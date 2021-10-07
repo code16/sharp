@@ -1,0 +1,19 @@
+
+
+.SharpTabbedLayout {
+  .tab-pane {
+    padding: var(--tab-padding-top) var(--tab-padding-x) var(--tab-padding-bottom);
+  }
+
+  &__divider {
+    opacity: .125;
+    margin-top: var(--tab-divider-margin-top, 1rem);
+    margin-bottom: var(--tab-divider-margin-bottom, 1rem);
+    margin-left: calc(var(--tab-padding-x) * -1);
+    margin-right: calc(var(--tab-padding-x) * -1);
+
+    &:last-child {
+      display: none;
+    }
+  }
+}
