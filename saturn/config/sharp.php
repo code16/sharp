@@ -164,7 +164,7 @@ return [
                 [
                     "label" => "Some external link",
                     "icon" => "fas fa-globe",
-                    "url" => "https://google.com"
+                    "url" => "https://google.com",
                 ],
             ]
         ], [
@@ -186,7 +186,7 @@ return [
         [
             "label" => "Public website",
             "icon" => "fas fa-globe",
-            "url" => "https://google.com"
+            "url" => "https://google.com",
         ],
         [
             "label" => "Some powerful Features",
