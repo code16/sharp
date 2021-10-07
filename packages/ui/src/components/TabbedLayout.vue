@@ -21,7 +21,7 @@
             <div class="tab-pane">
                 <template v-for="tab in layout.tabs">
                     <slot :tab="tab" />
-                    <hr>
+                    <hr class="SharpTabbedLayout__divider">
                 </template>
             </div>
         </template>
