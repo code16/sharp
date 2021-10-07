@@ -4,7 +4,7 @@
             <i class="fa" :class="iconClasses"></i>
         </template>
         <template v-else-if="item.image">
-            <img :src="item.image">
+            <img class="img-fluid" :src="item.image">
         </template>
     </span>
 </template>

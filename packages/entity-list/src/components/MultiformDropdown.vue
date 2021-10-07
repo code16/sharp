@@ -1,12 +1,16 @@
 <template>
     <Dropdown v-bind="$attrs" :text="l('action_bar.list.forms_dropdown')">
-        <template v-for="(form,key) in forms">
-            <DropdownItem @click="handleSelected(form)" :key="key">
+        <template v-for="form in forms">
+            <DropdownItem @click="handleSelected(form)" :key="form.key">
                 <div class="row gx-2">
-                    <div class="col-auto">
-                        <ItemVisual :item="form" icon-class="fa-fw"/>
-                    </div>
-                    <div class="col">
+                    <template v-if="hasIcon">
+                        <div class="col-auto">
+                            <div class="fa-fw">
+                                <ItemVisual :item="form" />
+                            </div>
+                        </div>
+                    </template>
+                    <div class="col" style="min-width: 0">
                         {{ form.label }}
                     </div>
                 </div>
@@ -33,6 +37,11 @@
             handleSelected(form) {
                 this.$emit('select', form);
             }
-        }
+        },
+        computed: {
+            hasIcon() {
+                return this.forms?.some(form => form.icon || form.image);
+            },
+        },
     }
 </script>
