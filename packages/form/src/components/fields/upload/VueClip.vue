@@ -67,7 +67,7 @@
             :value="value"
             :visible.sync="showEditModal"
             :src="originalImageSrc"
-            :transform-original="transformOriginal"
+            :transform-original="transformKeepOriginal"
             :ratio-x="ratioX"
             :ratio-y="ratioY"
             @submit="handleEditSubmitted"
@@ -129,7 +129,7 @@
                 default: true,
             },
             transformableFileTypes: Array,
-            transformOriginal: Boolean,
+            transformKeepOriginal: Boolean,
 
             readOnly: Boolean,
             root: Boolean,
