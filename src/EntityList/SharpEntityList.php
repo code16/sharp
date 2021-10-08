@@ -174,7 +174,7 @@ abstract class SharpEntityList
         });
     }
 
-    public final function listFields(): array
+    public final function listMetaFields(): array
     {
         if($this->globalMessageHtmlField) {
             return [

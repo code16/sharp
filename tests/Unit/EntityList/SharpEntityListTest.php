@@ -245,7 +245,7 @@ class SharpEntityListTest extends SharpTestCase
         $this->assertEquals("test-key", $list->listConfig()["globalMessage"]["fieldKey"]);
         $this->assertEquals(
             SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(), 
-            $list->listFields()["test-key"]
+            $list->listMetaFields()["test-key"]
         );
     }
 
