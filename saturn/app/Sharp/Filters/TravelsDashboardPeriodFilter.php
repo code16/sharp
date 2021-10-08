@@ -4,10 +4,10 @@ namespace App\Sharp\Filters;
 
 use Code16\Sharp\Dashboard\DashboardDateRangeFilter;
 
-class TravelsDashboardPeriodFilter implements DashboardDateRangeFilter
+class TravelsDashboardPeriodFilter extends DashboardDateRangeFilter
 {
-    public function label(): string
+    public function buildFilterConfig(): void
     {
-        return "period";
+        $this->configureLabel("period");
     }
 }

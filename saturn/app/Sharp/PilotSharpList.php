@@ -9,7 +9,6 @@ use App\Sharp\Filters\PilotRoleFilter;
 use App\Sharp\Filters\PilotSpaceshipFilter;
 use App\Sharp\States\PilotEntityState;
 use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -49,15 +48,21 @@ class PilotSharpList extends SharpEntityList
         ];
     }
 
+    public function getFilters(): array
+    {
+        return [
+            PilotSpaceshipFilter::class,
+            PilotRoleFilter::class
+        ];
+    }
+
     function buildListConfig(): void
     {
         $this->configureSearchable()
             ->configureDefaultSort("name", "asc")
             ->setMultiformAttribute("role")
             ->configurePaginated()
-            ->configureEntityState("state", PilotEntityState::class)
-            ->addFilter("spaceship", PilotSpaceshipFilter::class)
-            ->addFilter("role", PilotRoleFilter::class);
+            ->configureEntityState("state", PilotEntityState::class);
     }
 
     function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
@@ -82,13 +87,13 @@ class PilotSharpList extends SharpEntityList
             $pilots->whereIn("id", $ids);
 
         } else {
-            if ($spaceship = $this->queryParams->filterFor("spaceship")) {
+            if ($spaceship = $this->queryParams->filterFor(PilotSpaceshipFilter::class)) {
                 $pilots->leftJoin("pilot_spaceship", "pilots.id", "=", "pilot_spaceship.pilot_id")
                     ->leftJoin("spaceships", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                     ->where("spaceships.id", $spaceship);
             }
 
-            if ($role = $this->queryParams->filterFor("role")) {
+            if ($role = $this->queryParams->filterFor(PilotRoleFilter::class)) {
                 $pilots->where("role", $role);
             }
 

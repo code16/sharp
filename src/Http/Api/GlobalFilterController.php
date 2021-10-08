@@ -3,17 +3,19 @@
 namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Utils\Filters\HandleFilters;
+use Illuminate\Support\Collection;
 
 class GlobalFilterController extends ApiController
 {
     use HandleFilters;
 
+    public function getFilters(): array
+    {
+        return config("sharp.global_filters");
+    }
+
     public function index()
     {
-        foreach(config("sharp.global_filters") as $filterName => $handlerClass) {
-            $this->addFilter($filterName, $handlerClass);
-        }
-
         return response()->json(
             tap([], function(&$filters) {
                 $this->appendFiltersToConfig($filters);

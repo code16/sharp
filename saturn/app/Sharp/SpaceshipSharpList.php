@@ -91,26 +91,24 @@ class SpaceshipSharpList extends SharpEntityList
         ];
     }
     
-//    function getFilters(): ?array
-//    {
-//        return [
-//            "type" => SpaceshipTypeFilter::class,
-//            new SpaceshipPilotsFilter()
-//        ];
-//    }
+    function getFilters(): ?array
+    {
+        return [
+            SpaceshipTypeFilter::class,
+            new SpaceshipPilotsFilter()
+        ];
+    }
 
     function buildListConfig(): void
     {
         $this->configureInstanceIdAttribute("id")
             ->configureSearchable()
             ->configureDefaultSort("name", "asc")
-            ->addFilter("type", SpaceshipTypeFilter::class)
-            ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->configureEntityState("state", SpaceshipEntityState::class)
-            ->configurePaginated()
-            ->configureGlobalMessage(
-                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
-            );
+            ->configurePaginated();
+//            ->configureGlobalMessage(
+//                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
+//            );
     }
 
     function getGlobalMessageData(): ?array
@@ -141,16 +139,16 @@ class SpaceshipSharpList extends SharpEntityList
             $spaceships->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($this->queryParams->filterFor("type")) {
-            $spaceships->where("type_id", $this->queryParams->filterFor("type"));
+        if($type = $this->queryParams->filterFor(SpaceshipTypeFilter::class)) {
+            $spaceships->where("type_id", $type);
         }
 
-        if($this->queryParams->hasSearch() || $this->queryParams->filterFor("pilots")) {
+        if($this->queryParams->hasSearch() || $this->queryParams->filterFor(SpaceshipPilotsFilter::class)) {
             $spaceships->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
-            if ($this->queryParams->filterFor("pilots")) {
-                $spaceships->whereIn("pilots.id", (array)$this->queryParams->filterFor("pilots"));
+            if ($pilots = $this->queryParams->filterFor(SpaceshipPilotsFilter::class)) {
+                $spaceships->whereIn("pilots.id", (array)$pilots);
             }
 
             if ($this->queryParams->hasSearch()) {

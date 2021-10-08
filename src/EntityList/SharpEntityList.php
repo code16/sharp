@@ -261,6 +261,14 @@ abstract class SharpEntityList
     }
 
     /**
+     * Return all filters in an array of class names or instances
+     */
+    function getFilters(): ?array
+    {
+        return null;
+    }
+
+    /**
      * Return global message data if needed.
      */
     function getGlobalMessageData(): ?array

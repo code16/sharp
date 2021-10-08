@@ -14,7 +14,6 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class PassengerSharpList extends SharpEntityList
 {
-
     function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
@@ -34,13 +33,19 @@ class PassengerSharpList extends SharpEntityList
                     ->setLabel("Travel")
             );
     }
+    
+    public function getFilters(): ?array
+    {
+        return [
+            PassengerTravelFilter::class,
+            PassengerBirthdateFilter::class
+        ];
+    }
 
     function buildListConfig(): void
     {
         $this->configureSearchable()
             ->configureDefaultSort("name", "asc")
-            ->addFilter("travel", PassengerTravelFilter::class)
-            ->addFilter("birthdate", PassengerBirthdateFilter::class)
             ->configurePaginated();
     }
 
@@ -59,11 +64,11 @@ class PassengerSharpList extends SharpEntityList
             $passengers->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($travelFilter = $this->queryParams->filterFor("travel")) {
+        if($travelFilter = $this->queryParams->filterFor(PassengerTravelFilter::class)) {
             $passengers->where("travel_id", $travelFilter);
         }
 
-        if($birthdateFilter = $this->queryParams->filterFor("birthdate")) {
+        if($birthdateFilter = $this->queryParams->filterFor(PassengerBirthdateFilter::class)) {
             $passengers->whereBetween("birth_date", [
                 $birthdateFilter['start'],
                 $birthdateFilter['end'],
