@@ -9,7 +9,7 @@ exports[`EntityList mount 1`] = `
 			<div url="instanceUrl" class="MOCKED_SharpDataListRow"></div>
 		</div>
 	</div>
-	<commandformmodal-stub></commandformmodal-stub>
+	<commandformmodal-stub entitykey="spaceship"></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
 </div>
 `;
@@ -27,7 +27,7 @@ exports[`EntityList mount with row actions 1`] = `
 			</div>
 		</div>
 	</div>
-	<commandformmodal-stub></commandformmodal-stub>
+	<commandformmodal-stub entitykey="spaceship"></commandformmodal-stub>
 	<commandviewpanel-stub></commandviewpanel-stub>
 </div>
 `;
