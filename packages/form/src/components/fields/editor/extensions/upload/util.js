@@ -8,12 +8,8 @@ function serializeNumber(number, decimals) {
     return Math.round((number + Number.EPSILON) * 10 ** decimals) / 10 ** decimals;
 }
 
-export function serializeFilterCrop(value) {
-    if(!value?.filters?.crop) {
-        return null;
-    }
-
-    let { x, y, width, height } = value.filters.crop;
+export function serializeFilterCrop(data) {
+    let { x, y, width, height } = data ?? {};
 
     x = serializeNumber(x, 4) ?? 0;
     y = serializeNumber(y, 4) ?? 0;
@@ -27,13 +23,33 @@ export function serializeFilterCrop(value) {
     return `${x},${y},${width},${height}`;
 }
 
-
-export function serializeFilterRotate(value) {
-    if(!value?.filters?.rotate) {
+export function parseFilterCrop(attributeValue) {
+    if(!attributeValue) {
         return null;
     }
 
-    let { angle } = value.filters.rotate;
+    const [x, y, width, height] = attributeValue.split(',');
 
-    return angle || null;
+    return {
+        x: Number(x),
+        y: Number(y),
+        width: Number(width),
+        height: Number(height),
+    }
+}
+
+
+export function serializeFilterRotate(data) {
+    return serializeNumber(data?.angle, 4);
+}
+
+
+export function parseFilterRotate(attributeValue) {
+    if(!attributeValue) {
+        return null;
+    }
+
+    return {
+        angle: Number(attributeValue),
+    }
 }

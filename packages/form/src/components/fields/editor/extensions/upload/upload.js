@@ -1,7 +1,8 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import UploadNode from "./UploadNode";
-import { serializeFilterCrop, serializeFilterRotate } from "./util";
+import { parseFilterCrop, parseFilterRotate, serializeFilterCrop, serializeFilterRotate } from "./util";
+import { getFiltersFromCropData } from "../../../upload/util/filters";
 
 
 export const Upload = Node.create({
@@ -36,11 +37,17 @@ export const Upload = Node.create({
             {
                 tag: 'x-sharp-media',
                 getAttrs: node => ({
-                    value: this.options.findFile({
-                        disk: node.getAttribute('disk'),
-                        path: node.getAttribute('path'),
-                        name: node.getAttribute('name'),
-                    }),
+                    value: {
+                        ...this.options.findFile({
+                            disk: node.getAttribute('disk'),
+                            path: node.getAttribute('path'),
+                            name: node.getAttribute('name'),
+                        }),
+                        filters: {
+                            crop: parseFilterCrop(node.getAttribute('filter-crop')),
+                            rotate: parseFilterRotate(node.getAttribute('filter-rotate')),
+                        },
+                    },
                 }),
             },
         ]
@@ -58,8 +65,8 @@ export const Upload = Node.create({
                 'name': value?.name,
                 'disk': value?.disk,
                 'path': value?.path,
-                'filter-crop': serializeFilterCrop(value),
-                'filter-rotate': serializeFilterRotate(value),
+                'filter-crop': serializeFilterCrop(value?.filters?.crop),
+                'filter-rotate': serializeFilterRotate(value?.filters?.rotate),
             }
         ];
     },
