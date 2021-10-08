@@ -227,7 +227,20 @@ class SpaceshipSharpForm extends SharpForm
     function buildFormLayout(): void
     {
         $this
-            
+            ->addTab("Details", function(FormLayoutTab $tab) {
+                $tab
+                    ->addColumn(5, function(FormLayoutColumn $column) {
+                        $column
+                            ->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
+                                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
+                            })
+                            ->withSingleField("features");
+                
+                    })
+                    ->addColumn(7, function(FormLayoutColumn $column) {
+                        $column->withSingleField("description");
+                    });
+            })
             ->addTab("General info", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function(FormLayoutColumn $column) {
@@ -254,20 +267,6 @@ class SpaceshipSharpForm extends SharpForm
                                     ->withSingleField("file")
                                     ->withSingleField("legend");
                             });
-                    });
-            })
-            ->addTab("Details", function(FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(5, function(FormLayoutColumn $column) {
-                        $column
-                            ->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
-                                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
-                            })
-                            ->withSingleField("features");
-                
-                    })
-                    ->addColumn(7, function(FormLayoutColumn $column) {
-                        $column->withSingleField("description");
                     });
             });
     }
