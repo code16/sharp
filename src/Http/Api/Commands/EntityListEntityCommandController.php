@@ -19,7 +19,7 @@ class EntityListEntityCommandController extends ApiController
         $list->initQueryParams();
         
         $commandHandler = $this->getCommandHandler($list, $commandKey);
-
+        
         return response()->json([
             "data" => $commandHandler->formData()
         ]);
@@ -44,6 +44,7 @@ class EntityListEntityCommandController extends ApiController
     protected function getCommandHandler(SharpEntityList $list, string $commandKey): ?EntityCommand
     {
         $commandHandler = $list->findEntityCommandHandler($commandKey);
+        $commandHandler->buildCommandConfig();
         $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest("query"));
 
         if(! $commandHandler->authorize()) {

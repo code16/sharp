@@ -8,6 +8,7 @@ use App\User;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
@@ -49,9 +50,9 @@ class UserSharpList extends SharpEntityList
             ->configureDefaultSort("name", "asc");
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name", 4)
+        $fieldsLayout->addColumn("name", 4)
             ->addColumn("email", 4)
             ->addColumn("group", 4);
     }
