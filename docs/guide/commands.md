@@ -134,14 +134,16 @@ protected function initialData($instanceId): array
 
 Note that in both cases (Entity or Instance Command), you can access to the EntityList querystring via the request.
 
-### Command confirmation
+### Configure optional confirmation text, description, form modal title
 
-To add a confirmation message before a Command is executed, add a `confirmationText()` method:
+You can tweak this in an optional `buildCommandConfig()` function:
 
 ```php
-public function confirmationText()
+public function buildCommandConfig(): void
 {
-    return "Sure, really?";
+    $this->configureConfirmationText("Sure, really?")
+        ->configureDescription("This action will send a text message to your boss")
+        ->configureFormModalTitle("Text message");
 }
 ```
 
