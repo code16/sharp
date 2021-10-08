@@ -16,7 +16,7 @@ php artisan sharp:make:entity-list <class_name> [--model=<model_name>]
 
 First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore, there are four abstract methods to implement:
 
-- `buildListFields(EntityListFieldsContainer $fieldsContainer)` and `buildListLayout()` for the structure,
+- `buildListFields(EntityListFieldsContainer $fieldsContainer)` and `buildListLayout(EntityListFieldsLayout $fieldsLayout)` for the structure,
 - `getListData()` for the data,
 - and `buildListConfig()` for... the list config.
 
@@ -42,14 +42,14 @@ function buildListFields(EntityListFieldsContainer $fieldsContainer)
 
 Setting the label, allowing the column to be sortable and to display html is optional.
 
-### `buildListLayout()`
+### `buildListLayout(EntityListFieldsLayout $fieldsLayout)`
 
 Next step, define how those columns are displayed:
 
 ```php
-function buildListLayout()
+function buildListLayout(EntityListFieldsLayout $fieldsLayout)
 {
-    $this->addColumn("picture", 1)
+    $fieldsLayout->addColumn("picture", 1)
         ->addColumn("name")
         ->addColumnLarge("capacity", 2);
 }
@@ -62,12 +62,12 @@ We add columns giving:
 
 In this example, `picture` and `capacity` will be displayed respectively on 1/12 and 2/12 of the viewport width. The column `name` will fill the rest, 9/12.
 
-To handle small screens, you can declare an optional `buildListLayoutForSmallScreens()` function: 
+To handle small screens, you can declare an optional `buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout)` function: 
 
 ```php
-function buildListLayoutForSmallScreens()
+function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout)
 {
-    $this->addColumn("picture", 4)
+    $fieldsLayout->addColumn("picture", 4)
         ->addColumn("name");
 }
 ```
