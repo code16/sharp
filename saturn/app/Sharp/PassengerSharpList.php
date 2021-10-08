@@ -8,6 +8,7 @@ use App\Sharp\Filters\PassengerTravelFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -43,9 +44,9 @@ class PassengerSharpList extends SharpEntityList
             ->configurePaginated();
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name", 4)
+        $fieldsLayout->addColumn("name", 4)
             ->addColumn("birth_date", 4)
             ->addColumn("travel", 4);
     }

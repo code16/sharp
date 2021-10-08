@@ -8,6 +8,7 @@ use App\Travel;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -47,9 +48,9 @@ class TravelSharpList extends SharpEntityList
             ->configurePaginated();
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("destination", 4)
+        $fieldsLayout->addColumn("destination", 4)
             ->addColumn("departure_date", 4)
             ->addColumn("spaceship", 4);
     }

@@ -5,6 +5,7 @@ namespace Code16\Sharp\EntityList;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
@@ -26,10 +27,9 @@ abstract class SharpEntityList
         WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;
-    protected array $columns = [];
+    private ?EntityListFieldsLayout $fieldsLayout = null;
+    private ?EntityListFieldsLayout $xsFieldsLayout = null;
     protected ?EntityListQueryParams $queryParams;
-    protected bool $listBuilt = false;
-    protected bool $layoutBuilt = false;
     protected string $instanceIdAttribute = "id";
     protected ?string $multiformAttribute = null;
     protected bool $searchable = false;
@@ -68,36 +68,17 @@ abstract class SharpEntityList
 
     public final function listLayout(): array
     {
-        if(!$this->layoutBuilt) {
-            $this->buildListLayouts();
-            $this->layoutBuilt = true;
-        }
+        $this->checkListIsBuilt();
         
-        // We need this to know if buildListLayoutForSmallScreens() was declared,
-        // in order to hide unset columns in XS size.
-        $xsSizesWereDefined = collect($this->columns)
-                ->pluck("sizeXS")
-                ->filter()
-                ->count() > 0;
-
-        return collect($this->columns)
-            ->map(function($sizes, $key) use ($xsSizesWereDefined) {
-                $data = [
+        return $this->fieldsLayout->getColumns()
+            ->keys()
+            ->map(function($key) {
+                return [
                     "key" => $key,
-                    "size" => $sizes["size"],
+                    "size" => $this->fieldsLayout->getSizeOf($key),
+                    "hideOnXS" => $this->xsFieldsLayout->hasColumns() && $this->xsFieldsLayout->getSizeOf($key) === null,
+                    "sizeXS" => $this->xsFieldsLayout->getSizeOf($key) ?: $this->fieldsLayout->getSizeOf($key)
                 ];
-                
-                if(!$xsSizesWereDefined) {
-                    $data["hideOnXS"] = false;
-                    $data["sizeXS"] = $sizes["size"];
-                } else {
-                    $data["hideOnXS"] = ($sizes["sizeXS"] ?? null) === null;
-                    $data["sizeXS"] = $data["hideOnXS"] 
-                        ? null 
-                        : (($sizes["sizeXS"] ?? null) ?: $sizes["size"]);
-                }
-                
-                return $data;
             })
             ->values()
             ->toArray();
@@ -242,32 +223,17 @@ abstract class SharpEntityList
         return $this->reorderHandler;
     }
 
-    protected function addColumn(string $label, int $size = null): self
-    {
-        $sizeAttr = isset($this->columns[$label]["size"])
-            ? "sizeXS"
-            : "size";
-        
-        if(isset($this->columns[$label][$sizeAttr])) {
-            throw new SharpEntityListLayoutException("The $label column was defined twice for the $sizeAttr size");
-        }
-        
-        $this->columns[$label][$sizeAttr] = $size ?: "fill";
-
-        return $this;
-    }
-
-    private function buildListLayouts(): void
-    {
-        $this->buildListLayout();
-        $this->buildListLayoutForSmallScreens();
-    }
-
     private function checkListIsBuilt(): void
     {
         if ($this->fieldsContainer === null) {
             $this->fieldsContainer = new EntityListFieldsContainer();
             $this->buildListFields($this->fieldsContainer);
+
+            $this->fieldsLayout = new EntityListFieldsLayout();
+            $this->buildListLayout($this->fieldsLayout);
+            
+            $this->xsFieldsLayout = new EntityListFieldsLayout();
+            $this->buildListLayoutForSmallScreens($this->xsFieldsLayout);
         }
     }
 
@@ -303,13 +269,6 @@ abstract class SharpEntityList
     }
 
     /**
-     * Build layout for small screen. Optional, only if needed.
-     */
-    function buildListLayoutForSmallScreens(): void
-    {
-    }
-
-    /**
      * Retrieve all rows data as an array
      */
     abstract function getListData(): array|Arrayable;
@@ -320,9 +279,16 @@ abstract class SharpEntityList
     abstract function buildListFields(EntityListFieldsContainer $fieldsContainer): void;
 
     /**
-     * Build list layout using ->addColumn()
+     * Build list layout
      */
-    abstract function buildListLayout(): void;
+    abstract function buildListLayout(EntityListFieldsLayout $fieldsLayout): void;
+
+    /**
+     * Build layout for small screen. Optional, only if needed.
+     */
+    function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
+    {
+    }
 
     /**
      * Build list config

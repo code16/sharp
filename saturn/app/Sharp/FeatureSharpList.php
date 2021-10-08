@@ -7,11 +7,11 @@ use App\Sharp\Commands\FeatureReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 
 class FeatureSharpList extends SharpEntityList
 {
-
     function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
@@ -30,9 +30,9 @@ class FeatureSharpList extends SharpEntityList
         $this->setReorderable(new FeatureReorderHandler());
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this
+        $fieldsLayout
             ->addColumn("name", 6)
             ->addColumn("type", 6);
     }

@@ -15,6 +15,7 @@ use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
@@ -52,6 +53,24 @@ class SpaceshipSharpList extends SharpEntityList
                 EntityListField::make("messages_sent_count")
                     ->setLabel("Messages sent")
         );
+    }
+
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout->addColumn("picture", 1)
+            ->addColumn("name", 2)
+            ->addColumn("capacity", 2)
+            ->addColumn("type:label", 2)
+            ->addColumn("pilots")
+            ->addColumn("messages_sent_count");
+    }
+
+    function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout->addColumn("picture", 2)
+            ->addColumn("name")
+            ->addColumn("type:label")
+            ->addColumn("messages_sent_count", 2);
     }
     
     function getEntityCommands(): ?array
@@ -94,24 +113,6 @@ class SpaceshipSharpList extends SharpEntityList
             );
     }
 
-    function buildListLayout(): void
-    {
-        $this->addColumn("picture", 1)
-            ->addColumn("name", 2)
-            ->addColumn("capacity", 2)
-            ->addColumn("type:label", 2)
-            ->addColumn("pilots")
-            ->addColumn("messages_sent_count");
-    }
-
-    function buildListLayoutForSmallScreens(): void
-    {
-        $this->addColumn("picture", 2)
-            ->addColumn("name")
-            ->addColumn("type:label")
-            ->addColumn("messages_sent_count", 2);
-    }
-    
     function getGlobalMessageData(): ?array
     {
         $pilots = $this->queryParams->filterFor('pilots');

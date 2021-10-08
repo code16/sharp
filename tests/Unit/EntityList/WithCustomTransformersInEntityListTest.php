@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
@@ -198,7 +199,7 @@ class WithCustomTransformersTestList extends SharpEntityList
     }
 
     function buildListFields(EntityListFieldsContainer $fieldsContainer): void {}
-    function buildListLayout(): void {}
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void {}
     function buildListConfig(): void {}
 }
 

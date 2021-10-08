@@ -11,6 +11,7 @@ use App\Sharp\States\PilotEntityState;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -59,15 +60,15 @@ class PilotSharpList extends SharpEntityList
             ->addFilter("role", PilotRoleFilter::class);
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         if($role = $this->queryParams->filterFor("role")) {
-            $this->addColumn("name", 6);
+            $fieldsLayout->addColumn("name", 6);
             if($role === "sr") {
-                $this->addColumn("xp", 6);
+                $fieldsLayout->addColumn("xp", 6);
             }
         } else {
-            $this->addColumn("name", 4)
+            $fieldsLayout->addColumn("name", 4)
                 ->addColumn("role", 4)
                 ->addColumn("xp", 4);
         }

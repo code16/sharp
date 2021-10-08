@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
@@ -48,9 +49,9 @@ class SharpEntityListTest extends SharpTestCase
                     ->addField(EntityListField::make("name"))
                     ->addField(EntityListField::make("age"));
             }
-            function buildListLayout(): void
+            function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 6)
+                $fieldsLayout->addColumn("name", 6)
                     ->addColumn("age", 6);
             }
         };
@@ -77,14 +78,14 @@ class SharpEntityListTest extends SharpTestCase
                     ->addField(EntityListField::make("name"))
                     ->addField(EntityListField::make("age"));
             }
-            function buildListLayout(): void
+            function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 6)
+                $fieldsLayout->addColumn("name", 6)
                     ->addColumn("age", 6);
             }
-            function buildListLayoutForSmallScreens(): void
+            function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 12);
+                $fieldsLayout->addColumn("name", 12);
             }
         };
 
@@ -93,7 +94,7 @@ class SharpEntityListTest extends SharpTestCase
                 [
                     "key" => "name", "size" => 6, "sizeXS" => 12, "hideOnXS" => false,
                 ], [
-                    "key" => "age", "size" => 6, "sizeXS" => null, "hideOnXS" => true,
+                    "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => true,
                 ]
             ],
             $list->listLayout()
@@ -110,9 +111,9 @@ class SharpEntityListTest extends SharpTestCase
                     ->addField(EntityListField::make("name"))
                     ->addField(EntityListField::make("age"));
             }
-            function buildListLayout(): void
+            function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 4)
+                $fieldsLayout->addColumn("name", 4)
                     ->addColumn("age");
             }
         };

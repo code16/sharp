@@ -9,6 +9,7 @@ use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -88,15 +89,15 @@ class PersonSharpEntityList extends SharpEntityList
             );
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name", 6)
+        $fieldsLayout->addColumn("name", 6)
             ->addColumn("age", 6);
     }
     
-    public function buildListLayoutForSmallScreens(): void
+    public function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name");
+        $fieldsLayout->addColumn("name");
     }
 
     function buildListConfig(): void
