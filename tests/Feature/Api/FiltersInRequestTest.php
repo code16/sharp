@@ -334,45 +334,42 @@ class FiltersInRequestTest extends BaseApiTest
     }
 }
 
-class FiltersInRequestTestRetainedActiveFilter implements EntityListSelectFilter
+class FiltersInRequestTestRetainedActiveFilter extends EntityListSelectFilter
 {
+    public function buildFilterConfig(): void
+    {
+        $this->configureRetainInSession();
+    }
     public function values(): array
     {
         return [0, 1];
     }
-    public function retainValueInSession(): bool
-    {
-        return true;
-    }
 }
 
-class FiltersInRequestTestRetainedAgeMultipleFilter implements EntityListSelectMultipleFilter
+class FiltersInRequestTestRetainedAgeMultipleFilter extends EntityListSelectMultipleFilter
 {
+    public function buildFilterConfig(): void
+    {
+        $this->configureRetainInSession();
+    }
     public function values(): array
     {
         return range(0, 80);
     }
-
-    public function retainValueInSession(): bool
-    {
-        return true;
-    }
 }
 
-class FiltersInRequestTestRetainedAgeRequiredFilter implements EntityListSelectRequiredFilter
+class FiltersInRequestTestRetainedAgeRequiredFilter extends EntityListSelectRequiredFilter
 {
+    public function buildFilterConfig(): void
+    {
+        $this->configureRetainInSession();
+    }
     public function values(): array
     {
         return range(0, 80);
     }
-
-    public function defaultValue()
+    public function defaultValue(): mixed
     {
         return 2;
-    }
-
-    public function retainValueInSession(): bool
-    {
-        return true;
     }
 }

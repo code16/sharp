@@ -99,23 +99,34 @@ class PersonSharpEntityList extends SharpEntityList
     {
         $fieldsLayout->addColumn("name");
     }
+    
+    public function getFilters(): ?array
+    {
+        return [
+            PersonSharpEntityListAgeFilter::class,
+            PersonSharpEntityListAgeMultipleFilter::class,
+            PersonSharpEntityListAgeRequiredFilter::class,
+            PersonSharpEntityListAgeFilter::class
+        ];
+    }
 
     function buildListConfig(): void
     {
         $this->configureSearchable()
             ->setReorderable(PersonSharpEntityListReorderHandler::class)
-            ->addFilter("age", PersonSharpEntityListAgeFilter::class, function($value) {
-                session(["filter_age_was_set" => $value]);
-            })
-            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
-            ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class)
-            ->addFilter("age_forced", PersonSharpEntityListAgeFilter::class, function($value, $params) {
-                $params->forceFilterValue("age", $value);
-            });
+//            ->addFilter("age", PersonSharpEntityListAgeFilter::class, function($value) {
+//                session(["filter_age_was_set" => $value]);
+//            })
+//            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
+//            ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class)
+//            ->addFilter("age_forced", PersonSharpEntityListAgeFilter::class, function($value, $params) {
+//                $params->forceFilterValue("age", $value);
+//            })
+        ;
     }
 }
 
-class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
+class PersonSharpEntityListAgeFilter extends EntityListSelectFilter
 {
     public function values(): array
     {
@@ -123,15 +134,22 @@ class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
     }
 }
 
-class PersonSharpEntityListAgeMultipleFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListSelectMultipleFilter
+class PersonSharpEntityListAgeMultipleFilter extends EntityListSelectMultipleFilter
 {
+    public function values(): array
+    {
+        return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
+    }
 }
 
-class PersonSharpEntityListAgeRequiredFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
+class PersonSharpEntityListAgeRequiredFilter extends EntityListSelectRequiredFilter
 {
-    public function defaultValue()
+    public function values(): array
+    {
+        return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
+    }
+    
+    public function defaultValue(): mixed
     {
         return 22;
     }

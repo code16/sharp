@@ -98,14 +98,14 @@ class GlobalFiltersTest extends BaseApiTest
     }
 }
 
-class GlobalFiltersTestGlobalRequiredFilter implements GlobalRequiredFilter
+class GlobalFiltersTestGlobalRequiredFilter extends GlobalRequiredFilter
 {
     public function values(): array
     {
         return range(0, 10);
     }
 
-    public function defaultValue()
+    public function defaultValue(): mixed
     {
         return "default";
     }

@@ -47,6 +47,12 @@ abstract class SelectFilter extends Filter
         return $this;
     }
 
+    public final function configureMaster(bool $isMaster = true): self
+    {
+        $this->isMaster = $isMaster;
+        return $this;
+    }
+
     public abstract function values(): array;
 }
 
