@@ -5,29 +5,30 @@ namespace App\Sharp;
 use App\Passenger;
 use App\Sharp\Filters\PassengerBirthdateFilter;
 use App\Sharp\Filters\PassengerTravelFilter;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
 class PassengerSharpList extends SharpEntityList
 {
 
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
                     ->setSortable()
                     ->setLabel("Name")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("birth_date")
+            ->addField(
+                EntityListField::make("birth_date")
                     ->setSortable()
                     ->setLabel("Birth date")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("travel")
+            ->addField(
+                EntityListField::make("travel")
                     ->setSortable()
                     ->setLabel("Travel")
             );

@@ -5,29 +5,30 @@ namespace App\Sharp;
 use App\Passenger;
 use App\Sharp\Commands\TravelSendEmail;
 use App\Travel;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
 class TravelSharpList extends SharpEntityList
 {
 
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("destination")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("destination")
                     ->setSortable()
                     ->setLabel("Destination")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("departure_date")
+            ->addField(
+                EntityListField::make("departure_date")
                     ->setSortable()
                     ->setLabel("Departure date")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("spaceship")
+            ->addField(
+                EntityListField::make("spaceship")
                     ->setLabel("Spaceship")
             );
     }

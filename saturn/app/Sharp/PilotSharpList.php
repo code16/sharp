@@ -8,27 +8,28 @@ use App\Sharp\Commands\PilotUpdateXPCommand;
 use App\Sharp\Filters\PilotRoleFilter;
 use App\Sharp\Filters\PilotSpaceshipFilter;
 use App\Sharp\States\PilotEntityState;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
 class PilotSharpList extends SharpEntityList
 {
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
                     ->setSortable()
                     ->setLabel("Name")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("role")
+            ->addField(
+                EntityListField::make("role")
                     ->setLabel("Role")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("xp")
+            ->addField(
+                EntityListField::make("xp")
                     ->setLabel("Xp")
             );
     }

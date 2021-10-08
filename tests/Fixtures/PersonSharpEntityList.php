@@ -3,11 +3,12 @@
 namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\EntityListSelectFilter;
 use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,7 +16,6 @@ use Illuminate\Support\Str;
 
 class PersonSharpEntityList extends SharpEntityList
 {
-
     function getListData(): array|Arrayable
     {
         $items = [
@@ -72,17 +72,17 @@ class PersonSharpEntityList extends SharpEntityList
         return $this->transform($items);
     }
 
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
                     ->setLabel("Name")
                     ->setHtml()
                     ->setSortable()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("age")
+            ->addField(
+                EntityListField::make("age")
                     ->setLabel("Age")
                     ->setSortable()
             );

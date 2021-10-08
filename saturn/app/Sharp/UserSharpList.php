@@ -5,8 +5,9 @@ namespace App\Sharp;
 use App\Sharp\Commands\ExportUsersCommand;
 use App\Sharp\Commands\InviteUserCommand;
 use App\User;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
@@ -14,21 +15,21 @@ class UserSharpList extends SharpEntityList
 {
     use WithCustomTransformers;
 
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
                     ->setLabel("Name")
                     ->setSortable()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("email")
+            ->addField(
+                EntityListField::make("email")
                     ->setLabel("Email")
                     ->setSortable()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("group")
+            ->addField(
+                EntityListField::make("group")
                     ->setLabel("Group")
             );
     }

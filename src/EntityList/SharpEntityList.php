@@ -3,7 +3,8 @@
 namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
@@ -24,8 +25,9 @@ abstract class SharpEntityList
         HandleGlobalMessage,
         WithCustomTransformers;
 
-    protected array $containers = [];
+    private ?EntityListFieldsContainer $fieldsContainer = null;
     protected array $columns = [];
+    protected ?EntityListQueryParams $queryParams;
     protected bool $listBuilt = false;
     protected bool $layoutBuilt = false;
     protected string $instanceIdAttribute = "id";
@@ -35,7 +37,6 @@ abstract class SharpEntityList
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort= null;
     protected ?string $defaultSortDir = null;
-    protected ?EntityListQueryParams $queryParams;
 
     public final function initQueryParams(): self
     {
@@ -56,16 +57,13 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public final function dataContainers(): array
+    public final function fields(): array
     {
         $this->checkListIsBuilt();
-
-        return collect($this->containers)
-            ->map(function(EntityListDataContainer $container) {
-                return $container->toArray();
-            })
-            ->keyBy("key")
-            ->all();
+        
+        return $this->fieldsContainer
+            ->getFields()
+            ->toArray();
     }
 
     public final function listLayout(): array
@@ -244,14 +242,6 @@ abstract class SharpEntityList
         return $this->reorderHandler;
     }
 
-    protected function addDataContainer(EntityListDataContainer $container): self
-    {
-        $this->containers[] = $container;
-        $this->listBuilt = false;
-
-        return $this;
-    }
-
     protected function addColumn(string $label, int $size = null): self
     {
         $sizeAttr = isset($this->columns[$label]["size"])
@@ -275,15 +265,15 @@ abstract class SharpEntityList
 
     private function checkListIsBuilt(): void
     {
-        if (!$this->listBuilt) {
-            $this->buildListDataContainers();
-            $this->listBuilt = true;
+        if ($this->fieldsContainer === null) {
+            $this->fieldsContainer = new EntityListFieldsContainer();
+            $this->buildListFields($this->fieldsContainer);
         }
     }
 
     protected final function getDataKeys(): array
     {
-        return collect($this->dataContainers())
+        return collect($this->fields())
             ->pluck("key")
             ->all();
     }
@@ -325,9 +315,9 @@ abstract class SharpEntityList
     abstract function getListData(): array|Arrayable;
 
     /**
-     * Build list containers using ->addDataContainer()
+     * Build list fields
      */
-    abstract function buildListDataContainers(): void;
+    abstract function buildListFields(EntityListFieldsContainer $fieldsContainer): void;
 
     /**
      * Build list layout using ->addColumn()

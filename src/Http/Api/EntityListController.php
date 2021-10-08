@@ -16,7 +16,7 @@ class EntityListController extends ApiController
         $list->initQueryParams();
 
         return response()->json([
-            "containers" => $list->dataContainers(),
+            "containers" => $list->fields(),
             "layout" => $list->listLayout(),
             "data" => $list->data(),
             "fields" => $list->listFields(),

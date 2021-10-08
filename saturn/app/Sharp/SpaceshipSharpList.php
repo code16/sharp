@@ -13,43 +13,43 @@ use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use App\SpaceshipType;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("picture")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("picture")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+            ->addField(
+                EntityListField::make("name")
                     ->setLabel("Name")
                     ->setSortable()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("capacity")
+            ->addField(
+                EntityListField::make("capacity")
                     ->setLabel("Capacity")
                     ->setSortable()
                     ->setHtml(false)
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("type:label")
+            ->addField(
+                EntityListField::make("type:label")
                     ->setLabel("Type")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("pilots")
+            ->addField(
+                EntityListField::make("pilots")
                     ->setLabel("Pilots")
                     ->setHtml()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("messages_sent_count")
+            ->addField(
+                EntityListField::make("messages_sent_count")
                     ->setLabel("Messages sent")
         );
     }
