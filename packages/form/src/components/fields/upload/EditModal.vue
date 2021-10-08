@@ -44,11 +44,12 @@
 </template>
 
 <script>
+    import VueCropper from 'vue-cropperjs';
     import { lang } from "sharp";
     import { Modal, Loading, Button } from 'sharp-ui';
-    import VueCropper from 'vue-cropperjs';
+    import { postResolveFiles } from 'sharp-files';
+
     import { rotate, rotateTo } from "./util/rotate";
-    import { getOriginalThumbnail } from "../../../api";
     import { getCropDataFromFilters } from "./util/filters";
 
     export default {
@@ -57,6 +58,11 @@
             Loading,
             VueCropper,
             Button,
+        },
+        inject: {
+            $form: {
+                default: null,
+            },
         },
         props: {
             value: Object,
@@ -106,12 +112,25 @@
                 if(this.originalImg) {
                     return;
                 }
-                this.originalImg = await getOriginalThumbnail({
-                    path: this.value.path,
-                    disk: this.value.disk,
-                    max_width: 800,
-                    max_height: 600,
+                const files = await postResolveFiles({
+                    entityKey: this.$form.entityKey,
+                    instanceId: this.$form.instanceId,
+                    files: [
+                        {
+                            path: this.value.path,
+                            disk: this.value.disk,
+                        }
+                    ],
+                    thumbnailWidth: 800,
+                    thumbnailHeight: 600,
                 });
+
+                this.originalImg = files[0]?.thumbnail;
+
+                if(!this.originalImg) {
+                    return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');
+                }
+
                 await new Promise(resolve => {
                     const image = new Image();
                     image.src = this.originalImg;

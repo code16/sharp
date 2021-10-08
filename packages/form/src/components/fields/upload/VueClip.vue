@@ -112,7 +112,11 @@
             Button,
         },
 
-        inject : [ '$form' ],
+        inject: {
+            $form: {
+                default: null,
+            },
+        },
 
         mixins: [ Localization ],
 
@@ -220,8 +224,8 @@
             },
             downloadUrl() {
                 return downloadFileUrl({
-                    entityKey: this.$form.entityKey,
-                    instanceId: this.$form.instanceId,
+                    entityKey: this.$form?.entityKey,
+                    instanceId: this.$form?.instanceId,
                     fieldKey: this.fieldConfigIdentifier,
                     fileName: this.fileName,
                 });

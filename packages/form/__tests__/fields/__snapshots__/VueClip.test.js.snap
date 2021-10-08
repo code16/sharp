@@ -216,6 +216,52 @@ exports[`vue-clip can mount non croppable image 1`] = `
 <input type="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
 `;
 
+exports[`vue-clip can mount non transformable image 1`] = `
+<div id="app">
+	<div class="SharpUpload">
+		<div class="dz-clickable">
+			<div class="card card-body SharpUpload__card">
+				<div class="row">
+					<div class="SharpUpload__thumbnail col-4 col-md-4">
+						<img src="/image.jpg" alt="">
+					</div>
+					<div class="SharpUpload__infos col-8 col-md-8">
+						<div class="mb-3">
+							<label class="SharpUpload__filename text-truncate d-block">Image.jpg</label>
+							<div class="SharpUpload__info mt-2">
+								<div class="row g-2">
+									<div class="col-auto">14.65 KB</div>
+									<div class="col-auto">
+										<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Image.jpg" download="Image.jpg" class="SharpUpload__download-link">
+											<i class="fas fa-download"></i>
+											{{ form.upload.download_link }}
+										</a>
+									</div>
+								</div>
+							</div>
+							<!---->
+						</div>
+						<div>
+							<!---->
+							<button class="SharpButton btn SharpUpload__remove-button btn-outline-danger btn-sm">
+								{{ form.upload.remove_button }}
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clip-preview-template" style="display: none;">
+				<div></div>
+			</div>
+		</div>
+		<!---->
+		<!---->
+		<a style="display: none;"></a>
+	</div>
+</div>
+<input type="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+`;
+
 exports[`vue-clip can mount read-only VueClip component 1`] = `
 <div id="app">
 	<div class="SharpUpload SharpUpload--empty SharpUpload--disabled">

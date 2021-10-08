@@ -96,7 +96,7 @@
             GlobalMessage,
         },
 
-        props:{
+        props: {
             entityKey: String,
             instanceId: String,
 
@@ -125,14 +125,14 @@
                 breadcrumb: null,
                 config: null,
 
-                errors:{},
+                errors: {},
                 fieldLocale: {},
                 locales: null,
                 loading: false,
 
                 fieldVisible: {},
                 uploadingFields: {},
-                curFieldsetId:0,
+                curFieldsetId: 0,
             }
         },
         computed: {
@@ -400,9 +400,7 @@
                     [errorId]: null,
                 }
             });
-        },
-        mounted() {
             this.init();
-        }
+        },
     }
 </script>

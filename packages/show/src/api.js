@@ -6,7 +6,7 @@ export function getShowView({ entityKey, instanceId }) {
 }
 
 export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
-    return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
+    return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
         data,
     }, { responseType: 'blob' });
 }
