@@ -2,7 +2,7 @@
 
 namespace App\Sharp\Filters;
 
-use Code16\Sharp\Dashboard\DashboardDateRangeFilter;
+use Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter;
 
 class TravelsDashboardPeriodFilter extends DashboardDateRangeFilter
 {

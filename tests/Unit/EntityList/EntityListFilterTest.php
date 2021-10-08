@@ -3,11 +3,11 @@
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Carbon\Carbon;
-use Code16\Sharp\EntityList\EntityListDateRangeFilter;
-use Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter;
-use Code16\Sharp\EntityList\EntityListSelectFilter;
-use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
-use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
+use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 
@@ -20,7 +20,7 @@ class EntityListFilterTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->addFilter("test", new class implements EntityListSelectFilter {
+                $this->addFilter("test", new class implements \Code16\Sharp\EntityList\Filters\EntityListSelectFilter {
                     public function values(): array { return [1 => "A", 2 => "B"]; }
                 });
             }
@@ -464,7 +464,7 @@ class EntityListFilterTest extends SharpTestCase
     }
 }
 
-class SharpEntityListTestFilter implements EntityListSelectFilter
+class SharpEntityListTestFilter implements \Code16\Sharp\EntityList\Filters\EntityListSelectFilter
 {
     public function values(): array
     {
@@ -472,7 +472,7 @@ class SharpEntityListTestFilter implements EntityListSelectFilter
     }
 }
 
-class SharpEntityListTestMultipleFilter implements EntityListSelectMultipleFilter
+class SharpEntityListTestMultipleFilter implements \Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter
 {
     public function values(): array
     {
@@ -497,7 +497,7 @@ class SharpEntityListDateRangeTestFilter implements EntityListDateRangeFilter
 {
 }
 
-class SharpEntityListDateRangeRequiredTestFilter implements EntityListDateRangeRequiredFilter
+class SharpEntityListDateRangeRequiredTestFilter implements \Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter
 {
     public function defaultValue(): array
     {

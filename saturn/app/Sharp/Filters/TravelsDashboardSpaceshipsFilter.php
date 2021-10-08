@@ -3,7 +3,7 @@
 namespace App\Sharp\Filters;
 
 use App\Spaceship;
-use Code16\Sharp\Dashboard\DashboardSelectMultipleFilter;
+use Code16\Sharp\Dashboard\Filters\DashboardSelectMultipleFilter;
 
 class TravelsDashboardSpaceshipsFilter extends DashboardSelectMultipleFilter
 {

@@ -3,9 +3,9 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
-use Code16\Sharp\EntityList\EntityListSelectFilter;
-use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
-use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 

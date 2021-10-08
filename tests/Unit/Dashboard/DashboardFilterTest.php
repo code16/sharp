@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Tests\Unit\Dashboard;
 
-use Code16\Sharp\Dashboard\DashboardDateRangeFilter;
+use Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter;
 use Code16\Sharp\Dashboard\DashboardFilter;
-use Code16\Sharp\Dashboard\DashboardSelectFilter;
+use Code16\Sharp\Dashboard\Filters\DashboardSelectFilter;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 
