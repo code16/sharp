@@ -62,7 +62,7 @@
             value: Object,
             visible: Boolean,
             src: String,
-            cropOriginal: Boolean,
+            transformOriginal: Boolean,
             ratioX: Number,
             ratioY: Number,
         },
@@ -131,7 +131,7 @@
             },
             async init() {
                 this.ready = false;
-                if(this.cropOriginal && this.value?.path) {
+                if(this.transformOriginal && this.value?.path) {
                     await this.initOriginalThumbnail();
                 }
                 this.ready = true;

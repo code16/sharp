@@ -67,14 +67,14 @@
             :value="value"
             :visible.sync="showEditModal"
             :src="originalImageSrc"
-            :crop-original="cropOriginal"
+            :transform-original="transformOriginal"
             :ratio-x="ratioX"
             :ratio-y="ratioY"
             @submit="handleEditSubmitted"
             ref="modal"
         />
 
-        <template v-if="hasInitialCrop">
+        <template v-if="hasInitialTransform">
             <vue-cropper
                 class="d-none"
                 :src="originalImageSrc"
@@ -120,12 +120,12 @@
             ratioX: Number,
             ratioY: Number,
             value: Object,
-            croppable: {
+            transformable: {
                 type: Boolean,
                 default: true,
             },
-            croppableFileTypes: Array,
-            cropOriginal: Boolean,
+            transformableFileTypes: Array,
+            transformOriginal: Boolean,
 
             readOnly: Boolean,
             root: Boolean,
@@ -138,7 +138,7 @@
         data() {
             return {
                 showEditModal: false,
-                croppedImg: null,
+                transformedImg: null,
             }
         },
         watch: {
@@ -167,7 +167,7 @@
                 return this.file?.thumbnail || this.file?.blobUrl;
             },
             imageSrc() {
-                return this.croppedImg || this.originalImageSrc;
+                return this.transformedImg || this.originalImageSrc;
             },
             size() {
                 return this.file.size != null
@@ -176,7 +176,7 @@
             },
             operationFinished() {
                 return {
-                    crop: this.hasInitialCrop ? !!this.croppedImg : null
+                    transform: this.hasInitialTransform ? !!this.transformedImg : null
                 }
             },
             operations() {
@@ -229,23 +229,23 @@
             showThumbnail() {
                 return !!this.imageSrc;
             },
-            isCroppable() {
-                if(!this.croppable || !this.originalImageSrc) {
+            isTransformable() {
+                if(!this.transformable || !this.originalImageSrc) {
                     return false;
                 }
                 if(this.file?.type && !this.file.type.match(/^image\//)) {
                     return false;
                 }
-                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
+                return !this.transformableFileTypes || this.transformableFileTypes.includes(this.fileExtension);
             },
-            hasInitialCrop() {
+            hasInitialTransform() {
                 if(this.file?.status === 'exist') {
                     return false;
                 }
-                return this.isCroppable && !!this.ratioX && !!this.ratioY;
+                return this.isTransformable && !!this.ratioX && !!this.ratioY;
             },
             hasEdit() {
-                return this.isCroppable && !this.inProgress;
+                return this.isTransformable && !this.inProgress;
             },
             hasDownload() {
                 return this.file?.status === 'exist';
@@ -313,7 +313,7 @@
                 this.setPending(false);
 
                 this.resetThumbnails();
-                this.croppedImg = null;
+                this.transformedImg = null;
 
                 if(emits) {
                     this.$emit('input', null);
@@ -342,7 +342,7 @@
             },
 
             handleEditSubmitted(cropper) {
-                this.updateCroppedImage(cropper);
+                this.updateTransformedImage(cropper);
                 this.updateFilters(cropper);
             },
 
@@ -351,8 +351,8 @@
             },
 
             onCropperReady() {
-                if(this.hasInitialCrop) {
-                    this.updateCroppedImage(this.$refs.cropper);
+                if(this.hasInitialTransform) {
+                    this.updateTransformedImage(this.$refs.cropper);
                     this.updateFilters(this.$refs.cropper);
                 }
             },
@@ -378,16 +378,16 @@
                 this.$emit('updated', value);
             },
 
-            updateCroppedImage(cropper) {
-                this.resetCroppedImage();
+            updateTransformedImage(cropper) {
+                this.resetTransformedImage();
                 cropper.getCroppedCanvas().toBlob(blob => {
-                    this.croppedImg = URL.createObjectURL(blob);
+                    this.transformedImg = URL.createObjectURL(blob);
                 });
             },
 
-            resetCroppedImage() {
-                if(this.croppedImg) {
-                    URL.revokeObjectURL(this.croppedImg);
+            resetTransformedImage() {
+                if(this.transformedImg) {
+                    URL.revokeObjectURL(this.transformedImg);
                 }
             },
 
@@ -395,7 +395,7 @@
                 if(this.file?.blobUrl) {
                     URL.revokeObjectURL(this.file.blobUrl)
                 }
-                this.resetCroppedImage();
+                this.resetTransformedImage();
             },
 
             validateValue() {
