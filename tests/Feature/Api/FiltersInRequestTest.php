@@ -7,6 +7,8 @@ use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityListAgeFilter;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityListAgeMultipleFilter;
 use Illuminate\Contracts\Support\Arrayable;
 
 class FiltersInRequestTest extends BaseApiTest
@@ -21,8 +23,8 @@ class FiltersInRequestTest extends BaseApiTest
     public function we_can_filter_instances_of_an_entity_list()
     {
         $this->buildTheWorld();
-
-        $this->json('get', '/sharp/api/list/person?filter_age=22')
+        
+        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(PersonSharpEntityListAgeFilter::class).'=22')
             ->assertStatus(200)
             ->assertJsonFragment([
                 "data" => [
@@ -78,8 +80,8 @@ class FiltersInRequestTest extends BaseApiTest
     public function we_can_filter_on_a_single_value_with_a_multiple_values_filter()
     {
         $this->buildTheWorld();
-
-        $this->json('get', '/sharp/api/list/person?filter_age_multiple=22')
+        
+        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(PersonSharpEntityListAgeMultipleFilter::class).'=22')
             ->assertStatus(200)
             ->assertJsonFragment([
                 "data" => [
@@ -98,7 +100,7 @@ class FiltersInRequestTest extends BaseApiTest
         $this->buildTheWorld();
 
         $age = rand(1, 99);
-        $this->json('get', '/sharp/api/list/person?filter_age=' . $age);
+        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(PersonSharpEntityListAgeFilter::class).'=' . $age);
 
         // The age was put in session in the Callback
         $this->assertEquals($age, session("filter_age_was_set"));
@@ -176,12 +178,11 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig(): void
+                    public function getFilters(): ?array
                     {
-                        $this->addFilter(
-                            "active",
+                        return [
                             FiltersInRequestTestRetainedActiveFilter::class
-                        );
+                        ];
                     }
                 };
             }
@@ -190,7 +191,7 @@ class FiltersInRequestTest extends BaseApiTest
         $this->buildTheWorld();
 
         // First call to retain the filter on session
-        $this->json('get', '/sharp/api/list/person?filter_active=1');
+        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(FiltersInRequestTestRetainedActiveFilter::class).'=1');
 
         // Second call: filter should be valued to 1
         $this->json('get', '/sharp/api/list/person')
@@ -206,7 +207,7 @@ class FiltersInRequestTest extends BaseApiTest
             ]);
 
         // Third call, change filter value
-        $this->json('get', '/sharp/api/list/person?filter_active=0')
+        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(FiltersInRequestTestRetainedActiveFilter::class).'=0')
             ->assertStatus(200)
             ->assertJsonFragment([
                 "items" => [
@@ -215,7 +216,7 @@ class FiltersInRequestTest extends BaseApiTest
             ]);
 
         // Fourth call, reset filter value (un-required filters)
-        $this->json('get', '/sharp/api/list/person?filter_active=')
+        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(FiltersInRequestTestRetainedActiveFilter::class).'=')
             ->assertStatus(200)
             ->assertJsonFragment([
                 "items" => [
@@ -248,12 +249,11 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig(): void
+                    public function getFilters(): ?array
                     {
-                        $this->addFilter(
-                            "age",
+                        return [
                             FiltersInRequestTestRetainedAgeMultipleFilter::class
-                        );
+                        ];
                     }
                 };
             }
@@ -307,12 +307,11 @@ class FiltersInRequestTest extends BaseApiTest
 
                         return $this->transform($items);
                     }
-                    function buildListConfig(): void
+                    function getFilters(): ?array
                     {
-                        $this->addFilter(
-                            "age",
+                        return [
                             FiltersInRequestTestRetainedAgeRequiredFilter::class
-                        );
+                        ];
                     }
                 };
             }

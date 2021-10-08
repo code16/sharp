@@ -10,6 +10,7 @@ class SpaceshipTypeFilter extends EntityListSelectRequiredFilter
     public function buildFilterConfig(): void
     {
         $this->configureLabel("Ship type")
+            ->configureKey("s-type")
             ->configureRetainInSession();
     }
 

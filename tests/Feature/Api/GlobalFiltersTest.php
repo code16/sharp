@@ -48,7 +48,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals(5, currentSharpRequest()->globalFilterFor("test"));
+        $this->assertEquals(5, currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
 
         $this
             ->postJson('/sharp/api/filters/test')
@@ -56,7 +56,7 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals("default", currentSharpRequest()->globalFilterFor("test"));
+        $this->assertEquals("default", currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
     }
 
     /** @test */
@@ -68,11 +68,11 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this
             ->postJson('/sharp/api/filters/test', ["value" => 20])
-            ->assertStatus(200);
+            ->assertOk();
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals("default", currentSharpRequest()->globalFilterFor("test"));
+        $this->assertEquals("default", currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
     }
 
     /** @test */
@@ -88,7 +88,7 @@ class GlobalFiltersTest extends BaseApiTest
             ->assertJson([
                 "filters" => [
                     [
-                        "key" => "test",
+                        "key" => class_basename(GlobalFiltersTestGlobalRequiredFilter::class),
                         "multiple" => false,
                         "required" => true,
                         "default" => "default",

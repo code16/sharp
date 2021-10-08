@@ -35,25 +35,25 @@ class PersonSharpEntityList extends SharpEntityList
                 ->toArray();
         }
 
-        if($this->queryParams->filterFor("age")) {
+        if($age = $this->queryParams->filterFor(PersonSharpEntityListAgeFilter::class)) {
             $items = collect($items)
-                ->filter(function($item) {
-                    return $item["age"] == $this->queryParams->filterFor("age");
+                ->filter(function($item) use($age) {
+                    return $item["age"] == $age;
                 })
                 ->toArray();
 
         } elseif(request()->has("default_age")) {
             $items = collect($items)
                 ->filter(function($item) {
-                    return $item["age"] == $this->queryParams->filterFor("age_required");
+                    return $item["age"] == $this->queryParams->filterFor(PersonSharpEntityListAgeRequiredFilter::class);
                 })
                 ->toArray();
         }
 
-        if($this->queryParams->filterFor("age_multiple")) {
+        if($ages = $this->queryParams->filterFor(PersonSharpEntityListAgeMultipleFilter::class)) {
             $items = collect($items)
-                ->filter(function($item) {
-                    return in_array($item["age"], (array)$this->queryParams->filterFor("age_multiple"));
+                ->filter(function($item) use ($ages) {
+                    return in_array($item["age"], (array)$ages);
                 })
                 ->toArray();
         }

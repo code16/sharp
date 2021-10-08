@@ -9,20 +9,28 @@ trait HasFiltersInQuery
 {
     protected array $filters;
 
-    public function filterFor(string $filterFullClassName): mixed
+    public function filterFor(string $filterFullClassNameOrKey): mixed
     {
-        $filterClassName = class_basename($filterFullClassName);
+        if(class_exists($filterFullClassNameOrKey)) {
+            $key = tap(
+                app($filterFullClassNameOrKey), function(Filter $filter) {
+                    $filter->buildFilterConfig();
+                })
+                ->getKey();
+        } else {
+            $key = $filterFullClassNameOrKey;
+        }
         
-        if(isset($this->filters["/forced/$filterClassName"])) {
-            return $this->filterFor("/forced/$filterClassName");
+        if(isset($this->filters["/forced/$key"])) {
+            return $this->filterFor("/forced/$key");
         }
 
-        if(!isset($this->filters[$filterClassName])) {
+        if(!isset($this->filters[$key])) {
             return null;
         }
 
-        if(Str::contains($this->filters[$filterClassName], "..")) {
-            list($start, $end) = explode("..", $this->filters[$filterClassName]);
+        if(Str::contains($this->filters[$key], "..")) {
+            list($start, $end) = explode("..", $this->filters[$key]);
 
             return [
                 "start" => Carbon::createFromFormat('Ymd', $start)->startOfDay(),
@@ -30,11 +38,11 @@ trait HasFiltersInQuery
             ];
         }
 
-        if(Str::contains($this->filters[$filterClassName], ",")){
-            return explode(",", $this->filters[$filterClassName]);
+        if(Str::contains($this->filters[$key], ",")){
+            return explode(",", $this->filters[$key]);
         }
 
-        return $this->filters[$filterClassName];
+        return $this->filters[$key];
     }
 
     public function setDefaultFilters(array $filters): self

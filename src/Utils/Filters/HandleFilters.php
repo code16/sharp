@@ -17,10 +17,8 @@ trait HandleFilters
     {
         $this->getFilterHandlers()
             ->each(function(Filter $filterHandler) use(&$config) {
-                $filterHandler->buildFilterConfig();
-                
                 $filterConfigData = [
-                    "key" => class_basename($filterHandler::class),
+                    "key" => $filterHandler->getKey(),
                     "default" => $this->getFilterDefaultValue($filterHandler),
                     "label" => $filterHandler->getLabel()
                 ];
@@ -69,6 +67,8 @@ trait HandleFilters
                         throw new SharpException("Handler class for filter [{$filterHandlerOrClassName}] must implement a sub-interface of " . Filter::class);
                     }
                     
+                    $filterHandler->buildFilterConfig();
+                    
                     return $filterHandler;
 
 //        if($callback) {
@@ -103,27 +103,27 @@ trait HandleFilters
         return collect($this->getFilterHandlers())
 
             // Only filters which aren't in the request
-            ->filter(function($handler) {
-                return !request()->has("filter_" . class_basename($handler::class));
+            ->filter(function(Filter $handler) {
+                return !request()->has("filter_{$handler->getKey()}");
             })
 
             // Only required filters or retained filters with value saved in session
-            ->filter(function($handler) {
+            ->filter(function(Filter $handler) {
                 return $handler instanceof SelectRequiredFilter
                     || $handler instanceof DateRangeRequiredFilter
                     || $this->isRetainedFilter($handler, true);
             })
             
-            ->map(function($handler) {
+            ->map(function(Filter $handler) {
                 if($this->isRetainedFilter($handler, true)) {
                     return [
-                        "name" => class_basename($handler::class),
-                        "value" => session("_sharp_retained_filter_" . $handler::class)
+                        "name" => $handler->getKey(),
+                        "value" => session("_sharp_retained_filter_{$handler->getKey()}")
                     ];
                 }
 
                 return [
-                    "name" => class_basename($handler::class),
+                    "name" => $handler->getKey(),
                     "value" => $handler->defaultValue()
                 ];
             })
@@ -138,6 +138,7 @@ trait HandleFilters
      */
     protected function putRetainedFilterValuesInSession(): void
     {
+        // TODO REFACTOR THIS
         collect($this->filterHandlers)
             // Only filters sent which are declared "retained"
             ->filter(function($handler, $attribute) {
@@ -169,7 +170,7 @@ trait HandleFilters
     protected function isRetainedFilter(Filter $handler, $onlyValued = false): bool
     {
         return $handler->isRetainInSession()
-            && (!$onlyValued || session()->has("_sharp_retained_filter_" . $handler::class));
+            && (!$onlyValued || session()->has("_sharp_retained_filter_{$handler->getKey()}"));
     }
 
     protected function isGlobalFilter(Filter $handler): bool
@@ -186,11 +187,11 @@ trait HandleFilters
     protected function getFilterDefaultValue(Filter $handler): int|string|array|null
     {
         if($this->isGlobalFilter($handler)) {
-            return session("_sharp_retained_global_filter_" . $handler::class) ?: $handler->defaultValue();
+            return session("_sharp_retained_global_filter_{$handler->getKey()}") ?: $handler->defaultValue();
         }
 
         if($this->isRetainedFilter($handler, true)) {
-            $sessionValue = session("_sharp_retained_filter_" . $handler::class);
+            $sessionValue = session("_sharp_retained_filter_{$handler->getKey()}");
 
             if($handler instanceof SelectMultipleFilter) {
                 return explode(",", $sessionValue);
