@@ -15,12 +15,6 @@
             <EditorContent :editor="editor" />
 
             <template v-if="editor && !readOnly">
-                <BubbleMenu
-                    :id="uniqueIdentifier"
-                    :editor="editor"
-                    :toolbar="toolbar"
-                    :ignored-extensions="bubbleMenuIgnoredExtensions"
-                />
                 <template v-if="hasUpload">
                     <UploadFileInput :editor="editor"/>
                 </template>
@@ -31,12 +25,9 @@
 
 <script>
     import { EditorContent } from '@tiptap/vue-2';
-    import HorizontalRule from "@tiptap/extension-horizontal-rule";
     import { Upload } from "./extensions/upload/upload";
-    import { Image } from "@tiptap/extension-image";
     import UploadFileInput from "./extensions/upload/UploadFileInput";
     import MenuBar from "./toolbar/MenuBar";
-    import BubbleMenu from "./BubbleMenu";
     import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
 
@@ -45,7 +36,6 @@
             EditorContent,
             MenuBar,
             UploadFileInput,
-            BubbleMenu,
         },
         props: {
             id: String,
@@ -78,13 +68,6 @@
                 return {
                     '--height': `${this.height}px`,
                 }
-            },
-            bubbleMenuIgnoredExtensions() {
-                return [
-                    Upload,
-                    Image,
-                    HorizontalRule,
-                ]
             },
             hasUpload() {
                 return this.editor.options.extensions?.find(extension => extension.name === Upload.name);

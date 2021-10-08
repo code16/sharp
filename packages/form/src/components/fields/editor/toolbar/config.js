@@ -6,13 +6,11 @@ export const buttons = {
         command: editor => editor.chain().focus().toggleBold().run(),
         isActive: editor => editor.isActive('bold'),
         icon: getToolbarIcon('bold'),
-        bubbleMenu: true,
     },
     'italic': {
         command: editor => editor.chain().focus().toggleItalic().run(),
         isActive: editor => editor.isActive('italic'),
         icon: getToolbarIcon('italic'),
-        bubbleMenu: true,
     },
     'heading-1': {
         command: editor => editor.chain().focus().toggleHeading({ level: 1 }).run(),
@@ -60,7 +58,6 @@ export const buttons = {
         },
         isActive: editor => editor.isActive('link'),
         icon: getToolbarIcon('link'),
-        bubbleMenu: true,
     },
     'upload-image': {
         command: editor => editor.chain().focus().newUpload().run(),

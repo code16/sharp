@@ -9,7 +9,6 @@
                                 :id="id"
                                 :active="isActive(button)"
                                 :editor="editor"
-                                :dropup="bubbleMenu"
                                 :disabled="disabled"
                                 @submit="handleLinkSubmitted"
                                 @remove="handleRemoveLinkClicked"
@@ -50,18 +49,11 @@
             id: String,
             editor: Object,
             toolbar: Array,
-            bubbleMenu: Boolean,
             disabled: Boolean,
         },
         computed: {
             toolbarGroups() {
                 return this.toolbar
-                    .filter(button => {
-                        if(this.bubbleMenu) {
-                            return buttons[button]?.bubbleMenu;
-                        }
-                        return true;
-                    })
                     .reduce((res, btn) => {
                         if(btn === '|') {
                             return [...res, []];
