@@ -25,7 +25,6 @@ class SharpEntityListCommandTest extends SharpTestCase
                         {
                             return "My Entity Command";
                         }
-
                         public function execute(array $data = []): array
                         {
                         }
@@ -122,8 +121,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function confirmationText(): ?string {
-                            return "Sure?";
+                        public function buildCommandConfig(): void {
+                            $this->configureConfirmationText("Sure?");
                         }
                         public function execute(array $data = []): array {}
                     }
@@ -280,9 +279,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        function buildFormFields(FieldsContainer $formFields): void
-                        {
-                            $this->setGlobalMessage("template", "global_message");
+                        public function buildCommandConfig(): void {
+                            $this->configureGlobalMessage("template", "global_message");
                         }
                         public function execute(array $data = []): array {}
                     }
@@ -385,8 +383,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function formModalTitle(): string {
-                            return "My title";
+                        public function buildCommandConfig(): void {
+                            $this->configureFormModalTitle("My title");
                         }
                         public function execute(array $data = []): array {}
                     }
@@ -515,8 +513,8 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function label(): string {
                             return "My Entity Command";
                         }
-                        public function description(): string {
-                            return "My Entity Command description";
+                        public function buildCommandConfig(): void {
+                            $this->configureDescription("My Entity Command description");
                         }
                         public function execute(array $data = []): array {}
                     }

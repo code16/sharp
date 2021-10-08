@@ -97,7 +97,7 @@ class SpaceshipSharpShow extends SharpShow
     function buildShowConfig(): void
     {
         $this
-            ->setGlobalMessage(
+            ->configureGlobalMessage(
                 "<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>",
                 "globalMessage"
             )

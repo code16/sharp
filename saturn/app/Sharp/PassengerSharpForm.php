@@ -62,7 +62,7 @@ class PassengerSharpForm extends SharpForm
     
     public function buildFormConfig(): void
     {
-        $this->setGlobalMessage(
+        $this->configureGlobalMessage(
             '<div class="alert alert-danger">Careful: editing a passenger in category {{category}} could lead to problems.</div>',
             'html_help'
         );

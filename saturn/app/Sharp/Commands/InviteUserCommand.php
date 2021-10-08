@@ -12,12 +12,35 @@ class InviteUserCommand extends EntityCommand
     {
         return "Invite new user...";
     }
-    
-    public function formModalTitle(): string
+
+    function buildCommandConfig(): void
     {
-        return "Send an invitation to a new user";
+        $this
+            ->configureFormModalTitle("Send an invitation to a new user")
+            ->configureGlobalMessage(
+                "The invitation will be automatically sent before {{day}}, 10 AM",
+                "globalHelp"
+            );
     }
-    
+
+    function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make("email")
+                    ->setLabel("E-mail address")
+            );
+    }
+
+    protected function initialData(): array
+    {
+        return [
+            "globalHelp" => [
+                "day" => now()->addDay()->formatLocalized("%A")
+            ]
+        ];
+    }
+
     public function execute(array $data = []): array
     {
         $this->validate(
@@ -28,29 +51,5 @@ class InviteUserCommand extends EntityCommand
         );
         
         return $this->info("Invitation planned!");
-    }
-
-    function buildFormFields(FieldsContainer $formFields): void
-    {
-        $this
-            ->setGlobalMessage(
-                "The invitation will be automatically sent before {{day}}, 10 AM",
-                "globalHelp"
-            );
-        
-        $formFields
-            ->addField(
-                SharpFormTextField::make("email")
-                    ->setLabel("E-mail address")
-            );
-    }
-    
-    protected function initialData(): array
-    {
-        return [
-            "globalHelp" => [
-                "day" => now()->addDay()->formatLocalized("%A")
-            ]
-        ];
     }
 }

@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
-class EntityCommandController extends ApiController
+class EntityListEntityCommandController extends ApiController
 {
     use HandleCommandReturn;
 
@@ -16,6 +16,7 @@ class EntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->initQueryParams();
         
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
@@ -28,6 +29,7 @@ class EntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->initQueryParams();
         
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 

@@ -17,15 +17,12 @@ class SpaceshipSendMessage extends InstanceCommand
     {
         return "Send a text message...";
     }
-
-    public function formModalTitle(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Send a text message";
-    }
-
-    public function description(): string
-    {
-        return "Will pretend to send a message and increment message count.";
+        $this
+            ->configureFormModalTitle("Send a text message")
+            ->configureDescription("Will pretend to send a message and increment message count.");
     }
 
     public function execute($instanceId, array $data = []): array

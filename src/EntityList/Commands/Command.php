@@ -11,10 +11,6 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-/**
- * Base class for Commands. Handle returns (info, refresh, reload...),
- * form creation, and validation.
- */
 abstract class Command
 {
     use HandleFormFields, 
@@ -23,6 +19,10 @@ abstract class Command
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
+    
+    private ?string $formModalTitle = null;
+    private ?string $confirmationText = null;
+    private ?string $description = null;
 
     protected function info(string $message): array
     {
@@ -82,6 +82,24 @@ abstract class Command
         ];
     }
 
+    protected final function configureFormModalTitle(string $formModalTitle): self
+    {
+        $this->formModalTitle = $formModalTitle;
+        return $this;
+    }
+
+    protected final function configureDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    protected final function configureConfirmationText(string $confirmationText): self
+    {
+        $this->confirmationText = $confirmationText;
+        return $this;
+    }
+
     /**
      * Check if the current user is allowed to use this Command.
      */
@@ -95,9 +113,26 @@ abstract class Command
         return $this->authorize();
     }
 
-    public function confirmationText(): ?string
+    public final function getConfirmationText(): ?string
     {
-        return null;
+        return $this->confirmationText;
+    }
+    
+    public final function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public final function getFormModalTitle(): ?string
+    {
+        return $this->formModalTitle;
+    }
+
+    /**
+     * Build the optional Command config with configure... methods
+     */
+    public function buildCommandConfig(): void
+    {
     }
 
     /**
@@ -177,16 +212,6 @@ abstract class Command
                 $validator, new JsonResponse($validator->errors()->getMessages(), 422)
             );
         }
-    }
-
-    public function description(): string
-    {
-        return "";
-    }
-
-    public function formModalTitle(): string
-    {
-        return "";
     }
 
     abstract public function label(): ?string;

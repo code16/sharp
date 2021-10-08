@@ -7,7 +7,6 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 class SpaceshipPreview extends InstanceCommand
 {
-
     public function label(): string
     {
         return "Preview public page";

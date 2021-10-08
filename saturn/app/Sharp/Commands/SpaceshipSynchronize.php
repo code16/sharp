@@ -14,10 +14,12 @@ class SpaceshipSynchronize extends EntityCommand
             SpaceshipType::findOrFail($this->queryParams->filterFor("type"))->label
         );
     }
-
-    public function description(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Let's be honest: this command is a fraud. It's just an empty command for test purpose.";
+        $this
+            ->configureDescription("Let's be honest: this command is a fraud. It's just an empty command for test purpose.")
+            ->configureConfirmationText("Sure, really?");
     }
 
     public function execute(array $data=[]): array
@@ -30,11 +32,6 @@ class SpaceshipSynchronize extends EntityCommand
                 SpaceshipType::findOrFail($this->queryParams->filterFor("type"))->label
             )
         );
-    }
-
-    public function confirmationText(): string
-    {
-        return "Sure, really?";
     }
 
     public function authorize():bool

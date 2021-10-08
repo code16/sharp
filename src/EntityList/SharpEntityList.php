@@ -49,9 +49,9 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public final function initWith(EntityListQueryParams $customParams): self
+    public final function updateQueryParamsWithSpecificIds(array $specificIds): self
     {
-        $this->queryParams = $customParams;
+        $this->queryParams->setSpecificIds($specificIds);
 
         return $this;
     }

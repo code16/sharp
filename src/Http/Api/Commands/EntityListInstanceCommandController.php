@@ -33,7 +33,7 @@ class EntityListInstanceCommandController extends ApiController
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
         $list->initQueryParams();
-
+        
         $handler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
         return $this->returnCommandResult(

@@ -89,7 +89,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->configureEntityState("state", SpaceshipEntityState::class)
             ->configurePaginated()
-            ->setGlobalMessage(
+            ->configureGlobalMessage(
                 "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
             );
     }

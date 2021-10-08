@@ -134,7 +134,7 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->setGlobalMessage("template", "test-key");
+                $this->configureGlobalMessage("template", "test-key");
             }
         };
 
@@ -154,7 +154,7 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->setGlobalMessage("Hello {{name}}", "test-key");
+                $this->configureGlobalMessage("Hello {{name}}", "test-key");
             }
             function find($id): array
             {

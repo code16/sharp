@@ -235,7 +235,7 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setGlobalMessage('template', 'test-key');
+                $this->configureGlobalMessage('template', 'test-key');
             }
         };
 
@@ -254,7 +254,7 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setGlobalMessage("Hello {{name}}", "test-key");
+                $this->configureGlobalMessage("Hello {{name}}", "test-key");
             }
             function getGlobalMessageData(): ?array
             {

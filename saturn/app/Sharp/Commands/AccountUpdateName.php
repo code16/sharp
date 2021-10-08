@@ -9,7 +9,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class AccountUpdateName extends SingleInstanceCommand
 {
-
     public function label(): string
     {
         return "Update your name";

@@ -15,15 +15,11 @@ class TravelSendEmail extends InstanceCommand
     {
         return "Send email";
     }
-
-    public function formModalTitle(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Send email";
-    }
-
-    public function description(): string
-    {
-        return "Will pretend to send an email to all the passengers of this flight.";
+        $this->configureFormModalTitle("Send email")
+            ->configureDescription("Will pretend to send an email to all the passengers of this flight.");
     }
 
     public function execute($instanceId, array $data = []): array

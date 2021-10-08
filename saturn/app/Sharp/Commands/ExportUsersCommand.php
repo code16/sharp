@@ -15,6 +15,12 @@ class ExportUsersCommand extends EntityCommand
     {
         return "Export users as text file";
     }
+    
+    public function buildCommandConfig(): void
+    {
+        $this
+            ->configureDescription("Download or stream a text file as response.");
+    }
 
     public function execute(array $data = []): array
     {
