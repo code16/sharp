@@ -1,35 +1,37 @@
 <template>
     <div class="editor__toolbar">
-        <template v-for="group in toolbarGroups">
-            <div class="btn-group">
-                <template v-for="button in group">
-                    <template v-if="button === 'link'">
-                        <LinkDropdown
-                            :id="id"
-                            :active="isActive(button)"
-                            :editor="editor"
-                            :dropup="bubbleMenu"
-                            :disabled="disabled"
-                            @submit="handleLinkSubmitted"
-                            @remove="handleRemoveLinkClicked"
-                        >
-                            <i :class="getIcon(button)"></i>
-                        </LinkDropdown>
+        <div class="row row-cols-auto g-2">
+            <template v-for="group in toolbarGroups">
+                <div class="btn-group">
+                    <template v-for="button in group">
+                        <template v-if="button === 'link'">
+                            <LinkDropdown
+                                :id="id"
+                                :active="isActive(button)"
+                                :editor="editor"
+                                :dropup="bubbleMenu"
+                                :disabled="disabled"
+                                @submit="handleLinkSubmitted"
+                                @remove="handleRemoveLinkClicked"
+                            >
+                                <i :class="getIcon(button)"></i>
+                            </LinkDropdown>
+                        </template>
+                        <template v-else>
+                            <Button
+                                variant="light"
+                                :active="isActive(button)"
+                                :disabled="disabled"
+                                @click="handleClicked(button)"
+                                :key="button"
+                            >
+                                <i :class="getIcon(button)"></i>
+                            </Button>
+                        </template>
                     </template>
-                    <template v-else>
-                        <Button
-                            variant="light"
-                            :active="isActive(button)"
-                            :disabled="disabled"
-                            @click="handleClicked(button)"
-                            :key="button"
-                        >
-                            <i :class="getIcon(button)"></i>
-                        </Button>
-                    </template>
-                </template>
-            </div>
-        </template>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 

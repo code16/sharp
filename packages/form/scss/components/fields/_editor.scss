@@ -169,12 +169,6 @@
       font-size: .675rem;
     }
 
-    .btn-group {
-      &:not(:first-child):not(.dropdown) {
-        margin-left: .5rem;
-      }
-    }
-
     .btn-light {
       &:not(:hover):not(:focus):not(.active):not(.trix-active) {
         //color: hsla(var(--primary-h), var(--primary-s), 20%, .75);
