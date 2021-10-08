@@ -10,6 +10,8 @@
             <template v-if="visible">
                 <Form
                     class="SharpCommandForm"
+                    :entity-key="entityKey"
+                    :instance-id="instanceId"
                     :form="command.form"
                     :show-alert="false"
                     independant
@@ -35,6 +37,8 @@
         },
         props: {
             command: Object,
+            entityKey: String,
+            instanceId: [Number, String],
         },
         data() {
             return {

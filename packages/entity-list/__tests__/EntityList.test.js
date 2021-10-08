@@ -421,19 +421,6 @@ describe('EntityList', () => {
             expect(wrapper.vm.reorderActive).toEqual(false);
         });
 
-        test('handleEntityCommandRequested', () => {
-            const wrapper = createWrapper();
-            wrapper.setMethods({
-                handleCommandRequested: jest.fn(),
-                commandEndpoint: jest.fn(()=>'commandEndpoint'),
-            });
-            wrapper.vm.handleEntityCommandRequested({ key:'sync' });
-            expect(wrapper.vm.handleCommandRequested).toHaveBeenCalledWith({ key:'sync' }, {
-                endpoint: 'commandEndpoint',
-            });
-            expect(wrapper.vm.commandEndpoint).toHaveBeenCalledWith('sync');
-        });
-
         test('handleCreateButtonClicked', () => {
             const wrapper = createWrapper();
             wrapper.setMethods({

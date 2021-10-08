@@ -16,8 +16,15 @@
             <ActionBar />
         </template>
 
-        <CommandFormModal :command="currentCommand" ref="commandForm" />
-        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal
+            :command="currentCommand"
+            :entity-key="dashboardKey"
+            ref="commandForm"
+        />
+        <CommandViewPanel
+            :content="commandViewContent"
+            @close="handleCommandViewPanelClosed"
+        />
     </div>
 </template>
 
@@ -63,6 +70,9 @@
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
                 commandsForType: 'commands/forType',
             }),
+            dashboardKey() {
+                return this.$route.params.dashboardKey;
+            },
             commands() {
                 return this.commandsForType('dashboard') || [];
             },
@@ -83,7 +93,7 @@
                 });
             },
             async init() {
-                await this.$store.dispatch('dashboard/setDashboardKey', this.$route.params.id);
+                this.$store.commit('dashboard/setDashboardKey', this.dashboardKey);
                 await withLoadingOverlay(
                     this.$store.dispatch('dashboard/get', {
                         filtersValues: this.getFiltersValuesFromQuery(this.$route.query)

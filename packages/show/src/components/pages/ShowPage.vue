@@ -61,8 +61,16 @@
             </template>
         </div>
 
-        <CommandFormModal :command="currentCommand" ref="commandForm" />
-        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal
+            :command="currentCommand"
+            :entity-key="entityKey"
+            :instance-id="instanceId"
+            ref="commandForm"
+        />
+        <CommandViewPanel
+            :content="commandViewContent"
+            @close="handleCommandViewPanelClosed"
+        />
     </div>
 </template>
 

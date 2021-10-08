@@ -98,7 +98,7 @@
 
         props: {
             entityKey: String,
-            instanceId: String,
+            instanceId: [Number, String],
 
             /// Extras props for customization
             independant: Boolean,
