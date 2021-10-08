@@ -1,5 +1,3 @@
-import { Upload } from "./extensions/upload/upload";
-import { filesEquals } from "../../../util/upload";
 import StarterKit from "@tiptap/starter-kit";
 import Table from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
@@ -10,43 +8,105 @@ import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Link from "@tiptap/extension-link";
 import Placeholder from '@tiptap/extension-placeholder';
 import Heading from "@tiptap/extension-heading";
+import { Upload } from "./extensions/upload/upload";
 import { TrailingNode } from "./extensions/trailing-node";
-import { getAllowedHeadingLevels } from "./util";
+import { getAllowedHeadingLevels, toolbarHasButton } from "./util";
+import { filesEquals } from "../../../util/upload";
 
-export function getDefaultExtensions({ placeholder, toolbar } = {}) {
-    const extensions = [
-        StarterKit.configure({
-            horizontalRule: false,
-            heading: false,
-        }),
-        Table,
-        TableRow,
-        TableHeader,
-        TableCell,
-        Image.configure({
+
+export const defaultEditorOptions = {
+    injectCSS: false,
+}
+
+function getHeadingExtension(toolbar) {
+    const levels = getAllowedHeadingLevels(toolbar);
+    if(levels.length > 0) {
+        return Heading.configure({
+            levels,
+        });
+    }
+}
+
+function getLinkExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'link')) {
+        return Link.configure({
+            openOnClick: false,
+        });
+    }
+}
+
+function getImageExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'image')) {
+        return Image.configure({
             HTMLAttributes: {
                 class: 'editor__image',
             },
-        }),
-        Heading.configure({
-            levels: getAllowedHeadingLevels(toolbar),
-        }),
-        HorizontalRule.extend({
+        });
+    }
+}
+
+function getHorizontalRuleExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'horizontal-rule')) {
+        return HorizontalRule.extend({
             selectable: false,
+        });
+    }
+}
+
+function getTableExtensions(toolbar) {
+    if(toolbarHasButton(toolbar, 'table')) {
+        return [
+            Table,
+            TableRow,
+            TableHeader,
+            TableCell,
+        ];
+    }
+}
+
+function getPlaceholderExtension(placeholder) {
+    if(placeholder) {
+        return Placeholder.configure({
+            placeholder,
+        });
+    }
+}
+
+export function getDefaultExtensions({ placeholder, toolbar } = {}) {
+    const bulletList = toolbarHasButton(toolbar, 'bullet-list');
+    const orderedList = toolbarHasButton(toolbar, 'ordered-list');
+    const extensions = [
+        StarterKit.configure({
+            blockquote: toolbarHasButton(toolbar, 'blockquote'),
+            bold: toolbarHasButton(toolbar, 'bold'),
+            bulletList,
+            code: toolbarHasButton(toolbar, 'code'),
+            codeBlock: false,
+            document: true,
+            dropcursor: true,
+            gapcursor: true,
+            hardBreak: true,
+            heading: false,
+            history: true,
+            horizontalRule: false,
+            italic: toolbarHasButton(toolbar, 'italic'),
+            listItem: bulletList || orderedList,
+            orderedList,
+            paragraph: true,
+            strike: false,
+            text: true,
         }),
-        Link.configure({
-            openOnClick: false,
-        }),
+        getHeadingExtension(toolbar),
+        getLinkExtension(toolbar),
+        getImageExtension(toolbar),
+        getHorizontalRuleExtension(toolbar),
+        getTableExtensions(toolbar),
+        getPlaceholderExtension(placeholder),
         TrailingNode,
     ];
-
-    if(placeholder) {
-        extensions.push(Placeholder.configure({
-            placeholder,
-        }));
-    }
-
-    return extensions;
+    return extensions
+        .flat()
+        .filter(extension => !!extension);
 }
 
 export function getUploadExtension({ fieldProps }) {

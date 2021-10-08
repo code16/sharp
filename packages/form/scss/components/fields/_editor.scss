@@ -1,14 +1,24 @@
 
 
 .editor {
-  .card {
-    border-color: $input-border-color;
-  }
-  .card-header {
+
+  &__header {
+    position: sticky;
+    top: var(--navbar-height);
     border-top-right-radius: $card-border-radius;
     border-top-left-radius: $card-border-radius;
     background: white;
     padding: .75rem;
+    transition: box-shadow .2s ease-in-out;
+
+    &.stuck {
+      z-index: 2;
+      box-shadow: $box-shadow-sm;
+    }
+  }
+
+  .card {
+    border-color: $input-border-color;
   }
 
   .card-body {
@@ -32,8 +42,13 @@
   }
 
   &__content {
+    position: static;
     height: var(--height, auto);
     overflow-y: auto;
+
+    &:focus {
+      position: relative;
+    }
 
     h1, h2, h3, h4, h5, h6 {
       font-weight: bold;

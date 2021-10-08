@@ -10,7 +10,7 @@
 <script>
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../editor/Editor';
-    import { getDefaultExtensions, getUploadExtension } from "../editor";
+    import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../editor";
     import localize from '../../../mixins/localize/editor';
     import { normalizeHTML } from "./util";
 
@@ -67,6 +67,7 @@
                 }
 
                 return new Editor({
+                    ...defaultEditorOptions,
                     extensions,
                     content: normalizeHTML(this.localizedText),
                     onUpdate: this.handleUpdate,

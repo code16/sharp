@@ -11,7 +11,7 @@
     import { createMarkdownEditor } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../editor/Editor';
-    import { getDefaultExtensions, getUploadExtension } from "../editor";
+    import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../editor";
     import localize from '../../../mixins/localize/editor';
 
     export default {
@@ -68,6 +68,7 @@
                 }
 
                 return new MarkdownEditor({
+                    ...defaultEditorOptions,
                     extensions,
                     content: this.localizedText,
                     onUpdate: this.handleUpdate,
