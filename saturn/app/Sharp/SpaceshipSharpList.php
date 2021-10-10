@@ -8,6 +8,7 @@ use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipReload;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\Commands\SpaceshipSynchronize;
+use App\Sharp\Filters\CorporationGlobalFilter;
 use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
@@ -128,7 +129,7 @@ class SpaceshipSharpList extends SharpEntityList
     function getListData(): array|Arrayable
     {
         $spaceships = Spaceship::select("spaceships.*")
-            ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
+            ->where("corporation_id", currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class))
             ->distinct();
 
         if($this->queryParams->specificIds()) {

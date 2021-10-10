@@ -116,7 +116,7 @@ return [
     ],
 
     "global_filters" => [
-        "corporation" => \App\Sharp\Filters\CorporationGlobalFilter::class
+        \App\Sharp\Filters\CorporationGlobalFilter::class
     ],
 
     "menu" => [

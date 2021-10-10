@@ -19,20 +19,27 @@ class GlobalFiltersTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters.req_test", GlobalFiltersTestGlobalRequiredFilter::class);
+        config()->set("sharp.global_filters", [GlobalFiltersTestGlobalRequiredFilter::class]);
 
         // First call without any value in session
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals("default", currentSharpRequest()->globalFilterFor("req_test"));
+        $this->assertEquals(
+            "default", 
+            currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
+        );
 
         // Second call with a value in session
+        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
         $value = Str::random();
-        session()->put("_sharp_retained_global_filter_req_test", $value);
+        session()->put("_sharp_retained_global_filter_$key", $value);
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals($value, currentSharpRequest()->globalFilterFor("req_test"));
+        $this->assertEquals(
+            $value, 
+            currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
+        );
     }
 
     /** @test */
@@ -40,23 +47,30 @@ class GlobalFiltersTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
+        config()->set("sharp.global_filters", [GlobalFiltersTestGlobalRequiredFilter::class]);
+        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
 
         $this
-            ->postJson('/sharp/api/filters/test', ["value" => 5])
-            ->assertStatus(200);
+            ->postJson("/sharp/api/filters/$key", ["value" => 5])
+            ->assertOk();
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals(5, currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
+        $this->assertEquals(
+            5, 
+            currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
+        );
 
         $this
-            ->postJson('/sharp/api/filters/test')
-            ->assertStatus(200);
+            ->postJson("/sharp/api/filters/$key")
+            ->assertOk();
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals("default", currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
+        $this->assertEquals(
+            "default", 
+            currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
+        );
     }
 
     /** @test */
@@ -65,9 +79,10 @@ class GlobalFiltersTest extends BaseApiTest
         $this->buildTheWorld();
 
         config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
+        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
 
         $this
-            ->postJson('/sharp/api/filters/test', ["value" => 20])
+            ->postJson("/sharp/api/filters/$key", ["value" => 20])
             ->assertOk();
 
         $this->getJson('/sharp/api/form/person/50');
@@ -80,15 +95,16 @@ class GlobalFiltersTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
+        config()->set("sharp.global_filters", [GlobalFiltersTestGlobalRequiredFilter::class]);
+        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
 
         $this
             ->getJson('/sharp/api/filters')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 "filters" => [
                     [
-                        "key" => class_basename(GlobalFiltersTestGlobalRequiredFilter::class),
+                        "key" => $key,
                         "multiple" => false,
                         "required" => true,
                         "default" => "default",

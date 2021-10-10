@@ -86,7 +86,7 @@ trait HandleFilters
     {
         $values = $handler->values();
         
-        if(Arr::isAssoc($values)) {
+        if(!is_array(collect($values)->first())) {
             return collect($values)
                 ->map(function ($label, $id) {
                     return compact('id', 'label');
@@ -138,27 +138,26 @@ trait HandleFilters
      */
     protected function putRetainedFilterValuesInSession(): void
     {
-        // TODO REFACTOR THIS
-        collect($this->filterHandlers)
+        collect($this->getFilterHandlers())
             // Only filters sent which are declared "retained"
-            ->filter(function($handler, $attribute) {
-                return request()->has("filter_$attribute")
-                    && $this->isRetainedFilter($handler, $attribute);
+            ->filter(function(Filter $handler) {
+                return request()->has("filter_{$handler->getKey()}")
+                    && $this->isRetainedFilter($handler);
             })
-            ->each(function($handler, $attribute) {
+            ->each(function($handler) {
                 // Array case: we store a coma separated string
                 // (to be consistent and only store strings on filter session)
-                $value = is_array(request()->get("filter_$attribute"))
-                    ? implode(",", request()->get("filter_$attribute"))
-                    : request()->get("filter_$attribute");
+                $value = is_array(request()->get("filter_{$handler->getKey()}"))
+                    ? implode(",", request()->get("filter_{$handler->getKey()}"))
+                    : request()->get("filter_{$handler->getKey()}");
 
                 if(strlen(trim($value)) === 0) {
                     // No value, we have to unset the retained value
-                    session()->forget("_sharp_retained_filter_$attribute");
+                    session()->forget("_sharp_retained_filter_{$handler->getKey()}");
 
                 } else {
                     session()->put(
-                        "_sharp_retained_filter_$attribute",
+                        "_sharp_retained_filter_{$handler->getKey()}",
                         $value
                     );
                 }

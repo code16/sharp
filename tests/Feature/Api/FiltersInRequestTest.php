@@ -132,25 +132,25 @@ class FiltersInRequestTest extends BaseApiTest
             PersonSharpEntityList::class,
             function() {
                 return new class() extends PersonSharpEntityList {
-                    function buildListConfig(): void
+                    function getFilters(): array
                     {
-                        $this->addFilter(
-                            "active",
+                        return [
                             FiltersInRequestTestRetainedActiveFilter::class
-                        );
+                        ];
                     }
                 };
             }
         );
 
         $this->buildTheWorld();
+        $key = (new FiltersInRequestTestRetainedActiveFilter())->getKey();
 
-        $this->assertFalse(!!session("_sharp_retained_filter_active"));
+        $this->assertFalse(!!session("_sharp_retained_filter_$key"));
 
         // Call to retain the filter on session
-        $this->json('get', '/sharp/api/list/person?filter_active=1');
+        $this->getJson("/sharp/api/list/person?filter_$key=1");
 
-        $this->assertTrue(!!session("_sharp_retained_filter_active"));
+        $this->assertTrue(!!session("_sharp_retained_filter_$key"));
     }
 
     /** @test */
@@ -168,10 +168,10 @@ class FiltersInRequestTest extends BaseApiTest
                             ["id" => 2, "name" => "Baby", "age" => 2, "active" => false],
                         ];
 
-                        if ($this->queryParams->filterFor("active") !== null) {
+                        if ($this->queryParams->filterFor(FiltersInRequestTestRetainedActiveFilter::class) !== null) {
                             $items = collect($items)
                                 ->filter(function ($item) {
-                                    return $item["active"] == $this->queryParams->filterFor("active");
+                                    return $item["active"] == $this->queryParams->filterFor(FiltersInRequestTestRetainedActiveFilter::class);
                                 })
                                 ->values();
                         }
@@ -241,7 +241,7 @@ class FiltersInRequestTest extends BaseApiTest
                             ["id" => 3, "name" => "Baby", "age" => 2],
                         ];
 
-                        if ($age = $this->queryParams->filterFor("age")) {
+                        if ($age = $this->queryParams->filterFor(FiltersInRequestTestRetainedAgeMultipleFilter::class)) {
                             $items = collect($items)
                                 ->whereIn("age", $age)
                                 ->values();
@@ -260,13 +260,14 @@ class FiltersInRequestTest extends BaseApiTest
         );
 
         $this->buildTheWorld();
+        $key = (new FiltersInRequestTestRetainedAgeMultipleFilter)->getKey();
 
         // First call to retain the filter on session
-        $this->json('get', '/sharp/api/list/person?filter_age=30,32');
+        $this->getJson("/sharp/api/list/person?filter_$key=30,32");
 
         // Second call: filter should be valued
-        $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+        $this->getJson('/sharp/api/list/person')
+            ->assertOk()
             ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
@@ -275,8 +276,8 @@ class FiltersInRequestTest extends BaseApiTest
             ]);
 
         // Third call: filter should be reset
-        $this->json('get', '/sharp/api/list/person?filter_age=')
-            ->assertStatus(200)
+        $this->getJson("/sharp/api/list/person?filter_$key=")
+            ->assertOk()
             ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
@@ -302,7 +303,7 @@ class FiltersInRequestTest extends BaseApiTest
                         ];
 
                         $items = collect($items)
-                            ->where("age", $this->queryParams->filterFor("age"))
+                            ->where("age", $this->queryParams->filterFor(FiltersInRequestTestRetainedAgeRequiredFilter::class))
                             ->values();
 
                         return $this->transform($items);
@@ -318,13 +319,14 @@ class FiltersInRequestTest extends BaseApiTest
         );
 
         $this->buildTheWorld();
+        $key = (new FiltersInRequestTestRetainedAgeRequiredFilter)->getKey();
 
         // First call to retain the filter on session (default is 2)
-        $this->json('get', '/sharp/api/list/person?filter_age=30');
+        $this->getJson("/sharp/api/list/person?filter_$key=30");
 
         // Second call: filter should be valued to 30
-        $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+        $this->getJson('/sharp/api/list/person')
+            ->assertOk()
             ->assertJsonFragment([
                 "items" => [
                     ["id" => 1, "name" => "John", "age" => 30],
