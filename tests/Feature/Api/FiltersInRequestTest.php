@@ -95,37 +95,6 @@ class FiltersInRequestTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_define_a_was_set_callback_on_a_filter()
-    {
-        $this->buildTheWorld();
-
-        $age = rand(1, 99);
-        $this->json('get', '/sharp/api/list/person?filter_'.class_basename(PersonSharpEntityListAgeFilter::class).'=' . $age);
-
-        // The age was put in session in the Callback
-        $this->assertEquals($age, session("filter_age_was_set"));
-    }
-
-    /** @test */
-    public function we_can_force_a_filter_value_in_a_callback()
-    {
-        $this->buildTheWorld();
-
-        // Filter `age` will be force set in the `age_forced` filter callback
-        $this->json('get', '/sharp/api/list/person?filter_age_forced=22&filter_age=12')
-            ->assertStatus(200)
-            ->assertJsonFragment([
-                "data" => [
-                    "list" => [
-                        "items" => [
-                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                        ]
-                    ]
-                ]
-            ]);
-    }
-
-    /** @test */
     public function retained_filters_are_saved_in_the_session()
     {
         app()->bind(

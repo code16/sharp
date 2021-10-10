@@ -21,10 +21,6 @@ trait HasFiltersInQuery
             $key = $filterFullClassNameOrKey;
         }
         
-        if(isset($this->filters["/forced/$key"])) {
-            return $this->filterFor("/forced/$key");
-        }
-
         if(!isset($this->filters[$key])) {
             return null;
         }
@@ -66,11 +62,6 @@ trait HasFiltersInQuery
             });
     }
 
-    public function forceFilterValue(string $filter, string $value): void
-    {
-        $this->filters["/forced/$filter"] = $value;
-    }
-
     protected function setFilterValue(string $filter, array|string|null $value): void
     {
         if(is_array($value)) {
@@ -78,11 +69,11 @@ trait HasFiltersInQuery
             // (filter in EntityList or in Command)
             if(empty($value)) {
                 $value = null;
-
-            } elseif(isset($value["start"]) && $value["start"] instanceof Carbon) {
+            } elseif(($value["start"] ?? null) instanceof Carbon) {
                 // RangeFilter case
-                $value = collect($value)->map->format("Ymd")->implode("..");
-
+                $value = collect($value)
+                    ->map->format("Ymd")
+                    ->implode("..");
             } else {
                 // Multiple filter case
                 $value = implode(',', $value);
