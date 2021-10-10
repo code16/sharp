@@ -3,127 +3,121 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Closure;
+use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 
 trait HandleFilters
 {
-    protected array $filterHandlers = [];
+    protected ?Collection $filterHandlers = null;
 
-    /**
-     * @param string $filterName
-     * @param string|Filter $filterHandler
-     * @param Closure|null $callback
-     * @return $this
-     */
-    protected function addFilter(string $filterName, $filterHandler, Closure $callback = null): self
-    {
-        $this->filterHandlers[$filterName] = $filterHandler instanceof Filter
-            ? $filterHandler
-            : app($filterHandler);
-
-        if($callback) {
-            Event::listen("filter-{$filterName}-was-set", function ($value, $params) use($callback) {
-                $callback($value, $params);
-            });
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array $config
-     */
     protected function appendFiltersToConfig(array &$config): void
     {
-        foreach($this->filterHandlers as $filterName => $handler) {
-            $filterConfigData = [
-                "key" => $filterName,
-                "default" => $this->getFilterDefaultValue($handler, $filterName),
-                "label" => method_exists($handler, "label") ? $handler->label() : $filterName,
-            ];
-
-            if($handler instanceof SelectFilter) {
-                $multiple = $handler instanceof SelectMultipleFilter;
-
-                $filterConfigData += [
-                    "type" => 'select',
-                    "multiple" => $multiple,
-                    "required" => !$multiple && $handler instanceof SelectRequiredFilter,
-                    "values" => $this->formatSelectFilterValues($handler),
-                    "master" => method_exists($handler, "isMaster") ? $handler->isMaster() : false,
-                    "searchable" => method_exists($handler, "isSearchable") ? $handler->isSearchable() : false,
-                    "searchKeys" => method_exists($handler, "searchKeys") ? $handler->searchKeys() : ["label"],
-                    "template" => $this->formatSelectFilterTemplate($handler)
+        $this->getFilterHandlers()
+            ->each(function(Filter $filterHandler) use(&$config) {
+                $filterConfigData = [
+                    "key" => $filterHandler->getKey(),
+                    "default" => $this->getFilterDefaultValue($filterHandler),
+                    "label" => $filterHandler->getLabel()
                 ];
 
-            } elseif($handler instanceof DateRangeFilter) {
-                $filterConfigData += [
-                    "type" =>  'daterange',
-                    "required" => $handler instanceof DateRangeRequiredFilter,
-                    "mondayFirst" => method_exists($handler, "isMondayFirst") ? $handler->isMondayFirst() : true,
-                    "displayFormat" => method_exists($handler, "dateFormat") ? $handler->dateFormat() : "MM-DD-YYYY"
-                ];
-            }
+                if($filterHandler instanceof SelectFilter) {
+                    $multiple = $filterHandler instanceof SelectMultipleFilter;
 
-            $config["filters"][] = $filterConfigData;
+                    $filterConfigData += [
+                        "type" => 'select',
+                        "multiple" => $multiple,
+                        "required" => !$multiple && $filterHandler instanceof SelectRequiredFilter,
+                        "values" => $this->formatSelectFilterValues($filterHandler),
+                        "master" => $filterHandler->isMaster(),
+                        "searchable" => $filterHandler->isSearchable(),
+                        "searchKeys" => $filterHandler->getSearchKeys(),
+                        "template" => $filterHandler->getTemplate()
+                    ];
+                } elseif($filterHandler instanceof DateRangeFilter) {
+                    $filterConfigData += [
+                        "type" =>  'daterange',
+                        "required" => $filterHandler instanceof DateRangeRequiredFilter,
+                        "mondayFirst" => $filterHandler->isMondayFirst(),
+                        "displayFormat" => $filterHandler->getDateFormat(),
+                    ];
+                }
+
+                $config["filters"][] = $filterConfigData;
+            });
+    }
+
+    private function getFilterHandlers(): Collection
+    {
+        if($this->filterHandlers === null) {
+            $this->filterHandlers = collect($this->getFilters())
+                ->map(function($filterHandlerOrClassName) {
+                    if(is_string($filterHandlerOrClassName)) {
+                        if(!class_exists($filterHandlerOrClassName)) {
+                            throw new SharpException("Handler for filter [{$filterHandlerOrClassName}] is invalid");
+                        }
+                        $filterHandler = app($filterHandlerOrClassName);
+                    } else {
+                        $filterHandler = $filterHandlerOrClassName;
+                    }
+
+                    if(!$filterHandler instanceof Filter) {
+                        throw new SharpException("Handler class for filter [{$filterHandlerOrClassName}] must implement a sub-interface of " . Filter::class);
+                    }
+                    
+                    $filterHandler->buildFilterConfig();
+                    
+                    return $filterHandler;
+                });
         }
+        
+        return $this->filterHandlers;
     }
 
     protected function formatSelectFilterValues(SelectFilter $handler): array
     {
-        if(!method_exists($handler, "template")) {
-            return collect($handler->values())
+        $values = $handler->values();
+        
+        if(!is_array(collect($values)->first())) {
+            return collect($values)
                 ->map(function ($label, $id) {
                     return compact('id', 'label');
                 })
                 ->values()
                 ->all();
         }
-
-        // There is a user-defined template: just return the raw values() is this case
-        return $handler->values();
-    }
-
-    protected function formatSelectFilterTemplate(SelectFilter $handler): string
-    {
-        if(!method_exists($handler, "template")) {
-            return '{{label}}';
-        }
-
-        if(($template = $handler->template()) instanceof View) {
-            return $template->render();
-        }
-
-        return $template;
+        
+        return $values;
     }
 
     protected function getFilterDefaultValues(): array
     {
-        return collect($this->filterHandlers)
+        return collect($this->getFilterHandlers())
 
             // Only filters which aren't in the request
-            ->filter(function($handler, $attribute) {
-                return !request()->has("filter_$attribute");
+            ->filter(function(Filter $handler) {
+                return !request()->has("filter_{$handler->getKey()}");
             })
 
             // Only required filters or retained filters with value saved in session
-            ->filter(function($handler, $attribute) {
+            ->filter(function(Filter $handler) {
                 return $handler instanceof SelectRequiredFilter
                     || $handler instanceof DateRangeRequiredFilter
-                    || $this->isRetainedFilter($handler, $attribute, true);
+                    || $this->isRetainedFilter($handler, true);
             })
             
-            ->map(function($handler, $attribute) {
-                if($this->isRetainedFilter($handler, $attribute, true)) {
+            ->map(function(Filter $handler) {
+                if($this->isRetainedFilter($handler, true)) {
                     return [
-                        "name" => $attribute,
-                        "value" => session("_sharp_retained_filter_$attribute")
+                        "name" => $handler->getKey(),
+                        "value" => session("_sharp_retained_filter_{$handler->getKey()}")
                     ];
                 }
 
                 return [
-                    "name" => $attribute,
+                    "name" => $handler->getKey(),
                     "value" => $handler->defaultValue()
                 ];
             })
@@ -138,26 +132,26 @@ trait HandleFilters
      */
     protected function putRetainedFilterValuesInSession(): void
     {
-        collect($this->filterHandlers)
+        collect($this->getFilterHandlers())
             // Only filters sent which are declared "retained"
-            ->filter(function($handler, $attribute) {
-                return request()->has("filter_$attribute")
-                    && $this->isRetainedFilter($handler, $attribute);
+            ->filter(function(Filter $handler) {
+                return request()->has("filter_{$handler->getKey()}")
+                    && $this->isRetainedFilter($handler);
             })
-            ->each(function($handler, $attribute) {
+            ->each(function($handler) {
                 // Array case: we store a coma separated string
                 // (to be consistent and only store strings on filter session)
-                $value = is_array(request()->get("filter_$attribute"))
-                    ? implode(",", request()->get("filter_$attribute"))
-                    : request()->get("filter_$attribute");
+                $value = is_array(request()->get("filter_{$handler->getKey()}"))
+                    ? implode(",", request()->get("filter_{$handler->getKey()}"))
+                    : request()->get("filter_{$handler->getKey()}");
 
                 if(strlen(trim($value)) === 0) {
                     // No value, we have to unset the retained value
-                    session()->forget("_sharp_retained_filter_$attribute");
+                    session()->forget("_sharp_retained_filter_{$handler->getKey()}");
 
                 } else {
                     session()->put(
-                        "_sharp_retained_filter_$attribute",
+                        "_sharp_retained_filter_{$handler->getKey()}",
                         $value
                     );
                 }
@@ -166,11 +160,10 @@ trait HandleFilters
         session()->save();
     }
 
-    protected function isRetainedFilter(Filter $handler, string $attribute, $onlyValued = false): bool
+    protected function isRetainedFilter(Filter $handler, $onlyValued = false): bool
     {
-        return method_exists($handler, "retainValueInSession")
-            && $handler->retainValueInSession()
-            && (!$onlyValued || session()->has("_sharp_retained_filter_$attribute"));
+        return $handler->isRetainInSession()
+            && (!$onlyValued || session()->has("_sharp_retained_filter_{$handler->getKey()}"));
     }
 
     protected function isGlobalFilter(Filter $handler): bool
@@ -183,19 +176,15 @@ trait HandleFilters
      * - the retained value, if the filter is retained
      * - the default value is the filter is required
      * - or null
-     *
-     * @param $handler
-     * @param string $attribute
-     * @return int|string|array|null
      */
-    protected function getFilterDefaultValue(Filter $handler, string $attribute)
+    protected function getFilterDefaultValue(Filter $handler): int|string|array|null
     {
         if($this->isGlobalFilter($handler)) {
-            return session("_sharp_retained_global_filter_$attribute") ?: $handler->defaultValue();
+            return session("_sharp_retained_global_filter_{$handler->getKey()}") ?: $handler->defaultValue();
         }
 
-        if($this->isRetainedFilter($handler, $attribute, true)) {
-            $sessionValue = session("_sharp_retained_filter_$attribute");
+        if($this->isRetainedFilter($handler, true)) {
+            $sessionValue = session("_sharp_retained_filter_{$handler->getKey()}");
 
             if($handler instanceof SelectMultipleFilter) {
                 return explode(",", $sessionValue);

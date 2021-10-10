@@ -29,11 +29,12 @@ class TravelsDashboard extends SharpDashboard
         ];
     }
 
-    function buildDashboardConfig(): void
+    public function getFilters(): array
     {
-        $this
-            ->addFilter("spaceships", TravelsDashboardSpaceshipsFilter::class)
-            ->addFilter("period", TravelsDashboardPeriodFilter::class);
+        return [
+            TravelsDashboardSpaceshipsFilter::class,
+            TravelsDashboardPeriodFilter::class
+        ];
     }
 
     function buildWidgetsLayout(): void
@@ -46,13 +47,13 @@ class TravelsDashboard extends SharpDashboard
         $query = DB::table('travels')
             ->select(DB::raw("DATE_FORMAT(departure_date,'%Y-%m') as label, count(*) as value"));
 
-        if($spaceships = $this->queryParams->filterFor("spaceships")) {
+        if($spaceships = $this->queryParams->filterFor(TravelsDashboardSpaceshipsFilter::class)) {
             $query->whereIn("spaceship_id", (array)$spaceships);
         }
 
         $query->groupBy(DB::raw('label'));
 
-        if($departurePeriodRange = $this->queryParams->filterFor("period")) {
+        if($departurePeriodRange = $this->queryParams->filterFor(TravelsDashboardPeriodFilter::class)) {
             $query->whereBetween("departure_date", [
                 $departurePeriodRange['start'],
                 $departurePeriodRange['end']

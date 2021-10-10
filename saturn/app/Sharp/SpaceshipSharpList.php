@@ -8,6 +8,7 @@ use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipReload;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\Commands\SpaceshipSynchronize;
+use App\Sharp\Filters\CorporationGlobalFilter;
 use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
@@ -91,36 +92,34 @@ class SpaceshipSharpList extends SharpEntityList
         ];
     }
     
-//    function getFilters(): ?array
-//    {
-//        return [
-//            "type" => SpaceshipTypeFilter::class,
-//            new SpaceshipPilotsFilter()
-//        ];
-//    }
+    function getFilters(): ?array
+    {
+        return [
+            SpaceshipTypeFilter::class,
+            new SpaceshipPilotsFilter()
+        ];
+    }
 
     function buildListConfig(): void
     {
         $this->configureInstanceIdAttribute("id")
             ->configureSearchable()
             ->configureDefaultSort("name", "asc")
-            ->addFilter("type", SpaceshipTypeFilter::class)
-            ->addFilter("pilots", SpaceshipPilotsFilter::class)
             ->configureEntityState("state", SpaceshipEntityState::class)
             ->configurePaginated()
             ->configureGlobalMessage(
-                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
+                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'> for pilots {{pilots}}</span>",
             );
     }
 
     function getGlobalMessageData(): ?array
     {
-        $pilots = $this->queryParams->filterFor('pilots');
+        $pilots = $this->queryParams->filterFor(SpaceshipPilotsFilter::class);
         
         return [
-            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor('type'))->label,
+            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label,
             "pilots" => $pilots 
-                ? Pilot::whereIn($pilots)
+                ? Pilot::whereIn("id", (array)$pilots)
                     ->pluck("name")
                     ->implode(", ")
                 : null
@@ -130,7 +129,7 @@ class SpaceshipSharpList extends SharpEntityList
     function getListData(): array|Arrayable
     {
         $spaceships = Spaceship::select("spaceships.*")
-            ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
+            ->where("corporation_id", currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class))
             ->distinct();
 
         if($this->queryParams->specificIds()) {
@@ -141,16 +140,16 @@ class SpaceshipSharpList extends SharpEntityList
             $spaceships->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($this->queryParams->filterFor("type")) {
-            $spaceships->where("type_id", $this->queryParams->filterFor("type"));
+        if($type = $this->queryParams->filterFor(SpaceshipTypeFilter::class)) {
+            $spaceships->where("type_id", $type);
         }
 
-        if($this->queryParams->hasSearch() || $this->queryParams->filterFor("pilots")) {
+        if($this->queryParams->hasSearch() || $this->queryParams->filterFor(SpaceshipPilotsFilter::class)) {
             $spaceships->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
-            if ($this->queryParams->filterFor("pilots")) {
-                $spaceships->whereIn("pilots.id", (array)$this->queryParams->filterFor("pilots"));
+            if ($pilots = $this->queryParams->filterFor(SpaceshipPilotsFilter::class)) {
+                $spaceships->whereIn("pilots.id", (array)$pilots);
             }
 
             if ($this->queryParams->hasSearch()) {

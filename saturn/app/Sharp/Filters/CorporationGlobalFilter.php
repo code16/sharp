@@ -5,8 +5,13 @@ namespace App\Sharp\Filters;
 use App\Corporation;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 
-class CorporationGlobalFilter implements GlobalRequiredFilter
+class CorporationGlobalFilter extends GlobalRequiredFilter
 {
+    public function buildFilterConfig(): void
+    {
+        $this->configureSearchable();
+    }
+
     public function values(): array
     {
         return Corporation::orderBy("name")
@@ -14,13 +19,8 @@ class CorporationGlobalFilter implements GlobalRequiredFilter
             ->all();
     }
 
-    public function defaultValue()
+    public function defaultValue(): mixed
     {
         return Corporation::first()->id;
-    }
-
-    public function isSearchable(): bool
-    {
-        return true;
     }
 }

@@ -45,7 +45,7 @@ class EntityListQueryParams
         }
 
         $this->fillFilterWithRequest($query);
-
+        
         return $this;
     }
 

@@ -20,6 +20,7 @@ use Code16\Sharp\Http\ListController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\SingleShowController;
 use Code16\Sharp\Http\WebDispatchController;
+use Illuminate\Support\Facades\Route;
 
 // API routes
 Route::group([

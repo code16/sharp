@@ -41,7 +41,7 @@ abstract class SharpEntityList
     public final function initQueryParams(): self
     {
         $this->putRetainedFilterValuesInSession();
-
+        
         $this->queryParams = EntityListQueryParams::create()
             ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
             ->fillWithRequest()
@@ -256,6 +256,14 @@ abstract class SharpEntityList
      * Return all instance commands in an array of class names or instances
      */
     function getInstanceCommands(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * Return all filters in an array of class names or instances
+     */
+    function getFilters(): ?array
     {
         return null;
     }

@@ -3,13 +3,15 @@
 namespace App\Sharp\Filters;
 
 use App\SpaceshipType;
-use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
 
-class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
+class SpaceshipTypeFilter extends EntityListSelectRequiredFilter
 {
-    public function label(): string
+    public function buildFilterConfig(): void
     {
-        return "Ship type";
+        $this->configureLabel("Ship type")
+            ->configureKey("s-type")
+            ->configureRetainInSession();
     }
 
     public function values(): array
@@ -19,13 +21,10 @@ class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
             ->all();
     }
 
-    public function defaultValue()
+    public function defaultValue(): mixed
     {
-        return SpaceshipType::orderBy("label")->first()->id;
-    }
-
-    public function retainValueInSession(): bool
-    {
-        return true;
+        return SpaceshipType::orderBy("label")
+            ->first()
+            ->id;
     }
 }

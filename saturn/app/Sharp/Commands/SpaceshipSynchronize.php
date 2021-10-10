@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Commands;
 
+use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\SpaceshipType;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 
@@ -11,7 +12,7 @@ class SpaceshipSynchronize extends EntityCommand
     {
         return sprintf(
             "Synchronize the gamma-spectrum of %s spaceships",
-            SpaceshipType::findOrFail($this->queryParams->filterFor("type"))->label
+            SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label
         );
     }
     
@@ -29,7 +30,7 @@ class SpaceshipSynchronize extends EntityCommand
         return $this->info(
             sprintf(
                 "Gamma spectrum of %s spaceships synchronized!",
-                SpaceshipType::findOrFail($this->queryParams->filterFor("type"))->label
+                SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label
             )
         );
     }
