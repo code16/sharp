@@ -106,20 +106,20 @@ class SpaceshipSharpList extends SharpEntityList
             ->configureSearchable()
             ->configureDefaultSort("name", "asc")
             ->configureEntityState("state", SpaceshipEntityState::class)
-            ->configurePaginated();
-//            ->configureGlobalMessage(
-//                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
-//            );
+            ->configurePaginated()
+            ->configureGlobalMessage(
+                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'> for pilots {{pilots}}</span>",
+            );
     }
 
     function getGlobalMessageData(): ?array
     {
-        $pilots = $this->queryParams->filterFor('pilots');
+        $pilots = $this->queryParams->filterFor(SpaceshipPilotsFilter::class);
         
         return [
-            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor('type'))->label,
+            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label,
             "pilots" => $pilots 
-                ? Pilot::whereIn($pilots)
+                ? Pilot::whereIn("id", (array)$pilots)
                     ->pluck("name")
                     ->implode(", ")
                 : null
