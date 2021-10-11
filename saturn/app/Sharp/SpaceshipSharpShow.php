@@ -99,6 +99,7 @@ class SpaceshipSharpShow extends SharpShow
         $this
             ->configurePageAlert(
                 "<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>",
+                static::$pageAlertLevelWarning,
                 "globalMessage"
             )
             ->configureBreadcrumbCustomLabelAttribute("name")
