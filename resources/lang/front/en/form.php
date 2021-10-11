@@ -49,6 +49,8 @@ return [
     'daterange.end_placeholder' => 'End date',
     
     'text.validation.maxlength' => 'Text too long (:maxlength characters max.)',
+    
+    'editor.errors.unknown_file' => 'Fichier inconnu ":path"',
 
     'markdown.icons.bold.title' => 'Bold',
     'markdown.icons.italic.title' => 'Italic',

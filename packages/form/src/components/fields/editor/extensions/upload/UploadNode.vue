@@ -1,17 +1,22 @@
 <template>
-    <NodeRenderer :node="node">
+    <NodeRenderer class="editor__node" :node="node">
         <VueClip
-            class="editor__node"
-            :value="value"
+            :value="resolvedValue"
             :root="false"
             :options="options"
             :focused="selected"
+            :invalid="!!error"
             v-bind="fieldProps"
             @updated="handleUpdate"
             @removed="handleRemoveClicked"
             @success="handleSuccess"
             @error="handleError"
         />
+        <template v-if="error">
+            <div class="invalid-feedback d-block" style="font-size: .75rem">
+                {{ error }}
+            </div>
+        </template>
     </NodeRenderer>
 </template>
 
@@ -44,6 +49,15 @@
                     }
                 }
                 return this.extension.options.getFile(attrs);
+            },
+            resolvedValue() {
+                return this.value ?? this.node.attrs;
+            },
+            error() {
+                if(!this.value) {
+                    return lang('form.editor.errors.unknown_file')
+                        .replace(':path', this.node.attrs.path ?? '');
+                }
             },
             fieldProps() {
                 const props = this.extension.options.fieldProps;

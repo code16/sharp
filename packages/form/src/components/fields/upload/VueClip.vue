@@ -135,6 +135,7 @@
             root: Boolean,
             compactThumbnail: Boolean,
             focused: Boolean,
+            invalid: Boolean,
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
         },
@@ -212,7 +213,7 @@
                 }
             },
             hasError() {
-                return this.file?.status === 'error';
+                return this.file?.status === 'error' || this.invalid;
             },
             fileName() {
                 let splitted = this.file.name.split('/');
