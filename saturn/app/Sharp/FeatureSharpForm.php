@@ -6,24 +6,28 @@ use App\Feature;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FeatureSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLabel("Name")
-            )->addField(
+            )
+            ->addField(
                 SharpFormSelectField::make("type", Feature::TYPES)
                     ->setDisplayAsDropdown()
                     ->setLabel("Type")
-            )->addField(
+            )
+            ->addField(
                 SharpFormSelectField::make("subtype", Feature::SUBTYPES)
                     ->setDisplayAsDropdown()
                     ->setOptionsLinkedTo("type")
@@ -31,9 +35,9 @@ class FeatureSharpForm extends SharpForm
             );
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this->addColumn(5, function(FormLayoutColumn $column) {
+        $formLayout->addColumn(5, function(FormLayoutColumn $column) {
             $column->withSingleField("name")
                 ->withFields("type|6", "subtype|6");
         });
@@ -49,7 +53,6 @@ class FeatureSharpForm extends SharpForm
     function update($id, array $data)
     {
         $instance = $id ? Feature::findOrFail($id) : new Feature;
-
         $this->save($instance, $data);
     }
 

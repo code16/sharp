@@ -2,13 +2,13 @@
 
 namespace App\Sharp\Filters;
 
-use Code16\Sharp\EntityList\EntityListSelectFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 
-class PilotRoleFilter implements EntityListSelectFilter
+class PilotRoleFilter extends EntityListSelectFilter
 {
-    public function label(): string
+    public function buildFilterConfig(): void
     {
-        return "Role";
+        $this->configureLabel("Role");
     }
 
     public function values(): array

@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\EntityList\Containers;
+namespace Code16\Sharp\EntityList\Fields;
 
-class EntityListDataContainer
+class EntityListField
 {
     protected string $key;
     protected string $label = "";

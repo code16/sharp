@@ -26,7 +26,7 @@ class ShowInstanceCommandController extends ApiController
     /**
      * Execute the Command.
      */
-    public function update(string $entityKey, string $commandKey, string $instanceId = null)
+    public function update(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);

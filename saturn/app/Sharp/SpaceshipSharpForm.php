@@ -19,18 +19,20 @@ use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLocalized()
@@ -184,12 +186,14 @@ class SpaceshipSharpForm extends SharpForm
                             ->setDisplayFormat("YYYY/MM/DD HH:mm")
                             ->setMinTime(8)
                             ->setHasTime(true)
-                    )->addItemField(
+                    )
+                    ->addItemField(
                         SharpFormSelectField::make("status", [
                             "ok" => "Passed", "ko" => "Failed"
                         ])->setLabel("Status")
                         ->setDisplayAsList()->setInline()
-                    )->addItemField(
+                    )
+                    ->addItemField(
                         SharpFormTextareaField::make("comment")
                             ->setLabel("Comment")
                             ->setMaxLength(50)
@@ -224,9 +228,9 @@ class SpaceshipSharpForm extends SharpForm
             );
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this
+        $formLayout
             ->addTab("Details", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(5, function(FormLayoutColumn $column) {
@@ -268,13 +272,14 @@ class SpaceshipSharpForm extends SharpForm
                                     ->withSingleField("legend");
                             });
                     });
+
             });
     }
 
     function buildFormConfig(): void
     {
-        $this->setBreadcrumbCustomLabelAttribute("name.en")
-            ->setDisplayShowPageAfterCreation();
+        $this->configureBreadcrumbCustomLabelAttribute("name.en")
+            ->configureDisplayShowPageAfterCreation();
     }
 
     function getDataLocalizations(): array

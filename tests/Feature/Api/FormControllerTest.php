@@ -3,12 +3,14 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FormControllerTest extends BaseApiTest
 {
@@ -311,15 +313,14 @@ class FormControllerTest extends BaseApiTest
 
 class PersonSharpSingleForm extends SharpSingleForm
 {
-
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(SharpFormTextField::make("name"));
+        $formFields->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this->addColumn(6, function(FormLayoutColumn $column) {
+        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
         });
     }

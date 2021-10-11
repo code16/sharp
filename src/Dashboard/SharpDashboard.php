@@ -41,9 +41,6 @@ abstract class SharpDashboard
 
     /**
      * Add a widget.
-     *
-     * @param SharpWidget $widget
-     * @return $this
      */
     protected function addWidget(SharpWidget $widget): self
     {
@@ -55,9 +52,6 @@ abstract class SharpDashboard
 
     /**
      * Add a new row with a single widget.
-     *
-     * @param string $widgetKey
-     * @return $this
      */
     protected function addFullWidthWidget(string $widgetKey): self
     {
@@ -72,9 +66,6 @@ abstract class SharpDashboard
 
     /**
      * Add a new row.
-     *
-     * @param \Closure $callback
-     * @return $this
      */
     protected function addRow(\Closure $callback): self
     {
@@ -99,8 +90,6 @@ abstract class SharpDashboard
 
     /**
      * Return the dashboard widgets layout.
-     *
-     * @return array
      */
     function widgetsLayout(): array
     {
@@ -117,10 +106,17 @@ abstract class SharpDashboard
     }
 
     /**
-     * Build config, meaning add filters, if necessary.
+     * Build config id necessary
      */
     public function buildDashboardConfig(): void
     {
+    }
+    /**
+     * Return all filters in an array of class names or instances
+     */
+    function getFilters(): ?array
+    {
+        return null;
     }
 
     /**

@@ -14,17 +14,19 @@ use Code16\Sharp\Show\Fields\SharpShowFileField;
 use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 
 class SpaceshipSharpShow extends SharpShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this
+        $showFields
             ->addField(
                 SharpShowTitleField::make("name")
                     ->setTitleLevel(2)
@@ -92,9 +94,20 @@ class SpaceshipSharpShow extends SharpShow
         ];
     }
 
-    function buildShowLayout(): void
+    function buildShowConfig(): void
     {
         $this
+            ->configureGlobalMessage(
+                "<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>",
+                "globalMessage"
+            )
+            ->configureBreadcrumbCustomLabelAttribute("name")
+            ->configureEntityState("state", SpaceshipEntityState::class);
+    }
+
+    function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout
             ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function(ShowLayoutColumn $column) {
@@ -125,17 +138,6 @@ class SpaceshipSharpShow extends SharpShow
             ->addEntityListSection("pilots", function (ShowLayoutSection $section) {
                 $section->setCollapsable();
             });
-    }
-
-    function buildShowConfig(): void
-    {
-        $this
-            ->setBreadcrumbCustomLabelAttribute("name")
-            ->setGlobalMessage(
-                "<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>",
-                "globalMessage"
-            )
-            ->setEntityState("state", SpaceshipEntityState::class);
     }
 
     function find($id): array

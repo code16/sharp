@@ -3,7 +3,9 @@
 namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
@@ -24,10 +26,10 @@ abstract class SharpEntityList
         HandleGlobalMessage,
         WithCustomTransformers;
 
-    protected array $containers = [];
-    protected array $columns = [];
-    protected bool $listBuilt = false;
-    protected bool $layoutBuilt = false;
+    private ?EntityListFieldsContainer $fieldsContainer = null;
+    private ?EntityListFieldsLayout $fieldsLayout = null;
+    private ?EntityListFieldsLayout $xsFieldsLayout = null;
+    protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = "id";
     protected ?string $multiformAttribute = null;
     protected bool $searchable = false;
@@ -35,12 +37,11 @@ abstract class SharpEntityList
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort= null;
     protected ?string $defaultSortDir = null;
-    protected ?EntityListQueryParams $queryParams;
 
     public final function initQueryParams(): self
     {
         $this->putRetainedFilterValuesInSession();
-
+        
         $this->queryParams = EntityListQueryParams::create()
             ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
             ->fillWithRequest()
@@ -49,57 +50,35 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public final function initWith(EntityListQueryParams $customParams): self
+    public final function updateQueryParamsWithSpecificIds(array $specificIds): self
     {
-        $this->queryParams = $customParams;
+        $this->queryParams->setSpecificIds($specificIds);
 
         return $this;
     }
 
-    public final function dataContainers(): array
+    public final function fields(): array
     {
         $this->checkListIsBuilt();
-
-        return collect($this->containers)
-            ->map(function(EntityListDataContainer $container) {
-                return $container->toArray();
-            })
-            ->keyBy("key")
-            ->all();
+        
+        return $this->fieldsContainer
+            ->getFields()
+            ->toArray();
     }
 
     public final function listLayout(): array
     {
-        if(!$this->layoutBuilt) {
-            $this->buildListLayouts();
-            $this->layoutBuilt = true;
-        }
+        $this->checkListIsBuilt();
         
-        // We need this to know if buildListLayoutForSmallScreens() was declared,
-        // in order to hide unset columns in XS size.
-        $xsSizesWereDefined = collect($this->columns)
-                ->pluck("sizeXS")
-                ->filter()
-                ->count() > 0;
-
-        return collect($this->columns)
-            ->map(function($sizes, $key) use ($xsSizesWereDefined) {
-                $data = [
+        return $this->fieldsLayout->getColumns()
+            ->keys()
+            ->map(function($key) {
+                return [
                     "key" => $key,
-                    "size" => $sizes["size"],
+                    "size" => $this->fieldsLayout->getSizeOf($key),
+                    "hideOnXS" => $this->xsFieldsLayout->hasColumns() && $this->xsFieldsLayout->getSizeOf($key) === null,
+                    "sizeXS" => $this->xsFieldsLayout->getSizeOf($key) ?: $this->fieldsLayout->getSizeOf($key)
                 ];
-                
-                if(!$xsSizesWereDefined) {
-                    $data["hideOnXS"] = false;
-                    $data["sizeXS"] = $sizes["size"];
-                } else {
-                    $data["hideOnXS"] = ($sizes["sizeXS"] ?? null) === null;
-                    $data["sizeXS"] = $data["hideOnXS"] 
-                        ? null 
-                        : (($sizes["sizeXS"] ?? null) ?: $sizes["size"]);
-                }
-                
-                return $data;
             })
             ->values()
             ->toArray();
@@ -176,7 +155,7 @@ abstract class SharpEntityList
         });
     }
 
-    public final function listFields(): array
+    public final function listMetaFields(): array
     {
         if($this->globalMessageHtmlField) {
             return [
@@ -187,7 +166,7 @@ abstract class SharpEntityList
         return [];
     }
 
-    public function setInstanceIdAttribute(string $instanceIdAttribute): self
+    public function configureInstanceIdAttribute(string $instanceIdAttribute): self
     {
         $this->instanceIdAttribute = $instanceIdAttribute;
 
@@ -210,14 +189,14 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function setSearchable(bool $searchable = true): self
+    public function configureSearchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
 
         return $this;
     }
 
-    public function setDefaultSort(string $sortBy, string $sortDir = "asc"): self
+    public function configureDefaultSort(string $sortBy, string $sortDir = "asc"): self
     {
         $this->defaultSort = $sortBy;
         $this->defaultSortDir = $sortDir;
@@ -225,7 +204,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function setPaginated(bool $paginated = true): self
+    public function configurePaginated(bool $paginated = true): self
     {
         $this->paginated = $paginated;
 
@@ -244,46 +223,23 @@ abstract class SharpEntityList
         return $this->reorderHandler;
     }
 
-    protected function addDataContainer(EntityListDataContainer $container): self
-    {
-        $this->containers[] = $container;
-        $this->listBuilt = false;
-
-        return $this;
-    }
-
-    protected function addColumn(string $label, int $size = null): self
-    {
-        $sizeAttr = isset($this->columns[$label]["size"])
-            ? "sizeXS"
-            : "size";
-        
-        if(isset($this->columns[$label][$sizeAttr])) {
-            throw new SharpEntityListLayoutException("The $label column was defined twice for the $sizeAttr size");
-        }
-        
-        $this->columns[$label][$sizeAttr] = $size ?: "fill";
-
-        return $this;
-    }
-
-    private function buildListLayouts(): void
-    {
-        $this->buildListLayout();
-        $this->buildListLayoutForSmallScreens();
-    }
-
     private function checkListIsBuilt(): void
     {
-        if (!$this->listBuilt) {
-            $this->buildListDataContainers();
-            $this->listBuilt = true;
+        if ($this->fieldsContainer === null) {
+            $this->fieldsContainer = new EntityListFieldsContainer();
+            $this->buildListFields($this->fieldsContainer);
+
+            $this->fieldsLayout = new EntityListFieldsLayout();
+            $this->buildListLayout($this->fieldsLayout);
+            
+            $this->xsFieldsLayout = new EntityListFieldsLayout();
+            $this->buildListLayoutForSmallScreens($this->xsFieldsLayout);
         }
     }
 
     protected final function getDataKeys(): array
     {
-        return collect($this->dataContainers())
+        return collect($this->fields())
             ->pluck("key")
             ->all();
     }
@@ -305,6 +261,14 @@ abstract class SharpEntityList
     }
 
     /**
+     * Return all filters in an array of class names or instances
+     */
+    function getFilters(): ?array
+    {
+        return null;
+    }
+
+    /**
      * Return global message data if needed.
      */
     function getGlobalMessageData(): ?array
@@ -313,26 +277,26 @@ abstract class SharpEntityList
     }
 
     /**
-     * Build layout for small screen. Optional, only if needed.
-     */
-    function buildListLayoutForSmallScreens(): void
-    {
-    }
-
-    /**
      * Retrieve all rows data as an array
      */
     abstract function getListData(): array|Arrayable;
 
     /**
-     * Build list containers using ->addDataContainer()
+     * Build list fields
      */
-    abstract function buildListDataContainers(): void;
+    abstract function buildListFields(EntityListFieldsContainer $fieldsContainer): void;
 
     /**
-     * Build list layout using ->addColumn()
+     * Build list layout
      */
-    abstract function buildListLayout(): void;
+    abstract function buildListLayout(EntityListFieldsLayout $fieldsLayout): void;
+
+    /**
+     * Build layout for small screen. Optional, only if needed.
+     */
+    function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
+    {
+    }
 
     /**
      * Build list config

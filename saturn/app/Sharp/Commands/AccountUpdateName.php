@@ -5,10 +5,10 @@ namespace App\Sharp\Commands;
 use App\User;
 use Code16\Sharp\EntityList\Commands\SingleInstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class AccountUpdateName extends SingleInstanceCommand
 {
-
     public function label(): string
     {
         return "Update your name";
@@ -27,9 +27,9 @@ class AccountUpdateName extends SingleInstanceCommand
         return $this->reload();
     }
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
+        $formFields->addField(
             SharpFormTextField::make("name")
                 ->setLabel("Name")
         );

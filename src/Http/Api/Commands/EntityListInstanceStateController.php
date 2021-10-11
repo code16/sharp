@@ -13,6 +13,7 @@ class EntityListInstanceStateController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->initQueryParams();
 
         if(!$list->entityStateHandler()->authorize()
             || !$list->entityStateHandler()->authorizeFor($instanceId)) {

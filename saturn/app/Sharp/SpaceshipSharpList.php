@@ -8,50 +8,70 @@ use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipReload;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\Commands\SpaceshipSynchronize;
+use App\Sharp\Filters\CorporationGlobalFilter;
 use App\Sharp\Filters\SpaceshipPilotsFilter;
 use App\Sharp\Filters\SpaceshipTypeFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use App\SpaceshipType;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("picture")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("picture")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+            ->addField(
+                EntityListField::make("name")
                     ->setLabel("Name")
                     ->setSortable()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("capacity")
+            ->addField(
+                EntityListField::make("capacity")
                     ->setLabel("Capacity")
                     ->setSortable()
                     ->setHtml(false)
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("type:label")
+            ->addField(
+                EntityListField::make("type:label")
                     ->setLabel("Type")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("pilots")
+            ->addField(
+                EntityListField::make("pilots")
                     ->setLabel("Pilots")
                     ->setHtml()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("messages_sent_count")
+            ->addField(
+                EntityListField::make("messages_sent_count")
                     ->setLabel("Messages sent")
         );
+    }
+
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout->addColumn("picture", 1)
+            ->addColumn("name", 2)
+            ->addColumn("capacity", 2)
+            ->addColumn("type:label", 2)
+            ->addColumn("pilots")
+            ->addColumn("messages_sent_count");
+    }
+
+    function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout->addColumn("picture", 2)
+            ->addColumn("name")
+            ->addColumn("type:label")
+            ->addColumn("messages_sent_count", 2);
     }
     
     function getEntityCommands(): ?array
@@ -71,47 +91,35 @@ class SpaceshipSharpList extends SharpEntityList
             SpaceshipExternalLink::class
         ];
     }
+    
+    function getFilters(): ?array
+    {
+        return [
+            SpaceshipTypeFilter::class,
+            new SpaceshipPilotsFilter()
+        ];
+    }
 
     function buildListConfig(): void
     {
-        $this->setInstanceIdAttribute("id")
-            ->setSearchable()
-            ->setDefaultSort("name", "asc")
-            ->addFilter("type", SpaceshipTypeFilter::class)
-            ->addFilter("pilots", SpaceshipPilotsFilter::class)
-            ->setEntityState("state", SpaceshipEntityState::class)
-            ->setGlobalMessage(
-                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'>for pilots {{pilots}}</span>",
-            )
-            ->setPaginated();
+        $this->configureInstanceIdAttribute("id")
+            ->configureSearchable()
+            ->configureDefaultSort("name", "asc")
+            ->configureEntityState("state", SpaceshipEntityState::class)
+            ->configurePaginated()
+            ->configureGlobalMessage(
+                "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'> for pilots {{pilots}}</span>",
+            );
     }
 
-    function buildListLayout(): void
-    {
-        $this->addColumn("picture", 1)
-            ->addColumn("name", 2)
-            ->addColumn("capacity", 2)
-            ->addColumn("type:label", 2)
-            ->addColumn("pilots")
-            ->addColumn("messages_sent_count");
-    }
-
-    function buildListLayoutForSmallScreens(): void
-    {
-        $this->addColumn("picture", 2)
-            ->addColumn("name")
-            ->addColumn("type:label")
-            ->addColumn("messages_sent_count", 2);
-    }
-    
     function getGlobalMessageData(): ?array
     {
-        $pilots = $this->queryParams->filterFor('pilots');
+        $pilots = $this->queryParams->filterFor(SpaceshipPilotsFilter::class);
         
         return [
-            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor('type'))->label,
+            "type_label" => SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label,
             "pilots" => $pilots 
-                ? Pilot::whereIn($pilots)
+                ? Pilot::whereIn("id", (array)$pilots)
                     ->pluck("name")
                     ->implode(", ")
                 : null
@@ -121,7 +129,7 @@ class SpaceshipSharpList extends SharpEntityList
     function getListData(): array|Arrayable
     {
         $spaceships = Spaceship::select("spaceships.*")
-            ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
+            ->where("corporation_id", currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class))
             ->distinct();
 
         if($this->queryParams->specificIds()) {
@@ -132,16 +140,16 @@ class SpaceshipSharpList extends SharpEntityList
             $spaceships->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($this->queryParams->filterFor("type")) {
-            $spaceships->where("type_id", $this->queryParams->filterFor("type"));
+        if($type = $this->queryParams->filterFor(SpaceshipTypeFilter::class)) {
+            $spaceships->where("type_id", $type);
         }
 
-        if($this->queryParams->hasSearch() || $this->queryParams->filterFor("pilots")) {
+        if($this->queryParams->hasSearch() || $this->queryParams->filterFor(SpaceshipPilotsFilter::class)) {
             $spaceships->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                 ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
 
-            if ($this->queryParams->filterFor("pilots")) {
-                $spaceships->whereIn("pilots.id", (array)$this->queryParams->filterFor("pilots"));
+            if ($pilots = $this->queryParams->filterFor(SpaceshipPilotsFilter::class)) {
+                $spaceships->whereIn("pilots.id", (array)$pilots);
             }
 
             if ($this->queryParams->hasSearch()) {

@@ -3,10 +3,12 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MultiFormEntityFormControllerTest extends BaseApiTest
@@ -161,14 +163,14 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
 
 class SmallPersonSharpForm extends SharpForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(SharpFormTextField::make("name"));
+        $formFields->addField(SharpFormTextField::make("name"));
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this->addColumn(6, function(FormLayoutColumn $column) {
+        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
             return $column->withSingleField("name");
         });
     }
@@ -191,10 +193,10 @@ class SmallPersonSharpForm extends SharpForm
 
 class BigPersonSharpForm extends SmallPersonSharpForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        parent::buildFormFields();
-        $this->addField(SharpFormTextField::make("height"));
+        parent::buildFormFields($formFields);
+        $formFields->addField(SharpFormTextField::make("height"));
     }
 
     function find($id): array

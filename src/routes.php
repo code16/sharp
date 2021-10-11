@@ -1,7 +1,7 @@
 <?php
 
 use Code16\Sharp\Http\Api\Commands\DashboardCommandController;
-use Code16\Sharp\Http\Api\Commands\EntityCommandController;
+use Code16\Sharp\Http\Api\Commands\EntityListEntityCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListInstanceStateController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceCommandController;
@@ -20,6 +20,7 @@ use Code16\Sharp\Http\ListController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\SingleShowController;
 use Code16\Sharp\Http\WebDispatchController;
+use Illuminate\Support\Facades\Route;
 
 // API routes
 Route::group([
@@ -47,10 +48,10 @@ Route::group([
     Route::post("/list/{entityKey}/state/{instanceId}", [EntityListInstanceStateController::class, "update"])
         ->name("code16.sharp.api.list.state");
 
-    Route::post("/list/{entityKey}/command/{commandKey}", [EntityCommandController::class, "update"])
+    Route::post("/list/{entityKey}/command/{commandKey}", [EntityListEntityCommandController::class, "update"])
         ->name("code16.sharp.api.list.command.entity");
 
-    Route::get("/list/{entityKey}/command/{commandKey}/data", [EntityCommandController::class, "show"])
+    Route::get("/list/{entityKey}/command/{commandKey}/data", [EntityListEntityCommandController::class, "show"])
         ->name("code16.sharp.api.list.command.entity.data");
 
     Route::post("/list/{entityKey}/command/{commandKey}/{instanceId}", [EntityListInstanceCommandController::class, "update"])

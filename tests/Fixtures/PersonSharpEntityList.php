@@ -3,11 +3,13 @@
 namespace Code16\Sharp\Tests\Fixtures;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
-use Code16\Sharp\EntityList\EntityListSelectFilter;
-use Code16\Sharp\EntityList\EntityListSelectMultipleFilter;
-use Code16\Sharp\EntityList\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,7 +17,6 @@ use Illuminate\Support\Str;
 
 class PersonSharpEntityList extends SharpEntityList
 {
-
     function getListData(): array|Arrayable
     {
         $items = [
@@ -34,25 +35,25 @@ class PersonSharpEntityList extends SharpEntityList
                 ->toArray();
         }
 
-        if($this->queryParams->filterFor("age")) {
+        if($age = $this->queryParams->filterFor(PersonSharpEntityListAgeFilter::class)) {
             $items = collect($items)
-                ->filter(function($item) {
-                    return $item["age"] == $this->queryParams->filterFor("age");
+                ->filter(function($item) use($age) {
+                    return $item["age"] == $age;
                 })
                 ->toArray();
 
         } elseif(request()->has("default_age")) {
             $items = collect($items)
                 ->filter(function($item) {
-                    return $item["age"] == $this->queryParams->filterFor("age_required");
+                    return $item["age"] == $this->queryParams->filterFor(PersonSharpEntityListAgeRequiredFilter::class);
                 })
                 ->toArray();
         }
 
-        if($this->queryParams->filterFor("age_multiple")) {
+        if($ages = $this->queryParams->filterFor(PersonSharpEntityListAgeMultipleFilter::class)) {
             $items = collect($items)
-                ->filter(function($item) {
-                    return in_array($item["age"], (array)$this->queryParams->filterFor("age_multiple"));
+                ->filter(function($item) use ($ages) {
+                    return in_array($item["age"], (array)$ages);
                 })
                 ->toArray();
         }
@@ -72,49 +73,51 @@ class PersonSharpEntityList extends SharpEntityList
         return $this->transform($items);
     }
 
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
                     ->setLabel("Name")
                     ->setHtml()
                     ->setSortable()
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("age")
+            ->addField(
+                EntityListField::make("age")
                     ->setLabel("Age")
                     ->setSortable()
             );
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name", 6)
+        $fieldsLayout->addColumn("name", 6)
             ->addColumn("age", 6);
     }
     
-    public function buildListLayoutForSmallScreens(): void
+    public function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name");
+        $fieldsLayout->addColumn("name");
+    }
+    
+    public function getFilters(): ?array
+    {
+        return [
+            PersonSharpEntityListAgeFilter::class,
+            PersonSharpEntityListAgeMultipleFilter::class,
+            PersonSharpEntityListAgeRequiredFilter::class,
+            PersonSharpEntityListAgeFilter::class
+        ];
     }
 
     function buildListConfig(): void
     {
-        $this->setSearchable()
-            ->setReorderable(PersonSharpEntityListReorderHandler::class)
-            ->addFilter("age", PersonSharpEntityListAgeFilter::class, function($value) {
-                session(["filter_age_was_set" => $value]);
-            })
-            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
-            ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class)
-            ->addFilter("age_forced", PersonSharpEntityListAgeFilter::class, function($value, $params) {
-                $params->forceFilterValue("age", $value);
-            });
+        $this->configureSearchable()
+            ->setReorderable(PersonSharpEntityListReorderHandler::class);
     }
 }
 
-class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
+class PersonSharpEntityListAgeFilter extends EntityListSelectFilter
 {
     public function values(): array
     {
@@ -122,15 +125,22 @@ class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
     }
 }
 
-class PersonSharpEntityListAgeMultipleFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListSelectMultipleFilter
+class PersonSharpEntityListAgeMultipleFilter extends EntityListSelectMultipleFilter
 {
+    public function values(): array
+    {
+        return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
+    }
 }
 
-class PersonSharpEntityListAgeRequiredFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
+class PersonSharpEntityListAgeRequiredFilter extends EntityListSelectRequiredFilter
 {
-    public function defaultValue()
+    public function values(): array
+    {
+        return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
+    }
+    
+    public function defaultValue(): mixed
     {
         return 22;
     }

@@ -11,9 +11,6 @@ class DashboardCommandController extends ApiController
 {
     use HandleCommandReturn;
 
-    /**
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     */
     public function show(string $entityKey, string $commandKey)
     {
         $dashboard = $this->getDashboardInstance($entityKey);
@@ -26,9 +23,6 @@ class DashboardCommandController extends ApiController
         ]);
     }
 
-    /**
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     */
     public function update(string $entityKey, string $commandKey)
     {
         $dashboard = $this->getDashboardInstance($entityKey);
@@ -44,10 +38,6 @@ class DashboardCommandController extends ApiController
         );
     }
 
-    /**
-     * @return \Code16\Sharp\Dashboard\Commands\DashboardCommand|null
-     * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     */
     protected function getCommandHandler(SharpDashboard $dashboard, string $commandKey)
     {
         if($handler = $dashboard->findDashboardCommandHandler($commandKey)) {

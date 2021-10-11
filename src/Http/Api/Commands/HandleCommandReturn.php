@@ -4,7 +4,6 @@ namespace Code16\Sharp\Http\Api\Commands;
 
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Show\SharpShow;
@@ -34,18 +33,14 @@ trait HandleCommandReturn
         if($returnedValue["action"] == "refresh" && $commandContainer instanceof SharpEntityList) {
             // We have to load and build items from ids
             $returnedValue["items"] = $commandContainer
-                ->initWith(
-                    EntityListQueryParams::createFromArrayOfIds(
-                        $returnedValue["items"]
-                    )
-                )
+                ->updateQueryParamsWithSpecificIds($returnedValue["items"])
                 ->data($commandContainer->getListData())["list"]["items"];
         }
 
         return response()->json($returnedValue);
     }
 
-    protected function getInstanceCommandHandler(SharpEntityList|SharpShow|SharpDashboard $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
+    protected function getInstanceCommandHandler(SharpEntityList|SharpShow $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
     {
         $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
 

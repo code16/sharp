@@ -3,8 +3,9 @@
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Commands\EntityState;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 use Illuminate\Contracts\Support\Arrayable;
@@ -17,7 +18,7 @@ class SharpEntityListStateTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setEntityState("_state", new class extends EntityState {
+                $this->configureEntityState("_state", new class extends EntityState {
                     protected function buildStates(): void
                     {
                         $this->addState("test1", "Test 1", "blue");
@@ -47,7 +48,7 @@ class SharpEntityListStateTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setEntityState("_state", SharpEntityListTestState::class);
+                $this->configureEntityState("_state", SharpEntityListTestState::class);
             }
         };
 
@@ -75,15 +76,15 @@ class SharpEntityListStateTest extends SharpTestCase
                     ["id" => 2, "name" => "Mary Wayne", "state" => false]
                 ];
             }
-            function buildListDataContainers(): void
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
-                $this->addDataContainer(
-                    EntityListDataContainer::make("name")
+                $fieldsContainer->addField(
+                    EntityListField::make("name")
                 );
             }
             function buildListConfig(): void
             {
-                $this->setEntityState("state", new class extends EntityState {
+                $this->configureEntityState("state", new class extends EntityState {
                     protected function buildStates(): void
                     {
                         $this->addState(true, "Test 1", "blue");
@@ -113,7 +114,7 @@ class SharpEntityListStateTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setEntityState("_state", new class extends EntityState {
+                $this->configureEntityState("_state", new class extends EntityState {
                     protected function buildStates(): void
                     {
                         $this->addState(1, "Test 1", "blue");

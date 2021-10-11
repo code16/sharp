@@ -9,7 +9,7 @@ trait HandleEntityState
     protected ?string $entityStateAttribute = null;
     protected ?EntityState $entityStateHandler = null;
 
-    protected function setEntityState(string $stateAttribute, $stateHandlerOrClassName): self
+    protected function configureEntityState(string $stateAttribute, $stateHandlerOrClassName): self
     {
         $this->entityStateAttribute = $stateAttribute;
 

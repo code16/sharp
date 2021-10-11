@@ -8,7 +8,7 @@ trait HandleGlobalMessage
 {
     protected ?SharpShowHtmlField $globalMessageHtmlField = null;
 
-    protected function setGlobalMessage(string $template, string $fieldKey = null, bool $declareTemplateAsPath = false): self
+    protected function configureGlobalMessage(string $template, string $fieldKey = null, bool $declareTemplateAsPath = false): self
     {
         $this->globalMessageHtmlField = SharpShowHtmlField::make($fieldKey ?: uniqid("f"));
 

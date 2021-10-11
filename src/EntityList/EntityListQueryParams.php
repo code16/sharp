@@ -45,16 +45,8 @@ class EntityListQueryParams
         }
 
         $this->fillFilterWithRequest($query);
-
+        
         return $this;
-    }
-
-    public static function createFromArrayOfIds(array $ids): self
-    {
-        $instance = new static;
-        $instance->specificIds = $ids;
-
-        return $instance;
     }
 
     public function hasSearch(): bool
@@ -96,6 +88,13 @@ class EntityListQueryParams
         }
 
         return $terms;
+    }
+
+    public final function setSpecificIds(array $specificIds): self
+    {
+        $this->specificIds = $specificIds;
+        
+        return $this;
     }
 
     public function specificIds(): array

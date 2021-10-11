@@ -118,7 +118,7 @@ class EntityListControllerTest extends BaseApiTest
                 ], [
                     "key" => "age",
                     "size" => 6,
-                    "sizeXS" => null,
+                    "sizeXS" => 6,
                     "hideOnXS" => true
                 ]
             ]]);

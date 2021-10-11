@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -149,21 +150,16 @@ class CurrentSharpRequest
         return $current ? $current->instanceId() : null;
     }
 
-    /**
-     * @param string $filterName
-     * @return array|string|null
-     */
-    public function globalFilterFor(string $filterName)
+    public final function globalFilterFor(string $handlerClass): array|string|null
     {
-        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
-            return null;
-        }
+        $handler = app($handlerClass);
+        
+        abort_if(!$handler instanceof GlobalRequiredFilter, 404);
 
-        if(session()->has("_sharp_retained_global_filter_$filterName")) {
-            return session()->get("_sharp_retained_global_filter_$filterName");
-        }
-
-        return app($handlerClass)->defaultValue();
+        return session()->get(
+            "_sharp_retained_global_filter_{$handler->getKey()}",
+            $handler->defaultValue()
+        );
     }
 
     protected function buildBreadcrumb(): void

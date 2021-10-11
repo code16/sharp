@@ -4,9 +4,11 @@ namespace Code16\Sharp\Tests\Unit\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Support\Facades\DB;
@@ -192,8 +194,8 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "BBB"]);
 
         $form = new class extends WithCustomTransformersTestForm {
-            function buildFormFields(): void {
-                $this->addField(SharpFormTextField::make("mother:name"));
+            function buildFormFields(FieldsContainer $formFields): void {
+                $formFields->addField(SharpFormTextField::make("mother:name"));
             }
         };
 
@@ -277,8 +279,8 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         Person::create(["name" => "bbb", "mother_id" => $mother->id]);
 
         $form = new class extends WithCustomTransformersTestForm {
-            function buildFormFields(): void {
-                $this->addField(SharpFormListField::make("sons")
+            function buildFormFields(FieldsContainer $formFields): void {
+                $formFields->addField(SharpFormListField::make("sons")
                     ->addItemField(SharpFormTextField::make("name"))
                 );
             }
@@ -317,8 +319,8 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
                 ]);
             }
 
-            function buildFormFields(): void {
-                $this->addField(SharpFormListField::make("sons")
+            function buildFormFields(FieldsContainer $formFields): void {
+                $formFields->addField(SharpFormListField::make("sons")
                     ->addItemField(SharpFormTextField::make("name"))
                 );
             }
@@ -351,8 +353,8 @@ class WithCustomTransformersTestForm extends SharpForm
 
     function update($id, array $data): bool { return false; }
     function delete($id): void {}
-    function buildFormLayout(): void {}
-    function buildFormFields(): void {}
+    function buildFormLayout(FormLayout $formLayout): void {}
+    function buildFormFields(FieldsContainer $formFields): void {}
 }
 
 class SharpAttributeUppercaseTransformer implements SharpAttributeTransformer

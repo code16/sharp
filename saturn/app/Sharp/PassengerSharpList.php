@@ -5,46 +5,53 @@ namespace App\Sharp;
 use App\Passenger;
 use App\Sharp\Filters\PassengerBirthdateFilter;
 use App\Sharp\Filters\PassengerTravelFilter;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
 class PassengerSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this
-            ->addDataContainer(
-                EntityListDataContainer::make("name")
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
                     ->setSortable()
                     ->setLabel("Name")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("birth_date")
+            ->addField(
+                EntityListField::make("birth_date")
                     ->setSortable()
                     ->setLabel("Birth date")
             )
-            ->addDataContainer(
-                EntityListDataContainer::make("travel")
+            ->addField(
+                EntityListField::make("travel")
                     ->setSortable()
                     ->setLabel("Travel")
             );
     }
+    
+    public function getFilters(): ?array
+    {
+        return [
+            PassengerTravelFilter::class,
+            PassengerBirthdateFilter::class
+        ];
+    }
 
     function buildListConfig(): void
     {
-        $this->setSearchable()
-            ->setDefaultSort("name", "asc")
-            ->addFilter("travel", PassengerTravelFilter::class)
-            ->addFilter("birthdate", PassengerBirthdateFilter::class)
-            ->setPaginated();
+        $this->configureSearchable()
+            ->configureDefaultSort("name", "asc")
+            ->configurePaginated();
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name", 4)
+        $fieldsLayout->addColumn("name", 4)
             ->addColumn("birth_date", 4)
             ->addColumn("travel", 4);
     }
@@ -57,11 +64,11 @@ class PassengerSharpList extends SharpEntityList
             $passengers->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
         }
 
-        if($travelFilter = $this->queryParams->filterFor("travel")) {
+        if($travelFilter = $this->queryParams->filterFor(PassengerTravelFilter::class)) {
             $passengers->where("travel_id", $travelFilter);
         }
 
-        if($birthdateFilter = $this->queryParams->filterFor("birthdate")) {
+        if($birthdateFilter = $this->queryParams->filterFor(PassengerBirthdateFilter::class)) {
             $passengers->whereBetween("birth_date", [
                 $birthdateFilter['start'],
                 $birthdateFilter['end'],

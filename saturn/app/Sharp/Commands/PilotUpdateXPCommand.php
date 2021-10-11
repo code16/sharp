@@ -12,10 +12,10 @@ class PilotUpdateXPCommand extends EntityCommand
     {
         return "Update experience";
     }
-
-    public function description(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Add one year to every senior pilot experience.";
+        $this->configureDescription("Add one year to every senior pilot experience.");
     }
 
     public function execute(array $data = []): array

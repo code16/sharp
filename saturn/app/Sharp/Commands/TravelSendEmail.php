@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TravelSendEmail extends InstanceCommand
 {
@@ -14,15 +15,11 @@ class TravelSendEmail extends InstanceCommand
     {
         return "Send email";
     }
-
-    public function formModalTitle(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Send email";
-    }
-
-    public function description(): string
-    {
-        return "Will pretend to send an email to all the passengers of this flight.";
+        $this->configureFormModalTitle("Send email")
+            ->configureDescription("Will pretend to send an email to all the passengers of this flight.");
     }
 
     public function execute($instanceId, array $data = []): array
@@ -35,29 +32,25 @@ class TravelSendEmail extends InstanceCommand
         return $this->info('Emails have been sent.');
     }
 
-    public function buildFormFields(): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
-            SharpFormHtmlField::make("explanation")
-                ->setInlineTemplate('This message will be sent to the passenger preferred language.')
-
-        )->addField(
-            SharpFormTextField::make("subject")
-                ->setLabel("Subject")
-                ->setLocalized()
-
-        )->addField(
-            SharpFormTextareaField::make("message")
-                ->setLabel("Message")
-                ->setLocalized()
-
-        );
+        $formFields
+            ->addField(
+                SharpFormHtmlField::make("explanation")
+                    ->setInlineTemplate('This message will be sent to the passenger preferred language.')
+            )
+            ->addField(
+                SharpFormTextField::make("subject")
+                    ->setLabel("Subject")
+                    ->setLocalized()
+            )
+            ->addField(
+                SharpFormTextareaField::make("message")
+                    ->setLabel("Message")
+                    ->setLocalized()
+            );
     }
 
-    /**
-     * @param $instanceId
-     * @return array
-     */
     protected function initialData($instanceId): array
     {
         return $this

@@ -3,14 +3,16 @@
 namespace App\Sharp\Filters;
 
 use Carbon\Carbon;
-use Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter;
+use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
 
-class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
+class PassengerBirthdateFilter extends EntityListDateRangeRequiredFilter
 {
-
-    public function label(): string
+    public function buildFilterConfig(): void
     {
-        return "Born between";
+        $this->configureLabel("Born between")
+            ->configureDateFormat("YYYY-MM-DD")
+            ->configureMondayFirst(false)
+            ->configureRetainInSession();
     }
 
     public function defaultValue(): array
@@ -19,20 +21,5 @@ class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
             "start" => (new Carbon())->setDate(2014,1,1),
             "end" => (new Carbon())->setDate(2014,12,31),
         ];
-    }
-
-    public function dateFormat(): string
-    {
-        return "YYYY-MM-DD";
-    }
-
-    public function isMondayFirst(): bool
-    {
-        return false;
-    }
-
-    public function retainValueInSession(): bool
-    {
-        return true;
     }
 }

@@ -78,7 +78,7 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
 
     function buildShowConfig(): void
     {
-        $this->setEntityState("state", new class() extends EntityState {
+        $this->configureEntityState("state", new class() extends EntityState {
             protected function buildStates(): void
             {
                 $this->addState("ok", "OK", "blue");

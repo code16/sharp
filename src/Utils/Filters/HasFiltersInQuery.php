@@ -9,30 +9,36 @@ trait HasFiltersInQuery
 {
     protected array $filters;
 
-    public function filterFor(string $filterName): mixed
+    public function filterFor(string $filterFullClassNameOrKey): mixed
     {
-        if(isset($this->filters["/forced/$filterName"])) {
-            return $this->filterFor("/forced/$filterName");
+        if(class_exists($filterFullClassNameOrKey)) {
+            $key = tap(
+                app($filterFullClassNameOrKey), function(Filter $filter) {
+                    $filter->buildFilterConfig();
+                })
+                ->getKey();
+        } else {
+            $key = $filterFullClassNameOrKey;
         }
-
-        if(!isset($this->filters[$filterName])) {
+        
+        if(!isset($this->filters[$key])) {
             return null;
         }
 
-        if(Str::contains($this->filters[$filterName], "..")) {
-            list($start, $end) = explode("..", $this->filters[$filterName]);
+        if(Str::contains($this->filters[$key], "..")) {
+            list($start, $end) = explode("..", $this->filters[$key]);
 
             return [
-                "start" => Carbon::createFromFormat('Ymd', $start)->setTime(0,0,0,0),
-                "end" => Carbon::createFromFormat('Ymd', $end)->setTime(23,59,59,999999),
+                "start" => Carbon::createFromFormat('Ymd', $start)->startOfDay(),
+                "end" => Carbon::createFromFormat('Ymd', $end)->endOfDay()
             ];
         }
 
-        if(Str::contains($this->filters[$filterName], ",")){
-            return explode(",", $this->filters[$filterName]);
+        if(Str::contains($this->filters[$key], ",")){
+            return explode(",", $this->filters[$key]);
         }
 
-        return $this->filters[$filterName];
+        return $this->filters[$key];
     }
 
     public function setDefaultFilters(array $filters): self
@@ -41,7 +47,7 @@ trait HasFiltersInQuery
             ->each(function($value, $filter) {
                 $this->setFilterValue($filter, $value);
             });
-
+        
         return $this;
     }
 
@@ -56,11 +62,6 @@ trait HasFiltersInQuery
             });
     }
 
-    public function forceFilterValue(string $filter, string $value): void
-    {
-        $this->filters["/forced/$filter"] = $value;
-    }
-
     protected function setFilterValue(string $filter, array|string|null $value): void
     {
         if(is_array($value)) {
@@ -68,11 +69,11 @@ trait HasFiltersInQuery
             // (filter in EntityList or in Command)
             if(empty($value)) {
                 $value = null;
-
-            } elseif(isset($value["start"]) && $value["start"] instanceof Carbon) {
+            } elseif(($value["start"] ?? null) instanceof Carbon) {
                 // RangeFilter case
-                $value = collect($value)->map->format("Ymd")->implode("..");
-
+                $value = collect($value)
+                    ->map->format("Ymd")
+                    ->implode("..");
             } else {
                 // Multiple filter case
                 $value = implode(',', $value);

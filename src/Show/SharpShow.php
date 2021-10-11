@@ -4,8 +4,9 @@ namespace Code16\Sharp\Show;
 
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
-use Code16\Sharp\Form\HandleFormFields;
-use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Show\Layout\ShowLayout;
+use Code16\Sharp\Utils\Fields\HandleFields;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -13,34 +14,29 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 abstract class SharpShow
 {
     use WithCustomTransformers,
-        HandleFormFields,
+        HandleFields,
         HandleEntityState,
         HandleInstanceCommands,
         HandleGlobalMessage,
         HandleCustomBreadcrumb;
 
-    protected bool $layoutBuilt = false;
-    protected array $sections = [];
+    protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;
 
     final public function showLayout(): array
     {
-        if(!$this->layoutBuilt) {
-            $this->buildShowLayout();
-            $this->layoutBuilt = true;
+        if($this->showLayout === null) {
+            $this->showLayout = new ShowLayout();
+            $this->buildShowLayout($this->showLayout);
         }
 
-        return [
-            "sections" => collect($this->sections)
-                ->map->toArray()
-                ->all()
-        ];
+        return $this->showLayout->toArray();
     }
 
     /**
      * Return the entity instance, as an array.
      */
-    final public function instance(mixed $id): array
+    public final function instance(mixed $id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
@@ -54,9 +50,6 @@ abstract class SharpShow
             ->all();
     }
 
-    /**
-     * Return the show config values (commands and state).
-     */
     public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
@@ -73,48 +66,16 @@ abstract class SharpShow
         });
     }
 
-    protected function setMultiformAttribute(string $attribute): self
+    protected final function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
         return $this;
     }
 
-    private function buildFormFields(): void
+    private function buildFormFields(FieldsContainer $fields): void
     {
-        $this->buildShowFields();
-    }
-
-    final protected function addSection(string $label, \Closure $callback = null): self
-    {
-        $this->layoutBuilt = false;
-
-        $section = new ShowLayoutSection($label);
-        $this->sections[] = $section;
-
-        if($callback) {
-            $callback($section);
-        }
-
-        return $this;
-    }
-
-    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null): self
-    {
-        $this->layoutBuilt = false;
-
-        $section = new ShowLayoutSection("");
-        $section->addColumn(12, function($column) use($entityListKey) {
-            $column->withSingleField($entityListKey);
-        });
-
-        if($callback) {
-            $callback($section);
-        }
-
-        $this->sections[] = $section;
-
-        return $this;
+        $this->buildShowFields($fields);
     }
 
     /**
@@ -134,17 +95,17 @@ abstract class SharpShow
     }
 
     /**
-     * Retrieve a Model for the form and pack all its data as JSON.
+     * Retrieve a Model for the show and pack all its data as array
      */
     abstract function find(mixed $id): array;
 
     /**
-     * Build form fields using ->addField()
+     * Build show fields
      */
-    abstract function buildShowFields(): void;
+    abstract function buildShowFields(FieldsContainer $showFields): void;
 
     /**
-     * Build form layout using ->addSection()
+     * Build show layout
      */
-    abstract function buildShowLayout(): void;
+    abstract function buildShowLayout(ShowLayout $showLayout): void;
 }

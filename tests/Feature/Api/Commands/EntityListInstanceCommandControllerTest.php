@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class EntityListInstanceCommandControllerTest extends BaseApiTest
 {
@@ -145,8 +146,8 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
             },
             "instance_with_init_data" => new class() extends InstanceCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+                public function buildFormFields(FieldsContainer $formFields): void {
+                    $formFields->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialData($instanceId): array
                 {

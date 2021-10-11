@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class PilotDownloadPhoto extends InstanceCommand
 {
-
     public function label(): string
     {
         return "Download photo";

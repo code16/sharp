@@ -14,42 +14,42 @@ php artisan sharp:make:entity-list <class_name> [--model=<model_name>]
 
 ## Write the class
 
-First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore there are four abstract methods to implement:
+First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore, there are four abstract methods to implement:
 
-- `buildListDataContainers()` and `buildListLayout()` for the structure,
+- `buildListFields(EntityListFieldsContainer $fieldsContainer)` and `buildListLayout(EntityListFieldsLayout $fieldsLayout)` for the structure,
 - `getListData()` for the data,
 - and `buildListConfig()` for... the list config.
 
 Each one is detailed here:
 
-### `buildListDataContainers()`
+### `buildListFields(EntityListFieldsContainer $fieldsContainer)`
 
-A "data container" is a column in the `Entity List`, named this way to abstract the presentation. This first function is responsible to describe each column:
+A field is a column in the `Entity List`. This first function is responsible to describe each column:
 
 ```php
-function buildListDataContainers()
+function buildListFields(EntityListFieldsContainer $fieldsContainer)
 {
-    $this
-        ->addDataContainer(
-            EntityListDataContainer::make("name")
+    $fieldsContainer
+        ->addField(
+            EntityListField::make("name")
                 ->setLabel("Full name")
                 ->setSortable()
                 ->setHtml()
         )
-        ->addDataContainer([...]);
+        ->addField([...]);
 }
 ```
 
 Setting the label, allowing the column to be sortable and to display html is optional.
 
-### `buildListLayout()`
+### `buildListLayout(EntityListFieldsLayout $fieldsLayout)`
 
 Next step, define how those columns are displayed:
 
 ```php
-function buildListLayout()
+function buildListLayout(EntityListFieldsLayout $fieldsLayout)
 {
-    $this->addColumn("picture", 1)
+    $fieldsLayout->addColumn("picture", 1)
         ->addColumn("name")
         ->addColumnLarge("capacity", 2);
 }
@@ -57,17 +57,17 @@ function buildListLayout()
 
 We add columns giving:
 
-- the column key, which must match those defined in `buildListDataContainers()`,
+- the column key, which must match those defined in `buildListFields()`,
 - and the "width" of the column, as an integer on a 12-based grid. If missing, it will be deduced.
 
 In this example, `picture` and `capacity` will be displayed respectively on 1/12 and 2/12 of the viewport width. The column `name` will fill the rest, 9/12.
 
-To handle small screens, you can declare an optional `buildListLayoutForSmallScreens()` function: 
+To handle small screens, you can declare an optional `buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout)` function: 
 
 ```php
-function buildListLayoutForSmallScreens()
+function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout)
 {
-    $this->addColumn("picture", 4)
+    $fieldsLayout->addColumn("picture", 4)
         ->addColumn("name");
 }
 ```
@@ -80,7 +80,7 @@ Now the real work: grab and return the actual list data. This method must return
 
 The returned array is meant to be built with 2 rules:
 
-- each item must define the keys declared in the `buildDatacontainer()` function,
+- each item must define the keys declared in the `buildListFields()` function,
 - plus one attribute for the identifier, which is `id` by default (more on that later).
 
 So for instance, if we defined 2 columns `name` and `capacity`:
@@ -125,7 +125,7 @@ You can use the `queryParams` everywhere except in the `buildListConfig()` funct
 
 `$this->queryParams->sortedBy()` contains the name of the attribute, and `$this->queryParams->sortedDir()` the direction: `asc` or `desc`.
 
-Note that the ability of sorting a column is defined in `buildListDataContainers()`.
+Note that the ability of sorting a column is defined in `buildListFields()`.
 
 ##### Search
 

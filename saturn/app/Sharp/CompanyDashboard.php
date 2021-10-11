@@ -30,7 +30,6 @@ class CompanyDashboard extends SharpDashboard
         "#78350F",
         "#9CA3AF"
     ];
-    
     private static $colorsIndex = 0;
 
     function buildWidgets(): void

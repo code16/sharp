@@ -5,6 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DataLocalizationTest extends BaseApiTest
 {
@@ -78,9 +79,9 @@ class DataLocalizationTest extends BaseApiTest
 
 class DataLocalizationTestForm extends PersonSharpForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(SharpFormTextField::make("name")->setLocalized());
+        $formFields->addField(SharpFormTextField::make("name")->setLocalized());
     }
 
     function getDataLocalizations(): array
@@ -99,9 +100,9 @@ class DataLocalizationWithoutLocalizedFieldTestForm extends PersonSharpForm
 
 class DataLocalizationWithLocalizedFormListTestForm extends PersonSharpForm
 {
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
+        $formFields->addField(
             SharpFormListField::make("name")
                 ->addItemField(
                     SharpFormTextField::make("name")->setLocalized()

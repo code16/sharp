@@ -12,83 +12,88 @@ use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormWysiwygField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TravelSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
-            SharpFormDateField::make("departure_date")
-                ->setHasTime(true)
-                ->setLabel("Departure date")
-
-        )->addField(
-            SharpFormSelectField::make("spaceship_id",
-                Spaceship::orderBy("name")->get()->pluck("name", "id")->all()
+        $formFields
+            ->addField(
+                SharpFormDateField::make("departure_date")
+                    ->setHasTime(true)
+                    ->setLabel("Departure date")
             )
-                ->setLabel("Spaceship")
-                ->setDisplayAsDropdown()
-
-        )->addField(
-            SharpFormTextField::make("destination")
-                ->setLabel("Destination")
-
-        )->addField(
-            SharpFormWysiwygField::make("description")
-                ->setToolbar([
-                    SharpFormWysiwygField::B,
-                    SharpFormWysiwygField::I,
-                    SharpFormWysiwygField::A,
-                    SharpFormWysiwygField::SEPARATOR,
-                    SharpFormWysiwygField::H1,
-                    SharpFormWysiwygField::UL,
-                    SharpFormWysiwygField::OL,
-                    SharpFormWysiwygField::QUOTE,
-                    SharpFormWysiwygField::CODE,
-                ])
-                ->setLabel("Description")
-
-        )->addField(
-            SharpFormGeolocationField::make("destination_coordinates")
-                ->setDisplayUnitDegreesMinutesSeconds()
-                ->setGeocoding()
-                ->setInitialPosition(48.5838961, 7.742182599999978)
-                ->setApiKey(env("GMAPS_KEY", "my-api-key"))
-                ->setLabel("Destination coordinates")
-
-        )->addField(
-            SharpFormAutocompleteListField::make("delegates")
-                ->setLabel("Travel delegates")
-                ->setAddable()
-                ->setRemovable()
-                ->setItemField(
-                    SharpFormAutocompleteField::make("item", "remote")
-                        ->setLabel("Passenger")
-                        ->setPlaceholder("test")
-                        ->setListItemInlineTemplate("{{ name }}")
-                        ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
-                        ->setRemoteEndpoint(url('/passengers'))
+            ->addField(
+                SharpFormSelectField::make("spaceship_id",
+                    Spaceship::orderBy("name")->get()->pluck("name", "id")->all()
                 )
-        );
-    }
-
-    function buildFormLayout(): void
-    {
-        $this->addColumn(5, function(FormLayoutColumn $column) {
-            $column->withSingleField("departure_date")
-                ->withSingleField("destination")
-                ->withSingleField("destination_coordinates");
-        })->addColumn(7, function(FormLayoutColumn $column) {
-            $column->withSingleField("spaceship_id")
-                ->withSingleField("description")
-                ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
-                    $listItem->withSingleField("item");
+                    ->setLabel("Spaceship")
+                    ->setDisplayAsDropdown()
+            )
+            ->addField(
+                SharpFormTextField::make("destination")
+                    ->setLabel("Destination")
+            )
+            ->addField(
+                SharpFormWysiwygField::make("description")
+                    ->setToolbar([
+                        SharpFormWysiwygField::B,
+                        SharpFormWysiwygField::I,
+                        SharpFormWysiwygField::A,
+                        SharpFormWysiwygField::SEPARATOR,
+                        SharpFormWysiwygField::H1,
+                        SharpFormWysiwygField::UL,
+                        SharpFormWysiwygField::OL,
+                        SharpFormWysiwygField::QUOTE,
+                        SharpFormWysiwygField::CODE,
+                    ])
+                    ->setLabel("Description")
+            )
+            ->addField(
+                SharpFormGeolocationField::make("destination_coordinates")
+                    ->setDisplayUnitDegreesMinutesSeconds()
+                    ->setGeocoding()
+                    ->setInitialPosition(48.5838961, 7.742182599999978)
+                    ->setApiKey(env("GMAPS_KEY", "my-api-key"))
+                    ->setLabel("Destination coordinates")
+            )
+            ->addField(
+                SharpFormAutocompleteListField::make("delegates")
+                    ->setLabel("Travel delegates")
+                    ->setAddable()
+                    ->setRemovable()
+                    ->setItemField(
+                        SharpFormAutocompleteField::make("item", "remote")
+                            ->setLabel("Passenger")
+                            ->setPlaceholder("test")
+                            ->setListItemInlineTemplate("{{ name }}")
+                            ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
+                            ->setRemoteEndpoint(url('/passengers'))
+                    )
+            );
+        }
+    
+        function buildFormLayout(FormLayout $formLayout): void
+        {
+            $formLayout
+                ->addColumn(5, function(FormLayoutColumn $column) {
+                    $column->withSingleField("departure_date")
+                        ->withSingleField("destination")
+                        ->withSingleField("destination_coordinates");
+                })
+                ->addColumn(7, function(FormLayoutColumn $column) {
+                    $column->withSingleField("spaceship_id")
+                        ->withSingleField("description")
+                        ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
+                            $listItem->withSingleField("item");
+                        });
                 });
-        });
     }
 
     function find($id): array
@@ -101,7 +106,6 @@ class TravelSharpForm extends SharpForm
     function update($id, array $data)
     {
         $instance = $id ? Travel::findOrFail($id) : new Travel;
-
         $this->save($instance, $data);
     }
 

@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Tests\Unit\EntityList;
 
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
@@ -15,10 +17,10 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_get_containers()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers(): void
-            {
-                $this->addDataContainer(
-                    EntityListDataContainer::make("name")
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+            {   
+                $fieldsContainer->addField(
+                    EntityListField::make("name")
                         ->setLabel("Name")
                 );
             }
@@ -33,7 +35,7 @@ class SharpEntityListTest extends SharpTestCase
                     "html" => true,
                 ]
             ], 
-            $list->dataContainers()
+            $list->fields()
         );
     }
 
@@ -41,15 +43,15 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_get_layout()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers(): void
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
-                $this
-                    ->addDataContainer(EntityListDataContainer::make("name"))
-                    ->addDataContainer(EntityListDataContainer::make("age"));
+                $fieldsContainer
+                    ->addField(EntityListField::make("name"))
+                    ->addField(EntityListField::make("age"));
             }
-            function buildListLayout(): void
+            function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 6)
+                $fieldsLayout->addColumn("name", 6)
                     ->addColumn("age", 6);
             }
         };
@@ -70,20 +72,20 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_define_a_layout_for_small_screens()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers(): void
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
-                $this
-                    ->addDataContainer(EntityListDataContainer::make("name"))
-                    ->addDataContainer(EntityListDataContainer::make("age"));
+                $fieldsContainer
+                    ->addField(EntityListField::make("name"))
+                    ->addField(EntityListField::make("age"));
             }
-            function buildListLayout(): void
+            function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 6)
+                $fieldsLayout->addColumn("name", 6)
                     ->addColumn("age", 6);
             }
-            function buildListLayoutForSmallScreens(): void
+            function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 12);
+                $fieldsLayout->addColumn("name", 12);
             }
         };
 
@@ -92,7 +94,7 @@ class SharpEntityListTest extends SharpTestCase
                 [
                     "key" => "name", "size" => 6, "sizeXS" => 12, "hideOnXS" => false,
                 ], [
-                    "key" => "age", "size" => 6, "sizeXS" => null, "hideOnXS" => true,
+                    "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => true,
                 ]
             ],
             $list->listLayout()
@@ -103,15 +105,15 @@ class SharpEntityListTest extends SharpTestCase
     function we_can_configure_a_column_to_fill_left_space()
     {
         $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers(): void
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
-                $this
-                    ->addDataContainer(EntityListDataContainer::make("name"))
-                    ->addDataContainer(EntityListDataContainer::make("age"));
+                $fieldsContainer
+                    ->addField(EntityListField::make("name"))
+                    ->addField(EntityListField::make("age"));
             }
-            function buildListLayout(): void
+            function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
             {
-                $this->addColumn("name", 4)
+                $fieldsLayout->addColumn("name", 4)
                     ->addColumn("age");
             }
         };
@@ -139,14 +141,14 @@ class SharpEntityListTest extends SharpTestCase
                     ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
                 ];
             }
-            function buildListDataContainers(): void
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
-                $this
-                    ->addDataContainer(
-                        EntityListDataContainer::make("name")
+                $fieldsContainer
+                    ->addField(
+                        EntityListField::make("name")
                     )
-                    ->addDataContainer(
-                        EntityListDataContainer::make("age")
+                    ->addField(
+                        EntityListField::make("age")
                     );
             }
         };
@@ -175,14 +177,14 @@ class SharpEntityListTest extends SharpTestCase
 
                 return new LengthAwarePaginator($data, 10, 2, 1);
             }
-            function buildListDataContainers(): void
+            function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
-                $this
-                    ->addDataContainer(
-                        EntityListDataContainer::make("name")
+                $fieldsContainer
+                    ->addField(
+                        EntityListField::make("name")
                     )
-                    ->addDataContainer(
-                        EntityListDataContainer::make("age")
+                    ->addField(
+                        EntityListField::make("age")
                     );
             }
         };
@@ -207,8 +209,8 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setSearchable()
-                    ->setPaginated();
+                $this->configureSearchable()
+                    ->configurePaginated();
             }
         };
 
@@ -235,7 +237,7 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setGlobalMessage('template', 'test-key');
+                $this->configureGlobalMessage('template', 'test-key');
             }
         };
 
@@ -244,7 +246,7 @@ class SharpEntityListTest extends SharpTestCase
         $this->assertEquals("test-key", $list->listConfig()["globalMessage"]["fieldKey"]);
         $this->assertEquals(
             SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(), 
-            $list->listFields()["test-key"]
+            $list->listMetaFields()["test-key"]
         );
     }
 
@@ -254,7 +256,7 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setGlobalMessage("Hello {{name}}", "test-key");
+                $this->configureGlobalMessage("Hello {{name}}", "test-key");
             }
             function getGlobalMessageData(): ?array
             {
