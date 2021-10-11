@@ -179,7 +179,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $field = SharpFormUploadField::make("upload")
             ->setStorageDisk("local")
-            ->setTransformable(true, true)
+            ->setTransformable(true, false)
             ->setStorageBasePath("data/Test");
         
         $result = (new UploadFormatter)
@@ -218,7 +218,7 @@ class UploadFormatterTest extends SharpTestCase
 
         $field = SharpFormUploadField::make("upload")
             ->setStorageDisk("local")
-            ->setTransformable(true, true)
+            ->setTransformable(true, false)
             ->setStorageBasePath("data/Test");
 
         $this->assertEquals(

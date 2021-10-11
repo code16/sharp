@@ -10,14 +10,12 @@ trait SharpFormFieldWithUpload
     protected ?array $cropRatio = null;
     protected ?array $transformableFileTypes = null;
     protected string $storageDisk = "local";
-    /** @var string|Closure  */
-    protected $storageBasePath = "data";
+    protected string|Closure $storageBasePath = "data";
     protected bool $transformable = true;
-    protected bool $transformOriginal = false;
+    protected bool $transformKeepOriginal = true;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
-    /** @var string|array|null */
-    protected $fileFilter = null;
+    protected string|array|null $fileFilter = null;
 
     public function setMaxFileSize(float $maxFileSizeInMB): self
     {
@@ -73,11 +71,11 @@ trait SharpFormFieldWithUpload
         return $this->setTransformable($croppable);
     }
 
-    public function setTransformable(bool $transformable = true, bool $transformOriginal = false): self
+    public function setTransformable(bool $transformable = true, bool $transformKeepOriginal = true): self
     {
         $this->transformable = $transformable;
         if($transformable) {
-            $this->transformOriginal = $transformOriginal;
+            $this->transformKeepOriginal = $transformKeepOriginal;
         }
 
         return $this;
@@ -85,7 +83,7 @@ trait SharpFormFieldWithUpload
 
     public function isTransformOriginal(): bool
     {
-        return $this->transformable && $this->transformOriginal;
+        return $this->transformable && !$this->transformKeepOriginal;
     }
 
     public function setStorageDisk(string $storageDisk): self

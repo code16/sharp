@@ -18,7 +18,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
                 "type" => "upload", 
                 "compactThumbnail" => false, 
                 "transformable" => true, 
-                "transformOriginal" => false, 
+                "transformKeepOriginal" => true, 
                 "shouldOptimizeImage" => false
             ], 
             $formField->toArray()
@@ -62,15 +62,15 @@ class SharpFormUploadFieldTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_transformOriginal_with_transformable()
+    function we_can_define_transformKeepOriginal_with_transformable()
     {
         $formField = SharpFormUploadField::make("file")
-            ->setTransformable(true, true);
+            ->setTransformable(true, false);
 
         $this->assertArraySubset(
             [
                 "transformable" => true, 
-                "transformOriginal" => true
+                "transformKeepOriginal" => false
             ],
             $formField->toArray()
         );
