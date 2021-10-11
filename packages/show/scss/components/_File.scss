@@ -1,5 +1,10 @@
 
 .ShowFileField {
+
+  .show-field__content {
+    font-size: var(--file-font-size, 1em);
+  }
+
   &__name {
     font-size: 1em;
     font-weight: 600;
@@ -47,9 +52,9 @@
   }
 
   &--root {
+    --file-font-size: .875em;
     .show-field__content {
       padding-bottom: .5rem;
-      font-size: .875em;
     }
   }
 

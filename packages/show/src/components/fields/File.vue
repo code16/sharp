@@ -26,11 +26,13 @@
                 </div>
                 <div class="ShowFileField__info">
                     <div class="row mx-n2 h-100">
-                        <div class="col-auto px-2">
-                            <div class="ShowFileField__size text-muted">
-                                {{ sizeLabel }}
+                        <template v-if="sizeLabel">
+                            <div class="col-auto px-2">
+                                <div class="ShowFileField__size text-muted">
+                                    {{ sizeLabel }}
+                                </div>
                             </div>
-                        </div>
+                        </template>
                         <div class="col-auto px-2">
                             <div class="text-muted">
                                 <i class="fa fas fa-download"></i>

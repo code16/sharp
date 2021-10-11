@@ -10,8 +10,8 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Heading from "@tiptap/extension-heading";
 import { Upload } from "./extensions/upload/upload";
 import { TrailingNode } from "./extensions/trailing-node";
+import { filesEquals } from "sharp-files";
 import { getAllowedHeadingLevels, toolbarHasButton } from "./util";
-import { filesEquals } from "../../../util/upload";
 
 
 export const defaultEditorOptions = {
