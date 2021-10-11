@@ -81,6 +81,8 @@ describe('vue-clip',() => {
             data: () => ({
                 value: {
                     name: 'Fichier.pdf',
+                    path: 'storage/data/Fichier.pdf',
+                    disk: 'local',
                     size: 15000
                 }
             })
@@ -97,6 +99,8 @@ describe('vue-clip',() => {
             data: () => ({
                 value: {
                     name: 'Image.jpg',
+                    path: 'storage/data/Image.jpg',
+                    disk: 'local',
                     thumbnail: '/image.jpg',
                     size: 15000
                 }
@@ -114,6 +118,8 @@ describe('vue-clip',() => {
             data: () => ({
                 value: {
                     name: 'Image.jpg',
+                    path: 'storage/data/Image.jpg',
+                    disk: 'local',
                     thumbnail: '/image.jpg',
                     size: 15000
                 }
