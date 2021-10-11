@@ -1,5 +1,5 @@
 <template>
-    <NodeViewWrapper>
+    <NodeRenderer :node="node">
         <VueClip
             class="editor__node"
             :value="value"
@@ -12,18 +12,18 @@
             @success="handleSuccess"
             @error="handleError"
         />
-    </NodeViewWrapper>
+    </NodeRenderer>
 </template>
 
 <script>
     import VueClip from "../../../upload/VueClip";
-    import { NodeViewWrapper } from '@tiptap/vue-2';
+    import NodeRenderer from "../../NodeRenderer";
     import { lang, showAlert, getUniqueId } from "sharp";
     import { getUploadOptions } from "../../../../../util/upload";
 
     export default {
         components: {
-            NodeViewWrapper,
+            NodeRenderer,
             VueClip,
         },
         props: {
@@ -37,7 +37,13 @@
         },
         computed: {
             value() {
-                return this.node.attrs.value;
+                const attrs = this.node.attrs;
+                if(attrs.file) {
+                    return {
+                        file: attrs.file,
+                    }
+                }
+                return this.extension.options.getFile(attrs);
             },
             fieldProps() {
                 const props = this.extension.options.fieldProps;
@@ -68,13 +74,17 @@
             },
             handleUpdate(value) {
                 this.updateAttributes({
-                    value,
+                    'filter-crop': value.filters.crop,
+                    'filter-rotate': value.filters.rotate,
                 });
                 this.extension.options.onUpdate(value);
             },
             handleSuccess(value) {
                 this.updateAttributes({
-                    value,
+                    'name': value.name,
+                    'disk': value.disk,
+                    'media': value.media,
+                    'file': null,
                 });
                 this.extension.options.onSuccess(value);
             },

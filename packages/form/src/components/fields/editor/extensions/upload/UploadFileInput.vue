@@ -26,9 +26,7 @@
                 this.editor.chain()
                     .focus()
                     .insertUpload({
-                        value: {
-                            file: e.target.files[0],
-                        },
+                        file: e.target.files[0],
                     })
                     .run();
             },
