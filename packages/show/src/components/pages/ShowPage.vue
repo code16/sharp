@@ -19,13 +19,12 @@
 
                 <div class="mt-4 pt-2">
                     <template v-if="config.globalMessage">
-                        <div class="mb-3">
-                            <GlobalMessage
-                                :options="config.globalMessage"
-                                :data="data"
-                                :fields="fields"
-                            />
-                        </div>
+                        <GlobalMessage
+                            class="mb-3"
+                            :options="config.globalMessage"
+                            :data="data"
+                            :fields="fields"
+                        />
                     </template>
 
                     <template v-for="section in layout.sections">

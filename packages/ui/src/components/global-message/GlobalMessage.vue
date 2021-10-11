@@ -1,10 +1,11 @@
 <template>
-    <GlobalMessageLayout class="SharpGlobalMessage" :options="options">
+    <GlobalMessageLayout class="SharpGlobalMessage" :options="options" v-show="visible">
         <template v-if="fieldOptions">
             <TemplateRenderer
                 name="GlobalMessage"
                 :template-data="value"
                 :template="fieldOptions.template"
+                @content-change="handleTemplateContentChanged"
             ></TemplateRenderer>
         </template>
     </GlobalMessageLayout>
@@ -24,6 +25,11 @@
             fields: Object,
             data: Object,
         },
+        data() {
+            return {
+                visible: true,
+            }
+        },
         computed: {
             fieldKey() {
                 return this.options.fieldKey;
@@ -35,5 +41,10 @@
                 return this.data?.[this.fieldKey];
             },
         },
+        methods: {
+            handleTemplateContentChanged({ isEmpty }) {
+                this.visible = !isEmpty;
+            },
+        }
     }
 </script>
