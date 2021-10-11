@@ -8,14 +8,14 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
-use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
     use WithCustomTransformers, 
         HandleFormFields,
-        HandleGlobalMessage,
+        HandlePageAlertMessage,
         HandleCustomBreadcrumb;
 
     protected ?FormLayout $formLayout = null;

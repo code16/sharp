@@ -280,7 +280,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return "My Entity Command";
                         }
                         public function buildCommandConfig(): void {
-                            $this->configureGlobalMessage("template", "global_message");
+                            $this->configurePageAlert("template", null, "global_message");
                         }
                         public function execute(array $data = []): array {}
                     }

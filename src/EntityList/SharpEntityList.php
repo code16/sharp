@@ -11,7 +11,7 @@ use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Exceptions\EntityList\SharpEntityListLayoutException;
 use Code16\Sharp\Utils\Filters\HandleFilters;
-use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -23,7 +23,7 @@ abstract class SharpEntityList
         HandleEntityState,
         HandleEntityCommands,
         HandleInstanceCommands,
-        HandleGlobalMessage,
+        HandlePageAlertMessage,
         WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;
@@ -126,8 +126,8 @@ abstract class SharpEntityList
                     })
                     ->toArray()
             ])
-            ->when($this->globalMessageHtmlField !== null, function(Collection $collection) {
-                $collection[$this->globalMessageHtmlField->key] = $this->getGlobalMessageData();
+            ->when($this->pageAlertHtmlField !== null, function(Collection $collection) {
+                $collection[$this->pageAlertHtmlField->key] = $this->getGlobalMessageData();
                 return $collection;
             })
             ->toArray();
@@ -157,9 +157,9 @@ abstract class SharpEntityList
 
     public final function listMetaFields(): array
     {
-        if($this->globalMessageHtmlField) {
+        if($this->pageAlertHtmlField) {
             return [
-                $this->globalMessageHtmlField->key => $this->globalMessageHtmlField->toArray()
+                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray()
             ];
         }
         

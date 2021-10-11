@@ -27,8 +27,8 @@ trait HandleFields
         $this->checkFormIsBuilt();
 
         return collect($this->fieldsContainer()->getFields())
-            ->when($this->globalMessageHtmlField, function(Collection $collection) {
-                return $collection->push($this->globalMessageHtmlField);
+            ->when($this->pageAlertHtmlField, function(Collection $collection) {
+                return $collection->push($this->pageAlertHtmlField);
             })
             ->map->toArray()
             ->keyBy("key")

@@ -237,7 +237,7 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->configureGlobalMessage('template', 'test-key');
+                $this->configurePageAlert('template', null, 'test-key');
             }
         };
 
@@ -256,7 +256,7 @@ class SharpEntityListTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->configureGlobalMessage("Hello {{name}}", "test-key");
+                $this->configurePageAlert("Hello {{name}}", null, "test-key");
             }
             function getGlobalMessageData(): ?array
             {
@@ -271,6 +271,24 @@ class SharpEntityListTest extends SharpTestCase
         $this->assertEquals(
             ["name" => "Bob"], 
             $list->data()["test-key"]
+        );
+    }
+
+    /** @test */
+    function we_can_configure_a_global_message_field_with_alert_level()
+    {
+        $list = new class extends SharpEntityDefaultTestList {
+            function buildListConfig(): void
+            {
+                $this->configurePageAlert("alert", static::$pageAlertLevelDanger);
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertEquals(
+            "danger", 
+            $list->listConfig()["globalMessage"]["alertLevel"]
         );
     }
 }

@@ -134,13 +134,22 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->configureGlobalMessage("template", "test-key");
+                $this->configurePageAlert("template", static::$pageAlertLevelWarning, "test-key");
             }
         };
 
         $sharpShow->buildShowConfig();
 
-        $this->assertEquals("test-key", $sharpShow->showConfig(1)["globalMessage"]["fieldKey"]);
+        $this->assertEquals(
+            "test-key", 
+            $sharpShow->showConfig(1)["globalMessage"]["fieldKey"]
+        );
+
+        $this->assertEquals(
+            "warning",
+            $sharpShow->showConfig(1)["globalMessage"]["alertLevel"]
+        );
+        
         $this->assertEquals(
             SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(),
             $sharpShow->fields()["test-key"]
@@ -154,7 +163,7 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->configureGlobalMessage("Hello {{name}}", "test-key");
+                $this->configurePageAlert("Hello {{name}}", null, "test-key");
             }
             function find($id): array
             {

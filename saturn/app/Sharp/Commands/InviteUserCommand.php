@@ -17,8 +17,9 @@ class InviteUserCommand extends EntityCommand
     {
         $this
             ->configureFormModalTitle("Send an invitation to a new user")
-            ->configureGlobalMessage(
+            ->configurePageAlert(
                 "The invitation will be automatically sent before {{day}}, 10 AM",
+                static::$pageAlertLevelPrimary,
                 "globalHelp"
             );
     }

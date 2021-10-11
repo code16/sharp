@@ -107,7 +107,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->configureDefaultSort("name", "asc")
             ->configureEntityState("state", SpaceshipEntityState::class)
             ->configurePaginated()
-            ->configureGlobalMessage(
+            ->configurePageAlert(
                 "Here are the spaceships of type <strong>{{type_label}}</strong><span v-if='pilots'> for pilots {{pilots}}</span>",
             );
     }

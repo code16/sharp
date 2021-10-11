@@ -5,7 +5,7 @@ namespace Code16\Sharp\EntityList\Commands;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
-use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
@@ -14,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 abstract class Command
 {
     use HandleFormFields, 
-       HandleGlobalMessage,
+       HandlePageAlertMessage,
         WithCustomTransformers;
 
     protected int $groupIndex = 0;
@@ -151,7 +151,7 @@ abstract class Command
 
     public final function commandFormConfig(): ?array
     {
-        if($this->globalMessageHtmlField === null) {
+        if($this->pageAlertHtmlField === null) {
             return null;
         }
         
