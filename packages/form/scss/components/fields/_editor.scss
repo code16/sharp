@@ -10,9 +10,10 @@
     background: white;
     padding: .75rem;
     transition: box-shadow .2s ease-in-out;
+    z-index: 1;
 
     &.stuck {
-      z-index: 2;
+      z-index: 3;
       box-shadow: $box-shadow-sm;
     }
   }
@@ -42,12 +43,12 @@
   }
 
   &__content {
-    position: static;
+    position: relative;
     height: var(--height, auto);
     overflow-y: auto;
 
     &:focus {
-      position: relative;
+      z-index: 2;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -121,6 +122,10 @@
       p {
         margin-bottom: 0;
       }
+    }
+
+    [data-node-view-wrapper] {
+      display: block;
     }
   }
 

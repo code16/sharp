@@ -116,7 +116,7 @@ export function getUploadExtension({ fieldProps }) {
             uniqueIdentifier: this.uniqueIdentifier,
             fieldConfigIdentifier: this.fieldConfigIdentifier,
         },
-        findFile: attrs => {
+        getFile: attrs => {
             return this.value.files?.find(file => filesEquals(attrs, file));
         },
         onSuccess: (value) => {

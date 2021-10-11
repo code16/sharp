@@ -2,7 +2,6 @@ import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import UploadNode from "./UploadNode";
 import { parseFilterCrop, parseFilterRotate, serializeFilterCrop, serializeFilterRotate } from "./util";
-import { getFiltersFromCropData } from "../../../upload/util/filters";
 
 
 export const Upload = Node.create({
@@ -26,9 +25,27 @@ export const Upload = Node.create({
 
     addAttributes() {
         return {
-            value: {
+            'disk': {
                 default: null,
             },
+            'path': {
+                default: null,
+            },
+            'name': {
+                default: null,
+            },
+            'filter-crop': {
+                default: null,
+            },
+            'filter-rotate': {
+                default: null,
+            },
+            /**
+             * @type File
+             */
+            'file': {
+                default: null,
+            }
         }
     },
 
@@ -37,36 +54,29 @@ export const Upload = Node.create({
             {
                 tag: 'x-sharp-media',
                 getAttrs: node => ({
-                    value: {
-                        ...this.options.findFile({
-                            disk: node.getAttribute('disk'),
-                            path: node.getAttribute('path'),
-                            name: node.getAttribute('name'),
-                        }),
-                        filters: {
-                            crop: parseFilterCrop(node.getAttribute('filter-crop')),
-                            rotate: parseFilterRotate(node.getAttribute('filter-rotate')),
-                        },
-                    },
+                    'disk': node.getAttribute('disk'),
+                    'path': node.getAttribute('path'),
+                    'name': node.getAttribute('name'),
+                    'filter-crop': parseFilterCrop(node.getAttribute('filter-crop')),
+                    'filter-rotate': parseFilterRotate(node.getAttribute('filter-rotate')),
                 }),
             },
         ]
     },
 
     /**
-     * <x-sharp-media src="example.jpg">
+     * <x-sharp-media path="example.jpg">
      * </x-sharp-media>
      */
     renderHTML({ HTMLAttributes }) {
-        const value = HTMLAttributes.value;
         return [
             'x-sharp-media',
             {
-                'name': value?.name,
-                'disk': value?.disk,
-                'path': value?.path,
-                'filter-crop': serializeFilterCrop(value?.filters?.crop),
-                'filter-rotate': serializeFilterRotate(value?.filters?.rotate),
+                'name': HTMLAttributes['name'],
+                'disk': HTMLAttributes['disk'],
+                'path': HTMLAttributes['path'],
+                'filter-crop': serializeFilterCrop(HTMLAttributes['filter-crop']),
+                'filter-rotate': serializeFilterRotate(HTMLAttributes['filter-rotate']),
             }
         ];
     },
@@ -81,7 +91,7 @@ export const Upload = Node.create({
             },
             newUpload: () => ({ editor }) => {
                 /**
-                 * @see FileInput
+                 * @see UploadFileInput
                  */
                 editor.emit('new-upload');
             },

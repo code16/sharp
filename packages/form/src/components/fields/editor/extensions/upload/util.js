@@ -40,7 +40,7 @@ export function parseFilterCrop(attributeValue) {
 
 
 export function serializeFilterRotate(data) {
-    return serializeNumber(data?.angle, 4);
+    return serializeNumber(data?.angle, 4) || null;
 }
 
 
