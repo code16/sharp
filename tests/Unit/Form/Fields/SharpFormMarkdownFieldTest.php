@@ -22,7 +22,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 2,
-                        "croppable" => true,
+                        "transformable" => true,
                         "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
                 ]
@@ -49,14 +49,17 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $formField = SharpFormMarkdownField::make("text")
             ->setMaxFileSize(50);
 
-        $this->assertArraySubset([
-            "innerComponents" => [
-                "upload" => [
-                    "maxFileSize" => 50,
-                    "croppable" => true,
+        $this->assertArraySubset(
+            [
+                "innerComponents" => [
+                    "upload" => [
+                        "maxFileSize" => 50,
+                        "transformable" => true,
+                    ]
                 ]
-            ]
-        ], $formField->toArray());
+            ], 
+            $formField->toArray()
+        );
 
         $formField->setCropRatio("16:9");
 
@@ -65,7 +68,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 50,
-                        "croppable" => true,
+                        "transformable" => true,
                         "ratioX" => 16,
                         "ratioY" => 9
                     ]
@@ -83,7 +86,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                         "maxFileSize" => 50,
                         "ratioX" => 16,
                         "ratioY" => 9,
-                        "croppable" => true,
+                        "transformable" => true,
                         "fileFilter" => [".jpg", ".pdf"]
                     ]
                 ]
@@ -100,7 +103,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                         "maxFileSize" => 50,
                         "ratioX" => 16,
                         "ratioY" => 9,
-                        "croppable" => false,
+                        "transformable" => false,
                         "fileFilter" => [".jpg", ".pdf"]
                     ]
                 ]
