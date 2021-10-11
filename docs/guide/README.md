@@ -7,13 +7,13 @@ In Sharp, we handle `entities`; and `entity` is simply a data structure which ha
 Each instance of an `entity` is called... an `instance`.
 
 Each `entity` in Sharp can be displayed:
-- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
-- In a `Show`, optionally, to display an `instance` details.
+- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the published state of an Article, for instance). All of that is described below.
+- In a `Show Page`, optionally, to display an `instance` details.
 - And in a `Form`, either to update or create a new `instance`.
 
 ## Installation
 
-Sharp 6 needs Laravel 7+ and PHP 7.4+.
+Sharp 7 needs Laravel 8+ and PHP 8.0+.
 
 - Add the package with composer: `composer require code16/sharp`
 - And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
