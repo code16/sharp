@@ -12,6 +12,7 @@
 </template>
 
 <script>
+    import { ignoreVueElement } from "sharp";
     import { NodeViewWrapper } from '@tiptap/vue-2';
 
     export default {
@@ -31,9 +32,7 @@
             },
         },
         created() {
-            if(this.tag) {
-
-            }
+            ignoreVueElement(this.tag);
         },
     }
 </script>
