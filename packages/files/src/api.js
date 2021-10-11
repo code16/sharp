@@ -1,4 +1,4 @@
-import { api } from 'sharp';
+import { api, apiUrl } from 'sharp';
 
 
 export function postResolveFiles({ entityKey, instanceId, files, thumbnailWidth, thumbnailHeight }) {
@@ -8,4 +8,13 @@ export function postResolveFiles({ entityKey, instanceId, files, thumbnailWidth,
         thumbnail_height: thumbnailHeight,
     })
     .then(response => response.data.files);
+}
+
+export function downloadFileUrl({ entityKey, instanceId, disk, path }) {
+    return apiUrl(`/download/${entityKey}/${instanceId ?? ''}`, {
+        params: {
+            disk,
+            path,
+        },
+    })
 }

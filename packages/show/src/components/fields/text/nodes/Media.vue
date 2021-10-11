@@ -1,6 +1,5 @@
 <template>
     <ShowFile
-        :field-config-identifier="fieldConfigIdentifier"
         :value="value"
         :root="false"
     />
@@ -16,7 +15,6 @@
         },
         inject: [
             'state',
-            'fieldConfigIdentifier',
         ],
         props: {
             name: String,

@@ -21,10 +21,3 @@ export function postShowState({ entityKey, instanceId, value }) {
         .then(response => response.data);
 }
 
-export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
-    return apiUrl(`show/download/${fieldKey}/${entityKey}/${instanceId}`, {
-        params: {
-            fileName,
-        },
-    })
-}

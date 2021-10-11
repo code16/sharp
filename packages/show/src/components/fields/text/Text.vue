@@ -4,7 +4,6 @@
             <TextRenderer
                 class="ShowTextField__content"
                 :content="currentContent"
-                :field-config-identifier="fieldConfigIdentifier"
             />
         </template>
         <template v-else>
@@ -45,7 +44,6 @@
             label: String,
             emptyVisible: Boolean,
             html: Boolean,
-            fieldConfigIdentifier: String,
         },
         data() {
             return {

@@ -54,7 +54,7 @@
     import { getClassNameForExtension } from 'font-awesome-filetypes';
     import { lang, filesizeLabel } from 'sharp';
     import { Button } from "sharp-ui";
-    import { downloadFileUrl } from "../../api";
+    import { downloadFileUrl } from "sharp-files";
     import { syncVisibility } from "../../util/fields/visiblity";
     import FieldLayout from "../FieldLayout";
 
@@ -64,7 +64,6 @@
             FieldLayout,
         },
         props: {
-            fieldConfigIdentifier: String,
             value: Object,
             label: String,
             collapsed: {
@@ -102,22 +101,18 @@
                 return downloadFileUrl({
                     entityKey: this.entityKey,
                     instanceId: this.instanceId,
-                    fieldKey: this.fieldConfigIdentifier,
-                    fileName: this.fileName,
+                    disk: this.value?.disk,
+                    path: this.value?.path,
                 })
             },
-            name() {
-                return this.value ? this.value.name : null;
-            },
             fileName() {
-                const parts = (this.name || '').split('/');
-                return parts[parts.length - 1];
+                return this.value?.name ?? '';
             },
             hasThumbnail() {
-                return !!this.value?.thumbnail;
+                return !!this.thumbnailUrl;
             },
             thumbnailUrl() {
-                return this.value ? this.value.thumbnail : null;
+                return this.value?.thumbnail;
             },
             thumbnailStyle() {
                 return {
@@ -126,12 +121,9 @@
                         : null,
                 }
             },
-            size() {
-                return this.value ? this.value.size : null;
-            },
             sizeLabel() {
-                return this.size
-                    ? filesizeLabel(this.size)
+                return this.value?.size
+                    ? filesizeLabel(this.value.size)
                     : null;
             },
             iconClass() {

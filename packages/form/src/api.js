@@ -34,11 +34,3 @@ export function getAutocompleteSuggestions({
             : response.data ?? [];
     });
 }
-
-export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
-    return apiUrl(`form/download/${fieldKey}/${entityKey}/${instanceId}`, {
-        params: {
-            fileName,
-        },
-    });
-}

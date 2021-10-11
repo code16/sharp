@@ -9,12 +9,10 @@
     export default {
         props: {
             content: String,
-            fieldConfigIdentifier: String,
         },
         provide() {
             return {
                 state: this.state,
-                fieldConfigIdentifier: this.fieldConfigIdentifier,
             }
         },
         data() {

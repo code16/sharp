@@ -93,11 +93,10 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Button } from 'sharp-ui';
-    import { Localization } from 'sharp/mixins';
     import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
-
-    import { downloadFileUrl } from "../../../api";
+    import { Localization } from 'sharp/mixins';
+    import { Button } from 'sharp-ui';
+    import { downloadFileUrl } from "sharp-files";
     import { getFiltersFromCropData } from "./util/filters";
     import EditModal from "./EditModal";
 
@@ -227,8 +226,8 @@
                 return downloadFileUrl({
                     entityKey: this.$form?.entityKey,
                     instanceId: this.$form?.instanceId,
-                    fieldKey: this.fieldConfigIdentifier,
-                    fileName: this.fileName,
+                    disk: this.value.disk,
+                    path: this.value.path,
                 });
             },
             showThumbnail() {
