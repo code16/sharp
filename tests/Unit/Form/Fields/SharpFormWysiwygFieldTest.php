@@ -23,7 +23,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 2,
-                        "croppable" => true,
+                        "transformable" => true,
                         "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
                 ]
