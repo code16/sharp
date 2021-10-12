@@ -41,7 +41,7 @@
                     @endif
                 >
                     @foreach($menuItem->entities as $entity)
-                        <x-sharp::menu-item
+                        <x-sharp::menu.menu-item
                             :item="$entity"
                             :is-current="$currentEntity == $entity->key"
                             nested
@@ -49,7 +49,7 @@
                     @endforeach
                 </sharp-collapsible-item>
             @else
-                <x-sharp::menu-item
+                <x-sharp::menu.menu-item
                     :item="$menuItem"
                     :is-current="$currentEntity == $menuItem->key"
                 />

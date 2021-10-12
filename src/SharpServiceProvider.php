@@ -19,7 +19,6 @@ use Code16\Sharp\Console\SingleShowMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
-use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
@@ -32,9 +31,6 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
-use Code16\Sharp\View\Components\Menu;
-use Code16\Sharp\View\Components\RootStyles;
-use Code16\Sharp\View\Components\Title;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -62,17 +58,12 @@ class SharpServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../resources/views/public' => resource_path('views/vendor/sharp/public'),
+            __DIR__.'/../resources/views/components/media.blade.php' => resource_path('views/vendor/sharp/components/media.blade.php'),
         ], 'views');
-
-        $this->registerPolicies();
         
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
-
-        view()->composer(
-            ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
-            AssetViewComposer::class
-        );
+    
+        $this->registerPolicies();
     }
 
     public function register()

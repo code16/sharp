@@ -45,8 +45,8 @@ function sharp_markdown_thumbnails(string $html, string $classNames, int $width 
  * Handle embedded images and files in a SharpMarkdownField's markdown text.
  */
 function sharp_markdown_embedded_files(
-    string $html, string $classNames, 
-    int $width = null, int $height = null, array $filters = [], 
+    string $html, string $classNames,
+    int $width = null, int $height = null, array $filters = [],
     string $viewName = 'public.markdown-embedded-file'): string
 {
     preg_match_all('/<p><img src="(.*)".*><\/p>/U', $html, $matches, PREG_SET_ORDER);
@@ -76,21 +76,6 @@ function sharp_markdown_embedded_files(
     return $html;
 }
 
-/**
- * Include <script> tag for sharp plugins if available.
- *
- * @return string
- */
-function sharp_custom_fields(): string
-{
-    if(config("sharp.extensions.activate_custom_fields", false)) {
-        try {
-            return "<script src='" . mix('/js/sharp-plugin.js') . "'></script>";
-        } catch (\Exception $forget) {}
-    }
-
-    return "";
-}
 
 /**
  * Return true if current Laravel installation is newer than
@@ -125,12 +110,4 @@ function is_method_implemented_in_concrete_class($handler, string $methodName): 
     } catch (\ReflectionException $e) {
         return false;
     }
-}
-
-function sharp_assets_out_of_date(): bool
-{
-    $distManifest = file_get_contents(__DIR__ . '/../resources/assets/dist/mix-manifest.json');
-    $publicManifest = file_get_contents(public_path('vendor/sharp/mix-manifest.json'));
-    
-    return $distManifest !== $publicManifest;
 }

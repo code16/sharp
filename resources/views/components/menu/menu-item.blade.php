@@ -1,7 +1,7 @@
 @if($item->type === 'separator')
-    <x-sharp::menu-separator>
+    <x-sharp::menu.menu-separator>
         {{ $item->label }}
-    </x-sharp::menu-separator>
+    </x-sharp::menu.menu-separator>
 @else
     <sharp-nav-item
         :current="{{ json_encode($isCurrent) }}"
