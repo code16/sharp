@@ -15,14 +15,15 @@ class Media extends Component
     public FilesystemAdapter $disk;
     public bool $exists;
     public bool $isImage;
-    public int $width = 500;
-    public int $height = 500;
+    public ?int $width;
+    public ?int $height;
     public array $filters = [];
     
     public function __construct(
+        ?Content $content,
         ?string $disk = null,
         ?string $path = null,
-        ?string $name = null
+        ?string $name = null,
     ) {
         $this->fileModel = new SharpUploadModel([
             'disk' => $disk,
@@ -31,6 +32,12 @@ class Media extends Component
         $this->disk = Storage::disk($disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);
         $this->isImage = $this->isImage();
+        $this->width = $content->imageWidth;
+        $this->height = $content->imageHeight;
+        
+        if(!$this->width && !$this->height) {
+            $this->width = 500;
+        }
     }
     
     protected function isImage(): bool
