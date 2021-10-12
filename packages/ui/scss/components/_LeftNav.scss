@@ -11,7 +11,7 @@
   $item-expanded-color: hsl(var(--primary-h), var(--primary-s), 25%);
 
   position: fixed;
-  top: 0;
+  top: var(--navbar-top, 0);
   height: 100vh;
   background-color: $color__white;
   //border-right: 1px solid $color__gray-1;
