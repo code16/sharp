@@ -4,7 +4,7 @@ namespace Code16\Sharp\Tests\Feature;
 
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 
-class AssetViewComposerTest extends BaseApiTest
+class InjectedAssetTest extends BaseApiTest
 {
     /** @test */
     public function we_can_define_assets_to_render_in_views()
@@ -18,7 +18,6 @@ class AssetViewComposerTest extends BaseApiTest
         );
 
         $this->get(route('code16.sharp.login'))
-            ->assertViewHas('injectedAssets')
             ->assertSee('<link rel="stylesheet" href="/path/to/asset.css">', false);
     }
 }
