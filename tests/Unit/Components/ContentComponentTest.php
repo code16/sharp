@@ -41,7 +41,7 @@ class ContentComponentTest extends SharpTestCase
             blade,
         ]);
         
-        $mediaComponent = view()->shared('media');
+        [$mediaComponent] = view()->shared('sharp-media');
         
         $this->assertEquals($mediaComponent->attributes->getAttributes(), [
             'path' => 'storage/path.png',

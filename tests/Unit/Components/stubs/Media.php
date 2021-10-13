@@ -10,11 +10,13 @@ class Media extends Component
 {
     public function __construct()
     {
-        view()->share('media', $this);
+        $components = view()->shared('sharp-media');
+        $components[] = $this;
+        view()->share('sharp-media', $components);
     }
     
     public function render()
     {
-        return view('stub::media');
+        return '<div class="sharp-media"></div>';
     }
 }
