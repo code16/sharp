@@ -33,7 +33,6 @@ class Markdown extends Component
     {
         $options = array_merge($this->options, [
             'html_input' => 'allow',
-            'allow_unsafe_links' => true,
             'renderer' => [
                 'soft_break' => $this->nl2br ? "<br>" : "\n",
             ],
