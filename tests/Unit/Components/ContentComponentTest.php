@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Components;
 
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Components\stubs\Media;
+use Code16\Sharp\View\Components\Content;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Blade;
 
@@ -55,5 +56,7 @@ class ContentComponentTest extends SharpTestCase
             '<div class="sharp-media"></div>',
             '</div>'
         ], false);
+    
+        $this->assertFalse(app()->has(Content::class));
     }
 }
