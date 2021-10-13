@@ -3,25 +3,41 @@
 namespace Code16\Sharp\View\Components\Content;
 
 
+use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\Content\Utils\ComponentFragment;
 use Illuminate\View\Component;
+use Illuminate\View\ComponentAttributeBag;
+use Illuminate\View\View;
+use JetBrains\PhpStorm\Pure;
 
 class RenderComponent extends Component
 {
-    public ComponentFragment $fragment;
 
-    public function __construct(ComponentFragment $fragment)
-    {
-        $this->fragment = $fragment;
+    public function __construct(
+        public ComponentFragment $fragment,
+        public Content $content,
+    ) {
     }
-
-    public function render(): callable
+    
+    public function resolveComponentName(): string
     {
-        $this->withName($this->fragment->getComponentName());
+        return $this->fragment->getComponentName();
+    }
+    
+    public function resolveAttributes(): ComponentAttributeBag
+    {
+        $componentName = $this->fragment->getComponentName();
+        $attributes = new ComponentAttributeBag($this->fragment->getComponentAttributes());
         
-        return function ($data) {
-            $this->withAttributes($this->fragment->getComponentAttributes());
-            return 'sharp::components.content.render-component';
-        };
+        if($contentAttributes = $this->content->contentComponentAttributes->get($componentName)) {
+            $attributes = $attributes->merge($contentAttributes->getAttributes());
+        }
+        
+        return $attributes;
+    }
+    
+    public function render(): View
+    {
+        return view('sharp::components.content.render-component');
     }
 }

@@ -6,10 +6,10 @@
         {{ $spaceship->name }}
     </h1>
 
-    <x-sharp-content :image-height="500">
+    <x-sharp-content :image-width="400">
         <x-sharp-content::attributes
             component="sharp-media"
-            :width="400"
+            :height="300"
         />
         <x-markdown>
             {!! $spaceship->description !!}

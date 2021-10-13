@@ -18,7 +18,7 @@ class RenderContent extends Component
 
     public function fragments(): Collection
     {
-        return $this->fragmentsFactory->fromHTML($this->content);
+        return $this->fragmentsFactory->fromHTML(trim($this->content));
     }
 
     public function fragmentComponent(Fragment $fragment): ?string

@@ -20,25 +20,26 @@ class FragmentsFactory
         $doc = new \DOMDocument();
 
         libxml_use_internal_errors(true);
-        $doc->loadHTML($html);
+        $doc->loadHTML("<body>$html</body>");
         $container = $this->findContentContainer($doc);
+        $fragments = $this->fromDOMNode($container);
+        
+        if($boundaries = $this->getContainerBoundaries($container)) {
+            [$start, $end] = $boundaries;
+            $fragments->prepend(new HTMLFragment($start));
+            $fragments->push(new HTMLFragment($end));
+        }
 
-        return $this->fromDOMNode($container);
+        return $this->groupFragments($fragments);
     }
     
-    protected function fromDOMNode(\DOMNode $container): Collection
+    protected function fromDOMNode(\DOMElement $container): Collection
     {
         $fragments = collect();
         
         foreach ($container->childNodes as $node) {
             if($componentElement = $this->findComponentElement($node)) {
                 $fragments->push(ComponentFragment::fromDOMElement($componentElement));
-                continue;
-            }
-            
-            $lastFragment = $fragments->last();
-            if($lastFragment instanceof HTMLFragment) {
-                $lastFragment->appendDOMNode($node);
             } else {
                 $fragments->push(HTMLFragment::fromDOMNode($node));
             }
@@ -47,8 +48,49 @@ class FragmentsFactory
         return $fragments;
     }
     
+    protected function groupFragments(Collection $fragments): Collection
+    {
+        return $fragments
+            ->chunkWhile(function ($fragment, $key, $chunk) {
+                return $fragment->type == $chunk->last()->type;
+            })
+            ->map(function ($fragments) {
+                if($fragments->first() instanceof HTMLFragment) {
+                    return new HTMLFragment(
+                        collect($fragments)
+                            ->map(fn ($fragment) => $fragment->getHTML())
+                            ->join('')
+                    );
+                }
+                return $fragments;
+            })
+            ->flatten();
+    }
+    
+    protected function getContainerBoundaries(\DOMElement $container): ?array
+    {
+        if($container->tagName === 'body') {
+            return null;
+        }
+        
+        $container->insertBefore(new \DOMComment('content-start'), $container->firstChild);
+        $container->appendChild(new \DOMComment('content-end'));
+        $body = $container->ownerDocument->getElementsByTagName('body')->item(0);
+        $html = $container->ownerDocument->saveHTML($body);
+        $html = Str::between($html, '<body>', '</body>');
+        
+        return [
+            Str::before($html, '<!--content-start'),
+            Str::after($html, 'content-end-->'),
+        ];
+    }
+    
     protected function findContentContainer(\DOMDocument $document): \DOMElement
     {
+        if($container = (new \DOMXPath($document))->query('//div[not(div)]')->item(0)) {
+            return $container; // is most deep <div>
+        }
+        
         return $document->getElementsByTagName('body')->item(0);
     }
     

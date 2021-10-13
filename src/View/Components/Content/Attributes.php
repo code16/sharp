@@ -16,7 +16,10 @@ class Attributes extends Component
     public function render(): callable
     {
         return function () {
-            $this->content->addAttributes($this->component, $this->attributes);
+            $this->content->contentComponentAttributes->put(
+                $this->component,
+                $this->attributes
+            );
         };
     }
 }

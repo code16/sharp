@@ -1,4 +1,4 @@
 <x-dynamic-component
-    :component="$componentName"
-    {{ $attributes }}
+    :component="$resolveComponentName()"
+    :attributes="$resolveAttributes()"
 />
