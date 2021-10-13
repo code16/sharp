@@ -130,16 +130,4 @@ function find($id): array
 }
 ```
 
-You can handle embedded images (see the [markdown form field documentation for details on that](form-fields/markdown.html)) if needed, with `handleImages(int $width = null, int $height = null, array $filters = [])`:
-
-```php
-function find($id): array
-{
-    return $this
-        ->setCustomTransformer(
-            "description", 
-            (new MarkdownAttributeTransformer())->handleImages(200)
-        )
-        ->transform([...]);
-}
-```
+It will handle embedded images (see the [markdown form field documentation for details on that](form-fields/markdown.html)).

@@ -9,11 +9,11 @@ footer: Code 16 — 2021
 pageClass: home-page
 ---
 
-Sharp is not a CMS: it's a content management framework, a toolset which provides help building a CMS section in a website, with some rules in mind:
+Sharp is not a CMS: it's a content management framework, a toolset which provides help to build a CMS section in a website, with some rules in mind:
 - the public website **should not have any knowledge of the CMS** — the CMS is a part of the system, not the center of it. In fact, removing the CMS should not have any effect on the project.
 - The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
 - Content administrators **should work with their data and terminology**, not CMS terms. I mean, if the project is about spaceships, space travels and pilots, why would the CMS talk about articles, categories and tags?
-- website developers **should not have to work on the front-end development** for the CMS. Yeah. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
+- Developers **should not have to work on the front-end development for the CMS**. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
 
 <div class="mb-3 mt-4 mt-md-5 mb-md-4">
     <div class="section mb-0">
@@ -77,7 +77,7 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
                         <path class="heroicon-outline" fill-rule="nonzero" d="M3.997 2h92.006C98.21 2 100 3.783 100 5.995v72.01c0 .328-.04.647-.115.952.076.67.115 1.352.115 2.043 0 9.94-8.06 18-18 18-9.606 0-17.454-7.524-17.973-17H3.997C1.79 82 0 80.217 0 78.005V5.995C0 3.788 1.8 2 3.997 2zM82 63c6.966 0 13.007 3.957 16 9.746V18H9v62h55.027c.52-9.476 8.367-17 17.973-17zm16-51V5.995C98 4.89 97.108 4 96.003 4H3.997C2.9 4 2 4.897 2 5.995V12h16l6-6h18l6 6h50zM2 14v2h96v-2H47.172l-6-6H24.828l-6 6H2zm0 4v60.005C2 79.11 2.892 80 3.997 80H7V18H2zm80 79c8.837 0 16-7.163 16-16s-7.163-16-16-16-16 7.163-16 16 7.163 16 16 16zM11 20h4v1h-4v-1zm14 0v1h-8v-1h8zm2 0h6v1h-6v-1zm20 0v1H35v-1h12zm-26 3v1H11v-1h10zm8 0v1h-6v-1h6zm10 0v1h-8v-1h8zm14 1H41v-1h12v1zm2-1h6v1h-6v-1zm-34 4h-8v-1h8v1zm2-1h6v1h-6v-1zm18 0v1H31v-1h10zm2 0h6v1h-6v-1zm16 1h-8v-1h8v1zm-40 2v1h-4v-1h4zm10 1h-8v-1h8v1zm2-1h10v1H31v-1zm24 1H43v-1h12v1zm10-1v1h-8v-1h8zm10 0v1h-8v-1h8zM25 56v1h-8v-1h8zm-4 4h-4v-1h4v1zm10-1v1h-8v-1h8zm12 0v1H33v-1h10zm2 0h10v1H45v-1zm-18-3h10v1H27v-1zm20 0v1h-8v-1h8zm8 0v1h-6v-1h6zm2 0h10v1H57v-1zm18 0v1h-6v-1h6zm2 0h10v1H77v-1zm19 0v1h-7v-1h7zM21 32v1h-6v-1h6zm12 0v1H23v-1h10zm-16 3h7v1h-7v-1zm5 18v1h-7v-1h7zm-7 9h9v1h-9v-1zm5 3v1h-5v-1h5zm-3 3h7v1h-7v-1zm16 0v1h-7v-1h7zm12 0v1H35v-1h10zm8 0v1h-6v-1h6zm-32 3v1h-6v-1h6zm-8 3h6v1h-6v-1zm4 3v1h-6v-1h6zm10 1h-8v-1h8v1zm10-1v1h-8v-1h8zm-9-11h-6v-1h6v1zm2-1h8v1h-8v-1zm0-27v1H19v-1h11zm2 0h8v1h-8v-1zm-7 3v1h-8v-1h8zm-10 3h6v1h-6v-1zm8 6v1h-8v-1h8zm6 0v1h-4v-1h4zm0-6v1h-6v-1h6zm-12 3h10v1H17v-1zm18 0v1h-6v-1h6zm2 0h4v1h-4v-1zm8-15v1H35v-1h10zM6 10c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm7-2c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm3 2c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zM4 20h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm-1 3h1v1H4v-1zm1 3v1H4v-1h1zm63 4c0-7.732 6.268-14 14-14v1c-7.18 0-13 5.82-13 13 0 1.652.308 3.232.87 4.686l-.908.425C68.342 84.53 68 82.805 68 81zm8.707-.707L76 81l.707.707 3.586 3.586L81 86l-.707.707-1.586 1.586L78 89l-.707-.707-6.586-6.586L70 81l.707-.707 6.586-6.586L78 73l.707.707 1.586 1.586L81 76l-.707.707-3.586 3.586zM79.587 86l-4.294-4.293-.707-.707.707-.707L79.586 76 78 74.414 71.414 81 78 87.586 79.586 86zm4.12-9.293L83 76l.707-.707 1.586-1.586L86 73l.707.707 6.586 6.586L94 81l-.707.707-6.586 6.586L86 89l-.707-.707-1.586-1.586L83 86l.707-.707 3.586-3.586L88 81l-.707-.707-3.586-3.586zm5 5L84.414 86 86 87.586 92.586 81 86 74.414 84.414 76l4.293 4.293.707.707-.707.707z"></path>
                     </svg>
                     <h2 class="section-title">
-                        Using a clean and documented PHP API to create list, forms, filters, searches, commands, ...
+                        Using a clean and documented PHP API to create list, forms, show pages, filters, searches, commands, ...
                     </h2>
                 </div>
             </div>
@@ -113,10 +113,6 @@ Sharp is not a CMS: it's a content management framework, a toolset which provide
 </div>
 
 A Sharp instance for a demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/). 
-
-Use these accounts to login:
-- admin@example.com / secret
-- boss@example.com / secret (has a few more permissions)
 
 Data of this demo is reset each hour. 
 
