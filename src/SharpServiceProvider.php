@@ -31,6 +31,8 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\View\Components\Content;
+use Code16\Sharp\View\Components\Media;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -62,6 +64,9 @@ class SharpServiceProvider extends ServiceProvider
         ], 'views');
         
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
+        Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
+        Blade::component(Content::class, 'sharp-content');
+        Blade::component(Media::class, 'sharp-media');
     
         $this->registerPolicies();
     }

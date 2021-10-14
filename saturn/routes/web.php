@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\SpaceshipController;
+
 Route::get('/', function () {
     return redirect("/docs/index.html");
 });
+
+Route::get('/spaceships/{spaceship}', [SpaceshipController::class, 'show']);
 
 Route::get('/passengers', function () {
     $passengers = \App\Passenger::where("name", "like", request("query") . "%")
