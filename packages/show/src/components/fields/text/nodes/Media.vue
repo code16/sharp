@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import { filesEquals } from "sharp-files";
+    import { filesEquals, parseFilterCrop, parseFilterRotate } from "sharp-files";
     import ShowFile from "../../File";
 
     export default {
@@ -20,6 +20,8 @@
             name: String,
             path: String,
             disk: String,
+            filterCrop: String,
+            filterRotate: String,
         },
         computed: {
             value() {
@@ -40,6 +42,10 @@
                 name: this.name,
                 path: this.path,
                 disk: this.disk,
+                filters: {
+                    crop: parseFilterCrop(this.filterCrop),
+                    rotate: parseFilterRotate(this.filterRotate),
+                },
             });
         },
     }

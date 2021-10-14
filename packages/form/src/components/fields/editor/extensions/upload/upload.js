@@ -1,7 +1,12 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import UploadNode from "./UploadNode";
-import { parseFilterCrop, parseFilterRotate, serializeFilterCrop, serializeFilterRotate } from "./util";
+import {
+    parseFilterCrop,
+    serializeFilterCrop,
+    parseFilterRotate,
+    serializeFilterRotate,
+} from "sharp-files";
 
 
 export const Upload = Node.create({
