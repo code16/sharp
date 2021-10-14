@@ -13,7 +13,7 @@ module.exports = {
         nav: [
             { text: 'Home', link: '/' },
             { text: 'Documentation', link: '/guide/' },
-            { text: 'Demo', link: 'http://sharp.code16.fr/sharp/' },
+            { text: 'Demo', link: 'https://sharp.code16.fr/sharp/' },
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
@@ -128,6 +128,7 @@ module.exports = {
                     title: 'Migrations guide',
                     collapsable: false,
                     children: [
+                        'upgrading/7.0',
                         'upgrading/6.0',
                         'upgrading/5.0',
                         'upgrading/4.2',
