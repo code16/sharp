@@ -10,6 +10,7 @@
         <x-sharp-content::attributes
             component="sharp-media"
             :height="300"
+            style="margin:auto; display:block; box-shadow: #444 0 0 10px"
         />
         <x-markdown>
             {!! $spaceship->description !!}
