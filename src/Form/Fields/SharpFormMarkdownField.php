@@ -104,16 +104,21 @@ class SharpFormMarkdownField extends SharpFormField
 
     public function toArray(): array
     {
-        return parent::buildArray([
-            "minHeight" => $this->minHeight,
-            "maxHeight" => $this->maxHeight,
-            "toolbar" => $this->showToolbar ? $this->toolbar : null,
-            "placeholder" => $this->placeholder,
-            "localized" => $this->localized,
-            "innerComponents" => [
-                "upload" => $this->innerComponentUploadConfiguration()
-            ]
-        ]);
+        return parent::buildArray(
+            array_merge(
+                [
+                    "minHeight" => $this->minHeight,
+                    "maxHeight" => $this->maxHeight,
+                    "toolbar" => $this->showToolbar ? $this->toolbar : null,
+                    "placeholder" => $this->placeholder,
+                    "localized" => $this->localized,
+                    "innerComponents" => [
+                        "upload" => $this->innerComponentUploadConfiguration()
+                    ]
+                ],
+                $this->editorCustomConfiguration()
+            )
+        );
     }
 
     protected function innerComponentUploadConfiguration(): array
@@ -136,5 +141,13 @@ class SharpFormMarkdownField extends SharpFormField
         $array["fileFilter"] = $this->fileFilter;
 
         return $array;
+    }
+
+    protected function editorCustomConfiguration(): array
+    {
+        return [
+            "tightListsOnly" => config("sharp.markdown_editor.tight_lists_only"),
+            "nl2br" => config("sharp.markdown_editor.nl2br"),
+        ];
     }
 }

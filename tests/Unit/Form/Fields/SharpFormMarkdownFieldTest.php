@@ -11,6 +11,12 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     function only_default_values_are_set()
     {
         $formField = SharpFormMarkdownField::make("text");
+        
+        // These configs are globally set in the config 
+        config()->set("sharp.markdown_editor", [
+            "tight_lists_only" => true,
+            "nl2br" => true
+        ]);
 
         $this->assertEquals(
             [
@@ -20,14 +26,16 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "toolbar" => [
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
-                ], 
+                ],
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 2,
                         "transformable" => true,
                         "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
-                ]
+                ],
+                "tightListsOnly" => true,
+                "nl2br" => true,
             ], 
             $formField->toArray()
         );
