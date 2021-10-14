@@ -36,7 +36,8 @@ class SharpFormMarkdownField extends SharpFormField
 
     /** @deprecated use UPLOAD */ const DOC = "upload";
 
-    protected ?int $height = null;
+    protected int $minHeight = 200;
+    protected ?int $maxHeight = null;
     protected array $toolbar = [
         self::B, self::I,
         self::SEPARATOR,
@@ -51,9 +52,16 @@ class SharpFormMarkdownField extends SharpFormField
         return new static($key, static::FIELD_TYPE, new MarkdownFormatter());
     }
 
-    public function setHeight(int $height): self
+    public function setHeight(int $height, int|null $maxHeight = null): self
     {
-        $this->height = $height;
+        $this->minHeight = $height;
+        // Spec maxHeight:
+        // null: same as minHeight;
+        // 0: infinite
+        // int: a defined size
+        $this->maxHeight = $maxHeight === null 
+            ? $height
+            : ($maxHeight === 0 ? null : $maxHeight);
 
         return $this;
     }
@@ -82,7 +90,8 @@ class SharpFormMarkdownField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "height" => "integer",
+            "minHeight" => "required|integer",
+            "maxHeight" => "integer|nullable",
             "toolbar" => "array|nullable",
             "maxImageSize" => "numeric",
             "ratioX" => "integer|nullable",
@@ -96,7 +105,8 @@ class SharpFormMarkdownField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            "height" => $this->height,
+            "minHeight" => $this->minHeight,
+            "maxHeight" => $this->maxHeight,
             "toolbar" => $this->showToolbar ? $this->toolbar : null,
             "placeholder" => $this->placeholder,
             "localized" => $this->localized,

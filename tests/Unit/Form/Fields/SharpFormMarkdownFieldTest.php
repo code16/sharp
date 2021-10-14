@@ -14,7 +14,9 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                "key" => "text", "type" => "markdown", 
+                "key" => "text", 
+                "type" => "markdown",
+                "minHeight" => 200,
                 "toolbar" => [
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
@@ -38,8 +40,24 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
             ->setHeight(50);
 
         $this->assertArraySubset(
-            ["height" => 50],
+            ["minHeight" => 50, "maxHeight" => 50],
             $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_height_with_maxHeight()
+    {
+        $formField = SharpFormMarkdownField::make("text");
+
+        $this->assertArraySubset(
+            ["minHeight" => 50, "maxHeight" => 100],
+            $formField->setHeight(50, 100)->toArray()
+        );
+
+        $this->assertArraySubset(
+            ["minHeight" => 50],
+            $formField->setHeight(50, 0)->toArray()
         );
     }
 
