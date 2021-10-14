@@ -431,7 +431,8 @@ describe('vue-clip',() => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
-                    name: 'Fichier.pdf'
+                    name: 'Fichier.pdf',
+                    type: '',
                 }
             })
         });
@@ -453,7 +454,14 @@ describe('vue-clip',() => {
     });
 
     test('on status added', async () => {
-        let $vueClip = await createVm();
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Fichier.pdf',
+                    type: 'application/pdf',
+                }
+            })
+        });
 
         let handleReset = jest.fn();
 
@@ -483,7 +491,7 @@ describe('vue-clip',() => {
         await $vueClip.$nextTick();
 
         expect(handleError).toHaveBeenCalledTimes(1);
-        expect(handleError).toHaveBeenCalledWith("Can't upload");
+        expect(handleError).toHaveBeenCalledWith("Can't upload", expect.anything());
     });
 
     test('on status success', async () => {
