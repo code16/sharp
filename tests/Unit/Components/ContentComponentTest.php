@@ -8,16 +8,9 @@ use Code16\Sharp\View\Components\Content;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Blade;
 
-
 class ContentComponentTest extends SharpTestCase
 {
     use InteractsWithViews;
-    
-    protected function setUp(): void
-    {
-        parent::setUp();
-        view()->addNamespace('stub', __DIR__ . '/stubs');
-    }
     
     /** @test */
     function we_can_render_content()
@@ -41,21 +34,29 @@ class ContentComponentTest extends SharpTestCase
             blade,
         ]);
         
+        // Retrieve component @see to Media::__construct()
         [$mediaComponent] = view()->shared('sharp-media');
         
-        $this->assertEquals($mediaComponent->attributes->getAttributes(), [
-            'path' => 'storage/path.png',
-            'width' => 500,
-            'height' => 500,
-        ]);
+        $this->assertEquals(
+            [
+                'path' => 'storage/path.png',
+                'width' => 500,
+                'height' => 500,
+            ],
+            $mediaComponent->attributes->getAttributes(),
+        );
         
         $view->assertDontSee('<body');
-        $view->assertSeeInOrder([
-            '<div class="markdown">',
-            '<p>Text</p>',
-            '<div class="sharp-media"></div>',
-            '</div>'
-        ], false);
+        
+        $view->assertSeeInOrder(
+            [
+                '<div class="markdown">',
+                '<p>Text</p>',
+                '<div class="sharp-media"></div>',
+                '</div>'
+            ], 
+            false
+        );
     
         $this->assertFalse(app()->has(Content::class));
     }

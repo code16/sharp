@@ -20,6 +20,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
                     SharpFormWysiwygField::B, SharpFormWysiwygField::I, SharpFormWysiwygField::SEPARATOR,
                     SharpFormWysiwygField::UL, SharpFormWysiwygField::SEPARATOR, SharpFormWysiwygField::A,
                 ],
+                "minHeight" => 200,
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 2,
@@ -36,11 +37,27 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
     function we_can_define_height()
     {
         $formField = SharpFormWysiwygField::make("text")
-            ->setHeight(500);
+            ->setHeight(50);
 
         $this->assertArraySubset(
-            ["height" => 500],
+            ["minHeight" => 50, "maxHeight" => 50],
             $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_height_with_maxHeight()
+    {
+        $formField = SharpFormWysiwygField::make("text");
+
+        $this->assertArraySubset(
+            ["minHeight" => 50, "maxHeight" => 100],
+            $formField->setHeight(50, 100)->toArray()
+        );
+
+        $this->assertArraySubset(
+            ["minHeight" => 50],
+            $formField->setHeight(50, 0)->toArray()
         );
     }
 

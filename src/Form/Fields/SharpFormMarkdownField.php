@@ -36,7 +36,8 @@ class SharpFormMarkdownField extends SharpFormField
 
     /** @deprecated use UPLOAD */ const DOC = "upload";
 
-    protected ?int $height = null;
+    protected int $minHeight = 200;
+    protected ?int $maxHeight = null;
     protected array $toolbar = [
         self::B, self::I,
         self::SEPARATOR,
@@ -51,9 +52,16 @@ class SharpFormMarkdownField extends SharpFormField
         return new static($key, static::FIELD_TYPE, new MarkdownFormatter());
     }
 
-    public function setHeight(int $height): self
+    public function setHeight(int $height, int|null $maxHeight = null): self
     {
-        $this->height = $height;
+        $this->minHeight = $height;
+        // Spec maxHeight:
+        // null: same as minHeight;
+        // 0: infinite
+        // int: a defined size
+        $this->maxHeight = $maxHeight === null 
+            ? $height
+            : ($maxHeight === 0 ? null : $maxHeight);
 
         return $this;
     }
@@ -82,7 +90,8 @@ class SharpFormMarkdownField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "height" => "integer",
+            "minHeight" => "required|integer",
+            "maxHeight" => "integer|nullable",
             "toolbar" => "array|nullable",
             "maxImageSize" => "numeric",
             "ratioX" => "integer|nullable",
@@ -95,15 +104,21 @@ class SharpFormMarkdownField extends SharpFormField
 
     public function toArray(): array
     {
-        return parent::buildArray([
-            "height" => $this->height,
-            "toolbar" => $this->showToolbar ? $this->toolbar : null,
-            "placeholder" => $this->placeholder,
-            "localized" => $this->localized,
-            "innerComponents" => [
-                "upload" => $this->innerComponentUploadConfiguration()
-            ]
-        ]);
+        return parent::buildArray(
+            array_merge(
+                [
+                    "minHeight" => $this->minHeight,
+                    "maxHeight" => $this->maxHeight,
+                    "toolbar" => $this->showToolbar ? $this->toolbar : null,
+                    "placeholder" => $this->placeholder,
+                    "localized" => $this->localized,
+                    "innerComponents" => [
+                        "upload" => $this->innerComponentUploadConfiguration()
+                    ]
+                ],
+                $this->editorCustomConfiguration()
+            )
+        );
     }
 
     protected function innerComponentUploadConfiguration(): array
@@ -126,5 +141,13 @@ class SharpFormMarkdownField extends SharpFormField
         $array["fileFilter"] = $this->fileFilter;
 
         return $array;
+    }
+
+    protected function editorCustomConfiguration(): array
+    {
+        return [
+            "tightListsOnly" => config("sharp.markdown_editor.tight_lists_only"),
+            "nl2br" => config("sharp.markdown_editor.nl2br"),
+        ];
     }
 }

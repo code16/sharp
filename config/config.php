@@ -84,6 +84,14 @@ return [
         "thumbnails_disk" => env("SHARP_UPLOADS_THUMBS_DISK", "public"),
         "thumbnails_dir" => env("SHARP_UPLOADS_THUMBS_DIR", "thumbnails"),
     ],
+    
+    // Optional. Options for form markdown editor (SharpFormMarkdownField)
+    "markdown_editor" => [
+        // If false, the UL tool will display a dropdown to choose between tight and normal lists
+        "tight_lists_only" => true,
+        // If false, simple carriage return will not be converted to <br> (in Sharp) 
+        "nl2br" => true
+    ],
 
     // Optional. Auth related configuration.
     "auth" => [

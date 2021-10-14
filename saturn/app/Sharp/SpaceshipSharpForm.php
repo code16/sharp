@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use App\Feature;
 use App\Pilot;
+use App\Sharp\Filters\CorporationGlobalFilter;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
@@ -325,7 +326,7 @@ class SpaceshipSharpForm extends SharpForm
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
-            "corporation_id" => currentSharpRequest()->globalFilterFor("corporation")
+            "corporation_id" => currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class)
         ]);
 
         if(($data["name"]["fr"] ?? "") == "error") {

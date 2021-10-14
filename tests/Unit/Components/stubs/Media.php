@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Components\stubs;
 
-use Code16\Sharp\View\Components\Content;
 use Illuminate\View\Component;
-
 
 class Media extends Component
 {

@@ -11,21 +11,31 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     function only_default_values_are_set()
     {
         $formField = SharpFormMarkdownField::make("text");
+        
+        // These configs are globally set in the config 
+        config()->set("sharp.markdown_editor", [
+            "tight_lists_only" => true,
+            "nl2br" => true
+        ]);
 
         $this->assertEquals(
             [
-                "key" => "text", "type" => "markdown", 
+                "key" => "text", 
+                "type" => "markdown",
+                "minHeight" => 200,
                 "toolbar" => [
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
-                ], 
+                ],
                 "innerComponents" => [
                     "upload" => [
                         "maxFileSize" => 2,
                         "transformable" => true,
                         "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
-                ]
+                ],
+                "tightListsOnly" => true,
+                "nl2br" => true,
             ], 
             $formField->toArray()
         );
@@ -38,8 +48,24 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
             ->setHeight(50);
 
         $this->assertArraySubset(
-            ["height" => 50],
+            ["minHeight" => 50, "maxHeight" => 50],
             $formField->toArray()
+        );
+    }
+
+    /** @test */
+    function we_can_define_height_with_maxHeight()
+    {
+        $formField = SharpFormMarkdownField::make("text");
+
+        $this->assertArraySubset(
+            ["minHeight" => 50, "maxHeight" => 100],
+            $formField->setHeight(50, 100)->toArray()
+        );
+
+        $this->assertArraySubset(
+            ["minHeight" => 50],
+            $formField->setHeight(50, 0)->toArray()
         );
     }
 
