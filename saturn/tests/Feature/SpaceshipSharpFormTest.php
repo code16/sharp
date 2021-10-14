@@ -124,15 +124,21 @@ class SpaceshipSharpFormTest extends TestCase
     {
         $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
 
-        $this->storeSharpForm("spaceship", array_merge(factory(Spaceship::class)->make()->toArray(), [
-            "name" => ["fr" => "test_create"],
-            "capacity" => 10
-        ]))->assertStatus(200);
+        $this
+            ->storeSharpForm("spaceship", 
+                array_merge(
+                    factory(Spaceship::class)->make()->toArray(), 
+                    [
+                        "name" => ["fr" => "test_create"],
+                        "capacity" => 10
+                    ]
+                )
+            )
+            ->assertOk();
 
         $this->assertDatabaseHas("spaceships", [
             "name" => json_encode(["fr" => "test_create"]),
             "capacity" => 10000
         ]);
     }
-
 }
