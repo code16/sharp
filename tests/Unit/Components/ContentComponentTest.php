@@ -18,7 +18,7 @@ class ContentComponentTest extends SharpTestCase
         Blade::component(Media::class, 'sharp-media');
         
         $view = $this->blade(<<<blade
-            <x-sharp-content :media-width="500">
+            <x-sharp-content :image-width="500">
                 <x-sharp-content::attributes
                     component="sharp-media"
                     :height="500"
@@ -38,12 +38,12 @@ class ContentComponentTest extends SharpTestCase
         [$mediaComponent] = view()->shared('sharp-media');
         
         $this->assertEquals(
-            $mediaComponent->attributes->getAttributes(), 
             [
                 'path' => 'storage/path.png',
                 'width' => 500,
                 'height' => 500,
-            ]
+            ],
+            $mediaComponent->attributes->getAttributes(),
         );
         
         $view->assertDontSee('<body');
