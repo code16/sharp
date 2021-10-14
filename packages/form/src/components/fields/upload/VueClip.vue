@@ -146,11 +146,7 @@
             }
         },
         watch: {
-            value(value) {
-                if(!value) {
-                    this.files = [];
-                }
-            },
+            value: 'init',
             'file.status'(status) {
                 (status in this.statusFunction) && this[this.statusFunction[status]]();
             },
@@ -263,6 +259,10 @@
             onStatusAdded() {
                 this.$emit('reset');
                 this.setPending(true);
+
+                if(this.file.type.match(/^image\//)) {
+                    this.$set(this.file, 'blobUrl', URL.createObjectURL(this.file._file));
+                }
             },
             async onStatusError() {
                 const xhr = this.file.xhrResponse;
@@ -270,7 +270,7 @@
                 this.setPending(false);
                 await this.$nextTick();
                 if(!xhr?.statusCode) {
-                    this.$emit('error', msg);
+                    this.$emit('error', msg, this.file._file);
                 } else {
                    this.handleUploadError(xhr);
                 }
@@ -299,14 +299,6 @@
                 this.$emit('input', data);
 
                 this.setPending(false);
-
-                this.$nextTick(() => {
-                    this.isCropperReady() && this.onCropperReady();
-                });
-            },
-
-            onThumbnail() {
-                this.$set(this.file, 'blobUrl', URL.createObjectURL(this.file._file));
             },
 
             // actions
@@ -350,10 +342,6 @@
                 this.updateFilters(cropper);
             },
 
-            isCropperReady() {
-                return this.$refs.cropper?.cropper.ready;
-            },
-
             onCropperReady() {
                 if(this.hasInitialTransform) {
                     this.updateTransformedImage(this.$refs.cropper);
@@ -384,7 +372,7 @@
 
             updateTransformedImage(cropper) {
                 this.resetTransformedImage();
-                cropper.getCroppedCanvas().toBlob(blob => {
+                cropper.getCroppedCanvas({ width: 300, height: 300 }).toBlob(blob => {
                     this.transformedImg = URL.createObjectURL(blob);
                 });
             },
@@ -408,6 +396,19 @@
                 }
                 return true;
             },
+
+            init() {
+                if(this.value) {
+                    if(this.file) {
+                        Object.assign(this.file, this.value);
+                    } else {
+                        this.addedFile({ ...this.value, upload: {} });
+                    }
+                    this.$set(this.file, 'thumbnail', this.value.thumbnail ?? null);
+                } else {
+                    this.files = [];
+                }
+            },
         },
         created() {
             this.options.thumbnailWidth = null;
@@ -422,8 +423,7 @@
                 return;
             }
 
-            this.addedFile({ ...this.value, upload: {} });
-            this.file.thumbnail = this.value.thumbnail;
+            this.init();
             this.file.status = 'exist';
         },
         mounted() {

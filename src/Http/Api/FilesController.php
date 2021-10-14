@@ -17,6 +17,9 @@ class FilesController extends Controller
         
         return response()->json([
             "files" => collect(request()->get("files"))
+                ->filter(function (array $file) {
+                    return isset($file['disk'], $file['path']);
+                })
                 ->map(function(array $file) use ($thumbnailHeight, $thumbnailWidth) {
                     $disk = Storage::disk($file["disk"]);
                     if(!$disk->exists($file["path"])) {

@@ -1,4 +1,4 @@
-
+import { serializeFilterNumber } from "sharp-files";
 
 export function getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
     const rotate = filters?.rotate?.angle ?? 0;
@@ -30,13 +30,13 @@ export function getFiltersFromCropData({ cropData, imageWidth, imageHeight }) {
 
     return {
         crop: {
-            width: cropData.width / rw,
-            height: cropData.height / rh,
-            x: cropData.x / rw,
-            y: cropData.y / rh,
+            width: serializeFilterNumber(cropData.width / rw, 4),
+            height: serializeFilterNumber(cropData.height / rh, 4),
+            x: serializeFilterNumber(cropData.x / rw, 4),
+            y: serializeFilterNumber(cropData.y / rh, 4),
         },
         rotate: {
-            angle: cropData.rotate * -1,
+            angle: serializeFilterNumber(cropData.rotate * -1, 4),
         },
     }
 }

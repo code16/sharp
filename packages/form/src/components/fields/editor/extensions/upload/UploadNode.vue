@@ -1,13 +1,13 @@
 <template>
     <NodeRenderer class="editor__node" :node="node">
         <VueClip
-            :value="resolvedValue"
+            :value="value"
             :root="false"
             :options="options"
             :focused="selected"
             :invalid="!!error"
             v-bind="fieldProps"
-            @updated="handleUpdate"
+            @updated="handleUpdated"
             @removed="handleRemoveClicked"
             @success="handleSuccess"
             @error="handleError"
@@ -41,6 +41,15 @@
             deleteNode: Function,
         },
         computed: {
+            ready() {
+                if(this.node.attrs.file) {
+                    return true;
+                }
+                return this.extension.options.isReady(this.node.attrs);
+            },
+            file() {
+                return this.extension.options.getFile(this.node.attrs);
+            },
             value() {
                 const attrs = this.node.attrs;
                 if(attrs.file) {
@@ -48,15 +57,25 @@
                         file: attrs.file,
                     }
                 }
-                return this.extension.options.getFile(attrs);
+                return {
+                    ...this.serializableAttrs,
+                    ...this.file,
+                }
             },
-            resolvedValue() {
-                return this.value ?? this.node.attrs;
+            serializableAttrs() {
+                const attrs = this.node.attrs;
+                return {
+                    path: attrs.path,
+                    disk: attrs.disk,
+                    name: attrs.name,
+                    filters: attrs.filters,
+                };
             },
             error() {
-                if(!this.value) {
+                const attrs = this.node.attrs;
+                if(this.ready && !attrs.file && !this.file) {
                     return lang('form.editor.errors.unknown_file')
-                        .replace(':path', this.node.attrs.path ?? '');
+                        .replace(':path', attrs.path ?? '');
                 }
             },
             fieldProps() {
@@ -80,31 +99,42 @@
                     this.editor.commands.focus();
                 }, 0);
             },
-            handleError(message) {
-                showAlert(message, {
+            handleError(message, file) {
+                this.deleteNode();
+                showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
                     isError: true,
                     title: lang(`modals.error.title`),
                 });
             },
-            handleUpdate(value) {
+            handleUpdated(value) {
                 this.updateAttributes({
-                    'filter-crop': value.filters.crop,
-                    'filter-rotate': value.filters.rotate,
+                    filters: value.filters,
                 });
-                this.extension.options.onUpdate(value);
+                if(!this.node.attrs.file) {
+                    this.extension.options.onUpdate(value);
+                }
             },
             handleSuccess(value) {
                 this.updateAttributes({
-                    'name': value.name,
-                    'disk': value.disk,
-                    'media': value.media,
-                    'file': null,
+                    name: value.name,
+                    disk: value.disk,
+                    path: value.path,
+                    file: null,
                 });
                 this.extension.options.onSuccess(value);
             },
         },
+        created() {
+            if(!this.node.attrs.file) {
+                this.extension.options.registerFile({
+                    ...this.serializableAttrs,
+                });
+            }
+        },
         beforeDestroy() {
-            this.extension.options.onRemove(this.value);
+            if(!this.node.attrs.file) {
+                this.extension.options.onRemove(this.value);
+            }
         },
     }
 </script>

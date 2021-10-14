@@ -19,6 +19,7 @@
         components: {
             SharpEditor,
         },
+        inject: ['$form'],
         props: {
             id: String,
             value: {
@@ -63,6 +64,9 @@
                 if(this.hasUpload) {
                     const Upload = getUploadExtension.call(this, {
                         fieldProps: this.innerComponents.upload,
+                        uniqueIdentifier: this.uniqueIdentifier,
+                        fieldConfigIdentifier: this.fieldConfigIdentifier,
+                        form: this.$form,
                     });
                     extensions.push(Upload);
                 }

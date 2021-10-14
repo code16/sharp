@@ -9,13 +9,15 @@
 </template>
 
 <script>
+    import { Upload } from "./upload";
+
     export default {
         props: {
             editor: Object,
         },
         computed: {
             uploadExtension() {
-                return this.editor.options.extensions.find(extension => extension.name === 'upload');
+                return this.editor.options.extensions.find(extension => extension.name === Upload.name);
             },
             accept() {
                 return this.uploadExtension?.options.fieldProps.fileFilter;
@@ -31,7 +33,10 @@
                     .run();
             },
             handleUploadRequested() {
-                this.$refs.input.click();
+                this.$refs.input.value = '';
+                setTimeout(() => {
+                    this.$refs.input.click();
+                });
             },
         },
         mounted() {

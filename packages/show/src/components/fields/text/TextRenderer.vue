@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import { postResolveFiles } from "sharp-files";
+    import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "sharp-files";
     import Media from "./nodes/Media";
 
     export default {
@@ -43,8 +43,8 @@
                         entityKey: this.$store.getters['show/entityKey'],
                         instanceId: this.$store.getters['show/instanceId'],
                         files,
-                        thumbnailWidth: 150,
-                        thumbnailHeight: 150,
+                        thumbnailWidth: defaultFileThumbnailWidth,
+                        thumbnailHeight: defaultFileThumbnailHeight,
                     });
                 }
             },

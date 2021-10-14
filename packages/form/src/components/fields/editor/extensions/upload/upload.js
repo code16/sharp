@@ -21,36 +21,51 @@ export const Upload = Node.create({
     priority: 150,
 
     defaultOptions: {
-        fieldOptions: {},
+        fieldProps: {},
+        isReady: () => true,
+        getFile: () => {},
+        registerFile: () => {},
         onInput: () => {},
         onRemove: () => {},
         onUpdate: () => {},
-        findFile: ({ disk, path, name }) => {},
     },
 
     addAttributes() {
         return {
-            'disk': {
+            disk: {
                 default: null,
             },
-            'path': {
+            path: {
                 default: null,
             },
-            'name': {
+            name: {
                 default: null,
+            },
+            filters: {
+                parseHTML: element => ({
+                    crop: parseFilterCrop(element.getAttribute('filter-crop')),
+                    rotate: parseFilterRotate(element.getAttribute('filter-rotate')),
+                }),
+                renderHTML: () => null,
             },
             'filter-crop': {
                 default: null,
+                renderHTML: attributes => ({
+                    'filter-crop': serializeFilterCrop(attributes.filters?.crop),
+                }),
             },
             'filter-rotate': {
                 default: null,
+                renderHTML: attributes => ({
+                    'filter-rotate': serializeFilterRotate(attributes.filters?.rotate),
+                }),
             },
             /**
              * @type File
              */
-            'file': {
+            file: {
                 default: null,
-            }
+            },
         }
     },
 
@@ -58,32 +73,12 @@ export const Upload = Node.create({
         return [
             {
                 tag: 'x-sharp-media',
-                getAttrs: node => ({
-                    'disk': node.getAttribute('disk'),
-                    'path': node.getAttribute('path'),
-                    'name': node.getAttribute('name'),
-                    'filter-crop': parseFilterCrop(node.getAttribute('filter-crop')),
-                    'filter-rotate': parseFilterRotate(node.getAttribute('filter-rotate')),
-                }),
-            },
+            }
         ]
     },
 
-    /**
-     * <x-sharp-media path="example.jpg">
-     * </x-sharp-media>
-     */
     renderHTML({ HTMLAttributes }) {
-        return [
-            'x-sharp-media',
-            {
-                'name': HTMLAttributes['name'],
-                'disk': HTMLAttributes['disk'],
-                'path': HTMLAttributes['path'],
-                'filter-crop': serializeFilterCrop(HTMLAttributes['filter-crop']),
-                'filter-rotate': serializeFilterRotate(HTMLAttributes['filter-rotate']),
-            }
-        ];
+        return ['x-sharp-media', HTMLAttributes];
     },
 
     addCommands() {

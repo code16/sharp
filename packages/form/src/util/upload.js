@@ -30,6 +30,8 @@ export function getUploadOptions({ fileFilter, maxFileSize }) {
                 message: maxFileSizeMessage(maxFileSize),
             },
         } : null,
+
+        createImageThumbnails: false,
     }
 }
 

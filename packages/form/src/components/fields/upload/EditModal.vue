@@ -11,7 +11,7 @@
         <template v-if="ready">
             <vue-cropper
                 class="SharpUpload__modal-vue-cropper"
-                :view-mode="2"
+                :view-mode="0"
                 drag-mode="crop"
                 :aspect-ratio="ratioX / ratioY"
                 :auto-crop-area="1"

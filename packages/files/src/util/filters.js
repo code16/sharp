@@ -8,6 +8,10 @@ function serializeNumber(number, decimals) {
     return Math.round((number + Number.EPSILON) * 10 ** decimals) / 10 ** decimals;
 }
 
+export function serializeFilterNumber(number, decimals) {
+    return serializeNumber(number, decimals);
+}
+
 export function serializeFilterCrop(data) {
     let { x, y, width, height } = data ?? {};
 
