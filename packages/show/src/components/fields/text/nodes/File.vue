@@ -1,5 +1,6 @@
 <template>
     <ShowFile
+        class="text-component"
         :value="value"
         :root="false"
     />

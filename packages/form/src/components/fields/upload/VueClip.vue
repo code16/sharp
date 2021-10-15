@@ -257,11 +257,13 @@
             },
             // status callbacks
             onStatusAdded() {
-                this.$emit('reset');
+                const htmlFile = this.file._file;
+
+                this.$emit('add', htmlFile);
                 this.setPending(true);
 
                 if(this.file.type.match(/^image\//)) {
-                    this.$set(this.file, 'blobUrl', URL.createObjectURL(this.file._file));
+                    this.$set(this.file, 'blobUrl', URL.createObjectURL(htmlFile));
                 }
             },
             async onStatusError() {

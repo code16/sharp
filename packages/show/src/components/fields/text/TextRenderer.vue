@@ -4,7 +4,7 @@
 
 <script>
     import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "sharp-files";
-    import Media from "./nodes/Media";
+    import File from "./nodes/File";
 
     export default {
         props: {
@@ -30,7 +30,8 @@
                 return {
                     template: `<div>${this.content}</div>`,
                     components: {
-                        'x-sharp-media': Media,
+                        'x-sharp-file': File,
+                        'x-sharp-image': File,
                     },
                 }
             },

@@ -65,20 +65,32 @@ export const Upload = Node.create({
              */
             file: {
                 default: null,
+                renderHTML: () => null,
             },
+            isImage: {
+                default: false,
+                parseHTML: element => element.matches('x-sharp-image'),
+                renderHTML: () => null,
+            }
         }
     },
 
     parseHTML() {
         return [
             {
-                tag: 'x-sharp-media',
-            }
+                tag: 'x-sharp-image',
+            },
+            {
+                tag: 'x-sharp-file',
+            },
         ]
     },
 
-    renderHTML({ HTMLAttributes }) {
-        return ['x-sharp-media', HTMLAttributes];
+    renderHTML({ node, HTMLAttributes }) {
+        if(node.attrs.isImage) {
+            return ['x-sharp-image', HTMLAttributes];
+        }
+        return ['x-sharp-file', HTMLAttributes];
     },
 
     addCommands() {
@@ -86,7 +98,10 @@ export const Upload = Node.create({
             insertUpload: attrs => ({ commands }) => {
                 return commands.insertContent({
                     type: this.name,
-                    attrs,
+                    attrs: {
+                        file: attrs.file,
+                        isImage: attrs.file.type.match(/^image\//),
+                    },
                 });
             },
             newUpload: () => ({ editor }) => {

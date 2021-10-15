@@ -6,7 +6,7 @@
         v-bind="$props"
         @input="$emit('input', $event)"
         @error="$emit('error', $event)"
-        @reset="$emit('clear')"
+        @add="$emit('clear')"
     />
 </template>
 
