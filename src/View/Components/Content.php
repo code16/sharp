@@ -15,13 +15,13 @@ class Content extends Component
     public ComponentAttributeBagCollection $contentComponentAttributes;
     
     public function __construct(
-        public ?int $imageWidth = null,
-        public ?int $imageHeight = null,
+        public ?int $imageThumbnailWidth = null,
+        public ?int $imageThumbnailHeight = null,
     ) {
         $this->contentComponentAttributes = new ComponentAttributeBagCollection();
-        $this->contentComponentAttributes->put('sharp-media', [
-            'width' => $this->imageWidth,
-            'height' => $this->imageHeight,
+        $this->contentComponentAttributes->put('sharp-image', [
+            'thumbnail-width' => $this->imageThumbnailWidth,
+            'thumbnail-height' => $this->imageThumbnailHeight,
         ]);
     }
     

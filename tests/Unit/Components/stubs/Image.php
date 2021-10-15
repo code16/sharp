@@ -4,17 +4,17 @@ namespace Code16\Sharp\Tests\Unit\Components\stubs;
 
 use Illuminate\View\Component;
 
-class Media extends Component
+class Image extends Component
 {
     public function __construct()
     {
-        $components = view()->shared('sharp-media');
+        $components = view()->shared('sharp-image');
         $components[] = $this;
-        view()->share('sharp-media', $components);
+        view()->share('sharp-image', $components);
     }
     
     public function render()
     {
-        return '<div class="sharp-media"></div>';
+        return '<img class="sharp-image">';
     }
 }

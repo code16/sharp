@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Components;
 
 use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\Components\stubs\Media;
+use Code16\Sharp\Tests\Unit\Components\stubs\Image;
 use Code16\Sharp\View\Components\Content;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Blade;
@@ -15,13 +15,13 @@ class ContentComponentTest extends SharpTestCase
     /** @test */
     function we_can_render_content()
     {
-        Blade::component(Media::class, 'sharp-media');
+        Blade::component(Image::class, 'sharp-image');
         
         $view = $this->blade(<<<blade
-            <x-sharp-content :image-width="500">
+            <x-sharp-content :image-thumbnail-width="500">
                 <x-sharp-content::attributes
-                    component="sharp-media"
-                    :height="500"
+                    component="sharp-image"
+                    :thumbnail-height="500"
                 />
                 {!! \$content !!}
             </x-sharp-content>
@@ -29,21 +29,21 @@ class ContentComponentTest extends SharpTestCase
             'content' => <<<blade
                 <div class="markdown">
                     <p>Text</p>
-                    <x-sharp-media path="storage/path.png"></x-sharp-media>
+                    <x-sharp-image path="storage/path.png"></x-sharp-image>
                 </div>
             blade,
         ]);
         
-        // Retrieve component @see to Media::__construct()
-        [$mediaComponent] = view()->shared('sharp-media');
+        // Retrieve component @see to Image::__construct()
+        [$imageComponent] = view()->shared('sharp-image');
         
         $this->assertEquals(
             [
                 'path' => 'storage/path.png',
-                'width' => 500,
-                'height' => 500,
+                'thumbnail-width' => 500,
+                'thumbnail-height' => 500,
             ],
-            $mediaComponent->attributes->getAttributes(),
+            $imageComponent->attributes->getAttributes(),
         );
         
         $view->assertDontSee('<body');
@@ -52,9 +52,9 @@ class ContentComponentTest extends SharpTestCase
             [
                 '<div class="markdown">',
                 '<p>Text</p>',
-                '<div class="sharp-media"></div>',
+                '<img class="sharp-image">',
                 '</div>'
-            ], 
+            ],
             false
         );
     

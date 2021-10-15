@@ -32,7 +32,8 @@ use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\View\Components\Content;
-use Code16\Sharp\View\Components\Media;
+use Code16\Sharp\View\Components\File;
+use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -60,13 +61,14 @@ class SharpServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../resources/views/components/media.blade.php' => resource_path('views/vendor/sharp/components/media.blade.php'),
+            __DIR__ . '/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/media.blade.php'),
         ], 'views');
         
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
         Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
         Blade::component(Content::class, 'sharp-content');
-        Blade::component(Media::class, 'sharp-media');
+        Blade::component(File::class, 'sharp-file');
+        Blade::component(Image::class, 'sharp-image');
     
         $this->registerPolicies();
     }

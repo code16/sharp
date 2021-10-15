@@ -9,12 +9,11 @@ use Illuminate\View\Component;
 use Illuminate\View\View;
 
 
-class Media extends Component
+class Image extends Component
 {
     public SharpUploadModel $fileModel;
     public FilesystemAdapter $disk;
     public bool $exists;
-    public bool $isImage;
     
     public function __construct(
         string $path,
@@ -22,8 +21,8 @@ class Media extends Component
         public ?string $name = null,
         public ?string $filterCrop = null,
         public ?string $filterRotate = null,
-        public ?int $width = null,
-        public ?int $height = null,
+        public ?int $thumbnailWidth = null,
+        public ?int $thumbnailHeight = null,
         public ?array $filters = [],
     ) {
         $this->fileModel = new SharpUploadModel([
@@ -33,10 +32,9 @@ class Media extends Component
         ]);
         $this->disk = Storage::disk($this->fileModel->disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);
-        $this->isImage = $this->isImage();
         
-        if(!$this->width && !$this->height) {
-            $this->width = 500;
+        if(!$this->thumbnailWidth && !$this->thumbnailHeight) {
+            $this->thumbnailWidth = 500;
         }
     }
     
@@ -63,22 +61,8 @@ class Media extends Component
         return $filters;
     }
     
-    protected function isImage(): bool
+    public function render(): View
     {
-        if(!$this->exists) {
-            return false;
-        }
-        $mimeType = $this->disk->mimeType($this->fileModel->file_name);
-        return in_array($mimeType, [
-            'image/jpeg',
-            'image/gif',
-            'image/png',
-            'image/bmp',
-        ]);
-    }
-    
-    public function render()
-    {
-        return view('sharp::components.media');
+        return view('sharp::components.image');
     }
 }
