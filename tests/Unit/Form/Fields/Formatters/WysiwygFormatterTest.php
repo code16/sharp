@@ -20,7 +20,7 @@ class WysiwygFormatterTest extends SharpTestCase
         $value = Str::random();
 
         $this->assertEquals(
-            ["text" => $value, "files" => []], 
+            ["text" => $value], 
             (new WysiwygFormatter())->toFront(SharpFormWysiwygField::make("a"), $value)
         );
     }

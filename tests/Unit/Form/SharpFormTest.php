@@ -30,10 +30,13 @@ class SharpFormTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            "md" => ["text" => null, "files" => []],
-            "check" => false
-        ], $sharpForm->newInstance());
+        $this->assertEquals(
+            [
+                "md" => ["text" => null],
+                "check" => false
+            ], 
+            $sharpForm->newInstance()
+        );
     }
 
     /** @test */
@@ -48,10 +51,13 @@ class SharpFormTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            "name" => "",
-            "subclass:company" => ["text" => null, "files" => []],
-        ], $sharpForm->newInstance());
+        $this->assertEquals(
+            [
+                "name" => "",
+                "subclass:company" => ["text" => null],
+            ],
+            $sharpForm->newInstance()
+        );
     }
 
     /** @test */
@@ -103,11 +109,14 @@ class SharpFormTest extends SharpTestCase
             "delayed" => "abc",
         ]);
 
-        $this->assertEquals([
-            "id" => 1,
-            "normal" => "abc",
-            "delayed" => "abc-1",
-        ], $sharpForm->instance);
+        $this->assertEquals(
+            [
+                "id" => 1,
+                "normal" => "abc",
+                "delayed" => "abc-1",
+            ], 
+            $sharpForm->instance
+        );
     }
 
     /** @test */

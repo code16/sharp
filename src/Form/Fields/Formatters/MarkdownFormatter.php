@@ -2,22 +2,12 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
-use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use DOMDocument;
 use DOMElement;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class MarkdownFormatter extends SharpFieldFormatter
 {
-
-    /**
-     * @param SharpFormField $field
-     * @param $value
-     * @return mixed
-     */
     function toFront(SharpFormField $field, $value)
     {
         return [
@@ -25,12 +15,6 @@ class MarkdownFormatter extends SharpFieldFormatter
         ];
     }
 
-    /**
-     * @param SharpFormField $field
-     * @param string $attribute
-     * @param $value
-     * @return mixed
-     */
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $text = $value['text'] ?? '';
