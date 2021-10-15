@@ -463,12 +463,12 @@ describe('vue-clip',() => {
             })
         });
 
-        let handleReset = jest.fn();
+        let handleAdd = jest.fn();
 
-        $vueClip.$on('reset', handleReset);
+        $vueClip.$on('add', handleAdd);
         $vueClip.onStatusAdded();
 
-        expect(handleReset).toHaveBeenCalled();
+        expect(handleAdd).toHaveBeenCalled();
     });
 
     test('on status error', async () => {

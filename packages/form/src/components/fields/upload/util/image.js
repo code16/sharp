@@ -1,7 +1,7 @@
 
 export function getImageBlobUrl(file) {
     if(!file.type.match(/^image\//)) {
-        return null;
+        return Promise.resolve(null);
     }
     const img = new Image();
     img.src = URL.createObjectURL(file);
