@@ -98,6 +98,7 @@
     import { Button } from 'sharp-ui';
     import { downloadFileUrl } from "sharp-files";
     import { getFiltersFromCropData } from "./util/filters";
+    import { getImageBlobUrl } from "./util/image";
     import EditModal from "./EditModal";
 
     export default {
@@ -262,9 +263,15 @@
                 this.$emit('add', htmlFile);
                 this.setPending(true);
 
-                if(this.file.type.match(/^image\//)) {
-                    this.$set(this.file, 'blobUrl', URL.createObjectURL(htmlFile));
-                }
+                getImageBlobUrl(htmlFile)
+                    .then(blobUrl => {
+                        if(blobUrl) {
+                            this.$set(this.file, 'blobUrl', blobUrl);
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
             },
             async onStatusError() {
                 const xhr = this.file.xhrResponse;
