@@ -44,7 +44,8 @@
     "prod": "npm run production",
     "docs:dev": "cd docs && npm run dev",
     "docs:build": "cd docs && npm run build",
-    "test": "jest"
+    "test": "jest",
+    "update:tiptap": "npm update @tiptap/core @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/starter-kit @tiptap/vue-2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.4",
@@ -114,7 +115,7 @@
     "sharp-form": "file:packages/form",
     "sharp-show": "file:packages/show",
     "sharp-ui": "file:packages/ui",
-    "tiptap-markdown": "^0.2.1",
+    "tiptap-markdown": "^0.3.0",
     "trix": "^1.0.0",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
