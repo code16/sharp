@@ -28,7 +28,8 @@
             },
             placeholder: String,
             toolbar: Array,
-            height: Number,
+            minHeight: Number,
+            maxHeight: Number,
             innerComponents: Object,
 
             readOnly: Boolean,

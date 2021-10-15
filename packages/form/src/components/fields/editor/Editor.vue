@@ -42,10 +42,11 @@
             editor: Object,
             uniqueIdentifier: String,
             toolbar: Array,
-            height: {
+            minHeight: {
                 type: Number,
                 default: 300
             },
+            maxHeight: Number,
             readOnly: Boolean,
         },
         data() {
@@ -66,7 +67,8 @@
             },
             style() {
                 return {
-                    '--height': `${this.height}px`,
+                    '--min-height': this.minHeight ? `${this.minHeight}px` : null,
+                    '--max-height': this.maxHeight ? `${this.maxHeight}px` : null,
                 }
             },
             hasUpload() {

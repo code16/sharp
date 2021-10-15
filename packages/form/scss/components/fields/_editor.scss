@@ -44,7 +44,8 @@
 
   &__content {
     position: relative;
-    height: var(--height, auto);
+    min-height: var(--min-height);
+    max-height: var(--max-height);
     overflow-y: auto;
 
     &:focus {
