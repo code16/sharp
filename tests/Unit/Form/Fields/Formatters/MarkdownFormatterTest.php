@@ -60,7 +60,7 @@ class MarkdownFormatterTest extends SharpTestCase
                 function fromFront(SharpFormField $field, string $attribute, $value): ?array
                 {
                     return [
-                        "file_name" => "data/uploaded_test.png",
+                        "file_name" => "data/uploaded_" . $value['name'],
                         "disk" => "local"
                     ];
                 }
@@ -71,9 +71,14 @@ class MarkdownFormatterTest extends SharpTestCase
             Some content text before
             
             <x-sharp-media 
-                name="test.png"
+                name="test.pdf"
                 uploaded="true"
             ></x-sharp-media>
+            
+            <x-sharp-image 
+                name="test.png"
+                uploaded="true"
+            ></x-sharp-image>
 
             Some content text after
         EOT;
@@ -88,6 +93,9 @@ class MarkdownFormatterTest extends SharpTestCase
                     "text" => $value,
                     "files" => [
                         [
+                            "name" => "test.pdf",
+                            "uploaded" => true
+                        ], [
                             "name" => "test.png",
                             "uploaded" => true
                         ]
@@ -106,7 +114,12 @@ class MarkdownFormatterTest extends SharpTestCase
         );
 
         $this->assertStringContainsString(
-            '<x-sharp-media name="uploaded_test.png" uploaded="true" path="data/uploaded_test.png" disk="local"></x-sharp-media>',
+            '<x-sharp-media name="uploaded_test.pdf" uploaded="true" path="data/uploaded_test.pdf" disk="local"></x-sharp-media>',
+            $result
+        );
+
+        $this->assertStringContainsString(
+            '<x-sharp-image name="uploaded_test.png" uploaded="true" path="data/uploaded_test.png" disk="local"></x-sharp-image>',
             $result
         );
     }
