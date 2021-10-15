@@ -37,16 +37,25 @@
                     ...file,
                 }
             },
+            filters() {
+                const filters = {
+                    crop: parseFilterCrop(this.filterCrop),
+                    rotate: parseFilterRotate(this.filterRotate),
+                };
+
+                if(Object.values(filters).every(filter => filter == null)) {
+                    return null;
+                }
+
+                return filters;
+            },
         },
         created() {
             this.state.files.push({
                 name: this.name,
                 path: this.path,
                 disk: this.disk,
-                filters: {
-                    crop: parseFilterCrop(this.filterCrop),
-                    rotate: parseFilterRotate(this.filterRotate),
-                },
+                filters: this.filters,
             });
         },
     }
