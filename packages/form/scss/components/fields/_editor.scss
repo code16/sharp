@@ -75,6 +75,7 @@
       width: 100%;
       margin-bottom: 1rem;
       vertical-align: top;
+      transition: box-shadow .15s ease-in-out;
       > tbody {
         vertical-align: inherit;
       }
@@ -84,6 +85,9 @@
       }
       p {
         margin-bottom: 0;
+      }
+      &.selected {
+        box-shadow: 0 0 0 1px var(--primary);
       }
     }
 
