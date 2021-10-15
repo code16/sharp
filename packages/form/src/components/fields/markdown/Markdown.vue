@@ -30,6 +30,8 @@
             toolbar: Array,
             height: Number,
             innerComponents: Object,
+            nl2br: Boolean,
+            tightListsOnly: Boolean,
 
             readOnly: Boolean,
             uniqueIdentifier: String,
@@ -77,6 +79,9 @@
                     content: this.localizedText,
                     onUpdate: this.handleUpdate,
                     editable: !this.readOnly,
+                    markdown: {
+                        breaks: this.nl2br,
+                    },
                 });
             },
         },
