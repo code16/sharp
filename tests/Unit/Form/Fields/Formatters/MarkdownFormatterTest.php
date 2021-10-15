@@ -70,10 +70,10 @@ class MarkdownFormatterTest extends SharpTestCase
         $value = <<<EOT
             Some content text before
             
-            <x-sharp-media 
+            <x-sharp-file 
                 name="test.pdf"
                 uploaded="true"
-            ></x-sharp-media>
+            ></x-sharp-file>
             
             <x-sharp-image 
                 name="test.png"
@@ -114,7 +114,7 @@ class MarkdownFormatterTest extends SharpTestCase
         );
 
         $this->assertStringContainsString(
-            '<x-sharp-media name="uploaded_test.pdf" uploaded="true" path="data/uploaded_test.pdf" disk="local"></x-sharp-media>',
+            '<x-sharp-file name="uploaded_test.pdf" uploaded="true" path="data/uploaded_test.pdf" disk="local"></x-sharp-file>',
             $result
         );
 
