@@ -16,6 +16,15 @@
                                 <i :class="getIcon(button)"></i>
                             </LinkDropdown>
                         </template>
+                        <template v-else-if="button === 'table'">
+                            <TableDropdown
+                                :active="isActive(button)"
+                                :disabled="disabled"
+                                :editor="editor"
+                            >
+                                <i :class="getIcon(button)"></i>
+                            </TableDropdown>
+                        </template>
                         <template v-else>
                             <Button
                                 variant="light"
@@ -38,9 +47,11 @@
     import { Button, Dropdown } from "sharp-ui";
     import { buttons } from './config';
     import LinkDropdown from "./LinkDropdown";
+    import TableDropdown from "./TableDropdown";
 
     export default {
         components: {
+            TableDropdown,
             LinkDropdown,
             Button,
             Dropdown,

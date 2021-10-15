@@ -74,6 +74,11 @@ export const buttons = {
         isActive: editor => editor.isActive('horizontalRule'),
         icon: getToolbarIcon('hr'),
     },
+    'table': {
+        command: editor => editor.chain().focus().insertTable().run(), // handled in TableDropdown
+        isActive: editor => editor.isActive('table'),
+        icon: getToolbarIcon('table'),
+    },
     'undo': {
         command: editor => editor.chain().undo().run(),
         icon: getToolbarIcon('undo'),

@@ -128,6 +128,8 @@ class TestForm extends SharpForm
                         SharpFormMarkdownField::QUOTE,
                         SharpFormMarkdownField::CODE,
                         SharpFormMarkdownField::UPLOAD_IMAGE,
+                        SharpFormMarkdownField::SEPARATOR,
+                        SharpFormMarkdownField::TABLE,
                     ])
                     ->setCropRatio("1:1")
                     ->setHeight(350)
@@ -284,7 +286,10 @@ class TestForm extends SharpForm
                 "name" => $faker->name
             ],
             "markdown" => [
-                "fr" => "Du **texte** avec *style*",
+                "fr" => "Du **texte** avec *style* \n\n|   |   |   |
+|---|---|---|
+|   |   |   |
+|   |   |   |",
                 "en" => "Some **text** with *style*",
             ],
             "number" => $faker->numberBetween(1, 100),

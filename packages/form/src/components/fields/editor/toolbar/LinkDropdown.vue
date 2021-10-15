@@ -1,6 +1,6 @@
 <template>
     <Dropdown
-        class="editor__link-dropdown"
+        class="editor__dropdown editor__dropdown--table"
         variant="light"
         :active="active"
         v-bind="$attrs"

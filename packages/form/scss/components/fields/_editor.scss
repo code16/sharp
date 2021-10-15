@@ -134,12 +134,9 @@
     margin-bottom: 1rem;
   }
 
-  &__link-dropdown {
+  &__dropdown {
     .dropdown-menu {
       width: 18rem;
-      &[x-placement^=top] {
-        bottom: auto;
-      }
     }
   }
 

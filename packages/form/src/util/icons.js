@@ -19,6 +19,7 @@ const toolbarIcons = {
     'hr': 'fas fa-minus',
     'image': 'far fa-image',
     'document': 'fas fa-paperclip',
+    'table': 'fas fa-table',
 };
 
 export function getToolbarIcon(key) {
