@@ -2,7 +2,6 @@
 
 namespace App\View\Components;
 
-
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
@@ -10,12 +9,10 @@ use League\CommonMark\MarkdownConverterInterface;
 
 class Markdown extends Component
 {
-    protected bool $nl2br;
     protected array $options;
     
-    public function __construct($nl2br = false, array $options = [])
+    public function __construct(array $options = [])
     {
-        $this->nl2br = $nl2br;
         $this->options = $options;
     }
     
@@ -34,7 +31,7 @@ class Markdown extends Component
         $options = array_merge($this->options, [
             'html_input' => 'allow',
             'renderer' => [
-                'soft_break' => $this->nl2br ? "<br>" : "\n",
+                'soft_break' => config("sharp.markdown_editor.nl2br") ? "<br>" : "\n",
             ],
         ]);
         
