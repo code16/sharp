@@ -74,6 +74,16 @@ export const buttons = {
         isActive: editor => editor.isActive('horizontalRule'),
         icon: getToolbarIcon('hr'),
     },
+    'iframe': {
+        command: editor => {
+            const html = window.prompt('Enter embed code');
+            if(html) {
+                editor.chain().focus().insertIframe(html).run();
+            }
+        },
+        isActive: editor => editor.isActive('iframe'),
+        icon: getToolbarIcon('iframe'),
+    },
     'undo': {
         command: editor => editor.chain().undo().run(),
         icon: getToolbarIcon('undo'),

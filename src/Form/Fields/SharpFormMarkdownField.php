@@ -9,8 +9,8 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormMarkdownField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, 
-        SharpFormFieldWithUpload, 
+    use SharpFormFieldWithPlaceholder,
+        SharpFormFieldWithUpload,
         SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = "markdown";
@@ -31,6 +31,7 @@ class SharpFormMarkdownField extends SharpFormField
     const UPLOAD = "upload";
     const HR = "horizontal-rule";
     const TABLE = "table";
+    const IFRAME = "iframe";
     const UNDO = "undo";
     const REDO = "redo";
 
@@ -59,7 +60,7 @@ class SharpFormMarkdownField extends SharpFormField
         // null: same as minHeight;
         // 0: infinite
         // int: a defined size
-        $this->maxHeight = $maxHeight === null 
+        $this->maxHeight = $maxHeight === null
             ? $height
             : ($maxHeight === 0 ? null : $maxHeight);
 

@@ -125,6 +125,13 @@
       }
     }
 
+    iframe {
+      display: block;
+      width: 350px;
+      max-height: 200px;
+      margin-bottom: 1rem;
+    }
+
     [data-node-view-wrapper] {
       display: block;
     }
@@ -144,6 +151,7 @@
   }
 
   &__toolbar {
+    // upload
     .fa-paperclip {
       -webkit-text-stroke: .03em $ui-03;
       &:hover {
@@ -158,6 +166,11 @@
         padding-top: calc(#{$btn-padding-y} - .12em);
         padding-bottom: calc(#{$btn-padding-y} - .12em);
       }
+    }
+
+    // iframe
+    .fa-caret-square-right {
+      font-size: 1rem;
     }
 
     .btn {

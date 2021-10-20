@@ -9,6 +9,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { TrailingNode } from "./trailing-node";
+import { Iframe } from "./iframe";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
 
 function getHeadingExtension(toolbar) {
@@ -65,6 +66,12 @@ function getPlaceholderExtension(placeholder) {
     }
 }
 
+function getIframeExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'iframe')) {
+        return Iframe;
+    }
+}
+
 export function getDefaultExtensions({ placeholder, toolbar } = {}) {
     const bulletList = toolbarHasButton(toolbar, 'bullet-list');
     const orderedList = toolbarHasButton(toolbar, 'ordered-list');
@@ -95,6 +102,7 @@ export function getDefaultExtensions({ placeholder, toolbar } = {}) {
         getHorizontalRuleExtension(toolbar),
         getTableExtensions(toolbar),
         getPlaceholderExtension(placeholder),
+        getIframeExtension(toolbar),
         TrailingNode,
     ];
     return extensions
