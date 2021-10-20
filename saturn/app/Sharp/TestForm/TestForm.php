@@ -286,7 +286,7 @@ class TestForm extends SharpForm
                 "name" => $faker->name
             ],
             "markdown" => [
-                "fr" => "Du **texte** avec *style*",
+                "fr" => "Du **texte** avec *style* a\n\n<formoj></formoj>",
                 "en" => "Some **text** with *style*",
             ],
             "number" => $faker->numberBetween(1, 100),

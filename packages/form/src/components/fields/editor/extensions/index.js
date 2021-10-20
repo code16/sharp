@@ -11,6 +11,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { TrailingNode } from "./trailing-node";
 import { Iframe } from "./iframe";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
+import { Html } from "./html";
 
 function getHeadingExtension(toolbar) {
     const levels = getAllowedHeadingLevels(toolbar);
@@ -104,6 +105,7 @@ export function getDefaultExtensions({ placeholder, toolbar } = {}) {
         getPlaceholderExtension(placeholder),
         getIframeExtension(toolbar),
         TrailingNode,
+        Html,
     ];
     return extensions
         .flat()
