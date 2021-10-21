@@ -8,6 +8,7 @@
                             <LinkDropdown
                                 :id="id"
                                 :active="isActive(button)"
+                                :title="buttonTitle(button)"
                                 :editor="editor"
                                 :disabled="disabled"
                                 @submit="handleLinkSubmitted"
@@ -21,6 +22,7 @@
                                 variant="light"
                                 :active="isActive(button)"
                                 :disabled="disabled"
+                                :title="buttonTitle(button)"
                                 @click="handleClicked(button)"
                                 :key="button"
                             >
@@ -69,6 +71,9 @@
             },
             isActive(button) {
                 return buttons[button]?.isActive?.(this.editor);
+            },
+            buttonTitle(button) {
+                return buttons[button]?.label;
             },
             handleClicked(button) {
                 buttons[button]?.command(this.editor);

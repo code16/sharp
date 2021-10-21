@@ -143,7 +143,10 @@
 
   &__link-dropdown {
     .dropdown-menu {
-      width: 18rem;
+      width: max-content;
+      @include media-breakpoint-up(sm) {
+        min-width: 18rem;
+      }
       &[x-placement^=top] {
         bottom: auto;
       }
