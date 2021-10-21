@@ -113,7 +113,7 @@ class PersonSharpEntityList extends SharpEntityList
     function buildListConfig(): void
     {
         $this->configureSearchable()
-            ->setReorderable(PersonSharpEntityListReorderHandler::class);
+            ->configureReorderable(PersonSharpEntityListReorderHandler::class);
     }
 }
 

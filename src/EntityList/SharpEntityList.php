@@ -173,18 +173,11 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function setReorderable($reorderHandler): self
+    public function configureReorderable(ReorderHandler|string $reorderHandler): self
     {
         $this->reorderHandler = $reorderHandler instanceof ReorderHandler
             ? $reorderHandler
             : app($reorderHandler);
-
-        return $this;
-    }
-
-    public function setNotReorderable(): self
-    {
-        $this->reorderHandler = null;
 
         return $this;
     }
@@ -211,7 +204,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    protected function setMultiformAttribute(string $attribute): self
+    protected function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
