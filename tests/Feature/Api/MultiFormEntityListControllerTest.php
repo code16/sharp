@@ -93,6 +93,6 @@ class PersonWithMultiformSharpEntityList extends SharpEntityList
 
     function buildListConfig(): void
     {
-        $this->setMultiformAttribute("type");
+        $this->configureMultiformAttribute("type");
     }
 }

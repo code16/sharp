@@ -15,7 +15,7 @@ class SharpEntityListReorderTest extends SharpTestCase
         $list = new class extends SharpEntityDefaultTestList {
             function buildListConfig(): void
             {
-                $this->setReorderable(new class implements ReorderHandler {
+                $this->configureReorderable(new class implements ReorderHandler {
                     function reorder(array $ids): void {}
                 });
             }
