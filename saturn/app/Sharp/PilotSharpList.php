@@ -60,7 +60,7 @@ class PilotSharpList extends SharpEntityList
     {
         $this->configureSearchable()
             ->configureDefaultSort("name", "asc")
-            ->setMultiformAttribute("role")
+            ->configureMultiformAttribute("role")
             ->configurePaginated()
             ->configureEntityState("state", PilotEntityState::class);
     }

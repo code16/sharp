@@ -19,6 +19,7 @@ const toolbarIcons = {
     'hr': 'fas fa-minus',
     'image': 'far fa-image',
     'document': 'fas fa-paperclip',
+    'iframe': 'far fa-caret-square-right',
     'table': 'fas fa-table',
 };
 

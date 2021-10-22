@@ -13,7 +13,7 @@ abstract class DateRangeFilter extends Filter
         return $this;
     }
 
-    public final function configureMondayFirst(bool $isMondayFirst): self
+    public final function configureMondayFirst(bool $isMondayFirst = true): self
     {
         $this->isMondayFirst = $isMondayFirst;
         return $this;

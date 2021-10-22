@@ -130,6 +130,7 @@ class TestForm extends SharpForm
                         SharpFormMarkdownField::UPLOAD_IMAGE,
                         SharpFormMarkdownField::SEPARATOR,
                         SharpFormMarkdownField::TABLE,
+                        SharpFormMarkdownField::IFRAME,
                     ])
                     ->setCropRatio("1:1")
                     ->setHeight(350)
@@ -260,7 +261,7 @@ class TestForm extends SharpForm
             ->addTab("Special", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField("geolocation");
+//                        $column->withSingleField("geolocation");
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withSingleField("upload");

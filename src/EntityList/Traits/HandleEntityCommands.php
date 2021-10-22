@@ -13,7 +13,7 @@ trait HandleEntityCommands
     protected ?Collection $entityCommandHandlers = null;
     protected ?string $primaryEntityCommandKey = null;
 
-    protected function setPrimaryEntityCommand(string $commandKey): self
+    protected function configurePrimaryEntityCommand(string $commandKey): self
     {
         $this->primaryEntityCommandKey = $commandKey;
         

@@ -673,7 +673,7 @@ class SharpEntityListCommandTest extends SharpTestCase
             
             function buildListConfig(): void
             {
-                $this->setPrimaryEntityCommand("primary-entity");
+                $this->configurePrimaryEntityCommand("primary-entity");
             }
         };
 
