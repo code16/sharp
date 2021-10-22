@@ -260,7 +260,7 @@ class TestForm extends SharpForm
             ->addTab("Special", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField("geolocation");
+//                        $column->withSingleField("geolocation");
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withSingleField("upload");
