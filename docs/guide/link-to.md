@@ -67,9 +67,9 @@ Set a link tooltip (only when rendered as link).
 
 Set a search text.
 
-### `addFilter(string $name, string $value)`
+### `addFilter(string $filterFullClassNameOrKey, string $value)`
 
-Set a filter and its value.
+Set a filter and its value; for the filter, you can either pass its custom key or (more conveniently) its full class name.
 
 ### `setSort(string $attribute, $dir = 'asc')`
 
