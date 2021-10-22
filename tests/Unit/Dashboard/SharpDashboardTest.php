@@ -257,30 +257,33 @@ class SharpDashboardTest extends SharpTestCase
         // Have to manually call this to ensure widgets are loaded
         $dashboard->widgets();
 
-        $this->assertEquals([
-            "widget" => [
-                "key" => "widget",
-                "data" => [
-                    [
-                        "id" => 1,
-                        "label" => "John Wayne",
-                        "count" => 888,
-                        "url" => "http://localhost/sharp/s-list/my-entity?filter_type=1"
-                    ],
-                    [
-                        "id" => 2,
-                        "label" => "Jane Wayne",
-                        "count" => 771,
-                        "url" => "http://localhost/sharp/s-list/my-entity?filter_type=2"
-                    ],
-                    [
-                        "id" => 3,
-                        "label" => "John Ford",
-                        "count" => 112,
-                        "url" => null
-                    ],
+        $this->assertEquals(
+            [
+                "widget" => [
+                    "key" => "widget",
+                    "data" => [
+                        [
+                            "id" => 1,
+                            "label" => "John Wayne",
+                            "count" => 888,
+                            "url" => "http://localhost/sharp/s-list/my-entity?filter_type=1"
+                        ],
+                        [
+                            "id" => 2,
+                            "label" => "Jane Wayne",
+                            "count" => 771,
+                            "url" => "http://localhost/sharp/s-list/my-entity?filter_type=2"
+                        ],
+                        [
+                            "id" => 3,
+                            "label" => "John Ford",
+                            "count" => 112,
+                            "url" => null
+                        ],
+                    ]
                 ]
-            ]
-        ], $dashboard->data());
+            ], 
+            $dashboard->data()
+        );
     }
 }
