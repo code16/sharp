@@ -75,19 +75,37 @@
       width: 100%;
       margin-bottom: 1rem;
       vertical-align: top;
-      transition: box-shadow .15s ease-in-out;
+      overflow: visible;
+
       > tbody {
         vertical-align: inherit;
       }
       td, th {
         padding: 0.5rem 0.5rem;
         border: 1px solid #dee2e6;
+
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border: var(--border);
+          pointer-events: none;
+        }
+
+        &.selectedCell {
+          z-index: 0;
+        }
+
+        &.selected {
+          --border: 1px solid hsla(var(--primary-h), var(--primary-s), 30%, .5);
+        }
       }
       p {
         margin-bottom: 0;
-      }
-      &.selected {
-        box-shadow: 0 0 0 1px var(--primary);
       }
     }
 
