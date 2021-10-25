@@ -87,10 +87,12 @@
         },
         methods: {
             handleInsertClicked() {
-                this.editor.chain()
-                    .focus()
-                    .insertTable()
-                    .run();
+                this.command(() => {
+                    this.editor.chain()
+                        .focus()
+                        .insertTable()
+                        .run();
+                });
             },
             command(run) {
                 run();
