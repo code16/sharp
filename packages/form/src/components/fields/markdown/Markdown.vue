@@ -83,22 +83,6 @@
                     editable: !this.readOnly,
                     markdown: {
                         breaks: this.nl2br,
-                        extensions: [
-                            createMarkdownExtension({}, {
-                                parse: {
-                                    updateDOM(dom) {
-                                        dom.querySelectorAll('*').forEach(node => {
-                                            if(node instanceof HTMLUnknownElement) {
-                                                const div = document.createElement('div');
-                                                div.setAttribute('data-html-content', node.outerHTML);
-                                                node.parentElement.replaceChild(div, node);
-                                            }
-                                        })
-                                        console.log(dom);
-                                    }
-                                },
-                            })
-                        ]
                     },
                 });
             },

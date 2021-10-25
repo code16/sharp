@@ -12,7 +12,7 @@ import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
 import { Selected } from "./selected";
-import { Html } from "./html";
+import { Html } from "./html/html";
 
 function getHeadingExtension(toolbar) {
     const levels = getAllowedHeadingLevels(toolbar);
