@@ -109,13 +109,25 @@
 }
 
 .btn-light {
-  &:hover, &:focus, &.active {
-    color: hsl(var(--primary-h), var(--primary-s), 30%);
-  }
-  &.active {
-    background-color: hsla(var(--primary-h), var(--primary-s), 30%, .1);
-    border-color: transparent;
-  }
+  --bs-btn-color: black;
+  --active-color: hsl(var(--primary-h), var(--primary-s), 30%);
+
+  @include button-variant(
+    $background: var(--bs-light),
+    $border: transparent,
+    $color: black,
+    $hover-background: var(--bs-light),
+    $hover-border: transparent,
+    $hover-color: hsl(var(--primary-h), var(--primary-s), 30%),
+    $active-background: hsl(var(--primary-h), 75%, 94%),
+    $active-border: transparent,
+    $active-color: hsl(var(--primary-h), var(--primary-s), 25%),
+    $disabled-background: var(--bs-light),
+    $disabled-border: transparent,
+    $disabled-color: black
+  );
+
+  color: var(--bs-btn-color);
 }
 
 .btn-outline-light {

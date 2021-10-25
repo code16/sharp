@@ -2,15 +2,16 @@ import Heading from "@tiptap/extension-heading";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import Table from "@tiptap/extension-table";
-import TableRow from "@tiptap/extension-table-row";
-import TableHeader from "@tiptap/extension-table-header";
-import TableCell from "@tiptap/extension-table-cell";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { TrailingNode } from "./trailing-node";
 import { Iframe } from "./iframe";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableHeader from "@tiptap/extension-table-header";
+import TableCell from "@tiptap/extension-table-cell";
+import { Selected } from "./selected";
 import { Html } from "./html";
 
 function getHeadingExtension(toolbar) {
@@ -48,7 +49,7 @@ function getHorizontalRuleExtension(toolbar) {
     }
 }
 
-function getTableExtensions(toolbar) {
+export function getTableExtensions(toolbar) {
     if(toolbarHasButton(toolbar, 'table')) {
         return [
             Table,
@@ -104,8 +105,9 @@ export function getDefaultExtensions({ placeholder, toolbar } = {}) {
         getTableExtensions(toolbar),
         getPlaceholderExtension(placeholder),
         getIframeExtension(toolbar),
-        TrailingNode,
         Html,
+        TrailingNode,
+        Selected,
     ];
     return extensions
         .flat()

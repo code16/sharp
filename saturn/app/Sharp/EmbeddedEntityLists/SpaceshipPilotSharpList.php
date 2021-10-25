@@ -10,6 +10,6 @@ class SpaceshipPilotSharpList extends PilotSharpList
     {
         parent::buildListConfig();
 
-        $this->setReorderable(SpaceshipPilotReorderHandler::class);
+        $this->configureReorderable(SpaceshipPilotReorderHandler::class);
     }
 }

@@ -27,7 +27,7 @@ class FeatureSharpList extends SharpEntityList
 
     function buildListConfig(): void
     {
-        $this->setReorderable(new FeatureReorderHandler());
+        $this->configureReorderable(new FeatureReorderHandler());
     }
 
     function buildListLayout(EntityListFieldsLayout $fieldsLayout): void

@@ -53,6 +53,7 @@
                 await this.$nextTick();
                 const content = this.editor.getMarkdown();
                 this.$emit('input', this.localizedValue(content));
+                console.log(this.editor.getHTML());
             },
 
             createEditor() {

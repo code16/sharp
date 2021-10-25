@@ -20,6 +20,7 @@ const toolbarIcons = {
     'image': 'far fa-image',
     'document': 'fas fa-paperclip',
     'iframe': 'far fa-caret-square-right',
+    'table': 'fas fa-table',
 };
 
 export function getToolbarIcon(key) {

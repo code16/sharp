@@ -8,6 +8,7 @@
                             <LinkDropdown
                                 :id="id"
                                 :active="isActive(button)"
+                                :title="buttonTitle(button)"
                                 :editor="editor"
                                 :disabled="disabled"
                                 @submit="handleLinkSubmitted"
@@ -16,11 +17,21 @@
                                 <i :class="getIcon(button)"></i>
                             </LinkDropdown>
                         </template>
+                        <template v-else-if="button === 'table'">
+                            <TableDropdown
+                                :active="isActive(button)"
+                                :disabled="disabled"
+                                :editor="editor"
+                            >
+                                <i :class="getIcon(button)"></i>
+                            </TableDropdown>
+                        </template>
                         <template v-else>
                             <Button
                                 variant="light"
                                 :active="isActive(button)"
                                 :disabled="disabled"
+                                :title="buttonTitle(button)"
                                 @click="handleClicked(button)"
                                 :key="button"
                             >
@@ -38,9 +49,11 @@
     import { Button, Dropdown } from "sharp-ui";
     import { buttons } from './config';
     import LinkDropdown from "./LinkDropdown";
+    import TableDropdown from "./TableDropdown";
 
     export default {
         components: {
+            TableDropdown,
             LinkDropdown,
             Button,
             Dropdown,
@@ -69,6 +82,9 @@
             },
             isActive(button) {
                 return buttons[button]?.isActive?.(this.editor);
+            },
+            buttonTitle(button) {
+                return buttons[button]?.label;
             },
             handleClicked(button) {
                 buttons[button]?.command(this.editor);
