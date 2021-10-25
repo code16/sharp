@@ -4,6 +4,7 @@ import { shallowMount } from '@vue/test-utils';
 import { MockI18n } from "@sharp/test-utils";
 import Vue from 'vue';
 
+jest.mock('sharp');
 
 describe('filter-select', ()=>{
     Vue.use(MockI18n, { mockFn:true });
