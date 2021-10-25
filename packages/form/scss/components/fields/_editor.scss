@@ -160,6 +160,10 @@
     [data-node-view-wrapper] {
       display: block;
     }
+
+    .btn-light {
+      --bs-btn-color: rgba(0,0,0,.675);
+    }
   }
 
   &__node {

@@ -117,6 +117,11 @@ export const buttons = {
         isActive: editor => editor.isActive('table'),
         icon: getToolbarIcon('table'),
     },
+    'html': {
+        command: editor => editor.chain().focus().insertHtml().run(),
+        isActive: editor => editor.isActive('html'),
+        icon: getToolbarIcon('html'),
+    },
     'undo': {
         command: editor => editor.chain().undo().run(),
         icon: getToolbarIcon('undo'),

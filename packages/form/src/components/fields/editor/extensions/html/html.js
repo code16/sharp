@@ -1,57 +1,34 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
-import { DOMParser } from "prosemirror-model";
 import HtmlNode from "./HtmlNode";
-
-/**
- * @returns HTMLElement
- */
-function elementFromString(value) {
-    const wrappedValue = `<body>${value}</body>`
-    return new window.DOMParser().parseFromString(wrappedValue, 'text/html').body
-}
-
-function updateContent(content, schema) {
-    const dom = elementFromString(content);
-    const parser = DOMParser.fromSchema(schema);
-    [...dom.children].forEach(node => {
-        const slice = parser.parseSlice(node).content;
-        if(!slice.size) {
-            const div = document.createElement('div');
-            div.setAttribute('data-html-content', '');
-            node.parentElement.replaceChild(div, node);
-            div.appendChild(node);
-        }
-    });
-    return dom.innerHTML;
-}
+import { setupContent } from "./util";
 
 export const Html = Node.create({
     name: 'html-content',
     group: 'block',
     onBeforeCreate() {
-        this.editor.options.content = updateContent(this.editor.options.content, this.editor.schema);
+        this.editor.options.content = setupContent(
+            this.editor.options.content,
+            this.editor.schema
+        );
     },
     addAttributes() {
         return {
             content: {
                 default: '',
                 parseHTML(element) {
-                    return element.getAttribute('data-html-content') || element.innerHTML;
+                    return element.innerHTML.trim();
                 },
+            },
+            new: {
+                default: false,
             },
         }
     },
     renderHTML({ node }) {
         const parent = document.createElement('div');
-        const content = node.attrs.content.trim();
-        parent.innerHTML = content;
-        if(parent.innerHTML === content) {
-            parent.setAttribute('data-html-content', '');
-        } else {
-            parent.innerHTML = '';
-            parent.setAttribute('data-html-content', node.attrs.content);
-        }
+        parent.setAttribute('data-html-content', 'true');
+        parent.innerHTML = node.attrs.content;
         return parent;
     },
     parseHTML() {
@@ -60,6 +37,18 @@ export const Html = Node.create({
                 tag: '[data-html-content]',
             }
         ]
+    },
+    addCommands() {
+        return {
+            insertHtml: () => ({ commands }) => {
+                return commands.insertContent({
+                    type: this.name,
+                    attrs: {
+                        new: true,
+                    },
+                })
+            },
+        }
     },
     addNodeView() {
         return VueNodeViewRenderer(HtmlNode);

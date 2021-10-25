@@ -32,6 +32,7 @@ class SharpFormMarkdownField extends SharpFormField
     const HR = "horizontal-rule";
     const TABLE = "table";
     const IFRAME = "iframe";
+    const RAW_HTML = "html";
     const UNDO = "undo";
     const REDO = "redo";
 
