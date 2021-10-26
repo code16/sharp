@@ -16,6 +16,10 @@ function prosemirrorParse(node, schema) {
 
 export function setupContent(content, schema) {
     const dom = elementFromString(content);
+    return setupContentDOM(dom, schema);
+}
+
+export function setupContentDOM(dom, schema) {
     [...dom.children].forEach(node => {
         const parsed = prosemirrorParse(node, schema);
         if(!parsed.size) {

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import { createMarkdownEditor, createMarkdownExtension } from 'tiptap-markdown';
+    import { createMarkdownEditor } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../editor/Editor';
     import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../editor";
@@ -53,7 +53,6 @@
                 await this.$nextTick();
                 const content = this.editor.getMarkdown();
                 this.$emit('input', this.localizedValue(content));
-                console.log(this.editor.getHTML());
             },
 
             createEditor() {
