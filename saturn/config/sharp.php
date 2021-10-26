@@ -101,6 +101,7 @@ return [
             "label" => "Feature"
         ],
         "test" => [
+            "show" => \App\Sharp\TestForm\TestShow::class,
             "form" => \App\Sharp\TestForm\TestForm::class,
         ],
     ],

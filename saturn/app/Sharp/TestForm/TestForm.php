@@ -21,9 +21,10 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class TestForm extends SharpForm
+class TestForm extends SharpSingleForm
 {
     function buildFormFields(FieldsContainer $formFields): void
     {
@@ -269,7 +270,7 @@ class TestForm extends SharpForm
             });
     }
 
-    public function create(): array
+    protected function findSingle()
     {
         if(!$rawData = (array)session()->get("sharp_test_form")) {
             $faker = \Faker\Factory::create();
@@ -304,23 +305,14 @@ class TestForm extends SharpForm
                 ]
             ];
         }
-        
+
         return $this->transform($rawData);
     }
-    
-    function find($id): array
-    {
-    }
 
-    function update($id, array $data)
+
+    protected function updateSingle(array $data)
     {
         session()->put("sharp_test_form", $data);
-        
-        return $id;
-    }
-
-    function delete($id): void
-    {
     }
 
     function getDataLocalizations(): array
