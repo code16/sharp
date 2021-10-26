@@ -59,8 +59,8 @@ class SharpFormMarkdownField extends SharpFormField
         $this->minHeight = $height;
         // Spec maxHeight:
         // null: same as minHeight;
-        // 0: infinite
-        // int: a defined size
+        // 0: infinite;
+        // int: a defined size.
         $this->maxHeight = $maxHeight === null
             ? $height
             : ($maxHeight === 0 ? null : $maxHeight);
