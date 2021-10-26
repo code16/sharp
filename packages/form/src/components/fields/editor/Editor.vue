@@ -24,6 +24,7 @@
 </template>
 
 <script>
+    import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-2';
     import { Upload } from "./extensions/upload/upload";
     import UploadFileInput from "./extensions/upload/UploadFileInput";
@@ -92,6 +93,9 @@
                     window.scrollBy(0, cursorRect.top - headerRect.bottom - 10);
                 }
             },
+            handleUpdated() {
+                this.$emit('update', this.editor);
+            },
         },
         async mounted() {
             await this.$nextTick();
@@ -102,6 +106,8 @@
             );
             this.editor.on('focus', this.handleFocus);
             this.editor.on('selectionUpdate', this.handleSelectionUpdated);
+            this.editor.on('update', debounce(this.handleUpdated, 50));
+
             onLabelClicked(this, this.id, () => this.focus());
         },
         directives: {

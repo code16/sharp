@@ -1,22 +1,44 @@
 <template>
-    <SharpEditor
-        class="SharpWysiwyg"
-        :editor="editor"
-        v-bind="$props"
-    >
-    </SharpEditor>
+    <div>
+        <template v-if="isLocalized">
+            <LocalizedEditors
+                :value="value"
+                :locale="locale"
+                :locales="locales"
+                :create-editor="createEditor"
+                v-slot="{ editor }"
+            >
+                <SharpEditor
+                    :editor="editor"
+                    v-bind="$props"
+                    @update="handleUpdate"
+                />
+            </LocalizedEditors>
+        </template>
+        <template v-else>
+            <SharpEditor
+                :editor="editor"
+                v-bind="$props"
+                @update="handleUpdate"
+            />
+        </template>
+    </div>
 </template>
 
 <script>
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../editor/Editor';
     import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../editor";
-    import localize from '../../../mixins/localize/editor';
+    import { LocalizedEditor } from "../../../mixins/localize/editor";
     import { normalizeHTML } from "./util";
+    import LocalizedEditors from "../editor/LocalizedEditors";
 
     export default {
-        mixins: [ localize({ textProp:'text' }) ],
+        mixins: [
+            LocalizedEditor
+        ],
         components: {
+            LocalizedEditors,
             SharpEditor,
         },
         inject: ['$form'],
@@ -47,13 +69,12 @@
             },
         },
         methods: {
-            async handleUpdate() {
-                await this.$nextTick();
-                const content = this.editor.getHTML();
+            handleUpdate(editor) {
+                const content = editor.getHTML();
                 this.$emit('input', this.localizedValue(content));
             },
 
-            createEditor() {
+            createEditor({ content }) {
                 const extensions = [
                     ...getDefaultExtensions({
                         placeholder: this.placeholder,
@@ -74,17 +95,20 @@
                 return new Editor({
                     ...defaultEditorOptions,
                     extensions,
-                    content: normalizeHTML(this.localizedText),
-                    onUpdate: this.handleUpdate,
+                    content: normalizeHTML(content),
                     editable: !this.readOnly,
                 });
             },
         },
-        mounted() {
-            this.editor = this.createEditor();
+        created() {
+            if(!this.isLocalized) {
+                this.editor = this.createEditor({
+                    content: this.localizedText,
+                });
+            }
         },
         beforeDestroy() {
-            this.editor.destroy();
+            this.editor?.destroy();
         },
     }
 </script>

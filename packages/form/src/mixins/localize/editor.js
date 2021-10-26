@@ -2,35 +2,33 @@ import localizeField from "./field";
 import { localeObjectOrEmpty } from "../../util/locale";
 
 /**
- * Can be used in Markdown, TrixEditor component
+ * Can be used in Editor components
  */
-export default function ({ textProp }) {
-    return {
-        _localizedEditor: { textProp },
-        mixins: [localizeField],
-        computed: {
-            localizedText() {
-                if(this.isLocalized) {
-                    return this.value?.[textProp]?.[this.locale] ?? null;
-                }
+export const LocalizedEditor =  {
+    mixins: [localizeField],
 
-                return this.value?.[textProp] ?? null;
+    computed: {
+        localizedText() {
+            if(this.isLocalized) {
+                return this.value?.text?.[this.locale] ?? null;
             }
-        },
 
-        methods: {
-            localizedValue(text) {
-                return {
-                    ...this.value,
-                    [textProp]: this.isLocalized
-                        ? localeObjectOrEmpty({
-                            localeObject: this.value?.[textProp],
-                            locale: this.locale,
-                            value: text
-                        })
-                        : text
-                };
-            }
+            return this.value?.text ?? null;
+        }
+    },
+
+    methods: {
+        localizedValue(text) {
+            return {
+                ...this.value,
+                text: this.isLocalized
+                    ? localeObjectOrEmpty({
+                        localeObject: this.value?.text,
+                        locale: this.locale,
+                        value: text
+                    })
+                    : text
+            };
         }
     }
 }
