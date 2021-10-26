@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class MarkdownFormatterTest extends SharpTestCase
+class EditorFormatterTest extends SharpTestCase
 {
 
     protected function setUp(): void

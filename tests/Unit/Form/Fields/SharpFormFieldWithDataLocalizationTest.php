@@ -43,18 +43,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_the_localized_attribute_for_wysiwyg_field()
-    {
-        $formField = SharpFormWysiwygField::make("name")
-            ->setLocalized();
-
-        $this->assertArraySubset(
-            ["localized" => true], $formField->toArray()
-        );
-    }
-
-    /** @test */
-    function we_can_define_the_localized_attribute_for_markdown_field()
+    function we_can_define_the_localized_attribute_for_editor_field()
     {
         $formField = SharpFormEditorField::make("name")
             ->setLocalized();

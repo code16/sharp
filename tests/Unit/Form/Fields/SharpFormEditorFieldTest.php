@@ -5,7 +5,7 @@ namespace Code16\Sharp\Tests\Unit\Form\Fields;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormMarkdownFieldTest extends SharpTestCase
+class SharpFormEditorFieldTest extends SharpTestCase
 {
     /** @test */
     function only_default_values_are_set()
@@ -21,7 +21,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
         $this->assertEquals(
             [
                 "key" => "text", 
-                "type" => "markdown",
+                "type" => "editor",
                 "minHeight" => 200,
                 "toolbar" => [
                     SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
@@ -36,6 +36,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 ],
                 "tightListsOnly" => true,
                 "nl2br" => true,
+                "markdown" => false,
             ], 
             $formField->toArray()
         );
@@ -166,5 +167,18 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
             ->hideToolbar();
 
         $this->assertArrayNotHasKey("toolbar", $formField->toArray());
+    }
+
+    /** @test */
+    function we_can_define_markdown_as_content_renderer()
+    {
+        $formField = SharpFormEditorField::make("text")
+            ->setHeight(50)
+            ->setRenderContentAsMarkdown();
+
+        $this->assertArraySubset(
+            ["markdown" => true],
+            $formField->toArray()
+        );
     }
 }

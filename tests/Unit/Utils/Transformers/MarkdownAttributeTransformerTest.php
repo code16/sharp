@@ -4,8 +4,6 @@ namespace Code16\Sharp\Tests\Unit\Utils\Transformers;
 
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class MarkdownAttributeTransformerTest extends SharpTestCase
 {
