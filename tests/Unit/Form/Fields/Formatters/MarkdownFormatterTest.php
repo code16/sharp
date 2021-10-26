@@ -2,10 +2,10 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Fields\Formatters;
 
-use Code16\Sharp\Form\Fields\Formatters\MarkdownFormatter;
+use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -25,8 +25,8 @@ class MarkdownFormatterTest extends SharpTestCase
     /** @test */
     function we_can_format_a_text_value_to_front()
     {
-        $formatter = new MarkdownFormatter;
-        $field = SharpFormMarkdownField::make("md");
+        $formatter = new EditorFormatter;
+        $field = SharpFormEditorField::make("md");
         $value = Str::random() . "\n\n" . Str::random();
 
         $this->assertEquals(
@@ -44,8 +44,8 @@ class MarkdownFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             $value, 
-            (new MarkdownFormatter)->fromFront(
-                SharpFormMarkdownField::make("md"), 
+            (new EditorFormatter)->fromFront(
+                SharpFormEditorField::make("md"), 
                 "attribute", 
                 ["text" => $value]
             )
@@ -83,9 +83,9 @@ class MarkdownFormatterTest extends SharpTestCase
             Some content text after
         EOT;
         
-        $result = (new MarkdownFormatter)
+        $result = (new EditorFormatter)
             ->fromFront(
-                SharpFormMarkdownField::make("md")
+                SharpFormEditorField::make("md")
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data"),
                 "attribute",
@@ -157,9 +157,9 @@ class MarkdownFormatterTest extends SharpTestCase
             Some content text after
         EOT;
 
-        $result = (new MarkdownFormatter)
+        $result = (new EditorFormatter)
             ->fromFront(
-                SharpFormMarkdownField::make("md")
+                SharpFormEditorField::make("md")
                     ->setLocalized()
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data"),

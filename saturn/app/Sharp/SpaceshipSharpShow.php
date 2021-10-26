@@ -165,7 +165,7 @@ class SpaceshipSharpShow extends SharpShow
             ->setCustomTransformer("pictures[legend]", function($value, $instance) {
                 return $instance->legend["en"] ?? "";
             })
-            ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->setNewLineOnCarriageReturn())
+//            ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->setNewLineOnCarriageReturn())
             ->transform(Spaceship::with("manual", "pictures")->findOrFail($id));
     }
 }

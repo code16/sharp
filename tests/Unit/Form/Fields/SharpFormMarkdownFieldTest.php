@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Fields;
 
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\SharpTestCase;
 
 class SharpFormMarkdownFieldTest extends SharpTestCase
@@ -10,7 +10,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     /** @test */
     function only_default_values_are_set()
     {
-        $formField = SharpFormMarkdownField::make("text");
+        $formField = SharpFormEditorField::make("text");
         
         // These configs are globally set in the config 
         config()->set("sharp.markdown_editor", [
@@ -24,8 +24,8 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 "type" => "markdown",
                 "minHeight" => 200,
                 "toolbar" => [
-                    SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
-                    SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
+                    SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
+                    SharpFormEditorField::UL, SharpFormEditorField::SEPARATOR, SharpFormEditorField::A,
                 ],
                 "innerComponents" => [
                     "upload" => [
@@ -44,7 +44,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_height()
     {
-        $formField = SharpFormMarkdownField::make("text")
+        $formField = SharpFormEditorField::make("text")
             ->setHeight(50);
 
         $this->assertArraySubset(
@@ -56,7 +56,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_height_with_maxHeight()
     {
-        $formField = SharpFormMarkdownField::make("text");
+        $formField = SharpFormEditorField::make("text");
 
         $this->assertArraySubset(
             ["minHeight" => 50, "maxHeight" => 100],
@@ -72,7 +72,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_upload_configuration()
     {
-        $formField = SharpFormMarkdownField::make("text")
+        $formField = SharpFormEditorField::make("text")
             ->setMaxFileSize(50);
 
         $this->assertArraySubset(
@@ -141,18 +141,18 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_toolbar()
     {
-        $formField = SharpFormMarkdownField::make("text")
+        $formField = SharpFormEditorField::make("text")
             ->setToolbar([
-                SharpFormMarkdownField::UPLOAD,
-                SharpFormMarkdownField::SEPARATOR,
-                SharpFormMarkdownField::UL,
+                SharpFormEditorField::UPLOAD,
+                SharpFormEditorField::SEPARATOR,
+                SharpFormEditorField::UL,
             ]);
 
         $this->assertArraySubset(
             ["toolbar" => [
-                SharpFormMarkdownField::UPLOAD,
-                SharpFormMarkdownField::SEPARATOR,
-                SharpFormMarkdownField::UL,
+                SharpFormEditorField::UPLOAD,
+                SharpFormEditorField::SEPARATOR,
+                SharpFormEditorField::UL,
             ]],
             $formField->toArray()
         );
@@ -161,7 +161,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
     /** @test */
     function we_can_hide_toolbar()
     {
-        $formField = SharpFormMarkdownField::make("text")
+        $formField = SharpFormEditorField::make("text")
             ->setHeight(50)
             ->hideToolbar();
 

@@ -8,7 +8,7 @@ use Illuminate\Validation\Validator;
 
 /**
  * Sharp special implementation of Laravel's Validator to handle specific SharpFormField,
- * like the RTF ones (markdown, wysiwyg) and their ["text"=>...] structure.
+ * like the SharpFormEditorField and their ["text"=>...] structure.
  */
 class SharpValidator extends Validator
 {

@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Form\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -56,7 +56,7 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
     /** @test */
     function we_can_define_the_localized_attribute_for_markdown_field()
     {
-        $formField = SharpFormMarkdownField::make("name")
+        $formField = SharpFormEditorField::make("name")
             ->setLocalized();
 
         $this->assertArraySubset(
