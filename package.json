@@ -28,6 +28,9 @@
     "testMatch": [
       "**/__tests__/**/?(*.)(spec|test).js?(x)"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/", "/legacy/"
+    ],
     "verbose": true,
     "setupFiles": [
       "<rootDir>/packages/test-utils/src/setup/mockument.js",
