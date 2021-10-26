@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Code16\Sharp\View\Components\Content\Utils;
-
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -10,11 +8,6 @@ use JetBrains\PhpStorm\Pure;
 
 class FragmentsFactory
 {
-    
-    public function __construct()
-    {
-    }
-    
     public function fromHTML(string $html): Collection
     {
         $doc = new \DOMDocument();
@@ -85,7 +78,7 @@ class FragmentsFactory
         ];
     }
     
-    protected function findContentContainer(\DOMDocument $document): \DOMElement
+    protected function findContentContainer(\DOMDocument $document): \DOMNode
     {
         if($container = (new \DOMXPath($document))->query('//div[not(div)]')->item(0)) {
             return $container; // is most deep <div>
@@ -102,7 +95,7 @@ class FragmentsFactory
     }
     
     #[Pure]
-    protected function findComponentElement(\DOMNode $node): ?\DOMElement
+    protected function findComponentElement(\DOMNode $node): ?\DOMNode
     {
         if($this->isComponentElement($node)) {
             return $node;
