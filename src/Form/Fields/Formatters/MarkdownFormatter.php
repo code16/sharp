@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use DOMDocument;
 use DOMElement;
+use Illuminate\Support\Str;
 
 class MarkdownFormatter extends SharpFieldFormatter
 {
@@ -17,13 +18,42 @@ class MarkdownFormatter extends SharpFieldFormatter
 
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        $text = $value['text'] ?? '';
+        $content = $value['text'] ?? '';
+        
+        if(is_array($content)) {
+            // Field is localized
+            foreach($content as $locale => $singleText) {
+                $content[$locale] = preg_replace(
+                    '/\R/', "\n",
+                    $this->handleUploadedFiles(
+                        $singleText, 
+                        $value["files"] ?? [],
+                        $field,
+                        $attribute
+                    )
+                );
+            }
+            return $content;
+        }
+        
+        return preg_replace(
+            '/\R/', "\n", 
+            $this->handleUploadedFiles(
+                $content, 
+                $value["files"] ?? [], 
+                $field,
+                $attribute
+            )
+        );
+    }
 
-        if(count($value["files"] ?? [])) {
+    protected function handleUploadedFiles(string $text, array $files, SharpFormField $field, string $attribute): string
+    {
+        if(count($files)) {
             $dom = $this->getDomDocument($text);
             $uploadFormatter = app(UploadFormatter::class);
 
-            foreach($value["files"] as $file) {
+            foreach($files as $file) {
                 $upload = $uploadFormatter
                     ->setInstanceId($this->instanceId)
                     ->fromFront($field, $attribute, $file);
@@ -45,33 +75,24 @@ class MarkdownFormatter extends SharpFieldFormatter
                     }
                 }
             }
-            
-            $text = $this->formatDomStringValue($dom);
+
+            return $this->formatDomStringValue($dom);
         }
         
-        // Normalize \n
-        return preg_replace('/\R/', "\n", $text);
+        return $text;
     }
     
     protected function getDomDocument(string $content): DOMDocument
     {
         return tap(new DOMDocument(), function(DOMDocument $dom) use ($content) {
-            @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            @$dom->loadHTML("<body>$content</body>");
         });
     }
 
     protected function formatDomStringValue(DOMDocument $dom): string
     {
-        $wrapperElement = $dom->firstChild;
-        $newParent = $wrapperElement->parentNode;
-        foreach ($wrapperElement->childNodes as $child) {
-            $newParent->insertBefore(
-                $child->cloneNode(true),
-                $wrapperElement
-            );
-        }
-        $newParent->removeChild($wrapperElement);
+        $body = $dom->getElementsByTagName('body')->item(0);
         
-        return trim($dom->saveHTML());
+        return trim(Str::replace(['<body>', '</body>'], '', $dom->saveHTML($body)));
     }
 }

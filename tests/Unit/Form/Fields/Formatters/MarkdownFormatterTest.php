@@ -123,4 +123,72 @@ class MarkdownFormatterTest extends SharpTestCase
             $result
         );
     }
+
+    /** @test */
+    function we_store_newly_uploaded_files_in_a_localized_field_from_front()
+    {
+        app()->bind(UploadFormatter::class, function() {
+            return new class extends UploadFormatter {
+                function fromFront(SharpFormField $field, string $attribute, $value): ?array
+                {
+                    return [
+                        "file_name" => "data/uploaded_" . $value['name'],
+                        "disk" => "local"
+                    ];
+                }
+            };
+        });
+
+        $frValue = <<<EOT
+            <x-sharp-file 
+                name="test.pdf"
+                uploaded="true"
+            ></x-sharp-file>
+
+            Some content text after
+        EOT;
+
+        $enValue = <<<EOT
+            <x-sharp-image 
+                name="test.png"
+                uploaded="true"
+            ></x-sharp-image>
+
+            Some content text after
+        EOT;
+
+        $result = (new MarkdownFormatter)
+            ->fromFront(
+                SharpFormMarkdownField::make("md")
+                    ->setLocalized()
+                    ->setStorageDisk("local")
+                    ->setStorageBasePath("data"),
+                "attribute",
+                [
+                    "text" => [
+                        "fr" => $frValue,
+                        "en" => $enValue
+                    ],
+                    "files" => [
+                        [
+                            "name" => "test.pdf",
+                            "uploaded" => true
+                        ], [
+                            "name" => "test.png",
+                            "uploaded" => true
+                        ]
+                    ]
+                ]
+            );
+        
+        $this->assertStringContainsString(
+            '<x-sharp-file name="uploaded_test.pdf" uploaded="true" path="data/uploaded_test.pdf" disk="local"></x-sharp-file>',
+            $result["fr"]
+        );
+
+        $this->assertStringContainsString(
+            '<x-sharp-image name="uploaded_test.png" uploaded="true" path="data/uploaded_test.png" disk="local"></x-sharp-image>',
+            $result["en"]
+        );
+    }
 }

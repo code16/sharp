@@ -261,48 +261,51 @@ class TestForm extends SharpForm
             ->addTab("Special", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-//                        $column->withSingleField("geolocation");
+                        $column->withSingleField("upload");
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField("upload");
+//                        $column->withSingleField("geolocation");
                     });
             });
     }
 
     public function create(): array
     {
-        $faker = \Faker\Factory::create();
-    
-        return $this->transform([
-            "text" => [
-                "fr" => $faker->words(3, true),
-                "en" => $faker->words(3, true),
-            ],
-            "autocomplete_local" => 1,
-            "autocomplete_remote" => null,
-            "autocomplete_list" => null,
-            "check" => true,
-            "date" => $faker->date("Y-m-d H:i"),
-            "html" => [
-                "name" => $faker->name
-            ],
-            "markdown" => [
-                "fr" => "Du **texte** avec *style* \n\n|   |   |   |
+        if(!$rawData = (array)session()->get("sharp_test_form")) {
+            $faker = \Faker\Factory::create();
+            $rawData = [
+                "text" => [
+                    "fr" => $faker->words(3, true),
+                    "en" => $faker->words(3, true),
+                ],
+                "autocomplete_local" => 1,
+                "autocomplete_remote" => null,
+                "autocomplete_list" => null,
+                "check" => true,
+                "date" => $faker->date("Y-m-d H:i"),
+                "html" => [
+                    "name" => $faker->name
+                ],
+                "markdown" => [
+                    "fr" => "Du **texte** avec *style* \n\n|   |   |   |
 |---|---|---|
 |   |   |   |
 |   |   |   |",
-                "en" => "Some **text** with *style*",
-            ],
-            "number" => $faker->numberBetween(1, 100),
-            "textarea" => [
-                "fr" => $faker->paragraph(3),
-                "en" => $faker->paragraph(3),
-            ],
-            "wysiwyg" => [
-                "fr" => '<p>fezfjklez fezjkflezjfkez fezjkflezjfklezjkflezj</p>',
-                "en" => 'some <strong>html stuff</strong>',
-            ]
-        ]);
+                    "en" => "Some **text** with *style*",
+                ],
+                "number" => $faker->numberBetween(1, 100),
+                "textarea" => [
+                    "fr" => $faker->paragraph(3),
+                    "en" => $faker->paragraph(3),
+                ],
+                "wysiwyg" => [
+                    "fr" => '<p>fezfjklez fezjkflezjfkez fezjkflezjfklezjkflezj</p>',
+                    "en" => 'some <strong>html stuff</strong>',
+                ]
+            ];
+        }
+        
+        return $this->transform($rawData);
     }
     
     function find($id): array
@@ -311,8 +314,9 @@ class TestForm extends SharpForm
 
     function update($id, array $data)
     {
-        print_r($data);
-        die();
+        session()->put("sharp_test_form", $data);
+        
+        return $id;
     }
 
     function delete($id): void
