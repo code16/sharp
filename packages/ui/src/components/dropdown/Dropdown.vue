@@ -36,6 +36,7 @@
                 type: Boolean,
                 default: true
             },
+            title: String,
             disabled: Boolean,
         },
         computed: {
@@ -51,6 +52,11 @@
             hide() {
                 this.$refs.dropdown.hide();
             },
+        },
+        mounted() {
+            if(this.title) {
+                this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
+            }
         },
     }
 </script>

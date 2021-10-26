@@ -5,6 +5,7 @@ import * as fields from '../src/components/fields';
 
 import { MockInjections } from "@sharp/test-utils";
 
+jest.mock('sharp');
 
 describe('field-container', () => {
     Vue.component('sharp-field-container', FieldContainer);
