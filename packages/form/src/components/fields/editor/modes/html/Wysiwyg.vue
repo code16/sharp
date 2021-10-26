@@ -26,20 +26,20 @@
 </template>
 
 <script>
-    import { createMarkdownEditor } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
-    import SharpEditor from '../editor/Editor';
-    import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../editor";
-    import { LocalizedEditor } from '../../../mixins/localize/editor';
-    import LocalizedEditors from "../editor/LocalizedEditors";
+    import SharpEditor from '../../Editor';
+    import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../..";
+    import { LocalizedEditor } from "../../../../../mixins/localize/editor";
+    import { normalizeHTML } from "./util";
+    import LocalizedEditors from "../../LocalizedEditors";
 
     export default {
         mixins: [
             LocalizedEditor
         ],
         components: {
-            SharpEditor,
             LocalizedEditors,
+            SharpEditor,
         },
         inject: ['$form'],
         props: {
@@ -53,8 +53,6 @@
             minHeight: Number,
             maxHeight: Number,
             innerComponents: Object,
-            nl2br: Boolean,
-            tightListsOnly: Boolean,
 
             readOnly: Boolean,
             uniqueIdentifier: String,
@@ -72,12 +70,11 @@
         },
         methods: {
             handleUpdate(editor) {
-                const content = editor.getMarkdown();
+                const content = editor.getHTML();
                 this.$emit('input', this.localizedValue(content));
             },
 
             createEditor({ content }) {
-                const MarkdownEditor = createMarkdownEditor(Editor);
                 const extensions = [
                     ...getDefaultExtensions({
                         placeholder: this.placeholder,
@@ -95,14 +92,11 @@
                     extensions.push(Upload);
                 }
 
-                return new MarkdownEditor({
+                return new Editor({
                     ...defaultEditorOptions,
                     extensions,
-                    content,
+                    content: normalizeHTML(content),
                     editable: !this.readOnly,
-                    markdown: {
-                        breaks: this.nl2br,
-                    },
                 });
             },
         },
