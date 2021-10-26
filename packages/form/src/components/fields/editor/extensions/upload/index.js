@@ -42,8 +42,10 @@ export function getUploadExtension({
             updateFiles([])
         },
         onCreate: async () => {
-            const files = await resolveFiles(state.registeredFiles);
-            updateFiles(files);
+            if(state.registeredFiles.length > 0) {
+                const files = await resolveFiles(state.registeredFiles);
+                updateFiles(files);
+            }
             state.created = true;
             state.registeredFiles = [];
         },
