@@ -60,6 +60,7 @@ class SpaceshipSharpForm extends SharpForm
                         SharpFormEditorField::A,
                     ])
                     ->setCropRatio("1:1")
+                    ->setTransformable()
                     ->setMaxFileSize(4)
                     ->setFileFilterImages()
                     ->setStorageDisk("local")

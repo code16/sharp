@@ -130,4 +130,4 @@ function find($id): array
 }
 ```
 
-It will handle embedded images (see the [markdown form field documentation for details on that](form-fields/markdown.html)).
+It will handle embedded images (see the [editor form field documentation for details on that](form-fields/editor.html)).

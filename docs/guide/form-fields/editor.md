@@ -1,18 +1,21 @@
-# Markdown
+# Editor
 
-This form field is a markdown editor, with formatting and an optional toolbar.
+This form field is a rich text editor, with formatting and an optional toolbar.
 
-Class: `Code16\Sharp\Form\Fields\SharpFormMarkdownField`
+Class: `Code16\Sharp\Form\Fields\SharpFormEditorField`
 
-<img src="./markdown.png" width="500">
+<img src="./editor.png" width="500">
 
 
 ## Configuration
 
+### `setHeight(int $height, int|null $maxHeight = null)`
 
-### `setHeight(int $height)`
+Set the textarea height, in pixels.  
+If `$maxHeight` is set, the field will auto-grow until:
 
-Set the textarea height, in pixels.
+- the indicated height in pixels
+- on infinitely if set to `0`
 
 ### `showToolbar()`
 ### `hideToolbar()`
@@ -21,11 +24,12 @@ Show or hide the toolbar (shown by default).
 
 ### `setToolbar(array $toolbar)`
 
-Override the default toolbar, providing an array built with `SharpFormMarkdownField`'s constants:
+Override the default toolbar, providing an array built with `SharpFormEditorField`'s constants:
 
 ```php
 const B = "bold";
 const I = "italic";
+const HIGHLIGHT = "highlight";
 const UL = "unordered-list";
 const OL = "ordered-list";
 const SEPARATOR = "|";
@@ -33,28 +37,38 @@ const A = "link";
 const H1 = "heading-1";
 const H2 = "heading-2";
 const H3 = "heading-3";
+const UPLOAD_IMAGE = "upload-image";
+const UPLOAD = "upload";
+const TABLE = "table";
+const IFRAME = "iframe";
+const RAW_HTML = "html";
+const UNDO = "undo";
+const REDO = "redo";
 const CODE = "code";
-const QUOTE = "quote";
-const DOC = "document"; // special, see below
+const QUOTE = "blockquote";
 const HR = "horizontal-rule";
 ```
 
 Example:
 
 ```php
-SharpFormMarkdownField::make("description")
+SharpFormEditorField::make("description")
     ->setToolbar([
-        SharpFormMarkdownField::B, SharpFormMarkdownField::I,
-        SharpFormMarkdownField::SEPARATOR,
-        SharpFormMarkdownField::DOC,
-        SharpFormMarkdownField::SEPARATOR,
-        SharpFormMarkdownField::A,
+        SharpFormEditorField::B, SharpFormEditorField::I,
+        SharpFormEditorField::SEPARATOR,
+        SharpFormEditorField::UPLOAD_IMAGE,
+        SharpFormEditorField::SEPARATOR,
+        SharpFormEditorField::A,
      ]);
 ```
 
-### Embed images and files in markdown
+### `setRenderContentAsMarkdown(bool $renderAsMarkdown = true)`
 
-The markdown field allows file embedding, with the `DOC` tool (from the toolbar). To use this feature, add the tool in the toolbar and configure the environment (see below).
+If true te front will send the content as markdown to the back, for storage. Default is false.
+
+### Embed images and files
+
+The editor field allows file embedding, with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature, add the tool in the toolbar and configure the environment (see below).
 
 Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the configuration.
 
@@ -62,9 +76,9 @@ Sharp takes care of copying the file at the right place (after image transformat
 
 Max file size allowed.
 
-#### `setCroppable(bool $croppable = true)`
+#### `setTransformable(bool $transformable = true)`
 
-Allow the user to crop (or rotate) the visual, after the upload.
+Allow the user to crop or rotate a visual, after the upload.
 
 #### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
@@ -93,7 +107,9 @@ Set the allowed file extensions. You can pass either an array, or a comma-separa
 
 Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
-### Display embedded files in the public site
+### Display embedded files in the public site (-- deprecated)
+
+**TODO REWRITE ALL THIS**
 
 You may need to display those embedded files in the public website. The idea here is to display embedded images as thumbnails, and other files as you need. Sharp provides a helper for that:
 
@@ -125,5 +141,5 @@ In order to make this parsing work, you have to ensure that embedded images and 
 
 ## Formatter
 
-- `toFront`: expects a markdown string; will extract embedded files for the front.
-- `fromFront`: returns a markdown string, handle files (format, transformation, copy).
+- `toFront`: expects a string; will extract embedded files for the front.
+- `fromFront`: returns a string, handle files (format, transformation, copy).
