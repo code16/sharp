@@ -57,6 +57,9 @@ return [
     'editor.dialogs.link.insert_button' => 'Insérer le lien',
     'editor.dialogs.link.update_button' => 'Mettre à jour',
     'editor.dialogs.link.remove_button' => 'Supprimer le lien',
+    
+    'editor.dialogs.raw_html.insert_title' => 'Insérez du contenu HTML',
+    'editor.dialogs.raw_html.edit_title' => 'Modifier du contenu HTML',
 
     'editor.toolbar.bold.title' => 'Gras',
     'editor.toolbar.italic.title' => 'Italique',

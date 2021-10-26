@@ -24,7 +24,6 @@
 
     import localize from '../../../mixins/localize/editor';
     import { buttons } from './config';
-    import { handleMarkdownTables } from "./tables";
     import { onLabelClicked } from "../../../util/accessibility";
     import { normalizeText } from "../../../util/text";
 
@@ -421,8 +420,6 @@
                 this.codemirrorOn(codemirror, 'cursorActivity', this.onCursorActivity, true);
                 this.codemirrorOn(codemirror, 'change', this.onChange);
                 this.codemirrorOn(codemirror, 'beforeChange',this.onBeforeChange);
-
-                handleMarkdownTables(codemirror);
 
                 codemirror.getWrapperElement().classList.add('card-body');
                 codemirror.getWrapperElement().classList.add('form-control');

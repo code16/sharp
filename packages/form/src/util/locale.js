@@ -1,12 +1,9 @@
-export const LocalizableFields = [
-    'text', 'markdown', 'textarea', 'wysiwyg', 'select', 'autocomplete', 'tags'
-];
 export const LocalizableOptionsFields = [
     'select', 'autocomplete', 'tags'
 ];
 export const LocalizableValueFields = [
     'text', 'textarea', // localized value handled in Form/FieldDisplay components
-    //'markdown', 'wysiwyg' (markdown/wysiwyg fields handle localized value themselves)
+    //'editor' (editor field handle localized value themselves)
 ];
 
 export function isLocaleObject(obj, locales) {
@@ -37,7 +34,7 @@ export function localeObjectOrEmpty({ localeObject, locale, value }) {
 }
 
 export function resolveTextValue({ field, value }) {
-    if(field.type === 'markdown' || field.type === 'wysiwyg') {
+    if(field.type === 'editor') {
         return (value || {}).text;
     }
     return value;

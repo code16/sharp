@@ -7,7 +7,7 @@ use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
@@ -25,7 +25,7 @@ class SharpFormTest extends SharpTestCase
             function buildFormFields(FieldsContainer $formFields): void
             {
                 $formFields
-                    ->addField(SharpFormMarkdownField::make("md"))
+                    ->addField(SharpFormEditorField::make("md"))
                     ->addField(SharpFormCheckField::make("check", "text"));
             }
         };
@@ -47,7 +47,7 @@ class SharpFormTest extends SharpTestCase
             {
                 $formFields
                     ->addField(SharpFormTextField::make("name"))
-                    ->addField(SharpFormMarkdownField::make("subclass:company"));
+                    ->addField(SharpFormEditorField::make("subclass:company"));
             }
         };
 

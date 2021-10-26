@@ -14,7 +14,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -49,18 +49,20 @@ class SpaceshipSharpForm extends SharpForm
                     ->setLabel("Capacity (x1000)")
             )
             ->addField(
-                SharpFormMarkdownField::make("description")
+                SharpFormEditorField::make("description")
+                    ->setRenderContentAsMarkdown()
                     ->setLabel("Description")
                     ->setToolbar([
-                        SharpFormMarkdownField::B, SharpFormMarkdownField::I,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::DOC,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::A,
+                        SharpFormEditorField::B, SharpFormEditorField::I,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::UPLOAD,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::A,
                     ])
                     ->setCropRatio("1:1")
+                    ->setTransformable()
                     ->setMaxFileSize(4)
-                    ->setFileFilter(["jpg", "png", "pdf"])
+                    ->setFileFilterImages()
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/Spaceship/{id}/markdown")
                     ->setHeight(700)

@@ -9,18 +9,16 @@ use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormNumberField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Form\Fields\SharpFormWysiwygField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
-use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -104,35 +102,36 @@ class TestForm extends SharpSingleForm
                     ->addItemField(
                         SharpFormCheckField::make("check", "check this")
                     )
-                    ->addItemField(SharpFormMarkdownField::make("markdown2")
+                    ->addItemField(SharpFormEditorField::make("markdown2")
                         ->setLocalized()
                         ->setLabel("Markdown")
                         ->setToolbar([
-                            SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::A,
+                            SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
                         ])
                     )
             )
             ->addField(
-                SharpFormMarkdownField::make("markdown")
+                SharpFormEditorField::make("markdown")
+                    ->setRenderContentAsMarkdown()
                     ->setLocalized()
                     ->setLabel("Markdown")
                     ->setToolbar([
-                        SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::A,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::H1,
-                        SharpFormMarkdownField::H2,
-                        SharpFormMarkdownField::H3,
-                        SharpFormMarkdownField::HR,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::OL,
-                        SharpFormMarkdownField::UL,
-                        SharpFormMarkdownField::QUOTE,
-                        SharpFormMarkdownField::CODE,
-                        SharpFormMarkdownField::UPLOAD_IMAGE,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::TABLE,
-                        SharpFormMarkdownField::IFRAME,
-                        SharpFormMarkdownField::RAW_HTML,
+                        SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::H1,
+                        SharpFormEditorField::H2,
+                        SharpFormEditorField::H3,
+                        SharpFormEditorField::HR,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::OL,
+                        SharpFormEditorField::UL,
+                        SharpFormEditorField::QUOTE,
+                        SharpFormEditorField::CODE,
+                        SharpFormEditorField::UPLOAD_IMAGE,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::TABLE,
+                        SharpFormEditorField::IFRAME,
+                        SharpFormEditorField::RAW_HTML,
                     ])
                     ->setCropRatio("1:1")
                     ->setHeight(350)
@@ -189,19 +188,20 @@ class TestForm extends SharpSingleForm
                     ->setStorageBasePath("data")
             )
             ->addField(
-                SharpFormWysiwygField::make("wysiwyg")
+                SharpFormEditorField::make("wysiwyg")
+                    ->setRenderContentAsMarkdown(false)
                     ->setLocalized()
                     ->setLabel("Wysiwyg")
                     ->setToolbar([
-                        SharpFormWysiwygField::B, SharpFormWysiwygField::I, SharpFormWysiwygField::A,
-                        SharpFormWysiwygField::SEPARATOR,
-                        SharpFormWysiwygField::H1,
-                        SharpFormWysiwygField::OL,
-                        SharpFormWysiwygField::UL,
-                        SharpFormWysiwygField::UPLOAD,
-                        SharpFormWysiwygField::QUOTE,
-                        SharpFormWysiwygField::CODE,
-                        SharpFormWysiwygField::SEPARATOR,
+                        SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::H1,
+                        SharpFormEditorField::OL,
+                        SharpFormEditorField::UL,
+                        SharpFormEditorField::UPLOAD,
+                        SharpFormEditorField::QUOTE,
+                        SharpFormEditorField::CODE,
+                        SharpFormEditorField::SEPARATOR,
                     ])
                     ->setHeight(350)
             );

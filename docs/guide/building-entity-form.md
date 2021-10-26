@@ -80,8 +80,7 @@ For the specifics of each field, here's the full list and documentation:
 
 - [Text](form-fields/text.md)
 - [Textarea](form-fields/textarea.md)
-- [Markdown](form-fields/markdown.md)
-- [Wysiwyg](form-fields/wysiwyg.md)
+- [Editor (rich text rendered as Markdown or HTML)](form-fields/editor.md)
 - [Number](form-fields/number.md)
 - [Html](form-fields/html.md)
 - [Check](form-fields/check.md)
@@ -236,7 +235,7 @@ Well, this is the core: how to write the actual update code.
 
 Before going into the details, please note that the `$data` array contains the per-field formatted data: depending on the type of SharpFormField you used, the structure may change.
 
-For instance, a `SharpFormMarkdownField` content will be formated as an array with a `text` attribute for the full text and an optional `fields` attribute with embedded fields (see the Markdown field documentation for more details).
+For instance, a `SharpFormEditorField` content will be formatted as an array with a `text` attribute for the full text and an optional `fields` attribute with embedded fields (see the Editor field documentation for more details).
 
 Sharp will use this format step to perform some tasks: move or copy uploaded files, handle image transformation, ... Note that you can override the formatter of a specific field as explained above in the `buildFormFields()` section.
 
@@ -399,9 +398,9 @@ return [
 
 Sharp will handle the error display in the form.
 
-### Validate rich text fields (markdown and wysiwyg)
+### Validate rich text fields (editor fields)
 
-Rich text fields (RTF) are structured in a certain way by Sharp. This means that a rule like this will not work out of the box, if bio is a RTF:
+Rich text are structured in a certain way by Sharp. This means that a rule like this will not work out of the box:
 
 ```php
 public function rules()

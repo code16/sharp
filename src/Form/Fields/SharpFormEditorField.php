@@ -2,18 +2,18 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Fields\Formatters\MarkdownFormatter;
+use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
-class SharpFormMarkdownField extends SharpFormField
+class SharpFormEditorField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder,
         SharpFormFieldWithUpload,
         SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "markdown";
+    const FIELD_TYPE = "editor";
 
     const B = "bold";
     const I = "italic";
@@ -48,10 +48,11 @@ class SharpFormMarkdownField extends SharpFormField
         self::A,
     ];
     protected bool $showToolbar = true;
+    protected bool $renderAsMarkdown = false;
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new MarkdownFormatter());
+        return new static($key, static::FIELD_TYPE, new EditorFormatter());
     }
 
     public function setHeight(int $height, int|null $maxHeight = null): self
@@ -89,6 +90,13 @@ class SharpFormMarkdownField extends SharpFormField
         return $this;
     }
 
+    public function setRenderContentAsMarkdown(bool $renderAsMarkdown = true): self
+    {
+        $this->renderAsMarkdown = $renderAsMarkdown;
+        
+        return $this;
+    }
+
     protected function validationRules(): array
     {
         return [
@@ -101,6 +109,7 @@ class SharpFormMarkdownField extends SharpFormField
             "transformable" => "boolean",
             "transformableFileTypes" => "array",
             "transformKeepOriginal" => "boolean",
+            "markdown" => "boolean",
         ];
     }
 
@@ -114,6 +123,7 @@ class SharpFormMarkdownField extends SharpFormField
                     "toolbar" => $this->showToolbar ? $this->toolbar : null,
                     "placeholder" => $this->placeholder,
                     "localized" => $this->localized,
+                    "markdown" => $this->renderAsMarkdown,
                     "innerComponents" => [
                         "upload" => $this->innerComponentUploadConfiguration()
                     ]
@@ -147,9 +157,11 @@ class SharpFormMarkdownField extends SharpFormField
 
     protected function editorCustomConfiguration(): array
     {
-        return [
-            "tightListsOnly" => config("sharp.markdown_editor.tight_lists_only"),
-            "nl2br" => config("sharp.markdown_editor.nl2br"),
-        ];
+        return $this->renderAsMarkdown
+            ? [
+                "tightListsOnly" => config("sharp.markdown_editor.tight_lists_only"),
+                "nl2br" => config("sharp.markdown_editor.nl2br"),
+            ]
+            : [];
     }
 }

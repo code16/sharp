@@ -1,5 +1,4 @@
-import localizeEditor from '../../../src/mixins/localize/editor';
-import localizeField from '../../../src/mixins/localize/field';
+import { LocalizedEditor } from '../../../src/mixins/localize/editor';
 import { localeObjectOrEmpty } from "../../../src/util/locale";
 import { mount } from '@vue/test-utils';
 import { mockInjections } from "./mock";
@@ -10,9 +9,9 @@ jest.mock('../../../src/util/locale', ()=>({
 
 describe('localize-editor', ()=>{
     let wrapper;
-    beforeEach(()=>{
+    beforeEach(() => {
         wrapper = mount({
-            mixins:[localizeEditor({ textProp: 'text' })],
+            mixins:[LocalizedEditor],
             data() {
                 return {
                     value: { text: null }
@@ -23,10 +22,6 @@ describe('localize-editor', ()=>{
             propsData: { localized:false, locale:'en' },
             provide: mockInjections({ locales:['en', 'fr'], localized: true })
         });
-    });
-
-    test('has localize field mixin', ()=>{
-        expect(localizeEditor({}).mixins).toContain(localizeField);
     });
 
     test('localizedText', ()=>{

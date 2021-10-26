@@ -4,7 +4,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
@@ -104,7 +104,7 @@ class UploadFormatter extends SharpFieldFormatter
     /**
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
-    protected function getStoragePath(string $fileName, SharpFormUploadField|SharpFormMarkdownField $field): string
+    protected function getStoragePath(string $fileName, SharpFormUploadField|SharpFormEditorField $field): string
     {
         $basePath = $field->storageBasePath();
 

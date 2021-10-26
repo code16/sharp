@@ -7,7 +7,7 @@ use DOMDocument;
 use DOMElement;
 use Illuminate\Support\Str;
 
-class MarkdownFormatter extends SharpFieldFormatter
+class EditorFormatter extends SharpFieldFormatter
 {
     function toFront(SharpFormField $field, $value)
     {

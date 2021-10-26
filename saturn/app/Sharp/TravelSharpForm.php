@@ -8,10 +8,10 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Fields\SharpFormWysiwygField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
@@ -41,17 +41,17 @@ class TravelSharpForm extends SharpForm
                     ->setLabel("Destination")
             )
             ->addField(
-                SharpFormWysiwygField::make("description")
+                SharpFormEditorField::make("description")
                     ->setToolbar([
-                        SharpFormWysiwygField::B,
-                        SharpFormWysiwygField::I,
-                        SharpFormWysiwygField::A,
-                        SharpFormWysiwygField::SEPARATOR,
-                        SharpFormWysiwygField::H1,
-                        SharpFormWysiwygField::UL,
-                        SharpFormWysiwygField::OL,
-                        SharpFormWysiwygField::QUOTE,
-                        SharpFormWysiwygField::CODE,
+                        SharpFormEditorField::B,
+                        SharpFormEditorField::I,
+                        SharpFormEditorField::A,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::H1,
+                        SharpFormEditorField::UL,
+                        SharpFormEditorField::OL,
+                        SharpFormEditorField::QUOTE,
+                        SharpFormEditorField::CODE,
                     ])
                     ->setLabel("Description")
             )

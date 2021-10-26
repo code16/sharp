@@ -57,6 +57,8 @@ return [
     'editor.dialogs.link.insert_button' => 'Insert link',
     'editor.dialogs.link.update_button' => 'Update',
     'editor.dialogs.link.remove_button' => 'Remove link',
+    'editor.dialogs.raw_html.insert_title' => 'Insert HTML',
+    'editor.dialogs.raw_html.edit_title' => 'Edit HTML',
     
     'editor.toolbar.bold.title' => 'Bold',
     'editor.toolbar.italic.title' => 'Italic',
