@@ -23,10 +23,10 @@
         >
             <template v-slot:title>
                 <template v-if="node.attrs.new">
-                    Insert HTML
+                    {{ lang('form.editor.dialogs.raw_html.insert_title') }}
                 </template>
                 <template v-else>
-                    Edit HTML
+                    {{ lang('form.editor.dialogs.raw_html.edit_title') }}
                 </template>
             </template>
 
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+    import { lang } from "sharp";
     import { Button, Modal } from "sharp-ui";
     import { NodeViewWrapper } from '@tiptap/vue-2';
     import { elementFromString } from "./util";
@@ -60,6 +61,7 @@
             }
         },
         methods: {
+            lang,
             handleEditClicked() {
                 this.editContent = this.node.attrs.content;
                 this.$refs.modal.show();
