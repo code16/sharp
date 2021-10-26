@@ -11,12 +11,6 @@ class SharpFormEditorFieldTest extends SharpTestCase
     function only_default_values_are_set()
     {
         $formField = SharpFormEditorField::make("text");
-        
-        // These configs are globally set in the config 
-        config()->set("sharp.markdown_editor", [
-            "tight_lists_only" => true,
-            "nl2br" => true
-        ]);
 
         $this->assertEquals(
             [
@@ -34,8 +28,6 @@ class SharpFormEditorFieldTest extends SharpTestCase
                         "fileFilter" => [".jpg",".jpeg",".gif",".png"]
                     ]
                 ],
-                "tightListsOnly" => true,
-                "nl2br" => true,
                 "markdown" => false,
             ], 
             $formField->toArray()
@@ -172,12 +164,22 @@ class SharpFormEditorFieldTest extends SharpTestCase
     /** @test */
     function we_can_define_markdown_as_content_renderer()
     {
+        // These configs are globally set in the config 
+        config()->set("sharp.markdown_editor", [
+            "tight_lists_only" => true,
+            "nl2br" => true
+        ]);
+        
         $formField = SharpFormEditorField::make("text")
             ->setHeight(50)
             ->setRenderContentAsMarkdown();
 
         $this->assertArraySubset(
-            ["markdown" => true],
+            [
+                "markdown" => true,
+                "tightListsOnly" => true,
+                "nl2br" => true,
+            ],
             $formField->toArray()
         );
     }
