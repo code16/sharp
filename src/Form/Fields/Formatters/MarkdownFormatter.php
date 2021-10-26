@@ -19,32 +19,21 @@ class MarkdownFormatter extends SharpFieldFormatter
     function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $content = $value['text'] ?? '';
+        $files =  $value["files"] ?? [];
         
         if(is_array($content)) {
             // Field is localized
-            foreach($content as $locale => $singleText) {
-                $content[$locale] = preg_replace(
-                    '/\R/', "\n",
-                    $this->handleUploadedFiles(
-                        $singleText, 
-                        $value["files"] ?? [],
-                        $field,
-                        $attribute
-                    )
-                );
-            }
-            return $content;
+            return collect($content)
+                ->map(function(string $localizedContent) use($files, $field, $attribute) {
+                    return preg_replace(
+                        '/\R/', "\n",
+                        $this->handleUploadedFiles($localizedContent, $files, $field, $attribute)
+                    );
+                })
+                ->toArray();
         }
         
-        return preg_replace(
-            '/\R/', "\n", 
-            $this->handleUploadedFiles(
-                $content, 
-                $value["files"] ?? [], 
-                $field,
-                $attribute
-            )
-        );
+        return preg_replace('/\R/', "\n", $this->handleUploadedFiles($content, $files, $field, $attribute));
     }
 
     protected function handleUploadedFiles(string $text, array $files, SharpFormField $field, string $attribute): string
