@@ -1,10 +1,28 @@
 <template>
-    <SharpEditor
-        class="SharpMarkdown"
-        :editor="editor"
-        v-bind="$props"
-    >
-    </SharpEditor>
+    <div>
+        <template v-if="isLocalized">
+            <LocalizedEditors
+                :value="value"
+                :locale="locale"
+                :locales="locales"
+                :create-editor="createEditor"
+                v-slot="{ editor }"
+            >
+                <SharpEditor
+                    :editor="editor"
+                    v-bind="$props"
+                    @update="handleUpdate"
+                />
+            </LocalizedEditors>
+        </template>
+        <template v-else>
+            <SharpEditor
+                :editor="editor"
+                v-bind="$props"
+                @update="handleUpdate"
+            />
+        </template>
+    </div>
 </template>
 
 <script>
@@ -12,12 +30,16 @@
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../editor/Editor';
     import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../editor";
-    import localize from '../../../mixins/localize/editor';
+    import { LocalizedEditor } from '../../../mixins/localize/editor';
+    import LocalizedEditors from "../editor/LocalizedEditors";
 
     export default {
-        mixins: [ localize({ textProp:'text' }) ],
+        mixins: [
+            LocalizedEditor
+        ],
         components: {
             SharpEditor,
+            LocalizedEditors,
         },
         inject: ['$form'],
         props: {
@@ -49,13 +71,12 @@
             },
         },
         methods: {
-            async handleUpdate() {
-                await this.$nextTick();
-                const content = this.editor.getMarkdown();
+            handleUpdate(editor) {
+                const content = editor.getMarkdown();
                 this.$emit('input', this.localizedValue(content));
             },
 
-            createEditor() {
+            createEditor({ content }) {
                 const MarkdownEditor = createMarkdownEditor(Editor);
                 const extensions = [
                     ...getDefaultExtensions({
@@ -77,8 +98,7 @@
                 return new MarkdownEditor({
                     ...defaultEditorOptions,
                     extensions,
-                    content: this.localizedText,
-                    onUpdate: this.handleUpdate,
+                    content,
                     editable: !this.readOnly,
                     markdown: {
                         breaks: this.nl2br,
@@ -86,11 +106,15 @@
                 });
             },
         },
-        mounted() {
-            this.editor = this.createEditor();
+        created() {
+            if(!this.isLocalized) {
+                this.editor = this.createEditor({
+                    content: this.localizedText,
+                });
+            }
         },
         beforeDestroy() {
-            this.editor.destroy();
+            this.editor?.destroy();
         },
     }
 </script>
