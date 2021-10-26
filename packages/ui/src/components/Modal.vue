@@ -12,6 +12,11 @@
         @change="handleVisiblityChanged"
         ref="modal"
     >
+
+        <template v-if="$slots.title" v-slot:modal-title>
+            <slot name="title" />
+        </template>
+
         <slot />
 
         <template v-slot:modal-footer="{ cancel, ok }">
