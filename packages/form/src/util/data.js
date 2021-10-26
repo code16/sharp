@@ -25,7 +25,7 @@ export function setDefaultValue(field, callback, { dependantAttributes } = {}) {
 }
 
 export function fieldEmptyValue(fieldType) {
-    if(fieldType === 'markdown') {
+    if(fieldType === 'editor') {
         return {};
     }
     return null;
