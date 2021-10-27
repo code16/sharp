@@ -11,7 +11,8 @@ require('dotenv').config({
 const APP_NAME = process.env.APP_NAME || 'Sharp';
 const APP_URL = process.env.APP_URL || 'https://sharp.code16.fr';
 const DOCS_VERSION = process.env.DOCS_VERSION || '7.0';
-const DOCS_HOME_URL = process.env.DOCS_HOME_URL || APP_URL;
+const DOCS_MAIN_URL = process.env.DOCS_MAIN_URL || APP_URL;
+const DOCS_HOME_URL = process.env.DOCS_MAIN_URL || '/';
 
 module.exports = {
     title: APP_NAME,
@@ -29,7 +30,7 @@ module.exports = {
             },
             { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
             { text: 'Documentation', link: '/guide/' },
-            { text: 'Demo', link: `${DOCS_HOME_URL}/sharp/` },
+            { text: 'Demo', link: `${DOCS_MAIN_URL}/sharp/` },
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
