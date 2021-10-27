@@ -8,12 +8,13 @@ require('dotenv').config({
     path: path.resolve(__dirname, '../../saturn/.env'),
 });
 
+const APP_NAME = process.env.APP_NAME || 'Sharp';
 const APP_URL = process.env.APP_URL || 'https://sharp.code16.fr';
 const DOCS_VERSION = process.env.DOCS_VERSION || '7.0';
 const DOCS_HOME_URL = process.env.DOCS_HOME_URL || APP_URL;
 
 module.exports = {
-    title: 'Sharp',
+    title: APP_NAME,
     base: '/docs/',
     head: [
         ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
