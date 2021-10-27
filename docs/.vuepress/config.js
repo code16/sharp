@@ -8,11 +8,17 @@ require('dotenv').config({
     path: path.resolve(__dirname, '../../saturn/.env'),
 });
 
-const APP_NAME = process.env.APP_NAME || 'Sharp';
-const APP_URL = process.env.APP_URL || 'https://sharp.code16.fr';
-const DOCS_VERSION = process.env.DOCS_VERSION || '7.0';
-const DOCS_MAIN_URL = process.env.DOCS_MAIN_URL || APP_URL;
-const DOCS_HOME_URL = process.env.DOCS_MAIN_URL || '/';
+const {
+    APP_NAME = 'Sharp',
+    APP_URL = 'https://sharp.code16.fr',
+    DOCS_ENABLE_VERSIONING = 'false',
+    DOCS_VERSION = '7.0',
+    DOCS_VERSION_ITEMS = '[]',
+    DOCS_MAIN_URL = APP_URL,
+    DOCS_ALGOLIA_TAG = 'v7'
+} = process.env;
+
+const DOCS_HOME_URL = DOCS_MAIN_URL || '/';
 
 module.exports = {
     title: APP_NAME,
@@ -23,9 +29,9 @@ module.exports = {
     ],
     themeConfig: {
         nav: [
-            process.env.DOCS_ENABLE_VERSIONING === 'true' && {
+            DOCS_ENABLE_VERSIONING === 'true' && {
                 text: DOCS_VERSION,
-                items: JSON.parse(process.env.DOCS_VERSION_ITEMS || '[]')
+                items: JSON.parse(DOCS_VERSION_ITEMS || '[]')
                     .map(item => ({ ...item, target: '_self' })),
             },
             { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
@@ -160,6 +166,7 @@ module.exports = {
             // debug: true,
             algoliaOptions: {
                 hitsPerPage: 5,
+                facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
             },
         }
     },
