@@ -1,6 +1,16 @@
-var Prism = require('prismjs');
-var loadLanguages = require('prismjs/components/');
+const path = require('path');
+const Prism = require('prismjs');
+const loadLanguages = require('prismjs/components/');
+
 loadLanguages(['php']);
+
+require('dotenv').config({
+    path: path.resolve(__dirname, '../../saturn/.env'),
+});
+
+const APP_URL = process.env.APP_URL || 'https://sharp.code16.fr';
+const DOCS_VERSION = process.env.DOCS_VERSION || '7.0';
+const DOCS_HOME_URL = process.env.DOCS_HOME_URL || APP_URL;
 
 module.exports = {
     title: 'Sharp',
@@ -11,9 +21,14 @@ module.exports = {
     ],
     themeConfig: {
         nav: [
-            { text: 'Home', link: '/' },
+            process.env.DOCS_ENABLE_VERSIONING === 'true' && {
+                text: DOCS_VERSION,
+                items: JSON.parse(process.env.DOCS_VERSION_ITEMS || '[]')
+                    .map(item => ({ ...item, target: '_self' })),
+            },
+            { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
             { text: 'Documentation', link: '/guide/' },
-            { text: 'Demo', link: 'https://sharp.code16.fr/sharp/' },
+            { text: 'Demo', link: `${DOCS_HOME_URL}/sharp/` },
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
@@ -22,7 +37,7 @@ module.exports = {
                     { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
             }
-        ],
+        ].filter(Boolean),
         sidebar: {
             '/guide/': [
                 {
