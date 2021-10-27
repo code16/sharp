@@ -24,10 +24,15 @@
         methods: {
             handleScroll() {
                 this.showLogo = window.scrollY > 500;
-            }
+            },
+            init() {
+                const siteName = this.$el.querySelector('.site-name');
+                siteName.innerHTML = siteName.innerHTML.replace(/(\d)/, '<span class="version">$1</span>');
+            },
         },
         mounted() {
             window.addEventListener('scroll', this.handleScroll);
+            this.init();
         },
         destroyed() {
             window.removeEventListener('scroll', this.handleScroll);
