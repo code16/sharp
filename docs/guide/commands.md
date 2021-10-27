@@ -4,7 +4,7 @@ Commands in Sharp are a powerful way to integrate functional processes in the co
 
 Commands can be defined in an EntityList, in a Show Page or in a Dashboard. This documentation will take the EntityList case, but the API is very similar in all cases, as explained at the end of this page.
 
-## Generator for an 'EntityList' command
+## Generator for an 'Entity' command
 
 ```bash
 php artisan sharp:make:entity-command <class_name>
@@ -39,14 +39,16 @@ public function execute(array $data=[]): array
 }
 ```
 
-More on this `return $this->reload();` below.
-
 
 ### Command scope: instance or entity
 
-The example above is an "entity" case: Command applies to a subset of entities, or all of them. To get the EntityList context (search, page, filters...), you can check `$this->queryParams`, just like in the EntityList itself.
+The example above is an "entity" case, reserved to EntityLists: Command applies to a subset of instances, or all of
+them. To get the EntityList context (search, page, filters...), you can check `$this->queryParams`, just like in the
+EntityList itself.
 
-To create an instance Command (relative to a specific instance), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
+To create an instance Command (relative to a specific instance, which can be placed on each EntityList row, or in a Sho
+Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is
+a bit different:
 
 ```php
 public function execute($instanceId, array $params = []): array
@@ -63,9 +65,9 @@ Here we get an `$instanceId` parameter to identify the exact instance involved. 
 The second parameter in the `execute()` function is an array named `$data`, which contains values entered by the user in a Command specific form. A use case might be to allow the user to enter a text to be sent to the customer with his invoice. In order to do that, we have first to write a `buildFormFields()` function in the Command class:
 
 ```php
-function buildFormFields()
+function buildFormFields(FieldsContainer $formFields)
 {
-    $this
+    $formFields
         ->addField(
             SharpFormTextareaField::make("message")
                 ->setLabel("Message")
@@ -77,9 +79,10 @@ function buildFormFields()
 }
 ```
 
-The API is the same as building a standard entity form (see [Building an Entity Form](building-entity-form.md)).
+The API is the same as building a standard Form (see [Building an Entity Form](building-entity-form.md)).
 
-Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed. 
+Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The
+optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed.
 
 Then, is the `execute()` method, you can grab the entered value, and even to handle the validation:
 
@@ -176,7 +179,7 @@ function getListData()
 
 ## Configure the Command
 
-Once the Command class is written, we must add it to the EntityList. This is straightforward:
+Once the Command class is written, we must add it to the EntityList:
 
 ```php
 function getInstanceCommands(): ?array
@@ -203,17 +206,15 @@ Of course, it's often mandatory to add authorizations to a Command. Here's how t
 
 ### Authorizations for entity Commands
 
-Implement the `authorize():bool` function, which must return a boolean to allow or disallow the Command execution, based on any logic of yours. It can be for instance:
+Implement the `authorize(): bool` function, which must return a boolean to allow or disallow the Command execution,
+based on any logic of yours. It can be for instance:
 
 ```php
-public function authorize():bool
+public function authorize(): bool
 {
-    return sharp_user()->hasGroup("boss");
+    return auth()->user()->hasGroup("boss");
 }
 ```
-
-Note that the `sharp_user()` helper returns the logged user (see [Authentication](authentication.md)).
-
 
 ### Authorizations for instance Commands
 
@@ -222,7 +223,7 @@ For instance Commands we have to know the instance involved, which means the sig
 ```php
 public function authorizeFor($instanceId): bool
 {
-    return Spaceship::findOrFail($instanceId)->owner_id == sharp_user()->id;
+    return Spaceship::findOrFail($instanceId)->owner_id == auth()->id();
 }
 ```
 
@@ -233,7 +234,7 @@ An EntityList can declare one (and only one) of its entity Commands as "primary"
 ```php
 function buildListConfig(): void
 {
-    $this->setPrimaryEntityCommand("invite_new_user");
+    $this->setPrimaryEntityCommand(InviteNewUser::class);
 }
 ```
 

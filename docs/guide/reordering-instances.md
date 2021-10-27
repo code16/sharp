@@ -17,15 +17,14 @@ Here's an example with Eloquent and a numerical `order` column:
 ```php
 class PageReorderHandler implements ReorderHandler
 {
-
     function reorder(array $ids)
     {
-        $pages = Page::whereIn("id", $ids)->get();
-
-        foreach($pages as $page) {
-            $page->order = array_search($page->id, $ids) + 1;
-            $page->save();
-        }
+        Page::whereIn("id", $ids)
+            ->get()
+            ->each(function(Page $page) use ($ids) {
+                $page->order = array_search($page->id, $ids) + 1;
+                $page->save();
+            });
     }
 }
 ```
@@ -37,7 +36,7 @@ Then, in the `SharpEntityList` class, we have to configure our reorder handler:
 ```php
 function buildListConfig()
 {
-    $this->setReorderable(new PageReorderHandler());
+    $this->configureReorderable(new PageReorderHandler());
 }
 ```
 
