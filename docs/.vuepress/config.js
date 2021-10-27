@@ -98,8 +98,7 @@ module.exports = {
                     children: [
                         'text',
                         'textarea',
-                        'markdown',
-                        'wysiwyg',
+                        'editor',
                         'number',
                         'html',
                         'check',
