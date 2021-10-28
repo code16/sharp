@@ -1,6 +1,6 @@
 # Testing with Sharp
 
-Sharp provides a few assertions and helpers to help you testing your Sharp code.
+Sharp provides a few assertions and helpers to help you test your Sharp code.
 
 
 ## The `SharpAssertions` trait
