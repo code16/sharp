@@ -1,9 +1,11 @@
 # How to transform data
 
-Data transformation is useful when sending data to the front, which happens in the Entity List `getListData()` and in the Entity Form `find()` methods.
+Data transformation is useful when sending data to the front, which happens in the Entity List `getListData()` and in
+the Entity Form `find()` methods.
 
-::: warning
-Note that transformers need your data models to allow a direct access to their attributes, like for instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model fulfill those needs.
+::: warning Note that transformers need your data models to allow direct access to their attributes, like for
+instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model
+fulfill those needs.
 :::
 
 ## The `transform()` function
@@ -16,11 +18,11 @@ In an Entity List or an Entity Form, you can use the `transform()` function whic
 Eloquent example in an Entity List:
 
 ```php
-function getListData(EntityListQueryParams $params)
+function getListData(): array|Arrayable
 {
     return $this->transform(
         Spaceship::with("picture", "type", "pilots")
-                ->paginate(10)
+            ->paginate(10)
     );
 }
 ```
@@ -31,7 +33,8 @@ Eloquent example in an Entity Form:
 function find($id): array
 {
     return $this->transform(
-        Spaceship::with("reviews", "pilots")->findOrFail($id)
+        Spaceship::with("reviews", "pilots")
+            ->findOrFail($id)
     );
 }
 ```
@@ -41,7 +44,7 @@ function find($id): array
 In the process, it's easy to add some custom transformation with `setCustomTransformer()`:
 
 ```php
-function getListData(EntityListQueryParams $params)
+function getListData(): array|Arrayable
 {
     return $this
         ->setCustomTransformer(
@@ -64,17 +67,18 @@ But if this isn't the wanted behaviour, the solution is to define in the `SharpA
 
 ## Transform attribute of a related model (hasMany relationship)
 
-Sometimes (maybe more often in the Entity Form), you would like to transform an attribute of a related model in a "has many" relationship. For instance let's say you want to display the names of the sons of a father in caps:
+Sometimes you would like to transform an attribute of a related model in a "has many" relationship. For instance let's
+say you want to display the names of the sons of a father in caps:
 
 ```php
 return $this
-        ->setCustomTransformer(
-            "sons[name]",
-            function($son) {
-                return strtoupper($son->name);
-            }
-        )
-        ->transform($father);
+    ->setCustomTransformer(
+        "sons[name]",
+        function($son) {
+            return strtoupper($son->name);
+        }
+    )
+    ->transform($father);
 ```
 
 The convention in this case is to use an array notation, given that `$father->sons` is a collection of objects with a `name` attribute
@@ -85,26 +89,26 @@ The convention in this case is to use an array notation, given that `$father->so
 Sometimes you'll need to reference a related attribute, like for instance the name of the author of a Post, either in an Entity List:
 
 ```php
-function buildListDataContainers()
+function buildListFields(EntityListFieldsContainer $fieldsContainer): void
 {
-    $this->addDataContainer(
+    $fieldsContainer->addField(
         EntityListDataContainer::make("author:name")
             ->setLabel("Author")
     );
 }
 
-function buildListLayout()
+function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
 {
-    $this->addColumn("author:name", 6, 6);
+    $fieldsLayout->addColumn("author:name", 6);
 }
 ```
 
 or in an Entity Form:
 
 ```php
-function buildFormFields()
+function buildFormFields(FieldsContainer $formFields): void
 {
-    $this->addField(
+    $formFields->addField(
         SharpFormTextField::make("picture:legend")
             ->setLabel("Legend")
     );

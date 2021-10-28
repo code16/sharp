@@ -6,9 +6,9 @@ The Sharp side menu can contain several links. Its organization is totally up to
 
 All links shares common things:
 
-- an icon (from [Font Awesome 4.7](https://fontawesome.com/v4.7.0/icons/))
+- an icon (from [Font Awesome 5](https://fontawesome.com/icons/))
 - a label
-- and an URL
+- and a URL
 
 Links can be grouped in categories, like Company, Travels and Admin in this example.
 

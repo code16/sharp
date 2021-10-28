@@ -2,13 +2,13 @@
 
 namespace Code16\Sharp\Tests\Unit\Dashboard;
 
-use Code16\Sharp\Dashboard\DashboardQueryParams;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
-use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -19,166 +19,206 @@ class SharpDashboardTest extends SharpTestCase
     function we_can_get_widgets()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(
+                $widgetsContainer->addWidget(
                     SharpBarGraphWidget::make("widget")
                 );
             }
         };
 
-        $this->assertEquals(["widget" => [
-            "key" => "widget",
-            "type" => "graph",
-            "display" => "bar",
-            "ratioX" => 16,
-            "ratioY" => 9,
-            "minimal" => false,
-            "showLegend" => true,
-            "dateLabels" => false,
-            "options" => [
-                "horizontal" => false
-            ]
-        ]], $dashboard->widgets());
+        $this->assertEquals(
+            [
+                "widget" => [
+                    "key" => "widget",
+                    "type" => "graph",
+                    "display" => "bar",
+                    "ratioX" => 16,
+                    "ratioY" => 9,
+                    "minimal" => false,
+                    "showLegend" => true,
+                    "dateLabels" => false,
+                    "options" => [
+                        "horizontal" => false
+                    ]
+                ]
+            ],
+            $dashboard->widgets()
+        );
     }
 
     /** @test */
     function we_can_get_widgets_layout()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(SharpBarGraphWidget::make("widget"))
+                $widgetsContainer->addWidget(SharpBarGraphWidget::make("widget"))
                     ->addWidget(SharpBarGraphWidget::make("widget2"))
                     ->addWidget(SharpBarGraphWidget::make("widget3"));
             }
-            protected function buildWidgetsLayout(): void
+
+            protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
             {
-                $this->addFullWidthWidget("widget")
-                    ->addRow(function(DashboardLayoutRow $row) {
+                $dashboardLayout->addFullWidthWidget("widget")
+                    ->addRow(function (DashboardLayoutRow $row) {
                         $row->addWidget(4, "widget2")
                             ->addWidget(8, "widget3");
                     });
             }
         };
 
-        $this->assertEquals([
-            "rows" => [
-                [
-                    ["key" => "widget", "size" => 12]
-                ], [
-                    ["key" => "widget2", "size" => 4],
-                    ["key" => "widget3", "size" => 8],
+        $this->assertEquals(
+            [
+                "rows" => [
+                    [
+                        ["key" => "widget", "size" => 12]
+                    ],
+                    [
+                        ["key" => "widget2", "size" => 4],
+                        ["key" => "widget3", "size" => 8],
+                    ]
                 ]
-            ]
-        ], $dashboard->widgetsLayout());
+            ],
+            $dashboard->widgetsLayout()
+        );
     }
 
     /** @test */
     function we_can_get_graph_widget_data()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(SharpBarGraphWidget::make("widget"));
+                $widgetsContainer->addWidget(SharpBarGraphWidget::make("widget"));
             }
+
             protected function buildWidgetsData(): void
             {
-                $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
-                    "a" => 10, "b" => 20, "c" => 30,
-                ])->setLabel("test")->setColor("blue"));
+                $this->addGraphDataSet(
+                    "widget",
+                    SharpGraphWidgetDataSet::make([
+                        "a" => 10,
+                        "b" => 20,
+                        "c" => 30,
+                    ])->setLabel("test")->setColor("blue"));
             }
         };
 
-        $this->assertEquals([
-            "widget" => [
-                "key" => "widget",
-                "datasets" => [
-                    [
-                        "data" => [10,20,30],
-                        "label" => "test",
-                        "color" => "blue"
+        $this->assertEquals(
+            [
+                "widget" => [
+                    "key" => "widget",
+                    "datasets" => [
+                        [
+                            "data" => [10, 20, 30],
+                            "label" => "test",
+                            "color" => "blue"
+                        ]
+                    ],
+                    "labels" => [
+                        "a",
+                        "b",
+                        "c"
                     ]
-                ], "labels" => [
-                    "a", "b", "c"
                 ]
-            ]
-        ], $dashboard->data());
+            ],
+            $dashboard->data()
+        );
     }
 
     /** @test */
     function we_can_get_graph_widget_data_with_multiple_datasets()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(SharpBarGraphWidget::make("widget"));
+                $widgetsContainer->addWidget(SharpBarGraphWidget::make("widget"));
             }
+
             protected function buildWidgetsData(): void
             {
-                $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
-                    "a" => 10, "b" => 20, "c" => 30,
-                ])->setLabel("test")->setColor("blue"));
-                $this->addGraphDataSet("widget", SharpGraphWidgetDataSet::make([
-                    "a" => 40, "b" => 50, "c" => 60,
-                ])->setLabel("test2")->setColor("red"));
+                $this->addGraphDataSet("widget",
+                    SharpGraphWidgetDataSet::make([
+                        "a" => 10,
+                        "b" => 20,
+                        "c" => 30,
+                    ])->setLabel("test")->setColor("blue"));
+                $this->addGraphDataSet("widget",
+                    SharpGraphWidgetDataSet::make([
+                        "a" => 40,
+                        "b" => 50,
+                        "c" => 60,
+                    ])->setLabel("test2")->setColor("red"));
             }
         };
 
-        $this->assertEquals([
-            "widget" => [
-                "key" => "widget",
-                "datasets" => [
-                    [
-                        "data" => [10,20,30],
-                        "label" => "test",
-                        "color" => "blue"
-                    ], [
-                        "data" => [40,50,60],
-                        "label" => "test2",
-                        "color" => "red"
+        $this->assertEquals(
+            [
+                "widget" => [
+                    "key" => "widget",
+                    "datasets" => [
+                        [
+                            "data" => [10, 20, 30],
+                            "label" => "test",
+                            "color" => "blue"
+                        ],
+                        [
+                            "data" => [40, 50, 60],
+                            "label" => "test2",
+                            "color" => "red"
+                        ]
+                    ],
+                    "labels" => [
+                        "a",
+                        "b",
+                        "c"
                     ]
-                ], "labels" => [
-                    "a", "b", "c"
                 ]
-            ]
-        ], $dashboard->data());
+            ],
+            $dashboard->data()
+        );
     }
 
     /** @test */
     function we_can_get_panel_widget_data()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(
+                $widgetsContainer->addWidget(
                     SharpPanelWidget::make("widget")->setInlineTemplate('<b>Hello {{user}}</b>')
                 );
             }
+
             protected function buildWidgetsData(): void
             {
                 $this->setPanelData("widget", ["user" => "John Wayne"]);
             }
         };
 
-        $this->assertEquals([
-            "widget" => [
-                "key" => "widget",
-                "data" => [
-                    "user" => "John Wayne"
+        $this->assertEquals(
+            [
+                "widget" => [
+                    "key" => "widget",
+                    "data" => [
+                        "user" => "John Wayne"
+                    ]
                 ]
-            ]
-        ], $dashboard->data());
+            ],
+            $dashboard->data()
+        );
     }
 
     /** @test */
     function we_can_get_ordered_list_widget_data()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(SharpOrderedListWidget::make("widget"));
+                $widgetsContainer->addWidget(SharpOrderedListWidget::make("widget"));
             }
+
             protected function buildWidgetsData(): void
             {
                 $this->setOrderedListData("widget", [
@@ -197,34 +237,37 @@ class SharpDashboardTest extends SharpTestCase
         // Have to manually call this to ensure widgets are loaded
         $dashboard->widgets();
 
-        $this->assertEquals([
-            "widget" => [
-                "key" => "widget",
-                "data" => [
-                    [
-                        "label" => "John Wayne",
-                        "count" => 888,
-                        "url" => null
-                    ],
-                    [
-                        "label" => "Toto",
-                        "count" => 771,
-                        "url" => null
-                    ],
+        $this->assertEquals(
+            [
+                "widget" => [
+                    "key" => "widget",
+                    "data" => [
+                        [
+                            "label" => "John Wayne",
+                            "count" => 888,
+                            "url" => null
+                        ],
+                        [
+                            "label" => "Toto",
+                            "count" => 771,
+                            "url" => null
+                        ],
+                    ]
                 ]
-            ]
-        ], $dashboard->data());
+            ],
+            $dashboard->data()
+        );
     }
 
     /** @test */
     function we_can_get_ordered_list_widget_item_url()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            protected function buildWidgets(): void
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
             {
-                $this->addWidget(
+                $widgetsContainer->addWidget(
                     SharpOrderedListWidget::make("widget")
-                        ->buildItemLink(function($item) {
+                        ->buildItemLink(function ($item) {
                             return $item['id'] == 3
                                 ? null
                                 : LinkToEntityList::make("my-entity")

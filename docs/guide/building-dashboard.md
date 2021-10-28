@@ -10,38 +10,41 @@ php artisan sharp:make:dashboard <class_name>
 
 ## Write the class
 
-A Dashboard is very much like an Entity Form, except it is readonly. So the first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which leads us to implement three functions:
+The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which leads us to implement
+three functions:
 
-- `buildWidgets()`, similar to Entity Form's `buildForm()`
-- `buildWidgetsLayout()`, similar to `buildLayout()`
-- `buildDashboardConfig()`, for optional filters
-- and `buildWidgetsData(DashboardQueryParams $params)`, for the actual Dashboard data, like Entity Form's `find()` method.
+- `buildWidgets(WidgetsContainer $widgetsContainer)`,
+- `buildDashboardLayout(DashboardLayout $dashboardLayout)`,
+- and `buildWidgetsData(DashboardQueryParams $params)`, for the actual Dashboard data
 
-### `buildWidgets()`
+### `buildWidgets(WidgetsContainer $widgetsContainer): void`
 
-We're supposed to use here `$this->addWidget()` to configure all the Dashboard widgets.
+This method is meant to host the code responsible for the declaration and configuration of each widget. This must be
+done by calling `$widgetsContainer->addWidget()`:
 
 ```php
-function buildWidgets()
+function buildWidgets(WidgetsContainer $widgetsContainer): void
 {
-    $this->addWidget(
-        SharpLineGraphWidget::make("capacities")
-            ->setTitle("Spaceships by capacity")
-
-    )->addWidget(
-        SharpPanelWidget::make("activeSpaceships")
-            ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-            ->setLink('spaceship')
-    );
+    $widgetsContainer
+        ->addWidget(
+            SharpLineGraphWidget::make("capacities")
+                ->setTitle("Spaceships by capacity")
+        )
+        ->addWidget(
+            SharpPanelWidget::make("activeSpaceships")
+                ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
+                ->setLink('spaceship')
+        );
 }
 ```
 
-As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties depending of their type.
+As we can see in this example, we defined two widgets giving them a mandatory `key` and some optional properties.
 
 Every widget has the optional following setters:
 
 - `setTitle(string $title)` for the widget title displayed above it
-- `setLink(string $entityKey, string $instanceId = null, array $querystring = [])` to make the whole widget linked to a specific entity. To link to the Entity List, pass the `$entityKey`, and add the `$instanceId` to link to the Entity Form.
+- `setLink(SharpLinkTo $sharpLinkTo)` to make the whole widget linked to a specific page (
+  see [dedicated SharpLinkTo documentation](link-to.md))
 
 And here's the full list and documentation of each widget available, for the specifics:
 
@@ -49,14 +52,16 @@ And here's the full list and documentation of each widget available, for the spe
 - [Panel](dashboard-widgets/panel.md)
 - [OrderedList](dashboard-widgets/ordered-list.md)
 
-### `buildWidgetsLayout()`
+### `buildDashboardLayout(DashboardLayout $dashboardLayout): void`
 
-The layout API is a bit different of Entity Form here, because we think in terms of rows and not columns. So for instance:
+The layout API is a bit different from Forms or Show Pages here, because we think in terms of rows and not columns. So
+for instance:
 
 ```php
-function buildWidgetsLayout()
+function buildDashboardLayout(DashboardLayout $dashboardLayout): void
 {
-    $this->addFullWidthWidget("capacities")
+    $dashboardLayout
+        ->addFullWidthWidget("capacities")
         ->addRow(function(DashboardLayoutRow $row) {
             $row->addWidget(6, "activeSpaceships")
                 ->addWidget(6, "inactiveSpaceships");
@@ -66,9 +71,9 @@ function buildWidgetsLayout()
 
 We can only add rows and "full width widgets" (which are a shortcut for a single widget row). A row groups widgets in a 12-based grid.
 
-### `buildWidgetsData(DashboardQueryParams $params)`
+### `buildWidgetsData(): void`
 
-Widget data is set with specific methods depending of their type. The documentation is therefore split:
+Widget data is set with specific methods depending on their type. The documentation is therefore split:
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
@@ -119,7 +124,7 @@ Like again EntityLists, Commands can be attached to a Dashboard: [see the Comman
 
 ## Dashboard policies
 
-Just like for an Entity, you can define a Policy for a Dashboard. The only available action is `view`.
+You can define a Policy for a Dashboard:
 
 ```php
 // config/sharp.php
@@ -138,7 +143,7 @@ return [
 ];
 ```
 
-And the policy class can be pretty straightforward:
+And the policy class can be pretty straightforward, since the only available action is `view`:
 
 ```php
 class CompanyDashboardPolicy

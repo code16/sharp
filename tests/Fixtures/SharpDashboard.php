@@ -2,19 +2,19 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
-use Code16\Sharp\Dashboard\DashboardQueryParams;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard as AbstractSharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 
 class SharpDashboard extends AbstractSharpDashboard
 {
-
-    protected function buildWidgets(): void
+    protected function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
-        $this
+        $widgetsContainer
             ->addWidget(
                 SharpBarGraphWidget::make("bars")
             )
@@ -27,10 +27,10 @@ class SharpDashboard extends AbstractSharpDashboard
             );
     }
 
-    protected function buildWidgetsLayout(): void
+    protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        $this->addFullWidthWidget("bars")
-            ->addRow(function(DashboardLayoutRow $row) {
+        $dashboardLayout->addFullWidthWidget("bars")
+            ->addRow(function (DashboardLayoutRow $row) {
                 $row->addWidget(4, "panel")
                     ->addWidget(8, "bars2");
             });

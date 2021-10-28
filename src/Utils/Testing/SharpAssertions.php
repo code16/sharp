@@ -83,11 +83,7 @@ trait SharpAssertions
         });
     }
 
-    /**
-     * @param array $breadcrumb
-     * @return $this
-     */
-    public function withSharpCurrentBreadcrumb(array $breadcrumb)
+    public function withSharpCurrentBreadcrumb(array $breadcrumb): self
     {
         $this->currentBreadcrumb = $breadcrumb;
 
@@ -222,9 +218,9 @@ trait SharpAssertions
             );
     }
 
-    public function loginAsSharpUser($user)
+    public function loginAsSharpUser($user): self
     {
-        $this->actingAs($user, config("sharp.auth.guard", config("auth.defaults.guard")));
+        return $this->actingAs($user, config("sharp.auth.guard", config("auth.defaults.guard")));
     }
 
     protected function buildRefererUrl(array $segments): string

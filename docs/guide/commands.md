@@ -79,7 +79,7 @@ function buildFormFields(FieldsContainer $formFields)
 }
 ```
 
-The API is the same as building a standard Form (see [Building an Entity Form](building-entity-form.md)).
+The API is the same as building a standard Form (see [Building an Entity Form](building-form.md)).
 
 Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The
 optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed.
@@ -120,7 +120,8 @@ For an Instance command, add the `$instanceId` as a parameter:
  }
 ```
 
-This method must return an array of formatted values, like for a regular [Entity Form](building-entity-form.md). This means you can [transform data](how-to-transform-data.md) here:
+This method must return an array of formatted values, like for a regular [Entity Form](building-form.md). This means you
+can [transform data](how-to-transform-data.md) here:
 
 ```php
 protected function initialData($instanceId): array
