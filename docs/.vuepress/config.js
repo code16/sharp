@@ -1,9 +1,27 @@
-var Prism = require('prismjs');
-var loadLanguages = require('prismjs/components/');
+const path = require('path');
+const Prism = require('prismjs');
+const loadLanguages = require('prismjs/components/');
+
 loadLanguages(['php']);
 
+require('dotenv').config({
+    path: path.resolve(__dirname, '../../saturn/.env'),
+});
+
+const {
+    APP_NAME = 'Sharp',
+    APP_URL = 'https://sharp.code16.fr',
+    DOCS_ENABLE_VERSIONING = 'false',
+    DOCS_VERSION = '7.0',
+    DOCS_VERSION_ITEMS = '[]',
+    DOCS_MAIN_URL = APP_URL,
+    DOCS_ALGOLIA_TAG = 'v7'
+} = process.env;
+
+const DOCS_HOME_URL = DOCS_MAIN_URL || '/';
+
 module.exports = {
-    title: 'Sharp',
+    title: APP_NAME,
     base: '/docs/',
     head: [
         ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
@@ -11,9 +29,14 @@ module.exports = {
     ],
     themeConfig: {
         nav: [
-            { text: 'Home', link: '/' },
+            DOCS_ENABLE_VERSIONING === 'true' && {
+                text: DOCS_VERSION,
+                items: JSON.parse(DOCS_VERSION_ITEMS || '[]')
+                    .map(item => ({ ...item, target: '_self' })),
+            },
+            { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
             { text: 'Documentation', link: '/guide/' },
-            { text: 'Demo', link: 'https://sharp.code16.fr/sharp/' },
+            { text: 'Demo', link: `${DOCS_MAIN_URL}/sharp/` },
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
@@ -22,7 +45,7 @@ module.exports = {
                     { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
             }
-        ],
+        ].filter(Boolean),
         sidebar: {
             '/guide/': [
                 {
@@ -143,6 +166,7 @@ module.exports = {
             // debug: true,
             algoliaOptions: {
                 hitsPerPage: 5,
+                facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
             },
         }
     },
