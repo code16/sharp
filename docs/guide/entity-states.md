@@ -43,7 +43,7 @@ For the color, you may indicate anything that the browser would understand (an H
 When the user clicks on a state to update it, this is the functional code called.
 
 ```php
-public function updateState($instanceId, $stateId)
+public function updateState($instanceId, $stateId): array
 {
     Spaceship::findOrFail($instanceId)
         ->update([
@@ -63,7 +63,7 @@ in the code sample above this line can be deleted).
 Once the Entity state class is defined, we have to add it in the Entity List config:
 
 ```php
-function buildListConfig()
+function buildListConfig(): void
 {
     $this->configureEntityState("state", SpaceshipEntityState::class)
 }

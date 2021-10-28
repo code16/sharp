@@ -5,16 +5,17 @@ Let's say you want to handle different variants for an Entity, but in one Entity
 For instance, maybe you want to display sold cars on an Entity List. Easy enough, you create a `Car` entity, list and
 form. But now let's say you want the to handle different form fields for cars with an internal combustion engine and
 those with an electric engine; you can of course use a form
-and [conditional display](building-entity-form.md#conditional-display) to achieve this, but in a case where there are
-many differences, the best option may be to split the Entity in two (or more) Forms. That's Multi-Form.
+and [conditional display](building-form.md#conditional-display) to achieve this, but in a case where there are many
+differences, the best option may be to split the Entity in two (or more) Forms. That's Multi-Form.
 
 ## Write the Form classes
 
-Following up the car example, we would write two Form classes: `CombustionCarForm` and `ElectricCarForm`, maybe. They are regular `SharpForm` classes, as [described here](building-entity-form.md).
+Following up the car example, we would write two Form classes: `CombustionCarForm` and `ElectricCarForm`, maybe. They
+are regular `SharpForm` classes, as [described here](building-form.md).
 
 Note that you'll probably be able to regroup some common code in a trait or by inheritance: it's up to you.
 
-Same goes for [Validators](building-entity-form.md#input-validation), if needed.
+Same goes for [Validators](building-form.md#input-validation), if needed.
 
 ## Configuration
 

@@ -4,9 +4,12 @@ sidebarDepth: 3
 
 # Building a Show Page
 
-Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to interact with it through Commands.
+Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to
+interact with it through Commands.
 
-Note that building a Show is really optional: in fact, until Sharp 4.2, this concept didn't exist. But in some situations it could be really helpful to add this layer — and it can be even a must-have when dealing with "single" resources, such as a personal account, or a configuration entity, for which it's weird to build an Entity List.
+Note that building a Show Page is really optional; but in some situations it could be really helpful to add this layer —
+and it can be even a must-have when dealing with "single" resources, such as a personal account, or a configuration
+entity, for which it's weird to build an Entity List.
 
 ## Generator
 
@@ -16,22 +19,24 @@ php artisan sharp:make:show <class_name> [--model=<model_name>]
 
 ## Write the class
 
-First we build a class dedicated to our Entity Show extending `Code16\Sharp\Show\SharpShow`; and we'll have to implement:
+First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\SharpShow`; and we'll have to implement:
 
-- `buildShowFields()` and `buildShowLayout()` to declare the fields presenting the instance.
+- `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields
+  presenting the instance.
 - `find($id): array` to retrieve the instance.
-- `buildShowConfig()` is optional, and contains Commands and Entity State declarations.
+- `buildShowConfig()` (optional).
 
 In detail:
 
-### `buildShowFields()`
+### `buildShowFields(FieldsContainer $showFields): void`
 
-Very much like Form's `buildFormFields()`, this method is meant to host the code responsible for the declaration and configuration of each show field. This must be done by calling `$this->addField`:
+Very much like Form's `buildFormFields()`, this method is meant to host the code responsible for the declaration and
+configuration of each show field. This must be done by calling `$showFields->addField`:
 
 ```php
-function buildShowFields()
+function buildShowFields(FieldsContainer $showFields): void
 {
-    $this
+    $showFields
         ->addField(
             SharpShowTextField::make("name")
                 ->setLabel("Name")
@@ -46,9 +51,8 @@ function buildShowFields()
 
 Each available Show field is detailed below; here are the attributes they all share:
 
-##### `setShowIfEmpty(bool $show = true)`
-
-By default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute.
+- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not
+  displayed at all in the Show UI. You can change this behaviour with this attribute.
 
 #### Available simple Show fields
 
@@ -65,18 +69,24 @@ A crucial feature in the ability given to add a full Entity List in a Show, to d
 Let's see a simple example: we want to display the pilots list dedicated to a spaceship. In the spaceship Show page, we can add a pilots Entity List as a field:
 
 ```php
-function buildShowFields()
+function buildShowFields(FieldsContainer $showFields): void
 {
     SharpShowEntityListField::make("pilots", "pilot");
 }
 ```
 
-Sharp will consider this as a regular Entity List, meaning it will look for a `sharp.entities.pilot.list` config key containing an EntityList class name, build it and display it it the Show as a field (see below for layout), with the full feature set of an Entity List: filters, commands, reorder, entity state, search, ...
+Sharp will consider this as a regular Entity List, meaning it will look for a `sharp.entities.pilot.list` config key
+containing an EntityList class name, build it and display it the Show as a field (see below for layout), with the full
+feature set of an Entity List: filters, commands, reorder, entity state, search...
 
-Clicking a row in the EntityList can lead to whatever you've configured for this entity: a Show or a Form. Sharp will maintain a navigation breadcrumb under the hood to, in this case, get back to the spaceship Show after a pilot update or creation.
+Clicking a row in the EntityList can lead to whatever you've configured for this entity: a Show Page or a Form. Sharp
+will maintain a navigation breadcrumb under the hood to, in this case, get back to the spaceship Show after a pilot
+update.
 
-Notice that you have three possibilities for the actual code of this EntityList: 
-- if want to have a "pilots" entity in the main menu, you can reuse the same EntityList instance for the Show (and configure it to scope the data, as we'll discuss below),
+Notice that you have three possibilities for the actual code of this EntityList:
+
+- if you want to have a "pilots" entity in the main menu, you can reuse the same EntityList instance for the Show Page (
+  and configure it to scope the data, as we'll discuss below),
 - or you can build a specific EntityList without declaring it in the main menu,
 - or you can have both, making the spaceship Show version of the  pilots EntityList extend the other.
 
@@ -86,19 +96,19 @@ But at this stage we still have a major issue: how to scope the data of the Enti
 
 - [embedded EntityList](show-fields/embedded-entity-list.md)
 
+### `buildShowLayout(ShowLayout $showLayout): void`
 
-### `buildShowLayout()`
-
-The show layout is a simplifed version of the Form layout, and is made of sections which contains `columns` of `fields`.
+The show layout is a simplified version of the Form layout, and is made of sections which contains `columns` of `fields`
+.
 
 #### Sections
 
 A section is just a block of fields, packed in columns:
 
 ```php
-function buildShowLayout()
+function buildShowLayout(ShowLayout $showLayout): void
 {
-    $this->addSection(
+    $showLayout->addSection(
         'Description', 
         function(ShowLayoutSection $section) {
             ...
@@ -110,9 +120,9 @@ function buildShowLayout()
 A section can be declared *collapsable*:
 
 ```php
-function buildShowLayout()
+function buildShowLayout(ShowLayout $showLayout): void
 {
-    $this->addSection(
+    $showLayout->addSection(
         'Description', 
         function(ShowLayoutSection $section) {
             $section->setCollapsable();
@@ -126,9 +136,9 @@ function buildShowLayout()
 Just like for Forms, a `ShowLayoutSection` is made of columns and fields. So completing the example above:
 
 ```php
-function buildShowLayout()
+function buildShowLayout(ShowLayout $showLayout): void
 {
-    $this->addSection(
+    $showLayout->addSection(
         'Description', 
         function(ShowLayoutSection $section) {
             $section->addColumn(
@@ -142,7 +152,8 @@ function buildShowLayout()
 }
 ```
 
-A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-entity-form.md#buildformlayout) to find out how.
+A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report
+to the [Form layout documentation](building-form.md#buildformlayout) to find out how.
 
 #### SharpShowListField's layout
 
@@ -168,9 +179,9 @@ function(ShowLayoutSection $section) {
 An embedded Entity List in treated as a special section; its label will be displayed as section title. 
 
 ```php
-function buildShowLayout()
+function buildShowLayout(ShowLayout $showLayout): void
 {
-    $this->addEntityListSection('members');
+    $showLayout->addEntityListSection('members');
 }
 ```
 
@@ -209,11 +220,9 @@ function find($id): array
 }
 ```
 
-
 Transformers are explained in the detailed [How to transform data](how-to-transform-data.md) documentation.
 
-
-### `buildShowConfig()`
+### `buildShowConfig(): void`
 
 Very much like EntityLists, a Show can declare a config with `EntityState` handler, or Breadcrumb configuration:
 
@@ -221,8 +230,8 @@ Very much like EntityLists, a Show can declare a config with `EntityState` handl
 function buildShowConfig()
 {
    $this
-        ->setBreadcrumbCustomLabelAttribute("name")
-        ->setEntityState("state", SpaceshipEntityState::class);
+        ->configureBreadcrumbCustomLabelAttribute("name")
+        ->configureEntityState("state", SpaceshipEntityState::class);
 }
 ```
 
@@ -231,9 +240,12 @@ Refer [EntityState](entity-states.md) and [Breadcrumb](sharp-breadcrumb.md) docu
 
 ## Accessing the navigation breadcrumb
 
-A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation from there. Taking back our spaceship / pilots example, we may need to add a pilot to the spaceship. Question is: how can we attach a newly created pilot to a spaceship? 
+A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation
+from there. Taking back our spaceship / pilots example, we may need to add a pilot to the spaceship. Question is: how
+can we attach a newly created pilot to a spaceship?
 
-Answer is: accessing the navigation breadcrumb, with [SharpContext](context.md), and more precisely with its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
+Answer is: accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with
+its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
 
 ```php
 class PilotSharpForm extends SharpForm
@@ -248,12 +260,10 @@ class PilotSharpForm extends SharpForm
         $pilot = $this->save($pilot, $data);
         
         if(currentSharpRequest()->isCreation()) {
-            if($breadcrumbItem = currentSharpRequest()->getPreviousShowFromBreadcrumbItems()) {
-                if ($breadcrumbItem->entityKey() === "spaceship") {
-                    Spaceship::findOrFail($breadcrumbItem->instanceId())
-                        ->pilots()
-                        ->attach($pilot->id);
-                }
+            if($breadcrumbItem = currentSharpRequest()->getPreviousShowFromBreadcrumbItems("spaceship")) {
+                Spaceship::findOrFail($breadcrumbItem->instanceId())
+                    ->pilots()
+                    ->attach($pilot->id);
             }
         }
     }

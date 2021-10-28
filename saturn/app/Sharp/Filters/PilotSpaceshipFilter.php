@@ -9,7 +9,9 @@ class PilotSpaceshipFilter extends EntityListSelectFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Spaceship");
+        $this
+            ->configureKey("pilot")
+            ->configureLabel("Spaceship");
     }
 
     public function values(): array

@@ -2,9 +2,11 @@
 
 Uploads are painful.
 
-Sharp provide a very opinionated and totally optional solution to handle if you are using Eloquent and the `WithSharpFormEloquentUpdater` trait (see [related documentation](building-entity-form.md)).
+Sharp provide a very opinionated and totally optional solution to handle if you are using Eloquent and
+the `WithSharpFormEloquentUpdater` trait (see [related documentation](building-form.md)).
 
-The proposal is to use a special Sharp Model for all your uploads, and to link them to your Models with Eloquent's Morph relationships.
+The proposal is to use a special Sharp Model for all your uploads, and to link them to your Models with Eloquent's Morph
+relationships.
 
 ## Use `SharpUploadModel`
 

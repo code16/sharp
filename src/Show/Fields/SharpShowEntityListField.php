@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Show\Fields;
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Utils\Filters\Filter;
 
 class SharpShowEntityListField extends SharpShowField
 {
@@ -27,38 +27,35 @@ class SharpShowEntityListField extends SharpShowField
         });
     }
 
-    /**
-     * @param string $filterName
-     * @param mixed $value
-     * @return $this
-     */
-    public function hideFilterWithValue(string $filterName, $value): self
+    public function hideFilterWithValue(string $filterFullClassNameOrKey, $value): self
     {
-        $this->hiddenFilters[$filterName] = $value;
+        if (class_exists($filterFullClassNameOrKey)) {
+            $key = tap(
+                app($filterFullClassNameOrKey), function (Filter $filter) {
+                $filter->buildFilterConfig();
+            })
+                ->getKey();
+        } else {
+            $key = $filterFullClassNameOrKey;
+        }
+
+        $this->hiddenFilters[$key] = $value;
 
         return $this;
     }
 
-    /**
-     * @param array|string $commands
-     * @return $this
-     */
-    public function hideEntityCommand($commands): self
+    public function hideEntityCommand(array|string $commands): self
     {
-        foreach((array)$commands as $command) {
+        foreach ((array)$commands as $command) {
             $this->hiddenCommands["entity"][] = $command;
         }
 
         return $this;
     }
 
-    /**
-     * @param array|string $commands
-     * @return $this
-     */
-    public function hideInstanceCommand($commands): self
+    public function hideInstanceCommand(array|string $commands): self
     {
-        foreach((array)$commands as $command) {
+        foreach ((array)$commands as $command) {
             $this->hiddenCommands["instance"][] = $command;
         }
 
@@ -115,13 +112,13 @@ class SharpShowEntityListField extends SharpShowField
             "hiddenCommands" => $this->hiddenCommands,
             "hiddenFilters" => sizeof($this->hiddenFilters) 
                 ? collect($this->hiddenFilters)
-                    ->map(function($value, $filter) {
+                    ->map(function ($value) {
                         // Filter value can be a Closure
-                        if(is_callable($value)) {
+                        if (is_callable($value)) {
                             // Call it with current instanceId
                             return $value(currentSharpRequest()->instanceId());
                         }
-    
+
                         return $value;
                     })
                     ->all()

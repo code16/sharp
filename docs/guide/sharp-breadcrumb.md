@@ -46,7 +46,7 @@ In Forms and Shows, you can define which attribute should be used as the breadcr
 // In a SharpShow or a SharpForm
 function buildShowConfig(): void
 {
-    $this->setBreadcrumbCustomLabelAttribute("breadcrumb_label");
+    $this->configureBreadcrumbCustomLabelAttribute("breadcrumb_label");
 }
 ```
 

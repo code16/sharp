@@ -6,6 +6,7 @@ use App\Sharp\Commands\SpaceshipExternalLink;
 use App\Sharp\Commands\SpaceshipPreview;
 use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Sharp\CustomShowFields\SharpShowTitleField;
+use App\Sharp\Filters\PilotSpaceshipFilter;
 use App\Sharp\States\SpaceshipEntityState;
 use App\Spaceship;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
@@ -69,16 +70,10 @@ class SpaceshipSharpShow extends SharpShow
             ->addField(
                 SharpShowEntityListField::make("pilots", "spaceship_pilot")
                     ->setLabel("Pilots")
-                    ->hideFilterWithValue("spaceship", function($instanceId) {
+                    ->hideFilterWithValue(PilotSpaceshipFilter::class, function ($instanceId) {
                         return $instanceId;
                     })
-//                    ->hideFilterWithValue("role", function($instanceId) {
-//                        return null;
-//                    })
-//                    ->showSearchField(false)
                     ->showEntityState(false)
-//                    ->hideEntityCommand("updateXP")
-//                    ->hideInstanceCommand("download")
                     ->showReorderButton(true)
                     ->showCreateButton()
             );
