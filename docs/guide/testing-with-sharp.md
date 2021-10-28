@@ -54,7 +54,6 @@ Call the `$commandKey` Instance Command with the optional `$data`.
 
 Call the `$commandKey` Instance Command with the optional `$data`.
 
-
 #### `withSharpCurrentBreadcrumb(array $breadcrumb): self`
 
 It can be useful to fake a Sharp context before calling a Sharp endpoint, and that's the purpose of this method;  `$breadcrumb` is an array of arrays, each one containing, in this order:

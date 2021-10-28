@@ -58,7 +58,6 @@ class SharpAssertionsTest extends SharpTestCase
             {
                 $this->uri = $uri;
                 $this->postedData = get_object_vars(json_decode($content));
-
                 return $this;
             }
         };
@@ -85,7 +84,6 @@ class SharpAssertionsTest extends SharpTestCase
             {
                 $this->uri = $uri;
                 $this->postedData = get_object_vars(json_decode($content));
-
                 return $this;
             }
         };
@@ -111,7 +109,6 @@ class SharpAssertionsTest extends SharpTestCase
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
             {
                 $this->uri = $uri;
-
                 return $this;
             }
         };
@@ -137,7 +134,6 @@ class SharpAssertionsTest extends SharpTestCase
                         return get_object_vars($item);
                     })
                     ->toArray();
-
                 return $this;
             }
         };
@@ -172,7 +168,6 @@ class SharpAssertionsTest extends SharpTestCase
                         return get_object_vars($item);
                     })
                     ->toArray();
-
                 return $this;
             }
         };
