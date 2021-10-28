@@ -1,9 +1,14 @@
 <template>
     <div>
-        <template v-for="locale in locales">
-            <div v-show="isActive(locale)" :key="locale">
-                <slot :editor="localizedEditors[locale]" />
-            </div>
+        <template v-if="editor">
+            <slot :editor="editor" />
+        </template>
+        <template v-else>
+            <template v-for="locale in locales">
+                <div v-show="isActive(locale)" :key="locale">
+                    <slot :editor="localizedEditors[locale]" />
+                </div>
+            </template>
         </template>
     </div>
 </template>
@@ -16,6 +21,7 @@
             SharpEditor,
         },
         props: {
+            editor: Object,
             value: Object,
             locales: Array,
             locale: String,

@@ -124,7 +124,7 @@
     $active-color: hsl(var(--primary-h), var(--primary-s), 25%),
     $disabled-background: var(--bs-light),
     $disabled-border: transparent,
-    $disabled-color: black
+    $disabled-color: var(--bs-btn-color)
   );
 
   color: var(--bs-btn-color);
