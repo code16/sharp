@@ -45,20 +45,20 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Entity Forms',
+                    title: 'Forms',
                     collapsable: false,
                     children: [
-                        'building-entity-form',
+                        'building-form',
                         'multiforms',
                         'single-form',
                         'custom-form-fields'
                     ]
                 },
                 {
-                    title: 'Entity Shows',
+                    title: 'Show Pages',
                     collapsable: false,
                     children: [
-                        'building-entity-show',
+                        'building-show-page',
                         'single-show',
                         'custom-show-fields'
                     ]

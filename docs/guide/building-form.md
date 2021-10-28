@@ -2,9 +2,9 @@
 sidebarDepth: 3
 ---
 
-# Building an Entity Form
+# Building a Form
 
-Entity Forms as used to create or update instances.
+Forms as used to create or update instances.
 
 ## Generator
 
@@ -14,7 +14,8 @@ php artisan sharp:make:form <class_name> [--model=<model_name>]
 
 ## Write the class
 
-As usual in Sharp, we begin by creating a class dedicated to our Entity Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 5 functions:
+As usual in Sharp, we begin by creating a class dedicated to our Form and make it extend `Code16\Sharp\Form\SharpForm`;
+and we'll have to implement at least 5 functions:
 
 - `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to build and configure
   the form itself,
