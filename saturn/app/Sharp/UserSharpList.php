@@ -6,7 +6,6 @@ use App\Sharp\Commands\ExportUsersCommand;
 use App\Sharp\Commands\InviteUserCommand;
 use App\User;
 use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -38,7 +37,7 @@ class UserSharpList extends SharpEntityList
     public function getEntityCommands(): ?array
     {
         return [
-            "invite_new_user" => InviteUserCommand::class,
+            InviteUserCommand::class,
             ExportUsersCommand::class
         ];
     }
@@ -46,7 +45,7 @@ class UserSharpList extends SharpEntityList
     function buildListConfig(): void
     {
         $this->configureInstanceIdAttribute("id")
-            ->configurePrimaryEntityCommand("invite_new_user")
+            ->configurePrimaryEntityCommand(InviteUserCommand::class)
             ->configureDefaultSort("name", "asc");
     }
 

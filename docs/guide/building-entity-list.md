@@ -170,27 +170,44 @@ With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` o
 
 ### `buildListConfig()`
 
-Finally, this last function must describe... the list config. Let's see an example:
+Finally, this last function must describe the list config. Let's see an example:
 
 ```php
 function buildListConfig()
 {
-    $this->setInstanceIdAttribute("id")
-        ->setSearchable()
-        ->setDefaultSort("name", "asc")
-        ->setPaginated();
+    $this->configureInstanceIdAttribute("id")
+        ->configureSearchable()
+        ->configureDefaultSort("name", "asc")
+        ->configurePaginated();
 }
 ```
 
-Here we declare that:
+Here is the full list of available methods:
 
 - each item of our list is identified by an attribute `id` (this is the default value);
-- the list is meant to allow search to the user, meaning Sharp will display a search text input and process its content to fill the `EntityListQueryParams` instance (see above);
-- the list must be sorted by "name", meaning that the `EntityListQueryParams` instance will be filled with this default value;
-- and finally, the list is paginated, meaning that `getListData(EntityListQueryParams $params)` must return an instance of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed.
+- the list is meant to allow search to the user, meaning Sharp will display a search text input and process its content
+  to fill the `EntityListQueryParams` instance (see above);
+- the list must be sorted by "name", meaning that the `EntityListQueryParams $queryParams` instance will be filled with
+  this default value;
+- and finally, the list is paginated, .
 
-This config can also contain things related to Filters and State, and all of this is discussed in following chapters.
-
+- `configureInstanceIdAttribute(string $instanceIdAttribute)`: define this if the id attribute of an instance is
+  not `id`
+- `configureReorderable(ReorderHandler|string $reorderHandler)`: allow instances to be rearranged;
+  see [detailed documentation](reordering-instances.md)
+- `configureSearchable()`: Sharp will display a search text input and process its content to
+  fill `EntityListQueryParams $queryParams` (see above)
+- `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled
+  with this default value (see above)
+- `configurePaginated(bool $paginated = true)`: this means that `getListData()` must return an instance
+  of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed
+- `configureMultiformAttribute(string $attribute)`: handle various types of entities; see [detailed doc](multiforms.md)
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
+  display a dynamic message above the list; [see detailed doc](page-alerts.md)
+- `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
+  toggle, [see detailed doc](entity-states.md)
+- `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "
+  primary": [see related doc](commands.md)
 
 ## Configure the entity
 

@@ -18,7 +18,7 @@ class SpaceshipTypeFilter extends EntityListSelectRequiredFilter
     {
         return SpaceshipType::orderBy("label")
             ->pluck("label", "id")
-            ->all();
+            ->toArray();
     }
 
     public function defaultValue(): mixed

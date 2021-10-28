@@ -3,7 +3,6 @@
 namespace Code16\Sharp\EntityList\Traits;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -13,10 +12,12 @@ trait HandleEntityCommands
     protected ?Collection $entityCommandHandlers = null;
     protected ?string $primaryEntityCommandKey = null;
 
-    protected function configurePrimaryEntityCommand(string $commandKey): self
+    protected function configurePrimaryEntityCommand(string $commandKeyOrClassName): self
     {
-        $this->primaryEntityCommandKey = $commandKey;
-        
+        $this->primaryEntityCommandKey = class_exists($commandKeyOrClassName)
+            ? class_basename($commandKeyOrClassName)
+            : $commandKeyOrClassName;
+
         return $this;
     }
     
