@@ -13,8 +13,13 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
 import { Selected } from "./selected";
 import { Html } from "./html";
+import { getSchema } from "@tiptap/core";
+import { Paste } from "./paste";
 
 function getHeadingExtension(toolbar) {
+    if(!toolbar) {
+        return Heading;
+    }
     const levels = getAllowedHeadingLevels(toolbar);
     if(levels.length > 0) {
         return Heading.configure({
@@ -32,13 +37,11 @@ function getLinkExtension(toolbar) {
 }
 
 function getImageExtension(toolbar) {
-    if(toolbarHasButton(toolbar, 'image')) {
-        return Image.configure({
-            HTMLAttributes: {
-                class: 'editor__image',
-            },
-        });
-    }
+    return Image.configure({
+        HTMLAttributes: {
+            class: 'editor__image',
+        },
+    });
 }
 
 function getHorizontalRuleExtension(toolbar) {
@@ -49,7 +52,7 @@ function getHorizontalRuleExtension(toolbar) {
     }
 }
 
-export function getTableExtensions(toolbar) {
+function getTableExtensions(toolbar) {
     if(toolbarHasButton(toolbar, 'table')) {
         return [
             Table,
@@ -74,7 +77,15 @@ function getIframeExtension(toolbar) {
     }
 }
 
-export function getDefaultExtensions({ placeholder, toolbar } = {}) {
+function getPasteExtension(toolbar) {
+    const extensions = getToolbarExtensions(toolbar);
+    const schema = getSchema(extensions);
+    return Paste.configure({
+        schema,
+    });
+}
+
+function getToolbarExtensions(toolbar) {
     const bulletList = toolbarHasButton(toolbar, 'bullet-list');
     const orderedList = toolbarHasButton(toolbar, 'ordered-list');
     const extensions = [
@@ -103,8 +114,18 @@ export function getDefaultExtensions({ placeholder, toolbar } = {}) {
         getImageExtension(toolbar),
         getHorizontalRuleExtension(toolbar),
         getTableExtensions(toolbar),
-        getPlaceholderExtension(placeholder),
         getIframeExtension(toolbar),
+    ];
+    return extensions
+        .flat()
+        .filter(extension => !!extension);
+}
+
+export function getDefaultExtensions({ placeholder, toolbar } = {}) {
+    const extensions = [
+        getToolbarExtensions(),
+        getPlaceholderExtension(placeholder),
+        getPasteExtension(toolbar),
         Html,
         TrailingNode,
         Selected,

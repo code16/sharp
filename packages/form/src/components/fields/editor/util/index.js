@@ -8,5 +8,5 @@ export function getAllowedHeadingLevels(toolbar) {
 }
 
 export function toolbarHasButton(toolbar, buttonName) {
-    return toolbar.some(button => button === buttonName);
+    return !toolbar || toolbar.some(button => button === buttonName);
 }
