@@ -4,7 +4,7 @@ sidebarDepth: 3
 
 # Building an Entity Form
 
-Sharp is mostly made of Entity Lists to display, search, filter, act on instances, and of Entity Forms to create or update entities.
+Entity Forms as used to create or update instances.
 
 ## Generator
 
@@ -16,21 +16,23 @@ php artisan sharp:make:form <class_name> [--model=<model_name>]
 
 As usual in Sharp, we begin by creating a class dedicated to our Entity Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 5 functions:
 
-- `buildFormFields()` and `buildFormLayout()` to build and configure the form itself,
+- `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to build and configure
+  the form itself,
 - `find($id): array` to get the instance data,
 - `update($id, array $data)` to update the instance,
 - `delete($id)` to... delete the instance.
 
 Let's see the specifics:
 
-### `buildFormFields()`
+### `buildFormFields(FieldsContainer $formFields)`
 
-In short, this method is meant to host the code responsible for the declaration and configuration of each form field. This must be done calling `$this->addField`:
+In short, this method is meant to host the code responsible for the declaration and configuration of each form field.
+This must be done calling `$formFields->addField`:
 
 ```php
-function buildFormFields()
+function buildFormFields(FieldsContainer $formFields)
 {
-    $this
+    $formFields
 		->addField(
 			SharpFormTextField::make("name")
 				->setLabel("Name")
@@ -93,18 +95,19 @@ For the specifics of each field, here's the full list and documentation:
 - [AutocompleteList](form-fields/autocomplete-list.md)
 - [Geolocation](form-fields/geolocation.md)
 
-### `buildFormLayout()`
+### `buildFormLayout(FormLayout $formLayout)`
 
-Now let's build the form layout. A form layout is made of `columns`,  which contains `fields`, `lists` of fields and `fieldsets`. If needed, we can even define `tabs` above `columns`.
+Now let's build the form layout. A form layout is made of `columns`, which contains `fields`, `lists` of fields
+and `fieldsets`. If needed, we can even define `tabs` above `columns`.
 
 #### Columns and fields
 
 Here's how we can define the layout for the simple two-fields form we built above:
 
 ```php
-function buildFormLayout()
+function buildFormLayout(FormLayout $formLayout)
 {
-    $this->addColumn(6, function(FormLayoutColumn $column) {
+    $formLayout->addColumn(6, function(FormLayoutColumn $column) {
         $column->withSingleField("name")
             ->withSingleField("capacity");
     });
@@ -116,9 +119,9 @@ This will result in a 50% column (columns width are 12-based, like in Entity Lis
 Here's another possible layout, with two unequally large columns:
 
 ```php
-function buildFormLayout()
+function buildFormLayout(FormLayout $formLayout)
 {
-    $this
+    $formLayout
     	->addColumn(7, function(FormLayoutColumn $column) {
         	$column->withSingleField("name");
     	})
@@ -128,14 +131,14 @@ function buildFormLayout()
 }
 ```
 
-##### Putting fields on the same row
+##### Displaying fields on the same row
 
 One final way is to put fields side by side on the same column:
 
 ```php
-function buildFormLayout()
+function buildFormLayout(FormLayout $formLayout)
 {
-    $this->addColumn(6, function(FormLayoutColumn $column) {
+    $formLayout->addColumn(6, function(FormLayoutColumn $column) {
         $column->withFields("name", "capacity");
     });
 }
@@ -167,7 +170,7 @@ Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller o
 Fieldsets are useful to group some fields in a labelled block. Here's how they work:
 
 ```php
-$this->addColumn(6, function(FormLayoutColumn $column) {
+$formLayout->addColumn(6, function(FormLayoutColumn $column) {
     $column->withFieldset("Details", function(FormLayoutFieldset $fieldset) {
         return $fieldset->withSingleField("name")
                         ->withSingleField("capacity");
@@ -197,7 +200,7 @@ Notice we added a `Closure` on a `withSingleField()` call, meaning we define an 
 Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
-$this
+$formLayout
 	->addTab("tab 1", function(FormLayoutTab $tab) {
 		$tab->addColumn(6, function(FormLayoutColumn $column) {
 			$column->withSingleField("name");
@@ -224,7 +227,8 @@ function find($id): array
 }
 ```
 
-As for the Entity List, you'll want to transform your data before sending it. Transformers are explained in the detailled [How to transform data](how-to-transform-data.md) documentation.
+As for the Entity List, you'll want to transform your data before sending it. Transformers are explained in the
+detailed [How to transform data](how-to-transform-data.md) documentation.
 
 
 ### `update($id, array $data)`
@@ -344,7 +348,7 @@ function delete($id)
 }
 ```
 
-### `buildFormConfig()`
+### `buildFormConfig(): void`
 
 This method, entirely optional, is the place to configure 2 behaviours:
 
@@ -380,7 +384,9 @@ return [
 
 ## Input validation
 
-Of course you'll want to have an input validation on your form; create a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the config:
+In order to have an input validation on your form, you must create
+a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the
+config:
 
 ```php
 // config/sharp.php

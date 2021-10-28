@@ -121,19 +121,19 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
 
     protected $icon;
 
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter);
     }
 
-    public function setIcon(string $iconName)
+    public function setIcon(string $iconName): self
     {
         $this->icon = $iconName;
 
         return $this;
     }
 
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "icon" => "required",
@@ -164,9 +164,9 @@ Next step is using the new form field:
 *in some `Code16\Sharp\Form\SharpForm` subclass:*
 
 ```php
-function buildFormFields()
+function buildFormFields(FieldsContainer $formFields): void
 {
-    $this->addField(
+    $formFields->addField(
         SharpCustomFormFieldTextIcon::make("name")
             ->setLabel("Name")
             ->setIcon("fa-user")

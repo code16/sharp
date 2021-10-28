@@ -98,7 +98,7 @@ Last, you must configure an instance attribute to disambiguate each type: each i
 You declare this attribute in the Entity List `buildListConfig()` method:
 
 ```php
-function buildListConfig()
+function buildListConfig(): void
 {
     $this->configureMultiformAttribute("engine");
 }
@@ -107,7 +107,7 @@ function buildListConfig()
 Here, the `engine` attribute must be filled for each Car instance. So how you do that? Obviously, the first way is to keep the same attribute you use in your database: in many cases, you already have this `engine` value in a column. If not, or if the value is something less readable (an ID for instance), use a [custom transformer](how-to-transform-data.md):
 
 ```php
-function getListData()
+function getListData(): array
 {
     return $this
         ->setCustomTransformer("engine", function($value, Car $car) {
