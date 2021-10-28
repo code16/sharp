@@ -2,26 +2,26 @@
 
 namespace Code16\Sharp\Dashboard;
 
-use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Illuminate\Support\Arr;
 
 abstract class SharpDashboard
 {
-    use HandleFilters, 
+    use HandleFilters,
         HandleDashboardCommands;
 
     protected bool $dashboardBuilt = false;
-    protected bool $layoutBuilt = false;
-    protected array $widgets = [];
     protected array $graphWidgetDataSets = [];
     protected array $panelWidgetsData = [];
     protected array $orderedListWidgetsData = [];
-    protected array $rows = [];
     protected ?DashboardQueryParams $queryParams;
+    protected ?DashboardLayout $dashboardLayout = null;
+    protected ?WidgetsContainer $widgetsContainer = null;
 
     public final function init(): self
     {
@@ -30,79 +30,41 @@ abstract class SharpDashboard
         $this->queryParams = DashboardQueryParams::create()
             ->fillWithRequest()
             ->setDefaultFilters($this->getFilterDefaultValues());
-        
+
         return $this;
     }
 
-    public function getQueryParams(): ?DashboardQueryParams
+    public final function getQueryParams(): ?DashboardQueryParams
     {
         return $this->queryParams;
     }
 
-    /**
-     * Add a widget.
-     */
-    protected function addWidget(SharpWidget $widget): self
-    {
-        $this->widgets[] = $widget;
-        $this->dashboardBuilt = false;
-
-        return $this;
-    }
-
-    /**
-     * Add a new row with a single widget.
-     */
-    protected function addFullWidthWidget(string $widgetKey): self
-    {
-        $this->layoutBuilt = false;
-
-        $this->addRow(function(DashboardLayoutRow $row) use ($widgetKey) {
-            $row->addWidget(12, $widgetKey);
-        });
-
-        return $this;
-    }
-
-    /**
-     * Add a new row.
-     */
-    protected function addRow(\Closure $callback): self
-    {
-        $row = new DashboardLayoutRow();
-
-        $callback($row);
-
-        $this->rows[] = $row;
-
-        return $this;
-    }
-
-    public function widgets(): array
+    public final function widgets(): array
     {
         $this->checkDashboardIsBuilt();
 
-        return collect($this->widgets)
+        return collect($this->widgetsContainer()->getWidgets())
             ->map->toArray()
             ->keyBy("key")
             ->all();
     }
 
-    /**
-     * Return the dashboard widgets layout.
-     */
-    function widgetsLayout(): array
+    public final function widgetsContainer(): WidgetsContainer
     {
-        if(!$this->layoutBuilt) {
-            $this->buildWidgetsLayout();
-            $this->layoutBuilt = true;
+        if ($this->widgetsContainer === null) {
+            $this->widgetsContainer = new WidgetsContainer();
+        }
+        return $this->widgetsContainer;
+    }
+
+    public final function widgetsLayout(): array
+    {
+        if ($this->dashboardLayout === null) {
+            $this->dashboardLayout = new DashboardLayout();
+            $this->buildDashboardLayout($this->dashboardLayout);
         }
 
-        return [
-            "rows" => collect($this->rows)
-                ->map->toArray()
-                ->toArray()
-        ];
+        return $this->dashboardLayout->toArray();
     }
 
     /**
@@ -111,6 +73,7 @@ abstract class SharpDashboard
     public function buildDashboardConfig(): void
     {
     }
+
     /**
      * Return all filters in an array of class names or instances
      */
@@ -127,9 +90,9 @@ abstract class SharpDashboard
         return null;
     }
 
-    public function dashboardConfig(): array
+    public final function dashboardConfig(): array
     {
-        return tap([], function(&$config) {
+        return tap([], function (&$config) {
             $this->appendFiltersToConfig($config);
             $this->appendDashboardCommandsToConfig($config);
         });
@@ -140,20 +103,22 @@ abstract class SharpDashboard
      *
      * @return array
      */
-    function data(): array
+    public final function data(): array
     {
         $this->buildWidgetsData();
-            
+
         // First, graph widgets dataSets
         $data = collect($this->graphWidgetDataSets)
-            ->map(function(array $dataSets, string $key) {
+            ->map(function (array $dataSets, string $key) {
                 $dataSetsValues = collect($dataSets)->map->toArray();
 
                 return [
                     "key" => $key,
-                    "datasets" => $dataSetsValues->map(function($dataSet) {
-                        return Arr::except($dataSet, "labels");
-                    })->all(),
+                    "datasets" => $dataSetsValues
+                        ->map(function ($dataSet) {
+                            return Arr::except($dataSet, "labels");
+                        })
+                        ->all(),
                     "labels" => $dataSetsValues->first()["labels"]
                 ];
             });
@@ -194,21 +159,21 @@ abstract class SharpDashboard
             ->all();
     }
 
-    protected function addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet): self
+    protected final function addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet): self
     {
         $this->graphWidgetDataSets[$graphWidgetKey][] = $dataSet;
 
         return $this;
     }
 
-    protected function setPanelData(string $panelWidgetKey, array $data): self
+    protected final function setPanelData(string $panelWidgetKey, array $data): self
     {
         $this->panelWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
     }
 
-    protected function setOrderedListData(string $panelWidgetKey, array $data): self
+    protected final function setOrderedListData(string $panelWidgetKey, array $data): self
     {
         $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
@@ -218,29 +183,23 @@ abstract class SharpDashboard
     private function checkDashboardIsBuilt(): void
     {
         if (!$this->dashboardBuilt) {
-            $this->buildWidgets();
+            $this->buildWidgets($this->widgetsContainer());
             $this->dashboardBuilt = true;
         }
     }
 
     private function findWidgetByKey(string $key): ?SharpWidget
     {
-        return collect($this->widgets)
-            ->filter(function($widget) use($key) {
+        return collect($this->widgetsContainer()->getWidgets())
+            ->filter(function ($widget) use ($key) {
                 return $widget->getKey() == $key;
             })
             ->first();
     }
 
-    /**
-     * Build dashboard's widget using ->addWidget.
-     */
-    protected abstract function buildWidgets(): void;
+    protected abstract function buildWidgets(WidgetsContainer $widgetsContainer): void;
 
-    /**
-     * Build dashboard's widgets layout.
-     */
-    protected abstract function buildWidgetsLayout(): void;
+    protected abstract function buildDashboardLayout(DashboardLayout $dashboardLayout): void;
 
     /**
      * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData

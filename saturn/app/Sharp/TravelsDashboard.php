@@ -5,17 +5,18 @@ namespace App\Sharp;
 use App\Sharp\Commands\TravelsDashboardDownloadCommand;
 use App\Sharp\Filters\TravelsDashboardPeriodFilter;
 use App\Sharp\Filters\TravelsDashboardSpaceshipsFilter;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Illuminate\Support\Facades\DB;
 
 class TravelsDashboard extends SharpDashboard
 {
-
-    function buildWidgets(): void
+    function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
-        $this->addWidget(
+        $widgetsContainer->addWidget(
             SharpBarGraphWidget::make("travels")
                 ->setDisplayHorizontalAxisAsTimeline()
                 ->setTitle("Travel counts " . ($this->queryParams->filterFor("period") ? "(period filtered)" : ""))
@@ -37,9 +38,9 @@ class TravelsDashboard extends SharpDashboard
         ];
     }
 
-    function buildWidgetsLayout(): void
+    function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        $this->addFullWidthWidget("travels");
+        $dashboardLayout->addFullWidthWidget("travels");
     }
 
     function buildWidgetsData(): void

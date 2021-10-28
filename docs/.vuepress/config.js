@@ -67,7 +67,7 @@ module.exports = {
                     title: 'Dashboards',
                     collapsable: false,
                     children: [
-                        'dashboard',
+                        'building-dashboard',
                         ...[
                             'graph',
                             'panel',

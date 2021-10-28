@@ -269,8 +269,8 @@ the filter class name by default).
 
 ## Filters for Dashboards
 
-[Dashboards](dashboard.md) also can take advantage of filters; the API is almost the same, except there is obviously no
-Entity or Instance distinction: the only available options are `Code16\Sharp\Dashboard\DashboardFilter`
+[Dashboards](building-dashboard.md) also can take advantage of filters; the API is almost the same, except there is
+obviously no Entity or Instance distinction: the only available options are `Code16\Sharp\Dashboard\DashboardFilter`
 , `Code16\Sharp\Dashboard\DashboardMultipleFilter` and `Code16\Sharp\Dashboard\DashboardRequiredFilter`.
 
 ## Global menu Filters

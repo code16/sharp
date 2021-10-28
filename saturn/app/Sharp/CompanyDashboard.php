@@ -4,7 +4,7 @@ namespace App\Sharp;
 
 use App\Feature;
 use App\SpaceshipType;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
@@ -13,12 +13,13 @@ use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Illuminate\Support\Facades\DB;
 
 class CompanyDashboard extends SharpDashboard
 {
-    private static $colors = [
+    private static array $colors = [
         "#7F1D1D",
         "#F59E0B",
         "#10B981",
@@ -30,11 +31,11 @@ class CompanyDashboard extends SharpDashboard
         "#78350F",
         "#9CA3AF"
     ];
-    private static $colorsIndex = 0;
+    private static int $colorsIndex = 0;
 
-    function buildWidgets(): void
+    function buildWidgets(WidgetsContainer $widgetContainer): void
     {
-        $this
+        $widgetContainer
             ->addWidget(
                 SharpBarGraphWidget::make("features_bars")
                     ->setTitle("Main features")
@@ -75,17 +76,17 @@ class CompanyDashboard extends SharpDashboard
             );
     }
 
-    function buildWidgetsLayout(): void
+    function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        $this
-            ->addRow(function(DashboardLayoutRow $row) {
+        $dashboardLayout
+            ->addRow(function (DashboardLayoutRow $row) {
                 $row->addWidget(6, "types_pie")
                     ->addWidget(6, "features_bars");
             })
-            ->addRow(function(DashboardLayoutRow $row) {
+            ->addRow(function (DashboardLayoutRow $row) {
                 $row->addWidget(12, "capacities");
             })
-            ->addRow(function(DashboardLayoutRow $row) {
+            ->addRow(function (DashboardLayoutRow $row) {
                 $row->addWidget(6, "activeSpaceships")
                     ->addWidget(6, "inactiveSpaceships");
             })
