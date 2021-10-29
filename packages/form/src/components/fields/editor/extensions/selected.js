@@ -3,6 +3,7 @@ import { Decoration, DecorationSet } from "prosemirror-view";
 import { Extension } from "@tiptap/core";
 
 export const Selected = Extension.create({
+    name: 'selected',
     addProseMirrorPlugins() {
         return [
             new Plugin({

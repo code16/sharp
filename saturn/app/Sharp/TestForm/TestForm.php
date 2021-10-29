@@ -132,6 +132,8 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::TABLE,
                         SharpFormEditorField::IFRAME,
                         SharpFormEditorField::RAW_HTML,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::HIGHLIGHT,
                     ])
                     ->setCropRatio("1:1")
                     ->setHeight(350)
