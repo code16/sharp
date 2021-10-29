@@ -108,7 +108,7 @@ module.exports = {
                         'how-to-transform-data',
                         'link-to',
                         'context',
-                        'sharp-built-in-solution-for-uploads',
+                        'sharp-uploads',
                         'form-data-localization',
                         'testing-with-sharp',
                         'artisan-generators',

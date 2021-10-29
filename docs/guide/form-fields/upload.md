@@ -25,9 +25,12 @@ This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel
 
 Max file size allowed.
 
-### `setCroppable(bool $croppable = true)`
+### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
 
-Allow the user to crop (or rotate) the visual, after the upload.
+Allow the user to crop or rotate the visual, after the upload.  
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
+stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the
+Formatter part below.
 
 ### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
@@ -64,7 +67,9 @@ If true and if the upload has a thumbnail, it is limited to 60px high (to compac
 
 ### `shouldOptimizeImage(bool $shouldOptimizeImage = true)`
 
-If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [image-optmizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these packages on your system:
+If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on
+spatie's [image-optimizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these
+packages on your system:
 - [JpegOptim](http://freecode.com/projects/jpegoptim)
 - [Optipng](http://optipng.sourceforge.net/)
 - [Pngquant 2](https://pngquant.org/)
@@ -76,9 +81,11 @@ Check their documentation for [more instructions](https://github.com/spatie/imag
 
 ## Formatter
 
-First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-built-in-solution-for-uploads.md), which greatly simplify the work (to be clear: it will handle everything from storage to image transformations).
+First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class,
+as [detailed here](../sharp-uploads.md), which greatly simplify the work (to be clear: it will handle everything from
+storage to image transformations).
 
-Here's the documentation for the not built-in solution:
+Here's the documentation for the **not built-in solution**:
 
 ### `toFront`
 

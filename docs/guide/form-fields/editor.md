@@ -68,17 +68,32 @@ If true te front will send the content as markdown to the back, for storage. Def
 
 ### Embed images and files
 
-The editor field allows file embedding, with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature, add the tool in the toolbar and configure the environment (see below).
+The editor field allows file embedding, with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature,
+add the tool in the toolbar and configure the environment (see below).
 
-Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the configuration.
+Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the
+configuration.
 
 #### `setMaxFileSize(float $sizeInMB)`
 
 Max file size allowed.
 
-#### `setTransformable(bool $transformable = true)`
+#### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
 
-Allow the user to crop or rotate a visual, after the upload.
+Allow the user to crop or rotate a visual, after the upload.  
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
+stored directly in the `<x-sharp-image/>` tag. For instance:
+
+```html
+
+<x-sharp-image name="filename.jpg"
+               filter-crop="0.1495,0,0.5625,1"
+               path="data/Spaceship/10/markdown/filename.jpg"
+               disk="local">
+</x-sharp-image>
+```
+
+Then at render Sharp will take care of that for the thumbnail (see *Display embedded files in the public site* below).
 
 #### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
@@ -86,7 +101,9 @@ Set a ratio constraint to uploaded images, formatted like this: `width:height`. 
 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break animation.
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files
+extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break
+animation.
 
 #### `setStorageDisk(string $storageDisk)`
 
@@ -121,8 +138,9 @@ Where:
 - `$classNames` will be set a `class` on the `<img>` or `<div>` tag.
   
 And for images only:
+
 - `$width` and `$height` are constraints for the thumbnail.
-- `$filters` [described in this documentation](../sharp-built-in-solution-for-uploads.md).
+- `$filters` [described in this documentation](../sharp-uploads.md).
 
 This helper will make use of a special view, `public.markdown-embedded-file.blade.php`, for the render part. You can extend this view publishing it:
 
@@ -131,7 +149,8 @@ This helper will make use of a special view, `public.markdown-embedded-file.blad
 ```
 
 Here are the parameters passed to the view:
-- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-built-in-solution-for-uploads.md))
+
+- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-uploads.md))
 - `$isImage` (bool)
 - `$classNames`, `$width`, `$height`, `$filters`: whatever you passed to the helper function
 
