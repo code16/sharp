@@ -184,13 +184,6 @@ function buildListConfig()
 
 Here is the full list of available methods:
 
-- each item of our list is identified by an attribute `id` (this is the default value);
-- the list is meant to allow search to the user, meaning Sharp will display a search text input and process its content
-  to fill the `EntityListQueryParams` instance (see above);
-- the list must be sorted by "name", meaning that the `EntityListQueryParams $queryParams` instance will be filled with
-  this default value;
-- and finally, the list is paginated, .
-
 - `configureInstanceIdAttribute(string $instanceIdAttribute)`: define this if the id attribute of an instance is
   not `id`
 - `configureReorderable(ReorderHandler|string $reorderHandler)`: allow instances to be rearranged;
@@ -207,7 +200,8 @@ Here is the full list of available methods:
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
   toggle, [see detailed doc](entity-states.md)
 - `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "
-  primary": [see related doc](commands.md)
+  primary", by passing its key or full cass name. The command should be declared for this Entity
+  List ([see related doc](commands.md)).
 
 ## Configure the entity
 

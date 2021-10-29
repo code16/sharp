@@ -235,8 +235,14 @@ function buildShowConfig()
 }
 ```
 
-Refer [EntityState](entity-states.md) and [Breadcrumb](sharp-breadcrumb.md) documentations.
+Here is the full list of available methods:
 
+- `configureBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute)`: declare the data attribute to use for the
+  breadcrumb; [see detailed doc](sharp-breadcrumb.md)
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
+  display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
+- `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
+  toggle, [see detailed doc](entity-states.md)
 
 ## Accessing the navigation breadcrumb
 
