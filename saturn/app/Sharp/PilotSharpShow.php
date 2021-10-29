@@ -70,16 +70,16 @@ class PilotSharpShow extends SharpShow
             ->addEntityListSection("spaceships");
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this
-            ->setCustomTransformer("role", function($role, $pilot) {
+            ->setCustomTransformer("role", function ($role, $pilot) {
                 return $pilot->role == "sr" ? "senior" : "junior";
             })
-            ->setCustomTransformer("xp", function($xp, $pilot) {
+            ->setCustomTransformer("xp", function ($xp, $pilot) {
                 return $pilot->role == "sr" ? $xp . "y" : null;
             })
-            ->setCustomTransformer("breadcrumb_label", function($role, $pilot) {
+            ->setCustomTransformer("breadcrumb_label", function ($role, $pilot) {
                 return sprintf("Pilot %s", $pilot->name);
             })
             ->transform(Pilot::with("spaceships")->findOrFail($id));

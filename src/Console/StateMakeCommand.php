@@ -2,41 +2,17 @@
 
 namespace Code16\Sharp\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
 class StateMakeCommand extends GeneratorCommand
 {
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
     protected $name = 'sharp:make:entity-state';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a new entity state class';
-
-    /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
+    protected $description = 'Create a new Entity State class';
     protected $type = 'EntityState';
 
-    /**
-     * Build the class with the given name.
-     *
-     * Remove the base controller import if we are already in base namespace.
-     *
-     * @param  string  $name
-     * @return string
-     */
     protected function buildClass($name)
     {
         $replace = [];
@@ -49,12 +25,6 @@ class StateMakeCommand extends GeneratorCommand
         );
     }
 
-    /**
-     * Build the model replacement values.
-     *
-     * @param  array  $replace
-     * @return array
-     */
     protected function buildModelReplacements(array $replace)
     {
         $modelClass = $this->parseModel($this->option('model'));
@@ -72,14 +42,6 @@ class StateMakeCommand extends GeneratorCommand
         ]);
     }
 
-    /**
-     * Get the fully-qualified model class name.
-     *
-     * @param  string  $model
-     * @return string
-     *
-     * @throws \InvalidArgumentException
-     */
     protected function parseModel($model)
     {
         if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
@@ -95,34 +57,18 @@ class StateMakeCommand extends GeneratorCommand
         return $model;
     }
 
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
     protected function getStub()
     {
         return $this->option('model')
-                    ? __DIR__.'/stubs/entity-state.model.stub'
-                    : __DIR__.'/stubs/entity-state.stub';
+            ? __DIR__ . '/stubs/entity-state.model.stub'
+            : __DIR__ . '/stubs/entity-state.stub';
     }
 
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string  $rootNamespace
-     * @return string
-     */
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
     protected function getOptions()
     {
         return [

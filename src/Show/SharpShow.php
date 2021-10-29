@@ -5,8 +5,8 @@ namespace Code16\Sharp\Show;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Show\Layout\ShowLayout;
-use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -97,15 +97,15 @@ abstract class SharpShow
     /**
      * Retrieve a Model for the show and pack all its data as array
      */
-    abstract function find(mixed $id): array;
+    abstract protected function find(mixed $id): array;
 
     /**
      * Build show fields
      */
-    abstract function buildShowFields(FieldsContainer $showFields): void;
+    abstract protected function buildShowFields(FieldsContainer $showFields): void;
 
     /**
      * Build show layout
      */
-    abstract function buildShowLayout(ShowLayout $showLayout): void;
+    abstract protected function buildShowLayout(ShowLayout $showLayout): void;
 }

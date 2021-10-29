@@ -8,16 +8,16 @@ class DummyClass extends InstanceCommand
 {
     public function label(): string
     {
-        //
+        return "My Command label";
+    }
+    
+    public function buildCommandConfig(): void
+    {
+        // $this->configureDescription(...)
     }
 
-    /**
-     * @param string $instanceId
-     * @param array $data
-     * @return array
-     */
     public function execute($instanceId, array $data = []): array
     {
-        //
+        return $this->refresh($instanceId);
     }
 }

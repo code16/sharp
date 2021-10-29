@@ -9,9 +9,11 @@ class DummyClass implements ReorderHandler
 {
     public function reorder(array $ids): void
     {
-        DummyModelClass::whereIn('id', $ids)->get()->each(function ($DummyModelVariable) use ($ids) {
-            $DummyModelVariable->order = array_search($DummyModelVariable->id, $ids) + 1;
-            $DummyModelVariable->save();
-        });
+        DummyModelClass::whereIn('id', $ids)
+            ->get()
+            ->each(function ($DummyModelVariable) use ($ids) {
+                $DummyModelVariable->order = array_search($DummyModelVariable->id, $ids) + 1;
+                $DummyModelVariable->save();
+            });
     }
 }

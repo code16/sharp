@@ -8,14 +8,6 @@ Sometimes you will need to configure a "unique" resource that does not fit into 
 an account, or a configuration item. SingleForms are the natural companions for
 SingleShows, [documented here](single-show.md).
 
-
-## Generator
-
-```sh
-php artisan sharp:make:single-form <class_name> [--model=<model_name>]
-```
-
-
 ## Write the class
 
 Instead of extending `SharpForm`, our SingleForm implementation should extend `Code16\Sharp\Form\SharpSingleForm`. We

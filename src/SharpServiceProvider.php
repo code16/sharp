@@ -5,17 +5,13 @@ namespace Code16\Sharp;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
+use Code16\Sharp\Console\EntityListFilterMakeCommand;
+use Code16\Sharp\Console\EntityListMakeCommand;
 use Code16\Sharp\Console\FormMakeCommand;
 use Code16\Sharp\Console\InstanceCommandMakeCommand;
-use Code16\Sharp\Console\ListFilterMakeCommand;
-use Code16\Sharp\Console\ListMakeCommand;
 use Code16\Sharp\Console\MediaMakeCommand;
-use Code16\Sharp\Console\ModelWizardCommand;
-use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
-use Code16\Sharp\Console\ShowMakeCommand;
-use Code16\Sharp\Console\SingleFormMakeCommand;
-use Code16\Sharp\Console\SingleShowMakeCommand;
+use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
@@ -91,20 +87,16 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->commands([
             CreateUploadsMigration::class,
-            ListMakeCommand::class,
+            EntityListMakeCommand::class,
             FormMakeCommand::class,
-            SingleFormMakeCommand::class,
-            ShowMakeCommand::class,
-            SingleShowMakeCommand::class,
+            ShowPageMakeCommand::class,
             StateMakeCommand::class,
             MediaMakeCommand::class,
-            PolicyMakeCommand::class,
-            ModelWizardCommand::class,
             EntityCommandMakeCommand::class,
             InstanceCommandMakeCommand::class,
             DashboardMakeCommand::class,
             ValidatorMakeCommand::class,
-            ListFilterMakeCommand::class,
+            EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
         ]);
 

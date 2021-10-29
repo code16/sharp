@@ -3,13 +3,11 @@
 namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
-use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
-use Code16\Sharp\Exceptions\EntityList\SharpEntityListLayoutException;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -240,7 +238,7 @@ abstract class SharpEntityList
     /**
      * Return all entity commands in an array of class names or instances
      */
-    function getEntityCommands(): ?array
+    protected function getEntityCommands(): ?array
     {
         return null;
     }
@@ -248,7 +246,7 @@ abstract class SharpEntityList
     /**
      * Return all instance commands in an array of class names or instances
      */
-    function getInstanceCommands(): ?array
+    protected function getInstanceCommands(): ?array
     {
         return null;
     }
@@ -256,7 +254,7 @@ abstract class SharpEntityList
     /**
      * Return all filters in an array of class names or instances
      */
-    function getFilters(): ?array
+    protected function getFilters(): ?array
     {
         return null;
     }
@@ -264,7 +262,7 @@ abstract class SharpEntityList
     /**
      * Return global message data if needed.
      */
-    function getGlobalMessageData(): ?array
+    protected function getGlobalMessageData(): ?array
     {
         return null;
     }
@@ -272,27 +270,27 @@ abstract class SharpEntityList
     /**
      * Retrieve all rows data as an array
      */
-    abstract function getListData(): array|Arrayable;
+    abstract protected function getListData(): array|Arrayable;
 
     /**
      * Build list fields
      */
-    abstract function buildListFields(EntityListFieldsContainer $fieldsContainer): void;
+    abstract protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void;
 
     /**
      * Build list layout
      */
-    abstract function buildListLayout(EntityListFieldsLayout $fieldsLayout): void;
+    abstract protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void;
 
     /**
      * Build layout for small screen. Optional, only if needed.
      */
-    function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
+    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
     {
     }
 
     /**
      * Build list config
      */
-    abstract function buildListConfig(): void;
+    abstract protected function buildListConfig(): void;
 }

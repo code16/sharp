@@ -14,7 +14,7 @@ entity, for which it's weird to build an Entity List.
 ## Generator
 
 ```bash
-php artisan sharp:make:show <class_name> [--model=<model_name>]
+php artisan sharp:make:show-page <class_name> [--model=<model_name>]
 ```
 
 ## Write the class

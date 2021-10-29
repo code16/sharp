@@ -6,38 +6,14 @@ use Code16\Sharp\Console\Utils\WithModel;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-class ListMakeCommand extends GeneratorCommand
+class EntityListMakeCommand extends GeneratorCommand
 {
     use WithModel;
 
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
     protected $name = 'sharp:make:entity-list';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a new entity list class';
-
-    /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
+    protected $description = 'Create a new Entity List class';
     protected $type = 'SharpEntityList';
 
-    /**
-     * Build the class with the given name.
-     *
-     * @param string $name
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
     protected function buildClass($name)
     {
         $replace = [];
@@ -53,34 +29,18 @@ class ListMakeCommand extends GeneratorCommand
         );
     }
 
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__.'/stubs/sharp-entity-list.stub'
-            : __DIR__.'/stubs/sharp-entity-list.plain.stub';
+            ? __DIR__ . '/stubs/entity-list.model.stub'
+            : __DIR__ . '/stubs/entity-list.stub';
     }
 
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string  $rootNamespace
-     * @return string
-     */
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
     protected function getOptions()
     {
         return [
