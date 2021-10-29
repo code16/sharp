@@ -8,12 +8,12 @@ export const Iframe =  Node.create({
 
     atom: true,
 
-    defaultOptions: {
+    addOptions: () => ({
         allowFullscreen: false,
         HTMLAttributes: {
             class: 'iframe-wrapper',
         },
-    },
+    }),
 
     addAttributes() {
         return {

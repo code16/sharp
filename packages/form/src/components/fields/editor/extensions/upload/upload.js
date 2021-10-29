@@ -20,7 +20,7 @@ export const Upload = Node.create({
 
     priority: 150,
 
-    defaultOptions: {
+    addOptions: () => ({
         fieldProps: {},
         isReady: () => true,
         getFile: () => {},
@@ -28,7 +28,7 @@ export const Upload = Node.create({
         onInput: () => {},
         onRemove: () => {},
         onUpdate: () => {},
-    },
+    }),
 
     addAttributes() {
         return {

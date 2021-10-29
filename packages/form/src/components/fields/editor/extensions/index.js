@@ -1,3 +1,4 @@
+import { getExtensionField, getSchema } from "@tiptap/core";
 import Heading from "@tiptap/extension-heading";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -8,7 +9,7 @@ import Table from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
-import { getExtensionField, getSchema } from "@tiptap/core";
+import Highlight from "@tiptap/extension-highlight";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
@@ -79,6 +80,12 @@ function getIframeExtension(toolbar) {
     }
 }
 
+function getHighlightExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'highlight')) {
+        return Highlight;
+    }
+}
+
 function getPasteExtension(toolbar) {
     const extensions = getToolbarExtensions(toolbar);
     const schema = getSchema(extensions);
@@ -121,6 +128,7 @@ function getToolbarExtensions(toolbar) {
         getImageExtension(toolbar),
         getHorizontalRuleExtension(toolbar),
         getTableExtensions(toolbar),
+        getHighlightExtension(toolbar),
         getIframeExtension(toolbar),
     ];
 
