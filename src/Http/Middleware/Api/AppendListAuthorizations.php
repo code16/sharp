@@ -32,10 +32,10 @@ class AppendListAuthorizations
 
         $authorizations = $this->getGlobalAuthorizations($entityKey);
 
-        if(sizeof($authorizations) != 3 && $this->hasPolicyFor($entityKey)) {
+        if ($this->hasPolicyFor($entityKey)) {
             // Have to dig into policies
 
-            if(!isset($authorizations["create"])) {
+            if (!isset($authorizations["create"])) {
                 // Create doesn't need instanceId
                 $authorizations["create"] = $this->gate->check("sharp.{$entityKey}.create");
             }
