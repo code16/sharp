@@ -46,19 +46,19 @@ class AppendListAuthorizations
 
             $missingAbilities = array_diff(["view", "update"], array_keys($authorizations));
 
-            foreach($instanceIds as $instanceId) {
-                foreach($missingAbilities as $missingAbility) {
-                    if($this->gate->check("sharp.{$entityKey}.{$missingAbility}", $instanceId)) {
+            foreach ($instanceIds as $instanceId) {
+                foreach ($missingAbilities as $missingAbility) {
+                    if ($this->gate->check("sharp.{$entityKey}.{$missingAbility}", $instanceId)) {
                         $authorizations[$missingAbility][] = $instanceId;
 
-                    } elseif(!isset($authorizations[$missingAbility])) {
+                    } elseif (!isset($authorizations[$missingAbility])) {
                         $authorizations[$missingAbility] = [];
                     }
                 }
             }
 
-            foreach($missingAbilities as $missingAbility) {
-                if(isset($authorizations[$missingAbility]) && sizeof($authorizations[$missingAbility]) == 0) {
+            foreach ($missingAbilities as $missingAbility) {
+                if (isset($authorizations[$missingAbility]) && sizeof($authorizations[$missingAbility]) == 0) {
                     $authorizations[$missingAbility] = false;
                 }
             }
@@ -70,13 +70,11 @@ class AppendListAuthorizations
             $authorizations
         );
 
-        $data = $jsonResponse->getData();
-
-        $data->authorizations = $authorizations;
-
-        $jsonResponse->setData($data);
-
-        return $jsonResponse;
+        return tap($jsonResponse, function ($jsonResponse) use ($authorizations) {
+            $data = $jsonResponse->getData();
+            $data->authorizations = $authorizations;
+            $jsonResponse->setData($data);
+        });
     }
 
     protected function hasPolicyFor(string $entityKey): bool
