@@ -62,6 +62,7 @@ class CompanyDashboard extends SharpDashboard
             )->addWidget(
                 SharpOrderedListWidget::make("topTravelledSpaceshipModels")
                     ->setTitle("Top travelled spaceship types")
+                    ->setHtml()
                     ->buildItemLink(function($item) {
                         if($item['id'] >= 5) {
                             return null;
@@ -118,7 +119,7 @@ class CompanyDashboard extends SharpDashboard
                 ->map(function(SpaceshipType $type) {
                     return [
                         "id" => $type->id,
-                        "label" => $type->label,
+                        "label" => sprintf('<em>%s</em>', $type->label),
                         "count" => $type->id >= 5 ? null : rand(20, 100),
                     ];
                 })
