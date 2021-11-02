@@ -28,10 +28,6 @@
 
         props: {
             value: Object,
-            withCounts: {
-                type: Boolean,
-                default: true,
-            },
             title: String,
             html: Boolean,
         },
@@ -53,7 +49,7 @@
         },
         methods: {
             hasCount(item) {
-                return this.withCounts && item.count != null;
+                return typeof item.count === 'number' || !!item.count;
             }
         },
     }
