@@ -6,14 +6,6 @@ sidebarDepth: 3
 
 Sometimes you will need to configure a "unique" resource that does not fit into a List / Show schema, like for instance an account, or a configuration item. To handle this kind of "unique" resource, Sharp provides a way to build SingleShows.
 
-
-## Generator
-
-```sh
-php artisan sharp:make:single-show <class_name> [--model=<model_name>]
-```
-
-
 ## Write the class
 
 Instead of extending `SharpShow`, our SingleShow implementation should extend `Code16\Sharp\Show\SharpSingleShow`. We

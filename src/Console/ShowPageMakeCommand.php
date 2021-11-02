@@ -6,13 +6,13 @@ use Code16\Sharp\Console\Utils\WithModel;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-class FormMakeCommand extends GeneratorCommand
+class ShowPageMakeCommand extends GeneratorCommand
 {
     use WithModel;
 
-    protected $name = 'sharp:make:form';
-    protected $description = 'Create a new Form class';
-    protected $type = 'SharpForm';
+    protected $name = 'sharp:make:show-page';
+    protected $description = 'Create a new Show Page class';
+    protected $type = 'SharpShow';
 
     protected function buildClass($name)
     {
@@ -32,8 +32,8 @@ class FormMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/form.model.stub'
-            : __DIR__ . '/stubs/form.stub';
+            ? __DIR__ . '/stubs/show-page.model.stub'
+            : __DIR__ . '/stubs/show-page.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
@@ -44,7 +44,7 @@ class FormMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the form handles'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the show displays'],
         ];
     }
 }

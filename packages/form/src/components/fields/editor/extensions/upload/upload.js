@@ -7,7 +7,7 @@ import {
     parseFilterRotate,
     serializeFilterRotate,
 } from "sharp-files";
-
+import { getEventsPlugin } from "./events-plugin";
 
 export const Upload = Node.create({
     name: 'upload',
@@ -93,16 +93,23 @@ export const Upload = Node.create({
         return ['x-sharp-file', HTMLAttributes];
     },
 
+    addProseMirrorPlugins() {
+        return [
+            getEventsPlugin(this.editor),
+        ]
+    },
+
     addCommands() {
         return {
-            insertUpload: attrs => ({ commands }) => {
-                return commands.insertContent({
-                    type: this.name,
-                    attrs: {
-                        file: attrs.file,
-                        isImage: attrs.file.type.match(/^image\//),
-                    },
-                });
+            insertUpload: ({ file, pos }) => ({ commands, tr }) => {
+                return commands
+                    .insertContentAt(pos ?? tr.selection, {
+                        type: this.name,
+                        attrs: {
+                            file,
+                            isImage: file.type.match(/^image\//),
+                        },
+                    });
             },
             newUpload: () => ({ editor }) => {
                 /**

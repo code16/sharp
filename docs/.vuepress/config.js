@@ -107,6 +107,7 @@ module.exports = {
                         'entity-authorizations',
                         'how-to-transform-data',
                         'link-to',
+                        'page-alerts',
                         'context',
                         'sharp-uploads',
                         'form-data-localization',

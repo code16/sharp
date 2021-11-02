@@ -7,13 +7,13 @@ This documentation is written for the EntityList case, but the API is the same f
 ## Generator
 
 ```bash
-php artisan sharp:make:list-filter <class_name> [--required,--multiple]
+php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple]
 ```
 
 ## Write the filter class
 
-First, we need to write a class which extends `Code16\Sharp\EntityList\EntityListSelectFilter`, and therefore declare
-a `values()` function. This function must return an `["id" => "label"]` array. For instance, with Eloquent:
+First, we need to write a class which extends `Code16\Sharp\EntityList\Filters\EntityListSelectFilter`, and therefore
+declare a `values()` function. This function must return an `["id" => "label"]` array. For instance, with Eloquent:
 
 ```php
 class SpaceshipTypeFilter extends EntityListSelectFilter
@@ -82,7 +82,7 @@ function getListData()
 
 First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate
 something else: allowing the user to select more than one value for a filter. To achieve this, make your filter
-extend `Code16\Sharp\EntityList\EntityListSelectMultipleFilter`.
+extend `Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter`.
 
 In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp
 will return either null, and id or an array of id, depending on the user selection):
@@ -106,7 +106,7 @@ Note that a filter can't be required AND multiple.
 
 You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data
 that meets a given time period. To implement such a filter, your filter class must
-extend `Code16\Sharp\EntityList\EntityListDateRangeFilter`.
+extend `Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter`.
 
 Then you need to adjust the query with selected range (Sharp will return an associative array of two Carbon date
 objects). In this case, with Eloquent for instance, you might add a condition like:

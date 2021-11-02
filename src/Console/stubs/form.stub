@@ -1,0 +1,37 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\Layout\FormLayout;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+
+class DummyClass extends SharpForm
+{
+    function buildFormFields(FieldsContainer $formFields): void
+    {
+        // $formFields->addField(SharpFormTextField::make("myField"))
+    }
+
+    function buildFormLayout(FormLayout $formLayout): void
+    {
+        // $formLayout->addColumn(6, function(FormLayoutColumn $column) { ... })
+    }
+
+    function find($id): array
+    {
+        // return $this->transform(...);
+    }
+
+    function update($id, array $data)
+    {
+        //
+    }
+
+    function delete($id): void
+    {
+        //
+    }
+}

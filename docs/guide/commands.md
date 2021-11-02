@@ -138,7 +138,7 @@ protected function initialData($instanceId): array
 
 Note that in both cases (Entity or Instance Command), you can access to the EntityList querystring via the request.
 
-### Configure optional confirmation text, description, form modal title
+### Configure the command (confirmation text, description, form modal title...)
 
 You can tweak this in an optional `buildCommandConfig()` function:
 
@@ -151,14 +151,26 @@ public function buildCommandConfig(): void
 }
 ```
 
+Here is the full list of available methods:
+
+- `configureConfirmationText(string $confirmationText)`: is set the Command will ask a confirmation to the user before
+  executing
+- `configureDescription(string $description)`: this text will appear under the Command label
+- `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its
+  label, or `$formModalTitle` if defined
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
+  display a dynamic message above the Form; [see detailed doc](page-alerts.md)
+
 ### Command return types
 
-Finally, let's review the return possibilities. After a Command has been executed, the code must return a "command return" to tell to the front what to do next. There are six of them:
+Finally, let's review the return possibilities. After a Command has been executed, the code must return a "command
+return" to tell to the front what to do next. There are six of them:
 
 - `return $this->info("some text")`: displays the entered text in a modal.
 - `return $this->reload()`: reload the current entity list (with context).
-- `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more than one instance.
-- `return $this->view("view.name", ["some"=>"params"])`: display a  view right in Sharp. Useful for page previews.
+- `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more
+  than one instance.
+- `return $this->view("view.name", ["some"=>"params"])`: display a view right in Sharp. Useful for page previews.
 - `return $this->link("/path/to/redirect")`: redirect to the given path
 - `return $this->download("path", "diskName")`: the browser will download the specified file.
 - `return $this->streamDownload("path", "name")`: the browser will stream the specified file.

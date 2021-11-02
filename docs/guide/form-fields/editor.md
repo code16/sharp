@@ -124,25 +124,31 @@ Set the allowed file extensions. You can pass either an array, or a comma-separa
 
 Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
-### Display embedded files in the public site (-- deprecated)
+### Display embedded files in the public site
 
-**TODO REWRITE ALL THIS**
 
-You may need to display those embedded files in the public website. The idea here is to display embedded images as thumbnails, and other files as you need. Sharp provides a helper for that:
+You may need to display those embedded files in the public website. 
+The idea here is to display embedded images as thumbnails, and other files as you need. 
+Sharp provides a component for that:
 
-`sharp_markdown_embedded_files(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])`
+```blade
+<x-sharp-content>
+    {!! $content !!}
+</x-sharp-content>
+```
 
-Where:
+To handle image thumbnails, you can pass the following props:
 
-- `$html` is the html-parsed markdown. Note that Sharp includes a markdown parser, [Parsedown](https://github.com/erusev/parsedown), but you are free to choose yours.
-- `$classNames` will be set a `class` on the `<img>` or `<div>` tag.
-  
-And for images only:
+```blade
+<x-sharp-content
+    :image-thumbnail-width="600"
+    :image-thumbnail-height="400"
+>
+    {!! $content !!}
+</x-sharp-content>
+```
 
-- `$width` and `$height` are constraints for the thumbnail.
-- `$filters` [described in this documentation](../sharp-uploads.md).
-
-This helper will make use of a special view, `public.markdown-embedded-file.blade.php`, for the render part. You can extend this view publishing it:
+You can extend `<x-sharp-file>` and `<x-sharp-image>` component by publishing them:
 
 ```
     php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
