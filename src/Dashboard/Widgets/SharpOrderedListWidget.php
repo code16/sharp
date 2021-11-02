@@ -8,6 +8,7 @@ use Code16\Sharp\Utils\Links\SharpLinkTo;
 class SharpOrderedListWidget extends SharpWidget
 {
     protected ?Closure $itemLinkBuilderClosure = null;
+    protected bool $html = false;
 
     public static function make(string $key): self
     {
@@ -21,10 +22,17 @@ class SharpOrderedListWidget extends SharpWidget
         return $this;
     }
 
+    public function setHtml(bool $html = true): self
+    {
+        $this->html = $html;
+
+        return $this;
+    }
+
     public function getItemUrl(array $item): ?string
     {
-        if($closure = $this->itemLinkBuilderClosure) {
-            if($link = $closure($item)) {
+        if ($closure = $this->itemLinkBuilderClosure) {
+            if ($link = $closure($item)) {
                 return $link instanceof SharpLinkTo
                     ? $link->renderAsUrl()
                     : $link;
@@ -38,6 +46,10 @@ class SharpOrderedListWidget extends SharpWidget
 
     public function toArray(): array
     {
-        return parent::buildArray([]);
+        return parent::buildArray(
+            [
+                "html" => $this->html,
+            ]
+        );
     }
 }
