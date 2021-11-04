@@ -131,37 +131,56 @@ You may need to display those embedded files in the public website.
 The idea here is to display embedded images as thumbnails, and other files as you need. 
 Sharp provides a component for that:
 
-```blade
+```html
 <x-sharp-content>
-    {!! $content !!}
+    {!! $html !!}
 </x-sharp-content>
 ```
 
 To handle image thumbnails, you can pass the following props:
 
-```blade
+```html
 <x-sharp-content
     :image-thumbnail-width="600"
     :image-thumbnail-height="400"
 >
-    {!! $content !!}
+    {!! $html !!}
 </x-sharp-content>
 ```
+
+#### Advanced usages
+
+To add custom attributes to `<x-sharp-image>` component you can use the following syntax:
+```html
+<x-sharp-content>
+    <x-sharp-content::attributes
+        component="sharp-image"
+        class="my-image h-auto"
+        :width="600"
+    />
+    {!! $html !!}
+</x-sharp-content>
+```
+
+#### Customize views
 
 You can extend `<x-sharp-file>` and `<x-sharp-image>` component by publishing them:
 
 ```
-    php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
 ```
 
-Here are the parameters passed to the view:
+Here are the parameters passed to the components:
 
 - `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-uploads.md))
-- `$isImage` (bool)
-- `$classNames`, `$width`, `$height`, `$filters`: whatever you passed to the helper function
+- `$width`, `$height`, `$filters`: whatever you passed as attribute
+
+#### Handle markdown
+The `<x-sharp-content>` component does not render markdown, you will have to use your own `<x-markdown>` component or helper function.
+To make sharp markup working you must enable HTML in your parser (e.g. pass `['html_input' => 'allow']` to [league/commonmark](https://commonmark.thephpleague.com/2.0/configuration/))
 
 ::: warning
-In order to make this parsing work, you have to ensure that embedded images and files are in a dedicated paragraph. This means, as we're using the Markdown norm here, that a file should have a blank row before and one after, in the text. Sharp's Markdown filed will take care of that, by default, in its formatter. 
+[cebe/markdown](https://github.com/cebe/markdown) is not compatible with sharp components
 :::
 
 ## Formatter
