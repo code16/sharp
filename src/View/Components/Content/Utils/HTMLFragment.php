@@ -17,13 +17,6 @@ class HTMLFragment extends Fragment
         $this->content = $content;
     }
 
-    public function appendDOMNode(\DOMNode $node): void
-    {
-        $html = $node->ownerDocument->saveHTML($node);
-
-        $this->content .= $html;
-    }
-
     public function getHTML(): string
     {
         return $this->content;
