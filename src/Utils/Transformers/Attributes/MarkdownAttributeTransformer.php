@@ -3,7 +3,10 @@
 namespace Code16\Sharp\Utils\Transformers\Attributes;
 
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Table\TableExtension;
+use League\CommonMark\MarkdownConverter;
 
 class MarkdownAttributeTransformer implements SharpAttributeTransformer
 {
@@ -22,12 +25,16 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
             return null;
         }
         
-        $converter = new GithubFlavoredMarkdownConverter([
+        $environment = new Environment([
             'html_input' => 'allow',
             'renderer' => [
                 'soft_break' => $this->nl2br ? "<br>" : "\n",
             ],
         ]);
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new TableExtension());
+        
+        $converter = new MarkdownConverter($environment);
         
         return $converter->convertToHtml($instance->$attribute)->getContent();
     }

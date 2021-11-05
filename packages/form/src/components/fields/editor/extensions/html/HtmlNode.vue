@@ -1,9 +1,9 @@
 <template>
     <NodeViewWrapper>
-        <div class="card editor__node" :class="{ 'shadow border-primary': selected }">
+        <div class="card editor__node html-node" :class="{ 'shadow border-primary': selected }">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col" style="min-width: 0">
                         <pre class="mb-0">{{ node.attrs.content }}</pre>
                     </div>
                     <div class="col-auto me-n2 my-n2">

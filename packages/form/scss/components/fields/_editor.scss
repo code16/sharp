@@ -112,6 +112,10 @@
       }
     }
 
+    pre {
+      overflow-wrap: anywhere;
+    }
+
     ul, ol {
       &.tight p {
         margin-bottom: 0;

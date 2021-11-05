@@ -5,6 +5,7 @@
 <script>
     import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "sharp-files";
     import File from "./nodes/File";
+    import Html from "./nodes/Html";
 
     export default {
         props: {
@@ -28,12 +29,24 @@
         computed: {
             component() {
                 return {
-                    template: `<div>${this.content}</div>`,
+                    template: `<div>${this.formattedContent}</div>`,
                     components: {
                         'x-sharp-file': File,
                         'x-sharp-image': File,
+                        'html-content': Html,
                     },
                 }
+            },
+            formattedContent() {
+                const dom = document.createElement('template');
+                dom.innerHTML = this.content;
+                dom.content.querySelectorAll('[data-html-content]').forEach(htmlNode => {
+                    const component = document.createElement('html-content');
+                    component.setAttribute('content', htmlNode.innerHTML.trim());
+                    dom.content.insertBefore(component, htmlNode);
+                    dom.content.removeChild(htmlNode);
+                });
+                return dom.innerHTML;
             },
         },
         methods: {
