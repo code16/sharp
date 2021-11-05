@@ -1,27 +1,19 @@
 <template>
     <div>
-        <template v-if="isLocalized">
-            <LocalizedEditors
-                :value="value"
-                :locale="locale"
-                :locales="locales"
-                :create-editor="createEditor"
-                v-slot="{ editor }"
-            >
-                <SharpEditor
-                    :editor="editor"
-                    v-bind="$props"
-                    @update="handleUpdate"
-                />
-            </LocalizedEditors>
-        </template>
-        <template v-else>
+        <LocalizedEditors
+            :editor="editor"
+            :value="value"
+            :locale="locale"
+            :locales="locales"
+            :create-editor="createEditor"
+            v-slot="{ editor }"
+        >
             <SharpEditor
                 :editor="editor"
                 v-bind="$props"
                 @update="handleUpdate"
             />
-        </template>
+        </LocalizedEditors>
     </div>
 </template>
 
@@ -38,8 +30,8 @@
             LocalizedEditor
         ],
         components: {
-            LocalizedEditors,
             SharpEditor,
+            LocalizedEditors,
         },
         inject: ['$form'],
         props: {

@@ -8,6 +8,7 @@
                         :editor="editor"
                         :toolbar="toolbar"
                         :disabled="readOnly"
+                        :options="toolbarOptions"
                     />
                 </template>
             </div>
@@ -49,6 +50,7 @@
             },
             maxHeight: Number,
             readOnly: Boolean,
+            toolbarOptions: Array,
         },
         data() {
             return {

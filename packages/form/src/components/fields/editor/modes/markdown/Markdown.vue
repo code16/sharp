@@ -1,27 +1,20 @@
 <template>
     <div>
-        <template v-if="isLocalized">
-            <LocalizedEditors
-                :value="value"
-                :locale="locale"
-                :locales="locales"
-                :create-editor="createEditor"
-                v-slot="{ editor }"
-            >
-                <SharpEditor
-                    :editor="editor"
-                    v-bind="$props"
-                    @update="handleUpdate"
-                />
-            </LocalizedEditors>
-        </template>
-        <template v-else>
+        <LocalizedEditors
+            :editor="editor"
+            :value="value"
+            :locale="locale"
+            :locales="locales"
+            :create-editor="createEditor"
+            v-slot="{ editor }"
+        >
             <SharpEditor
                 :editor="editor"
+                :toolbar-options="toolbarOptions(editor)"
                 v-bind="$props"
                 @update="handleUpdate"
             />
-        </template>
+        </LocalizedEditors>
     </div>
 </template>
 
@@ -32,6 +25,7 @@
     import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
     import LocalizedEditors from "../../LocalizedEditors";
+    import ListDropdown from "../../toolbar/OptionsDropdown";
 
     export default {
         mixins: [
@@ -40,6 +34,7 @@
         components: {
             SharpEditor,
             LocalizedEditors,
+            ListDropdown,
         },
         inject: ['$form'],
         props: {
@@ -74,6 +69,19 @@
             handleUpdate(editor) {
                 const content = editor.getMarkdown();
                 this.$emit('input', this.localizedValue(content));
+            },
+            toolbarOptions(editor) {
+                const options = [];
+
+                if(!this.tightListsOnly) {
+                    options.push({
+                        command: () => editor.chain().toggleTight().run(),
+                        disabled: !editor.can().toggleTight(),
+                        label: 'Toggle tight list',
+                    });
+                }
+
+                return options;
             },
 
             createEditor({ content }) {

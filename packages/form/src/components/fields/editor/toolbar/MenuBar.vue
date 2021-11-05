@@ -41,6 +41,11 @@
                     </template>
                 </div>
             </template>
+            <template v-if="options && options.length > 0">
+                <div class="btn-group">
+                    <OptionsDropdown :options="options" :editor="editor" />
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -50,11 +55,13 @@
     import { buttons } from './config';
     import LinkDropdown from "./LinkDropdown";
     import TableDropdown from "./TableDropdown";
+    import OptionsDropdown from "./OptionsDropdown";
 
     export default {
         components: {
             TableDropdown,
             LinkDropdown,
+            OptionsDropdown,
             Button,
             Dropdown,
         },
@@ -63,6 +70,7 @@
             editor: Object,
             toolbar: Array,
             disabled: Boolean,
+            options: Array,
         },
         computed: {
             toolbarGroups() {

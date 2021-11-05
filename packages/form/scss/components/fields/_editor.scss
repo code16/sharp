@@ -112,6 +112,12 @@
       }
     }
 
+    ul, ol {
+      &.tight p {
+        margin-bottom: 0;
+      }
+    }
+
     .editor__image {
       display: inline-block;
       width: auto;
@@ -142,11 +148,6 @@
         &:last-child {
           margin-bottom: 0;
         }
-      }
-    }
-    li {
-      p {
-        margin-bottom: 0;
       }
     }
 

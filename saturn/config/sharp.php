@@ -195,6 +195,13 @@ return [
             "entity" => "feature"
         ]
     ],
+    
+    "markdown_editor" => [
+        // If false, the UL tool will display a dropdown to choose between tight and normal lists
+        "tight_lists_only" => false,
+        // If false, simple carriage return will not be converted to <br> (in Sharp)
+        "nl2br" => false,
+    ],
 
     "uploads" => [
         "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
