@@ -71,6 +71,10 @@ export const Upload = Node.create({
                 default: false,
                 parseHTML: element => element.matches('x-sharp-image'),
                 renderHTML: () => null,
+            },
+            uploaded: {
+                default: false,
+                renderHTML: () => null,
             }
         }
     },

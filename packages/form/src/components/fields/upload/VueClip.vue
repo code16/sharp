@@ -249,7 +249,7 @@
                 return this.isTransformable && !this.inProgress;
             },
             hasDownload() {
-                return this.file?.status === 'exist';
+                return this.file?.status === 'exist' && !!this.value.path;
             },
         },
         methods: {

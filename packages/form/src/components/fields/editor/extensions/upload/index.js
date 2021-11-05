@@ -68,9 +68,17 @@ export function getUploadExtension({
             return this.value.files.find(file => filesEquals(attrs, file));
         },
         registerFile: attrs => {
+            if(attrs.uploaded) {
+                updateFiles([
+                    ...this.value.files,
+                    attrs,
+                ]);
+                return;
+            }
+
             state.registeredFiles.push(attrs);
 
-            if(state.created) {
+            if(state.created && attrs.path) {
                 options.restoreFile(attrs);
             }
         },

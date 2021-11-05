@@ -69,6 +69,7 @@
                     disk: attrs.disk,
                     name: attrs.name,
                     filters: attrs.filters,
+                    uploaded: attrs.uploaded,
                 };
             },
             error() {
@@ -120,6 +121,7 @@
                     disk: value.disk,
                     path: value.path,
                     file: null,
+                    uploaded: true,
                 });
                 this.extension.options.onSuccess(value);
             },

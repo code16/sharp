@@ -33,6 +33,7 @@ export const Html = Node.create({
             });
         }
     },
+
     addAttributes() {
         return {
             content: {
@@ -46,12 +47,14 @@ export const Html = Node.create({
             },
         }
     },
+
     renderHTML({ node }) {
         const parent = document.createElement('div');
         parent.setAttribute('data-html-content', 'true');
         parent.innerHTML = node.attrs.content;
         return parent;
     },
+
     parseHTML() {
         return [
             {
@@ -59,6 +62,7 @@ export const Html = Node.create({
             }
         ]
     },
+
     addCommands() {
         return {
             insertHtml: () => ({ commands }) => {
@@ -71,6 +75,7 @@ export const Html = Node.create({
             },
         }
     },
+
     addNodeView() {
         return VueNodeViewRenderer(HtmlNode);
     },
