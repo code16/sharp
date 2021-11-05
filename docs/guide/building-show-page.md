@@ -23,7 +23,9 @@ First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\S
 
 - `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields
   presenting the instance.
+
 - `find($id): array` to retrieve the instance.
+
 - `buildShowConfig()` (optional).
 
 In detail:
@@ -87,7 +89,9 @@ Notice that you have three possibilities for the actual code of this EntityList:
 
 - if you want to have a "pilots" entity in the main menu, you can reuse the same EntityList instance for the Show Page (
   and configure it to scope the data, as we'll discuss below),
+
 - or you can build a specific EntityList without declaring it in the main menu,
+
 - or you can have both, making the spaceship Show version of the  pilots EntityList extend the other.
 
 As always with Sharp, implementation is up to you.

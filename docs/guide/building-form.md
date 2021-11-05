@@ -19,8 +19,11 @@ and we'll have to implement at least 5 functions:
 
 - `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to build and configure
   the form itself,
+
 - `find($id): array` to get the instance data,
+
 - `update($id, array $data)` to update the instance,
+
 - `delete($id)` to... delete the instance.
 
 Let's see the specifics:
@@ -52,8 +55,11 @@ As we can see in this simple example, we defined two text fields giving them a m
 Every field has the optional following setters:
 
 - `setLabel(string $label)` for the field label displayed above it
+
 - `setHelpMessage(string $helpMessage)` to add a help text below the field
+
 - `setReadOnly(bool $readOnly = true)`
+
 - `setExtraStyle(string $style)`: the CSS style will be added in a `style` attribute
 
 In addition, all text fields have one more generic setter:
@@ -63,7 +69,9 @@ In addition, all text fields have one more generic setter:
 #### Conditional display
 
 The idea is to hide or show a field depending on some other field value, called "master" in this relation. To do that, use the `addConditionalDisplay(string $fieldKey, $values = true)` setter giving:
+
 - the master `$fieldKey`, which should refer to either a Check, Select, Tags or Autocomplete field,
+
 - the `$values` of the master field for which the "slave" field must be visible. You can put there a boolean for a Check master field, and for other fields (Select, Tags, Autocomplete), either:
 	- a string value, like for instance `"red"`: the slave field is visible only when the master field value is "red"
 	- a string value with a negation mark as the first char, like `"!red`": the slave field is visible only when the master field value is NOT "red"
@@ -354,9 +362,11 @@ function delete($id)
 This method, entirely optional, is the place to configure thise:
 
 - `setBreadcrumbCustomLabelAttribute(string $attribute)` to declare the attribute used by the breadcrumb (see [breadcrumb documentation](sharp-breadcrumb.md)).
+
 - `setDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show Page (
   instead of the EntityList) after the store. No existence check is done here, meaning if there is no Show Page
   configured it will end up in a 404.
+
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
   display a dynamic message above the Form; [see detailed doc](page-alerts.md)
 
