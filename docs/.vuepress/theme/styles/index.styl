@@ -30,8 +30,27 @@ code.inline {
     }
   }
 
-  h3, h4 {
+  code {
+    background-color: #f3f4f4;
+  }
+
+  h2, h3, h4 {
     code {
+      line-height: 1.75;
+      font-size .8em;
+    }
+    code:not(.full) {
+      * {
+        color: #476582!important;
+      }
+      .type-declaration {
+        color: #597fa6!important;
+      }
+      .punctuation {
+        color: #597fa6!important;
+      }
+    }
+    code.full {
       display block;
       width: calc(100% + 1rem);
       padding: 1rem;

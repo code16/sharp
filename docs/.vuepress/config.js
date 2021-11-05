@@ -174,10 +174,14 @@ module.exports = {
     markdown: {
         extendMarkdown: md => {
             md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
-                let token = tokens[idx];
-                return '<code class="inline">' +
-                    Prism.highlight(token.content, Prism.languages.php) +
-                '</code>';
+                const token = tokens[idx];
+                const highlighted = Prism.highlight(token.content, Prism.languages.php);
+                const inlineNodes = tokens.filter(token =>
+                    token.type === 'text' && token.content.trim()
+                    || token.type === 'code_inline'
+                );
+                const isFullwidth = inlineNodes.length === 1;
+                return `<code class="inline ${isFullwidth ? 'full' : ''}" v-pre>${highlighted}</code>`;
             };
         }
     },
