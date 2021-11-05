@@ -12,9 +12,9 @@ use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttribut
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -53,10 +53,12 @@ class SpaceshipSharpForm extends SharpForm
                     ->setRenderContentAsMarkdown()
                     ->setLabel("Description")
                     ->setToolbar([
-                        SharpFormEditorField::B, SharpFormEditorField::I,
+                        SharpFormEditorField::B,
+                        SharpFormEditorField::I,
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::RAW_HTML,
                         SharpFormEditorField::A,
                     ])
                     ->setCropRatio("1:1")

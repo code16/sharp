@@ -74,6 +74,7 @@ class EditorFormatter extends SharpFieldFormatter
     protected function getDomDocument(string $content): DOMDocument
     {
         return tap(new DOMDocument(), function(DOMDocument $dom) use ($content) {
+            $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
             @$dom->loadHTML("<body>$content</body>");
         });
     }
