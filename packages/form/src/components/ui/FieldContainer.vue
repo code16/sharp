@@ -143,11 +143,11 @@
             errorsLocales() {
                 return Object.entries(this.$form.errors)
                     .filter(([key, value]) => !!value)
-                    .reduce((res, [key]) => {
+                    .map(([key]) => {
                         const match = key.match(new RegExp(`^${this.mergedErrorIdentifier}\\.([^.]+)$`));
-                        const locale = match?.[1];
-                        return locale ? [...res, locale] : res;
-                    }, []);
+                        return match?.[1];
+                    })
+                    .filter(locale => locale && this.$form.locales?.includes(locale))
             },
         },
         methods: {
@@ -156,7 +156,7 @@
                 if(Array.isArray(error)) {
                     this.setError(error[0]);
                 }
-                else if(this.errorsLocales.length > 0) {
+                else if(this.fieldProps.localized && this.errorsLocales.length > 0) {
                     const locales = this.errorsLocales.join(', ').toUpperCase();
                     const message = lang('form.validation_error.localized').replace(':locales', locales);
                     this.setError(message);

@@ -14,7 +14,7 @@ entity, for which it's weird to build an Entity List.
 ## Generator
 
 ```bash
-php artisan sharp:make:show <class_name> [--model=<model_name>]
+php artisan sharp:make:show-page <class_name> [--model=<model_name>]
 ```
 
 ## Write the class
@@ -235,8 +235,14 @@ function buildShowConfig()
 }
 ```
 
-Refer [EntityState](entity-states.md) and [Breadcrumb](sharp-breadcrumb.md) documentations.
+Here is the full list of available methods:
 
+- `configureBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute)`: declare the data attribute to use for the
+  breadcrumb; [see detailed doc](sharp-breadcrumb.md)
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
+  display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
+- `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
+  toggle, [see detailed doc](entity-states.md)
 
 ## Accessing the navigation breadcrumb
 

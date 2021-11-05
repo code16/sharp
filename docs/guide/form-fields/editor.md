@@ -68,17 +68,32 @@ If true te front will send the content as markdown to the back, for storage. Def
 
 ### Embed images and files
 
-The editor field allows file embedding, with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature, add the tool in the toolbar and configure the environment (see below).
+The editor field allows file embedding, with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature,
+add the tool in the toolbar and configure the environment (see below).
 
-Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the configuration.
+Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the
+configuration.
 
 #### `setMaxFileSize(float $sizeInMB)`
 
 Max file size allowed.
 
-#### `setTransformable(bool $transformable = true)`
+#### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
 
-Allow the user to crop or rotate a visual, after the upload.
+Allow the user to crop or rotate a visual, after the upload.  
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
+stored directly in the `<x-sharp-image/>` tag. For instance:
+
+```html
+
+<x-sharp-image name="filename.jpg"
+               filter-crop="0.1495,0,0.5625,1"
+               path="data/Spaceship/10/markdown/filename.jpg"
+               disk="local">
+</x-sharp-image>
+```
+
+Then at render Sharp will take care of that for the thumbnail (see *Display embedded files in the public site* below).
 
 #### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
@@ -86,7 +101,9 @@ Set a ratio constraint to uploaded images, formatted like this: `width:height`. 
 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break animation.
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files
+extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break
+animation.
 
 #### `setStorageDisk(string $storageDisk)`
 
@@ -107,36 +124,63 @@ Set the allowed file extensions. You can pass either an array, or a comma-separa
 
 Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
-### Display embedded files in the public site (-- deprecated)
+### Display embedded files in the public site
 
-**TODO REWRITE ALL THIS**
 
-You may need to display those embedded files in the public website. The idea here is to display embedded images as thumbnails, and other files as you need. Sharp provides a helper for that:
+You may need to display those embedded files in the public website. 
+The idea here is to display embedded images as thumbnails, and other files as you need. 
+Sharp provides a component for that:
 
-`sharp_markdown_embedded_files(string $html, string $classNames, int $width = null, int $height = null, array $filters = [])`
-
-Where:
-
-- `$html` is the html-parsed markdown. Note that Sharp includes a markdown parser, [Parsedown](https://github.com/erusev/parsedown), but you are free to choose yours.
-- `$classNames` will be set a `class` on the `<img>` or `<div>` tag.
-  
-And for images only:
-- `$width` and `$height` are constraints for the thumbnail.
-- `$filters` [described in this documentation](../sharp-built-in-solution-for-uploads.md).
-
-This helper will make use of a special view, `public.markdown-embedded-file.blade.php`, for the render part. You can extend this view publishing it:
-
-```
-    php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+```html
+<x-sharp-content>
+    {!! $html !!}
+</x-sharp-content>
 ```
 
-Here are the parameters passed to the view:
-- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-built-in-solution-for-uploads.md))
-- `$isImage` (bool)
-- `$classNames`, `$width`, `$height`, `$filters`: whatever you passed to the helper function
+To handle image thumbnails, you can pass the following props:
+
+```html
+<x-sharp-content
+    :image-thumbnail-width="600"
+    :image-thumbnail-height="400"
+>
+    {!! $html !!}
+</x-sharp-content>
+```
+
+#### Advanced usages
+
+To add custom attributes to `<x-sharp-image>` component you can use the following syntax:
+```html
+<x-sharp-content>
+    <x-sharp-content::attributes
+        component="sharp-image"
+        class="my-image h-auto"
+        :width="600"
+    />
+    {!! $html !!}
+</x-sharp-content>
+```
+
+#### Customize views
+
+You can extend `<x-sharp-file>` and `<x-sharp-image>` component by publishing them:
+
+```
+php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+```
+
+Here are the parameters passed to the components:
+
+- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-uploads.md))
+- `$width`, `$height`, `$filters`: whatever you passed as attribute
+
+#### Handle markdown
+The `<x-sharp-content>` component does not render markdown, you will have to use your own `<x-markdown>` component or helper function.
+To make sharp markup working you must enable HTML in your parser (e.g. pass `['html_input' => 'allow']` to [league/commonmark](https://commonmark.thephpleague.com/2.0/configuration/))
 
 ::: warning
-In order to make this parsing work, you have to ensure that embedded images and files are in a dedicated paragraph. This means, as we're using the Markdown norm here, that a file should have a blank row before and one after, in the text. Sharp's Markdown filed will take care of that, by default, in its formatter. 
+[cebe/markdown](https://github.com/cebe/markdown) is not compatible with sharp components
 :::
 
 ## Formatter

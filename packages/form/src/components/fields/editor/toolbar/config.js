@@ -1,6 +1,5 @@
 import { lang } from "sharp";
-import { getToolbarIcon } from '../../../../util/icons';
-import { getMarkRange, getMarkType } from "@tiptap/core";
+import { getToolbarIcon } from '../util/icons';
 
 
 export const buttons = {
@@ -15,6 +14,12 @@ export const buttons = {
         isActive: editor => editor.isActive('italic'),
         icon: getToolbarIcon('italic'),
         label: lang('form.editor.toolbar.italic.title'),
+    },
+    'highlight': {
+        command: editor => editor.chain().focus().toggleHighlight().run(),
+        isActive: editor => editor.isActive('highlight'),
+        icon: getToolbarIcon('highlight'),
+        label: lang('form.editor.toolbar.highlight.title'),
     },
     'heading-1': {
         command: editor => editor.chain().focus().toggleHeading({ level: 1 }).run(),

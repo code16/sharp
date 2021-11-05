@@ -3,9 +3,10 @@ import { Plugin } from 'prosemirror-state';
 import { DOMParser, Schema } from 'prosemirror-model';
 
 export const Paste = Extension.create({
-    defaultOptions: {
+    name: 'paste',
+    addOptions: () => ({
         schema: null,
-    },
+    }),
     addProseMirrorPlugins() {
         const schema = getNormalizedSchema(
             this.options.schema,
