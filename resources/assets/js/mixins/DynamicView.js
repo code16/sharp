@@ -1,3 +1,4 @@
+import { preloadConfig } from "../api";
 import { handleNotifications } from "../util/notifications";
 
 export const withAxiosInterceptors = {
@@ -45,7 +46,8 @@ export default {
     methods: {
         get() {
             return this.axiosInstance.get(this.apiPath, {
-                    params: this.apiParams
+                    ...this.preload ? preloadConfig : null,
+                    params: this.apiParams,
                 })
                 .then(response => {
                     this.mount(response.data);

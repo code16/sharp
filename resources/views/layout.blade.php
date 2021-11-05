@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
 
+    @stack('head')
+
     <x-sharp::root-styles />
 
     <x-sharp::extensions.injected-assets />

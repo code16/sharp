@@ -3,6 +3,7 @@ import cookies from 'axios/lib/helpers/cookies';
 import { API_PATH } from "../consts";
 import paramsSerializer from './paramsSerializer';
 import { installInterceptors } from "./interceptors";
+import { getPreloadConfig } from "./preload";
 
 export const api = createApi();
 
@@ -26,4 +27,6 @@ export function getXsrfToken() {
     return cookies.read('XSRF-TOKEN');
 }
 
+export const preloadConfig = getPreloadConfig(api);
 export { handleErrorAlert, getErrorMessage } from './errors';
+

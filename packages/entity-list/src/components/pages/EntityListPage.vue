@@ -5,6 +5,7 @@
                 <!-- Action bar is defined inside entity list component -->
                 <EntityList
                     :entity-key="entityKey"
+                    preload
                     module="entity-list"
                     @error="handleError"
                 >

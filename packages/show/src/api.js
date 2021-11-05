@@ -1,7 +1,8 @@
-import { api, apiUrl } from 'sharp';
+import { api } from 'sharp';
+import { preloadConfig } from 'sharp/api';
 
 export function getShowView({ entityKey, instanceId }) {
-    return api.get(`show/${entityKey}/${instanceId || ''}`)
+    return api.get(`show/${entityKey}/${instanceId || ''}`, preloadConfig)
         .then(response => response.data);
 }
 

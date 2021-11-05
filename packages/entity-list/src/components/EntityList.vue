@@ -176,6 +176,7 @@
                 default: true,
             },
             focusedItem: Number,
+            preload: Boolean,
         },
         data() {
             return {
