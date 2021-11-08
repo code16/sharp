@@ -2,6 +2,7 @@
     <div>
         <template v-if="editor">
             <slot :editor="editor" />
+            <input type="hidden" :name="name" :value="value && value.text">
         </template>
         <template v-else>
             <template v-for="locale in locales">
@@ -22,6 +23,7 @@
         },
         props: {
             editor: Object,
+            name: String,
             value: Object,
             locales: Array,
             locale: String,

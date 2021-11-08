@@ -1,8 +1,9 @@
-import Vue from 'vue';
 
 export default {
     inject: {
-        $form: { default:()=>new Vue() }
+        $form: {
+            default:() => ({})
+        },
     },
     props: {
         locale: String,

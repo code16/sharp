@@ -1,0 +1,28 @@
+{
+    "private": true,
+    "name": "tests-e2e",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "cy:open": "cypress open",
+        "cy:open-ct": "cypress open-ct",
+        "cy:run": "cypress run",
+        "cy:run-ct": "cypress run-ct"
+    },
+    "devDependencies": {
+        "@cypress/vue": "^2.2.3",
+        "@cypress/webpack-dev-server": "^1.7.0",
+        "@vue/cli-plugin-babel": "~4.5.15",
+        "@vue/cli-service": "~4.5.15",
+        "cache-loader": "^4.1.0",
+        "cypress": "^8.7.0",
+        "cypress-dotenv": "^2.0.0",
+        "dotenv": "^10.0.0",
+        "vue-loader": "^15.9.8",
+        "vue-template-compiler": "^2.6.14",
+        "webpack": "^4.46.0"
+    },
+    "author": "",
+    "license": "ISC"
+}
