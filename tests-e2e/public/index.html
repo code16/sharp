@@ -18,6 +18,10 @@
     </head>
     <body>
         <div class="p-3" id="__cy_root"></div>
-        <script>window.i18n = {}</script>
+        <script>
+            window.i18n = new Proxy({}, {
+                get: (_, key) => key,
+            });
+        </script>
     </body>
 </html>

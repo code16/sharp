@@ -5,14 +5,13 @@
   "viewportHeight": 1200,
   "chromeWebSecurity": false,
   "video": false,
-  "scrollBehavior": "center",
   "retries": {
     "runMode": 1,
     "openMode": 1
   },
   "component": {
     "componentFolder": "cypress/components",
-    "testFiles": "**/*.*",
+    "testFiles": "**/*.spec.js",
     "viewportWidth": 1000,
     "viewportHeight": 600,
     "retries": {

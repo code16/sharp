@@ -49,6 +49,7 @@
     "docs:dev": "cd docs && npm run dev",
     "docs:build": "cd docs && npm run build",
     "test": "jest",
+    "cy:open-ct": "cd tests-e2e && npm run cy:open-ct",
     "update:tiptap": "npm update @tiptap/core @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/extension-highlight @tiptap/starter-kit @tiptap/vue-2"
   },
   "devDependencies": {
