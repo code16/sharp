@@ -58,7 +58,7 @@ describe('toolbar', () => {
   it('italic', testMark('italic', '<em>'));
   it('highlight', testMark('highlight', '<mark>'));
 
-  it('link', () => {
+  it.skip('link', () => {
     mountEditor();
     toolbarButton('link').click()
   });
@@ -71,7 +71,7 @@ describe('toolbar', () => {
   it('ordered-list', testNode('ordered-list', '<ol>'));
   it('blockquote', testNode('blockquote', '<blockquote>'));
 
-  it('table', () => {
+  it.skip('table', () => {
     mountEditor();
     toolbarButton('table').click()
   });
