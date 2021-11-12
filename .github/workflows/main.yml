@@ -2,10 +2,11 @@ name: Tests
 on:
   push:
     branches:
-      - master
+      - main
+      - next
   pull_request:
     branches:
-      - master
+      - main
       - next
 jobs:
 
@@ -92,8 +93,8 @@ jobs:
 
   slack:
     needs:
-#      - laravel-tests
-#      - front-tests
+      - laravel-tests
+      - front-tests
       - e2e-tests
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
