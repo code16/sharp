@@ -60,6 +60,17 @@ return [
     'editor.dialogs.raw_html.insert_title' => 'Insert HTML',
     'editor.dialogs.raw_html.edit_title' => 'Edit HTML',
     
+    'editor.dropdown.table.insert_table' => 'Insert table',
+    'editor.dropdown.table.insert_row_above' => 'Insert row above',
+    'editor.dropdown.table.insert_row_below' => 'Insert row below',
+    'editor.dropdown.table.remove_row' => 'Remove row',
+    'editor.dropdown.table.insert_col_left' => 'Insert column to the left',
+    'editor.dropdown.table.insert_col_right' => 'Insert column to the right',
+    'editor.dropdown.table.remove_col' => 'Remove column',
+    'editor.dropdown.table.remove_table' => 'Remove table',
+    
+    'editor.dropdown.options.toggle_tight_list' => 'Toggle tight list',
+    
     'editor.toolbar.bold.title' => 'Bold',
     'editor.toolbar.italic.title' => 'Italic',
     'editor.toolbar.strikethrough.title' => 'Strike through',

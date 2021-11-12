@@ -27,6 +27,7 @@
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
     import LocalizedEditors from "../../LocalizedEditors";
     import ListDropdown from "../../toolbar/OptionsDropdown";
+    import { lang } from "sharp";
 
     export default {
         mixins: [
@@ -79,7 +80,7 @@
                     options.push({
                         command: () => editor.chain().toggleTight().run(),
                         disabled: !editor.can().toggleTight(),
-                        label: 'Toggle tight list',
+                        label: lang('form.editor.dropdown.options.toggle_tight_list'),
                     });
                 }
 

@@ -60,6 +60,17 @@ return [
     
     'editor.dialogs.raw_html.insert_title' => 'Insérez du contenu HTML',
     'editor.dialogs.raw_html.edit_title' => 'Modifier du contenu HTML',
+    
+    'editor.dropdown.table.insert_table' => 'Insérer un tableau',
+    'editor.dropdown.table.insert_row_above' => 'Insérer une ligne au-dessus',
+    'editor.dropdown.table.insert_row_below' => 'Insérer une ligne au-dessous',
+    'editor.dropdown.table.remove_row' => 'Supprimer la ligne',
+    'editor.dropdown.table.insert_col_left' => 'Insérer une colonne à gauche',
+    'editor.dropdown.table.insert_col_right' => 'Insérer une colonne à droite',
+    'editor.dropdown.table.remove_col' => 'Supprimer la colonne',
+    'editor.dropdown.table.remove_table' => 'Supprimer le tableau',
+    
+    'editor.dropdown.options.toggle_tight_list' => 'Changer l’espacement de la liste',
 
     'editor.toolbar.bold.title' => 'Gras',
     'editor.toolbar.italic.title' => 'Italique',
