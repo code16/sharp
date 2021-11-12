@@ -16,6 +16,8 @@ class SpaceshipPreview extends InstanceCommand
     {
         $spaceship = Spaceship::findOrFail($instanceId);
 
-        return $this->view("sharp.spaceship-preview", compact('spaceship'));
+        return $this->view('pages.spaceships.spaceship', [
+            'spaceship' => $spaceship,
+        ]);
     }
 }
