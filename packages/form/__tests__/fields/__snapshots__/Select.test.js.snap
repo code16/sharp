@@ -24,10 +24,10 @@ exports[`select-field can mount "read only" Select field as checkboxes list 1`] 
 		<div class="SharpSelect__links mt-3">
 			<div class="row gx-3">
 				<div class="col-auto">
-					<a href="#"></a>
+					<a href="#">form.select.select_all</a>
 				</div>
 				<div class="col-auto">
-					<a href="#"></a>
+					<a href="#">form.select.unselect_all</a>
 				</div>
 			</div>
 		</div>
@@ -125,10 +125,10 @@ exports[`select-field can mount Select field as checkboxes list 1`] = `
 		<div class="SharpSelect__links mt-3">
 			<div class="row gx-3">
 				<div class="col-auto">
-					<a href="#"></a>
+					<a href="#">form.select.select_all</a>
 				</div>
 				<div class="col-auto">
-					<a href="#"></a>
+					<a href="#">form.select.unselect_all</a>
 				</div>
 			</div>
 		</div>
