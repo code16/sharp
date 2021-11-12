@@ -10,7 +10,7 @@ on:
       - next
 jobs:
 
- Unit tests back (phpunit)
+  # Unit tests back (phpunit)
   laravel-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -46,7 +46,7 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: ./vendor/bin/phpunit
 
-   Front unit tests
+  #  Front unit tests
   front-tests:
     runs-on: ubuntu-latest
     steps:
