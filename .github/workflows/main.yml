@@ -88,7 +88,10 @@ jobs:
           path: tests-e2e/cypress/screenshots
 
   slack:
-    needs: [laravel-tests, front-tests, e2e-tests]
+    needs:
+#      - laravel-tests
+#      - front-tests
+      - e2e-tests
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
