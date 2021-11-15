@@ -74,6 +74,23 @@ add the tool in the toolbar and configure the environment (see below).
 Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the
 configuration.
 
+When inserting a file, the following tag is added in field text value:
+```html
+<x-sharp-file 
+    name="filename.pdf"
+    path="data/Spaceship/10/markdown/filename.pdf"
+    disk="local">
+</x-sharp-file>
+```
+In case of an image the inserted tag is:
+```html
+<x-sharp-image
+    name="filename.jpg"
+    path="data/Spaceship/10/markdown/filename.jpg"
+    disk="local">
+</x-sharp-image>
+```
+
 #### `setMaxFileSize(float $sizeInMB)`
 
 Max file size allowed.
@@ -86,10 +103,11 @@ stored directly in the `<x-sharp-image/>` tag. For instance:
 
 ```html
 
-<x-sharp-image name="filename.jpg"
-               filter-crop="0.1495,0,0.5625,1"
-               path="data/Spaceship/10/markdown/filename.jpg"
-               disk="local">
+<x-sharp-image 
+    name="filename.jpg"
+    filter-crop="0.1495,0,0.5625,1"
+    path="data/Spaceship/10/markdown/filename.jpg"
+    disk="local">
 </x-sharp-image>
 ```
 
@@ -148,6 +166,12 @@ To handle image thumbnails, you can pass the following props:
 </x-sharp-content>
 ```
 
+::: warning
+`<x-sharp-content>` cannot contain complex structure of elements. 
+The simple usage is to output `{!! $html !!}` as direct child. 
+However, for composition purpose the HTML can be wrapped by a `<div>{!! $html !!}</div>`.
+:::
+
 #### Advanced usages
 
 To add custom attributes to `<x-sharp-image>` component you can use the following syntax:
@@ -164,7 +188,7 @@ To add custom attributes to `<x-sharp-image>` component you can use the followin
 
 #### Customize views
 
-You can extend `<x-sharp-file>` and `<x-sharp-image>` component by publishing them:
+You can extend `<x-sharp-file>` and `<x-sharp-image>` components by publishing them:
 
 ```
 php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
