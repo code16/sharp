@@ -18,7 +18,7 @@ const {
     DOCS_ALGOLIA_TAG = 'v7'
 } = process.env;
 
-const DOCS_HOME_URL = DOCS_MAIN_URL || '/';
+const DOCS_HOME_URL = DOCS_MAIN_URL === APP_URL ? '/' : DOCS_MAIN_URL;
 
 module.exports = {
     title: APP_NAME,
