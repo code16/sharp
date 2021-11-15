@@ -27,7 +27,10 @@
             },
             init() {
                 const siteName = this.$el.querySelector('.site-name');
-                siteName.innerHTML = siteName.innerHTML.replace(/(\d)/, '<span class="version">$1</span>');
+                const match = siteName.innerHTML.match(/(Sharp )(.+)/i);
+                if(match) {
+                    siteName.innerHTML = `${match[1]}<span class="version">${match[2]}</span>`
+                }
             },
         },
         mounted() {
