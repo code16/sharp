@@ -151,7 +151,6 @@ class SpaceshipSharpForm extends SharpForm
                     ->setFileFilterImages()
                     ->shouldOptimizeImage()
                     ->setTransformable()
-//                    ->setCroppable(false)
                     ->setCropRatio("1:1")
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/Spaceship/{id}")
