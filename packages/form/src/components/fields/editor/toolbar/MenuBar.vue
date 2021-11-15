@@ -14,7 +14,7 @@
                                 @submit="handleLinkSubmitted"
                                 @remove="handleRemoveLinkClicked"
                             >
-                                <i :class="getIcon(button)"></i>
+                                <i :class="getIcon(button)" data-test="link"></i>
                             </LinkDropdown>
                         </template>
                         <template v-else-if="button === 'table'">
@@ -23,7 +23,7 @@
                                 :disabled="disabled"
                                 :editor="editor"
                             >
-                                <i :class="getIcon(button)"></i>
+                                <i :class="getIcon(button)" data-test="table"></i>
                             </TableDropdown>
                         </template>
                         <template v-else>
@@ -33,6 +33,7 @@
                                 :disabled="disabled"
                                 :title="buttonTitle(button)"
                                 @click="handleClicked(button)"
+                                :data-test="button"
                                 :key="button"
                             >
                                 <i :class="getIcon(button)"></i>

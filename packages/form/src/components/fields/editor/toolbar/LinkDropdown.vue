@@ -20,14 +20,14 @@
                         type="button"
                         @click="handleCancelClicked"
                     >
-                        <span class="visually-hidden">{{ lang('modals.cancel_button') }}</span>
+                        <span class="visually-hidden">{{ lang('modals.cancel_button', 'Cancel') }}</span>
                     </button>
                 </template>
 
                 <template v-if="hasLabelInput">
                     <div class="mb-3">
                         <label class="form-label" :for="fieldId('label')">
-                            {{ lang('form.editor.dialogs.link.text_label') }}
+                            {{ lang('form.editor.dialogs.link.text_label', 'Text') }}
                         </label>
                         <TextInput :id="fieldId('label')" v-model="label" />
                     </div>
@@ -35,7 +35,7 @@
 
                 <div class="mb-3">
                     <label class="form-label" :for="fieldId('href')">
-                        {{ lang('form.editor.dialogs.link.url_label') }}
+                        {{ lang('form.editor.dialogs.link.url_label', 'URL') }}
                     </label>
                     <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
@@ -45,22 +45,22 @@
                         <div class="col-auto">
                             <Button type="submit" small variant="primary">
                                 <template v-if="isEdit">
-                                    {{ lang('form.editor.dialogs.link.update_button') }}
+                                    {{ lang('form.editor.dialogs.link.update_button', 'Update') }}
                                 </template>
                                 <template v-else>
-                                    {{ lang('form.editor.dialogs.link.insert_button') }}
+                                    {{ lang('form.editor.dialogs.link.insert_button', 'Insert link') }}
                                 </template>
                             </Button>
                         </div>
                         <div class="col-auto">
                             <template v-if="isEdit">
                                 <Button type="button" small variant="danger" outline @click="handleRemoveClicked">
-                                    {{ lang('form.editor.dialogs.link.remove_button') }}
+                                    {{ lang('form.editor.dialogs.link.remove_button', 'Remove link') }}
                                 </Button>
                             </template>
                             <template v-else>
                                 <Button type="button" small variant="light" @click="handleCancelClicked">
-                                    {{ lang('modals.cancel_button') }}
+                                    {{ lang('modals.cancel_button', 'Cancel') }}
                                 </Button>
                             </template>
                         </div>

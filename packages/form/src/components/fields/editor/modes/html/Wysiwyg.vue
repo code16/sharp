@@ -2,6 +2,7 @@
     <div>
         <LocalizedEditors
             :editor="editor"
+            :name="uniqueIdentifier"
             :value="value"
             :locale="locale"
             :locales="locales"
