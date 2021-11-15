@@ -177,7 +177,14 @@ Here are the parameters passed to the components:
 
 #### Handle markdown
 The `<x-sharp-content>` component does not render markdown, you will have to use your own `<x-markdown>` component or helper function.
-To make sharp markup working you must enable HTML in your parser (e.g. pass `['html_input' => 'allow']` to [league/commonmark](https://commonmark.thephpleague.com/2.0/configuration/))
+To make `<x-sharp-*>` elements working you must enable HTML in your parser 
+(e.g. pass `['html_input' => 'allow']` to [league/commonmark](https://commonmark.thephpleague.com/2.0/configuration/))
+
+Example:
+- [Blade view file](https://github.com/code16/sharp/blob/e387562698a2908f0f575cc5fd96705b9b78e078/saturn/resources/views/pages/spaceships/spaceship.blade.php)
+  with `<x-markdown>` usage
+- [`Markdown` component](https://github.com/code16/sharp/blob/e387562698a2908f0f575cc5fd96705b9b78e078/saturn/app/View/Components/Markdown.php)
+  using league/commonmark  
 
 ::: warning
 [cebe/markdown](https://github.com/cebe/markdown) is not compatible with sharp components
