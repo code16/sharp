@@ -1,12 +1,6 @@
 ---
-home: true
-heroImage: /img/logo.png
-heroText: null
-actionText: Get Started →
-actionLink: /guide/
-tagline: The Content Management Framework for Laravel
-footer: Code 16 — 2021
-pageClass: home-page
+home: true heroImage: /img/sharp-logo.png heroText: null actionText: Get Started → actionLink: /guide/ tagline: The
+Content Management Framework for Laravel footer: Code 16 — 2021 pageClass: home-page
 ---
 
 Sharp is not a CMS: it's a content management framework, a toolset which provides help to build a CMS section in a website, with some rules in mind:
