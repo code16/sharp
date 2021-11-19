@@ -1,5 +1,5 @@
 ---
-home: true heroImage: /img/sharp-logo.png heroText: null actionText: Get Started → actionLink: /guide/ tagline: The
+home: true heroImage: /img/sharplogo.png heroText: null actionText: Get Started → actionLink: /guide/ tagline: The
 Content Management Framework for Laravel footer: Code 16 — 2021 pageClass: home-page
 ---
 
