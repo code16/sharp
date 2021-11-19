@@ -17,7 +17,7 @@ Sharp intends to provide a clean solution to the following needs:
 - handle authorizations and validation;
 - all without write a line of front code, and using a clean API in the PHP app.
 
-Sharp needs Laravel 7+ and PHP 7.4.0+.
+Sharp needs Laravel 8+ and PHP 8.0+.
 
 ## Documentation
 
