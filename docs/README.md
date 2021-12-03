@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /img/logo.png
+heroImage: /img/sharplogo.png
 heroText: null
 actionText: Get Started →
 actionLink: /guide/
