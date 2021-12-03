@@ -40,14 +40,16 @@
             },
         },
         created() {
-            this.localizedEditors = Object.fromEntries(
-                this.locales.map(locale => [
-                    locale,
-                    this.createEditor({
-                        content: this.value?.text?.[locale] ?? null,
-                    }),
-                ])
-            );
+            if(!this.editor && this.locales) {
+                this.localizedEditors = Object.fromEntries(
+                    this.locales.map(locale => [
+                        locale,
+                        this.createEditor({
+                            content: this.value?.text?.[locale] ?? null,
+                        }),
+                    ])
+                );
+            }
         },
         beforeDestroy() {
             Object.values(this.localizedEditors).forEach(editor => {
