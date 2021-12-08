@@ -1,3 +1,9 @@
+/**
+ * trim empty paragraphs at the end
+ */
+export function trimHTML(content) {
+    return content.replace(/(<p>\s*<\/p>)+$/, '');
+}
 
 /**
  * normalize HTML coming from legacy Trix output

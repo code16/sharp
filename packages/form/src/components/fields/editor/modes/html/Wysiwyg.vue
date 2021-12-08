@@ -23,7 +23,7 @@
     import SharpEditor from '../../Editor';
     import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../..";
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";
-    import { normalizeHTML } from "./util";
+    import { normalizeHTML, trimHTML } from "./util";
     import LocalizedEditors from "../../LocalizedEditors";
 
     export default {
@@ -63,7 +63,7 @@
         },
         methods: {
             handleUpdate(editor) {
-                const content = editor.getHTML();
+                const content = trimHTML(editor.getHTML());
                 this.$emit('input', this.localizedValue(content));
             },
 
