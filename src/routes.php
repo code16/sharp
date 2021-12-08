@@ -123,7 +123,7 @@ Route::group([
     Route::get('/', [HomeController::class, "index"])
         ->name("code16.sharp.home");
 
-    Route::get('/logout', [LoginController::class, "destroy"])
+    Route::post('/logout', [LoginController::class, "destroy"])
         ->name("code16.sharp.logout");
 
     Route::get('/s-list/{entityKey}', [ListController::class, "show"])
