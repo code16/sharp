@@ -1,6 +1,14 @@
 
 export function lang(key, defaultLabel) {
-    return window.i18n?.[key]
-        ?? defaultLabel
-        ?? key;
+    const message = window.i18n?.[key];
+
+    if(message) {
+        return message;
+    }
+
+    if(defaultLabel !== undefined) {
+        return defaultLabel;
+    }
+
+    return key;
 }
