@@ -292,5 +292,5 @@ abstract class SharpEntityList
     /**
      * Build list config
      */
-    abstract protected function buildListConfig(): void;
+    abstract public function buildListConfig(): void;
 }
