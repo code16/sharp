@@ -20,14 +20,20 @@
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>
-            <div class="row gx-2 flex-nowrap">
+            <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
                     <div class="text-truncate" title="{{ $username }}">
                         {{ $username }}
                     </div>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fas fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
+                    <form action="{{ route('code16.sharp.logout') }}" method="post">
+                        @csrf
+                        <button class="btn btn-link p-2 m-n2 lh-1 d-block" type="submit">
+                            <span class="visually-hidden">{{ __('sharp::menu.logout_label') }}</span>
+                            <i class="fas fa-fw fa-sign-out-alt"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </sharp-nav-item>
