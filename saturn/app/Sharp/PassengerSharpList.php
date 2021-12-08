@@ -6,7 +6,6 @@ use App\Passenger;
 use App\Sharp\Filters\PassengerBirthdateFilter;
 use App\Sharp\Filters\PassengerTravelFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -20,6 +19,7 @@ class PassengerSharpList extends SharpEntityList
             ->addField(
                 EntityListField::make("name")
                     ->setSortable()
+                    ->setHtml(false)
                     ->setLabel("Name")
             )
             ->addField(
