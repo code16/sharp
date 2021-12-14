@@ -74,6 +74,8 @@ return [
     'editor.toolbar.bold.title' => 'Bold',
     'editor.toolbar.italic.title' => 'Italic',
     'editor.toolbar.strikethrough.title' => 'Strike through',
+    'editor.toolbar.highlight.title' => 'Highlight',
+    'editor.toolbar.small.title' => 'Small text',
     'editor.toolbar.heading_1.title' => 'Heading 1',
     'editor.toolbar.heading_2.title' => 'Heading 2',
     'editor.toolbar.heading_3.title' => 'Heading 3',

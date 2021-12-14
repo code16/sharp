@@ -75,6 +75,8 @@ return [
     'editor.toolbar.bold.title' => 'Gras',
     'editor.toolbar.italic.title' => 'Italique',
     'editor.toolbar.strikethrough.title' => 'Barré',
+    'editor.toolbar.highlight.title' => 'Surligner',
+    'editor.toolbar.small.title' => 'Texte plus petit',
     'editor.toolbar.heading_1.title' => 'Titre 1',
     'editor.toolbar.heading_2.title' => 'Titre 2',
     'editor.toolbar.heading_3.title' => 'Titre 3',

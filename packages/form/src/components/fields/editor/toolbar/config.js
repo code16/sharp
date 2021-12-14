@@ -21,6 +21,12 @@ export const buttons = {
         icon: getToolbarIcon('highlight'),
         label: lang('form.editor.toolbar.highlight.title'),
     },
+    'small': {
+        command: editor => editor.chain().focus().toggleSmall().run(),
+        isActive: editor => editor.isActive('small'),
+        icon: getToolbarIcon('small'),
+        label: lang('form.editor.toolbar.small.title'),
+    },
     'heading-1': {
         command: editor => editor.chain().focus().toggleHeading({ level: 1 }).run(),
         isActive: editor => editor.isActive('heading', { level: 1 }),

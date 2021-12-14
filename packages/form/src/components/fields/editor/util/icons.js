@@ -6,6 +6,7 @@ const toolbarIcons = {
     'strike': 'fas fa-strikethrough',
     'link': 'fas fa-link',
     'highlight': 'fas fa-highlighter',
+    'small': 'fas fa-font',
     'h1': 'fas fa-heading',
     'h2': 'fas fa-heading fa-sm',
     'h3': 'fas fa-heading fa-xs',

@@ -11,9 +11,7 @@
         ref="dropdown"
     >
         <template v-slot:button-content>
-            <span class="d-inline-block">
-                <slot name="text">{{ text }}</slot>
-            </span>
+            <slot name="text">{{ text }}</slot>
         </template>
 
         <slot :hide="hide" />

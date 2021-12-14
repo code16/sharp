@@ -1,23 +1,22 @@
 import { getExtensionField, getSchema } from "@tiptap/core";
-import Heading from "@tiptap/extension-heading";
-import Link from "@tiptap/extension-link";
-import Image from "@tiptap/extension-image";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
-import Table from "@tiptap/extension-table";
-import TableRow from "@tiptap/extension-table-row";
-import TableHeader from "@tiptap/extension-table-header";
-import TableCell from "@tiptap/extension-table-cell";
-import Highlight from "@tiptap/extension-highlight";
+import { Heading } from "@tiptap/extension-heading";
+import { Link } from "@tiptap/extension-link";
+import { Image } from "@tiptap/extension-image";
+import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { Table } from "@tiptap/extension-table";
+import { TableRow } from "@tiptap/extension-table-row";
+import { TableHeader } from "@tiptap/extension-table-header";
+import { TableCell } from "@tiptap/extension-table-cell";
+import { Highlight } from "@tiptap/extension-highlight";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
 import { Iframe } from "./iframe";
 import { Paste } from "./paste";
+import { Small } from "./small";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
-import { disablePasteRules } from "../util/extensions";
-
 
 function getHeadingExtension(toolbar) {
     if(!toolbar) {
@@ -86,6 +85,12 @@ function getHighlightExtension(toolbar) {
     }
 }
 
+function getSmallExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'small')) {
+        return Small;
+    }
+}
+
 function getPasteExtension(toolbar) {
     const extensions = getToolbarExtensions(toolbar);
     const schema = getSchema(extensions);
@@ -129,13 +134,12 @@ function getToolbarExtensions(toolbar) {
         getHorizontalRuleExtension(toolbar),
         getTableExtensions(toolbar),
         getHighlightExtension(toolbar),
+        getSmallExtension(toolbar),
         getIframeExtension(toolbar),
     ];
-
     return extensions
         .flat()
-        .filter(extension => !!extension)
-        .map(extension => disablePasteRules(extension));
+        .filter(extension => !!extension);
 }
 
 export function getDefaultExtensions({ placeholder, toolbar } = {}) {

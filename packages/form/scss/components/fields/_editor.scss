@@ -190,18 +190,10 @@
   &__toolbar {
     // upload
     .fa-paperclip {
-      -webkit-text-stroke: .03em $ui-03;
-      &:hover {
-        -webkit-text-stroke-color: $light;
-      }
+      -webkit-text-stroke: .03em var(--bs-light);
       &::before {
         display: inline-block;
-        transform: rotate(-45deg);
-        font-size: 1.2em;
-      }
-      &.btn {
-        padding-top: calc(#{$btn-padding-y} - .12em);
-        padding-bottom: calc(#{$btn-padding-y} - .12em);
+        transform: scale(1.2) rotate(-45deg);
       }
     }
 
@@ -213,8 +205,8 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      padding: .5rem .75rem;
-      line-height: 1.2;
+      padding: .625rem .75rem;
+      line-height: 1;
     }
 
     .fa-sm {

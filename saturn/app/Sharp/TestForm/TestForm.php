@@ -116,7 +116,9 @@ class TestForm extends SharpSingleForm
                     ->setLocalized()
                     ->setLabel("Markdown")
                     ->setToolbar([
-                        SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
+                        SharpFormEditorField::B,
+                        SharpFormEditorField::I,
+                        SharpFormEditorField::A,
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::H1,
                         SharpFormEditorField::H2,
@@ -134,6 +136,7 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::RAW_HTML,
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::HIGHLIGHT,
+                        SharpFormEditorField::SMALL,
                     ])
                     ->setCropRatio("1:1")
                     ->setHeight(350)

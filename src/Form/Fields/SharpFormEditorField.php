@@ -18,6 +18,7 @@ class SharpFormEditorField extends SharpFormField
     const B = "bold";
     const I = "italic";
     const HIGHLIGHT = "highlight";
+    const SMALL = "small";
     const UL = "bullet-list";
     const OL = "ordered-list";
     const SEPARATOR = "|";

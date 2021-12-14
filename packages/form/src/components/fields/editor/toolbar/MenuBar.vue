@@ -37,6 +37,9 @@
                                 :key="button"
                             >
                                 <i :class="getIcon(button)"></i>
+                                <template v-if="button === 'small'">
+                                    <i class="fas fa-font fa-xs" style="margin-top: .25em"></i>
+                                </template>
                             </Button>
                         </template>
                     </template>
