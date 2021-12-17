@@ -23,7 +23,7 @@ class SharpEntityManager
             {
                 parent::__construct($entityKey);
                 $this->entity = $entity;
-                $this->label = $this->entity["label"];
+                $this->label = $this->entity["label"] ?? "Entity";
                 $this->isSingle = $this->entity["single"] ?? false;
                 $this->list = $this->entity["list"] ?? null;
                 $this->show = $this->entity["show"] ?? null;

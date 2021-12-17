@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 
@@ -57,10 +56,10 @@ class FormController extends ApiController
     {
         sharp_check_ability("update", $entityKey, $instanceId);
 
-        $this->validateRequest($entityKey);
-
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
+        
+        $form->validateRequest($entityKey);
         
         $form->updateInstance($instanceId, request()->all());
         
@@ -80,8 +79,8 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
-        $this->validateRequest($entityKey);
         
+        $form->validateRequest($entityKey);
         $instanceId = $form->storeInstance(request()->all());
         
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
@@ -112,25 +111,25 @@ class FormController extends ApiController
         ]);
     }
 
-    protected function validateRequest(string $entityKey): void
-    {
-        try {
-            // Validation is automatically called (FormRequest)
-            $this->entityManager->entityFor($entityKey)->getFormValidatorOrFail();
-        } catch(SharpInvalidEntityKeyException) {}
-        
-//        if($this->isSubEntity($entityKey)) {
-//            list($entityKey, $subEntityKey) = explode(':', $entityKey);
-//            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
-//        } else {
-//            $validatorClass = config("sharp.entities.{$entityKey}.validator");
-//        }
-//
-//        if(class_exists($validatorClass)) {
+//    protected function validateRequest(string $entityKey): void
+//    {
+//        try {
 //            // Validation is automatically called (FormRequest)
-//            app($validatorClass);
-//        }
-    }
+//            $this->entityManager->entityFor($entityKey)->getFormValidatorOrFail();
+//        } catch(SharpInvalidEntityKeyException) {}
+//        
+////        if($this->isSubEntity($entityKey)) {
+////            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+////            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
+////        } else {
+////            $validatorClass = config("sharp.entities.{$entityKey}.validator");
+////        }
+////
+////        if(class_exists($validatorClass)) {
+////            // Validation is automatically called (FormRequest)
+////            app($validatorClass);
+////        }
+//    }
 
     protected function dataLocalizations(SharpForm $form): array
     {
