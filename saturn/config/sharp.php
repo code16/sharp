@@ -20,14 +20,15 @@ return [
     ],
 
     "entities" => [
-        "spaceship" => [
-            "list" => \App\Sharp\SpaceshipSharpList::class,
-            "show" => \App\Sharp\SpaceshipSharpShow::class,
-            "form" => \App\Sharp\SpaceshipSharpForm::class,
-            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
-            "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
-            "label" => "Spaceship"
-        ],
+        "spaceship" => \App\Sharp\Entities\SpaceshipEntity::class,
+//            [
+//            "list" => \App\Sharp\SpaceshipSharpList::class,
+//            "show" => \App\Sharp\SpaceshipSharpShow::class,
+//            "form" => \App\Sharp\SpaceshipSharpForm::class,
+//            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
+//            "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
+//            "label" => "Spaceship"
+//        ],
         "pilot" => 
             \App\Sharp\Entities\PilotEntity::class, 
 //        [

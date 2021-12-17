@@ -2,56 +2,18 @@
 
 namespace App\Sharp\Policies;
 
-use App\User;
+use Code16\Sharp\Auth\SharpEntityPolicy;
 
-class SpaceshipPolicy
+class SpaceshipPolicy extends SharpEntityPolicy
 {
 
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function entity(User $user)
+    public function view($user, $instanceId): bool
     {
-        return true;
+        return $instanceId%2 == 0 || $instanceId > 10;
     }
 
-    /**
-     * @param User $user
-     * @param $spaceshipId
-     * @return bool
-     */
-    public function view(User $user, $spaceshipId)
+    public function update($user, $instanceId): bool
     {
-        return $spaceshipId%2 == 0 || $spaceshipId > 10;
-    }
-
-    /**
-     * @param User $user
-     * @param $spaceshipId
-     * @return bool
-     */
-    public function update(User $user, $spaceshipId)
-    {
-        return $spaceshipId%2 == 0;
-    }
-
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function create(User $user)
-    {
-        return true;
-    }
-
-    /**
-     * @param User $user
-     * @param $spaceshipId
-     * @return bool
-     */
-    public function delete(User $user, $spaceshipId)
-    {
-        return true;
+        return $instanceId%2 == 0;
     }
 }

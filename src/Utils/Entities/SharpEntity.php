@@ -2,11 +2,11 @@
 
 namespace Code16\Sharp\Utils\Entities;
 
+use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
-use Illuminate\Foundation\Http\FormRequest;
 
 abstract class SharpEntity
 {
@@ -16,6 +16,7 @@ abstract class SharpEntity
     protected ?string $list = null;
     protected ?string $form = null;
     protected ?string $show = null;
+    protected ?string $policy = null;
     
     public function __construct(string $entityKey)
     {
@@ -27,7 +28,6 @@ abstract class SharpEntity
         if(!$list = $this->getList()) {
             throw new SharpInvalidEntityKeyException("The list for the entity [{$this->entityKey}] was not found.");
         }
-
         return app($list);
     }
 
@@ -37,7 +37,6 @@ abstract class SharpEntity
             !$this->hasShow(), 
             new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found.")
         );
-        
         return app($this->getShow());
     }
 
@@ -51,17 +50,15 @@ abstract class SharpEntity
         if(!$form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException("The form for the entity [{$this->entityKey}] was not found.");
         }
-
         return app($form);
     }
 
-    public final function getFormValidatorOrFail(): FormRequest
+    public final function getPolicyOrDefault(): SharpEntityPolicy
     {
-        if(!$validator = $this->getFormValidator()) {
-            throw new SharpInvalidEntityKeyException("The form validator for the entity [{$this->entityKey}] was not found.");
+        if(!$policy = $this->getPolicy()) {
+            return new SharpEntityPolicy();
         }
-
-        return is_string($validator) ? app($validator) : $validator;
+        return app($policy);
     }
 
     protected function getList(): ?string
@@ -81,22 +78,13 @@ abstract class SharpEntity
         return $this->form;
     }
 
-    // authorizations
+    protected function getPolicy(): ?string
+    {
+        return $this->policy;
+    }
 
     public function getMultiforms(): array
     {
         return [];
     }
-
-//    abstract protected function getFormValidator(): ?string;
-//
-//    abstract protected function getPolicy(): ?string;
-//
-//    abstract protected function getLabel(): ?string;
-//
-//    abstract protected function getGlobalAuthorizationForEntity(): bool;
-//    abstract protected function getGlobalAuthorizationForCreate(): bool;
-//    abstract protected function getGlobalAuthorizationForDelete(): bool;
-//    abstract protected function getGlobalAuthorizationForUpdate(): bool;
-//    abstract protected function getGlobalAuthorizationForView(): bool;
 }
