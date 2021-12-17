@@ -65,4 +65,9 @@ class PilotJuniorSharpForm extends SharpForm
     {
         Pilot::findOrFail($id)->delete();
     }
+
+    public function getValidator(): ?string
+    {
+        return PilotJuniorSharpValidator::class;
+    }
 }

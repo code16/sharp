@@ -2,24 +2,12 @@
 
 namespace App\Sharp\Entities;
 
-use Code16\Sharp\Utils\Entities\SharpDefaultEntity;
+use Code16\Sharp\Utils\Entities\SharpEntity;
 
-class TestEntity extends SharpDefaultEntity
+class TestEntity extends SharpEntity
 {
     protected bool $isSingle = true;
-    
-    public function getShow(): ?string
-    {
-        return \App\Sharp\TestForm\TestShow::class;
-    }
-
-    public function getForm(): ?string
-    {
-        return \App\Sharp\TestForm\TestForm::class;
-    }
-
-    public function getLabel(): ?string
-    {
-        return "Test";
-    }
+    protected ?string $show = \App\Sharp\TestForm\TestShow::class;
+    protected ?string $form = \App\Sharp\TestForm\TestForm::class;
+    protected string $label = "Test";
 }

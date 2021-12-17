@@ -3,8 +3,6 @@
 namespace Code16\Sharp\Utils\Entities;
 
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
-use Code16\Sharp\Show\SharpShow;
-use Code16\Sharp\Show\SharpSingleShow;
 
 class SharpEntityManager
 {
@@ -25,12 +23,21 @@ class SharpEntityManager
             {
                 parent::__construct($entityKey);
                 $this->entity = $entity;
+                $this->label = $this->entity["label"];
+                $this->isSingle = $this->entity["single"] ?? false;
+                $this->list = $this->entity["list"] ?? null;
+                $this->show = $this->entity["show"] ?? null;
+                $this->form = $this->entity["form"] ?? null;
             }
 
-            protected function getShow(): string|SharpShow|SharpSingleShow|null
+            public function getMultiforms(): array
             {
-                return $this->entity["show"] ?? null;
-            }
+                return collect($this->entity["forms"] ?? [])
+                    ->mapWithKeys(function($values, $key) {
+                        return [$key => [$values["form"], $values["label"]]];
+                    })
+                    ->toArray();
+                }
         };
     }
 }

@@ -2,41 +2,21 @@
 
 namespace App\Sharp\Entities;
 
-use App\Sharp\PilotJuniorSharpForm;
-use App\Sharp\PilotJuniorSharpValidator;
 use App\Sharp\PilotSharpList;
 use App\Sharp\PilotSharpShow;
-use Code16\Sharp\Utils\Entities\SharpDefaultEntity;
+use Code16\Sharp\Utils\Entities\SharpEntity;
 
-class PilotEntity extends SharpDefaultEntity
+class PilotEntity extends SharpEntity
 {
-    public function getList(): ?string
-    {
-        return PilotSharpList::class;
-    }
-
-    public function getShow(): ?string
-    {
-        return PilotSharpShow::class;
-    }
+    protected ?string $list = PilotSharpList::class;
+    protected ?string $show = PilotSharpShow::class;
+    protected string $label = "Pilot";
     
-    public function getForm(): ?string
+    public function getMultiforms(): array
     {
-        return PilotJuniorSharpForm::class;
-        
-        return match ($subEntity) {
-            "junior" => \App\Sharp\PilotJuniorSharpForm::class,
-            "senior" => \App\Sharp\PilotSeniorSharpForm::class,
-        };
-    }
-
-    protected function getLabel(): ?string
-    {
-        return "Pilot";
-    }
-    
-    protected function getFormValidator(): ?string
-    {
-        return PilotJuniorSharpValidator::class;
+        return [
+            "junior" => [\App\Sharp\PilotJuniorSharpForm::class, "Junior pilot"],
+            "senior" => [\App\Sharp\PilotSeniorSharpForm::class, "Senior pilot"],
+        ];
     }
 }

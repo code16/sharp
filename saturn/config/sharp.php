@@ -28,7 +28,8 @@ return [
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
             "label" => "Spaceship"
         ],
-        "pilot" => \App\Sharp\Entities\PilotEntity::class, 
+        "pilot" => 
+            \App\Sharp\Entities\PilotEntity::class, 
 //        [
 //            "list" => \App\Sharp\PilotSharpList::class,
 //            "show" => \App\Sharp\PilotSharpShow::class,

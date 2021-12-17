@@ -10,8 +10,25 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class SharpEntity
 {
-    public function __construct(protected string $entityKey)
+    protected string $entityKey;
+    protected bool $isSingle = false;
+    protected string $label = "entity";
+    protected ?string $list = null;
+    protected ?string $form = null;
+    protected ?string $show = null;
+    
+    public function __construct(string $entityKey)
     {
+        $this->entityKey = $entityKey;
+    }
+
+    public final function getListOrFail(): SharpEntityList
+    {
+        if(!$list = $this->getList()) {
+            throw new SharpInvalidEntityKeyException("The list for the entity [{$this->entityKey}] was not found.");
+        }
+
+        return app($list);
     }
 
     public function getShowOrFail(): SharpShow
@@ -23,8 +40,6 @@ abstract class SharpEntity
         return app($show);
     }
 
-    abstract protected function getShow(): ?string;
-
     public final function getFormOrFail(): SharpForm
     {
         if(!$form = $this->getForm()) {
@@ -33,21 +48,6 @@ abstract class SharpEntity
 
         return app($form);
     }
-
-    abstract protected function getForm(): ?string;
-    
-    // authorizations
-
-    public final function getListOrFail(): SharpEntityList
-    {
-        if(!$list = $this->getList()) {
-            throw new SharpInvalidEntityKeyException("The list for the entity [{$this->entityKey}] was not found.");
-        }
-
-        return app($list);
-    }
-
-    abstract protected function getList(): ?string;
 
     public final function getFormValidatorOrFail(): FormRequest
     {
@@ -58,15 +58,39 @@ abstract class SharpEntity
         return is_string($validator) ? app($validator) : $validator;
     }
 
-    abstract protected function getFormValidator(): ?string;
+    protected function getList(): ?string
+    {
+        return $this->isSingle
+            ? throw new SharpInvalidEntityKeyException("The entity [{$this->entityKey}] is single, and does not have a list.")
+            : $this->list;
+    }
 
-    abstract protected function getPolicy(): ?string;
+    protected function getShow(): ?string
+    {
+        return $this->show;
+    }
 
-    abstract protected function getLabel(): ?string;
+    protected function getForm(): ?string
+    {
+        return $this->form;
+    }
 
-    abstract protected function getGlobalAuthorizationForEntity(): bool;
-    abstract protected function getGlobalAuthorizationForCreate(): bool;
-    abstract protected function getGlobalAuthorizationForDelete(): bool;
-    abstract protected function getGlobalAuthorizationForUpdate(): bool;
-    abstract protected function getGlobalAuthorizationForView(): bool;
+    // authorizations
+
+    public function getMultiforms(): array
+    {
+        return [];
+    }
+
+//    abstract protected function getFormValidator(): ?string;
+//
+//    abstract protected function getPolicy(): ?string;
+//
+//    abstract protected function getLabel(): ?string;
+//
+//    abstract protected function getGlobalAuthorizationForEntity(): bool;
+//    abstract protected function getGlobalAuthorizationForCreate(): bool;
+//    abstract protected function getGlobalAuthorizationForDelete(): bool;
+//    abstract protected function getGlobalAuthorizationForUpdate(): bool;
+//    abstract protected function getGlobalAuthorizationForView(): bool;
 }
