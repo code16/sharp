@@ -19,7 +19,7 @@
                             <template v-slot:cell="{ column }">
                                 <div class="row">
                                     <div class="col-auto">
-                                        <div class="row gx-2">
+                                        <div class="row align-items-center gx-2">
                                             <div class="col" style="min-width: 0">
                                                 <div class="overflow-hidden">
                                                     {{ column.label }}

@@ -36,7 +36,7 @@
 
                     <template v-slot:append-head>
                         <template v-if="hasEntityCommands">
-                            <div class="d-flex justify-content-end">
+                            <div class="d-flex align-items-center justify-content-end">
                                 <CommandsDropdown
                                     :commands="dropdownEntityCommands"
                                     :disabled="reorderActive"
@@ -53,20 +53,18 @@
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append="props">
-                                <div class="SharpEntityList__actions d-flex">
-                                    <EntityActions
-                                        :config="config"
-                                        :has-state="instanceHasState(item)"
-                                        :state="instanceState(item)"
-                                        :state-options="instanceStateOptions(item)"
-                                        :state-disabled="!instanceHasStateAuthorization(item)"
-                                        :has-commands="instanceHasCommands(item)"
-                                        :commands="instanceCommands(item)"
-                                        @command="handleInstanceCommandRequested(item, $event)"
-                                        @state-change="handleInstanceStateChanged(item, $event)"
-                                        @selecting="props.toggleHighlight($event)"
-                                    />
-                                </div>
+                                <EntityActions
+                                    :config="config"
+                                    :has-state="instanceHasState(item)"
+                                    :state="instanceState(item)"
+                                    :state-options="instanceStateOptions(item)"
+                                    :state-disabled="!instanceHasStateAuthorization(item)"
+                                    :has-commands="instanceHasCommands(item)"
+                                    :commands="instanceCommands(item)"
+                                    @command="handleInstanceCommandRequested(item, $event)"
+                                    @state-change="handleInstanceStateChanged(item, $event)"
+                                    @selecting="props.toggleHighlight($event)"
+                                />
                             </template>
                         </DataListRow>
                     </template>
