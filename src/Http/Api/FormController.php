@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
+use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 
@@ -113,17 +114,22 @@ class FormController extends ApiController
 
     protected function validateRequest(string $entityKey): void
     {
-        if($this->isSubEntity($entityKey)) {
-            list($entityKey, $subEntityKey) = explode(':', $entityKey);
-            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
-        } else {
-            $validatorClass = config("sharp.entities.{$entityKey}.validator");
-        }
-
-        if(class_exists($validatorClass)) {
+        try {
             // Validation is automatically called (FormRequest)
-            app($validatorClass);
-        }
+            $this->entityManager->entityFor($entityKey)->getFormValidatorOrFail();
+        } catch(SharpInvalidEntityKeyException) {}
+        
+//        if($this->isSubEntity($entityKey)) {
+//            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+//            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
+//        } else {
+//            $validatorClass = config("sharp.entities.{$entityKey}.validator");
+//        }
+//
+//        if(class_exists($validatorClass)) {
+//            // Validation is automatically called (FormRequest)
+//            app($validatorClass);
+//        }
     }
 
     protected function dataLocalizations(SharpForm $form): array

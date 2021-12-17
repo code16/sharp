@@ -28,25 +28,26 @@ return [
             "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
             "label" => "Spaceship"
         ],
-        "pilot" => [
-            "list" => \App\Sharp\PilotSharpList::class,
-            "show" => \App\Sharp\PilotSharpShow::class,
-            "forms" => [
-                "junior" => [
-                    "icon" => "far fa-user",
-                    "label" => "Junior Pilot",
-                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
-                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
-                ],
-                "senior" => [
-                    "icon" => "fas fa-user",
-                    "label" => "Senior Pilot",
-                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
-                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
-                ]
-            ],
-            "label" => "Pilot"
-        ],
+        "pilot" => \App\Sharp\Entities\PilotEntity::class, 
+//        [
+//            "list" => \App\Sharp\PilotSharpList::class,
+//            "show" => \App\Sharp\PilotSharpShow::class,
+//            "forms" => [
+//                "junior" => [
+//                    "icon" => "far fa-user",
+//                    "label" => "Junior Pilot",
+//                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
+//                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
+//                ],
+//                "senior" => [
+//                    "icon" => "fas fa-user",
+//                    "label" => "Senior Pilot",
+//                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
+//                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
+//                ]
+//            ],
+//            "label" => "Pilot"
+//        ],
         "spaceship_pilot" => [
             "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
             "show" => \App\Sharp\PilotSharpShow::class,
@@ -100,10 +101,7 @@ return [
             "validator" => \App\Sharp\FeatureSharpValidator::class,
             "label" => "Feature"
         ],
-        "test" => [
-            "show" => \App\Sharp\TestForm\TestShow::class,
-            "form" => \App\Sharp\TestForm\TestForm::class,
-        ],
+        "test" => \App\Sharp\Entities\TestEntity::class,
     ],
 
     "dashboards" => [

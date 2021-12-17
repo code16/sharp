@@ -8,42 +8,51 @@ use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\SharpProtectedController;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 abstract class ApiController extends SharpProtectedController
 {
+    protected SharpEntityManager $entityManager;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->entityManager = app(SharpEntityManager::class);
+    }
 
     protected function getListInstance(string $entityKey): SharpEntityList
     {
-        if(!$listClass = config("sharp.entities.{$entityKey}.list")) {
-            throw new SharpInvalidEntityKeyException("The list for the entity [{$entityKey}] was not found.");
-        }
-
-        return app($listClass);
+        return $this->entityManager->entityFor($entityKey)->getListOrFail();
     }
 
     protected function getShowInstance(string $entityKey): SharpShow
     {
-        if(!$showClass = config("sharp.entities.{$entityKey}.show")) {
-            throw new SharpInvalidEntityKeyException("The show for the entity [{$entityKey}] was not found.");
-        }
-
-        return app($showClass);
+        return $this->entityManager->entityFor($entityKey)->getShowOrFail();
     }
     
     protected function getFormInstance(string $entityKey): SharpForm
     {
-        if($this->isSubEntity($entityKey)) {
-            list($entityKey, $subEntityKey) = explode(':', $entityKey);
-            $formClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.form");
-        } else {
-            $formClass = config("sharp.entities.{$entityKey}.form");
-        }
-
-        if(!$formClass) {
-            throw new SharpInvalidEntityKeyException("The form for the entity [{$entityKey}] was not found.");
-        }
-
-        return app($formClass);
+        return $this->entityManager->entityFor($entityKey)->getFormOrFail();
+        
+//        if($this->isSubEntity($entityKey)) {
+//            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+//        }
+//        
+//        if($entity = config("sharp.entities.$entityKey")) {
+//            if(is_string($entity)) {
+//                return app(app($entity)->getForm($subEntityKey ?? null));
+//            } 
+//            
+//            $formClass = isset($subEntityKey)
+//                ? ($entity["forms.$subEntityKey.form"] ?? null)
+//                : ($entity["form"] ?? null);
+//            
+//            if($formClass) {
+//                return app($formClass);
+//            }
+//        }
+//
+//        throw new SharpInvalidEntityKeyException("The form for the entity [{$entityKey}] was not found.");
     }
 
     protected function getDashboardInstance(string $dashboardKey): ?SharpDashboard
