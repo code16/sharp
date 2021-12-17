@@ -33,11 +33,17 @@ abstract class SharpEntity
 
     public function getShowOrFail(): SharpShow
     {
-        if(!$show = $this->getShow()) {
-            throw new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found.");
-        }
+        throw_if(
+            !$this->hasShow(), 
+            new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found.")
+        );
         
-        return app($show);
+        return app($this->getShow());
+    }
+
+    public function hasShow(): bool
+    {
+        return $this->getShow() !== null;
     }
 
     public final function getFormOrFail(): SharpForm
