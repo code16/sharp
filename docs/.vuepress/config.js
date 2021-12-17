@@ -27,11 +27,12 @@ module.exports = {
         ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
         ['link', { rel: 'icon', type:'image/svg+xml', href: '/favicon.svg' }],
     ],
+    theme: path.resolve(__dirname, './theme'),
     themeConfig: {
-        nav: [
+        navbar: [
             DOCS_ENABLE_VERSIONING === 'true' && {
                 text: DOCS_VERSION,
-                items: JSON.parse(DOCS_VERSION_ITEMS || '[]')
+                children: JSON.parse(DOCS_VERSION_ITEMS || '[]')
                     .map(item => ({ ...item, target: '_self' })),
             },
             { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
@@ -40,7 +41,7 @@ module.exports = {
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
-                items: [
+                children: [
                     { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
                     { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
@@ -49,7 +50,7 @@ module.exports = {
         sidebar: {
             '/guide/': [
                 {
-                    title: 'Introduction',
+                    text: 'Introduction',
                     collapsable: false,
                     children: [
                         '',
@@ -57,7 +58,7 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Entity Lists',
+                    text: 'Entity Lists',
                     collapsable: false,
                     children: [
                         'building-entity-list',
@@ -68,7 +69,7 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Entity Forms',
+                    text: 'Entity Forms',
                     collapsable: false,
                     children: [
                         'building-entity-form',
@@ -78,7 +79,7 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Entity Shows',
+                    text: 'Entity Shows',
                     collapsable: false,
                     children: [
                         'building-entity-show',
@@ -87,7 +88,7 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Dashboards',
+                    text: 'Dashboards',
                     collapsable: false,
                     children: [
                         'dashboard',
@@ -99,7 +100,7 @@ module.exports = {
                     ],
                 },
                 {
-                    title: 'Generalities',
+                    text: 'Generalities',
                     collapsable: false,
                     children: [
                         'building-menu',
@@ -116,7 +117,7 @@ module.exports = {
                     ]
                 },
                 {
-                    title: 'Form fields',
+                    text: 'Form fields',
                     collapsable: false,
                     children: [
                         'text',
@@ -137,7 +138,7 @@ module.exports = {
                     ].map(page => `form-fields/${page}`),
                 },
                 {
-                    title: 'Show fields',
+                    text: 'Show fields',
                     collapsable: false,
                     children: [
                         'text',
@@ -148,7 +149,7 @@ module.exports = {
                     ].map(page => `show-fields/${page}`),
                 },
                 {
-                    title: 'Migrations guide',
+                    text: 'Migrations guide',
                     collapsable: false,
                     children: [
                         'upgrading/6.0',
@@ -158,29 +159,44 @@ module.exports = {
                         'upgrading/4.1',
                     ],
                 },
-            ]
+            ],
         },
-        algolia: {
-            apiKey: 'd88cea985d718328d4b892ff6a05dba8',
-            indexName: 'code16_sharp',
-            // debug: true,
-            algoliaOptions: {
-                hitsPerPage: 5,
-                facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
-            },
-        }
+        // algolia: {
+        //     apiKey: 'd88cea985d718328d4b892ff6a05dba8',
+        //     indexName: 'code16_sharp',
+        //     // debug: true,
+        //     algoliaOptions: {
+        //         hitsPerPage: 5,
+        //         facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
+        //     },
+        // }
     },
-    markdown: {
-        extendMarkdown: md => {
-            md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
-                let token = tokens[idx];
-                return '<code class="inline">' +
-                    Prism.highlight(token.content, Prism.languages.php) +
-                '</code>';
-            };
-        }
-    },
-    scss: {
-        implementation: require('sass'),
-    }
+    plugins: [
+        [
+            '@vuepress/plugin-docsearch',
+            {
+                appId: '1A1N8XRQFM',
+                apiKey: 'c5c8c8034f3c0586d562fdbb0a4d26cb',
+                indexName: 'code16_sharp',
+                searchFilters: {
+                    hitsPerPage: 5,
+                    facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
+                },
+            }
+        ],
+        {
+            extendsMarkdown: md => {
+                md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
+                    let token = tokens[idx];
+                    return '<code class="inline">' +
+                        Prism.highlight(token.content, Prism.languages.php) +
+                        '</code>';
+                };
+            }
+        },
+    ],
+    bundler: '@vuepress/bundler-vite',
+    // scss: {
+    //     implementation: require('sass'),
+    // },
 };

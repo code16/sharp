@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import ParentLayout from '@parent-theme/layouts/Layout.vue';
+    import ParentLayout from '@vuepress/theme-default/lib/client/layouts/Layout.vue';
 
     export default {
         components: {
@@ -43,6 +43,6 @@
     }
 </script>
 
-<style src="@theme/styles/vendors.scss" lang="scss"></style>
-<style src="@theme/styles/index.styl" lang="stylus"></style>
+<style src="../styles/vendors.scss" lang="scss"></style>
+<style src="../styles/index.scss" lang="scss"></style>
 
