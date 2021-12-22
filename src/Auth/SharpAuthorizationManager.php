@@ -12,9 +12,12 @@ class SharpAuthorizationManager
 
     public function check(string $ability, string $entityKey, ?string $instanceId = null): void
     {
-        $this->entityManager->entityFor($entityKey)->getPolicyOrDefault();
-
-        if($this->isForbidden("entity", $entityKey) || $this->isForbidden($ability, $entityKey, $instanceId)) {
+        
+        if($this->isForbidden("entity", $entityKey)) {
+            $this->deny();
+        }
+        
+        if($this->isForbidden($ability, $entityKey, $instanceId)) {
             $this->deny();
         }
 

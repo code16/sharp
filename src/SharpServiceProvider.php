@@ -23,16 +23,15 @@ use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
+use Code16\Sharp\Http\Middleware\Api\RegisterAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
 
@@ -67,8 +66,6 @@ class SharpServiceProvider extends ServiceProvider
         Blade::component(Content::class, 'sharp-content');
         Blade::component(File::class, 'sharp-file');
         Blade::component(Image::class, 'sharp-image');
-    
-        $this->registerPolicies();
     }
 
     public function register()
@@ -105,20 +102,6 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->register(ImageServiceProviderLaravelRecent::class);
     }
 
-    protected function registerPolicies(): void
-    {
-        $entityManager = app(SharpEntityManager::class);
-        
-        collect(array_keys(config("sharp.entities")))
-            ->merge(array_keys(config("sharp.dashboards")))
-            ->each(function(string $entityKey) use ($entityManager) {
-                $policy = $entityManager->entityFor($entityKey)->getPolicyOrDefault()::class;
-                foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
-                    Gate::define("sharp.{$entityKey}.{$action}", "{$policy}@{$action}");
-                }
-            });
-    }
-
     protected function registerMiddleware(): void
     {
         $this->app['router']->middlewareGroup("sharp_web", [
@@ -135,6 +118,10 @@ class SharpServiceProvider extends ServiceProvider
         ]);
 
         $this->app['router']
+            ->aliasMiddleware(
+                'sharp_api_register_authorizations',
+                RegisterAuthorizations::class
+            )
             ->aliasMiddleware(
                 'sharp_api_append_form_authorizations',
                 AppendFormAuthorizations::class

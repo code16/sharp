@@ -10,17 +10,18 @@ use Code16\Sharp\Show\SharpShow;
 
 abstract class SharpEntity
 {
-    protected string $entityKey;
+    protected string $entityKey = "entity";
     protected bool $isSingle = false;
     protected string $label = "entity";
     protected ?string $list = null;
     protected ?string $form = null;
     protected ?string $show = null;
     protected ?string $policy = null;
-    
-    public function __construct(string $entityKey)
+
+    public function setEntityKey(string $entityKey): self
     {
         $this->entityKey = $entityKey;
+        return $this;
     }
 
     public final function getListOrFail(): SharpEntityList
@@ -45,9 +46,13 @@ abstract class SharpEntity
         return $this->getShow() !== null;
     }
 
-    public final function getFormOrFail(): SharpForm
+    public final function getFormOrFail(?string $subEntity = null): SharpForm
     {
-        if(!$form = $this->getForm()) {
+        if($subEntity) {
+            if(!$form = ($this->getMultiforms()[$subEntity][0] ?? null)) {
+                throw new SharpInvalidEntityKeyException("The subform for the entity [{$this->entityKey}:{$subEntity}] was not found.");
+            }
+        } elseif(!$form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException("The form for the entity [{$this->entityKey}] was not found.");
         }
         return app($form);

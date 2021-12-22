@@ -8,15 +8,16 @@ use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 
 abstract class SharpDashboardEntity
 {
-    protected string $entityKey;
+    protected string $entityKey = "dashboard";
     protected ?string $view = null;
     protected ?string $policy = null;
-    
-    public function __construct(string $entityKey)
+
+    public function setEntityKey(string $entityKey): self
     {
         $this->entityKey = $entityKey;
+        return $this;
     }
-
+    
     public function getViewOrFail(): SharpDashboard
     {
         throw_if(

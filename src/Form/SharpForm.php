@@ -184,7 +184,7 @@ abstract class SharpForm
     protected function getFormValidator(string $entityKey): ?string
     {
         // Legacy stuff: backward compatibility with Sharp 6 config
-        return config("sharp.entities.{$entityKey}.validator") ?: $this->formValidatorClass;
+        return config("sharp.entities.{$entityKey}.validator") ?: $this->getFormValidatorClass();
     }
 
     /**
@@ -193,6 +193,11 @@ abstract class SharpForm
     public function notify(string $title): SharpNotification
     {
         return (new SharpNotification($title));
+    }
+
+    protected function getFormValidatorClass(): ?string
+    {
+        return $this->formValidatorClass;
     }
 
     /**

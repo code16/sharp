@@ -2,12 +2,13 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -18,22 +19,22 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     protected function setUp(): void
     {
         parent::setUp();
+        
         $this->login();
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        parent::getEnvironmentSetUp($app);
-
-        // Policies have to be defined upfront
-        $app['config']['sharp.entities.person.policy'] = AuthorizationsTestMultiPersonPolicy::class;
+        $this->buildTheWorld();
+        app(SharpEntityManager::class)
+            ->entityFor("person")
+            ->setList(PersonWithMultiformSharpEntityList::class)
+            ->setPolicy(AuthorizationsTestMultiPersonPolicy::class)
+            ->setMultiforms([
+                "big" => [BigPersonSharpForm::class, "Big person"],
+                "small" => [SmallPersonSharpForm::class, "Small person"]
+            ]);
     }
 
     /** @test */
     public function we_can_get_form_data_for_an_sub_entity()
     {
-        $this->buildTheWorld();
-
         $this->getJson('/sharp/api/form/person:small/1')
             ->assertStatus(200)
             ->assertJson(["data" => [
@@ -51,8 +52,6 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     /** @test */
     public function we_can_update_an_sub_entity()
     {
-        $this->buildTheWorld();
-        
         $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:small/1");
         $this
             ->postJson('/sharp/api/form/person:small/1', [
@@ -77,8 +76,6 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     /** @test */
     public function we_can_validate_a_sub_entity_before_update()
     {
-        $this->buildTheWorld();
-
         $this->app['config']->set(
             'sharp.entities.person.forms.big.validator',
             BigPersonSharpValidator::class
@@ -99,8 +96,6 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     /** @test */
     public function global_authorizations_are_applied_sub_entities()
     {
-        $this->buildTheWorld();
-
         $this->app['config']->set('sharp.entities.person.authorizations', [
             "view" => false
         ]);
@@ -115,8 +110,6 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     /** @test */
     public function policies_are_applied_to_sub_entities()
     {
-        $this->buildTheWorld();
-
         $this->getJson('/sharp/api/form/person:small/3')
             ->assertStatus(403);
 
@@ -130,8 +123,6 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     /** @test */
     public function policy_authorizations_are_appended_to_the_response_for_a_sub_entity()
     {
-        $this->buildTheWorld();
-
         $this->getJson('/sharp/api/form/person:small/4')->assertJson([
             "authorizations" => [
                 "delete" => false,
@@ -139,25 +130,6 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
                 "view" => true,
             ]
         ]);
-    }
-
-    protected function buildTheWorld($singleShow = false)
-    {
-        parent::buildTheWorld($singleShow);
-
-        $this->app['config']->set('sharp.entities.person.form', null);
-
-        $this->app['config']->set(
-            'sharp.entities.person.forms', [
-                "big" => [
-                    "form" => BigPersonSharpForm::class,
-                    "label" => "Big person"
-                ], "small" => [
-                    "form" => SmallPersonSharpForm::class,
-                    "label" => "Small person"
-                ]
-            ]
-        );
     }
 }
 
@@ -215,11 +187,11 @@ class BigPersonSharpValidator extends FormRequest
     }
 }
 
-class AuthorizationsTestMultiPersonPolicy
+class AuthorizationsTestMultiPersonPolicy extends SharpEntityPolicy
 {
-    public function view(User $user, $id) { return $id != 3; }
+    public function view($user, $id): bool { return $id != 3; }
 
-    public function update(User $user, $id) { return $id < 3; }
+    public function update($user, $id): bool { return $id < 3; }
 
-    public function delete(User $user, $id) { return $id < 3; }
+    public function delete($user, $id): bool { return $id < 3; }
 }

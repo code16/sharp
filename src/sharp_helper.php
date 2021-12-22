@@ -32,7 +32,12 @@ function sharp_has_ability(string $ability, string $entityKey, string $instanceI
 function sharp_check_ability(string $ability, string $entityKey, string $instanceId = null)
 {
     app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
-        ->check($ability, $entityKey, $instanceId);
+        ->check($ability, sharp_normalize_entity_key($entityKey), $instanceId);
+}
+
+function sharp_normalize_entity_key(string $entityKey): string
+{
+    return \Illuminate\Support\Str::before($entityKey, ":");
 }
 
 function sharp_base_url_segment(): string

@@ -8,6 +8,8 @@ class SharpEntityManager
 {
     public function entityFor(string $entityKey): SharpEntity|SharpDashboardEntity
     {
+        $entityKey = sharp_normalize_entity_key($entityKey);
+        
         if(!$entity = config("sharp.entities.$entityKey")) {
             if(!$entity = config("sharp.dashboards.$entityKey")) {
                 throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
@@ -16,7 +18,13 @@ class SharpEntityManager
         
         if(is_string($entity)) {
             // New Sharp 7 format: SharpEntity
-            return new $entity($entityKey);
+            if(!app()->bound($entity)) {
+                app()->singleton($entity, function () use($entity, $entityKey) {
+                    return (new $entity())->setEntityKey($entityKey);
+                });
+            }
+            
+            return app($entity);
         }
         
         // Old array config format is used
@@ -40,7 +48,7 @@ class SharpEntityManager
 
             public function __construct(array $entity, string $entityKey)
             {
-                parent::__construct($entityKey);
+                $this->entityKey = $entityKey;
                 $this->entity = $entity;
                 $this->label = $this->entity["label"] ?? "Entity";
                 $this->isSingle = $this->entity["single"] ?? false;

@@ -2,12 +2,10 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
-use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
-use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
-use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
+use Code16\Sharp\Tests\Fixtures\PersonalDashboardEntity;
+use Code16\Sharp\Tests\Fixtures\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
-use Code16\Sharp\Tests\Fixtures\SharpDashboard;
+use Code16\Sharp\Tests\Fixtures\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
 
@@ -50,31 +48,13 @@ abstract class BaseApiTest extends SharpTestCase
     protected function buildTheWorld($singleShow = false)
     {
         $this->app['config']->set(
-            'sharp.entities.person.list',
-            PersonSharpEntityList::class
+            'sharp.entities.person',
+            $singleShow ? SinglePersonEntity::class : PersonEntity::class
         );
-
+        
         $this->app['config']->set(
-            'sharp.entities.person.form',
-            PersonSharpForm::class
+            'sharp.dashboards.personal_dashboard',
+            PersonalDashboardEntity::class
         );
-
-        $this->app['config']->set(
-            'sharp.dashboards.personal_dashboard.view',
-            SharpDashboard::class
-        );
-
-        if($singleShow) {
-            $this->app['config']->set(
-                'sharp.entities.person.show',
-                PersonSharpSingleShow::class
-            );
-
-        } else {
-            $this->app['config']->set(
-                'sharp.entities.person.show',
-                PersonSharpShow::class
-            );
-        }
     }
 }
