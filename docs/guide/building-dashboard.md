@@ -143,12 +143,12 @@ return [
 ];
 ```
 
-And the policy class can be pretty straightforward, since the only available action is `view`:
+And the policy class can be pretty straightforward, since the only available action is `entity`:
 
 ```php
 class CompanyDashboardPolicy
 {
-    public function view(User $user)
+    public function entity($user): bool
     {
         return $user->hasGroup("boss");
     }

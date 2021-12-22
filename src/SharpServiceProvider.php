@@ -27,6 +27,7 @@ use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
@@ -106,31 +107,16 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerPolicies(): void
     {
-        foreach((array)config("sharp.entities") as $entityKey => $config) {
-            if(isset($config["policy"])) {
+        $entityManager = app(SharpEntityManager::class);
+        
+        collect(array_keys(config("sharp.entities")))
+            ->merge(array_keys(config("sharp.dashboards")))
+            ->each(function(string $entityKey) use ($entityManager) {
+                $policy = $entityManager->entityFor($entityKey)->getPolicyOrDefault()::class;
                 foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
-                    $this->definePolicy($entityKey, $config["policy"], $action);
+                    Gate::define("sharp.{$entityKey}.{$action}", "{$policy}@{$action}");
                 }
-            }
-        }
-
-        foreach((array)config("sharp.dashboards") as $dashboardKey => $config) {
-            if(isset($config["policy"])) {
-                $this->definePolicy($dashboardKey, $config["policy"], 'view');
-            }
-        }
-    }
-
-    protected function definePolicy(string $entityKey, string $policy, string $action): void
-    {
-        if(method_exists(app($policy), $action)) {
-            Gate::define("sharp.{$entityKey}.{$action}", $policy . "@{$action}");
-        } else {
-            // No policy = true by default
-            Gate::define("sharp.{$entityKey}.{$action}", function () {
-                return true;
             });
-        }
     }
 
     protected function registerMiddleware(): void

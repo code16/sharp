@@ -2,12 +2,12 @@
 
 namespace App\Sharp\Policies;
 
-use App\User;
+use Code16\Sharp\Auth\SharpEntityPolicy;
 
-class UserPolicy
+class UserPolicy extends SharpEntityPolicy
 {
 
-    public function entity(User $user)
+    public function entity($user): bool
     {
         return $user->hasGroup("boss");
     }

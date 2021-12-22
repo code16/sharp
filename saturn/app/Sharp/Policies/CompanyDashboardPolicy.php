@@ -2,16 +2,12 @@
 
 namespace App\Sharp\Policies;
 
-use App\User;
+use Code16\Sharp\Auth\SharpEntityPolicy;
 
-class CompanyDashboardPolicy
+class CompanyDashboardPolicy extends SharpEntityPolicy
 {
 
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function view(User $user)
+    public function entity($user): bool
     {
         return $user->hasGroup("boss");
     }
