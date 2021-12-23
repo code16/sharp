@@ -19,82 +19,36 @@ Same goes for [Validators](building-form.md#input-validation), if needed.
 
 ## Configuration
 
-Once the classes are written, you must declare the forms in the sharp config file. So instead of:
+Once the classes are written, you must declare the forms in the entity class:
 
 ```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        "car" => [
-            "list" => \App\Sharp\CarSharpList::class,
-            "form" => \App\Sharp\CarSharpForm::class,
-            "validator" => \App\Sharp\CarSharpValidator::class
-        ]
-    ]
-];
+class CarEntity extends SharpEntity
+{
+    protected ?string $list = CarSharpList::class;
+    protected string $label = "Car";
+    
+    public function getMultiforms(): array
+    {
+        return [
+            "combustion" => [\App\Sharp\CombustionCarSharpForm::class, "Combustion car"],
+            "electric" => [\App\Sharp\ElectricCarSharpForm::class, "Electric car"],
+        ];
+    }
+}
 ```
 
-You'll have something like:
-
-```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        "car" => [
-            "list" => \App\Sharp\CarSharpList::class,
-            "forms" => [
-              "combustion" => [
-                "form" => \App\Sharp\CombustionCarSharpForm::class,
-                "validator" => \App\Sharp\CombustionCarSharpValidator::class,
-              ],
-              "electric" => [
-                "form" => \App\Sharp\ElectricCarSharpForm::class,
-                "validator" => \App\Sharp\ElectricCarSharpValidator::class,
-              ]
-            ]
-        ]
-    ]
-];
-```
+Note te expected return format of the `getMultiforms()` method: an array with: 
+- the subentity key as array key: this is the value of the split attribute, to disambiguate each type (see below)
+- and as value an array with first the Form class, and second the subentity label
 
 At this stage, you need only one more thing: configure the Entity List to handle Multi-Form.
-
 
 ## The Entity List
 
 Now we want to "merge" our Car entity in the Entity List, and allow the user to create or edit either a combustion or an
-electric car. To achieve this final step, you'll have to first update the global configuration to add a label and an
-optional icon to each type:
+electric car. With the configuration added to the entity class, at the previous step, we already have a dropdown button replacing the "New" button, each value leading to the right Form.
 
-```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        "car" => [
-            "list" => \App\Sharp\CarSharpList::class,
-            "forms" => [
-              "combustion" => [
-                "label" => "Combustion car",
-                "icon" => "fa-truck"
-                [...]
-              ],
-              "electric" => [
-                "label" => "Electric car",
-                "icon" => "fa-car",
-                [...]
-              ]
-            ]
-        ]
-    ]
-];
-```
-
-This allows the "new" button to display a dropdown with each type, leading to the right Form.
-
-Last, you must configure an instance attribute to disambiguate each type: each instance must have this attribute valuated either with "electric" or "combustion", in our example.
+You must configure an instance attribute to disambiguate each type: each instance must have this attribute valuated either with "electric" or "combustion", in our example.
 
 You declare this attribute in the Entity List `buildListConfig()` method:
 

@@ -81,21 +81,21 @@ Widget data is set with specific methods depending on their type. The documentat
 
 ## Configure the Dashboard
 
-Once this class written, we have to declare the form in the sharp config file:
+A Dashboard must have his own [Entity class, as documented here](entity-class.md). 
+
+Once this class (`CompanyDashboardEntity` for instance) written, we have to declare it the sharp config file:
 
 ```php
 // config/sharp.php
 
 return [
     "entities" => [
-        [...]
+        // ...
     ],
     "dashboards" => [
-        "company_dashboard" => [
-            "view" => \App\Sharp\CompanyDashboard::class
-        ]
+        "company_dashboard" => \App\Sharp\CompanyDashboardEntity::class
     ],
-    [...]
+    // ...
     "menu" => [
         [
             "label" => "Company",
@@ -122,36 +122,6 @@ Just like EntityLists, Dashboard can display filters, as [documented on the Filt
 
 Like again EntityLists, Commands can be attached to a Dashboard: [see the Command documentation](commands.md).
 
-## Dashboard policies
+## Dashboard policy
 
-You can define a Policy for a Dashboard:
-
-```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        [...]
-    ],
-    "dashboards" => [
-        "company_dashboard" => [
-            "view" => \App\Sharp\CompanyDashboard::class,
-            "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
-        ]
-    ],
-    [...]
-];
-```
-
-And the policy class can be pretty straightforward, since the only available action is `entity`:
-
-```php
-class CompanyDashboardPolicy
-{
-    public function entity($user): bool
-    {
-        return $user->hasGroup("boss");
-    }
-}
-```
-
+You can define a Policy for a Dashboard; [see the authorization documentation](entity-authorizations.md).

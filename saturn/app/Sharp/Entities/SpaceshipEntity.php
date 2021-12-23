@@ -15,7 +15,7 @@ class SpaceshipEntity extends SharpEntity
     protected ?string $form = SpaceshipSharpForm::class;
     protected string $label = "Spaceship";
 
-    public function getPolicy(): string|SharpEntityPolicy|null
+    protected function getPolicy(): string|SharpEntityPolicy|null
     {
         return new class extends SharpEntityPolicy
         {

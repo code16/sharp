@@ -42,23 +42,29 @@ Here's an example:
 ```php
 return [
     "entities" => [
-        "spaceship" => [
-            "list" => \App\Sharp\SpaceshipSharpList::class,
-            "form" => \App\Sharp\SpaceshipSharpForm::class,
-            "show" => \App\Sharp\SpaceshipSharpShow::class,
-            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
-            "policy" => \App\Sharp\Policies\SpaceshipPolicy::class
-        ]
+        "spaceship" => \App\Sharp\Entities\SpaceshipEntity::class,
     ]
 ];
 ```
 
-As we can see, each `entity` (like `spaceship` here) can define:
+This `SpaceshipSharpEntity` class could be written like this:
+
+```php
+class SpaceshipEntity extends SharpEntity
+{
+    protected ?string $list = SpaceshipSharpList::class;
+    protected ?string $show = SpaceshipSharpShow::class;
+    protected ?string $form = SpaceshipSharpForm::class;
+    protected ?string $policy = SpaceshipSharpPolicy::class;
+    protected string $label = "Spaceship";
+}
+```
+
+We choose to define:
 
 - a `list` class, responsible for the `Entity List`,
 - a `show` class, responsible for displaying an `instance`,
-- a `form` class, responsible for the create and edit `Form`
-- a `validator` class, to handle form validation
+- a `form` class, responsible for the create and edit `Form`,
 - and a `policy` class, for authorization.
 
 Almost each one is optional, in fact: we could skip the `show` and go straight to the `form` from the `list`, for instance. 

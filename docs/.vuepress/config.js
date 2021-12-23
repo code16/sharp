@@ -53,7 +53,7 @@ module.exports = {
                     collapsable: false,
                     children: [
                         '',
-                        'authentication',
+                        'entity-class',
                     ]
                 },
                 {
@@ -99,12 +99,19 @@ module.exports = {
                     ],
                 },
                 {
+                    title: 'Authentication and authorizations',
+                    collapsable: false,
+                    children: [
+                        'authentication',
+                        'entity-authorizations',
+                    ]
+                },
+                {
                     title: 'Generalities',
                     collapsable: false,
                     children: [
                         'building-menu',
                         'sharp-breadcrumb',
-                        'entity-authorizations',
                         'how-to-transform-data',
                         'link-to',
                         'page-alerts',

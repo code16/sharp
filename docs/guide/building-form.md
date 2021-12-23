@@ -380,42 +380,21 @@ function buildFormConfig(): void
 }
 ```
 
-## Configure the form
-
-Once this class written, we have to declare the form in the sharp config file:
-
-```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        "spaceship" => [
-            "list" => \App\Sharp\SpaceshipSharpList::class,
-            "form" => \App\Sharp\SpaceshipSharpForm::class
-        ]
-    ]
-];
-```
-
 ## Input validation
 
-In order to have an input validation on your form, you must create
-a [Laravel Form Request class](https://laravel.com/docs/5.4/validation#form-request-validation), and link it in the
-config:
+In order to have an input validation on your form, you can create
+a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
 
 ```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        "spaceship" => [
-            "list" => \App\Sharp\SpaceshipSharpList::class,
-            "form" => \App\Sharp\SpaceshipSharpForm::class,
-            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
-        ]
-    ]
-];
+class SpaceshipSharpForm extends SharpForm
+{
+    protected ?string $formValidatorClass = SpaceshipSharpValidator::class;
+    
+    // ...
+}
 ```
+
+You can, as an alternative, override the `protected function getFormValidatorClass(): ?string` method, which sould return the classname of the validator, in case you need more control.
 
 Sharp will handle the error display in the form.
 
@@ -446,3 +425,7 @@ public function rules()
 ```
 
 Or even easier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
+
+## Declare the form
+
+The Form must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).
