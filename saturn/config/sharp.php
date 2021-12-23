@@ -1,7 +1,5 @@
 <?php
 
-use App\Sharp\Entities\UserEntity;
-
 return [
 
     "name" => "Saturn",
@@ -23,100 +21,27 @@ return [
 
     "entities" => [
         "spaceship" => \App\Sharp\Entities\SpaceshipEntity::class,
-//            [
-//            "list" => \App\Sharp\SpaceshipSharpList::class,
-//            "show" => \App\Sharp\SpaceshipSharpShow::class,
-//            "form" => \App\Sharp\SpaceshipSharpForm::class,
-//            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
-//            "policy" => \App\Sharp\Policies\SpaceshipPolicy::class,
-//            "label" => "Spaceship"
-//        ],
-        "pilot" => 
-            \App\Sharp\Entities\PilotEntity::class, 
-//        [
-//            "list" => \App\Sharp\PilotSharpList::class,
-//            "show" => \App\Sharp\PilotSharpShow::class,
-//            "forms" => [
-//                "junior" => [
-//                    "icon" => "far fa-user",
-//                    "label" => "Junior Pilot",
-//                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
-//                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
-//                ],
-//                "senior" => [
-//                    "icon" => "fas fa-user",
-//                    "label" => "Senior Pilot",
-//                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
-//                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
-//                ]
-//            ],
-//            "label" => "Pilot"
-//        ],
-        "spaceship_pilot" => [
-            "list" => \App\Sharp\EmbeddedEntityLists\SpaceshipPilotSharpList::class,
-            "show" => \App\Sharp\PilotSharpShow::class,
-            "forms" => [
-                "junior" => [
-                    "icon" => "far fa-user",
-                    "label" => "Junior Pilot",
-                    "form" => \App\Sharp\PilotJuniorSharpForm::class,
-                    "validator" => \App\Sharp\PilotJuniorSharpValidator::class,
-                ],
-                "senior" => [
-                    "icon" => "fas fa-user",
-                    "label" => "Senior Pilot",
-                    "form" => \App\Sharp\PilotSeniorSharpForm::class,
-                    "validator" => \App\Sharp\PilotSeniorSharpValidator::class,
-                ]
-            ],
-            "label" => "Pilot"
-        ],
-        "passenger" => [
-            "list" => \App\Sharp\PassengerSharpList::class,
-            "form" => \App\Sharp\PassengerSharpForm::class,
-            "validator" => \App\Sharp\PassengerSharpValidator::class,
-            "label" => "Passenger"
-        ],
-        "travel" => [
-            "list" => \App\Sharp\TravelSharpList::class,
-            "form" => \App\Sharp\TravelSharpForm::class,
-            "validator" => \App\Sharp\TravelSharpValidator::class,
-            "label" => "Travel"
-        ],
-        "user" => UserEntity::class,
-//        [
-//            "list" => \App\Sharp\UserSharpList::class,
-//            "policy" => \App\Sharp\Policies\UserPolicy::class,
-//            "authorizations" => [
-//                "delete" => false,
-//                "create" => false,
-//                "update" => false,
-//                "view" => false
-//            ],
-//            "label" => "Sharp user"
-//        ],
-        "account" => [
-            "show" => \App\Sharp\AccountSharpShow::class,
-            "form" => \App\Sharp\AccountSharpForm::class,
-            "label" => "My account"
-        ],
+        "pilot" => \App\Sharp\Entities\PilotEntity::class, 
+        "spaceship_pilot" => \App\Sharp\Entities\SpaceshipPilotEntity::class,
+        "passenger" => \App\Sharp\Entities\PassengerEntity::class,
+        "travel" => \App\Sharp\Entities\TravelEntity::class,
+        "user" => App\Sharp\Entities\UserEntity::class,
+        "account" => App\Sharp\Entities\AccountEntity::class,
+        
+        // Keep the legacy config way for this one: 
         "feature" => [
             "list" => \App\Sharp\FeatureSharpList::class,
             "form" => \App\Sharp\FeatureSharpForm::class,
             "validator" => \App\Sharp\FeatureSharpValidator::class,
             "label" => "Feature"
         ],
+        
         "test" => \App\Sharp\Entities\TestEntity::class,
     ],
 
     "dashboards" => [
-        "company_dashboard" => [
-            "view" => \App\Sharp\CompanyDashboard::class,
-            "policy" => \App\Sharp\Policies\CompanyDashboardPolicy::class,
-        ],
-        "travels_dashboard" => [
-            "view" => \App\Sharp\TravelsDashboard::class,
-        ],
+        "company_dashboard" => \App\Sharp\Entities\CompanyDashboardEntity::class,
+        "travels_dashboard" => \App\Sharp\Entities\TravelsDashboardEntity::class,
     ],
 
     "global_filters" => [

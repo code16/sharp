@@ -20,6 +20,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class TravelSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
+    protected ?string $formValidatorClass = TravelSharpValidator::class;
 
     function buildFormFields(FieldsContainer $formFields): void
     {

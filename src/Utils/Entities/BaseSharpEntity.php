@@ -7,7 +7,6 @@ use Code16\Sharp\Auth\SharpEntityPolicy;
 abstract class BaseSharpEntity
 {
     protected string $entityKey = "entity";
-    protected string $label = "entity";
     protected ?string $policy = null;
 
     public final function setEntityKey(string $entityKey): self
