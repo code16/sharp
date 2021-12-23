@@ -76,14 +76,15 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     /** @test */
     public function we_can_validate_a_sub_entity_before_update()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.forms.big.validator',
-            BigPersonSharpValidator::class
-        );
+        app(SharpEntityManager::class)
+            ->entityFor("person")
+            ->setValidator(BigPersonSharpValidator::class, "big");
 
-        $this->postJson('/sharp/api/form/person:big/1', [
-            "name" => "Bob"
-        ])->assertStatus(422)
+        $this
+            ->postJson('/sharp/api/form/person:big/1', [
+                "name" => "Bob"
+            ])
+            ->assertStatus(422)
             ->assertJson([
                 "errors" => [
                     "height" => [
@@ -161,6 +162,13 @@ class SmallPersonSharpForm extends SharpForm
     function delete($id): void
     {
     }
+
+    protected function getFormValidatorClass(): ?string
+    {
+        return app(SharpEntityManager::class)
+                ->entityFor("person")
+            ->multiformValidatorsForTest["small"] ?? null;
+    }
 }
 
 class BigPersonSharpForm extends SmallPersonSharpForm
@@ -174,6 +182,13 @@ class BigPersonSharpForm extends SmallPersonSharpForm
     function find($id): array
     {
         return ["name" => "John Wayne", "height" => 180];
+    }
+
+    protected function getFormValidatorClass(): ?string
+    {
+        return app(SharpEntityManager::class)
+                ->entityFor("person")
+                ->multiformValidatorsForTest["big"] ?? null;
     }
 }
 

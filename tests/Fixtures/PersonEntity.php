@@ -7,6 +7,7 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class PersonEntity extends SharpEntity
 {
     public ?string $validatorForTest = null;
+    public array $multiformValidatorsForTest = [];
     public array $multiformForTest = [];
     protected string $entityKey = "person";
     protected ?string $list = PersonSharpEntityList::class;
@@ -25,9 +26,13 @@ class PersonEntity extends SharpEntity
         return $this;
     }
 
-    public function setValidator(string $validatorClass): self
+    public function setValidator(string $validatorClass, ?string $subentity = null): self
     {
-        $this->validatorForTest = $validatorClass;
+        if(!$subentity) {
+            $this->validatorForTest = $validatorClass;
+        } else {
+            $this->multiformValidatorsForTest[$subentity] = $validatorClass;
+        }
         return $this;
     }
 

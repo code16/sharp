@@ -71,7 +71,6 @@ class FormController extends ApiController
     public function store(string $entityKey)
     {
         $form = $this->getFormInstance($entityKey);
-        $form->buildFormConfig();
 
         if($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -79,6 +78,7 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
+        $form->buildFormConfig();
         
         $form->validateRequest($entityKey);
         $instanceId = $form->storeInstance(request()->all());

@@ -181,7 +181,7 @@ abstract class SharpForm
     /**
      * Return the full classname of a FormRequest to be executed as validation
      */
-    protected function getFormValidator(string $entityKey): ?string
+    protected final function getFormValidator(string $entityKey): ?string
     {
         // Legacy stuff: backward compatibility with Sharp 6 config
         return config("sharp.entities.{$entityKey}.validator") ?: $this->getFormValidatorClass();
