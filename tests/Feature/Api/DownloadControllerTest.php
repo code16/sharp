@@ -17,6 +17,7 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     function we_can_download_a_file_from_a_form_field()
     {
+        $this->disableSharpAuthorizationChecks();
         $this->withoutExceptionHandling();
         
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
@@ -46,6 +47,7 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     function we_can_download_a_file_from_a_show_field()
     {
+        $this->disableSharpAuthorizationChecks();
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
@@ -73,6 +75,7 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     function we_get_a_404_for_a_missing_file()
     {
+        $this->disableSharpAuthorizationChecks();
         $this
             ->withHeader(
                 "referer",
