@@ -26,7 +26,4 @@ php artisan sharp:make:entity-state <class_name> [--model=<model_name>]
 
 # Generate sharp media model
 php artisan sharp:make:media <class_name> [--table=<db table_name>]
-
-# Run a wizard that will create a model, list & form in one go
-php artisan sharp:model-wizard [--model=<model_name>]
 ```
