@@ -2,23 +2,14 @@
 
 namespace Code16\Sharp\Utils\Entities;
 
-use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 
-abstract class SharpDashboardEntity
+abstract class SharpDashboardEntity extends BaseSharpEntity
 {
-    protected string $entityKey = "dashboard";
     protected ?string $view = null;
-    protected ?string $policy = null;
 
-    public function setEntityKey(string $entityKey): self
-    {
-        $this->entityKey = $entityKey;
-        return $this;
-    }
-    
-    public function getViewOrFail(): SharpDashboard
+    public final function getViewOrFail(): SharpDashboard
     {
         throw_if(
             !$this->hasView(), 
@@ -27,7 +18,7 @@ abstract class SharpDashboardEntity
         return app($this->getView());
     }
 
-    public function hasView(): bool
+    public final function hasView(): bool
     {
         return $this->getView() !== null;
     }
@@ -37,16 +28,8 @@ abstract class SharpDashboardEntity
         return $this->view;
     }
 
-    public final function getPolicyOrDefault(): SharpEntityPolicy
+    public final function isActionProhibited(string $action): bool
     {
-        if(!$policy = $this->getPolicy()) {
-            return new SharpEntityPolicy();
-        }
-        return app($policy);
-    }
-
-    protected function getPolicy(): ?string
-    {
-        return $this->policy;
+        return false;
     }
 }

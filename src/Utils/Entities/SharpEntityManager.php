@@ -28,7 +28,7 @@ class SharpEntityManager
         }
         
         // Old array config format is used
-        if(isset($this->entity["view"])) {
+        if(isset($entity["view"])) {
             // This is a Dashboard
             return new class($entity) extends SharpDashboardEntity {
                 public function __construct(private array $entity)

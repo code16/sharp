@@ -2,28 +2,18 @@
 
 namespace Code16\Sharp\Utils\Entities;
 
-use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
 
-abstract class SharpEntity
+abstract class SharpEntity extends BaseSharpEntity
 {
-    protected string $entityKey = "entity";
     protected bool $isSingle = false;
-    protected string $label = "entity";
     protected ?string $list = null;
     protected ?string $form = null;
     protected ?string $show = null;
-    protected ?string $policy = null;
     protected array $prohibitedActions = [];
-
-    public final function setEntityKey(string $entityKey): self
-    {
-        $this->entityKey = $entityKey;
-        return $this;
-    }
 
     public final function getListOrFail(): SharpEntityList
     {
@@ -58,14 +48,6 @@ abstract class SharpEntity
         }
         return app($form);
     }
-
-    public final function getPolicyOrDefault(): SharpEntityPolicy
-    {
-        if(!$policy = $this->getPolicy()) {
-            return new SharpEntityPolicy();
-        }
-        return is_string($policy) ? app($policy) : $policy;
-    }
     
     public final function isActionProhibited(string $action): bool
     {
@@ -87,11 +69,6 @@ abstract class SharpEntity
     protected function getForm(): ?string
     {
         return $this->form;
-    }
-
-    protected function getPolicy(): string|SharpEntityPolicy|null
-    {
-        return $this->policy;
     }
 
     public function getMultiforms(): array
