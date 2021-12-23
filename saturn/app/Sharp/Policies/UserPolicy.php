@@ -2,12 +2,16 @@
 
 namespace App\Sharp\Policies;
 
-use Code16\Sharp\Auth\SharpEntityPolicy;
+use App\User;
 
-class UserPolicy extends SharpEntityPolicy
+/**
+ * This policy is written as a legacy from Sharp 6.
+ * It will be ultimately decorate in a SharpEntityPolicyLegacyDecorator object 
+ */
+class UserPolicy
 {
 
-    public function entity($user): bool
+    public function entity(User $user)
     {
         return $user->hasGroup("boss");
     }

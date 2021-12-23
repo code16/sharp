@@ -3,9 +3,11 @@
 namespace Code16\Sharp\Utils\Entities;
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\Auth\SharpEntityPolicyLegacyDecorator;
 
 abstract class BaseSharpEntity
 {
+    private bool $isDashboard = false;
     protected string $entityKey = "entity";
     protected ?string $policy = null;
 
@@ -20,7 +22,16 @@ abstract class BaseSharpEntity
         if(!$policy = $this->getPolicy()) {
             return new SharpEntityPolicy();
         }
-        return is_string($policy) ? app($policy) : $policy;
+        
+        if(is_string($policy)) {
+            $policy = app($policy);
+            if(!$policy instanceof SharpEntityPolicy) {
+                // Legacy (Sharp 6) policy
+                return new SharpEntityPolicyLegacyDecorator($policy, $this->isDashboard);
+            }
+        } 
+        
+        return $policy;
     }
 
     protected function getPolicy(): string|SharpEntityPolicy|null
