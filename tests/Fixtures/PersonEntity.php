@@ -19,6 +19,12 @@ class PersonEntity extends SharpEntity
         return $this;
     }
 
+    public function setShow(?string $show): self
+    {
+        $this->show = $show;
+        return $this;
+    }
+
     public function setValidator(string $validatorClass): self
     {
         $this->validatorForTest = $validatorClass;
@@ -39,6 +45,12 @@ class PersonEntity extends SharpEntity
     public function setPolicy(string $policy): self
     {
         $this->policy = $policy;
+        return $this;
+    }
+
+    public function setProhibitedActions(array $prohibitedActions): self
+    {
+        $this->prohibitedActions = $prohibitedActions;
         return $this;
     }
 }

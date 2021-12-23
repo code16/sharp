@@ -2,9 +2,12 @@
 
 namespace Code16\Sharp\Tests\Unit\Components;
 
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\View\Components\Menu;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 class MenuComponentTest extends SharpTestCase
 {
@@ -12,6 +15,19 @@ class MenuComponentTest extends SharpTestCase
     {
         parent::setUp();
         $this->actingAs(new User);
+        
+        // Disable authorization check for this unit test
+        $this->app->bind(SharpAuthorizationManager::class, function() {
+            return new class(app(SharpEntityManager::class), app(Gate::class)) extends SharpAuthorizationManager {
+                public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
+                {
+                    return true;
+                }
+                public function check(string $ability, string $entityKey, ?string $instanceId = null): void
+                {
+                }
+            };
+        });
     }
 
     /** @test */

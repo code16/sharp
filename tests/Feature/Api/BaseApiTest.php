@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Tests\Fixtures\PersonalDashboardEntity;
 use Code16\Sharp\Tests\Fixtures\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
 use Code16\Sharp\Tests\Fixtures\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
@@ -35,14 +34,6 @@ abstract class BaseApiTest extends SharpTestCase
     protected function login()
     {
         $this->actingAs(new User);
-    }
-
-    protected function configurePersonValidator()
-    {
-        $this->app['config']->set(
-            'sharp.entities.person.validator',
-            PersonSharpValidator::class
-        );
     }
 
     protected function buildTheWorld($singleShow = false)

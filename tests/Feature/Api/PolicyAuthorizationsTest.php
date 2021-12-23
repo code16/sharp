@@ -46,34 +46,38 @@ class PolicyAuthorizationsTest extends BaseApiTest
     /** @test */
     public function policy_authorizations_are_appended_to_the_response_on_a_form_case()
     {
-        $this->getJson('/sharp/api/form/person')->assertJson([
-            "authorizations" => [
-                // Delete policy is false, but in a create case it will return true
-                // because there is no entity to check for.
-                "delete" => true,
-                "update" => true,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person')
+            ->assertJson([
+                "authorizations" => [
+                    "delete" => false,
+                    "update" => true,
+                    "create" => true,
+                    "view" => true,
+                ]
+            ]);
 
-        $this->getJson('/sharp/api/form/person/1')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => true,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person/1')
+            ->assertJson([
+                "authorizations" => [
+                    "delete" => false,
+                    "update" => true,
+                    "create" => true,
+                    "view" => true,
+                ]
+            ]);
 
-        $this->getJson('/sharp/api/form/person/10')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person/10')
+            ->assertJson([
+                "authorizations" => [
+                    "delete" => false,
+                    "update" => false,
+                    "create" => true,
+                    "view" => true,
+                ]
+            ]);
     }
 
     /** @test */
@@ -91,21 +95,20 @@ class PolicyAuthorizationsTest extends BaseApiTest
     /** @test */
     public function global_authorizations_override_policies()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.authorizations', [
-                "delete" => true,
-                "update" => false,
-            ]
-        );
+        app(SharpEntityManager::class)
+            ->entityFor("person")
+            ->setProhibitedActions(["update"]);
 
-        $this->getJson('/sharp/api/form/person')->assertJson([
-            "authorizations" => [
-                "delete" => true,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person')
+            ->assertJson([
+                "authorizations" => [
+                    "delete" => false,
+                    "update" => false,
+                    "create" => true,
+                    "view" => true,
+                ]
+            ]);
     }
 
     /** @test */

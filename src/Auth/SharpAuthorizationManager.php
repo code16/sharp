@@ -30,7 +30,7 @@ class SharpAuthorizationManager
         }
 
         // Check global authorization
-        if ($this->isGloballyForbidden($ability, $entityKey, $instanceId)) {
+        if ($this->isGloballyForbidden($ability, $entityKey)) {
             $this->deny();
         }        
         
@@ -39,20 +39,11 @@ class SharpAuthorizationManager
         }
     }
 
-    protected function isGloballyForbidden(string $ability, string $entityKey, $instanceId): bool
+    protected function isGloballyForbidden(string $ability, string $entityKey): bool
     {
-        $entity = $this->entityManager->entityFor($entityKey);
-
-        if(!$entity->isActionProhibited($ability)) {
-            return false;
-        }
-        
-        if(($instanceId && $ability == "view") || $ability == "create") {
-            // Create or edit form case: we check for the global ability even on a GET
-            return true;
-        }
-
-        return request()->method() != 'GET';
+        return $this->entityManager
+            ->entityFor($entityKey)
+            ->isActionProhibited($ability);
     }
 
     protected function isPolicyForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool

@@ -26,7 +26,7 @@ class AppendFormAuthorizations
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse): JsonResponse
     {
         list($entityKey, $instanceId) = $this->determineEntityKeyAndInstanceId();
-
+        
         $data = $jsonResponse->getData();
         $data->authorizations = [
             "create" => $this->sharpAuthorizationManager->isAllowed("create", $entityKey),

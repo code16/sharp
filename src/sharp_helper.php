@@ -20,13 +20,8 @@ function sharp_user()
 
 function sharp_has_ability(string $ability, string $entityKey, string $instanceId = null): bool
 {
-    try {
-        sharp_check_ability($ability, $entityKey, $instanceId);
-        return true;
-
-    } catch(Code16\Sharp\Exceptions\Auth\SharpAuthorizationException $ex){
-        return false;
-    }
+    return app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
+        ->isAllowed($ability, sharp_normalize_entity_key($entityKey)[0], $instanceId);
 }
 
 function sharp_check_ability(string $ability, string $entityKey, string $instanceId = null)

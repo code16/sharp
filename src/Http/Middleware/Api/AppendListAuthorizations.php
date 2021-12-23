@@ -25,7 +25,11 @@ class AppendListAuthorizations
     {
         $entityKey = $this->determineEntityKey();
 
-        $authorizations["create"] = $this->sharpAuthorizationManager->isAllowed("create", $entityKey);
+        $authorizations = [
+            "view" => [],
+            "update" => [],
+            "create" => $this->sharpAuthorizationManager->isAllowed("create", $entityKey)
+        ];
 
         // Collect instanceIds from response
         collect($jsonResponse->getData()->data->list->items)
