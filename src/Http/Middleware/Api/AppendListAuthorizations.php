@@ -3,13 +3,13 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Illuminate\Contracts\Auth\Access\Gate;
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AppendListAuthorizations
 {
-    public function __construct(protected Gate $gate) {}
+    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager) {}
 
     public function handle(Request $request, Closure $next)
     {
@@ -25,16 +25,16 @@ class AppendListAuthorizations
     {
         $entityKey = $this->determineEntityKey();
 
-        $authorizations["create"] = $this->gate->check("sharp.{$entityKey}.create");
+        $authorizations["create"] = $this->sharpAuthorizationManager->isAllowed("create", $entityKey);
 
         // Collect instanceIds from response
         collect($jsonResponse->getData()->data->list->items)
             ->pluck($jsonResponse->getData()->config->instanceIdAttribute)
             ->each(function($instanceId) use (&$authorizations, $entityKey) {
-                if($this->gate->check("sharp.{$entityKey}.view", $instanceId)) {
+                if($this->sharpAuthorizationManager->isAllowed("view", $entityKey, $instanceId)) {
                     $authorizations["view"][] = $instanceId;
                 }
-                if($this->gate->check("sharp.{$entityKey}.update", $instanceId)) {
+                if($this->sharpAuthorizationManager->isAllowed("update", $entityKey, $instanceId)) {
                     $authorizations["update"][] = $instanceId;
                 }
             });

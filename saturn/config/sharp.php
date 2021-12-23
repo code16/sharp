@@ -1,5 +1,7 @@
 <?php
 
+use App\Sharp\Entities\UserEntity;
+
 return [
 
     "name" => "Saturn",
@@ -81,17 +83,18 @@ return [
             "validator" => \App\Sharp\TravelSharpValidator::class,
             "label" => "Travel"
         ],
-        "user" => [
-            "list" => \App\Sharp\UserSharpList::class,
-            "policy" => \App\Sharp\Policies\UserPolicy::class,
-            "authorizations" => [
-                "delete" => false,
-                "create" => false,
-                "update" => false,
-                "view" => false
-            ],
-            "label" => "Sharp user"
-        ],
+        "user" => UserEntity::class,
+//        [
+//            "list" => \App\Sharp\UserSharpList::class,
+//            "policy" => \App\Sharp\Policies\UserPolicy::class,
+//            "authorizations" => [
+//                "delete" => false,
+//                "create" => false,
+//                "update" => false,
+//                "view" => false
+//            ],
+//            "label" => "Sharp user"
+//        ],
         "account" => [
             "show" => \App\Sharp\AccountSharpShow::class,
             "form" => \App\Sharp\AccountSharpForm::class,

@@ -8,37 +8,66 @@ use Illuminate\Contracts\Auth\Access\Gate;
 
 class SharpAuthorizationManager
 {
-    public function __construct(protected SharpEntityManager $entityManager) {}
+    public function __construct(protected SharpEntityManager $entityManager, protected Gate $gate) {}
 
-    public function check(string $ability, string $entityKey, ?string $instanceId = null): void
+    public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
     {
-        
-        if($this->isForbidden("entity", $entityKey)) {
-            $this->deny();
+        try {
+            $this->check($ability, $entityKey, $instanceId);
+            return true;
+        } catch(SharpAuthorizationException) {
+            return false;
         }
-        
-        if($this->isForbidden($ability, $entityKey, $instanceId)) {
-            $this->deny();
-        }
-
-//        // Check global authorization
-//        if ($this->isGloballyForbidden($ability, $entityKey, $instanceId)) {
-//            $this->deny();
-//        }
     }
 
-    protected function isForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool
+    /**
+     * @throws SharpAuthorizationException
+     */
+    public function check(string $ability, string $entityKey, ?string $instanceId = null): void
     {
-        if($instanceId) {
-            // Form case: view, update, create, delete
-            return !app(Gate::class)->check("sharp.{$entityKey}.{$ability}", $instanceId);
+        if($this->isPolicyForbidden("entity", $entityKey)) {
+            $this->deny();
         }
 
-        if(in_array($ability, ["entity", "create"])) {
-            return !app(Gate::class)->check("sharp.{$entityKey}.{$ability}");
+        // Check global authorization
+        if ($this->isGloballyForbidden($ability, $entityKey, $instanceId)) {
+            $this->deny();
+        }        
+        
+        if($this->isPolicyForbidden($ability, $entityKey, $instanceId)) {
+            $this->deny();
+        }
+    }
+
+    protected function isGloballyForbidden(string $ability, string $entityKey, $instanceId): bool
+    {
+        $entity = $this->entityManager->entityFor($entityKey);
+
+        if(!$entity->isActionProhibited($ability)) {
+            return false;
+        }
+        
+        if(($instanceId && $ability == "view") || $ability == "create") {
+            // Create or edit form case: we check for the global ability even on a GET
+            return true;
         }
 
-        return false;
+        return request()->method() != 'GET';
+    }
+
+    protected function isPolicyForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool
+    {
+        $policy = $this->entityManager->entityFor($entityKey)->getPolicyOrDefault();
+        
+        if(in_array($ability, ['entity', 'create'])) {
+            return !$policy->$ability(auth()->user());
+        }
+
+        if(in_array($ability, ['view', 'update', 'delete'])) {
+            return !$policy->$ability(auth()->user(), $instanceId);
+        }
+        
+        return true;
     }
 
     private function deny()

@@ -3,17 +3,16 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Illuminate\Contracts\Auth\Access\Gate;
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 /**
  * This middleware appends authorizations for GET form request to the response.
  */
 class AppendFormAuthorizations
 {
-    public function __construct(protected Gate $gate) {}
+    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager) {}
 
     public function handle(Request $request, Closure $next)
     {
@@ -28,23 +27,13 @@ class AppendFormAuthorizations
     {
         list($entityKey, $instanceId) = $this->determineEntityKeyAndInstanceId();
 
-        $authorizations = collect(
-            [
-                "create" => $this->gate->check("sharp.{$entityKey}.create"),
-                "view" => true,
-                "update" => true,
-                "delete" => true
-            ])
-            ->when($instanceId, function(Collection $collection) use ($entityKey, $instanceId) {
-                return $collection->merge([
-                    "view" => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
-                    "update" => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
-                    "delete" => $this->gate->check("sharp.{$entityKey}.delete", $instanceId)
-                ]);
-            });
-            
         $data = $jsonResponse->getData();
-        $data->authorizations = $authorizations->toArray();
+        $data->authorizations = [
+            "create" => $this->sharpAuthorizationManager->isAllowed("create", $entityKey),
+            "view" => $this->sharpAuthorizationManager->isAllowed("view", $entityKey, $instanceId),
+            "update" => $this->sharpAuthorizationManager->isAllowed("update", $entityKey, $instanceId),
+            "delete" => $this->sharpAuthorizationManager->isAllowed("delete", $entityKey, $instanceId)
+        ];
         $jsonResponse->setData($data);
 
         return $jsonResponse;
@@ -55,10 +44,6 @@ class AppendFormAuthorizations
         $entityKey = request()->segment(4);
         $instanceId = request()->segment(5) ?? null;
 
-        if(($pos = strpos($entityKey, ':')) !== false) {
-            $entityKey = substr($entityKey, 0, $pos);
-        }
-
-        return [$entityKey, $instanceId];
+        return [sharp_normalize_entity_key($entityKey)[0], $instanceId];
     }
 }

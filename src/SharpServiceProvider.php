@@ -119,10 +119,6 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->app['router']
             ->aliasMiddleware(
-                'sharp_api_register_authorizations',
-                RegisterAuthorizations::class
-            )
-            ->aliasMiddleware(
                 'sharp_api_append_form_authorizations',
                 AppendFormAuthorizations::class
             )

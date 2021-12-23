@@ -8,7 +8,6 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\SharpProtectedController;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Illuminate\Support\Str;
 
 abstract class ApiController extends SharpProtectedController
 {
@@ -32,7 +31,7 @@ abstract class ApiController extends SharpProtectedController
     
     protected function getFormInstance(string $entityKey): SharpForm
     {
-        return $this->entityManager->entityFor($entityKey)->getFormOrFail(Str::after($entityKey, ':'));
+        return $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
     }
 
     protected function getDashboardInstance(string $dashboardKey): ?SharpDashboard

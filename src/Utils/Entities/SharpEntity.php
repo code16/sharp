@@ -17,8 +17,9 @@ abstract class SharpEntity
     protected ?string $form = null;
     protected ?string $show = null;
     protected ?string $policy = null;
+    protected array $prohibitedActions = [];
 
-    public function setEntityKey(string $entityKey): self
+    public final function setEntityKey(string $entityKey): self
     {
         $this->entityKey = $entityKey;
         return $this;
@@ -32,7 +33,7 @@ abstract class SharpEntity
         return app($list);
     }
 
-    public function getShowOrFail(): SharpShow
+    public final function getShowOrFail(): SharpShow
     {
         throw_if(
             !$this->hasShow(), 
@@ -41,7 +42,7 @@ abstract class SharpEntity
         return app($this->getShow());
     }
 
-    public function hasShow(): bool
+    public final function hasShow(): bool
     {
         return $this->getShow() !== null;
     }
@@ -63,7 +64,12 @@ abstract class SharpEntity
         if(!$policy = $this->getPolicy()) {
             return new SharpEntityPolicy();
         }
-        return app($policy);
+        return is_string($policy) ? app($policy) : $policy;
+    }
+    
+    public final function isActionProhibited(string $action): bool
+    {
+        return in_array($action, $this->prohibitedActions);
     }
 
     protected function getList(): ?string
@@ -83,7 +89,7 @@ abstract class SharpEntity
         return $this->form;
     }
 
-    protected function getPolicy(): ?string
+    protected function getPolicy(): string|SharpEntityPolicy|null
     {
         return $this->policy;
     }
