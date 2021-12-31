@@ -9,12 +9,26 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 class SharpMenuItem
 {
     protected SharpEntity|SharpDashboardEntity|null $entity;
-    
-    public function __construct(protected ?string $entityKey, protected ?string $label, protected ?string $icon)
+    protected ?string $entityKey = null;
+    protected ?string $url = null;
+
+    public function __construct(protected ?string $label, protected ?string $icon)
     {
+    }
+
+    public function setEntity(string $entityKey): self
+    {
+        $this->entityKey = $entityKey;
         $this->entity = $this->entityKey
             ? app(SharpEntityManager::class)->entityFor($this->entityKey)
             : null;
+        return $this;
+    }
+
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+        return $this;
     }
 
     public function getLabel(): string
@@ -39,7 +53,12 @@ class SharpMenuItem
 
     public function isEntity(): bool
     {
-        return true;
+        return $this->entityKey !== null;
+    }
+
+    public function isExternalLink(): bool
+    {
+        return !$this->isEntity();
     }
 
     public function getKey(): string
@@ -49,6 +68,10 @@ class SharpMenuItem
 
     public function getUrl(): string
     {
+        if($this->isExternalLink()) {
+            return $this->url;
+        }
+        
         if($this->entity->isDashboard()) {
             return route('code16.sharp.dashboard', $this->entityKey);
         }

@@ -13,7 +13,7 @@ class MenuItemCategory extends MenuItem
     public function __construct(SharpMenuSection $section)
     {
         $this->label = $section->getLabel();
-        $this->entities = collect($section->getEntityLinks())
+        $this->entities = collect($section->getItems())
             ->map(function(SharpMenuItem $entityMenuItem) {
                 return MenuItem::buildFromItemClass($entityMenuItem);
             })

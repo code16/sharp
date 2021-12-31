@@ -49,11 +49,13 @@ class Menu extends Component
                         );
                     }
                     
-                    return new SharpMenuItem(
-                        $itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null),
+                    $item = new SharpMenuItem(
                         $itemConfig['label'] ?? null,
                         $itemConfig['icon'] ?? null,
                     );
+                    $item->setEntity($itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null));
+                    
+                    return $item;
                 });
         } else {
             // Menu is built in a class (Sharp 7 way)

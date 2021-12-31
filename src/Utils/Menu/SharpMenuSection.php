@@ -4,11 +4,16 @@ namespace Code16\Sharp\Utils\Menu;
 
 class SharpMenuSection extends SharpMenuItem
 {
-    use HasMenuEntityLinks;
+    use HasSharpMenuItems;
     
     public function __construct(string $label)
     {
-        parent::__construct(null, $label, null);
+        parent::__construct($label, null);
+    }
+
+    public function addSeparator(string $label): self
+    {
+        return $this;
     }
 
     public function isSection(): bool

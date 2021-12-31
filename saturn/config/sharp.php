@@ -48,7 +48,8 @@ return [
         \App\Sharp\Filters\CorporationGlobalFilter::class
     ],
 
-    "menu" => \App\Sharp\SharpMenu::class,
+    "menu" => 
+        \App\Sharp\SharpMenu::class,
 //    [
 //        [
 //            "label" => "Company",

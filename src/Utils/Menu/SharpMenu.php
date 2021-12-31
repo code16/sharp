@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 abstract class SharpMenu
 {
-    use HasMenuEntityLinks;
+    use HasSharpMenuItems;
     
     public final function addSection(string $title, Closure $callbackClosure): self
     {

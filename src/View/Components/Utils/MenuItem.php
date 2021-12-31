@@ -14,29 +14,8 @@ abstract class MenuItem
             $menuItem = new MenuItemCategory($item);
         } elseif ($item->isEntity()) {
             $menuItem = new MenuItemEntity($item);
-        } elseif (isset($config['url'])) {
-            $menuItem = new MenuItemUrl($config);
-        } elseif (isset($config['dashboard'])) {
-            $menuItem = new MenuItemDashboard($config);
-        } elseif (isset($config['separator'])) {
-            $menuItem = new MenuItemSeparator($config);
-        }
-
-        return ($menuItem ?? false) && $menuItem->isValid()
-            ? $menuItem
-            : null;
-    }
-
-    public static function parse(array $config): ?MenuItem
-    {
-        if (isset($config['entities'])) {
-            $menuItem = new MenuItemCategory($config);
-        } elseif (isset($config['entity'])) {
-            $menuItem = new MenuItemEntity($config);
-        } elseif (isset($config['url'])) {
-            $menuItem = new MenuItemUrl($config);
-        } elseif (isset($config['dashboard'])) {
-            $menuItem = new MenuItemDashboard($config);
+        } elseif ($item->isExternalLink()) {
+            $menuItem = new MenuItemUrl($item);
         } elseif (isset($config['separator'])) {
             $menuItem = new MenuItemSeparator($config);
         }
