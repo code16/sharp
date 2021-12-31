@@ -10,6 +10,7 @@ class PersonEntity extends SharpEntity
     public array $multiformValidatorsForTest = [];
     public array $multiformForTest = [];
     protected string $entityKey = "person";
+    protected string $label = "person";
     protected ?string $list = PersonSharpEntityList::class;
     protected ?string $form = PersonSharpForm::class;
     protected ?string $show = PersonSharpShow::class;

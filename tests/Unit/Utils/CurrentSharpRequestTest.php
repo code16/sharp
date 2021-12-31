@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Utils;
 
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class CurrentSharpRequestTest extends SharpTestCase
 {
@@ -23,6 +24,12 @@ class CurrentSharpRequestTest extends SharpTestCase
     /** @test */
     function we_can_get_form_creation_state_from_request()
     {
+        // We have to define "child" as a non-single form
+        $this->app->bind("child_entity", function() {
+            return new class extends SharpEntity {};
+        });
+        $this->app['config']->set('sharp.entities.child', 'child_entity');
+        
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child');
 
         $this->assertTrue(currentSharpRequest()->isForm());

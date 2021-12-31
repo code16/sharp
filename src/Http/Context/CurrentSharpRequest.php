@@ -139,7 +139,7 @@ class CurrentSharpRequest
     public function isUpdate(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current && $current->isForm() && ($current->isSingleForm() || $current->instanceId() !== null);
+        return $current && $current->isForm() && ($current->instanceId() !== null || $current->isSingleForm());
     }
 
     public function entityKey(): ?string

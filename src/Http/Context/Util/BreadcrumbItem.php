@@ -2,8 +2,7 @@
 
 namespace Code16\Sharp\Http\Context\Util;
 
-use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class BreadcrumbItem
 {
@@ -44,7 +43,7 @@ class BreadcrumbItem
     {
         return $this->isShow() 
             && $this->instanceId() === null
-            && is_subclass_of(config("sharp.entities.{$this->entityKey()}.show"), SharpSingleShow::class);
+            && app(SharpEntityManager::class)->entityFor($this->entityKey())->isSingle();
     }
 
     public function isForm(): bool
@@ -56,7 +55,7 @@ class BreadcrumbItem
     {
         return $this->isForm() 
             && $this->instanceId() === null
-            && is_subclass_of(config("sharp.entities.{$this->entityKey()}.form"), SharpSingleForm::class);
+            && app(SharpEntityManager::class)->entityFor($this->entityKey())->isSingle();
     }
 
     public function is(BreadcrumbItem $item): bool

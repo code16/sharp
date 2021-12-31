@@ -52,7 +52,6 @@ class BreadcrumbTest extends BaseApiTest
                     ]
                 ]
             ]);
-            
     }
 
     /** @test */
