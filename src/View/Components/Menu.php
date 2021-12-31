@@ -53,7 +53,11 @@ class Menu extends Component
                         $itemConfig['label'] ?? null,
                         $itemConfig['icon'] ?? null,
                     );
-                    $item->setEntity($itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null));
+                    if($itemConfig['url'] ?? false) {
+                        $item->setUrl($itemConfig['url']);
+                    } else {
+                        $item->setEntity($itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null));
+                    }
                     
                     return $item;
                 });

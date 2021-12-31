@@ -7,6 +7,7 @@ use Code16\Sharp\Tests\Fixtures\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Menu\SharpMenu;
 use Code16\Sharp\View\Components\Menu;
 
 class MenuComponentTest extends SharpTestCase
@@ -19,7 +20,7 @@ class MenuComponentTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_an_external_url_in_the_menu()
+    function we_can_define_an_external_url_in_the_menu_via_config()
     {
         $this->app['config']->set(
             'sharp.menu', [
@@ -31,8 +32,6 @@ class MenuComponentTest extends SharpTestCase
             ]
         );
         
-        $menu = app(Menu::class);
-
         $this->assertArraySubset(
             [
                 "label" => "external",
@@ -40,12 +39,38 @@ class MenuComponentTest extends SharpTestCase
                 "url" => "https://google.com",
                 "type" => "url"
             ], 
-            (array)$menu->getItems()[0]
+            (array)app(Menu::class)->getItems()[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_direct_entity_link_in_the_menu()
+    function we_can_define_an_external_url_in_the_menu_via_class()
+    {
+        $this->app->bind("test_sharp_menu", function() {
+            return new class extends SharpMenu
+            {
+                public function build(): SharpMenu
+                {
+                    return $this->addExternalLink("https://google.com", "external", "fa-globe");
+                }
+            };
+        });
+        
+        $this->app['config']->set('sharp.menu', 'test_sharp_menu');
+
+        $this->assertArraySubset(
+            [
+                "label" => "external",
+                "icon" => "fa-globe",
+                "url" => "https://google.com",
+                "type" => "url"
+            ],
+            (array)app(Menu::class)->getItems()[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_direct_entity_link_in_the_menu_via_config()
     {
         $this->app['config']->set(
             'sharp.entities.person',
@@ -62,8 +87,6 @@ class MenuComponentTest extends SharpTestCase
             ]
         );
 
-        $menu = app(Menu::class);
-
         $this->assertArraySubset(
             [
                 "key" => "person",
@@ -72,12 +95,39 @@ class MenuComponentTest extends SharpTestCase
                 "type" => "entity",
                 "url" => route("code16.sharp.list", "person"),
             ], 
-            (array)$menu->getItems()[0]
+            (array)app(Menu::class)->getItems()[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_category_in_the_menu()
+    function we_can_define_a_direct_entity_link_in_the_menu_via_class()
+    {
+        $this->app->bind("test_sharp_menu", function() {
+            return new class extends SharpMenu
+            {
+                public function build(): SharpMenu
+                {
+                    return $this->addEntityLink("person", "people", "fa-user");
+                }
+            };
+        });
+        $this->app['config']->set('sharp.menu', 'test_sharp_menu');
+        $this->app['config']->set('sharp.entities.person', PersonEntity::class);
+
+        $this->assertArraySubset(
+            [
+                "key" => "person",
+                "label" => "people",
+                "icon" => "fa-user",
+                "type" => "entity",
+                "url" => route("code16.sharp.list", "person"),
+            ],
+            (array)app(Menu::class)->getItems()[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_category_in_the_menu_via_config()
     {
         $this->app['config']->set(
             'sharp.entities.person',
@@ -117,7 +167,41 @@ class MenuComponentTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_a_dashboard_in_the_menu()
+    function we_can_define_a_category_in_the_menu_via_class()
+    {
+        $this->app->bind("test_sharp_menu", function() {
+            return new class extends SharpMenu
+            {
+                public function build(): SharpMenu
+                {
+                    return $this->addSection("Data", function($section) {
+                        $section->addEntityLink("person", "people", "fa-user");
+                    });
+                }
+            };
+        });
+        $this->app['config']->set('sharp.menu', 'test_sharp_menu');
+        $this->app['config']->set('sharp.entities.person', PersonEntity::class);
+
+        $menu = app(Menu::class);
+
+        $this->assertEquals("Data", $menu->getItems()[0]->label);
+        $this->assertEquals("category", $menu->getItems()[0]->type);
+
+        $this->assertArraySubset(
+            [
+                "key" => "person",
+                "label" => "people",
+                "icon" => "fa-user",
+                "type" => "entity",
+                "url" => route("code16.sharp.list", "person"),
+            ],
+            (array)$menu->getItems()[0]->entities[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_dashboard_in_the_menu_via_config()
     {
         $this->app['config']->set(
             'sharp.entities.personal_dashboard',
@@ -149,7 +233,38 @@ class MenuComponentTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_a_single_show_entity_link_in_the_menu()
+    function we_can_define_a_dashboard_in_the_menu_via_class()
+    {
+        $this->app->bind("test_sharp_menu", function() {
+            return new class extends SharpMenu
+            {
+                public function build(): SharpMenu
+                {
+                    return $this->addEntityLink("personal_dashboard", "My Dashboard", "fa-dashboard");
+                }
+            };
+        });
+        $this->app['config']->set('sharp.menu', 'test_sharp_menu');
+
+        $this->app['config']->set(
+            'sharp.entities.personal_dashboard',
+            PersonalDashboardEntity::class
+        );
+
+        $this->assertArraySubset(
+            [
+                "key" => "personal_dashboard",
+                "label" => "My Dashboard",
+                "icon" => "fa-dashboard",
+                "type" => "dashboard",
+                "url" => route("code16.sharp.dashboard", "personal_dashboard"),
+            ],
+            (array)app(Menu::class)->getItems()[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_single_show_entity_link_in_the_menu_via_config()
     {
         $this->app['config']->set(
             'sharp.entities.person',
@@ -182,7 +297,38 @@ class MenuComponentTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_define_a_separator_in_the_menu()
+    function we_can_define_a_single_show_entity_link_in_the_menu_via_class()
+    {
+        $this->app['config']->set(
+            'sharp.entities.person',
+            SinglePersonEntity::class
+        );
+
+        $this->app->bind("test_sharp_menu", function() {
+            return new class extends SharpMenu
+            {
+                public function build(): SharpMenu
+                {
+                    return $this->addEntityLink("person", "people", "fa-user");
+                }
+            };
+        });
+        $this->app['config']->set('sharp.menu', 'test_sharp_menu');
+
+        $this->assertArraySubset(
+            [
+                "key" => "person",
+                "label" => "people",
+                "icon" => "fa-user",
+                "type" => "entity",
+                "url" => route("code16.sharp.single-show", "person"),
+            ],
+            (array)app(Menu::class)->getItems()[0]
+        );
+    }
+
+    /** @test */
+    function we_can_define_a_separator_in_the_menu_via_config()
     {
         $this->app['config']->set(
             'sharp.entities.person',
