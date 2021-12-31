@@ -30,24 +30,23 @@ class Menu extends Component
         $sharpMenu = config("sharp.menu", []);
         
         if(is_array($sharpMenu)) {
-            // Menu is defined in the config file (Sharp 6 way)
+            // Menu is defined in the config file (Sharp 6 way, legacy)
             $items = collect($sharpMenu)
                 ->map(function(array $itemConfig) {
                     if($itemConfig['entities'] ?? false) {
-                        $section = new SharpMenuSection(
-                            $itemConfig['label'] ?? null
+                        return tap(
+                            new SharpMenuSection($itemConfig['label'] ?? null),
+                            function(SharpMenuSection $section) use($itemConfig) {
+                                collect($itemConfig['entities'])
+                                    ->each(function(array $entityConfig) use (&$section) {
+                                        $section->addEntityLink(
+                                            $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
+                                            $entityConfig['label'] ?? null,
+                                            $entityConfig['icon'] ?? null,
+                                        );
+                                    });
+                            }
                         );
-                        
-                        collect($itemConfig['entities'])
-                            ->each(function(array $entityConfig) use (&$section) {
-                                $section->addEntityLink(
-                                    $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
-                                    $entityConfig['label'] ?? null,
-                                    $entityConfig['icon'] ?? null,
-                                );
-                            });
-                        
-                        return $section;
                     }
                     
                     return new SharpMenuItem(
