@@ -3,14 +3,14 @@
 namespace Code16\Sharp\View\Components\Utils;
 
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
-use Code16\Sharp\Utils\Menu\SharpMenuSection;
+use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 
-class MenuItemCategory extends MenuItem
+class MenuItemSection extends MenuItem
 {
     public string $type = "category";
     public array $entities = [];
 
-    public function __construct(SharpMenuSection $section)
+    public function __construct(SharpMenuItemSection $section)
     {
         $this->label = $section->getLabel();
         $this->entities = collect($section->getItems())
@@ -20,7 +20,7 @@ class MenuItemCategory extends MenuItem
             ->filter()
             ->toArray();
         
-//        $this->sanitizeItems();
+        $this->sanitizeItems();
     }
 
     private function sanitizeItems(): void
@@ -45,7 +45,7 @@ class MenuItemCategory extends MenuItem
         return count($this->entities) != 0;
     }
 
-    public function isMenuItemCategory(): bool
+    public function isMenuItemSection(): bool
     {
         return true;
     }

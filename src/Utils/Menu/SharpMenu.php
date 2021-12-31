@@ -11,7 +11,7 @@ abstract class SharpMenu
     
     public final function addSection(string $title, Closure $callbackClosure): self
     {
-        $section = new SharpMenuSection($title);
+        $section = new SharpMenuItemSection($title);
         $callbackClosure($section);
         $this->items[] = $section;
         return $this;

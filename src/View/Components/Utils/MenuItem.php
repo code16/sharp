@@ -11,13 +11,13 @@ abstract class MenuItem
     public static function buildFromItemClass(SharpMenuItem $item): ?MenuItem
     {
         if ($item->isSection()) {
-            $menuItem = new MenuItemCategory($item);
+            $menuItem = new MenuItemSection($item);
         } elseif ($item->isEntity()) {
             $menuItem = new MenuItemEntity($item);
         } elseif ($item->isExternalLink()) {
             $menuItem = new MenuItemUrl($item);
-        } elseif (isset($config['separator'])) {
-            $menuItem = new MenuItemSeparator($config);
+        } elseif ($item->isSeparator()) {
+            $menuItem = new MenuItemSeparator($item);
         }
 
         return ($menuItem ?? false) && $menuItem->isValid()
@@ -25,7 +25,7 @@ abstract class MenuItem
             : null;
     }
 
-    public function isMenuItemCategory(): bool
+    public function isMenuItemSection(): bool
     {
         return false;
     }

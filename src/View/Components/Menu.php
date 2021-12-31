@@ -3,7 +3,9 @@
 namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
-use Code16\Sharp\Utils\Menu\SharpMenuSection;
+use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
+use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
+use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
 use Code16\Sharp\View\Components\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
@@ -35,21 +37,29 @@ class Menu extends Component
                 ->map(function(array $itemConfig) {
                     if($itemConfig['entities'] ?? false) {
                         return tap(
-                            new SharpMenuSection($itemConfig['label'] ?? null),
-                            function(SharpMenuSection $section) use($itemConfig) {
+                            new SharpMenuItemSection($itemConfig['label'] ?? null),
+                            function(SharpMenuItemSection $section) use($itemConfig) {
                                 collect($itemConfig['entities'])
                                     ->each(function(array $entityConfig) use (&$section) {
-                                        $section->addEntityLink(
-                                            $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
-                                            $entityConfig['label'] ?? null,
-                                            $entityConfig['icon'] ?? null,
-                                        );
+                                        if($entityConfig['separator'] ?? false) {
+                                            $section->addSeparator($entityConfig['label']);
+                                        } else {
+                                            $section->addEntityLink(
+                                                $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
+                                                $entityConfig['label'] ?? null,
+                                                $entityConfig['icon'] ?? null,
+                                            );
+                                        }
                                     });
                             }
                         );
                     }
                     
-                    $item = new SharpMenuItem(
+                    if($itemConfig['separator'] ?? false) {
+                        return new SharpMenuItemSeparator($itemConfig['label']);
+                    }
+                    
+                    $item = new SharpMenuItemLink(
                         $itemConfig['label'] ?? null,
                         $itemConfig['icon'] ?? null,
                     );

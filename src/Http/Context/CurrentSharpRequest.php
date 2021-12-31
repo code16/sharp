@@ -99,10 +99,10 @@ class CurrentSharpRequest
             ->filter(function(MenuItem $item) {
                 return $item->isMenuItemEntity() 
                     || $item->isMenuItemDashboard()
-                    || $item->isMenuItemCategory();
+                    || $item->isMenuItemSection();
             })
             ->map(function(MenuItem $item) {
-                if($item->isMenuItemCategory()) {
+                if($item->isMenuItemSection()) {
                     return $item->entities;
                 }
                 return $item;

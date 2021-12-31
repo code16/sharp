@@ -8,13 +8,13 @@ trait HasSharpMenuItems
     
     public function addEntityLink(string $entityKey, ?string $label = null, ?string $icon = null): self
     {
-        $this->items[] = (new SharpMenuItem($label, $icon))->setEntity($entityKey);
+        $this->items[] = (new SharpMenuItemLink($label, $icon))->setEntity($entityKey);
         return $this;
     }
 
     public function addExternalLink(string $url, ?string $label = null, ?string $icon = null): self
     {
-        $this->items[] = (new SharpMenuItem($label, $icon))->setUrl($url);
+        $this->items[] = (new SharpMenuItemLink($label, $icon))->setUrl($url);
         return $this;
     }
 

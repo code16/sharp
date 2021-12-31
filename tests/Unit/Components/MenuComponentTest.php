@@ -375,6 +375,45 @@ class MenuComponentTest extends SharpTestCase
     }
 
     /** @test */
+    function we_can_define_a_separator_in_the_menu_via_class()
+    {
+        $this->app['config']->set(
+            'sharp.entities.person',
+            PersonEntity::class
+        );
+
+        $this->app->bind("test_sharp_menu", function() {
+            return new class extends SharpMenu
+            {
+                public function build(): SharpMenu
+                {
+                    return $this
+                        ->addSection("Data", function($section) {
+                            $section->addEntityLink("person", "people", "fa-user")
+                                ->addSeparator("Separator")
+                                ->addEntityLink("person", "other people", "fa-user-o");
+                        });
+                }
+            };
+        });
+        $this->app['config']->set('sharp.menu', 'test_sharp_menu');
+
+        $menu = app(Menu::class);
+
+        $this->assertEquals("people", $menu->getItems()[0]->entities[0]->label);
+        $this->assertEquals("other people", $menu->getItems()[0]->entities[2]->label);
+
+        $this->assertEquals(
+            [
+                "type" => "separator",
+                "key" => null,
+                "label" => "Separator",
+            ],
+            (array)$menu->getItems()[0]->entities[1]
+        );
+    }
+
+    /** @test */
     function separators_in_last_position_are_hidden()
     {
         $this->app['config']->set(
