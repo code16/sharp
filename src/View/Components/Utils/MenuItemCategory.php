@@ -2,22 +2,25 @@
 
 namespace Code16\Sharp\View\Components\Utils;
 
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
+use Code16\Sharp\Utils\Menu\SharpMenuSection;
+
 class MenuItemCategory extends MenuItem
 {
     public string $type = "category";
     public array $entities = [];
 
-    public function __construct(array $category)
+    public function __construct(SharpMenuSection $section)
     {
-        $this->label = $category["label"] ?? "Unnamed category";
-
-        foreach ((array)($category["entities"] ?? []) as $entityConfig) {
-            if($menuEntity = static::parse($entityConfig)) {
-                $this->entities[] = $menuEntity;
-            }
-        }
+        $this->label = $section->getLabel();
+        $this->entities = collect($section->getEntityLinks())
+            ->map(function(SharpMenuItem $entityMenuItem) {
+                return MenuItem::buildFromItemClass($entityMenuItem);
+            })
+            ->filter()
+            ->toArray();
         
-        $this->sanitizeItems();
+//        $this->sanitizeItems();
     }
 
     private function sanitizeItems(): void

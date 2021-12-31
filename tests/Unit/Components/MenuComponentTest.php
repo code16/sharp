@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Tests\Unit\Components;
 
+use Code16\Sharp\Tests\Fixtures\PersonalDashboardEntity;
+use Code16\Sharp\Tests\Fixtures\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\View\Components\Menu;
@@ -45,6 +48,11 @@ class MenuComponentTest extends SharpTestCase
     function we_can_define_a_direct_entity_link_in_the_menu()
     {
         $this->app['config']->set(
+            'sharp.entities.person',
+            PersonEntity::class
+        );
+        
+        $this->app['config']->set(
             'sharp.menu', [
                 [
                     "label" => "people",
@@ -71,6 +79,11 @@ class MenuComponentTest extends SharpTestCase
     /** @test */
     function we_can_define_a_category_in_the_menu()
     {
+        $this->app['config']->set(
+            'sharp.entities.person',
+            PersonEntity::class
+        );
+        
         $this->app['config']->set(
             'sharp.menu', [
                 [
@@ -107,6 +120,11 @@ class MenuComponentTest extends SharpTestCase
     function we_can_define_a_dashboard_in_the_menu()
     {
         $this->app['config']->set(
+            'sharp.entities.personal_dashboard',
+            PersonalDashboardEntity::class
+        );
+        
+        $this->app['config']->set(
             'sharp.menu', [
                 [
                     "label" => "My Dashboard",
@@ -133,6 +151,11 @@ class MenuComponentTest extends SharpTestCase
     /** @test */
     function we_can_define_a_single_show_entity_link_in_the_menu()
     {
+        $this->app['config']->set(
+            'sharp.entities.person',
+            SinglePersonEntity::class
+        );
+        
         $this->app['config']->set(
             'sharp.menu', [
                 [
@@ -161,6 +184,11 @@ class MenuComponentTest extends SharpTestCase
     /** @test */
     function we_can_define_a_separator_in_the_menu()
     {
+        $this->app['config']->set(
+            'sharp.entities.person',
+            PersonEntity::class
+        );
+        
         $this->app['config']->set(
             'sharp.menu', [
                 [
@@ -204,6 +232,11 @@ class MenuComponentTest extends SharpTestCase
     function separators_in_last_position_are_hidden()
     {
         $this->app['config']->set(
+            'sharp.entities.person',
+            PersonEntity::class
+        );
+        
+        $this->app['config']->set(
             'sharp.menu', [
                 [
                     "label" => "Data",
@@ -230,6 +263,11 @@ class MenuComponentTest extends SharpTestCase
     /** @test */
     function stacked_separators_are_hidden()
     {
+        $this->app['config']->set(
+            'sharp.entities.person',
+            PersonEntity::class
+        );
+        
         $this->app['config']->set(
             'sharp.menu', [
                 [

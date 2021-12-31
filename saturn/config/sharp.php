@@ -86,15 +86,15 @@ return [
                     "icon" => "fas fa-suitcase",
                     "entity" => "travel"
                 ],
-                [
-                    "separator" => true,
-                    "label" => "Utilities",
-                ],
-                [
-                    "label" => "Some external link",
-                    "icon" => "fas fa-globe",
-                    "url" => "https://google.com",
-                ],
+//                [
+//                    "separator" => true,
+//                    "label" => "Utilities",
+//                ],
+//                [
+//                    "label" => "Some external link",
+//                    "icon" => "fas fa-globe",
+//                    "url" => "https://google.com",
+//                ],
             ]
         ], [
             "label" => "Admin",
@@ -112,11 +112,11 @@ return [
                 ]
             ]
         ],
-        [
-            "label" => "Public website",
-            "icon" => "fas fa-globe",
-            "url" => "https://google.com",
-        ],
+//        [
+//            "label" => "Public website",
+//            "icon" => "fas fa-globe",
+//            "url" => "https://google.com",
+//        ],
         [
             "label" => "Some powerful Features",
             "icon" => "fab fa-superpowers",

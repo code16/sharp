@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\View\Components;
 
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
+use Code16\Sharp\Utils\Menu\SharpMenuSection;
 use Code16\Sharp\View\Components\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
@@ -25,9 +27,43 @@ class Menu extends Component
     
     public function getItems(): Collection
     {
-        return collect(config("sharp.menu", []))
-            ->map(function($itemConfig) {
-                return MenuItem::parse($itemConfig);
+        $sharpMenu = config("sharp.menu", []);
+        
+        if(is_array($sharpMenu)) {
+            // Menu is defined in the config file (Sharp 6 way)
+            $items = collect($sharpMenu)
+                ->map(function(array $itemConfig) {
+                    if($itemConfig['entities'] ?? false) {
+                        $section = new SharpMenuSection(
+                            $itemConfig['label'] ?? null
+                        );
+                        
+                        collect($itemConfig['entities'])
+                            ->each(function(array $entityConfig) use (&$section) {
+                                $section->addEntityLink(
+                                    $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
+                                    $entityConfig['label'] ?? null,
+                                    $entityConfig['icon'] ?? null,
+                                );
+                            });
+                        
+                        return $section;
+                    }
+                    
+                    return new SharpMenuItem(
+                        $itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null),
+                        $itemConfig['label'] ?? null,
+                        $itemConfig['icon'] ?? null,
+                    );
+                });
+        } else {
+            // Menu is built in a class (Sharp 7 way)
+            $items = $sharpMenu->items();
+        }
+
+        return $items
+            ->map(function(SharpMenuItem $item) {
+                return MenuItem::buildFromItemClass($item);
             })
             ->filter()
             ->values();

@@ -7,9 +7,10 @@ use Code16\Sharp\Auth\SharpEntityPolicyLegacyDecorator;
 
 abstract class BaseSharpEntity
 {
-    private bool $isDashboard = false;
+    protected bool $isDashboard = false;
     protected string $entityKey = "entity";
     protected ?string $policy = null;
+    protected string $label = "entity";
 
     public final function setEntityKey(string $entityKey): self
     {
@@ -32,6 +33,16 @@ abstract class BaseSharpEntity
         } 
         
         return $policy;
+    }
+
+    public final function getLabel(): string
+    {
+        return $this->label;
+    }
+    
+    public final function isDashboard(): bool
+    {
+        return $this->isDashboard;
     }
 
     protected function getPolicy(): string|SharpEntityPolicy|null

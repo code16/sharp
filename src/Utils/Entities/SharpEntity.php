@@ -10,7 +10,6 @@ use Code16\Sharp\Show\SharpShow;
 abstract class SharpEntity extends BaseSharpEntity
 {
     protected bool $isSingle = false;
-    protected string $label = "entity";
     protected ?string $list = null;
     protected ?string $form = null;
     protected ?string $show = null;
@@ -53,6 +52,11 @@ abstract class SharpEntity extends BaseSharpEntity
     public final function isActionProhibited(string $action): bool
     {
         return in_array($action, $this->prohibitedActions);
+    }
+    
+    public final function isSingle(): bool
+    {
+        return $this->isSingle;
     }
 
     protected function getList(): ?string
