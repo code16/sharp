@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Menu;
 
 use Closure;
+use Illuminate\Support\Collection;
 
 abstract class SharpMenu
 {
@@ -16,5 +17,10 @@ abstract class SharpMenu
         return $this;
     }
 
-    abstract public function build(): void;
+    public final function items(): Collection
+    {
+        return collect($this->items);
+    }
+
+    abstract public function build(): self;
 }

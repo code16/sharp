@@ -2,29 +2,27 @@
 
 namespace App\Sharp;
 
-use App\Sharp\Entities\CompanyDashboardEntity;
 use Code16\Sharp\Utils\Menu\SharpMenu as BaseSharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuSection;
 
 class SharpMenu extends BaseSharpMenu
 {
-    public function build(): void
+    public function build(): self
     {
-        $this
+        return $this
             ->addSection("Company", function(SharpMenuSection $section) {
                 $section
-                    ->addEntityLink(new CompanyDashboardEntity(), "fas fa-tachometer-alt", "Optional label")
-                    ->addExternalLink("https://perdu.com", "fas fa-globe", "Some external link")
-                    
-                    ->addDashboardLink("Dashboard", "company_dashboard", "fas fa-tachometer-alt")
-                    ->addEntityLink("Spaceships", "spaceship", "fas fa-space-shuttle")
-                    ->addSingleEntityLink("My account", "account", "fas fa-user")
-                    ->addSeparator("Utils")
-                    ->addExternalLink("Some external link", "https://perdu.com", "fas fa-globe");
+                    ->addEntityLink("company_dashboard", "Dashboard", "fas fa-tachometer-alt")
+                    ->addEntityLink("spaceship", "Spaceships", "fas fa-space-shuttle")
+                    ->addEntityLink("pilot", "Pilots", "fas fa-user");
             })
-            ->addDashboardLink("Dashboard", "company_dashboard", "fas fa-tachometer-alt")
-            ->addEntityLink("Spaceships", "spaceship", "fas fa-space-shuttle")
-            ->addSingleEntityLink("My account", "account", "fas fa-user")
-            ->addExternalLink("Some external link", "https://perdu.com", "fas fa-globe");
+            ->addSection("Travels", function(SharpMenuSection $section) {
+                $section
+                    ->addEntityLink("travels_dashboard", "Dashboard", "fas fa-tachometer-alt")
+                    ->addEntityLink("passenger", "Passengers", "fas fa-bed")
+                    ->addEntityLink("travel", "Travels", "fas fa-suitcase");
+            })
+            ->addEntityLink("account", "My account", "fas fa-user")
+            ->addEntityLink("user", "Sharp users", "fas fa-user-secret");
     }
 }

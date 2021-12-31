@@ -48,81 +48,82 @@ return [
         \App\Sharp\Filters\CorporationGlobalFilter::class
     ],
 
-    "menu" => [
-        [
-            "label" => "Company",
-            "entities" => [
-                [
-                    "label" => "Dashboard",
-                    "icon" => "fas fa-tachometer-alt",
-                    "dashboard" => "company_dashboard"
-                ],
-                [
-                    "label" => "Spaceships",
-                    "icon" => "fas fa-space-shuttle",
-                    "entity" => "spaceship"
-                ],
-                [
-                    "label" => "Pilots",
-                    "icon" => "fas fa-user",
-                    "entity" => "pilot"
-                ]
-            ]
-        ], [
-            "label" => "Travels",
-            "entities" => [
-                [
-                    "label" => "Dashboard",
-                    "icon" => "fas fa-tachometer-alt",
-                    "dashboard" => "travels_dashboard"
-                ],
-                [
-                    "label" => "Passengers",
-                    "icon" => "fas fa-bed",
-                    "entity" => "passenger"
-                ],
-                [
-                    "label" => "Travel",
-                    "icon" => "fas fa-suitcase",
-                    "entity" => "travel"
-                ],
-//                [
-//                    "separator" => true,
-//                    "label" => "Utilities",
-//                ],
-//                [
-//                    "label" => "Some external link",
-//                    "icon" => "fas fa-globe",
-//                    "url" => "https://google.com",
-//                ],
-            ]
-        ], [
-            "label" => "Admin",
-            "entities" => [
-                [
-                    "label" => "My account",
-                    "icon" => "fas fa-user",
-                    "entity" => "account",
-                    "single" => true
-                ],
-                [
-                    "label" => "Sharp users",
-                    "icon" => "fas fa-user-secret",
-                    "entity" => "user"
-                ]
-            ]
-        ],
+    "menu" => \App\Sharp\SharpMenu::class,
+//    [
 //        [
-//            "label" => "Public website",
-//            "icon" => "fas fa-globe",
-//            "url" => "https://google.com",
+//            "label" => "Company",
+//            "entities" => [
+//                [
+//                    "label" => "Dashboard",
+//                    "icon" => "fas fa-tachometer-alt",
+//                    "dashboard" => "company_dashboard"
+//                ],
+//                [
+//                    "label" => "Spaceships",
+//                    "icon" => "fas fa-space-shuttle",
+//                    "entity" => "spaceship"
+//                ],
+//                [
+//                    "label" => "Pilots",
+//                    "icon" => "fas fa-user",
+//                    "entity" => "pilot"
+//                ]
+//            ]
+//        ], [
+//            "label" => "Travels",
+//            "entities" => [
+//                [
+//                    "label" => "Dashboard",
+//                    "icon" => "fas fa-tachometer-alt",
+//                    "dashboard" => "travels_dashboard"
+//                ],
+//                [
+//                    "label" => "Passengers",
+//                    "icon" => "fas fa-bed",
+//                    "entity" => "passenger"
+//                ],
+//                [
+//                    "label" => "Travel",
+//                    "icon" => "fas fa-suitcase",
+//                    "entity" => "travel"
+//                ],
+////                [
+////                    "separator" => true,
+////                    "label" => "Utilities",
+////                ],
+////                [
+////                    "label" => "Some external link",
+////                    "icon" => "fas fa-globe",
+////                    "url" => "https://google.com",
+////                ],
+//            ]
+//        ], [
+//            "label" => "Admin",
+//            "entities" => [
+//                [
+//                    "label" => "My account",
+//                    "icon" => "fas fa-user",
+//                    "entity" => "account",
+//                    "single" => true
+//                ],
+//                [
+//                    "label" => "Sharp users",
+//                    "icon" => "fas fa-user-secret",
+//                    "entity" => "user"
+//                ]
+//            ]
 //        ],
-        [
-            "label" => "Some powerful Features",
-            "icon" => "fab fa-superpowers",
-            "entity" => "feature"
-        ]
-    ],
+////        [
+////            "label" => "Public website",
+////            "icon" => "fas fa-globe",
+////            "url" => "https://google.com",
+////        ],
+//        [
+//            "label" => "Some powerful Features",
+//            "icon" => "fab fa-superpowers",
+//            "entity" => "feature"
+//        ]
+//    ],
     
     "markdown_editor" => [
         // If false, the UL tool will display a dropdown to choose between tight and normal lists

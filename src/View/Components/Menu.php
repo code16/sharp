@@ -57,7 +57,7 @@ class Menu extends Component
                 });
         } else {
             // Menu is built in a class (Sharp 7 way)
-            $items = $sharpMenu->items();
+            $items = app($sharpMenu)->build()->items();
         }
 
         return $items
