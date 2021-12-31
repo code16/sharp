@@ -43,28 +43,7 @@ return [
 
     // Required. The main menu (left bar), which may contain links to entities, dashboards
     // or external URLs, grouped in categories.
-    "menu" => [
-//        [
-//            "label" => "My Category",
-//            "entities" => [
-//                [
-//                    "label" => "My Dashboard",
-//                    "icon" => "fa-dashboard",
-//                    "dashboard" => "my_dashboard"
-//                ],
-//                [
-//                    "label" => "My Entity",
-//                    "icon" => "fa-page",
-//                    "entity" => "my_entity"
-//                ],
-//            ]
-//        ],
-//        [
-//            "label" => "My entity again",
-//            "icon" => "fa-page",
-//            "entity" => "my_entity"
-//        ]
-    ],
+    "menu" => null, //\App\Sharp\SharpMenu::class
 
     // Optional. Your file upload configuration.
     "uploads" => [

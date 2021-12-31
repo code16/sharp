@@ -29,52 +29,11 @@ class Menu extends Component
     
     public function getItems(): Collection
     {
-        $sharpMenu = config("sharp.menu", []);
+        $sharpMenu = config("sharp.menu", []) ?? [];
         
-        if(is_array($sharpMenu)) {
-            // Menu is defined in the config file (Sharp 6 way, legacy)
-            $items = collect($sharpMenu)
-                ->map(function(array $itemConfig) {
-                    if($itemConfig['entities'] ?? false) {
-                        return tap(
-                            new SharpMenuItemSection($itemConfig['label'] ?? null),
-                            function(SharpMenuItemSection $section) use($itemConfig) {
-                                collect($itemConfig['entities'])
-                                    ->each(function(array $entityConfig) use (&$section) {
-                                        if($entityConfig['separator'] ?? false) {
-                                            $section->addSeparator($entityConfig['label']);
-                                        } else {
-                                            $section->addEntityLink(
-                                                $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
-                                                $entityConfig['label'] ?? null,
-                                                $entityConfig['icon'] ?? null,
-                                            );
-                                        }
-                                    });
-                            }
-                        );
-                    }
-                    
-                    if($itemConfig['separator'] ?? false) {
-                        return new SharpMenuItemSeparator($itemConfig['label']);
-                    }
-                    
-                    $item = new SharpMenuItemLink(
-                        $itemConfig['label'] ?? null,
-                        $itemConfig['icon'] ?? null,
-                    );
-                    if($itemConfig['url'] ?? false) {
-                        $item->setUrl($itemConfig['url']);
-                    } else {
-                        $item->setEntity($itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null));
-                    }
-                    
-                    return $item;
-                });
-        } else {
-            // Menu is built in a class (Sharp 7 way)
-            $items = app($sharpMenu)->build()->items();
-        }
+        $items = is_array($sharpMenu)
+            ? $this->getItemFromLegacyConfig($sharpMenu)
+            : app($sharpMenu)->build()->items();
 
         return $items
             ->map(function(SharpMenuItem $item) {
@@ -89,5 +48,47 @@ class Menu extends Component
         return view('sharp::components.menu', [
             'self' => $this,
         ]);
+    }
+
+    public function getItemFromLegacyConfig(array $sharpMenuConfig): Collection {
+        // Sanitize legacy Sharp 6 config format to new Sharp 7 format
+        return collect($sharpMenuConfig)
+            ->map(function (array $itemConfig) {
+                if ($itemConfig['entities'] ?? false) {
+                    return tap(
+                        new SharpMenuItemSection($itemConfig['label'] ?? null),
+                        function (SharpMenuItemSection $section) use ($itemConfig) {
+                            collect($itemConfig['entities'])
+                                ->each(function (array $entityConfig) use (&$section) {
+                                    if ($entityConfig['separator'] ?? false) {
+                                        $section->addSeparator($entityConfig['label']);
+                                    } else {
+                                        $section->addEntityLink(
+                                            $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
+                                            $entityConfig['label'] ?? null,
+                                            $entityConfig['icon'] ?? null,
+                                        );
+                                    }
+                                });
+                        }
+                    );
+                }
+
+                if ($itemConfig['separator'] ?? false) {
+                    return new SharpMenuItemSeparator($itemConfig['label']);
+                }
+
+                $item = new SharpMenuItemLink(
+                    $itemConfig['label'] ?? null,
+                    $itemConfig['icon'] ?? null,
+                );
+                if ($itemConfig['url'] ?? false) {
+                    $item->setUrl($itemConfig['url']);
+                } else {
+                    $item->setEntity($itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null));
+                }
+
+                return $item;
+            });
     }
 }
