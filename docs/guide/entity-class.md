@@ -38,7 +38,25 @@ protected function getForm(): ?string {}
 protected function getPolicy(): string|SharpEntityPolicy|null {}
 ```
 
-Note that the last one, getPolicy, allows you to return a `SharpEntityPolicy` implementation instead of a classname, as it's sometimes easier to declare a quick policy right in here.
+Note that the last one, getPolicy, allows you to return a `SharpEntityPolicy` implementation instead of a classname, as it's sometimes easier to declare a quick policy right in here. Fot instance:
+
+```php
+class MyEntity extends SharpEntity
+{
+    // [...]
+
+    protected function getPolicy(): string|SharpEntityPolicy|null
+    {
+        return new class extends SharpEntityPolicy
+        {
+            public function update($user, $instanceId): bool
+            {
+                return $user->isBoss();
+            }
+        };
+    }
+}
+```
 
 ### Handle Multiforms
 

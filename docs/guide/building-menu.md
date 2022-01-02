@@ -7,9 +7,7 @@ The Sharp side menu can contain several links, organized as you want.
 All links shares common things:
 
 - an icon (from [Font Awesome 5](https://fontawesome.com/icons/))
-
 - a label
-
 - and a URL
 
 Links can be grouped in categories, like Company, Travels and Admin in this example.
@@ -20,7 +18,7 @@ The menu can be defined in two ways: either programmatically, in a dedicated cla
 
 ### Write and declare the class
 
-The class must extend `Code16\Sharp\Utils\Menu\SharpMenu`:
+The class must extend `Code16\Sharp\Utils\Menu\SharpMenu`, and define a required `build()` method:
 
 ```php
 class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
@@ -28,7 +26,6 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         // ...
-        return $this->addEntityLink("company_dashboard", "Dashboard", "fas fa-tachometer-alt");
     }
 }
 ```
@@ -49,13 +46,14 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 {
     public function build(): self
     {
-        // ...
-        return $this->addEntityLink("feature", "Features", "fas fa-superpowers");
+        return $this
+            ->addEntityLink("person", "People", "fas fa-user")
+            ->addEntityLink("feature", "Features", "fas fa-superpowers");
     }
 }
 ```
 
-Given that `feature` should be an entity defined in the config file. Sharp will create a link either to the Entity List, to the dashboard or to a [single Show Page](single-show.md) (depending on the entity configuration).
+Given that `feature` and 'person' should be entities defined in the config file. Sharp will create a link either to the Entity List, to the dashboard or to a [single Show Page](single-show.md) (depending on the entity configuration).
 
 ### Link to an external URL
 
@@ -64,7 +62,6 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 {
     public function build(): self
     {
-        // ...
         return $this->addExternalLink("https://google.com", "Some external link", "fas fa-globe");
     }
 }
@@ -79,7 +76,6 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 {
     public function build(): self
     {
-        // ...
         return $this
             ->addSection("Admin", function(SharpMenuItemSection $section) {
                 $section
@@ -99,7 +95,6 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 {
     public function build(): self
     {
-        // ...
         return $this
             ->addSection("Admin", function(SharpMenuItemSection $section) {
                 $section
