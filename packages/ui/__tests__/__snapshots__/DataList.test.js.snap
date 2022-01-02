@@ -12,7 +12,7 @@ exports[`DataList mount header: columns 1`] = `
 	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
 		<div class="row">
 			<div class="col-auto">
-				<div class="row gx-2">
+				<div class="row align-items-center gx-2">
 					<div class="col" style="min-width: 0;">
 						<div class="overflow-hidden">
 							col1
@@ -24,7 +24,7 @@ exports[`DataList mount header: columns 1`] = `
 		</div>
 		<div class="row">
 			<div class="col-auto">
-				<div class="row gx-2">
+				<div class="row align-items-center gx-2">
 					<div class="col" style="min-width: 0;">
 						<div class="overflow-hidden">
 							col2
@@ -54,7 +54,7 @@ exports[`DataList mount header: sort ascending 1`] = `
 	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
 		<div class="row">
 			<div class="col-auto">
-				<div class="row gx-2">
+				<div class="row align-items-center gx-2">
 					<div class="col" style="min-width: 0;">
 						<div class="overflow-hidden">
 							col1
@@ -66,7 +66,7 @@ exports[`DataList mount header: sort ascending 1`] = `
 		</div>
 		<div class="row">
 			<div class="col-auto">
-				<div class="row gx-2">
+				<div class="row align-items-center gx-2">
 					<div class="col" style="min-width: 0;">
 						<div class="overflow-hidden">
 							col2
@@ -90,7 +90,7 @@ exports[`DataList mount header: sort selected 1`] = `
 	<div row="[object Object]" header="true" class="MOCKED_SharpDataListRow" columns="[object Object],[object Object]">
 		<div class="row">
 			<div class="col-auto">
-				<div class="row gx-2">
+				<div class="row align-items-center gx-2">
 					<div class="col" style="min-width: 0;">
 						<div class="overflow-hidden">
 							col1
@@ -102,7 +102,7 @@ exports[`DataList mount header: sort selected 1`] = `
 		</div>
 		<div class="row">
 			<div class="col-auto">
-				<div class="row gx-2">
+				<div class="row align-items-center gx-2">
 					<div class="col" style="min-width: 0;">
 						<div class="overflow-hidden">
 							col2
