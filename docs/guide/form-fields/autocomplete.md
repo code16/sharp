@@ -64,9 +64,7 @@ Default: `"id"`
 
 ### `setListItemInlineTemplate(string $template)`
 ### `setResultItemInlineTemplate(string $template)`
-::: v-pre
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
-:::
 
 Example:
 
