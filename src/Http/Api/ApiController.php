@@ -12,29 +12,19 @@ use Code16\Sharp\Show\SharpShow;
 abstract class ApiController extends SharpProtectedController
 {
 
-    /**
-     * @throws SharpInvalidEntityKeyException
-     */
     protected function getListInstance(string $entityKey): SharpEntityList
     {
-        if(! $configKey = config("sharp.entities.{$entityKey}.list")) {
-            throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+        if(!$listClass = config("sharp.entities.{$entityKey}.list")) {
+            throw new SharpInvalidEntityKeyException("The list for the entity [{$entityKey}] was not found.");
         }
 
-        return app($configKey);
+        return app($listClass);
     }
 
     protected function getShowInstance(string $entityKey): SharpShow
     {
-        if($this->isSubEntity($entityKey)) {
-            list($entityKey, $subEntityKey) = explode(':', $entityKey);
-            $showClass = config("sharp.entities.{$entityKey}.shows.{$subEntityKey}.show");
-        } else {
-            $showClass = config("sharp.entities.{$entityKey}.show");
-        }
-
-        if(! $showClass) {
-            throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+        if(!$showClass = config("sharp.entities.{$entityKey}.show")) {
+            throw new SharpInvalidEntityKeyException("The show for the entity [{$entityKey}] was not found.");
         }
 
         return app($showClass);
@@ -49,8 +39,8 @@ abstract class ApiController extends SharpProtectedController
             $formClass = config("sharp.entities.{$entityKey}.form");
         }
 
-        if(! $formClass) {
-            throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+        if(!$formClass) {
+            throw new SharpInvalidEntityKeyException("The form for the entity [{$entityKey}] was not found.");
         }
 
         return app($formClass);
@@ -58,13 +48,15 @@ abstract class ApiController extends SharpProtectedController
 
     protected function getDashboardInstance(string $dashboardKey): ?SharpDashboard
     {
-        $dashboardClass = config("sharp.dashboards.$dashboardKey.view");
+        if(!$dashboardClass = config("sharp.dashboards.$dashboardKey.view")) {
+            throw new SharpInvalidEntityKeyException("The dashboard [{$dashboardKey}] was not found.");
+        }
 
-        return $dashboardClass ? app($dashboardClass) : null;
+        return app($dashboardClass);
     }
 
     protected function isSubEntity(string $entityKey): bool
     {
-        return strpos($entityKey, ':') !== false;
+        return str_contains($entityKey, ':');
     }
 }
