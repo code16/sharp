@@ -20,19 +20,20 @@ function sharp_user()
 
 function sharp_has_ability(string $ability, string $entityKey, string $instanceId = null): bool
 {
-    try {
-        sharp_check_ability($ability, $entityKey, $instanceId);
-        return true;
-
-    } catch(Code16\Sharp\Exceptions\Auth\SharpAuthorizationException $ex){
-        return false;
-    }
+    return app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
+        ->isAllowed($ability, sharp_normalize_entity_key($entityKey)[0], $instanceId);
 }
 
 function sharp_check_ability(string $ability, string $entityKey, string $instanceId = null)
 {
     app(Code16\Sharp\Auth\SharpAuthorizationManager::class)
-        ->check($ability, $entityKey, $instanceId);
+        ->check($ability, sharp_normalize_entity_key($entityKey)[0], $instanceId);
+}
+
+function sharp_normalize_entity_key(string $entityKey): array
+{
+    $parts = explode(":", $entityKey);
+    return count($parts) == 1 ? [$parts[0], null] : $parts;
 }
 
 function sharp_base_url_segment(): string

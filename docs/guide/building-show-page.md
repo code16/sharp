@@ -279,3 +279,7 @@ class PilotSharpForm extends SharpForm
     }
 }
 ```
+
+## Declare the Show Page
+
+The show Page must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).

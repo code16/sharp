@@ -219,23 +219,11 @@ Here is the full list of available methods:
   primary", by passing its key or full cass name. The command should be declared for this Entity
   List ([see related doc](commands.md)).
 
-## Configure the entity
+## Configure the entity list
 
-In the sharp config file, we have to declare our entity, and link it to the Entity List class:
+The Entity List must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).
 
-```php
-// config/sharp.php
-
-return [
-    "entities" => [
-        "spaceship" => [
-            "list" => \App\Sharp\SpaceshipSharpList::class,
-        ]
-    ]
-];
-```
-
-Then we can access the Entity List at the following URL:
+After this we can access the Entity List at the following URL:
 **/sharp/s-list/spaceship** (replace "spaceship" by our entity key).
 
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).

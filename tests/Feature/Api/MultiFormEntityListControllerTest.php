@@ -6,22 +6,25 @@ use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
 
 class MultiFormEntityListControllerTest extends BaseApiTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->login();
-    }
-
     /** @test */
     public function we_get_the_forms_attributes_on_a_multiform_entity()
     {
         $this->withoutExceptionHandling();
+        $this->login();
         $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor("person")
+            ->setList(PersonWithMultiformSharpEntityList::class)
+            ->setMultiforms([
+                "big" => [BigPersonSharpForm::class, "Big person"], 
+                "small" => [SmallPersonSharpForm::class, "Small person"]
+            ]);
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
@@ -35,33 +38,6 @@ class MultiFormEntityListControllerTest extends BaseApiTest
                     "instances" => [1]
                 ]
             ]]);
-    }
-
-    protected function buildTheWorld($singleShow = false)
-    {
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            PersonWithMultiformSharpEntityList::class
-        );
-
-        $this->app['config']->set(
-            'sharp.entities.person.forms', [
-                "big" => [
-                    "form" => PersonSharpForm::class,
-                    "label" => "Big person"
-                ], 
-                "small" => [
-                    "form" => PersonSharpForm::class,
-                    "label" => "Small person"
-                ]
-            ]
-        );
-
-        $this->app['config']->set(
-            'app.key', 'base64:'.base64_encode(random_bytes(
-                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
-            ))
-        );
     }
 }
 

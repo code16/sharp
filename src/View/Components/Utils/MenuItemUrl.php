@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\View\Components\Utils;
 
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
+
 class MenuItemUrl extends MenuItem
 {
     public string $type = "url";
@@ -10,12 +12,12 @@ class MenuItemUrl extends MenuItem
     public string $key;
     public string $target = "_blank";
 
-    public function __construct(array $config)
+    public function __construct(SharpMenuItem $item)
     {
-        $this->label = $config["label"] ?? "Unlabelled link";
-        $this->icon = $config["icon"] ?? null;
-        $this->url = $config["url"];
         $this->key = uniqid();
+        $this->label = $item->getLabel();
+        $this->icon = $item->getIcon();
+        $this->url = $item->getUrl();
     }
 
     public function isValid(): bool

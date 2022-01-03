@@ -40,4 +40,9 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
         $this->save($instance, $data + ["role" => "sr"]);
         return $instance->id;
     }
+
+    public function getFormValidatorClass(): ?string
+    {
+        return PilotSeniorSharpValidator::class;
+    }
 }

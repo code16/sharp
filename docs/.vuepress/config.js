@@ -52,7 +52,7 @@ module.exports = {
                 text: 'Introduction',
                 children: [
                     'README.md',
-                    'authentication.md',
+                    'entity-class.md',
                 ].map(page => `/guide/${page}`),
             },
             {
@@ -94,11 +94,17 @@ module.exports = {
                 ],
             },
             {
+                text: 'Authentication and authorizations',
+                children: [
+                    'authentication.md',
+                    'entity-authorizations.md',
+                ].map(page => `/guide/${page}`),
+            },
+            {
                 text: 'Generalities',
                 children: [
                     'building-menu.md',
                     'sharp-breadcrumb.md',
-                    'entity-authorizations.md',
                     'how-to-transform-data.md',
                     'link-to.md',
                     'page-alerts',

@@ -16,6 +16,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class PassengerSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
+    protected ?string $formValidatorClass = PassengerSharpValidator::class;
 
     function buildFormFields(FieldsContainer $formFields): void
     {

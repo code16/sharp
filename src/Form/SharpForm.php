@@ -20,6 +20,7 @@ abstract class SharpForm
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
+    protected ?string $formValidatorClass = null;
 
     public final function formLayout(): array
     {
@@ -70,6 +71,14 @@ abstract class SharpForm
             ->all();
 
         return sizeof($data) ? $data : null;
+    }
+
+    public final function validateRequest(string $entityKey): void
+    {
+        if($formRequest = $this->getFormValidator($entityKey)) {
+            // Validation is automatically called (FormRequest)
+            app($formRequest);
+        }
     }
 
     public final function hasDataLocalizations(): bool
@@ -170,11 +179,25 @@ abstract class SharpForm
     }
 
     /**
+     * Return the full classname of a FormRequest to be executed as validation
+     */
+    protected final function getFormValidator(string $entityKey): ?string
+    {
+        // Legacy stuff: backward compatibility with Sharp 6 config
+        return config("sharp.entities.{$entityKey}.validator") ?: $this->getFormValidatorClass();
+    }
+
+    /**
      * Display a notification next time entity list is shown.
      */
     public function notify(string $title): SharpNotification
     {
         return (new SharpNotification($title));
+    }
+
+    protected function getFormValidatorClass(): ?string
+    {
+        return $this->formValidatorClass;
     }
 
     /**

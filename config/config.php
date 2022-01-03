@@ -26,23 +26,14 @@ return [
 //        "activate_custom_fields" => false,
 //    ],
 
-    // Required. Your entities list; each one must define a "list",
-    // and can define "form", "validator", "policy" and "authorizations".
+    // Required. Your entities list, as entityKey => \App\Sharp\Entities\SharpEntity implementation
     "entities" => [
-//        "my_entity" => [
-//            "list" => \App\Sharp\MyEntitySharpList::class,
-//            "form" => \App\Sharp\MyEntitySharpForm::class,
-//            "validator" => \App\Sharp\MyEntitySharpValidator::class,
-//            "policy" => \App\Sharp\Policies\MyEntityPolicy::class,
-//        ],
+//        "my_entity" => \App\Sharp\Entities\MyEntity::class,
     ],
 
-    // Optional. Your dashboards list; each one must define a "view", and can define "policy".
+    // Optional. Your dashboards list, as entityKey => \App\Sharp\Entities\SharpDashboardEntity implementation
     "dashboards" => [
-//        "my_dashboard" => [
-//            "view" => \App\Sharp\MyDashboardView::class,
-//            "policy" => \App\Sharp\Policies\MyDashboardPolicy::class,
-//        ],
+//        "my_dashboard" => \App\Sharp\Entities\MyDashboardEntity::class,
     ],
 
     // Optional. Your global filters list, which will be displayed in the main menu.
@@ -52,28 +43,7 @@ return [
 
     // Required. The main menu (left bar), which may contain links to entities, dashboards
     // or external URLs, grouped in categories.
-    "menu" => [
-//        [
-//            "label" => "My Category",
-//            "entities" => [
-//                [
-//                    "label" => "My Dashboard",
-//                    "icon" => "fa-dashboard",
-//                    "dashboard" => "my_dashboard"
-//                ],
-//                [
-//                    "label" => "My Entity",
-//                    "icon" => "fa-page",
-//                    "entity" => "my_entity"
-//                ],
-//            ]
-//        ],
-//        [
-//            "label" => "My entity again",
-//            "icon" => "fa-page",
-//            "entity" => "my_entity"
-//        ]
-    ],
+    "menu" => null, //\App\Sharp\SharpMenu::class
 
     // Optional. Your file upload configuration.
     "uploads" => [

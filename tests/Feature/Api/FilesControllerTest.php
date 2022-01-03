@@ -15,6 +15,7 @@ class FilesControllerTest extends BaseApiTest
         Storage::fake("s3");
         Storage::fake("public");
         $this->login();
+        $this->disableSharpAuthorizationChecks();
     }
 
     /** @test */
