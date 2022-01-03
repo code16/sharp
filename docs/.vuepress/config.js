@@ -48,109 +48,109 @@ module.exports = {
             }
         ].filter(Boolean),
         sidebar: [
-                {
-                    text: 'Introduction',
-                    children: [
-                        'README.md',
-                        'authentication.md',
-                    ].map(page => `/guide/${page}`),
-                },
-                {
-                    text: 'Entity Lists',
-                    children: [
-                        'building-entity-list.md',
-                        'filters.md',
-                        'commands.md',
-                        'entity-states.md',
-                        'reordering-instances.md',
-                    ].map(page => `/guide/${page}`),
-                },
-                {
-                    text: 'Forms',
-                    children: [
-                        'building-form.md',
-                        'multiforms.md',
-                        'single-form.md',
-                        'custom-form-fields.md'
-                    ].map(page => `/guide/${page}`),
-                },
-                {
-                    text: 'Show Pages',
-                    children: [
-                        'building-show-page.md',
-                        'single-show.md',
-                        'custom-show-field.md'
-                    ].map(page => `/guide/${page}`),
-                },
-                {
-                    text: 'Dashboards',
-                    children: [
-                        'building-dashboard.md',
-                        ...[
-                            'graph.md',
-                            'panel.md',
-                            'ordered-list.md',
-                        ].map(page => `/guide/dashboard-widgets/${page}`),
-                    ],
-                },
-                {
-                    text: 'Generalities',
-                    children: [
-                        'building-menu.md',
-                        'sharp-breadcrumb.md',
-                        'entity-authorizations.md',
-                        'how-to-transform-data.md',
-                        'link-to.md',
-                        'page-alerts',
-                        'context.md',
-                        'sharp-uploads.md',
-                        'form-data-localization.md',
-                        'testing-with-sharp.md',
-                        'artisan-generators.md',
-                        'style-visual-theme.md'
-                    ].map(page => `/guide/${page}`),
-                },
-                {
-                    text: 'Form fields',
-                    children: [
-                        'text.md',
-                        'textarea.md',
-                        'editor.md',
-                        'number.md',
-                        'html.md',
-                        'check.md',
-                        'date.md',
-                        'upload.md',
-                        'select.md',
-                        'autocomplete.md',
-                        'tags.md',
-                        'list.md',
-                        'autocomplete-list.md',
-                        'geolocation.md',
-                    ].map(page => `/guide/form-fields/${page}`),
-                },
-                {
-                    text: 'Show fields',
-                    children: [
-                        'text.md',
-                        'picture.md',
-                        'list.md',
-                        'file.md',
-                        'embedded-entity-list.md',
-                    ].map(page => `/guide/show-fields/${page}`),
-                },
-                {
-                    text: 'Migrations guide',
-                    children: [
-                        '7.0.md',
-                        '6.0.md',
-                        '5.0.md',
-                        '4.2.md',
-                        '4.1.3.md',
-                        '4.1.md',
-                    ].map(page => `/guide/upgrading/${page}`),
-                },
-            ],
+            {
+                text: 'Introduction',
+                children: [
+                    'README.md',
+                    'authentication.md',
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Entity Lists',
+                children: [
+                    'building-entity-list.md',
+                    'filters.md',
+                    'commands.md',
+                    'entity-states.md',
+                    'reordering-instances.md',
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Forms',
+                children: [
+                    'building-form.md',
+                    'multiforms.md',
+                    'single-form.md',
+                    'custom-form-fields.md'
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Show Pages',
+                children: [
+                    'building-show-page.md',
+                    'single-show.md',
+                    'custom-show-fields.md'
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Dashboards',
+                children: [
+                    'building-dashboard.md',
+                    ...[
+                        'graph.md',
+                        'panel.md',
+                        'ordered-list.md',
+                    ].map(page => `/guide/dashboard-widgets/${page}`),
+                ],
+            },
+            {
+                text: 'Generalities',
+                children: [
+                    'building-menu.md',
+                    'sharp-breadcrumb.md',
+                    'entity-authorizations.md',
+                    'how-to-transform-data.md',
+                    'link-to.md',
+                    'page-alerts',
+                    'context.md',
+                    'sharp-uploads.md',
+                    'form-data-localization.md',
+                    'testing-with-sharp.md',
+                    'artisan-generators.md',
+                    'style-visual-theme.md'
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Form fields',
+                children: [
+                    'text.md',
+                    'textarea.md',
+                    'editor.md',
+                    'number.md',
+                    'html.md',
+                    'check.md',
+                    'date.md',
+                    'upload.md',
+                    'select.md',
+                    'autocomplete.md',
+                    'tags.md',
+                    'list.md',
+                    'autocomplete-list.md',
+                    'geolocation.md',
+                ].map(page => `/guide/form-fields/${page}`),
+            },
+            {
+                text: 'Show fields',
+                children: [
+                    'text.md',
+                    'picture.md',
+                    'list.md',
+                    'file.md',
+                    'embedded-entity-list.md',
+                ].map(page => `/guide/show-fields/${page}`),
+            },
+            {
+                text: 'Migrations guide',
+                children: [
+                    '7.0.md',
+                    '6.0.md',
+                    '5.0.md',
+                    '4.2.md',
+                    '4.1.3.md',
+                    '4.1.md',
+                ].map(page => `/guide/upgrading/${page}`),
+            },
+        ],
     },
     plugins: [
         [
