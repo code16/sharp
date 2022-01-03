@@ -144,7 +144,7 @@ function getToolbarExtensions(toolbar) {
 
 export function getDefaultExtensions({ placeholder, toolbar } = {}) {
     const extensions = [
-        getToolbarExtensions(),
+        getToolbarExtensions(toolbar),
         getPlaceholderExtension(placeholder),
         getPasteExtension(toolbar),
         Html,
