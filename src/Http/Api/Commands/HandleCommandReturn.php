@@ -2,57 +2,49 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\SharpEntityList;
-use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
+use Code16\Sharp\Show\SharpShow;
 use Illuminate\Support\Facades\Storage;
 
 trait HandleCommandReturn
 {
-
-    /**
-     * @param HandleInstanceCommands $commandContainer
-     * @param array $returnedValue
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\File\Stream
-     */
-    protected function returnCommandResult($commandContainer, array $returnedValue)
+    protected function returnCommandResult(SharpEntityList|SharpShow|SharpDashboard $commandContainer, array $returnedValue): \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\JsonResponse
     {
         if($returnedValue["action"] == "download") {
-            // Download case is specific: we return a File Stream
-            return Storage::disk($returnedValue["disk"])->download(
-                $returnedValue["file"],
+            return Storage::disk($returnedValue["disk"])
+                ->download(
+                    $returnedValue["file"],
+                    $returnedValue["name"]
+                );
+        }
+
+        if($returnedValue["action"] == "streamDownload") {
+            return response()->streamDownload(
+                function () use($returnedValue) {
+                    echo $returnedValue["content"];
+                }, 
                 $returnedValue["name"]
             );
         }
 
         if($returnedValue["action"] == "refresh" && $commandContainer instanceof SharpEntityList) {
             // We have to load and build items from ids
-            $returnedValue["items"] = $commandContainer->data(
-                $commandContainer->getListData(
-                    EntityListQueryParams::createFromArrayOfIds(
-                        $returnedValue["items"]
-                    )
-                )
-            )["items"];
+            $returnedValue["items"] = $commandContainer
+                ->updateQueryParamsWithSpecificIds($returnedValue["items"])
+                ->data($commandContainer->getListData())["list"]["items"];
         }
 
         return response()->json($returnedValue);
     }
 
-    /**
-     * @param HandleInstanceCommands $commandContainer
-     * @param string $commandKey
-     * @param $instanceId
-     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
-     * @throws SharpAuthorizationException
-     */
-    protected function getInstanceCommandHandler($commandContainer, $commandKey, $instanceId)
+    protected function getInstanceCommandHandler(SharpEntityList|SharpShow $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
     {
-        $commandHandler = $commandContainer->instanceCommandHandler($commandKey);
+        $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
 
-        if(!$commandHandler->authorize()
-            || !$commandHandler->authorizeFor($instanceId)) {
+        if(!$commandHandler->authorize() || !$commandHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
 

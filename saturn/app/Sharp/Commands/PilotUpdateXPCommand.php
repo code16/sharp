@@ -4,7 +4,6 @@ namespace App\Sharp\Commands;
 
 use App\Pilot;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 
 class PilotUpdateXPCommand extends EntityCommand
 {
@@ -12,13 +11,13 @@ class PilotUpdateXPCommand extends EntityCommand
     {
         return "Update experience";
     }
-
-    public function description(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Add one year to every senior pilot experience.";
+        $this->configureDescription("Add one year to every senior pilot experience.");
     }
 
-    public function execute(EntityListQueryParams $params, array $data = []): array
+    public function execute(array $data = []): array
     {
         Pilot::where("role", "sr")->increment("xp");
 

@@ -6,13 +6,20 @@ $utilities: (
 
 
 .text-inverted {
-  color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000));
+  color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000));
 }
 
 .bg-primary {
-  background-color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)) !important;
+  background-color: hsl(var(--primary-h), var(--primary-s), var(--primary-l)) !important;
 }
 
 .text-primary {
-  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%)!important;
+  color: hsl(var(--primary-h), var(--primary-s), 30%)!important;
+}
+
+.inset-0 {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

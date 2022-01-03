@@ -4,6 +4,7 @@ namespace App\Sharp;
 
 use App\Feature;
 use App\Pilot;
+use App\Sharp\Filters\CorporationGlobalFilter;
 use App\Spaceship;
 use App\SpaceshipType;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
@@ -11,26 +12,30 @@ use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttribut
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
+    
+    protected ?string $formValidatorClass = SpaceshipSharpValidator::class;
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLocalized()
@@ -46,20 +51,25 @@ class SpaceshipSharpForm extends SharpForm
                     ->setLabel("Capacity (x1000)")
             )
             ->addField(
-                SharpFormMarkdownField::make("description")
+                SharpFormEditorField::make("description")
+                    ->setRenderContentAsMarkdown()
                     ->setLabel("Description")
                     ->setToolbar([
-                        SharpFormMarkdownField::B, SharpFormMarkdownField::I,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::DOC,
-                        SharpFormMarkdownField::SEPARATOR,
-                        SharpFormMarkdownField::A,
+                        SharpFormEditorField::B,
+                        SharpFormEditorField::I,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::UPLOAD,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::RAW_HTML,
+                        SharpFormEditorField::A,
                     ])
                     ->setCropRatio("1:1")
+                    ->setTransformable()
                     ->setMaxFileSize(4)
-                    ->setFileFilter(["jpg", "png", "pdf"])
+                    ->setFileFilterImages()
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/Spaceship/{id}/markdown")
+                    ->setHeight(700)
             )
             ->addField(
                 SharpFormDateField::make("construction_date")
@@ -142,7 +152,8 @@ class SpaceshipSharpForm extends SharpForm
                     ->setLabel("Picture")
                     ->setFileFilterImages()
                     ->shouldOptimizeImage()
-                    ->setCroppable(false)
+                    ->setTransformable()
+                    ->setCropRatio("1:1")
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/Spaceship/{id}")
             )
@@ -181,12 +192,14 @@ class SpaceshipSharpForm extends SharpForm
                             ->setDisplayFormat("YYYY/MM/DD HH:mm")
                             ->setMinTime(8)
                             ->setHasTime(true)
-                    )->addItemField(
+                    )
+                    ->addItemField(
                         SharpFormSelectField::make("status", [
                             "ok" => "Passed", "ko" => "Failed"
                         ])->setLabel("Status")
                         ->setDisplayAsList()->setInline()
-                    )->addItemField(
+                    )
+                    ->addItemField(
                         SharpFormTextareaField::make("comment")
                             ->setLabel("Comment")
                             ->setMaxLength(50)
@@ -221,9 +234,23 @@ class SpaceshipSharpForm extends SharpForm
             );
     }
 
-    function buildFormLayout(): void
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this
+        $formLayout
+            ->addTab("Details", function(FormLayoutTab $tab) {
+                $tab
+                    ->addColumn(5, function(FormLayoutColumn $column) {
+                        $column
+                            ->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
+                                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
+                            })
+                            ->withSingleField("features");
+                
+                    })
+                    ->addColumn(7, function(FormLayoutColumn $column) {
+                        $column->withSingleField("description");
+                    });
+            })
             ->addTab("General info", function(FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function(FormLayoutColumn $column) {
@@ -236,7 +263,8 @@ class SpaceshipSharpForm extends SharpForm
                             ->withSingleField("manual")
                             ->withSingleField("pilots")
                             ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
-                                $listItem->withSingleField("starts_at")
+                                $listItem
+                                    ->withSingleField("starts_at")
                                     ->withFields("status|5", "comment|7");
                             });
                     })
@@ -245,30 +273,19 @@ class SpaceshipSharpForm extends SharpForm
                             ->withSingleField("picture")
                             ->withSingleField("picture:legend")
                             ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
-                                $listItem->withSingleField("file")
+                                $listItem
+                                    ->withSingleField("file")
                                     ->withSingleField("legend");
                             });
                     });
 
-            })
-            ->addTab("Details", function(FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(5, function(FormLayoutColumn $column) {
-                        $column->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
-                            return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
-                        })->withSingleField("features");
-    
-                    })
-                    ->addColumn(7, function(FormLayoutColumn $column) {
-                        $column->withSingleField("description");
-                    });
             });
     }
-    
+
     function buildFormConfig(): void
     {
-        $this->setBreadcrumbCustomLabelAttribute("name.en")
-            ->setDisplayShowPageAfterCreation();
+        $this->configureBreadcrumbCustomLabelAttribute("name.en")
+            ->configureDisplayShowPageAfterCreation();
     }
 
     function getDataLocalizations(): array
@@ -314,7 +331,7 @@ class SpaceshipSharpForm extends SharpForm
     function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
-            "corporation_id" => currentSharpRequest()->globalFilterFor("corporation")
+            "corporation_id" => currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class)
         ]);
 
         if(($data["name"]["fr"] ?? "") == "error") {

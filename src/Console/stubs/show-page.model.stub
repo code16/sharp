@@ -1,0 +1,34 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
+use Code16\Sharp\Show\Layout\ShowLayoutColumn;
+use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+
+class DummyClass extends SharpShow
+{
+    protected function buildShowFields(FieldsContainer $showFields): void
+    {
+        // $showFields->addField(SharpShowTextField::make("myField"))
+    }
+    
+    protected function buildShowLayout(ShowLayout $showLayout): void
+    {
+        // $showLayout->addSection('My section', function(ShowLayoutSection $section) { ... })
+    }
+    
+    function buildShowConfig(): void
+    {
+        //
+    }
+
+    public function find($id): array
+    {
+        return $this->transform(DummyModelClass::findOrFail($id));
+    }
+}

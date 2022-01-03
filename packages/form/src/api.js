@@ -1,8 +1,17 @@
 import axios from 'axios';
-import { apiUrl } from "sharp";
+import { api, apiUrl } from "sharp";
 import { validateAutocompleteResponse } from "./util/autocomplete";
 
-export function getAutocompleteSuggestions({ url, method, locale, searchAttribute, query, dataWrapper, fieldKey, cancelToken, }) {
+export function getAutocompleteSuggestions({
+    url,
+    method,
+    locale,
+    searchAttribute,
+    query,
+    dataWrapper,
+    fieldKey,
+    cancelToken,
+}) {
     const isGet = method.toLowerCase() === 'get';
     const params = {
         locale,
@@ -24,12 +33,4 @@ export function getAutocompleteSuggestions({ url, method, locale, searchAttribut
             ? response.data?.[dataWrapper] ?? []
             : response.data ?? [];
     });
-}
-
-export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
-    return apiUrl(`form/download/${fieldKey}/${entityKey}/${instanceId}`, {
-        params: {
-            fileName,
-        },
-    })
 }

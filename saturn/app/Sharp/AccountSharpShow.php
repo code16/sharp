@@ -6,30 +6,34 @@ use App\Sharp\Commands\AccountUpdateName;
 use App\Sharp\States\AccountStatusState;
 use App\User;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class AccountSharpShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this
+        $showFields
             ->addField(
                 SharpShowTextField::make("name")
                     ->setLabel("Name:")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("email")
                     ->setLabel("Email:")
-            )->addField(
+            )
+            ->addField(
                 SharpShowTextField::make("groups")
                     ->setLabel("Groups:")
             );
     }
 
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
-        $this
+        $showLayout
             ->addSection('Identity', function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function(ShowLayoutColumn $column) {
@@ -40,12 +44,17 @@ class AccountSharpShow extends SharpSingleShow
                     });
             });
     }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            AccountUpdateName::class
+        ];
+    }
 
     function buildShowConfig(): void
     {
-        $this
-            ->addInstanceCommand("rename", AccountUpdateName::class)
-            ->setEntityState("status", AccountStatusState::class);
+        $this->setEntityState("status", AccountStatusState::class);
     }
 
     function findSingle(): array

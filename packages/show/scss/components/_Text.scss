@@ -1,5 +1,7 @@
 
 .ShowTextField {
+  --file-font-size: .875em;
+
   &__content {
     white-space: pre-line;
     h1, h2, h3, h4, h5, h6 {
@@ -43,6 +45,12 @@
     }
     :last-child {
       margin-bottom: 0;
+    }
+    .text-component {
+      margin-bottom: 1.5rem;
+    }
+    .html-content {
+      max-height: 200px;
     }
   }
 

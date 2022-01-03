@@ -3,15 +3,15 @@
 .SharpLeftNav {
 
   --item-color-l: 30%;
-  $item-color: hsl(var(--bs-primary-h), 10%, 20%);
-  $item-hover-bg: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l), .05);
+  $item-color: hsl(var(--primary-h), 10%, 20%);
+  $item-hover-bg: hsla(var(--primary-h), var(--primary-s), var(--item-color-l), .05);
   $item-hover-color: inherit;
-  $item-active-bg: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l), .1);
-  $item-active-color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--item-color-l));
-  $item-expanded-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 25%);
+  $item-active-bg: hsla(var(--primary-h), var(--primary-s), var(--item-color-l), .1);
+  $item-active-color: hsl(var(--primary-h), var(--primary-s), var(--item-color-l));
+  $item-expanded-color: hsl(var(--primary-h), var(--primary-s), 25%);
 
   position: fixed;
-  top: 0;
+  top: var(--navbar-top, 0);
   height: 100vh;
   background-color: $color__white;
   //border-right: 1px solid $color__gray-1;
@@ -20,7 +20,7 @@
   z-index: 100;
 
   &__content {
-    box-shadow: 1px 0 3px 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, 0.075);
+    box-shadow: 1px 0 3px 0 hsla(var(--primary-h), var(--primary-s), 30%, 0.075);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -37,8 +37,8 @@
     background-color: $primary;
     background: linear-gradient(
       0deg,
-      hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l)),
-      hsl(var(--bs-primary-h), var(--bs-primary-s), calc(var(--accent-bg-l) - 1.4%))
+      hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l)),
+      hsl(var(--primary-h), var(--primary-s), calc(var(--accent-bg-l) - 1.4%))
     );
     display: flex;
     align-items: center;
@@ -57,7 +57,7 @@
 
   &__top-icon {
     opacity: 0;
-    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+    color: hsl(var(--primary-h), var(--primary-s), 30%);
     position: absolute;
     right:0;
     left:0;
@@ -99,7 +99,7 @@
     padding-right: 3rem;
     margin-top: .75rem;
     margin-bottom: 1.25rem;
-    color: hsl(var(--bs-primary-h), 10%, 60%);
+    color: hsl(var(--primary-h), 10%, 60%);
     font-size: .6875rem;
     line-height: 1.2;
     min-height: 1px;
@@ -275,11 +275,11 @@
     width: $leftnav-collapsed-width;
     transition: background-color 300ms ease-in-out, $transition-leftnav-collapse;
     cursor: pointer;
-    background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .1);
+    background-color: hsla(var(--primary-h), var(--primary-s), 30%, .1);
     //background: $brand-01-light;
 
     &:hover, &:focus {
-      background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .15);
+      background-color: hsla(var(--primary-h), var(--primary-s), 30%, .15);
     }
 
     @include transition-elements {

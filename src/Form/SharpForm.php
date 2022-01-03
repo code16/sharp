@@ -3,45 +3,49 @@
 namespace Code16\Sharp\Form;
 
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Code16\Sharp\Form\Layout\FormLayout;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
     use WithCustomTransformers, 
         HandleFormFields,
+        HandlePageAlertMessage,
         HandleCustomBreadcrumb;
 
-    protected array $tabs = [];
+    protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
-    protected bool $tabbed = true;
-    protected bool $layoutBuilt = false;
+    protected ?string $formValidatorClass = null;
 
-    /**
-     * Return the form fields layout.
-     */
-    function formLayout(): array
+    public final function formLayout(): array
     {
-        if(!$this->layoutBuilt) {
-            $this->buildFormLayout();
-            $this->layoutBuilt = true;
+        if($this->formLayout === null) {
+            $this->formLayout = new FormLayout();
+            $this->buildFormLayout($this->formLayout);
         }
-
-        return [
-            "tabbed" => $this->tabbed,
-            "tabs" => collect($this->tabs)
-                ->map->toArray()
-                ->all()
-        ];
+        
+        return $this->formLayout->toArray();
     }
 
-    /**
-     * Return the entity instance, as an array.
-     */
-    public function instance($id): array
+    public function formConfig(): array
+    {
+        return tap(
+            [
+                "hasShowPage" => $this->displayShowPageAfterCreation
+            ],
+            function(&$config) {
+                $this->appendBreadcrumbCustomLabelAttribute($config);
+                $this->appendGlobalMessageToConfig($config);
+            }
+        );
+    }
+
+    public final function instance($id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
@@ -54,7 +58,7 @@ abstract class SharpForm
             ->all();
     }
 
-    public function newInstance(): ?array
+    public final function newInstance(): ?array
     {
         $data = collect($this->create())
             // Filter model attributes on actual form fields
@@ -69,7 +73,15 @@ abstract class SharpForm
         return sizeof($data) ? $data : null;
     }
 
-    public function hasDataLocalizations(): bool
+    public final function validateRequest(string $entityKey): void
+    {
+        if($formRequest = $this->getFormValidator($entityKey)) {
+            // Validation is automatically called (FormRequest)
+            app($formRequest);
+        }
+    }
+
+    public final function hasDataLocalizations(): bool
     {
         foreach($this->fields() as $field) {
             if($field["localized"] ?? false) {
@@ -97,19 +109,7 @@ abstract class SharpForm
     {
     }
 
-    public function formConfig(): array
-    {
-        return tap(
-            [
-                "hasShowPage" => $this->displayShowPageAfterCreation
-            ], 
-            function(&$config) {
-                $this->appendBreadcrumbCustomLabelAttribute($config);
-            }
-        );
-    }
-
-    protected function setDisplayShowPageAfterCreation(bool $displayShowPage = true): self
+    protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
     {
         $this->displayShowPageAfterCreation = $displayShowPage;
         
@@ -121,58 +121,7 @@ abstract class SharpForm
         return $this->displayShowPageAfterCreation;
     }
 
-    protected function addTab(string $label, \Closure $callback = null): self
-    {
-        $this->layoutBuilt = false;
-
-        $tab = $this->addTabLayout(new FormLayoutTab($label));
-
-        if($callback) {
-            $callback($tab);
-        }
-
-        return $this;
-    }
-
-    protected function addColumn(int $size, \Closure $callback = null): self
-    {
-        $this->layoutBuilt = false;
-
-        $column = $this->getLonelyTab()->addColumnLayout(
-            new FormLayoutColumn($size)
-        );
-
-        if($callback) {
-            $callback($column);
-        }
-
-        return $this;
-    }
-
-    protected function setTabbed(bool $tabbed = true): self
-    {
-        $this->tabbed = $tabbed;
-
-        return $this;
-    }
-
-    private function addTabLayout(FormLayoutTab $tab): FormLayoutTab
-    {
-        $this->tabs[] = $tab;
-
-        return $tab;
-    }
-
-    private function getLonelyTab(): FormLayoutTab
-    {
-        if(!sizeof($this->tabs)) {
-            $this->addTabLayout(new FormLayoutTab("one"));
-        }
-
-        return $this->tabs[0];
-    }
-
-    public function updateInstance($id, $data)
+    public final function updateInstance($id, $data)
     {
         list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
 
@@ -201,8 +150,6 @@ abstract class SharpForm
 
     /**
      * Pack new Model data as JSON.
-     *
-     * @return array
      */
     public function create(): array
     {
@@ -210,7 +157,8 @@ abstract class SharpForm
             ->flip()
             ->map(function() {
                 return null;
-            })->all();
+            })
+            ->all();
 
         // Build a fake Model class based on attributes
         return $this->transform(new class($attributes) extends \stdClass
@@ -231,47 +179,49 @@ abstract class SharpForm
     }
 
     /**
+     * Return the full classname of a FormRequest to be executed as validation
+     */
+    protected final function getFormValidator(string $entityKey): ?string
+    {
+        // Legacy stuff: backward compatibility with Sharp 6 config
+        return config("sharp.entities.{$entityKey}.validator") ?: $this->getFormValidatorClass();
+    }
+
+    /**
      * Display a notification next time entity list is shown.
-     *
-     * @param string $title
-     * @return SharpNotification
      */
     public function notify(string $title): SharpNotification
     {
         return (new SharpNotification($title));
     }
 
+    protected function getFormValidatorClass(): ?string
+    {
+        return $this->formValidatorClass;
+    }
+
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
-     *
-     * @param $id
-     * @return array
      */
-    abstract function find($id): array;
+    abstract function find(mixed $id): array;
 
     /**
-     * @param $id
-     * @param array $data
-     * @return mixed the instance id
+     * Update the Model of id $id with $data
      */
-    abstract function update($id, array $data);
+    abstract function update(mixed $id, array $data);
 
     /**
-     * @param $id
+     * Delete Model of id $id
      */
-    abstract function delete($id): void;
+    abstract function delete(mixed $id): void;
 
     /**
-     * Build form fields using ->addField()
-     *
-     * @return void
+     * Build form fields
      */
-    abstract function buildFormFields(): void;
+    abstract function buildFormFields(FieldsContainer $formFields): void;
 
     /**
-     * Build form layout using ->addTab() or ->addColumn()
-     *
-     * @return void
+     * Build form layout
      */
-    abstract function buildFormLayout(): void;
+    abstract function buildFormLayout(FormLayout $formLayout): void;
 }

@@ -2,21 +2,22 @@
 
 namespace Code16\Sharp\View\Components\Utils;
 
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
+
 class MenuItemEntity extends MenuItem
 {
-    public string $type = "entity";
+    public string $type;
     public string $key;
     public ?string $icon;
     public string $url;
 
-    public function __construct(array $config)
+    public function __construct(SharpMenuItem $item)
     {
-        $this->key = $config['entity'];
-        $this->label = $config["label"] ?? "Unnamed entity";
-        $this->icon = $config["icon"] ?? null;
-        $this->url = $config["single"] ?? false
-                ? route('code16.sharp.single-show', ["entityKey" => $this->key])
-                : route('code16.sharp.list', $this->key);
+        $this->type = $item->isDashboardEntity() ? "dashboard" : "entity";
+        $this->key = $item->getKey();
+        $this->label = $item->getLabel();
+        $this->icon = $item->getIcon();
+        $this->url = $item->getUrl();
     }
 
     public function isValid(): bool

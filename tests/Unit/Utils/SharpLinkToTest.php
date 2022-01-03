@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Unit\Utils;
 
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Filters\SelectFilter;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToForm;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
@@ -92,6 +93,32 @@ class SharpLinkToTest extends SharpTestCase
             LinkToEntityList::make("my-entity")
                 ->addFilter("country", "France")
                 ->addFilter("city", "Paris")
+                ->renderAsText("test")
+        );
+    }
+
+    /** @test */
+    function we_can_generate_a_link_to_an_entity_list_with_a_filter_classname()
+    {
+        $filter = new class extends SelectFilter {
+            public function buildFilterConfig(): void
+            {
+                $this->configureKey("my-key");
+            }
+
+            public function values(): array
+            {
+                return [
+                    1 => "one",
+                    2 => "two",
+                ];
+            }
+        };
+        
+        $this->assertEquals(
+            '<a href="http://localhost/sharp/s-list/my-entity?filter_my-key=1" title="">test</a>',
+            LinkToEntityList::make("my-entity")
+                ->addFilter($filter::class, 1)
                 ->renderAsText("test")
         );
     }

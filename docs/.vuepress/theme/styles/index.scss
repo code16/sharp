@@ -33,8 +33,23 @@ code.inline {
     }
   }
 
-  h3, h4 {
+  h2, h3, h4 {
     code {
+      line-height: 1.75;
+      font-size: .8em;
+    }
+    code:not(.full) {
+      * {
+        color: #476582!important;
+      }
+      .type-declaration {
+        color: #597fa6!important;
+      }
+      .punctuation {
+        color: #597fa6!important;
+      }
+    }
+    code.full {
       display: block;
       width: calc(100% + 1rem);
       padding: 1rem;
@@ -50,6 +65,12 @@ code.inline {
       }
     }
   }
+  .custom-block {
+    code.inline {
+      background-color: rgba(27,31,35,0.05);
+    }
+  }
+
   h3 + h3, h4 + h4 {
     margin-top: calc(-1.5rem - var(--navbar-height)) !important;
   }
@@ -65,7 +86,10 @@ code.inline {
 
 .dark {
   h2, h3, h4 {
-    code {
+    code:not(.full) {
+      * {
+        color: #7b9ab7!important;
+      }
     }
   }
   .custom-container.warning {

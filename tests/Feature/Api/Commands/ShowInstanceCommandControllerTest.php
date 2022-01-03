@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class ShowInstanceCommandControllerTest extends BaseApiTest
 {
@@ -111,21 +112,21 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     }
 }
 
-class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
-
-    function buildShowConfig(): void
+class ShowInstanceCommandPersonSharpShow extends PersonSharpShow 
+{
+    public function getInstanceCommands(): ?array
     {
-        $this
-            ->addInstanceCommand("instance_info", new class() extends InstanceCommand {
+        return [
+            "instance_info" => new class() extends InstanceCommand {
                 public function label(): string { return "label"; }
                 public function execute($instanceId, array $params = []): array {
                     return $this->info("ok");
                 }
-            })
-            ->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
+            },
+            "instance_with_init_data" => new class() extends InstanceCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+                public function buildFormFields(FieldsContainer $formFields): void {
+                    $formFields->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialData($instanceId): array
                 {
@@ -135,25 +136,26 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
                     ];
                 }
                 public function execute($instanceId, array $data = []): array {}
-            });
+            }
+        ];
     }
 }
 
-class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow {
-
-    function buildShowConfig(): void
+class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow 
+{
+    public function getInstanceCommands(): ?array
     {
-        $this
-            ->addInstanceCommand("instance_info", new class() extends SingleInstanceCommand {
+        return [
+            "instance_info" => new class() extends SingleInstanceCommand {
                 public function label(): string { return "label"; }
                 public function executeSingle(array $params = []): array {
                     return $this->info("ok");
                 }
-            })
-            ->addInstanceCommand("instance_with_init_data", new class() extends SingleInstanceCommand {
+            },
+            "instance_with_init_data" => new class() extends SingleInstanceCommand {
                 public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+                public function buildFormFields(FieldsContainer $formFields): void {
+                    $formFields->addField(SharpFormTextField::make("name"));
                 }
                 protected function initialSingleData(): array
                 {
@@ -163,6 +165,7 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow {
                     ];
                 }
                 public function executeSingle(array $data = []): array {}
-            });
+            }
+        ];
     }
 }

@@ -5,7 +5,7 @@ This widget is based on the HTML Form field, and is intended to display any usef
 ## Attributes (setters)
 
 ```php
-$this->addWidget(
+$widgetsContainer->addWidget(
     SharpPanelWidget::make("activeSpaceships")
         ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
         ->setLink(LinkToEntityList::make("spaceship"));
@@ -45,7 +45,7 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey, array $data)` in the Dashboard class:
 
 ```php
-function buildWidgetsData()
+function buildWidgetsData(): void
 {
     $count = [...];
 

@@ -11,18 +11,13 @@ class EntityListInstanceCommandController extends ApiController
 
     /**
      * Display the Command form.
-     *
-     * @param string $entityKey
-     * @param string $commandKey
-     * @param $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function show($entityKey, $commandKey, $instanceId)
+    public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
+        $list->initQueryParams();
+        
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
         return response()->json([
@@ -32,19 +27,13 @@ class EntityListInstanceCommandController extends ApiController
 
     /**
      * Execute the Command.
-     *
-     * @param string $entityKey
-     * @param string $commandKey
-     * @param string $instanceId
-     * @return \Illuminate\Http\JsonResponse
-     * @throws SharpAuthorizationException
-     * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
      */
-    public function update($entityKey, $commandKey, $instanceId)
+    public function update(string $entityKey, string $commandKey, mixed $instanceId)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-
+        $list->initQueryParams();
+        
         $handler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
         return $this->returnCommandResult(

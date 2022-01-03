@@ -8,8 +8,11 @@
 @import '~@fortawesome/fontawesome-free/scss/v4-shims';
 
 @import "~cropperjs/dist/cropper.css";
-@import '~simplemde/dist/simplemde.min.css';
-@import '~trix/dist/trix.css';
+@import "~prosemirror-view/style/prosemirror.css";
+@import "~prosemirror-gapcursor/style/gapcursor.css";
+@import "~prosemirror-tables/style/tables.css";
+//@import '~simplemde/dist/simplemde.min.css';
+//@import '~trix/dist/trix.css';
 @import "~leaflet/dist/leaflet.css";
 
 

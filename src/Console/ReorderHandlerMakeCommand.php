@@ -2,39 +2,17 @@
 
 namespace Code16\Sharp\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
 class ReorderHandlerMakeCommand extends GeneratorCommand
 {
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
     protected $name = 'sharp:make:reorder-handler';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a new entity reorder handler class';
-
-    /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
+    protected $description = 'Create a new Reorder Handler class';
     protected $type = 'ReorderHandler';
 
-    /**
-     * Build the class with the given name.
-     *
-     * @param  string  $name
-     * @return string
-     */
     protected function buildClass($name)
     {
         $replace = [];
@@ -49,12 +27,6 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
         );
     }
 
-    /**
-     * Build the model replacement values.
-     *
-     * @param  array  $replace
-     * @return array
-     */
     protected function buildModelReplacements(array $replace)
     {
         $modelClass = $this->parseModel($this->option('model'));
@@ -72,14 +44,6 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
         ]);
     }
 
-    /**
-     * Get the fully-qualified model class name.
-     *
-     * @param  string  $model
-     * @return string
-     *
-     * @throws \InvalidArgumentException
-     */
     protected function parseModel($model)
     {
         if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
@@ -95,11 +59,6 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
         return $model;
     }
 
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
     protected function getStub()
     {
         return $this->option('model')
@@ -107,26 +66,15 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
                     : __DIR__.'/stubs/reorder-handler.stub';
     }
 
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string  $rootNamespace
-     * @return string
-     */
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the state governs'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'The model of the reorder handler'],
         ];
     }
 }

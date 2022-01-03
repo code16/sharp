@@ -3,53 +3,54 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AppendMultiformInEntityList
 {
+    public function __construct(protected SharpEntityManager $sharpEntityManager) {}
 
-    /**
-     * @param Request $request
-     * @param Closure $next
-     * @return JsonResponse
-     */
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 
         // Add Multiform data to the JSON returned
-        return $response->status() == 200
+        return $response->isOk()
             ? $this->addMultiformDataToJsonResponse($response)
             : $response;
     }
 
-    protected function addMultiformDataToJsonResponse(JsonResponse $jsonResponse)
+    protected function addMultiformDataToJsonResponse(JsonResponse $jsonResponse): JsonResponse
     {
-        if(!$multiformAttribute = $jsonResponse->getData()->config->multiformAttribute) {
+        $entityKey = $this->determineEntityKey();
+        $jsonData = $jsonResponse->getData();
+        
+        if(!$jsonData->config->multiformAttribute) {
             return $jsonResponse;
         }
 
-        $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
+        if(!$forms = $this->sharpEntityManager->entityFor($entityKey)->getMultiforms()) {
+            throw new SharpInvalidConfigException("The list for the entity [$entityKey] defines a multiform attribute [{$jsonData->config->multiformAttribute}] but the entity is not configured as multiform.");
+        }
 
-        $subFormKeys = collect($this->getMultiformKeys())
-            ->map(function($value) use($instanceIdAttribute, $multiformAttribute, $jsonResponse) {
-                $instanceIds = collect($jsonResponse->getData()->data->items)
-                    ->where($multiformAttribute, $value)
-                    ->pluck($instanceIdAttribute);
+        $subFormKeys = collect($forms)
+            ->map(function($value, $key) use($jsonData) {
+                $instanceIds = collect($jsonData->data->list->items)
+                    ->where($jsonData->config->multiformAttribute, $key)
+                    ->pluck($jsonData->config->instanceIdAttribute);
 
                 return [
-                    "key" => $value,
-                    "label" => $this->getMultiformLabelFor($value),
+                    "key" => $key,
+                    "label" => is_array($value) && sizeof($value) > 1 ? $value[1] : $key,
                     "instances" => $instanceIds
-                ] + $this->getIconConfigFor($value);
+                ];
             })
             ->keyBy("key");
 
         if(sizeof($subFormKeys)) {
-            $data = $jsonResponse->getData();
-            $data->forms = $subFormKeys;
-            $jsonResponse->setData($data);
+            $jsonData->forms = $subFormKeys;
+            $jsonResponse->setData($jsonData);
         }
 
         return $jsonResponse;
@@ -58,30 +59,5 @@ class AppendMultiformInEntityList
     protected function determineEntityKey(): ?string
     {
         return request()->segment(4);
-    }
-
-    protected function getMultiformKeys(): array
-    {
-        $entityKey = $this->determineEntityKey();
-
-        $config = config("sharp.entities.{$entityKey}.forms");
-
-        return $config ? array_keys($config) : [];
-    }
-
-    protected function getMultiformLabelFor(string $formSubKey): ?string
-    {
-        $entityKey = $this->determineEntityKey();
-
-        return config("sharp.entities.{$entityKey}.forms.{$formSubKey}.label");
-    }
-
-    protected function getIconConfigFor(string $formSubKey): array
-    {
-        $entityKey = $this->determineEntityKey();
-
-        $icon = config("sharp.entities.{$entityKey}.forms.{$formSubKey}.icon");
-
-        return $icon ? compact('icon') : [];
     }
 }

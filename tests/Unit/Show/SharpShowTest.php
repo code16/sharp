@@ -2,13 +2,17 @@
 
 namespace Code16\Sharp\Tests\Unit\Show;
 
+use App\Spaceship;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpShowTest extends SharpTestCase
 {
@@ -18,16 +22,16 @@ class SharpShowTest extends SharpTestCase
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields(): void
+            function buildShowFields(FieldsContainer $showFields): void
             {
-                $this->addField(
+                $showFields->addField(
                     SharpShowEntityListField::make("entityList", "entityKey")
                         ->setLabel("Test")
                 );
             }
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addEntityListSection("entityList");
+                $showLayout->addEntityListSection("entityList");
             }
         };
 
@@ -60,16 +64,16 @@ class SharpShowTest extends SharpTestCase
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields(): void
+            function buildShowFields(FieldsContainer $showFields): void
             {
-                $this->addField(
+                $showFields->addField(
                     SharpShowTextField::make("test")
                         ->setLabel("Test")
                 );
             }
-            function buildShowLayout(): void
+            function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("test", function(ShowLayoutSection $section) {
+                $showLayout->addSection("test", function(ShowLayoutSection $section) {
                     $section->setCollapsable()
                         ->addColumn(12, function(ShowLayoutColumn $column) {
                             $column->withSingleField("test");
@@ -109,15 +113,74 @@ class SharpShowTest extends SharpTestCase
         {
             public function buildShowConfig(): void
             {
-                $this->setMultiformAttribute("role");
+                $this->configureMultiformAttribute("role");
             }
         };
 
         $sharpShow->buildShowConfig();
 
-        $this->assertEquals([
-            "multiformAttribute" => "role",
-        ], $sharpShow->showConfig(1));
+        $this->assertArraySubset(
+            [
+                "multiformAttribute" => "role",
+            ], 
+            $sharpShow->showConfig(1)
+        );
+    }
+
+    /** @test */
+    function we_can_declare_a_global_message_field()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowConfig(): void
+            {
+                $this->configurePageAlert("template", static::$pageAlertLevelWarning, "test-key");
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            "test-key", 
+            $sharpShow->showConfig(1)["globalMessage"]["fieldKey"]
+        );
+
+        $this->assertEquals(
+            "warning",
+            $sharpShow->showConfig(1)["globalMessage"]["alertLevel"]
+        );
+        
+        $this->assertEquals(
+            SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(),
+            $sharpShow->fields()["test-key"]
+        );
+    }
+
+    /** @test */
+    function we_can_associate_data_to_a_global_message_field()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowConfig(): void
+            {
+                $this->configurePageAlert("Hello {{name}}", null, "test-key");
+            }
+            function find($id): array
+            {
+                return [
+                    "test-key" => [
+                        "name" => "Bob"
+                    ]
+                ];
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            ["name" => "Bob"],
+            $sharpShow->instance(1)["test-key"]
+        );
     }
 
     /** @test */
@@ -127,9 +190,8 @@ class SharpShowTest extends SharpTestCase
         {
         };
 
-        $this->assertEquals(
+        $this->assertArraySubset(
             [
-                "multiformAttribute" => null,
                 "isSingle" => true
             ], 
             $sharpShow->showConfig(null)
@@ -142,20 +204,20 @@ class BaseSharpShow extends SharpShow
     function find($id): array
     {
     }
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
     }
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
     }
 }
 
 class BaseSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
     }
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
     }
     function findSingle(): array

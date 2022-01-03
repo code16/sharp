@@ -7,7 +7,6 @@ import { filtersModule as filters } from 'sharp-filters';
 import { commandsModule as commands } from 'sharp-commands';
 
 export const UPDATE = 'UPDATE';
-export const SET_DASHBOARD_KEY = 'SET_DASHBOARD_KEY';
 
 export default {
     namespaced: true,
@@ -29,9 +28,9 @@ export default {
             state.layout = layout;
             state.config = config;
         },
-        [SET_DASHBOARD_KEY](state, dashboardKey) {
+        setDashboardKey(state, dashboardKey) {
             state.dashboardKey = dashboardKey;
-        }
+        },
     },
     actions: {
         update({ commit, dispatch }, { data, widgets, layout, config, filtersValues }) {
@@ -79,8 +78,5 @@ export default {
                 query,
             });
         },
-        setDashboardKey({ commit }, dashboardKey) {
-            commit(SET_DASHBOARD_KEY, dashboardKey);
-        }
     }
 }

@@ -32,6 +32,7 @@
 @import '~bootstrap/scss/spinners';
 @import '~bootstrap/scss/toasts';
 @import '~bootstrap/scss/tooltip';
+@import '~bootstrap/scss/tables';
 
 @import '~bootstrap/scss/utilities/api';
 
@@ -42,6 +43,12 @@ $bv-enable-tooltip-variants: false;
 @import '~bootstrap-vue/src/components/modal/index';
 @import '~bootstrap-vue/src/components/tooltip/index';
 
+
+.alert-primary {
+  background-color: hsl(var(--primary-h), var(--primary-s), 92.5%);
+  border-color: hsla(var(--primary-h), var(--primary-s), 20%, 0.1);
+  color: hsl(var(--primary-h), var(--primary-s), 20%);
+}
 
 .close {
   @extend .btn-close;

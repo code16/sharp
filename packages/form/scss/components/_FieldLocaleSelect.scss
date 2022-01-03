@@ -2,7 +2,7 @@
   margin-bottom: $form-label-margin-bottom;
 
   &__btn {
-    --primary: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+    --primary: hsl(var(--primary-h), var(--primary-s), 30%);
     --padding-y: 2px;
 
     display: inline-flex;

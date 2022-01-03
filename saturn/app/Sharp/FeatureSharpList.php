@@ -4,37 +4,40 @@ namespace App\Sharp;
 
 use App\Feature;
 use App\Sharp\Commands\FeatureReorderHandler;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 
 class FeatureSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
-        )->addDataContainer(
-            EntityListDataContainer::make("type")
-                ->setLabel("Type")
-        );
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
+                    ->setLabel("Name")
+            )
+            ->addField(
+                EntityListField::make("type")
+                    ->setLabel("Type")
+            );
     }
 
     function buildListConfig(): void
     {
-        $this->setReorderable(new FeatureReorderHandler());
+        $this->configureReorderable(new FeatureReorderHandler());
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this
+        $fieldsLayout
             ->addColumn("name", 6)
             ->addColumn("type", 6);
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array
     {
         return $this
             ->setCustomTransformer("type", function($value, $instance) {

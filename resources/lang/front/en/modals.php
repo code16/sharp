@@ -13,7 +13,7 @@ return [
 
     // Other errors fallback text
     'error.title' => 'Error',
-    'error.message' => 'An error has occured',
+    'error.message' => 'An error has occurred',
 
     'ok_button' => 'Ok',
     'cancel_button' => 'Cancel',

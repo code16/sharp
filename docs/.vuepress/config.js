@@ -52,7 +52,7 @@ module.exports = {
                 text: 'Introduction',
                 children: [
                     'README.md',
-                    'authentication.md',
+                    'entity-class.md',
                 ].map(page => `/guide/${page}`),
             },
             {
@@ -66,18 +66,18 @@ module.exports = {
                 ].map(page => `/guide/${page}`),
             },
             {
-                text: 'Entity Forms',
+                text: 'Forms',
                 children: [
-                    'building-entity-form.md',
+                    'building-form.md',
                     'multiforms.md',
                     'single-form.md',
                     'custom-form-fields.md'
                 ].map(page => `/guide/${page}`),
             },
             {
-                text: 'Entity Shows',
+                text: 'Show Pages',
                 children: [
-                    'building-entity-show.md',
+                    'building-show-page.md',
                     'single-show.md',
                     'custom-show-fields.md'
                 ].map(page => `/guide/${page}`),
@@ -85,7 +85,7 @@ module.exports = {
             {
                 text: 'Dashboards',
                 children: [
-                    '/guide/dashboard.md',
+                    'building-dashboard.md',
                     ...[
                         'graph.md',
                         'panel.md',
@@ -94,15 +94,22 @@ module.exports = {
                 ],
             },
             {
+                text: 'Authentication and authorizations',
+                children: [
+                    'authentication.md',
+                    'entity-authorizations.md',
+                ].map(page => `/guide/${page}`),
+            },
+            {
                 text: 'Generalities',
                 children: [
                     'building-menu.md',
                     'sharp-breadcrumb.md',
-                    'entity-authorizations.md',
                     'how-to-transform-data.md',
                     'link-to.md',
+                    'page-alerts',
                     'context.md',
-                    'sharp-built-in-solution-for-uploads.md',
+                    'sharp-uploads.md',
                     'form-data-localization.md',
                     'testing-with-sharp.md',
                     'artisan-generators.md',
@@ -114,8 +121,7 @@ module.exports = {
                 children: [
                     'text.md',
                     'textarea.md',
-                    'markdown.md',
-                    'wysiwyg.md',
+                    'editor.md',
                     'number.md',
                     'html.md',
                     'check.md',
@@ -142,6 +148,7 @@ module.exports = {
             {
                 text: 'Migrations guide',
                 children: [
+                    '7.0.md',
                     '6.0.md',
                     '5.0.md',
                     '4.2.md',
@@ -166,10 +173,14 @@ module.exports = {
         {
             extendsMarkdown: md => {
                 md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
-                    let token = tokens[idx];
-                    return '<code class="inline">' +
-                        Prism.highlight(token.content, Prism.languages.php) +
-                        '</code>';
+                    const token = tokens[idx];
+                    const highlighted = Prism.highlight(token.content, Prism.languages.php);
+                        const inlineNodes = tokens.filter(token =>
+                    token.type === 'text' && token.content.trim()
+                    || token.type === 'code_inline'
+                );
+                const isFullwidth = inlineNodes.length === 1;
+                return `<code class="inline ${isFullwidth ? 'full' : ''}" v-pre>${highlighted}</code>`;
                 };
             }
         },

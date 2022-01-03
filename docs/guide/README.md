@@ -2,18 +2,18 @@
 
 ## Terminology, general concept
 
-In Sharp, we handle `entities`; and `entity` is simply a data structure which has a meaning in the applicative context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
+In Sharp, we handle `entities`; an `entity` is simply a data structure which has a meaning in the application context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
 
 Each instance of an `entity` is called... an `instance`.
 
 Each `entity` in Sharp can be displayed:
-- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, and perform a search. From there we also gain access to applicative `commands` applied to an `instance` or the whole list, and to a simple `state` changer (the publish state of an Article, for instance). All of that is described below.
-- In a `Show`, optionally, to display an `instance` details.
+- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, pagination, and perform searches. From there we also gain access to applicative `commands` applied either to an `instance` or to the whole (filtered) list, and to a simple `state` changer (the published state of an Article, for instance). All of that is described below.
+- In a `Show Page`, optionally, to display an `instance` details.
 - And in a `Form`, either to update or create a new `instance`.
 
 ## Installation
 
-Sharp 6 needs Laravel 7+ and PHP 7.4+.
+Sharp 7 needs Laravel 8+ and PHP 8+.
 
 - Add the package with composer: `composer require code16/sharp`
 - And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
@@ -35,30 +35,36 @@ A tip on this last command: you'll need fresh assets each time Sharp is updated,
 
 Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. 
 
-You can init this file with: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=config`
+You can initialize this file with `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=config`
 
 Here's an example:
 
 ```php
 return [
     "entities" => [
-        "spaceship" => [
-            "list" => \App\Sharp\SpaceshipSharpList::class,
-            "form" => \App\Sharp\SpaceshipSharpForm::class,
-            "show" => \App\Sharp\SpaceshipSharpShow::class,
-            "validator" => \App\Sharp\SpaceshipSharpValidator::class,
-            "policy" => \App\Sharp\Policies\SpaceshipPolicy::class
-        ]
+        "spaceship" => \App\Sharp\Entities\SpaceshipEntity::class,
     ]
 ];
 ```
 
-As we can see, each `entity` (like `spaceship`, here), can define:
+This `SpaceshipSharpEntity` class could be written like this:
+
+```php
+class SpaceshipEntity extends SharpEntity
+{
+    protected ?string $list = SpaceshipSharpList::class;
+    protected ?string $show = SpaceshipSharpShow::class;
+    protected ?string $form = SpaceshipSharpForm::class;
+    protected ?string $policy = SpaceshipSharpPolicy::class;
+    protected string $label = "Spaceship";
+}
+```
+
+We choose to define:
 
 - a `list` class, responsible for the `Entity List`,
 - a `show` class, responsible for displaying an `instance`,
-- a `form` class, responsible for... the `Form`
-- a `validator` class, to handle form validation
+- a `form` class, responsible for the create and edit `Form`,
 - and a `policy` class, for authorization.
 
 Almost each one is optional, in fact: we could skip the `show` and go straight to the `form` from the `list`, for instance. 

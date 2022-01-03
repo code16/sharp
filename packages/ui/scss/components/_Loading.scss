@@ -2,7 +2,7 @@ $loading__gap: 40;
 $loading__end-duration: 300ms;
 
 .SharpLoading {
-  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 40%);
+  color: hsl(var(--primary-h), var(--primary-s), 40%);
 
   .btn & {
     color: inherit;

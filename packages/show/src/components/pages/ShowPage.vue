@@ -18,6 +18,15 @@
                 />
 
                 <div class="mt-4 pt-2">
+                    <template v-if="config.globalMessage">
+                        <GlobalMessage
+                            class="mb-3"
+                            :options="config.globalMessage"
+                            :data="data"
+                            :fields="fields"
+                        />
+                    </template>
+
                     <template v-for="section in layout.sections">
                         <Section
                             class="ShowPage__section"
@@ -51,8 +60,16 @@
             </template>
         </div>
 
-        <CommandFormModal :command="currentCommand" ref="commandForm" />
-        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal
+            :command="currentCommand"
+            :entity-key="entityKey"
+            :instance-id="instanceId"
+            ref="commandForm"
+        />
+        <CommandViewPanel
+            :content="commandViewContent"
+            @close="handleCommandViewPanelClosed"
+        />
     </div>
 </template>
 
@@ -60,7 +77,7 @@
     import { mapGetters } from 'vuex';
     import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
-    import { Grid } from 'sharp-ui';
+    import { Grid, GlobalMessage } from 'sharp-ui';
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
     import ActionBarShow from "../ActionBar";
@@ -79,6 +96,7 @@
             UnknownField,
             CommandFormModal,
             CommandViewPanel,
+            GlobalMessage,
         },
 
         data() {

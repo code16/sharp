@@ -3,50 +3,39 @@
 namespace Code16\Sharp\Utils\Transformers\Attributes;
 
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Table\TableExtension;
+use League\CommonMark\MarkdownConverter;
 
 class MarkdownAttributeTransformer implements SharpAttributeTransformer
 {
-    protected bool $handleImages = false;
-    protected ?int $imageWidth;
-    protected ?int $imageHeight;
-    protected ?array $imageFilters;
+    protected bool $nl2br = false;
 
-    public function handleImages(int $width = null, int $height = null, array $filters = []): self
+    public function setNewLineOnCarriageReturn(bool $nb2br = true): self
     {
-        $this->handleImages = true;
-        $this->imageWidth = $width;
-        $this->imageHeight = $height;
-        $this->imageFilters = $filters;
-
+        $this->nl2br = $nb2br;
+        
         return $this;
     }
 
-    /**
-     * Transform a model attribute to array (json-able).
-     *
-     * @param mixed $value
-     * @param object $instance
-     * @param string $attribute
-     * @return mixed
-     */
     function apply($value, $instance = null, $attribute = null)
     {
         if(!$instance->$attribute) {
             return null;
         }
-
-        $html = (new \Parsedown())
-            ->setBreaksEnabled(true)
-            ->text($instance->$attribute);
         
-        if($this->handleImages) {
-            return sharp_markdown_embedded_files(
-                $html, "", $this->imageWidth, 
-                $this->imageHeight, $this->imageFilters,
-                'partials.markdown-embedded-file'
-            );
-        }
-
-        return $html;
+        $environment = new Environment([
+            'html_input' => 'allow',
+            'renderer' => [
+                'soft_break' => $this->nl2br ? "<br>" : "\n",
+            ],
+        ]);
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new TableExtension());
+        
+        $converter = new MarkdownConverter($environment);
+        
+        return $converter->convertToHtml($instance->$attribute)->getContent();
     }
 }

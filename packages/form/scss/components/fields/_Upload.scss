@@ -1,7 +1,5 @@
 .SharpUpload {
   position: relative;
-  margin: 0;
-  padding: 0!important;
 
   .dropzone {
     margin:0;
@@ -12,17 +10,9 @@
   }
 
   .dz-drag-hover {
-    .card {
-      box-shadow: $box-shadow;
-      border-color: var(--bs-primary-hsl);
-    }
     .SharpUpload__browse {
       @extend :focus;
     }
-  }
-
-  &__card {
-    transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
   }
 
   &__thumbnail {
@@ -84,6 +74,17 @@
     @include media-breakpoint-up(sm) { max-height: 300px; }
     @include media-breakpoint-up(md) { max-height: 400px; }
     @include media-breakpoint-up(md) { max-height: 500px; }
+  }
+
+  &__card {
+    transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
+  }
+
+  &--focused, .dz-drag-hover {
+    .SharpUpload__card {
+      box-shadow: $box-shadow;
+      border-color: var(--primary-hsl);
+    }
   }
 
   &--compacted {

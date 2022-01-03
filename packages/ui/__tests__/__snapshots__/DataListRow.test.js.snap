@@ -1,88 +1,130 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DataListRow mount 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled SharpDataList__row--full-width">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3"></div>
-		<!---->
+<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3"></div>
+			</div>
+			<!---->
+		</div>
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-spacer"></div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
 exports[`DataListRow mount append 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3"></div>
-		<!---->
+<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3"></div>
+			</div>
+			<!---->
+		</div>
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-append pb-3 pt-sm-3">mockedAppend</div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-append align-self-center">mockedAppend</div>
 </div>
 `;
 
 exports[`DataListRow mount cell slot 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled SharpDataList__row--full-width">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3">
-			<div class="px-2 px-md-3 SharpDataList__td colClasses">
-				<div row="[object Object]" column="[object Object]">name:John</div>
+<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3">
+					<div class="SharpDataList__td colClasses">
+						<div row="[object Object]" column="[object Object]">name:John</div>
+					</div>
+				</div>
 			</div>
+			<!---->
 		</div>
-		<!---->
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-spacer"></div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
 exports[`DataListRow mount columns 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--disabled SharpDataList__row--full-width">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3">
-			<div class="px-2 px-md-3 SharpDataList__td colClasses">
-				John
-			</div>
-			<div class="px-2 px-md-3 SharpDataList__td colClasses">
-				<div class="SharpDataList__td-html-container">
-					<span>3</span>
+<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3">
+					<div class="SharpDataList__td colClasses">
+						John
+					</div>
+					<div class="SharpDataList__td colClasses">
+						<div class="SharpDataList__td-html-container">
+							<span>3</span>
+						</div>
+					</div>
 				</div>
 			</div>
+			<!---->
 		</div>
-		<!---->
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-spacer"></div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
 exports[`DataListRow mount header 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--header SharpDataList__row--full-width">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3"></div>
-		<!---->
+<div class="SharpDataList__row px-3 SharpDataList__row--header">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3"></div>
+			</div>
+			<!---->
+		</div>
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-spacer"></div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
 exports[`DataListRow mount header: columns 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--header SharpDataList__row--full-width">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3">
-			<div class="px-2 px-md-3 SharpDataList__th colClasses">
-				label
+<div class="SharpDataList__row px-3 SharpDataList__row--header">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3">
+					<div class="SharpDataList__th colClasses">
+						label
+					</div>
+				</div>
 			</div>
+			<!---->
 		</div>
-		<!---->
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-spacer"></div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;
 
 exports[`DataListRow mount with url 1`] = `
-<div class="SharpDataList__row container SharpDataList__row--full-width">
-	<div class="SharpDataList__cols">
-		<div class="row mx-n2 mx-md-n3"></div>
-		<a class="SharpDataList__row-link" href="http://example.org"></a>
+<div class="SharpDataList__row px-3">
+	<div class="row gx-0">
+		<div class="col d-flex flex-column justify-content-center position-relative">
+			<div class="SharpDataList__cols py-3">
+				<div class="row gx-n2 gx-md-n3"></div>
+			</div>
+			<a class="SharpDataList__row-link position-absolute inset-0" href="http://example.org"></a>
+		</div>
+		<div class="col-sm-auto align-self-center">
+			<div class="SharpDataList__row-spacer"></div>
+		</div>
 	</div>
-	<div class="SharpDataList__row-spacer"></div>
 </div>
 `;

@@ -1,5 +1,7 @@
 import dashboard, { UPDATE} from '../../src/store/dashboard';
 
+jest.mock('sharp');
+
 describe('store dashboard', ()=>{
     test('state matches snapshot', ()=>{
         expect(dashboard.state).toMatchSnapshot();

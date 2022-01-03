@@ -8,6 +8,7 @@ use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Arr;
 
 class SpaceshipSendMessage extends InstanceCommand
@@ -16,15 +17,12 @@ class SpaceshipSendMessage extends InstanceCommand
     {
         return "Send a text message...";
     }
-
-    public function formModalTitle(): string
+    
+    public function buildCommandConfig(): void
     {
-        return "Send a text message";
-    }
-
-    public function description(): string
-    {
-        return "Will pretend to send a message and increment message count.";
+        $this
+            ->configureFormModalTitle("Send a text message")
+            ->configureDescription("Will pretend to send a message and increment message count.");
     }
 
     public function execute($instanceId, array $data = []): array
@@ -43,34 +41,31 @@ class SpaceshipSendMessage extends InstanceCommand
         return $this->refresh($instanceId);
     }
 
-    function buildFormFields(): void
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this->addField(
-            SharpFormTextareaField::make("message")
-                ->setLabel("Message")
-
-        )->addField(
-            SharpFormCheckField::make("now", "Send right now?")
-                ->setHelpMessage("Otherwise it will be sent next night.")
-
-        )->addField(
-            SharpFormAutocompleteField::make("level", "local")
-                ->setListItemInlineTemplate('{{label}}')
-                ->setResultItemInlineTemplate('{{label}}')
-                ->setLocalValues([
-                    "l" => "Low",
-                    "m" => "Medium",
-                    "h" => "High",
-                ])
-                ->setLabel("Level")
-        );
+        $formFields
+            ->addField(
+                SharpFormTextareaField::make("message")
+                    ->setLabel("Message")
+            )
+            ->addField(
+                SharpFormCheckField::make("now", "Send right now?")
+                    ->setHelpMessage("Otherwise it will be sent next night.")
+            )
+            ->addField(
+                SharpFormAutocompleteField::make("level", "local")
+                    ->setListItemInlineTemplate('{{label}}')
+                    ->setResultItemInlineTemplate('{{label}}')
+                    ->setLocalValues([
+                        "l" => "Low",
+                        "m" => "Medium",
+                        "h" => "High",
+                    ])
+                    ->setLabel("Level")
+            );
     }
 
-    /**
-     * @param $instanceId
-     * @return array
-     */
-    protected function initialData($instanceId): array
+    protected function initialData(mixed $instanceId): array
     {
         return $this
             ->setCustomTransformer("message", function($value, Spaceship $instance) {
@@ -84,7 +79,7 @@ class SpaceshipSendMessage extends InstanceCommand
             );
     }
 
-    public function authorizeFor($instanceId): bool
+    public function authorizeFor(mixed $instanceId): bool
     {
         return $instanceId%2 == 0 && $instanceId > 10;
     }

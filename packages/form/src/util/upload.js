@@ -1,10 +1,5 @@
-import { getXsrfToken, lang, filesizeLabel } from "sharp";
+import { getXsrfToken, lang, filesizeLabel, UPLOAD_URL } from "sharp";
 
-export const defaultUploadOptions = {
-    headers: {
-        'X-XSRF-TOKEN': getXsrfToken(),
-    },
-}
 
 // size in Mo
 export function maxFileSizeMessage(size) {
@@ -12,3 +7,31 @@ export function maxFileSizeMessage(size) {
     return lang('form.upload.message.file_too_big')
         .replace(':size', filesizeLabel(bytes));
 }
+
+
+export function getUploadOptions({ fileFilter, maxFileSize }) {
+    return {
+        url: UPLOAD_URL,
+        uploadMultiple: false,
+        headers: {
+            'X-XSRF-TOKEN': getXsrfToken(),
+        },
+
+        ...fileFilter ? {
+            acceptedFiles: {
+                extensions: fileFilter,
+                message: lang('form.upload.message.bad_extension')
+            }
+        } : null,
+
+        ...maxFileSize ? {
+            maxFilesize: {
+                limit: maxFileSize,
+                message: maxFileSizeMessage(maxFileSize),
+            },
+        } : null,
+
+        createImageThumbnails: false,
+    }
+}
+

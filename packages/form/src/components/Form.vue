@@ -7,6 +7,14 @@
         />
 
         <template v-if="ready">
+            <template v-if="config.globalMessage">
+                <GlobalMessage
+                    :options="config.globalMessage"
+                    :data="data"
+                    :fields="fields"
+                />
+            </template>
+
             <template v-if="hasErrors && showAlert">
                 <div class="alert alert-danger SharpForm__alert" role="alert">
                     <div class="fw-bold">{{ l('form.validation_error.title') }}</div>
@@ -60,7 +68,7 @@
         showAlert,
     } from "sharp";
 
-    import { TabbedLayout, Grid, Dropdown, DropdownItem, } from 'sharp-ui';
+    import { TabbedLayout, Grid, Dropdown, DropdownItem, GlobalMessage } from 'sharp-ui';
     import { Localization, DynamicView } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
@@ -85,11 +93,12 @@
             Dropdown,
             DropdownItem,
             LocaleSelect,
+            GlobalMessage,
         },
 
-        props:{
+        props: {
             entityKey: String,
-            instanceId: String,
+            instanceId: [Number, String],
 
             /// Extras props for customization
             independant: Boolean,
@@ -116,14 +125,14 @@
                 breadcrumb: null,
                 config: null,
 
-                errors:{},
+                errors: {},
                 fieldLocale: {},
                 locales: null,
                 loading: false,
 
                 fieldVisible: {},
                 uploadingFields: {},
-                curFieldsetId:0,
+                curFieldsetId: 0,
             }
         },
         computed: {
@@ -229,14 +238,14 @@
             handleLocaleChanged(locale) {
                 this.fieldLocale = this.defaultFieldLocaleMap({ fields: this.fields, locales: this.locales }, locale);
             },
-            mount({ fields, layout, data={}, authorizations={}, locales, breadcrumb, config }) {
+            mount({ fields, layout, data, authorizations, locales, breadcrumb, config }) {
                 this.fields = fields;
-                this.data = data;
+                this.data = data ?? {};
                 this.layout = this.patchLayout(layout);
                 this.locales = locales;
-                this.authorizations = authorizations;
+                this.authorizations = authorizations ?? {};
                 this.breadcrumb = breadcrumb;
-                this.config = config;
+                this.config = config ?? {};
 
                 if(fields) {
                     this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
@@ -391,9 +400,7 @@
                     [errorId]: null,
                 }
             });
-        },
-        mounted() {
             this.init();
-        }
+        },
     }
 </script>

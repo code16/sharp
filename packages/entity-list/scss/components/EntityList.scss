@@ -5,10 +5,6 @@
     background: white;
   }
 
-  &__actions {
-    justify-content: flex-end;
-  }
-
   &--has-state-only {
     .SharpEntityList__actions {
       @include media-breakpoint-up(sm) {

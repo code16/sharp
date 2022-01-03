@@ -1,6 +1,7 @@
 @import '~sharp/scss/mixins/entity-list';
 
 .SharpDataList {
+
   &--reordering {
     .SharpDataList__row:not(.SharpDataList__row--header) {
       cursor: move;
@@ -68,12 +69,8 @@
   }
 
   &__row {
-    //display: table-row;
-    display:flex;
     border-bottom: 1px solid $ui-04;
     transition: box-shadow .25s ease-in-out;
-    padding-left: 1rem;
-    padding-right: 1rem;
 
     @include media-breakpoint-down(sm) {
       flex-flow: column;
@@ -81,12 +78,6 @@
 
     &:last-child {
       border-bottom: 0;
-    }
-
-    .SharpDataList__cols,
-    .SharpDataList__row-append  {
-      padding-top: 1rem;
-      padding-bottom: 1rem;
     }
 
     &--header {
@@ -100,37 +91,25 @@
       }
     }
 
-    &:hover:not(.SharpDataList__row--header):not(.SharpDataList__row--disabled) {
-      box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+    &:hover, &:focus-within {
+      box-shadow: inset 5px 0 0 hsla(var(--primary-h), var(--primary-s), 40%, .5);
     }
 
-    &--highlight {
-      box-shadow: inset 3px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .25);
-      .modal-open & {
-        box-shadow: inset 5px 0 0 hsla(var(--bs-primary-h), var(--bs-primary-s), 40%, .5);
+    &--header, &--disabled {
+      &:hover, &:focus-within {
+        box-shadow: none;
       }
     }
 
-    &--full-width {
-      .SharpDataList__td:last-child {
-        margin-right: calc(var(--append-width) * -1);
-        width: 100%;
-        flex: 1 0 0;
+    &--highlight {
+      box-shadow: inset 3px 0 0 hsla(var(--primary-h), var(--primary-s), 40%, .25);
+      .modal-open & {
+        box-shadow: inset 5px 0 0 hsla(var(--primary-h), var(--primary-s), 40%, .5);
       }
     }
 
     .SharpDataList__cols {
-      flex: 1;
-      display: flex;
       position: relative;
-      .row {
-        flex:1;
-        align-items: center;
-      }
-      .SharpDataList__row-link {
-        position: absolute;
-        left:0; right: 0; top: 0; bottom:0;
-      }
     }
     .SharpDataList__row-append {
       @include media-breakpoint-down(sm) {

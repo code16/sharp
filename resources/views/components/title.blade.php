@@ -1,15 +1,12 @@
-@php
-/** @var \Code16\Sharp\View\Components\Title $component */
-@endphp
 
 {{--
     Warning: title is also updated by the front
 --}}
 <title>
-    @if(request()->is(sharp_base_url_segment() . "/login"))
+    @if(request()->routeIs('code16.sharp.login'))
         {{ trans('sharp::login.login_page_title') }}
     @else
-        @if($currentEntityLabel = $component->currentEntityLabel())
+        @if($currentEntityLabel = currentSharpRequest()->getCurrentEntityMenuLabel())
             {{ $currentEntityLabel }} |
         @endif
         {{ config("sharp.name", "Sharp") }}

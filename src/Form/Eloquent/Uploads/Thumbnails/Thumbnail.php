@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads\Thumbnails;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
@@ -18,6 +19,7 @@ class Thumbnail
     protected int $quality = 90;
     protected bool $appendTimestamp = false;
     protected ?Closure $afterClosure = null;
+    protected ?array $transformationFilters = null;
 
     public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
     {
@@ -47,15 +49,31 @@ class Thumbnail
         return $this;
     }
 
-    public function make($width, $height=null, $filters=[]): ?string
+    public function setTransformationFilters(array $transformationFilters = null): self
+    {
+        $this->transformationFilters = $transformationFilters;
+
+        return $this;
+    }
+
+    public function make(?int $width, ?int $height=null, array $filters=[]): ?string
     {
         $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
 
-        $thumbDirNameAppender = sizeof($filters) ? "_" . md5(serialize($filters)) : "";
-        $thumbnailPath = config("sharp.uploads.thumbnails_dir", "thumbnails")
-            . "/" . dirname($this->uploadModel->file_name)
-            . "/$width-$height" . $thumbDirNameAppender
-            . "/" . basename($this->uploadModel->file_name);
+        $thumbDirNameAppender = 
+            ($this->transformationFilters ? "_" . md5(serialize($this->transformationFilters)) : "")
+            . (sizeof($filters) ? "_" . md5(serialize($filters)) : "");
+        
+        $thumbnailPath = sprintf(
+            "%s/%s/%s-%s%s/%s",
+            config("sharp.uploads.thumbnails_dir", "thumbnails"),
+            dirname($this->uploadModel->file_name),
+            $width, $height, $thumbDirNameAppender,
+            basename($this->uploadModel->file_name)
+        );
+        
+        // Strip double /
+        $thumbnailPath = Str::replace("//", "/", $thumbnailPath);
 
         $wasCreated = !$thumbnailDisk->exists($thumbnailPath);
 
@@ -83,8 +101,8 @@ class Thumbnail
     }
 
     private function generateThumbnail(
-        $sourceDisk, $sourceRelativeFilePath,
-        $thumbnailPath, $width, $height, $filters): ?string
+        string $sourceDisk, string $sourceRelativeFilePath,
+        string $thumbnailPath, ?int $width, ?int $height, array $filters): ?string
     {
         if($width==0) $width=null;
         if($height==0) $height=null;
@@ -101,8 +119,24 @@ class Thumbnail
                 $sourceImg = $this->imageManager->make(
                     $this->storage->disk($sourceDisk)->get($sourceRelativeFilePath)
                 );
+                
+                // Transformation filters
+                if($this->transformationFilters) {
+                    if($rotate = Arr::get($this->transformationFilters, "rotate.angle")) {
+                        $sourceImg->rotate($rotate);
+                    }
 
-                // Filters
+                    if($cropData = Arr::get($this->transformationFilters, "crop")) {
+                        $sourceImg->crop(
+                            intval(round($sourceImg->width() * $cropData["width"])),
+                            intval(round($sourceImg->height() * $cropData["height"])),
+                            intval(round($sourceImg->width() * $cropData["x"])),
+                            intval(round($sourceImg->height() * $cropData["y"]))
+                        );
+                    }
+                }
+
+                // Custom filters
                 $alreadyResized = false;
                 foreach ($filters as $filter => $params) {
                     $filterInstance = $this->resolveFilterClass($filter, $params);

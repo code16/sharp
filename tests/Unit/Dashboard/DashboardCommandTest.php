@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DashboardCommandTest extends SharpTestCase
 {
@@ -16,14 +17,16 @@ class DashboardCommandTest extends SharpTestCase
     function we_can_get_list_commands_config_of_a_dashboard()
     {
         $dashboard = new class extends FakeSharpDashboard {
-            function buildDashboardConfig(): void
+            function getDashboardCommands(): ?array
             {
-                $this->addDashboardCommand("dashboardCommand", new class extends DashboardCommand {
-                    public function label(): string {
-                        return "My Dashboard Command";
+                return [
+                    "dashboardCommand" => new class extends DashboardCommand {
+                        public function label(): string {
+                            return "My Dashboard Command";
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function execute(DashboardQueryParams $params, array $data = []): array {}
-                });
+                ];
             }
         };
 
@@ -49,20 +52,22 @@ class DashboardCommandTest extends SharpTestCase
     function we_can_define_a_form_on_a_dashboard_command()
     {
         $list = new class extends FakeSharpDashboard {
-            function buildDashboardConfig(): void
+            function getDashboardCommands(): ?array
             {
-                $this->addDashboardCommand("dashboardCommand", new class extends DashboardCommand {
-                    public function label(): string {
-                        return "My Dashboard Command";
+                return [
+                    "dashboardCommand" => new class extends DashboardCommand {
+                        public function label(): string {
+                            return "My Dashboard Command";
+                        }
+                        public function buildFormFields(FieldsContainer $formFields): void {
+                            $formFields->addField(SharpFormTextField::make("message"));
+                        }
+                        public function buildFormLayout(FormLayoutColumn &$column): void {
+                            $column->withSingleField("message");
+                        }
+                        public function execute(array $data = []): array {}
                     }
-                    public function buildFormFields(): void {
-                        $this->addField(SharpFormTextField::make("message"));
-                    }
-                    public function buildFormLayout(FormLayoutColumn &$column): void {
-                        $column->withSingleField("message");
-                    }
-                    public function execute(DashboardQueryParams $params, array $data = []): array {}
-                });
+                ];
             }
         };
 

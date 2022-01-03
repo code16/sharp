@@ -2,22 +2,22 @@
 
 namespace Code16\Sharp\View\Components\Utils;
 
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
+
 abstract class MenuItem
 {
     public ?string $label;
 
-    public static function parse(array $config): ?MenuItem
+    public static function buildFromItemClass(SharpMenuItem $item): ?MenuItem
     {
-        if (isset($config['entities'])) {
-            $menuItem = new MenuItemCategory($config);
-        } elseif (isset($config['entity'])) {
-            $menuItem = new MenuItemEntity($config);
-        } elseif (isset($config['url'])) {
-            $menuItem = new MenuItemUrl($config);
-        } elseif (isset($config['dashboard'])) {
-            $menuItem = new MenuItemDashboard($config);
-        } elseif (isset($config['separator'])) {
-            $menuItem = new MenuItemSeparator($config);
+        if ($item->isSection()) {
+            $menuItem = new MenuItemSection($item);
+        } elseif ($item->isEntity()) {
+            $menuItem = new MenuItemEntity($item);
+        } elseif ($item->isExternalLink()) {
+            $menuItem = new MenuItemUrl($item);
+        } elseif ($item->isSeparator()) {
+            $menuItem = new MenuItemSeparator($item);
         }
 
         return ($menuItem ?? false) && $menuItem->isValid()
@@ -25,7 +25,7 @@ abstract class MenuItem
             : null;
     }
 
-    public function isMenuItemCategory(): bool
+    public function isMenuItemSection(): bool
     {
         return false;
     }

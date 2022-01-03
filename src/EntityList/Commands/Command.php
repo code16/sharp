@@ -2,22 +2,27 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
-use Code16\Sharp\Form\HandleFormFields;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Fields\HandleFormFields;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Validation\Factory as Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-/**
- * Base class for Commands. Handle returns (info, refresh, reload...),
- * form creation, and validation.
- */
 abstract class Command
 {
-    use HandleFormFields, WithCustomTransformers;
+    use HandleFormFields, 
+       HandlePageAlertMessage,
+        WithCustomTransformers;
 
     protected int $groupIndex = 0;
+    protected ?string $commandKey = null;
+    
+    private ?string $formModalTitle = null;
+    private ?string $confirmationText = null;
+    private ?string $description = null;
 
     protected function info(string $message): array
     {
@@ -68,6 +73,33 @@ abstract class Command
         ];
     }
 
+    protected function streamDownload(string $fileContent, string $fileName): array
+    {
+        return [
+            "action" => "streamDownload",
+            "content" => $fileContent,
+            "name" => $fileName
+        ];
+    }
+
+    protected final function configureFormModalTitle(string $formModalTitle): self
+    {
+        $this->formModalTitle = $formModalTitle;
+        return $this;
+    }
+
+    protected final function configureDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    protected final function configureConfirmationText(string $confirmationText): self
+    {
+        $this->confirmationText = $confirmationText;
+        return $this;
+    }
+
     /**
      * Check if the current user is allowed to use this Command.
      */
@@ -76,23 +108,37 @@ abstract class Command
         return true;
     }
 
-    /**
-     * @return array|bool
-     */
-    public function getGlobalAuthorization()
+    public function getGlobalAuthorization(): array|bool
     {
         return $this->authorize();
     }
 
-    public function confirmationText(): ?string
+    public final function getConfirmationText(): ?string
     {
-        return null;
+        return $this->confirmationText;
+    }
+    
+    public final function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public final function getFormModalTitle(): ?string
+    {
+        return $this->formModalTitle;
     }
 
     /**
-     * Build the optional Command form, calling ->addField()
+     * Build the optional Command config with configure... methods
      */
-    public function buildFormFields(): void
+    public function buildCommandConfig(): void
+    {
+    }
+
+    /**
+     * Build the optional Command form
+     */
+    public function buildFormFields(FieldsContainer $formFields): void
     {
     }
 
@@ -103,40 +149,61 @@ abstract class Command
     {
     }
 
-    public function form(): array
+    public final function commandFormConfig(): ?array
+    {
+        if($this->pageAlertHtmlField === null) {
+            return null;
+        }
+        
+        return tap([], function(&$config) {
+            $this->appendGlobalMessageToConfig($config);
+        });
+    }
+
+    public final function form(): array
     {
         return $this->fields();
     }
 
-    public function formLayout(): ?array
+    public final function formLayout(): ?array
     {
-        if(!$this->fields) {
-            return null;
-        }
+        if($fields = $this->fieldsContainer()->getFields()) {
+            $column = new FormLayoutColumn(12);
+            $this->buildFormLayout($column);
 
-        $column = new FormLayoutColumn(12);
-        $this->buildFormLayout($column);
-
-        if(empty($column->fieldsToArray()["fields"])) {
-            foreach($this->fields as $field) {
-                $column->withSingleField($field->key());
+            if (empty($column->fieldsToArray()["fields"])) {
+                foreach ($fields as $field) {
+                    $column->withSingleField($field->key());
+                }
             }
+
+            return $column->fieldsToArray()["fields"];
         }
 
-        return $column->fieldsToArray()["fields"];
+        return null;
     }
 
-    public function setGroupIndex($index): void
+    public final function setGroupIndex($index): void
     {
         $this->groupIndex = $index;
     }
 
-    public function groupIndex(): int
+    public final function setCommandKey(string $key): void
+    {
+        $this->commandKey = $key;
+    }
+
+    public final function groupIndex(): int
     {
         return $this->groupIndex;
     }
 
-    public function validate(array $params, array $rules, array $messages = []): void
+    public final function getCommandKey(): string
+    {
+        return $this->commandKey ?? class_basename($this::class);
+    }
+
+    public final function validate(array $params, array $rules, array $messages = []): void
     {
         $validator = app(Validator::class)->make($params, $rules, $messages);
 
@@ -145,16 +212,6 @@ abstract class Command
                 $validator, new JsonResponse($validator->errors()->getMessages(), 422)
             );
         }
-    }
-
-    public function description(): string
-    {
-        return "";
-    }
-
-    public function formModalTitle(): string
-    {
-        return "";
     }
 
     abstract public function label(): ?string;

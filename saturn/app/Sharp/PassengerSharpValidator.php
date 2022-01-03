@@ -10,6 +10,8 @@ class PassengerSharpValidator extends FormRequest
     {
         return [
             'name' => 'required',
+            "birth_date" => 'required',
+            "gender" => 'required',
         ];
     }
 }

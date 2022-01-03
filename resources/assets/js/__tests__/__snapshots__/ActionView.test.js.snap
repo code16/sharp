@@ -35,10 +35,10 @@ exports[`action-view can mount with multiple modals 1`] = `
 	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
 	    max="Infinity" closeonclick="true" style="top: 6rem; right: 1rem;"></notifications-stub>
 	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
-		Modal 1
+		<div>Modal 1</div>
 	</modal-stub>
 	<modal-stub visible="true">
-		Modal 2
+		<div>Modal 2</div>
 	</modal-stub>
 	<loadingoverlay-stub fade="true" class="SharpActionView__loading"></loadingoverlay-stub>
 </div>
@@ -50,10 +50,10 @@ exports[`action-view loading 1`] = `
 	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
 	    max="Infinity" closeonclick="true" style="top: 6rem; right: 1rem;"></notifications-stub>
 	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
-		Modal 1
+		<div>Modal 1</div>
 	</modal-stub>
 	<modal-stub visible="true">
-		Modal 2
+		<div>Modal 2</div>
 	</modal-stub>
 	<loadingoverlay-stub fade="true" class="SharpActionView__loading" visible="true"></loadingoverlay-stub>
 </div>

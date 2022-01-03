@@ -1,16 +1,16 @@
 <template>
-    <div class="SharpUpload" :class="[{'SharpUpload--empty':!file, 'SharpUpload--disabled':readOnly}, modifiersClasses]">
+    <div class="SharpUpload" :class="classes">
         <div> <!-- keep content div to allow dropzone events (vue-clip) -->
             <template v-if="file">
                 <div class="card card-body SharpUpload__card" :class="{ 'border-danger': hasError }">
                     <div :class="{ 'row': showThumbnail }">
                         <template v-if="showThumbnail">
-                            <div class="SharpUpload__thumbnail" :class="[modifiers.compacted?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
-                                <img :src="imageSrc" @load="handleImageLoaded">
+                            <div class="SharpUpload__thumbnail" :class="[compactThumbnail?'col-4 col-sm-3 col-xl-2':'col-4 col-md-4']">
+                                <img :src="imageSrc" alt="">
                             </div>
                         </template>
 
-                        <div class="SharpUpload__infos" :class="{[modifiers.compacted?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
+                        <div class="SharpUpload__infos" :class="{[compactThumbnail?'col-8 col-sm-9 col-xl-10':'col-8 col-md-8']:showThumbnail}">
                             <div class="mb-3">
                                 <label class="SharpUpload__filename text-truncate d-block">{{ fileName }}</label>
                                 <div class="SharpUpload__info mt-2">
@@ -40,7 +40,7 @@
                             <template v-if="!readOnly">
                                 <div>
                                     <template v-if="hasEdit && !hasError">
-                                        <Button outline small @click="onEditButtonClick">
+                                        <Button outline small @click="handleEditButtonClick">
                                             {{ l('form.upload.edit_button') }}
                                         </Button>
                                     </template>
@@ -63,40 +63,23 @@
             </div>
         </div>
 
-        <Modal :visible.sync="showEditModal"
-            :title="l('modals.cropper.title')"
-            no-close-on-backdrop
-            @ok="onEditModalOk"
-            @hidden="onEditModalHidden"
+        <EditModal
+            :value="value"
+            :visible.sync="showEditModal"
+            :src="originalImageSrc"
+            :transform-original="transformKeepOriginal"
+            :ratio-x="ratioX"
+            :ratio-y="ratioY"
+            @submit="handleEditSubmitted"
             ref="modal"
-        >
-            <vue-cropper
-                class="SharpUpload__modal-vue-cropper"
-                :view-mode="2"
-                drag-mode="crop"
-                :aspect-ratio="ratioX/ratioY"
-                :auto-crop-area="1"
-                :zoomable="false"
-                :guides="false"
-                :background="true"
-                :rotatable="true"
-                :src="originalImageSrc"
-                :data="cropData"
-                alt="Source image"
-                ref="modalCropper"
-            />
-            <div class="mt-3">
-                <Button @click="rotate(-90)"><i class="fas fa-undo"></i></Button>
-                <Button @click="rotate(90)"><i class="fas fa-redo"></i></Button>
-            </div>
-        </Modal>
+        />
 
-        <template v-if="hasInitialCrop">
+        <template v-if="hasInitialTransform">
             <vue-cropper
                 class="d-none"
+                :src="originalImageSrc"
                 :aspect-ratio="ratioX/ratioY"
                 :auto-crop-area="1"
-                :src="originalImageSrc"
                 :ready="onCropperReady"
                 ref="cropper"
             />
@@ -110,13 +93,13 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Modal, Button } from 'sharp-ui';
-    import { Localization } from 'sharp/mixins';
     import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
-
-    import { VueClipModifiers } from './modifiers';
-    import rotateResize from './rotate';
-    import { downloadFileUrl } from "../../../api";
+    import { Localization } from 'sharp/mixins';
+    import { Button } from 'sharp-ui';
+    import { downloadFileUrl } from "sharp-files";
+    import { getFiltersFromCropData } from "./util/filters";
+    import { getImageBlobUrl } from "./util/image";
+    import EditModal from "./EditModal";
 
     export default {
         name: 'SharpVueClip',
@@ -124,60 +107,68 @@
         extends: VueClip,
 
         components: {
-            Modal,
+            EditModal,
             VueCropper,
             Button,
         },
 
-        inject : [ '$form' ],
+        inject: {
+            $form: {
+                default: null,
+            },
+        },
 
-        mixins: [ Localization, VueClipModifiers ],
+        mixins: [ Localization ],
 
         props: {
-            downloadId: String,
-            pendingKey: String,
             ratioX: Number,
             ratioY: Number,
             value: Object,
-            croppable: {
+            transformable: {
                 type: Boolean,
                 default: true,
             },
-            croppableFileTypes: Array,
+            transformableFileTypes: Array,
+            transformKeepOriginal: Boolean,
 
             readOnly: Boolean,
             root: Boolean,
+            compactThumbnail: Boolean,
+            focused: Boolean,
+            invalid: Boolean,
+            uniqueIdentifier: String,
+            fieldConfigIdentifier: String,
         },
 
         data() {
             return {
                 showEditModal: false,
-                croppedImg: null,
-                allowCrop: false,
-                cropData: null,
-
-                isNew: !this.value,
+                transformedImg: null,
             }
         },
         watch: {
-            value(value) {
-                if(!value) {
-                    this.files = [];
-                }
-            },
+            value: 'init',
             'file.status'(status) {
                 (status in this.statusFunction) && this[this.statusFunction[status]]();
             },
         },
         computed: {
+            classes() {
+                return {
+                    'SharpUpload--empty': !this.file,
+                    'SharpUpload--disabled': this.readOnly,
+                    'SharpUpload--compacted': this.compactThumbnail,
+                    'SharpUpload--focused': this.focused,
+                }
+            },
             file() {
                 return this.files[0];
             },
             originalImageSrc() {
-                return this.file?.thumbnail || this.file?.dataUrl;
+                return this.file?.thumbnail || this.file?.blobUrl;
             },
             imageSrc() {
-                return this.croppedImg || this.originalImageSrc;
+                return this.transformedImg || this.originalImageSrc;
             },
             size() {
                 return this.file.size != null
@@ -186,7 +177,7 @@
             },
             operationFinished() {
                 return {
-                    crop: this.hasInitialCrop ? !!this.croppedImg : null
+                    transform: this.hasInitialTransform ? !!this.transformedImg : null
                 }
             },
             operations() {
@@ -218,7 +209,7 @@
                 }
             },
             hasError() {
-                return this.file?.status === 'error';
+                return this.file?.status === 'error' || this.invalid;
             },
             fileName() {
                 let splitted = this.file.name.split('/');
@@ -230,42 +221,57 @@
             },
             downloadUrl() {
                 return downloadFileUrl({
-                    entityKey: this.$form.entityKey,
-                    instanceId: this.$form.instanceId,
-                    fieldKey: this.downloadId,
-                    fileName: this.fileName,
+                    entityKey: this.$form?.entityKey,
+                    instanceId: this.$form?.instanceId,
+                    disk: this.value.disk,
+                    path: this.value.path,
                 });
             },
             showThumbnail() {
-                return this.imageSrc;
+                return !!this.imageSrc;
             },
-            isCroppable() {
-                if(!this.croppable || !this.originalImageSrc) {
+            isTransformable() {
+                if(!this.transformable || !this.originalImageSrc) {
                     return false;
                 }
                 if(this.file?.type && !this.file.type.match(/^image\//)) {
                     return false;
                 }
-                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
+                return !this.transformableFileTypes || this.transformableFileTypes.includes(this.fileExtension);
             },
-            hasInitialCrop() {
-                return this.isCroppable && !!this.ratioX && !!this.ratioY;
+            hasInitialTransform() {
+                if(this.file?.status === 'exist') {
+                    return false;
+                }
+                return this.isTransformable && !!this.ratioX && !!this.ratioY;
             },
             hasEdit() {
-                return this.isCroppable && !this.inProgress;
+                return this.isTransformable && !this.inProgress;
             },
             hasDownload() {
-                return this.file?.status === 'exist';
+                return this.file?.status === 'exist' && !!this.value.path;
             },
         },
         methods: {
             setPending(value) {
-                this.$form?.setUploading(this.pendingKey, value);
+                this.$form?.setUploading(this.uniqueIdentifier, value);
             },
             // status callbacks
             onStatusAdded() {
-                this.$emit('reset');
+                const htmlFile = this.file._file;
+
+                this.$emit('add', htmlFile);
                 this.setPending(true);
+
+                getImageBlobUrl(htmlFile)
+                    .then(blobUrl => {
+                        if(blobUrl) {
+                            this.$set(this.file, 'blobUrl', blobUrl);
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
             },
             async onStatusError() {
                 const xhr = this.file.xhrResponse;
@@ -273,7 +279,7 @@
                 this.setPending(false);
                 await this.$nextTick();
                 if(!xhr?.statusCode) {
-                    this.$emit('error', msg);
+                    this.$emit('error', msg, this.file._file);
                 } else {
                    this.handleUploadError(xhr);
                 }
@@ -299,14 +305,9 @@
 
                 data.uploaded = true;
                 this.$emit('success', data);
-                this.$emit('input',data);
+                this.$emit('input', data);
 
                 this.setPending(false);
-
-                this.allowCrop = true;
-                this.$nextTick(() => {
-                    this.isCropperReady() && this.onCropperReady();
-                });
             },
 
             // actions
@@ -316,7 +317,8 @@
 
                 this.setPending(false);
 
-                this.resetEdit();
+                this.resetThumbnails();
+                this.transformedImg = null;
 
                 if(emits) {
                     this.$emit('input', null);
@@ -324,21 +326,8 @@
                 }
             },
 
-            resetEdit() {
-                this.croppedImg = null;
-                this.cropData = null;
-            },
-
-            onEditButtonClick() {
-                this.$emit('active');
+            handleEditButtonClick() {
                 this.showEditModal = true;
-                this.allowCrop = true;
-            },
-
-            handleImageLoaded() {
-                if(this.isNew) {
-                    this.$emit('image-updated');
-                }
             },
 
             handleRemoveClicked() {
@@ -357,66 +346,57 @@
                 }
             },
 
-            onEditModalHidden() {
-                this.$emit('inactive');
-            },
-
-            onEditModalOk() {
-                this.updateCroppedImage(this.$refs.modalCropper);
-                this.updateCropData(this.$refs.modalCropper);
-            },
-
-            isCropperReady() {
-                return this.$refs.cropper && this.$refs.cropper.cropper.ready;
+            handleEditSubmitted(cropper) {
+                this.updateTransformedImage(cropper);
+                this.updateFilters(cropper);
             },
 
             onCropperReady() {
-                if(this.hasInitialCrop) {
-                    this.updateCroppedImage(this.$refs.cropper);
-                    this.updateCropData(this.$refs.cropper);
+                if(this.hasInitialTransform) {
+                    this.updateTransformedImage(this.$refs.cropper);
+                    this.updateFilters(this.$refs.cropper);
                 }
             },
 
-            updateCropData(cropper) {
-                let cropData = cropper.getData(true);
-                let imgData = cropper.getImageData();
+            updateFilters(cropper) {
+                const cropData = cropper.getData(true);
+                const imageData = cropper.getImageData();
 
-                let rw=imgData.naturalWidth, rh=imgData.naturalHeight;
-
-                if(Math.abs(cropData.rotate)%180) {
-                    rw = imgData.naturalHeight;
-                    rh = imgData.naturalWidth;
+                const value = {
+                    ...this.value,
+                    transformed: true,
+                    filters: {
+                        ...this.value?.filters,
+                        ...getFiltersFromCropData({
+                            cropData,
+                            imageWidth: imageData.naturalWidth,
+                            imageHeight: imageData.naturalHeight,
+                        }),
+                    }
                 }
 
-                let relativeData = {
-                    width: cropData.width / rw,
-                    height: cropData.height / rh,
-                    x: cropData.x / rw,
-                    y: cropData.y / rh,
-                    rotate: cropData.rotate * -1 // counterclockwise
-                };
+                this.$emit('input', value);
+                this.$emit('updated', value);
+            },
 
-                this.cropData = { ...cropData };
+            updateTransformedImage(cropper) {
+                this.resetTransformedImage();
+                cropper.getCroppedCanvas({ width: 300, height: 300 }).toBlob(blob => {
+                    this.transformedImg = URL.createObjectURL(blob);
+                });
+            },
 
-                if(this.allowCrop) {
-                    let data = {
-                        ...this.value,
-                        cropData: relativeData,
-                    };
-                    this.$emit('input', data);
-                    this.$emit('updated', data);
+            resetTransformedImage() {
+                if(this.transformedImg) {
+                    URL.revokeObjectURL(this.transformedImg);
                 }
             },
 
-            updateCroppedImage(cropper) {
-                if(this.allowCrop) {
-                    this.isNew = true;
-                    this.croppedImg = cropper.getCroppedCanvas().toDataURL();
+            resetThumbnails() {
+                if(this.file?.blobUrl) {
+                    URL.revokeObjectURL(this.file.blobUrl)
                 }
-            },
-
-            rotate(degree) {
-                rotateResize(this.$refs.modalCropper.cropper, degree);
+                this.resetTransformedImage();
             },
 
             validateValue() {
@@ -424,6 +404,19 @@
                     return logError(`Upload field '${this.downloadId}' has an invalid value: expects to have a "name", given :`, JSON.parse(JSON.stringify(this.value)));
                 }
                 return true;
+            },
+
+            init() {
+                if(this.value) {
+                    if(this.file) {
+                        Object.assign(this.file, this.value);
+                    } else {
+                        this.addedFile({ ...this.value, upload: {} });
+                    }
+                    this.$set(this.file, 'thumbnail', this.value.thumbnail ?? null);
+                } else {
+                    this.files = [];
+                }
             },
         },
         created() {
@@ -439,8 +432,7 @@
                 return;
             }
 
-            this.addedFile({ ...this.value, upload: {} });
-            this.file.thumbnail = this.value.thumbnail;
+            this.init();
             this.file.status = 'exist';
         },
         mounted() {
@@ -451,6 +443,7 @@
             dropzone.enable();
 
             dropzone.on('drop', this.handleDrop);
+            dropzone.on('thumbnail', this.onThumbnail);
 
             if(this.value?.file) {
                 dropzone.addFile(this.value.file);
@@ -458,6 +451,7 @@
             }
         },
         beforeDestroy() {
+            this.resetThumbnails();
             this.setPending(false);
             this.uploader._uploader.destroy();
         },

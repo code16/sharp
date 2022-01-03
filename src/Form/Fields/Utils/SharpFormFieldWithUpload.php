@@ -8,15 +8,14 @@ trait SharpFormFieldWithUpload
 {
     protected ?float $maxFileSize = null;
     protected ?array $cropRatio = null;
-    protected ?array $croppableFileTypes = null;
+    protected ?array $transformableFileTypes = null;
     protected string $storageDisk = "local";
-    /** @var string|Closure  */
-    protected $storageBasePath = "data";
-    protected bool $croppable = true;
+    protected string|Closure $storageBasePath = "data";
+    protected bool $transformable = true;
+    protected bool $transformKeepOriginal = true;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
-    /** @var string|array|null */
-    protected $fileFilter = null;
+    protected string|array|null $fileFilter = null;
 
     public function setMaxFileSize(float $maxFileSizeInMB): self
     {
@@ -27,21 +26,21 @@ trait SharpFormFieldWithUpload
 
     /**
      * @param string $ratio 16:9, 1:1, ...
-     * @param array|null $croppableFileTypes
+     * @param array|null $transformableFileTypes
      * @return static
      */
-    public function setCropRatio(string $ratio = null, array $croppableFileTypes = null): self
+    public function setCropRatio(string $ratio = null, array $transformableFileTypes = null): self
     {
         if($ratio) {
             $this->cropRatio = explode(":", $ratio);
 
-            $this->croppableFileTypes = $croppableFileTypes
-                ? $this->formatFileExtension($croppableFileTypes)
+            $this->transformableFileTypes = $transformableFileTypes
+                ? $this->formatFileExtension($transformableFileTypes)
                 : null;
 
         } else {
             $this->cropRatio = null;
-            $this->croppableFileTypes = null;
+            $this->transformableFileTypes = null;
         }
 
         return $this;
@@ -66,11 +65,25 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
+    /** @deprecated use setTransformable() */
     public function setCroppable(bool $croppable = true): self
     {
-        $this->croppable = $croppable;
+        return $this->setTransformable($croppable);
+    }
+
+    public function setTransformable(bool $transformable = true, bool $transformKeepOriginal = true): self
+    {
+        $this->transformable = $transformable;
+        if($transformable) {
+            $this->transformKeepOriginal = $transformKeepOriginal;
+        }
 
         return $this;
+    }
+
+    public function isTransformOriginal(): bool
+    {
+        return $this->transformable && !$this->transformKeepOriginal;
     }
 
     public function setStorageDisk(string $storageDisk): self
@@ -119,7 +132,7 @@ trait SharpFormFieldWithUpload
         return value($this->storageBasePath);
     }
 
-    public function cropRatio(): string
+    public function cropRatio(): array
     {
         return $this->cropRatio;
     }

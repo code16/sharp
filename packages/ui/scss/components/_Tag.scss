@@ -6,8 +6,8 @@
   padding: 0 .625rem;
   height: 1.25rem;
   margin: .375rem;
-  background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .15);
-  color: hsl(var(--bs-primary-h), var(--bs-primary-s), 20%);
+  background-color: hsla(var(--primary-h), var(--primary-s), 30%, .15);
+  color: hsl(var(--primary-h), var(--primary-s), 20%);
   border-radius: 3px;
 
   &:not(:first-child) {

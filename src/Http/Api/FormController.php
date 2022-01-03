@@ -4,7 +4,6 @@ namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 
 class FormController extends ApiController
 {
@@ -57,10 +56,10 @@ class FormController extends ApiController
     {
         sharp_check_ability("update", $entityKey, $instanceId);
 
-        $this->validateRequest($entityKey);
-
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
+        
+        $form->validateRequest($entityKey);
         
         $form->updateInstance($instanceId, request()->all());
         
@@ -72,7 +71,6 @@ class FormController extends ApiController
     public function store(string $entityKey)
     {
         $form = $this->getFormInstance($entityKey);
-        $form->buildFormConfig();
 
         if($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
@@ -80,8 +78,9 @@ class FormController extends ApiController
         }
 
         sharp_check_ability("create", $entityKey);
-        $this->validateRequest($entityKey);
+        $form->buildFormConfig();
         
+        $form->validateRequest($entityKey);
         $instanceId = $form->storeInstance(request()->all());
         
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
@@ -112,21 +111,6 @@ class FormController extends ApiController
         ]);
     }
 
-    protected function validateRequest(string $entityKey)
-    {
-        if($this->isSubEntity($entityKey)) {
-            list($entityKey, $subEntityKey) = explode(':', $entityKey);
-            $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
-        } else {
-            $validatorClass = config("sharp.entities.{$entityKey}.validator");
-        }
-
-        if(class_exists($validatorClass)) {
-            // Validation is automatically called (FormRequest)
-            app($validatorClass);
-        }
-    }
-
     protected function dataLocalizations(SharpForm $form): array
     {
         return $form->hasDataLocalizations()
@@ -134,14 +118,9 @@ class FormController extends ApiController
             : [];
     }
 
-    protected function checkFormImplementation(SharpForm $form, ?string $instanceId)
+    protected function checkFormImplementation(SharpForm $form, ?string $instanceId): void
     {
-        if(!$instanceId && !$form instanceof SharpSingleForm) {
-            abort(404);
-        }
-
-        if($instanceId && $form instanceof SharpSingleForm) {
-            abort(404);
-        }
+        abort_if(!$instanceId && !$form instanceof SharpSingleForm, 404);
+        abort_if($instanceId && $form instanceof SharpSingleForm, 404);
     }
 }

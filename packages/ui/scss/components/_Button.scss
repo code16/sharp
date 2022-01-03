@@ -18,38 +18,38 @@
 
 .btn-primary {
   --threshold: var(--l-threshold);
-  --color-l: calc((var(--bs-primary-l) - var(--threshold)) * -100000);
-  --hover-bg-l: calc(var(--bs-primary-l) + clamp(-#{$btn-hover-bg-shade-amount}, var(--color-l), #{$btn-hover-bg-tint-amount}));
-  --active-bg-l: calc(var(--bs-primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}));
+  --color-l: calc((var(--primary-l) - var(--threshold)) * -100000);
+  --hover-bg-l: calc(var(--primary-l) + clamp(-#{$btn-hover-bg-shade-amount}, var(--color-l), #{$btn-hover-bg-tint-amount}));
+  --active-bg-l: calc(var(--primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}));
 
   @include button-variant(
-    $background: var(--bs-primary-hsl),
+    $background: var(--primary-hsl),
     $border: transparent,
     $color: white,
-    $hover-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--hover-bg-l)),
+    $hover-background: hsl(var(--primary-h), var(--primary-s), var(--hover-bg-l)),
     $hover-border: hsl(
-        var(--bs-primary-h),
-        var(--bs-primary-s),
-        calc(var(--bs-primary-l) + clamp(-#{$btn-hover-border-shade-amount}, var(--color-l), #{$btn-hover-border-tint-amount}))
+        var(--primary-h),
+        var(--primary-s),
+        calc(var(--primary-l) + clamp(-#{$btn-hover-border-shade-amount}, var(--color-l), #{$btn-hover-border-tint-amount}))
     ),
     $hover-color: hsl(0, 0%, calc((var(--hover-bg-l) - var(--threshold)) * -100000)),
-    $active-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--active-bg-l)),
+    $active-background: hsl(var(--primary-h), var(--primary-s), var(--active-bg-l)),
     $active-border: hsl(
-        var(--bs-primary-h),
-        var(--bs-primary-s),
-        calc(var(--bs-primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}))
+        var(--primary-h),
+        var(--primary-s),
+        calc(var(--primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}))
     ),
     $active-color: hsl(0, 0%, calc((var(--active-bg-l) - var(--threshold)) * -100000)),
-    $disabled-background: var(--bs-primary),
-    $disabled-border: var(--bs-primary),
+    $disabled-background: var(--primary),
+    $disabled-border: var(--primary),
     $disabled-color: white
   );
 
   color: hsl(0, 0%, var(--color-l));
-  border-color: var(--bs-primary-hsl);
+  border-color: var(--primary-hsl);
 
   &:focus {
-    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--bs-primary-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), calc(var(--primary-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
   }
 }
 
@@ -57,17 +57,17 @@
 
 .btn-text {
   --color-l: 30%;
-  --color: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--color-l));
+  --color: hsl(var(--primary-h), var(--primary-s), var(--color-l));
 
   @include button-variant(
-    $background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .1),
+    $background: hsla(var(--primary-h), var(--primary-s), var(--color-l), .1),
     $border: transparent,
     $color: $primary,
-    //$hover-background: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l)),
+    //$hover-background: hsl(var(--primary-h), var(--primary-s), var(--primary-l)),
     //$hover-border: transparent,
     //$hover-color: white,
-    $hover-background: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .15),
-    $hover-border: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .25),
+    $hover-background: hsla(var(--primary-h), var(--primary-s), var(--color-l), .15),
+    $hover-border: hsla(var(--primary-h), var(--primary-s), var(--color-l), .25),
     $hover-color: var(--color),
     $active-background: var(--color),
     $active-border: var(--color),
@@ -77,10 +77,10 @@
     $disabled-color: var(--color)
   );
 
-  color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--color-l), .875);
+  color: hsla(var(--primary-h), var(--primary-s), var(--color-l), .875);
 
   &:focus {
-    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
   }
 }
 
@@ -88,17 +88,17 @@
 .btn-outline-primary {
   @include button-outline-variant(
     $color: black,
-    $color-hover: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000)),
-    $active-background: var(--bs-primary-hsl),
-    $active-border: var(--bs-primary-hsl),
-    $active-color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000))
+    $color-hover: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000)),
+    $active-background: var(--primary-hsl),
+    $active-border: var(--primary-hsl),
+    $active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000))
   );
 
-  color: var(--bs-primary-hsl);
-  border-color: hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .375);
+  color: var(--primary-hsl);
+  border-color: hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375);
 
   &:focus {
-    box-shadow: 0 0 0 $btn-focus-width hsla(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l), .5)!important;
+    box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), var(--primary-l), .5)!important;
   }
 }
 
@@ -109,13 +109,25 @@
 }
 
 .btn-light {
-  &:hover, &:focus, &.active {
-    color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
-  }
-  &.active {
-    background-color: hsla(var(--bs-primary-h), var(--bs-primary-s), 30%, .1);
-    border-color: transparent;
-  }
+  --bs-btn-color: black;
+  --active-color: hsl(var(--primary-h), var(--primary-s), 30%);
+
+  @include button-variant(
+    $background: var(--bs-light),
+    $border: transparent,
+    $color: black,
+    $hover-background: var(--bs-light),
+    $hover-border: transparent,
+    $hover-color: hsl(var(--primary-h), var(--primary-s), 30%),
+    $active-background: hsl(var(--primary-h), 75%, 94%),
+    $active-border: transparent,
+    $active-color: hsl(var(--primary-h), var(--primary-s), 25%),
+    $disabled-background: var(--bs-light),
+    $disabled-border: transparent,
+    $disabled-color: var(--bs-btn-color)
+  );
+
+  color: var(--bs-btn-color);
 }
 
 .btn-outline-light {

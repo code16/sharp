@@ -2,13 +2,17 @@
 
 namespace DummyNamespace;
 
-use Code16\Sharp\EntityList\EntityListFilter;
-use Code16\Sharp\EntityList\EntityListMultipleFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 
-class DummyClassName implements EntityListSelectFilter, EntityListSelectMultipleFilter
+class DummyClass extends EntityListSelectFilter
 {
+    public function buildFilterConfig(): void
+    {
+        // $this->configureLabel("My Filter label")
+    }
+
     public function values(): array
     {
-        //
+        // return []
     }
 }

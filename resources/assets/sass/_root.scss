@@ -1,22 +1,24 @@
 
 :root {
-  --bs-primary-h: #{hue($primary)};
-  --bs-primary-s: #{saturation($primary)};
-  --bs-primary-l: #{lightness($primary)};
-  --bs-primary-hsl: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--bs-primary-l));
+  --primary: #{$primary};
+  --primary-h: #{hue($primary)};
+  --primary-s: #{saturation($primary)};
+  --primary-l: #{lightness($primary)};
+  --primary-hsl: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
 
   // lightened navbar color
   --accent-bg-amount: 20%;
-  --accent-bg-l: calc(var(--bs-primary-l) + var(--accent-bg-amount));
-  --accent-bg: hsl(var(--bs-primary-h), var(--bs-primary-s), var(--accent-bg-l));
+  --accent-bg-l: calc(var(--primary-l) + var(--accent-bg-amount));
+  --accent-bg: hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l));
 
   --l-threshold: 80%;
 
-  --component-active-bg: var(--bs-primary-hsl);
-  --component-active-color: hsl(0, 0%, calc((var(--bs-primary-l) - var(--l-threshold)) * -100000));
+  --component-active-bg: var(--primary-hsl);
+  --component-active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000));
 
-  --filter-close-icon-color: hsl(var(--bs-primary-h), var(--bs-primary-s), 35%);
+  --filter-close-icon-color: hsl(var(--primary-h), var(--primary-s), 35%);
 
   --navbar-height: #{$navbar-min-height};
+  --navbar-top: 0;
   --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
 }

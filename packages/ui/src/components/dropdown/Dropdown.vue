@@ -1,20 +1,20 @@
 <template>
     <b-dropdown
         class="SharpDropdown"
-        :toggle-class="classes"
+        :toggle-class="toggleClass"
         :disabled="disabled"
         :no-caret="!showCaret"
-        offset="1"
+        :offset="1"
         variant="custom"
         v-bind="$attrs"
+        v-on="$listeners"
+        ref="dropdown"
     >
         <template v-slot:button-content>
-            <span class="d-inline-block">
-                <slot name="text">{{ text }}</slot>
-            </span>
+            <slot name="text">{{ text }}</slot>
         </template>
 
-        <slot />
+        <slot :hide="hide" />
     </b-dropdown>
 </template>
 
@@ -29,15 +29,32 @@
         },
         props: {
             ...Button.props,
-            text: [Boolean, String],
+            text: String,
             showCaret: {
                 type: Boolean,
                 default: true
             },
+            title: String,
             disabled: Boolean,
         },
         computed: {
             ...Button.computed,
+            /**
+             * button variant is defined in classes
+             */
+            toggleClass() {
+                return this.classes;
+            },
+        },
+        methods: {
+            hide() {
+                this.$refs.dropdown.hide();
+            },
+        },
+        mounted() {
+            if(this.title) {
+                this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
+            }
         },
     }
 </script>

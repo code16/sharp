@@ -1,0 +1,22 @@
+{
+  "watchForFileChanges": false,
+  "ignoreTestFiles": [],
+  "viewportWidth": 1600,
+  "viewportHeight": 1200,
+  "chromeWebSecurity": false,
+  "video": false,
+  "retries": {
+    "runMode": 1,
+    "openMode": 1
+  },
+  "component": {
+    "componentFolder": "cypress/components",
+    "testFiles": "**/*.spec.js",
+    "viewportWidth": 1000,
+    "viewportHeight": 600,
+    "retries": {
+      "runMode": 0,
+      "openMode": 0
+    }
+  }
+}

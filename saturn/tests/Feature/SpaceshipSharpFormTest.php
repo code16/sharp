@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Sharp\Commands\SpaceshipSendMessage;
 use App\Spaceship;
 use App\SpaceshipType;
 use App\User;
@@ -34,6 +35,24 @@ class SpaceshipSharpFormTest extends TestCase
                 "name", "picture", "picture:legend", "capacity", "type_id",
                 "construction_date", "pilots", "reviews", "features"
             ]);
+    }
+
+    /** @test */
+    public function we_can_send_a_message_through_command()
+    {
+        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        factory(Spaceship::class)->create(["id" => 22, "messages_sent_count" => 0]);
+        
+        $this
+            ->callSharpInstanceCommandFromList(
+                "spaceship", 
+                22, 
+                SpaceshipSendMessage::class, 
+                ["message" => "lol"]
+            )
+            ->assertOk();
+        
+        $this->assertDatabaseHas("spaceships", ["id"=>22, "messages_sent_count"=>1]);
     }
 
     /** @test */
@@ -77,7 +96,7 @@ class SpaceshipSharpFormTest extends TestCase
     {
         $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
 
-        $spaceship = factory(Spaceship::class)->create(["id" => 2, "name" => "old"]);
+        $spaceship = factory(Spaceship::class)->create(["id" => 2, "name" => null]);
 
         $this
             ->updateSharpForm(
@@ -105,15 +124,21 @@ class SpaceshipSharpFormTest extends TestCase
     {
         $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
 
-        $this->storeSharpForm("spaceship", array_merge(factory(Spaceship::class)->make()->toArray(), [
-            "name" => ["fr" => "test_create"],
-            "capacity" => 10
-        ]))->assertStatus(200);
+        $this
+            ->storeSharpForm("spaceship", 
+                array_merge(
+                    factory(Spaceship::class)->make()->toArray(), 
+                    [
+                        "name" => ["fr" => "test_create"],
+                        "capacity" => 10
+                    ]
+                )
+            )
+            ->assertOk();
 
         $this->assertDatabaseHas("spaceships", [
             "name" => json_encode(["fr" => "test_create"]),
             "capacity" => 10000
         ]);
     }
-
 }

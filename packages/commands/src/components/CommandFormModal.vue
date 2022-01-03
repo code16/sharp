@@ -7,16 +7,20 @@
         @hidden="handleClosed"
     >
         <transition>
-            <Form
-                v-if="visible"
-                :form="command.form"
-                :show-alert="false"
-                independant
-                ignore-authorizations
-                @loading="handleLoadingChanged"
-                style="transition-duration: 300ms"
-                ref="form"
-            />
+            <template v-if="visible">
+                <Form
+                    class="SharpCommandForm"
+                    :entity-key="entityKey"
+                    :instance-id="instanceId"
+                    :form="command.form"
+                    :show-alert="false"
+                    independant
+                    ignore-authorizations
+                    @loading="handleLoadingChanged"
+                    style="transition-duration: 300ms"
+                    ref="form"
+                />
+            </template>
         </transition>
     </Modal>
 </template>
@@ -33,6 +37,8 @@
         },
         props: {
             command: Object,
+            entityKey: String,
+            instanceId: [Number, String],
         },
         data() {
             return {

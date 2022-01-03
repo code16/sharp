@@ -52,7 +52,6 @@ class BreadcrumbTest extends BaseApiTest
                     ]
                 ]
             ]);
-            
     }
 
     /** @test */
@@ -165,6 +164,6 @@ class PersonWithBreadcrumbConfigSharpShow extends PersonSharpShow
     function buildShowConfig(): void
     {
         parent::buildShowConfig();
-        $this->setBreadcrumbCustomLabelAttribute("name");
+        $this->configureBreadcrumbCustomLabelAttribute("name");
     }
 }

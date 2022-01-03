@@ -3,6 +3,7 @@
 exports[`sharp-form can mount "independant" sharp-form 1`] = `
 <div data-popover-boundary="" class="SharpForm">
 	<!---->
+	<!---->
 	<div id="MOCKED_TABBED_LAYOUT">
 		<div id="MOCKED_GRID">
 			<div id="MOCKED_FIELDS_LAYOUT">
@@ -17,6 +18,7 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
 exports[`sharp-form can mount sharp-form 1`] = `
 <div data-popover-boundary="" class="SharpForm">
 	<!---->
+	<!---->
 	<div id="MOCKED_TABBED_LAYOUT">
 		<div id="MOCKED_GRID">
 			<div id="MOCKED_FIELDS_LAYOUT">
@@ -30,6 +32,7 @@ exports[`sharp-form can mount sharp-form 1`] = `
 
 exports[`sharp-form can mount sharp-form with alert 1`] = `
 <div data-popover-boundary="" class="SharpForm">
+	<!---->
 	<div role="alert" class="alert alert-danger SharpForm__alert">
 		<div class="fw-bold">{{ form.validation_error.title }}</div>
 		<div>{{ form.validation_error.description }}</div>

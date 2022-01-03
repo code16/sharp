@@ -6,7 +6,7 @@ use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleForm extends SharpForm
 {
-    public function formConfig(): array
+    public final function formConfig(): array
     {
         return array_merge(
             parent::formConfig(),

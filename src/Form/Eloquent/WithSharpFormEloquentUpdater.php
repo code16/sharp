@@ -62,7 +62,7 @@ trait WithSharpFormEloquentUpdater
      */
     protected function getFormListFieldsConfiguration(): Collection
     {
-        return collect($this->fields)
+        return collect($this->fieldsContainer()->getFields())
             ->filter(function($field) {
                 return $field instanceof SharpFormListField
                     && $field->isSortable();

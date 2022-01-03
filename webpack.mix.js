@@ -56,8 +56,7 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
                 // resolve core-js@2.0 polyfills (now 3.0)
                 'core-js/fn': 'core-js/features',
                 'sharp/scss': path.resolve(__dirname, 'resources/assets/sass'),
-                'sharp': path.resolve(__dirname, 'resources/assets/js'),
-            }
+            },
         }
     });
 
@@ -75,7 +74,16 @@ else {
                 cwd: process.cwd(),
             }),
             // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-        ]
+        ],
+        resolve: {
+            alias: {
+                ...require('fs').existsSync('../packages/tiptap-markdown') && {
+                    'tiptap-markdown': console.warn('\x1b[33m⚠️  Using local tiptap-markdown\n\n')
+                        || path.resolve(__dirname, '../packages/tiptap-markdown')
+                },
+            },
+            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'],
+        }
     });
 }
 

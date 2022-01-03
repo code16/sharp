@@ -33,7 +33,7 @@ class MyForm extends SharpForm
 }
 ```
 
-The context is often useful in a Form situation to display or hide fields depending on the instance status (creation, update), or in a Validator to add an id exception in an unique rule.
+The context is often useful in a Form situation to display or hide fields depending on the instance status (creation, update), or in a Validator to add an ID exception in a "unique" rule.
 
 ## Methods
 

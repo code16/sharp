@@ -8,72 +8,101 @@ use App\Sharp\Commands\PilotUpdateXPCommand;
 use App\Sharp\Filters\PilotRoleFilter;
 use App\Sharp\Filters\PilotSpaceshipFilter;
 use App\Sharp\States\PilotEntityState;
-use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
-use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
 
 class PilotSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setSortable()
-                ->setLabel("Name")
-        )->addDataContainer(
-            EntityListDataContainer::make("role")
-                ->setLabel("Role")
-        )->addDataContainer(
-            EntityListDataContainer::make("xp")
-                ->setLabel("Xp")
-        );
+        $fieldsContainer
+            ->addField(
+                EntityListField::make("name")
+                    ->setSortable()
+                    ->setLabel("Name")
+            )
+            ->addField(
+                EntityListField::make("role")
+                    ->setLabel("Role")
+            )
+            ->addField(
+                EntityListField::make("xp")
+                    ->setLabel("Xp")
+            );
+    }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            PilotDownloadPhoto::class
+        ];
+    }
+
+    public function getEntityCommands(): ?array
+    {
+        return [
+            PilotUpdateXPCommand::class
+        ];
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            PilotSpaceshipFilter::class,
+            PilotRoleFilter::class
+        ];
     }
 
     function buildListConfig(): void
     {
-        $this->setSearchable()
-            ->setDefaultSort("name", "asc")
-            ->setMultiformAttribute("role")
-            ->setPaginated()
-            ->setEntityState("state", PilotEntityState::class)
-            ->addFilter("spaceship", PilotSpaceshipFilter::class)
-            ->addFilter("role", PilotRoleFilter::class)
-            ->addEntityCommand("updateXP", PilotUpdateXPCommand::class)
-            ->addInstanceCommand("download", PilotDownloadPhoto::class);
+        $this->configureSearchable()
+            ->configureDefaultSort("name", "asc")
+            ->configureMultiformAttribute("role")
+            ->configurePaginated()
+            ->configureEntityState("state", PilotEntityState::class);
     }
 
-    function buildListLayout(): void
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $this->addColumn("name", 4)
-            ->addColumn("role", 4)
-            ->addColumn("xp", 4);
+        if($role = $this->queryParams->filterFor("role")) {
+            $fieldsLayout->addColumn("name", 6);
+            if($role === "sr") {
+                $fieldsLayout->addColumn("xp", 6);
+            }
+        } else {
+            $fieldsLayout->addColumn("name", 4)
+                ->addColumn("role", 4)
+                ->addColumn("xp", 4);
+        }
     }
 
-    function getListData(EntityListQueryParams $params)
+    function getListData(): array|Arrayable
     {
         $pilots = Pilot::select("pilots.*")->distinct();
 
-        if($ids = $params->specificIds()) {
+        if($ids = $this->queryParams->specificIds()) {
             $pilots->whereIn("id", $ids);
 
         } else {
-            if ($spaceship = $params->filterFor("spaceship")) {
+            if ($spaceship = $this->queryParams->filterFor(PilotSpaceshipFilter::class)) {
                 $pilots->leftJoin("pilot_spaceship", "pilots.id", "=", "pilot_spaceship.pilot_id")
                     ->leftJoin("spaceships", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
                     ->where("spaceships.id", $spaceship);
             }
 
-            if ($role = $params->filterFor("role")) {
+            if ($role = $this->queryParams->filterFor(PilotRoleFilter::class)) {
                 $pilots->where("role", $role);
             }
 
-            if ($params->sortedBy()) {
-                $pilots->orderBy($params->sortedBy(), $params->sortedDir());
+            if ($this->queryParams->sortedBy()) {
+                $pilots->orderBy($this->queryParams->sortedBy(), $this->queryParams->sortedDir());
             }
 
-            if ($params->hasSearch()) {
-                foreach ($params->searchWords() as $word) {
+            if ($this->queryParams->hasSearch()) {
+                foreach ($this->queryParams->searchWords() as $word) {
                     $pilots->where('pilots.name', 'like', $word);
                 }
             }

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads\Transformers;
 
-use Code16\Sharp\EntityList\Eloquent\Transformers\SharpUploadModelAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
@@ -38,10 +37,56 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
         $this->assertEquals(
             [
                 "id" => $upload->id,
-                "name" => $upload->file_name,
-                "size" => (string)$upload->size,
-                "thumbnail" => $upload->thumbnail(1000, 400)
+                "name" => basename($upload->file_name),
+                "path" => $upload->file_name,
+                "disk" => "local",
+                "size" => $upload->size,
+                "thumbnail" => $upload->thumbnail(200, 200),
             ], 
+            $transformer->apply("", $picturable, "picture")
+        );
+    }
+
+    /** @test */
+    function we_can_transform_a_single_upload_with_transformations()
+    {
+        $picturable = Picturable::create();
+        $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
+        $upload->filters = [
+            "crop" => [
+                "height" => .5,
+                "width" => .75,
+                "x" => .3,
+                "y" => .34,
+            ],
+            "rotate" => [
+                "angle" => 45
+            ]
+        ];
+        $upload->save();
+
+        $transformer = new SharpUploadModelFormAttributeTransformer();
+
+        $this->assertEquals(
+            [
+                "id" => $upload->id,
+                "name" => basename($upload->file_name),
+                "path" => $upload->file_name,
+                "disk" => "local",
+                "size" => $upload->size,
+                "thumbnail" => $upload->thumbnail(200, 200),
+                "filters" => [
+                    "crop" => [
+                        "height" => .5,
+                        "width" => .75,
+                        "x" => .3,
+                        "y" => .34,
+                    ],
+                    "rotate" => [
+                        "angle" => 45
+                    ]
+                ]
+            ],
             $transformer->apply("", $picturable, "picture")
         );
     }
@@ -59,20 +104,75 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
             [
                 [
                     "file" => [
-                        "name" => $upload->file_name,
-                        "size" => (string)$upload->size,
-                        "thumbnail" => $upload->thumbnail(1000, 400)
+                        "name" => basename($upload->file_name),
+                        "path" => $upload->file_name,
+                        "disk" => "local",
+                        "size" => $upload->size,
+                        "thumbnail" => $upload->thumbnail(200, 200)
                     ],
                     "id" => $upload->id,
                 ], [
                     "file" => [
-                        "name" => $upload2->file_name,
-                        "size" => (string)$upload2->size,
-                        "thumbnail" => $upload2->thumbnail(1000, 400)
+                        "name" => basename($upload2->file_name),
+                        "path" => $upload2->file_name,
+                        "disk" => "local",
+                        "size" => $upload2->size,
+                        "thumbnail" => $upload2->thumbnail(200, 200)
                     ],
                     "id" => $upload2->id,
                 ]
             ], 
+            $transformer->apply("", $picturable, "pictures")
+        );
+    }
+
+    /** @test */
+    function we_can_transform_a_list_of_upload_with_transformations()
+    {
+        $picturable = Picturable::create();
+        $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
+        $upload2 = $this->createSharpUploadModel($this->createImage(), $picturable);
+        
+        $filters = [
+            "crop" => [
+                "height" => .5,
+                "width" => .75,
+                "x" => .3,
+                "y" => .34,
+            ],
+            "rotate" => [
+                "angle" => 45
+            ]
+        ];
+
+        $upload->filters = $filters;
+        $upload->save();
+
+        $transformer = new SharpUploadModelFormAttributeTransformer();
+
+        $this->assertEquals(
+            [
+                [
+                    "file" => [
+                        "name" => basename($upload->file_name),
+                        "path" => $upload->file_name,
+                        "disk" => "local",
+                        "size" => $upload->size,
+                        "thumbnail" => $upload->thumbnail(200, 200),
+                        "filters" => $filters
+                    ],
+                    "id" => $upload->id,
+                ], [
+                "file" => [
+                    "name" => basename($upload2->file_name),
+                    "path" => $upload2->file_name,
+                    "disk" => "local",
+                    "size" => $upload2->size,
+                    "thumbnail" => $upload2->thumbnail(200, 200)
+                ],
+                "id" => $upload2->id,
+            ]
+            ],
             $transformer->apply("", $picturable, "pictures")
         );
     }

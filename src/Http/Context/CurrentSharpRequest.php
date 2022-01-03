@@ -3,6 +3,9 @@
 namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+use Code16\Sharp\View\Components\Menu;
+use Code16\Sharp\View\Components\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -91,16 +94,22 @@ class CurrentSharpRequest
 
     public function getEntityMenuLabel(string $entityKey): ?string
     {
-        return collect(config("sharp.menu"))
-                ->mapWithKeys(function($itemOrCategory) {
-                    return isset($itemOrCategory["entities"])
-                        ? collect($itemOrCategory["entities"])
-                            ->mapWithKeys(function($item) {
-                                return $this->extractMenuKeyAndLabel($item);
-                            })
-                        : $this->extractMenuKeyAndLabel($itemOrCategory);
-                })
-                ->filter()[$entityKey] ?? null;
+        return app(Menu::class)
+            ->getItems()
+            ->filter(function(MenuItem $item) {
+                return $item->isMenuItemEntity() 
+                    || $item->isMenuItemDashboard()
+                    || $item->isMenuItemSection();
+            })
+            ->map(function(MenuItem $item) {
+                if($item->isMenuItemSection()) {
+                    return $item->entities;
+                }
+                return $item;
+            })
+            ->flatten()
+            ->firstWhere("key", $entityKey)
+            ?->label;
     }
 
     public function isEntityList(): bool
@@ -124,46 +133,37 @@ class CurrentSharpRequest
     public function isCreation(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current 
-            ? $current->isForm() && !$current->isSingleForm() && $current->instanceId() === null 
-            : false;
+        return $current && $current->isForm() && !$current->isSingleForm() && $current->instanceId() === null;
     }
 
     public function isUpdate(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current
-            ? $current->isForm() && ($current->isSingleForm() || $current->instanceId() !== null)
-            : false;
+        return $current && $current->isForm() && ($current->instanceId() !== null || $current->isSingleForm());
     }
 
     public function entityKey(): ?string
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current ? $current->entityKey() : null;
+        return $current?->entityKey();
     }
 
     public function instanceId(): ?string
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current ? $current->instanceId() : null;
+        return $current?->instanceId();
     }
 
-    /**
-     * @param string $filterName
-     * @return array|string|null
-     */
-    public function globalFilterFor(string $filterName)
+    public final function globalFilterFor(string $handlerClass): array|string|null
     {
-        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
-            return null;
-        }
+        $handler = app($handlerClass);
+        
+        abort_if(!$handler instanceof GlobalRequiredFilter, 404);
 
-        if(session()->has("_sharp_retained_global_filter_$filterName")) {
-            return session()->get("_sharp_retained_global_filter_$filterName");
-        }
-
-        return app($handlerClass)->defaultValue();
+        return session()->get(
+            "_sharp_retained_global_filter_{$handler->getKey()}",
+            $handler->defaultValue()
+        );
     }
 
     protected function buildBreadcrumb(): void
@@ -220,18 +220,5 @@ class CurrentSharpRequest
         }
         
         return collect(request()->segments())->slice(1)->values();
-    }
-
-    private function extractMenuKeyAndLabel(array $item): array
-    {
-        if(isset($item["entity"])) {
-            return [$item["entity"] => $item["label"] ?? ""];
-        }
-
-        if(isset($item["dashboard"])) {
-            return [$item["dashboard"] => $item["label"] ?? ""];
-        }
-
-        return [];
     }
 }

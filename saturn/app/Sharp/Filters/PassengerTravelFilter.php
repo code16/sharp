@@ -3,10 +3,17 @@
 namespace App\Sharp\Filters;
 
 use App\Travel;
-use Code16\Sharp\EntityList\EntityListSelectFilter;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 
-class PassengerTravelFilter implements EntityListSelectFilter
+class PassengerTravelFilter extends EntityListSelectFilter
 {
+    public function buildFilterConfig(): void
+    {
+        $this->configureLabel("Flies on")
+            ->configureSearchable()
+            ->configureSearchKeys(["label", "continent"])
+            ->configureTemplate("{{label}}<br><small>{{continent}}</small>");
+    }
 
     public function values(): array
     {
@@ -20,25 +27,5 @@ class PassengerTravelFilter implements EntityListSelectFilter
                 ];
             })
             ->all();
-    }
-
-    public function label(): string
-    {
-        return "Flies on";
-    }
-
-    public function isSearchable(): bool
-    {
-        return true;
-    }
-
-    public function searchKeys(): array
-    {
-        return ["label", "continent"];
-    }
-
-    public function template(): string
-    {
-        return "{{label}}<br><small>{{continent}}</small>";
     }
 }

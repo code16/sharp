@@ -5,21 +5,23 @@ namespace Code16\Sharp\Tests\Fixtures;
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PersonSharpShow extends SharpShow
 {
-    function buildShowFields(): void
+    function buildShowFields(FieldsContainer $showFields): void
     {
-        $this->addField(SharpShowTextField::make("name"));
+        $showFields->addField(SharpShowTextField::make("name"));
     }
-
-    function buildShowConfig(): void
+    
+    function getInstanceCommands(): ?array
     {
-        $this
-            ->addInstanceCommand("test_command", new class extends InstanceCommand {
+        return [
+            "test_command" => new class extends InstanceCommand {
                 public function label(): string
                 {
                     return "Label";
@@ -31,8 +33,15 @@ class PersonSharpShow extends SharpShow
                 {
                     return $instanceId < 10;
                 }
-            })
-            ->setEntityState("state", new class extends EntityState {
+            },
+            
+        ];
+    }
+
+    function buildShowConfig(): void
+    {
+        $this
+            ->configureEntityState("state", new class extends EntityState {
                 protected function buildStates(): void
                 {
                     $this->addState("active", "Label", "blue");
@@ -47,9 +56,9 @@ class PersonSharpShow extends SharpShow
             });
     }
 
-    function buildShowLayout(): void
+    function buildShowLayout(ShowLayout $showLayout): void
     {
-        $this
+        $showLayout
             ->addSection("Identity", function(ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function(ShowLayoutColumn $column) {

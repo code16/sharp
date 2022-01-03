@@ -4,6 +4,7 @@
     "version": "1.0.0",
     "main": "src/index.js",
     "dependencies": {
+        "sharp-files": "file:../files",
         "sharp-ui": "file:../ui"
     }
 }

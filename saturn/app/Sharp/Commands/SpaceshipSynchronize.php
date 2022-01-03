@@ -2,30 +2,37 @@
 
 namespace App\Sharp\Commands;
 
+use App\Sharp\Filters\SpaceshipTypeFilter;
+use App\SpaceshipType;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 
 class SpaceshipSynchronize extends EntityCommand
 {
     public function label(): string
     {
-        return "Synchronize the gamma-spectrum";
+        return sprintf(
+            "Synchronize the gamma-spectrum of %s spaceships",
+            SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label
+        );
+    }
+    
+    public function buildCommandConfig(): void
+    {
+        $this
+            ->configureDescription("Let's be honest: this command is a fraud. It's just an empty command for test purpose.")
+            ->configureConfirmationText("Sure, really?");
     }
 
-    public function description(): string
+    public function execute(array $data=[]): array
     {
-        return "Let's be honest: this command is a fraud. It's just an empty command for test purpose.";
-    }
+        sleep(1);
 
-    public function execute(EntityListQueryParams $params, array $data=[]): array
-    {
-        sleep(2);
-        return $this->info("Gamma spectrum synchronized!");
-    }
-
-    public function confirmationText(): string
-    {
-        return "Sure, really?";
+        return $this->info(
+            sprintf(
+                "Gamma spectrum of %s spaceships synchronized!",
+                SpaceshipType::findOrFail($this->queryParams->filterFor(SpaceshipTypeFilter::class))->label
+            )
+        );
     }
 
     public function authorize():bool

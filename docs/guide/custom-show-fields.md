@@ -30,7 +30,7 @@ Example of custom sharp field:
 |-----------------|---------------------------------------------|
 | value           | value of the field, *required*                                            |
 | fieldKey        | field key in the show                       |
-| emptyVisible    | boolean determined by the [->setShowIfEmpty()](building-entity-show.md) method, true by default  |
+| emptyVisible    | boolean determined by the [->setShowIfEmpty()](building-show-page.md) method, true by default  |
 | ...             | *All other props given in the field definition* |
 
 #### Listened events
@@ -115,7 +115,7 @@ class SharpCustomShowFieldTitle extends SharpShowField
 
     protected int $level = 1;
 
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE);
     }
@@ -127,7 +127,7 @@ class SharpCustomShowFieldTitle extends SharpShowField
         return $this;
     }
 
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "level" => "required|integer|min:1|max:5",
@@ -158,9 +158,9 @@ Next step is using the new show field:
 *in some `Code16\Sharp\Show\SharpShow` subclass:*
 
 ```php
-function buildShowFields()
+function buildShowFields(FieldsContainer $showFields): void
 {
-    $this->addField(
+    $showFields->addField(
         SharpCustomShowFieldTitle::make("name")
             ->setLevel(2)
     );

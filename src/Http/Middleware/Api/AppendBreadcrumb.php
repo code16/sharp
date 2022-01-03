@@ -4,10 +4,12 @@ namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 /**
  * This middleware is responsible for appending the breadcrumb array
@@ -120,21 +122,19 @@ class AppendBreadcrumb
             return null;
         }
         
-        switch ($item->type) {
-            case "s-show":
-                return trans("sharp::breadcrumb.show", [
+        return match($item->type) {
+            "s-show" => trans("sharp::breadcrumb.show", [
                     "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
-                ]);
-            case "s-form":
-                return isset($item->instance)
+                ]),
+            "s-form" => isset($item->instance)
                     ? trans("sharp::breadcrumb.form.edit_entity", [
                         "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
                     ])
                     : trans("sharp::breadcrumb.form.create_entity", [
                         "entity" => $this->getEntityLabelForInstance($item, $isLeaf)
-                    ]);
-            
-        }
+                    ]),
+            default => null
+        };
     }
 
     /**
@@ -158,16 +158,13 @@ class AppendBreadcrumb
             }
         }
         
-        if(strpos($item->key, ':') !== false) {
-            list($itemKey, $itemSubKey) = explode(":", $item->key);
-            if($value = config("sharp.entities.{$itemKey}.forms.{$itemSubKey}.label")) {
-                return $value;
-            }
-
-            return config("sharp.entities.{$itemKey}.label", $itemKey);
+        $entity = app(SharpEntityManager::class)->entityFor($item->key);
+        
+        if(str_contains($item->key, ':')) {
+            return $entity->getMultiforms()[Str::after($item->key, ':')][1] ?? $entity->getLabel();
         }
         
-        return config("sharp.entities.{$item->key}.label", $item->key);
+        return $entity->getLabel();
     }
 
     private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool

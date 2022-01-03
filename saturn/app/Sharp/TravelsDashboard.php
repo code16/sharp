@@ -5,49 +5,56 @@ namespace App\Sharp;
 use App\Sharp\Commands\TravelsDashboardDownloadCommand;
 use App\Sharp\Filters\TravelsDashboardPeriodFilter;
 use App\Sharp\Filters\TravelsDashboardSpaceshipsFilter;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Illuminate\Support\Facades\DB;
 
 class TravelsDashboard extends SharpDashboard
 {
-
-    function buildWidgets(): void
+    function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
-        $this->addWidget(
+        $widgetsContainer->addWidget(
             SharpBarGraphWidget::make("travels")
                 ->setDisplayHorizontalAxisAsTimeline()
-                ->setTitle("Travel counts")
+                ->setTitle("Travel counts " . ($this->queryParams->filterFor("period") ? "(period filtered)" : ""))
         );
     }
-
-    function buildDashboardConfig(): void
+    
+    function getDashboardCommands(): ?array
     {
-        $this
-            ->addFilter("spaceships", TravelsDashboardSpaceshipsFilter::class)
-            ->addFilter("period", TravelsDashboardPeriodFilter::class)
-            ->addDashboardCommand("download", TravelsDashboardDownloadCommand::class);
+        return [
+            TravelsDashboardDownloadCommand::class
+        ];
     }
 
-    function buildWidgetsLayout(): void
+    public function getFilters(): array
     {
-        $this->addFullWidthWidget("travels");
+        return [
+            TravelsDashboardSpaceshipsFilter::class,
+            TravelsDashboardPeriodFilter::class
+        ];
     }
 
-    function buildWidgetsData(DashboardQueryParams $params): void
+    function buildDashboardLayout(DashboardLayout $dashboardLayout): void
+    {
+        $dashboardLayout->addFullWidthWidget("travels");
+    }
+
+    function buildWidgetsData(): void
     {
         $query = DB::table('travels')
             ->select(DB::raw("DATE_FORMAT(departure_date,'%Y-%m') as label, count(*) as value"));
 
-        if($spaceships = $params->filterFor("spaceships")) {
+        if($spaceships = $this->queryParams->filterFor(TravelsDashboardSpaceshipsFilter::class)) {
             $query->whereIn("spaceship_id", (array)$spaceships);
         }
 
         $query->groupBy(DB::raw('label'));
 
-        if($departurePeriodRange = $params->filterFor("period")) {
+        if($departurePeriodRange = $this->queryParams->filterFor(TravelsDashboardPeriodFilter::class)) {
             $query->whereBetween("departure_date", [
                 $departurePeriodRange['start'],
                 $departurePeriodRange['end']

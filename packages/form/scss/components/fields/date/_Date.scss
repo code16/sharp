@@ -156,7 +156,7 @@
 
         .prev, .next, .up {
           &:hover, &:focus {
-            color: hsl(var(--bs-primary-h), var(--bs-primary-s), 30%);
+            color: hsl(var(--primary-h), var(--primary-s), 30%);
           }
         }
 
@@ -252,7 +252,7 @@
               }
 
               &.today {
-                border: 2px solid var(--bs-primary);
+                border: 2px solid var(--primary);
               }
 
               &.blank {

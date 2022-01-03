@@ -1,36 +1,44 @@
 @php
-    /** @var \Code16\Sharp\View\Components\Menu $component */
+/**
+ * @var \Code16\Sharp\View\Components\Menu $self
+ */
 @endphp
 
 <sharp-left-nav
     class="SharpLeftNav"
-    current="{{ $component->currentEntity }}"
-    title="{{ $component->title }}"
-    :items="{{ json_encode($component->items) }}"
-    :has-global-filters="{{ json_encode($component->hasGlobalFilters) }}"
+    current="{{ $currentEntity }}"
+    title="{{ $title }}"
+    :items="{{ json_encode($items) }}"
+    :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
     <template v-slot:title>
         @if($icon = config('sharp.theme.logo_urls.menu'))
-            <img src="{{ url($icon) }}" alt="{{ $component->title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ url($icon) }}" alt="{{ $title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
         @elseif(file_exists(public_path($icon = 'sharp-assets/menu-icon.png')))
-            <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $component->title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
         <sharp-nav-item disabled>
-            <div class="row gx-2 flex-nowrap">
+            <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
-                    <div class="text-truncate" title="{{ $component->username }}">
-                        {{ $component->username }}
+                    <div class="text-truncate" title="{{ $username }}">
+                        {{ $username }}
                     </div>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fas fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
+                    <form action="{{ route('code16.sharp.logout') }}" method="post">
+                        @csrf
+                        <button class="btn btn-link p-2 m-n2 lh-1 d-block" type="submit">
+                            <span class="visually-hidden">{{ __('sharp::menu.logout_label') }}</span>
+                            <i class="fas fa-fw fa-sign-out-alt"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </sharp-nav-item>
 
-        @foreach($component->items as $menuItem)
+        @foreach($items as $menuItem)
             @if($menuItem->type === 'category')
                 <sharp-collapsible-item
                     label="{{ $menuItem->label }}"
@@ -39,7 +47,7 @@
                     @endif
                 >
                     @foreach($menuItem->entities as $entity)
-                        <x-sharp::menu-item
+                        <x-sharp::menu.menu-item
                             :item="$entity"
                             :is-current="$currentEntity == $entity->key"
                             nested
@@ -47,7 +55,7 @@
                     @endforeach
                 </sharp-collapsible-item>
             @else
-                <x-sharp::menu-item
+                <x-sharp::menu.menu-item
                     :item="$menuItem"
                     :is-current="$currentEntity == $menuItem->key"
                 />

@@ -3,8 +3,8 @@
 namespace App\Sharp\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityCommand;
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class InviteUserCommand extends EntityCommand
 {
@@ -13,23 +13,44 @@ class InviteUserCommand extends EntityCommand
         return "Invite new user...";
     }
 
-    public function execute(EntityListQueryParams $params, array $data = []): array
+    function buildCommandConfig(): void
+    {
+        $this
+            ->configureFormModalTitle("Send an invitation to a new user")
+            ->configurePageAlert(
+                "The invitation will be automatically sent before {{day}}, 10 AM",
+                static::$pageAlertLevelPrimary,
+                "globalHelp"
+            );
+    }
+
+    function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make("email")
+                    ->setLabel("E-mail address")
+            );
+    }
+
+    protected function initialData(): array
+    {
+        return [
+            "globalHelp" => [
+                "day" => now()->addDay()->formatLocalized("%A")
+            ]
+        ];
+    }
+
+    public function execute(array $data = []): array
     {
         $this->validate(
-            $data, 
+            $data,
             [
                 "email" => "required|email"
             ]
         );
         
-        return $this->info("Invitation sent!");
-    }
-
-    function buildFormFields(): void
-    {
-        $this->addField(
-            SharpFormTextField::make("email")
-                ->setLabel("E-mail address")
-        );
+        return $this->info("Invitation planned!");
     }
 }

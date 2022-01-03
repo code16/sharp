@@ -22,7 +22,7 @@ class HomeController extends SharpProtectedController
                 return $menuItem->url;
             }
             
-            if($menuItem->isMenuItemCategory()) {
+            if($menuItem->isMenuItemSection()) {
                 foreach($menuItem->entities as $menuItemEntity) {
                     if($menuItemEntity->isMenuItemEntity() || $menuItemEntity->isMenuItemDashboard()) {
                         return $menuItemEntity->url;

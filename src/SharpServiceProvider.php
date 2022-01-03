@@ -5,21 +5,16 @@ namespace Code16\Sharp;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
+use Code16\Sharp\Console\EntityListFilterMakeCommand;
+use Code16\Sharp\Console\EntityListMakeCommand;
 use Code16\Sharp\Console\FormMakeCommand;
 use Code16\Sharp\Console\InstanceCommandMakeCommand;
-use Code16\Sharp\Console\ListFilterMakeCommand;
-use Code16\Sharp\Console\ListMakeCommand;
 use Code16\Sharp\Console\MediaMakeCommand;
-use Code16\Sharp\Console\ModelWizardCommand;
-use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
-use Code16\Sharp\Console\ShowMakeCommand;
-use Code16\Sharp\Console\SingleFormMakeCommand;
-use Code16\Sharp\Console\SingleShowMakeCommand;
+use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
-use Code16\Sharp\Http\Composers\AssetViewComposer;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
@@ -28,21 +23,21 @@ use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
+use Code16\Sharp\Http\Middleware\Api\RegisterAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
-use Code16\Sharp\View\Components\Menu;
-use Code16\Sharp\View\Components\RootStyles;
-use Code16\Sharp\View\Components\Title;
+use Code16\Sharp\View\Components\Content;
+use Code16\Sharp\View\Components\File;
+use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '6.5.4';
+    const VERSION = '7.0.0-beta.6';
 
     public function boot()
     {
@@ -62,19 +57,15 @@ class SharpServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../resources/views/public' => resource_path('views/vendor/sharp/public'),
+            __DIR__ . '/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
+            __DIR__ . '/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
         ], 'views');
-
-        $this->registerPolicies();
-
-        Blade::component('sharp-menu', Menu::class);
-        Blade::component('sharp-root-styles', RootStyles::class);
-        Blade::component('sharp-title', Title::class);
-
-        view()->composer(
-            ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
-            AssetViewComposer::class
-        );
+        
+        Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
+        Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
+        Blade::component(Content::class, 'sharp-content');
+        Blade::component(File::class, 'sharp-file');
+        Blade::component(Image::class, 'sharp-image');
     }
 
     public function register()
@@ -95,53 +86,20 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->commands([
             CreateUploadsMigration::class,
-            ListMakeCommand::class,
+            EntityListMakeCommand::class,
             FormMakeCommand::class,
-            SingleFormMakeCommand::class,
-            ShowMakeCommand::class,
-            SingleShowMakeCommand::class,
+            ShowPageMakeCommand::class,
             StateMakeCommand::class,
             MediaMakeCommand::class,
-            PolicyMakeCommand::class,
-            ModelWizardCommand::class,
             EntityCommandMakeCommand::class,
             InstanceCommandMakeCommand::class,
             DashboardMakeCommand::class,
             ValidatorMakeCommand::class,
-            ListFilterMakeCommand::class,
+            EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravelRecent::class);
-    }
-
-    protected function registerPolicies(): void
-    {
-        foreach((array)config("sharp.entities") as $entityKey => $config) {
-            if(isset($config["policy"])) {
-                foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
-                    $this->definePolicy($entityKey, $config["policy"], $action);
-                }
-            }
-        }
-
-        foreach((array)config("sharp.dashboards") as $dashboardKey => $config) {
-            if(isset($config["policy"])) {
-                $this->definePolicy($dashboardKey, $config["policy"], 'view');
-            }
-        }
-    }
-
-    protected function definePolicy(string $entityKey, string $policy, string $action): void
-    {
-        if(method_exists(app($policy), $action)) {
-            Gate::define("sharp.{$entityKey}.{$action}", $policy . "@{$action}");
-        } else {
-            // No policy = true by default
-            Gate::define("sharp.{$entityKey}.{$action}", function () {
-                return true;
-            });
-        }
     }
 
     protected function registerMiddleware(): void

@@ -7,8 +7,10 @@ use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 {
@@ -18,9 +20,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "John Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
+                $formFields->addField(SharpFormTextField::make("name"));
             }
         };
 
@@ -36,9 +38,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     function we_can_store_a_new_instance()
     {
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
+                $formFields->addField(SharpFormTextField::make("name"));
             }
         };
 
@@ -75,10 +77,10 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
                 return $this->ignore("age")
                     ->save(Person::findOrFail($id), $data);
             }
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
-                $this->addField(SharpFormTextField::make("age"));
+                $formFields->addField(SharpFormTextField::make("name"))
+                    ->addField(SharpFormTextField::make("age"));
             }
         };
 
@@ -102,10 +104,10 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
                 return $this->ignore(["name", "age"])
                     ->save(Person::findOrFail($id), $data);
             }
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("name"));
-                $this->addField(SharpFormTextField::make("age"));
+                $formFields->addField(SharpFormTextField::make("name"))
+                    ->addField(SharpFormTextField::make("age"));
             }
         };
 
@@ -125,9 +127,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "John Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormSelectField::make("mother", Person::all()->pluck("name", "id")->all()));
+                $formFields->addField(SharpFormSelectField::make("mother", Person::all()->pluck("name", "id")->all()));
             }
         };
 
@@ -146,9 +148,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $son = Person::create(["name" => "John Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormSelectField::make(
+                $formFields->addField(SharpFormSelectField::make(
                     "elderSon", Person::all()->pluck("name", "id")->all())
                 );
             }
@@ -169,9 +171,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $son = Person::create(["name" => "AAA", "mother_id" => $mother->id]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(
+                $formFields->addField(
                     SharpFormListField::make("sons")
                         ->addItemField(SharpFormTextField::make("name"))
                 );
@@ -204,12 +206,13 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $person2 = Person::create(["name" => "John Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTagsField::make(
-                        "friends", Person::all()->pluck("name", "id")->all()
-                    )->setCreatable()
-                );
+                $formFields
+                    ->addField(
+                        SharpFormTagsField::make("friends", Person::all()->pluck("name", "id")->all())
+                            ->setCreatable()
+                    );
             }
         };
 
@@ -231,12 +234,12 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $person1 = Person::create(["name" => "John Ford"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTagsField::make(
-                        "friends", Person::all()->pluck("name", "id")->all()
-                    )->setCreatable()
-                    ->setCreateAttribute("name")
+                $formFields->addField(
+                    SharpFormTagsField::make("friends", Person::all()->pluck("name", "id")->all())
+                        ->setCreatable()
+                        ->setCreateAttribute("name")
                 );
             }
         };
@@ -265,9 +268,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(["name" => "Jane Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(
+                $formFields->addField(
                     SharpFormListField::make("sons")
                         ->addItemField(SharpFormTextField::make("name"))
                         ->setSortable()->setOrderAttribute("order")
@@ -303,9 +306,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $daughter = Person::create(["name" => "C", "order" => 50, "mother_id"=>$mother->id]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(
+                $formFields->addField(
                     SharpFormListField::make("sons")
                         ->addItemField(SharpFormTextField::make("name"))
                         ->setSortable()->setOrderAttribute("order")
@@ -337,9 +340,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $person = Person::create(["name" => "John Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("picture:file"));
+                $formFields->addField(SharpFormTextField::make("picture:file"));
             }
         };
 
@@ -359,10 +362,10 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $son = Person::create(["name" => "John Wayne", "mother_id" => $mother->id]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("mother:name"));
-                $this->addField(SharpFormTextField::make("mother:age"));
+                $formFields->addField(SharpFormTextField::make("mother:name"))
+                    ->addField(SharpFormTextField::make("mother:age"));
             }
         };
 
@@ -385,10 +388,10 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $son = Person::create(["name" => "AAA", "mother_id" => $mother->id]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("elderSon:name"));
-                $this->addField(SharpFormTextField::make("elderSon:age"));
+                $formFields->addField(SharpFormTextField::make("elderSon:name"))
+                    ->addField(SharpFormTextField::make("elderSon:age"));
             }
         };
 
@@ -411,10 +414,10 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(["name" => "Jane Wayne"]);
 
         $form = new class extends WithSharpFormEloquentUpdaterTestForm {
-            function buildFormFields(): void
+            function buildFormFields(FieldsContainer $formFields): void
             {
-                $this->addField(SharpFormTextField::make("elderSon:name"));
-                $this->addField(SharpFormTextField::make("elderSon:age"));
+                $formFields->addField(SharpFormTextField::make("elderSon:name"))
+                    ->addField(SharpFormTextField::make("elderSon:age"));
             }
         };
 
@@ -443,6 +446,6 @@ class WithSharpFormEloquentUpdaterTestForm extends SharpForm
         return $this->save($instance, $data);
     }
     function delete($id): void {}
-    function buildFormLayout(): void {}
-    function buildFormFields(): void {}
+    function buildFormLayout(FormLayout $formLayout): void {}
+    function buildFormFields(FieldsContainer $formFields): void {}
 }
