@@ -53,7 +53,7 @@
 }
 
 .token.function {
-  color: #004c9b;
+  color: var(--c-text-accent);
 }
 
 .token.regex,

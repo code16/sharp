@@ -1,8 +1,6 @@
-@import 'palette';
-@import 'home';
-@import 'search';
-
-$hoverColor = rgba($accentColor, .35);
+@use 'root';
+@use 'home';
+@use 'search';
 
 html {
   scroll-behavior: smooth;
@@ -13,14 +11,14 @@ code {
 }
 
 code.inline {
-  @import "inline_code";
+  @import "inline-code";
 }
 
 .theme-default-content {
   &:not(.custom) {
     padding-top: 2.5rem;
     @media (min-width: 720px) {
-      padding-top: $navbarHeight;
+      padding-top: var(--navbar-height);
     }
   }
 
@@ -37,37 +35,50 @@ code.inline {
 
   h3, h4 {
     code {
-      display block;
+      display: block;
       width: calc(100% + 1rem);
       padding: 1rem;
       font-size: 1rem;
       box-sizing: border-box;
       border-bottom: 1px solid rgba(27,31,35,0.25);
-      margin-bottom -.5rem;
+      margin-bottom: -.5rem;
       margin-left: -1rem;
-      background: #f3f4f4;
+      background: var(--c-bg-light);
       color: #6996bf;
       .token.function {
-        margin-right .25em;
+        margin-right: .25em;
       }
     }
   }
   h3 + h3, h4 + h4 {
-    margin-top: -1.5rem - $navbarHeight !important;
+    margin-top: calc(-1.5rem - var(--navbar-height)) !important;
   }
   h5, h6 {
-    font-size 700;
+    font-weight: 700;
   }
   ul, p {
     code * {
-      color: #476582!important;
+      color: inherit!important;
+    }
+  }
+}
+
+.dark {
+  h2, h3, h4 {
+    code {
+    }
+  }
+  .custom-container.warning {
+    code {
+      color: inherit;
+      background-color: rgba(255, 255, 255, .15);
     }
   }
 }
 
 a.header-anchor {
   text-decoration: none;
-  color: $accentColor;
+  color: var(--c-text-accent);
   opacity: 0;
   position: relative;
   z-index: 1;
@@ -76,7 +87,7 @@ a.header-anchor {
 h1, h2, h3, h4, h5, h6 {
   &:hover {
     .header-anchor {
-      opacity .5;
+      opacity: .5;
     }
   }
 }
@@ -87,23 +98,23 @@ div[class~="language-php"]:before {
 
 a.sidebar-link {
   &.active {
-    font-weight 700;
+    font-weight: 700;
   }
 }
 
 .sidebar-sub-headers {
   a.sidebar-link {
     &.active {
-      font-weight 600;
+      font-weight: 600;
     }
   }
 }
 
 .page-nav {
   a {
-    color: $textColor;
+    color: var(--c-text);
     &:hover {
-      background: $hoverColor;
+      background: rgba(var(--c-brand), .35);
     }
   }
 }
@@ -121,7 +132,7 @@ a.sidebar-link {
     }
   }
   .site-name {
-    line-height: $navbarHeight;
+    line-height: var(--navbar-height);
     font-size: 1.5rem;
     @media (min-width: 720px) {
       font-size: 2rem;
@@ -135,11 +146,15 @@ a.sidebar-link {
   }
   .sidebar-button {
     box-sizing: content-box;
-    top: ($navbarHeight / 2);
+    top: calc(var(--navbar-height) / 2);
     transform: translateY(-50%);
   }
 }
 
-.sidebar {
-  background: #f9fafc;
+.navbar-links-wrapper {
+  align-items: center;
 }
+
+//.sidebar {
+//  background: #f9fafc;
+//}

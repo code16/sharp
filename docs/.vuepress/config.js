@@ -27,11 +27,12 @@ module.exports = {
         ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
         ['link', { rel: 'icon', type:'image/svg+xml', href: '/favicon.svg' }],
     ],
+    theme: path.resolve(__dirname, './theme'),
     themeConfig: {
-        nav: [
+        navbar: [
             DOCS_ENABLE_VERSIONING === 'true' && {
                 text: DOCS_VERSION,
-                items: JSON.parse(DOCS_VERSION_ITEMS || '[]')
+                children: JSON.parse(DOCS_VERSION_ITEMS || '[]')
                     .map(item => ({ ...item, target: '_self' })),
             },
             { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
@@ -40,147 +41,141 @@ module.exports = {
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
-                items: [
+                children: [
                     { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
                     { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
             }
         ].filter(Boolean),
-        sidebar: {
-            '/guide/': [
-                {
-                    title: 'Introduction',
-                    collapsable: false,
-                    children: [
-                        '',
-                        'authentication',
-                    ]
-                },
-                {
-                    title: 'Entity Lists',
-                    collapsable: false,
-                    children: [
-                        'building-entity-list',
-                        'filters',
-                        'commands',
-                        'entity-states',
-                        'reordering-instances',
-                    ]
-                },
-                {
-                    title: 'Entity Forms',
-                    collapsable: false,
-                    children: [
-                        'building-entity-form',
-                        'multiforms',
-                        'single-form',
-                        'custom-form-fields'
-                    ]
-                },
-                {
-                    title: 'Entity Shows',
-                    collapsable: false,
-                    children: [
-                        'building-entity-show',
-                        'single-show',
-                        'custom-show-fields'
-                    ]
-                },
-                {
-                    title: 'Dashboards',
-                    collapsable: false,
-                    children: [
-                        'dashboard',
-                        ...[
-                            'graph',
-                            'panel',
-                            'ordered-list',
-                        ].map(page => `dashboard-widgets/${page}`),
-                    ],
-                },
-                {
-                    title: 'Generalities',
-                    collapsable: false,
-                    children: [
-                        'building-menu',
-                        'sharp-breadcrumb',
-                        'entity-authorizations',
-                        'how-to-transform-data',
-                        'link-to',
-                        'context',
-                        'sharp-built-in-solution-for-uploads',
-                        'form-data-localization',
-                        'testing-with-sharp',
-                        'artisan-generators',
-                        'style-visual-theme'
-                    ]
-                },
-                {
-                    title: 'Form fields',
-                    collapsable: false,
-                    children: [
-                        'text',
-                        'textarea',
-                        'markdown',
-                        'wysiwyg',
-                        'number',
-                        'html',
-                        'check',
-                        'date',
-                        'upload',
-                        'select',
-                        'autocomplete',
-                        'tags',
-                        'list',
-                        'autocomplete-list',
-                        'geolocation',
-                    ].map(page => `form-fields/${page}`),
-                },
-                {
-                    title: 'Show fields',
-                    collapsable: false,
-                    children: [
-                        'text',
-                        'picture',
-                        'list',
-                        'file',
-                        'embedded-entity-list',
-                    ].map(page => `show-fields/${page}`),
-                },
-                {
-                    title: 'Migrations guide',
-                    collapsable: false,
-                    children: [
-                        'upgrading/6.0',
-                        'upgrading/5.0',
-                        'upgrading/4.2',
-                        'upgrading/4.1.3',
-                        'upgrading/4.1',
-                    ],
-                },
-            ]
-        },
-        algolia: {
-            apiKey: 'd88cea985d718328d4b892ff6a05dba8',
-            indexName: 'code16_sharp',
-            // debug: true,
-            algoliaOptions: {
-                hitsPerPage: 5,
-                facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
+        sidebar: [
+            {
+                text: 'Introduction',
+                children: [
+                    'README.md',
+                    'authentication.md',
+                ].map(page => `/guide/${page}`),
             },
-        }
+            {
+                text: 'Entity Lists',
+                children: [
+                    'building-entity-list.md',
+                    'filters.md',
+                    'commands.md',
+                    'entity-states.md',
+                    'reordering-instances.md',
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Entity Forms',
+                children: [
+                    'building-entity-form.md',
+                    'multiforms.md',
+                    'single-form.md',
+                    'custom-form-fields.md'
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Entity Shows',
+                children: [
+                    'building-entity-show.md',
+                    'single-show.md',
+                    'custom-show-fields.md'
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Dashboards',
+                children: [
+                    '/guide/dashboard.md',
+                    ...[
+                        'graph.md',
+                        'panel.md',
+                        'ordered-list.md',
+                    ].map(page => `/guide/dashboard-widgets/${page}`),
+                ],
+            },
+            {
+                text: 'Generalities',
+                children: [
+                    'building-menu.md',
+                    'sharp-breadcrumb.md',
+                    'entity-authorizations.md',
+                    'how-to-transform-data.md',
+                    'link-to.md',
+                    'context.md',
+                    'sharp-built-in-solution-for-uploads.md',
+                    'form-data-localization.md',
+                    'testing-with-sharp.md',
+                    'artisan-generators.md',
+                    'style-visual-theme.md'
+                ].map(page => `/guide/${page}`),
+            },
+            {
+                text: 'Form fields',
+                children: [
+                    'text.md',
+                    'textarea.md',
+                    'markdown.md',
+                    'wysiwyg.md',
+                    'number.md',
+                    'html.md',
+                    'check.md',
+                    'date.md',
+                    'upload.md',
+                    'select.md',
+                    'autocomplete.md',
+                    'tags.md',
+                    'list.md',
+                    'autocomplete-list.md',
+                    'geolocation.md',
+                ].map(page => `/guide/form-fields/${page}`),
+            },
+            {
+                text: 'Show fields',
+                children: [
+                    'text.md',
+                    'picture.md',
+                    'list.md',
+                    'file.md',
+                    'embedded-entity-list.md',
+                ].map(page => `/guide/show-fields/${page}`),
+            },
+            {
+                text: 'Migrations guide',
+                children: [
+                    '6.0.md',
+                    '5.0.md',
+                    '4.2.md',
+                    '4.1.3.md',
+                    '4.1.md',
+                ].map(page => `/guide/upgrading/${page}`),
+            },
+        ],
     },
-    markdown: {
-        extendMarkdown: md => {
-            md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
-                let token = tokens[idx];
-                return '<code class="inline">' +
-                    Prism.highlight(token.content, Prism.languages.php) +
-                '</code>';
-            };
-        }
-    },
-    scss: {
-        implementation: require('sass'),
-    }
+    plugins: [
+        [
+            '@vuepress/plugin-docsearch',
+            {
+                appId: '1A1N8XRQFM',
+                apiKey: 'c5c8c8034f3c0586d562fdbb0a4d26cb',
+                indexName: 'code16_sharp',
+                searchParameters: {
+                    facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
+                },
+            }
+        ],
+        {
+            extendsMarkdown: md => {
+                md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
+                    let token = tokens[idx];
+                    return '<code class="inline">' +
+                        Prism.highlight(token.content, Prism.languages.php) +
+                        '</code>';
+                };
+            }
+        },
+    ],
+    bundler: '@vuepress/bundler-vite',
+    // scss: {
+    //     implementation: require('sass'),
+    // },
 };
