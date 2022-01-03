@@ -288,15 +288,20 @@ Sometimes you may want to "scope" the entire data set. An example could be a use
 
 Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear like this (on the left menu):
 
+
 <table>
-    <tr>
-        <td class="p-0">
-            <img src="./img/global-filters-1.png" alt="Global filters">
-        </td>
-        <td class="p-0">
-            <img src="./img/global-filters-2.png" alt="Global filters">
-        </td>
-    </tr>
+<tr>
+<td class="p-0">
+
+![](./img/global-filters-1.png)
+
+</td>
+<td class="p-0">
+
+![](./img/global-filters-2.png)
+
+</td>
+</tr>
 </table>
 
 To achieve this, first write the filter class, like any filter, except it must implement `\Code16\Sharp\Utils\Filters\GlobalRequiredFilter` — meaning it must be a required filter.

@@ -1,7 +1,7 @@
 {
   "name": "site",
   "version": "1.0.0",
-  "description": "<div align=\"center\">",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "vuepress dev",

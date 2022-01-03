@@ -47,129 +47,109 @@ module.exports = {
                 ]
             }
         ].filter(Boolean),
-        sidebar: {
-            '/guide/': [
+        sidebar: [
                 {
                     text: 'Introduction',
-                    collapsable: false,
                     children: [
-                        '',
-                        'authentication',
-                    ]
+                        'README.md',
+                        'authentication.md',
+                    ].map(page => `/guide/${page}`),
                 },
                 {
                     text: 'Entity Lists',
-                    collapsable: false,
                     children: [
-                        'building-entity-list',
-                        'filters',
-                        'commands',
-                        'entity-states',
-                        'reordering-instances',
-                    ]
+                        'building-entity-list.md',
+                        'filters.md',
+                        'commands.md',
+                        'entity-states.md',
+                        'reordering-instances.md',
+                    ].map(page => `/guide/${page}`),
                 },
                 {
                     text: 'Entity Forms',
-                    collapsable: false,
                     children: [
-                        'building-entity-form',
-                        'multiforms',
-                        'single-form',
-                        'custom-form-fields'
-                    ]
+                        'building-entity-form.md',
+                        'multiforms.md',
+                        'single-form.md',
+                        'custom-form-fields.md'
+                    ].map(page => `/guide/${page}`),
                 },
                 {
                     text: 'Entity Shows',
-                    collapsable: false,
                     children: [
-                        'building-entity-show',
-                        'single-show',
-                        'custom-show-fields'
-                    ]
+                        'building-entity-show.md',
+                        'single-show.md',
+                        'custom-show-fields.md'
+                    ].map(page => `/guide/${page}`),
                 },
                 {
                     text: 'Dashboards',
-                    collapsable: false,
                     children: [
-                        'dashboard',
+                        '/guide/dashboard.md',
                         ...[
-                            'graph',
-                            'panel',
-                            'ordered-list',
-                        ].map(page => `dashboard-widgets/${page}`),
+                            'graph.md',
+                            'panel.md',
+                            'ordered-list.md',
+                        ].map(page => `/guide/dashboard-widgets/${page}`),
                     ],
                 },
                 {
                     text: 'Generalities',
-                    collapsable: false,
                     children: [
-                        'building-menu',
-                        'sharp-breadcrumb',
-                        'entity-authorizations',
-                        'how-to-transform-data',
-                        'link-to',
-                        'context',
-                        'sharp-built-in-solution-for-uploads',
-                        'form-data-localization',
-                        'testing-with-sharp',
-                        'artisan-generators',
-                        'style-visual-theme'
-                    ]
+                        'building-menu.md',
+                        'sharp-breadcrumb.md',
+                        'entity-authorizations.md',
+                        'how-to-transform-data.md',
+                        'link-to.md',
+                        'context.md',
+                        'sharp-built-in-solution-for-uploads.md',
+                        'form-data-localization.md',
+                        'testing-with-sharp.md',
+                        'artisan-generators.md',
+                        'style-visual-theme.md'
+                    ].map(page => `/guide/${page}`),
                 },
                 {
                     text: 'Form fields',
-                    collapsable: false,
                     children: [
-                        'text',
-                        'textarea',
-                        'markdown',
-                        'wysiwyg',
-                        'number',
-                        'html',
-                        'check',
-                        'date',
-                        'upload',
-                        'select',
-                        'autocomplete',
-                        'tags',
-                        'list',
-                        'autocomplete-list',
-                        'geolocation',
-                    ].map(page => `form-fields/${page}`),
+                        'text.md',
+                        'textarea.md',
+                        'markdown.md',
+                        'wysiwyg.md',
+                        'number.md',
+                        'html.md',
+                        'check.md',
+                        'date.md',
+                        'upload.md',
+                        'select.md',
+                        'autocomplete.md',
+                        'tags.md',
+                        'list.md',
+                        'autocomplete-list.md',
+                        'geolocation.md',
+                    ].map(page => `/guide/form-fields/${page}`),
                 },
                 {
                     text: 'Show fields',
-                    collapsable: false,
                     children: [
-                        'text',
-                        'picture',
-                        'list',
-                        'file',
-                        'embedded-entity-list',
-                    ].map(page => `show-fields/${page}`),
+                        'text.md',
+                        'picture.md',
+                        'list.md',
+                        'file.md',
+                        'embedded-entity-list.md',
+                    ].map(page => `/guide/show-fields/${page}`),
                 },
                 {
                     text: 'Migrations guide',
-                    collapsable: false,
                     children: [
-                        'upgrading/6.0',
-                        'upgrading/5.0',
-                        'upgrading/4.2',
-                        'upgrading/4.1.3',
-                        'upgrading/4.1',
-                    ],
+                        '6.0.md',
+                        '5.0.md',
+                        '4.2.md',
+                        '4.1.3.md',
+                        '4.1.md',
+                    ].map(page => `/guide/upgrading/${page}`),
                 },
             ],
-        },
-        // algolia: {
-        //     apiKey: 'd88cea985d718328d4b892ff6a05dba8',
-        //     indexName: 'code16_sharp',
-        //     // debug: true,
-        //     algoliaOptions: {
-        //         hitsPerPage: 5,
-        //         facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
-        //     },
-        // }
     },
     plugins: [
         [
@@ -178,8 +158,7 @@ module.exports = {
                 appId: '1A1N8XRQFM',
                 apiKey: 'c5c8c8034f3c0586d562fdbb0a4d26cb',
                 indexName: 'code16_sharp',
-                searchFilters: {
-                    hitsPerPage: 5,
+                searchParameters: {
                     facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
                 },
             }

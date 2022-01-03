@@ -43,7 +43,7 @@ code.inline {
       border-bottom: 1px solid rgba(27,31,35,0.25);
       margin-bottom: -.5rem;
       margin-left: -1rem;
-      background: #f3f4f4;
+      background: var(--c-bg-light);
       color: #6996bf;
       .token.function {
         margin-right: .25em;
@@ -58,7 +58,20 @@ code.inline {
   }
   ul, p {
     code * {
-      color: #476582!important;
+      color: inherit!important;
+    }
+  }
+}
+
+.dark {
+  h2, h3, h4 {
+    code {
+    }
+  }
+  .custom-container.warning {
+    code {
+      color: inherit;
+      background-color: rgba(255, 255, 255, .15);
     }
   }
 }

@@ -5,15 +5,20 @@ A map-based field to pick a precise location and return its coordinates (latitud
 Class: `Code16\Sharp\Form\Fields\SharpFormGeolocationField`
 
 
+
 <table>
-    <tr>
-        <td class="p-0">
-            <img src="./geolocation-1.png" alt="Global filters">
-        </td>
-        <td class="p-0">
-            <img src="./geolocation-2.png" alt="Global filters">
-        </td>
-    </tr>
+<tr>
+<td class="p-0">
+
+![](./geolocation-1.png)
+
+</td>
+<td class="p-0">
+
+![](./geolocation-2.png)
+
+</td>
+</tr>
 </table>
 
 ## Configuration
