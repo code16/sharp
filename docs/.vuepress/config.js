@@ -24,8 +24,8 @@ module.exports = {
     title: APP_NAME,
     base: '/docs/',
     head: [
-        ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
-        ['link', { rel: 'icon', type:'image/svg+xml', href: '/favicon.svg' }],
+        ['link', { rel: 'icon', type:'image/png', href: '/docs/favicon.png' }],
+        ['link', { rel: 'icon', type:'image/svg+xml', href: '/docs/favicon.svg' }],
     ],
     theme: path.resolve(__dirname, './theme'),
     themeConfig: {
