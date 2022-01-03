@@ -66,10 +66,9 @@ This is only useful when using the `WithSharpFormEloquentUpdater` trait. You can
 ### `setCollapsedItemInlineTemplate(string $template)`
 ### `setCollapsedItemTemplatePath(string $template)`
 
-::: v-pre
 The UI for a `sortable` List is to add a "reorder" button, which swaps the list in a readonly state. But for big List items it can be useful to define a special template for this reordering state.
 For inline template, just write the template as a string, using placeholders for data like this: `{{var}}`.
-:::
+
 
 Example:
 

@@ -16,10 +16,7 @@ Note that the `setLink()` method is expecting a [LinkTo... instance](../link-to.
 The Panel needs a view template, that you can provide in two ways:
 
 ### `setInlineTemplate(string $template)`
-
-::: v-pre
 Just write the template as a string, using placeholders for data like this: `{{var}}`.
-:::
 
 Example:
 
