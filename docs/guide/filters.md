@@ -279,15 +279,20 @@ You may want to "scope" the entire data set: an example of this could be a user 
 Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear
 like this (on the left menu):
 
+
 <table>
-    <tr>
-        <td class="p-0">
-            <img src="./img/global-filters-1.png" alt="Global filters">
-        </td>
-        <td class="p-0">
-            <img src="./img/global-filters-2.png" alt="Global filters">
-        </td>
-    </tr>
+<tr>
+<td class="p-0">
+
+![](./img/global-filters-1.png)
+
+</td>
+<td class="p-0">
+
+![](./img/global-filters-2.png)
+
+</td>
+</tr>
 </table>
 
 To achieve this, first write the filter class, like any filter, except it must

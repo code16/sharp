@@ -27,11 +27,12 @@ module.exports = {
         ['link', { rel: 'icon', type:'image/png', href: '/favicon.png' }],
         ['link', { rel: 'icon', type:'image/svg+xml', href: '/favicon.svg' }],
     ],
+    theme: path.resolve(__dirname, './theme'),
     themeConfig: {
-        nav: [
+        navbar: [
             DOCS_ENABLE_VERSIONING === 'true' && {
                 text: DOCS_VERSION,
-                items: JSON.parse(DOCS_VERSION_ITEMS || '[]')
+                children: JSON.parse(DOCS_VERSION_ITEMS || '[]')
                     .map(item => ({ ...item, target: '_self' })),
             },
             { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
@@ -40,152 +41,146 @@ module.exports = {
             { text: 'Github', link:'https://github.com/code16/sharp' },
             {
                 text: 'Links',
-                items: [
+                children: [
                     { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
                     { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
             }
         ].filter(Boolean),
-        sidebar: {
-            '/guide/': [
+        sidebar: [
                 {
-                    title: 'Introduction',
-                    collapsable: false,
+                    text: 'Introduction',
                     children: [
-                        '',
-                        'authentication',
-                    ]
+                        'README.md',
+                        'authentication.md',
+                    ].map(page => `/guide/${page}`),
                 },
                 {
-                    title: 'Entity Lists',
-                    collapsable: false,
+                    text: 'Entity Lists',
                     children: [
-                        'building-entity-list',
-                        'filters',
-                        'commands',
-                        'entity-states',
-                        'reordering-instances',
-                    ]
+                        'building-entity-list.md',
+                        'filters.md',
+                        'commands.md',
+                        'entity-states.md',
+                        'reordering-instances.md',
+                    ].map(page => `/guide/${page}`),
                 },
                 {
-                    title: 'Forms',
-                    collapsable: false,
+                    text: 'Forms',
                     children: [
-                        'building-form',
-                        'multiforms',
-                        'single-form',
-                        'custom-form-fields'
-                    ]
+                        'building-form.md',
+                        'multiforms.md',
+                        'single-form.md',
+                        'custom-form-fields.md'
+                    ].map(page => `/guide/${page}`),
                 },
                 {
-                    title: 'Show Pages',
-                    collapsable: false,
+                    text: 'Show Pages',
                     children: [
-                        'building-show-page',
-                        'single-show',
-                        'custom-show-fields'
-                    ]
+                        'building-show-page.md',
+                        'single-show.md',
+                        'custom-show-field.md'
+                    ].map(page => `/guide/${page}`),
                 },
                 {
-                    title: 'Dashboards',
-                    collapsable: false,
+                    text: 'Dashboards',
                     children: [
-                        'building-dashboard',
+                        'building-dashboard.md',
                         ...[
-                            'graph',
-                            'panel',
-                            'ordered-list',
-                        ].map(page => `dashboard-widgets/${page}`),
+                            'graph.md',
+                            'panel.md',
+                            'ordered-list.md',
+                        ].map(page => `/guide/dashboard-widgets/${page}`),
                     ],
                 },
                 {
-                    title: 'Generalities',
-                    collapsable: false,
+                    text: 'Generalities',
                     children: [
-                        'building-menu',
-                        'sharp-breadcrumb',
-                        'entity-authorizations',
-                        'how-to-transform-data',
-                        'link-to',
+                        'building-menu.md',
+                        'sharp-breadcrumb.md',
+                        'entity-authorizations.md',
+                        'how-to-transform-data.md',
+                        'link-to.md',
                         'page-alerts',
-                        'context',
-                        'sharp-uploads',
-                        'form-data-localization',
-                        'testing-with-sharp',
-                        'artisan-generators',
-                        'style-visual-theme'
-                    ]
+                        'context.md',
+                        'sharp-uploads.md',
+                        'form-data-localization.md',
+                        'testing-with-sharp.md',
+                        'artisan-generators.md',
+                        'style-visual-theme.md'
+                    ].map(page => `/guide/${page}`),
                 },
                 {
-                    title: 'Form fields',
-                    collapsable: false,
+                    text: 'Form fields',
                     children: [
-                        'text',
-                        'textarea',
-                        'editor',
-                        'number',
-                        'html',
-                        'check',
-                        'date',
-                        'upload',
-                        'select',
-                        'autocomplete',
-                        'tags',
-                        'list',
-                        'autocomplete-list',
-                        'geolocation',
-                    ].map(page => `form-fields/${page}`),
+                        'text.md',
+                        'textarea.md',
+                        'editor.md',
+                        'number.md',
+                        'html.md',
+                        'check.md',
+                        'date.md',
+                        'upload.md',
+                        'select.md',
+                        'autocomplete.md',
+                        'tags.md',
+                        'list.md',
+                        'autocomplete-list.md',
+                        'geolocation.md',
+                    ].map(page => `/guide/form-fields/${page}`),
                 },
                 {
-                    title: 'Show fields',
-                    collapsable: false,
+                    text: 'Show fields',
                     children: [
-                        'text',
-                        'picture',
-                        'list',
-                        'file',
-                        'embedded-entity-list',
-                    ].map(page => `show-fields/${page}`),
+                        'text.md',
+                        'picture.md',
+                        'list.md',
+                        'file.md',
+                        'embedded-entity-list.md',
+                    ].map(page => `/guide/show-fields/${page}`),
                 },
                 {
-                    title: 'Migrations guide',
-                    collapsable: false,
+                    text: 'Migrations guide',
                     children: [
-                        'upgrading/7.0',
-                        'upgrading/6.0',
-                        'upgrading/5.0',
-                        'upgrading/4.2',
-                        'upgrading/4.1.3',
-                        'upgrading/4.1',
-                    ],
+                        '7.0.md',
+                        '6.0.md',
+                        '5.0.md',
+                        '4.2.md',
+                        '4.1.3.md',
+                        '4.1.md',
+                    ].map(page => `/guide/upgrading/${page}`),
                 },
-            ]
-        },
-        algolia: {
-            apiKey: 'd88cea985d718328d4b892ff6a05dba8',
-            indexName: 'code16_sharp',
-            // debug: true,
-            algoliaOptions: {
-                hitsPerPage: 5,
-                facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
-            },
-        }
+            ],
     },
-    markdown: {
-        extendMarkdown: md => {
-            md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
-                const token = tokens[idx];
-                const highlighted = Prism.highlight(token.content, Prism.languages.php);
-                const inlineNodes = tokens.filter(token =>
+    plugins: [
+        [
+            '@vuepress/plugin-docsearch',
+            {
+                appId: '1A1N8XRQFM',
+                apiKey: 'c5c8c8034f3c0586d562fdbb0a4d26cb',
+                indexName: 'code16_sharp',
+                searchParameters: {
+                    facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
+                },
+            }
+        ],
+        {
+            extendsMarkdown: md => {
+                md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {
+                    const token = tokens[idx];
+                    const highlighted = Prism.highlight(token.content, Prism.languages.php);
+                        const inlineNodes = tokens.filter(token =>
                     token.type === 'text' && token.content.trim()
                     || token.type === 'code_inline'
                 );
                 const isFullwidth = inlineNodes.length === 1;
                 return `<code class="inline ${isFullwidth ? 'full' : ''}" v-pre>${highlighted}</code>`;
-            };
-        }
-    },
-    scss: {
-        implementation: require('sass'),
-    }
+                };
+            }
+        },
+    ],
+    bundler: '@vuepress/bundler-vite',
+    // scss: {
+    //     implementation: require('sass'),
+    // },
 };

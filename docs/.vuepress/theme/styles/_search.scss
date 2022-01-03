@@ -10,7 +10,7 @@
 }
 
 .algolia-search-wrapper .algolia-autocomplete .algolia-docsearch-suggestion--highlight {
-  color: $accentColor;
+  color: var(--c-text-accent);
 }
 
 .aa-suggestion-title-separator {
