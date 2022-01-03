@@ -85,7 +85,7 @@ module.exports = {
             {
                 text: 'Dashboards',
                 children: [
-                    'building-dashboard.md',
+                    '/guide/building-dashboard.md',
                     ...[
                         'graph.md',
                         'panel.md',
