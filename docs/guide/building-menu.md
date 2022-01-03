@@ -2,7 +2,11 @@
 
 The Sharp side menu can contain several links, organized as you want.
 
-<center><img width="250" src="./img/menu.png" alt="Menu"></center>
+<div style="text-align: center">
+
+<img width="250" src="./img/menu.png" alt="Menu">
+
+</div>
 
 All links shares common things:
 
