@@ -1,18 +1,22 @@
 
 
-.algolia-docsearch-suggestion {
-  &--category-header {
-    .algolia-docsearch-suggestion--highlight {
-      background-color: rgba(255, 255, 255, .375);
-      box-shadow: none;
-    }
+.DocSearch {
+  --docsearch-title-color: var(--c-primary);
+  --docsearch-hit-active-background: var(--c-brand);
+
+  .dark & {
+    --docsearch-hit-active-color: rgba(255,255,255,.75);
+    --docsearch-highlight-color: var(--c-text-accent);
+    --docsearch-title-color: var(--c-text-light);
   }
 }
 
-.algolia-search-wrapper .algolia-autocomplete .algolia-docsearch-suggestion--highlight {
-  color: var(--c-text-accent);
+.DocSearch-Hit {
+  &[aria-selected=true] a {
+    background-color: var(--docsearch-hit-active-background);
+  }
 }
 
-.aa-suggestion-title-separator {
-  display: inline!important;
+.DocSearch-Hit-source {
+  color: var(--docsearch-title-color);
 }
