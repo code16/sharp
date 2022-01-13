@@ -23,7 +23,6 @@ use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
-use Code16\Sharp\Http\Middleware\Api\RegisterAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;

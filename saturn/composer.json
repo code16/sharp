@@ -13,6 +13,7 @@
     "laravel/framework": "^9.0",
     "laravel/tinker": "^2.7",
     "spatie/image-optimizer": "^1.2",
+    "intervention/image": "^2.5",
     "spatie/laravel-translatable": "^5.0"
   },
   "require-dev": {
