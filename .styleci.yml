@@ -4,3 +4,5 @@ php:
   enabled:
     - heredoc_indentation
     - trailing_comma_in_multiline_call
+css: false
+js: false
