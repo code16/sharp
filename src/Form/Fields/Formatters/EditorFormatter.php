@@ -24,11 +24,13 @@ class EditorFormatter extends SharpFieldFormatter
         if(is_array($content)) {
             // Field is localized
             return collect($content)
-                ->map(function(string $localizedContent) use($files, $field, $attribute) {
-                    return preg_replace(
-                        '/\R/', "\n",
-                        $this->handleUploadedFiles($localizedContent, $files, $field, $attribute)
-                    );
+                ->map(function(?string $localizedContent) use($files, $field, $attribute) {
+                    return $localizedContent
+                        ? preg_replace(
+                            '/\R/', "\n",
+                            $this->handleUploadedFiles($localizedContent, $files, $field, $attribute)
+                        )
+                        : null;
                 })
                 ->toArray();
         }
