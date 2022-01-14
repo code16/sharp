@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
