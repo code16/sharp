@@ -16,5 +16,9 @@ return [
     'error.message' => 'Een fout is opgetreden',
 
     'ok_button' => 'Ok',
-    'cancel_button' => 'Annuleren'
+    'cancel_button' => 'Annuleren',
+
+    'entity_state.edit.title' => 'Update status',
+    'entity_state.edit.ok_button' => 'Bevestigen',
+
 ];
