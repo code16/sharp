@@ -8,7 +8,8 @@ interface SharpAuthenticationCheckHandler
 {
     /**
      * @param Authenticatable $user
+     *
      * @return bool
      */
-    function check(Authenticatable $user): bool;
+    public function check(Authenticatable $user): bool;
 }

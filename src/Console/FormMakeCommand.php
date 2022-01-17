@@ -32,8 +32,8 @@ class FormMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/form.model.stub'
-            : __DIR__ . '/stubs/form.stub';
+            ? __DIR__.'/stubs/form.model.stub'
+            : __DIR__.'/stubs/form.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

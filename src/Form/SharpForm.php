@@ -13,22 +13,22 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
-    use WithCustomTransformers, 
-        HandleFormFields,
-        HandlePageAlertMessage,
-        HandleCustomBreadcrumb;
+    use WithCustomTransformers;
+    use HandleFormFields;
+    use HandlePageAlertMessage;
+    use HandleCustomBreadcrumb;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
     protected ?string $formValidatorClass = null;
 
-    public final function formLayout(): array
+    final public function formLayout(): array
     {
-        if($this->formLayout === null) {
+        if ($this->formLayout === null) {
             $this->formLayout = new FormLayout();
             $this->buildFormLayout($this->formLayout);
         }
-        
+
         return $this->formLayout->toArray();
     }
 
@@ -36,16 +36,16 @@ abstract class SharpForm
     {
         return tap(
             [
-                "hasShowPage" => $this->displayShowPageAfterCreation
+                'hasShowPage' => $this->displayShowPageAfterCreation,
             ],
-            function(&$config) {
+            function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
                 $this->appendGlobalMessageToConfig($config);
             }
         );
     }
 
-    public final function instance($id): array
+    final public function instance($id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual form fields
@@ -58,7 +58,7 @@ abstract class SharpForm
             ->all();
     }
 
-    public final function newInstance(): ?array
+    final public function newInstance(): ?array
     {
         $data = collect($this->create())
             // Filter model attributes on actual form fields
@@ -73,30 +73,30 @@ abstract class SharpForm
         return sizeof($data) ? $data : null;
     }
 
-    public final function validateRequest(string $entityKey): void
+    final public function validateRequest(string $entityKey): void
     {
-        if($formRequest = $this->getFormValidator($entityKey)) {
+        if ($formRequest = $this->getFormValidator($entityKey)) {
             // Validation is automatically called (FormRequest)
             app($formRequest);
         }
     }
 
-    public final function hasDataLocalizations(): bool
+    final public function hasDataLocalizations(): bool
     {
-        foreach($this->fields() as $field) {
-            if($field["localized"] ?? false) {
+        foreach ($this->fields() as $field) {
+            if ($field['localized'] ?? false) {
                 return true;
             }
-            
-            if($field["type"] === "list") {
-                foreach($field["itemFields"] as $itemField) {
-                    if($itemField["localized"] ?? false) {
+
+            if ($field['type'] === 'list') {
+                foreach ($field['itemFields'] as $itemField) {
+                    if ($itemField['localized'] ?? false) {
                         return true;
                     }
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -112,7 +112,7 @@ abstract class SharpForm
     protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
     {
         $this->displayShowPageAfterCreation = $displayShowPage;
-        
+
         return $this;
     }
 
@@ -121,25 +121,25 @@ abstract class SharpForm
         return $this->displayShowPageAfterCreation;
     }
 
-    public final function updateInstance($id, $data)
+    final public function updateInstance($id, $data)
     {
         list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
 
         $id = $this->update($id, $formattedData);
 
-        if($delayedData) {
+        if ($delayedData) {
             // Some formatters asked to delay their handling after a first pass.
             // Typically, this is used if the formatter needs the id of the
             // instance: in a creation case, we must store it first.
-            if(!$id) {
+            if (!$id) {
                 throw new SharpFormUpdateException(
-                    sprintf("The update method of [%s] must return the instance id", basename(get_class($this)))
+                    sprintf('The update method of [%s] must return the instance id', basename(get_class($this)))
                 );
             }
 
             $this->update($id, $this->formatRequestData($delayedData, $id, false));
         }
-        
+
         return $id;
     }
 
@@ -155,22 +155,22 @@ abstract class SharpForm
     {
         $attributes = collect($this->getDataKeys())
             ->flip()
-            ->map(function() {
+            ->map(function () {
                 return null;
             })
             ->all();
 
         // Build a fake Model class based on attributes
-        return $this->transform(new class($attributes) extends \stdClass
-        {
+        return $this->transform(new class($attributes) extends \stdClass {
             public function __construct($attributes)
             {
                 $this->attributes = $attributes;
 
-                foreach($attributes as $name => $value) {
+                foreach ($attributes as $name => $value) {
                     $this->$name = $value;
                 }
             }
+
             public function toArray()
             {
                 return $this->attributes;
@@ -179,9 +179,9 @@ abstract class SharpForm
     }
 
     /**
-     * Return the full classname of a FormRequest to be executed as validation
+     * Return the full classname of a FormRequest to be executed as validation.
      */
-    protected final function getFormValidator(string $entityKey): ?string
+    final protected function getFormValidator(string $entityKey): ?string
     {
         // Legacy stuff: backward compatibility with Sharp 6 config
         return config("sharp.entities.{$entityKey}.validator") ?: $this->getFormValidatorClass();
@@ -192,7 +192,7 @@ abstract class SharpForm
      */
     public function notify(string $title): SharpNotification
     {
-        return (new SharpNotification($title));
+        return new SharpNotification($title);
     }
 
     protected function getFormValidatorClass(): ?string
@@ -203,25 +203,25 @@ abstract class SharpForm
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      */
-    abstract function find(mixed $id): array;
+    abstract public function find(mixed $id): array;
 
     /**
-     * Update the Model of id $id with $data
+     * Update the Model of id $id with $data.
      */
-    abstract function update(mixed $id, array $data);
+    abstract public function update(mixed $id, array $data);
 
     /**
-     * Delete Model of id $id
+     * Delete Model of id $id.
      */
-    abstract function delete(mixed $id): void;
+    abstract public function delete(mixed $id): void;
 
     /**
-     * Build form fields
+     * Build form fields.
      */
-    abstract function buildFormFields(FieldsContainer $formFields): void;
+    abstract public function buildFormFields(FieldsContainer $formFields): void;
 
     /**
-     * Build form layout
+     * Build form layout.
      */
-    abstract function buildFormLayout(FormLayout $formLayout): void;
+    abstract public function buildFormLayout(FormLayout $formLayout): void;
 }

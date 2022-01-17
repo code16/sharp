@@ -19,45 +19,45 @@ class GlobalFiltersTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters", [GlobalFiltersTestGlobalRequiredFilter::class]);
+        config()->set('sharp.global_filters', [GlobalFiltersTestGlobalRequiredFilter::class]);
 
         // First call without any value in session
         $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(
-            "default", 
+            'default',
             currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
         );
 
         // Second call with a value in session
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
         $value = Str::random();
         session()->put("_sharp_retained_global_filter_$key", $value);
 
         $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(
-            $value, 
+            $value,
             currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
         );
     }
 
     /** @test */
-    function we_can_set_a_global_filter_value_via_the_endpoint()
+    public function we_can_set_a_global_filter_value_via_the_endpoint()
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters", [GlobalFiltersTestGlobalRequiredFilter::class]);
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        config()->set('sharp.global_filters', [GlobalFiltersTestGlobalRequiredFilter::class]);
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
 
         $this
-            ->postJson("/sharp/api/filters/$key", ["value" => 5])
+            ->postJson("/sharp/api/filters/$key", ['value' => 5])
             ->assertOk();
 
         $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(
-            5, 
+            5,
             currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
         );
 
@@ -68,48 +68,48 @@ class GlobalFiltersTest extends BaseApiTest
         $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(
-            "default", 
+            'default',
             currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
         );
     }
 
     /** @test */
-    function we_cant_set_an_invalid_global_filter_value_via_the_endpoint()
+    public function we_cant_set_an_invalid_global_filter_value_via_the_endpoint()
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters.test", GlobalFiltersTestGlobalRequiredFilter::class);
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        config()->set('sharp.global_filters.test', GlobalFiltersTestGlobalRequiredFilter::class);
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
 
         $this
-            ->postJson("/sharp/api/filters/$key", ["value" => 20])
+            ->postJson("/sharp/api/filters/$key", ['value' => 20])
             ->assertOk();
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals("default", currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
+        $this->assertEquals('default', currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
     }
 
     /** @test */
-    function we_can_get_global_filter_values_via_the_endpoint()
+    public function we_can_get_global_filter_values_via_the_endpoint()
     {
         $this->buildTheWorld();
 
-        config()->set("sharp.global_filters", [GlobalFiltersTestGlobalRequiredFilter::class]);
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
+        config()->set('sharp.global_filters', [GlobalFiltersTestGlobalRequiredFilter::class]);
+        $key = (new GlobalFiltersTestGlobalRequiredFilter())->getKey();
 
         $this
             ->getJson('/sharp/api/filters')
             ->assertOk()
             ->assertJson([
-                "filters" => [
+                'filters' => [
                     [
-                        "key" => $key,
-                        "multiple" => false,
-                        "required" => true,
-                        "default" => "default",
+                        'key'      => $key,
+                        'multiple' => false,
+                        'required' => true,
+                        'default'  => 'default',
                     ],
-                ]
+                ],
             ]);
     }
 }
@@ -123,6 +123,6 @@ class GlobalFiltersTestGlobalRequiredFilter extends GlobalRequiredFilter
 
     public function defaultValue(): mixed
     {
-        return "default";
+        return 'default';
     }
 }

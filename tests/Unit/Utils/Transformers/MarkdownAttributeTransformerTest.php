@@ -8,15 +8,15 @@ use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 class MarkdownAttributeTransformerTest extends SharpTestCase
 {
     /** @test */
-    function we_can_transform_a_text_to_markdown()
+    public function we_can_transform_a_text_to_markdown()
     {
-        $object = (object)[
-            "text" => "some basic *markdown* **test**"
+        $object = (object) [
+            'text' => 'some basic *markdown* **test**',
         ];
-        
+
         $this->assertEquals(
             "<p>some basic <em>markdown</em> <strong>test</strong></p>\n",
-            (new MarkdownAttributeTransformer())->apply($object->text, $object, "text")
+            (new MarkdownAttributeTransformer())->apply($object->text, $object, 'text')
         );
     }
 }

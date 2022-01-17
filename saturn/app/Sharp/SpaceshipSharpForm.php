@@ -30,30 +30,30 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class SpaceshipSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
-    
+
     protected ?string $formValidatorClass = SpaceshipSharpValidator::class;
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormTextField::make("name")
+                SharpFormTextField::make('name')
                     ->setLocalized()
                     ->setMaxLength(30)
-                    ->setLabel("Name")
+                    ->setLabel('Name')
             )
             ->addField(
-                SharpFormHtmlField::make("html")
-                    ->setInlineTemplate("The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>")
+                SharpFormHtmlField::make('html')
+                    ->setInlineTemplate('The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>')
             )
             ->addField(
-                SharpFormTextField::make("capacity")
-                    ->setLabel("Capacity (x1000)")
+                SharpFormTextField::make('capacity')
+                    ->setLabel('Capacity (x1000)')
             )
             ->addField(
-                SharpFormEditorField::make("description")
+                SharpFormEditorField::make('description')
                     ->setRenderContentAsMarkdown()
-                    ->setLabel("Description")
+                    ->setLabel('Description')
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -63,304 +63,304 @@ class SpaceshipSharpForm extends SharpForm
                         SharpFormEditorField::RAW_HTML,
                         SharpFormEditorField::A,
                     ])
-                    ->setCropRatio("1:1")
+                    ->setCropRatio('1:1')
                     ->setTransformable()
                     ->setMaxFileSize(4)
                     ->setFileFilterImages()
-                    ->setStorageDisk("local")
-                    ->setStorageBasePath("data/Spaceship/{id}/markdown")
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/Spaceship/{id}/markdown')
                     ->setHeight(700)
             )
             ->addField(
-                SharpFormDateField::make("construction_date")
-                    ->setLabel("Construction date")
-                    ->setDisplayFormat("YYYY/MM/DD")
+                SharpFormDateField::make('construction_date')
+                    ->setLabel('Construction date')
+                    ->setDisplayFormat('YYYY/MM/DD')
                     ->setHasTime(false)
             )
             ->addField(
-                SharpFormAutocompleteField::make("type_id", "local")
-                    ->setLabel("Ship type")
+                SharpFormAutocompleteField::make('type_id', 'local')
+                    ->setLabel('Ship type')
                     ->setAdditionalTemplateData([
-                        'hasWarning' => currentSharpRequest()->isUpdate() && currentSharpRequest()->instanceId() > 10
+                        'hasWarning' => currentSharpRequest()->isUpdate() && currentSharpRequest()->instanceId() > 10,
                     ])
-                    ->setLocalSearchKeys(["label"])
-                    ->setListItemTemplatePath("/sharp/templates/spaceshipType_list.vue")
-                    ->setResultItemTemplatePath("/sharp/templates/spaceshipType_result.vue")
+                    ->setLocalSearchKeys(['label'])
+                    ->setListItemTemplatePath('/sharp/templates/spaceshipType_list.vue')
+                    ->setResultItemTemplatePath('/sharp/templates/spaceshipType_result.vue')
                     ->setLocalValues(
-                        SpaceshipType::orderBy("label")->get()->pluck("label", "id")->all()
+                        SpaceshipType::orderBy('label')->get()->pluck('label', 'id')->all()
                     )
             )
             ->addField(
                 SharpFormSelectField::make(
-                    "brand",
+                    'brand',
                     SpaceshipType::all()
-                        ->mapWithKeys(function($spaceshipType) {
+                        ->mapWithKeys(function ($spaceshipType) {
                             return [
                                 $spaceshipType->id => collect($spaceshipType->brands)
-                                    ->mapWithKeys(function($values, $key) {
+                                    ->mapWithKeys(function ($values, $key) {
                                         return [$key => $key];
-                                    })->all()
+                                    })->all(),
                             ];
                         })
                     ->all()
                 )
-                    ->setLabel("Brand (depends on type)")
+                    ->setLabel('Brand (depends on type)')
                     ->setDisplayAsDropdown()
-                    ->setOptionsLinkedTo("type_id")
+                    ->setOptionsLinkedTo('type_id')
             )
             ->addField(
-                SharpFormUploadField::make("manual")
-                    ->setLabel("Manual")
-                    ->setHelpMessage("Max file size: 20 Mb")
-                    ->setStorageDisk("local")
-                    ->setStorageBasePath("data/Spaceship/{id}/Manual")
-                    ->setFileFilter("pdf")
+                SharpFormUploadField::make('manual')
+                    ->setLabel('Manual')
+                    ->setHelpMessage('Max file size: 20 Mb')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/Spaceship/{id}/Manual')
+                    ->setFileFilter('pdf')
                     ->setMaxFileSize(20)
             )
             ->addField(
                 SharpFormSelectField::make(
-                    "model",
+                    'model',
                     SpaceshipType::all()
-                        ->mapWithKeys(function($spaceshipType) {
+                        ->mapWithKeys(function ($spaceshipType) {
                             return [
                                 $spaceshipType->id => collect($spaceshipType->brands)
-                                    ->mapWithKeys(function($values, $key) {
+                                    ->mapWithKeys(function ($values, $key) {
                                         return [
-                                            $key => collect($values)->mapWithKeys(function($value) {
+                                            $key => collect($values)->mapWithKeys(function ($value) {
                                                 return [$value => $value];
-                                            })->all()
+                                            })->all(),
                                         ];
-                                    })->all()
+                                    })->all(),
                             ];
                         })
                         ->all()
                 )
-                    ->setLabel("Model (depends on brand)")
+                    ->setLabel('Model (depends on brand)')
                     ->setDisplayAsDropdown()
-                    ->setOptionsLinkedTo("type_id", "brand")
+                    ->setOptionsLinkedTo('type_id', 'brand')
             )
             ->addField(
-                SharpFormAutocompleteField::make("serial_number", "remote")
-                    ->setDataWrapper("data")
-                    ->setLabel("S/N")
-                    ->setListItemInlineTemplate("{{serial}}")
-                    ->setResultItemInlineTemplate("{{serial}}")
-                    ->setDynamicRemoteEndpoint("/spaceships/serial_numbers/{{type_id}}")
+                SharpFormAutocompleteField::make('serial_number', 'remote')
+                    ->setDataWrapper('data')
+                    ->setLabel('S/N')
+                    ->setListItemInlineTemplate('{{serial}}')
+                    ->setResultItemInlineTemplate('{{serial}}')
+                    ->setDynamicRemoteEndpoint('/spaceships/serial_numbers/{{type_id}}')
             )
             ->addField(
-                SharpFormUploadField::make("picture")
-                    ->setLabel("Picture")
+                SharpFormUploadField::make('picture')
+                    ->setLabel('Picture')
                     ->setFileFilterImages()
                     ->shouldOptimizeImage()
                     ->setTransformable()
-                    ->setCropRatio("1:1")
-                    ->setStorageDisk("local")
-                    ->setStorageBasePath("data/Spaceship/{id}")
+                    ->setCropRatio('1:1')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/Spaceship/{id}')
             )
             ->addField(
-                SharpFormTextField::make("picture:legend")
+                SharpFormTextField::make('picture:legend')
                     ->setLocalized()
-                    ->setLabel("Legend")
+                    ->setLabel('Legend')
             )
             ->addField(
-                SharpFormTagsField::make("pilots",
-                        Pilot::orderBy("name")->get()->pluck("name", "id")->all()
-                    )
-                    ->setLabel("Pilots")
+                SharpFormTagsField::make(
+                    'pilots',
+                    Pilot::orderBy('name')->get()->pluck('name', 'id')->all()
+                )
+                    ->setLabel('Pilots')
                     ->setCreatable(true)
-                    ->setCreateAttribute("name")
+                    ->setCreateAttribute('name')
                     ->setMaxTagCount(4)
             )
             ->addField(
-                SharpFormSelectField::make("features",
-                        Feature::orderBy("name")->get()->pluck("name", "id")->all()
-                    )
-                    ->setLabel("Features")
+                SharpFormSelectField::make(
+                    'features',
+                    Feature::orderBy('name')->get()->pluck('name', 'id')->all()
+                )
+                    ->setLabel('Features')
                     ->setMultiple()
                     ->setDisplayAsList()
                     ->allowSelectAll()
             )
             ->addField(
-                SharpFormListField::make("reviews")
-                    ->setLabel("Technical reviews")
+                SharpFormListField::make('reviews')
+                    ->setLabel('Technical reviews')
                     ->setAddable()
                     ->setRemovable()
-                    ->setItemIdAttribute("id")
+                    ->setItemIdAttribute('id')
                     ->addItemField(
-                        SharpFormDateField::make("starts_at")
-                            ->setLabel("Date")
-                            ->setDisplayFormat("YYYY/MM/DD HH:mm")
+                        SharpFormDateField::make('starts_at')
+                            ->setLabel('Date')
+                            ->setDisplayFormat('YYYY/MM/DD HH:mm')
                             ->setMinTime(8)
                             ->setHasTime(true)
                     )
                     ->addItemField(
-                        SharpFormSelectField::make("status", [
-                            "ok" => "Passed", "ko" => "Failed"
-                        ])->setLabel("Status")
+                        SharpFormSelectField::make('status', [
+                            'ok' => 'Passed', 'ko' => 'Failed',
+                        ])->setLabel('Status')
                         ->setDisplayAsList()->setInline()
                     )
                     ->addItemField(
-                        SharpFormTextareaField::make("comment")
-                            ->setLabel("Comment")
+                        SharpFormTextareaField::make('comment')
+                            ->setLabel('Comment')
                             ->setMaxLength(50)
-                            ->addConditionalDisplay("status", "ko")
+                            ->addConditionalDisplay('status', 'ko')
                     )
             )
             ->addField(
-                SharpFormListField::make("pictures")
-                    ->setLabel("Additional pictures")
-                    ->setAddable()->setAddText("Add a picture")
-                    ->allowBulkUploadForField("file")
+                SharpFormListField::make('pictures')
+                    ->setLabel('Additional pictures')
+                    ->setAddable()->setAddText('Add a picture')
+                    ->allowBulkUploadForField('file')
                     ->setBulkUploadFileCountLimitAtOnce(6)
 //                    ->setMaxItemCount(2)
                     ->setRemovable()
                     ->setSortable()
-                    ->setItemIdAttribute("id")
-                    ->setOrderAttribute("order")
+                    ->setItemIdAttribute('id')
+                    ->setOrderAttribute('order')
                     ->addItemField(
-                        SharpFormUploadField::make("file")
+                        SharpFormUploadField::make('file')
                             ->setFileFilterImages()
     //                        ->setCompactThumbnail()
-                            ->setCropRatio("16:9")
-                            ->setStorageDisk("local")
+                            ->setCropRatio('16:9')
+                            ->setStorageDisk('local')
 //                            ->setMaxFileSize(.5)
-                            ->setStorageBasePath("data/Spaceship/{id}/Pictures")
+                            ->setStorageBasePath('data/Spaceship/{id}/Pictures')
                     )
                     ->addItemField(
-                        SharpFormTextField::make("legend")
+                        SharpFormTextField::make('legend')
                             ->setLocalized()
-                            ->setPlaceholder("Legend")
+                            ->setPlaceholder('Legend')
                     )
             );
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout
-            ->addTab("Details", function(FormLayoutTab $tab) {
+            ->addTab('Details', function (FormLayoutTab $tab) {
                 $tab
-                    ->addColumn(5, function(FormLayoutColumn $column) {
+                    ->addColumn(5, function (FormLayoutColumn $column) {
                         $column
-                            ->withFieldset("Technical details", function(FormLayoutFieldset $fieldset) {
-                                return $fieldset->withFields("capacity|4,6", "construction_date|8,6");
+                            ->withFieldset('Technical details', function (FormLayoutFieldset $fieldset) {
+                                return $fieldset->withFields('capacity|4,6', 'construction_date|8,6');
                             })
-                            ->withSingleField("features");
-                
+                            ->withSingleField('features');
                     })
-                    ->addColumn(7, function(FormLayoutColumn $column) {
-                        $column->withSingleField("description");
+                    ->addColumn(7, function (FormLayoutColumn $column) {
+                        $column->withSingleField('description');
                     });
             })
-            ->addTab("General info", function(FormLayoutTab $tab) {
+            ->addTab('General info', function (FormLayoutTab $tab) {
                 $tab
-                    ->addColumn(6, function(FormLayoutColumn $column) {
+                    ->addColumn(6, function (FormLayoutColumn $column) {
                         $column
-                            ->withSingleField("name")
-                            ->withSingleField("html")
-                            ->withSingleField("type_id")
-                            ->withSingleField("serial_number")
-                            ->withFields("brand|6", "model|6")
-                            ->withSingleField("manual")
-                            ->withSingleField("pilots")
-                            ->withSingleField("reviews", function(FormLayoutColumn $listItem) {
+                            ->withSingleField('name')
+                            ->withSingleField('html')
+                            ->withSingleField('type_id')
+                            ->withSingleField('serial_number')
+                            ->withFields('brand|6', 'model|6')
+                            ->withSingleField('manual')
+                            ->withSingleField('pilots')
+                            ->withSingleField('reviews', function (FormLayoutColumn $listItem) {
                                 $listItem
-                                    ->withSingleField("starts_at")
-                                    ->withFields("status|5", "comment|7");
+                                    ->withSingleField('starts_at')
+                                    ->withFields('status|5', 'comment|7');
                             });
                     })
-                    ->addColumn(6, function(FormLayoutColumn $column) {
+                    ->addColumn(6, function (FormLayoutColumn $column) {
                         $column
-                            ->withSingleField("picture")
-                            ->withSingleField("picture:legend")
-                            ->withSingleField("pictures", function(FormLayoutColumn $listItem) {
+                            ->withSingleField('picture')
+                            ->withSingleField('picture:legend')
+                            ->withSingleField('pictures', function (FormLayoutColumn $listItem) {
                                 $listItem
-                                    ->withSingleField("file")
-                                    ->withSingleField("legend");
+                                    ->withSingleField('file')
+                                    ->withSingleField('legend');
                             });
                     });
-
             });
     }
 
-    function buildFormConfig(): void
+    public function buildFormConfig(): void
     {
-        $this->configureBreadcrumbCustomLabelAttribute("name.en")
+        $this->configureBreadcrumbCustomLabelAttribute('name.en')
             ->configureDisplayShowPageAfterCreation();
     }
 
-    function getDataLocalizations(): array
+    public function getDataLocalizations(): array
     {
-        return ["fr", "en", "it"];
+        return ['fr', 'en', 'it'];
     }
 
-    function create(): array
+    public function create(): array
     {
         return $this->transform(new Spaceship([
-            "name" => [
-                "en" => "new",
-                "fr" => "nouveau",
-            ]
+            'name' => [
+                'en' => 'new',
+                'fr' => 'nouveau',
+            ],
         ]));
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this
-            ->setCustomTransformer("capacity", function($capacity) {
+            ->setCustomTransformer('capacity', function ($capacity) {
                 return $capacity / 1000;
             })
-            ->setCustomTransformer("serial_number", function($serial) {
+            ->setCustomTransformer('serial_number', function ($serial) {
                 return $serial ? [
-                    "id" => $serial,
-                    "serial" => str_pad($serial, 5, "0", STR_PAD_LEFT)
+                    'id'     => $serial,
+                    'serial' => str_pad($serial, 5, '0', STR_PAD_LEFT),
                 ] : null;
             })
-            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer())
-            ->setCustomTransformer("picture", new SharpUploadModelFormAttributeTransformer())
-            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer())
-            ->setCustomTransformer("html", function($html, Spaceship $spaceship){
+            ->setCustomTransformer('manual', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('picture', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('pictures', new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('html', function ($html, Spaceship $spaceship) {
                 return [
-                    "nameFr" => $spaceship->getTranslation('name','fr'),
+                    'nameFr' => $spaceship->getTranslation('name', 'fr'),
                 ];
             })
             ->transform(
-                Spaceship::with("reviews", "pilots", "manual", "picture", "pictures", "features")->findOrFail($id)
+                Spaceship::with('reviews', 'pilots', 'manual', 'picture', 'pictures', 'features')->findOrFail($id)
             );
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         $instance = $id ? Spaceship::findOrFail($id) : new Spaceship([
-            "corporation_id" => currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class)
+            'corporation_id' => currentSharpRequest()->globalFilterFor(CorporationGlobalFilter::class),
         ]);
 
-        if(($data["name"]["fr"] ?? "") == "error") {
+        if (($data['name']['fr'] ?? '') == 'error') {
             throw new SharpApplicativeException("Name can't be «error»");
         }
 
-        $this->setCustomTransformer("capacity", function($capacity) {
-                return $capacity * 1000;
-            })
-            ->ignore("html")
+        $this->setCustomTransformer('capacity', function ($capacity) {
+            return $capacity * 1000;
+        })
+            ->ignore('html')
             ->save($instance, $data);
 
-        if(isset($data["name"])) {
+        if (isset($data['name'])) {
             // Workaround to display this only once, in case of a double pass in this method
             // by Sharp, to handle relationships in a creation case.
-            $this->notify("Spaceship was updated with success!")
-                ->setDetail("Congratulations, this was not an easy thing to do.")
+            $this->notify('Spaceship was updated with success!')
+                ->setDetail('Congratulations, this was not an easy thing to do.')
                 ->setLevelSuccess()
                 ->setAutoHide(false);
         }
 
-        if(($data["capacity"] ?? 0) >= 1000) {
-            $this->notify("this is a huge spaceship, by the way!");
+        if (($data['capacity'] ?? 0) >= 1000) {
+            $this->notify('this is a huge spaceship, by the way!');
         }
 
         return $instance->id;
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
         Spaceship::findOrFail($id)->delete();
     }

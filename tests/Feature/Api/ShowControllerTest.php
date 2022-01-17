@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 class ShowControllerTest extends BaseApiTest
 {
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -20,9 +19,9 @@ class ShowControllerTest extends BaseApiTest
         $this->getJson('/sharp/api/show/person/1')
             ->assertStatus(200)
             ->assertJson([
-                "data" => [
-                    "name" => "John Wayne"
-                ]
+                'data' => [
+                    'name' => 'John Wayne',
+                ],
             ]);
 
         $this->getJson('/sharp/api/show/person')
@@ -36,7 +35,7 @@ class ShowControllerTest extends BaseApiTest
 
         $result = $this->getJson('/sharp/api/show/person/1');
 
-        $this->assertArrayHasKey("state", $result->json()["data"]);
+        $this->assertArrayHasKey('state', $result->json()['data']);
     }
 
     /** @test */
@@ -46,8 +45,8 @@ class ShowControllerTest extends BaseApiTest
 
         $result = $this->getJson('/sharp/api/show/person/1');
 
-        $this->assertArrayHasKey("name", $result->json()["data"]);
-        $this->assertArrayNotHasKey("job", $result->json()["data"]);
+        $this->assertArrayHasKey('name', $result->json()['data']);
+        $this->assertArrayNotHasKey('job', $result->json()['data']);
     }
 
     /** @test */
@@ -57,10 +56,10 @@ class ShowControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
-            ->assertJson(["fields" => [
-                "name" => [
-                    "type" => "text"
-                ]
+            ->assertJson(['fields' => [
+                'name' => [
+                    'type' => 'text',
+                ],
             ]]);
     }
 
@@ -71,20 +70,20 @@ class ShowControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
-            ->assertJson(["layout" => [
-                "sections" => [[
-                    "title" => "Identity",
-                    "columns" => [
+            ->assertJson(['layout' => [
+                'sections' => [[
+                    'title'   => 'Identity',
+                    'columns' => [
                         [
-                            "size" => 6,
-                            "fields" => [
+                            'size'   => 6,
+                            'fields' => [
                                 [
-                                    ["key" => "name"]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]]
+                                    ['key' => 'name'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ]],
             ]]);
     }
 
@@ -95,27 +94,27 @@ class ShowControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
-            ->assertJson(["config" => [
-                "commands" => [
-                    "instance" => [
+            ->assertJson(['config' => [
+                'commands' => [
+                    'instance' => [
                         [
                             [
-                                "key" => "test_command",
-                                "label" => "Label"
-                            ]
-                        ]
-                    ]
+                                'key'   => 'test_command',
+                                'label' => 'Label',
+                            ],
+                        ],
+                    ],
                 ],
-                "state" => [
-                    "attribute" => "state",
-                    "values" => [
+                'state' => [
+                    'attribute' => 'state',
+                    'values'    => [
                         [
-                            "value" => "active",
-                            "label" => "Label",
-                            "color" => "blue"
-                        ]
-                    ]
-                ]
+                            'value' => 'active',
+                            'label' => 'Label',
+                            'color' => 'blue',
+                        ],
+                    ],
+                ],
             ]]);
     }
 
@@ -127,9 +126,9 @@ class ShowControllerTest extends BaseApiTest
         $this->getJson('/sharp/api/show/person')
             ->assertStatus(200)
             ->assertJson([
-                "data" => [
-                    "name" => "John Wayne"
-                ]
+                'data' => [
+                    'name' => 'John Wayne',
+                ],
             ]);
 
         $this->getJson('/sharp/api/show/person/1')
@@ -143,40 +142,40 @@ class ShowControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/show/person/11')
             ->assertStatus(200)
-            ->assertJson(["config" => [
-                "commands" => [
-                    "instance" => [
+            ->assertJson(['config' => [
+                'commands' => [
+                    'instance' => [
                         [
                             [
-                                "key" => "test_command",
-                                "authorization" => false
+                                'key'           => 'test_command',
+                                'authorization' => false,
                             ],
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
-                "state" => [
-                    "attribute" => "state",
-                    "authorization" => false
-                ]
+                'state' => [
+                    'attribute'     => 'state',
+                    'authorization' => false,
+                ],
             ]]);
 
         $this->json('get', '/sharp/api/show/person/1')
             ->assertStatus(200)
-            ->assertJson(["config" => [
-                "commands" => [
-                    "instance" => [
+            ->assertJson(['config' => [
+                'commands' => [
+                    'instance' => [
                         [
                             [
-                                "key" => "test_command",
-                                "authorization" => true
-                            ]
-                        ]
-                    ]
+                                'key'           => 'test_command',
+                                'authorization' => true,
+                            ],
+                        ],
+                    ],
                 ],
-                "state" => [
-                    "attribute" => "state",
-                    "authorization" => true
-                ]
+                'state' => [
+                    'attribute'     => 'state',
+                    'authorization' => true,
+                ],
             ]]);
     }
 }

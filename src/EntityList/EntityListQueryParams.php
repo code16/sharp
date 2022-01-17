@@ -16,7 +16,7 @@ class EntityListQueryParams
 
     public static function create(): static
     {
-        return new static;
+        return new static();
     }
 
     public function getPage(): ?int
@@ -36,16 +36,16 @@ class EntityListQueryParams
     {
         $query = $queryPrefix ? request($queryPrefix) : request()->all();
 
-        $this->search = $query["search"] ?? null ? urldecode($query["search"]) : null;
-        $this->page = $query["page"] ?? null;
+        $this->search = $query['search'] ?? null ? urldecode($query['search']) : null;
+        $this->page = $query['page'] ?? null;
 
-        if(isset($query["sort"])) {
-            $this->sortedBy = $query["sort"];
-            $this->sortedDir = $query["dir"];
+        if (isset($query['sort'])) {
+            $this->sortedBy = $query['sort'];
+            $this->sortedDir = $query['dir'];
         }
 
         $this->fillFilterWithRequest($query);
-        
+
         return $this;
     }
 
@@ -68,7 +68,7 @@ class EntityListQueryParams
     {
         $terms = [];
 
-        foreach (explode(" ", $this->search) as $term) {
+        foreach (explode(' ', $this->search) as $term) {
             $term = trim($term);
             if (!$term) {
                 continue;
@@ -80,7 +80,7 @@ class EntityListQueryParams
                     continue;
                 }
 
-                $terms[] = $noStarTermPrefix . $term . $noStarTermSuffix;
+                $terms[] = $noStarTermPrefix.$term.$noStarTermSuffix;
                 continue;
             }
 
@@ -90,10 +90,10 @@ class EntityListQueryParams
         return $terms;
     }
 
-    public final function setSpecificIds(array $specificIds): self
+    final public function setSpecificIds(array $specificIds): self
     {
         $this->specificIds = $specificIds;
-        
+
         return $this;
     }
 

@@ -11,7 +11,7 @@ class SharpUploadModel extends Model
     protected $guarded = [];
     protected $casts = [
         'custom_properties' => 'array',
-        'size' => 'integer',
+        'size'              => 'integer',
     ];
 
     public function model(): MorphTo
@@ -23,19 +23,20 @@ class SharpUploadModel extends Model
     {
         // We use this magical "file" attribute to fill at the same time
         // file_name, mime_type, disk and size in a MorphMany case
-        if($value) {
+        if ($value) {
             $this->fill($value);
         }
     }
 
     /**
      * @param string $key
+     *
      * @return mixed|null
      */
     public function getAttribute($key)
     {
-        if(!$this->isRealAttribute($key)) {
-            return $this->getAttribute("custom_properties")[$key] ?? null;
+        if (!$this->isRealAttribute($key)) {
+            return $this->getAttribute('custom_properties')[$key] ?? null;
         }
 
         return parent::getAttribute($key);
@@ -43,12 +44,13 @@ class SharpUploadModel extends Model
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return Model
      */
     public function setAttribute($key, $value)
     {
-        if(!$this->isRealAttribute($key)) {
+        if (!$this->isRealAttribute($key)) {
             return $this->updateCustomProperty($key, $value);
         }
 
@@ -57,9 +59,9 @@ class SharpUploadModel extends Model
 
     protected function updateCustomProperty(string $key, $value): self
     {
-        $properties = $this->getAttribute("custom_properties");
+        $properties = $this->getAttribute('custom_properties');
         $properties[$key] = $value;
-        $this->setAttribute("custom_properties", $properties);
+        $this->setAttribute('custom_properties', $properties);
 
         return $this;
     }
@@ -67,13 +69,13 @@ class SharpUploadModel extends Model
     protected function isRealAttribute(string $name): bool
     {
         return in_array($name, [
-            "id", "model", "model_id", "model_type", "model_key", "file_name",
-            "mime_type", "disk", "size", "custom_properties",
-            "order", "created_at", "updated_at", "file", "transformed"
+            'id', 'model', 'model_id', 'model_type', 'model_key', 'file_name',
+            'mime_type', 'disk', 'size', 'custom_properties',
+            'order', 'created_at', 'updated_at', 'file', 'transformed',
         ]);
     }
 
-    public function thumbnail(int $width=null, int $height=null, array $customFilters=[]): ?string
+    public function thumbnail(int $width = null, int $height = null, array $customFilters = []): ?string
     {
         return (new Thumbnail($this))
             ->setTransformationFilters($this->filters ?: null)

@@ -9,9 +9,9 @@ class PassengerSharpValidator extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            "birth_date" => 'required',
-            "gender" => 'required',
+            'name'       => 'required',
+            'birth_date' => 'required',
+            'gender'     => 'required',
         ];
     }
 }

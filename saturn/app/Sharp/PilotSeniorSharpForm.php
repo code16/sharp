@@ -10,34 +10,35 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PilotSeniorSharpForm extends PilotJuniorSharpForm
 {
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         parent::buildFormFields($formFields);
 
         $formFields->addField(
-            SharpFormNumberField::make("xp")
-                ->setLabel("Experience (in years)")
+            SharpFormNumberField::make('xp')
+                ->setLabel('Experience (in years)')
         );
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
         parent::buildFormLayout($formLayout);
 
-        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-            $column->withSingleField("xp");
+        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
+            $column->withSingleField('xp');
         });
     }
-    
-    function buildFormConfig(): void
+
+    public function buildFormConfig(): void
     {
-        $this->configureBreadcrumbCustomLabelAttribute("name");
+        $this->configureBreadcrumbCustomLabelAttribute('name');
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
-        $instance = $id ? Pilot::findOrFail($id) : new Pilot;
-        $this->save($instance, $data + ["role" => "sr"]);
+        $instance = $id ? Pilot::findOrFail($id) : new Pilot();
+        $this->save($instance, $data + ['role' => 'sr']);
+
         return $instance->id;
     }
 

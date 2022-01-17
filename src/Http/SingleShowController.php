@@ -6,6 +6,6 @@ class SingleShowController extends SharpProtectedController
 {
     public function show(string $entityKey)
     {
-        return view("sharp::show", compact('entityKey'));
+        return view('sharp::show', compact('entityKey'));
     }
 }

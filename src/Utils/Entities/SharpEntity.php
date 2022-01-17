@@ -15,46 +15,49 @@ abstract class SharpEntity extends BaseSharpEntity
     protected ?string $show = null;
     protected array $prohibitedActions = [];
 
-    public final function getListOrFail(): SharpEntityList
+    final public function getListOrFail(): SharpEntityList
     {
-        if(!$list = $this->getList()) {
+        if (!$list = $this->getList()) {
             throw new SharpInvalidEntityKeyException("The list for the entity [{$this->entityKey}] was not found.");
         }
+
         return app($list);
     }
 
-    public final function getShowOrFail(): SharpShow
+    final public function getShowOrFail(): SharpShow
     {
         throw_if(
-            !$this->hasShow(), 
+            !$this->hasShow(),
             new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found.")
         );
+
         return app($this->getShow());
     }
 
-    public final function hasShow(): bool
+    final public function hasShow(): bool
     {
         return $this->getShow() !== null;
     }
 
-    public final function getFormOrFail(?string $subEntity = null): SharpForm
+    final public function getFormOrFail(?string $subEntity = null): SharpForm
     {
-        if($subEntity) {
-            if(!$form = ($this->getMultiforms()[$subEntity][0] ?? null)) {
+        if ($subEntity) {
+            if (!$form = ($this->getMultiforms()[$subEntity][0] ?? null)) {
                 throw new SharpInvalidEntityKeyException("The subform for the entity [{$this->entityKey}:{$subEntity}] was not found.");
             }
-        } elseif(!$form = $this->getForm()) {
+        } elseif (!$form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException("The form for the entity [{$this->entityKey}] was not found.");
         }
+
         return app($form);
     }
-    
-    public final function isActionProhibited(string $action): bool
+
+    final public function isActionProhibited(string $action): bool
     {
         return in_array($action, $this->prohibitedActions);
     }
-    
-    public final function isSingle(): bool
+
+    final public function isSingle(): bool
     {
         return $this->isSingle;
     }

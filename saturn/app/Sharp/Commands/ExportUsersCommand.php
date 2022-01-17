@@ -13,47 +13,47 @@ class ExportUsersCommand extends EntityCommand
 {
     public function label(): string
     {
-        return "Export users as text file";
+        return 'Export users as text file';
     }
-    
+
     public function buildCommandConfig(): void
     {
         $this
-            ->configureDescription("Download or stream a text file as response.");
+            ->configureDescription('Download or stream a text file as response.');
     }
 
     public function execute(array $data = []): array
     {
         $fileContent = User::query()
-            ->when($data["sample"] ?? false, function($query) {
+            ->when($data['sample'] ?? false, function ($query) {
                 return $query->take(2);
             })
             ->get()
-            ->map(function(User $user) {
-                return implode(",", $user->toArray());
+            ->map(function (User $user) {
+                return implode(',', $user->toArray());
             })
             ->implode("\n");
-        
-        if($data["type"] == "streamDownload") {
-            return $this->streamDownload($fileContent, "users.txt");
+
+        if ($data['type'] == 'streamDownload') {
+            return $this->streamDownload($fileContent, 'users.txt');
         }
 
-        $filePath = "tmp/users " . now()->format("YmdHis") . ".txt";
-        Storage::disk("local")->put($filePath, $fileContent);
+        $filePath = 'tmp/users '.now()->format('YmdHis').'.txt';
+        Storage::disk('local')->put($filePath, $fileContent);
 
-        return $this->download($filePath, "users.txt", "local");
+        return $this->download($filePath, 'users.txt', 'local');
     }
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormCheckField::make("sample", "Download a file sample")
+                SharpFormCheckField::make('sample', 'Download a file sample')
             )
             ->addField(
-                SharpFormSelectField::make("type", [
-                    "download" => "Download",
-                    "streamDownload" => "Stream (no file storage)",
+                SharpFormSelectField::make('type', [
+                    'download'       => 'Download',
+                    'streamDownload' => 'Stream (no file storage)',
                 ])
             );
     }

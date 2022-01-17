@@ -15,7 +15,7 @@ class ShowInstanceStateController extends ApiController
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $stateHandler = $showPage->entityStateHandler();
 
-        if(!$stateHandler->authorize()
+        if (!$stateHandler->authorize()
             || !$stateHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
@@ -23,8 +23,8 @@ class ShowInstanceStateController extends ApiController
         return $this->returnCommandResult(
             $showPage,
             array_merge(
-                $stateHandler->execute($instanceId, request()->only("value")),
-                ["value" => request("value")]
+                $stateHandler->execute($instanceId, request()->only('value')),
+                ['value' => request('value')]
             )
         );
     }

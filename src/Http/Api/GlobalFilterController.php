@@ -11,13 +11,13 @@ class GlobalFilterController extends ApiController
 
     public function getFilters(): array
     {
-        return config("sharp.global_filters");
+        return config('sharp.global_filters');
     }
 
     public function index()
     {
         return response()->json(
-            tap([], function(&$filters) {
+            tap([], function (&$filters) {
                 $this->appendFiltersToConfig($filters);
             })
         );
@@ -25,7 +25,7 @@ class GlobalFilterController extends ApiController
 
     public function update(string $filterKey)
     {
-        $handler = collect(config("sharp.global_filters"))
+        $handler = collect(config('sharp.global_filters'))
             ->map(function (string $filterClass) {
                 return app($filterClass);
             })
@@ -33,16 +33,16 @@ class GlobalFilterController extends ApiController
                 return $filter->getKey() == $filterKey;
             })
             ->first();
-        
+
         abort_if(!$handler, 404);
-        
+
         // Ensure value is in the filter value-set
         $allowedFilterValues = collect($this->formatSelectFilterValues($handler));
-        $value = $allowedFilterValues->where("id", request("value"))->first()
-            ? request("value")
+        $value = $allowedFilterValues->where('id', request('value'))->first()
+            ? request('value')
             : null;
 
-        if($value) {
+        if ($value) {
             session()->put(
                 "_sharp_retained_global_filter_{$handler->getKey()}",
                 $value
@@ -51,6 +51,6 @@ class GlobalFilterController extends ApiController
             session()->forget("_sharp_retained_global_filter_{$handler->getKey()}");
         }
 
-        return response()->json(["ok" => true]);
+        return response()->json(['ok' => true]);
     }
 }

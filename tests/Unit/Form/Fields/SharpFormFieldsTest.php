@@ -10,15 +10,14 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpFormFieldsTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_add_a_field()
+    public function we_can_add_a_field()
     {
-        $form = new class extends FormFieldsTestForm {
-            function buildFormFields(FieldsContainer $formFields): void
+        $form = new class() extends FormFieldsTestForm {
+            public function buildFormFields(FieldsContainer $formFields): void
             {
-                $formFields->addField(SharpFormTextField::make("name"))
-                    ->addField(SharpFormTextField::make("first_name"));
+                $formFields->addField(SharpFormTextField::make('name'))
+                    ->addField(SharpFormTextField::make('first_name'));
             }
         };
 
@@ -26,31 +25,44 @@ class SharpFormFieldsTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_see_fields_as_array()
+    public function we_can_see_fields_as_array()
     {
-        $form = new class extends FormFieldsTestForm {
-            function buildFormFields(FieldsContainer $formFields): void
+        $form = new class() extends FormFieldsTestForm {
+            public function buildFormFields(FieldsContainer $formFields): void
             {
-                $formFields->addField(SharpFormTextField::make("name"))
-                    ->addField(SharpFormTextField::make("first_name"));
+                $formFields->addField(SharpFormTextField::make('name'))
+                    ->addField(SharpFormTextField::make('first_name'));
             }
         };
 
         $this->assertArraySubset(
-            ["type" => "text"],
-            $form->fields()["name"]
+            ['type' => 'text'],
+            $form->fields()['name']
         );
         $this->assertArraySubset(
-            ["type" => "text"],
-            $form->fields()["first_name"]
+            ['type' => 'text'],
+            $form->fields()['first_name']
         );
     }
 }
 
 abstract class FormFieldsTestForm extends SharpForm
 {
-    function find($id): array { return []; }
-    function update($id, array $data) { return false; }
-    function delete($id): void {}
-    function buildFormLayout(FormLayout $formLayout): void {}
+    public function find($id): array
+    {
+        return [];
+    }
+
+    public function update($id, array $data)
+    {
+        return false;
+    }
+
+    public function delete($id): void
+    {
+    }
+
+    public function buildFormLayout(FormLayout $formLayout): void
+    {
+    }
 }

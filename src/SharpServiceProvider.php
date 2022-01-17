@@ -23,7 +23,6 @@ use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
-use Code16\Sharp\Http\Middleware\Api\RegisterAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -49,7 +48,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/front', 'sharp-front');
 
         $this->publishes([
-            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
+            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp'),
         ], 'assets');
 
         $this->publishes([
@@ -57,10 +56,10 @@ class SharpServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
-            __DIR__ . '/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
+            __DIR__.'/../resources/views/components/file.blade.php'  => resource_path('views/vendor/sharp/components/file.blade.php'),
+            __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
         ], 'views');
-        
+
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
         Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
         Blade::component(Content::class, 'sharp-content');
@@ -104,7 +103,7 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerMiddleware(): void
     {
-        $this->app['router']->middlewareGroup("sharp_web", [
+        $this->app['router']->middlewareGroup('sharp_web', [
             \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
             \Illuminate\Foundation\Http\Middleware\TrimStrings::class,

@@ -28,26 +28,28 @@ abstract class EntityState extends InstanceCommand
 
     protected function view(string $bladeView, array $params = []): array
     {
-        throw new Exception("View return type is not supported for a state.");
+        throw new Exception('View return type is not supported for a state.');
     }
 
     protected function info(string $message): array
     {
-        throw new Exception("Info return type is not supported for a state.");
+        throw new Exception('Info return type is not supported for a state.');
     }
 
     /**
      * @param mixed $instanceId
      * @param array $data
-     * @return array
+     *
      * @throws SharpInvalidEntityStateException
+     *
+     * @return array
      */
     public function execute($instanceId, array $data = []): array
     {
-        $stateId = $data["value"];
+        $stateId = $data['value'];
         $this->buildStates();
 
-        if(!in_array($stateId, array_keys($this->states))) {
+        if (!in_array($stateId, array_keys($this->states))) {
             throw new SharpInvalidEntityStateException($stateId);
         }
 
@@ -62,8 +64,9 @@ abstract class EntityState extends InstanceCommand
     abstract protected function buildStates(): void;
 
     /**
-     * @param mixed $instanceId
+     * @param mixed  $instanceId
      * @param string $stateId
+     *
      * @return mixed
      */
     abstract protected function updateState($instanceId, string $stateId): array;

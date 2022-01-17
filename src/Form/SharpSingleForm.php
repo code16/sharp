@@ -6,34 +6,35 @@ use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleForm extends SharpForm
 {
-    public final function formConfig(): array
+    final public function formConfig(): array
     {
         return array_merge(
             parent::formConfig(),
-            ["isSingle" => true]
+            ['isSingle' => true]
         );
     }
 
-    final function find($id): array
+    final public function find($id): array
     {
         return $this->findSingle();
     }
 
-    final function update($id, array $data)
+    final public function update($id, array $data)
     {
         return $this->updateSingle($data);
     }
 
     final public function storeInstance($data)
     {
-        throw new SharpException("Store is not possible in a SingleSharpForm.");
+        throw new SharpException('Store is not possible in a SingleSharpForm.');
     }
 
-    final function delete($id): void
+    final public function delete($id): void
     {
-        throw new SharpException("Delete is not possible in a SingleSharpForm.");
+        throw new SharpException('Delete is not possible in a SingleSharpForm.');
     }
 
     abstract protected function findSingle();
+
     abstract protected function updateSingle(array $data);
 }

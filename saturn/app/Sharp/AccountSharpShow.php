@@ -14,50 +14,50 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class AccountSharpShow extends SharpSingleShow
 {
-    function buildShowFields(FieldsContainer $showFields): void
+    public function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
             ->addField(
-                SharpShowTextField::make("name")
-                    ->setLabel("Name:")
+                SharpShowTextField::make('name')
+                    ->setLabel('Name:')
             )
             ->addField(
-                SharpShowTextField::make("email")
-                    ->setLabel("Email:")
+                SharpShowTextField::make('email')
+                    ->setLabel('Email:')
             )
             ->addField(
-                SharpShowTextField::make("groups")
-                    ->setLabel("Groups:")
+                SharpShowTextField::make('groups')
+                    ->setLabel('Groups:')
             );
     }
 
-    function buildShowLayout(ShowLayout $showLayout): void
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('Identity', function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(7, function(ShowLayoutColumn $column) {
+                    ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField("name")
-                            ->withSingleField("email")
-                            ->withSingleField("groups");
+                            ->withSingleField('name')
+                            ->withSingleField('email')
+                            ->withSingleField('groups');
                     });
             });
     }
-    
+
     public function getInstanceCommands(): ?array
     {
         return [
-            AccountUpdateName::class
+            AccountUpdateName::class,
         ];
     }
 
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
-        $this->setEntityState("status", AccountStatusState::class);
+        $this->setEntityState('status', AccountStatusState::class);
     }
 
-    function findSingle(): array
+    public function findSingle(): array
     {
         return $this->transform(User::findOrFail(auth()->id()));
     }

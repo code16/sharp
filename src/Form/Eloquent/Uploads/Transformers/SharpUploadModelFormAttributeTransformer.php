@@ -27,28 +27,29 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
      * @param $value
      * @param $instance
      * @param string $attribute
+     *
      * @return mixed
      */
-    function apply($value, $instance = null, $attribute = null)
+    public function apply($value, $instance = null, $attribute = null)
     {
-        if(!$instance->$attribute) {
+        if (!$instance->$attribute) {
             return null;
         }
 
-        if($instance->$attribute() instanceof MorphMany) {
+        if ($instance->$attribute() instanceof MorphMany) {
             // We are handling a list of uploads
             return $instance->$attribute
-                ->map(function($upload) {
+                ->map(function ($upload) {
                     $array = $this->transformUpload($upload);
-                    $fileAttrs = ["name", "path", "disk", "thumbnail", "size", "filters"];
-                    
+                    $fileAttrs = ['name', 'path', 'disk', 'thumbnail', 'size', 'filters'];
+
                     return array_merge(
-                        ["file" => Arr::only($array, $fileAttrs) ?: null],
+                        ['file' => Arr::only($array, $fileAttrs) ?: null],
                         Arr::except($array, $fileAttrs)
                     );
                 })
                 ->all();
-        };
+        }
 
         return $this->transformUpload($instance->$attribute);
     }
@@ -58,29 +59,29 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         return array_merge(
             $upload->file_name
                 ? [
-                    "name" => basename($upload->file_name),
-                    "path" => $upload->file_name,
-                    "disk" => $upload->disk,
-                    "thumbnail" => $this->getThumbnailUrl($upload),
-                    "size" => $upload->size,
+                    'name'      => basename($upload->file_name),
+                    'path'      => $upload->file_name,
+                    'disk'      => $upload->disk,
+                    'thumbnail' => $this->getThumbnailUrl($upload),
+                    'size'      => $upload->size,
                 ]
                 : [],
             $upload->custom_properties ?? [], // Including filters
-            ["id" => $upload->id]
+            ['id' => $upload->id]
         );
     }
 
     private function getThumbnailUrl(SharpUploadModel $upload): ?string
     {
-        if(!$this->withThumbnails) {
+        if (!$this->withThumbnails) {
             return null;
         }
-        
+
         $url = $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight);
-        
+
         // Return relative URL if possible, to avoid CORS issues in multidomain case.
-        return Str::startsWith($url, config("app.url"))
-            ? Str::after($url, config("app.url"))
+        return Str::startsWith($url, config('app.url'))
+            ? Str::after($url, config('app.url'))
             : $url;
     }
 }

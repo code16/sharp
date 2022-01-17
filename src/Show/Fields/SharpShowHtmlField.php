@@ -11,8 +11,8 @@ class SharpShowHtmlField extends SharpShowField
         setInlineTemplate as protected parentSetInlineTemplate;
         template as protected parentTemplate;
     }
-    
-    const FIELD_TYPE = "html";
+
+    const FIELD_TYPE = 'html';
 
     protected ?string $label = null;
 
@@ -27,15 +27,15 @@ class SharpShowHtmlField extends SharpShowField
 
         return $this;
     }
-    
+
     public function setTemplatePath(string $templatePath): self
     {
-        return $this->parentSetTemplatePath($templatePath, "html");
+        return $this->parentSetTemplatePath($templatePath, 'html');
     }
 
     public function setInlineTemplate(string $template): self
     {
-        return $this->parentSetInlineTemplate($template, "html");
+        return $this->parentSetInlineTemplate($template, 'html');
     }
 
     public function setAdditionalTemplateData(array $data): self
@@ -45,22 +45,22 @@ class SharpShowHtmlField extends SharpShowField
 
     public function template(): ?string
     {
-        return $this->parentTemplate("html");
+        return $this->parentTemplate('html');
     }
 
     protected function validationRules(): array
     {
         return [
-            "template" => "required",
-            "templateData" => "nullable|array",
+            'template'     => 'required',
+            'templateData' => 'nullable|array',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "template" => $this->template(),
-            "templateData" => $this->additionalTemplateData,
+            'template'     => $this->template(),
+            'templateData' => $this->additionalTemplateData,
         ]);
     }
 }

@@ -32,8 +32,8 @@ class EntityListMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/entity-list.model.stub'
-            : __DIR__ . '/stubs/entity-list.stub';
+            ? __DIR__.'/stubs/entity-list.model.stub'
+            : __DIR__.'/stubs/entity-list.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

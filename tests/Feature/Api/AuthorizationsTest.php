@@ -19,8 +19,8 @@ class AuthorizationsTest extends BaseApiTest
     public function we_can_configure_prohibited_actions_on_entities()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
-            ->setProhibitedActions(["delete", "create", "update", "view"]);
+            ->entityFor('person')
+            ->setProhibitedActions(['delete', 'create', 'update', 'view']);
 
         $this->postJson('/sharp/api/form/person/50', [])->assertStatus(403);
         $this->postJson('/sharp/api/form/person', [])->assertStatus(403);
@@ -29,7 +29,7 @@ class AuthorizationsTest extends BaseApiTest
 
         // Can't see the form, since view is false
         $this->getJson('/sharp/api/form/person/50')->assertStatus(403);
-        
+
         // We can still view the list
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
     }
@@ -38,8 +38,8 @@ class AuthorizationsTest extends BaseApiTest
     public function default_prohibited_actions_on_entity_is_handled()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
-            ->setProhibitedActions(["delete", "update"]);
+            ->entityFor('person')
+            ->setProhibitedActions(['delete', 'update']);
 
         $this->getJson('/sharp/api/list/person')->assertStatus(200);
         $this->getJson('/sharp/api/form/person')->assertStatus(200);
@@ -53,29 +53,29 @@ class AuthorizationsTest extends BaseApiTest
     public function prohibited_actions_are_appended_to_the_response_on_a_form_get_request()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
-            ->setProhibitedActions(["delete", "update"]);
+            ->entityFor('person')
+            ->setProhibitedActions(['delete', 'update']);
 
         // Create
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => false,
-                    "update" => false,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view'   => true,
+                ],
             ]);
 
         // Edit
         $this->getJson('/sharp/api/form/person/1')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
+            'authorizations' => [
+                'delete' => false,
+                'update' => false,
+                'create' => true,
+                'view'   => true,
+            ],
         ]);
     }
 
@@ -83,17 +83,17 @@ class AuthorizationsTest extends BaseApiTest
     public function prohibited_actions_are_appended_to_the_response_on_a_list_get_request()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
-            ->setProhibitedActions(["delete", "update"]);
+            ->entityFor('person')
+            ->setProhibitedActions(['delete', 'update']);
 
         $this
             ->getJson('/sharp/api/list/person')
             ->assertJson([
-                "authorizations" => [
-                    "update" => false,
-                    "create" => true,
-                    "view" => [1,2],
-                ]
+                'authorizations' => [
+                    'update' => false,
+                    'create' => true,
+                    'view'   => [1, 2],
+                ],
             ]);
     }
 
@@ -106,35 +106,35 @@ class AuthorizationsTest extends BaseApiTest
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => true,
-                    "update" => true,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => true,
+                    'update' => true,
+                    'create' => true,
+                    'view'   => true,
+                ],
             ]);
 
         // Edit
         $this
             ->getJson('/sharp/api/form/person/1')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => true,
-                    "update" => true,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => true,
+                    'update' => true,
+                    'create' => true,
+                    'view'   => true,
+                ],
             ]);
 
         // List
         $this
             ->getJson('/sharp/api/list/person')
             ->assertJson([
-                "authorizations" => [
-                    "update" => true,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'update' => true,
+                    'create' => true,
+                    'view'   => true,
+                ],
             ]);
     }
 
@@ -142,11 +142,11 @@ class AuthorizationsTest extends BaseApiTest
     public function a_sub_entity_takes_its_main_entity_prohibited_actions()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
+            ->entityFor('person')
             ->setMultiforms([
-                "big" => [PersonSharpForm::class]
+                'big' => [PersonSharpForm::class],
             ])
-            ->setProhibitedActions(["delete"]);
+            ->setProhibitedActions(['delete']);
 
         $this->postJson('/sharp/api/form/person:big/50', [])->assertStatus(200);
         $this->postJson('/sharp/api/form/person:big', [])->assertStatus(200);

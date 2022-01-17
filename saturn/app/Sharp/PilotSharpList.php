@@ -16,35 +16,35 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class PilotSharpList extends SharpEntityList
 {
-    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
             ->addField(
-                EntityListField::make("name")
+                EntityListField::make('name')
                     ->setSortable()
-                    ->setLabel("Name")
+                    ->setLabel('Name')
             )
             ->addField(
-                EntityListField::make("role")
-                    ->setLabel("Role")
+                EntityListField::make('role')
+                    ->setLabel('Role')
             )
             ->addField(
-                EntityListField::make("xp")
-                    ->setLabel("Xp")
+                EntityListField::make('xp')
+                    ->setLabel('Xp')
             );
     }
-    
+
     public function getInstanceCommands(): ?array
     {
         return [
-            PilotDownloadPhoto::class
+            PilotDownloadPhoto::class,
         ];
     }
 
     public function getEntityCommands(): ?array
     {
         return [
-            PilotUpdateXPCommand::class
+            PilotUpdateXPCommand::class,
         ];
     }
 
@@ -52,49 +52,48 @@ class PilotSharpList extends SharpEntityList
     {
         return [
             PilotSpaceshipFilter::class,
-            PilotRoleFilter::class
+            PilotRoleFilter::class,
         ];
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
         $this->configureSearchable()
-            ->configureDefaultSort("name", "asc")
-            ->configureMultiformAttribute("role")
+            ->configureDefaultSort('name', 'asc')
+            ->configureMultiformAttribute('role')
             ->configurePaginated()
-            ->configureEntityState("state", PilotEntityState::class);
+            ->configureEntityState('state', PilotEntityState::class);
     }
 
-    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        if($role = $this->queryParams->filterFor("role")) {
-            $fieldsLayout->addColumn("name", 6);
-            if($role === "sr") {
-                $fieldsLayout->addColumn("xp", 6);
+        if ($role = $this->queryParams->filterFor('role')) {
+            $fieldsLayout->addColumn('name', 6);
+            if ($role === 'sr') {
+                $fieldsLayout->addColumn('xp', 6);
             }
         } else {
-            $fieldsLayout->addColumn("name", 4)
-                ->addColumn("role", 4)
-                ->addColumn("xp", 4);
+            $fieldsLayout->addColumn('name', 4)
+                ->addColumn('role', 4)
+                ->addColumn('xp', 4);
         }
     }
 
-    function getListData(): array|Arrayable
+    public function getListData(): array|Arrayable
     {
-        $pilots = Pilot::select("pilots.*")->distinct();
+        $pilots = Pilot::select('pilots.*')->distinct();
 
-        if($ids = $this->queryParams->specificIds()) {
-            $pilots->whereIn("id", $ids);
-
+        if ($ids = $this->queryParams->specificIds()) {
+            $pilots->whereIn('id', $ids);
         } else {
             if ($spaceship = $this->queryParams->filterFor(PilotSpaceshipFilter::class)) {
-                $pilots->leftJoin("pilot_spaceship", "pilots.id", "=", "pilot_spaceship.pilot_id")
-                    ->leftJoin("spaceships", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
-                    ->where("spaceships.id", $spaceship);
+                $pilots->leftJoin('pilot_spaceship', 'pilots.id', '=', 'pilot_spaceship.pilot_id')
+                    ->leftJoin('spaceships', 'spaceships.id', '=', 'pilot_spaceship.spaceship_id')
+                    ->where('spaceships.id', $spaceship);
             }
 
             if ($role = $this->queryParams->filterFor(PilotRoleFilter::class)) {
-                $pilots->where("role", $role);
+                $pilots->where('role', $role);
             }
 
             if ($this->queryParams->sortedBy()) {
@@ -109,11 +108,11 @@ class PilotSharpList extends SharpEntityList
         }
 
         return $this
-            ->setCustomTransformer("role", function($role, $pilot) {
-                return $pilot->role == "sr" ? "senior" : "junior";
+            ->setCustomTransformer('role', function ($role, $pilot) {
+                return $pilot->role == 'sr' ? 'senior' : 'junior';
             })
-            ->setCustomTransformer("xp", function($xp, $pilot) {
-                return $pilot->role == "sr" ? $xp . "y" : null;
+            ->setCustomTransformer('xp', function ($xp, $pilot) {
+                return $pilot->role == 'sr' ? $xp.'y' : null;
             })
             ->transform($pilots->paginate(30));
     }

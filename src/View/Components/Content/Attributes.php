@@ -12,7 +12,7 @@ class Attributes extends Component
         public string $component,
     ) {
     }
-    
+
     public function render(): callable
     {
         return function () {

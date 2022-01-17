@@ -15,7 +15,7 @@ class EntityListInstanceStateController extends ApiController
         $list->buildListConfig();
         $list->initQueryParams();
 
-        if(!$list->entityStateHandler()->authorize()
+        if (!$list->entityStateHandler()->authorize()
             || !$list->entityStateHandler()->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
@@ -23,8 +23,8 @@ class EntityListInstanceStateController extends ApiController
         return $this->returnCommandResult(
             $list,
             array_merge(
-                $list->entityStateHandler()->execute($instanceId, request()->only("value")),
-                ["value" => request("value")]
+                $list->entityStateHandler()->execute($instanceId, request()->only('value')),
+                ['value' => request('value')]
             )
         );
     }

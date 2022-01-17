@@ -9,7 +9,7 @@ class SharpFormNumberField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
 
-    const FIELD_TYPE = "number";
+    const FIELD_TYPE = 'number';
 
     protected ?int $min = null;
     protected ?int $max = null;
@@ -18,7 +18,7 @@ class SharpFormNumberField extends SharpFormField
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new NumberFormatter);
+        return new static($key, static::FIELD_TYPE, new NumberFormatter());
     }
 
     public function setMin(int $min): self
@@ -52,21 +52,21 @@ class SharpFormNumberField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "min" => "integer",
-            "max" => "integer",
-            "step" => "required|integer",
-            "showControls" => "required|bool",
+            'min'          => 'integer',
+            'max'          => 'integer',
+            'step'         => 'required|integer',
+            'showControls' => 'required|bool',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "min" => $this->min,
-            "max" => $this->max,
-            "step" => $this->step,
-            "showControls" => $this->showControls,
-            "placeholder" => $this->placeholder,
+            'min'          => $this->min,
+            'max'          => $this->max,
+            'step'         => $this->step,
+            'showControls' => $this->showControls,
+            'placeholder'  => $this->placeholder,
         ]);
     }
 }

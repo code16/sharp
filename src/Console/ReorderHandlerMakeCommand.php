@@ -20,6 +20,7 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
         if ($this->option('model')) {
             $replace = $this->buildModelReplacements($replace);
         }
+
         return str_replace(
             array_keys($replace),
             array_values($replace),
@@ -31,7 +32,7 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
     {
         $modelClass = $this->parseModel($this->option('model'));
 
-        if (! class_exists($modelClass)) {
+        if (!class_exists($modelClass)) {
             if ($this->confirm("A {$modelClass} model does not exist. Do you want to generate it?", true)) {
                 $this->call('make:model', ['name' => $modelClass]);
             }
@@ -39,8 +40,8 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
 
         return array_merge($replace, [
             'DummyFullModelClass' => $modelClass,
-            'DummyModelClass' => class_basename($modelClass),
-            'DummyModelVariable' => lcfirst(class_basename($modelClass)),
+            'DummyModelClass'     => class_basename($modelClass),
+            'DummyModelVariable'  => lcfirst(class_basename($modelClass)),
         ]);
     }
 
@@ -52,7 +53,7 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
 
         $model = trim(str_replace('/', '\\', $model), '\\');
 
-        if (! Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
+        if (!Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
             $model = $rootNamespace.$model;
         }
 

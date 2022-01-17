@@ -18,49 +18,50 @@ class PassengerSharpForm extends SharpForm
     use WithSharpFormEloquentUpdater;
     protected ?string $formValidatorClass = PassengerSharpValidator::class;
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormTextField::make("name")
-                    ->setLabel("Name")
+                SharpFormTextField::make('name')
+                    ->setLabel('Name')
             )
             ->addField(
-                SharpFormDateField::make("birth_date")
+                SharpFormDateField::make('birth_date')
                     ->setHasTime(false)
-                    ->setLabel("Birth date")
+                    ->setLabel('Birth date')
             )
             ->addField(
-                SharpFormSelectField::make("gender", ["M"=>"Mr", "F"=>"Mrs"])
+                SharpFormSelectField::make('gender', ['M'=>'Mr', 'F'=>'Mrs'])
                     ->setDisplayAsDropdown()
-                    ->setLabel("Gender")
+                    ->setLabel('Gender')
                     ->setClearable()
             )
             ->addField(
-                SharpFormSelectField::make("travel_category", [
-                    "Business"=>"Business",
-                    "First class"=>"First class",
-                    "Classic"=>"Classic",
-                    "Third class"=>"Third class",
+                SharpFormSelectField::make('travel_category', [
+                    'Business'   => 'Business',
+                    'First class'=> 'First class',
+                    'Classic'    => 'Classic',
+                    'Third class'=> 'Third class',
                 ])
                     ->setDisplayAsDropdown()
-                    ->setLabel("Travel category")
+                    ->setLabel('Travel category')
             )
             ->addField(
-                SharpFormSelectField::make("travel_id",
-                    Travel::orderBy("departure_date")->get()->map(function($travel) {
+                SharpFormSelectField::make(
+                    'travel_id',
+                    Travel::orderBy('departure_date')->get()->map(function ($travel) {
                         return [
-                            "id" => $travel->id,
-                            "label" => $travel->departure_date->format("Y-m-d (H:i)")
-                                . " — " . $travel->destination];
-                        })
+                            'id'    => $travel->id,
+                            'label' => $travel->departure_date->format('Y-m-d (H:i)')
+                                .' — '.$travel->destination, ];
+                    })
                     ->all()
                 )
-                    ->setLabel("Travel")
+                    ->setLabel('Travel')
                     ->setDisplayAsList()
             );
     }
-    
+
     public function buildFormConfig(): void
     {
         $this->configurePageAlert(
@@ -70,38 +71,38 @@ class PassengerSharpForm extends SharpForm
         );
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout
-            ->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withFields("gender|4", "name|8")
-                    ->withSingleField("birth_date");
+            ->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withFields('gender|4', 'name|8')
+                    ->withSingleField('birth_date');
             })
-            ->addColumn(6, function(FormLayoutColumn $column) {
-                $column->withSingleField("travel_id")
-                    ->withSingleField("travel_category");
+            ->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withSingleField('travel_id')
+                    ->withSingleField('travel_category');
             });
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this
-            ->setCustomTransformer('html_help', function($value, Passenger $passenger) {
+            ->setCustomTransformer('html_help', function ($value, Passenger $passenger) {
                 return [
-                    "category" => $passenger->travel_category
+                    'category' => $passenger->travel_category,
                 ];
             })
-            ->transform(Passenger::with("travel")->findOrFail($id));
+            ->transform(Passenger::with('travel')->findOrFail($id));
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
-        $instance = $id ? Passenger::findOrFail($id) : new Passenger;
+        $instance = $id ? Passenger::findOrFail($id) : new Passenger();
 
         $this->save($instance, $data);
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
         Passenger::findOrFail($id)->delete();
     }

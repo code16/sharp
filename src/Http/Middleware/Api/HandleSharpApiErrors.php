@@ -14,31 +14,31 @@ use Illuminate\Validation\ValidationException;
 
 class HandleSharpApiErrors
 {
-
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     * @param string|null              $guard
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
         $response = $next($request);
 
-        if(isset($response->exception) && $response->exception) {
+        if (isset($response->exception) && $response->exception) {
             if ($response->exception instanceof ValidationException) {
                 return $this->handleValidationException($response);
             }
-            
+
             $code = $this->getHttpCodeFor($response->exception);
-            
-            if($code != 500) {
+
+            if ($code != 500) {
                 return response()->json(
-                    ["message" => $response->exception->getMessage()], 
+                    ['message' => $response->exception->getMessage()],
                     $code
                 );
             }
-            
+
             // Let Laravel regular ErrorHandler manage the error
         }
 
@@ -68,7 +68,7 @@ class HandleSharpApiErrors
             return 500;
         }
 
-        if(method_exists($exception, 'getStatusCode')) {
+        if (method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
 
@@ -77,13 +77,14 @@ class HandleSharpApiErrors
 
     /**
      * @param $response
+     *
      * @return JsonResponse
      */
     protected function handleValidationException($response)
     {
         return response()->json([
-            "message" => $response->exception->getMessage(),
-            "errors" => $response->exception->errors()
+            'message' => $response->exception->getMessage(),
+            'errors'  => $response->exception->errors(),
         ], 422);
     }
 }

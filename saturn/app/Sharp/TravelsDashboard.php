@@ -14,19 +14,19 @@ use Illuminate\Support\Facades\DB;
 
 class TravelsDashboard extends SharpDashboard
 {
-    function buildWidgets(WidgetsContainer $widgetsContainer): void
+    public function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
         $widgetsContainer->addWidget(
-            SharpBarGraphWidget::make("travels")
+            SharpBarGraphWidget::make('travels')
                 ->setDisplayHorizontalAxisAsTimeline()
-                ->setTitle("Travel counts " . ($this->queryParams->filterFor("period") ? "(period filtered)" : ""))
+                ->setTitle('Travel counts '.($this->queryParams->filterFor('period') ? '(period filtered)' : ''))
         );
     }
-    
-    function getDashboardCommands(): ?array
+
+    public function getDashboardCommands(): ?array
     {
         return [
-            TravelsDashboardDownloadCommand::class
+            TravelsDashboardDownloadCommand::class,
         ];
     }
 
@@ -34,42 +34,42 @@ class TravelsDashboard extends SharpDashboard
     {
         return [
             TravelsDashboardSpaceshipsFilter::class,
-            TravelsDashboardPeriodFilter::class
+            TravelsDashboardPeriodFilter::class,
         ];
     }
 
-    function buildDashboardLayout(DashboardLayout $dashboardLayout): void
+    public function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        $dashboardLayout->addFullWidthWidget("travels");
+        $dashboardLayout->addFullWidthWidget('travels');
     }
 
-    function buildWidgetsData(): void
+    public function buildWidgetsData(): void
     {
         $query = DB::table('travels')
             ->select(DB::raw("DATE_FORMAT(departure_date,'%Y-%m') as label, count(*) as value"));
 
-        if($spaceships = $this->queryParams->filterFor(TravelsDashboardSpaceshipsFilter::class)) {
-            $query->whereIn("spaceship_id", (array)$spaceships);
+        if ($spaceships = $this->queryParams->filterFor(TravelsDashboardSpaceshipsFilter::class)) {
+            $query->whereIn('spaceship_id', (array) $spaceships);
         }
 
         $query->groupBy(DB::raw('label'));
 
-        if($departurePeriodRange = $this->queryParams->filterFor(TravelsDashboardPeriodFilter::class)) {
-            $query->whereBetween("departure_date", [
+        if ($departurePeriodRange = $this->queryParams->filterFor(TravelsDashboardPeriodFilter::class)) {
+            $query->whereBetween('departure_date', [
                 $departurePeriodRange['start'],
-                $departurePeriodRange['end']
+                $departurePeriodRange['end'],
             ]);
         }
 
         $data = $query
             ->get()
-            ->pluck("value", "label");
+            ->pluck('value', 'label');
 
         $this->addGraphDataSet(
-            "travels",
+            'travels',
             SharpGraphWidgetDataSet::make($data)
-                ->setLabel("Travels")
-                ->setColor("red")
+                ->setLabel('Travels')
+                ->setColor('red')
         );
     }
 }

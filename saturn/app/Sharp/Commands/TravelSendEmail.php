@@ -13,20 +13,20 @@ class TravelSendEmail extends InstanceCommand
 {
     public function label(): string
     {
-        return "Send email";
+        return 'Send email';
     }
-    
+
     public function buildCommandConfig(): void
     {
-        $this->configureFormModalTitle("Send email")
-            ->configureDescription("Will pretend to send an email to all the passengers of this flight.");
+        $this->configureFormModalTitle('Send email')
+            ->configureDescription('Will pretend to send an email to all the passengers of this flight.');
     }
 
     public function execute($instanceId, array $data = []): array
     {
         $this->validate($data, [
-            "subject" => "required|array",
-            "message" => 'required|array'
+            'subject' => 'required|array',
+            'message' => 'required|array',
         ]);
 
         return $this->info('Emails have been sent.');
@@ -36,17 +36,17 @@ class TravelSendEmail extends InstanceCommand
     {
         $formFields
             ->addField(
-                SharpFormHtmlField::make("explanation")
+                SharpFormHtmlField::make('explanation')
                     ->setInlineTemplate('This message will be sent to the passenger preferred language.')
             )
             ->addField(
-                SharpFormTextField::make("subject")
-                    ->setLabel("Subject")
+                SharpFormTextField::make('subject')
+                    ->setLabel('Subject')
                     ->setLocalized()
             )
             ->addField(
-                SharpFormTextareaField::make("message")
-                    ->setLabel("Message")
+                SharpFormTextareaField::make('message')
+                    ->setLabel('Message')
                     ->setLocalized()
             );
     }
@@ -54,18 +54,18 @@ class TravelSendEmail extends InstanceCommand
     protected function initialData($instanceId): array
     {
         return $this
-            ->setCustomTransformer("subject", function($value, Travel $instance) {
+            ->setCustomTransformer('subject', function ($value, Travel $instance) {
                 return [
-                    "fr" => "écrire un sujet",
-                    "en" => "write a subject",
-                    "it" => "scrivi un oggetto",
+                    'fr' => 'écrire un sujet',
+                    'en' => 'write a subject',
+                    'it' => 'scrivi un oggetto',
                 ];
             })
-            ->setCustomTransformer("message", function($value, Travel $instance) {
+            ->setCustomTransformer('message', function ($value, Travel $instance) {
                 return [
-                    "fr" => "Le vol a été annulé.",
-                    "en" => "The flight has been cancelled.",
-                    "it" => "Il volo è stato cancellato.",
+                    'fr' => 'Le vol a été annulé.',
+                    'en' => 'The flight has been cancelled.',
+                    'it' => 'Il volo è stato cancellato.',
                 ];
             })
             ->transform(
@@ -75,6 +75,6 @@ class TravelSendEmail extends InstanceCommand
 
     public function getDataLocalizations(): array
     {
-        return ["en", "fr", "it"];
+        return ['en', 'fr', 'it'];
     }
 }

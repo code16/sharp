@@ -9,20 +9,19 @@ use Illuminate\Support\Str;
 
 class HtmlFormatterTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
         $value = Str::random();
 
-        $this->assertEquals($value, (new HtmlFormatter())->toFront(SharpFormHtmlField::make("html"), $value));
+        $this->assertEquals($value, (new HtmlFormatter())->toFront(SharpFormHtmlField::make('html'), $value));
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
         $this->assertNull(
-            (new HtmlFormatter())->fromFront(SharpFormHtmlField::make("html"), "attribute", Str::random())
+            (new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random())
         );
     }
 }

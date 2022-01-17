@@ -25,51 +25,51 @@ use Code16\Sharp\Utils\Transformers\Attributes\MarkdownAttributeTransformer;
 
 class SpaceshipSharpShow extends SharpShow
 {
-    function buildShowFields(FieldsContainer $showFields): void
+    public function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
             ->addField(
-                SharpShowTitleField::make("name")
+                SharpShowTitleField::make('name')
                     ->setTitleLevel(2)
             )
             ->addField(
-                SharpShowTextField::make("type:label")
-                    ->setLabel("Type")
+                SharpShowTextField::make('type:label')
+                    ->setLabel('Type')
             )
             ->addField(
-                SharpShowTextField::make("serial_number")
-                    ->setLabel("S/N")
+                SharpShowTextField::make('serial_number')
+                    ->setLabel('S/N')
             )
             ->addField(
-                SharpShowTextField::make("brand")
-                    ->setLabel("Brand / model")
+                SharpShowTextField::make('brand')
+                    ->setLabel('Brand / model')
             )
             ->addField(
-                SharpShowFileField::make("manual")
-                    ->setLabel("Manual")
-                    ->setStorageDisk("local")
-                    ->setStorageBasePath("data/Spaceship/{id}/Manual")
+                SharpShowFileField::make('manual')
+                    ->setLabel('Manual')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/Spaceship/{id}/Manual')
             )
             ->addField(
-                SharpShowPictureField::make("picture")
+                SharpShowPictureField::make('picture')
             )
             ->addField(
-                SharpShowTextField::make("description")
+                SharpShowTextField::make('description')
                     ->collapseToWordCount(50)
             )
             ->addField(
-                SharpShowListField::make("pictures")
-                    ->setLabel("additional pictures")
+                SharpShowListField::make('pictures')
+                    ->setLabel('additional pictures')
                     ->addItemField(
-                        SharpShowFileField::make("file")
-                            ->setStorageDisk("local")
-                            ->setStorageBasePath("data/Spaceship/{id}/Pictures")
+                        SharpShowFileField::make('file')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data/Spaceship/{id}/Pictures')
                     )
-                    ->addItemField(SharpShowTextField::make("legend")->setLabel("Legend"))
+                    ->addItemField(SharpShowTextField::make('legend')->setLabel('Legend'))
             )
             ->addField(
-                SharpShowEntityListField::make("pilots", "spaceship_pilot")
-                    ->setLabel("Pilots")
+                SharpShowEntityListField::make('pilots', 'spaceship_pilot')
+                    ->setLabel('Pilots')
                     ->hideFilterWithValue(PilotSpaceshipFilter::class, function ($instanceId) {
                         return $instanceId;
                     })
@@ -78,89 +78,89 @@ class SpaceshipSharpShow extends SharpShow
                     ->showCreateButton()
             );
     }
-    
+
     public function getInstanceCommands(): ?array
     {
         return [
-            "message" => SpaceshipSendMessage::class,
-            "preview" => SpaceshipPreview::class,
-            "---",
-            "external" => SpaceshipExternalLink::class
+            'message' => SpaceshipSendMessage::class,
+            'preview' => SpaceshipPreview::class,
+            '---',
+            'external' => SpaceshipExternalLink::class,
         ];
     }
 
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         $this
             ->configurePageAlert(
                 "<span v-if='is_building'>Warning: this spaceship is still in conception or building phase.</span>",
                 static::$pageAlertLevelWarning,
-                "globalMessage"
+                'globalMessage'
             )
-            ->configureBreadcrumbCustomLabelAttribute("name")
-            ->configureEntityState("state", SpaceshipEntityState::class);
+            ->configureBreadcrumbCustomLabelAttribute('name')
+            ->configureEntityState('state', SpaceshipEntityState::class);
     }
 
-    function buildShowLayout(ShowLayout $showLayout): void
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('Identity', function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(7, function(ShowLayoutColumn $column) {
+                    ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField("name")
-                            ->withSingleField("type:label")
-                            ->withSingleField("serial_number")
-                            ->withSingleField("brand")
-                            ->withSingleField("manual");
+                            ->withSingleField('name')
+                            ->withSingleField('type:label')
+                            ->withSingleField('serial_number')
+                            ->withSingleField('brand')
+                            ->withSingleField('manual');
                     })
-                    ->addColumn(5, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("picture");
+                    ->addColumn(5, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('picture');
                     });
             })
-            ->addSection('Description', function(ShowLayoutSection $section) {
+            ->addSection('Description', function (ShowLayoutSection $section) {
                 $section
 //                    ->setCollapsable()
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("description");
+                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('description');
                     })
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("pictures", function(ShowLayoutColumn $listItem) {
-                            $listItem->withSingleField("file")
-                                ->withSingleField("legend");
+                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('pictures', function (ShowLayoutColumn $listItem) {
+                            $listItem->withSingleField('file')
+                                ->withSingleField('legend');
                         });
                     });
             })
-            ->addEntityListSection("pilots", function (ShowLayoutSection $section) {
+            ->addEntityListSection('pilots', function (ShowLayoutSection $section) {
                 $section->setCollapsable();
             });
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this
-            ->setCustomTransformer("globalMessage", function($value, Spaceship $spaceship) {
+            ->setCustomTransformer('globalMessage', function ($value, Spaceship $spaceship) {
                 return [
-                    "is_building" => in_array($spaceship->state, ["building", "conception"]) 
+                    'is_building' => in_array($spaceship->state, ['building', 'conception']),
                 ];
             })
-            ->setCustomTransformer("brand", function($value, Spaceship $spaceship) {
+            ->setCustomTransformer('brand', function ($value, Spaceship $spaceship) {
                 return sprintf(
-                    "%s / %s",
+                    '%s / %s',
                     $spaceship->brand ?: '<em>no brand</em>',
                     $spaceship->model ?: '<em>no model</em>'
                 );
             })
-            ->setCustomTransformer("name", function($value, Spaceship $spaceship) {
+            ->setCustomTransformer('name', function ($value, Spaceship $spaceship) {
                 return $spaceship->name;
             })
-            ->setCustomTransformer("manual", new SharpUploadModelFormAttributeTransformer(false))
-            ->setCustomTransformer("picture", new SharpUploadModelThumbnailUrlTransformer(140))
-            ->setCustomTransformer("pictures", new SharpUploadModelFormAttributeTransformer(true, 200, 200))
-            ->setCustomTransformer("pictures[legend]", function($value, $instance) {
-                return $instance->legend["en"] ?? "";
+            ->setCustomTransformer('manual', new SharpUploadModelFormAttributeTransformer(false))
+            ->setCustomTransformer('picture', new SharpUploadModelThumbnailUrlTransformer(140))
+            ->setCustomTransformer('pictures', new SharpUploadModelFormAttributeTransformer(true, 200, 200))
+            ->setCustomTransformer('pictures[legend]', function ($value, $instance) {
+                return $instance->legend['en'] ?? '';
             })
-            ->setCustomTransformer("description", (new MarkdownAttributeTransformer())->setNewLineOnCarriageReturn())
-            ->transform(Spaceship::with("manual", "pictures")->findOrFail($id));
+            ->setCustomTransformer('description', (new MarkdownAttributeTransformer())->setNewLineOnCarriageReturn())
+            ->transform(Spaceship::with('manual', 'pictures')->findOrFail($id));
     }
 }

@@ -19,13 +19,14 @@ abstract class BaseApiTest extends SharpTestCase
         }
         touch(public_path('vendor/sharp/mix-manifest.json'));
     }
-    
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->app['config']->set(
-            'app.key', 'base64:'.base64_encode(random_bytes(
+            'app.key',
+            'base64:'.base64_encode(random_bytes(
                 $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
             ))
         );
@@ -33,7 +34,7 @@ abstract class BaseApiTest extends SharpTestCase
 
     protected function login()
     {
-        $this->actingAs(new User);
+        $this->actingAs(new User());
     }
 
     protected function buildTheWorld($singleShow = false)
@@ -42,7 +43,7 @@ abstract class BaseApiTest extends SharpTestCase
             'sharp.entities.person',
             $singleShow ? SinglePersonEntity::class : PersonEntity::class
         );
-        
+
         $this->app['config']->set(
             'sharp.dashboards.personal_dashboard',
             PersonalDashboardEntity::class

@@ -8,25 +8,27 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpFormCheckFieldTest extends SharpTestCase
 {
     /** @test */
-    function only_default_values_are_set()
+    public function only_default_values_are_set()
     {
-        $formField = SharpFormCheckField::make("check", "text");
+        $formField = SharpFormCheckField::make('check', 'text');
 
-        $this->assertEquals([
-                "key" => "check", "type" => "check",
-                "text" => "text"
-            ], $formField->toArray()
+        $this->assertEquals(
+            [
+                'key'  => 'check', 'type' => 'check',
+                'text' => 'text',
+            ],
+            $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_text()
+    public function we_can_define_text()
     {
-        $formField = SharpFormCheckField::make("check", "text")
-            ->setText("text 2");
+        $formField = SharpFormCheckField::make('check', 'text')
+            ->setText('text 2');
 
         $this->assertArraySubset(
-            ["text" => "text 2"],
+            ['text' => 'text 2'],
             $formField->toArray()
         );
     }

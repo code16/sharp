@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 trait HandleInstanceCommands
 {
     use CommonCommandUtils;
-    
+
     private ?Collection $instanceCommandHandlers = null;
 
     /**
@@ -22,7 +22,7 @@ trait HandleInstanceCommands
     {
         $this->appendCommandsToConfig(
             $this->getInstanceCommandsHandlers(),
-            $config, 
+            $config,
             $instanceId
         );
     }
@@ -40,12 +40,12 @@ trait HandleInstanceCommands
             ->filter->authorize()
 
             // ... and Entity State if present...
-            ->when($this->entityStateHandler, function(Collection $collection) {
+            ->when($this->entityStateHandler, function (Collection $collection) {
                 return $collection->push($this->entityStateHandler);
             })
 
             // ... and for each of them, set authorization for every $item
-            ->each(function($commandHandler) use($items) {
+            ->each(function ($commandHandler) use ($items) {
                 foreach ($items as $item) {
                     $commandHandler->checkAndStoreAuthorizationFor(
                         $item[$this->instanceIdAttribute]
@@ -54,19 +54,20 @@ trait HandleInstanceCommands
             });
     }
 
-    public final function getInstanceCommandsHandlers(): Collection
+    final public function getInstanceCommandsHandlers(): Collection
     {
-        if($this->instanceCommandHandlers === null) {
+        if ($this->instanceCommandHandlers === null) {
             $groupIndex = 0;
             $this->instanceCommandHandlers = collect($this->getInstanceCommands())
-                ->map(function($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
-                    if(is_string($commandHandlerOrClassName)) {
-                        if(Str::startsWith($commandHandlerOrClassName, "-")) {
+                ->map(function ($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
+                    if (is_string($commandHandlerOrClassName)) {
+                        if (Str::startsWith($commandHandlerOrClassName, '-')) {
                             // It's a separator
                             $groupIndex++;
+
                             return null;
                         }
-                        if(!class_exists($commandHandlerOrClassName)) {
+                        if (!class_exists($commandHandlerOrClassName)) {
                             throw new SharpException("Handler for instance command [{$commandHandlerOrClassName}] is invalid");
                         }
                         $commandHandler = app($commandHandlerOrClassName);
@@ -74,29 +75,29 @@ trait HandleInstanceCommands
                         $commandHandler = $commandHandlerOrClassName;
                     }
 
-                    if(!$commandHandler instanceof InstanceCommand) {
-                        throw new SharpException("Handler class for instance command [{$commandHandlerOrClassName}] is not an subclass of " . InstanceCommand::class);
+                    if (!$commandHandler instanceof InstanceCommand) {
+                        throw new SharpException("Handler class for instance command [{$commandHandlerOrClassName}] is not an subclass of ".InstanceCommand::class);
                     }
 
                     $commandHandler->setGroupIndex($groupIndex);
-                    if(is_string($commandKey)) {
+                    if (is_string($commandKey)) {
                         $commandHandler->setCommandKey($commandKey);
                     }
-                    
+
                     return $commandHandler;
                 })
                 ->filter()
                 ->values();
         }
-        
+
         return $this->instanceCommandHandlers;
     }
 
-    public final function findInstanceCommandHandler(string $commandKey): ?InstanceCommand
+    final public function findInstanceCommandHandler(string $commandKey): ?InstanceCommand
     {
         return $this
             ->getInstanceCommandsHandlers()
-            ->filter(function(InstanceCommand $command) use ($commandKey) {
+            ->filter(function (InstanceCommand $command) use ($commandKey) {
                 return $command->getCommandKey() === $commandKey;
             })
             ->first();

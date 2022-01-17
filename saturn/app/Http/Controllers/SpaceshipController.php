@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Spaceship;
-use Illuminate\Http\Request;
 
 class SpaceshipController extends Controller
 {

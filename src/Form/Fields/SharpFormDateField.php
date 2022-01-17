@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Fields\Formatters\DateFormatter;
 
 class SharpFormDateField extends SharpFormField
 {
-    const FIELD_TYPE = "date";
+    const FIELD_TYPE = 'date';
 
     protected bool $hasDate = true;
     protected bool $hasTime = false;
@@ -92,46 +92,47 @@ class SharpFormDateField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "hasDate" => "required|boolean",
-            "hasTime" => "required|boolean",
-            "displayFormat" => "required",
-            "minTime" => "regex:/[0-9]{2}:[0-9]{2}/",
-            "maxTime" => "regex:/[0-9]{2}:[0-9]{2}/",
-            "stepTime" => "integer|min:1|max:60",
-            "mondayFirst" => "required|boolean",
+            'hasDate'       => 'required|boolean',
+            'hasTime'       => 'required|boolean',
+            'displayFormat' => 'required',
+            'minTime'       => 'regex:/[0-9]{2}:[0-9]{2}/',
+            'maxTime'       => 'regex:/[0-9]{2}:[0-9]{2}/',
+            'stepTime'      => 'integer|min:1|max:60',
+            'mondayFirst'   => 'required|boolean',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "hasDate" => $this->hasDate,
-            "hasTime" => $this->hasTime,
-            "minTime" => $this->minTime,
-            "maxTime" => $this->maxTime,
-            "stepTime" => $this->stepTime,
-            "mondayFirst" => $this->mondayFirst,
-            "displayFormat" => $this->displayFormat ?: $this->detectDisplayFormat(),
-            "language" => $this->language
+            'hasDate'       => $this->hasDate,
+            'hasTime'       => $this->hasTime,
+            'minTime'       => $this->minTime,
+            'maxTime'       => $this->maxTime,
+            'stepTime'      => $this->stepTime,
+            'mondayFirst'   => $this->mondayFirst,
+            'displayFormat' => $this->displayFormat ?: $this->detectDisplayFormat(),
+            'language'      => $this->language,
         ]);
     }
 
     private function formatTime(int $hours, int $minutes): string
     {
-        return str_pad($hours, 2, "0", STR_PAD_LEFT)
-            . ":"
-            . str_pad($minutes, 2, "0", STR_PAD_LEFT);
+        return str_pad($hours, 2, '0', STR_PAD_LEFT)
+            .':'
+            .str_pad($minutes, 2, '0', STR_PAD_LEFT);
     }
 
     protected function detectDisplayFormat(): string
     {
-        if($this->hasDate()) {
-            if($this->hasTime()) {
-                return "YYYY-MM-DD HH:mm";
+        if ($this->hasDate()) {
+            if ($this->hasTime()) {
+                return 'YYYY-MM-DD HH:mm';
             }
-            return "YYYY-MM-DD";
+
+            return 'YYYY-MM-DD';
         }
 
-        return $this->hasTime() ? "HH:mm" : "";
+        return $this->hasTime() ? 'HH:mm' : '';
     }
 }

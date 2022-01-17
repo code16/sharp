@@ -14,7 +14,7 @@ class AddStateToPilots extends Migration
     public function up()
     {
         Schema::table('pilots', function (Blueprint $table) {
-            $table->string("state")->default("active");
+            $table->string('state')->default('active');
         });
     }
 }

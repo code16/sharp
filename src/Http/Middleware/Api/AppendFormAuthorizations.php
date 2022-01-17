@@ -12,7 +12,9 @@ use Illuminate\Http\Request;
  */
 class AppendFormAuthorizations
 {
-    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager) {}
+    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager)
+    {
+    }
 
     public function handle(Request $request, Closure $next)
     {
@@ -26,13 +28,13 @@ class AppendFormAuthorizations
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse): JsonResponse
     {
         list($entityKey, $instanceId) = $this->determineEntityKeyAndInstanceId();
-        
+
         $data = $jsonResponse->getData();
         $data->authorizations = [
-            "create" => $this->sharpAuthorizationManager->isAllowed("create", $entityKey),
-            "view" => $this->sharpAuthorizationManager->isAllowed("view", $entityKey, $instanceId),
-            "update" => $this->sharpAuthorizationManager->isAllowed("update", $entityKey, $instanceId),
-            "delete" => $this->sharpAuthorizationManager->isAllowed("delete", $entityKey, $instanceId)
+            'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
+            'view'   => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
+            'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
+            'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
         ];
         $jsonResponse->setData($data);
 

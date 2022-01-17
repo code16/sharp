@@ -8,6 +8,6 @@ class TravelsDashboardPeriodFilter extends DashboardDateRangeFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("period");
+        $this->configureLabel('period');
     }
 }

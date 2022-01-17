@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 trait CanCreateRelatedModel
 {
-
     /**
      * @param $instance
      * @param $attribute
      * @param array $data
+     *
      * @return mixed
      */
     protected function createRelatedModel($instance, $attribute, $data = [])

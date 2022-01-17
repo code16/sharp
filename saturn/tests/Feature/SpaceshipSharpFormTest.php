@@ -13,7 +13,8 @@ use Tests\TestCase;
 
 class SpaceshipSharpFormTest extends TestCase
 {
-    use DatabaseMigrations, SharpAssertions;
+    use DatabaseMigrations;
+    use SharpAssertions;
 
     protected function setUp(): void
     {
@@ -25,120 +26,121 @@ class SpaceshipSharpFormTest extends TestCase
     /** @test */
     public function we_can_get_a_valid_spaceship_update_form()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
 
-        $spaceship = factory(Spaceship::class)->create(["id" => 2]);
+        $spaceship = factory(Spaceship::class)->create(['id' => 2]);
 
-        $this->getSharpForm("spaceship", $spaceship->id)
-            ->assertSharpFormHasFieldOfType("name", SharpFormTextField::class)
+        $this->getSharpForm('spaceship', $spaceship->id)
+            ->assertSharpFormHasFieldOfType('name', SharpFormTextField::class)
             ->assertSharpFormHasFields([
-                "name", "picture", "picture:legend", "capacity", "type_id",
-                "construction_date", "pilots", "reviews", "features"
+                'name', 'picture', 'picture:legend', 'capacity', 'type_id',
+                'construction_date', 'pilots', 'reviews', 'features',
             ]);
     }
 
     /** @test */
     public function we_can_send_a_message_through_command()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
-        factory(Spaceship::class)->create(["id" => 22, "messages_sent_count" => 0]);
-        
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
+        factory(Spaceship::class)->create(['id' => 22, 'messages_sent_count' => 0]);
+
         $this
             ->callSharpInstanceCommandFromList(
-                "spaceship", 
-                22, 
-                SpaceshipSendMessage::class, 
-                ["message" => "lol"]
+                'spaceship',
+                22,
+                SpaceshipSendMessage::class,
+                ['message' => 'lol']
             )
             ->assertOk();
-        
-        $this->assertDatabaseHas("spaceships", ["id"=>22, "messages_sent_count"=>1]);
+
+        $this->assertDatabaseHas('spaceships', ['id'=>22, 'messages_sent_count'=>1]);
     }
 
     /** @test */
     public function we_can_get_a_valid_spaceship_create_form()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
 
         factory(SpaceshipType::class)->create();
 
-        $this->getSharpForm("spaceship")
+        $this->getSharpForm('spaceship')
             ->assertSharpFormHasFields([
-                "name", "picture", "picture:legend", "capacity", "type_id",
-                "construction_date", "pilots", "reviews", "features"
+                'name', 'picture', 'picture:legend', 'capacity', 'type_id',
+                'construction_date', 'pilots', 'reviews', 'features',
             ]);
     }
 
     /** @test */
     public function we_are_authorized_to_update_a_spaceship_with_an_even_id()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
 
-        $spaceship = factory(Spaceship::class)->create(["id"=>2]);
+        $spaceship = factory(Spaceship::class)->create(['id'=>2]);
 
-        $this->getSharpForm("spaceship", $spaceship->id)
-            ->assertSharpHasAuthorization("update");
+        $this->getSharpForm('spaceship', $spaceship->id)
+            ->assertSharpHasAuthorization('update');
     }
 
     /** @test */
     public function we_are_not_authorize_to_update_a_spaceship_with_an_odd_id()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
 
-        $spaceship = factory(Spaceship::class)->create(["id"=>11]);
+        $spaceship = factory(Spaceship::class)->create(['id'=>11]);
 
-        $this->getSharpForm("spaceship", $spaceship->id)
-            ->assertSharpHasNotAuthorization("update");
+        $this->getSharpForm('spaceship', $spaceship->id)
+            ->assertSharpHasNotAuthorization('update');
     }
 
     /** @test */
     public function we_can_update_a_spaceship()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
 
-        $spaceship = factory(Spaceship::class)->create(["id" => 2, "name" => null]);
+        $spaceship = factory(Spaceship::class)->create(['id' => 2, 'name' => null]);
 
         $this
             ->updateSharpForm(
-                "spaceship", 
-                $spaceship->id, 
+                'spaceship',
+                $spaceship->id,
                 array_merge(
-                    $spaceship->toArray(), 
+                    $spaceship->toArray(),
                     [
-                        "name" => ["fr" => "test"],
-                        "capacity" => 10
+                        'name'     => ['fr' => 'test'],
+                        'capacity' => 10,
                     ]
                 )
             )
             ->assertStatus(200);
 
-        $this->assertDatabaseHas("spaceships", [
-            "id" => 2,
-            "name" => json_encode(["fr" => "test"]),
-            "capacity" => 10000
+        $this->assertDatabaseHas('spaceships', [
+            'id'       => 2,
+            'name'     => json_encode(['fr' => 'test']),
+            'capacity' => 10000,
         ]);
     }
 
     /** @test */
     public function we_can_create_a_spaceship()
     {
-        $this->loginAsSharpUser(factory(User::class)->create(["group" => "sharp"]));
+        $this->loginAsSharpUser(factory(User::class)->create(['group' => 'sharp']));
 
         $this
-            ->storeSharpForm("spaceship", 
+            ->storeSharpForm(
+                'spaceship',
                 array_merge(
-                    factory(Spaceship::class)->make()->toArray(), 
+                    factory(Spaceship::class)->make()->toArray(),
                     [
-                        "name" => ["fr" => "test_create"],
-                        "capacity" => 10
+                        'name'     => ['fr' => 'test_create'],
+                        'capacity' => 10,
                     ]
                 )
             )
             ->assertOk();
 
-        $this->assertDatabaseHas("spaceships", [
-            "name" => json_encode(["fr" => "test_create"]),
-            "capacity" => 10000
+        $this->assertDatabaseHas('spaceships', [
+            'name'     => json_encode(['fr' => 'test_create']),
+            'capacity' => 10000,
         ]);
     }
 }

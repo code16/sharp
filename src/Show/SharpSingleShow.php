@@ -7,14 +7,14 @@ use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleShow extends SharpShow
 {
-    public final function showConfig(mixed $instanceId, array $config = []): array
+    final public function showConfig(mixed $instanceId, array $config = []): array
     {
         return parent::showConfig(null, [
-            "isSingle" => true
+            'isSingle' => true,
         ]);
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this->findSingle();
     }
@@ -25,7 +25,7 @@ abstract class SharpSingleShow extends SharpShow
             ? app($stateHandlerOrClassName)
             : $stateHandlerOrClassName;
 
-        if(!$entityStateHandler instanceof SingleEntityState) {
+        if (!$entityStateHandler instanceof SingleEntityState) {
             throw new SharpException(
                 sprintf(
                     "Handler class for entity state handler [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
@@ -41,5 +41,5 @@ abstract class SharpSingleShow extends SharpShow
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      */
-    abstract function findSingle(): array;
+    abstract public function findSingle(): array;
 }

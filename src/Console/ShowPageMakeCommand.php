@@ -32,8 +32,8 @@ class ShowPageMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/show-page.model.stub'
-            : __DIR__ . '/stubs/show-page.stub';
+            ? __DIR__.'/stubs/show-page.model.stub'
+            : __DIR__.'/stubs/show-page.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

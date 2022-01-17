@@ -10,13 +10,14 @@ class SelectFormatter extends SharpFieldFormatter
     /**
      * @param SharpFormField $field
      * @param $value
+     *
      * @return mixed
      */
-    function toFront(SharpFormField $field, $value)
+    public function toFront(SharpFormField $field, $value)
     {
-        if($field->multiple()) {
-            return collect((array)$value)
-                ->map(function($item) use($field) {
+        if ($field->multiple()) {
+            return collect((array) $value)
+                ->map(function ($item) use ($field) {
                     $item = ArrayConverter::modelToArray($item);
 
                     return is_array($item)
@@ -24,8 +25,7 @@ class SelectFormatter extends SharpFieldFormatter
                         : $item;
                 })
                 ->all();
-
-        } elseif(is_array($value)) {
+        } elseif (is_array($value)) {
             // Strip other values is not configured to be multiple
             return $value[0];
         }
@@ -35,21 +35,21 @@ class SelectFormatter extends SharpFieldFormatter
 
     /**
      * @param SharpFormField $field
-     * @param string $attribute
+     * @param string         $attribute
      * @param $value
+     *
      * @return mixed
      */
-    function fromFront(SharpFormField $field, string $attribute, $value)
+    public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        if($field->multiple()) {
+        if ($field->multiple()) {
             // We must transform items into associative arrays with the "id" key
-            return collect((array)$value)
-                ->map(function ($item) use($field) {
+            return collect((array) $value)
+                ->map(function ($item) use ($field) {
                     return [$field->idAttribute() => $item];
                 })
                 ->all();
-
-        } elseif(is_array($value)) {
+        } elseif (is_array($value)) {
             return $value[0];
         }
 

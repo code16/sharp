@@ -9,35 +9,35 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormEditorField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder,
-        SharpFormFieldWithUpload,
-        SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithUpload;
+    use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "editor";
+    const FIELD_TYPE = 'editor';
 
-    const B = "bold";
-    const I = "italic";
-    const HIGHLIGHT = "highlight";
-    const SMALL = "small";
-    const UL = "bullet-list";
-    const OL = "ordered-list";
-    const SEPARATOR = "|";
-    const A = "link";
-    const H1 = "heading-1";
-    const H2 = "heading-2";
-    const H3 = "heading-3";
-    const CODE = "code";
-    const QUOTE = "blockquote";
-    const UPLOAD_IMAGE = "upload-image";
-    const UPLOAD = "upload";
-    const HR = "horizontal-rule";
-    const TABLE = "table";
-    const IFRAME = "iframe";
-    const RAW_HTML = "html";
-    const UNDO = "undo";
-    const REDO = "redo";
+    const B = 'bold';
+    const I = 'italic';
+    const HIGHLIGHT = 'highlight';
+    const SMALL = 'small';
+    const UL = 'bullet-list';
+    const OL = 'ordered-list';
+    const SEPARATOR = '|';
+    const A = 'link';
+    const H1 = 'heading-1';
+    const H2 = 'heading-2';
+    const H3 = 'heading-3';
+    const CODE = 'code';
+    const QUOTE = 'blockquote';
+    const UPLOAD_IMAGE = 'upload-image';
+    const UPLOAD = 'upload';
+    const HR = 'horizontal-rule';
+    const TABLE = 'table';
+    const IFRAME = 'iframe';
+    const RAW_HTML = 'html';
+    const UNDO = 'undo';
+    const REDO = 'redo';
 
-    /** @deprecated use UPLOAD */ const DOC = "upload";
+/** @deprecated use UPLOAD */ const DOC = 'upload';
 
     protected int $minHeight = 200;
     protected ?int $maxHeight = null;
@@ -94,23 +94,23 @@ class SharpFormEditorField extends SharpFormField
     public function setRenderContentAsMarkdown(bool $renderAsMarkdown = true): self
     {
         $this->renderAsMarkdown = $renderAsMarkdown;
-        
+
         return $this;
     }
 
     protected function validationRules(): array
     {
         return [
-            "minHeight" => "required|integer",
-            "maxHeight" => "integer|nullable",
-            "toolbar" => "array|nullable",
-            "maxImageSize" => "numeric",
-            "ratioX" => "integer|nullable",
-            "ratioY" => "integer|nullable",
-            "transformable" => "boolean",
-            "transformableFileTypes" => "array",
-            "transformKeepOriginal" => "boolean",
-            "markdown" => "boolean",
+            'minHeight'              => 'required|integer',
+            'maxHeight'              => 'integer|nullable',
+            'toolbar'                => 'array|nullable',
+            'maxImageSize'           => 'numeric',
+            'ratioX'                 => 'integer|nullable',
+            'ratioY'                 => 'integer|nullable',
+            'transformable'          => 'boolean',
+            'transformableFileTypes' => 'array',
+            'transformKeepOriginal'  => 'boolean',
+            'markdown'               => 'boolean',
         ];
     }
 
@@ -119,15 +119,15 @@ class SharpFormEditorField extends SharpFormField
         return parent::buildArray(
             array_merge(
                 [
-                    "minHeight" => $this->minHeight,
-                    "maxHeight" => $this->maxHeight,
-                    "toolbar" => $this->showToolbar ? $this->toolbar : null,
-                    "placeholder" => $this->placeholder,
-                    "localized" => $this->localized,
-                    "markdown" => $this->renderAsMarkdown,
-                    "innerComponents" => [
-                        "upload" => $this->innerComponentUploadConfiguration()
-                    ]
+                    'minHeight'       => $this->minHeight,
+                    'maxHeight'       => $this->maxHeight,
+                    'toolbar'         => $this->showToolbar ? $this->toolbar : null,
+                    'placeholder'     => $this->placeholder,
+                    'localized'       => $this->localized,
+                    'markdown'        => $this->renderAsMarkdown,
+                    'innerComponents' => [
+                        'upload' => $this->innerComponentUploadConfiguration(),
+                    ],
                 ],
                 $this->editorCustomConfiguration()
             )
@@ -137,21 +137,21 @@ class SharpFormEditorField extends SharpFormField
     protected function innerComponentUploadConfiguration(): array
     {
         $array = [
-            "maxFileSize" => $this->maxFileSize ?: 2,
-            "transformable" => $this->transformable,
+            'maxFileSize'   => $this->maxFileSize ?: 2,
+            'transformable' => $this->transformable,
         ];
 
-        if($this->cropRatio) {
-            $array["ratioX"] = (int)$this->cropRatio[0];
-            $array["ratioY"] = (int)$this->cropRatio[1];
-            $array["transformKeepOriginal"] = $this->transformKeepOriginal;
-            $array["transformableFileTypes"] = $this->transformableFileTypes;
+        if ($this->cropRatio) {
+            $array['ratioX'] = (int) $this->cropRatio[0];
+            $array['ratioY'] = (int) $this->cropRatio[1];
+            $array['transformKeepOriginal'] = $this->transformKeepOriginal;
+            $array['transformableFileTypes'] = $this->transformableFileTypes;
         }
-        
-        if(!$this->fileFilter) {
+
+        if (!$this->fileFilter) {
             $this->setFileFilterImages();
         }
-        $array["fileFilter"] = $this->fileFilter;
+        $array['fileFilter'] = $this->fileFilter;
 
         return $array;
     }
@@ -160,8 +160,8 @@ class SharpFormEditorField extends SharpFormField
     {
         return $this->renderAsMarkdown
             ? [
-                "tightListsOnly" => config("sharp.markdown_editor.tight_lists_only"),
-                "nl2br" => config("sharp.markdown_editor.nl2br"),
+                'tightListsOnly' => config('sharp.markdown_editor.tight_lists_only'),
+                'nl2br'          => config('sharp.markdown_editor.nl2br'),
             ]
             : [];
     }

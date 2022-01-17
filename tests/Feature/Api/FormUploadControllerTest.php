@@ -12,7 +12,7 @@ class FormUploadControllerTest extends BaseApiTest
         parent::setUp();
 
         config(['sharp.uploads.tmp_dir' => 'tmp']);
-        File::deleteDirectory(storage_path("app/tmp"));
+        File::deleteDirectory(storage_path('app/tmp'));
 
         // Must use this to login & set APP_KEY
         $this->buildTheWorld();
@@ -20,35 +20,35 @@ class FormUploadControllerTest extends BaseApiTest
     }
 
     /** @test */
-    function we_can_upload_a_file()
+    public function we_can_upload_a_file()
     {
         $this->json('post', '/sharp/api/upload', [
-                'file' => UploadedFile::fake()->image('image.jpg', 600, 600)
-            ])->assertStatus(200)
-            ->assertJson(["name" => "image.jpg"]);
+            'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
+        ])->assertStatus(200)
+            ->assertJson(['name' => 'image.jpg']);
     }
 
     /** @test */
-    function when_uploading_an_already_existing_filename_we_change_the_name()
+    public function when_uploading_an_already_existing_filename_we_change_the_name()
     {
         $this->json('post', '/sharp/api/upload', [
-            'file' => UploadedFile::fake()->image('image.jpg', 600, 600)
+            'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
         ])->assertStatus(200)
-            ->assertJson(["name" => "image.jpg"]);
+            ->assertJson(['name' => 'image.jpg']);
 
         $this->json('post', '/sharp/api/upload', [
-            'file' => UploadedFile::fake()->image('image.jpg', 600, 600)
+            'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
         ])->assertStatus(200)
-            ->assertJson(["name" => "image-1.jpg"]);
+            ->assertJson(['name' => 'image-1.jpg']);
     }
 
     /** @test */
-    function file_is_copied_in_the_wanted_directory()
+    public function file_is_copied_in_the_wanted_directory()
     {
         $this->json('post', '/sharp/api/upload', [
-            'file' => UploadedFile::fake()->image('image.jpg', 600, 600)
+            'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
         ]);
 
-        $this->assertTrue(File::exists(storage_path("app/tmp/image.jpg")));
+        $this->assertTrue(File::exists(storage_path('app/tmp/image.jpg')));
     }
 }

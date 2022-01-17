@@ -27,20 +27,20 @@ trait HandleEntityState
 
     protected function appendEntityStateToConfig(array &$config, $instanceId = null): void
     {
-        if($this->entityStateAttribute) {
-            $config["state"] = [
-                "attribute" => $this->entityStateAttribute,
-                "values" => collect($this->entityStateHandler->states())
-                    ->map(function($state, $key) {
+        if ($this->entityStateAttribute) {
+            $config['state'] = [
+                'attribute' => $this->entityStateAttribute,
+                'values'    => collect($this->entityStateHandler->states())
+                    ->map(function ($state, $key) {
                         return [
-                            "value" => $key,
-                            "label" => $state[0],
-                            "color" => $state[1]
+                            'value' => $key,
+                            'label' => $state[0],
+                            'color' => $state[1],
                         ];
                     })->values()->all(),
-                "authorization" => $instanceId
+                'authorization' => $instanceId
                     ? $this->entityStateHandler->authorizeFor($instanceId)
-                    : $this->entityStateHandler->getGlobalAuthorization()
+                    : $this->entityStateHandler->getGlobalAuthorization(),
             ];
         }
     }

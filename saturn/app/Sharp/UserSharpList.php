@@ -15,56 +15,56 @@ class UserSharpList extends SharpEntityList
 {
     use WithCustomTransformers;
 
-    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
             ->addField(
-                EntityListField::make("name")
-                    ->setLabel("Name")
+                EntityListField::make('name')
+                    ->setLabel('Name')
                     ->setSortable()
             )
             ->addField(
-                EntityListField::make("email")
-                    ->setLabel("Email")
+                EntityListField::make('email')
+                    ->setLabel('Email')
                     ->setSortable()
             )
             ->addField(
-                EntityListField::make("group")
-                    ->setLabel("Group")
+                EntityListField::make('group')
+                    ->setLabel('Group')
             );
     }
-    
+
     public function getEntityCommands(): ?array
     {
         return [
             InviteUserCommand::class,
-            ExportUsersCommand::class
+            ExportUsersCommand::class,
         ];
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
-        $this->configureInstanceIdAttribute("id")
+        $this->configureInstanceIdAttribute('id')
             ->configurePrimaryEntityCommand(InviteUserCommand::class)
-            ->configureDefaultSort("name", "asc");
+            ->configureDefaultSort('name', 'asc');
     }
 
-    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $fieldsLayout->addColumn("name", 4)
-            ->addColumn("email", 4)
-            ->addColumn("group", 4);
+        $fieldsLayout->addColumn('name', 4)
+            ->addColumn('email', 4)
+            ->addColumn('group', 4);
     }
 
-    function getListData(): array
+    public function getListData(): array
     {
         return $this
-            ->setCustomTransformer("group", function($group) {
-                return implode("<br>", explode(",", $group));
+            ->setCustomTransformer('group', function ($group) {
+                return implode('<br>', explode(',', $group));
             })
             ->transform(
                 User::orderBy(
-                    $this->queryParams->sortedBy(), 
+                    $this->queryParams->sortedBy(),
                     $this->queryParams->sortedDir()
                 )
                     ->get()

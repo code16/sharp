@@ -10,7 +10,7 @@ class DashboardQueryParams
 
     public static function create(): self
     {
-        return new static;
+        return new static();
     }
 
     public function fillWithRequest(string $queryPrefix = null): self

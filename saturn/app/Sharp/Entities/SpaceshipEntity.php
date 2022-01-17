@@ -13,20 +13,19 @@ class SpaceshipEntity extends SharpEntity
     protected ?string $list = SpaceshipSharpList::class;
     protected ?string $show = SpaceshipSharpShow::class;
     protected ?string $form = SpaceshipSharpForm::class;
-    protected string $label = "Spaceship";
+    protected string $label = 'Spaceship';
 
     protected function getPolicy(): string|SharpEntityPolicy|null
     {
-        return new class extends SharpEntityPolicy
-        {
+        return new class() extends SharpEntityPolicy {
             public function view($user, $instanceId): bool
             {
-                return $instanceId%2 == 0 || $instanceId > 10;
+                return $instanceId % 2 == 0 || $instanceId > 10;
             }
 
             public function update($user, $instanceId): bool
             {
-                return $instanceId%2 == 0;
+                return $instanceId % 2 == 0;
             }
         };
     }

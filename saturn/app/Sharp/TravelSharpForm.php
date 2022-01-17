@@ -22,27 +22,28 @@ class TravelSharpForm extends SharpForm
     use WithSharpFormEloquentUpdater;
     protected ?string $formValidatorClass = TravelSharpValidator::class;
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormDateField::make("departure_date")
+                SharpFormDateField::make('departure_date')
                     ->setHasTime(true)
-                    ->setLabel("Departure date")
+                    ->setLabel('Departure date')
             )
             ->addField(
-                SharpFormSelectField::make("spaceship_id",
-                    Spaceship::orderBy("name")->get()->pluck("name", "id")->all()
+                SharpFormSelectField::make(
+                    'spaceship_id',
+                    Spaceship::orderBy('name')->get()->pluck('name', 'id')->all()
                 )
-                    ->setLabel("Spaceship")
+                    ->setLabel('Spaceship')
                     ->setDisplayAsDropdown()
             )
             ->addField(
-                SharpFormTextField::make("destination")
-                    ->setLabel("Destination")
+                SharpFormTextField::make('destination')
+                    ->setLabel('Destination')
             )
             ->addField(
-                SharpFormEditorField::make("description")
+                SharpFormEditorField::make('description')
                     ->setToolbar([
                         SharpFormEditorField::B,
                         SharpFormEditorField::I,
@@ -54,63 +55,63 @@ class TravelSharpForm extends SharpForm
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::CODE,
                     ])
-                    ->setLabel("Description")
+                    ->setLabel('Description')
             )
             ->addField(
-                SharpFormGeolocationField::make("destination_coordinates")
+                SharpFormGeolocationField::make('destination_coordinates')
                     ->setDisplayUnitDegreesMinutesSeconds()
                     ->setGeocoding()
                     ->setInitialPosition(48.5838961, 7.742182599999978)
-                    ->setApiKey(env("GMAPS_KEY", "my-api-key"))
-                    ->setLabel("Destination coordinates")
+                    ->setApiKey(env('GMAPS_KEY', 'my-api-key'))
+                    ->setLabel('Destination coordinates')
             )
             ->addField(
-                SharpFormAutocompleteListField::make("delegates")
-                    ->setLabel("Travel delegates")
+                SharpFormAutocompleteListField::make('delegates')
+                    ->setLabel('Travel delegates')
                     ->setAddable()
                     ->setRemovable()
                     ->setItemField(
-                        SharpFormAutocompleteField::make("item", "remote")
-                            ->setLabel("Passenger")
-                            ->setPlaceholder("test")
-                            ->setListItemInlineTemplate("{{ name }}")
-                            ->setResultItemTemplatePath("sharp/templates/delegate_result.vue")
+                        SharpFormAutocompleteField::make('item', 'remote')
+                            ->setLabel('Passenger')
+                            ->setPlaceholder('test')
+                            ->setListItemInlineTemplate('{{ name }}')
+                            ->setResultItemTemplatePath('sharp/templates/delegate_result.vue')
                             ->setRemoteEndpoint(url('/passengers'))
                     )
             );
-        }
-    
-        function buildFormLayout(FormLayout $formLayout): void
-        {
-            $formLayout
-                ->addColumn(5, function(FormLayoutColumn $column) {
-                    $column->withSingleField("departure_date")
-                        ->withSingleField("destination")
-                        ->withSingleField("destination_coordinates");
+    }
+
+    public function buildFormLayout(FormLayout $formLayout): void
+    {
+        $formLayout
+                ->addColumn(5, function (FormLayoutColumn $column) {
+                    $column->withSingleField('departure_date')
+                        ->withSingleField('destination')
+                        ->withSingleField('destination_coordinates');
                 })
-                ->addColumn(7, function(FormLayoutColumn $column) {
-                    $column->withSingleField("spaceship_id")
-                        ->withSingleField("description")
-                        ->withSingleField("delegates", function(FormLayoutColumn $listItem) {
-                            $listItem->withSingleField("item");
+                ->addColumn(7, function (FormLayoutColumn $column) {
+                    $column->withSingleField('spaceship_id')
+                        ->withSingleField('description')
+                        ->withSingleField('delegates', function (FormLayoutColumn $listItem) {
+                            $listItem->withSingleField('item');
                         });
                 });
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this->transform(
-            Travel::with(["spaceship", "delegates"])->findOrFail($id)
+            Travel::with(['spaceship', 'delegates'])->findOrFail($id)
         );
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
-        $instance = $id ? Travel::findOrFail($id) : new Travel;
+        $instance = $id ? Travel::findOrFail($id) : new Travel();
         $this->save($instance, $data);
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
         Travel::findOrFail($id)->delete();
     }

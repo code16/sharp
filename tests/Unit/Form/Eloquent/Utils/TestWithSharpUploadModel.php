@@ -6,13 +6,11 @@ use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 trait TestWithSharpUploadModel
 {
-
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -40,19 +38,20 @@ trait TestWithSharpUploadModel
     protected function createImage(): string
     {
         $file = UploadedFile::fake()->image('test.png', 600, 600);
+
         return $file->storeAs('data', 'test.png', ['disk' => 'local']);
     }
 
-    protected function createSharpUploadModel(string $file, ?object $model = null, ?string $modelKey = "test"): SharpUploadModel
+    protected function createSharpUploadModel(string $file, ?object $model = null, ?string $modelKey = 'test'): SharpUploadModel
     {
         return SharpUploadModel::create([
-            "file_name" => $file,
-            "size" => 120,
-            "mime_type" => "image/png",
-            "disk" => "local",
-            "model_type" => $model ? get_class($model) : Person::class,
-            "model_id" => $model ? $model->id : Person::create(["name" => "A"])->id,
-            "model_key" => $modelKey
+            'file_name'  => $file,
+            'size'       => 120,
+            'mime_type'  => 'image/png',
+            'disk'       => 'local',
+            'model_type' => $model ? get_class($model) : Person::class,
+            'model_id'   => $model ? $model->id : Person::create(['name' => 'A'])->id,
+            'model_key'  => $modelKey,
         ]);
     }
 }

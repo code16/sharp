@@ -3,17 +3,17 @@
 use App\Http\Controllers\SpaceshipController;
 
 Route::get('/', function () {
-    return redirect("/docs/index.html");
+    return redirect('/docs/index.html');
 });
 
 Route::get('/spaceships/{spaceship}', [SpaceshipController::class, 'show']);
 
 Route::get('/passengers', function () {
-    $passengers = \App\Passenger::where("name", "like", request("query") . "%")
+    $passengers = \App\Passenger::where('name', 'like', request('query').'%')
         ->get();
 
-    return $passengers->map(function($passenger) {
-        return $passenger->toArray() + ["num" => $passenger->id];
+    return $passengers->map(function ($passenger) {
+        return $passenger->toArray() + ['num' => $passenger->id];
     })->all();
 });
 
@@ -21,16 +21,16 @@ Route::get('/spaceships/serial_numbers/{typeId}', function ($typeId) {
     $type = \App\SpaceshipType::findOrFail($typeId);
 
     return [
-        "data" => collect(range($type->id*100, ($type->id*100)+99))
-            ->map(function($number) {
+        'data' => collect(range($type->id * 100, ($type->id * 100) + 99))
+            ->map(function ($number) {
                 return [
-                    "id" => $number,
-                    "serial" => str_pad($number, 5, "0", STR_PAD_LEFT)
+                    'id'     => $number,
+                    'serial' => str_pad($number, 5, '0', STR_PAD_LEFT),
                 ];
             })
-            ->filter(function($number) {
-                return \Illuminate\Support\Str::contains($number["serial"], request('query'));
+            ->filter(function ($number) {
+                return \Illuminate\Support\Str::contains($number['serial'], request('query'));
             })
-            ->values()
+            ->values(),
     ];
 });

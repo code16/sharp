@@ -30,8 +30,8 @@ class CreateUploadsMigration extends Command
     /**
      * Create a new migration install command instance.
      *
-     * @param  UploadsMigrationCreator $creator
-     * @param  Composer  $composer
+     * @param UploadsMigrationCreator $creator
+     * @param Composer                $composer
      */
     public function __construct(UploadsMigrationCreator $creator, Composer $composer)
     {
@@ -59,14 +59,18 @@ class CreateUploadsMigration extends Command
     /**
      * Write the migration file to disk.
      *
-     * @param  string  $name
-     * @param  string  $table
+     * @param string $name
+     * @param string $table
+     *
      * @return string
      */
     protected function writeMigration($name, $table)
     {
         $file = pathinfo($this->creator->create(
-            $name, $this->getMigrationPath(), $table, true
+            $name,
+            $this->getMigrationPath(),
+            $table,
+            true
         ), PATHINFO_FILENAME);
 
         $this->line("<info>Created Migration:</info> {$file}");
