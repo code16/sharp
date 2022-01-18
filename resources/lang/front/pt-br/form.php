@@ -3,7 +3,7 @@
 return [
     'validation_error.title'       => 'Os dados inseridos são inválida.',
     'validation_error.description' => 'Revise os dados inseridos, os erros são detalhados abaixo de cada campo.',
-    'validation_error.localized'   => 'Há um erro em : :locales',
+    'validation_error.localized'   => 'Há um erro em: :locales',
 
     'list.remove_button'                => 'Remover',
     'list.insert_button'                => 'Inserir',
