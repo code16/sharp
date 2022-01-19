@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'status'
+        'name', 'email', 'password', 'status',
     ];
 
     /**
@@ -29,6 +29,6 @@ class User extends Authenticatable
 
     public function hasGroup($group)
     {
-        return array_search($group, explode(",", $this->group)) !== false;
+        return array_search($group, explode(',', $this->group)) !== false;
     }
 }

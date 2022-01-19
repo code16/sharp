@@ -1,15 +1,12 @@
 <?php
 
-
 namespace Code16\Sharp\View\Components\Content\Utils;
 
-
 use Illuminate\Support\Str;
-use Illuminate\View\ComponentAttributeBag;
 
 class ComponentFragment extends Fragment
 {
-    public string $type = "component";
+    public string $type = 'component';
 
     protected string $name;
     protected array $attributes;

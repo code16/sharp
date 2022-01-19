@@ -3,7 +3,6 @@
 namespace Code16\Sharp\EntityList\Traits;
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Traits\Utils\CommonCommandUtils;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\Collection;
@@ -12,7 +11,7 @@ use Illuminate\Support\Str;
 trait HandleDashboardCommands
 {
     use CommonCommandUtils;
-    
+
     protected ?Collection $dashboardCommandHandlers = null;
 
     /**
@@ -22,23 +21,24 @@ trait HandleDashboardCommands
     {
         $this->appendCommandsToConfig(
             $this->getDashboardCommandHandlers(),
-            $config
+            $config,
         );
     }
 
-    public final function getDashboardCommandHandlers(): Collection
+    final public function getDashboardCommandHandlers(): Collection
     {
-        if($this->dashboardCommandHandlers === null) {
+        if ($this->dashboardCommandHandlers === null) {
             $groupIndex = 0;
             $this->dashboardCommandHandlers = collect($this->getDashboardCommands())
-                ->map(function($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
-                    if(is_string($commandHandlerOrClassName)) {
-                        if(Str::startsWith($commandHandlerOrClassName, "-")) {
+                ->map(function ($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
+                    if (is_string($commandHandlerOrClassName)) {
+                        if (Str::startsWith($commandHandlerOrClassName, '-')) {
                             // It's a separator
                             $groupIndex++;
+
                             return null;
                         }
-                        if(!class_exists($commandHandlerOrClassName)) {
+                        if (! class_exists($commandHandlerOrClassName)) {
                             throw new SharpException("Handler for dashboard command [{$commandHandlerOrClassName}] is invalid");
                         }
                         $commandHandler = app($commandHandlerOrClassName);
@@ -46,16 +46,16 @@ trait HandleDashboardCommands
                         $commandHandler = $commandHandlerOrClassName;
                     }
 
-                    if(!$commandHandler instanceof DashboardCommand) {
-                        throw new SharpException("Handler class for dashboard command [{$commandHandlerOrClassName}] is not an subclass of " . DashboardCommand::class);
+                    if (! $commandHandler instanceof DashboardCommand) {
+                        throw new SharpException("Handler class for dashboard command [{$commandHandlerOrClassName}] is not an subclass of ".DashboardCommand::class);
                     }
 
                     $commandHandler->setGroupIndex($groupIndex);
-                    if(is_string($commandKey)) {
+                    if (is_string($commandKey)) {
                         $commandHandler->setCommandKey($commandKey);
                     }
 
-                    if(isset($this->queryParams)) {
+                    if (isset($this->queryParams)) {
                         // We have to init query params of the command
                         $commandHandler->initQueryParams($this->queryParams);
                     }
@@ -73,7 +73,7 @@ trait HandleDashboardCommands
     {
         return $this
             ->getDashboardCommandHandlers()
-            ->filter(function(DashboardCommand $command) use ($commandKey) {
+            ->filter(function (DashboardCommand $command) use ($commandKey) {
                 return $command->getCommandKey() === $commandKey;
             })
             ->first();

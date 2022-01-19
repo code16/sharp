@@ -31,7 +31,7 @@ class Spaceship extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(TechnicalReview::class)
-            ->orderBy("starts_at");
+            ->orderBy('starts_at');
     }
 
     public function pilots(): BelongsToMany
@@ -46,27 +46,27 @@ class Spaceship extends Model
 
     public function manual(): MorphOne
     {
-        return $this->morphOne(Media::class, "model")
-            ->where("model_key", "manual");
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'manual');
     }
 
     public function picture(): MorphOne
     {
-        return $this->morphOne(Media::class, "model")
-            ->where("model_key", "picture");
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'picture');
     }
 
     public function pictures(): MorphMany
     {
-        return $this->morphMany(Media::class, "model")
-            ->where("model_key", "pictures")
-            ->orderBy("order");
+        return $this->morphMany(Media::class, 'model')
+            ->where('model_key', 'pictures')
+            ->orderBy('order');
     }
-    
+
     public function getDefaultAttributesFor(string $attribute): array
     {
-        return in_array($attribute, ["manual", "picture", "pictures"])
-            ? ["model_key" => $attribute]
+        return in_array($attribute, ['manual', 'picture', 'pictures'])
+            ? ['model_key' => $attribute]
             : [];
     }
 }

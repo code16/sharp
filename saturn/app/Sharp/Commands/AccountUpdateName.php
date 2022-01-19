@@ -11,27 +11,27 @@ class AccountUpdateName extends SingleInstanceCommand
 {
     public function label(): string
     {
-        return "Update your name";
+        return 'Update your name';
     }
 
     public function executeSingle(array $data = []): array
     {
         $this->validate($data, [
-            "name" => "required"
+            'name' => 'required',
         ]);
 
         User::findOrFail(auth()->id())->update([
-            "name" => $data["name"]
+            'name' => $data['name'],
         ]);
 
         return $this->reload();
     }
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields->addField(
-            SharpFormTextField::make("name")
-                ->setLabel("Name")
+            SharpFormTextField::make('name')
+                ->setLabel('Name'),
         );
     }
 

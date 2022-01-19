@@ -8,16 +8,17 @@ use Illuminate\Support\Collection;
 abstract class SharpMenu
 {
     use HasSharpMenuItems;
-    
-    public final function addSection(string $title, Closure $callbackClosure): self
+
+    final public function addSection(string $title, Closure $callbackClosure): self
     {
         $section = new SharpMenuItemSection($title);
         $callbackClosure($section);
         $this->items[] = $section;
+
         return $this;
     }
 
-    public final function items(): Collection
+    final public function items(): Collection
     {
         return collect($this->items);
     }

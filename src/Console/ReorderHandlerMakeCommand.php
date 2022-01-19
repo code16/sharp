@@ -20,10 +20,11 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
         if ($this->option('model')) {
             $replace = $this->buildModelReplacements($replace);
         }
+
         return str_replace(
             array_keys($replace),
             array_values($replace),
-            parent::buildClass($name)
+            parent::buildClass($name),
         );
     }
 

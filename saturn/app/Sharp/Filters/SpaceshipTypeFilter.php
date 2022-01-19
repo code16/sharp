@@ -9,21 +9,21 @@ class SpaceshipTypeFilter extends EntityListSelectRequiredFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Ship type")
-            ->configureKey("s-type")
+        $this->configureLabel('Ship type')
+            ->configureKey('s-type')
             ->configureRetainInSession();
     }
 
     public function values(): array
     {
-        return SpaceshipType::orderBy("label")
-            ->pluck("label", "id")
+        return SpaceshipType::orderBy('label')
+            ->pluck('label', 'id')
             ->toArray();
     }
 
     public function defaultValue(): mixed
     {
-        return SpaceshipType::orderBy("label")
+        return SpaceshipType::orderBy('label')
             ->first()
             ->id;
     }

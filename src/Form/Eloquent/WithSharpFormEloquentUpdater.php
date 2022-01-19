@@ -11,27 +11,27 @@ trait WithSharpFormEloquentUpdater
     protected array $ignoredAttributes = [];
 
     /**
-     * @param string|array $attribute
+     * @param  string|array  $attribute
      * @return $this
      */
-    function ignore($attribute): self
+    public function ignore($attribute): self
     {
         $this->ignoredAttributes = array_merge(
             $this->ignoredAttributes,
-            (array)$attribute
+            (array) $attribute,
         );
 
         return $this;
     }
 
     /**
-     * Update an Eloquent Model with $data (which is already Form Field formatted)
+     * Update an Eloquent Model with $data (which is already Form Field formatted).
      *
-     * @param Model $instance
-     * @param array $data
+     * @param  Model  $instance
+     * @param  array  $data
      * @return Model
      */
-    function save(Model $instance, array $data): Model
+    public function save(Model $instance, array $data): Model
     {
         // First transform data, passing false as a second parameter to allow partial objects.
         // This is important: this save() can be the second one called in the same request
@@ -39,7 +39,7 @@ trait WithSharpFormEloquentUpdater
         $data = $this->applyTransformers($data, false);
 
         // Then handle manually ignored attributes...
-        if(count($this->ignoredAttributes)) {
+        if (count($this->ignoredAttributes)) {
             $data = collect($data)
                 ->filter(function ($value, $attribute) {
                     return array_search($attribute, $this->ignoredAttributes) === false;
@@ -63,16 +63,16 @@ trait WithSharpFormEloquentUpdater
     protected function getFormListFieldsConfiguration(): Collection
     {
         return collect($this->fieldsContainer()->getFields())
-            ->filter(function($field) {
+            ->filter(function ($field) {
                 return $field instanceof SharpFormListField
                     && $field->isSortable();
             })
-            ->map(function($listField) {
+            ->map(function ($listField) {
                 return [
-                    "key" => $listField->key(),
-                    "orderAttribute" => $listField->orderAttribute()
+                    'key' => $listField->key(),
+                    'orderAttribute' => $listField->orderAttribute(),
                 ];
             })
-            ->keyBy("key");
+            ->keyBy('key');
     }
 }

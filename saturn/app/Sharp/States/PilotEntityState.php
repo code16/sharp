@@ -9,14 +9,14 @@ class PilotEntityState extends EntityState
 {
     protected function buildStates(): void
     {
-        $this->addState("active", "Active", "green")
-            ->addState("inactive", "Retired", "orange");
+        $this->addState('active', 'Active', 'green')
+            ->addState('inactive', 'Retired', 'orange');
     }
 
     public function updateState($instanceId, $stateId): array
     {
         Pilot::findOrFail($instanceId)->update([
-            "state" => $stateId
+            'state' => $stateId,
         ]);
 
         return $this->refresh($instanceId);

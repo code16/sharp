@@ -13,5 +13,5 @@ return [
         'edit_entity' => 'Edit “:entity”',
         'create_entity' => 'New “:entity”',
     ],
-    
+
 ];

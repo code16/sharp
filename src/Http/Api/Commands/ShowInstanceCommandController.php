@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 use Code16\Sharp\Show\SharpSingleShow;
 
@@ -19,7 +18,7 @@ class ShowInstanceCommandController extends ApiController
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
         return response()->json([
-            "data" => $commandHandler->formData($instanceId)
+            'data' => $commandHandler->formData($instanceId),
         ]);
     }
 
@@ -35,8 +34,8 @@ class ShowInstanceCommandController extends ApiController
             $showPage,
             $commandHandler->execute(
                 $instanceId,
-                $commandHandler->formatRequestData((array)request("data"), $instanceId)
-            )
+                $commandHandler->formatRequestData((array) request('data'), $instanceId),
+            ),
         );
     }
 
@@ -45,9 +44,9 @@ class ShowInstanceCommandController extends ApiController
         $showPage = $this->getShowInstance($entityKey);
 
         abort_if(
-            (!$instanceId && !$showPage instanceof SharpSingleShow)
+            (! $instanceId && ! $showPage instanceof SharpSingleShow)
             || ($instanceId && $showPage instanceof SharpSingleShow),
-            404
+            404,
         );
 
         $showPage->buildShowConfig();

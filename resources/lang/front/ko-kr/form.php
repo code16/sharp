@@ -18,7 +18,7 @@ return [
     'geolocation.modal.title' => '주소를 입력하거나지도를 클릭하십시오',
     'geolocation.modal.title-no-geocoding' => '지도를 클릭하십시오',
     'geolocation.modal.geocode_input.placeholder' => '전체 주소',
-    'geolocation.modal.geocode_input.message.error' => "오류 : 지오 코딩 서버에 연결할 수 없습니다",
+    'geolocation.modal.geocode_input.message.error' => '오류 : 지오 코딩 서버에 연결할 수 없습니다',
     'geolocation.modal.geocode_input.message.no_results' => '":query"에 대한 결과가 없습니다',
     'geolocation.modal.search_button' => '검색',
 

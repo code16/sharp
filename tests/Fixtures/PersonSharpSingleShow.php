@@ -11,24 +11,24 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PersonSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields(FieldsContainer $showFields): void
+    public function buildShowFields(FieldsContainer $showFields): void
     {
-        $showFields->addField(SharpShowTextField::make("name"));
+        $showFields->addField(SharpShowTextField::make('name'));
     }
 
-    function buildShowLayout(ShowLayout $showLayout): void
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection("Identity", function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("name");
+                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('name');
                     });
             });
     }
 
-    function findSingle(): array
+    public function findSingle(): array
     {
-        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
+        return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
 }

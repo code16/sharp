@@ -6,7 +6,7 @@ class WidgetsContainer
 {
     protected array $widgets = [];
 
-    public final function addWidget(SharpWidget $widget): self
+    final public function addWidget(SharpWidget $widget): self
     {
         $this->widgets[] = $widget;
 

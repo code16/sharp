@@ -13,7 +13,7 @@ class Media extends SharpUploadModel
 
     public $translatable = ['legend'];
 
-    protected $table = "medias";
+    protected $table = 'medias';
 
     /**
      * The "booting" method of the model.
@@ -25,7 +25,7 @@ class Media extends SharpUploadModel
         parent::boot();
 
         Event::listen(TranslationHasBeenSet::class, function (TranslationHasBeenSet $event) {
-            if (!$event->model instanceof self) {
+            if (! $event->model instanceof self) {
                 return;
             }
 

@@ -19,7 +19,7 @@ class SharpPanelWidget extends SharpWidget
     public function toArray(): array
     {
         return parent::buildArray([
-            "template" => $this->htmlFormField->template()
+            'template' => $this->htmlFormField->template(),
         ]);
     }
 
@@ -40,7 +40,7 @@ class SharpPanelWidget extends SharpWidget
     protected function validationRules(): array
     {
         return [
-            "template" => "required"
+            'template' => 'required',
         ];
     }
 }

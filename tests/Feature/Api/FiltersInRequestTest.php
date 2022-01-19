@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
@@ -23,17 +22,17 @@ class FiltersInRequestTest extends BaseApiTest
     public function we_can_filter_instances_of_an_entity_list()
     {
         $this->buildTheWorld();
-        
+
         $this->json('get', '/sharp/api/list/person?filter_'.class_basename(PersonSharpEntityListAgeFilter::class).'=22')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "data" => [
-                    "list" => [
-                        "items" => [
-                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
-                        ]
-                    ]
-                ]
+                'data' => [
+                    'list' => [
+                        'items' => [
+                            ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -47,13 +46,13 @@ class FiltersInRequestTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person?default_age=true')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "data" => [
-                    "list" => [
-                        "items" => [
-                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22]
-                        ]
-                    ]
-                ]
+                'data' => [
+                    'list' => [
+                        'items' => [
+                            ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -65,14 +64,14 @@ class FiltersInRequestTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person?filter_age_multiple=22,26')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "data" => [
-                    "list" => [
-                        "items" => [
-                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                            ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26]
-                        ]
-                    ]
-                ]
+                'data' => [
+                    'list' => [
+                        'items' => [
+                            ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                            ['id' => 2, 'name' => 'Mary <b>Wayne</b>', 'age' => 26],
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -80,17 +79,17 @@ class FiltersInRequestTest extends BaseApiTest
     public function we_can_filter_on_a_single_value_with_a_multiple_values_filter()
     {
         $this->buildTheWorld();
-        
+
         $this->json('get', '/sharp/api/list/person?filter_'.class_basename(PersonSharpEntityListAgeMultipleFilter::class).'=22')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "data" => [
-                    "list" => [
-                        "items" => [
-                            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                        ]
-                    ]
-                ]
+                'data' => [
+                    'list' => [
+                        'items' => [
+                            ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -99,27 +98,28 @@ class FiltersInRequestTest extends BaseApiTest
     {
         app()->bind(
             PersonSharpEntityList::class,
-            function() {
-                return new class() extends PersonSharpEntityList {
-                    function getFilters(): array
+            function () {
+                return new class() extends PersonSharpEntityList
+                {
+                    public function getFilters(): array
                     {
                         return [
-                            FiltersInRequestTestRetainedActiveFilter::class
+                            FiltersInRequestTestRetainedActiveFilter::class,
                         ];
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
         $key = (new FiltersInRequestTestRetainedActiveFilter())->getKey();
 
-        $this->assertFalse(!!session("_sharp_retained_filter_$key"));
+        $this->assertFalse((bool) session("_sharp_retained_filter_$key"));
 
         // Call to retain the filter on session
         $this->getJson("/sharp/api/list/person?filter_$key=1");
 
-        $this->assertTrue(!!session("_sharp_retained_filter_$key"));
+        $this->assertTrue((bool) session("_sharp_retained_filter_$key"));
     }
 
     /** @test */
@@ -128,33 +128,35 @@ class FiltersInRequestTest extends BaseApiTest
         $this->withoutExceptionHandling();
         app()->bind(
             PersonSharpEntityList::class,
-            function() {
-                return new class() extends PersonSharpEntityList {
-                    function getListData(): array|Arrayable
+            function () {
+                return new class() extends PersonSharpEntityList
+                {
+                    public function getListData(): array|Arrayable
                     {
                         $items = [
-                            ["id" => 1, "name" => "John", "age" => 30, "active" => true],
-                            ["id" => 2, "name" => "Baby", "age" => 2, "active" => false],
+                            ['id' => 1, 'name' => 'John', 'age' => 30, 'active' => true],
+                            ['id' => 2, 'name' => 'Baby', 'age' => 2, 'active' => false],
                         ];
 
                         if ($this->queryParams->filterFor(FiltersInRequestTestRetainedActiveFilter::class) !== null) {
                             $items = collect($items)
                                 ->filter(function ($item) {
-                                    return $item["active"] == $this->queryParams->filterFor(FiltersInRequestTestRetainedActiveFilter::class);
+                                    return $item['active'] == $this->queryParams->filterFor(FiltersInRequestTestRetainedActiveFilter::class);
                                 })
                                 ->values();
                         }
 
                         return $this->transform($items);
                     }
+
                     public function getFilters(): ?array
                     {
                         return [
-                            FiltersInRequestTestRetainedActiveFilter::class
+                            FiltersInRequestTestRetainedActiveFilter::class,
                         ];
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
@@ -166,32 +168,32 @@ class FiltersInRequestTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "data" => [
-                    "list" => [
-                        "items" => [
-                            ["id" => 1, "name" => "John", "age" => 30],
-                        ]
-                    ]
-                ]
+                'data' => [
+                    'list' => [
+                        'items' => [
+                            ['id' => 1, 'name' => 'John', 'age' => 30],
+                        ],
+                    ],
+                ],
             ]);
 
         // Third call, change filter value
         $this->json('get', '/sharp/api/list/person?filter_'.class_basename(FiltersInRequestTestRetainedActiveFilter::class).'=0')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "items" => [
-                    ["id" => 2, "name" => "Baby", "age" => 2],
-                ]
+                'items' => [
+                    ['id' => 2, 'name' => 'Baby', 'age' => 2],
+                ],
             ]);
 
         // Fourth call, reset filter value (un-required filters)
         $this->json('get', '/sharp/api/list/person?filter_'.class_basename(FiltersInRequestTestRetainedActiveFilter::class).'=')
             ->assertStatus(200)
             ->assertJsonFragment([
-                "items" => [
-                    ["id" => 1, "name" => "John", "age" => 30],
-                    ["id" => 2, "name" => "Baby", "age" => 2],
-                ]
+                'items' => [
+                    ['id' => 1, 'name' => 'John', 'age' => 30],
+                    ['id' => 2, 'name' => 'Baby', 'age' => 2],
+                ],
             ]);
     }
 
@@ -200,32 +202,34 @@ class FiltersInRequestTest extends BaseApiTest
     {
         app()->bind(
             PersonSharpEntityList::class,
-            function() {
-                return new class() extends PersonSharpEntityList {
-                    function getListData(): array|Arrayable
+            function () {
+                return new class() extends PersonSharpEntityList
+                {
+                    public function getListData(): array|Arrayable
                     {
                         $items = [
-                            ["id" => 1, "name" => "John", "age" => 30],
-                            ["id" => 2, "name" => "Mary", "age" => 32],
-                            ["id" => 3, "name" => "Baby", "age" => 2],
+                            ['id' => 1, 'name' => 'John', 'age' => 30],
+                            ['id' => 2, 'name' => 'Mary', 'age' => 32],
+                            ['id' => 3, 'name' => 'Baby', 'age' => 2],
                         ];
 
                         if ($age = $this->queryParams->filterFor(FiltersInRequestTestRetainedAgeMultipleFilter::class)) {
                             $items = collect($items)
-                                ->whereIn("age", $age)
+                                ->whereIn('age', $age)
                                 ->values();
                         }
 
                         return $this->transform($items);
                     }
+
                     public function getFilters(): ?array
                     {
                         return [
-                            FiltersInRequestTestRetainedAgeMultipleFilter::class
+                            FiltersInRequestTestRetainedAgeMultipleFilter::class,
                         ];
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
@@ -238,21 +242,21 @@ class FiltersInRequestTest extends BaseApiTest
         $this->getJson('/sharp/api/list/person')
             ->assertOk()
             ->assertJsonFragment([
-                "items" => [
-                    ["id" => 1, "name" => "John", "age" => 30],
-                    ["id" => 2, "name" => "Mary", "age" => 32],
-                ]
+                'items' => [
+                    ['id' => 1, 'name' => 'John', 'age' => 30],
+                    ['id' => 2, 'name' => 'Mary', 'age' => 32],
+                ],
             ]);
 
         // Third call: filter should be reset
         $this->getJson("/sharp/api/list/person?filter_$key=")
             ->assertOk()
             ->assertJsonFragment([
-                "items" => [
-                    ["id" => 1, "name" => "John", "age" => 30],
-                    ["id" => 2, "name" => "Mary", "age" => 32],
-                    ["id" => 3, "name" => "Baby", "age" => 2],
-                ]
+                'items' => [
+                    ['id' => 1, 'name' => 'John', 'age' => 30],
+                    ['id' => 2, 'name' => 'Mary', 'age' => 32],
+                    ['id' => 3, 'name' => 'Baby', 'age' => 2],
+                ],
             ]);
     }
 
@@ -261,30 +265,32 @@ class FiltersInRequestTest extends BaseApiTest
     {
         app()->bind(
             PersonSharpEntityList::class,
-            function() {
-                return new class() extends PersonSharpEntityList {
-                    function getListData(): array|Arrayable
+            function () {
+                return new class() extends PersonSharpEntityList
+                {
+                    public function getListData(): array|Arrayable
                     {
                         $items = [
-                            ["id" => 1, "name" => "John", "age" => 30],
-                            ["id" => 2, "name" => "Mary", "age" => 32],
-                            ["id" => 3, "name" => "Baby", "age" => 2],
+                            ['id' => 1, 'name' => 'John', 'age' => 30],
+                            ['id' => 2, 'name' => 'Mary', 'age' => 32],
+                            ['id' => 3, 'name' => 'Baby', 'age' => 2],
                         ];
 
                         $items = collect($items)
-                            ->where("age", $this->queryParams->filterFor(FiltersInRequestTestRetainedAgeRequiredFilter::class))
+                            ->where('age', $this->queryParams->filterFor(FiltersInRequestTestRetainedAgeRequiredFilter::class))
                             ->values();
 
                         return $this->transform($items);
                     }
-                    function getFilters(): ?array
+
+                    public function getFilters(): ?array
                     {
                         return [
-                            FiltersInRequestTestRetainedAgeRequiredFilter::class
+                            FiltersInRequestTestRetainedAgeRequiredFilter::class,
                         ];
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
@@ -297,9 +303,9 @@ class FiltersInRequestTest extends BaseApiTest
         $this->getJson('/sharp/api/list/person')
             ->assertOk()
             ->assertJsonFragment([
-                "items" => [
-                    ["id" => 1, "name" => "John", "age" => 30],
-                ]
+                'items' => [
+                    ['id' => 1, 'name' => 'John', 'age' => 30],
+                ],
             ]);
     }
 }
@@ -310,6 +316,7 @@ class FiltersInRequestTestRetainedActiveFilter extends EntityListSelectFilter
     {
         $this->configureRetainInSession();
     }
+
     public function values(): array
     {
         return [0, 1];
@@ -322,6 +329,7 @@ class FiltersInRequestTestRetainedAgeMultipleFilter extends EntityListSelectMult
     {
         $this->configureRetainInSession();
     }
+
     public function values(): array
     {
         return range(0, 80);
@@ -334,10 +342,12 @@ class FiltersInRequestTestRetainedAgeRequiredFilter extends EntityListSelectRequ
     {
         $this->configureRetainInSession();
     }
+
     public function values(): array
     {
         return range(0, 80);
     }
+
     public function defaultValue(): mixed
     {
         return 2;

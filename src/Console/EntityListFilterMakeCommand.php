@@ -14,14 +14,14 @@ class EntityListFilterMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('required')) {
-            return __DIR__ . '/stubs/entity-list-filter.required.stub';
+            return __DIR__.'/stubs/entity-list-filter.required.stub';
         }
 
         if ($this->option('multiple')) {
-            return __DIR__ . '/stubs/entity-list-filter.multiple.stub';
+            return __DIR__.'/stubs/entity-list-filter.multiple.stub';
         }
 
-        return __DIR__ . '/stubs/entity-list-filter.stub';
+        return __DIR__.'/stubs/entity-list-filter.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

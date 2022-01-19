@@ -9,7 +9,6 @@ use Illuminate\View\Component;
 
 class RenderContent extends Component
 {
-    
     public function __construct(
         public string $content,
         public FragmentsFactory $fragmentsFactory
@@ -23,12 +22,13 @@ class RenderContent extends Component
 
     public function fragmentComponent(Fragment $fragment): ?string
     {
-        if($fragment->type === 'html') {
+        if ($fragment->type === 'html') {
             return 'sharp::content.render-html';
         }
-        if($fragment->type === 'component') {
+        if ($fragment->type === 'component') {
             return 'sharp::content.render-component';
         }
+
         return null;
     }
 

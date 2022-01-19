@@ -39,7 +39,7 @@ return [
 
     'select.select_all' => 'Select all',
     'select.unselect_all' => 'Unselect all',
-    'select.validation.max_selected' => "Too many items selected (:max_selected max.)",
+    'select.validation.max_selected' => 'Too many items selected (:max_selected max.)',
 
     'autocomplete.no_results_text' => 'No result found',
 
@@ -47,11 +47,11 @@ return [
 
     'daterange.start_placeholder' => 'Start date',
     'daterange.end_placeholder' => 'End date',
-    
+
     'text.validation.maxlength' => 'Text too long (:maxlength characters max.)',
-    
+
     'editor.errors.unknown_file' => 'Unknown file ":path"',
-    
+
     'editor.dialogs.link.text_label' => 'Text',
     'editor.dialogs.link.url_label' => 'URL',
     'editor.dialogs.link.insert_button' => 'Insert link',
@@ -59,7 +59,7 @@ return [
     'editor.dialogs.link.remove_button' => 'Remove link',
     'editor.dialogs.raw_html.insert_title' => 'Insert HTML',
     'editor.dialogs.raw_html.edit_title' => 'Edit HTML',
-    
+
     'editor.dropdown.table.insert_table' => 'Insert table',
     'editor.dropdown.table.insert_row_above' => 'Insert row above',
     'editor.dropdown.table.insert_row_below' => 'Insert row below',
@@ -68,9 +68,9 @@ return [
     'editor.dropdown.table.insert_col_right' => 'Insert column to the right',
     'editor.dropdown.table.remove_col' => 'Remove column',
     'editor.dropdown.table.remove_table' => 'Remove table',
-    
+
     'editor.dropdown.options.toggle_tight_list' => 'Toggle tight list',
-    
+
     'editor.toolbar.bold.title' => 'Bold',
     'editor.toolbar.italic.title' => 'Italic',
     'editor.toolbar.strikethrough.title' => 'Strike through',

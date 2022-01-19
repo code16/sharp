@@ -17,14 +17,14 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
 
         app(SharpEntityManager::class)
-            ->entityFor("person")
+            ->entityFor('person')
             ->setPolicy(AuthorizationsTestPersonPolicy::class);
 
         app(SharpEntityManager::class)
-            ->entityFor("personal_dashboard")
+            ->entityFor('personal_dashboard')
             ->setPolicy(AuthorizationsTestPersonalDashboardPolicy::class);
     }
-    
+
     /** @test */
     public function we_can_configure_a_policy()
     {
@@ -49,34 +49,34 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => false,
-                    "update" => true,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => true,
+                    'create' => true,
+                    'view' => true,
+                ],
             ]);
 
         $this
             ->getJson('/sharp/api/form/person/1')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => false,
-                    "update" => true,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => true,
+                    'create' => true,
+                    'view' => true,
+                ],
             ]);
 
         $this
             ->getJson('/sharp/api/form/person/10')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => false,
-                    "update" => false,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => true,
+                ],
             ]);
     }
 
@@ -84,11 +84,11 @@ class PolicyAuthorizationsTest extends BaseApiTest
     public function policy_authorizations_are_appended_to_the_response_on_a_list_case()
     {
         $this->getJson('/sharp/api/list/person')->assertJson([
-            "authorizations" => [
-                "update" => [1],
-                "create" => true,
-                "view" => [1,2],
-            ]
+            'authorizations' => [
+                'update' => [1],
+                'create' => true,
+                'view' => [1, 2],
+            ],
         ]);
     }
 
@@ -96,25 +96,25 @@ class PolicyAuthorizationsTest extends BaseApiTest
     public function global_authorizations_override_policies()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
-            ->setProhibitedActions(["update"]);
+            ->entityFor('person')
+            ->setProhibitedActions(['update']);
 
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
-                "authorizations" => [
-                    "delete" => false,
-                    "update" => false,
-                    "create" => true,
-                    "view" => true,
-                ]
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => true,
+                ],
             ]);
     }
 
     /** @test */
     public function entity_policy_can_be_set_to_handle_whole_entity_visibility()
     {
-        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->actingAs(new User(['name' => 'Unauthorized-User']));
 
         $this->getJson('/sharp/api/form/person')->assertStatus(403);
         $this->postJson('/sharp/api/form/person/1', [])->assertStatus(403);
@@ -128,7 +128,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
     {
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(200);
 
-        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->actingAs(new User(['name' => 'Unauthorized-User']));
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
     }
 }
@@ -137,20 +137,29 @@ class AuthorizationsTestPersonPolicy extends SharpEntityPolicy
 {
     public function entity($user): bool
     {
-        return $user->name != "Unauthorized-User";
+        return $user->name != 'Unauthorized-User';
     }
 
-    public function view($user, $id): bool { return true; }
+    public function view($user, $id): bool
+    {
+        return true;
+    }
 
-    public function update($user, $id): bool { return $id < 2; }
+    public function update($user, $id): bool
+    {
+        return $id < 2;
+    }
 
-    public function delete($user, $id): bool { return false; }
+    public function delete($user, $id): bool
+    {
+        return false;
+    }
 }
 
 class AuthorizationsTestPersonalDashboardPolicy extends SharpEntityPolicy
 {
     public function entity($user): bool
     {
-        return $user->name != "Unauthorized-User";
+        return $user->name != 'Unauthorized-User';
     }
 }

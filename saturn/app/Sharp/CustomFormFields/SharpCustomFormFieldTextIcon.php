@@ -7,7 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 
 class SharpCustomFormFieldTextIcon extends SharpFormField
 {
-    const FIELD_TYPE = "custom-textIcon";
+    const FIELD_TYPE = 'custom-textIcon';
 
     protected string $icon;
 
@@ -26,14 +26,14 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "icon" => "required",
+            'icon' => 'required',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "icon" => $this->icon,
+            'icon' => $this->icon,
         ]);
     }
 }

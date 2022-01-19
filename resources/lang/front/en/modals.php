@@ -17,7 +17,7 @@ return [
 
     'ok_button' => 'Ok',
     'cancel_button' => 'Cancel',
-    
+
     'entity_state.edit.title' => 'Update state',
     'entity_state.edit.ok_button' => 'Ok',
 ];

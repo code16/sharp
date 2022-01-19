@@ -27,7 +27,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
     }
 
     /** @test */
-    function we_can_transform_a_single_upload()
+    public function we_can_transform_a_single_upload()
     {
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
@@ -36,32 +36,32 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
 
         $this->assertEquals(
             [
-                "id" => $upload->id,
-                "name" => basename($upload->file_name),
-                "path" => $upload->file_name,
-                "disk" => "local",
-                "size" => $upload->size,
-                "thumbnail" => $upload->thumbnail(200, 200),
-            ], 
-            $transformer->apply("", $picturable, "picture")
+                'id' => $upload->id,
+                'name' => basename($upload->file_name),
+                'path' => $upload->file_name,
+                'disk' => 'local',
+                'size' => $upload->size,
+                'thumbnail' => $upload->thumbnail(200, 200),
+            ],
+            $transformer->apply('', $picturable, 'picture'),
         );
     }
 
     /** @test */
-    function we_can_transform_a_single_upload_with_transformations()
+    public function we_can_transform_a_single_upload_with_transformations()
     {
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
         $upload->filters = [
-            "crop" => [
-                "height" => .5,
-                "width" => .75,
-                "x" => .3,
-                "y" => .34,
+            'crop' => [
+                'height' => .5,
+                'width' => .75,
+                'x' => .3,
+                'y' => .34,
             ],
-            "rotate" => [
-                "angle" => 45
-            ]
+            'rotate' => [
+                'angle' => 45,
+            ],
         ];
         $upload->save();
 
@@ -69,30 +69,30 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
 
         $this->assertEquals(
             [
-                "id" => $upload->id,
-                "name" => basename($upload->file_name),
-                "path" => $upload->file_name,
-                "disk" => "local",
-                "size" => $upload->size,
-                "thumbnail" => $upload->thumbnail(200, 200),
-                "filters" => [
-                    "crop" => [
-                        "height" => .5,
-                        "width" => .75,
-                        "x" => .3,
-                        "y" => .34,
+                'id' => $upload->id,
+                'name' => basename($upload->file_name),
+                'path' => $upload->file_name,
+                'disk' => 'local',
+                'size' => $upload->size,
+                'thumbnail' => $upload->thumbnail(200, 200),
+                'filters' => [
+                    'crop' => [
+                        'height' => .5,
+                        'width' => .75,
+                        'x' => .3,
+                        'y' => .34,
                     ],
-                    "rotate" => [
-                        "angle" => 45
-                    ]
-                ]
+                    'rotate' => [
+                        'angle' => 45,
+                    ],
+                ],
             ],
-            $transformer->apply("", $picturable, "picture")
+            $transformer->apply('', $picturable, 'picture'),
         );
     }
 
     /** @test */
-    function we_can_transform_a_list_of_upload()
+    public function we_can_transform_a_list_of_upload()
     {
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
@@ -103,46 +103,46 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
         $this->assertEquals(
             [
                 [
-                    "file" => [
-                        "name" => basename($upload->file_name),
-                        "path" => $upload->file_name,
-                        "disk" => "local",
-                        "size" => $upload->size,
-                        "thumbnail" => $upload->thumbnail(200, 200)
+                    'file' => [
+                        'name' => basename($upload->file_name),
+                        'path' => $upload->file_name,
+                        'disk' => 'local',
+                        'size' => $upload->size,
+                        'thumbnail' => $upload->thumbnail(200, 200),
                     ],
-                    "id" => $upload->id,
+                    'id' => $upload->id,
                 ], [
-                    "file" => [
-                        "name" => basename($upload2->file_name),
-                        "path" => $upload2->file_name,
-                        "disk" => "local",
-                        "size" => $upload2->size,
-                        "thumbnail" => $upload2->thumbnail(200, 200)
+                    'file' => [
+                        'name' => basename($upload2->file_name),
+                        'path' => $upload2->file_name,
+                        'disk' => 'local',
+                        'size' => $upload2->size,
+                        'thumbnail' => $upload2->thumbnail(200, 200),
                     ],
-                    "id" => $upload2->id,
-                ]
-            ], 
-            $transformer->apply("", $picturable, "pictures")
+                    'id' => $upload2->id,
+                ],
+            ],
+            $transformer->apply('', $picturable, 'pictures'),
         );
     }
 
     /** @test */
-    function we_can_transform_a_list_of_upload_with_transformations()
+    public function we_can_transform_a_list_of_upload_with_transformations()
     {
         $picturable = Picturable::create();
         $upload = $this->createSharpUploadModel($this->createImage(), $picturable);
         $upload2 = $this->createSharpUploadModel($this->createImage(), $picturable);
-        
+
         $filters = [
-            "crop" => [
-                "height" => .5,
-                "width" => .75,
-                "x" => .3,
-                "y" => .34,
+            'crop' => [
+                'height' => .5,
+                'width' => .75,
+                'x' => .3,
+                'y' => .34,
             ],
-            "rotate" => [
-                "angle" => 45
-            ]
+            'rotate' => [
+                'angle' => 45,
+            ],
         ];
 
         $upload->filters = $filters;
@@ -153,27 +153,27 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
         $this->assertEquals(
             [
                 [
-                    "file" => [
-                        "name" => basename($upload->file_name),
-                        "path" => $upload->file_name,
-                        "disk" => "local",
-                        "size" => $upload->size,
-                        "thumbnail" => $upload->thumbnail(200, 200),
-                        "filters" => $filters
+                    'file' => [
+                        'name' => basename($upload->file_name),
+                        'path' => $upload->file_name,
+                        'disk' => 'local',
+                        'size' => $upload->size,
+                        'thumbnail' => $upload->thumbnail(200, 200),
+                        'filters' => $filters,
                     ],
-                    "id" => $upload->id,
+                    'id' => $upload->id,
                 ], [
-                "file" => [
-                    "name" => basename($upload2->file_name),
-                    "path" => $upload2->file_name,
-                    "disk" => "local",
-                    "size" => $upload2->size,
-                    "thumbnail" => $upload2->thumbnail(200, 200)
+                    'file' => [
+                        'name' => basename($upload2->file_name),
+                        'path' => $upload2->file_name,
+                        'disk' => 'local',
+                        'size' => $upload2->size,
+                        'thumbnail' => $upload2->thumbnail(200, 200),
+                    ],
+                    'id' => $upload2->id,
                 ],
-                "id" => $upload2->id,
-            ]
             ],
-            $transformer->apply("", $picturable, "pictures")
+            $transformer->apply('', $picturable, 'pictures'),
         );
     }
 }
@@ -182,11 +182,11 @@ class Picturable extends Model
 {
     public function picture()
     {
-        return $this->morphOne(SharpUploadModel::class, "model");
+        return $this->morphOne(SharpUploadModel::class, 'model');
     }
 
     public function pictures()
     {
-        return $this->morphMany(SharpUploadModel::class, "model");
+        return $this->morphMany(SharpUploadModel::class, 'model');
     }
 }

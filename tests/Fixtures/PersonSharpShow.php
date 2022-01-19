@@ -13,62 +13,68 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PersonSharpShow extends SharpShow
 {
-    function buildShowFields(FieldsContainer $showFields): void
+    public function buildShowFields(FieldsContainer $showFields): void
     {
-        $showFields->addField(SharpShowTextField::make("name"));
+        $showFields->addField(SharpShowTextField::make('name'));
     }
-    
-    function getInstanceCommands(): ?array
+
+    public function getInstanceCommands(): ?array
     {
         return [
-            "test_command" => new class extends InstanceCommand {
+            'test_command' => new class extends InstanceCommand
+            {
                 public function label(): string
                 {
-                    return "Label";
+                    return 'Label';
                 }
+
                 public function execute($instanceId, array $data = []): array
                 {
                 }
+
                 public function authorizeFor($instanceId): bool
                 {
                     return $instanceId < 10;
                 }
             },
-            
+
         ];
     }
 
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         $this
-            ->configureEntityState("state", new class extends EntityState {
+            ->configureEntityState('state', new class extends EntityState
+            {
                 protected function buildStates(): void
                 {
-                    $this->addState("active", "Label", "blue");
+                    $this->addState('active', 'Label', 'blue');
                 }
+
                 protected function updateState($instanceId, $stateId): array
                 {
                 }
+
                 public function authorizeFor($instanceId): bool
                 {
                     return $instanceId < 10;
                 }
-            });
+            }, );
     }
 
-    function buildShowLayout(ShowLayout $showLayout): void
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection("Identity", function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("name");
+                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('name');
                     });
             });
     }
 
-    function find($id): array
+    public function find($id): array
     {
-        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
+        return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
 }

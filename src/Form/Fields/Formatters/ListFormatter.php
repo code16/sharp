@@ -6,32 +6,30 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 
 class ListFormatter extends SharpFieldFormatter
 {
-
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
      * @return mixed
      */
-    function toFront(SharpFormField $field, $value)
+    public function toFront(SharpFormField $field, $value)
     {
         return collect($value)
-            ->map(function ($item) use($field) {
+            ->map(function ($item) use ($field) {
                 $itemArray = [
-                    $field->itemIdAttribute() => $item[$field->itemIdAttribute()]
+                    $field->itemIdAttribute() => $item[$field->itemIdAttribute()],
                 ];
 
                 $field
                     ->itemFields()
-                    ->each(function($itemField) use($item, &$itemArray) {
+                    ->each(function ($itemField) use ($item, &$itemArray) {
                         $key = $itemField->key();
 
-                        if(strpos($key, ':') !== false) {
+                        if (strpos($key, ':') !== false) {
                             // It's a sub attribute (like mother:name)
-                            list($attribute, $subAttribute) = explode(':', $key);
+                            [$attribute, $subAttribute] = explode(':', $key);
                             $itemArray[$key] = isset($item[$attribute][$subAttribute])
                                 ? $itemField->formatter()->toFront($itemField, $item[$attribute][$subAttribute])
                                 : null;
-
                         } else {
                             $itemArray[$key] = isset($item[$key])
                                 ? $itemField->formatter()->toFront($itemField, $item[$key])
@@ -45,23 +43,23 @@ class ListFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
-     * @param string $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
      * @return array
      */
-    function fromFront(SharpFormField $field, string $attribute, $value)
+    public function fromFront(SharpFormField $field, string $attribute, $value)
     {
         return collect($value)
-            ->map(function ($item) use($field) {
+            ->map(function ($item) use ($field) {
                 $itemArray = [
-                    $field->itemIdAttribute() => $item[$field->itemIdAttribute()]
+                    $field->itemIdAttribute() => $item[$field->itemIdAttribute()],
                 ];
 
-                foreach($item as $key => $value) {
+                foreach ($item as $key => $value) {
                     $itemField = $field->findItemFormFieldByKey($key);
 
-                    if($itemField) {
+                    if ($itemField) {
                         $itemArray[$key] = $itemField->formatter()
                             ->setInstanceId($this->instanceId)
                             ->fromFront($itemField, $key, $value);

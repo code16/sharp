@@ -14,22 +14,24 @@ abstract class SharpTestCase extends TestCase
     use ArraySubsetAsserts;
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return array
      */
     protected function getPackageProviders($app)
     {
         return [SharpServiceProvider::class];
     }
-    
+
     protected function disableSharpAuthorizationChecks(): void
     {
-        $this->app->bind(SharpAuthorizationManager::class, function() {
-            return new class(app(SharpEntityManager::class), app(Gate::class)) extends SharpAuthorizationManager {
+        $this->app->bind(SharpAuthorizationManager::class, function () {
+            return new class(app(SharpEntityManager::class), app(Gate::class)) extends SharpAuthorizationManager
+            {
                 public function isAllowed(string $ability, string $entityKey, ?string $instanceId = null): bool
                 {
                     return true;
                 }
+
                 public function check(string $ability, string $entityKey, ?string $instanceId = null): void
                 {
                 }

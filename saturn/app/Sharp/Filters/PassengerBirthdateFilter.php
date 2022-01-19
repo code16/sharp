@@ -9,8 +9,8 @@ class PassengerBirthdateFilter extends EntityListDateRangeRequiredFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Born between")
-            ->configureDateFormat("YYYY-MM-DD")
+        $this->configureLabel('Born between')
+            ->configureDateFormat('YYYY-MM-DD')
             ->configureMondayFirst(false)
             ->configureRetainInSession();
     }
@@ -18,8 +18,8 @@ class PassengerBirthdateFilter extends EntityListDateRangeRequiredFilter
     public function defaultValue(): array
     {
         return [
-            "start" => (new Carbon())->setDate(2014,1,1),
-            "end" => (new Carbon())->setDate(2014,12,31),
+            'start' => (new Carbon())->setDate(2014, 1, 1),
+            'end' => (new Carbon())->setDate(2014, 12, 31),
         ];
     }
 }

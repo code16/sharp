@@ -14,12 +14,12 @@ class AddBrandAndModelColumnsToSpaceshipTypes extends Migration
     public function up()
     {
         Schema::table('spaceship_types', function (Blueprint $table) {
-            $table->longText("brands")->nullable();
+            $table->longText('brands')->nullable();
         });
 
         Schema::table('spaceships', function (Blueprint $table) {
-            $table->string("brand")->nullable();
-            $table->string("model")->nullable();
+            $table->string('brand')->nullable();
+            $table->string('model')->nullable();
         });
     }
 }
