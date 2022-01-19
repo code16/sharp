@@ -12,7 +12,7 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 abstract class ApiController extends SharpProtectedController
 {
     protected SharpEntityManager $entityManager;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -28,7 +28,7 @@ abstract class ApiController extends SharpProtectedController
     {
         return $this->entityManager->entityFor($entityKey)->getShowOrFail();
     }
-    
+
     protected function getFormInstance(string $entityKey): SharpForm
     {
         return $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);

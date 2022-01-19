@@ -20,8 +20,9 @@ class StateMakeCommand extends GeneratorCommand
         if ($this->option('model')) {
             $replace = $this->buildModelReplacements($replace);
         }
+
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace), array_values($replace), parent::buildClass($name),
         );
     }
 
@@ -60,8 +61,8 @@ class StateMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/entity-state.model.stub'
-            : __DIR__ . '/stubs/entity-state.stub';
+            ? __DIR__.'/stubs/entity-state.model.stub'
+            : __DIR__.'/stubs/entity-state.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

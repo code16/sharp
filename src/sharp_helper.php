@@ -32,13 +32,14 @@ function sharp_check_ability(string $ability, string $entityKey, string $instanc
 
 function sharp_normalize_entity_key(string $entityKey): array
 {
-    $parts = explode(":", $entityKey);
+    $parts = explode(':', $entityKey);
+
     return count($parts) == 1 ? [$parts[0], null] : $parts;
 }
 
 function sharp_base_url_segment(): string
 {
-    return config("sharp.custom_url_segment", "sharp");
+    return config('sharp.custom_url_segment', 'sharp');
 }
 
 /**
@@ -52,7 +53,6 @@ function is_method_implemented_in_concrete_class($handler, string $methodName): 
         $declaringClass = $foo->getDeclaringClass()->getName();
 
         return $foo->getPrototype()->getDeclaringClass()->getName() !== $declaringClass;
-
     } catch (\ReflectionException $e) {
         return false;
     }

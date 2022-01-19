@@ -22,7 +22,7 @@ return [
     'geolocation.modal.title' => 'Введите адрес или отметьте на карте',
     'geolocation.modal.title-no-geocoding' => 'Отметьте на карте',
     'geolocation.modal.geocode_input.placeholder' => 'Полный адрес',
-    'geolocation.modal.geocode_input.message.error' => "Ошибка: сервер карт не доступен",
+    'geolocation.modal.geocode_input.message.error' => 'Ошибка: сервер карт не доступен',
     'geolocation.modal.geocode_input.message.no_results' => 'Ничего не найдено по запросу ":query"',
     'geolocation.modal.search_button' => 'Поиск',
 
@@ -35,12 +35,12 @@ return [
 
     'multiselect.placeholder' => 'Выберите варианты',
     'multiselect.max_text' => 'Достигнут лимит вариантов',
-    
+
     'tags.unknown_label' => 'Неизвестно',
-    
+
     'select.select_all' => 'Выбрать всё',
     'select.unselect_all' => 'Снять выделение',
-    'select.validation.max_selected' => "Выбрано слишком много элементов (:max_selected макс.)",
+    'select.validation.max_selected' => 'Выбрано слишком много элементов (:max_selected макс.)',
 
     'autocomplete.no_results_text' => 'Ничего не найдено',
 

@@ -5,7 +5,7 @@ namespace Code16\Sharp\Utils\Menu;
 class SharpMenuItemSection extends SharpMenuItem
 {
     use HasSharpMenuItems;
-    
+
     public function __construct(protected string $label)
     {
     }
@@ -18,6 +18,7 @@ class SharpMenuItemSection extends SharpMenuItem
     public function addSeparator(string $label): self
     {
         $this->items[] = new SharpMenuItemSeparator($label);
+
         return $this;
     }
 

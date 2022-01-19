@@ -14,24 +14,24 @@ class SharpFormAutocompleteField extends SharpFormField
     use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates,
         SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "autocomplete";
+    const FIELD_TYPE = 'autocomplete';
 
     protected string $mode;
     /** @var Collection|array */
     protected $localValues = [];
-    protected array $localSearchKeys = ["value"];
-    protected string $remoteMethod = "GET";
+    protected array $localSearchKeys = ['value'];
+    protected string $remoteMethod = 'GET';
     protected ?string $remoteEndpoint = null;
-    protected string $remoteSearchAttribute = "query";
-    protected string $itemIdAttribute = "id";
+    protected string $remoteSearchAttribute = 'query';
+    protected string $itemIdAttribute = 'id';
     protected int $searchMinChars = 1;
     protected ?array $dynamicAttributes = null;
-    protected string $dataWrapper = "";
+    protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
 
     /**
-     * @param string $key
-     * @param string $mode "local" or "remote"
+     * @param  string  $key
+     * @param  string  $mode  "local" or "remote"
      * @return static
      */
     public static function make(string $key, string $mode): self
@@ -43,7 +43,7 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
-     * @param array|Collection $localValues
+     * @param  array|Collection  $localValues
      * @return $this
      */
     public function setLocalValues($localValues): self
@@ -71,24 +71,24 @@ class SharpFormAutocompleteField extends SharpFormField
     {
         $this->remoteEndpoint = $dynamicRemoteEndpoint;
 
-        if($defaultValues) {
+        if ($defaultValues) {
             $defaultEndpoint = $dynamicRemoteEndpoint;
             collect($defaultValues)
                 ->each(function ($value, $name) use (&$defaultEndpoint) {
-                    $defaultEndpoint = str_replace("{{" . $name . "}}", $value, $defaultEndpoint);
+                    $defaultEndpoint = str_replace('{{'.$name.'}}', $value, $defaultEndpoint);
                 });
         }
 
         $this->dynamicAttributes = [
             array_merge(
                 [
-                    "name" => "remoteEndpoint",
-                    "type"  => "template"
+                    'name' => 'remoteEndpoint',
+                    'type' => 'template',
                 ],
                 ($defaultEndpoint ?? false)
-                    ? ["default" => $defaultEndpoint]
-                    : []
-            )
+                    ? ['default' => $defaultEndpoint]
+                    : [],
+            ),
         ];
 
         return $this;
@@ -103,14 +103,14 @@ class SharpFormAutocompleteField extends SharpFormField
 
     public function setRemoteMethodGET(): self
     {
-        $this->remoteMethod = "GET";
+        $this->remoteMethod = 'GET';
 
         return $this;
     }
 
     public function setRemoteMethodPOST(): self
     {
-        $this->remoteMethod = "POST";
+        $this->remoteMethod = 'POST';
 
         return $this;
     }
@@ -124,26 +124,26 @@ class SharpFormAutocompleteField extends SharpFormField
 
     public function setListItemTemplatePath(string $listItemTemplatePath): self
     {
-        $this->setTemplatePath($listItemTemplatePath, "list");
-        
+        $this->setTemplatePath($listItemTemplatePath, 'list');
+
         return $this;
     }
 
     public function setResultItemTemplatePath(string $resultItemTemplate): self
     {
-        $this->setTemplatePath($resultItemTemplate, "result");
-        
+        $this->setTemplatePath($resultItemTemplate, 'result');
+
         return $this;
     }
 
     public function setListItemInlineTemplate(string $template): self
     {
-        return $this->setInlineTemplate($template, "list");
+        return $this->setInlineTemplate($template, 'list');
     }
 
     public function setResultItemInlineTemplate(string $template): self
     {
-        return $this->setInlineTemplate($template, "result");
+        return $this->setInlineTemplate($template, 'result');
     }
 
     public function setAdditionalTemplateData(array $data): self
@@ -176,10 +176,10 @@ class SharpFormAutocompleteField extends SharpFormField
     {
         $this->dynamicAttributes = [
             [
-                "name" => "localValues",
-                "type" => "map",
-                "path" => $fieldKeys
-            ]
+                'name' => 'localValues',
+                'type' => 'map',
+                'path' => $fieldKeys,
+            ],
         ];
 
         return $this;
@@ -187,12 +187,12 @@ class SharpFormAutocompleteField extends SharpFormField
 
     public function isRemote(): bool
     {
-        return $this->mode == "remote";
+        return $this->mode == 'remote';
     }
 
     public function isLocal(): bool
     {
-        return $this->mode == "local";
+        return $this->mode == 'local';
     }
 
     public function itemIdAttribute(): string
@@ -203,18 +203,18 @@ class SharpFormAutocompleteField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "mode" => "required|in:local,remote",
-            "itemIdAttribute" => "required",
-            "listItemTemplate" => "required",
-            "resultItemTemplate" => "required",
-            "searchMinChars" => "required|integer",
-            "localValues" => "array",
-            "templateData" => "nullable|array",
-            "searchKeys" => "required_if:mode,local|array",
-            "remoteEndpoint" => "required_if:mode,remote",
-            "remoteMethod" => "required_if:mode,remote|in:GET,POST",
-            "remoteSearchAttribute" => "required_if:mode,remote",
-            "debounceDelay" => "required|integer",
+            'mode' => 'required|in:local,remote',
+            'itemIdAttribute' => 'required',
+            'listItemTemplate' => 'required',
+            'resultItemTemplate' => 'required',
+            'searchMinChars' => 'required|integer',
+            'localValues' => 'array',
+            'templateData' => 'nullable|array',
+            'searchKeys' => 'required_if:mode,local|array',
+            'remoteEndpoint' => 'required_if:mode,remote',
+            'remoteMethod' => 'required_if:mode,remote|in:GET,POST',
+            'remoteSearchAttribute' => 'required_if:mode,remote',
+            'debounceDelay' => 'required|integer',
         ];
     }
 
@@ -223,28 +223,28 @@ class SharpFormAutocompleteField extends SharpFormField
         return parent::buildArray(
             array_merge(
                 [
-                    "mode" => $this->mode,
-                    "placeholder" => $this->placeholder,
-                    "localValues" => $this->isLocal() && $this->dynamicAttributes
-                        ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]["path"]))
+                    'mode' => $this->mode,
+                    'placeholder' => $this->placeholder,
+                    'localValues' => $this->isLocal() && $this->dynamicAttributes
+                        ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]['path']))
                         : ($this->isLocal() ? self::formatOptions($this->localValues, $this->itemIdAttribute) : []),
-                    "itemIdAttribute" => $this->itemIdAttribute,
-                    "searchKeys" => $this->localSearchKeys,
-                    "remoteEndpoint" => $this->remoteEndpoint,
-                    "dataWrapper" => $this->dataWrapper,
-                    "remoteMethod" => $this->remoteMethod,
-                    "remoteSearchAttribute" => $this->remoteSearchAttribute,
-                    "debounceDelay" => $this->debounceDelay,
-                    "templateData" => $this->additionalTemplateData,
-                    "listItemTemplate" => $this->template("list"),
-                    "resultItemTemplate" => $this->template("result"),
-                    "searchMinChars" => $this->searchMinChars,
-                    "localized" => $this->localized,
-                ], 
+                    'itemIdAttribute' => $this->itemIdAttribute,
+                    'searchKeys' => $this->localSearchKeys,
+                    'remoteEndpoint' => $this->remoteEndpoint,
+                    'dataWrapper' => $this->dataWrapper,
+                    'remoteMethod' => $this->remoteMethod,
+                    'remoteSearchAttribute' => $this->remoteSearchAttribute,
+                    'debounceDelay' => $this->debounceDelay,
+                    'templateData' => $this->additionalTemplateData,
+                    'listItemTemplate' => $this->template('list'),
+                    'resultItemTemplate' => $this->template('result'),
+                    'searchMinChars' => $this->searchMinChars,
+                    'localized' => $this->localized,
+                ],
                 $this->dynamicAttributes
-                    ? ["dynamicAttributes" => $this->dynamicAttributes]
-                    : []
-            )
+                    ? ['dynamicAttributes' => $this->dynamicAttributes]
+                    : [],
+            ),
         );
     }
 }

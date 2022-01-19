@@ -26,7 +26,7 @@ class ResetTestData extends Command
     protected $filesystem;
 
     /**
-     * @param Filesystem $filesystem
+     * @param  Filesystem  $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -41,10 +41,10 @@ class ResetTestData extends Command
      */
     public function handle()
     {
-        Artisan::call('migrate:fresh', ["--seed" => true, "--force" => true]);
+        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
 
-        $this->filesystem->cleanDirectory("storage/app/data");
-        $this->filesystem->cleanDirectory("storage/app/tmp");
-        $this->filesystem->cleanDirectory("public/thumbnails");
+        $this->filesystem->cleanDirectory('storage/app/data');
+        $this->filesystem->cleanDirectory('storage/app/tmp');
+        $this->filesystem->cleanDirectory('public/thumbnails');
     }
 }

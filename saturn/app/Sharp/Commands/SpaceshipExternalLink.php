@@ -9,13 +9,13 @@ class SpaceshipExternalLink extends InstanceCommand
 {
     public function label(): string
     {
-        return "A Link to the Form";
+        return 'A Link to the Form';
     }
 
     public function execute($instanceId, array $data = []): array
     {
         return $this->link(
-            LinkToForm::make('spaceship', $instanceId)->renderAsUrl()
+            LinkToForm::make('spaceship', $instanceId)->renderAsUrl(),
         );
     }
 }

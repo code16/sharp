@@ -46,14 +46,14 @@ abstract class SharpWidget
     protected function validate(array $properties): void
     {
         $validator = Validator::make(
-            $properties, 
+            $properties,
             array_merge(
                 [
                     'key' => 'required',
                     'type' => 'required',
                 ],
-                $this->validationRules()
-            )
+                $this->validationRules(),
+            ),
         );
 
         if ($validator->fails()) {
@@ -64,14 +64,14 @@ abstract class SharpWidget
     protected function buildArray(array $childArray): array
     {
         $array = collect([
-            "key" => $this->key,
-            "type" => $this->type,
-            "title" => $this->title,
-            "link" => $this->link
+            'key' => $this->key,
+            'type' => $this->type,
+            'title' => $this->title,
+            'link' => $this->link,
         ])
             ->merge($childArray)
-            ->filter(function($value) {
-                return !is_null($value);
+            ->filter(function ($value) {
+                return ! is_null($value);
             })
             ->all();
 
@@ -85,5 +85,5 @@ abstract class SharpWidget
         return [];
     }
 
-    public abstract function toArray(): array;
+    abstract public function toArray(): array;
 }

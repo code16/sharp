@@ -9,8 +9,8 @@ trait SharpFormFieldWithUpload
     protected ?float $maxFileSize = null;
     protected ?array $cropRatio = null;
     protected ?array $transformableFileTypes = null;
-    protected string $storageDisk = "local";
-    protected string|Closure $storageBasePath = "data";
+    protected string $storageDisk = 'local';
+    protected string|Closure $storageBasePath = 'data';
     protected bool $transformable = true;
     protected bool $transformKeepOriginal = true;
     protected bool $compactThumbnail = false;
@@ -25,19 +25,18 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string $ratio 16:9, 1:1, ...
-     * @param array|null $transformableFileTypes
+     * @param  string  $ratio  16:9, 1:1, ...
+     * @param  array|null  $transformableFileTypes
      * @return static
      */
     public function setCropRatio(string $ratio = null, array $transformableFileTypes = null): self
     {
-        if($ratio) {
-            $this->cropRatio = explode(":", $ratio);
+        if ($ratio) {
+            $this->cropRatio = explode(':', $ratio);
 
             $this->transformableFileTypes = $transformableFileTypes
                 ? $this->formatFileExtension($transformableFileTypes)
                 : null;
-
         } else {
             $this->cropRatio = null;
             $this->transformableFileTypes = null;
@@ -74,7 +73,7 @@ trait SharpFormFieldWithUpload
     public function setTransformable(bool $transformable = true, bool $transformKeepOriginal = true): self
     {
         $this->transformable = $transformable;
-        if($transformable) {
+        if ($transformable) {
             $this->transformKeepOriginal = $transformKeepOriginal;
         }
 
@@ -83,7 +82,7 @@ trait SharpFormFieldWithUpload
 
     public function isTransformOriginal(): bool
     {
-        return $this->transformable && !$this->transformKeepOriginal;
+        return $this->transformable && ! $this->transformKeepOriginal;
     }
 
     public function setStorageDisk(string $storageDisk): self
@@ -94,7 +93,7 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string|Closure $storageBasePath
+     * @param  string|Closure  $storageBasePath
      * @return static
      */
     public function setStorageBasePath($storageBasePath): self
@@ -105,7 +104,7 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string|array $fileFilter
+     * @param  string|array  $fileFilter
      * @return static
      */
     public function setFileFilter($fileFilter): self
@@ -117,7 +116,7 @@ trait SharpFormFieldWithUpload
 
     public function setFileFilterImages(): self
     {
-        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
+        $this->setFileFilter(['.jpg', '.jpeg', '.gif', '.png']);
 
         return $this;
     }
@@ -138,21 +137,22 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string|array $fileFilter
+     * @param  string|array  $fileFilter
      * @return array
      */
     private function formatFileExtension($fileFilter): array
     {
-        if (!is_array($fileFilter)) {
-            $fileFilter = explode(",", $fileFilter);
+        if (! is_array($fileFilter)) {
+            $fileFilter = explode(',', $fileFilter);
         }
 
         return collect($fileFilter)
             ->map(function ($filter) {
                 $filter = trim($filter);
-                if (substr($filter, 0, 1) != ".") {
+                if (substr($filter, 0, 1) != '.') {
                     $filter = ".$filter";
                 }
+
                 return $filter;
             })
             ->all();

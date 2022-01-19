@@ -9,8 +9,20 @@ use Illuminate\Contracts\Support\Arrayable;
 
 abstract class SharpEntityDefaultTestList extends SharpEntityList
 {
-    function buildListFields(EntityListFieldsContainer $fieldsContainer): void {}
-    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void {}
-    function buildListConfig(): void {}
-    function getListData(): array|Arrayable { return []; }
+    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    {
+    }
+
+    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+    }
+
+    public function buildListConfig(): void
+    {
+    }
+
+    public function getListData(): array|Arrayable
+    {
+        return [];
+    }
 }

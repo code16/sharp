@@ -13,7 +13,7 @@ class SharpFormHtmlField extends SharpFormField
         template as protected parentTemplate;
     }
 
-    const FIELD_TYPE = "html";
+    const FIELD_TYPE = 'html';
 
     public static function make(string $key): self
     {
@@ -22,12 +22,12 @@ class SharpFormHtmlField extends SharpFormField
 
     public function setTemplatePath(string $templatePath): self
     {
-        return $this->parentSetTemplatePath($templatePath, "html");
+        return $this->parentSetTemplatePath($templatePath, 'html');
     }
 
     public function setInlineTemplate(string $template): self
     {
-        return $this->parentSetInlineTemplate($template, "html");
+        return $this->parentSetInlineTemplate($template, 'html');
     }
 
     public function setAdditionalTemplateData(array $data): self
@@ -37,22 +37,22 @@ class SharpFormHtmlField extends SharpFormField
 
     public function template(): ?string
     {
-        return $this->parentTemplate("html");
+        return $this->parentTemplate('html');
     }
 
     protected function validationRules(): array
     {
         return [
-            "template" => "required",
-            "templateData" => "nullable|array",
+            'template' => 'required',
+            'templateData' => 'nullable|array',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "template" => $this->template(),
-            "templateData" => $this->additionalTemplateData,
+            'template' => $this->template(),
+            'templateData' => $this->additionalTemplateData,
         ]);
     }
 }
