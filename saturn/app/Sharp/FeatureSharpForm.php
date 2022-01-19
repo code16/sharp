@@ -15,48 +15,48 @@ class FeatureSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormTextField::make("name")
-                    ->setLabel("Name")
+                SharpFormTextField::make('name')
+                    ->setLabel('Name'),
             )
             ->addField(
-                SharpFormSelectField::make("type", Feature::TYPES)
+                SharpFormSelectField::make('type', Feature::TYPES)
                     ->setDisplayAsDropdown()
-                    ->setLabel("Type")
+                    ->setLabel('Type'),
             )
             ->addField(
-                SharpFormSelectField::make("subtype", Feature::SUBTYPES)
+                SharpFormSelectField::make('subtype', Feature::SUBTYPES)
                     ->setDisplayAsDropdown()
-                    ->setOptionsLinkedTo("type")
-                    ->setLabel("Sub-type")
+                    ->setOptionsLinkedTo('type')
+                    ->setLabel('Sub-type'),
             );
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(5, function(FormLayoutColumn $column) {
-            $column->withSingleField("name")
-                ->withFields("type|6", "subtype|6");
+        $formLayout->addColumn(5, function (FormLayoutColumn $column) {
+            $column->withSingleField('name')
+                ->withFields('type|6', 'subtype|6');
         });
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this->transform(
-            Feature::findOrFail($id)
+            Feature::findOrFail($id),
         );
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         $instance = $id ? Feature::findOrFail($id) : new Feature;
         $this->save($instance, $data);
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
         Feature::findOrFail($id)->delete();
     }

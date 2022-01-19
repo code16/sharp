@@ -8,7 +8,7 @@ return [
 
     'command.confirm.title' => 'Bevestig',
     'command.info.title' => 'Info',
-    'state.422.title' => "Kan staat niet wijzigen",
+    'state.422.title' => 'Kan staat niet wijzigen',
     'cropper.title' => 'Transformeer afbeelding',
 
     // Other errors fallback text

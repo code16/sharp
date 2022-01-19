@@ -23,18 +23,18 @@ class ShowInstanceStateControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->postJson('/sharp/api/show/person/state/1', [
-            "attribute" => "state",
-            "value" => "ok"
+            'attribute' => 'state',
+            'value' => 'ok',
         ])
             ->assertStatus(200)
             ->assertJson([
-                "action" => "refresh",
-                "value" => "ok",
+                'action' => 'refresh',
+                'value' => 'ok',
             ]);
 
         $this->postJson('/sharp/api/show/person/state', [
-            "attribute" => "state",
-            "value" => "ok"
+            'attribute' => 'state',
+            'value' => 'ok',
         ])
             ->assertStatus(404);
     }
@@ -45,18 +45,18 @@ class ShowInstanceStateControllerTest extends BaseApiTest
         $this->buildTheWorld(true);
 
         $this->postJson('/sharp/api/show/person/state', [
-            "attribute" => "state",
-            "value" => "ok"
+            'attribute' => 'state',
+            'value' => 'ok',
         ])
             ->assertStatus(200)
             ->assertJson([
-                "action" => "reload",
-                "value" => "ok",
+                'action' => 'reload',
+                'value' => 'ok',
             ]);
 
         $this->postJson('/sharp/api/show/person/state/1', [
-            "attribute" => "state",
-            "value" => "ok"
+            'attribute' => 'state',
+            'value' => 'ok',
         ])
             ->assertStatus(404);
     }
@@ -69,25 +69,26 @@ class ShowInstanceStateControllerTest extends BaseApiTest
             'sharp.entities.person.show',
             $singleShow
                 ? ShowInstanceStatePersonSharpSingleShow::class
-                : ShowInstanceStatePersonSharpShow::class
+                : ShowInstanceStatePersonSharpShow::class,
         );
     }
 }
 
-class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
-
-    function buildShowConfig(): void
+class ShowInstanceStatePersonSharpShow extends PersonSharpShow
+{
+    public function buildShowConfig(): void
     {
-        $this->configureEntityState("state", new class() extends EntityState {
+        $this->configureEntityState('state', new class() extends EntityState
+        {
             protected function buildStates(): void
             {
-                $this->addState("ok", "OK", "blue");
-                $this->addState("ko", "KO2", "red");
+                $this->addState('ok', 'OK', 'blue');
+                $this->addState('ko', 'KO2', 'red');
             }
 
             protected function updateState($instanceId, $stateId): array
             {
-                if($stateId == "ok") {
+                if ($stateId == 'ok') {
                     return $this->refresh($instanceId);
                 }
             }
@@ -96,24 +97,25 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow {
             {
                 return $instanceId != 100;
             }
-        });
+        }, );
     }
 }
 
-class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow {
-
-    function buildShowConfig(): void
+class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow
+{
+    public function buildShowConfig(): void
     {
-        $this->setEntityState("state", new class() extends SingleEntityState {
+        $this->setEntityState('state', new class() extends SingleEntityState
+        {
             protected function buildStates(): void
             {
-                $this->addState("ok", "OK", "blue");
-                $this->addState("ko", "KO2", "red");
+                $this->addState('ok', 'OK', 'blue');
+                $this->addState('ko', 'KO2', 'red');
             }
 
             protected function updateSingleState(string $stateId): array
             {
-                if($stateId == "ok") {
+                if ($stateId == 'ok') {
                     return $this->reload();
                 }
             }
@@ -122,6 +124,6 @@ class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow {
             {
                 return true;
             }
-        });
+        }, );
     }
 }

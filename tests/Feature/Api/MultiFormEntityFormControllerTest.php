@@ -15,20 +15,20 @@ use Illuminate\Foundation\Http\FormRequest;
 class MultiFormEntityFormControllerTest extends BaseApiTest
 {
     use WithCurrentSharpRequestFake;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->login();
         $this->buildTheWorld();
         app(SharpEntityManager::class)
-            ->entityFor("person")
+            ->entityFor('person')
             ->setList(PersonWithMultiformSharpEntityList::class)
             ->setPolicy(AuthorizationsTestMultiPersonPolicy::class)
             ->setMultiforms([
-                "big" => [BigPersonSharpForm::class, "Big person"],
-                "small" => [SmallPersonSharpForm::class, "Small person"]
+                'big' => [BigPersonSharpForm::class, 'Big person'],
+                'small' => [SmallPersonSharpForm::class, 'Small person'],
             ]);
     }
 
@@ -37,39 +37,39 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     {
         $this->getJson('/sharp/api/form/person:small/1')
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "name" => "Joe Pesci"
+            ->assertJson(['data' => [
+                'name' => 'Joe Pesci',
             ]]);
 
         $this->getJson('/sharp/api/form/person:big/1')
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "name" => "John Wayne",
-                "height" => 180
+            ->assertJson(['data' => [
+                'name' => 'John Wayne',
+                'height' => 180,
             ]]);
     }
 
     /** @test */
     public function we_can_update_an_sub_entity()
     {
-        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:small/1");
+        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person:small/1');
         $this
             ->postJson('/sharp/api/form/person:small/1', [
-                "name" => "Jane Fonda"
+                'name' => 'Jane Fonda',
             ])
             ->assertOk()
             ->assertJson([
-                "redirectUrl" => url("/sharp/s-list/person")
+                'redirectUrl' => url('/sharp/s-list/person'),
             ]);
 
-        $this->fakeCurrentSharpRequestWithUrl("/sharp/s-list/person/s-form/person:big/1");
+        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person:big/1');
         $this
             ->postJson('/sharp/api/form/person:big/1', [
-                "name" => "Jane Fonda"
+                'name' => 'Jane Fonda',
             ])
             ->assertOk()
             ->assertJson([
-                "redirectUrl" => url("/sharp/s-list/person")
+                'redirectUrl' => url('/sharp/s-list/person'),
             ]);
     }
 
@@ -77,20 +77,20 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     public function we_can_validate_a_sub_entity_before_update()
     {
         app(SharpEntityManager::class)
-            ->entityFor("person")
-            ->setValidator(BigPersonSharpValidator::class, "big");
+            ->entityFor('person')
+            ->setValidator(BigPersonSharpValidator::class, 'big');
 
         $this
             ->postJson('/sharp/api/form/person:big/1', [
-                "name" => "Bob"
+                'name' => 'Bob',
             ])
             ->assertStatus(422)
             ->assertJson([
-                "errors" => [
-                    "height" => [
-                        "The height field is required."
-                    ]
-                ]
+                'errors' => [
+                    'height' => [
+                        'The height field is required.',
+                    ],
+                ],
             ]);
     }
 
@@ -98,7 +98,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     public function global_authorizations_are_applied_sub_entities()
     {
         $this->app['config']->set('sharp.entities.person.authorizations', [
-            "view" => false
+            'view' => false,
         ]);
 
         $this->getJson('/sharp/api/form/person:small/1')
@@ -125,88 +125,100 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     public function policy_authorizations_are_appended_to_the_response_for_a_sub_entity()
     {
         $this->getJson('/sharp/api/form/person:small/4')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => false,
-                "view" => true,
-            ]
+            'authorizations' => [
+                'delete' => false,
+                'update' => false,
+                'view' => true,
+            ],
         ]);
     }
 }
 
 class SmallPersonSharpForm extends SharpForm
 {
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
-        $formFields->addField(SharpFormTextField::make("name"));
+        $formFields->addField(SharpFormTextField::make('name'));
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-            return $column->withSingleField("name");
+        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
+            return $column->withSingleField('name');
         });
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this
-            ->transform(["name" => "Joe Pesci"]);
+            ->transform(['name' => 'Joe Pesci']);
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         return $id;
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
     }
 
     protected function getFormValidatorClass(): ?string
     {
         return app(SharpEntityManager::class)
-                ->entityFor("person")
-            ->multiformValidatorsForTest["small"] ?? null;
+                ->entityFor('person')
+            ->multiformValidatorsForTest['small'] ?? null;
     }
 }
 
 class BigPersonSharpForm extends SmallPersonSharpForm
 {
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         parent::buildFormFields($formFields);
-        $formFields->addField(SharpFormTextField::make("height"));
+        $formFields->addField(SharpFormTextField::make('height'));
     }
 
-    function find($id): array
+    public function find($id): array
     {
-        return ["name" => "John Wayne", "height" => 180];
+        return ['name' => 'John Wayne', 'height' => 180];
     }
 
     protected function getFormValidatorClass(): ?string
     {
         return app(SharpEntityManager::class)
-                ->entityFor("person")
-                ->multiformValidatorsForTest["big"] ?? null;
+                ->entityFor('person')
+                ->multiformValidatorsForTest['big'] ?? null;
     }
 }
 
 class BigPersonSharpValidator extends FormRequest
 {
-    public function authorize() { return true; }
+    public function authorize()
+    {
+        return true;
+    }
 
     public function rules()
     {
-        return ['name' => 'required', "height" => "required|numeric"];
+        return ['name' => 'required', 'height' => 'required|numeric'];
     }
 }
 
 class AuthorizationsTestMultiPersonPolicy extends SharpEntityPolicy
 {
-    public function view($user, $id): bool { return $id != 3; }
+    public function view($user, $id): bool
+    {
+        return $id != 3;
+    }
 
-    public function update($user, $id): bool { return $id < 3; }
+    public function update($user, $id): bool
+    {
+        return $id < 3;
+    }
 
-    public function delete($user, $id): bool { return $id < 3; }
+    public function delete($user, $id): bool
+    {
+        return $id < 3;
+    }
 }

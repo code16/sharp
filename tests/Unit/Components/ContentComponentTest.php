@@ -11,32 +11,32 @@ use Illuminate\Support\Facades\Blade;
 class ContentComponentTest extends SharpTestCase
 {
     use InteractsWithViews;
-    
+
     /** @test */
-    function we_can_render_content()
+    public function we_can_render_content()
     {
         Blade::component(Image::class, 'sharp-image');
-        
-        $view = $this->blade(<<<blade
-            <x-sharp-content :image-thumbnail-width="500">
-                <x-sharp-content::attributes
-                    component="sharp-image"
-                    :thumbnail-height="500"
-                />
-                {!! \$content !!}
-            </x-sharp-content>
-        blade, [
-            'content' => <<<blade
-                <div class="markdown">
-                    <p>Text</p>
-                    <x-sharp-image path="storage/path.png"></x-sharp-image>
-                </div>
-            blade,
+
+        $view = $this->blade(<<<'blade'
+                <x-sharp-content :image-thumbnail-width="500">
+                    <x-sharp-content::attributes
+                        component="sharp-image"
+                        :thumbnail-height="500"
+                    />
+                    {!! $content !!}
+                </x-sharp-content>
+            blade, [
+            'content' => <<<'blade'
+                    <div class="markdown">
+                        <p>Text</p>
+                        <x-sharp-image path="storage/path.png"></x-sharp-image>
+                    </div>
+                blade,
         ]);
-        
+
         // Retrieve component @see to Image::__construct()
         [$imageComponent] = view()->shared('sharp-image');
-        
+
         $this->assertEquals(
             [
                 'path' => 'storage/path.png',
@@ -45,19 +45,19 @@ class ContentComponentTest extends SharpTestCase
             ],
             $imageComponent->attributes->getAttributes(),
         );
-        
+
         $view->assertDontSee('<body');
-        
+
         $view->assertSeeInOrder(
             [
                 '<div class="markdown">',
                 '<p>Text</p>',
                 '<img class="sharp-image">',
-                '</div>'
+                '</div>',
             ],
-            false
+            false,
         );
-    
+
         $this->assertFalse(app()->has(Content::class));
     }
 }

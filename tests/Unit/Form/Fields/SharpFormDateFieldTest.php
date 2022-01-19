@@ -8,126 +8,125 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpFormDateFieldTest extends SharpTestCase
 {
     /** @test */
-    function only_default_values_are_set()
+    public function only_default_values_are_set()
     {
-        $defaultFormField = SharpFormDateField::make("date");
+        $defaultFormField = SharpFormDateField::make('date');
 
         $this->assertEquals([
-                "key" => "date", "type" => "date",
-                "hasDate" => true, "hasTime" => false,
-                "minTime" => '00:00', "maxTime" => '23:59',
-                "stepTime" => 30, "displayFormat" => "YYYY-MM-DD",
-                "mondayFirst" => true, "language" => $this->app->getLocale()
-            ], $defaultFormField->toArray()
+            'key' => 'date', 'type' => 'date',
+            'hasDate' => true, 'hasTime' => false,
+            'minTime' => '00:00', 'maxTime' => '23:59',
+            'stepTime' => 30, 'displayFormat' => 'YYYY-MM-DD',
+            'mondayFirst' => true, 'language' => $this->app->getLocale(),
+        ], $defaultFormField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_hasDate_and_hasTime()
+    public function we_can_define_hasDate_and_hasTime()
     {
-        $dateFormField = SharpFormDateField::make("date")
+        $dateFormField = SharpFormDateField::make('date')
             ->setHasDate();
 
-        $dateTimeFormField = SharpFormDateField::make("date")
+        $dateTimeFormField = SharpFormDateField::make('date')
             ->setHasTime();
 
-        $timeFormField = SharpFormDateField::make("date")
+        $timeFormField = SharpFormDateField::make('date')
             ->setHasTime()
             ->setHasDate(false);
 
         $this->assertArraySubset(
-            ["key" => "date", "type" => "date", "hasDate" => true, "hasTime" => false],
-            $dateFormField->toArray()
+            ['key' => 'date', 'type' => 'date', 'hasDate' => true, 'hasTime' => false],
+            $dateFormField->toArray(),
         );
 
         $this->assertArraySubset(
-            ["key" => "date", "type" => "date", "hasTime" => true, "hasDate" => true],
-            $dateTimeFormField->toArray()
+            ['key' => 'date', 'type' => 'date', 'hasTime' => true, 'hasDate' => true],
+            $dateTimeFormField->toArray(),
         );
 
         $this->assertArraySubset(
-            ["key" => "date", "type" => "date", "hasTime" => true, "hasDate" => false],
-            $timeFormField->toArray()
+            ['key' => 'date', 'type' => 'date', 'hasTime' => true, 'hasDate' => false],
+            $timeFormField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_min_and_max_time()
+    public function we_can_define_min_and_max_time()
     {
-        $dateTimeFormField = SharpFormDateField::make("date")
+        $dateTimeFormField = SharpFormDateField::make('date')
             ->setMinTime(8)
             ->setMaxTime(20, 30);
 
         $this->assertArraySubset([
-                "minTime" => "08:00",
-                "maxTime" => "20:30",
-            ], $dateTimeFormField->toArray()
+            'minTime' => '08:00',
+            'maxTime' => '20:30',
+        ], $dateTimeFormField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_a_step_time()
+    public function we_can_define_a_step_time()
     {
-        $dateFormField = SharpFormDateField::make("date")
+        $dateFormField = SharpFormDateField::make('date')
             ->setStepTime(45);
 
         $this->assertArraySubset(
-            ["stepTime" => 45],
-            $dateFormField->toArray()
+            ['stepTime' => 45],
+            $dateFormField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_monday_as_first_day_of_week()
+    public function we_can_define_monday_as_first_day_of_week()
     {
-        $dateFormField = SharpFormDateField::make("date")
+        $dateFormField = SharpFormDateField::make('date')
             ->setMondayFirst();
 
         $this->assertArraySubset(
-            ["mondayFirst" => true],
-            $dateFormField->toArray()
+            ['mondayFirst' => true],
+            $dateFormField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_a_display_format()
+    public function we_can_define_a_display_format()
     {
-        $dateFormField = SharpFormDateField::make("date")
-            ->setDisplayFormat("DD/MM/YYYY");
+        $dateFormField = SharpFormDateField::make('date')
+            ->setDisplayFormat('DD/MM/YYYY');
 
         $this->assertArraySubset(
-            ["displayFormat" => "DD/MM/YYYY"],
-            $dateFormField->toArray()
+            ['displayFormat' => 'DD/MM/YYYY'],
+            $dateFormField->toArray(),
         );
     }
 
     /** @test */
-    function default_displayFormat_depends_on_date_time_configuration()
+    public function default_displayFormat_depends_on_date_time_configuration()
     {
-        $dateFormField = SharpFormDateField::make("date")
+        $dateFormField = SharpFormDateField::make('date')
             ->setHasDate();
 
-        $dateTimeFormField = SharpFormDateField::make("date")
+        $dateTimeFormField = SharpFormDateField::make('date')
             ->setHasTime();
 
-        $timeFormField = SharpFormDateField::make("date")
+        $timeFormField = SharpFormDateField::make('date')
             ->setHasTime()
             ->setHasDate(false);
 
         $this->assertArraySubset(
-            ["displayFormat" => "YYYY-MM-DD"],
-            $dateFormField->toArray()
+            ['displayFormat' => 'YYYY-MM-DD'],
+            $dateFormField->toArray(),
         );
 
         $this->assertArraySubset(
-            ["displayFormat" => "YYYY-MM-DD HH:mm"],
-            $dateTimeFormField->toArray()
+            ['displayFormat' => 'YYYY-MM-DD HH:mm'],
+            $dateTimeFormField->toArray(),
         );
 
         $this->assertArraySubset(
-            ["displayFormat" => "HH:mm"],
-            $timeFormField->toArray()
+            ['displayFormat' => 'HH:mm'],
+            $timeFormField->toArray(),
         );
     }
-
 }

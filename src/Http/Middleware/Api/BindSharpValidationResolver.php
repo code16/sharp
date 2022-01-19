@@ -15,7 +15,7 @@ class BindSharpValidationResolver
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        app()->validator->resolver(function($translator, $data, $rules, $messages) {
+        app()->validator->resolver(function ($translator, $data, $rules, $messages) {
             return new SharpValidator($translator, $data, $rules, $messages);
         });
 

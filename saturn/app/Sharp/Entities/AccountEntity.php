@@ -11,5 +11,5 @@ class AccountEntity extends SharpEntity
     protected bool $isSingle = true;
     protected ?string $show = AccountSharpShow::class;
     protected ?string $form = AccountSharpForm::class;
-    protected string $label = "My account";
+    protected string $label = 'My account';
 }

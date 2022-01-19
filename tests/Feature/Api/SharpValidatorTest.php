@@ -20,18 +20,18 @@ class SharpValidatorTest extends BaseApiTest
     {
         $this->buildTheWorld();
         app(SharpEntityManager::class)
-            ->entityFor("person")
+            ->entityFor('person')
             ->setValidator(ValidatorTestPersonSharpValidator::class);
 
         $this
             ->postJson('/sharp/api/form/person/1', [
-                "name.text" => ""
+                'name.text' => '',
             ])
             ->assertStatus(422)
             ->assertJson([
-                "errors" => [
-                    "name" => ["The name field is required."] // Regular field name returned
-                ]
+                'errors' => [
+                    'name' => ['The name field is required.'], // Regular field name returned
+                ],
             ]);
     }
 
@@ -40,18 +40,18 @@ class SharpValidatorTest extends BaseApiTest
     {
         $this->buildTheWorld();
         app(SharpEntityManager::class)
-            ->entityFor("person")
+            ->entityFor('person')
             ->setValidator(ValidatorTestPersonExtendingSharpFormRequestSharpValidator::class);
 
         $this
             ->postJson('/sharp/api/form/person/1', [
-                "name.text" => ""
+                'name.text' => '',
             ])
             ->assertStatus(422)
             ->assertJson([
-                "errors" => [
-                    "name" => ["The name field is required."] // Regular field name returned
-                ]
+                'errors' => [
+                    'name' => ['The name field is required.'], // Regular field name returned
+                ],
             ]);
     }
 }

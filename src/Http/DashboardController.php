@@ -6,6 +6,6 @@ class DashboardController extends SharpProtectedController
 {
     public function show(string $dashboardKey)
     {
-        return view("sharp::dashboard", compact('dashboardKey'));
+        return view('sharp::dashboard', compact('dashboardKey'));
     }
 }

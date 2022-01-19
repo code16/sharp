@@ -9,7 +9,7 @@ class SpaceshipPreview extends InstanceCommand
 {
     public function label(): string
     {
-        return "Preview public page";
+        return 'Preview public page';
     }
 
     public function execute($instanceId, array $data = []): array

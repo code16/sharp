@@ -14,7 +14,7 @@ class AddStatusToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string("status")->default("online");
+            $table->string('status')->default('online');
         });
     }
 }

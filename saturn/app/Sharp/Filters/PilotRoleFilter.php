@@ -8,11 +8,11 @@ class PilotRoleFilter extends EntityListSelectFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Role");
+        $this->configureLabel('Role');
     }
 
     public function values(): array
     {
-        return ["jr" => "Junior", "sr" => "Senior"];
+        return ['jr' => 'Junior', 'sr' => 'Senior'];
     }
 }

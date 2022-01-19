@@ -12,7 +12,7 @@ class Image extends Component
         $components[] = $this;
         view()->share('sharp-image', $components);
     }
-    
+
     public function render()
     {
         return '<img class="sharp-image">';

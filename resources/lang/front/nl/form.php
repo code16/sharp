@@ -21,7 +21,7 @@ return [
     'geolocation.modal.title' => 'Typ een adres or klik op de kaart',
     'geolocation.modal.title-no-geocoding' => 'Klik op de kaart',
     'geolocation.modal.geocode_input.placeholder' => 'Volledig adres',
-    'geolocation.modal.geocode_input.message.error' => "Foutmelding: Kan geen verbindingen maken met de Geocoding server",
+    'geolocation.modal.geocode_input.message.error' => 'Foutmelding: Kan geen verbindingen maken met de Geocoding server',
     'geolocation.modal.geocode_input.message.no_results' => 'Geen resultaten voor ":query"',
     'geolocation.modal.search_button' => 'Zoeken',
 

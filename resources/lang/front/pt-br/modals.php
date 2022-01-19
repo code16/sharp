@@ -8,7 +8,7 @@ return [
 
     'command.confirm.title' => 'Confirmar',
     'command.info.title' => 'Informação',
-    'state.422.title' => "Não pode mudar de estado",
+    'state.422.title' => 'Não pode mudar de estado',
     'cropper.title' => 'Transformar a imagem',
 
     // Other errors fallback text
@@ -16,5 +16,8 @@ return [
     'error.message' => 'Ocorreu um erro',
 
     'ok_button' => 'Ok',
-    'cancel_button' => 'Cancelar'
+    'cancel_button' => 'Cancelar',
+
+    'entity_state.edit.title' => 'Atualizar estado',
+    'entity_state.edit.ok_button' => 'Ok',
 ];

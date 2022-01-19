@@ -14,30 +14,30 @@ class HasManyRelationUpdater
         $relatedModelKeyName = $relatedModel->getKeyName();
 
         // Add / update sent items
-        foreach((array)$value as $k => $item) {
+        foreach ((array) $value as $k => $item) {
             $id = $this->findItemId($item, $relatedModelKeyName);
             $relatedInstance = $instance->$attribute()->findOrNew($id);
 
-            if(!$relatedInstance->exists) {
+            if (! $relatedInstance->exists) {
                 // Creation: we call the optional getDefaultAttributesFor($attribute)
                 // on the model, to get some default values for required attributes
                 $relatedInstance->fill(
                     method_exists($instance, 'getDefaultAttributesFor')
                         ? $instance->getDefaultAttributesFor($attribute)
-                        : []
+                        : [],
                 );
             }
 
-            if($relatedInstance->incrementing) {
+            if ($relatedInstance->incrementing) {
                 // Remove the id
                 unset($item[$relatedModelKeyName]);
             }
 
             $model = app(EloquentModelUpdater::class)->update($relatedInstance, $item);
 
-            if($sortConfiguration) {
+            if ($sortConfiguration) {
                 $model->update([
-                    $sortConfiguration["orderAttribute"] => ($k+1)
+                    $sortConfiguration['orderAttribute'] => ($k + 1),
                 ]);
             }
 
@@ -46,7 +46,7 @@ class HasManyRelationUpdater
 
         // Remove unsent items
         $instance->$attribute->whereNotIn($relatedModelKeyName, $this->handledIds)
-            ->each(function($item) {
+            ->each(function ($item) {
                 $item->delete();
             });
     }
@@ -55,7 +55,7 @@ class HasManyRelationUpdater
     {
         $id = $item[$relatedModelKeyName];
 
-        if($id) {
+        if ($id) {
             $this->handledIds[] = $id;
         }
 

@@ -18,7 +18,7 @@ return [
     'geolocation.modal.title' => 'Adresse eingeben oder auf Karte klicken',
     'geolocation.modal.title-no-geocoding' => 'Auf die Karte klicken',
     'geolocation.modal.geocode_input.placeholder' => 'Ganze Adresse',
-    'geolocation.modal.geocode_input.message.error' => "Fehler: Dienst für die Geocodierung nicht erreichbar",
+    'geolocation.modal.geocode_input.message.error' => 'Fehler: Dienst für die Geocodierung nicht erreichbar',
     'geolocation.modal.geocode_input.message.no_results' => 'Keine Ergebnisse für ":query"',
     'geolocation.modal.search_button' => 'Suche',
 

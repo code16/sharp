@@ -8,7 +8,7 @@ class DashboardLayout implements HasLayout
 {
     protected array $rows = [];
 
-    public final function addFullWidthWidget(string $widgetKey): self
+    final public function addFullWidthWidget(string $widgetKey): self
     {
         $this->addRow(function (DashboardLayoutRow $row) use ($widgetKey) {
             $row->addWidget(12, $widgetKey);
@@ -17,7 +17,7 @@ class DashboardLayout implements HasLayout
         return $this;
     }
 
-    public final function addRow(\Closure $callback): self
+    final public function addRow(\Closure $callback): self
     {
         $row = new DashboardLayoutRow();
 
@@ -31,9 +31,9 @@ class DashboardLayout implements HasLayout
     public function toArray(): array
     {
         return [
-            "rows" => collect($this->rows)
+            'rows' => collect($this->rows)
                 ->map->toArray()
-                ->toArray()
+                ->toArray(),
         ];
     }
 }
