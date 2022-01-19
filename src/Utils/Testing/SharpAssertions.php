@@ -11,19 +11,19 @@ trait SharpAssertions
 
     /**
      * This function must be called before using Sharp's assertions
-     * (in the setUp() for instance)
+     * (in the setUp() for instance).
      */
     public function initSharpAssertions()
     {
         TestResponse::macro('assertSharpHasAuthorization', function ($authorization) {
             return $this->assertJson(
-                ["authorizations" => [$authorization => true]]
+                ['authorizations' => [$authorization => true]],
             );
         });
 
         TestResponse::macro('assertSharpHasNotAuthorization', function ($authorization) {
             return $this->assertJson(
-                ["authorizations" => [$authorization => false]]
+                ['authorizations' => [$authorization => false]],
             );
         });
 
@@ -31,7 +31,7 @@ trait SharpAssertions
             $type = $formFieldClassName::FIELD_TYPE;
 
             $this->assertJson(
-                ["fields" => [$name => ["key" => $name, "type" => $type]]]
+                ['fields' => [$name => ['key' => $name, 'type' => $type]]],
             );
 
             $this->assertSharpFormHasFields($name);
@@ -40,26 +40,26 @@ trait SharpAssertions
         });
 
         TestResponse::macro('assertSharpFormHasFields', function ($names) {
-            foreach((array)$names as $name) {
+            foreach ((array) $names as $name) {
                 $this->assertJson(
-                    ["fields" => [$name => ["key" => $name]]]
+                    ['fields' => [$name => ['key' => $name]]],
                 );
 
                 $found = false;
-                foreach ($this->decodeResponseJson()["layout"]["tabs"] as $tab) {
-                    foreach ($tab["columns"] as $column) {
-                        foreach ($column["fields"] as $fieldset) {
+                foreach ($this->decodeResponseJson()['layout']['tabs'] as $tab) {
+                    foreach ($tab['columns'] as $column) {
+                        foreach ($column['fields'] as $fieldset) {
                             foreach ($fieldset as $field) {
-                                if(isset($field["legend"])) {
-                                    foreach($field["fields"] as $fieldsetFields) {
-                                        foreach($fieldsetFields as $field) {
-                                            if ($field["key"] == $name) {
+                                if (isset($field['legend'])) {
+                                    foreach ($field['fields'] as $fieldsetFields) {
+                                        foreach ($fieldsetFields as $field) {
+                                            if ($field['key'] == $name) {
                                                 $found = true;
                                                 break 6;
                                             }
                                         }
                                     }
-                                } else if ($field["key"] == $name) {
+                                } elseif ($field['key'] == $name) {
                                     $found = true;
                                     break 4;
                                 }
@@ -68,7 +68,7 @@ trait SharpAssertions
                     }
                 }
 
-                if(!$found) {
+                if (! $found) {
                     PHPUnit::fail("The field [$name] was not found on the layout part.");
                 }
             }
@@ -78,7 +78,7 @@ trait SharpAssertions
 
         TestResponse::macro('assertSharpFormDataEquals', function ($name, $value) {
             return $this->assertJson(
-                ["data" => [$name => $value]]
+                ['data' => [$name => $value]],
             );
         });
     }
@@ -94,16 +94,16 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey],
-                    ["form", $entityKey, $instanceId],
-                ])
+                    ['list', $entityKey],
+                    ['form', $entityKey, $instanceId],
+                ]),
             )
             ->getJson(
                 $instanceId
-                    ? route("code16.sharp.api.form.edit", [$entityKey, $instanceId])
-                    : route("code16.sharp.api.form.create", $entityKey)
+                    ? route('code16.sharp.api.form.edit', [$entityKey, $instanceId])
+                    : route('code16.sharp.api.form.create', $entityKey),
             );
     }
 
@@ -111,14 +111,14 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey],
-                    ["form", $entityKey, $instanceId],
-                ])
+                    ['list', $entityKey],
+                    ['form', $entityKey, $instanceId],
+                ]),
             )
             ->deleteJson(
-                route("code16.sharp.api.form.delete", [$entityKey, $instanceId])
+                route('code16.sharp.api.form.delete', [$entityKey, $instanceId]),
             );
     }
 
@@ -126,15 +126,15 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey],
-                    ["form", $entityKey, $instanceId],
-                ])
+                    ['list', $entityKey],
+                    ['form', $entityKey, $instanceId],
+                ]),
             )
             ->postJson(
-                route("code16.sharp.api.form.update", [$entityKey, $instanceId]),
-                $data
+                route('code16.sharp.api.form.update', [$entityKey, $instanceId]),
+                $data,
             );
     }
 
@@ -142,15 +142,15 @@ trait SharpAssertions
     {
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey],
-                    ["form", $entityKey],
-                ])
+                    ['list', $entityKey],
+                    ['form', $entityKey],
+                ]),
             )
             ->postJson(
-                route("code16.sharp.api.form.store", $entityKey),
-                $data
+                route('code16.sharp.api.form.store', $entityKey),
+                $data,
             );
     }
 
@@ -159,20 +159,20 @@ trait SharpAssertions
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
-        
+
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey],
-                ])
+                    ['list', $entityKey],
+                ]),
             )
             ->postJson(
                 route(
-                    "code16.sharp.api.list.command.instance",
-                    compact('entityKey', 'instanceId', 'commandKey')
+                    'code16.sharp.api.list.command.instance',
+                    compact('entityKey', 'instanceId', 'commandKey'),
                 ),
-                ["data" => $data]
+                ['data' => $data],
             );
     }
 
@@ -181,21 +181,21 @@ trait SharpAssertions
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
-        
+
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey],
-                    ["show", $entityKey, $instanceId],
-                ])
+                    ['list', $entityKey],
+                    ['show', $entityKey, $instanceId],
+                ]),
             )
             ->postJson(
                 route(
-                    "code16.sharp.api.show.command.instance",
-                    compact('entityKey', 'instanceId', 'commandKey')
+                    'code16.sharp.api.show.command.instance',
+                    compact('entityKey', 'instanceId', 'commandKey'),
                 ),
-                ["data" => $data]
+                ['data' => $data],
             );
     }
 
@@ -204,41 +204,42 @@ trait SharpAssertions
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
-        
+
         return $this
             ->withHeader(
-                "referer",
+                'referer',
                 $this->buildRefererUrl([
-                    ["list", $entityKey]
-                ])
+                    ['list', $entityKey],
+                ]),
             )
             ->postJson(
-                route("code16.sharp.api.list.command.entity", compact('entityKey', 'commandKey')),
-                ["data" => $data]
+                route('code16.sharp.api.list.command.entity', compact('entityKey', 'commandKey')),
+                ['data' => $data],
             );
     }
 
     public function loginAsSharpUser($user): self
     {
-        return $this->actingAs($user, config("sharp.auth.guard", config("auth.defaults.guard")));
+        return $this->actingAs($user, config('sharp.auth.guard', config('auth.defaults.guard')));
     }
 
     protected function buildRefererUrl(array $segments): string
     {
         $segments = $this->currentBreadcrumb ?: $segments;
         $this->currentBreadcrumb = null;
-        
+
         $uri = collect($segments)
-            ->map(function(array $segment) {
-                if(count($segment) === 2) {
-                    return sprintf("s-%s/%s", $segment[0], $segment[1]);
-                } elseif(count($segment) === 3) {
-                    return sprintf("s-%s/%s/%s", $segment[0], $segment[1], $segment[2]);
+            ->map(function (array $segment) {
+                if (count($segment) === 2) {
+                    return sprintf('s-%s/%s', $segment[0], $segment[1]);
+                } elseif (count($segment) === 3) {
+                    return sprintf('s-%s/%s/%s', $segment[0], $segment[1], $segment[2]);
                 }
+
                 return null;
             })
             ->filter()
-            ->implode("/");
+            ->implode('/');
 
         return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
     }

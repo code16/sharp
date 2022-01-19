@@ -14,29 +14,29 @@ class PersonSharpForm extends SharpForm
 {
     protected function getFormValidatorClass(): ?string
     {
-        return app(SharpEntityManager::class)->entityFor("person")->validatorForTest;
+        return app(SharpEntityManager::class)->entityFor('person')->validatorForTest;
     }
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
-        $formFields->addField(SharpFormTextField::make("name"));
+        $formFields->addField(SharpFormTextField::make('name'));
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-            return $column->withSingleField("name");
+        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
+            return $column->withSingleField('name');
         });
     }
 
-    function find($id): array
+    public function find($id): array
     {
-        return ["name" => "John Wayne", "job" => "actor"];
+        return ['name' => 'John Wayne', 'job' => 'actor'];
     }
 
-    function update($id, array $data): bool
+    public function update($id, array $data): bool
     {
-        if(!is_null($id) && !intval($id)) {
+        if (! is_null($id) && ! intval($id)) {
             // Throw an applicative exception
             throw new SharpApplicativeException("$id is not a valid id");
         }
@@ -44,14 +44,14 @@ class PersonSharpForm extends SharpForm
         return true;
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
     }
 
-    function create(): array
+    public function create(): array
     {
         return [
-            "name" => "default name"
+            'name' => 'default name',
         ];
     }
 }

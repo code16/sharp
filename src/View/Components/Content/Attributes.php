@@ -12,13 +12,13 @@ class Attributes extends Component
         public string $component,
     ) {
     }
-    
+
     public function render(): callable
     {
         return function () {
             $this->content->contentComponentAttributes->put(
                 $this->component,
-                $this->attributes
+                $this->attributes,
             );
         };
     }

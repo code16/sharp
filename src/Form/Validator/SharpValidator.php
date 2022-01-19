@@ -12,7 +12,6 @@ use Illuminate\Validation\Validator;
  */
 class SharpValidator extends Validator
 {
-
     /**
      * @return bool
      */
@@ -21,17 +20,17 @@ class SharpValidator extends Validator
         $result = parent::passes();
 
         // First grab all messages which do not refer to a Rich Text Field (RTF)
-        $newMessages = collect($this->messages->getMessages())->filter(function($messages, $key) {
-            return !Str::endsWith($key, ".text");
+        $newMessages = collect($this->messages->getMessages())->filter(function ($messages, $key) {
+            return ! Str::endsWith($key, '.text');
         })->all();
 
         // Then for all RFT fields, remove the .text in their key (description.text -> description)
         collect($this->messages->getMessages())
-            ->filter(function($messages, $key) {
-                return Str::endsWith($key, ".text");
+            ->filter(function ($messages, $key) {
+                return Str::endsWith($key, '.text');
             })
-            ->each(function($messages, $key) use(&$newMessages) {
-                collect($messages)->each(function($message) use($key, &$newMessages) {
+            ->each(function ($messages, $key) use (&$newMessages) {
+                collect($messages)->each(function ($message) use ($key, &$newMessages) {
                     $newKey = substr($key, 0, -5);
                     $newMessages[$newKey] = str_replace($key, $newKey, $message);
                 });

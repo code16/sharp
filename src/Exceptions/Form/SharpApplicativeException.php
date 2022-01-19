@@ -6,5 +6,4 @@ use Code16\Sharp\Exceptions\SharpException;
 
 class SharpApplicativeException extends SharpException
 {
-
 }

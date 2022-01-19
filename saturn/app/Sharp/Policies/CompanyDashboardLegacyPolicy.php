@@ -8,6 +8,6 @@ class CompanyDashboardLegacyPolicy
 {
     public function view(User $user)
     {
-        return $user->hasGroup("boss");
+        return $user->hasGroup('boss');
     }
 }

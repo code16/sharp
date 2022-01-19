@@ -19,56 +19,56 @@ class MultiFormEntityListControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         app(SharpEntityManager::class)
-            ->entityFor("person")
+            ->entityFor('person')
             ->setList(PersonWithMultiformSharpEntityList::class)
             ->setMultiforms([
-                "big" => [BigPersonSharpForm::class, "Big person"], 
-                "small" => [SmallPersonSharpForm::class, "Small person"]
+                'big' => [BigPersonSharpForm::class, 'Big person'],
+                'small' => [SmallPersonSharpForm::class, 'Small person'],
             ]);
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["forms" => [
-                "big" => [
-                    "label" => "Big person",
-                    "instances" => [2]
+            ->assertJson(['forms' => [
+                'big' => [
+                    'label' => 'Big person',
+                    'instances' => [2],
                 ],
-                "small" => [
-                    "label" => "Small person",
-                    "instances" => [1]
-                ]
+                'small' => [
+                    'label' => 'Small person',
+                    'instances' => [1],
+                ],
             ]]);
     }
 }
 
 class PersonWithMultiformSharpEntityList extends SharpEntityList
 {
-    function getListData(): array|Arrayable
+    public function getListData(): array|Arrayable
     {
         return $this
-            ->setCustomTransformer("type", function($a, $person) {
-                return $person['id']%2 == 0 ? "big" : "small";
+            ->setCustomTransformer('type', function ($a, $person) {
+                return $person['id'] % 2 == 0 ? 'big' : 'small';
             })
             ->transform([
-                ["id" => 1, "name" => "John Wayne"],
-                ["id" => 2, "name" => "Mary Wayne"],
+                ['id' => 1, 'name' => 'John Wayne'],
+                ['id' => 2, 'name' => 'Mary Wayne'],
             ]);
     }
 
-    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer->addField(
-            EntityListField::make("name")
+            EntityListField::make('name'),
         );
     }
 
-    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        $fieldsLayout->addColumn("name", 12);
+        $fieldsLayout->addColumn('name', 12);
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
-        $this->configureMultiformAttribute("type");
+        $this->configureMultiformAttribute('type');
     }
 }

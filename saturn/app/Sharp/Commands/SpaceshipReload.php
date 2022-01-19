@@ -8,10 +8,10 @@ class SpaceshipReload extends EntityCommand
 {
     public function label(): string
     {
-        return "Reload full list";
+        return 'Reload full list';
     }
 
-    public function execute(array $data=[]): array
+    public function execute(array $data = []): array
     {
         return $this->reload();
     }

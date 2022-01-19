@@ -6,53 +6,56 @@ abstract class SelectFilter extends Filter
 {
     private bool $isMaster = false;
     private bool $isSearchable = false;
-    private array $searchKeys = ["label"];
+    private array $searchKeys = ['label'];
     private string $template = '{{label}}';
 
-    public final function isMaster(): bool
+    final public function isMaster(): bool
     {
         return $this->isMaster;
     }
 
-    public final function isSearchable(): bool
+    final public function isSearchable(): bool
     {
         return $this->isSearchable;
     }
 
-    public final function getSearchKeys(): array
+    final public function getSearchKeys(): array
     {
         return $this->searchKeys;
     }
 
-    public final function getTemplate(): string
+    final public function getTemplate(): string
     {
         return $this->template;
     }
-    
-    public final function configureSearchable(bool $isSearchable = true): self
+
+    final public function configureSearchable(bool $isSearchable = true): self
     {
         $this->isSearchable = $isSearchable;
+
         return $this;
     }
 
-    public final function configureSearchKeys(array $searchKeys): self
+    final public function configureSearchKeys(array $searchKeys): self
     {
         $this->searchKeys = $searchKeys;
+
         return $this;
     }
 
-    public final function configureTemplate(string $template): self
+    final public function configureTemplate(string $template): self
     {
         $this->template = $template;
+
         return $this;
     }
 
-    public final function configureMaster(bool $isMaster = true): self
+    final public function configureMaster(bool $isMaster = true): self
     {
         $this->isMaster = $isMaster;
+
         return $this;
     }
 
-    public abstract function values(): array;
+    abstract public function values(): array;
 }
-

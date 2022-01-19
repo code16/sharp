@@ -8,16 +8,16 @@ class FormLayoutFieldset implements HasLayout
 
     protected string $legend;
 
-    function __construct(string $legend)
+    public function __construct(string $legend)
     {
         $this->legend = $legend;
     }
 
-    function toArray(): array
+    public function toArray(): array
     {
         return array_merge(
-            ["legend" => $this->legend],
-            $this->fieldsToArray()
+            ['legend' => $this->legend],
+            $this->fieldsToArray(),
         );
     }
 }

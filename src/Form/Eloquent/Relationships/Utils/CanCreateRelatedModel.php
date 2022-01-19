@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 trait CanCreateRelatedModel
 {
-
     /**
      * @param $instance
      * @param $attribute
-     * @param array $data
+     * @param  array  $data
      * @return mixed
      */
     protected function createRelatedModel($instance, $attribute, $data = [])
@@ -22,7 +21,7 @@ trait CanCreateRelatedModel
             : [];
 
         $related = $instance->$attribute()->create(
-            array_merge($defaultAttributes, $data)
+            array_merge($defaultAttributes, $data),
         );
 
         // Force relation reload, in case there is

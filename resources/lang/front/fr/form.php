@@ -21,7 +21,7 @@ return [
     'geolocation.modal.title' => 'Recherchez une addresse ou cliquez sur la carte',
     'geolocation.modal.title-no-geocoding' => 'Cliquez sur la carte',
     'geolocation.modal.geocode_input.placeholder' => 'Adresse',
-    'geolocation.modal.geocode_input.message.error' => "Erreur: Impossible de contacter le service de Geocoding",
+    'geolocation.modal.geocode_input.message.error' => 'Erreur: Impossible de contacter le service de Geocoding',
     'geolocation.modal.geocode_input.message.no_results' => 'Aucun résultats pour ":query"',
     'geolocation.modal.search_button' => 'Rechercher',
 
@@ -39,7 +39,7 @@ return [
 
     'select.select_all' => 'Tout sélectionner',
     'select.unselect_all' => 'Tout désélectionner',
-    'select.validation.max_selected' => "Trop d’éléments sélectionnés (:max_selected max.)",
+    'select.validation.max_selected' => 'Trop d’éléments sélectionnés (:max_selected max.)',
 
     'autocomplete.no_results_text' => 'Pas de résultats',
 
@@ -47,20 +47,20 @@ return [
 
     'daterange.start_placeholder' => 'Date de début',
     'daterange.end_placeholder' => 'Date de fin',
-    
+
     'text.validation.maxlength' => 'Le texte est trop long (:maxlength caractères max.)',
-    
+
     'editor.errors.unknown_file' => 'Unknown file ":path"',
-    
+
     'editor.dialogs.link.text_label' => 'Texte',
     'editor.dialogs.link.url_label' => 'URL',
     'editor.dialogs.link.insert_button' => 'Insérer le lien',
     'editor.dialogs.link.update_button' => 'Mettre à jour',
     'editor.dialogs.link.remove_button' => 'Supprimer le lien',
-    
+
     'editor.dialogs.raw_html.insert_title' => 'Insérez du contenu HTML',
     'editor.dialogs.raw_html.edit_title' => 'Modifier du contenu HTML',
-    
+
     'editor.dropdown.table.insert_table' => 'Insérer un tableau',
     'editor.dropdown.table.insert_row_above' => 'Insérer une ligne au-dessus',
     'editor.dropdown.table.insert_row_below' => 'Insérer une ligne au-dessous',
@@ -69,7 +69,7 @@ return [
     'editor.dropdown.table.insert_col_right' => 'Insérer une colonne à droite',
     'editor.dropdown.table.remove_col' => 'Supprimer la colonne',
     'editor.dropdown.table.remove_table' => 'Supprimer le tableau',
-    
+
     'editor.dropdown.options.toggle_tight_list' => 'Changer l’espacement de la liste',
 
     'editor.toolbar.bold.title' => 'Gras',

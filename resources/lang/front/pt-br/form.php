@@ -18,7 +18,7 @@ return [
     'geolocation.modal.title' => 'Digite um endereço ou clique no mapa',
     'geolocation.modal.title-no-geocoding' => 'Clique no mapa',
     'geolocation.modal.geocode_input.placeholder' => 'Endereço completo',
-    'geolocation.modal.geocode_input.message.error' => "Erro: não é possível acessar o Servidor de Geocodificação",
+    'geolocation.modal.geocode_input.message.error' => 'Erro: não é possível acessar o Servidor de Geocodificação',
     'geolocation.modal.geocode_input.message.no_results' => 'Nenhum resultado para ":query"',
     'geolocation.modal.search_button' => 'Pesquisar',
 

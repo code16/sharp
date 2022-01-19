@@ -22,6 +22,7 @@ class SharpMenuItemLink extends SharpMenuItem
         $this->entity = $this->entityKey
             ? app(SharpEntityManager::class)->entityFor($this->entityKey)
             : null;
+
         return $this;
     }
 
@@ -52,27 +53,28 @@ class SharpMenuItemLink extends SharpMenuItem
 
     public function getUrl(): string
     {
-        if($this->isExternalLink()) {
+        if ($this->isExternalLink()) {
             return $this->url;
         }
-        
-        if($this->entity->isDashboard()) {
+
+        if ($this->entity->isDashboard()) {
             return route('code16.sharp.dashboard', $this->entityKey);
         }
-        
+
         return $this->entity->isSingle()
-            ? route('code16.sharp.single-show', ["entityKey" => $this->entityKey])
+            ? route('code16.sharp.single-show', ['entityKey' => $this->entityKey])
             : route('code16.sharp.list', $this->entityKey);
     }
 
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
         return $this;
     }
 
     public function isExternalLink(): bool
     {
-        return !$this->isEntity();
+        return ! $this->isEntity();
     }
 }

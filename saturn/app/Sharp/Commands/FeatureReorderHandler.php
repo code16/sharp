@@ -7,11 +7,11 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 
 class FeatureReorderHandler implements ReorderHandler
 {
-    function reorder(array $ids): void
+    public function reorder(array $ids): void
     {
-        Feature::whereIn("id", $ids)
+        Feature::whereIn('id', $ids)
             ->get()
-            ->each(function(Feature $feature) use ($ids) {
+            ->each(function (Feature $feature) use ($ids) {
                 $feature->order = array_search($feature->id, $ids) + 1;
                 $feature->save();
             });

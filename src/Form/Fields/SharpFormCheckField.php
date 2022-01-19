@@ -2,12 +2,11 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-
 use Code16\Sharp\Form\Fields\Formatters\CheckFormatter;
 
 class SharpFormCheckField extends SharpFormField
 {
-    const FIELD_TYPE = "check";
+    const FIELD_TYPE = 'check';
 
     protected string $text;
 
@@ -29,14 +28,14 @@ class SharpFormCheckField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "text" => "required",
+            'text' => 'required',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "text" => $this->text
+            'text' => $this->text,
         ]);
     }
 }

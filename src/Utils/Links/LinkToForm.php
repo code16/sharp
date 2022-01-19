@@ -9,18 +9,18 @@ class LinkToForm extends LinkToShowPage
     public function throughShowPage($throughShowPage = true): self
     {
         $this->throughShowPage = $throughShowPage;
-        
+
         return $this;
     }
-    
+
     protected function generateUri(): string
     {
-        $uri = sprintf("s-form/%s/%s", $this->entityKey, $this->instanceId);
-        
-        if($this->throughShowPage) {
-            $uri = sprintf("%s/%s", parent::generateUri(), $uri);
+        $uri = sprintf('s-form/%s/%s', $this->entityKey, $this->instanceId);
+
+        if ($this->throughShowPage) {
+            $uri = sprintf('%s/%s', parent::generateUri(), $uri);
         }
-        
+
         return $uri;
     }
 }

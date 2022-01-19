@@ -13,7 +13,7 @@ class MenuItemEntity extends MenuItem
 
     public function __construct(SharpMenuItem $item)
     {
-        $this->type = $item->isDashboardEntity() ? "dashboard" : "entity";
+        $this->type = $item->isDashboardEntity() ? 'dashboard' : 'entity';
         $this->key = $item->getKey();
         $this->label = $item->getLabel();
         $this->icon = $item->getIcon();
@@ -22,7 +22,7 @@ class MenuItemEntity extends MenuItem
 
     public function isValid(): bool
     {
-        return sharp_has_ability("entity", $this->key);
+        return sharp_has_ability('entity', $this->key);
     }
 
     public function isMenuItemEntity(): bool
