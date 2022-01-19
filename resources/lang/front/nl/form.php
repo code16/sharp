@@ -39,7 +39,7 @@ return [
 
     'select.select_all' => 'Alles selecteren',
     'select.unselect_all' => 'Alles deselecteren',
-    'select.validation.max_selected' => "Te veel items geselecteerd (maximaal :max_selected)",
+    'select.validation.max_selected' => ' Te veel items geselecteerd (maximaal :max_selected)',
 
     'autocomplete.no_results_text' => 'Geen resultaten gevonden',
 
