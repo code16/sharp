@@ -17,4 +17,8 @@ return [
 
     'ok_button' => 'Ok',
     'cancel_button' => 'Annuleren',
+
+    'entity_state.edit.title' => 'Update status',
+    'entity_state.edit.ok_button' => 'Bevestigen',
+
 ];
