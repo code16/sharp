@@ -12,9 +12,9 @@ abstract class SharpFormRequest extends FormRequest
         // Find SharpFormEditorField based on their posted structure ($field["text"])
         $editorFields = collect($this->all())
             ->filter(fn ($value) => is_array($value) && array_key_exists('text', $value))
-            ->map(function($value, $key) {
+            ->map(function ($value, $key) {
                 return is_array($value['text'])
-                    ? collect($value['text'])->map(fn($value, $locale) => "$key.$locale")->toArray()
+                    ? collect($value['text'])->map(fn ($value, $locale) => "$key.$locale")->toArray()
                     : $key;
             })
             ->flatten()
@@ -23,10 +23,11 @@ abstract class SharpFormRequest extends FormRequest
 
         // Replace Editor rules with .text suffix
         $newRules = collect($validator->getRules())
-            ->mapWithKeys(function ($messages, $key) use($editorFields) {
+            ->mapWithKeys(function ($messages, $key) use ($editorFields) {
                 if (in_array($key, $editorFields)) {
                     return ["$key.text" => $messages];
                 }
+
                 return [$key => $messages];
             })
             ->toArray();
