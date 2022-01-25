@@ -47,9 +47,9 @@ class SharpValidatorTest extends BaseApiTest
             ->postJson('/sharp/api/form/person/1', [
                 'name' => [
                     'text' => [
-                        'en' => 'Something', 
+                        'en' => 'Something',
                         'fr' => '',
-                    ]
+                    ],
                 ],
             ])
             ->assertStatus(422)
@@ -92,9 +92,9 @@ class SharpValidatorTest extends BaseApiTest
             ->postJson('/sharp/api/form/person/1', [
                 'name' => [
                     'text' => [
-                        'en' => '', 
+                        'en' => '',
                         'fr' => 'Something',
-                    ]
+                    ],
                 ],
             ])
             ->assertStatus(422)
