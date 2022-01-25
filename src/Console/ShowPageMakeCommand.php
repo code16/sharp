@@ -25,15 +25,15 @@ class ShowPageMakeCommand extends GeneratorCommand
         return str_replace(
             array_keys($replace),
             array_values($replace),
-            parent::buildClass($name)
+            parent::buildClass($name),
         );
     }
 
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/show-page.model.stub'
-            : __DIR__ . '/stubs/show-page.stub';
+            ? __DIR__.'/stubs/show-page.model.stub'
+            : __DIR__.'/stubs/show-page.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

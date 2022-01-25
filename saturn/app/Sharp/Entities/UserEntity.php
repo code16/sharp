@@ -10,8 +10,8 @@ class UserEntity extends SharpEntity
 {
     protected ?string $list = UserSharpList::class;
     protected ?string $policy = UserPolicy::class;
-    protected string $label = "Sharp user";
+    protected string $label = 'Sharp user';
     protected array $prohibitedActions = [
-        "delete", "create", "update", "view"
+        'delete', 'create', 'update', 'view',
     ];
 }

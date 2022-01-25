@@ -8,15 +8,15 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestShow extends SharpSingleShow
 {
-    function buildShowFields(FieldsContainer $showFields): void
+    public function buildShowFields(FieldsContainer $showFields): void
     {
     }
 
-    function buildShowLayout(ShowLayout $showLayout): void
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
     }
 
-    function findSingle(): array
+    public function findSingle(): array
     {
         return [];
     }

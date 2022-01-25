@@ -25,15 +25,15 @@ class FormMakeCommand extends GeneratorCommand
         return str_replace(
             array_keys($replace),
             array_values($replace),
-            parent::buildClass($name)
+            parent::buildClass($name),
         );
     }
 
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__ . '/stubs/form.model.stub'
-            : __DIR__ . '/stubs/form.stub';
+            ? __DIR__.'/stubs/form.model.stub'
+            : __DIR__.'/stubs/form.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

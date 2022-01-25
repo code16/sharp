@@ -1,14 +1,10 @@
 <?php
 
-
 namespace Code16\Sharp\View\Components\Content\Utils;
-
-
-use Illuminate\View\ComponentAttributeBag;
 
 class HTMLFragment extends Fragment
 {
-    public string $type = "html";
+    public string $type = 'html';
 
     protected string $content;
 

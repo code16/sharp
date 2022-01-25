@@ -6,7 +6,6 @@ use Illuminate\Auth\EloquentUserProvider;
 
 class EloquentSharpUserProvider extends EloquentUserProvider
 {
-
     /**
      * Retrieve a user by their unique identifier.
      *

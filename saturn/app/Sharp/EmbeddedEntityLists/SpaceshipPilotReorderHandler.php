@@ -6,7 +6,7 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 
 class SpaceshipPilotReorderHandler implements ReorderHandler
 {
-    function reorder(array $ids): void
+    public function reorder(array $ids): void
     {
         // TODO: Implement reorder() method.
     }

@@ -11,18 +11,18 @@ class FilesControllerTest extends BaseApiTest
     protected function setUp(): void
     {
         parent::setUp();
-        Storage::fake("local");
-        Storage::fake("s3");
-        Storage::fake("public");
+        Storage::fake('local');
+        Storage::fake('s3');
+        Storage::fake('public');
         $this->login();
         $this->disableSharpAuthorizationChecks();
     }
 
     /** @test */
-    function we_can_get_files_info()
+    public function we_can_get_files_info()
     {
         $this->withoutExceptionHandling();
-        
+
         $file1 = UploadedFile::fake()->create('test.doc', Str::random(16));
         $file1->storeAs('/files/docs', 'test.doc', ['disk' => 'local']);
 
@@ -31,48 +31,48 @@ class FilesControllerTest extends BaseApiTest
 
         $this
             ->withHeader(
-                "referer",
-                url('/sharp/s-list/person/s-form/download/1')
+                'referer',
+                url('/sharp/s-list/person/s-form/download/1'),
             )
             ->postJson(
                 route('code16.sharp.api.files.show', [
                     'entityKey' => 'download',
-                    'instanceId' => 1
+                    'instanceId' => 1,
                 ]),
                 [
-                    "files" => [
+                    'files' => [
                         [
-                            "path" => "/files/docs/test.doc", 
-                            "disk" => "local"
+                            'path' => '/files/docs/test.doc',
+                            'disk' => 'local',
                         ], [
-                            "path" => "/files/pdfs/test.pdf",
-                            "disk" => "s3"
-                        ]
+                            'path' => '/files/pdfs/test.pdf',
+                            'disk' => 's3',
+                        ],
                     ],
-                    "thumbnail_width" => 400,
-                    "thumbnail_height" => 400,
-                ]
+                    'thumbnail_width' => 400,
+                    'thumbnail_height' => 400,
+                ],
             )
             ->assertOk()
             ->assertJson([
-                "files" => [
+                'files' => [
                     [
-                        "name" => "test.doc",
-                        "path" => "/files/docs/test.doc",
-                        "disk" => "local",
-                        "size" => 16
+                        'name' => 'test.doc',
+                        'path' => '/files/docs/test.doc',
+                        'disk' => 'local',
+                        'size' => 16,
                     ], [
-                        "name" => "test.pdf",
-                        "path" => "/files/pdfs/test.pdf",
-                        "disk" => "s3",
-                        "size" => 32
-                    ]
-                ]
+                        'name' => 'test.pdf',
+                        'path' => '/files/pdfs/test.pdf',
+                        'disk' => 's3',
+                        'size' => 32,
+                    ],
+                ],
             ]);
     }
 
     /** @test */
-    function we_can_get_thumbnails_if_file_is_image()
+    public function we_can_get_thumbnails_if_file_is_image()
     {
         $this->withoutExceptionHandling();
 
@@ -84,49 +84,49 @@ class FilesControllerTest extends BaseApiTest
 
         $this
             ->withHeader(
-                "referer",
-                url('/sharp/s-list/person/s-form/download/1')
+                'referer',
+                url('/sharp/s-list/person/s-form/download/1'),
             )
             ->postJson(
                 route('code16.sharp.api.files.show', [
                     'entityKey' => 'download',
-                    'instanceId' => 1
+                    'instanceId' => 1,
                 ]),
                 [
-                    "files" => [
+                    'files' => [
                         [
-                            "path" => "/files/docs/test.doc",
-                            "disk" => "local"
+                            'path' => '/files/docs/test.doc',
+                            'disk' => 'local',
                         ], [
-                            "path" => "/files/images/test.jpg",
-                            "disk" => "s3"
-                        ]
+                            'path' => '/files/images/test.jpg',
+                            'disk' => 's3',
+                        ],
                     ],
-                    "thumbnail_width" => 400,
-                    "thumbnail_height" => 400,
-                ]
+                    'thumbnail_width' => 400,
+                    'thumbnail_height' => 400,
+                ],
             )
             ->assertOk()
             ->assertJson([
-                "files" => [
+                'files' => [
                     [
-                        "name" => "test.doc",
-                        "path" => "/files/docs/test.doc",
-                        "disk" => "local",
-                        "size" => 16
+                        'name' => 'test.doc',
+                        'path' => '/files/docs/test.doc',
+                        'disk' => 'local',
+                        'size' => 16,
                     ], [
-                        "name" => "test.jpg",
-                        "path" => "/files/images/test.jpg",
-                        "disk" => "s3",
-                        "thumbnail" => "/storage/thumbnails/files/images/400-400/test.jpg?" . time(),
-                        "size" => 6467
-                    ]
-                ]
+                        'name' => 'test.jpg',
+                        'path' => '/files/images/test.jpg',
+                        'disk' => 's3',
+                        'thumbnail' => '/storage/thumbnails/files/images/400-400/test.jpg?'.time(),
+                        'size' => 6467,
+                    ],
+                ],
             ]);
     }
 
     /** @test */
-    function missing_files_are_stripped_out()
+    public function missing_files_are_stripped_out()
     {
         $this->withoutExceptionHandling();
 
@@ -138,49 +138,49 @@ class FilesControllerTest extends BaseApiTest
 
         $this
             ->withHeader(
-                "referer",
-                url('/sharp/s-list/person/s-form/download/1')
+                'referer',
+                url('/sharp/s-list/person/s-form/download/1'),
             )
             ->postJson(
                 route('code16.sharp.api.files.show', [
                     'entityKey' => 'download',
-                    'instanceId' => 1
+                    'instanceId' => 1,
                 ]),
                 [
-                    "files" => [
+                    'files' => [
                         [
-                            "path" => "/files/docs/test.doc",
-                            "disk" => "local"
+                            'path' => '/files/docs/test.doc',
+                            'disk' => 'local',
                         ], [
-                            "path" => "/files/missing.jpg",
-                            "disk" => "s3"
+                            'path' => '/files/missing.jpg',
+                            'disk' => 's3',
                         ], [
-                            "path" => "/files/pdfs/test.pdf",
-                            "disk" => "s3"
+                            'path' => '/files/pdfs/test.pdf',
+                            'disk' => 's3',
                         ], [
-                            "path" => "/files/missing2.txt",
-                            "disk" => "local"
+                            'path' => '/files/missing2.txt',
+                            'disk' => 'local',
                         ],
                     ],
-                    "thumbnail_width" => 400,
-                    "thumbnail_height" => 400,
-                ]
+                    'thumbnail_width' => 400,
+                    'thumbnail_height' => 400,
+                ],
             )
             ->assertOk()
             ->assertJson([
-                "files" => [
+                'files' => [
                     [
-                        "name" => "test.doc",
-                        "path" => "/files/docs/test.doc",
-                        "disk" => "local",
-                        "size" => 16
+                        'name' => 'test.doc',
+                        'path' => '/files/docs/test.doc',
+                        'disk' => 'local',
+                        'size' => 16,
                     ], [
-                        "name" => "test.pdf",
-                        "path" => "/files/pdfs/test.pdf",
-                        "disk" => "s3",
-                        "size" => 32
-                    ]
-                ]
+                        'name' => 'test.pdf',
+                        'path' => '/files/pdfs/test.pdf',
+                        'disk' => 's3',
+                        'size' => 32,
+                    ],
+                ],
             ]);
     }
 }

@@ -1,0 +1,6 @@
+preset: laravel
+version: 8.0
+enabled:
+  - heredoc_indentation
+  - trailing_comma_in_multiline_call
+  - unalign_double_arrow

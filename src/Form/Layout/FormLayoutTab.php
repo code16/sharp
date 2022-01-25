@@ -7,7 +7,7 @@ class FormLayoutTab implements HasLayout
     protected string $title;
     protected array $columns = [];
 
-    function __construct(string $title)
+    public function __construct(string $title)
     {
         $this->title = $title;
     }
@@ -16,7 +16,7 @@ class FormLayoutTab implements HasLayout
     {
         $column = $this->addColumnLayout(new FormLayoutColumn($size));
 
-        if($callback) {
+        if ($callback) {
             $callback($column);
         }
 
@@ -26,10 +26,10 @@ class FormLayoutTab implements HasLayout
     public function toArray(): array
     {
         return [
-            "title" => $this->title,
-            "columns" => collect($this->columns)->map(function($column) {
+            'title' => $this->title,
+            'columns' => collect($this->columns)->map(function ($column) {
                 return $column->toArray();
-            })->all()
+            })->all(),
         ];
     }
 

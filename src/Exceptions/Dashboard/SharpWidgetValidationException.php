@@ -7,8 +7,8 @@ use Illuminate\Contracts\Support\MessageBag;
 
 class SharpWidgetValidationException extends SharpException
 {
-    function __construct(MessageBag $validationErrors)
+    public function __construct(MessageBag $validationErrors)
     {
-        parent::__construct("Invalid widget attributes : " . $validationErrors->toJson());
+        parent::__construct('Invalid widget attributes : '.$validationErrors->toJson());
     }
 }

@@ -4,7 +4,7 @@ namespace Code16\Sharp\Show\Fields;
 
 class SharpShowListField extends SharpShowField
 {
-    const FIELD_TYPE = "list";
+    const FIELD_TYPE = 'list';
 
     protected ?string $label = null;
     protected array $itemFields = [];
@@ -31,27 +31,27 @@ class SharpShowListField extends SharpShowField
     public function findItemFormFieldByKey(string $key): SharpShowField
     {
         return collect($this->itemFields)
-            ->where("key", $key)
+            ->where('key', $key)
             ->first();
     }
 
     protected function validationRules(): array
     {
         return [
-            "itemFields" => "required|array",
+            'itemFields' => 'required|array',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "label" => $this->label,
-            "itemFields" => collect($this->itemFields)
-                ->map(function(SharpShowField $field) {
+            'label' => $this->label,
+            'itemFields' => collect($this->itemFields)
+                ->map(function (SharpShowField $field) {
                     return $field->toArray();
                 })
-                ->keyBy("key")
-                ->all()
+                ->keyBy('key')
+                ->all(),
         ]);
     }
 }

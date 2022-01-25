@@ -6,11 +6,11 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 
 class MenuItemUrl extends MenuItem
 {
-    public string $type = "url";
+    public string $type = 'url';
     public string $url;
     public ?string $icon;
     public string $key;
-    public string $target = "_blank";
+    public string $target = '_blank';
 
     public function __construct(SharpMenuItem $item)
     {

@@ -4,6 +4,7 @@ return [
 
     'list.items_count' => 'artikel(en)',
     'list.search.placeholder' => 'Zoeken',
+    'list.search.title' => 'Resultaten voor “:search”',
     'list.create_button' => 'Nieuw...',
     'list.forms_dropdown' => 'Nieuw',
     'list.reorder_button' => 'Herordenen',

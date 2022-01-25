@@ -8,26 +8,28 @@ use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
 
 class SharpEntityListReorderTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_configure_a_reorder_handler()
+    public function we_can_configure_a_reorder_handler()
     {
-        $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+        $list = new class extends SharpEntityDefaultTestList
+        {
+            public function buildListConfig(): void
             {
-                $this->configureReorderable(new class implements ReorderHandler {
-                    function reorder(array $ids): void {}
-                });
+                $this->configureReorderable(new class implements ReorderHandler
+                {
+                    public function reorder(array $ids): void
+                    {
+                    }
+                }, );
             }
         };
 
         $list->buildListConfig();
 
         $this->assertArraySubset([
-            "reorderable" => true
+            'reorderable' => true,
         ], $list->listConfig());
 
         $this->assertInstanceOf(ReorderHandler::class, $list->reorderHandler());
     }
-
 }

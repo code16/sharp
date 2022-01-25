@@ -9,5 +9,5 @@ class TestEntity extends SharpEntity
     protected bool $isSingle = true;
     protected ?string $show = \App\Sharp\TestForm\TestShow::class;
     protected ?string $form = \App\Sharp\TestForm\TestForm::class;
-    protected string $label = "Test";
+    protected string $label = 'Test';
 }

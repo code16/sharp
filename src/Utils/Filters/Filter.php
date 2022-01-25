@@ -26,18 +26,21 @@ abstract class Filter
     public function configureKey(string $key): self
     {
         $this->customKey = $key;
+
         return $this;
     }
 
     public function configureLabel(string $label): self
     {
         $this->label = $label;
+
         return $this;
     }
 
     public function configureRetainInSession(bool $retainInSession = true): self
     {
         $this->retainInSession = $retainInSession;
+
         return $this;
     }
 

@@ -20,7 +20,7 @@ return [
     'geolocation.modal.geocode_input.placeholder' => 'Direción completa',
     'geolocation.modal.geocode_input.message.ERROR' => "Error: Can't reach Google Maps servers",
     'geolocation.modal.geocode_input.message.ZERO_RESULTS' => 'No hay resultados (...)',
-    'geolocation.modal.search_button' => 'Buscar',    
+    'geolocation.modal.search_button' => 'Buscar',
 
     'upload.browse_button' => 'Buscar...',
     'upload.remove_button' => 'Borrar',

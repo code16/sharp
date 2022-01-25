@@ -15,11 +15,11 @@ class CreateTravelsTable extends Migration
     {
         Schema::create('travels', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTime("departure_date");
+            $table->dateTime('departure_date');
             $table->unsignedInteger('spaceship_id');
-            $table->text("description")->nullable();
-            $table->string("destination");
-            $table->string("destination_coordinates")->nullable();
+            $table->text('description')->nullable();
+            $table->string('destination');
+            $table->string('destination_coordinates')->nullable();
             $table->timestamps();
         });
     }

@@ -5,7 +5,7 @@ namespace Code16\Sharp\Utils\Links;
 abstract class SharpLinkTo
 {
     protected string $entityKey;
-    protected string $tooltip = "";
+    protected string $tooltip = '';
 
     protected function __construct(string $entityKey)
     {
@@ -15,6 +15,7 @@ abstract class SharpLinkTo
     public function setTooltip($tooltip): self
     {
         $this->tooltip = $tooltip;
+
         return $this;
     }
 
@@ -24,7 +25,7 @@ abstract class SharpLinkTo
             '<a href="%s" title="%s">%s</a>',
             $this->renderAsUrl(),
             $this->tooltip,
-            $text
+            $text,
         );
     }
 

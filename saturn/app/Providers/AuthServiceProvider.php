@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        auth()->provider('eloquent.sharp', function($app, array $config) {
+        auth()->provider('eloquent.sharp', function ($app, array $config) {
             return new EloquentSharpUserProvider($app['hash'], $config['model']);
         });
     }

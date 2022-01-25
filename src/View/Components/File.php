@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
-
 class File extends Component
 {
     public SharpUploadModel $fileModel;
     public FilesystemAdapter $disk;
     public bool $exists;
-    
+
     public function __construct(
         string $path,
         ?string $disk = null,
@@ -27,7 +26,7 @@ class File extends Component
         $this->disk = Storage::disk($this->fileModel->disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);
     }
-    
+
     public function render(): View
     {
         return view('sharp::components.file');

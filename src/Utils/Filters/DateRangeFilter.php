@@ -7,26 +7,27 @@ abstract class DateRangeFilter extends Filter
     private string $dateFormat = 'YYYY-MM-DD';
     private bool $isMondayFirst = true;
 
-    public final function configureDateFormat(string $dateFormat): self
+    final public function configureDateFormat(string $dateFormat): self
     {
         $this->dateFormat = $dateFormat;
+
         return $this;
     }
 
-    public final function configureMondayFirst(bool $isMondayFirst = true): self
+    final public function configureMondayFirst(bool $isMondayFirst = true): self
     {
         $this->isMondayFirst = $isMondayFirst;
+
         return $this;
     }
 
-    public final function getDateFormat(): string
+    final public function getDateFormat(): string
     {
         return $this->dateFormat;
     }
 
-    public final function isMondayFirst(): bool
+    final public function isMondayFirst(): bool
     {
         return $this->isMondayFirst;
     }
 }
-

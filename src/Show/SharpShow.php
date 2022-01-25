@@ -25,7 +25,7 @@ abstract class SharpShow
 
     final public function showLayout(): array
     {
-        if($this->showLayout === null) {
+        if ($this->showLayout === null) {
             $this->showLayout = new ShowLayout();
             $this->buildShowLayout($this->showLayout);
         }
@@ -36,7 +36,7 @@ abstract class SharpShow
     /**
      * Return the entity instance, as an array.
      */
-    public final function instance(mixed $id): array
+    final public function instance(mixed $id): array
     {
         return collect($this->find($id))
             // Filter model attributes on actual show labels
@@ -44,8 +44,8 @@ abstract class SharpShow
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                    $this->getDataKeys()
-                )
+                    $this->getDataKeys(),
+                ),
             )
             ->all();
     }
@@ -54,11 +54,11 @@ abstract class SharpShow
     {
         $config = collect($config)
             ->merge([
-                "multiformAttribute" => $this->multiformAttribute
+                'multiformAttribute' => $this->multiformAttribute,
             ])
             ->all();
-        
-        return tap($config, function(&$config) use($instanceId) {
+
+        return tap($config, function (&$config) use ($instanceId) {
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
@@ -66,7 +66,7 @@ abstract class SharpShow
         });
     }
 
-    protected final function configureMultiformAttribute(string $attribute): self
+    final protected function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
@@ -79,33 +79,33 @@ abstract class SharpShow
     }
 
     /**
-     * Build show config using ->addInstanceCommand() and ->setEntityState()
+     * Build show config using ->addInstanceCommand() and ->setEntityState().
      */
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         // No default implementation
     }
 
     /**
-     * Return all instance commands in an array of class names or instances
+     * Return all instance commands in an array of class names or instances.
      */
-    function getInstanceCommands(): ?array
+    public function getInstanceCommands(): ?array
     {
         return null;
     }
 
     /**
-     * Retrieve a Model for the show and pack all its data as array
+     * Retrieve a Model for the show and pack all its data as array.
      */
     abstract protected function find(mixed $id): array;
 
     /**
-     * Build show fields
+     * Build show fields.
      */
     abstract protected function buildShowFields(FieldsContainer $showFields): void;
 
     /**
-     * Build show layout
+     * Build show layout.
      */
     abstract protected function buildShowLayout(ShowLayout $showLayout): void;
 }
