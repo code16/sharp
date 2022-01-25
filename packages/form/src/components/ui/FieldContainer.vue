@@ -130,7 +130,7 @@
                 return resolveTextValue({ field:this.fieldProps, value:this.originalValue });
             },
             isLocaleObject() {
-                return isLocalizableValueField(this.fieldProps);
+                return isLocalizableValueField(this.fieldProps) || this.fieldProps.type === 'editor';
             },
             mergedErrorIdentifier() {
                 return this.getMergedIdentifier('mergedErrorIdentifier', this.errorIdentifier);
