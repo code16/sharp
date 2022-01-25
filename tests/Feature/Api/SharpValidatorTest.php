@@ -48,7 +48,7 @@ class SharpValidatorTest extends BaseApiTest
                 'name' => [
                     'text' => [
                         'en' => 'Something', 
-                        'fr' => ''
+                        'fr' => '',
                     ]
                 ],
             ])
@@ -93,7 +93,7 @@ class SharpValidatorTest extends BaseApiTest
                 'name' => [
                     'text' => [
                         'en' => '', 
-                        'fr' => 'Something'
+                        'fr' => 'Something',
                     ]
                 ],
             ])

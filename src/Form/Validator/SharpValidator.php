@@ -22,16 +22,16 @@ class SharpValidator extends Validator
         // For all Editor fields, remove the .text in their key (description.text -> description)
         $newMessages = collect($this->messages->getMessages())
             ->mapWithKeys(function ($messages, $key) {
-                if(preg_match("/.*[^\\\\].text.*/", $key)) {
+                if(preg_match('/.*[^\\\\].text.*/', $key)) {
                     $newKey = Str::replace(".text", "", $key);
                     return [
                         $newKey => collect($messages)
-                            ->map(fn($value) => Str::replace($key, $newKey, $value))
-                            ->toArray()
+                            ->map(fn ($value) => Str::replace($key, $newKey, $value))
+                            ->toArray(),
                     ];
                 }
                 return [
-                    $key => $messages
+                    $key => $messages,
                 ];
             })
             ->toArray();
