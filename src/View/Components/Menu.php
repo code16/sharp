@@ -63,7 +63,7 @@ class Menu extends Component
                                 ->each(function (array $entityConfig) use (&$section) {
                                     if ($entityConfig['separator'] ?? false) {
                                         $section->addSeparator($entityConfig['label']);
-                                    }  elseif($entityConfig['url'] ?? false) {
+                                    } elseif ($entityConfig['url'] ?? false) {
                                         $section->addExternalLink(
                                             $entityConfig['url'],
                                             $entityConfig['label'] ?? null,
