@@ -46,7 +46,6 @@ class SharpEntityManager
             {
                 $this->entityKey = $entityKey;
                 $this->label = $this->entity['label'] ?? 'Entity';
-                $this->isSingle = $this->entity['single'] ?? false;
                 $this->list = $this->entity['list'] ?? null;
                 $this->show = $this->entity['show'] ?? null;
                 $this->form = $this->entity['form'] ?? null;
@@ -57,6 +56,21 @@ class SharpEntityManager
                     })
                     ->keys()
                     ->toArray();
+
+                // Single is tricky... It's defined in the menu!
+                $this->isSingle = collect(config("sharp.menu", []))
+                        ->map(function ($values) {
+                            if (isset($values["entities"])) {
+                                return $values["entities"];
+                            }
+                            if (isset($values["entity"])) {
+                                return [$values];
+                            }
+                            return null;
+                        })
+                        ->flatten(1)
+                        ->filter(fn($values) => ($values["entity"] ?? null) === $entityKey)
+                        ->first()["single"] ?? false;
             }
 
             public function getMultiforms(): array
