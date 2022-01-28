@@ -63,14 +63,33 @@ Sharp will display a dropdown with those values for a "type" filter.
 ## Handle filter selection
 
 Once the user clicked on a filter, Sharp will call EntityList's `getListData()`; the filter value will be accessible
-with `$this->queryParams->filterFor("key")`. For instance:
+either with :
+- classname : `$this->queryParams->filterFor(MyFilter::class)`
+- key : `$this->queryParams->filterFor("key")` (this only works if it was set in the filter class with `configureKey()`)
+
+For instance:
 
 ```php
 function getListData()
 {
     $spaceships = Spaceship::query();
 
-    if($type = $this->queryParams->filterFor("type")) {
+    if($type = $this->queryParams->filterFor(SpaceshipTypeFilter::class)) {
+        $spaceships->where("type_id", $type);
+    }
+
+    [...]
+}
+```
+
+Or with a key:
+
+```php
+function getListData()
+{
+    $spaceships = Spaceship::query();
+
+    if($type = $this->queryParams->filterFor("s-type")) {
         $spaceships->where("type_id", $type);
     }
 
