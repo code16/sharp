@@ -27,6 +27,16 @@ Here is the full list:
 - `bool $isSingle` must be set only if you are dealing [with a single show](single-show.md)
 - and finally `array $prohibitedActions` can be use to set globally prohibited actions on the entity, [as documented here](entity-authorizations.md).
 
+### Dashboard
+
+Dashboard only needs to override one protected attribute: `$view`:
+
+```php
+class TravelsDashboardEntity extends SharpEntity
+{
+    protected ?string $view = TravelsDashboard::class;
+```
+
 ### Override methods instead
 
 If you need more control, you can override these instead of the attributes:
