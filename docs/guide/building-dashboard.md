@@ -120,7 +120,7 @@ Just like EntityLists, Dashboard can display filters, as [documented on the Filt
 
 ## Dashboard commands
 
-Like again EntityLists, Commands can be attached to a Dashboard: [see the Command documentation](commands.md).
+Like again EntityLists, Commands can be attached to a Dashboard with `getDashboardCommands()` : [see the Command documentation](commands.md).
 
 ## Dashboard policy
 

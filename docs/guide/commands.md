@@ -210,6 +210,17 @@ function getEntityCommands(): ?array
 }
 ```
 
+or to the Dashboard:
+
+```php
+function getDashboardCommands(): ?array
+{
+    return [
+        TravelsDashboardDownloadCommand::class
+    ];
+}
+```
+
 You can optionally specify a command key (like "message" in the example); Sharp will use the command class name if it is missing. For the command itself, you can type a class name, a class instance or a Closure.
 
 ## Handle authorizations
