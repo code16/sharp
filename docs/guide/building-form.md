@@ -394,7 +394,7 @@ class SpaceshipSharpForm extends SharpForm
 }
 ```
 
-You can, as an alternative, override the `protected function getFormValidatorClass(): ?string` method, which sould return the classname of the validator, in case you need more control.
+You can, as an alternative, override the `protected function getFormValidatorClass(): ?string` method, which should return the classname of the validator, in case you need more control.
 
 Sharp will handle the error display in the form.
 
