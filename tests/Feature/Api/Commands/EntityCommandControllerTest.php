@@ -105,8 +105,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
-            ->assertOk()
-            ->assertHeader('content-type', 'application/pdf');
+            ->assertOk();
 
         $this->assertTrue(
             Str::contains(
