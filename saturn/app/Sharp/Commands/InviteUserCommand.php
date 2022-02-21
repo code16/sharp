@@ -10,35 +10,35 @@ class InviteUserCommand extends EntityCommand
 {
     public function label(): string
     {
-        return "Invite new user...";
+        return 'Invite new user...';
     }
 
-    function buildCommandConfig(): void
+    public function buildCommandConfig(): void
     {
         $this
-            ->configureFormModalTitle("Send an invitation to a new user")
+            ->configureFormModalTitle('Send an invitation to a new user')
             ->configurePageAlert(
-                "The invitation will be automatically sent before {{day}}, 10 AM",
+                'The invitation will be automatically sent before {{day}}, 10 AM',
                 static::$pageAlertLevelPrimary,
-                "globalHelp"
+                'globalHelp',
             );
     }
 
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormTextField::make("email")
-                    ->setLabel("E-mail address")
+                SharpFormTextField::make('email')
+                    ->setLabel('E-mail address'),
             );
     }
 
     protected function initialData(): array
     {
         return [
-            "globalHelp" => [
-                "day" => now()->addDay()->formatLocalized("%A")
-            ]
+            'globalHelp' => [
+                'day' => now()->addDay()->formatLocalized('%A'),
+            ],
         ];
     }
 
@@ -47,10 +47,10 @@ class InviteUserCommand extends EntityCommand
         $this->validate(
             $data,
             [
-                "email" => "required|email"
-            ]
+                'email' => 'required|email',
+            ],
         );
-        
-        return $this->info("Invitation planned!");
+
+        return $this->info('Invitation planned!');
     }
 }

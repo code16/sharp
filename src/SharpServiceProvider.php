@@ -36,7 +36,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '7.0.0';
+    const VERSION = '7.0.2';
 
     public function boot()
     {
@@ -48,7 +48,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/front', 'sharp-front');
 
         $this->publishes([
-            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
+            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp'),
         ], 'assets');
 
         $this->publishes([
@@ -56,10 +56,10 @@ class SharpServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
-            __DIR__ . '/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
+            __DIR__.'/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
+            __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
         ], 'views');
-        
+
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
         Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
         Blade::component(Content::class, 'sharp-content');
@@ -75,12 +75,12 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             SharpAuthorizationManager::class,
-            SharpAuthorizationManager::class
+            SharpAuthorizationManager::class,
         );
 
         $this->app->singleton(
             CurrentSharpRequest::class,
-            CurrentSharpRequest::class
+            CurrentSharpRequest::class,
         );
 
         $this->commands([
@@ -103,7 +103,7 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerMiddleware(): void
     {
-        $this->app['router']->middlewareGroup("sharp_web", [
+        $this->app['router']->middlewareGroup('sharp_web', [
             \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
             \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
@@ -119,47 +119,47 @@ class SharpServiceProvider extends ServiceProvider
         $this->app['router']
             ->aliasMiddleware(
                 'sharp_api_append_form_authorizations',
-                AppendFormAuthorizations::class
+                AppendFormAuthorizations::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_list_authorizations',
-                AppendListAuthorizations::class
+                AppendListAuthorizations::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_multiform_in_list',
-                AppendMultiformInEntityList::class
+                AppendMultiformInEntityList::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_notifications',
-                AppendNotifications::class
+                AppendNotifications::class,
             )
             ->aliasMiddleware(
                 'sharp_api_errors',
-                HandleSharpApiErrors::class
+                HandleSharpApiErrors::class,
             )
             ->aliasMiddleware(
                 'sharp_api_validation',
-                BindSharpValidationResolver::class
+                BindSharpValidationResolver::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_breadcrumb',
-                AppendBreadcrumb::class
+                AppendBreadcrumb::class,
             )
             ->aliasMiddleware(
                 'sharp_locale',
-                SetSharpLocale::class
+                SetSharpLocale::class,
             )
             ->aliasMiddleware(
                 'sharp_auth',
-                SharpAuthenticate::class
+                SharpAuthenticate::class,
             )
             ->aliasMiddleware(
                 'sharp_guest',
-                SharpRedirectIfAuthenticated::class
+                SharpRedirectIfAuthenticated::class,
             )
             ->aliasMiddleware(
                 'sharp_invalidate_cache',
-                InvalidateCache::class
+                InvalidateCache::class,
             );
     }
 }

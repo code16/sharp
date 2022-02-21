@@ -5,24 +5,24 @@ namespace Code16\Sharp\Dashboard\Widgets;
 abstract class SharpGraphWidget extends SharpWidget
 {
     protected ?string $display = null;
-    protected array $ratio = [16,9];
+    protected array $ratio = [16, 9];
     protected ?int $height = null;
     protected bool $showLegend = true;
     protected bool $minimal = false;
-    
+
     /**
-     * @param string $ratio 16:9, 1:1, ...
+     * @param  string  $ratio  16:9, 1:1, ...
      * @return self
      */
     public function setRatio(string $ratio): self
     {
-        $this->ratio = explode(":", $ratio);
+        $this->ratio = explode(':', $ratio);
 
         return $this;
     }
 
     /**
-     * @param int $height an arbitrary height (ratio will be ignored)
+     * @param  int  $height  an arbitrary height (ratio will be ignored)
      * @return self
      */
     public function setHeight(int $height): self
@@ -49,19 +49,19 @@ abstract class SharpGraphWidget extends SharpWidget
     public function toArray(): array
     {
         return parent::buildArray([
-            "display" => $this->display,
-            "ratioX" => $this->ratio ? (int)$this->ratio[0] : null,
-            "ratioY" => $this->ratio ? (int)$this->ratio[1] : null,
-            "height" => $this->height,
-            "minimal" => $this->minimal,
-            "showLegend" => $this->showLegend,
+            'display' => $this->display,
+            'ratioX' => $this->ratio ? (int) $this->ratio[0] : null,
+            'ratioY' => $this->ratio ? (int) $this->ratio[1] : null,
+            'height' => $this->height,
+            'minimal' => $this->minimal,
+            'showLegend' => $this->showLegend,
         ]);
     }
 
     protected function validationRules(): array
     {
         return [
-            "display" => "required|in:bar,line,pie"
+            'display' => 'required|in:bar,line,pie',
         ];
     }
 }

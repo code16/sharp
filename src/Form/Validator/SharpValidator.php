@@ -12,7 +12,6 @@ use Illuminate\Validation\Validator;
  */
 class SharpValidator extends Validator
 {
-
     /**
      * @return bool
      */
@@ -20,22 +19,24 @@ class SharpValidator extends Validator
     {
         $result = parent::passes();
 
-        // First grab all messages which do not refer to a Rich Text Field (RTF)
-        $newMessages = collect($this->messages->getMessages())->filter(function($messages, $key) {
-            return !Str::endsWith($key, ".text");
-        })->all();
+        // For all Editor fields, remove the .text in their key (description.text -> description)
+        $newMessages = collect($this->messages->getMessages())
+            ->mapWithKeys(function ($messages, $key) {
+                if (preg_match('/.*[^\\\\].text.*/', $key)) {
+                    $newKey = Str::replace('.text', '', $key);
 
-        // Then for all RFT fields, remove the .text in their key (description.text -> description)
-        collect($this->messages->getMessages())
-            ->filter(function($messages, $key) {
-                return Str::endsWith($key, ".text");
+                    return [
+                        $newKey => collect($messages)
+                            ->map(fn ($value) => Str::replace($key, $newKey, $value))
+                            ->toArray(),
+                    ];
+                }
+
+                return [
+                    $key => $messages,
+                ];
             })
-            ->each(function($messages, $key) use(&$newMessages) {
-                collect($messages)->each(function($message) use($key, &$newMessages) {
-                    $newKey = substr($key, 0, -5);
-                    $newMessages[$newKey] = str_replace($key, $newKey, $message);
-                });
-            });
+            ->toArray();
 
         $this->messages = new MessageBag($newMessages);
 

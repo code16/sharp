@@ -12,7 +12,7 @@ class FormLayoutColumn extends LayoutColumn implements HasLayout
     {
         $fieldset = new FormLayoutFieldset($name);
 
-        if($callback) {
+        if ($callback) {
             $callback($fieldset);
         }
 

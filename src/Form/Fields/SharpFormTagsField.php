@@ -9,12 +9,12 @@ class SharpFormTagsField extends SharpFormField
 {
     use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "tags";
+    const FIELD_TYPE = 'tags';
 
     protected bool $creatable = false;
-    protected string $createText = "Create";
+    protected string $createText = 'Create';
     protected ?string $createAttribute = null;
-    protected string $idAttribute = "id";
+    protected string $idAttribute = 'id';
     protected ?int $maxTagCount = null;
     protected array $options = [];
     protected array $createAdditionalAttributes = [];
@@ -24,9 +24,9 @@ class SharpFormTagsField extends SharpFormField
         $instance = new static($key, static::FIELD_TYPE, new TagsFormatter);
 
         $instance->options = collect($options)
-            ->map(function($label, $id) {
+            ->map(function ($label, $id) {
                 return [
-                    "id" => $id, "label" => $label
+                    'id' => $id, 'label' => $label,
                 ];
             })
             ->values()
@@ -112,20 +112,20 @@ class SharpFormTagsField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "options" => "array",
-            "creatable" => "boolean",
-            "maxTagCount" => "integer",
+            'options' => 'array',
+            'creatable' => 'boolean',
+            'maxTagCount' => 'integer',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "creatable" => $this->creatable,
-            "createText" => $this->createText,
-            "maxTagCount" => $this->maxTagCount,
-            "options" => $this->options,
-            "localized" => $this->localized,
+            'creatable' => $this->creatable,
+            'createText' => $this->createText,
+            'maxTagCount' => $this->maxTagCount,
+            'options' => $this->options,
+            'localized' => $this->localized,
         ]);
     }
 }

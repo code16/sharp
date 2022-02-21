@@ -8,7 +8,7 @@ return [
 
     'command.confirm.title' => '확인',
     'command.info.title' => '정보',
-    'state.422.title' => "상태를 변경할 수 없습니다",
+    'state.422.title' => '상태를 변경할 수 없습니다',
     'cropper.title' => '사진 변환',
 
     // Other errors fallback text
@@ -16,5 +16,5 @@ return [
     'error.message' => '오류가 발생했습니다',
 
     'ok_button' => '확인',
-    'cancel_button' => '취소'
+    'cancel_button' => '취소',
 ];

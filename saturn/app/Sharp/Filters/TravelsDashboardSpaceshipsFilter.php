@@ -9,14 +9,14 @@ class TravelsDashboardSpaceshipsFilter extends DashboardSelectMultipleFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Travels")
+        $this->configureLabel('Travels')
             ->configureSearchable();
     }
 
     public function values(): array
     {
-        return Spaceship::orderBy("name")
-            ->pluck("name", "id")
+        return Spaceship::orderBy('name')
+            ->pluck('name', 'id')
             ->all();
     }
 }

@@ -7,33 +7,33 @@ class FormLayout implements HasLayout
     protected array $tabs = [];
     protected bool $tabbed = true;
 
-    public final function addTab(string $label, \Closure $callback = null): self
+    final public function addTab(string $label, \Closure $callback = null): self
     {
         $tab = $this->addTabLayout(new FormLayoutTab($label));
 
-        if($callback) {
+        if ($callback) {
             $callback($tab);
         }
 
         return $this;
     }
 
-    public final function addColumn(int $size, \Closure $callback = null): self
+    final public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this
             ->getLonelyTab()
             ->addColumnLayout(
-                new FormLayoutColumn($size)
+                new FormLayoutColumn($size),
             );
 
-        if($callback) {
+        if ($callback) {
             $callback($column);
         }
 
         return $this;
     }
 
-    public final function setTabbed(bool $tabbed = true): self
+    final public function setTabbed(bool $tabbed = true): self
     {
         $this->tabbed = $tabbed;
 
@@ -49,20 +49,20 @@ class FormLayout implements HasLayout
 
     private function getLonelyTab(): FormLayoutTab
     {
-        if(!sizeof($this->tabs)) {
-            $this->addTabLayout(new FormLayoutTab("one"));
+        if (! sizeof($this->tabs)) {
+            $this->addTabLayout(new FormLayoutTab('one'));
         }
 
         return $this->tabs[0];
     }
 
-    function toArray(): array
+    public function toArray(): array
     {
         return [
-            "tabbed" => $this->tabbed,
-            "tabs" => collect($this->tabs)
+            'tabbed' => $this->tabbed,
+            'tabs' => collect($this->tabs)
                 ->map->toArray()
-                ->all()
+                ->all(),
         ];
     }
 }

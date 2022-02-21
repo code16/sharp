@@ -9,7 +9,7 @@ class FormController extends ApiController
 {
     public function edit(string $entityKey, string $instanceId = null)
     {
-        sharp_check_ability("view", $entityKey, $instanceId);
+        sharp_check_ability('view', $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
@@ -18,13 +18,13 @@ class FormController extends ApiController
         return response()->json(
             array_merge(
                 [
-                    "fields" => $form->fields(),
-                    "layout" => $form->formLayout(),
-                    "config" => $form->formConfig(),
-                    "data" => $form->instance($instanceId)
+                    'fields' => $form->fields(),
+                    'layout' => $form->formLayout(),
+                    'config' => $form->formConfig(),
+                    'data' => $form->instance($instanceId),
                 ],
-                $this->dataLocalizations($form)
-            )
+                $this->dataLocalizations($form),
+            ),
         );
     }
 
@@ -32,39 +32,39 @@ class FormController extends ApiController
     {
         $form = $this->getFormInstance($entityKey);
 
-        if($form instanceof SharpSingleForm) {
+        if ($form instanceof SharpSingleForm) {
             return $this->edit($entityKey);
         }
 
-        sharp_check_ability("create", $entityKey);
+        sharp_check_ability('create', $entityKey);
         $form->buildFormConfig();
 
         return response()->json(
             array_merge(
                 [
-                    "fields" => $form->fields(),
-                    "layout" => $form->formLayout(),
-                    "config" => $form->formConfig(),
-                    "data" => $form->newInstance()
+                    'fields' => $form->fields(),
+                    'layout' => $form->formLayout(),
+                    'config' => $form->formConfig(),
+                    'data' => $form->newInstance(),
                 ],
-                $this->dataLocalizations($form)
-            )
+                $this->dataLocalizations($form),
+            ),
         );
     }
 
     public function update(string $entityKey, string $instanceId = null)
     {
-        sharp_check_ability("update", $entityKey, $instanceId);
+        sharp_check_ability('update', $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
-        
+
         $form->validateRequest($entityKey);
-        
+
         $form->updateInstance($instanceId, request()->all());
-        
+
         return response()->json([
-            "redirectUrl" => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem()
+            'redirectUrl' => $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem(),
         ]);
     }
 
@@ -72,29 +72,29 @@ class FormController extends ApiController
     {
         $form = $this->getFormInstance($entityKey);
 
-        if($form instanceof SharpSingleForm) {
+        if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
             return $this->update($entityKey);
         }
 
-        sharp_check_ability("create", $entityKey);
+        sharp_check_ability('create', $entityKey);
         $form->buildFormConfig();
-        
+
         $form->validateRequest($entityKey);
         $instanceId = $form->storeInstance(request()->all());
-        
+
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
-        
+
         return response()->json([
-            "redirectUrl" => $form->isDisplayShowPageAfterCreation()
+            'redirectUrl' => $form->isDisplayShowPageAfterCreation()
                 ? "{$previousUrl}/s-show/{$entityKey}/{$instanceId}"
-                : $previousUrl
+                : $previousUrl,
         ]);
     }
 
     public function delete(string $entityKey, string $instanceId = null)
     {
-        sharp_check_ability("delete", $entityKey, $instanceId);
+        sharp_check_ability('delete', $entityKey, $instanceId);
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
@@ -102,25 +102,25 @@ class FormController extends ApiController
         $form->delete($instanceId);
 
         $entityKey = $this->isSubEntity($entityKey) ? explode(':', $entityKey)[0] : $entityKey;
-        if($previousShowOfAnotherEntity = $this->currentSharpRequest->getPreviousShowFromBreadcrumbItems("!$entityKey")) {
+        if ($previousShowOfAnotherEntity = $this->currentSharpRequest->getPreviousShowFromBreadcrumbItems("!$entityKey")) {
             $redirectUrl = $this->currentSharpRequest->getUrlForBreadcrumbItem($previousShowOfAnotherEntity);
         }
-        
+
         return response()->json([
-            "redirectUrl" => $redirectUrl ?? $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem("s-list")
+            'redirectUrl' => $redirectUrl ?? $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem('s-list'),
         ]);
     }
 
     protected function dataLocalizations(SharpForm $form): array
     {
         return $form->hasDataLocalizations()
-            ? ["locales" => $form->getDataLocalizations()]
+            ? ['locales' => $form->getDataLocalizations()]
             : [];
     }
 
     protected function checkFormImplementation(SharpForm $form, ?string $instanceId): void
     {
-        abort_if(!$instanceId && !$form instanceof SharpSingleForm, 404);
+        abort_if(! $instanceId && ! $form instanceof SharpSingleForm, 404);
         abort_if($instanceId && $form instanceof SharpSingleForm, 404);
     }
 }

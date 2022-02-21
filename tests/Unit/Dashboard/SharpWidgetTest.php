@@ -10,69 +10,69 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 class SharpWidgetTest extends SharpTestCase
 {
     /** @test */
-    function we_must_define_a_key()
+    public function we_must_define_a_key()
     {
         $this->expectException(SharpWidgetValidationException::class);
-        SomeTestWidget::make("")->toArray();
+        SomeTestWidget::make('')->toArray();
     }
 
     /** @test */
-    function we_must_define_a_type()
+    public function we_must_define_a_type()
     {
         $this->expectException(SharpWidgetValidationException::class);
-        SomeTestWidget::make("type", "")->toArray();
+        SomeTestWidget::make('type', '')->toArray();
     }
 
     /** @test */
-    function returned_array_contains_key_and_type()
+    public function returned_array_contains_key_and_type()
     {
-        $widget = SomeTestWidget::make("name", "test");
+        $widget = SomeTestWidget::make('name', 'test');
 
         $this->assertArraySubset(
-            ["key" => "name", "type" => "test"],
-            $widget->toArray()
+            ['key' => 'name', 'type' => 'test'],
+            $widget->toArray(),
         );
     }
 
     /** @test */
-    function returned_array_does_not_contain_null_attributes()
+    public function returned_array_does_not_contain_null_attributes()
     {
-        $widget = SomeTestWidget::make("name");
+        $widget = SomeTestWidget::make('name');
 
         $this->assertEquals(
-            ["key" => "name", "type" => "test"],
-            $widget->toArray()
+            ['key' => 'name', 'type' => 'test'],
+            $widget->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_title()
+    public function we_can_define_title()
     {
-        $widget = SomeTestWidget::make("name")
-            ->setTitle("title");
+        $widget = SomeTestWidget::make('name')
+            ->setTitle('title');
 
         $this->assertArraySubset(
-            ["title" => "title"],
-            $widget->toArray()
+            ['title' => 'title'],
+            $widget->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_an_SharpLinkTo_link()
+    public function we_can_define_an_SharpLinkTo_link()
     {
-        $widget = SomeTestWidget::make("name")
-            ->setLink(LinkToEntityList::make("entity"));
+        $widget = SomeTestWidget::make('name')
+            ->setLink(LinkToEntityList::make('entity'));
 
         $this->assertArraySubset(
-            ["link" => route("code16.sharp.list", "entity")],
-            $widget->toArray()
+            ['link' => route('code16.sharp.list', 'entity')],
+            $widget->toArray(),
         );
     }
 }
 
 class SomeTestWidget extends SharpWidget
 {
-    public static function make(string $key, $type = "test")
+    public static function make(string $key, $type = 'test')
     {
         return new static($key, $type);
     }

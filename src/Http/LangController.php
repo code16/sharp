@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Cache;
 
 class LangController extends Controller
 {
-
     /**
      * Echoes out the localization messages as a JS file,
      * to be used by the front code (Vue.js).
@@ -17,17 +16,17 @@ class LangController extends Controller
         $lang = app()->getLocale();
         $version = sharp_version();
 
-        $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function() {
+        $strings = Cache::rememberForever("sharp.lang.$lang.$version.js", function () {
             $localizationStrings = [];
             $files = [
-                "action_bar",
-                "dashboard",
-                "entity_list",
-                "form",
-                "modals",
-                "show",
+                'action_bar',
+                'dashboard',
+                'entity_list',
+                'form',
+                'modals',
+                'show',
             ];
-    
+
             collect($files)
                 ->map(function (string $filename) {
                     return collect(trans("sharp-front::$filename"))
@@ -39,11 +38,11 @@ class LangController extends Controller
                 ->each(function (array $values) use (&$localizationStrings) {
                     $localizationStrings += $values;
                 });
-            
+
             return $localizationStrings;
         });
 
-        return response('window.i18n = ' . json_encode($strings) . ';')
+        return response('window.i18n = '.json_encode($strings).';')
             ->header('Content-Type', 'application/javascript');
     }
 }

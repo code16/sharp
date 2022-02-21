@@ -17,11 +17,11 @@ class EntityListEntityCommandController extends ApiController
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
         $list->initQueryParams();
-        
+
         $commandHandler = $this->getCommandHandler($list, $commandKey);
-        
+
         return response()->json([
-            "data" => $commandHandler->formData()
+            'data' => $commandHandler->formData(),
         ]);
     }
 
@@ -30,14 +30,14 @@ class EntityListEntityCommandController extends ApiController
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
         $list->initQueryParams();
-        
+
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
         return $this->returnCommandResult(
             $list,
             $commandHandler->execute(
-                $commandHandler->formatRequestData((array)request("data"))
-            )
+                $commandHandler->formatRequestData((array) request('data')),
+            ),
         );
     }
 
@@ -45,9 +45,9 @@ class EntityListEntityCommandController extends ApiController
     {
         $commandHandler = $list->findEntityCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();
-        $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest("query"));
+        $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest('query'));
 
-        if(! $commandHandler->authorize()) {
+        if (! $commandHandler->authorize()) {
             throw new SharpAuthorizationException();
         }
 

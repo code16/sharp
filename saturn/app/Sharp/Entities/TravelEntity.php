@@ -10,5 +10,5 @@ class TravelEntity extends SharpEntity
 {
     protected ?string $list = TravelSharpList::class;
     protected ?string $form = TravelSharpForm::class;
-    protected string $label = "Travel";
+    protected string $label = 'Travel';
 }

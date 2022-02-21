@@ -14,8 +14,7 @@ class AddSerialNumberToSpaceships extends Migration
     public function up()
     {
         Schema::table('spaceships', function (Blueprint $table) {
-            $table->string("serial_number")->nullable();
+            $table->string('serial_number')->nullable();
         });
     }
-
 }

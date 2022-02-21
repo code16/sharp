@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class AuthenticationTest extends BaseApiTest
 {
-
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
@@ -62,15 +61,15 @@ class AuthenticationTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.auth.check_handler',
-            AuthenticationTestCheckHandler::class
+            AuthenticationTestCheckHandler::class,
         );
 
-        $this->actingAs(new User(["name" => "ok"]));
+        $this->actingAs(new User(['name' => 'ok']));
 
         $this->get('/sharp/s-list/person')->assertStatus(200);
         $this->json('get', '/sharp/api/list/person')->assertStatus(200);
 
-        $this->actingAs(new User(["name" => "ko"]));
+        $this->actingAs(new User(['name' => 'ko']));
 
         // We're logged, but not as a sharp user (our fake auth check tells us that).
         $this->get('/sharp/s-list/person')->assertStatus(302);
@@ -90,14 +89,14 @@ class AuthenticationTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.auth.guard',
-            'sharp'
+            'sharp',
         );
 
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',
                 'provider' => 'users',
-            ]
+            ],
         );
 
         return $authGuard;
@@ -109,22 +108,27 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
     public function __construct(private bool $isValid) 
     {
     }
+
     public function check()
     {
         return $this->isValid;
     }
+
     public function guest()
     {
-        return !$this->isValid;
+        return ! $this->isValid;
     }
+
     public function user()
     {
         return $this->isValid ? new User() : null;
     }
+
     public function id()
     {
         return $this->isValid ? 1 : null;
     }
+
     public function validate(array $credentials = [])
     {
         return true;
@@ -148,9 +152,8 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
 class AuthenticationTestCheckHandler
 {
-
     public function check($user)
     {
-        return $user->name == "ok";
+        return $user->name == 'ok';
     }
 }

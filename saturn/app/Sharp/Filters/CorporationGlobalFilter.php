@@ -14,8 +14,8 @@ class CorporationGlobalFilter extends GlobalRequiredFilter
 
     public function values(): array
     {
-        return Corporation::orderBy("name")
-            ->pluck("name", "id")
+        return Corporation::orderBy('name')
+            ->pluck('name', 'id')
             ->all();
     }
 

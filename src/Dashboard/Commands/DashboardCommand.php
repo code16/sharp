@@ -11,10 +11,10 @@ abstract class DashboardCommand extends Command
 
     public function type(): string
     {
-        return "dashboard";
+        return 'dashboard';
     }
 
-    public final function initQueryParams(?DashboardQueryParams $queryParams): void
+    final public function initQueryParams(?DashboardQueryParams $queryParams): void
     {
         $this->queryParams = $queryParams;
     }
@@ -32,7 +32,7 @@ abstract class DashboardCommand extends Command
     }
 
     /**
-     * @param mixed $ids
+     * @param  mixed  $ids
      * @return array
      */
     protected function refresh($ids): array
@@ -42,8 +42,8 @@ abstract class DashboardCommand extends Command
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      * @return array
      */
-    public abstract function execute(array $data = []): array;
+    abstract public function execute(array $data = []): array;
 }

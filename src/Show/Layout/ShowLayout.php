@@ -8,26 +8,26 @@ class ShowLayout implements HasLayout
 {
     protected array $sections = [];
 
-    public final function addSection(string $label, \Closure $callback = null): self
+    final public function addSection(string $label, \Closure $callback = null): self
     {
         $section = new ShowLayoutSection($label);
         $this->sections[] = $section;
 
-        if($callback) {
+        if ($callback) {
             $callback($section);
         }
 
         return $this;
     }
 
-    public final function addEntityListSection(string $entityListKey, \Closure $callback = null): self
+    final public function addEntityListSection(string $entityListKey, \Closure $callback = null): self
     {
-        $section = new ShowLayoutSection("");
-        $section->addColumn(12, function($column) use($entityListKey) {
+        $section = new ShowLayoutSection('');
+        $section->addColumn(12, function ($column) use ($entityListKey) {
             $column->withSingleField($entityListKey);
         });
 
-        if($callback) {
+        if ($callback) {
             $callback($section);
         }
 
@@ -39,9 +39,9 @@ class ShowLayout implements HasLayout
     public function toArray(): array
     {
         return [
-            "sections" => collect($this->sections)
+            'sections' => collect($this->sections)
                 ->map->toArray()
-                ->all()
+                ->all(),
         ];
     }
 }

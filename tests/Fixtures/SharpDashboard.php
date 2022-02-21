@@ -16,23 +16,23 @@ class SharpDashboard extends AbstractSharpDashboard
     {
         $widgetsContainer
             ->addWidget(
-                SharpBarGraphWidget::make("bars")
+                SharpBarGraphWidget::make('bars'),
             )
             ->addWidget(
-                SharpPanelWidget::make("panel")
-                    ->setInlineTemplate("<b>test</b>")
+                SharpPanelWidget::make('panel')
+                    ->setInlineTemplate('<b>test</b>'),
             )
             ->addWidget(
-                SharpBarGraphWidget::make("bars2")
+                SharpBarGraphWidget::make('bars2'),
             );
     }
 
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        $dashboardLayout->addFullWidthWidget("bars")
+        $dashboardLayout->addFullWidthWidget('bars')
             ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(4, "panel")
-                    ->addWidget(8, "bars2");
+                $row->addWidget(4, 'panel')
+                    ->addWidget(8, 'bars2');
             });
     }
 
@@ -40,17 +40,17 @@ class SharpDashboard extends AbstractSharpDashboard
     {
         $this
             ->addGraphDataSet(
-                "bars1",
-                SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
-                    ->setLabel("Bars 1")
+                'bars1',
+                SharpGraphWidgetDataSet::make(['a' => 10, 'b' => 20, 'c' => 30])
+                    ->setLabel('Bars 1'),
             )
             ->addGraphDataSet(
-                "bars2",
-                SharpGraphWidgetDataSet::make(["a" => 10, "b" => 20, "c" => 30])
-                    ->setLabel("Bars 2")
+                'bars2',
+                SharpGraphWidgetDataSet::make(['a' => 10, 'b' => 20, 'c' => 30])
+                    ->setLabel('Bars 2'),
             )
             ->setPanelData(
-                "panel", ["name" => "John Wayne"]
+                'panel', ['name' => 'John Wayne'],
             );
     }
 }
