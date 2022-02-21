@@ -74,4 +74,4 @@ function find($id): array
 Note that we use the dynamic data in two ways, in this example:
 
 - the Page Alert will appear only if the spaceship state is "building" or "conception"
-- and the actual state will be injected ion the text message.
+- and the actual state will be injected in the text message.

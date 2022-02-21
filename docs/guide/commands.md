@@ -84,7 +84,7 @@ The API is the same as building a standard Form (see [Building an Entity Form](b
 Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The
 optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed.
 
-Then, is the `execute()` method, you can grab the entered value, and even to handle the validation:
+Then, in the `execute()` method, you can grab the entered value, and even to handle the validation:
 
 ```php
 public function execute($instanceId, array $data= []): array
@@ -206,6 +206,17 @@ function getEntityCommands(): ?array
 {
     return [
         SpaceshipReload::class
+    ];
+}
+```
+
+or to the Dashboard:
+
+```php
+function getDashboardCommands(): ?array
+{
+    return [
+        TravelsDashboardDownloadCommand::class
     ];
 }
 ```
