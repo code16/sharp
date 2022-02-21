@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Form\Eloquent\Relationships\Utils;
 
-use Illuminate\Database\Eloquent\Model;
-
 trait CanCreateRelatedModel
 {
     /**

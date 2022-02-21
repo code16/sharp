@@ -10,19 +10,19 @@
   }],
   "require": {
     "php": "^8.0",
-    "laravel/framework": "^8.0",
+    "laravel/framework": "^8.0|^9.0",
     "intervention/image": "^2.5",
     "spatie/image-optimizer": "^1.2",
     "league/commonmark": "^2.0"
   },
   "require-dev": {
-    "mockery/mockery": "^1.3.1",
-    "phpunit/phpunit": "^9.3",
+    "mockery/mockery": "^1.4.4",
+    "phpunit/phpunit": "^9.5",
     "doctrine/dbal": "~2.5",
-    "orchestra/testbench": "6.*",
+    "orchestra/testbench": "^6.0|^7.0",
     "dms/phpunit-arraysubset-asserts": "^0.2.0",
     "brianium/paratest": "^6.3",
-    "nunomaduro/collision": "^5.4",
+    "nunomaduro/collision": "^5.4|^6.0",
     "spatie/laravel-ray": "^1.26"
   },
   "autoload": {
@@ -47,5 +47,10 @@
         "Code16\\Sharp\\SharpServiceProvider"
       ]
     }
-  }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

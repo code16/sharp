@@ -105,11 +105,8 @@ class AuthenticationTest extends BaseApiTest
 
 class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 {
-    private $isValid;
-
-    public function __construct(bool $isValid)
+    public function __construct(private bool $isValid)
     {
-        $this->isValid = $isValid;
     }
 
     public function check()
@@ -139,6 +136,11 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
     public function setUser(Authenticatable $user)
     {
+    }
+
+    public function hasUser()
+    {
+        return $this->isValid;
     }
 
     public function setInvalid()

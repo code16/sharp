@@ -54,15 +54,15 @@
 </template>
 
 <script>
-    import { logError, lang } from 'sharp';
-    import { Identifier, ConfigNode }  from 'sharp/mixins';
-    import Field from '../Field';
-    import FieldLocaleSelect from './FieldLocaleSelect';
-    import { resolveTextValue, isLocalizableValueField } from '../../util';
-    import { sticky } from "sharp/directives";
+  import { lang, logError } from 'sharp';
+  import { ConfigNode, Identifier } from 'sharp/mixins';
+  import Field from '../Field';
+  import FieldLocaleSelect from './FieldLocaleSelect';
+  import { isLocalizableValueField, resolveTextValue } from '../../util';
+  import { sticky } from "sharp/directives";
 
 
-    export default {
+  export default {
         name: 'SharpFieldContainer',
 
         mixins: [ Identifier, ConfigNode ],

@@ -105,8 +105,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $response = $this->json('post', '/sharp/api/list/person/command/entity_download')
-            ->assertOk()
-            ->assertHeader('content-type', 'application/pdf');
+            ->assertOk();
 
         $this->assertTrue(
             Str::contains(
@@ -114,7 +113,8 @@ class EntityCommandControllerTest extends BaseApiTest
             ),
         );
 
-        $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
+        $this
+            ->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
             ->assertOk();
     }
 
@@ -124,7 +124,8 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $response = $this->json('post', '/sharp/api/list/person/command/entity_streamDownload')
+        $response = $this
+            ->json('post', '/sharp/api/list/person/command/entity_streamDownload')
             ->assertOk()
             ->assertHeader('content-type', 'text/html; charset=UTF-8');
 
@@ -140,7 +141,8 @@ class EntityCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_exception')
+        $this
+            ->json('post', '/sharp/api/list/person/command/entity_exception')
             ->assertStatus(417)
             ->assertJson([
                 'message' => 'error',
@@ -152,7 +154,8 @@ class EntityCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_form')
+        $this
+            ->json('post', '/sharp/api/list/person/command/entity_form')
             ->assertStatus(422)
             ->assertJson([
                 'errors' => [
@@ -169,9 +172,10 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_params', [
-            'query' => ['sort' => 'name', 'dir' => 'desc'],
-        ])
+        $this
+            ->json('post', '/sharp/api/list/person/command/entity_params', [
+                'query' => ['sort' => 'name', 'dir' => 'desc'],
+            ])
             ->assertOk()
             ->assertJson([
                 'action' => 'info',
@@ -184,7 +188,8 @@ class EntityCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('post', '/sharp/api/list/person/command/entity_unauthorized')
+        $this
+            ->json('post', '/sharp/api/list/person/command/entity_unauthorized')
             ->assertStatus(403);
     }
 
@@ -194,15 +199,19 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $response = $this->getJson('/sharp/api/list/person')
+        $response = $this
+            ->getJson('/sharp/api/list/person')
             ->assertOk()
             ->json();
 
         $this->assertTrue(
-            collect($response['config']['commands']['entity'][0])->where('key', 'entity_with_init_data')->first()['fetch_initial_data'],
+            collect($response['config']['commands']['entity'][0])
+                ->where('key', 'entity_with_init_data')
+                ->first()['fetch_initial_data'],
         );
 
-        $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
+        $this
+            ->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
             ->assertOk()
             ->assertExactJson([
                 'data' => [
@@ -316,7 +325,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 public function execute(array $data = []): array
                 {
                     Storage::fake('files');
-                    UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk' => 'files']);
+                    UploadedFile::fake()->create('account.pdf', 100, 'application/pdf')->storeAs('pdf', 'account.pdf', ['disk' => 'files']);
 
                     return $this->download('pdf/account.pdf', 'account.pdf', 'files');
                 }
