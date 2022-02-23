@@ -198,7 +198,7 @@ Once the Command class is written, we must add it to the EntityList:
 function getInstanceCommands(): ?array
 {
     return [
-        "message" => new SpaceshipSendMessage()
+        SpaceshipSendMessage::class
     ];
 }
 
