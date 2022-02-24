@@ -66,6 +66,57 @@ SharpFormEditorField::make("description")
 
 If true te front will send the content as markdown to the back, for storage. Default is false.
 
+### `setMaxFileSize(float $sizeInMB)`
+
+Max file size allowed.
+
+### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
+
+Allow the user to crop or rotate a visual, after the upload.  
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
+stored directly in the `<x-sharp-image/>` tag. For instance:
+
+```html
+
+<x-sharp-image 
+    name="filename.jpg"
+    filter-crop="0.1495,0,0.5625,1"
+    path="data/Spaceship/10/markdown/filename.jpg"
+    disk="local">
+</x-sharp-image>
+```
+
+Then at render Sharp will take care of that for the thumbnail (see *Display embedded files in the public site* below).
+
+### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
+
+Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
+
+When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
+
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files
+extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break
+animation.
+
+### `setStorageDisk(string $storageDisk)`
+
+Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
+
+### `setStorageBasePath(string $storageBasePath)`
+
+Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
+
+For instance:
+`$field->setStorageBasePath('/users/{id}/markdown')`
+
+### `setFileFilter($fileFilter)`
+
+Set the allowed file extensions. You can pass either an array, or a comma-separated list.
+
+### `setFileFilterImages()`
+
+Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
+
 ### Embed images and files
 
 The editor field allows file embedding, with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature,
@@ -90,57 +141,6 @@ In case of an image the inserted tag is:
     disk="local">
 </x-sharp-image>
 ```
-
-#### `setMaxFileSize(float $sizeInMB)`
-
-Max file size allowed.
-
-#### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
-
-Allow the user to crop or rotate a visual, after the upload.  
-With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
-stored directly in the `<x-sharp-image/>` tag. For instance:
-
-```html
-
-<x-sharp-image 
-    name="filename.jpg"
-    filter-crop="0.1495,0,0.5625,1"
-    path="data/Spaceship/10/markdown/filename.jpg"
-    disk="local">
-</x-sharp-image>
-```
-
-Then at render Sharp will take care of that for the thumbnail (see *Display embedded files in the public site* below).
-
-#### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
-
-Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
-
-When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
-
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files
-extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break
-animation.
-
-#### `setStorageDisk(string $storageDisk)`
-
-Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
-
-#### `setStorageBasePath(string $storageBasePath)`
-
-Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
-
-For instance:
-`$field->setStorageBasePath('/users/{id}/markdown')`
-
-#### `setFileFilter($fileFilter)`
-
-Set the allowed file extensions. You can pass either an array, or a comma-separated list.
-
-#### `setFileFilterImages()`
-
-Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
 
 ### Display embedded files in the public site
 
