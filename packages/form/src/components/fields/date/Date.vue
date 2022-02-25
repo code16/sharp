@@ -1,8 +1,8 @@
 <template>
     <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
-        <div class="SharpDate__input-wrapper">
-            <div class="input-group " :class="{ 'input-group--clearable': hasClearButton }" ref="inputGroup">
-                <button class="input-group-text btn"
+        <div class="SharpDate__input-wrapper position-relative">
+            <div class="input-group" :class="{ 'input-group--clearable': hasClearButton }" ref="inputGroup">
+                <button class="input-group-text btn SharpDate__prepend"
                     @pointerdown="handlePrependButtonPointerDown"
                     @click="handlePrependButtonClicked"
                 >
@@ -10,59 +10,86 @@
                         <path d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20  V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"/>
                     </svg>
                 </button>
-                <input
-                    class="form-control clearable SharpDate__input"
-                    :id="id"
-                    :class="{ 'SharpDate__input--valuated': value }"
-                    :placeholder="displayFormat"
-                    :value="inputValue"
-                    :disabled="readOnly"
-                    autocomplete="off"
-                    @input="handleInput"
-                    @blur="handleBlur"
-                    @keydown.up.prevent="increase"
-                    @keydown.down.prevent="decrease"
-                    ref="input"
-                >
+                <template v-if="displayFormat">
+                    <input
+                        :id="id"
+                        class="form-control clearable SharpDate__input"
+                        :class="{ 'SharpDate__input--valuated': value }"
+                        :placeholder="displayFormat"
+                        :value="inputValue"
+                        :disabled="readOnly"
+                        autocomplete="off"
+                        @input="handleInput"
+                        @blur="handleBlur"
+                        @keydown.up.prevent="increase"
+                        @keydown.down.prevent="decrease"
+                        ref="input"
+                    >
+                </template>
+                <template v-else>
+                    <template v-if="hasDate">
+                        <input
+                            :id="id"
+                            class="form-control SharpDate__date-input"
+                            :value="dateInputValue"
+                            type="date"
+                            autocomplete="off"
+                            @input="handleDateInput"
+                        >
+                    </template>
+                    <template v-if="hasTime">
+                        <input
+                            :id="!hasDate ? id : null"
+                            class="form-control SharpDate__date-input"
+                            :value="timeInputValue"
+                            type="time"
+                            autocomplete="off"
+                            @input="handleTimeInput"
+                        >
+                    </template>
+                </template>
+
                 <template v-if="hasClearButton">
                     <ClearButton @click="clear" ref="clearButton" />
                 </template>
             </div>
         </div>
-        <b-popover
-            :target="popoverTarget"
-            :show.sync="showPicker"
-            :boundary="popoverBoundary"
-            no-fade
-            triggers="focus"
-            placement="bottom"
-        >
-            <div class="SharpDate__picker position-static">
-                <template v-if="hasDate">
-                    <DatePicker
-                        class="SharpDate__date"
-                        :language="language"
-                        :monday-first="mondayFirst"
-                        inline
-                        :value="dateObject"
-                        @selected="handleDateSelect"
-                        ref="datepicker"
-                    />
-                </template>
-                <template v-if="hasTime">
-                    <TimePicker
-                        class="SharpDate__time"
-                        :value="timeObject"
-                        :active="showPicker"
-                        :format="displayFormat"
-                        :minute-interval="stepTime"
-                        :min="minTime" :max="maxTime"
-                        @change="handleTimeSelect"
-                        ref="timepicker"
-                    />
-                </template>
-            </div>
-        </b-popover>
+        <template v-if="displayFormat">
+            <b-popover
+                :target="popoverTarget"
+                :show.sync="showPicker"
+                :boundary="popoverBoundary"
+                no-fade
+                triggers="focus"
+                placement="bottom"
+            >
+                <div class="SharpDate__picker position-static">
+                    <template v-if="hasDate">
+                        <DatePicker
+                            class="SharpDate__date"
+                            :language="language"
+                            :monday-first="mondayFirst"
+                            inline
+                            :value="dateObject"
+                            @selected="handleDateSelect"
+                            ref="datepicker"
+                        />
+                    </template>
+                    <template v-if="hasTime">
+                        <TimePicker
+                            class="SharpDate__time"
+                            :value="timeObject"
+                            :active="showPicker"
+                            :format="displayFormat"
+                            :minute-interval="stepTime"
+                            :min="minTime" :max="maxTime"
+                            @change="handleTimeSelect"
+                            ref="timepicker"
+                        />
+                    </template>
+                </div>
+            </b-popover>
+        </template>
     </div>
 </template>
 
@@ -93,24 +120,21 @@
         props: {
             id: String,
             value: {
-                type:[Date, String]
+                type: [Date, String]
             },
             hasDate: {
-                type:Boolean,
-                default:true
+                type: Boolean,
+                default: true
             },
             hasTime: {
-                type:Boolean,
-                default:false
+                type: Boolean,
+                default: false
             },
-            displayFormat: {
-                type: String,
-                default:'DD/MM/YYYY HH:mm'
-            },
+            displayFormat: String,
             mondayFirst: Boolean,
             stepTime: {
-                type:Number,
-                default:30
+                type: Number,
+                default: 30,
             },
             minTime: String,
             maxTime: String,
@@ -153,8 +177,18 @@
             popoverBoundary() {
                 return document.querySelector('[data-popover-boundary]');
             },
+            timeInputValue() {
+                return this.value
+                    ? moment(this.value).format('HH:mm')
+                    : '';
+            },
+            dateInputValue() {
+                return this.value
+                    ? moment(this.value).format('YYYY-MM-DD')
+                    : '';
+            },
             hasClearButton() {
-                return !!this.value;
+                return !!this.displayFormat && !!this.value;
             },
         },
         methods: {
@@ -167,7 +201,23 @@
                     ? moment(this.value, this.format)
                     : moment();
             },
-
+            handleDateInput(e) {
+                if(!e.target.valueAsDate) {
+                    return;
+                }
+                // todo
+                this.$emit('input', date);
+            },
+            handleTimeInput(e) {
+                if(!this.hasDate) {
+                    return e.target.value;
+                }
+                if(!e.target.valueAsDate) {
+                    return;
+                }
+                // todo
+                this.$emit('input', date);
+            },
             handleDateSelect(date) {
                 let newMoment = this.getMoment();
                 newMoment.set({
