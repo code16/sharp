@@ -94,6 +94,7 @@ class SharpFormDateField extends SharpFormField
         return [
             'hasDate' => 'required|boolean',
             'hasTime' => 'required|boolean',
+            'displayFormat' => 'required',
             'minTime' => 'regex:/[0-9]{2}:[0-9]{2}/',
             'maxTime' => 'regex:/[0-9]{2}:[0-9]{2}/',
             'stepTime' => 'integer|min:1|max:60',
@@ -110,7 +111,7 @@ class SharpFormDateField extends SharpFormField
             'maxTime' => $this->maxTime,
             'stepTime' => $this->stepTime,
             'mondayFirst' => $this->mondayFirst,
-            'displayFormat' => $this->displayFormat,
+            'displayFormat' => $this->displayFormat ?: $this->detectDisplayFormat(),
             'language' => $this->language,
         ]);
     }
@@ -120,5 +121,18 @@ class SharpFormDateField extends SharpFormField
         return str_pad($hours, 2, '0', STR_PAD_LEFT)
             .':'
             .str_pad($minutes, 2, '0', STR_PAD_LEFT);
+    }
+
+    protected function detectDisplayFormat(): string
+    {
+        if ($this->hasDate()) {
+            if ($this->hasTime()) {
+                return 'YYYY-MM-DD HH:mm';
+            }
+
+            return 'YYYY-MM-DD';
+        }
+
+        return $this->hasTime() ? 'HH:mm' : '';
     }
 }

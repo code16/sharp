@@ -74,7 +74,7 @@ class SpaceshipSharpForm extends SharpForm
             ->addField(
                 SharpFormDateField::make('construction_date')
                     ->setLabel('Construction date')
-//                    ->setDisplayFormat('YYYY/MM/DD')
+                    ->setDisplayFormat('YYYY/MM/DD')
                     ->setHasTime(false),
             )
             ->addField(
@@ -189,7 +189,7 @@ class SpaceshipSharpForm extends SharpForm
                     ->addItemField(
                         SharpFormDateField::make('starts_at')
                             ->setLabel('Date')
-//                            ->setDisplayFormat('YYYY/MM/DD HH:mm')
+                            ->setDisplayFormat('YYYY/MM/DD HH:mm')
                             ->setMinTime(8)
                             ->setHasTime(true),
                     )

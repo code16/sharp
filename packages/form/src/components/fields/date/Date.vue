@@ -1,17 +1,16 @@
 <template>
-    <div class="SharpDate" :class="{'SharpDate--open':showPicker}">
+    <div class="SharpDate">
         <div class="SharpDate__input-wrapper position-relative">
-            <v-date-picker
-                :mode="mode"
+            <DatePicker
                 :value="pickerValue"
+                :mode="mode"
                 :valid-hours="validHours"
                 :minute-increment="stepTime"
-                is-24-hr
                 @input="handleDateChanged"
                 v-slot="{ inputEvents, togglePopover }"
             >
-                <div class="input-group" :class="{ 'input-group--clearable': hasClearButton }" ref="inputGroup">
-                    <button class="input-group-text btn SharpDate__prepend"
+                <div class="input-group" :class="{ 'input-group--clearable': hasClearButton }">
+                    <button class="input-group-text btn"
                         @click="togglePopover"
                     >
                         <svg class="align-middle" width="1.25em" height="1.25em" viewBox="0 0 32 32" style="fill:currentColor">
@@ -39,33 +38,25 @@
                         <ClearButton @click="clear" ref="clearButton" />
                     </template>
                 </div>
-            </v-date-picker>
+            </DatePicker>
         </div>
     </div>
 </template>
 
 <script>
     import moment from 'moment';
-    import { BPopover } from 'bootstrap-vue';
     import { lang } from 'sharp';
     import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
     import DatePicker from './Datepicker';
-    import TimePicker from './Timepicker';
-    import { DatePicker as VDatePicker } from 'v-calendar';
 
 
     export default {
         name:'SharpDate',
         components: {
             DatePicker,
-            TimePicker,
-            BPopover,
             ClearButton,
-            VDatePicker,
         },
-
-        inject:['$field'],
 
         mixins: [Localization],
 
@@ -133,17 +124,11 @@
                     ? moment(this.value, this.format).format(this.displayFormat)
                     : '';
             },
-            popoverBoundary() {
-                return document.querySelector('[data-popover-boundary]');
-            },
             hasClearButton() {
                 return !!this.value;
             },
         },
         methods: {
-            popoverTarget() {
-                return this.$refs.inputGroup;
-            },
             getMoment() {
                 return this.value
                     ? moment(this.value, this.format)
@@ -157,22 +142,22 @@
                 this.localInputValue = e.target.value;
                 this.showPicker = false;
                 if(!m.isValid()) {
-                    this.$field.$emit('error', `${lang('form.date.validation_error.format')} (${this.displayFormat})`);
+                    this.$emit('error', `${lang('form.date.validation_error.format')} (${this.displayFormat})`);
                 }
                 else {
                     this.rollback();
                     this.$emit('input', m.toDate());
                 }
             },
-            handlePrependButtonPointerDown(e) {
-                const button = e.target.closest('button');
-                this.toggleOnClick = button === document.activeElement;
-            },
-            handlePrependButtonClicked() {
-                if(this.toggleOnClick) {
-                    this.showPicker = !this.showPicker;
-                }
-            },
+            // handlePrependButtonPointerDown(e) {
+            //     const button = e.target.closest('button');
+            //     this.toggleOnClick = button === document.activeElement;
+            // },
+            // handlePrependButtonClicked() {
+            //     if(this.toggleOnClick) {
+            //         this.showPicker = !this.showPicker;
+            //     }
+            // },
             increase(e) {
                 this.translate(e.target, 1)
             },
