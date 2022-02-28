@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\View\Components\Content\Utils;
+namespace Code16\Sharp\View\Utils\Content;
 
 use Illuminate\Support\Str;
 

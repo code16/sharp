@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\View\Components\Utils;
+namespace Code16\Sharp\View\Utils;
 
 class Colors
 {

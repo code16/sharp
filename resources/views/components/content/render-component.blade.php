@@ -1,4 +1,7 @@
+@aware([
+    'contentComponent'
+])
 <x-dynamic-component
     :component="$resolveComponentName()"
-    :attributes="$resolveAttributes()"
+    :attributes="$resolveAttributes($contentComponent)"
 />

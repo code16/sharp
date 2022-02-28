@@ -17,6 +17,7 @@
                     component="sharp-image"
                     class="d-block shadow m-auto"
                     :thumbnail-height="400"
+                    :custom-prop="true"
                 />
                 <x-markdown>
                     {!! $spaceship->description !!}
