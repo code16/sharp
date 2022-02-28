@@ -23,7 +23,7 @@ class EditorFormatter extends SharpFieldFormatter
 
         if ($field->isLocalized()) {
             return collect(is_array($content) ? $content : [app()->getLocale() => $content])
-                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn($locale) => [$locale => null]))
+                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]))
                 ->map(function (?string $localizedContent) use ($files, $field, $attribute) {
                     return $localizedContent
                         ? preg_replace(
