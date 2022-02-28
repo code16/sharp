@@ -19,13 +19,13 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $value = Str::random();
 
         $this->assertEquals(
-            ["fr" => $value, "en" => null, "es" => null],
+            ['fr' => $value, 'en' => null, 'es' => null],
             (new TextFormatter())
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormTextField::make('text')->setLocalized(),
                     'attribute',
-                    ["fr" => $value],
+                    ['fr' => $value],
                 ),
         );
     }
@@ -36,9 +36,9 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $value = Str::random();
 
         $this->assertEquals(
-            ["fr" => null, "en" => $value, "es" => null],
+            ['fr' => null, 'en' => $value, 'es' => null],
             (new TextFormatter())
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormTextField::make('md')->setLocalized(),
                     'attribute',
@@ -53,13 +53,13 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $value = Str::random();
 
         $this->assertEquals(
-            ["fr" => $value, "en" => null, "es" => null],
+            ['fr' => $value, 'en' => null, 'es' => null],
             (new TextareaFormatter)
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormTextareaField::make('text')->setLocalized(),
                     'attribute',
-                    ["fr" => $value],
+                    ['fr' => $value],
                 ),
         );
     }
@@ -70,9 +70,9 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $value = Str::random();
 
         $this->assertEquals(
-            ["fr" => null, "en" => $value, "es" => null],
+            ['fr' => null, 'en' => $value, 'es' => null],
             (new TextareaFormatter())
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormTextareaField::make('md')->setLocalized(),
                     'attribute',
@@ -80,20 +80,20 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
                 ),
         );
     }
-    
+
     /** @test */
     public function we_add_missing_locales_when_formatting_a_localized_text_value_from_front_in_an_editor_field()
     {
         $value = Str::random();
 
         $this->assertEquals(
-            ["fr" => $value, "en" => null, "es" => null],
+            ['fr' => $value, 'en' => null, 'es' => null],
             (new EditorFormatter)
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormEditorField::make('md')->setLocalized(),
                     'attribute',
-                    ['text' => ["fr" => $value]],
+                    ['text' => ['fr' => $value]],
                 ),
         );
     }
@@ -104,9 +104,9 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $value = Str::random();
 
         $this->assertEquals(
-            ["fr" => null, "en" => $value, "es" => null],
+            ['fr' => null, 'en' => $value, 'es' => null],
             (new EditorFormatter)
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormEditorField::make('md')->setLocalized(),
                     'attribute',
