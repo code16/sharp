@@ -48,9 +48,4 @@ abstract class InstanceCommand extends Command
 
         return $this->authorizedInstances;
     }
-
-    public function getDataLocalizations(): array
-    {
-        return [];
-    }
 }

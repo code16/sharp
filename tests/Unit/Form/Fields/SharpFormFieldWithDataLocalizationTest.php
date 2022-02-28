@@ -19,13 +19,15 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setLocalized(false);
 
         $this->assertArrayNotHasKey(
-            'localized', $formField->toArray(),
+            'localized', 
+            $formField->toArray(),
         );
 
         $formField->setLocalized();
 
         $this->assertArraySubset(
-            ['localized' => true], $formField->toArray(),
+            ['localized' => true], 
+            $formField->toArray(),
         );
     }
 
@@ -36,7 +38,8 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setLocalized();
 
         $this->assertArraySubset(
-            ['localized' => true], $formField->toArray(),
+            ['localized' => true], 
+            $formField->toArray(),
         );
     }
 
@@ -47,7 +50,8 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setLocalized();
 
         $this->assertArraySubset(
-            ['localized' => true], $formField->toArray(),
+            ['localized' => true], 
+            $formField->toArray(),
         );
     }
 
@@ -58,7 +62,8 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setLocalized();
 
         $this->assertArraySubset(
-            ['localized' => true], $formField->toArray(),
+            ['localized' => true], 
+            $formField->toArray(),
         );
     }
 
@@ -72,7 +77,8 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setLocalized();
 
         $this->assertArraySubset(
-            ['localized' => true], $formField->toArray(),
+            ['localized' => true], 
+            $formField->toArray(),
         );
     }
 
@@ -83,7 +89,8 @@ class SharpFormFieldWithDataLocalizationTest extends SharpTestCase
             ->setLocalized();
 
         $this->assertArraySubset(
-            ['localized' => true], $formField->toArray(),
+            ['localized' => true], 
+            $formField->toArray(),
         );
     }
 }

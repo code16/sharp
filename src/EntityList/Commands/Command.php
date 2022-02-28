@@ -217,5 +217,10 @@ abstract class Command
         }
     }
 
+    public function getDataLocalizations(): array
+    {
+        return [];
+    }
+
     abstract public function label(): ?string;
 }

@@ -6,18 +6,19 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 
 abstract class SharpFieldFormatter
 {
-    /**
-     * @var string|null
-     */
-    protected $instanceId;
+    protected ?string $instanceId = null;
+    protected ?array $dataLocalizations = null;
 
-    /**
-     * @param  string|null  $instanceId
-     * @return $this
-     */
-    public function setInstanceId($instanceId)
+    public function setInstanceId(?string $instanceId): self
     {
         $this->instanceId = $instanceId;
+
+        return $this;
+    }
+
+    public function setDataLocalizations(array $dataLocalizations): self
+    {
+        $this->dataLocalizations = $dataLocalizations;
 
         return $this;
     }

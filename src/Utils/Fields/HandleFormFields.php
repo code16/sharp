@@ -31,6 +31,7 @@ trait HandleFormFields
                     return $field
                         ->formatter()
                         ->setInstanceId($instanceId)
+                        ->setDataLocalizations($this->getDataLocalizations())
                         ->fromFront($field, $key, $value);
                 } catch (SharpFormFieldFormattingMustBeDelayedException $exception) {
                     // The formatter needs to be executed in a second pass. We delay it.

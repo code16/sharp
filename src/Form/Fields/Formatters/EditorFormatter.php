@@ -21,9 +21,9 @@ class EditorFormatter extends SharpFieldFormatter
         $content = $value['text'] ?? '';
         $files = $value['files'] ?? [];
 
-        if (is_array($content)) {
-            // Field is localized
-            return collect($content)
+        if ($field->isLocalized()) {
+            return collect(is_array($content) ? $content : [app()->getLocale() => $content])
+                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn($locale) => [$locale => null]))
                 ->map(function (?string $localizedContent) use ($files, $field, $attribute) {
                     return $localizedContent
                         ? preg_replace(
