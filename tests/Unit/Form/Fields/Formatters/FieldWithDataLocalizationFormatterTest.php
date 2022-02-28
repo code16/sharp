@@ -48,6 +48,21 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_stand_to_null_when_formatting_a_null_localized_text_value_from_front_in_a_text_field()
+    {
+        $this->assertEquals(
+            null,
+            (new TextFormatter())
+                ->setDataLocalizations(["fr", "en", "es"])
+                ->fromFront(
+                    SharpFormTextField::make('md')->setLocalized(),
+                    'attribute',
+                    null,
+                ),
+        );
+    }
+
+    /** @test */
     public function we_add_missing_locales_when_formatting_a_localized_text_value_from_front_in_a_textarea_field()
     {
         $value = Str::random();
@@ -111,6 +126,21 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
                     SharpFormEditorField::make('md')->setLocalized(),
                     'attribute',
                     ['text' => $value],
+                ),
+        );
+    }
+
+    /** @test */
+    public function we_stand_to_null_when_formatting_a_null_localized_text_value_from_front_in_an_editor_field()
+    {
+        $this->assertEquals(
+            null,
+            (new EditorFormatter())
+                ->setDataLocalizations(["fr", "en", "es"])
+                ->fromFront(
+                    SharpFormEditorField::make('md')->setLocalized(),
+                    'attribute',
+                    null,
                 ),
         );
     }

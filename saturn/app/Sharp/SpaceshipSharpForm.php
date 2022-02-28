@@ -336,9 +336,10 @@ class SpaceshipSharpForm extends SharpForm
             throw new SharpApplicativeException("Name can't be «error»");
         }
 
-        $this->setCustomTransformer('capacity', function ($capacity) {
-            return $capacity * 1000;
-        })
+        $this
+            ->setCustomTransformer('capacity', function ($capacity) {
+                return $capacity * 1000;
+            })
             ->ignore('html')
             ->save($instance, $data);
 

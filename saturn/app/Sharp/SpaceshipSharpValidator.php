@@ -11,10 +11,9 @@ class SpaceshipSharpValidator extends FormRequest
         return [
             'name.fr' => 'required',
             'type_id' => 'required',
-            //            'picture' => 'required',
             'pictures.*.file' => 'required',
-            //            'pictures.*.legend' => 'required',
-            'capacity' => 'integer|min:10|required',
+            'capacity' => ['integer', 'min:10', 'required'],
+            'picture' => 'required_with:picture:legend'
         ];
     }
 }
