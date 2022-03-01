@@ -1,30 +1,4 @@
 
 .SharpDateRange {
-  height: auto;
 
-  .el-range__close-icon {
-    display: none;
-    font-weight: normal;
-    font-size: 1rem;
-    -webkit-font-smoothing: subpixel-antialiased;
-    font-family: inherit!important;
-    font-style: normal;
-    &::before {
-      content: '×';
-    }
-  }
-
-  .el-range-separator {
-    line-height: 1;
-  }
-
-  &.is-active {
-    @extend .form-control:focus;
-  }
-
-  &--clearable {
-    .el-range__close-icon {
-      display: inline-block;
-    }
-  }
 }

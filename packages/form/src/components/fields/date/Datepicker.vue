@@ -3,7 +3,9 @@
         :value="value"
         :popover="popoverOptions"
         :is-range="isRange"
+        color="primary"
         is-24-hr
+        trim-weeks
         @input="handleInput"
         v-bind="$attrs"
         v-on="$listeners"
@@ -13,6 +15,7 @@
         </template>
     </v-date-picker>
 </template>
+
 <script>
     import { DatePicker as VDatePicker } from 'v-calendar';
 
@@ -28,6 +31,7 @@
             popoverOptions() {
                 return {
                     visibility: 'focus',
+                    hideDelay: 10,
                     modifiers: [
                         {
                             name: 'preventOverflow',

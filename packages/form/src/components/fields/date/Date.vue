@@ -10,9 +10,7 @@
                 v-slot="{ inputEvents, togglePopover }"
             >
                 <div class="input-group" :class="{ 'input-group--clearable': hasClearButton }">
-                    <button class="input-group-text btn"
-                        @click="togglePopover"
-                    >
+                    <button class="input-group-text btn" @click="handlePrependButtonClicked">
                         <svg class="align-middle" width="1.25em" height="1.25em" viewBox="0 0 32 32" style="fill:currentColor">
                             <path d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20  V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"/>
                         </svg>
@@ -149,15 +147,9 @@
                     this.$emit('input', m.toDate());
                 }
             },
-            // handlePrependButtonPointerDown(e) {
-            //     const button = e.target.closest('button');
-            //     this.toggleOnClick = button === document.activeElement;
-            // },
-            // handlePrependButtonClicked() {
-            //     if(this.toggleOnClick) {
-            //         this.showPicker = !this.showPicker;
-            //     }
-            // },
+            handlePrependButtonClicked() {
+                setTimeout(() => this.$refs.input.focus());
+            },
             increase(e) {
                 this.translate(e.target, 1)
             },
@@ -212,14 +204,14 @@
             },
 
             rollback() {
-                this.$field.$emit('clear');
+                this.$emit('clear');
                 this.localInputValue = null;
             },
 
             clear() {
                 this.rollback();
                 this.$emit('input', null);
-                this.$refs.input.focus();
+                setTimeout(() => this.$refs.input.focus());
             },
 
             handleBlur() {
