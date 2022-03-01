@@ -21,7 +21,7 @@ class Content extends Component
         ]);
         $this->contentComponent = $this;
     }
-    
+
     public function render(): string
     {
         return '<x-sharp::content.render-content :content="$slot" />';

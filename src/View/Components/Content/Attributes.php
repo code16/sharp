@@ -13,7 +13,7 @@ class Attributes extends Component
         public string $component,
     ) {
     }
-    
+
     public function addAttributes(Content $content, ComponentAttributeBag $attributes)
     {
         $content->contentComponentAttributes->put(
@@ -21,7 +21,7 @@ class Attributes extends Component
             $attributes,
         );
     }
-    
+
     public function render(): View
     {
         return view('sharp::components.content.attributes');
