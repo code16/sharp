@@ -4,7 +4,7 @@
         :popover="popoverOptions"
         :is-range="isRange"
         color="primary"
-        is-24-hr
+        is24hr
         trim-weeks
         @input="handleInput"
         v-bind="$attrs"
@@ -20,6 +20,7 @@
     import { DatePicker as VDatePicker } from 'v-calendar';
 
     export default {
+        name: 'SharpDatePicker',
         components: {
             VDatePicker,
         },
