@@ -10,10 +10,10 @@ class TextFormatter extends AbstractSimpleFormatter
     {
         if ($value !== null && $field->isLocalized()) {
             return collect(is_array($value) ? $value : [app()->getLocale() => $value])
-                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn($locale) => [$locale => null]))
+                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]))
                 ->toArray();
         }
-        
+
         return parent::fromFront($field, $attribute, $value);
     }
 }
