@@ -45,6 +45,18 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
+    public function thumbnail_creation_returns_null_on_error()
+    {
+        $file = $this->createImage();
+        $upload = $this->createSharpUploadModel($file);
+        
+        // Corrupt data
+        $upload->update(["file_name" => null]);
+
+        $this->assertNull($upload->thumbnail());
+    }
+
+    /** @test */
     public function transformation_filters_are_considered_when_creating_a_thumbnail()
     {
         $filters = [
