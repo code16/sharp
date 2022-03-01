@@ -6,6 +6,7 @@
                 :mode="mode"
                 :valid-hours="validHours"
                 :minute-increment="stepTime"
+                :monday-first="mondayFirst"
                 @input="handleDateChanged"
                 v-slot="{ inputEvents, togglePopover }"
             >
@@ -84,7 +85,6 @@
         },
         data() {
             return {
-                showPicker: false,
                 localInputValue: null
             }
         },
@@ -138,17 +138,23 @@
             handleInput(e) {
                 const m = moment(e.target.value, this.displayFormat, true);
                 this.localInputValue = e.target.value;
-                this.showPicker = false;
                 if(!m.isValid()) {
                     this.$emit('error', `${lang('form.date.validation_error.format')} (${this.displayFormat})`);
                 }
                 else {
                     this.rollback();
                     this.$emit('input', m.toDate());
+                    this.updatePopover();
                 }
             },
             handlePrependButtonClicked() {
                 setTimeout(() => this.$refs.input.focus());
+            },
+            handleBlur() {
+                this.rollback();
+            },
+            updatePopover() {
+                this.$refs.input.dispatchEvent(new Event('change', { bubbles:true }));
             },
             increase(e) {
                 this.translate(e.target, 1)
@@ -162,6 +168,7 @@
                 if(selection)  {
                     await this.$nextTick();
                     input.setSelectionRange(selection.start, selection.end);
+                    this.updatePopover();
                 }
             },
             add(amount, unit) {
@@ -213,10 +220,6 @@
                 this.$emit('input', null);
                 setTimeout(() => this.$refs.input.focus());
             },
-
-            handleBlur() {
-                this.rollback();
-            }
         },
     }
 </script>

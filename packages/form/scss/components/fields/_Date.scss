@@ -34,8 +34,17 @@
     --primary-900: hsl(var(--primary-h), var(--primary-s), 10%);
   }
 
-  .vc-popover-content-wrapper {
-    z-index: 1060!important;
+  .vc-date {
+    display: none!important;
+  }
+
+  .vc-datepicker > .vc-popover-content-wrapper {
+    top: 100%!important;
+    transform: none!important;
+  }
+
+  .vc-time-picker {
+    padding: .875rem .5rem!important;
   }
 
 }

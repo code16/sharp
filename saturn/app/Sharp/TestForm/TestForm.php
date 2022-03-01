@@ -70,6 +70,9 @@ class TestForm extends SharpSingleForm
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
                     ->setDisplayFormat('YYYY-MM-DD HH:mm')
+                    ->setMinTime(8)
+                    ->setMaxTime(16)
+                    ->setStepTime(15)
                     ->setHasTime(true),
             )
             ->addField(

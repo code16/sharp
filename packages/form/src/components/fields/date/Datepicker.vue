@@ -1,8 +1,12 @@
 <template>
     <v-date-picker
+        class="vc-datepicker"
         :value="value"
         :popover="popoverOptions"
         :is-range="isRange"
+        :update-on-input="false"
+        :locale="locale"
+        :first-day-of-week="firstDayOfWeek"
         color="primary"
         is24hr
         trim-weeks
@@ -27,21 +31,34 @@
         props: {
             value: [Date, Object],
             isRange: Boolean,
+            mondayFirst: Boolean,
         },
         computed: {
             popoverOptions() {
+                const boundary = document.querySelector('[data-popover-boundary]');
                 return {
-                    visibility: 'focus',
+                    visibility: 'focus', // 'click' to debug
                     hideDelay: 10,
+                    placement: 'bottom',
                     modifiers: [
                         {
                             name: 'preventOverflow',
                             options: {
-                                boundary: document.querySelector('[data-popover-boundary]'),
+                                boundary,
                             },
+                        },
+                        {
+                            name: 'flip',
+                            enabled: false,
                         },
                     ],
                 }
+            },
+            locale() {
+                return document.documentElement.lang;
+            },
+            firstDayOfWeek() {
+                return this.mondayFirst ? 2 : 1;
             },
         },
         methods: {
