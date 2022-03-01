@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\View\Components\Utils;
+namespace Code16\Sharp\View\Utils;
 
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;

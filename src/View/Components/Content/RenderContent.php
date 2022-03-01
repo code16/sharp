@@ -2,10 +2,11 @@
 
 namespace Code16\Sharp\View\Components\Content;
 
-use Code16\Sharp\View\Components\Content\Utils\Fragment;
-use Code16\Sharp\View\Components\Content\Utils\FragmentsFactory;
+use Code16\Sharp\View\Utils\Content\Fragment;
+use Code16\Sharp\View\Utils\Content\FragmentsFactory;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class RenderContent extends Component
 {
@@ -32,7 +33,7 @@ class RenderContent extends Component
         return null;
     }
 
-    public function render()
+    public function render(): View
     {
         return view('sharp::components.content.render-content');
     }

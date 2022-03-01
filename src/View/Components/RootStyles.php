@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\View\Components;
 
-use Code16\Sharp\View\Components\Utils\Colors;
+use Code16\Sharp\View\Utils\Colors;
 use Illuminate\View\Component;
 use NumberFormatter;
 

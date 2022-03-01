@@ -3,7 +3,7 @@
 namespace Code16\Sharp\View\Components\Content;
 
 use Code16\Sharp\View\Components\Content;
-use Code16\Sharp\View\Components\Content\Utils\ComponentFragment;
+use Code16\Sharp\View\Utils\Content\ComponentFragment;
 use Illuminate\View\Component;
 use Illuminate\View\ComponentAttributeBag;
 use Illuminate\View\View;
@@ -12,7 +12,6 @@ class RenderComponent extends Component
 {
     public function __construct(
         public ComponentFragment $fragment,
-        public Content $content,
     ) {
     }
 
@@ -21,12 +20,12 @@ class RenderComponent extends Component
         return $this->fragment->getComponentName();
     }
 
-    public function resolveAttributes(): ComponentAttributeBag
+    public function resolveAttributes(Content $content): ComponentAttributeBag
     {
         $componentName = $this->fragment->getComponentName();
         $attributes = new ComponentAttributeBag($this->fragment->getComponentAttributes());
 
-        if ($contentAttributes = $this->content->contentComponentAttributes->get($componentName)) {
+        if ($contentAttributes = $content->contentComponentAttributes->get($componentName)) {
             $attributes = $attributes->merge($contentAttributes->getAttributes());
         }
 

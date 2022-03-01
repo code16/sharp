@@ -6,7 +6,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
-use Code16\Sharp\View\Components\Utils\MenuItem;
+use Code16\Sharp\View\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
