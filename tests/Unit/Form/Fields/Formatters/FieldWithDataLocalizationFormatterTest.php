@@ -53,7 +53,7 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $this->assertEquals(
             null,
             (new TextFormatter())
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormTextField::make('md')->setLocalized(),
                     'attribute',
@@ -136,7 +136,7 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
         $this->assertEquals(
             null,
             (new EditorFormatter())
-                ->setDataLocalizations(["fr", "en", "es"])
+                ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(
                     SharpFormEditorField::make('md')->setLocalized(),
                     'attribute',

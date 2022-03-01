@@ -13,7 +13,7 @@ class SpaceshipSharpValidator extends FormRequest
             'type_id' => 'required',
             'pictures.*.file' => 'required',
             'capacity' => ['integer', 'min:10', 'required'],
-            'picture' => 'required_with:picture:legend'
+            'picture' => 'required_with:picture:legend',
         ];
     }
 }

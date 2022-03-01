@@ -49,9 +49,9 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
     {
         $file = $this->createImage();
         $upload = $this->createSharpUploadModel($file);
-        
+
         // Corrupt data
-        $upload->update(["file_name" => null]);
+        $upload->update(['file_name' => null]);
 
         $this->assertNull($upload->thumbnail());
     }
