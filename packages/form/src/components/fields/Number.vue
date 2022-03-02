@@ -2,9 +2,9 @@
     <TextField
         :class="{ 'hide-controls': !showControls }"
         :value="value"
+        :step="step"
         :min="min"
         :max="max"
-        :step="step"
         input-type="number"
         v-bind="$attrs"
         v-on="$listeners"
@@ -19,7 +19,7 @@
             TextField,
         },
         props: {
-            value: Number,
+            value: [String, Number],
             showControls: Boolean,
             min: Number,
             max: Number,
