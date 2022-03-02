@@ -7,6 +7,8 @@ return [
     "display_breadcrumb" => true,
     "entities" => [
         "posts" => \App\Sharp\Entities\PostEntity::class,
+
+        'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 
     "menu" => \App\Sharp\SharpMenu::class,
