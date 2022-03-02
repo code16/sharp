@@ -1,22 +1,29 @@
+<template>
+    <TextField
+        :class="{ 'hide-controls': !showControls }"
+        :value="value"
+        :min="min"
+        :max="max"
+        :step="step"
+        input-type="number"
+        v-bind="$attrs"
+        v-on="$listeners"
+    />
+</template>
+
 <script>
-    import Text from './Text';
+    import TextField from './Text';
 
     export default {
-        name: 'SharpNumber',
-        functional: true,
-        render(h, {props: {step, min, max, showControls}, data }) {
-            return h(Text, {
-                ...data,
-                'class': {
-                    'hide-controls':!showControls, ...data['class']
-                },
-                props: {
-                    inputType:'number', ...data.props
-                },
-                attrs: {
-                    step, min, max, ...data.attrs
-                },
-            });
-        }
+        components: {
+            TextField,
+        },
+        props: {
+            value: Number,
+            showControls: Boolean,
+            min: Number,
+            max: Number,
+            step: Number,
+        },
     }
 </script>
