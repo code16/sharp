@@ -37,7 +37,7 @@ class InviteUserCommand extends EntityCommand
     {
         return [
             'globalHelp' => [
-                'day' => now()->addDay()->formatLocalized('%A'),
+                'day' => now()->addDay()->isoFormat('LL'),
             ],
         ];
     }
