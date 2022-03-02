@@ -9,6 +9,7 @@ use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -24,6 +25,9 @@ class PostList extends SharpEntityList
     protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
+            ->addField(
+                EntityListField::make("cover")
+            )
             ->addField(
                 EntityListField::make("title")
                     ->setLabel("Title")
@@ -43,7 +47,8 @@ class PostList extends SharpEntityList
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         $fieldsLayout
-            ->addColumn("title", 5)
+            ->addColumn("cover", 1)
+            ->addColumn("title", 4)
             ->addColumn("author:name", 3)
             ->addColumn("published_at", 4);
     }
@@ -110,6 +115,7 @@ class PostList extends SharpEntityList
                     $instance->getTranslation('title', 'en'),
                 );
             })
+            ->setCustomTransformer("cover", (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->setCustomTransformer("published_at", DateTimeCustomTransformer::class)
             ->transform($posts->paginate(20));
     }

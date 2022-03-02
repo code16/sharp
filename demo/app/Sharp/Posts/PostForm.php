@@ -4,10 +4,12 @@ namespace App\Sharp\Posts;
 
 use App\Models\Post;
 use App\Models\User;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpForm;
@@ -45,6 +47,15 @@ class PostForm extends SharpForm
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}/embed')
                     ->setHeight(250)
+            )
+            ->addField(
+                SharpFormUploadField::make("cover")
+                    ->setMaxFileSize(1)
+                    ->setLabel("Cover")
+                    ->setFileFilterImages()
+                    ->setCropRatio("16:9")
+                    ->setStorageDisk("local")
+                    ->setStorageBasePath("data/posts/{id}")
             );
         
         if(currentSharpRequest()->isUpdate()) {
@@ -63,10 +74,10 @@ class PostForm extends SharpForm
         $formLayout
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("title");
-
                 if(currentSharpRequest()->isUpdate()) {
                     $column->withSingleField("author_id");
                 }
+                $column->withSingleField("cover");
             })
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column->withSingleField("content");
@@ -80,7 +91,9 @@ class PostForm extends SharpForm
 
     public function find($id): array
     {
-        return $this->transform(Post::findOrFail($id));
+        return $this
+            ->setCustomTransformer("cover", new SharpUploadModelFormAttributeTransformer())
+            ->transform(Post::findOrFail($id));
     }
 
     public function update($id, array $data)
@@ -95,7 +108,7 @@ class PostForm extends SharpForm
             ->ignore(auth()->user()->isAdmin() ? [] : ['author_id'])
             ->save($post, $data);
         
-        if(currentSharpRequest()->isCreation()) {
+        if(currentSharpRequest()->isCreation() && !$id) {
             $this->notify('Your post was created, but not published yet.');
         }
 
