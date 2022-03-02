@@ -1,48 +1,48 @@
 <?php
 
 return [
-    "name" => "Sharp demo project",
-    "custom_url_segment" => "sharp",
-    "display_sharp_version_in_title" => true,
-    "display_breadcrumb" => true,
-    "entities" => [
-        "posts" => \App\Sharp\Entities\PostEntity::class,
-        "categories" => \App\Sharp\Entities\CategoryEntity::class,
-        "authors" => \App\Sharp\Entities\PostEntity::class,
+    'name' => 'Sharp demo project',
+    'custom_url_segment' => 'sharp',
+    'display_sharp_version_in_title' => true,
+    'display_breadcrumb' => true,
+    'entities' => [
+        'posts' => \App\Sharp\Entities\PostEntity::class,
+        'categories' => \App\Sharp\Entities\CategoryEntity::class,
+        'authors' => \App\Sharp\Entities\PostEntity::class,
 
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 
-    "menu" => \App\Sharp\SharpMenu::class,
+    'menu' => \App\Sharp\SharpMenu::class,
 
-    "uploads" => [
-        "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
-        "thumbnails_disk" => env("SHARP_UPLOADS_THUMBS_DISK", "public"),
-        "thumbnails_dir" => env("SHARP_UPLOADS_THUMBS_DIR", "thumbnails"),
+    'uploads' => [
+        'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
+        'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
+        'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
     ],
 
-    "auth" => [
-        "login_attribute" => "email",
-        "password_attribute" => "password",
-        "display_attribute" => "name",
-//        "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
+    'auth' => [
+        'login_attribute' => 'email',
+        'password_attribute' => 'password',
+        'display_attribute' => 'name',
+        //        "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],
 
-    "theme" => [
-        "primary_color" => "#0c4589",
-        "favicon_url" => "/img/sharp/favicon-32x32.png",
-        "logo_urls" => [
-            "menu" => "/img/sharp/menu-icon.png",
-            "login" => "/img/sharp/login-icon.png",
+    'theme' => [
+        'primary_color' => '#0c4589',
+        'favicon_url' => '/img/sharp/favicon-32x32.png',
+        'logo_urls' => [
+            'menu' => '/img/sharp/menu-icon.png',
+            'login' => '/img/sharp/login-icon.png',
         ],
     ],
 
-//    "extensions" => [
-//        "assets" => [
-//            "strategy" => "raw",
-//            "head" => [
-//                "/css/sharp-extension.css",
-//            ],
-//        ],
-//    ],
+    //    "extensions" => [
+    //        "assets" => [
+    //            "strategy" => "raw",
+    //            "head" => [
+    //                "/css/sharp-extension.css",
+    //            ],
+    //        ],
+    //    ],
 ];

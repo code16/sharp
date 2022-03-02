@@ -20,20 +20,20 @@ class CategoryList extends SharpEntityList
 
     public function getListData(): array|Arrayable
     {
-        $categories = Category::withCount("posts")
+        $categories = Category::withCount('posts')
 
             // Handle sorting
             ->when(
-                $this->queryParams->sortedBy() === 'name', 
-                function(Builder $builder) {
+                $this->queryParams->sortedBy() === 'name',
+                function (Builder $builder) {
                     $builder
                         ->orderBy('name', $this->queryParams->sortedDir());
                 },
-                function(Builder $builder) {
+                function (Builder $builder) {
                     $builder->orderBy('post_count', $this->queryParams->sortedDir() ?: 'asc');
                 },
             );
-        
+
         return $this->transform($categories->get());
     }
 
@@ -41,21 +41,21 @@ class CategoryList extends SharpEntityList
     {
         $fieldsContainer
             ->addField(
-                EntityListField::make("name")
-                    ->setLabel("Name")
-                    ->setSortable()
+                EntityListField::make('name')
+                    ->setLabel('Name')
+                    ->setSortable(),
             )
             ->addField(
-                EntityListField::make("posts_count")
-                    ->setLabel("# posts")
-                    ->setSortable()
+                EntityListField::make('posts_count')
+                    ->setLabel('# posts')
+                    ->setSortable(),
             );
     }
 
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         $fieldsLayout
-            ->addColumn("name", 7)
-            ->addColumn("posts_count", 5);
+            ->addColumn('name', 7)
+            ->addColumn('posts_count', 5);
     }
 }

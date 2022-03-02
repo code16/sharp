@@ -19,91 +19,91 @@ class PostShow extends SharpShow
     protected function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
-            ->addField(SharpShowTextField::make("title_fr")->setLabel("Title (FR)"))
-            ->addField(SharpShowTextField::make("title_en")->setLabel("Title (EN)"))
-            ->addField(SharpShowTextField::make("content_fr")->collapseToWordCount(30))
-            ->addField(SharpShowTextField::make("content_en")->collapseToWordCount(30))
-            ->addField(SharpShowTextField::make("author")->setLabel("Author"))
-            ->addField(SharpShowPictureField::make("cover"))
+            ->addField(SharpShowTextField::make('title_fr')->setLabel('Title (FR)'))
+            ->addField(SharpShowTextField::make('title_en')->setLabel('Title (EN)'))
+            ->addField(SharpShowTextField::make('content_fr')->collapseToWordCount(30))
+            ->addField(SharpShowTextField::make('content_en')->collapseToWordCount(30))
+            ->addField(SharpShowTextField::make('author')->setLabel('Author'))
+            ->addField(SharpShowPictureField::make('cover'))
             ->addField(
-                SharpShowEntityListField::make("blocks", "blocks")
-                    ->setLabel("Blocks")
-                    ->hideFilterWithValue("post", function ($instanceId) {
+                SharpShowEntityListField::make('blocks', 'blocks')
+                    ->setLabel('Blocks')
+                    ->hideFilterWithValue('post', function ($instanceId) {
                         return $instanceId;
-                    })
+                    }),
             );
     }
 
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection("", function (ShowLayoutSection $section) {
+            ->addSection('', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField("title_fr")
-                            ->withSingleField("title_en")
-                            ->withSingleField("author");
+                            ->withSingleField('title_fr')
+                            ->withSingleField('title_en')
+                            ->withSingleField('author');
                     })
                     ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField("cover");
+                        $column->withSingleField('cover');
                     });
             })
-            ->addSection("Content (FR)", function (ShowLayoutSection $section) {
+            ->addSection('Content (FR)', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField("content_fr");
+                        $column->withSingleField('content_fr');
                     });
             })
-            ->addSection("Content (EN)", function (ShowLayoutSection $section) {
+            ->addSection('Content (EN)', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField("content_en");
+                        $column->withSingleField('content_en');
                     });
             })
-            ->addEntityListSection("blocks");
+            ->addEntityListSection('blocks');
     }
 
     public function buildShowConfig(): void
     {
         $this
-            ->configureEntityState("state", PostStateHandler::class)
-            ->configureBreadcrumbCustomLabelAttribute("title_fr")
+            ->configureEntityState('state', PostStateHandler::class)
+            ->configureBreadcrumbCustomLabelAttribute('title_fr')
             ->configurePageAlert(
-                '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>', 
+                '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>',
                 static::$pageAlertLevelInfo,
-                'publication'
+                'publication',
             );
     }
 
     public function find(mixed $id): array
     {
         return $this
-            ->setCustomTransformer("title_fr", function ($value, $instance) {
-                return $instance->getTranslation("title", "fr");
+            ->setCustomTransformer('title_fr', function ($value, $instance) {
+                return $instance->getTranslation('title', 'fr');
             })
-            ->setCustomTransformer("title_en", function ($value, $instance) {
-                return $instance->getTranslation("title", "en");
+            ->setCustomTransformer('title_en', function ($value, $instance) {
+                return $instance->getTranslation('title', 'en');
             })
-            ->setCustomTransformer("content_fr", function ($value, $instance) {
-                return $instance->getTranslation("content", "fr");
+            ->setCustomTransformer('content_fr', function ($value, $instance) {
+                return $instance->getTranslation('content', 'fr');
             })
-            ->setCustomTransformer("content_en", function ($value, $instance) {
-                return $instance->getTranslation("content", "en");
+            ->setCustomTransformer('content_en', function ($value, $instance) {
+                return $instance->getTranslation('content', 'en');
             })
-            ->setCustomTransformer("publication", function ($value, Post $instance) {
+            ->setCustomTransformer('publication', function ($value, Post $instance) {
                 return [
                     'is_planed' => $instance->isOnline() && $instance->published_at->isFuture(),
-                    'published_at' => $instance->published_at->isoFormat('LLL')
+                    'published_at' => $instance->published_at->isoFormat('LLL'),
                 ];
             })
-            ->setCustomTransformer("author", function ($value, $instance) {
+            ->setCustomTransformer('author', function ($value, $instance) {
                 return $instance->author_id
-                    ? LinkToShowPage::make("users", $instance->author_id)
+                    ? LinkToShowPage::make('users', $instance->author_id)
                         ->renderAsText($instance->author->name)
                     : null;
             })
-            ->setCustomTransformer("cover", new SharpUploadModelThumbnailUrlTransformer(300))
+            ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(300))
             ->transform(Post::findOrFail($id));
     }
 }
