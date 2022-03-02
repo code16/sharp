@@ -3,15 +3,17 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
-use App\Models\User;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormSelectField;
+use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\FormLayoutFieldset;
+use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -44,6 +46,7 @@ class PostForm extends SharpForm
                         SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::IFRAME,
                     ])
+                    ->setMaxFileSize(1)
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}/embed')
                     ->setHeight(250)
@@ -56,14 +59,27 @@ class PostForm extends SharpForm
                     ->setCropRatio("16:9")
                     ->setStorageDisk("local")
                     ->setStorageBasePath("data/posts/{id}")
+            )
+            ->addField(
+                SharpFormTextField::make("meta_title")
+                    ->setLabel("Title")
+                    ->setMaxLength(100)
+            )
+            ->addField(
+                SharpFormTextareaField::make("meta_description")
+                    ->setLabel("Description")
+                    ->setRowCount(4)
+                    ->setMaxLength(250)
             );
         
         if(currentSharpRequest()->isUpdate()) {
             $formFields->addField(
-                SharpFormSelectField::make("author_id", User::orderBy('name')->pluck('name', 'id')->toArray())
+                SharpFormAutocompleteField::make("author_id", "remote")
                     ->setReadOnly(!auth()->user()->isAdmin())
-                    ->setDisplayAsDropdown()
                     ->setLabel("Author")
+                    ->setRemoteEndpoint("/api/admin/users")
+                    ->setListItemInlineTemplate("<div>{{name}}</div><div><small>{{email}}</small></div>")
+                    ->setResultItemInlineTemplate("<div>{{name}}</div><div><small>{{email}}</small></div>")
                     ->setHelpMessage("This field is only editable by admins.")
             );
         }
@@ -72,15 +88,27 @@ class PostForm extends SharpForm
     public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout
-            ->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField("title");
-                if(currentSharpRequest()->isUpdate()) {
-                    $column->withSingleField("author_id");
-                }
-                $column->withSingleField("cover");
+            ->addTab("Content", function (FormLayoutTab $tab) {
+                $tab
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withSingleField("title");
+                        if (currentSharpRequest()->isUpdate()) {
+                            $column->withSingleField("author_id");
+                        }
+                        $column->withSingleField("cover");
+                    })
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withSingleField("content");
+                    });
             })
-            ->addColumn(6, function (FormLayoutColumn $column) {
-                $column->withSingleField("content");
+            ->addTab("Metadata", function (FormLayoutTab $tab) {
+                $tab
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withFieldset("Meta fields", function (FormLayoutFieldset $fieldset) {
+                            $fieldset->withSingleField("meta_title")
+                                ->withSingleField("meta_description");
+                        });
+                    });
             });
     }
 
@@ -92,6 +120,9 @@ class PostForm extends SharpForm
     public function find($id): array
     {
         return $this
+            ->setCustomTransformer("author_id", function ($value, Post $instance) {
+                return $instance->author;
+            })
             ->setCustomTransformer("cover", new SharpUploadModelFormAttributeTransformer())
             ->transform(Post::findOrFail($id));
     }

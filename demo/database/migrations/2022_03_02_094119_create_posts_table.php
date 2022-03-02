@@ -13,6 +13,8 @@ return new class extends Migration
             $table->json('title');
             $table->json('content')->nullable();
             $table->dateTime('published_at')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
 
             $table->foreignId('author_id')
                 ->nullable()
