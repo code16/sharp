@@ -6,8 +6,10 @@ use App\Models\Post;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
@@ -77,6 +79,35 @@ class PostForm extends SharpForm
                     ->setLabel('Publication date')
                     ->setHasTime()
                     ->setDisplayFormat('MM-DD-YYYY HH:mm')
+            )
+            ->addField(
+                SharpFormListField::make("attachments")
+                    ->setLabel("Attachments")
+                    ->setAddable()->setAddText("Add an attachment")
+                    ->setRemovable()
+                    ->setMaxItemCount(5)
+                    ->setSortable()->setOrderAttribute("order")
+                    ->allowBulkUploadForField("document")
+                    ->addItemField(
+                        SharpFormTextField::make("title")
+                            ->setLabel("Title")
+                    )
+                    ->addItemField(
+                        SharpFormCheckField::make("is_link", "It’s a link")
+                    )
+                    ->addItemField(
+                        SharpFormTextField::make("link_url")
+                            ->setPlaceholder('URL of the link')
+                            ->addConditionalDisplay('is_link')
+                    )
+                    ->addItemField(
+                        SharpFormUploadField::make("document")
+                            ->setFileFilter(["pdf", "zip"])
+                            ->setMaxFileSize(1)
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data/Post/{id}')
+                            ->addConditionalDisplay('!is_link')
+                    )
             );
         
         if(currentSharpRequest()->isUpdate()) {
@@ -107,7 +138,12 @@ class PostForm extends SharpForm
                             ->withSingleField("cover");
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField("content");
+                        $column->withSingleField("content")
+                            ->withSingleField('attachments', function (FormLayoutColumn $item) {
+                                $item->withFields('title|8', 'is_link|4')
+                                    ->withSingleField('link_url')
+                                    ->withSingleField('document');
+                            });
                     });
             })
             ->addTab("Metadata", function (FormLayoutTab $tab) {
@@ -133,7 +169,8 @@ class PostForm extends SharpForm
                 return $instance->author;
             })
             ->setCustomTransformer("cover", new SharpUploadModelFormAttributeTransformer())
-            ->transform(Post::findOrFail($id));
+            ->setCustomTransformer("attachments[document]", new SharpUploadModelFormAttributeTransformer())
+            ->transform(Post::with("cover", "attachments")->findOrFail($id));
     }
 
     public function update($id, array $data)

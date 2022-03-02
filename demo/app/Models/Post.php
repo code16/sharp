@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\Translatable\HasTranslations;
 
@@ -30,6 +31,12 @@ class Post extends Model
     {
         return $this->morphOne(Media::class, "model")
             ->where("model_key", "cover");
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(PostAttachment::class)
+            ->orderBy('order');
     }
 
     public function isOnline(): bool
