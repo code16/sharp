@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Sharp\Posts\Filters;
+
+use App\Models\User;
+use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
+
+class AuthorFilter extends EntityListSelectFilter
+{
+    public function buildFilterConfig(): void
+    {
+        $this->configureLabel("Author");
+    }
+
+    public function values(): array
+    {
+        return User::whereHas("posts")
+            ->orderBy("name")
+            ->pluck("name", "id")
+            ->toArray();
+    }
+}
