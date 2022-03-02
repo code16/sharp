@@ -68,7 +68,12 @@ class PostShow extends SharpShow
     {
         $this
             ->configureEntityState("state", PostStateHandler::class)
-            ->configureBreadcrumbCustomLabelAttribute("title_fr");
+            ->configureBreadcrumbCustomLabelAttribute("title_fr")
+            ->configurePageAlert(
+                '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>', 
+                static::$pageAlertLevelInfo,
+                'publication'
+            );
     }
 
     public function find(mixed $id): array
@@ -85,6 +90,12 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer("content_en", function ($value, $instance) {
                 return $instance->getTranslation("content", "en");
+            })
+            ->setCustomTransformer("publication", function ($value, Post $instance) {
+                return [
+                    'is_planed' => $instance->isOnline() && $instance->published_at->isFuture(),
+                    'published_at' => $instance->published_at->isoFormat('LLL')
+                ];
             })
             ->setCustomTransformer("author", function ($value, $instance) {
                 return $instance->author_id

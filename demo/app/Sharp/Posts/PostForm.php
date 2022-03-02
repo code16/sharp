@@ -6,6 +6,7 @@ use App\Models\Post;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
@@ -70,6 +71,12 @@ class PostForm extends SharpForm
                     ->setLabel("Description")
                     ->setRowCount(4)
                     ->setMaxLength(250)
+            )
+            ->addField(
+                SharpFormDateField::make('published_at')
+                    ->setLabel('Publication date')
+                    ->setHasTime()
+                    ->setDisplayFormat('MM-DD-YYYY HH:mm')
             );
         
         if(currentSharpRequest()->isUpdate()) {
@@ -95,7 +102,9 @@ class PostForm extends SharpForm
                         if (currentSharpRequest()->isUpdate()) {
                             $column->withSingleField("author_id");
                         }
-                        $column->withSingleField("cover");
+                        $column
+                            ->withSingleField("published_at")
+                            ->withSingleField("cover");
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withSingleField("content");

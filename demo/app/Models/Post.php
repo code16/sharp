@@ -32,6 +32,11 @@ class Post extends Model
             ->where("model_key", "cover");
     }
 
+    public function isOnline(): bool
+    {
+        return $this->state === 'online';
+    }
+
     public function getDefaultAttributesFor($attribute)
     {
         return in_array($attribute, ["cover"])
