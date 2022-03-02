@@ -3,8 +3,8 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
-use App\Sharp\Posts\Filters\AuthorFilter;
 use App\Sharp\Utils\DateTimeCustomTransformer;
+use App\Sharp\Utils\Filters\AuthorFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -15,13 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PostList extends SharpEntityList
 {
-    public function buildListConfig(): void
-    {
-        $this->configurePaginated()
-            ->configureDefaultSort('published_at', 'desc')
-            ->configureSearchable();
-    }
-
     protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
@@ -43,7 +36,7 @@ class PostList extends SharpEntityList
                     ->setSortable()
             );
     }
-    
+
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         $fieldsLayout
@@ -51,6 +44,15 @@ class PostList extends SharpEntityList
             ->addColumn("title", 4)
             ->addColumn("author:name", 3)
             ->addColumn("published_at", 4);
+    }
+
+    public function buildListConfig(): void
+    {
+        $this
+            ->configurePaginated()
+            ->configureEntityState("state", PostStateHandler::class)
+            ->configureDefaultSort('published_at', 'desc')
+            ->configureSearchable();
     }
 
     protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
@@ -67,11 +69,19 @@ class PostList extends SharpEntityList
         ];
     }
 
-    protected function getListData(): array|Arrayable
+    public function getListData(): array|Arrayable
     {
         $posts = Post::select('posts.*')
             ->with("author")
 
+            // Handle specific IDs (in case of refresh, called by a state handler or a command)
+            ->when(
+                $this->queryParams->specificIds(),
+                function(Builder $builder, array $ids) {
+                    $builder->whereIn('id', $ids);
+                }
+            )
+            
             // Handle filters
             ->when(
                 $this->queryParams->filterFor(AuthorFilter::class),

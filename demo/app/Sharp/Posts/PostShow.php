@@ -66,7 +66,9 @@ class PostShow extends SharpShow
 
     public function buildShowConfig(): void
     {
-        $this->configureBreadcrumbCustomLabelAttribute("title_fr");
+        $this
+            ->configureEntityState("state", PostStateHandler::class)
+            ->configureBreadcrumbCustomLabelAttribute("title_fr");
     }
 
     public function find(mixed $id): array

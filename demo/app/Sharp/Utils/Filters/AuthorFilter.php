@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sharp\Posts\Filters;
+namespace App\Sharp\Utils\Filters;
 
 use App\Models\User;
 use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;

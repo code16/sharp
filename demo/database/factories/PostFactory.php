@@ -17,6 +17,7 @@ class PostFactory extends Factory
                 'fr' => collect($this->faker->paragraphs(rand(3, 5)))->map(fn($paragraph) => "<p>$paragraph</p>")->implode(''),
                 'en' => collect($this->faker->paragraphs(rand(3, 5)))->map(fn($paragraph) => "<p>$paragraph</p>")->implode(''),
             ],
+            'state' => 'online',
             'published_at' => now()->subMinutes($this->faker->numberBetween(1, 60*24*50)),
         ];
     }
