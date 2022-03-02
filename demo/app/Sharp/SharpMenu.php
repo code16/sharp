@@ -12,7 +12,9 @@ class SharpMenu extends BaseSharpMenu
         return $this
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink('posts', 'Posts', 'fas fa-file');
+                    ->addEntityLink('posts', 'Posts', 'fas fa-file')
+                    ->addEntityLink('categories', 'Categories', 'fas fa-tags')
+                    ->addEntityLink('authors', 'Authors', 'fas fa-user');
             })
             ->addEntityLink('test', 'Fields test', 'fas fa-cog');
     }

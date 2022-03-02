@@ -46,6 +46,13 @@ class PostList extends SharpEntityList
             ->addColumn("published_at", 4);
     }
 
+    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout
+            ->addColumn("title", 6)
+            ->addColumn("published_at", 6);
+    }
+
     public function buildListConfig(): void
     {
         $this
@@ -55,13 +62,6 @@ class PostList extends SharpEntityList
             ->configureSearchable();
     }
 
-    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn("title", 6)
-            ->addColumn("published_at", 6);
-    }
-    
     protected function getFilters(): ?array
     {
         return [
