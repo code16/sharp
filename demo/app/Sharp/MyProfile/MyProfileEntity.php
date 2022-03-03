@@ -10,6 +10,5 @@ class MyProfileEntity extends SharpEntity
     protected ?string $show = MyProfileSingleShow::class;
     protected ?string $form = MyProfileSingleForm::class;
     protected ?string $policy = MyProfilePolicy::class;
-    protected string $label = "My profile";
-
+    protected string $label = 'My profile';
 }

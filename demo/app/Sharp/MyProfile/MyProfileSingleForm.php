@@ -17,51 +17,51 @@ class MyProfileSingleForm extends SharpSingleForm
 
     protected ?string $formValidatorClass = MyProfileValidator::class;
 
-    function buildFormFields(FieldsContainer $formFields) : void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormUploadField::make("avatar")
-                    ->setLabel("Avatar")
+                SharpFormUploadField::make('avatar')
+                    ->setLabel('Avatar')
                     ->setFileFilterImages()
                     ->setMaxFileSize(1)
                     ->shouldOptimizeImage()
-                    ->setStorageDisk("local")
-                    ->setCropRatio("1:1")
-                    ->setStorageBasePath("data/User/{id}")
+                    ->setStorageDisk('local')
+                    ->setCropRatio('1:1')
+                    ->setStorageBasePath('data/User/{id}'),
             )
             ->addField(
-                SharpFormTextField::make("name")
-                    ->setLabel("Name")
+                SharpFormTextField::make('name')
+                    ->setLabel('Name')
                     ->setMaxLength(300)
-                    ->setHelpMessage("It will be displayed publicly")
+                    ->setHelpMessage('It will be displayed publicly'),
             )
             ->addField(
-                SharpFormTextField::make("email")
-                    ->setLabel("Email address")
+                SharpFormTextField::make('email')
+                    ->setLabel('Email address')
                     ->setMaxLength(150)
-                    ->setReadOnly()
+                    ->setReadOnly(),
             );
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout
-            ->addColumn(6, function(FormLayoutColumn $column) {
+            ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withFields("name")
-                    ->withFields("email");
+                    ->withFields('name')
+                    ->withFields('email');
             })
-            ->addColumn(6, function(FormLayoutColumn $column) {
+            ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withSingleField("avatar");
+                    ->withSingleField('avatar');
             });
     }
 
-    function findSingle(): array
+    public function findSingle(): array
     {
         return $this
-            ->setCustomTransformer("avatar", new SharpUploadModelFormAttributeTransformer())
+            ->setCustomTransformer('avatar', new SharpUploadModelFormAttributeTransformer())
             ->transform(auth()->user());
     }
 
