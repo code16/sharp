@@ -39,10 +39,10 @@ class DatabaseSeeder extends Seeder
             ->each(function (Post $post) use ($categories) {
                 $post->categories()->attach($categories->shuffle()->take(rand(1, 3))->pluck('id'));
 
-                if(rand(0, 1)) {
+                if (rand(0, 1)) {
                     PostBlock::factory()->text()->create(['post_id' => $post->id]);
                 }
-                if(rand(0, 1)) {
+                if (rand(0, 1)) {
                     PostBlock::factory()->video()->create(['post_id' => $post->id]);
                 }
             });

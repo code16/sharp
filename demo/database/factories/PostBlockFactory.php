@@ -9,7 +9,7 @@ class PostBlockFactory extends Factory
     public function definition()
     {
         return [
-            'type' => $this->faker->randomElement(['text', 'visuals', 'video'])
+            'type' => $this->faker->randomElement(['text', 'visuals', 'video']),
         ];
     }
 
@@ -17,7 +17,7 @@ class PostBlockFactory extends Factory
     {
         return $this->state(fn () => [
             'type' => 'text',
-            'content' => $this->faker->paragraph
+            'content' => $this->faker->paragraph,
         ]);
     }
 
@@ -25,7 +25,7 @@ class PostBlockFactory extends Factory
     {
         return $this->state(fn () => [
             'type' => 'text',
-            'content' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/R1h4Vl6oTyA?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+            'content' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/R1h4Vl6oTyA?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
         ]);
     }
 }

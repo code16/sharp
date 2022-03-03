@@ -11,14 +11,14 @@ use Code16\Sharp\Utils\Entities\SharpEntity;
 class PostBlockEntity extends SharpEntity
 {
     protected ?string $list = PostBlockList::class;
-    protected string $label = "Block";
+    protected string $label = 'Block';
 
     public function getMultiforms(): array
     {
         return [
-            "text" => [PostBlockTextForm::class, "Text"],
-            "visuals" => [PostBlockVisualsForm::class, "Visuals"],
-            "video" => [PostBlockVideoForm::class, "Video"],
+            'text' => [PostBlockTextForm::class, 'Text'],
+            'visuals' => [PostBlockVisualsForm::class, 'Visuals'],
+            'video' => [PostBlockVideoForm::class, 'Video'],
         ];
     }
 }

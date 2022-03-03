@@ -16,17 +16,18 @@ class PostBlockList extends SharpEntityList
 {
     public function buildListConfig(): void
     {
-        $this->configureMultiformAttribute("type")
-            ->configureReorderable(new class implements ReorderHandler {
+        $this->configureMultiformAttribute('type')
+            ->configureReorderable(new class implements ReorderHandler
+            {
                 public function reorder(array $ids): void
                 {
-                    PostBlock::whereIn("id", $ids)
+                    PostBlock::whereIn('id', $ids)
                         ->get()
                         ->each(function (PostBlock $block) use ($ids) {
                             $block->update(['order' => array_search($block->id, $ids) + 1]);
                         });
                 }
-            });
+            }, );
     }
 
     public function getListData(): array|Arrayable
@@ -36,8 +37,8 @@ class PostBlockList extends SharpEntityList
             ->get();
 
         return $this
-            ->setCustomTransformer('content', function($value, PostBlock $instance) {
-                return match($instance->type) {
+            ->setCustomTransformer('content', function ($value, PostBlock $instance) {
+                return match ($instance->type) {
                     'text' => Str::limit($instance->content, 150),
                     'video' => sprintf('<div style="font-family: monospace">%s</div>', Str::limit($instance->content, 150)),
                     'visuals' => $instance->files
@@ -47,7 +48,8 @@ class PostBlockList extends SharpEntityList
                             }
 
                             return null;
-                        })
+                        },
+                    )
                         ->implode(' ')
                 };
             })
@@ -57,7 +59,7 @@ class PostBlockList extends SharpEntityList
     protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
-            ->addField(EntityListField::make('type')->setLabel("Type"))
+            ->addField(EntityListField::make('type')->setLabel('Type'))
             ->addField(EntityListField::make('content'));
     }
 

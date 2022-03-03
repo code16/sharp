@@ -12,7 +12,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class PostBlockVisualsForm extends AbstractPostBlockForm
 {
-    protected static string $postBlockType = "visuals";
+    protected static string $postBlockType = 'visuals';
     protected ?string $formValidatorClass = PostBlockVisualsValidator::class;
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -33,8 +33,8 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                         ->setStorageDisk('local')
                         ->setStorageBasePath(function () {
                             return sprintf(
-                                "data/Post/%s/PostBlock/{id}",
-                                currentSharpRequest()->getPreviousShowFromBreadcrumbItems("posts")->instanceId()
+                                'data/Post/%s/PostBlock/{id}',
+                                currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId(),
                             );
                         }),
                 )

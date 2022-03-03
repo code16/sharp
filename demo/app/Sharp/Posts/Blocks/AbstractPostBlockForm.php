@@ -15,20 +15,20 @@ abstract class AbstractPostBlockForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    protected static string $postBlockType = "none";
-    protected static string $postBlockHelpText = "";
+    protected static string $postBlockType = 'none';
+    protected static string $postBlockHelpText = '';
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
                 SharpFormHtmlField::make('type')
-                    ->setInlineTemplate('Post block type: <strong>{{name}}</strong><div class="small" v-if="help">{{help}}</div>')
+                    ->setInlineTemplate('Post block type: <strong>{{name}}</strong><div class="small" v-if="help">{{help}}</div>'),
             )
             ->addField(
                 SharpFormTextareaField::make('content')
                     ->setLabel('Content')
-                    ->setRowCount(6)
+                    ->setRowCount(6),
             );
     }
 
@@ -47,7 +47,7 @@ abstract class AbstractPostBlockForm extends SharpForm
     public function find($id): array
     {
         return $this
-            ->setCustomTransformer('type', function() {
+            ->setCustomTransformer('type', function () {
                 return [
                     'name' => static::$postBlockType,
                     'help' => static::$postBlockHelpText,
@@ -67,9 +67,9 @@ abstract class AbstractPostBlockForm extends SharpForm
         // Provide data to fill the dummy html field on creation
         return [
             'type' => [
-                'name' => static::$postBlockType, 
+                'name' => static::$postBlockType,
                 'help' => static::$postBlockHelpText,
-            ]
+            ],
         ];
     }
 
@@ -78,8 +78,8 @@ abstract class AbstractPostBlockForm extends SharpForm
         $postBlock = $id
             ? PostBlock::findOrFail($id)
             : new PostBlock([
-                'type' => static::$postBlockType, 
-                'post_id' => currentSharpRequest()->getPreviousShowFromBreadcrumbItems("posts")->instanceId()
+                'type' => static::$postBlockType,
+                'post_id' => currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId(),
             ]);
 
         $this->save($postBlock, $data);
