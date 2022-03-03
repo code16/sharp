@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name' => 'Sharp demo project',
+    'name' => 'Demo project',
     'custom_url_segment' => 'sharp',
     'display_sharp_version_in_title' => true,
     'display_breadcrumb' => true,
@@ -36,6 +36,8 @@ return [
             'login' => '/img/sharp/login-icon.png',
         ],
     ],
+
+    'login_page_message_blade_path' => env('SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH', 'sharp/_login-page-message'),
 
     'extensions' => [
         'assets' => [
