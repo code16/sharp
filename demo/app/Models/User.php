@@ -35,14 +35,14 @@ class User extends Authenticatable
 
     public function avatar(): MorphOne
     {
-        return $this->morphOne(Media::class, "model")
-            ->where("model_key", "avatar");
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'avatar');
     }
 
     public function getDefaultAttributesFor(string $attribute): array
     {
-        return in_array($attribute, ["avatar"])
-            ? ["model_key" => $attribute]
+        return in_array($attribute, ['avatar'])
+            ? ['model_key' => $attribute]
             : [];
     }
 }

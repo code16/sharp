@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
 
         Media::factory([
             'model_id' => $admin->id,
-            "model_type" => User::class,
-            "model_key" => "avatar",
+            'model_type' => User::class,
+            'model_key' => 'avatar',
         ])
             ->withFile(storage_path('app/seed/users/01.jpeg'))
             ->create();
@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
 
         Media::factory([
             'model_id' => $editor1->id,
-            "model_type" => User::class,
-            "model_key" => "avatar",
+            'model_type' => User::class,
+            'model_key' => 'avatar',
         ])
             ->withFile(storage_path('app/seed/users/02.jpeg'))
             ->create();
@@ -41,8 +41,8 @@ class DatabaseSeeder extends Seeder
 
         Media::factory([
             'model_id' => $editor2->id,
-            "model_type" => User::class,
-            "model_key" => "avatar",
+            'model_type' => User::class,
+            'model_key' => 'avatar',
         ])
             ->withFile(storage_path('app/seed/users/03.jpeg'))
             ->create();

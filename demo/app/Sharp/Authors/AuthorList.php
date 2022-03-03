@@ -49,8 +49,8 @@ class AuthorList extends SharpEntityList
             );
 
         return $this
-            ->setCustomTransformer("avatar",function ($value, User $user) {
-                return '<img src="' . $user->avatar->thumbnail(140) . '" alt="" class="img-fluid">';
+            ->setCustomTransformer('avatar', function ($value, User $user) {
+                return '<img src="'.$user->avatar->thumbnail(140).'" alt="" class="img-fluid">';
             })
             ->transform($users->get());
     }
@@ -59,8 +59,8 @@ class AuthorList extends SharpEntityList
     {
         $fieldsContainer
             ->addField(
-                EntityListField::make("avatar")
-                    ->setLabel("Avatar")
+                EntityListField::make('avatar')
+                    ->setLabel('Avatar'),
             )
             ->addField(
                 EntityListField::make('name')
