@@ -48,12 +48,20 @@ class AuthorList extends SharpEntityList
                 },
             );
 
-        return $this->transform($users->get());
+        return $this
+            ->setCustomTransformer("avatar",function ($value, User $user) {
+                return '<img src="' . $user->avatar->thumbnail(140) . '" alt="" class="img-fluid">';
+            })
+            ->transform($users->get());
     }
 
     protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
         $fieldsContainer
+            ->addField(
+                EntityListField::make("avatar")
+                    ->setLabel("Avatar")
+            )
             ->addField(
                 EntityListField::make('name')
                     ->setLabel('Name')
@@ -69,7 +77,8 @@ class AuthorList extends SharpEntityList
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         $fieldsLayout
-            ->addColumn('name', 6)
-            ->addColumn('email', 6);
+            ->addColumn('avatar', 2)
+            ->addColumn('name', 5)
+            ->addColumn('email', 5);
     }
 }

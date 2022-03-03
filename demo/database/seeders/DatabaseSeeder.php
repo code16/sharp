@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Post;
 use App\Models\PostBlock;
 use App\Models\User;
@@ -16,12 +17,34 @@ class DatabaseSeeder extends Seeder
         $admin = User::factory(['email' => 'admin@example.org', 'role' => 'admin'])
             ->create();
 
-        $editors = User::factory(['email' => 'editor@example.org'])
-            ->state(new Sequence(
-                ['email' => 'editor@example.org'],
-                ['email' => 'editor2@example.org'],
-            ))
-            ->count(2)
+        Media::factory([
+            'model_id' => $admin->id,
+            "model_type" => User::class,
+            "model_key" => "avatar",
+        ])
+            ->withFile(storage_path('app/seed/users/01.jpeg'))
+            ->create();
+
+        $editor1 = User::factory(['email' => 'editor@example.org'])
+            ->create();
+
+        Media::factory([
+            'model_id' => $editor1->id,
+            "model_type" => User::class,
+            "model_key" => "avatar",
+        ])
+            ->withFile(storage_path('app/seed/users/02.jpeg'))
+            ->create();
+
+        $editor2 = User::factory(['email' => 'editor2@example.org'])
+            ->create();
+
+        Media::factory([
+            'model_id' => $editor2->id,
+            "model_type" => User::class,
+            "model_key" => "avatar",
+        ])
+            ->withFile(storage_path('app/seed/users/03.jpeg'))
             ->create();
 
         $categories = Category::factory()
@@ -31,8 +54,8 @@ class DatabaseSeeder extends Seeder
         Post::factory()
             ->state(new Sequence(
                 ['author_id' => $admin->id],
-                ['author_id' => $editors[0]->id],
-                ['author_id' => $editors[1]->id],
+                ['author_id' => $editor1->id],
+                ['author_id' => $editor2->id],
             ))
             ->count(50)
             ->create()

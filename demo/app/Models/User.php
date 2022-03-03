@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -30,5 +31,18 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function avatar(): MorphOne
+    {
+        return $this->morphOne(Media::class, "model")
+            ->where("model_key", "avatar");
+    }
+
+    public function getDefaultAttributesFor(string $attribute): array
+    {
+        return in_array($attribute, ["avatar"])
+            ? ["model_key" => $attribute]
+            : [];
     }
 }
