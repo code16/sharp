@@ -5,9 +5,12 @@ namespace Code16\Sharp\Auth;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Support\Arr;
 
 class SharpAuthorizationManager
 {
+    private array $cachedPolicies = [];
+
     public function __construct(protected SharpEntityManager $entityManager, protected Gate $gate)
     {
     }
@@ -51,17 +54,21 @@ class SharpAuthorizationManager
 
     protected function isPolicyForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool
     {
-        $policy = $this->entityManager->entityFor($entityKey)->getPolicyOrDefault();
+        if (! Arr::exists($this->cachedPolicies, "$ability-$entityKey-$instanceId")) {
+            $policy = $this->entityManager->entityFor($entityKey)->getPolicyOrDefault();
 
-        if (in_array($ability, ['entity', 'create'])) {
-            return ! $policy->$ability(auth()->user());
+            if (in_array($ability, ['entity', 'create'])) {
+                $forbidden = ! $policy->$ability(auth()->user());
+            } elseif (in_array($ability, ['view', 'update', 'delete'])) {
+                $forbidden = ! $policy->$ability(auth()->user(), $instanceId);
+            } else {
+                $forbidden = true;
+            }
+
+            $this->cachedPolicies["$ability-$entityKey-$instanceId"] = $forbidden;
         }
 
-        if (in_array($ability, ['view', 'update', 'delete'])) {
-            return ! $policy->$ability(auth()->user(), $instanceId);
-        }
-
-        return true;
+        return $this->cachedPolicies["$ability-$entityKey-$instanceId"];
     }
 
     private function deny()

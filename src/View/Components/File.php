@@ -19,9 +19,11 @@ class File extends ContentComponent
         ?string $disk = null,
         public ?string $name = null,
     ) {
-        $this->fileModel = new SharpUploadModel([
-            'disk' => $disk,
-            'file_name' => $path,
+        $this->fileModel = app()->make(SharpUploadModel::class, [
+            'attributes' => [
+                'disk' => $disk,
+                'file_name' => $path,
+            ],
         ]);
         $this->disk = Storage::disk($this->fileModel->disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);

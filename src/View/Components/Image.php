@@ -24,10 +24,12 @@ class Image extends ContentComponent
         public ?int $thumbnailHeight = null,
         public ?array $filters = [],
     ) {
-        $this->fileModel = new SharpUploadModel([
-            'disk' => $disk,
-            'file_name' => $path,
-            'filters' => $this->getTransformationFilters(),
+        $this->fileModel = app()->make(SharpUploadModel::class, [
+            'attributes' => [
+                'disk' => $disk,
+                'file_name' => $path,
+                'filters' => $this->getTransformationFilters(),
+            ],
         ]);
         $this->disk = Storage::disk($this->fileModel->disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);
