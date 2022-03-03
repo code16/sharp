@@ -10,7 +10,7 @@ describe('number-field',()=>{
     beforeEach(()=>{
         document.body.innerHTML = `
             <div id="app">
-                <sharp-number placeholder="Entrez un nombre" value="1" :show-controls="false" step="1" min="0" max="10"></sharp-number>
+                <sharp-number placeholder="Entrez un nombre" value="1" :show-controls="false" :step="1" :min="0" :max="10"></sharp-number>
             </div>
         `
     });
