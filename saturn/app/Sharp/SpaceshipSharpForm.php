@@ -32,7 +32,7 @@ class SpaceshipSharpForm extends SharpForm
     use WithSharpFormEloquentUpdater;
 
     protected ?string $formValidatorClass = SpaceshipSharpValidator::class;
-    
+
     public function render()
     {
         return view('sharp.spaceship-form');

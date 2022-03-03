@@ -4,13 +4,11 @@ namespace Code16\Sharp\View\Components\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\SharpForm;
-use Illuminate\View\Component;
 
 class TextField extends Field
 {
     protected SharpFormTextField $field;
-    
+
     public function __construct(
         public string $name,
         public ?string $label = null,
@@ -20,15 +18,15 @@ class TextField extends Field
         public ?int $maxLength = null,
     ) {
     }
-    
+
     public function makeField(): SharpFormField
     {
         return SharpFormTextField::make($this->name);
     }
-    
+
     public function setType()
     {
-        if($this->type === 'password') {
+        if ($this->type === 'password') {
             $this->field->setInputTypePassword();
         }
     }

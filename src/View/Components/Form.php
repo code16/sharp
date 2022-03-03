@@ -11,7 +11,7 @@ class Form extends Component
         public SharpForm $form,
     ) {
     }
-    
+
     public function render()
     {
         return view('sharp::components.form');
