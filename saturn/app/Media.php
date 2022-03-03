@@ -33,4 +33,9 @@ class Media extends SharpUploadModel
             unset($event->model->attributes[$event->key]);
         });
     }
+
+    public function thumbnail(int $width = null, int $height = null, array $customFilters = []): ?string
+    {
+        return parent::thumbnail($width, $height, array_merge($customFilters, ['greyscale' => []]));
+    }
 }
