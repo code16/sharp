@@ -36,10 +36,12 @@ class FilesController extends Controller
                         ],
                         function (array &$file) use ($disk, $thumbnailHeight, $thumbnailWidth) {
                             if ($this->isMimetypeAnImage($disk->mimeType($file['path']))) {
-                                $model = new SharpUploadModel([
-                                    'disk' => $file['disk'],
-                                    'file_name' => $file['path'],
-                                    'filters' => $file['filters'],
+                                $model = app()->make(SharpUploadModel::class, [
+                                    'attributes' => [
+                                        'disk' => $file['disk'],
+                                        'file_name' => $file['path'],
+                                        'filters' => $file['filters'],
+                                    ],
                                 ]);
 
                                 $file['thumbnail'] = $model->thumbnail($thumbnailWidth, $thumbnailHeight);
