@@ -54,7 +54,7 @@ class SharpAuthorizationManager
 
     protected function isPolicyForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool
     {
-        if(! Arr::exists($this->cachedPolicies, "$ability-$entityKey-$instanceId")) {
+        if (! Arr::exists($this->cachedPolicies, "$ability-$entityKey-$instanceId")) {
             $policy = $this->entityManager->entityFor($entityKey)->getPolicyOrDefault();
 
             if (in_array($ability, ['entity', 'create'])) {
