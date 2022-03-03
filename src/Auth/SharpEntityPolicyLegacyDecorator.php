@@ -44,7 +44,7 @@ class SharpEntityPolicyLegacyDecorator extends SharpEntityPolicy
         return $this->callFromDecorated('create', [$user]);
     }
 
-    public function delete($user, $instanceId)
+    public function delete($user, $instanceId): bool
     {
         return $this->callFromDecorated('delete', [$user, $instanceId]);
     }

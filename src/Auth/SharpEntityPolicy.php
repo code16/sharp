@@ -24,7 +24,7 @@ class SharpEntityPolicy
         return true;
     }
 
-    public function delete($user, $instanceId)
+    public function delete($user, $instanceId): bool
     {
         return true;
     }

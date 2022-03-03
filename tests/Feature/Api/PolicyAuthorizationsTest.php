@@ -126,8 +126,6 @@ class PolicyAuthorizationsTest extends BaseApiTest
     /** @test */
     public function dashboard_policy_can_be_set_to_handle_whole_dashboard_visibility()
     {
-        $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(200);
-
         $this->actingAs(new User(['name' => 'Unauthorized-User']));
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
     }
