@@ -32,16 +32,21 @@ class SpaceshipSharpForm extends SharpForm
     use WithSharpFormEloquentUpdater;
 
     protected ?string $formValidatorClass = SpaceshipSharpValidator::class;
+    
+    public function render()
+    {
+        return view('sharp.spaceship-form');
+    }
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
-            ->addField(
-                SharpFormTextField::make('name')
-                    ->setLocalized()
-                    ->setMaxLength(30)
-                    ->setLabel('Name'),
-            )
+//            ->addField(
+//                SharpFormTextField::make('name')
+//                    ->setLocalized()
+//                    ->setMaxLength(30)
+//                    ->setLabel('Name'),
+//            )
             ->addField(
                 SharpFormHtmlField::make('html')
                     ->setInlineTemplate('The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>'),

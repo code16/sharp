@@ -10,6 +10,7 @@ use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\View\View;
 
 abstract class SharpForm
 {
@@ -103,6 +104,22 @@ abstract class SharpForm
     public function getDataLocalizations(): array
     {
         return [];
+    }
+    
+    /**
+     * @return \Illuminate\Contracts\View\View|void
+     */
+    public function render()
+    {
+    }
+    
+    public function buildFromView(): void
+    {
+        $this->render()
+            ?->with([
+                'form' => $this,
+            ])
+            ->render();
     }
 
     public function buildFormConfig(): void

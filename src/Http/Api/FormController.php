@@ -14,6 +14,7 @@ class FormController extends ApiController
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
         $form->buildFormConfig();
+        $form->buildFromView();
 
         return response()->json(
             array_merge(
