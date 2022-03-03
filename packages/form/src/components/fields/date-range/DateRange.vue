@@ -1,30 +1,43 @@
 <template>
-    <el-date-picker
-        class="SharpDateRange"
-        :class="classes"
-        :value="transformedValue"
-        :format="transformedFormat"
-        :start-placeholder="startPlaceholder"
-        :end-placeholder="endPlaceholder"
-        :disabled="readOnly"
-        :clearable="clearable"
-        :picker-options="pickerOptions"
-        type="daterange"
-        popper-class="SharpDateRange__popper"
-        ref="picker"
+    <DatePicker
+        class="input-group"
+        :value="value"
+        :monday-first="mondayFirst"
+        :display-format="displayFormat"
+        is-range
         @input="handleChanged"
-        @focus="handleFocused"
-        @blur="handleBlur"
-    />
+        v-slot="{ inputValue, inputEvents }"
+    >
+        <template v-if="hasClearButton">
+            <ClearButton />
+        </template>
+        <DateRangeInput
+            v-bind="$props"
+            :value="inputValue.start"
+            :placeholder="startPlaceholder"
+            v-on="inputEvents.start"
+        />
+        <DateRangeInput
+            class="clearable"
+            v-bind="$props"
+            :value="inputValue.end"
+            :placeholder="endPlaceholder"
+            v-on="inputEvents.end"
+        />
+    </DatePicker>
 </template>
 
 <script>
     import { lang } from "sharp";
-    import ElDatePicker from 'element-ui/lib/date-picker';
+    import { ClearButton } from "sharp-ui";
+    import DatePicker from "../date/Datepicker";
+    import DateRangeInput from "./DateRangeInput";
 
     export default {
         components: {
-            ElDatePicker,
+            DateRangeInput,
+            DatePicker,
+            ClearButton,
         },
         props: {
             value: {
@@ -53,36 +66,13 @@
             mondayFirst: Boolean,
         },
         computed: {
-            transformedValue() {
-                const value = this.value || {};
-                return value.start || value.end ? [
-                    value.start,
-                    value.end,
-                ] : null;
-            },
-            transformedFormat() {
-                return this.displayFormat
-                    .replace(/D/g, 'd')
-                    .replace(/Y/g, 'y');
-            },
-            pickerOptions() {
-                return {
-                    firstDayOfWeek: this.mondayFirst ? 1 : 7,
-                }
-            },
-            classes() {
-                return {
-                    'SharpDateRange--clearable': this.clearable,
-                }
-            },
+           hasClearButton() {
+               return this.clearable && !!this.value?.start && !!this.value?.end;
+           },
         },
         methods: {
             handleChanged(value) {
-                const range = value || [];
-                this.$emit('input', {
-                    start: range[0],
-                    end: range[1],
-                });
+                this.$emit('input', value);
             },
             handleFocused() {
                 this.$emit('focus');

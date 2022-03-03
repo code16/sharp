@@ -2,8 +2,7 @@
     <div class="SharpFilterDateRange" :class="classes">
         <FilterControl :opened="opened" :label="label" @click="handleClicked">
             <DateRange
-                class="SharpFilterDateRange__field form-control"
-                :class="{ 'dropdown-toggle': required || !value }"
+                class="SharpFilterDateRange__field input-group-sm"
                 :value="value"
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"
@@ -14,6 +13,9 @@
                 @blur="handlePickerBlur"
                 ref="range"
             />
+            <template v-if="required || !value">
+                <div class="form-control dropdown-toggle"></div>
+            </template>
         </FilterControl>
     </div>
 </template>
@@ -60,7 +62,7 @@
 
         methods: {
             handleClicked() {
-                this.$refs.range.$refs.picker.focus();
+
             },
             handleInput(range) {
                 this.$emit('input', range);

@@ -32,6 +32,7 @@
             value: [Date, Object],
             isRange: Boolean,
             mondayFirst: Boolean,
+            displayFormat: String,
         },
         computed: {
             popoverOptions() {
@@ -52,6 +53,11 @@
                             enabled: false,
                         },
                     ],
+                }
+            },
+            masks() {
+                return {
+                    input: this.displayFormat || undefined,
                 }
             },
             locale() {
