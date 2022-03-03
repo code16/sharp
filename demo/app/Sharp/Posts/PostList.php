@@ -5,6 +5,7 @@ namespace App\Sharp\Posts;
 use App\Models\Post;
 use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
+use App\Sharp\Utils\Filters\CategoryFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -65,14 +66,15 @@ class PostList extends SharpEntityList
     protected function getFilters(): ?array
     {
         return [
-            AuthorFilter::class
+            AuthorFilter::class,
+            CategoryFilter::class
         ];
     }
 
     public function getListData(): array|Arrayable
     {
         $posts = Post::select('posts.*')
-            ->with("author")
+            ->with("author", "categories")
 
             // Handle specific IDs (in case of refresh, called by a state handler or a command)
             ->when(
@@ -87,6 +89,17 @@ class PostList extends SharpEntityList
                 $this->queryParams->filterFor(AuthorFilter::class),
                 function(Builder $builder, int $authorId) {
                     $builder->where('author_id', $authorId);
+                }
+            )
+            ->when(
+                $this->queryParams->filterFor(CategoryFilter::class),
+                function(Builder $builder, $categories) {
+                    collect($categories)
+                        ->each(function($categoryId) use ($builder) {
+                            $builder->whereHas('categories', function (Builder $builder) use ($categoryId) {
+                                return $builder->where("categories.id", $categoryId);
+                            });
+                        });
                 }
             )
             
@@ -120,9 +133,13 @@ class PostList extends SharpEntityList
         return $this
             ->setCustomTransformer("title", function ($value, Post $instance) {
                 return sprintf(
-                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div>',
+                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div><div>%s</div>',
                     $instance->getTranslation('title', 'fr'),
                     $instance->getTranslation('title', 'en'),
+                    $instance->categories
+                        ->pluck("name")
+                        ->map(fn($name) => '<span class="badge">' . $name . '</span>')
+                        ->implode(" ")
                 );
             })
             ->setCustomTransformer("cover", (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())

@@ -8,7 +8,6 @@ class PostPolicy extends SharpEntityPolicy
 {
     public function entity($user): bool
     {
-        ray("...");
         return true;
     }
 }

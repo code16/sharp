@@ -2,7 +2,9 @@
 
 namespace App\Sharp\Entities;
 
+use App\Sharp\Categories\CategoryForm;
 use App\Sharp\Categories\CategoryList;
+use App\Sharp\Categories\CategoryShow;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class CategoryEntity extends SharpEntity

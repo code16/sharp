@@ -37,12 +37,12 @@ return [
         ],
     ],
 
-//    "extensions" => [
-//        "assets" => [
-//            "strategy" => "raw",
-//            "head" => [
-//                "/css/sharp-extension.css",
-//            ],
-//        ],
-//    ],
+    "extensions" => [
+        "assets" => [
+            "strategy" => "raw",
+            "head" => [
+                "/css/sharp-extension.css",
+            ],
+        ],
+    ],
 ];
