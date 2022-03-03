@@ -24,7 +24,7 @@ class PostShow extends SharpShow
             ->addField(SharpShowTextField::make('content_fr')->collapseToWordCount(30))
             ->addField(SharpShowTextField::make('content_en')->collapseToWordCount(30))
             ->addField(SharpShowTextField::make('author')->setLabel('Author'))
-            ->addField(SharpShowTextField::make("categories")->setLabel("Categories"))
+            ->addField(SharpShowTextField::make('categories')->setLabel('Categories'))
             ->addField(SharpShowPictureField::make('cover'))
             ->addField(
                 SharpShowEntityListField::make('blocks', 'blocks')
@@ -44,7 +44,7 @@ class PostShow extends SharpShow
                         $column
                             ->withSingleField('title_fr')
                             ->withSingleField('title_en')
-                            ->withSingleField("categories")
+                            ->withSingleField('categories')
                             ->withSingleField('author');
                     })
                     ->addColumn(6, function (ShowLayoutColumn $column) {
@@ -105,10 +105,10 @@ class PostShow extends SharpShow
                         ->renderAsText($instance->author->name)
                     : null;
             })
-            ->setCustomTransformer("categories", function ($value, Post $instance) {
+            ->setCustomTransformer('categories', function ($value, Post $instance) {
                 return $instance->categories
-                    ->map(fn($category) => LinkToShowPage::make("categories", $category->id)->renderAsText($category->name))
-                    ->implode(", ");
+                    ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)->renderAsText($category->name))
+                    ->implode(', ');
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(300))
             ->transform(Post::findOrFail($id));

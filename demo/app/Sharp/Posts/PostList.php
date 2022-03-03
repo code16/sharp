@@ -93,16 +93,16 @@ class PostList extends SharpEntityList
             )
 ->when(
                 $this->queryParams->filterFor(CategoryFilter::class),
-                function(Builder $builder, $categories) {
+                function (Builder $builder, $categories) {
                     collect($categories)
-                        ->each(function($categoryId) use ($builder) {
+                        ->each(function ($categoryId) use ($builder) {
                             $builder->whereHas('categories', function (Builder $builder) use ($categoryId) {
-                                return $builder->where("categories.id", $categoryId);
+                                return $builder->where('categories.id', $categoryId);
                             });
                         });
-                }
+                },
             )
-            
+
             // Handle search words
             ->when(
                 $this->queryParams->hasSearch(),
@@ -137,9 +137,9 @@ class PostList extends SharpEntityList
                     $instance->getTranslation('title', 'fr'),
                     $instance->getTranslation('title', 'en'),
                     $instance->categories
-                        ->pluck("name")
-                        ->map(fn($name) => '<span class="badge">' . $name . '</span>')
-                        ->implode(" ")
+                        ->pluck('name')
+                        ->map(fn ($name) => '<span class="badge">'.$name.'</span>')
+                        ->implode(' '),
                 );
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())

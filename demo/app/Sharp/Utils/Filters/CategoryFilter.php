@@ -9,13 +9,13 @@ class CategoryFilter extends EntityListSelectMultipleFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Categories");
+        $this->configureLabel('Categories');
     }
 
     public function values(): array
     {
-        return Category::orderBy("name")
-            ->pluck("name", "id")
+        return Category::orderBy('name')
+            ->pluck('name', 'id')
             ->toArray();
     }
 }
