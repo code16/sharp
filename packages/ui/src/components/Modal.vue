@@ -1,5 +1,6 @@
 <template>
-    <b-modal v-bind="$attrs"
+    <b-modal
+        v-bind="$attrs"
         :title="title"
         :visible="visible"
         :ok-only="okOnly"
@@ -8,6 +9,7 @@
         :title-class="{ 'text-danger': isError }"
         :header-class="{ 'pb-0':!title }"
         no-enforce-focus
+        no-close-on-backdrop
         v-on="$listeners"
         @change="handleVisiblityChanged"
         ref="modal"
