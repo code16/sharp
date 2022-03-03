@@ -9,7 +9,7 @@ return [
         'posts' => \App\Sharp\Entities\PostEntity::class,
         'blocks' => \App\Sharp\Entities\PostBlockEntity::class,
         'categories' => \App\Sharp\Entities\CategoryEntity::class,
-        'authors' => \App\Sharp\Entities\PostEntity::class,
+        'authors' => \App\Sharp\Entities\AuthorEntity::class,
 
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],

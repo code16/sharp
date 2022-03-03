@@ -11,6 +11,7 @@ use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 
@@ -101,7 +102,8 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('author', function ($value, $instance) {
                 return $instance->author_id
-                    ? LinkToShowPage::make('users', $instance->author_id)
+                    ? LinkToEntityList::make('authors')
+                        ->setSearch($instance->author->email)
                         ->renderAsText($instance->author->name)
                     : null;
             })
