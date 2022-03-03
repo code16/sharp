@@ -7,6 +7,7 @@ return [
     'display_breadcrumb' => true,
     'entities' => [
         'posts' => \App\Sharp\Entities\PostEntity::class,
+        'blocks' => \App\Sharp\Entities\PostBlockEntity::class,
         'categories' => \App\Sharp\Entities\CategoryEntity::class,
         'authors' => \App\Sharp\Entities\PostEntity::class,
 

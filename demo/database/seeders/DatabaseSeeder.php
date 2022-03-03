@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostBlock;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
@@ -23,19 +24,27 @@ class DatabaseSeeder extends Seeder
             ->count(2)
             ->create();
 
-        $posts = Post::factory()
+        $categories = Category::factory()
+            ->count(8)
+            ->create();
+
+        Post::factory()
             ->state(new Sequence(
                 ['author_id' => $admin->id],
                 ['author_id' => $editors[0]->id],
                 ['author_id' => $editors[1]->id],
             ))
             ->count(50)
-            ->create();
-
-        Category::factory()->count(8)
             ->create()
-            ->each(function (Category $category) use ($posts) {
-                $category->posts()->attach($posts->shuffle()->take(rand(5, 12))->pluck('id'));
+            ->each(function (Post $post) use ($categories) {
+                $post->categories()->attach($categories->shuffle()->take(rand(1, 3))->pluck('id'));
+
+                if(rand(0, 1)) {
+                    PostBlock::factory()->text()->create(['post_id' => $post->id]);
+                }
+                if(rand(0, 1)) {
+                    PostBlock::factory()->video()->create(['post_id' => $post->id]);
+                }
             });
     }
 }

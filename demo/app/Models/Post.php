@@ -40,6 +40,12 @@ class Post extends Model
             ->orderBy('order');
     }
 
+    public function blocks(): HasMany
+    {
+        return $this->hasMany(PostBlock::class)
+            ->orderBy('order');
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
