@@ -14,11 +14,11 @@ class PostFactory extends Factory
                 'en' => $this->faker->sentence,
             ],
             'content' => [
-                'fr' => collect($this->faker->paragraphs(rand(3, 5)))->map(fn($paragraph) => "<p>$paragraph</p>")->implode(''),
-                'en' => collect($this->faker->paragraphs(rand(3, 5)))->map(fn($paragraph) => "<p>$paragraph</p>")->implode(''),
+                'fr' => collect($this->faker->paragraphs(rand(3, 5)))->map(fn ($paragraph) => "<p>$paragraph</p>")->implode(''),
+                'en' => collect($this->faker->paragraphs(rand(3, 5)))->map(fn ($paragraph) => "<p>$paragraph</p>")->implode(''),
             ],
             'state' => 'online',
-            'published_at' => now()->subMinutes($this->faker->numberBetween(-60*24*3, 60*24*50)),
+            'published_at' => now()->subMinutes($this->faker->numberBetween(-60 * 24 * 3, 60 * 24 * 50)),
         ];
     }
 }

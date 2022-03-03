@@ -18,7 +18,7 @@ class TestShow extends SharpSingleShow
 
     public function buildShowLayout(ShowLayout $showLayout): void
     {
-        $showLayout->addSection("", function(ShowLayoutSection $section) {
+        $showLayout->addSection('', function (ShowLayoutSection $section) {
             $section->addColumn(12, function (ShowLayoutColumn $column) {
                 $column->withSingleField('message');
             });
@@ -28,7 +28,7 @@ class TestShow extends SharpSingleShow
     public function findSingle(): array
     {
         return [
-            'message' => '<h2 class="text-center my-5 py-5">Please stay calm,<br>this is a test.</h2>'
+            'message' => '<h2 class="text-center my-5 py-5">Please stay calm,<br>this is a test.</h2>',
         ];
     }
 }

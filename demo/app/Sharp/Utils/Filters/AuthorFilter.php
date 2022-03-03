@@ -9,14 +9,14 @@ class AuthorFilter extends EntityListSelectFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel("Author");
+        $this->configureLabel('Author');
     }
 
     public function values(): array
     {
-        return User::whereHas("posts")
-            ->orderBy("name")
-            ->pluck("name", "id")
+        return User::whereHas('posts')
+            ->orderBy('name')
+            ->pluck('name', 'id')
             ->toArray();
     }
 }

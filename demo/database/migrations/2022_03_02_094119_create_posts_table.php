@@ -15,13 +15,13 @@ return new class extends Migration
             $table->dateTime('published_at')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
-            $table->string('state')->default("draft");
+            $table->string('state')->default('draft');
 
             $table->foreignId('author_id')
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
-            
+
             $table->timestamps();
         });
     }

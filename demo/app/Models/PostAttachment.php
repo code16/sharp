@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 class PostAttachment extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
 
     public function post(): BelongsTo
@@ -20,14 +20,14 @@ class PostAttachment extends Model
 
     public function document(): MorphOne
     {
-        return $this->morphOne(Media::class, "model")
-            ->where("model_key", "document");
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'document');
     }
 
     public function getDefaultAttributesFor($attribute)
     {
-        return in_array($attribute, ["document"])
-            ? ["model_key" => $attribute]
+        return in_array($attribute, ['document'])
+            ? ['model_key' => $attribute]
             : [];
     }
 }
