@@ -42,12 +42,12 @@
                     hideDelay: 10,
                     placement: 'bottom',
                     modifiers: [
-                        {
-                            name: 'preventOverflow',
-                            options: {
-                                boundary,
-                            },
-                        },
+                    //     {
+                    //         name: 'preventOverflow',
+                    //         options: {
+                    //             boundary,
+                    //         },
+                    //     },
                         {
                             name: 'flip',
                             enabled: false,

@@ -13,9 +13,9 @@
                 @blur="handlePickerBlur"
                 ref="range"
             />
-            <template v-if="required || !value">
-                <div class="form-control dropdown-toggle"></div>
-            </template>
+<!--            <template v-if="required || !value">-->
+<!--                <div class="form-control dropdown-toggle"></div>-->
+<!--            </template>-->
         </FilterControl>
     </div>
 </template>
