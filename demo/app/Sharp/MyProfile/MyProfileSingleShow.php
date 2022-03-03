@@ -2,7 +2,6 @@
 
 namespace App\Sharp\MyProfile;
 
-use App\Models\User;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -19,14 +18,14 @@ class MyProfileSingleShow extends SharpSingleShow
         $showFields
             ->addField(
                 SharpShowTextField::make('name')
-                    ->setLabel('Name')
+                    ->setLabel('Name'),
             )
             ->addField(
                 SharpShowTextField::make('email')
-                    ->setLabel('Email address')
+                    ->setLabel('Email address'),
             )
             ->addField(
-                SharpShowPictureField::make("avatar")
+                SharpShowPictureField::make('avatar'),
             );
     }
 
@@ -50,7 +49,7 @@ class MyProfileSingleShow extends SharpSingleShow
     public function findSingle(): array
     {
         return $this
-            ->setCustomTransformer("avatar", new SharpUploadModelThumbnailUrlTransformer(140))
+            ->setCustomTransformer('avatar', new SharpUploadModelThumbnailUrlTransformer(140))
             ->transform(auth()->user());
     }
 }
