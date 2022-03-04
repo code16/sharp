@@ -2,14 +2,17 @@
 
 namespace Database\Factories;
 
+use Database\Seeders\WithTextFixtures;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoryFactory extends Factory
 {
+    use WithTextFixtures;
+    
     public function definition()
     {
         return [
-            'name' => $this->faker->words(2, true),
+            'name' => $this->faker->randomElement(static::$categoryNames),
         ];
     }
 }
