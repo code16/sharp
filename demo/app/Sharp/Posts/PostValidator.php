@@ -11,8 +11,8 @@ class PostValidator extends FormRequest
         return [
             'title.fr' => ['required', 'string', 'max:150'],
             'title.en' => ['required', 'string', 'max:150'],
-            'content.text.fr' => ['required', 'string', 'max:1000'],
-            'content.text.en' => ['required', 'string', 'max:1000'],
+            'content.text.fr' => ['required', 'string', 'max:2000'],
+            'content.text.en' => ['required', 'string', 'max:2000'],
             'published_at' => ['required', 'date'],
             'attachments.*.title' => ['required', 'string', 'max:50'],
             'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],

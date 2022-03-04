@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Posts;
 
+use App\Models\Category;
 use App\Models\Post;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
@@ -10,6 +11,7 @@ use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
+use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
@@ -53,6 +55,12 @@ class PostForm extends SharpForm
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}/embed')
                     ->setHeight(250),
+            )
+            ->addField(
+                SharpFormTagsField::make('categories', Category::pluck("name", "id")->toArray())
+                    ->setLabel('Categories')
+                    ->setCreatable()
+                    ->setCreateAttribute('name')
             )
             ->addField(
                 SharpFormUploadField::make('cover')
@@ -134,7 +142,7 @@ class PostForm extends SharpForm
                             $column->withSingleField('author_id');
                         }
                         $column
-                            ->withSingleField('published_at')
+                            ->withFields('published_at|5', 'categories|7')
                             ->withSingleField('cover');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
@@ -170,7 +178,7 @@ class PostForm extends SharpForm
             })
             ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer())
-            ->transform(Post::with('cover', 'attachments')->findOrFail($id));
+            ->transform(Post::with('cover', 'attachments', 'categories')->findOrFail($id));
     }
 
     public function update($id, array $data)

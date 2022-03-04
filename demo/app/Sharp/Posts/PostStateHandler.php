@@ -9,7 +9,7 @@ class PostStateHandler extends EntityState
 {
     protected function buildStates(): void
     {
-        $this->addState('draft', 'Draft', '#999999')
+        $this->addState('draft', 'Draft', 'orange')
             ->addState('online', 'Online', '#0c4589');
     }
 
