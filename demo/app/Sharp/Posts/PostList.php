@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
+use App\Sharp\Utils\Filters\PeriodFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -68,6 +69,7 @@ class PostList extends SharpEntityList
         return [
             AuthorFilter::class,
             CategoryFilter::class,
+            PeriodFilter::class,
         ];
     }
 
@@ -86,12 +88,18 @@ class PostList extends SharpEntityList
 
             // Handle filters
             ->when(
+                $this->queryParams->filterFor(PeriodFilter::class),
+                function (Builder $builder, array $dates) {
+                    $builder->whereBetween('published_at', [$dates["start"], $dates["end"]]);
+                },
+            )
+            ->when(
                 $this->queryParams->filterFor(AuthorFilter::class),
                 function (Builder $builder, int $authorId) {
                     $builder->where('author_id', $authorId);
                 },
             )
-->when(
+            ->when(
                 $this->queryParams->filterFor(CategoryFilter::class),
                 function (Builder $builder, $categories) {
                     collect($categories)
