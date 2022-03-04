@@ -20,16 +20,16 @@ class DatabaseSeeder extends Seeder
             ->create();
         $editor2 = User::factory(['email' => 'editor2@example.org'])
             ->create();
-        
-        collect([$admin,$editor1,$editor2])
+
+        collect([$admin, $editor1, $editor2])
             ->shuffle()
-            ->each(function(User $user, int $k) {
+            ->each(function (User $user, int $k) {
                 Media::factory([
                     'model_id' => $user->id,
                     'model_type' => User::class,
                     'model_key' => 'avatar',
                 ])
-                    ->withFile(database_path('seeders/files/users/' . $k+1 . '.jpg'))
+                    ->withFile(database_path('seeders/files/users/'.$k + 1 .'.jpg'))
                     ->create();
             });
 
