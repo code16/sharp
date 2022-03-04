@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
+use Illuminate\Support\Str;
 
 class PostShow extends SharpShow
 {
@@ -71,7 +72,7 @@ class PostShow extends SharpShow
     {
         $this
             ->configureEntityState('state', PostStateHandler::class)
-            ->configureBreadcrumbCustomLabelAttribute('title_fr')
+            ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
             ->configurePageAlert(
                 '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>',
                 static::$pageAlertLevelInfo,
@@ -82,6 +83,9 @@ class PostShow extends SharpShow
     public function find(mixed $id): array
     {
         return $this
+            ->setCustomTransformer('breadcrumb', function ($value, $instance) {
+                return Str::limit($instance->getTranslation('title', 'en'), 30);
+            })
             ->setCustomTransformer('title_fr', function ($value, $instance) {
                 return $instance->getTranslation('title', 'fr');
             })
