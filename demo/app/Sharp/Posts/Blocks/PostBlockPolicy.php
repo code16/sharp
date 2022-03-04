@@ -10,19 +10,13 @@ class PostBlockPolicy extends SharpEntityPolicy
 {
     public function view($user, $instanceId): bool
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        return PostBlock::find($instanceId)?->post?->author_id === $user->id;
+        return $user->isAdmin()
+            || PostBlock::find($instanceId)?->post?->author_id === $user->id;
     }
 
     public function create($user): bool
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        return Post::find(currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId())?->author_id === $user->id;
+        return $user->isAdmin()
+            || Post::find(currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId())?->author_id === $user->id;
     }
 }
