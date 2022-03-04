@@ -31,7 +31,7 @@ class PostBlockFactory extends Factory
     public function video(): self
     {
         return $this->state(fn () => [
-            'type' => 'text',
+            'type' => 'video',
             'content' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/R1h4Vl6oTyA?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
         ]);
     }

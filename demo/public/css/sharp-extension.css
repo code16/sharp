@@ -10,3 +10,19 @@
     background: #ccc;
     color: #444;
 }
+
+.badge-bloc {
+    background: white;
+    border: 1px solid #0dcaf0;
+    color: #0dcaf0;
+}
+
+.badge-bloc-video {
+    border: 1px solid #2ca02c;
+    color: #2ca02c;
+}
+
+.badge-bloc-visuals {
+    border: 1px solid #d39e00;
+    color: #d39e00;
+}
