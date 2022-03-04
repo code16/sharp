@@ -15,48 +15,51 @@ Sharp is a content management framework built for Laravel, a toolset which provi
 - Developers **should not have to work on the front-end development for the CMS**. Because life is complicated enough, Sharp takes care of all the responsive / CSS / JS stuff.
 - The CMS **should not have any expectations from the persistence layer**: MySQL is cool — but it's not the perfect tool for every problem. And more important, the DB structure has nothing to do with the CMS.
 
-### Main features 
+### Build complex lists with total control on how the data is presented
 
-#### Build complex lists with total control on how the data is presented
+![Entity list](./img/readme/list.png)
 
-![Entity list](./img/readme/list.jpg)
+### Organize forms withs various fields, a customizable layout system and data validation
 
-#### Organize forms withs various fields, a customizable layout system and data validation
 You will find a powerful HTML / Markdown editor, autocompletes with templates, lists (repeaters) with custom items, files with bulk upload and image transformation...
 
-![Entity list](./img/readme/form.jpg)
+![Entity list](./img/readme/form.png)
 
-#### Optionally create show pages for your resources, with embedded lists for linked data, and breadcrumb
+### Optionally create show pages for your resources
 
-![Show page](./img/readme/show.jpg)
+You can use show page to present an instance and directly embed in it lists for linked data. The breadcrumb will help your users to find their way up.
 
-#### Add filters, sorting columns and search to your lists
+![Show page](./img/readme/show.png)
 
-![Filters](./img/readme/filters.jpg)
+### Add filters, sortable columns and global search to your lists
 
-#### Add individual or bulk commands, with dedicated forms, user confirmation...
+Filters could be defined required or not, allowing multiple values or not, or presented as a date range. 
+
+![Filters](./img/readme/filters.png)
+
+### Code individual or bulk commands, with dedicated forms, user confirmation...
 
 A Command is an action presented to the user (with permissions handled via policies, like everywhere in Sharp) which can lead to refreshing data after update, previewing a public page, downloading a file...
 
-![Commands](./img/readme/command-form.jpg)
+![Commands](./img/readme/command-form.png)
 
-#### Present synthetic data, graphs and direct links in dashboards
+### Present synthetic data, graphs and direct links in dashboards
 
 TODO
 
-#### Choose your theme color!
+### Choose your theme color!
 
 Choose one color, and the UI will adapt itself.
 
-![Colors](./img/readme/colors.jpg)
+![Colors](./img/readme/colors.png)
 
-#### Driven by code, with DX in mind
+### Driven by code, with DX in mind
 
-Everything in Sharp is manageable through a clean and documented PHP API, using Laravel conventions and coding style.  
+Everything in Sharp is manageable through a clean and documented PHP API, using Laravel conventions and coding style. And again: no frontend development is required.  
 
 
-### Online demo
+### Try the online demo
 
-A Sharp instance for a demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/). 
+A Sharp instance for a demo project is available online here: **[sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/)**. 
 
-Data of this demo is reset each hour. 
+(Data of this demo is reset each hour) 
