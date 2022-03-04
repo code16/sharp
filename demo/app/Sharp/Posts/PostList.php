@@ -62,11 +62,11 @@ class PostList extends SharpEntityList
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
             ->configureSearchable();
-        
-        if(!auth()->user()->isAdmin()) {
+
+        if (! auth()->user()->isAdmin()) {
             $this->configurePageAlert(
                 'As an editor, you can only edit your posts; you can see other posts except those which are still in draft.',
-                static::$pageAlertLevelSecondary
+                static::$pageAlertLevelSecondary,
             );
         }
     }
@@ -97,7 +97,7 @@ class PostList extends SharpEntityList
             ->when(
                 $this->queryParams->filterFor(PeriodFilter::class),
                 function (Builder $builder, array $dates) {
-                    $builder->whereBetween('published_at', [$dates["start"], $dates["end"]]);
+                    $builder->whereBetween('published_at', [$dates['start'], $dates['end']]);
                 },
             )
             ->when(

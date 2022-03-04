@@ -18,11 +18,11 @@ class CategoryList extends SharpEntityList
         $this
             ->configureDefaultSort('name');
     }
-    
+
     protected function getEntityCommands(): ?array
     {
         return [
-            CleanUnusedCategoriesCommand::class
+            CleanUnusedCategoriesCommand::class,
         ];
     }
 

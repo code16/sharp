@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class CategoryFactory extends Factory
 {
     use WithTextFixtures;
-    
+
     public function definition()
     {
         return [

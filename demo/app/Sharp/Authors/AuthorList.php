@@ -20,11 +20,11 @@ class AuthorList extends SharpEntityList
             ->configurePrimaryEntityCommand(InviteUserCommand::class)
             ->configureDefaultSort('name');
     }
-    
+
     protected function getEntityCommands(): ?array
     {
         return [
-            InviteUserCommand::class
+            InviteUserCommand::class,
         ];
     }
 

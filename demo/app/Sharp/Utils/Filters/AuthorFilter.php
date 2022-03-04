@@ -17,7 +17,7 @@ class AuthorFilter extends EntityListSelectFilter
         return User::whereHas('posts')
             ->orderBy('name')
             ->pluck('name', 'id')
-            ->map(fn($name, $id) => auth()->id() === $id ? "$name (me)" : $name)
+            ->map(fn ($name, $id) => auth()->id() === $id ? "$name (me)" : $name)
             ->toArray();
     }
 }

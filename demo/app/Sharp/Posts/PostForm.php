@@ -57,10 +57,10 @@ class PostForm extends SharpForm
                     ->setHeight(250),
             )
             ->addField(
-                SharpFormTagsField::make('categories', Category::pluck("name", "id")->toArray())
+                SharpFormTagsField::make('categories', Category::pluck('name', 'id')->toArray())
                     ->setLabel('Categories')
                     ->setCreatable()
-                    ->setCreateAttribute('name')
+                    ->setCreateAttribute('name'),
             )
             ->addField(
                 SharpFormUploadField::make('cover')

@@ -10,23 +10,23 @@ class CleanUnusedCategoriesCommand extends EntityCommand
 {
     public function label(): ?string
     {
-        return "Clean unused categories...";
+        return 'Clean unused categories...';
     }
-    
+
     public function buildCommandConfig(): void
     {
-        $this->configureConfirmationText("Delete all categories with 0 post attached?")
-            ->configureDescription("This action will remove all orphan categories");
+        $this->configureConfirmationText('Delete all categories with 0 post attached?')
+            ->configureDescription('This action will remove all orphan categories');
     }
 
     public function execute(array $data = []): array
     {
         $deletedCount = Category::whereDoesntHave('posts')->delete();
-        
-        if($deletedCount === 0) {
-            throw new SharpApplicativeException("No unused category found!");
+
+        if ($deletedCount === 0) {
+            throw new SharpApplicativeException('No unused category found!');
         }
-        
+
         return $this->reload();
     }
 }
