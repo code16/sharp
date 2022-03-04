@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const Prism = require('prismjs');
 const loadLanguages = require('prismjs/components/');
