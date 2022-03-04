@@ -21,4 +21,13 @@ class PostStateHandler extends EntityState
 
         return $this->refresh($instanceId);
     }
+    
+    public function authorizeFor(mixed $instanceId): bool
+    {
+        if(auth()->user()->isAdmin()) {
+            return true;
+        }
+
+        return Post::find($instanceId)?->author_id === auth()->id();
+    }
 }
