@@ -42,14 +42,14 @@ class PostShow extends SharpShow
         $showLayout
             ->addSection('', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                    ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
                             ->withSingleField('title_fr')
                             ->withSingleField('title_en')
                             ->withSingleField('categories')
                             ->withSingleField('author');
                     })
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                    ->addColumn(5, function (ShowLayoutColumn $column) {
                         $column->withSingleField('cover');
                     });
             })
@@ -116,7 +116,7 @@ class PostShow extends SharpShow
                     ->map(fn ($category) => LinkToShowPage::make('categories', $category->id)->renderAsText($category->name))
                     ->implode(', ');
             })
-            ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(300))
+            ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->transform(Post::findOrFail($id));
     }
 }
