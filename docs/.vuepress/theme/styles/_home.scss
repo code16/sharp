@@ -1,7 +1,4 @@
 .home-page {
-  .search-box {
-    display: none;
-  }
   .section {
     text-align: center;
     .row {
@@ -18,6 +15,9 @@
   }
   .home {
     max-width: 1024px;
+  }
+  .description {
+    color: var(--c-text-accent)!important;
   }
   .hero {
     .action-button {
@@ -39,7 +39,25 @@
       margin-top: 0;
     }
 
-    p, ul {
+    img {
+      display: block;
+      margin-bottom: 3rem;
+      margin-top: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,.1);
+      box-shadow: 0 .125rem .25rem rgba(0,0,0, .075);
+    }
+
+    h3 {
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p, ul, h1, h2, h3, h4, h5, h6 {
       max-width: 660px;
       margin-left: auto;
       margin-right: auto;
@@ -64,30 +82,12 @@
   .heroicon-component-shadow {
     display: none;
   }
-  .navbar {
-    @media (min-width: 1700px) {
-      background: none;
-      border-bottom: none;
-    }
-    @media (min-width: 720px) {
-      .site-name {
-        transition: opacity .1s ease-in-out;
-        opacity: 0;
-      }
-    }
-  }
   .nav-links {
     > .nav-item:first-child .dropdown-wrapper {
       display: none;
     }
   }
-  &.show-logo {
-    .navbar .site-name {
-      opacity: 1;
-    }
-  }
   .card {
-    //background: #f9fafc;
     padding: 1.5rem 1rem;
     height: 100%;
   }
