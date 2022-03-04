@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->deleteStorageFiles();
-        
+
         $admin = User::factory(['email' => 'admin@example.org', 'role' => 'admin'])
             ->create();
         $editor1 = User::factory(['email' => 'editor@example.org'])
@@ -34,8 +34,8 @@ class DatabaseSeeder extends Seeder
                     'model_key' => 'avatar',
                 ])
                     ->withFile(
-                        database_path(sprintf('seeders/files/users/%s.jpg', $k + 1)), 
-                        sprintf('users/%s', $user->id)
+                        database_path(sprintf('seeders/files/users/%s.jpg', $k + 1)),
+                        sprintf('users/%s', $user->id),
                     )
                     ->create();
             });
@@ -61,10 +61,10 @@ class DatabaseSeeder extends Seeder
                 ])
                     ->withFile(
                         Arr::random($coverImages),
-                        sprintf('posts/%s', $post->id)
+                        sprintf('posts/%s', $post->id),
                     )
                     ->create();
-                
+
                 $post->categories()->attach($categories->shuffle()->take(rand(1, 3))->pluck('id'));
 
                 if (rand(0, 1)) {
@@ -75,7 +75,7 @@ class DatabaseSeeder extends Seeder
                 }
                 if (rand(0, 1)) {
                     $visualsPostBlock = PostBlock::factory()->visuals()->create(['post_id' => $post->id]);
-                    for($k=0; $k<rand(2, 5); $k++) {
+                    for ($k = 0; $k < rand(2, 5); $k++) {
                         Media::factory([
                             'model_id' => $visualsPostBlock->id,
                             'model_type' => PostBlock::class,
@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
                         ])
                             ->withFile(
                                 Arr::random($coverImages),
-                                sprintf('posts/%s/blocks/%s', $post->id, $visualsPostBlock->id)
+                                sprintf('posts/%s/blocks/%s', $post->id, $visualsPostBlock->id),
                             )
                             ->create();
                     }
@@ -93,6 +93,6 @@ class DatabaseSeeder extends Seeder
 
     private function deleteStorageFiles(): void
     {
-        Storage::disk("local")->deleteDirectory("data");
+        Storage::disk('local')->deleteDirectory('data');
     }
 }
