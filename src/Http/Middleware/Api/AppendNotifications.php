@@ -11,6 +11,7 @@ class AppendNotifications
     /**
      * @param Request $request
      * @param Closure $next
+     *
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)
@@ -24,13 +25,13 @@ class AppendNotifications
 
     protected function addNotificationsToResponse(JsonResponse $jsonResponse)
     {
-        if(! $notifications = session("sharp_notifications")) {
+        if (!$notifications = session('sharp_notifications')) {
             return $jsonResponse;
         }
 
-        session()->forget("sharp_notifications");
+        session()->forget('sharp_notifications');
 
-        return tap($jsonResponse, function($jsonResponse) use($notifications) {
+        return tap($jsonResponse, function ($jsonResponse) use ($notifications) {
             $data = $jsonResponse->getData();
             $data->notifications = array_values($notifications);
             $jsonResponse->setData($data);

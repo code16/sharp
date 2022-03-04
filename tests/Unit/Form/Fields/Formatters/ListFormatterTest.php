@@ -10,14 +10,13 @@ use Illuminate\Support\Arr;
 
 class ListFormatterTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("name"))
-            ->addItemField(SharpFormTextField::make("job"));
+        $formatter = new ListFormatter();
+        $field = SharpFormListField::make('list')
+            ->addItemField(SharpFormTextField::make('name'))
+            ->addItemField(SharpFormTextField::make('job'));
 
         $data = $this->getData();
 
@@ -25,27 +24,27 @@ class ListFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function non_configured_values_are_ignored_when_formatting_to_front()
+    public function non_configured_values_are_ignored_when_formatting_to_front()
     {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("name"));
+        $formatter = new ListFormatter();
+        $field = SharpFormListField::make('list')
+            ->addItemField(SharpFormTextField::make('name'));
 
-        $expectedData = collect($this->getData())->map(function($item) {
-            return Arr::except($item, "job");
+        $expectedData = collect($this->getData())->map(function ($item) {
+            return Arr::except($item, 'job');
         })->all();
 
         $this->assertEquals($expectedData, $formatter->toFront($field, $this->getData()));
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
-        $formatter = new ListFormatter;
-        $attribute = "attribute";
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("name"))
-            ->addItemField(SharpFormTextField::make("job"));
+        $formatter = new ListFormatter();
+        $attribute = 'attribute';
+        $field = SharpFormListField::make('list')
+            ->addItemField(SharpFormTextField::make('name'))
+            ->addItemField(SharpFormTextField::make('job'));
 
         $data = $this->getData();
 
@@ -53,82 +52,82 @@ class ListFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function non_configured_values_are_ignored_when_formatting_from_front()
+    public function non_configured_values_are_ignored_when_formatting_from_front()
     {
-        $formatter = new ListFormatter;
-        $attribute = "attribute";
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("name"));
+        $formatter = new ListFormatter();
+        $attribute = 'attribute';
+        $field = SharpFormListField::make('list')
+            ->addItemField(SharpFormTextField::make('name'));
 
-        $expectedData = collect($this->getData())->map(function($item) {
-            return Arr::except($item, "job");
+        $expectedData = collect($this->getData())->map(function ($item) {
+            return Arr::except($item, 'job');
         })->all();
 
         $this->assertEquals($expectedData, $formatter->fromFront($field, $attribute, $this->getData()));
     }
 
     /** @test */
-    function we_can_configure_the_id_attribute()
+    public function we_can_configure_the_id_attribute()
     {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->setItemIdAttribute("number")
-            ->addItemField(SharpFormTextField::make("name"))
-            ->addItemField(SharpFormTextField::make("job"));
+        $formatter = new ListFormatter();
+        $field = SharpFormListField::make('list')
+            ->setItemIdAttribute('number')
+            ->addItemField(SharpFormTextField::make('name'))
+            ->addItemField(SharpFormTextField::make('job'));
 
-        $data = collect($this->getData())->map(function($item) {
+        $data = collect($this->getData())->map(function ($item) {
             return array_merge([
-                "number" => $item["id"],
-            ], Arr::except($item, "id"));
+                'number' => $item['id'],
+            ], Arr::except($item, 'id'));
         })->all();
 
         $this->assertEquals($data, $formatter->toFront($field, $data));
     }
 
     /** @test */
-    function non_valuated_values_are_initialized_to_null_when_formatting_to_front()
+    public function non_valuated_values_are_initialized_to_null_when_formatting_to_front()
     {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("name"))
-            ->addItemField(SharpFormTextField::make("job"));
+        $formatter = new ListFormatter();
+        $field = SharpFormListField::make('list')
+            ->addItemField(SharpFormTextField::make('name'))
+            ->addItemField(SharpFormTextField::make('job'));
 
         $this->assertEquals([
-            ["id" => 1, "name" => "John Wayne", "job" => null]
+            ['id' => 1, 'name' => 'John Wayne', 'job' => null],
         ], $formatter->toFront($field, [
-            ["id" => 1, "name" => "John Wayne"]
+            ['id' => 1, 'name' => 'John Wayne'],
         ]));
     }
 
     /** @test */
-    function we_can_format_sub_value_to_front()
+    public function we_can_format_sub_value_to_front()
     {
-        $formatter = new ListFormatter;
-        $field = SharpFormListField::make("list")
-            ->addItemField(SharpFormTextField::make("mother:name"));
+        $formatter = new ListFormatter();
+        $field = SharpFormListField::make('list')
+            ->addItemField(SharpFormTextField::make('mother:name'));
 
         $data = [
             [
-                "id" => 1,
-                "mother" => [
-                    "name" => "Jane"
+                'id'     => 1,
+                'mother' => [
+                    'name' => 'Jane',
                 ],
             ], [
-                "id" => 2,
-                "mother" => [
-                    "name" => "Alicia"
+                'id'     => 2,
+                'mother' => [
+                    'name' => 'Alicia',
                 ],
-            ]
+            ],
         ];
 
         $this->assertEquals([
             [
-                "id" => 1,
-                "mother:name" => "Jane",
+                'id'          => 1,
+                'mother:name' => 'Jane',
             ], [
-                "id" => 2,
-                "mother:name" => "Alicia"
-            ]
+                'id'          => 2,
+                'mother:name' => 'Alicia',
+            ],
         ], $formatter->toFront($field, $data));
     }
 
@@ -139,14 +138,14 @@ class ListFormatterTest extends SharpTestCase
     {
         return [
             [
-                "id" => 1,
-                "name" => "John Wayne",
-                "job" => "Actor"
+                'id'   => 1,
+                'name' => 'John Wayne',
+                'job'  => 'Actor',
             ], [
-                "id" => 2,
-                "name" => "John Ford",
-                "job" => "Director"
-            ]
+                'id'   => 2,
+                'name' => 'John Ford',
+                'job'  => 'Director',
+            ],
         ];
     }
 }

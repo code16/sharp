@@ -11,10 +11,9 @@ use Code16\Sharp\Show\SharpShow;
 
 abstract class ApiController extends SharpProtectedController
 {
-
     protected function getListInstance(string $entityKey): SharpEntityList
     {
-        if(! $configKey = config("sharp.entities.{$entityKey}.list")) {
+        if (!$configKey = config("sharp.entities.{$entityKey}.list")) {
             throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
         }
 
@@ -23,30 +22,30 @@ abstract class ApiController extends SharpProtectedController
 
     protected function getShowInstance(string $entityKey): SharpShow
     {
-        if($this->isSubEntity($entityKey)) {
+        if ($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $showClass = config("sharp.entities.{$entityKey}.shows.{$subEntityKey}.show");
         } else {
             $showClass = config("sharp.entities.{$entityKey}.show");
         }
 
-        if(! $showClass) {
+        if (!$showClass) {
             throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
         }
 
         return app($showClass);
     }
-    
+
     protected function getFormInstance(string $entityKey): SharpForm
     {
-        if($this->isSubEntity($entityKey)) {
+        if ($this->isSubEntity($entityKey)) {
             list($entityKey, $subEntityKey) = explode(':', $entityKey);
             $formClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.form");
         } else {
             $formClass = config("sharp.entities.{$entityKey}.form");
         }
 
-        if(! $formClass) {
+        if (!$formClass) {
             throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
         }
 

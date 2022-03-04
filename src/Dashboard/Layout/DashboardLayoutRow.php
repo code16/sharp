@@ -9,8 +9,8 @@ class DashboardLayoutRow
     public function addWidget(int $size, string $widgetKey): self
     {
         $this->widgets[] = [
-            "size" => $size,
-            "key" => $widgetKey
+            'size' => $size,
+            'key'  => $widgetKey,
         ];
 
         return $this;

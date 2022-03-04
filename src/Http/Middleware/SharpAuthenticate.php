@@ -24,9 +24,10 @@ class SharpAuthenticate extends BaseAuthenticate
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string[]  ...$guards
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     * @param string[]                 ...$guards
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, ...$guards)
@@ -34,19 +35,18 @@ class SharpAuthenticate extends BaseAuthenticate
         try {
             $this->authenticate($request, $guards);
 
-            if($checkHandler = config('sharp.auth.check_handler')) {
-                if(!app($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
+            if ($checkHandler = config('sharp.auth.check_handler')) {
+                if (!app($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
                     throw new AuthenticationException();
                 }
             }
-
         } catch (AuthenticationException $e) {
-            if($request->wantsJson()) {
-                return response()->json(['message' => "Unauthenticated user"], 401);
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Unauthenticated user'], 401);
             }
 
             return redirect()->guest(
-                config('sharp.auth.login_page_url', route("code16.sharp.login"))
+                config('sharp.auth.login_page_url', route('code16.sharp.login'))
             );
         }
 

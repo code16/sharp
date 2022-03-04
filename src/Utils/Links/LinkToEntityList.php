@@ -20,7 +20,7 @@ class LinkToEntityList extends SharpLinkTo
     public function addFilter(string $name, string $value): self
     {
         $this->filters[$name] = $value;
-        
+
         return $this;
     }
 
@@ -28,7 +28,7 @@ class LinkToEntityList extends SharpLinkTo
     {
         $this->sortAttribute = $attribute;
         $this->sortDir = $dir;
-        
+
         return $this;
     }
 
@@ -42,15 +42,16 @@ class LinkToEntityList extends SharpLinkTo
     public function setFullQuerystring(array $querystring): self
     {
         $this->fullQuerystring = $querystring;
-        
+
         return $this;
     }
-    
+
     public function renderAsUrl(): string
     {
-        return route("code16.sharp.list", 
+        return route(
+            'code16.sharp.list',
             array_merge(
-                ["entityKey" => $this->entityKey],
+                ['entityKey' => $this->entityKey],
                 $this->generateQuerystring()
             )
         );
@@ -58,23 +59,23 @@ class LinkToEntityList extends SharpLinkTo
 
     private function generateQuerystring(): array
     {
-        if($this->fullQuerystring !== null) {
+        if ($this->fullQuerystring !== null) {
             return $this->fullQuerystring;
         }
 
         return collect()
-            ->when($this->searchText, function(Collection $qs) {
+            ->when($this->searchText, function (Collection $qs) {
                 return $qs->put('search', $this->searchText);
             })
-            ->when(count($this->filters), function(Collection $qs) {
+            ->when(count($this->filters), function (Collection $qs) {
                 collect($this->filters)
-                    ->each(function($value, $name) use($qs) {
+                    ->each(function ($value, $name) use ($qs) {
                         $qs->put("filter_$name", $value);
                     });
 
                 return $qs;
             })
-            ->when($this->sortAttribute, function(Collection $qs) {
+            ->when($this->sortAttribute, function (Collection $qs) {
                 $qs->put('sort', $this->sortAttribute);
                 $qs->put('dir', $this->sortDir);
 

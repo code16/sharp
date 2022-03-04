@@ -25,8 +25,8 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/instance_info/1')
             ->assertStatus(200)
             ->assertJson([
-                "action" => "info",
-                "message" => "ok",
+                'action'  => 'info',
+                'message' => 'ok',
             ]);
     }
 
@@ -39,8 +39,8 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/instance_link/1')
             ->assertStatus(200)
             ->assertJson([
-                "action" => "link",
-                "link"   => "/link/out"
+                'action' => 'link',
+                'link'   => '/link/out',
             ]);
     }
 
@@ -53,18 +53,18 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
         $json = $this->json('post', '/sharp/api/list/person/command/instance_refresh/1')
             ->assertStatus(200)
             ->assertJson([
-                "action" => "refresh",
-                "items" => [
+                'action' => 'refresh',
+                'items'  => [
                     [
-                        "id" => 1,
-                        "name" => "John <b>Wayne</b>",
-                        "age" => 22
-                    ]
-                ]
+                        'id'   => 1,
+                        'name' => 'John <b>Wayne</b>',
+                        'age'  => 22,
+                    ],
+                ],
             ])
             ->decodeResponseJson();
 
-        $this->assertCount(1, $json["items"]);
+        $this->assertCount(1, $json['items']);
     }
 
     /** @test */
@@ -90,15 +90,15 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
             ->json();
 
         $this->assertTrue(
-            collect($response['config']['commands']['instance'][0])->where("key", "instance_with_init_data")->first()['fetch_initial_data']
+            collect($response['config']['commands']['instance'][0])->where('key', 'instance_with_init_data')->first()['fetch_initial_data']
         );
 
         $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
             ->assertStatus(200)
             ->assertExactJson([
-                "data" => [
-                    "name" => "John Wayne [25]"
-                ]
+                'data' => [
+                    'name' => 'John Wayne [25]',
+                ],
             ]);
     }
 
@@ -113,49 +113,82 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
     }
 }
 
-class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityList {
-
-    function buildListConfig(): void
+class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityList
+{
+    public function buildListConfig(): void
     {
         $this
-            ->addInstanceCommand("instance_info", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function execute($instanceId, array $params = []): array {
-                    return $this->info("ok");
+            ->addInstanceCommand('instance_info', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function execute($instanceId, array $params = []): array
+                {
+                    return $this->info('ok');
                 }
             })
-            ->addInstanceCommand("instance_refresh", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function execute($instanceId, array $params = []): array {
+            ->addInstanceCommand('instance_refresh', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function execute($instanceId, array $params = []): array
+                {
                     return $this->refresh(1);
                 }
             })
-            ->addInstanceCommand("instance_link", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function execute($instanceId, array $params = []): array {
+            ->addInstanceCommand('instance_link', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function execute($instanceId, array $params = []): array
+                {
                     return $this->link('/link/out');
                 }
             })
-            ->addInstanceCommand("instance_unauthorized_odd_id", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function authorizeFor($instanceId): bool { return $instanceId%2==0; }
-                public function execute($instanceId, array $params = []): array {
+            ->addInstanceCommand('instance_unauthorized_odd_id', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function authorizeFor($instanceId): bool
+                {
+                    return $instanceId % 2 == 0;
+                }
+
+                public function execute($instanceId, array $params = []): array
+                {
                     return $this->reload();
                 }
             })
-            ->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+            ->addInstanceCommand('instance_with_init_data', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
                 }
+
+                public function buildFormFields(): void
+                {
+                    $this->addField(SharpFormTextField::make('name'));
+                }
+
                 protected function initialData($instanceId): array
                 {
                     return [
-                        "name" => "John Wayne [$instanceId]",
-                        "age" => 32
+                        'name' => "John Wayne [$instanceId]",
+                        'age'  => 32,
                     ];
                 }
-                public function execute($instanceId, array $data = []): array {}
+
+                public function execute($instanceId, array $data = []): array
+                {
+                }
             });
     }
 }

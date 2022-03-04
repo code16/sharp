@@ -9,27 +9,27 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormMarkdownField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, 
-        SharpFormFieldWithUpload, 
-        SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithUpload;
+    use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "markdown";
+    const FIELD_TYPE = 'markdown';
 
-    const B = "bold";
-    const I = "italic";
-    const UL = "unordered-list";
-    const OL = "ordered-list";
-    const SEPARATOR = "|";
-    const A = "link";
-    const H1 = "heading-1";
-    const H2 = "heading-2";
-    const H3 = "heading-3";
-    const CODE = "code";
-    const QUOTE = "quote";
+    const B = 'bold';
+    const I = 'italic';
+    const UL = 'unordered-list';
+    const OL = 'ordered-list';
+    const SEPARATOR = '|';
+    const A = 'link';
+    const H1 = 'heading-1';
+    const H2 = 'heading-2';
+    const H3 = 'heading-3';
+    const CODE = 'code';
+    const QUOTE = 'quote';
     /** @deprecated use DOC */
-    const IMG = "image";
-    const DOC = "document";
-    const HR = "horizontal-rule";
+    const IMG = 'image';
+    const DOC = 'document';
+    const HR = 'horizontal-rule';
 
     protected ?int $height = null;
     protected array $toolbar = [
@@ -77,46 +77,46 @@ class SharpFormMarkdownField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "height" => "integer",
-            "toolbar" => "array|nullable",
-            "maxImageSize" => "numeric",
-            "ratioX" => "integer|nullable",
-            "ratioY" => "integer|nullable",
-            "boolean" => "croppable",
-            "croppableFileTypes" => "array|nullable",
+            'height'             => 'integer',
+            'toolbar'            => 'array|nullable',
+            'maxImageSize'       => 'numeric',
+            'ratioX'             => 'integer|nullable',
+            'ratioY'             => 'integer|nullable',
+            'boolean'            => 'croppable',
+            'croppableFileTypes' => 'array|nullable',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "height" => $this->height,
-            "toolbar" => $this->showToolbar ? $this->toolbar : null,
-            "placeholder" => $this->placeholder,
-            "localized" => $this->localized,
-            "innerComponents" => [
-                "upload" => $this->innerComponentUploadConfiguration()
-            ]
+            'height'          => $this->height,
+            'toolbar'         => $this->showToolbar ? $this->toolbar : null,
+            'placeholder'     => $this->placeholder,
+            'localized'       => $this->localized,
+            'innerComponents' => [
+                'upload' => $this->innerComponentUploadConfiguration(),
+            ],
         ]);
     }
 
     protected function innerComponentUploadConfiguration(): array
     {
         $array = [
-            "maxFileSize" => $this->maxFileSize ?: 2,
-            "croppable" => $this->croppable
+            'maxFileSize' => $this->maxFileSize ?: 2,
+            'croppable'   => $this->croppable,
         ];
 
-        if($this->cropRatio) {
-            $array["ratioX"] = (int)$this->cropRatio[0];
-            $array["ratioY"] = (int)$this->cropRatio[1];
-            $array["croppableFileTypes"] = $this->croppableFileTypes;
+        if ($this->cropRatio) {
+            $array['ratioX'] = (int) $this->cropRatio[0];
+            $array['ratioY'] = (int) $this->cropRatio[1];
+            $array['croppableFileTypes'] = $this->croppableFileTypes;
         }
-        
-        if(!$this->fileFilter) {
+
+        if (!$this->fileFilter) {
             $this->setFileFilterImages();
         }
-        $array["fileFilter"] = $this->fileFilter;
+        $array['fileFilter'] = $this->fileFilter;
 
         return $array;
     }

@@ -8,18 +8,18 @@ use Code16\Sharp\Exceptions\SharpException;
 
 abstract class SharpSingleShow extends SharpShow
 {
-
     /**
      * Return the show config values (commands and state).
      *
      * @param $instanceId
      * @param array $config
+     *
      * @return array
      */
-    function showConfig($instanceId, $config = []): array
+    public function showConfig($instanceId, $config = []): array
     {
         return parent::showConfig(null, [
-            "isSingle" => true
+            'isSingle' => true,
         ]);
     }
 
@@ -27,9 +27,10 @@ abstract class SharpSingleShow extends SharpShow
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param $id
+     *
      * @return array
      */
-    function find($id): array
+    public function find($id): array
     {
         return $this->findSingle();
     }
@@ -40,7 +41,7 @@ abstract class SharpSingleShow extends SharpShow
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
 
-        if(!$commandHandler instanceof SingleInstanceCommand) {
+        if (!$commandHandler instanceof SingleInstanceCommand) {
             throw new SharpException(
                 sprintf(
                     "Handler class for instance command [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
@@ -59,7 +60,7 @@ abstract class SharpSingleShow extends SharpShow
             ? app($stateHandlerOrClassName)
             : $stateHandlerOrClassName;
 
-        if(!$entityStateHandler instanceof SingleEntityState) {
+        if (!$entityStateHandler instanceof SingleEntityState) {
             throw new SharpException(
                 sprintf(
                     "Handler class for entity state handler [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
@@ -75,5 +76,5 @@ abstract class SharpSingleShow extends SharpShow
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      */
-    abstract function findSingle(): array;
+    abstract public function findSingle(): array;
 }

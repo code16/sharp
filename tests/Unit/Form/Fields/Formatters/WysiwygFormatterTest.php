@@ -9,24 +9,23 @@ use Illuminate\Support\Str;
 
 class WysiwygFormatterTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
         $value = Str::random();
 
-        $this->assertEquals(["text" => $value], (new WysiwygFormatter())
-            ->toFront(SharpFormWysiwygField::make("a"), $value));
+        $this->assertEquals(['text' => $value], (new WysiwygFormatter())
+            ->toFront(SharpFormWysiwygField::make('a'), $value));
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
         $value = Str::random();
 
         $this->assertEquals(
             $value,
-            (new WysiwygFormatter())->fromFront(SharpFormWysiwygField::make("a"), "attribute", ["text" => $value])
+            (new WysiwygFormatter())->fromFront(SharpFormWysiwygField::make('a'), 'attribute', ['text' => $value])
         );
     }
 }

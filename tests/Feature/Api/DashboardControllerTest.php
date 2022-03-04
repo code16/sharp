@@ -19,12 +19,12 @@ class DashboardControllerTest extends BaseApiTest
 
         $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
             ->assertStatus(200)
-            ->assertJson(["widgets" => [
-                "bars" => [
-                    "type" => "graph"
-                ], "panel" => [
-                    "type" => "panel"
-                ]
+            ->assertJson(['widgets' => [
+                'bars' => [
+                    'type' => 'graph',
+                ], 'panel' => [
+                    'type' => 'panel',
+                ],
             ]]);
     }
 
@@ -35,15 +35,15 @@ class DashboardControllerTest extends BaseApiTest
 
         $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
             ->assertStatus(200)
-            ->assertJson(["layout" => [
-                "rows" => [
+            ->assertJson(['layout' => [
+                'rows' => [
                     [
-                        ["key" => "bars", "size" => 12]
+                        ['key' => 'bars', 'size' => 12],
                     ], [
-                        ["key" => "panel", "size" => 4],
-                        ["key" => "bars2", "size" => 8]
-                    ]
-                ]
+                        ['key' => 'panel', 'size' => 4],
+                        ['key' => 'bars2', 'size' => 8],
+                    ],
+                ],
             ]]);
     }
 
@@ -54,33 +54,33 @@ class DashboardControllerTest extends BaseApiTest
 
         $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "bars1" => [
-                    "key" => "bars1",
-                    "datasets" => [
+            ->assertJson(['data' => [
+                'bars1' => [
+                    'key'      => 'bars1',
+                    'datasets' => [
                         [
-                            "data" => [10, 20, 30],
-                            "label" => "Bars 1"
-                        ]
+                            'data'  => [10, 20, 30],
+                            'label' => 'Bars 1',
+                        ],
                     ],
-                    "labels" => ["a", "b", "c"]
+                    'labels' => ['a', 'b', 'c'],
                 ],
-                "bars2" => [
-                    "key" => "bars2",
-                    "datasets" => [
+                'bars2' => [
+                    'key'      => 'bars2',
+                    'datasets' => [
                         [
-                            "data" => [10, 20, 30],
-                            "label" => "Bars 2"
-                        ]
+                            'data'  => [10, 20, 30],
+                            'label' => 'Bars 2',
+                        ],
                     ],
-                    "labels" => ["a", "b", "c"],
+                    'labels' => ['a', 'b', 'c'],
                 ],
-                "panel" => [
-                    "key" => "panel",
-                    "data" => [
-                        "name" => "John Wayne"
-                    ]
-                ]
+                'panel' => [
+                    'key'  => 'panel',
+                    'data' => [
+                        'name' => 'John Wayne',
+                    ],
+                ],
             ]]);
     }
 }

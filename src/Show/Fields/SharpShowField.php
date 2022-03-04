@@ -20,19 +20,19 @@ abstract class SharpShowField
     public function setShowIfEmpty(bool $showIfEmpty = true): self
     {
         $this->emptyVisible = $showIfEmpty;
-        
+
         return $this;
     }
 
     protected function buildArray(array $childArray): array
     {
         $array = collect([
-                "key" => $this->key,
-                "type" => $this->type,
-                "emptyVisible" => $this->emptyVisible
-            ])
+            'key'          => $this->key,
+            'type'         => $this->type,
+            'emptyVisible' => $this->emptyVisible,
+        ])
             ->merge($childArray)
-            ->filter(function($value) {
+            ->filter(function ($value) {
                 return !is_null($value);
             })
             ->all();
@@ -46,17 +46,19 @@ abstract class SharpShowField
      * Throw an exception in case of invalid attribute value.
      *
      * @param array $properties
+     *
      * @throws SharpShowFieldValidationException
      */
     protected function validate(array $properties): void
     {
-        $validator = Validator::make($properties, 
+        $validator = Validator::make(
+            $properties,
             array_merge(
                 [
-                    'key' => 'required',
-                    'type' => 'required',
-                    'emptyVisible' => 'required|bool'
-                ], 
+                    'key'          => 'required',
+                    'type'         => 'required',
+                    'emptyVisible' => 'required|bool',
+                ],
                 $this->validationRules()
             )
         );
@@ -75,7 +77,7 @@ abstract class SharpShowField
     }
 
     /**
-     * Create the properties array for the field, using parent::buildArray()
+     * Create the properties array for the field, using parent::buildArray().
      */
-    public abstract function toArray(): array;
+    abstract public function toArray(): array;
 }

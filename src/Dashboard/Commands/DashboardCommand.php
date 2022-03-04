@@ -7,10 +7,9 @@ use Code16\Sharp\EntityList\Commands\Command;
 
 abstract class DashboardCommand extends Command
 {
-
     public function type(): string
     {
-        return "dashboard";
+        return 'dashboard';
     }
 
     public function formData(): array
@@ -27,6 +26,7 @@ abstract class DashboardCommand extends Command
 
     /**
      * @param mixed $ids
+     *
      * @return array
      */
     protected function refresh($ids): array
@@ -37,8 +37,9 @@ abstract class DashboardCommand extends Command
 
     /**
      * @param DashboardQueryParams $params
-     * @param array $data
+     * @param array                $data
+     *
      * @return array
      */
-    public abstract function execute(DashboardQueryParams $params, array $data = []): array;
+    abstract public function execute(DashboardQueryParams $params, array $data = []): array;
 }

@@ -14,122 +14,117 @@ use Illuminate\Support\Facades\DB;
 class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
 {
     /** @test */
-    function we_can_retrieve_an_array_version_of_a_models_collection()
+    public function we_can_retrieve_an_array_version_of_a_models_collection()
     {
-        Person::create(["name" => "John Wayne"]);
-        Person::create(["name" => "Mary Wayne"]);
+        Person::create(['name' => 'John Wayne']);
+        Person::create(['name' => 'Mary Wayne']);
 
         $list = new WithCustomTransformersTestList();
 
         $this->assertArraySubset(
-            [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
+            [['name' => 'John Wayne'], ['name' => 'Mary Wayne']],
             $list->getListData(new EntityListQueryParams())
         );
     }
-    
+
     /** @test */
-    function we_can_retrieve_an_array_version_of_a_db_raw_collection()
+    public function we_can_retrieve_an_array_version_of_a_db_raw_collection()
     {
-        Person::create(["name" => "John Wayne"]);
-        Person::create(["name" => "Mary Wayne"]);
-        
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function getListData(EntityListQueryParams $params)
+        Person::create(['name' => 'John Wayne']);
+        Person::create(['name' => 'Mary Wayne']);
+
+        $list = new class() extends WithCustomTransformersTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 return $this->transform(DB::table((new Person())->getTable())->get());
             }
         };
-    
+
         $this->assertArraySubset(
-            [["name" => "John Wayne"], ["name" => "Mary Wayne"]],
+            [['name' => 'John Wayne'], ['name' => 'Mary Wayne']],
             $list->getListData(new EntityListQueryParams())
         );
     }
-    
+
     /** @test */
-    function we_can_retrieve_an_array_version_of_a_db_raw_paginator()
+    public function we_can_retrieve_an_array_version_of_a_db_raw_paginator()
     {
-        Person::create(["name" => "A"]);
-        Person::create(["name" => "B"]);
-        Person::create(["name" => "C"]);
-        Person::create(["name" => "D"]);
-        Person::create(["name" => "E"]);
-        
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function getListData(EntityListQueryParams $params)
+        Person::create(['name' => 'A']);
+        Person::create(['name' => 'B']);
+        Person::create(['name' => 'C']);
+        Person::create(['name' => 'D']);
+        Person::create(['name' => 'E']);
+
+        $list = new class() extends WithCustomTransformersTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 return $this->transform(DB::table((new Person())->getTable())->paginate(2));
             }
         };
-        
+
         $this->assertArraySubset(
-            [["name" => "A"], ["name" => "B"]],
+            [['name' => 'A'], ['name' => 'B']],
             $list->getListData(new EntityListQueryParams())->items()
         );
     }
 
     /** @test */
-    function we_can_retrieve_an_array_version_of_a_models_paginator()
+    public function we_can_retrieve_an_array_version_of_a_models_paginator()
     {
-        Person::create(["name" => "A"]);
-        Person::create(["name" => "B"]);
-        Person::create(["name" => "C"]);
-        Person::create(["name" => "D"]);
-        Person::create(["name" => "E"]);
+        Person::create(['name' => 'A']);
+        Person::create(['name' => 'B']);
+        Person::create(['name' => 'C']);
+        Person::create(['name' => 'D']);
+        Person::create(['name' => 'E']);
 
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function getListData(EntityListQueryParams $params)
+        $list = new class() extends WithCustomTransformersTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 return $this->transform(Person::paginate(2));
             }
         };
 
         $this->assertArraySubset(
-            [["name" => "A"], ["name" => "B"]],
+            [['name' => 'A'], ['name' => 'B']],
             $list->getListData(new EntityListQueryParams())->items()
         );
     }
 
     /** @test */
-    function we_handle_the_relation_separator()
+    public function we_handle_the_relation_separator()
     {
-        $mother = Person::create(["name" => "Jane Wayne"]);
-        Person::create(["name" => "Mary Wayne", "mother_id" => $mother->id]);
-        Person::create(["name" => "John Wayne"]);
+        $mother = Person::create(['name' => 'Jane Wayne']);
+        Person::create(['name' => 'Mary Wayne', 'mother_id' => $mother->id]);
+        Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function buildListDataContainers(): void
+        $list = new class() extends WithCustomTransformersTestList {
+            public function buildListDataContainers(): void
             {
-                $this->addDataContainer(EntityListDataContainer::make("mother:name"));
+                $this->addDataContainer(EntityListDataContainer::make('mother:name'));
             }
         };
 
         $this->assertArraySubset(
-            ["name" => "Mary Wayne", "mother:name" => "Jane Wayne"],
+            ['name' => 'Mary Wayne', 'mother:name' => 'Jane Wayne'],
             $list->getListData(new EntityListQueryParams())[1]
         );
 
         $this->assertArraySubset(
-            ["name" => "John Wayne", "mother:name" => null],
+            ['name' => 'John Wayne', 'mother:name' => null],
             $list->getListData(new EntityListQueryParams())[2]
         );
     }
 
     /** @test */
-    function we_can_define_a_custom_transformer_as_a_closure()
+    public function we_can_define_a_custom_transformer_as_a_closure()
     {
-        Person::create(["name" => "John Wayne"]);
+        Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function getListData(EntityListQueryParams $params)
+        $list = new class() extends WithCustomTransformersTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 return $this
-                    ->setCustomTransformer("name", function($name) {
+                    ->setCustomTransformer('name', function ($name) {
                         return strtoupper($name);
                     })
                     ->transform(Person::all());
@@ -137,49 +132,47 @@ class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
         };
 
         $this->assertArraySubset(
-            ["name" => "JOHN WAYNE"],
+            ['name' => 'JOHN WAYNE'],
             $list->getListData(new EntityListQueryParams())[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_custom_transformer_as_a_class_name()
+    public function we_can_define_a_custom_transformer_as_a_class_name()
     {
-        Person::create(["name" => "John Wayne"]);
+        Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function getListData(EntityListQueryParams $params)
+        $list = new class() extends WithCustomTransformersTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 return $this
-                    ->setCustomTransformer("name", UppercaseTransformer::class)
+                    ->setCustomTransformer('name', UppercaseTransformer::class)
                     ->transform(Person::all());
             }
         };
 
         $this->assertArraySubset(
-            ["name" => "JOHN WAYNE"],
+            ['name' => 'JOHN WAYNE'],
             $list->getListData(new EntityListQueryParams())[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_custom_transformer_as_a_class_instance()
+    public function we_can_define_a_custom_transformer_as_a_class_instance()
     {
-        Person::create(["name" => "John Wayne"]);
+        Person::create(['name' => 'John Wayne']);
 
-        $list = new class extends WithCustomTransformersTestList
-        {
-            function getListData(EntityListQueryParams $params)
+        $list = new class() extends WithCustomTransformersTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 return $this
-                    ->setCustomTransformer("name", new UppercaseTransformer())
+                    ->setCustomTransformer('name', new UppercaseTransformer())
                     ->transform(Person::all());
             }
         };
 
         $this->assertArraySubset(
-            ["name" => "JOHN WAYNE"],
+            ['name' => 'JOHN WAYNE'],
             $list->getListData(new EntityListQueryParams())[0]
         );
     }
@@ -189,28 +182,36 @@ class WithCustomTransformersTestList extends SharpEntityList
 {
     use WithCustomTransformers;
 
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
         return $this->transform(Person::all());
     }
 
-    function buildListDataContainers(): void {}
-    function buildListLayout(): void {}
-    function buildListConfig(): void {}
+    public function buildListDataContainers(): void
+    {
+    }
+
+    public function buildListLayout(): void
+    {
+    }
+
+    public function buildListConfig(): void
+    {
+    }
 }
 
 class UppercaseTransformer implements SharpAttributeTransformer
 {
-
     /**
      * Transform a model attribute to array (json-able).
      *
      * @param $value
      * @param $instance
      * @param string $attribute
+     *
      * @return mixed
      */
-    function apply($value, $instance = null, $attribute = null)
+    public function apply($value, $instance = null, $attribute = null)
     {
         return strtoupper($value);
     }

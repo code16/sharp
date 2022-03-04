@@ -14,70 +14,69 @@ class SpaceshipSendMessage extends InstanceCommand
 {
     public function label(): string
     {
-        return "Send a text message...";
+        return 'Send a text message...';
     }
 
     public function formModalTitle(): string
     {
-        return "Send a text message";
+        return 'Send a text message';
     }
 
     public function description(): string
     {
-        return "Will pretend to send a message and increment message count.";
+        return 'Will pretend to send a message and increment message count.';
     }
 
     public function execute($instanceId, array $data = []): array
     {
         $this->validate($data, [
-            "message" => "required"
+            'message' => 'required',
         ]);
 
-        if($data["message"] == "error") {
+        if ($data['message'] == 'error') {
             throw new SharpApplicativeException("Message can't be «error»");
         }
 
-        Spaceship::where("id", $instanceId)
+        Spaceship::where('id', $instanceId)
             ->increment('messages_sent_count');
 
         return $this->refresh($instanceId);
     }
 
-    function buildFormFields(): void
+    public function buildFormFields(): void
     {
         $this->addField(
-            SharpFormTextareaField::make("message")
-                ->setLabel("Message")
-
+            SharpFormTextareaField::make('message')
+                ->setLabel('Message')
         )->addField(
-            SharpFormCheckField::make("now", "Send right now?")
-                ->setHelpMessage("Otherwise it will be sent next night.")
-
+            SharpFormCheckField::make('now', 'Send right now?')
+                ->setHelpMessage('Otherwise it will be sent next night.')
         )->addField(
-            SharpFormAutocompleteField::make("level", "local")
+            SharpFormAutocompleteField::make('level', 'local')
                 ->setListItemInlineTemplate('{{label}}')
                 ->setResultItemInlineTemplate('{{label}}')
                 ->setLocalValues([
-                    "l" => "Low",
-                    "m" => "Medium",
-                    "h" => "High",
+                    'l' => 'Low',
+                    'm' => 'Medium',
+                    'h' => 'High',
                 ])
-                ->setLabel("Level")
+                ->setLabel('Level')
         );
     }
 
     /**
      * @param $instanceId
+     *
      * @return array
      */
     protected function initialData($instanceId): array
     {
         return $this
-            ->setCustomTransformer("message", function($value, Spaceship $instance) {
-                return sprintf("%s, message #%s", $instance->name, $instance->messages_sent_count);
+            ->setCustomTransformer('message', function ($value, Spaceship $instance) {
+                return sprintf('%s, message #%s', $instance->name, $instance->messages_sent_count);
             })
-            ->setCustomTransformer("level", function($value, Spaceship $instance) {
-                return Arr::random(["l","m","h",null]);
+            ->setCustomTransformer('level', function ($value, Spaceship $instance) {
+                return Arr::random(['l', 'm', 'h', null]);
             })
             ->transform(
                 Spaceship::findOrFail($instanceId)
@@ -86,6 +85,6 @@ class SpaceshipSendMessage extends InstanceCommand
 
     public function authorizeFor($instanceId): bool
     {
-        return $instanceId%2 == 0 && $instanceId > 10;
+        return $instanceId % 2 == 0 && $instanceId > 10;
     }
 }

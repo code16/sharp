@@ -12,17 +12,19 @@ class EntityListInstanceStateController extends ApiController
     /**
      * @param string $entityKey
      * @param string $instanceId
-     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update($entityKey, $instanceId)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
 
-        if(!$list->entityStateHandler()->authorize()
+        if (!$list->entityStateHandler()->authorize()
             || !$list->entityStateHandler()->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
@@ -30,8 +32,8 @@ class EntityListInstanceStateController extends ApiController
         return $this->returnCommandResult(
             $list,
             array_merge(
-                $list->entityStateHandler()->execute($instanceId, request()->only("value")),
-                ["value" => request("value")]
+                $list->entityStateHandler()->execute($instanceId, request()->only('value')),
+                ['value' => request('value')]
             )
         );
     }

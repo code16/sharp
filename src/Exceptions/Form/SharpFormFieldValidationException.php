@@ -7,8 +7,8 @@ use Illuminate\Support\MessageBag;
 
 class SharpFormFieldValidationException extends SharpException
 {
-    function __construct(MessageBag $validationErrors)
+    public function __construct(MessageBag $validationErrors)
     {
-        parent::__construct("Invalid form field attributes : " . $validationErrors->toJson());
+        parent::__construct('Invalid form field attributes : '.$validationErrors->toJson());
     }
 }

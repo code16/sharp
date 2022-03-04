@@ -54,7 +54,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/front', 'sharp-front');
 
         $this->publishes([
-            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp')
+            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp'),
         ], 'assets');
 
         $this->publishes([
@@ -72,7 +72,7 @@ class SharpServiceProvider extends ServiceProvider
         Blade::component('sharp-title', Title::class);
 
         view()->composer(
-            ['sharp::form','sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
+            ['sharp::form', 'sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
             AssetViewComposer::class
         );
     }
@@ -117,25 +117,25 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerPolicies(): void
     {
-        foreach((array)config("sharp.entities") as $entityKey => $config) {
-            if(isset($config["policy"])) {
-                foreach(['entity', 'view', 'update', 'create', 'delete'] as $action) {
-                    $this->definePolicy($entityKey, $config["policy"], $action);
+        foreach ((array) config('sharp.entities') as $entityKey => $config) {
+            if (isset($config['policy'])) {
+                foreach (['entity', 'view', 'update', 'create', 'delete'] as $action) {
+                    $this->definePolicy($entityKey, $config['policy'], $action);
                 }
             }
         }
 
-        foreach((array)config("sharp.dashboards") as $dashboardKey => $config) {
-            if(isset($config["policy"])) {
-                $this->definePolicy($dashboardKey, $config["policy"], 'view');
+        foreach ((array) config('sharp.dashboards') as $dashboardKey => $config) {
+            if (isset($config['policy'])) {
+                $this->definePolicy($dashboardKey, $config['policy'], 'view');
             }
         }
     }
 
     protected function definePolicy(string $entityKey, string $policy, string $action): void
     {
-        if(method_exists(app($policy), $action)) {
-            Gate::define("sharp.{$entityKey}.{$action}", $policy . "@{$action}");
+        if (method_exists(app($policy), $action)) {
+            Gate::define("sharp.{$entityKey}.{$action}", $policy."@{$action}");
         } else {
             // No policy = true by default
             Gate::define("sharp.{$entityKey}.{$action}", function () {
@@ -146,7 +146,7 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerMiddleware(): void
     {
-        $this->app['router']->middlewareGroup("sharp_web", [
+        $this->app['router']->middlewareGroup('sharp_web', [
             \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
             \Illuminate\Foundation\Http\Middleware\TrimStrings::class,

@@ -8,31 +8,32 @@ use Illuminate\Validation\Validator;
 abstract class SharpFormRequest extends FormRequest
 {
     /**
-     * Handle RTF (markdown and wysiwyg) fields
+     * Handle RTF (markdown and wysiwyg) fields.
      *
-     * @param  Validator $validator
+     * @param Validator $validator
+     *
      * @return void
      */
     public function withValidator(Validator $validator): void
     {
         // Find RTF (markdown, wysiwyg) based on their posted structure ($field["text"])
-        $richTextFields = collect($this->all())->filter(function($value, $key) {
-            return is_array($value) && array_key_exists("text", $value);
+        $richTextFields = collect($this->all())->filter(function ($value, $key) {
+            return is_array($value) && array_key_exists('text', $value);
         })->keys()->all();
 
         // Initialize rules by getting all those which DO NOT refer to a RTF
         $newRules = collect($validator->getRules())
-            ->filter(function($messages, $key) use($richTextFields) {
+            ->filter(function ($messages, $key) use ($richTextFields) {
                 return !in_array($key, $richTextFields);
             })
             ->all();
 
         // And then replace RTF rules with .text suffix
         collect($validator->getRules())
-            ->filter(function($messages, $key) use($richTextFields) {
+            ->filter(function ($messages, $key) use ($richTextFields) {
                 return in_array($key, $richTextFields);
             })
-            ->each(function($messages, $key) use(&$newRules) {
+            ->each(function ($messages, $key) use (&$newRules) {
                 $newRules["$key.text"] = $messages;
             });
 

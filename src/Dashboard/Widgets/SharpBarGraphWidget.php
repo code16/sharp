@@ -32,11 +32,12 @@ class SharpBarGraphWidget extends SharpGraphWidget
     public function toArray(): array
     {
         return array_merge(
-            parent::toArray(), [
-                "dateLabels" => $this->displayHorizontalAxisAsTimeline,
-                "options" => [
-                    "horizontal" => $this->horizontal
-                ]
+            parent::toArray(),
+            [
+                'dateLabels' => $this->displayHorizontalAxisAsTimeline,
+                'options'    => [
+                    'horizontal' => $this->horizontal,
+                ],
             ]
         );
     }

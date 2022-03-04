@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\Traits\Utils\CommonCommandUtils;
 trait HandleDashboardCommands
 {
     use CommonCommandUtils;
-    
+
     protected array $dashboardCommandHandlers = [];
     protected int $dashboardCommandCurrentGroupNumber = 0;
 

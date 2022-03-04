@@ -12,6 +12,7 @@ abstract class SharpTestCase extends TestCase
 
     /**
      * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)

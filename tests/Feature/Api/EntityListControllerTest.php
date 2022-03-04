@@ -20,11 +20,11 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
-                ]
+            ->assertJson(['data' => [
+                'items' => [
+                    ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                    ['id' => 2, 'name' => 'Mary <b>Wayne</b>', 'age' => 26],
+                ],
             ]]);
     }
 
@@ -35,11 +35,11 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person?paginated=1')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                    ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26],
-                ], "page" => 1, "totalCount" => 20, "pageSize" => 2
+            ->assertJsonFragment(['data' => [
+                'items' => [
+                    ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                    ['id' => 2, 'name' => 'Mary <b>Wayne</b>', 'age' => 26],
+                ], 'page' => 1, 'totalCount' => 20, 'pageSize' => 2,
             ]]);
     }
 
@@ -51,10 +51,10 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person?search=john')
             ->assertStatus(200)
-            ->assertJsonFragment(["data" => [
-                "items" => [
-                    ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22],
-                ]
+            ->assertJsonFragment(['data' => [
+                'items' => [
+                    ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22],
+                ],
             ]]);
     }
 
@@ -65,7 +65,7 @@ class EntityListControllerTest extends BaseApiTest
 
         $result = $this->json('get', '/sharp/api/list/person');
 
-        $this->assertArrayNotHasKey("job", $result->json()["data"]["items"][0]);
+        $this->assertArrayNotHasKey('job', $result->json()['data']['items'][0]);
     }
 
     /** @test */
@@ -75,17 +75,17 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["containers" => [
-                "name" => [
-                    "key" => "name",
-                    "label" => "Name",
-                    "sortable" => true,
-                    "html" => true
-                ], "age" => [
-                    "key" => "age",
-                    "label" => "Age",
-                    "sortable" => true,
-                ]
+            ->assertJson(['containers' => [
+                'name' => [
+                    'key'      => 'name',
+                    'label'    => 'Name',
+                    'sortable' => true,
+                    'html'     => true,
+                ], 'age' => [
+                    'key'      => 'age',
+                    'label'    => 'Age',
+                    'sortable' => true,
+                ],
             ]]);
     }
 
@@ -96,16 +96,16 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["layout" => [
+            ->assertJson(['layout' => [
                 [
-                    "key" => "name",
-                    "size" => 6,
-                    "sizeXS" => 12
+                    'key'    => 'name',
+                    'size'   => 6,
+                    'sizeXS' => 12,
                 ], [
-                    "key" => "age",
-                    "size" => 6,
-                    "hideOnXS" => true
-                ]
+                    'key'      => 'age',
+                    'size'     => 6,
+                    'hideOnXS' => true,
+                ],
             ]]);
     }
 
@@ -116,10 +116,10 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["config" => [
-                "instanceIdAttribute" => "id",
-                "searchable" => true,
-                "paginated" => false
+            ->assertJson(['config' => [
+                'instanceIdAttribute' => 'id',
+                'searchable'          => true,
+                'paginated'           => false,
             ]]);
     }
 
@@ -128,33 +128,33 @@ class EntityListControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        (new PersonSharpForm())->notify("title")
+        (new PersonSharpForm())->notify('title')
             ->setLevelSuccess()
-            ->setDetail("body")
+            ->setDetail('body')
             ->setAutoHide(false);
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["notifications" => [[
-                "level" => "success",
-                "title" => "title",
-                "message" => "body",
-                "autoHide" => false
+            ->assertJson(['notifications' => [[
+                'level'    => 'success',
+                'title'    => 'title',
+                'message'  => 'body',
+                'autoHide' => false,
             ]]]);
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJsonMissing(["alert"]);
+            ->assertJsonMissing(['alert']);
 
-        (new PersonSharpForm())->notify("title1");
-        (new PersonSharpForm())->notify("title2");
+        (new PersonSharpForm())->notify('title1');
+        (new PersonSharpForm())->notify('title2');
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["notifications" => [[
-                "title" => "title1",
+            ->assertJson(['notifications' => [[
+                'title' => 'title1',
             ], [
-                "title" => "title2",
+                'title' => 'title2',
             ]]]);
     }
 
@@ -172,7 +172,7 @@ class EntityListControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('post', '/sharp/api/list/person/reorder', [
-            3,2,1
+            3, 2, 1,
         ])->assertStatus(200);
     }
 
@@ -188,8 +188,8 @@ class EntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["config" => [
-                "hasShowPage" => true,
+            ->assertJson(['config' => [
+                'hasShowPage' => true,
             ]]);
     }
 }

@@ -9,9 +9,9 @@ trait SharpFormFieldWithUpload
     protected ?float $maxFileSize = null;
     protected ?array $cropRatio = null;
     protected ?array $croppableFileTypes = null;
-    protected string $storageDisk = "local";
-    /** @var string|Closure  */
-    protected $storageBasePath = "data";
+    protected string $storageDisk = 'local';
+    /** @var string|Closure */
+    protected $storageBasePath = 'data';
     protected bool $croppable = true;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
@@ -26,19 +26,19 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string $ratio 16:9, 1:1, ...
+     * @param string     $ratio              16:9, 1:1, ...
      * @param array|null $croppableFileTypes
+     *
      * @return static
      */
     public function setCropRatio(string $ratio = null, array $croppableFileTypes = null): self
     {
-        if($ratio) {
-            $this->cropRatio = explode(":", $ratio);
+        if ($ratio) {
+            $this->cropRatio = explode(':', $ratio);
 
             $this->croppableFileTypes = $croppableFileTypes
                 ? $this->formatFileExtension($croppableFileTypes)
                 : null;
-
         } else {
             $this->cropRatio = null;
             $this->croppableFileTypes = null;
@@ -82,6 +82,7 @@ trait SharpFormFieldWithUpload
 
     /**
      * @param string|Closure $storageBasePath
+     *
      * @return static
      */
     public function setStorageBasePath($storageBasePath): self
@@ -93,6 +94,7 @@ trait SharpFormFieldWithUpload
 
     /**
      * @param string|array $fileFilter
+     *
      * @return static
      */
     public function setFileFilter($fileFilter): self
@@ -104,7 +106,7 @@ trait SharpFormFieldWithUpload
 
     public function setFileFilterImages(): self
     {
-        $this->setFileFilter([".jpg",".jpeg",".gif",".png"]);
+        $this->setFileFilter(['.jpg', '.jpeg', '.gif', '.png']);
 
         return $this;
     }
@@ -126,20 +128,22 @@ trait SharpFormFieldWithUpload
 
     /**
      * @param string|array $fileFilter
+     *
      * @return array
      */
     private function formatFileExtension($fileFilter): array
     {
         if (!is_array($fileFilter)) {
-            $fileFilter = explode(",", $fileFilter);
+            $fileFilter = explode(',', $fileFilter);
         }
 
         return collect($fileFilter)
             ->map(function ($filter) {
                 $filter = trim($filter);
-                if (substr($filter, 0, 1) != ".") {
+                if (substr($filter, 0, 1) != '.') {
                     $filter = ".$filter";
                 }
+
                 return $filter;
             })
             ->all();

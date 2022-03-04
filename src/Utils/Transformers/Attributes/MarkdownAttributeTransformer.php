@@ -24,25 +24,29 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param mixed $value
+     * @param mixed  $value
      * @param object $instance
      * @param string $attribute
+     *
      * @return mixed
      */
-    function apply($value, $instance = null, $attribute = null)
+    public function apply($value, $instance = null, $attribute = null)
     {
-        if(!$instance->$attribute) {
+        if (!$instance->$attribute) {
             return null;
         }
 
         $html = (new \Parsedown())
             ->setBreaksEnabled(true)
             ->text($instance->$attribute);
-        
-        if($this->handleImages) {
+
+        if ($this->handleImages) {
             return sharp_markdown_embedded_files(
-                $html, "", $this->imageWidth, 
-                $this->imageHeight, $this->imageFilters,
+                $html,
+                '',
+                $this->imageWidth,
+                $this->imageHeight,
+                $this->imageFilters,
                 'partials.markdown-embedded-file'
             );
         }

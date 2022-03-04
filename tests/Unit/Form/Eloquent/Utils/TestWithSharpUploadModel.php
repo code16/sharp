@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 trait TestWithSharpUploadModel
 {
-
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -36,32 +35,34 @@ trait TestWithSharpUploadModel
         Storage::fake('local');
         Storage::fake('public');
 
-        File::deleteDirectory(storage_path("app/data"));
-        File::deleteDirectory(public_path("thumbnails"));
+        File::deleteDirectory(storage_path('app/data'));
+        File::deleteDirectory(public_path('thumbnails'));
     }
 
     protected function createImage()
     {
         $file = UploadedFile::fake()->image('test.png', 600, 600);
+
         return $file->storeAs('data', 'test.png', ['disk' => 'local']);
     }
 
     /**
      * @param $file
-     * @param null $model
+     * @param null   $model
      * @param string $modelKey
+     *
      * @return $this|\Illuminate\Database\Eloquent\Model
      */
-    protected function createSharpUploadModel($file, $model = null, $modelKey = "test")
+    protected function createSharpUploadModel($file, $model = null, $modelKey = 'test')
     {
         return SharpUploadModel::create([
-            "file_name" => $file,
-            "size" => 120,
-            "mime_type" => "image/png",
-            "disk" => "local",
-            "model_type" => $model ? get_class($model) : Person::class,
-            "model_id" => $model ? $model->id : Person::create(["name" => "A"])->id,
-            "model_key" => $modelKey
+            'file_name'  => $file,
+            'size'       => 120,
+            'mime_type'  => 'image/png',
+            'disk'       => 'local',
+            'model_type' => $model ? get_class($model) : Person::class,
+            'model_id'   => $model ? $model->id : Person::create(['name' => 'A'])->id,
+            'model_key'  => $modelKey,
         ]);
     }
 }

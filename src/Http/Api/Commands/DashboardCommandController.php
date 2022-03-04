@@ -14,8 +14,10 @@ class DashboardCommandController extends ApiController
     /**
      * @param string $entityKey
      * @param string $commandKey
-     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($entityKey, $commandKey)
     {
@@ -24,15 +26,17 @@ class DashboardCommandController extends ApiController
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
 
         return response()->json([
-            "data" => $commandHandler->formData()
+            'data' => $commandHandler->formData(),
         ]);
     }
 
     /**
      * @param string $entityKey
      * @param string $commandKey
-     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update($entityKey, $commandKey)
     {
@@ -43,23 +47,25 @@ class DashboardCommandController extends ApiController
         return $this->returnCommandResult(
             $dashboard,
             $commandHandler->execute(
-                DashboardQueryParams::create()->fillWithRequest("query"),
-                $commandHandler->formatRequestData((array)request("data"))
+                DashboardQueryParams::create()->fillWithRequest('query'),
+                $commandHandler->formatRequestData((array) request('data'))
             )
         );
     }
 
     /**
      * @param SharpDashboard $dashboard
-     * @param string $commandKey
-     * @return \Code16\Sharp\Dashboard\Commands\DashboardCommand|null
+     * @param string         $commandKey
+     *
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
+     *
+     * @return \Code16\Sharp\Dashboard\Commands\DashboardCommand|null
      */
     protected function getCommandHandler(SharpDashboard $dashboard, $commandKey)
     {
         $commandHandler = $dashboard->dashboardCommandHandler($commandKey);
 
-        if(! $commandHandler->authorize()) {
+        if (!$commandHandler->authorize()) {
             throw new SharpAuthorizationException();
         }
 

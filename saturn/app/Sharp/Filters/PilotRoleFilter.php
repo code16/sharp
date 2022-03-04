@@ -8,11 +8,11 @@ class PilotRoleFilter implements EntityListSelectFilter
 {
     public function label(): string
     {
-        return "Role";
+        return 'Role';
     }
 
     public function values(): array
     {
-        return ["jr" => "Junior", "sr" => "Senior"];
+        return ['jr' => 'Junior', 'sr' => 'Senior'];
     }
 }

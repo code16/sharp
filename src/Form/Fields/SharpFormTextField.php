@@ -9,27 +9,29 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "text";
+    const FIELD_TYPE = 'text';
 
-    protected string $inputType = "text";
+    protected string $inputType = 'text';
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new TextFormatter);
+        return new static($key, static::FIELD_TYPE, new TextFormatter());
     }
 
     public function setInputTypeText(): self
     {
-        $this->inputType = "text";
+        $this->inputType = 'text';
 
         return $this;
     }
 
     public function setInputTypePassword(): self
     {
-        $this->inputType = "password";
+        $this->inputType = 'password';
 
         return $this;
     }
@@ -37,17 +39,17 @@ class SharpFormTextField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "inputType" => "required|in:text,password",
+            'inputType' => 'required|in:text,password',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "inputType" => $this->inputType,
-            "placeholder" => $this->placeholder,
-            "maxLength" => $this->maxLength,
-            "localized" => $this->localized
+            'inputType'   => $this->inputType,
+            'placeholder' => $this->placeholder,
+            'maxLength'   => $this->maxLength,
+            'localized'   => $this->localized,
         ]);
     }
 }

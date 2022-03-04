@@ -7,7 +7,15 @@ use Code16\Sharp\Dashboard\SharpDashboard;
 
 class FakeSharpDashboard extends SharpDashboard
 {
-    protected function buildWidgets(): void {}
-    protected function buildWidgetsLayout(): void {}
-    protected function buildWidgetsData(DashboardQueryParams $params): void { }
+    protected function buildWidgets(): void
+    {
+    }
+
+    protected function buildWidgetsLayout(): void
+    {
+    }
+
+    protected function buildWidgetsData(DashboardQueryParams $params): void
+    {
+    }
 }

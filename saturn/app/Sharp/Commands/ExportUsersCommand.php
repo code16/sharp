@@ -12,33 +12,33 @@ class ExportUsersCommand extends EntityCommand
 {
     public function label(): string
     {
-        return "Export users as text file";
+        return 'Export users as text file';
     }
 
     public function execute(EntityListQueryParams $params, array $data = []): array
     {
-        $filePath = "tmp/users " . now()->format("YmdHis") . ".txt";
+        $filePath = 'tmp/users '.now()->format('YmdHis').'.txt';
 
-        $users = ($data["sample"] ?? false)
+        $users = ($data['sample'] ?? false)
             ? User::take(2)->get()
             : User::all();
 
-        Storage::disk("local")->put(
+        Storage::disk('local')->put(
             $filePath,
             $users
-                ->map(function(User $user) {
-                    return implode(",", $user->toArray());
+                ->map(function (User $user) {
+                    return implode(',', $user->toArray());
                 })
                 ->implode("\n")
         );
 
-        return $this->download($filePath, "users.txt", "local");
+        return $this->download($filePath, 'users.txt', 'local');
     }
 
-    function buildFormFields(): void
+    public function buildFormFields(): void
     {
         $this->addField(
-            SharpFormCheckField::make("sample", "Download a file sample")
+            SharpFormCheckField::make('sample', 'Download a file sample')
         );
     }
 }

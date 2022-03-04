@@ -11,14 +11,14 @@ class TextFormatterTest extends SharpTestCase
     use WithSimpleFormatterTest;
 
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
-        $this->checkSimpleFormatterToFront(SharpFormTextField::make("text"), new TextFormatter);
+        $this->checkSimpleFormatterToFront(SharpFormTextField::make('text'), new TextFormatter());
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
-        $this->checkSimpleFormatterFromFront(SharpFormTextField::make("text"), new TextFormatter, "attribute");
+        $this->checkSimpleFormatterFromFront(SharpFormTextField::make('text'), new TextFormatter(), 'attribute');
     }
 }

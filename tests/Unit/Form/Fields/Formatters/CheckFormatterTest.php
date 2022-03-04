@@ -8,12 +8,11 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 class CheckFormatterTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
-        $formatter = new CheckFormatter;
-        $field = SharpFormCheckField::make("check", "text");
+        $formatter = new CheckFormatter();
+        $field = SharpFormCheckField::make('check', 'text');
 
         $this->assertTrue($formatter->toFront($field, true));
         $this->assertTrue($formatter->toFront($field, 1));
@@ -23,24 +22,24 @@ class CheckFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
-        $formatter = new CheckFormatter;
-        $field = SharpFormCheckField::make("check", "text");
-        $attribute = "attribute";
+        $formatter = new CheckFormatter();
+        $field = SharpFormCheckField::make('check', 'text');
+        $attribute = 'attribute';
 
         $this->assertTrue($formatter->fromFront($field, $attribute, true));
         $this->assertTrue($formatter->fromFront($field, $attribute, true));
-        $this->assertTrue($formatter->fromFront($field, $attribute, "true"));
+        $this->assertTrue($formatter->fromFront($field, $attribute, 'true'));
         $this->assertTrue($formatter->fromFront($field, $attribute, 1));
-        $this->assertTrue($formatter->fromFront($field, $attribute, "1"));
-        $this->assertTrue($formatter->fromFront($field, $attribute, "ok"));
-        $this->assertTrue($formatter->fromFront($field, $attribute, "on"));
+        $this->assertTrue($formatter->fromFront($field, $attribute, '1'));
+        $this->assertTrue($formatter->fromFront($field, $attribute, 'ok'));
+        $this->assertTrue($formatter->fromFront($field, $attribute, 'on'));
 
         $this->assertFalse($formatter->fromFront($field, $attribute, false));
-        $this->assertFalse($formatter->fromFront($field, $attribute, "false"));
-        $this->assertFalse($formatter->fromFront($field, $attribute, "0"));
+        $this->assertFalse($formatter->fromFront($field, $attribute, 'false'));
+        $this->assertFalse($formatter->fromFront($field, $attribute, '0'));
         $this->assertFalse($formatter->fromFront($field, $attribute, 0));
-        $this->assertFalse($formatter->fromFront($field, $attribute, ""));
+        $this->assertFalse($formatter->fromFront($field, $attribute, ''));
     }
 }

@@ -10,15 +10,15 @@ abstract class LayoutColumn
 
     protected int $size;
 
-    function __construct(int $size)
+    public function __construct(int $size)
     {
         $this->size = $size;
     }
 
-    function toArray(): array
+    public function toArray(): array
     {
         return array_merge(
-            ["size" => $this->size],
+            ['size' => $this->size],
             $this->fieldsToArray()
         );
     }

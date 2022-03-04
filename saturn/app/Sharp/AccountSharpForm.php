@@ -12,23 +12,23 @@ class AccountSharpForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields(): void
+    public function buildFormFields(): void
     {
         $this
             ->addField(
-                SharpFormTextField::make("name")
-                    ->setLabel("Name")
+                SharpFormTextField::make('name')
+                    ->setLabel('Name')
             )->addField(
-                SharpFormTextField::make("email")
-                    ->setLabel("Email address")
+                SharpFormTextField::make('email')
+                    ->setLabel('Email address')
             );
     }
 
-    function buildFormLayout(): void
+    public function buildFormLayout(): void
     {
-        $this->addColumn(6, function(FormLayoutColumn $column) {
-            return $column->withSingleField("name")
-                ->withSingleField("email");
+        $this->addColumn(6, function (FormLayoutColumn $column) {
+            return $column->withSingleField('name')
+                ->withSingleField('email');
         });
     }
 

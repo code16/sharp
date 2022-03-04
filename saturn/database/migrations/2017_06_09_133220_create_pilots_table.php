@@ -15,16 +15,16 @@ class CreatePilotsTable extends Migration
     {
         Schema::create('pilots', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name");
-            $table->string("role");
-            $table->unsignedSmallInteger("xp")->nullable();
+            $table->string('name');
+            $table->string('role');
+            $table->unsignedSmallInteger('xp')->nullable();
             $table->timestamps();
         });
 
         Schema::create('pilot_spaceship', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger("spaceship_id");
-            $table->unsignedInteger("pilot_id");
+            $table->unsignedInteger('spaceship_id');
+            $table->unsignedInteger('pilot_id');
             $table->timestamps();
         });
     }

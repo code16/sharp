@@ -26,8 +26,8 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
         $this->postJson('/sharp/api/show/person/command/instance_info/1')
             ->assertStatus(200)
             ->assertJson([
-                "action" => "info",
-                "message" => "ok",
+                'action'  => 'info',
+                'message' => 'ok',
             ]);
 
         $this->postJson('/sharp/api/show/person/command/instance_info')
@@ -42,8 +42,8 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
         $this->postJson('/sharp/api/show/person/command/instance_info')
             ->assertStatus(200)
             ->assertJson([
-                "action" => "info",
-                "message" => "ok",
+                'action'  => 'info',
+                'message' => 'ok',
             ]);
 
         $this->postJson('/sharp/api/show/person/command/instance_info/1')
@@ -62,15 +62,15 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
 
         $this->assertTrue(
             collect($response['config']['commands']['instance'][0])
-                ->where("key", "instance_with_init_data")->first()['fetch_initial_data']
+                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data']
         );
 
         $this->getJson('/sharp/api/show/person/command/instance_with_init_data/25/data')
             ->assertStatus(200)
             ->assertExactJson([
-                "data" => [
-                    "name" => "John Wayne [25]"
-                ]
+                'data' => [
+                    'name' => 'John Wayne [25]',
+                ],
             ]);
     }
 
@@ -86,15 +86,15 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
 
         $this->assertTrue(
             collect($response['config']['commands']['instance'][0])
-                ->where("key", "instance_with_init_data")->first()['fetch_initial_data']
+                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data']
         );
 
         $this->getJson('/sharp/api/show/person/command/instance_with_init_data/data')
             ->assertStatus(200)
             ->assertExactJson([
-                "data" => [
-                    "name" => "John Wayne"
-                ]
+                'data' => [
+                    'name' => 'John Wayne',
+                ],
             ]);
     }
 
@@ -111,58 +111,86 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     }
 }
 
-class ShowInstanceCommandPersonSharpShow extends PersonSharpShow {
-
-    function buildShowConfig(): void
+class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
+{
+    public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand("instance_info", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function execute($instanceId, array $params = []): array {
-                    return $this->info("ok");
+            ->addInstanceCommand('instance_info', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function execute($instanceId, array $params = []): array
+                {
+                    return $this->info('ok');
                 }
             })
-            ->addInstanceCommand("instance_with_init_data", new class() extends InstanceCommand {
-                public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+            ->addInstanceCommand('instance_with_init_data', new class() extends InstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
                 }
+
+                public function buildFormFields(): void
+                {
+                    $this->addField(SharpFormTextField::make('name'));
+                }
+
                 protected function initialData($instanceId): array
                 {
                     return [
-                        "name" => "John Wayne [$instanceId]",
-                        "age" => 32
+                        'name' => "John Wayne [$instanceId]",
+                        'age'  => 32,
                     ];
                 }
-                public function execute($instanceId, array $data = []): array {}
+
+                public function execute($instanceId, array $data = []): array
+                {
+                }
             });
     }
 }
 
-class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow {
-
-    function buildShowConfig(): void
+class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
+{
+    public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand("instance_info", new class() extends SingleInstanceCommand {
-                public function label(): string { return "label"; }
-                public function executeSingle(array $params = []): array {
-                    return $this->info("ok");
+            ->addInstanceCommand('instance_info', new class() extends SingleInstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function executeSingle(array $params = []): array
+                {
+                    return $this->info('ok');
                 }
             })
-            ->addInstanceCommand("instance_with_init_data", new class() extends SingleInstanceCommand {
-                public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+            ->addInstanceCommand('instance_with_init_data', new class() extends SingleInstanceCommand {
+                public function label(): string
+                {
+                    return 'label';
                 }
+
+                public function buildFormFields(): void
+                {
+                    $this->addField(SharpFormTextField::make('name'));
+                }
+
                 protected function initialSingleData(): array
                 {
                     return [
-                        "name" => "John Wayne",
-                        "age" => 32
+                        'name' => 'John Wayne',
+                        'age'  => 32,
                     ];
                 }
-                public function executeSingle(array $data = []): array {}
+
+                public function executeSingle(array $data = []): array
+                {
+                }
             });
     }
 }

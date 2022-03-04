@@ -9,26 +9,26 @@ use Code16\Sharp\Form\SharpForm;
 
 class PersonSharpForm extends SharpForm
 {
-    function buildFormFields(): void
+    public function buildFormFields(): void
     {
-        $this->addField(SharpFormTextField::make("name"));
+        $this->addField(SharpFormTextField::make('name'));
     }
 
-    function buildFormLayout(): void
+    public function buildFormLayout(): void
     {
-        $this->addColumn(6, function(FormLayoutColumn $column) {
-            return $column->withSingleField("name");
+        $this->addColumn(6, function (FormLayoutColumn $column) {
+            return $column->withSingleField('name');
         });
     }
 
-    function find($id): array
+    public function find($id): array
     {
-        return ["name" => "John Wayne", "job" => "actor"];
+        return ['name' => 'John Wayne', 'job' => 'actor'];
     }
 
-    function update($id, array $data): bool
+    public function update($id, array $data): bool
     {
-        if(!is_null($id) && !intval($id)) {
+        if (!is_null($id) && !intval($id)) {
             // Throw an applicative exception
             throw new SharpApplicativeException("$id is not a valid id");
         }
@@ -36,14 +36,14 @@ class PersonSharpForm extends SharpForm
         return true;
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
     }
 
-    function create(): array
+    public function create(): array
     {
         return [
-            "name" => "default name"
+            'name' => 'default name',
         ];
     }
 }

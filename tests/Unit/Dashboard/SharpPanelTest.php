@@ -8,28 +8,27 @@ use Code16\Sharp\Utils\Links\LinkToEntityList;
 
 class SharpPanelTest extends SharpTestCase
 {
-
     /** @test */
-    function returned_array_contains_template()
+    public function returned_array_contains_template()
     {
-        $widget = SharpPanelWidget::make("name")
+        $widget = SharpPanelWidget::make('name')
             ->setInlineTemplate('<b>test</b>');
 
         $this->assertArraySubset(
-            ["template" => "<b>test</b>"],
+            ['template' => '<b>test</b>'],
             $widget->toArray()
         );
     }
 
     /** @test */
-    function returned_array_contains_the_SharpLinkTo_link()
+    public function returned_array_contains_the_SharpLinkTo_link()
     {
-        $widget = SharpPanelWidget::make("name")
+        $widget = SharpPanelWidget::make('name')
             ->setInlineTemplate('<b>test</b>')
-            ->setLink(LinkToEntityList::make("entity"));
+            ->setLink(LinkToEntityList::make('entity'));
 
         $this->assertArraySubset(
-            ["link" => url("sharp/s-list/entity")],
+            ['link' => url('sharp/s-list/entity')],
             $widget->toArray()
         );
     }

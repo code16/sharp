@@ -7,31 +7,29 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 class FormLayoutFieldsetTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_set_a_legend()
+    public function we_can_set_a_legend()
     {
         $formTab = new FormLayoutFieldset('legend');
 
-        $this->assertEquals('legend', $formTab->toArray()["legend"]);
+        $this->assertEquals('legend', $formTab->toArray()['legend']);
     }
 
     /** @test */
-    function we_can_add_a_field()
+    public function we_can_add_a_field()
     {
         $formTab = new FormLayoutFieldset('legend');
-        $formTab->withSingleField("name");
+        $formTab->withSingleField('name');
 
-        $this->assertCount(1, $formTab->toArray()["fields"][0]);
+        $this->assertCount(1, $formTab->toArray()['fields'][0]);
     }
 
     /** @test */
-    function we_can_add_multiple_fields()
+    public function we_can_add_multiple_fields()
     {
         $formTab = new FormLayoutFieldset('legend');
-        $formTab->withFields("name", "age");
+        $formTab->withFields('name', 'age');
 
-        $this->assertCount(2, $formTab->toArray()["fields"][0]);
+        $this->assertCount(2, $formTab->toArray()['fields'][0]);
     }
-
 }

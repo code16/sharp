@@ -9,7 +9,7 @@ class SpaceshipExternalLink extends InstanceCommand
 {
     public function label(): string
     {
-        return "A Link to the Form";
+        return 'A Link to the Form';
     }
 
     public function execute($instanceId, array $data = []): array

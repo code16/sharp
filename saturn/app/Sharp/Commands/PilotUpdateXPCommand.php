@@ -10,17 +10,17 @@ class PilotUpdateXPCommand extends EntityCommand
 {
     public function label(): string
     {
-        return "Update experience";
+        return 'Update experience';
     }
 
     public function description(): string
     {
-        return "Add one year to every senior pilot experience.";
+        return 'Add one year to every senior pilot experience.';
     }
 
     public function execute(EntityListQueryParams $params, array $data = []): array
     {
-        Pilot::where("role", "sr")->increment("xp");
+        Pilot::where('role', 'sr')->increment('xp');
 
         return $this->reload();
     }

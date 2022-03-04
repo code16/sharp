@@ -8,64 +8,63 @@ use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
 class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
 {
-
     /** @test */
-    function we_can_update_a_belongsTo_relation()
+    public function we_can_update_a_belongsTo_relation()
     {
-        $mother = Person::create(["name" => "Jane Wayne"]);
-        $person = Person::create(["name" => "John Wayne"]);
+        $mother = Person::create(['name' => 'Jane Wayne']);
+        $person = Person::create(['name' => 'John Wayne']);
 
         $updater = new BelongsToRelationUpdater();
 
-        $updater->update($person, "mother", $mother->id);
+        $updater->update($person, 'mother', $mother->id);
 
-        $this->assertDatabaseHas("people", [
-            "id" => $person->id,
-            "mother_id" => $mother->id
+        $this->assertDatabaseHas('people', [
+            'id'        => $person->id,
+            'mother_id' => $mother->id,
         ]);
     }
 
     /** @test */
-    function we_can_create_a_belongsTo_relation()
+    public function we_can_create_a_belongsTo_relation()
     {
-        $person = Person::create(["name" => "John Wayne"]);
+        $person = Person::create(['name' => 'John Wayne']);
 
         $updater = new BelongsToRelationUpdater();
-        $updater->update($person, "mother:name", "Jane Wayne");
+        $updater->update($person, 'mother:name', 'Jane Wayne');
 
         $this->assertCount(2, Person::all());
 
-        $mother = Person::where("name", "Jane Wayne")->first();
+        $mother = Person::where('name', 'Jane Wayne')->first();
 
-        $this->assertDatabaseHas("people", [
-            "id" => $person->id,
-            "mother_id" => $mother->id
+        $this->assertDatabaseHas('people', [
+            'id'        => $person->id,
+            'mother_id' => $mother->id,
         ]);
     }
 
     /** @test */
-    function we_set_default_attributes_when_creating_a_belongsTo_relation()
+    public function we_set_default_attributes_when_creating_a_belongsTo_relation()
     {
-        $person = PersonWithDefaultAttributes::create(["name" => "John Wayne"]);
+        $person = PersonWithDefaultAttributes::create(['name' => 'John Wayne']);
 
         $updater = new BelongsToRelationUpdater();
-        $updater->update($person, "mother:name", "Jane Wayne");
+        $updater->update($person, 'mother:name', 'Jane Wayne');
 
-        $this->assertDatabaseHas("people", [
-            "name" => "Jane Wayne",
-            "age" => 60
+        $this->assertDatabaseHas('people', [
+            'name' => 'Jane Wayne',
+            'age'  => 60,
         ]);
     }
 }
 
 class PersonWithDefaultAttributes extends Person
 {
-    protected $table = "people";
-    
+    protected $table = 'people';
+
     public function getDefaultAttributesFor($attribute)
     {
-        if($attribute == "mother") {
-            return ["age" => 60];
+        if ($attribute == 'mother') {
+            return ['age' => 60];
         }
 
         return [];

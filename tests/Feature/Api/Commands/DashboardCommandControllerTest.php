@@ -25,8 +25,8 @@ class DashboardCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/dashboard/my_dashboard/command/dashboard_info')
             ->assertStatus(200)
             ->assertJson([
-                "action" => "info",
-                "message" => "ok",
+                'action'  => 'info',
+                'message' => 'ok',
             ]);
     }
 
@@ -38,9 +38,9 @@ class DashboardCommandControllerTest extends BaseApiTest
         $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/data')
             ->assertStatus(200)
             ->assertJson([
-                "data" => [
-                    "name" => "John Wayne"
-                ]
+                'data' => [
+                    'name' => 'John Wayne',
+                ],
             ]);
     }
 
@@ -57,28 +57,42 @@ class DashboardCommandControllerTest extends BaseApiTest
 
 class EntityCommandTestSharpDashboard extends SharpDashboard
 {
-    function buildDashboardConfig(): void
+    public function buildDashboardConfig(): void
     {
         $this
-            ->addDashboardCommand("dashboard_info", new class() extends DashboardCommand {
-                public function label(): string { return "label"; }
-                public function execute(DashboardQueryParams $params, array $data= []): array {
-                    return $this->info("ok");
+            ->addDashboardCommand('dashboard_info', new class() extends DashboardCommand {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function execute(DashboardQueryParams $params, array $data = []): array
+                {
+                    return $this->info('ok');
                 }
             })
-            ->addDashboardCommand("dashboard_form", new class() extends DashboardCommand {
-                public function label(): string { return "label"; }
-                public function buildFormFields(): void {
-                    $this->addField(SharpFormTextField::make("name"));
+            ->addDashboardCommand('dashboard_form', new class() extends DashboardCommand {
+                public function label(): string
+                {
+                    return 'label';
                 }
+
+                public function buildFormFields(): void
+                {
+                    $this->addField(SharpFormTextField::make('name'));
+                }
+
                 protected function initialData(): array
                 {
                     return [
-                        "name" => "John Wayne",
-                        "age" => 32
+                        'name' => 'John Wayne',
+                        'age'  => 32,
                     ];
                 }
-                public function execute(DashboardQueryParams $params, array $data = []): array {}
+
+                public function execute(DashboardQueryParams $params, array $data = []): array
+                {
+                }
             });
     }
 }

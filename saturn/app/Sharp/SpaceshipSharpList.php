@@ -19,97 +19,97 @@ use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnai
 
 class SpaceshipSharpList extends SharpEntityList
 {
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this
             ->addDataContainer(
-                EntityListDataContainer::make("picture")
+                EntityListDataContainer::make('picture')
             )
             ->addDataContainer(
-                EntityListDataContainer::make("name")
-                    ->setLabel("Name")
+                EntityListDataContainer::make('name')
+                    ->setLabel('Name')
                     ->setSortable()
             )
             ->addDataContainer(
-                EntityListDataContainer::make("capacity")
-                    ->setLabel("Capacity")
+                EntityListDataContainer::make('capacity')
+                    ->setLabel('Capacity')
                     ->setSortable()
                     ->setHtml(false)
             )
             ->addDataContainer(
-                EntityListDataContainer::make("type:label")
-                    ->setLabel("Type")
+                EntityListDataContainer::make('type:label')
+                    ->setLabel('Type')
             )
             ->addDataContainer(
-                EntityListDataContainer::make("pilots")
-                    ->setLabel("Pilots")
+                EntityListDataContainer::make('pilots')
+                    ->setLabel('Pilots')
                     ->setHtml()
             )
             ->addDataContainer(
-                EntityListDataContainer::make("messages_sent_count")
-                    ->setLabel("Messages sent")
-        );
+                EntityListDataContainer::make('messages_sent_count')
+                    ->setLabel('Messages sent')
+            );
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
-        $this->setInstanceIdAttribute("id")
+        $this->setInstanceIdAttribute('id')
             ->setSearchable()
-            ->setDefaultSort("name", "asc")
-            ->addFilter("type", SpaceshipTypeFilter::class)
-            ->addFilter("pilots", SpaceshipPilotsFilter::class)
+            ->setDefaultSort('name', 'asc')
+            ->addFilter('type', SpaceshipTypeFilter::class)
+            ->addFilter('pilots', SpaceshipPilotsFilter::class)
 
-            ->addEntityCommand("synchronize", SpaceshipSynchronize::class)
-            ->addEntityCommand("reload", SpaceshipReload::class)
-            ->addInstanceCommand("message", SpaceshipSendMessage::class)
-            ->addInstanceCommand("preview", SpaceshipPreview::class)
+            ->addEntityCommand('synchronize', SpaceshipSynchronize::class)
+            ->addEntityCommand('reload', SpaceshipReload::class)
+            ->addInstanceCommand('message', SpaceshipSendMessage::class)
+            ->addInstanceCommand('preview', SpaceshipPreview::class)
             ->addInstanceCommandSeparator()
-            ->addInstanceCommand("external", SpaceshipExternalLink::class)
-            ->setEntityState("state", SpaceshipEntityState::class)
+            ->addInstanceCommand('external', SpaceshipExternalLink::class)
+            ->setEntityState('state', SpaceshipEntityState::class)
 
             ->setPaginated();
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
-        $this->addColumn("picture", 1, 2)
-            ->addColumn("name", 2, 4)
-            ->addColumnLarge("capacity", 2)
-            ->addColumn("type:label", 2, 4)
-            ->addColumnLarge("pilots", 3)
-            ->addColumn("messages_sent_count", 2);
+        $this->addColumn('picture', 1, 2)
+            ->addColumn('name', 2, 4)
+            ->addColumnLarge('capacity', 2)
+            ->addColumn('type:label', 2, 4)
+            ->addColumnLarge('pilots', 3)
+            ->addColumn('messages_sent_count', 2);
     }
 
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
-        $spaceships = Spaceship::select("spaceships.*")
-            ->where("corporation_id", currentSharpRequest()->globalFilterFor("corporation"))
+        $spaceships = Spaceship::select('spaceships.*')
+            ->where('corporation_id', currentSharpRequest()->globalFilterFor('corporation'))
             ->distinct();
 
-        if($params->specificIds()) {
-            $spaceships->whereIn("id", $params->specificIds());
+        if ($params->specificIds()) {
+            $spaceships->whereIn('id', $params->specificIds());
         }
 
-        if($params->sortedBy()) {
+        if ($params->sortedBy()) {
             $spaceships->orderBy($params->sortedBy(), $params->sortedDir());
         }
 
-        if($params->filterFor("type")) {
-            $spaceships->where("type_id", $params->filterFor("type"));
+        if ($params->filterFor('type')) {
+            $spaceships->where('type_id', $params->filterFor('type'));
         }
 
-        if($params->hasSearch() || $params->filterFor("pilots")) {
-            $spaceships->leftJoin("pilot_spaceship", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
-                ->leftJoin("pilots", "pilots.id", "=", "pilot_spaceship.pilot_id");
+        if ($params->hasSearch() || $params->filterFor('pilots')) {
+            $spaceships->leftJoin('pilot_spaceship', 'spaceships.id', '=', 'pilot_spaceship.spaceship_id')
+                ->leftJoin('pilots', 'pilots.id', '=', 'pilot_spaceship.pilot_id');
 
-            if ($params->filterFor("pilots")) {
-                $spaceships->whereIn("pilots.id", (array)$params->filterFor("pilots"));
+            if ($params->filterFor('pilots')) {
+                $spaceships->whereIn('pilots.id', (array) $params->filterFor('pilots'));
             }
 
             if ($params->hasSearch()) {
                 foreach ($params->searchWords() as $word) {
                     $spaceships->where(function ($query) use ($word) {
-                        $query->orWhere("spaceships.name", "like", $word)
+                        $query->orWhere('spaceships.name', 'like', $word)
                             ->orWhere('pilots.name', 'like', $word);
                     });
                 }
@@ -117,26 +117,26 @@ class SpaceshipSharpList extends SharpEntityList
         }
 
         return $this
-            ->setCustomTransformer("name", function($name, $spaceship) {
+            ->setCustomTransformer('name', function ($name, $spaceship) {
                 return $spaceship->name;
             })
-            ->setCustomTransformer("capacity", function($capacity) {
-                return number_format($capacity / 1000, 0) . "k";
+            ->setCustomTransformer('capacity', function ($capacity) {
+                return number_format($capacity / 1000, 0).'k';
             })
-            ->setCustomTransformer("pilots", function($pilots, $spaceship) {
+            ->setCustomTransformer('pilots', function ($pilots, $spaceship) {
                 return $spaceship->pilots
-                    ->map(function($pilot) {
-                        return LinkToEntityList::make("pilot")
+                    ->map(function ($pilot) {
+                        return LinkToEntityList::make('pilot')
                             ->setSearch($pilot->name)
-                            ->setTooltip("See related pilot")
+                            ->setTooltip('See related pilot')
                             ->renderAsText($pilot->name);
                     })
-                    ->implode("<br>");
+                    ->implode('<br>');
             })
-            ->setCustomTransformer("picture", (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
+            ->setCustomTransformer('picture', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->transform(
-                $spaceships->with("picture", "type", "pilots")
-                    ->paginate(10, ["spaceships.*"])
+                $spaceships->with('picture', 'type', 'pilots')
+                    ->paginate(10, ['spaceships.*'])
             );
     }
 }

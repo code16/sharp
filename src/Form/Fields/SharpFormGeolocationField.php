@@ -6,33 +6,33 @@ use Code16\Sharp\Form\Fields\Formatters\GeolocationFormatter;
 
 class SharpFormGeolocationField extends SharpFormField
 {
-    const FIELD_TYPE = "geolocation";
+    const FIELD_TYPE = 'geolocation';
 
-    protected string $displayUnit = "DMS";
+    protected string $displayUnit = 'DMS';
     protected bool $geocoding = false;
     protected int $zoomLevel = 10;
     protected ?array $boundaries = null;
     protected ?array $initialPosition = null;
-    protected string $mapsProvider = "gmaps";
-    protected string $geocodingProvider = "gmaps";
+    protected string $mapsProvider = 'gmaps';
+    protected string $geocodingProvider = 'gmaps';
     protected array $mapsProviderOptions = [];
     protected array $geocodingProviderOptions = [];
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new GeolocationFormatter);
+        return new static($key, static::FIELD_TYPE, new GeolocationFormatter());
     }
-    
+
     public function setDisplayUnitDegreesMinutesSeconds(): self
     {
-        $this->displayUnit = "DMS";
+        $this->displayUnit = 'DMS';
 
         return $this;
     }
-    
+
     public function setDisplayUnitDecimalDegrees(): self
     {
-        $this->displayUnit = "DD";
+        $this->displayUnit = 'DD';
 
         return $this;
     }
@@ -52,7 +52,7 @@ class SharpFormGeolocationField extends SharpFormField
 
     public function setMapsApiKey(string $apiKey): self
     {
-        $this->mapsProviderOptions["apiKey"] = $apiKey;
+        $this->mapsProviderOptions['apiKey'] = $apiKey;
 
         return $this;
     }
@@ -74,12 +74,12 @@ class SharpFormGeolocationField extends SharpFormField
     public function setBoundaries(float $northEastLat, float $northEastLng, float $southWestLat, float $southWestLng): self
     {
         $this->boundaries = [
-            "ne" => [
-                "lat" => $northEastLat, "lng" => $northEastLng
+            'ne' => [
+                'lat' => $northEastLat, 'lng' => $northEastLng,
             ],
-            "sw" => [
-                "lat" => $southWestLat, "lng" => $southWestLng
-            ]
+            'sw' => [
+                'lat' => $southWestLat, 'lng' => $southWestLng,
+            ],
         ];
 
         return $this;
@@ -107,7 +107,7 @@ class SharpFormGeolocationField extends SharpFormField
 
         return $this;
     }
-    
+
     public function clearInitialPosition(): self
     {
         $this->initialPosition = null;
@@ -125,31 +125,31 @@ class SharpFormGeolocationField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "geocoding" => "required|bool",
-            "displayUnit" => "required|in:DD,DMS",
-            "zoomLevel" => "int|min:0|max:25|required",
-            "initialPosition" => "array|nullable",
-            "boundaries" => "array|nullable",
-            "mapsProvider.name" => "required|in:gmaps,osm",
-            "geocodingProvider.name" => "required|in:gmaps,osm",
+            'geocoding'              => 'required|bool',
+            'displayUnit'            => 'required|in:DD,DMS',
+            'zoomLevel'              => 'int|min:0|max:25|required',
+            'initialPosition'        => 'array|nullable',
+            'boundaries'             => 'array|nullable',
+            'mapsProvider.name'      => 'required|in:gmaps,osm',
+            'geocodingProvider.name' => 'required|in:gmaps,osm',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "geocoding" => $this->geocoding,
-            "displayUnit" => $this->displayUnit,
-            "zoomLevel" => $this->zoomLevel,
-            "initialPosition" => $this->initialPosition,
-            "boundaries" => $this->boundaries,
-            "mapsProvider" => [
-                "name" => $this->mapsProvider,
-                "options" => $this->mapsProviderOptions
+            'geocoding'       => $this->geocoding,
+            'displayUnit'     => $this->displayUnit,
+            'zoomLevel'       => $this->zoomLevel,
+            'initialPosition' => $this->initialPosition,
+            'boundaries'      => $this->boundaries,
+            'mapsProvider'    => [
+                'name'    => $this->mapsProvider,
+                'options' => $this->mapsProviderOptions,
             ],
-            "geocodingProvider" => [
-                "name" => $this->geocodingProvider,
-                "options" => $this->geocodingProviderOptions
+            'geocodingProvider' => [
+                'name'    => $this->geocodingProvider,
+                'options' => $this->geocodingProviderOptions,
             ],
         ]);
     }

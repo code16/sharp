@@ -26,9 +26,10 @@ class UploadFormatter extends SharpFieldFormatter
     /**
      * @param SharpFormField $field
      * @param $value
+     *
      * @return mixed
      */
-    function toFront(SharpFormField $field, $value)
+    public function toFront(SharpFormField $field, $value)
     {
         return $value;
     }
@@ -38,65 +39,66 @@ class UploadFormatter extends SharpFieldFormatter
      * + image transformations (crop, rotations) on transformed ones.
      *
      * @param SharpFormField $field
-     * @param string $attribute
+     * @param string         $attribute
      * @param $value
-     * @return array|null
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws SharpFormFieldFormattingMustBeDelayedException
+     *
+     * @return array|null
      */
-    function fromFront(SharpFormField $field, string $attribute, $value)
+    public function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $storage = $this->filesystem->disk($field->storageDisk());
 
-        if($this->isUploaded($value)) {
-
-            if($field->isShouldOptimizeImage()) {
+        if ($this->isUploaded($value)) {
+            if ($field->isShouldOptimizeImage()) {
                 $optimizerChain = OptimizerChainFactory::create();
                 // we do not need to check for exception nor file format because:
                 // > By default the package will not throw any errors and just operate silently.
                 $optimizerChain->optimize(
-                    $this->filesystem->disk("local")->path(
-                        config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
+                    $this->filesystem->disk('local')->path(
+                        config('sharp.uploads.tmp_dir', 'tmp').'/'.$value['name']
                     )
                 );
             }
 
-            $fileContent = $this->filesystem->disk("local")->get(
-                config("sharp.uploads.tmp_dir", 'tmp') . '/' . $value["name"]
+            $fileContent = $this->filesystem->disk('local')->get(
+                config('sharp.uploads.tmp_dir', 'tmp').'/'.$value['name']
             );
 
-            $storedFilePath = $this->getStoragePath($value["name"], $field);
+            $storedFilePath = $this->getStoragePath($value['name'], $field);
 
-            if($transformed = $this->isTransformed($value, $field)) {
+            if ($transformed = $this->isTransformed($value, $field)) {
                 // Handle transformations on the uploads disk for performance
-                $fileContent = $this->handleImageTransformations($fileContent, $value["cropData"]);
+                $fileContent = $this->handleImageTransformations($fileContent, $value['cropData']);
             }
 
             $storage->put($storedFilePath, $fileContent);
 
             return [
-                "file_name" => $storedFilePath,
-                "size" => $storage->size($storedFilePath),
-                "mime_type" => $storage->mimeType($storedFilePath),
-                "disk" => $field->storageDisk(),
-                "transformed" => $transformed
+                'file_name'   => $storedFilePath,
+                'size'        => $storage->size($storedFilePath),
+                'mime_type'   => $storage->mimeType($storedFilePath),
+                'disk'        => $field->storageDisk(),
+                'transformed' => $transformed,
             ];
         }
 
-        if($this->isTransformed($value, $field)) {
+        if ($this->isTransformed($value, $field)) {
             // Just transform image, without updating value in DB
             $fileContent = $storage->get(
-                $value["name"]
+                $value['name']
             );
 
             $storage->put(
-                $value["name"],
-                $this->handleImageTransformations($fileContent, $value["cropData"])
+                $value['name'],
+                $this->handleImageTransformations($fileContent, $value['cropData'])
             );
 
             return [
-                "transformed" => true
+                'transformed' => true,
             ];
         }
 
@@ -106,35 +108,39 @@ class UploadFormatter extends SharpFieldFormatter
 
     /**
      * @param array $value
+     *
      * @return bool
      */
     protected function isUploaded($value): bool
     {
-        return isset($value["uploaded"]) && $value["uploaded"];
+        return isset($value['uploaded']) && $value['uploaded'];
     }
 
     /**
-     * @param array $value
+     * @param array                    $value
      * @param SharpFormFieldWithUpload $field
+     *
      * @return bool
      */
     protected function isTransformed($value, $field): bool
     {
-        return isset($value["cropData"]);
+        return isset($value['cropData']);
     }
 
     /**
-     * @param string $fileName
+     * @param string                   $fileName
      * @param SharpFormFieldWithUpload $field
-     * @return string
+     *
      * @throws SharpFormFieldFormattingMustBeDelayedException
+     *
+     * @return string
      */
     protected function getStoragePath(string $fileName, $field): string
     {
         $basePath = $field->storageBasePath();
 
-        if(strpos($basePath, '{id}') !== false) {
-            if(!$this->instanceId) {
+        if (strpos($basePath, '{id}') !== false) {
+            if (!$this->instanceId) {
                 // Well, we need the instance id for the storage path, and we are
                 // in a store() case. Let's delay this formatter, it will be
                 // called again after a first save() on the model.
@@ -145,7 +151,9 @@ class UploadFormatter extends SharpFieldFormatter
         }
 
         $fileName = $this->fileUtil->findAvailableName(
-            $fileName, $basePath, $field->storageDisk()
+            $fileName,
+            $basePath,
+            $field->storageDisk()
         );
 
         return "{$basePath}/{$fileName}";
@@ -154,22 +162,24 @@ class UploadFormatter extends SharpFieldFormatter
     /**
      * @param $fileContent
      * @param array $cropData
-     * @return \Intervention\Image\Image
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return \Intervention\Image\Image
      */
     protected function handleImageTransformations($fileContent, array $cropData)
     {
         $img = $this->imageManager->make($fileContent);
 
-        if($cropData["rotate"]) {
-            $img->rotate($cropData["rotate"]);
+        if ($cropData['rotate']) {
+            $img->rotate($cropData['rotate']);
         }
 
         $img->crop(
-            intval(round($img->width() * $cropData["width"])),
-            intval(round($img->height() * $cropData["height"])),
-            intval(round($img->width() * $cropData["x"])),
-            intval(round($img->height() * $cropData["y"]))
+            intval(round($img->width() * $cropData['width'])),
+            intval(round($img->height() * $cropData['height'])),
+            intval(round($img->width() * $cropData['x'])),
+            intval(round($img->height() * $cropData['y']))
         );
 
         return $img->encode();
