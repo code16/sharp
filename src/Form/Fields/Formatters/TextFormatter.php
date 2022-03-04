@@ -8,7 +8,7 @@ class TextFormatter extends AbstractSimpleFormatter
 {
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        if ($value !== null && $field->isLocalized()) {
+        if ($field->isLocalized()) {
             return collect(is_array($value) ? $value : [app()->getLocale() => $value])
                 ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]))
                 ->toArray();
