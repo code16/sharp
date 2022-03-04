@@ -8,21 +8,19 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
- * Provide asset templates to views defined in config
- *
- * @package Code16\Sharp
+ * Provide asset templates to views defined in config.
  */
 class AssetViewComposer
 {
     /**
-     * The acceptable assset types to output
+     * The acceptable assset types to output.
      *
      * @var array
      */
     protected $assetTypes = ['css'];
 
     /**
-     * The strategies for outputting the asset paths
+     * The strategies for outputting the asset paths.
      *
      * - raw   - to output the raw string
      * - asset - to output through the asset() function
@@ -33,7 +31,7 @@ class AssetViewComposer
     protected $renderStrategies = ['raw', 'asset', 'mix'];
 
     /**
-     * The templates to inject asset paths into based on file type
+     * The templates to inject asset paths into based on file type.
      *
      * @var array
      */
@@ -42,9 +40,10 @@ class AssetViewComposer
     ];
 
     /**
-     * Bind data to the view
+     * Bind data to the view.
      *
      * @param View $view
+     *
      * @throws SharpInvalidAssetRenderStrategy
      */
     public function compose(View $view)
@@ -52,14 +51,14 @@ class AssetViewComposer
         $strategy = $this->getValidatedStrategyFromConfig();
         $output = [];
 
-        foreach((array)config("sharp.extensions.assets") as $position => $paths) {
-            foreach((array)$paths as $assetPath) {
-                if(!isset($output[$position])) {
+        foreach ((array) config('sharp.extensions.assets') as $position => $paths) {
+            foreach ((array) $paths as $assetPath) {
+                if (!isset($output[$position])) {
                     $output[$position] = [];
                 }
 
                 // Only render valid assets
-                if(Str::endsWith($assetPath, $this->assetTypes)) {
+                if (Str::endsWith($assetPath, $this->assetTypes)) {
                     // Grab the relevant template based on the filetype
                     $template = Arr::get($this->renderTemplates, $this->getAssetFileType($assetPath));
 
@@ -73,7 +72,7 @@ class AssetViewComposer
 
         // Build the strings to output in the blades
         $toBind = [];
-        foreach((array)$output as $position => $toOutput) {
+        foreach ((array) $output as $position => $toOutput) {
             $toBind[$position] = implode('', $toOutput);
         }
 
@@ -81,12 +80,13 @@ class AssetViewComposer
     }
 
     /**
-     * Get the asset file type
+     * Get the asset file type.
      *
-     * @param  string $assetPath
+     * @param string $assetPath
+     *
      * @return string
      */
-    protected function getAssetFileType($assetPath):string
+    protected function getAssetFileType($assetPath): string
     {
         $parts = explode('.', $assetPath);
 
@@ -94,16 +94,16 @@ class AssetViewComposer
     }
 
     /**
-     * Apply the strategy to the asset path to insert into the html template
+     * Apply the strategy to the asset path to insert into the html template.
      *
-     * @param  string $strategy
-     * @param  string $assetPath
+     * @param string $strategy
+     * @param string $assetPath
+     *
      * @return string
      */
-    protected function getAssetPathWithStrategyApplied($strategy, $assetPath):string
+    protected function getAssetPathWithStrategyApplied($strategy, $assetPath): string
     {
-        switch($strategy)
-        {
+        switch ($strategy) {
             case 'asset':
             case 'mix':
                 return $strategy($assetPath);
@@ -116,20 +116,21 @@ class AssetViewComposer
     }
 
     /**
-     * Get the strategy to render the assets
+     * Get the strategy to render the assets.
+     *
+     * @throws SharpInvalidAssetRenderStrategy
      *
      * @return string
-     * @throws SharpInvalidAssetRenderStrategy
      */
-    protected function getValidatedStrategyFromConfig():string
+    protected function getValidatedStrategyFromConfig(): string
     {
         $strategy = config('sharp.extensions.assets.strategy', 'raw');
 
-        if(!is_string($strategy)) {
+        if (!is_string($strategy)) {
             throw new SharpInvalidAssetRenderStrategy('The asset strategy defined at sharp.extensions.assets.strategy is not a string');
         }
 
-        if(!in_array($strategy, $this->renderStrategies)) {
+        if (!in_array($strategy, $this->renderStrategies)) {
             throw new SharpInvalidAssetRenderStrategy("The asset strategy [$strategy] is not raw, asset, or mix");
         }
 

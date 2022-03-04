@@ -9,14 +9,15 @@ trait WithModel
     /**
      * Build the model replacement values.
      *
-     * @param  array  $replace
+     * @param array $replace
+     *
      * @return array
      */
     protected function buildModelReplacements(array $replace)
     {
         $modelClass = $this->parseModel($this->option('model'));
 
-        if (! class_exists($modelClass)) {
+        if (!class_exists($modelClass)) {
             if ($this->confirm("A {$modelClass} model does not exist. Do you want to generate it?", true)) {
                 $this->call('make:model', ['name' => $modelClass]);
             }
@@ -24,18 +25,19 @@ trait WithModel
 
         return array_merge($replace, [
             'DummyFullModelClass' => $modelClass,
-            'DummyModelClass' => class_basename($modelClass),
-            'DummyModelVariable' => lcfirst(class_basename($modelClass)),
+            'DummyModelClass'     => class_basename($modelClass),
+            'DummyModelVariable'  => lcfirst(class_basename($modelClass)),
         ]);
     }
 
     /**
      * Get the fully-qualified model class name.
      *
-     * @param  string  $model
-     * @return string
+     * @param string $model
      *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     protected function parseModel($model)
     {
@@ -45,7 +47,7 @@ trait WithModel
 
         $model = trim(str_replace('/', '\\', $model), '\\');
 
-        if (! Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
+        if (!Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
             $model = $rootNamespace.$model;
         }
 

@@ -8,30 +8,29 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 
 class AccountUpdateName extends SingleInstanceCommand
 {
-
     public function label(): string
     {
-        return "Update your name";
+        return 'Update your name';
     }
 
     public function executeSingle(array $data = []): array
     {
         $this->validate($data, [
-            "name" => "required"
+            'name' => 'required',
         ]);
 
         User::findOrFail(auth()->id())->update([
-            "name" => $data["name"]
+            'name' => $data['name'],
         ]);
 
         return $this->reload();
     }
 
-    function buildFormFields(): void
+    public function buildFormFields(): void
     {
         $this->addField(
-            SharpFormTextField::make("name")
-                ->setLabel("Name")
+            SharpFormTextField::make('name')
+                ->setLabel('Name')
         );
     }
 

@@ -9,7 +9,7 @@ class CurrentSharpRequestTest extends SharpTestCase
     use WithCurrentSharpRequestFake;
 
     /** @test */
-    function we_can_get_form_update_state_from_request()
+    public function we_can_get_form_update_state_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child/2');
 
@@ -21,7 +21,7 @@ class CurrentSharpRequestTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_form_creation_state_from_request()
+    public function we_can_get_form_creation_state_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child');
 
@@ -33,7 +33,7 @@ class CurrentSharpRequestTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_show_state_from_request()
+    public function we_can_get_show_state_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1');
 
@@ -45,7 +45,7 @@ class CurrentSharpRequestTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_entity_list_state_from_request()
+    public function we_can_get_entity_list_state_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person');
 
@@ -57,38 +57,38 @@ class CurrentSharpRequestTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_get_current_breadcrumb_item_from_request()
+    public function we_can_get_current_breadcrumb_item_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child/2');
-        
+
         $this->assertTrue(currentSharpRequest()->getCurrentBreadcrumbItem()->isForm());
         $this->assertFalse(currentSharpRequest()->getCurrentBreadcrumbItem()->isSingleForm());
-        $this->assertEquals("child", currentSharpRequest()->getCurrentBreadcrumbItem()->entityKey());
+        $this->assertEquals('child', currentSharpRequest()->getCurrentBreadcrumbItem()->entityKey());
         $this->assertEquals(2, currentSharpRequest()->getCurrentBreadcrumbItem()->instanceId());
     }
 
     /** @test */
-    function we_can_get_previous_show_from_request()
+    public function we_can_get_previous_show_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 
-        $this->assertEquals("person", currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->entityKey());
+        $this->assertEquals('person', currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->entityKey());
         $this->assertEquals(42, currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->instanceId());
     }
 
     /** @test */
-    function we_can_get_previous_show_of_a_given_key_from_request()
+    public function we_can_get_previous_show_of_a_given_key_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/31/s-show/person/42/s-show/child/84/s-form/child/84');
 
-        $this->assertEquals("child", currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->entityKey());
+        $this->assertEquals('child', currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->entityKey());
         $this->assertEquals(84, currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->instanceId());
-        $this->assertEquals("person", currentSharpRequest()->getPreviousShowFromBreadcrumbItems("person")->entityKey());
-        $this->assertEquals(42, currentSharpRequest()->getPreviousShowFromBreadcrumbItems("person")->instanceId());
+        $this->assertEquals('person', currentSharpRequest()->getPreviousShowFromBreadcrumbItems('person')->entityKey());
+        $this->assertEquals(42, currentSharpRequest()->getPreviousShowFromBreadcrumbItems('person')->instanceId());
     }
 
     /** @test */
-    function we_can_get_previous_url_from_request()
+    public function we_can_get_previous_url_from_request()
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 

@@ -13,7 +13,7 @@ class Media extends SharpUploadModel
 
     public $translatable = ['legend'];
 
-    protected $table = "medias";
+    protected $table = 'medias';
 
     /**
      * The "booting" method of the model.

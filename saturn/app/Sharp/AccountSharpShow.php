@@ -12,43 +12,43 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class AccountSharpShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    public function buildShowFields(): void
     {
         $this
             ->addField(
-                SharpShowTextField::make("name")
-                    ->setLabel("Name:")
+                SharpShowTextField::make('name')
+                    ->setLabel('Name:')
             )->addField(
-                SharpShowTextField::make("email")
-                    ->setLabel("Email:")
+                SharpShowTextField::make('email')
+                    ->setLabel('Email:')
             )->addField(
-                SharpShowTextField::make("groups")
-                    ->setLabel("Groups:")
+                SharpShowTextField::make('groups')
+                    ->setLabel('Groups:')
             );
     }
 
-    function buildShowLayout(): void
+    public function buildShowLayout(): void
     {
         $this
-            ->addSection('Identity', function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(7, function(ShowLayoutColumn $column) {
+                    ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField("name")
-                            ->withSingleField("email")
-                            ->withSingleField("groups");
+                            ->withSingleField('name')
+                            ->withSingleField('email')
+                            ->withSingleField('groups');
                     });
             });
     }
 
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand("rename", AccountUpdateName::class)
-            ->setEntityState("status", AccountStatusState::class);
+            ->addInstanceCommand('rename', AccountUpdateName::class)
+            ->setEntityState('status', AccountStatusState::class);
     }
 
-    function findSingle(): array
+    public function findSingle(): array
     {
         return $this->transform(User::findOrFail(auth()->id()));
     }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTechnicalReviewsTable extends Migration
 {
@@ -16,9 +16,9 @@ class CreateTechnicalReviewsTable extends Migration
         Schema::create('technical_reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('spaceship_id');
-            $table->string("status");
-            $table->text("comment")->nullable();
-            $table->dateTime("starts_at");
+            $table->string('status');
+            $table->text('comment')->nullable();
+            $table->dateTime('starts_at');
             $table->timestamps();
         });
     }

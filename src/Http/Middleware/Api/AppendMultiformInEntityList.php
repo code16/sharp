@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class AppendMultiformInEntityList
 {
-
     /**
      * @param Request $request
      * @param Closure $next
+     *
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)
@@ -26,27 +26,27 @@ class AppendMultiformInEntityList
 
     protected function addMultiformDataToJsonResponse(JsonResponse $jsonResponse)
     {
-        if(!$multiformAttribute = $jsonResponse->getData()->config->multiformAttribute) {
+        if (!$multiformAttribute = $jsonResponse->getData()->config->multiformAttribute) {
             return $jsonResponse;
         }
 
         $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
 
         $subFormKeys = collect($this->getMultiformKeys())
-            ->map(function($value) use($instanceIdAttribute, $multiformAttribute, $jsonResponse) {
+            ->map(function ($value) use ($instanceIdAttribute, $multiformAttribute, $jsonResponse) {
                 $instanceIds = collect($jsonResponse->getData()->data->items)
                     ->where($multiformAttribute, $value)
                     ->pluck($instanceIdAttribute);
 
                 return [
-                    "key" => $value,
-                    "label" => $this->getMultiformLabelFor($value),
-                    "instances" => $instanceIds
+                    'key'       => $value,
+                    'label'     => $this->getMultiformLabelFor($value),
+                    'instances' => $instanceIds,
                 ] + $this->getIconConfigFor($value);
             })
-            ->keyBy("key");
+            ->keyBy('key');
 
-        if(sizeof($subFormKeys)) {
+        if (sizeof($subFormKeys)) {
             $data = $jsonResponse->getData();
             $data->forms = $subFormKeys;
             $jsonResponse->setData($data);

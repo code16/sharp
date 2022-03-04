@@ -11,119 +11,122 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class SharpEntityListTest extends SharpTestCase
 {
     /** @test */
-    function we_can_get_containers()
+    public function we_can_get_containers()
     {
-        $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers(): void
+        $list = new class() extends SharpEntityDefaultTestList {
+            public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make("name")
-                        ->setLabel("Name")
+                    EntityListDataContainer::make('name')
+                        ->setLabel('Name')
                 );
             }
         };
 
-        $this->assertEquals(["name" => [
-            "key" => "name",
-            "label" => "Name",
-            "sortable" => false,
-            "html" => true,
+        $this->assertEquals(['name' => [
+            'key'      => 'name',
+            'label'    => 'Name',
+            'sortable' => false,
+            'html'     => true,
         ]], $list->dataContainers());
     }
 
     /** @test */
-    function we_can_get_layout()
+    public function we_can_get_layout()
     {
-        $list = new class extends SharpEntityDefaultTestList {
-            function buildListDataContainers(): void
+        $list = new class() extends SharpEntityDefaultTestList {
+            public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make("name")
+                    EntityListDataContainer::make('name')
                 )->addDataContainer(
-                    EntityListDataContainer::make("age")
+                    EntityListDataContainer::make('age')
                 );
             }
-            function buildListLayout(): void
+
+            public function buildListLayout(): void
             {
-                $this->addColumn("name", 6, 12)
-                    ->addColumnLarge("age", 6);
+                $this->addColumn('name', 6, 12)
+                    ->addColumnLarge('age', 6);
             }
         };
 
         $this->assertEquals([
             [
-                "key" => "name", "size" => 6, "sizeXS" => 12, "hideOnXS" => false,
+                'key' => 'name', 'size' => 6, 'sizeXS' => 12, 'hideOnXS' => false,
             ], [
-                "key" => "age", "size" => 6, "sizeXS" => 6, "hideOnXS" => true,
-            ]
+                'key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => true,
+            ],
         ], $list->listLayout());
     }
 
     /** @test */
-    function we_can_get_list_data()
+    public function we_can_get_list_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
-            function getListData(EntityListQueryParams $params): array
+        $form = new class() extends SharpEntityDefaultTestList {
+            public function getListData(EntityListQueryParams $params): array
             {
                 return [
-                    ["name" => "John Wayne", "age" => 22, "job" => "actor"],
-                    ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
+                    ['name' => 'John Wayne', 'age' => 22, 'job' => 'actor'],
+                    ['name' => 'Mary Wayne', 'age' => 26, 'job' => 'truck driver'],
                 ];
             }
-            function buildListDataContainers(): void
+
+            public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make("name")
+                    EntityListDataContainer::make('name')
                 )->addDataContainer(
-                    EntityListDataContainer::make("age")
+                    EntityListDataContainer::make('age')
                 );
             }
         };
 
         $this->assertEquals([
-            "items" => [
-                ["name" => "John Wayne", "age" => 22],
-                ["name" => "Mary Wayne", "age" => 26],
-            ]
+            'items' => [
+                ['name' => 'John Wayne', 'age' => 22],
+                ['name' => 'Mary Wayne', 'age' => 26],
+            ],
         ], $form->data());
     }
 
     /** @test */
-    function we_can_get_paginated_list_data()
+    public function we_can_get_paginated_list_data()
     {
-        $form = new class extends SharpEntityDefaultTestList {
-            function getListData(EntityListQueryParams $params)
+        $form = new class() extends SharpEntityDefaultTestList {
+            public function getListData(EntityListQueryParams $params)
             {
                 $data = [
-                    ["name" => "John Wayne", "age" => 22, "job" => "actor"],
-                    ["name" => "Mary Wayne", "age" => 26, "job" => "truck driver"]
+                    ['name' => 'John Wayne', 'age' => 22, 'job' => 'actor'],
+                    ['name' => 'Mary Wayne', 'age' => 26, 'job' => 'truck driver'],
                 ];
 
                 return new LengthAwarePaginator($data, 10, 2, 1);
             }
-            function buildListDataContainers(): void
+
+            public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make("name")
+                    EntityListDataContainer::make('name')
                 )->addDataContainer(
-                    EntityListDataContainer::make("age")
+                    EntityListDataContainer::make('age')
                 );
             }
         };
 
         $this->assertEquals([
-            "items" => [
-                ["name" => "John Wayne", "age" => 22],
-                ["name" => "Mary Wayne", "age" => 26],
-            ], "page" => 1, "pageSize" => 2, "totalCount" => 10
+            'items' => [
+                ['name' => 'John Wayne', 'age' => 22],
+                ['name' => 'Mary Wayne', 'age' => 26],
+            ], 'page' => 1, 'pageSize' => 2, 'totalCount' => 10,
         ], $form->data());
     }
 
     /** @test */
-    function we_can_get_list_config()
+    public function we_can_get_list_config()
     {
-        $list = new class extends SharpEntityDefaultTestList {
-            function buildListConfig(): void
+        $list = new class() extends SharpEntityDefaultTestList {
+            public function buildListConfig(): void
             {
                 $this->setSearchable()
                     ->setPaginated();
@@ -133,14 +136,14 @@ class SharpEntityListTest extends SharpTestCase
         $list->buildListConfig();
 
         $this->assertEquals([
-            "searchable" => true,
-            "paginated" => true,
-            "reorderable" => false,
-            "hasShowPage" => false,
-            "instanceIdAttribute" => "id",
-            "multiformAttribute" => null,
-            "defaultSort" => null,
-            "defaultSortDir" => null
+            'searchable'          => true,
+            'paginated'           => true,
+            'reorderable'         => false,
+            'hasShowPage'         => false,
+            'instanceIdAttribute' => 'id',
+            'multiformAttribute'  => null,
+            'defaultSort'         => null,
+            'defaultSortDir'      => null,
         ], $list->listConfig());
     }
 }

@@ -2,13 +2,13 @@
 
 namespace Code16\Sharp\Form\Eloquent\Uploads\Thumbnails;
 
+use Closure;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Str;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
-use \Closure;
 
 class Thumbnail
 {
@@ -47,15 +47,15 @@ class Thumbnail
         return $this;
     }
 
-    public function make($width, $height=null, $filters=[]): ?string
+    public function make($width, $height = null, $filters = []): ?string
     {
-        $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
+        $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
 
-        $thumbDirNameAppender = sizeof($filters) ? "_" . md5(serialize($filters)) : "";
-        $thumbnailPath = config("sharp.uploads.thumbnails_dir", "thumbnails")
-            . "/" . dirname($this->uploadModel->file_name)
-            . "/$width-$height" . $thumbDirNameAppender
-            . "/" . basename($this->uploadModel->file_name);
+        $thumbDirNameAppender = sizeof($filters) ? '_'.md5(serialize($filters)) : '';
+        $thumbnailPath = config('sharp.uploads.thumbnails_dir', 'thumbnails')
+            .'/'.dirname($this->uploadModel->file_name)
+            ."/$width-$height".$thumbDirNameAppender
+            .'/'.basename($this->uploadModel->file_name);
 
         $wasCreated = !$thumbnailDisk->exists($thumbnailPath);
 
@@ -63,10 +63,12 @@ class Thumbnail
             $this->uploadModel->disk,
             $this->uploadModel->file_name,
             $thumbnailPath,
-            $width, $height, $filters
+            $width,
+            $height,
+            $filters
         );
 
-        if($closure = $this->afterClosure) {
+        if ($closure = $this->afterClosure) {
             $closure($wasCreated, $thumbnailPath, $thumbnailDisk);
         }
 
@@ -75,21 +77,30 @@ class Thumbnail
 
     public function destroyAllThumbnails(): void
     {
-        $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
-        $thumbnailPath = config("sharp.uploads.thumbnails_dir", "thumbnails");
+        $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
+        $thumbnailPath = config('sharp.uploads.thumbnails_dir', 'thumbnails');
         $destinationRelativeBasePath = dirname($this->uploadModel->file_name);
 
         $thumbnailDisk->deleteDirectory("$thumbnailPath/$destinationRelativeBasePath");
     }
 
     private function generateThumbnail(
-        $sourceDisk, $sourceRelativeFilePath,
-        $thumbnailPath, $width, $height, $filters): ?string
+        $sourceDisk,
+        $sourceRelativeFilePath,
+        $thumbnailPath,
+        $width,
+        $height,
+        $filters
+    ): ?string
     {
-        if($width==0) $width=null;
-        if($height==0) $height=null;
+        if ($width == 0) {
+            $width = null;
+        }
+        if ($height == 0) {
+            $height = null;
+        }
 
-        $thumbnailDisk = $this->storage->disk(config("sharp.uploads.thumbnails_disk", "public"));
+        $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
 
         if (!$thumbnailDisk->exists($thumbnailPath)) {
             // Create thumbnail directories if needed
@@ -121,25 +132,23 @@ class Thumbnail
                 }
 
                 $thumbnailDisk->put($thumbnailPath, $sourceImg->stream(null, $this->quality));
-
-            } catch(FileNotFoundException $ex) {
+            } catch (FileNotFoundException $ex) {
                 return null;
-
-            } catch(NotReadableException $ex) {
+            } catch (NotReadableException $ex) {
                 return null;
             }
         }
 
-        return $thumbnailDisk->url($thumbnailPath) . ($this->appendTimestamp ? "?" . $thumbnailDisk->lastModified($thumbnailPath) : "");
+        return $thumbnailDisk->url($thumbnailPath).($this->appendTimestamp ? '?'.$thumbnailDisk->lastModified($thumbnailPath) : '');
     }
 
     private function resolveFilterClass(string $class, array $params): ?ThumbnailFilter
     {
-        if(! Str::contains($class, "\\")) {
-            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($class) . 'Filter';
+        if (!Str::contains($class, '\\')) {
+            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
         }
 
-        if(class_exists($class)) {
+        if (class_exists($class)) {
             return new $class($params);
         }
 

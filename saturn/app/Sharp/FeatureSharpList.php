@@ -10,37 +10,36 @@ use Code16\Sharp\EntityList\SharpEntityList;
 
 class FeatureSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
+            EntityListDataContainer::make('name')
+                ->setLabel('Name')
         )->addDataContainer(
-            EntityListDataContainer::make("type")
-                ->setLabel("Type")
+            EntityListDataContainer::make('type')
+                ->setLabel('Type')
         );
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
         $this->setReorderable(new FeatureReorderHandler());
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
         $this
-            ->addColumn("name", 6)
-            ->addColumn("type", 6);
+            ->addColumn('name', 6)
+            ->addColumn('type', 6);
     }
 
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
         return $this
-            ->setCustomTransformer("type", function($value, $instance) {
-                return (Feature::TYPES[$instance->type] ?? "?")
-                    . " / "
-                    . (Feature::SUBTYPES[$instance->type][$instance->subtype] ?? "?");
+            ->setCustomTransformer('type', function ($value, $instance) {
+                return (Feature::TYPES[$instance->type] ?? '?')
+                    .' / '
+                    .(Feature::SUBTYPES[$instance->type][$instance->subtype] ?? '?');
             })
             ->transform(
                 Feature::orderBy('order', 'asc')->get()

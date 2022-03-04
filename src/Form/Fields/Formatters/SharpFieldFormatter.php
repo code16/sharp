@@ -6,7 +6,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 
 abstract class SharpFieldFormatter
 {
-
     /**
      * @var string|null
      */
@@ -14,9 +13,10 @@ abstract class SharpFieldFormatter
 
     /**
      * @param string|null $instanceId
+     *
      * @return $this
      */
-    function setInstanceId($instanceId)
+    public function setInstanceId($instanceId)
     {
         $this->instanceId = $instanceId;
 
@@ -26,15 +26,17 @@ abstract class SharpFieldFormatter
     /**
      * @param SharpFormField $field
      * @param $value
+     *
      * @return mixed
      */
-    abstract function toFront(SharpFormField $field, $value);
+    abstract public function toFront(SharpFormField $field, $value);
 
     /**
      * @param SharpFormField $field
-     * @param string $attribute
+     * @param string         $attribute
      * @param $value
+     *
      * @return mixed
      */
-    abstract function fromFront(SharpFormField $field, string $attribute, $value);
+    abstract public function fromFront(SharpFormField $field, string $attribute, $value);
 }

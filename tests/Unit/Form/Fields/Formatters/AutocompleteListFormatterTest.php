@@ -9,20 +9,20 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 class AutocompleteListFormatterTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
         $formatter = new AutocompleteListFormatter();
-        $field = SharpFormAutocompleteListField::make("list")
-            ->setItemField(SharpFormAutocompleteField::make("item", "remote")
-                ->setRemoteEndpoint("/endpoint")
+        $field = SharpFormAutocompleteListField::make('list')
+            ->setItemField(
+                SharpFormAutocompleteField::make('item', 'remote')
+                ->setRemoteEndpoint('/endpoint')
             );
 
-        $expectedData = collect($this->getData())->map(function($item) {
+        $expectedData = collect($this->getData())->map(function ($item) {
             return [
-                "id" => $item["id"],
-                "item" => $item
+                'id'   => $item['id'],
+                'item' => $item,
             ];
         })->all();
 
@@ -30,17 +30,18 @@ class AutocompleteListFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
         $formatter = new AutocompleteListFormatter();
-        $field = SharpFormAutocompleteListField::make("list")
-            ->setItemField(SharpFormAutocompleteField::make("item", "remote")
-                ->setRemoteEndpoint("/endpoint")
+        $field = SharpFormAutocompleteListField::make('list')
+            ->setItemField(
+                SharpFormAutocompleteField::make('item', 'remote')
+                ->setRemoteEndpoint('/endpoint')
             );
 
-        $expectedData = collect($this->getData())->map(function($item) {
+        $expectedData = collect($this->getData())->map(function ($item) {
             return [
-                "id" => $item["item"]
+                'id' => $item['item'],
             ];
         })->all();
 
@@ -54,12 +55,12 @@ class AutocompleteListFormatterTest extends SharpTestCase
     {
         return [
             [
-                "id" => 1,
-                "item" => "A",
+                'id'   => 1,
+                'item' => 'A',
             ], [
-                "id" => 2,
-                "item" => "B",
-            ]
+                'id'   => 2,
+                'item' => 'B',
+            ],
         ];
     }
 }

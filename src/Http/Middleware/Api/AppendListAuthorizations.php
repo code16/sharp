@@ -27,6 +27,7 @@ class AppendListAuthorizations
     /**
      * @param Request $request
      * @param Closure $next
+     *
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)
@@ -41,6 +42,7 @@ class AppendListAuthorizations
 
     /**
      * @param JsonResponse $jsonResponse
+     *
      * @return JsonResponse
      */
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse)
@@ -52,30 +54,29 @@ class AppendListAuthorizations
         if ($this->hasPolicyFor($entityKey)) {
             // Have to dig into policies
 
-            if (!isset($authorizations["create"])) {
+            if (!isset($authorizations['create'])) {
                 // Create doesn't need instanceId
-                $authorizations["create"] = $this->gate->check("sharp.{$entityKey}.create");
+                $authorizations['create'] = $this->gate->check("sharp.{$entityKey}.create");
             }
 
             // Collect instanceIds from response
             $instanceIdAttribute = $jsonResponse->getData()->config->instanceIdAttribute;
             $instanceIds = collect($jsonResponse->getData()->data->items)->pluck($instanceIdAttribute);
 
-            $missingAbilities = array_diff(["view", "update"], array_keys($authorizations));
+            $missingAbilities = array_diff(['view', 'update'], array_keys($authorizations));
 
-            foreach($instanceIds as $instanceId) {
-                foreach($missingAbilities as $missingAbility) {
-                    if($this->gate->check("sharp.{$entityKey}.{$missingAbility}", $instanceId)) {
+            foreach ($instanceIds as $instanceId) {
+                foreach ($missingAbilities as $missingAbility) {
+                    if ($this->gate->check("sharp.{$entityKey}.{$missingAbility}", $instanceId)) {
                         $authorizations[$missingAbility][] = $instanceId;
-
-                    } elseif(!isset($authorizations[$missingAbility])) {
+                    } elseif (!isset($authorizations[$missingAbility])) {
                         $authorizations[$missingAbility] = [];
                     }
                 }
             }
 
-            foreach($missingAbilities as $missingAbility) {
-                if(isset($authorizations[$missingAbility]) && sizeof($authorizations[$missingAbility]) == 0) {
+            foreach ($missingAbilities as $missingAbility) {
+                if (isset($authorizations[$missingAbility]) && sizeof($authorizations[$missingAbility]) == 0) {
                     $authorizations[$missingAbility] = false;
                 }
             }
@@ -83,7 +84,7 @@ class AppendListAuthorizations
 
         // All missing abilities are true by default
         $authorizations = array_merge(
-            ["view" => true, "create" => true, "update" => true],
+            ['view' => true, 'create' => true, 'update' => true],
             $authorizations
         );
 
@@ -98,6 +99,7 @@ class AppendListAuthorizations
 
     /**
      * @param $entityKey
+     *
      * @return bool
      */
     protected function hasPolicyFor($entityKey)
@@ -107,6 +109,7 @@ class AppendListAuthorizations
 
     /**
      * @param string $entityKey
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     protected function getGlobalAuthorizations(string $entityKey)

@@ -41,10 +41,10 @@ class ResetTestData extends Command
      */
     public function handle()
     {
-        Artisan::call('migrate:fresh', ["--seed" => true, "--force" => true]);
+        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
 
-        $this->filesystem->cleanDirectory("storage/app/data");
-        $this->filesystem->cleanDirectory("storage/app/tmp");
-        $this->filesystem->cleanDirectory("public/thumbnails");
+        $this->filesystem->cleanDirectory('storage/app/data');
+        $this->filesystem->cleanDirectory('storage/app/tmp');
+        $this->filesystem->cleanDirectory('public/thumbnails');
     }
 }

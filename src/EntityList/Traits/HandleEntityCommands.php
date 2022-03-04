@@ -17,8 +17,8 @@ trait HandleEntityCommands
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
 
-        if(!$commandHandler instanceof EntityCommand) {
-            throw new SharpException("Handler class for entity command [{$commandName}] is not an subclass of " . EntityCommand::class);
+        if (!$commandHandler instanceof EntityCommand) {
+            throw new SharpException("Handler class for entity command [{$commandName}] is not an subclass of ".EntityCommand::class);
         }
 
         $commandHandler->setGroupIndex($this->entityCommandCurrentGroupNumber);
@@ -32,7 +32,7 @@ trait HandleEntityCommands
     {
         $this->addEntityCommand($commandName, $commandHandlerOrClassName);
         $this->primaryEntityCommandKey = $commandName;
-        
+
         return $this;
     }
 
@@ -52,12 +52,12 @@ trait HandleEntityCommands
             collect($this->entityCommandHandlers),
             $config
         );
-        
+
         // If a command is defined as [primary], we have to update its config for the front:
-        if($this->primaryEntityCommandKey && $handler = $this->entityCommandHandler($this->primaryEntityCommandKey)) {
-            foreach($config["commands"]["entity"][$handler->groupIndex()] as $index => $commandConfig) {
-                if($commandConfig["key"] === $this->primaryEntityCommandKey) {
-                    $config["commands"]["entity"][$handler->groupIndex()][$index]["primary"] = true;
+        if ($this->primaryEntityCommandKey && $handler = $this->entityCommandHandler($this->primaryEntityCommandKey)) {
+            foreach ($config['commands']['entity'][$handler->groupIndex()] as $index => $commandConfig) {
+                if ($commandConfig['key'] === $this->primaryEntityCommandKey) {
+                    $config['commands']['entity'][$handler->groupIndex()][$index]['primary'] = true;
                     break;
                 }
             }

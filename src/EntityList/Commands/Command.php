@@ -15,56 +15,57 @@ use Illuminate\Validation\ValidationException;
  */
 abstract class Command
 {
-    use HandleFormFields, WithCustomTransformers;
+    use HandleFormFields;
+    use WithCustomTransformers;
 
     protected int $groupIndex = 0;
 
     protected function info(string $message): array
     {
         return [
-            "action" => "info",
-            "message" => $message
+            'action'  => 'info',
+            'message' => $message,
         ];
     }
 
     protected function link(string $link): array
     {
         return [
-            "action" => "link",
-            "link" => $link
+            'action' => 'link',
+            'link'   => $link,
         ];
     }
 
     protected function reload(): array
     {
         return [
-            "action" => "reload"
+            'action' => 'reload',
         ];
     }
 
     protected function refresh($ids): array
     {
         return [
-            "action" => "refresh",
-            "items" => (array)$ids
+            'action' => 'refresh',
+            'items'  => (array) $ids,
         ];
     }
 
     protected function view(string $bladeView, array $params = []): array
     {
         return [
-            "action" => "view",
-            "html" => view($bladeView, $params)->render()
+            'action' => 'view',
+            'html'   => view($bladeView, $params)->render(),
         ];
     }
 
     protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
         return [
-            "action" => "download",
-            "file" => $filePath,
-            "disk" => $diskName,
-            "name" => $fileName
+            'action' => 'download',
+            'file'   => $filePath,
+            'disk'   => $diskName,
+            'name'   => $fileName,
         ];
     }
 
@@ -90,7 +91,7 @@ abstract class Command
     }
 
     /**
-     * Build the optional Command form, calling ->addField()
+     * Build the optional Command form, calling ->addField().
      */
     public function buildFormFields(): void
     {
@@ -110,20 +111,20 @@ abstract class Command
 
     public function formLayout(): ?array
     {
-        if(!$this->fields) {
+        if (!$this->fields) {
             return null;
         }
 
         $column = new FormLayoutColumn(12);
         $this->buildFormLayout($column);
 
-        if(empty($column->fieldsToArray()["fields"])) {
-            foreach($this->fields as $field) {
+        if (empty($column->fieldsToArray()['fields'])) {
+            foreach ($this->fields as $field) {
                 $column->withSingleField($field->key());
             }
         }
 
-        return $column->fieldsToArray()["fields"];
+        return $column->fieldsToArray()['fields'];
     }
 
     public function setGroupIndex($index): void
@@ -142,19 +143,20 @@ abstract class Command
 
         if ($validator->fails()) {
             throw new ValidationException(
-                $validator, new JsonResponse($validator->errors()->getMessages(), 422)
+                $validator,
+                new JsonResponse($validator->errors()->getMessages(), 422)
             );
         }
     }
 
     public function description(): string
     {
-        return "";
+        return '';
     }
 
     public function formModalTitle(): string
     {
-        return "";
+        return '';
     }
 
     abstract public function label(): ?string;

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 trait HandleInstanceCommands
 {
     use CommonCommandUtils;
-    
+
     protected array $instanceCommandHandlers = [];
     protected int $instanceCommandCurrentGroupNumber = 0;
 
@@ -21,8 +21,8 @@ trait HandleInstanceCommands
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
 
-        if(!$commandHandler instanceof InstanceCommand) {
-            throw new SharpException("Handler class for instance command [{$commandName}] is not an subclass of " . InstanceCommand::class);
+        if (!$commandHandler instanceof InstanceCommand) {
+            throw new SharpException("Handler class for instance command [{$commandName}] is not an subclass of ".InstanceCommand::class);
         }
 
         $commandHandler->setGroupIndex($this->instanceCommandCurrentGroupNumber);
@@ -45,8 +45,8 @@ trait HandleInstanceCommands
     protected function appendInstanceCommandsToConfig(array &$config, $instanceId = null): void
     {
         $this->appendCommandsToConfig(
-            collect($this->instanceCommandHandlers), 
-            $config, 
+            collect($this->instanceCommandHandlers),
+            $config,
             $instanceId
         );
     }
@@ -61,17 +61,17 @@ trait HandleInstanceCommands
     {
         collect($this->instanceCommandHandlers)
             // Take all authorized instance commands...
-            ->filter(function($instanceCommandHandler) {
+            ->filter(function ($instanceCommandHandler) {
                 return $instanceCommandHandler->authorize();
             })
 
             // ... and Entity State if present...
-            ->when($this->entityStateHandler, function(Collection $collection) {
+            ->when($this->entityStateHandler, function (Collection $collection) {
                 return $collection->push($this->entityStateHandler);
             })
 
             // ... and for each of them, set authorization for every $item
-            ->each(function($commandHandler) use($items) {
+            ->each(function ($commandHandler) use ($items) {
                 foreach ($items as $item) {
                     $commandHandler->checkAndStoreAuthorizationFor(
                         $item[$this->instanceIdAttribute]

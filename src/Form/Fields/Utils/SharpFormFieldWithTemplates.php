@@ -10,7 +10,7 @@ trait SharpFormFieldWithTemplates
     protected function setTemplatePath(string $templatePath, string $key): self
     {
         return $this->setInlineTemplate(
-            file_get_contents(resource_path("views/" . $templatePath)),
+            file_get_contents(resource_path('views/'.$templatePath)),
             $key
         );
     }

@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
  */
 class AppendFormAuthorizations
 {
-
     /** @var Gate */
     protected $gate;
 
@@ -40,16 +39,16 @@ class AppendFormAuthorizations
 
         $policies = [];
 
-        if($this->hasPolicyFor($entityKey)) {
+        if ($this->hasPolicyFor($entityKey)) {
             $policies = [
-                "create" => $this->gate->check("sharp.{$entityKey}.create"),
+                'create' => $this->gate->check("sharp.{$entityKey}.create"),
             ];
 
-            if($instanceId) {
+            if ($instanceId) {
                 $policies += [
-                    "view" => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
-                    "update" => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
-                    "delete" => $this->gate->check("sharp.{$entityKey}.delete", $instanceId)
+                    'view'   => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
+                    'update' => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
+                    'delete' => $this->gate->check("sharp.{$entityKey}.delete", $instanceId),
                 ];
             }
         }
@@ -58,9 +57,9 @@ class AppendFormAuthorizations
         $data = $jsonResponse->getData();
 
         $data->authorizations = array_merge(
-            ["view" => true, "create" => true, "update" => true, "delete" => true],
+            ['view' => true, 'create' => true, 'update' => true, 'delete' => true],
             $policies,
-            (array)$globalAuthorizations
+            (array) $globalAuthorizations
         );
 
         $jsonResponse->setData($data);
@@ -83,7 +82,7 @@ class AppendFormAuthorizations
         $entityKey = request()->segment(4);
         $instanceId = request()->segment(5) ?? null;
 
-        if(($pos = strpos($entityKey, ':')) !== false) {
+        if (($pos = strpos($entityKey, ':')) !== false) {
             $entityKey = substr($entityKey, 0, $pos);
         }
 

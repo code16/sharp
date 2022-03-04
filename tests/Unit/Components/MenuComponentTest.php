@@ -11,45 +11,20 @@ class MenuComponentTest extends SharpTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAs(new User);
+        $this->actingAs(new User());
     }
 
     /** @test */
-    function we_can_define_an_external_url_in_the_menu()
+    public function we_can_define_an_external_url_in_the_menu()
     {
         $this->app['config']->set(
-            'sharp.menu', [
-                [
-                    "label" => "external",
-                    "icon" => "fa-globe",
-                    "url" => "https://google.com"
-                ]
-            ]
-        );
-        
-        $menu = app(Menu::class);
-
-        $this->assertArraySubset(
+            'sharp.menu',
             [
-                "label" => "external",
-                "icon" => "fa-globe",
-                "url" => "https://google.com",
-                "type" => "url"
-            ], 
-            (array)$menu->getItems()[0]
-        );
-    }
-
-    /** @test */
-    function we_can_define_a_direct_entity_link_in_the_menu()
-    {
-        $this->app['config']->set(
-            'sharp.menu', [
                 [
-                    "label" => "people",
-                    "icon" => "fa-user",
-                    "entity" => "person"
-                ]
+                    'label' => 'external',
+                    'icon'  => 'fa-globe',
+                    'url'   => 'https://google.com',
+                ],
             ]
         );
 
@@ -57,89 +32,90 @@ class MenuComponentTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                "key" => "person",
-                "label" => "people",
-                "icon" => "fa-user",
-                "type" => "entity",
-                "url" => route("code16.sharp.list", "person"),
-            ], 
-            (array)$menu->getItems()[0]
+                'label' => 'external',
+                'icon'  => 'fa-globe',
+                'url'   => 'https://google.com',
+                'type'  => 'url',
+            ],
+            (array) $menu->getItems()[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_category_in_the_menu()
+    public function we_can_define_a_direct_entity_link_in_the_menu()
     {
         $this->app['config']->set(
-            'sharp.menu', [
+            'sharp.menu',
+            [
                 [
-                    "label" => "Data",
-                    "entities" => [
+                    'label'  => 'people',
+                    'icon'   => 'fa-user',
+                    'entity' => 'person',
+                ],
+            ]
+        );
+
+        $menu = app(Menu::class);
+
+        $this->assertArraySubset(
+            [
+                'key'   => 'person',
+                'label' => 'people',
+                'icon'  => 'fa-user',
+                'type'  => 'entity',
+                'url'   => route('code16.sharp.list', 'person'),
+            ],
+            (array) $menu->getItems()[0]
+        );
+    }
+
+    /** @test */
+    public function we_can_define_a_category_in_the_menu()
+    {
+        $this->app['config']->set(
+            'sharp.menu',
+            [
+                [
+                    'label'    => 'Data',
+                    'entities' => [
                         [
-                            "label" => "people",
-                            "icon" => "fa-user",
-                            "entity" => "person"
-                        ]
-                    ]
-                ]
+                            'label'  => 'people',
+                            'icon'   => 'fa-user',
+                            'entity' => 'person',
+                        ],
+                    ],
+                ],
             ]
         );
 
         $menu = app(Menu::class);
 
-        $this->assertEquals("Data", $menu->getItems()[0]->label);
-        $this->assertEquals("category", $menu->getItems()[0]->type);
+        $this->assertEquals('Data', $menu->getItems()[0]->label);
+        $this->assertEquals('category', $menu->getItems()[0]->type);
 
         $this->assertArraySubset(
             [
-                "key" => "person",
-                "label" => "people",
-                "icon" => "fa-user",
-                "type" => "entity",
-                "url" => route("code16.sharp.list", "person"),
-            ], 
-            (array)$menu->getItems()[0]->entities[0]
+                'key'   => 'person',
+                'label' => 'people',
+                'icon'  => 'fa-user',
+                'type'  => 'entity',
+                'url'   => route('code16.sharp.list', 'person'),
+            ],
+            (array) $menu->getItems()[0]->entities[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_dashboard_in_the_menu()
+    public function we_can_define_a_dashboard_in_the_menu()
     {
         $this->app['config']->set(
-            'sharp.menu', [
-                [
-                    "label" => "My Dashboard",
-                    "icon" => "fa-dashboard",
-                    "dashboard" => "personal_dashboard"
-                ]
-            ]
-        );
-
-        $menu = app(Menu::class);
-
-        $this->assertArraySubset(
+            'sharp.menu',
             [
-                "key" => "personal_dashboard",
-                "label" => "My Dashboard",
-                "icon" => "fa-dashboard",
-                "type" => "dashboard",
-                "url" => route("code16.sharp.dashboard", "personal_dashboard"),
-            ], 
-            (array)$menu->getItems()[0]
-        );
-    }
-
-    /** @test */
-    function we_can_define_a_single_show_entity_link_in_the_menu()
-    {
-        $this->app['config']->set(
-            'sharp.menu', [
                 [
-                    "label" => "people",
-                    "icon" => "fa-user",
-                    "entity" => "person",
-                    "single" => true
-                ]
+                    'label'     => 'My Dashboard',
+                    'icon'      => 'fa-dashboard',
+                    'dashboard' => 'personal_dashboard',
+                ],
             ]
         );
 
@@ -147,77 +123,108 @@ class MenuComponentTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                "key" => "person",
-                "label" => "people",
-                "icon" => "fa-user",
-                "type" => "entity",
-                "url" => route("code16.sharp.single-show", "person"),
-            ], 
-            (array)$menu->getItems()[0]
+                'key'   => 'personal_dashboard',
+                'label' => 'My Dashboard',
+                'icon'  => 'fa-dashboard',
+                'type'  => 'dashboard',
+                'url'   => route('code16.sharp.dashboard', 'personal_dashboard'),
+            ],
+            (array) $menu->getItems()[0]
         );
     }
 
     /** @test */
-    function we_can_define_a_separator_in_the_menu()
+    public function we_can_define_a_single_show_entity_link_in_the_menu()
     {
         $this->app['config']->set(
-            'sharp.menu', [
+            'sharp.menu',
+            [
                 [
-                    "label" => "Data",
-                    "entities" => [
+                    'label'  => 'people',
+                    'icon'   => 'fa-user',
+                    'entity' => 'person',
+                    'single' => true,
+                ],
+            ]
+        );
+
+        $menu = app(Menu::class);
+
+        $this->assertArraySubset(
+            [
+                'key'   => 'person',
+                'label' => 'people',
+                'icon'  => 'fa-user',
+                'type'  => 'entity',
+                'url'   => route('code16.sharp.single-show', 'person'),
+            ],
+            (array) $menu->getItems()[0]
+        );
+    }
+
+    /** @test */
+    public function we_can_define_a_separator_in_the_menu()
+    {
+        $this->app['config']->set(
+            'sharp.menu',
+            [
+                [
+                    'label'    => 'Data',
+                    'entities' => [
                         [
-                            "label" => "people",
-                            "icon" => "fa-user",
-                            "entity" => "person"
+                            'label'  => 'people',
+                            'icon'   => 'fa-user',
+                            'entity' => 'person',
                         ],
                         [
-                            "separator" => true,
-                            "label" => "Separator",
+                            'separator' => true,
+                            'label'     => 'Separator',
                         ],
                         [
-                            "label" => "other people",
-                            "icon" => "fa-user-o",
-                            "entity" => "person"
-                        ]
-                    ]
-                ]
+                            'label'  => 'other people',
+                            'icon'   => 'fa-user-o',
+                            'entity' => 'person',
+                        ],
+                    ],
+                ],
             ]
         );
 
         $menu = app(Menu::class);
 
-        $this->assertEquals("people", $menu->getItems()[0]->entities[0]->label);
-        $this->assertEquals("other people", $menu->getItems()[0]->entities[2]->label);
+        $this->assertEquals('people', $menu->getItems()[0]->entities[0]->label);
+        $this->assertEquals('other people', $menu->getItems()[0]->entities[2]->label);
 
         $this->assertEquals(
             [
-                "type" => "separator",
-                "key" => null,
-                "label" => "Separator",
+                'type'  => 'separator',
+                'key'   => null,
+                'label' => 'Separator',
             ],
-            (array)$menu->getItems()[0]->entities[1]
+            (array) $menu->getItems()[0]->entities[1]
         );
     }
 
     /** @test */
-    function separators_in_last_position_are_hidden()
+    public function separators_in_last_position_are_hidden()
     {
         $this->app['config']->set(
-            'sharp.menu', [
+            'sharp.menu',
+            [
                 [
-                    "label" => "Data",
-                    "entities" => [
+                    'label'    => 'Data',
+                    'entities' => [
                         [
-                            "label" => "people",
-                            "icon" => "fa-user",
-                            "entity" => "person"
+                            'label'  => 'people',
+                            'icon'   => 'fa-user',
+                            'entity' => 'person',
                         ],
                         [
-                            "separator" => true,
-                            "label" => "Separator",
+                            'separator' => true,
+                            'label'     => 'Separator',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
 
@@ -227,33 +234,34 @@ class MenuComponentTest extends SharpTestCase
     }
 
     /** @test */
-    function stacked_separators_are_hidden()
+    public function stacked_separators_are_hidden()
     {
         $this->app['config']->set(
-            'sharp.menu', [
+            'sharp.menu',
+            [
                 [
-                    "label" => "Data",
-                    "entities" => [
+                    'label'    => 'Data',
+                    'entities' => [
                         [
-                            "label" => "people",
-                            "icon" => "fa-user",
-                            "entity" => "person"
+                            'label'  => 'people',
+                            'icon'   => 'fa-user',
+                            'entity' => 'person',
                         ],
                         [
-                            "separator" => true,
-                            "label" => "Not wanted",
+                            'separator' => true,
+                            'label'     => 'Not wanted',
                         ],
                         [
-                            "separator" => true,
-                            "label" => "Separator",
+                            'separator' => true,
+                            'label'     => 'Separator',
                         ],
                         [
-                            "label" => "people",
-                            "icon" => "fa-user",
-                            "entity" => "person"
+                            'label'  => 'people',
+                            'icon'   => 'fa-user',
+                            'entity' => 'person',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
 

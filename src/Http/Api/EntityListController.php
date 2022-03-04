@@ -6,16 +6,16 @@ class EntityListController extends ApiController
 {
     public function show(string $entityKey)
     {
-        sharp_check_ability("entity", $entityKey);
+        sharp_check_ability('entity', $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
 
         return response()->json([
-            "containers" => $list->dataContainers(),
-            "layout" => $list->listLayout(),
-            "data" => $list->data(),
-            "config" => $list->listConfig(config()->has("sharp.entities.{$entityKey}.show"))
+            'containers' => $list->dataContainers(),
+            'layout'     => $list->listLayout(),
+            'data'       => $list->data(),
+            'config'     => $list->listConfig(config()->has("sharp.entities.{$entityKey}.show")),
         ]);
     }
 
@@ -24,17 +24,17 @@ class EntityListController extends ApiController
      */
     public function update(string $entityKey)
     {
-        sharp_check_ability("update", $entityKey);
+        sharp_check_ability('update', $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
 
         $list->reorderHandler()->reorder(
-            request("instances")
+            request('instances')
         );
 
         return response()->json([
-            "ok" => true
+            'ok' => true,
         ]);
     }
 }

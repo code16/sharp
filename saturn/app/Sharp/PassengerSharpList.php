@@ -11,54 +11,53 @@ use Code16\Sharp\EntityList\SharpEntityList;
 
 class PassengerSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make("name")
+            EntityListDataContainer::make('name')
                 ->setSortable()
-                ->setLabel("Name")
+                ->setLabel('Name')
         )->addDataContainer(
-            EntityListDataContainer::make("birth_date")
+            EntityListDataContainer::make('birth_date')
                 ->setSortable()
-                ->setLabel("Birth date")
+                ->setLabel('Birth date')
         )->addDataContainer(
-            EntityListDataContainer::make("travel")
+            EntityListDataContainer::make('travel')
                 ->setSortable()
-                ->setLabel("Travel")
+                ->setLabel('Travel')
         );
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
         $this->setSearchable()
-            ->setDefaultSort("name", "asc")
-            ->addFilter("travel", PassengerTravelFilter::class)
-            ->addFilter("birthdate", PassengerBirthdateFilter::class)
+            ->setDefaultSort('name', 'asc')
+            ->addFilter('travel', PassengerTravelFilter::class)
+            ->addFilter('birthdate', PassengerBirthdateFilter::class)
             ->setPaginated();
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
-        $this->addColumn("name", 4)
-            ->addColumn("birth_date", 4)
-            ->addColumn("travel", 4);
+        $this->addColumn('name', 4)
+            ->addColumn('birth_date', 4)
+            ->addColumn('travel', 4);
     }
 
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
         $passengers = Passenger::distinct();
 
-        if($params->sortedBy()) {
+        if ($params->sortedBy()) {
             $passengers->orderBy($params->sortedBy(), $params->sortedDir());
         }
 
-        if($travelFilter = $params->filterFor("travel")) {
-            $passengers->where("travel_id", $travelFilter);
+        if ($travelFilter = $params->filterFor('travel')) {
+            $passengers->where('travel_id', $travelFilter);
         }
 
-        if($birthdateFilter = $params->filterFor("birthdate")) {
-            $passengers->whereBetween("birth_date", [
+        if ($birthdateFilter = $params->filterFor('birthdate')) {
+            $passengers->whereBetween('birth_date', [
                 $birthdateFilter['start'],
                 $birthdateFilter['end'],
             ]);
@@ -71,23 +70,23 @@ class PassengerSharpList extends SharpEntityList
         }
 
         return $this
-            ->setCustomTransformer("name", function($value, $passenger) {
-                return ($passenger->gender=='M' ? 'Mr' : 'Mrs') . " " . $value;
+            ->setCustomTransformer('name', function ($value, $passenger) {
+                return ($passenger->gender == 'M' ? 'Mr' : 'Mrs').' '.$value;
             })
-            ->setCustomTransformer("travel", function($value, $passenger) {
+            ->setCustomTransformer('travel', function ($value, $passenger) {
                 $travel = $passenger->travel;
 
-                if(!$travel) {
-                    return "";
+                if (!$travel) {
+                    return '';
                 }
 
                 $date = $travel->departure_date->format('Y-m-d (H:i)');
 
-                return '<i class="fas fa-space-shuttle"></i> ' 
-                    . ($travel->spaceship->name ?? "")
-                    . "<br><em>{$travel->destination}</em>"
-                    . "<br><small>{$date}</small>";
+                return '<i class="fas fa-space-shuttle"></i> '
+                    .($travel->spaceship->name ?? '')
+                    ."<br><em>{$travel->destination}</em>"
+                    ."<br><small>{$date}</small>";
             })
-            ->transform($passengers->with(["travel", "travel.spaceship"])->paginate(30));
+            ->transform($passengers->with(['travel', 'travel.spaceship'])->paginate(30));
     }
 }

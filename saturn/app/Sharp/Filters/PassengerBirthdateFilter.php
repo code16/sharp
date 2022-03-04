@@ -7,23 +7,22 @@ use Code16\Sharp\EntityList\EntityListDateRangeRequiredFilter;
 
 class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
 {
-
     public function label(): string
     {
-        return "Born between";
+        return 'Born between';
     }
 
     public function defaultValue(): array
     {
         return [
-            "start" => (new Carbon())->setDate(2014,1,1),
-            "end" => (new Carbon())->setDate(2014,12,31),
+            'start' => (new Carbon())->setDate(2014, 1, 1),
+            'end'   => (new Carbon())->setDate(2014, 12, 31),
         ];
     }
 
     public function dateFormat(): string
     {
-        return "YYYY-MM-DD";
+        return 'YYYY-MM-DD';
     }
 
     public function isMondayFirst(): bool

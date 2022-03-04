@@ -25,12 +25,12 @@ class SharpValidatorTest extends BaseApiTest
         );
 
         $this->postJson('/sharp/api/form/person/1', [
-            "name.text" => ""
+            'name.text' => '',
         ])->assertStatus(422)
             ->assertJson([
-                "errors" => [
-                    "name" => ["The name field is required."] // Regular field name returned
-                ]
+                'errors' => [
+                    'name' => ['The name field is required.'], // Regular field name returned
+                ],
             ]);
     }
 
@@ -45,19 +45,22 @@ class SharpValidatorTest extends BaseApiTest
         );
 
         $this->postJson('/sharp/api/form/person/1', [
-            "name.text" => ""
+            'name.text' => '',
         ])->assertStatus(422)
             ->assertJson([
-                "errors" => [
-                    "name" => ["The name field is required."] // Regular field name returned
-                ]
+                'errors' => [
+                    'name' => ['The name field is required.'], // Regular field name returned
+                ],
             ]);
     }
 }
 
 class ValidatorTestPersonSharpValidator extends FormRequest
 {
-    public function authorize() { return true; }
+    public function authorize()
+    {
+        return true;
+    }
 
     public function rules()
     {
@@ -67,7 +70,10 @@ class ValidatorTestPersonSharpValidator extends FormRequest
 
 class ValidatorTestPersonExtendingSharpFormRequestSharpValidator extends SharpFormRequest
 {
-    public function authorize() { return true; }
+    public function authorize()
+    {
+        return true;
+    }
 
     public function rules()
     {

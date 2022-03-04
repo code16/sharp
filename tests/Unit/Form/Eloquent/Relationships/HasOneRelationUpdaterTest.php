@@ -8,35 +8,34 @@ use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
 
 class HasOneRelationUpdaterTest extends SharpFormEloquentBaseTest
 {
-    
     /** @test */
-    function we_can_update_a_hasOne_relation()
+    public function we_can_update_a_hasOne_relation()
     {
-        $mother = Person::create(["name" => "Jane Wayne"]);
-        $son = Person::create(["name" => "John Wayne"]);
+        $mother = Person::create(['name' => 'Jane Wayne']);
+        $son = Person::create(['name' => 'John Wayne']);
 
         $updater = new HasOneRelationUpdater();
 
-        $updater->update($mother, "elderSon", $son->id);
+        $updater->update($mother, 'elderSon', $son->id);
 
-        $this->assertDatabaseHas("people", [
-            "id" => $son->id,
-            "mother_id" => $mother->id
+        $this->assertDatabaseHas('people', [
+            'id'        => $son->id,
+            'mother_id' => $mother->id,
         ]);
     }
 
     /** @test */
-    function we_can_create_a_hasOne_related()
+    public function we_can_create_a_hasOne_related()
     {
-        $mother = Person::create(["name" => "Jane Wayne"]);
+        $mother = Person::create(['name' => 'Jane Wayne']);
 
         $updater = new HasOneRelationUpdater();
 
-        $updater->update($mother, "elderSon:name", "John Wayne");
+        $updater->update($mother, 'elderSon:name', 'John Wayne');
 
-        $this->assertDatabaseHas("people", [
-            "name" => "John Wayne",
-            "mother_id" => $mother->id
+        $this->assertDatabaseHas('people', [
+            'name'      => 'John Wayne',
+            'mother_id' => $mother->id,
         ]);
     }
 }

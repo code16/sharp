@@ -27,7 +27,7 @@ class CreateSpaceshipsTable extends Migration
             $table->date('construction_date')->nullable();
             $table->unsignedInteger('type_id');
             $table->unsignedSmallInteger('messages_sent_count')->default(0);
-            $table->string('state')->default("inactive");
+            $table->string('state')->default('inactive');
             $table->timestamps();
         });
     }

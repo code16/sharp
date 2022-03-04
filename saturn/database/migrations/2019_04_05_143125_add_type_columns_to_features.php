@@ -14,8 +14,8 @@ class AddTypeColumnsToFeatures extends Migration
     public function up()
     {
         Schema::table('features', function (Blueprint $table) {
-            $table->string("type")->nullable();
-            $table->string("subtype")->nullable();
+            $table->string('type')->nullable();
+            $table->string('subtype')->nullable();
         });
     }
 }

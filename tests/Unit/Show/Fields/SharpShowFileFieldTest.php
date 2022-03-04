@@ -8,16 +8,16 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpShowFileFieldTest extends SharpTestCase
 {
     /** @test */
-    function we_can_define_a_file_field()
+    public function we_can_define_a_file_field()
     {
-        $field = SharpShowFileField::make("fileField")
-            ->setLabel("test");
+        $field = SharpShowFileField::make('fileField')
+            ->setLabel('test');
 
         $this->assertEquals([
-            "key" => "fileField",
-            "type" => "file",
-            "label" => "test",
-            "emptyVisible" => false,
+            'key'          => 'fileField',
+            'type'         => 'file',
+            'label'        => 'test',
+            'emptyVisible' => false,
         ], $field->toArray());
     }
 }

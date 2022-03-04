@@ -24,13 +24,13 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "ok"
+                'attribute' => 'state',
+                'value'     => 'ok',
             ])
             ->assertStatus(200)
             ->assertJson([
-                "action" => "refresh",
-                "value" => "ok",
+                'action' => 'refresh',
+                'value'  => 'ok',
             ]);
     }
 
@@ -41,13 +41,13 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "ok_reload"
+                'attribute' => 'state',
+                'value'     => 'ok_reload',
             ])
             ->assertStatus(200)
             ->assertJson([
-                "action" => "reload",
-                "value" => "ok_reload",
+                'action' => 'reload',
+                'value'  => 'ok_reload',
             ]);
     }
 
@@ -57,20 +57,20 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('post', '/sharp/api/list/person/state/1', [
-            "attribute" => "state",
-            "value" => "ok_refresh_items"
+            'attribute' => 'state',
+            'value'     => 'ok_refresh_items',
         ])
             ->assertStatus(200)
             ->assertJson([
-                "action" => "refresh",
-                "items" => [
+                'action' => 'refresh',
+                'items'  => [
                     [
-                        "id" => 1,
-                        "name" => "John <b>Wayne</b>",
-                        "age" => 22
-                    ]
+                        'id'   => 1,
+                        'name' => 'John <b>Wayne</b>',
+                        'age'  => 22,
+                    ],
                 ],
-                "value" => "ok_refresh_items",
+                'value' => 'ok_refresh_items',
             ]);
     }
 
@@ -81,8 +81,8 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "invalid"
+                'attribute' => 'state',
+                'value'     => 'invalid',
             ])
             ->assertStatus(422);
     }
@@ -94,8 +94,8 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
-                "attribute" => "state",
-                "value" => "ko"
+                'attribute' => 'state',
+                'value'     => 'ko',
             ])
             ->assertStatus(417);
     }
@@ -107,8 +107,8 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this
             ->json('post', '/sharp/api/list/person/state/100', [
-                "attribute" => "state",
-                "value" => "anything"
+                'attribute' => 'state',
+                'value'     => 'anything',
             ])
             ->assertStatus(403);
     }
@@ -124,34 +124,33 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
     }
 }
 
-class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList {
-
-    function buildListConfig(): void
+class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList
+{
+    public function buildListConfig(): void
     {
-        $this->setEntityState("state", new class() extends EntityState {
-
+        $this->setEntityState('state', new class() extends EntityState {
             protected function buildStates(): void
             {
-                $this->addState("ok", "OK", "blue");
-                $this->addState("ok_reload", "OK", "blue");
-                $this->addState("ok_refresh_items", "OK", "blue");
-                $this->addState("ko", "KO2", "red");
+                $this->addState('ok', 'OK', 'blue');
+                $this->addState('ok_reload', 'OK', 'blue');
+                $this->addState('ok_refresh_items', 'OK', 'blue');
+                $this->addState('ko', 'KO2', 'red');
             }
 
             protected function updateState($instanceId, $stateId): array
             {
-                if($stateId == "ko") {
-                    throw new SharpApplicativeException("Nope");
+                if ($stateId == 'ko') {
+                    throw new SharpApplicativeException('Nope');
                 }
 
-                if($stateId == "ok_reload") {
+                if ($stateId == 'ok_reload') {
                     return $this->reload();
                 }
 
-                if($stateId == "ok_refresh_items") {
+                if ($stateId == 'ok_refresh_items') {
                     return $this->refresh($instanceId);
                 }
-                
+
                 return [];
             }
 

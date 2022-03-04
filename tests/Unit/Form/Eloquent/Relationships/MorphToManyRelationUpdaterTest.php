@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Schema;
 
 class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 {
-
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
@@ -31,73 +30,73 @@ class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
     }
 
     /** @test */
-    function we_can_update_a_morphToMany_relation()
+    public function we_can_update_a_morphToMany_relation()
     {
-        $person = TaggablePerson::create(["name" => "A"]);
-        $tag = Tag::create(["name" => "A"]);
+        $person = TaggablePerson::create(['name' => 'A']);
+        $tag = Tag::create(['name' => 'A']);
 
         $updater = new MorphToManyRelationUpdater();
 
-        $updater->update($person, "tags", [
-            ["id"=>$tag->id]
+        $updater->update($person, 'tags', [
+            ['id'=>$tag->id],
         ]);
 
-        $this->assertDatabaseHas("taggables", [
-            "tag_id" => $tag->id,
-            "taggable_id" => $person->id,
-            "taggable_type" => TaggablePerson::class,
+        $this->assertDatabaseHas('taggables', [
+            'tag_id'        => $tag->id,
+            'taggable_id'   => $person->id,
+            'taggable_type' => TaggablePerson::class,
         ]);
     }
 
     /** @test */
-    function we_can_update_an_existing_morphToMany_relation()
+    public function we_can_update_an_existing_morphToMany_relation()
     {
-        $person = TaggablePerson::create(["name" => "A"]);
-        $oldTag = Tag::create(["name" => "A"]);
-        $newTag = Tag::create(["name" => "B"]);
+        $person = TaggablePerson::create(['name' => 'A']);
+        $oldTag = Tag::create(['name' => 'A']);
+        $newTag = Tag::create(['name' => 'B']);
 
         $person->tags()->sync([
-            ["id"=>$oldTag->id]
+            ['id'=>$oldTag->id],
         ]);
 
         $updater = new MorphToManyRelationUpdater();
 
-        $updater->update($person, "tags", [
-            ["id"=>$newTag->id]
+        $updater->update($person, 'tags', [
+            ['id'=>$newTag->id],
         ]);
 
-        $this->assertDatabaseHas("taggables", [
-            "tag_id" => $newTag->id,
-            "taggable_id" => $person->id,
-            "taggable_type" => TaggablePerson::class,
+        $this->assertDatabaseHas('taggables', [
+            'tag_id'        => $newTag->id,
+            'taggable_id'   => $person->id,
+            'taggable_type' => TaggablePerson::class,
         ]);
 
-        $this->assertDatabaseMissing("taggables", [
-            "tag_id" => $oldTag->id,
-            "taggable_id" => $person->id,
-            "taggable_type" => TaggablePerson::class,
+        $this->assertDatabaseMissing('taggables', [
+            'tag_id'        => $oldTag->id,
+            'taggable_id'   => $person->id,
+            'taggable_type' => TaggablePerson::class,
         ]);
     }
 
     /** @test */
-    function we_can_can_create_a_new_related_item()
+    public function we_can_can_create_a_new_related_item()
     {
-        $person = TaggablePerson::create(["name" => "A"]);
+        $person = TaggablePerson::create(['name' => 'A']);
 
         $updater = new MorphToManyRelationUpdater();
 
-        $updater->update($person, "tags", [
-            ["id"=>null, "name"=>"Z"]
+        $updater->update($person, 'tags', [
+            ['id'=>null, 'name'=>'Z'],
         ]);
 
-        $this->assertDatabaseHas("tags", [
-            "name" => "Z"
+        $this->assertDatabaseHas('tags', [
+            'name' => 'Z',
         ]);
 
-        $this->assertDatabaseHas("taggables", [
-            "tag_id" => Tag::first()->id,
-            "taggable_id" => $person->id,
-            "taggable_type" => TaggablePerson::class,
+        $this->assertDatabaseHas('taggables', [
+            'tag_id'        => Tag::first()->id,
+            'taggable_id'   => $person->id,
+            'taggable_type' => TaggablePerson::class,
         ]);
     }
 }
@@ -109,7 +108,7 @@ class Tag extends Model
 
 class TaggablePerson extends Person
 {
-    protected $table = "people";
+    protected $table = 'people';
 
     public function tags()
     {

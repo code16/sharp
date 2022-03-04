@@ -9,236 +9,238 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpFormGeolocationFieldTest extends SharpTestCase
 {
     /** @test */
-    function only_default_values_are_set()
+    public function only_default_values_are_set()
     {
-        $formField = SharpFormGeolocationField::make("geo");
+        $formField = SharpFormGeolocationField::make('geo');
 
-        $this->assertEquals([
-                "key" => "geo", "type" => "geolocation",
-                "displayUnit" => "DMS", "geocoding" => false,
-                "mapsProvider" => ["name" => "gmaps", "options" => []],
-                "geocodingProvider" => ["name" => "gmaps", "options" => []],
-                "zoomLevel" => 10
-            ], $formField->toArray()
+        $this->assertEquals(
+            [
+                'key'               => 'geo', 'type' => 'geolocation',
+                'displayUnit'       => 'DMS', 'geocoding' => false,
+                'mapsProvider'      => ['name' => 'gmaps', 'options' => []],
+                'geocodingProvider' => ['name' => 'gmaps', 'options' => []],
+                'zoomLevel'         => 10,
+            ],
+            $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_displayUnit()
+    public function we_can_define_displayUnit()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setDisplayUnitDegreesMinutesSeconds();
 
         $this->assertArraySubset(
-            ["displayUnit" => "DMS"],
+            ['displayUnit' => 'DMS'],
             $formField->toArray()
         );
 
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setDisplayUnitDecimalDegrees();
 
         $this->assertArraySubset(
-            ["displayUnit" => "DD"],
+            ['displayUnit' => 'DD'],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_turn_on_geocoding()
+    public function we_can_turn_on_geocoding()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setGeocoding();
 
         $this->assertArraySubset(
-            ["geocoding" => true],
+            ['geocoding' => true],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_a_global_apiKey()
+    public function we_can_define_a_global_apiKey()
     {
-        $formField = SharpFormGeolocationField::make("geo")
-            ->setApiKey("my-key");
+        $formField = SharpFormGeolocationField::make('geo')
+            ->setApiKey('my-key');
 
         $this->assertArraySubset(
             [
-                "mapsProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
-                "geocodingProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
+                'mapsProvider'      => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
+                'geocodingProvider' => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
             ],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_maps_or_geocoding_apiKey()
+    public function we_can_define_maps_or_geocoding_apiKey()
     {
-        $formField = SharpFormGeolocationField::make("geo")
-            ->setMapsApiKey("my-key");
+        $formField = SharpFormGeolocationField::make('geo')
+            ->setMapsApiKey('my-key');
 
         $this->assertArraySubset(
             [
-                "mapsProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
-                "geocodingProvider" => ["name" => "gmaps", "options" => []],
+                'mapsProvider'      => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
+                'geocodingProvider' => ['name' => 'gmaps', 'options' => []],
             ],
             $formField->toArray()
         );
 
-        $formField = SharpFormGeolocationField::make("geo")
-            ->setGeocodingApiKey("my-key");
+        $formField = SharpFormGeolocationField::make('geo')
+            ->setGeocodingApiKey('my-key');
 
         $this->assertArraySubset(
             [
-                "mapsProvider" => ["name" => "gmaps", "options" => []],
-                "geocodingProvider" => ["name" => "gmaps", "options" => ["apiKey" => "my-key"]],
+                'mapsProvider'      => ['name' => 'gmaps', 'options' => []],
+                'geocodingProvider' => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
             ],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_zoomLevel()
+    public function we_can_define_zoomLevel()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setZoomLevel(15);
 
         $this->assertArraySubset(
-            ["zoomLevel" => 15],
+            ['zoomLevel' => 15],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_initialPosition()
+    public function we_can_define_initialPosition()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setInitialPosition(12.4, -3.461894989013672);
 
         $this->assertArraySubset(
             [
-                "initialPosition" => [
-                    "lat" => 12.4, "lng" => -3.461894989013672
-                ]
+                'initialPosition' => [
+                    'lat' => 12.4, 'lng' => -3.461894989013672,
+                ],
             ],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_clear_initialPosition()
+    public function we_can_clear_initialPosition()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setInitialPosition(12.4, 24.5);
 
         $formField->clearInitialPosition();
 
         $this->assertArrayNotHasKey(
-            "initialPosition",
+            'initialPosition',
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_boundaries()
+    public function we_can_define_boundaries()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setBoundaries(1, 2, 3, 4);
 
         $this->assertArraySubset(
             [
-                "boundaries" => [
-                    "ne" => [
-                        "lat" => 1, "lng" => 2
+                'boundaries' => [
+                    'ne' => [
+                        'lat' => 1, 'lng' => 2,
                     ],
-                    "sw" => [
-                        "lat" => 3, "lng" => 4
-                    ]
-                ]
+                    'sw' => [
+                        'lat' => 3, 'lng' => 4,
+                    ],
+                ],
             ],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_define_providers()
+    public function we_can_define_providers()
     {
-        $formField = SharpFormGeolocationField::make("geo")
-            ->setMapsProvider("osm")
-            ->setGeocodingProvider("osm");
+        $formField = SharpFormGeolocationField::make('geo')
+            ->setMapsProvider('osm')
+            ->setGeocodingProvider('osm');
 
         $this->assertArraySubset(
             [
-                "mapsProvider" => ["name" => "osm", "options" => []],
-                "geocodingProvider" => ["name" => "osm", "options" => []],
+                'mapsProvider'      => ['name' => 'osm', 'options' => []],
+                'geocodingProvider' => ['name' => 'osm', 'options' => []],
             ],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_can_set_options_for_providers()
+    public function we_can_set_options_for_providers()
     {
-        $formField = SharpFormGeolocationField::make("geo")
-            ->setMapsProvider("osm", [
-                "tilesUrl" => "test"
+        $formField = SharpFormGeolocationField::make('geo')
+            ->setMapsProvider('osm', [
+                'tilesUrl' => 'test',
             ]);
 
         $this->assertArraySubset(
             [
-                "mapsProvider" => [
-                    "name" => "osm", "options" => [
-                        "tilesUrl" => "test"
-                    ]
-                ]
+                'mapsProvider' => [
+                    'name' => 'osm', 'options' => [
+                        'tilesUrl' => 'test',
+                    ],
+                ],
             ],
             $formField->toArray()
         );
 
-        $formField->setMapsApiKey("my-key");
+        $formField->setMapsApiKey('my-key');
 
         $this->assertArraySubset(
             [
-                "mapsProvider" => [
-                    "name" => "osm", "options" => [
-                        "tilesUrl" => "test",
-                        "apiKey" => "my-key"
-                    ]
-                ]
+                'mapsProvider' => [
+                    'name' => 'osm', 'options' => [
+                        'tilesUrl' => 'test',
+                        'apiKey'   => 'my-key',
+                    ],
+                ],
             ],
             $formField->toArray()
         );
     }
 
     /** @test */
-    function we_cant_define_an_unknown_maps_provider()
+    public function we_cant_define_an_unknown_maps_provider()
     {
         $this->expectException(SharpFormFieldValidationException::class);
 
-        SharpFormGeolocationField::make("geo")
-            ->setMapsProvider("apple")
+        SharpFormGeolocationField::make('geo')
+            ->setMapsProvider('apple')
             ->toArray();
     }
 
     /** @test */
-    function we_cant_define_an_unknown_geocoding_provider()
+    public function we_cant_define_an_unknown_geocoding_provider()
     {
         $this->expectException(SharpFormFieldValidationException::class);
 
-        SharpFormGeolocationField::make("geo")
-            ->setGeocodingProvider("apple")
+        SharpFormGeolocationField::make('geo')
+            ->setGeocodingProvider('apple')
             ->toArray();
     }
 
     /** @test */
-    function we_can_clear_boundaries()
+    public function we_can_clear_boundaries()
     {
-        $formField = SharpFormGeolocationField::make("geo")
+        $formField = SharpFormGeolocationField::make('geo')
             ->setBoundaries(1, 2, 3, 4);
 
         $formField->clearBoundaries();
 
         $this->assertArrayNotHasKey(
-            "boundaries",
+            'boundaries',
             $formField->toArray()
         );
     }

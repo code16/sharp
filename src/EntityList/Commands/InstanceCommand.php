@@ -8,11 +8,12 @@ abstract class InstanceCommand extends Command
 
     public function type(): string
     {
-        return "instance";
+        return 'instance';
     }
 
     /**
      * @param mixed $instanceId
+     *
      * @return array
      */
     public function formData($instanceId): array
@@ -24,6 +25,7 @@ abstract class InstanceCommand extends Command
 
     /**
      * @param mixed $instanceId
+     *
      * @return array
      */
     protected function initialData($instanceId): array
@@ -34,12 +36,14 @@ abstract class InstanceCommand extends Command
     /**
      * @param mixed $instanceId
      * @param array $data
+     *
      * @return array
      */
-    public abstract function execute($instanceId, array $data = []): array;
+    abstract public function execute($instanceId, array $data = []): array;
 
     /**
-     * Check if the current user is allowed to use this Command for this instance
+     * Check if the current user is allowed to use this Command for this instance.
+     *
      * @param mixed $instanceId
      */
     public function authorizeFor($instanceId): bool
@@ -52,7 +56,7 @@ abstract class InstanceCommand extends Command
      */
     public function checkAndStoreAuthorizationFor($instanceId)
     {
-        if($this->authorizeFor($instanceId)) {
+        if ($this->authorizeFor($instanceId)) {
             $this->authorizedInstances[] = $instanceId;
         }
     }
@@ -62,7 +66,7 @@ abstract class InstanceCommand extends Command
      */
     public function getGlobalAuthorization()
     {
-        if(!$this->authorize()) {
+        if (!$this->authorize()) {
             return false;
         }
 

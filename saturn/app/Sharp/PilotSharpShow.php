@@ -13,64 +13,64 @@ use Code16\Sharp\Show\SharpShow;
 
 class PilotSharpShow extends SharpShow
 {
-    function buildShowFields(): void
+    public function buildShowFields(): void
     {
         $this
             ->addField(
-                SharpShowTextField::make("name")
-                    ->setLabel("Name")
+                SharpShowTextField::make('name')
+                    ->setLabel('Name')
             )->addField(
-                SharpShowTextField::make("role")
-                    ->setLabel("Role")
+                SharpShowTextField::make('role')
+                    ->setLabel('Role')
             )->addField(
-                SharpShowTextField::make("xp")
-                    ->setLabel("Xp")
+                SharpShowTextField::make('xp')
+                    ->setLabel('Xp')
             )->addField(
-                SharpShowEntityListField::make("spaceships", "spaceship")
-                    ->setLabel("Spaceships")
-                    ->hideFilterWithValue("pilots", function($instanceId) {
+                SharpShowEntityListField::make('spaceships', 'spaceship')
+                    ->setLabel('Spaceships')
+                    ->hideFilterWithValue('pilots', function ($instanceId) {
                         return $instanceId;
                     })
-                    ->hideEntityCommand(["synchronize", "reload"])
+                    ->hideEntityCommand(['synchronize', 'reload'])
                     ->showCreateButton(false)
             );
     }
 
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         $this
-            ->setBreadcrumbCustomLabelAttribute("breadcrumb_label")
-            ->setMultiformAttribute("role")
-            ->setEntityState("state", PilotEntityState::class)
-            ->addInstanceCommand("download", PilotDownloadPhoto::class);
+            ->setBreadcrumbCustomLabelAttribute('breadcrumb_label')
+            ->setMultiformAttribute('role')
+            ->setEntityState('state', PilotEntityState::class)
+            ->addInstanceCommand('download', PilotDownloadPhoto::class);
     }
 
-    function buildShowLayout(): void
+    public function buildShowLayout(): void
     {
         $this
-            ->addSection('Identity', function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(7, function(ShowLayoutColumn $column) {
+                    ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField("name")
-                            ->withFields("role|6", "xp|6");
+                            ->withSingleField('name')
+                            ->withFields('role|6', 'xp|6');
                     });
             })
-            ->addEntityListSection("spaceships");
+            ->addEntityListSection('spaceships');
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this
-            ->setCustomTransformer("role", function($role, $pilot) {
-                return $pilot->role == "sr" ? "senior" : "junior";
+            ->setCustomTransformer('role', function ($role, $pilot) {
+                return $pilot->role == 'sr' ? 'senior' : 'junior';
             })
-            ->setCustomTransformer("xp", function($xp, $pilot) {
-                return $pilot->role == "sr" ? $xp . "y" : null;
+            ->setCustomTransformer('xp', function ($xp, $pilot) {
+                return $pilot->role == 'sr' ? $xp.'y' : null;
             })
-            ->setCustomTransformer("breadcrumb_label", function($role, $pilot) {
-                return sprintf("Pilot %s", $pilot->name);
+            ->setCustomTransformer('breadcrumb_label', function ($role, $pilot) {
+                return sprintf('Pilot %s', $pilot->name);
             })
-            ->transform(Pilot::with("spaceships")->findOrFail($id));
+            ->transform(Pilot::with('spaceships')->findOrFail($id));
     }
 }

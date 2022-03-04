@@ -8,7 +8,7 @@ abstract class EntityCommand extends Command
 {
     public function type(): string
     {
-        return "entity";
+        return 'entity';
     }
 
     public function formData(): array
@@ -23,5 +23,5 @@ abstract class EntityCommand extends Command
         return [];
     }
 
-    public abstract function execute(EntityListQueryParams $params, array $data = []): array;
+    abstract public function execute(EntityListQueryParams $params, array $data = []): array;
 }

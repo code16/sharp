@@ -9,19 +9,19 @@ class SpaceshipTypeFilter implements EntityListSelectRequiredFilter
 {
     public function label(): string
     {
-        return "Ship type";
+        return 'Ship type';
     }
 
     public function values(): array
     {
-        return SpaceshipType::orderBy("label")
-            ->pluck("label", "id")
+        return SpaceshipType::orderBy('label')
+            ->pluck('label', 'id')
             ->all();
     }
 
     public function defaultValue()
     {
-        return SpaceshipType::orderBy("label")->first()->id;
+        return SpaceshipType::orderBy('label')->first()->id;
     }
 
     public function retainValueInSession(): bool

@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class ReorderHandlerMakeCommand extends GeneratorCommand
@@ -32,7 +32,8 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return string
      */
     protected function buildClass($name)
@@ -42,6 +43,7 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
         if ($this->option('model')) {
             $replace = $this->buildModelReplacements($replace);
         }
+
         return str_replace(
             array_keys($replace),
             array_values($replace),
@@ -52,14 +54,15 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
     /**
      * Build the model replacement values.
      *
-     * @param  array  $replace
+     * @param array $replace
+     *
      * @return array
      */
     protected function buildModelReplacements(array $replace)
     {
         $modelClass = $this->parseModel($this->option('model'));
 
-        if (! class_exists($modelClass)) {
+        if (!class_exists($modelClass)) {
             if ($this->confirm("A {$modelClass} model does not exist. Do you want to generate it?", true)) {
                 $this->call('make:model', ['name' => $modelClass]);
             }
@@ -67,18 +70,19 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
 
         return array_merge($replace, [
             'DummyFullModelClass' => $modelClass,
-            'DummyModelClass' => class_basename($modelClass),
-            'DummyModelVariable' => lcfirst(class_basename($modelClass)),
+            'DummyModelClass'     => class_basename($modelClass),
+            'DummyModelVariable'  => lcfirst(class_basename($modelClass)),
         ]);
     }
 
     /**
      * Get the fully-qualified model class name.
      *
-     * @param  string  $model
-     * @return string
+     * @param string $model
      *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     protected function parseModel($model)
     {
@@ -88,7 +92,7 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
 
         $model = trim(str_replace('/', '\\', $model), '\\');
 
-        if (! Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
+        if (!Str::startsWith($model, $rootNamespace = $this->laravel->getNamespace())) {
             $model = $rootNamespace.$model;
         }
 
@@ -110,7 +114,8 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)

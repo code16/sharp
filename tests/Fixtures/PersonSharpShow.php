@@ -11,35 +11,39 @@ use Code16\Sharp\Show\SharpShow;
 
 class PersonSharpShow extends SharpShow
 {
-    function buildShowFields(): void
+    public function buildShowFields(): void
     {
-        $this->addField(SharpShowTextField::make("name"));
+        $this->addField(SharpShowTextField::make('name'));
     }
 
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand("test_command", new class extends InstanceCommand {
+            ->addInstanceCommand('test_command', new class() extends InstanceCommand {
                 public function label(): string
                 {
-                    return "Label";
+                    return 'Label';
                 }
+
                 public function execute($instanceId, array $data = []): array
                 {
                 }
+
                 public function authorizeFor($instanceId): bool
                 {
                     return $instanceId < 10;
                 }
             })
-            ->setEntityState("state", new class extends EntityState {
+            ->setEntityState('state', new class() extends EntityState {
                 protected function buildStates(): void
                 {
-                    $this->addState("active", "Label", "blue");
+                    $this->addState('active', 'Label', 'blue');
                 }
+
                 protected function updateState($instanceId, $stateId): array
                 {
                 }
+
                 public function authorizeFor($instanceId): bool
                 {
                     return $instanceId < 10;
@@ -47,19 +51,19 @@ class PersonSharpShow extends SharpShow
             });
     }
 
-    function buildShowLayout(): void
+    public function buildShowLayout(): void
     {
         $this
-            ->addSection("Identity", function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("name");
+                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('name');
                     });
             });
     }
 
-    function find($id): array
+    public function find($id): array
     {
-        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
+        return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
 }

@@ -47,32 +47,32 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->getJson('/sharp/api/form/person')->assertJson([
-            "authorizations" => [
+            'authorizations' => [
                 // Delete policy is false, but in a create case it will return true
                 // because there is no entity to check for.
-                "delete" => true,
-                "update" => true,
-                "create" => true,
-                "view" => true,
-            ]
+                'delete' => true,
+                'update' => true,
+                'create' => true,
+                'view'   => true,
+            ],
         ]);
 
         $this->getJson('/sharp/api/form/person/1')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => true,
-                "create" => true,
-                "view" => true,
-            ]
+            'authorizations' => [
+                'delete' => false,
+                'update' => true,
+                'create' => true,
+                'view'   => true,
+            ],
         ]);
 
         $this->getJson('/sharp/api/form/person/10')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
+            'authorizations' => [
+                'delete' => false,
+                'update' => false,
+                'create' => true,
+                'view'   => true,
+            ],
         ]);
     }
 
@@ -82,11 +82,11 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->getJson('/sharp/api/list/person')->assertJson([
-            "authorizations" => [
-                "update" => [1],
-                "create" => true,
-                "view" => [1,2],
-            ]
+            'authorizations' => [
+                'update' => [1],
+                'create' => true,
+                'view'   => [1, 2],
+            ],
         ]);
     }
 
@@ -96,19 +96,20 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->app['config']->set(
-            'sharp.entities.person.authorizations', [
-                "delete" => true,
-                "update" => false,
+            'sharp.entities.person.authorizations',
+            [
+                'delete' => true,
+                'update' => false,
             ]
         );
 
         $this->getJson('/sharp/api/form/person')->assertJson([
-            "authorizations" => [
-                "delete" => true,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
+            'authorizations' => [
+                'delete' => true,
+                'update' => false,
+                'create' => true,
+                'view'   => true,
+            ],
         ]);
     }
 
@@ -116,7 +117,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
     public function entity_policy_can_be_set_to_handle_whole_entity_visibility()
     {
         $this->buildTheWorld();
-        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->actingAs(new User(['name' => 'Unauthorized-User']));
 
         $this->getJson('/sharp/api/form/person')->assertStatus(403);
         $this->postJson('/sharp/api/form/person/1', [])->assertStatus(403);
@@ -132,7 +133,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
 
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(200);
 
-        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->actingAs(new User(['name' => 'Unauthorized-User']));
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
     }
 }
@@ -141,20 +142,29 @@ class AuthorizationsTestPersonPolicy
 {
     public function entity(User $user)
     {
-        return $user->name != "Unauthorized-User";
+        return $user->name != 'Unauthorized-User';
     }
 
-    public function view(User $user, $id) { return true; }
+    public function view(User $user, $id)
+    {
+        return true;
+    }
 
-    public function update(User $user, $id) { return $id < 2; }
+    public function update(User $user, $id)
+    {
+        return $id < 2;
+    }
 
-    public function delete(User $user, $id) { return false; }
+    public function delete(User $user, $id)
+    {
+        return false;
+    }
 }
 
 class AuthorizationsTestPersonalDashboardPolicy
 {
     public function view(User $user)
     {
-        return $user->name != "Unauthorized-User";
+        return $user->name != 'Unauthorized-User';
     }
 }

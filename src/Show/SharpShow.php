@@ -11,11 +11,11 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
-    use WithCustomTransformers,
-        HandleFormFields,
-        HandleEntityState,
-        HandleInstanceCommands,
-        HandleCustomBreadcrumb;
+    use WithCustomTransformers;
+    use HandleFormFields;
+    use HandleEntityState;
+    use HandleInstanceCommands;
+    use HandleCustomBreadcrumb;
 
     protected bool $layoutBuilt = false;
     protected array $sections = [];
@@ -23,15 +23,15 @@ abstract class SharpShow
 
     final public function showLayout(): array
     {
-        if(!$this->layoutBuilt) {
+        if (!$this->layoutBuilt) {
             $this->buildShowLayout();
             $this->layoutBuilt = true;
         }
 
         return [
-            "sections" => collect($this->sections)
+            'sections' => collect($this->sections)
                 ->map->toArray()
-                ->all()
+                ->all(),
         ];
     }
 
@@ -39,6 +39,7 @@ abstract class SharpShow
      * Return the entity instance, as an array.
      *
      * @param mixed $id
+     *
      * @return array
      */
     final public function instance($id): array
@@ -60,17 +61,18 @@ abstract class SharpShow
      *
      * @param mixed $instanceId
      * @param array $config
+     *
      * @return array
      */
     public function showConfig($instanceId, $config = []): array
     {
         $config = collect($config)
             ->merge([
-                "multiformAttribute" => $this->multiformAttribute
+                'multiformAttribute' => $this->multiformAttribute,
             ])
             ->all();
-        
-        return tap($config, function(&$config) use($instanceId) {
+
+        return tap($config, function (&$config) use ($instanceId) {
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
@@ -96,7 +98,7 @@ abstract class SharpShow
         $section = new ShowLayoutSection($label);
         $this->sections[] = $section;
 
-        if($callback) {
+        if ($callback) {
             $callback($section);
         }
 
@@ -107,12 +109,12 @@ abstract class SharpShow
     {
         $this->layoutBuilt = false;
 
-        $section = new ShowLayoutSection("");
-        $section->addColumn(12, function($column) use($entityListKey) {
+        $section = new ShowLayoutSection('');
+        $section->addColumn(12, function ($column) use ($entityListKey) {
             $column->withSingleField($entityListKey);
         });
 
-        if($callback) {
+        if ($callback) {
             $callback($section);
         }
 
@@ -122,9 +124,9 @@ abstract class SharpShow
     }
 
     /**
-     * Build show config using ->addInstanceCommand() and ->setEntityState()
+     * Build show config using ->addInstanceCommand() and ->setEntityState().
      */
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         // No default implementation
     }
@@ -133,17 +135,18 @@ abstract class SharpShow
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param mixed $id
+     *
      * @return array
      */
-    abstract function find($id): array;
+    abstract public function find($id): array;
 
     /**
-     * Build form fields using ->addField()
+     * Build form fields using ->addField().
      */
-    abstract function buildShowFields(): void;
+    abstract public function buildShowFields(): void;
 
     /**
-     * Build form layout using ->addSection()
+     * Build form layout using ->addSection().
      */
-    abstract function buildShowLayout(): void;
+    abstract public function buildShowLayout(): void;
 }

@@ -14,58 +14,56 @@ use Code16\Sharp\EntityList\SharpEntityList;
 
 class PilotSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make("name")
+            EntityListDataContainer::make('name')
                 ->setSortable()
-                ->setLabel("Name")
+                ->setLabel('Name')
         )->addDataContainer(
-            EntityListDataContainer::make("role")
-                ->setLabel("Role")
+            EntityListDataContainer::make('role')
+                ->setLabel('Role')
         )->addDataContainer(
-            EntityListDataContainer::make("xp")
-                ->setLabel("Xp")
+            EntityListDataContainer::make('xp')
+                ->setLabel('Xp')
         );
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
         $this->setSearchable()
-            ->setDefaultSort("name", "asc")
-            ->setMultiformAttribute("role")
+            ->setDefaultSort('name', 'asc')
+            ->setMultiformAttribute('role')
             ->setPaginated()
-            ->setEntityState("state", PilotEntityState::class)
-            ->addFilter("spaceship", PilotSpaceshipFilter::class)
-            ->addFilter("role", PilotRoleFilter::class)
-            ->addEntityCommand("updateXP", PilotUpdateXPCommand::class)
-            ->addInstanceCommand("download", PilotDownloadPhoto::class);
+            ->setEntityState('state', PilotEntityState::class)
+            ->addFilter('spaceship', PilotSpaceshipFilter::class)
+            ->addFilter('role', PilotRoleFilter::class)
+            ->addEntityCommand('updateXP', PilotUpdateXPCommand::class)
+            ->addInstanceCommand('download', PilotDownloadPhoto::class);
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
-        $this->addColumn("name", 4)
-            ->addColumn("role", 4)
-            ->addColumn("xp", 4);
+        $this->addColumn('name', 4)
+            ->addColumn('role', 4)
+            ->addColumn('xp', 4);
     }
 
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
-        $pilots = Pilot::select("pilots.*")->distinct();
+        $pilots = Pilot::select('pilots.*')->distinct();
 
-        if($ids = $params->specificIds()) {
-            $pilots->whereIn("id", $ids);
-
+        if ($ids = $params->specificIds()) {
+            $pilots->whereIn('id', $ids);
         } else {
-            if ($spaceship = $params->filterFor("spaceship")) {
-                $pilots->leftJoin("pilot_spaceship", "pilots.id", "=", "pilot_spaceship.pilot_id")
-                    ->leftJoin("spaceships", "spaceships.id", "=", "pilot_spaceship.spaceship_id")
-                    ->where("spaceships.id", $spaceship);
+            if ($spaceship = $params->filterFor('spaceship')) {
+                $pilots->leftJoin('pilot_spaceship', 'pilots.id', '=', 'pilot_spaceship.pilot_id')
+                    ->leftJoin('spaceships', 'spaceships.id', '=', 'pilot_spaceship.spaceship_id')
+                    ->where('spaceships.id', $spaceship);
             }
 
-            if ($role = $params->filterFor("role")) {
-                $pilots->where("role", $role);
+            if ($role = $params->filterFor('role')) {
+                $pilots->where('role', $role);
             }
 
             if ($params->sortedBy()) {
@@ -80,11 +78,11 @@ class PilotSharpList extends SharpEntityList
         }
 
         return $this
-            ->setCustomTransformer("role", function($role, $pilot) {
-                return $pilot->role == "sr" ? "senior" : "junior";
+            ->setCustomTransformer('role', function ($role, $pilot) {
+                return $pilot->role == 'sr' ? 'senior' : 'junior';
             })
-            ->setCustomTransformer("xp", function($xp, $pilot) {
-                return $pilot->role == "sr" ? $xp . "y" : null;
+            ->setCustomTransformer('xp', function ($xp, $pilot) {
+                return $pilot->role == 'sr' ? $xp.'y' : null;
             })
             ->transform($pilots->paginate(30));
     }

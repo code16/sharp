@@ -41,7 +41,8 @@ class MediaMakeCommand extends GeneratorCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return string
      */
     protected function buildClass($name)
@@ -55,14 +56,17 @@ class MediaMakeCommand extends GeneratorCommand
         }
 
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
         );
     }
 
     /**
-     * Build replacements required to set the DB table name
+     * Build replacements required to set the DB table name.
      *
-     * @param  array  $replace
+     * @param array $replace
+     *
      * @return array
      */
     protected function replaceTableName(array $replace)
@@ -73,9 +77,10 @@ class MediaMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Build replacements required to remove the table property
+     * Build replacements required to remove the table property.
      *
-     * @param  array  $replace
+     * @param array $replace
+     *
      * @return array
      */
     protected function removeTableProperty(array $replace)

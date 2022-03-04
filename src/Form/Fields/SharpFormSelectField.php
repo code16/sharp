@@ -8,23 +8,24 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 
 class SharpFormSelectField extends SharpFormField
 {
-    use SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithOptions;
+    use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "select";
+    const FIELD_TYPE = 'select';
 
     protected array $options;
     protected bool $multiple = false;
     protected bool $clearable = false;
     protected ?int $maxSelected = null;
-    protected string $display = "list";
-    protected string $idAttribute = "id";
+    protected string $display = 'list';
+    protected string $idAttribute = 'id';
     protected bool $inline = false;
     protected bool $showSelectAll = false;
     protected ?array $dynamicAttributes = null;
 
     public static function make(string $key, array $options): self
     {
-        $instance = new static($key, static::FIELD_TYPE, new SelectFormatter);
+        $instance = new static($key, static::FIELD_TYPE, new SelectFormatter());
         $instance->options = $options;
 
         return $instance;
@@ -40,7 +41,7 @@ class SharpFormSelectField extends SharpFormField
     public function allowSelectAll(bool $allowSelectAll = true): self
     {
         $this->showSelectAll = $allowSelectAll;
-        
+
         return $this;
     }
 
@@ -60,14 +61,14 @@ class SharpFormSelectField extends SharpFormField
 
     public function setDisplayAsList(): self
     {
-        $this->display = "list";
+        $this->display = 'list';
 
         return $this;
     }
 
     public function setDisplayAsDropdown(): self
     {
-        $this->display = "dropdown";
+        $this->display = 'dropdown';
 
         return $this;
     }
@@ -90,10 +91,10 @@ class SharpFormSelectField extends SharpFormField
     {
         $this->dynamicAttributes = [
             [
-                "name" => "options",
-                "type" => "map",
-                "path" => $fieldKeys
-            ]
+                'name' => 'options',
+                'type' => 'map',
+                'path' => $fieldKeys,
+            ],
         ];
 
         return $this;
@@ -115,37 +116,38 @@ class SharpFormSelectField extends SharpFormField
 
         return $this;
     }
-    
+
     protected function validationRules(): array
     {
         return [
-            "options" => "array",
-            "multiple" => "boolean",
-            "showSelectAll" => "boolean",
-            "inline" => "boolean",
-            "clearable" => "boolean",
-            "display" => "required|in:list,dropdown",
-            "maxSelected" => "int"
+            'options'       => 'array',
+            'multiple'      => 'boolean',
+            'showSelectAll' => 'boolean',
+            'inline'        => 'boolean',
+            'clearable'     => 'boolean',
+            'display'       => 'required|in:list,dropdown',
+            'maxSelected'   => 'int',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray(
-            array_merge([
-                "options" => $this->dynamicAttributes
-                    ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes[0]["path"]))
-                    : self::formatOptions($this->options, $this->idAttribute),
-                "multiple" => $this->multiple,
-                "showSelectAll" => $this->showSelectAll,
-                "clearable" => $this->clearable,
-                "display" => $this->display,
-                "inline" => $this->inline,
-                "maxSelected" => $this->maxSelected,
-                "localized" => $this->localized
-            ],
+            array_merge(
+                [
+                    'options' => $this->dynamicAttributes
+                        ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes[0]['path']))
+                        : self::formatOptions($this->options, $this->idAttribute),
+                    'multiple'      => $this->multiple,
+                    'showSelectAll' => $this->showSelectAll,
+                    'clearable'     => $this->clearable,
+                    'display'       => $this->display,
+                    'inline'        => $this->inline,
+                    'maxSelected'   => $this->maxSelected,
+                    'localized'     => $this->localized,
+                ],
                 $this->dynamicAttributes
-                    ? ["dynamicAttributes" => $this->dynamicAttributes]
+                    ? ['dynamicAttributes' => $this->dynamicAttributes]
                     : []
             )
         );

@@ -5,7 +5,7 @@ namespace Code16\Sharp\EntityList\Containers;
 class EntityListDataContainer
 {
     protected string $key;
-    protected string $label = "";
+    protected string $label = '';
     protected bool $sortable = false;
     protected bool $html = true;
 
@@ -41,10 +41,10 @@ class EntityListDataContainer
     public function toArray(): array
     {
         return [
-            "key" => $this->key,
-            "label" => $this->label,
-            "sortable" => $this->sortable,
-            "html" => $this->html,
+            'key'      => $this->key,
+            'label'    => $this->label,
+            'sortable' => $this->sortable,
+            'html'     => $this->html,
         ];
     }
 }

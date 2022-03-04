@@ -11,29 +11,30 @@ trait HasFiltersInQuery
 
     /**
      * @param string $filterName
+     *
      * @return mixed|null
      */
     public function filterFor(string $filterName)
     {
-        if(isset($this->filters["/forced/$filterName"])) {
+        if (isset($this->filters["/forced/$filterName"])) {
             return $this->filterFor("/forced/$filterName");
         }
 
-        if(!isset($this->filters[$filterName])) {
+        if (!isset($this->filters[$filterName])) {
             return null;
         }
 
-        if(Str::contains($this->filters[$filterName], "..")) {
-            list($start, $end) = explode("..", $this->filters[$filterName]);
+        if (Str::contains($this->filters[$filterName], '..')) {
+            list($start, $end) = explode('..', $this->filters[$filterName]);
 
             return [
-                "start" => Carbon::createFromFormat('Ymd', $start)->setTime(0,0,0,0),
-                "end" => Carbon::createFromFormat('Ymd', $end)->setTime(23,59,59,999999),
+                'start' => Carbon::createFromFormat('Ymd', $start)->setTime(0, 0, 0, 0),
+                'end'   => Carbon::createFromFormat('Ymd', $end)->setTime(23, 59, 59, 999999),
             ];
         }
 
-        if(Str::contains($this->filters[$filterName], ",")){
-            return explode(",", $this->filters[$filterName]);
+        if (Str::contains($this->filters[$filterName], ',')) {
+            return explode(',', $this->filters[$filterName]);
         }
 
         return $this->filters[$filterName];
@@ -42,7 +43,7 @@ trait HasFiltersInQuery
     public function setDefaultFilters(array $filters): self
     {
         collect($filters)
-            ->each(function($value, $filter) {
+            ->each(function ($value, $filter) {
                 $this->setFilterValue($filter, $value);
             });
 
@@ -52,11 +53,11 @@ trait HasFiltersInQuery
     protected function fillFilterWithRequest(array $query = null): void
     {
         collect($query)
-            ->filter(function($value, $name) {
-                return Str::startsWith($name, "filter_");
+            ->filter(function ($value, $name) {
+                return Str::startsWith($name, 'filter_');
             })
-            ->each(function($value, $name) {
-                $this->setFilterValue(substr($name, strlen("filter_")), $value);
+            ->each(function ($value, $name) {
+                $this->setFilterValue(substr($name, strlen('filter_')), $value);
             });
     }
 
@@ -66,21 +67,19 @@ trait HasFiltersInQuery
     }
 
     /**
-     * @param string $filter
+     * @param string            $filter
      * @param string|array|null $value
      */
     protected function setFilterValue(string $filter, $value)
     {
-        if(is_array($value)) {
+        if (is_array($value)) {
             // Force all filter values to be string, to be consistent with all use cases
             // (filter in EntityList or in Command)
-            if(empty($value)) {
+            if (empty($value)) {
                 $value = null;
-
-            } elseif(isset($value["start"]) && $value["start"] instanceof Carbon) {
+            } elseif (isset($value['start']) && $value['start'] instanceof Carbon) {
                 // RangeFilter case
-                $value = collect($value)->map->format("Ymd")->implode("..");
-
+                $value = collect($value)->map->format('Ymd')->implode('..');
             } else {
                 // Multiple filter case
                 $value = implode(',', $value);

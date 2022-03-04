@@ -14,82 +14,79 @@ use Illuminate\Support\Str;
 
 class PersonSharpEntityList extends SharpEntityList
 {
-
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
         $items = [
-            ["id" => 1, "name" => "John <b>Wayne</b>", "age" => 22, "job" => "actor"],
-            ["id" => 2, "name" => "Mary <b>Wayne</b>", "age" => 26, "job" => "truck driver"],
+            ['id' => 1, 'name' => 'John <b>Wayne</b>', 'age' => 22, 'job' => 'actor'],
+            ['id' => 2, 'name' => 'Mary <b>Wayne</b>', 'age' => 26, 'job' => 'truck driver'],
         ];
 
-        if($params->hasSearch()) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return Str::contains(strtolower($item["name"]), $params->searchWords(false));
+        if ($params->hasSearch()) {
+            $items = collect($items)->filter(function ($item) use ($params) {
+                return Str::contains(strtolower($item['name']), $params->searchWords(false));
             })->all();
         }
 
-        if($params->filterFor("age")) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return $item["age"] == $params->filterFor("age");
+        if ($params->filterFor('age')) {
+            $items = collect($items)->filter(function ($item) use ($params) {
+                return $item['age'] == $params->filterFor('age');
             })->all();
-
-        } elseif(request()->has("default_age")) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return $item["age"] == $params->filterFor("age_required");
-            })->all();
-        }
-
-        if($params->filterFor("age_multiple")) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return in_array($item["age"], (array)$params->filterFor("age_multiple"));
+        } elseif (request()->has('default_age')) {
+            $items = collect($items)->filter(function ($item) use ($params) {
+                return $item['age'] == $params->filterFor('age_required');
             })->all();
         }
 
-        if(count($params->specificIds())) {
-            $items = collect($items)->filter(function($item) use($params) {
-                return in_array($item["id"], $params->specificIds());
+        if ($params->filterFor('age_multiple')) {
+            $items = collect($items)->filter(function ($item) use ($params) {
+                return in_array($item['age'], (array) $params->filterFor('age_multiple'));
             })->all();
         }
 
-        if(request()->has("paginated")) {
+        if (count($params->specificIds())) {
+            $items = collect($items)->filter(function ($item) use ($params) {
+                return in_array($item['id'], $params->specificIds());
+            })->all();
+        }
+
+        if (request()->has('paginated')) {
             return $this->transform(new LengthAwarePaginator($items, 20, 2, 1));
         }
 
         return $this->transform($items);
     }
 
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make("name")
-                ->setLabel("Name")
+            EntityListDataContainer::make('name')
+                ->setLabel('Name')
                 ->setHtml()
                 ->setSortable()
-
         )->addDataContainer(
-            EntityListDataContainer::make("age")
-                ->setLabel("Age")
+            EntityListDataContainer::make('age')
+                ->setLabel('Age')
                 ->setSortable()
         );
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
-        $this->addColumn("name", 6, 12)
-            ->addColumnLarge("age", 6);
+        $this->addColumn('name', 6, 12)
+            ->addColumnLarge('age', 6);
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
         $this->setSearchable()
             ->setReorderable(PersonSharpEntityListReorderHandler::class)
-            ->addFilter("age", PersonSharpEntityListAgeFilter::class, function($value) {
-                session(["filter_age_was_set" => $value]);
+            ->addFilter('age', PersonSharpEntityListAgeFilter::class, function ($value) {
+                session(['filter_age_was_set' => $value]);
             })
-            ->addFilter("age_multiple", PersonSharpEntityListAgeMultipleFilter::class)
-            ->addFilter("age_required", PersonSharpEntityListAgeRequiredFilter::class)
-            ->addFilter("age_forced", PersonSharpEntityListAgeFilter::class, function($value, $params) {
-                $params->forceFilterValue("age", $value);
+            ->addFilter('age_multiple', PersonSharpEntityListAgeMultipleFilter::class)
+            ->addFilter('age_required', PersonSharpEntityListAgeRequiredFilter::class)
+            ->addFilter('age_forced', PersonSharpEntityListAgeFilter::class, function ($value, $params) {
+                $params->forceFilterValue('age', $value);
             });
     }
 }
@@ -102,13 +99,11 @@ class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
     }
 }
 
-class PersonSharpEntityListAgeMultipleFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListSelectMultipleFilter
+class PersonSharpEntityListAgeMultipleFilter extends PersonSharpEntityListAgeFilter implements EntityListSelectMultipleFilter
 {
 }
 
-class PersonSharpEntityListAgeRequiredFilter
-    extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
+class PersonSharpEntityListAgeRequiredFilter extends PersonSharpEntityListAgeFilter implements EntityListSelectRequiredFilter
 {
     /**
      * @return string|int
@@ -121,7 +116,7 @@ class PersonSharpEntityListAgeRequiredFilter
 
 class PersonSharpEntityListReorderHandler implements ReorderHandler
 {
-    function reorder(array $ids): void
+    public function reorder(array $ids): void
     {
     }
 }

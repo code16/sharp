@@ -24,10 +24,10 @@ class EntityListLayoutColumn
     public function toArray(): array
     {
         return [
-            "key" => $this->key,
-            "size" => $this->size,
-            "sizeXS" => $this->sizeXS,
-            "hideOnXS" => $this->largeOnly,
+            'key'      => $this->key,
+            'size'     => $this->size,
+            'sizeXS'   => $this->sizeXS,
+            'hideOnXS' => $this->largeOnly,
         ];
     }
 }

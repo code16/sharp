@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePassengersTable extends Migration
 {
@@ -15,9 +15,9 @@ class CreatePassengersTable extends Migration
     {
         Schema::create('passengers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name");
-            $table->date("birth_date");
-            $table->string("gender");
+            $table->string('name');
+            $table->date('birth_date');
+            $table->string('gender');
             $table->unsignedInteger('travel_id');
             $table->string('travel_category');
             $table->timestamps();

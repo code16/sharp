@@ -6,7 +6,6 @@ use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
-use Illuminate\Contracts\Support\Arrayable;
 
 class MultiFormEntityListControllerTest extends BaseApiTest
 {
@@ -24,15 +23,15 @@ class MultiFormEntityListControllerTest extends BaseApiTest
 
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
-            ->assertJson(["forms" => [
-                "big" => [
-                    "label" => "Big person",
-                    "instances" => [2]
+            ->assertJson(['forms' => [
+                'big' => [
+                    'label'     => 'Big person',
+                    'instances' => [2],
                 ],
-                "small" => [
-                    "label" => "Small person",
-                    "instances" => [1]
-                ]
+                'small' => [
+                    'label'     => 'Small person',
+                    'instances' => [1],
+                ],
             ]]);
     }
 
@@ -44,19 +43,21 @@ class MultiFormEntityListControllerTest extends BaseApiTest
         );
 
         $this->app['config']->set(
-            'sharp.entities.person.forms', [
-                "big" => [
-                    "form" => PersonSharpForm::class,
-                    "label" => "Big person"
-                ], "small" => [
-                    "form" => PersonSharpForm::class,
-                    "label" => "Small person"
-                ]
+            'sharp.entities.person.forms',
+            [
+                'big' => [
+                    'form'  => PersonSharpForm::class,
+                    'label' => 'Big person',
+                ], 'small' => [
+                    'form'  => PersonSharpForm::class,
+                    'label' => 'Small person',
+                ],
             ]
         );
 
         $this->app['config']->set(
-            'app.key', 'base64:'.base64_encode(random_bytes(
+            'app.key',
+            'base64:'.base64_encode(random_bytes(
                 $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
             ))
         );
@@ -65,33 +66,32 @@ class MultiFormEntityListControllerTest extends BaseApiTest
 
 class PersonWithMultiformSharpEntityList extends SharpEntityList
 {
-
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
         return $this
-            ->setCustomTransformer("type", function($a, $person) {
-                return $person['id']%2 == 0 ? "big" : "small";
+            ->setCustomTransformer('type', function ($a, $person) {
+                return $person['id'] % 2 == 0 ? 'big' : 'small';
             })
             ->transform([
-                ["id" => 1, "name" => "John Wayne"],
-                ["id" => 2, "name" => "Mary Wayne"],
+                ['id' => 1, 'name' => 'John Wayne'],
+                ['id' => 2, 'name' => 'Mary Wayne'],
             ]);
     }
 
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make("name")
+            EntityListDataContainer::make('name')
         );
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
-        $this->addColumn("name", 12);
+        $this->addColumn('name', 12);
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
-        $this->setMultiformAttribute("type");
+        $this->setMultiformAttribute('type');
     }
 }

@@ -6,7 +6,6 @@ use Code16\Sharp\Form\Validator\SharpFormRequest;
 
 class TravelSharpValidator extends SharpFormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *

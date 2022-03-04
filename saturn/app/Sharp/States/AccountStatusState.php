@@ -9,15 +9,15 @@ class AccountStatusState extends SingleEntityState
 {
     protected function buildStates(): void
     {
-        $this->addState("online", "Online", "green")
-            ->addState("offline", "Offline", "red")
-            ->addState("busy", "Busy", "orange");
+        $this->addState('online', 'Online', 'green')
+            ->addState('offline', 'Offline', 'red')
+            ->addState('busy', 'Busy', 'orange');
     }
 
     protected function updateSingleState(string $stateId): array
     {
         User::findOrFail(auth()->id())->update([
-            "status" => $stateId
+            'status' => $stateId,
         ]);
 
         return $this->reload();

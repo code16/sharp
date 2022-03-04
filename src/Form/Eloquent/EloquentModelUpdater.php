@@ -9,12 +9,12 @@ class EloquentModelUpdater
 {
     protected array $relationshipsConfiguration = [];
 
-    function update(Model $instance, array $data): Model
+    public function update(Model $instance, array $data): Model
     {
         $relationships = [];
 
-        foreach($data as $attribute => $value) {
-            if($this->isRelationship($instance, $attribute)) {
+        foreach ($data as $attribute => $value) {
+            if ($this->isRelationship($instance, $attribute)) {
                 $relationships[$attribute] = $value;
 
                 continue;
@@ -34,23 +34,24 @@ class EloquentModelUpdater
 
     /**
      * @param array|Arrayable $configuration
+     *
      * @return $this
      */
-    function initRelationshipsConfiguration($configuration): self
+    public function initRelationshipsConfiguration($configuration): self
     {
-        $this->relationshipsConfiguration = is_array($configuration) 
-            ? $configuration 
+        $this->relationshipsConfiguration = is_array($configuration)
+            ? $configuration
             : $configuration->toArray();
 
         return $this;
     }
 
     /**
-     * Valuates the $attribute with $value
+     * Valuates the $attribute with $value.
      *
-     * @param Model $instance
+     * @param Model  $instance
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      */
     protected function valuateAttribute(Model $instance, string $attribute, $value): void
     {
@@ -59,21 +60,24 @@ class EloquentModelUpdater
 
     protected function isRelationship(Model $instance, string $attribute): bool
     {
-        return strpos($attribute, ":") !== false || method_exists($instance, $attribute);
+        return strpos($attribute, ':') !== false || method_exists($instance, $attribute);
     }
 
     protected function saveRelationships(Model $instance, array $relationships)
     {
         foreach ($relationships as $attribute => $value) {
-            $relAttribute = explode(":", $attribute)[0];
+            $relAttribute = explode(':', $attribute)[0];
             $type = get_class($instance->{$relAttribute}());
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
-                . (new \ReflectionClass($type))->getShortName()
-                . 'RelationUpdater');
+                .(new \ReflectionClass($type))->getShortName()
+                .'RelationUpdater');
 
             $relationshipUpdater->update(
-                $instance, $attribute, $value, $this->relationshipsConfiguration[$attribute] ?? null
+                $instance,
+                $attribute,
+                $value,
+                $this->relationshipsConfiguration[$attribute] ?? null
             );
         }
     }

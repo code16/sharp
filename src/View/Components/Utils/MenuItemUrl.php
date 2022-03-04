@@ -4,17 +4,17 @@ namespace Code16\Sharp\View\Components\Utils;
 
 class MenuItemUrl extends MenuItem
 {
-    public string $type = "url";
+    public string $type = 'url';
     public string $url;
     public ?string $icon;
     public string $key;
-    public string $target = "_blank";
+    public string $target = '_blank';
 
     public function __construct(array $config)
     {
-        $this->label = $config["label"] ?? "Unlabelled link";
-        $this->icon = $config["icon"] ?? null;
-        $this->url = $config["url"];
+        $this->label = $config['label'] ?? 'Unlabelled link';
+        $this->icon = $config['icon'] ?? null;
+        $this->url = $config['url'];
         $this->key = uniqid();
     }
 

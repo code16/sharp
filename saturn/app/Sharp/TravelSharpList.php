@@ -2,7 +2,6 @@
 
 namespace App\Sharp;
 
-use App\Passenger;
 use App\Sharp\Commands\TravelSendEmail;
 use App\Travel;
 use Code16\Sharp\EntityList\Containers\EntityListDataContainer;
@@ -11,43 +10,42 @@ use Code16\Sharp\EntityList\SharpEntityList;
 
 class TravelSharpList extends SharpEntityList
 {
-
-    function buildListDataContainers(): void
+    public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make("destination")
+            EntityListDataContainer::make('destination')
                 ->setSortable()
-                ->setLabel("Destination")
+                ->setLabel('Destination')
         )->addDataContainer(
-            EntityListDataContainer::make("departure_date")
+            EntityListDataContainer::make('departure_date')
                 ->setSortable()
-                ->setLabel("Departure date")
+                ->setLabel('Departure date')
         )->addDataContainer(
-            EntityListDataContainer::make("spaceship")
-                ->setLabel("Spaceship")
+            EntityListDataContainer::make('spaceship')
+                ->setLabel('Spaceship')
         );
     }
 
-    function buildListConfig(): void
+    public function buildListConfig(): void
     {
         $this//->setSearchable()
-            ->setDefaultSort("departure_date", "desc")
+            ->setDefaultSort('departure_date', 'desc')
             ->setPaginated()
             ->addInstanceCommand('email', TravelSendEmail::class);
     }
 
-    function buildListLayout(): void
+    public function buildListLayout(): void
     {
-        $this->addColumn("destination", 4)
-            ->addColumn("departure_date", 4)
-            ->addColumn("spaceship", 4);
+        $this->addColumn('destination', 4)
+            ->addColumn('departure_date', 4)
+            ->addColumn('spaceship', 4);
     }
 
-    function getListData(EntityListQueryParams $params)
+    public function getListData(EntityListQueryParams $params)
     {
         $travels = Travel::distinct();
 
-        if($params->sortedBy()) {
+        if ($params->sortedBy()) {
             $travels->orderBy($params->sortedBy(), $params->sortedDir());
         }
 
@@ -58,13 +56,13 @@ class TravelSharpList extends SharpEntityList
         }
 
         return $this
-            ->setCustomTransformer("spaceship", function($value, $travel) {
-                if(!$travel->spaceship) {
-                    return "";
+            ->setCustomTransformer('spaceship', function ($value, $travel) {
+                if (!$travel->spaceship) {
+                    return '';
                 }
-                
-                return '<i class="fas fa-space-shuttle"></i> ' . $travel->spaceship->name;
+
+                return '<i class="fas fa-space-shuttle"></i> '.$travel->spaceship->name;
             })
-            ->transform($travels->with(["spaceship"])->paginate(30));
+            ->transform($travels->with(['spaceship'])->paginate(30));
     }
 }

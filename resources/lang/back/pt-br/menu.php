@@ -2,7 +2,7 @@
 
 return [
 
-    'dashboard' => 'Painel de Controle',
-    'no-dashboard-message' => "Bem vindo ao Sharp!"
+    'dashboard'            => 'Painel de Controle',
+    'no-dashboard-message' => 'Bem vindo ao Sharp!',
 
 ];

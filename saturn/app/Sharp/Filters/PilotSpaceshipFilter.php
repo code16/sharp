@@ -9,8 +9,8 @@ class PilotSpaceshipFilter implements EntityListSelectFilter
 {
     public function values(): array
     {
-        return Spaceship::orderBy("name")
-            ->pluck("name", "id")
+        return Spaceship::orderBy('name')
+            ->pluck('name', 'id')
             ->all();
     }
 }

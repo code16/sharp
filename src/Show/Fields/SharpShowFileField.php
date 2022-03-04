@@ -4,11 +4,11 @@ namespace Code16\Sharp\Show\Fields;
 
 class SharpShowFileField extends SharpShowField
 {
-    const FIELD_TYPE = "file";
+    const FIELD_TYPE = 'file';
 
     protected ?string $label = null;
-    protected string $storageDisk = "local";
-    protected string $storageBasePath = "data";
+    protected string $storageDisk = 'local';
+    protected string $storageBasePath = 'data';
 
     public static function make(string $key): SharpShowFileField
     {
@@ -49,7 +49,7 @@ class SharpShowFileField extends SharpShowField
     public function toArray(): array
     {
         return parent::buildArray([
-            "label" => $this->label
+            'label' => $this->label,
         ]);
     }
 }

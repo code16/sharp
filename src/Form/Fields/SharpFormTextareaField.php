@@ -9,15 +9,17 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormTextareaField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithMaxLength;
+    use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "textarea";
+    const FIELD_TYPE = 'textarea';
 
     protected ?int $rows = null;
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new TextareaFormatter);
+        return new static($key, static::FIELD_TYPE, new TextareaFormatter());
     }
 
     public function setRowCount(int $rows): self
@@ -30,17 +32,17 @@ class SharpFormTextareaField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "rows" => "integer|min:1",
+            'rows' => 'integer|min:1',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "rows" => $this->rows,
-            "placeholder" => $this->placeholder,
-            "maxLength" => $this->maxLength,
-            "localized" => $this->localized
+            'rows'        => $this->rows,
+            'placeholder' => $this->placeholder,
+            'maxLength'   => $this->maxLength,
+            'localized'   => $this->localized,
         ]);
     }
 }

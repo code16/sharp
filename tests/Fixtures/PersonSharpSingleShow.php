@@ -9,24 +9,24 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class PersonSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    public function buildShowFields(): void
     {
-        $this->addField(SharpShowTextField::make("name"));
+        $this->addField(SharpShowTextField::make('name'));
     }
 
-    function buildShowLayout(): void
+    public function buildShowLayout(): void
     {
         $this
-            ->addSection("Identity", function(ShowLayoutSection $section) {
+            ->addSection('Identity', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function(ShowLayoutColumn $column) {
-                        $column->withSingleField("name");
+                    ->addColumn(6, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('name');
                     });
             });
     }
 
-    function findSingle(): array
+    public function findSingle(): array
     {
-        return ["name" => "John Wayne", "job" => "actor", "state" => "active"];
+        return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
 }

@@ -6,14 +6,15 @@ abstract class SingleInstanceCommand extends InstanceCommand
 {
     public function type(): string
     {
-        return "instance";
+        return 'instance';
     }
 
     /**
      * @param mixed $instanceId
+     *
      * @return array
      */
-    protected final function initialData($instanceId): array
+    final protected function initialData($instanceId): array
     {
         return $this->initialSingleData();
     }
@@ -26,18 +27,20 @@ abstract class SingleInstanceCommand extends InstanceCommand
     /**
      * @param mixed $instanceId
      * @param array $data
+     *
      * @return array
      */
-    public final function execute($instanceId, array $data = []): array
+    final public function execute($instanceId, array $data = []): array
     {
         return $this->executeSingle($data);
     }
 
     /**
      * @param mixed $instanceId
+     *
      * @return bool
      */
-    public final function authorizeFor($instanceId): bool
+    final public function authorizeFor($instanceId): bool
     {
         return $this->authorize();
     }
@@ -50,5 +53,5 @@ abstract class SingleInstanceCommand extends InstanceCommand
         return $this->authorize();
     }
 
-    protected abstract function executeSingle(array $data): array;
+    abstract protected function executeSingle(array $data): array;
 }

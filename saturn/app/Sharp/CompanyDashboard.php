@@ -14,85 +14,85 @@ use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
-use Code16\Sharp\Utils\LinkToEntity;
 use Illuminate\Support\Facades\DB;
 
 class CompanyDashboard extends SharpDashboard
 {
     private static $colors = [
-        "#7F1D1D",
-        "#F59E0B",
-        "#10B981",
-        "#6366F1",
-        "#EC4899",
-        "#3B82F6",
-        "#F472B6",
-        "#064E3B",
-        "#78350F",
-        "#9CA3AF"
+        '#7F1D1D',
+        '#F59E0B',
+        '#10B981',
+        '#6366F1',
+        '#EC4899',
+        '#3B82F6',
+        '#F472B6',
+        '#064E3B',
+        '#78350F',
+        '#9CA3AF',
     ];
-    
+
     private static $colorsIndex = 0;
 
-    function buildWidgets(): void
+    public function buildWidgets(): void
     {
         $this
             ->addWidget(
-                SharpBarGraphWidget::make("features_bars")
-                    ->setTitle("Main features")
+                SharpBarGraphWidget::make('features_bars')
+                    ->setTitle('Main features')
                     ->setShowLegend(false)
                     ->setHorizontal()
             )->addWidget(
-                SharpPieGraphWidget::make("types_pie")
-                    ->setTitle("Spaceships by type")
+                SharpPieGraphWidget::make('types_pie')
+                    ->setTitle('Spaceships by type')
             )->addWidget(
-                SharpLineGraphWidget::make("capacities")
-                    ->setTitle("Spaceships by capacity")
+                SharpLineGraphWidget::make('capacities')
+                    ->setTitle('Spaceships by capacity')
                     ->setHeight(200)
                     ->setShowLegend()
                     ->setMinimal()
                     ->setCurvedLines()
             )->addWidget(
-                SharpPanelWidget::make("activeSpaceships")
-                    ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-                    ->setLink(LinkToEntityList::make("spaceship"))
+                SharpPanelWidget::make('activeSpaceships')
+                    ->setInlineTemplate('<h1>{{count}}</h1> spaceships in activity')
+                    ->setLink(LinkToEntityList::make('spaceship'))
             )->addWidget(
-                SharpPanelWidget::make("inactiveSpaceships")
-                    ->setInlineTemplate("<h1>{{count}}</h1> inactive spaceships")
+                SharpPanelWidget::make('inactiveSpaceships')
+                    ->setInlineTemplate('<h1>{{count}}</h1> inactive spaceships')
             )->addWidget(
-                SharpOrderedListWidget::make("topTravelledSpaceshipModels")
-                    ->setTitle("Top travelled spaceship types")
+                SharpOrderedListWidget::make('topTravelledSpaceshipModels')
+                    ->setTitle('Top travelled spaceship types')
                     ->setHtml()
-                    ->buildItemLink(function($item) {
-                        if($item['id'] >= 5) {
+                    ->buildItemLink(function ($item) {
+                        if ($item['id'] >= 5) {
                             return null;
                         }
-                        return LinkToEntityList::make("spaceship")
-                            ->addFilter("type", $item['id']);
+
+                        return LinkToEntityList::make('spaceship')
+                            ->addFilter('type', $item['id']);
                     })
             );
     }
 
-    function buildWidgetsLayout(): void
+    public function buildWidgetsLayout(): void
     {
         $this
-            ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(6, "types_pie")
-                    ->addWidget(6, "features_bars");
+            ->addRow(function (DashboardLayoutRow $row) {
+                $row->addWidget(6, 'types_pie')
+                    ->addWidget(6, 'features_bars');
             })
-            ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(12, "capacities");
+            ->addRow(function (DashboardLayoutRow $row) {
+                $row->addWidget(12, 'capacities');
             })
-            ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(6, "activeSpaceships")
-                    ->addWidget(6, "inactiveSpaceships");
+            ->addRow(function (DashboardLayoutRow $row) {
+                $row->addWidget(6, 'activeSpaceships')
+                    ->addWidget(6, 'inactiveSpaceships');
             })
-            ->addRow(function(DashboardLayoutRow $row) {
-                $row->addWidget(6, "topTravelledSpaceshipModels");
+            ->addRow(function (DashboardLayoutRow $row) {
+                $row->addWidget(6, 'topTravelledSpaceshipModels');
             });
     }
 
-    function buildWidgetsData(DashboardQueryParams $params): void
+    public function buildWidgetsData(DashboardQueryParams $params): void
     {
         $this->setPieGraphDataSet();
         $this->setBarsGraphDataSet();
@@ -105,25 +105,27 @@ class CompanyDashboard extends SharpDashboard
 
         $this
             ->setPanelData(
-                "activeSpaceships", ["count" => $spaceships->where("state", "active")->first()->count]
+                'activeSpaceships',
+                ['count' => $spaceships->where('state', 'active')->first()->count]
             )
             ->setPanelData(
-                "inactiveSpaceships", ["count" => $spaceships->where("state", "inactive")->first()->count]
+                'inactiveSpaceships',
+                ['count' => $spaceships->where('state', 'inactive')->first()->count]
             );
 
         $this->setOrderedListData(
-            "topTravelledSpaceshipModels",
+            'topTravelledSpaceshipModels',
             SpaceshipType::inRandomOrder()
                 ->take(5)
                 ->get()
-                ->map(function(SpaceshipType $type) {
+                ->map(function (SpaceshipType $type) {
                     return [
-                        "id" => $type->id,
-                        "label" => sprintf('<em>%s</em>', $type->label),
-                        "count" => $type->id >= 5 ? null : rand(20, 100),
+                        'id'    => $type->id,
+                        'label' => sprintf('<em>%s</em>', $type->label),
+                        'count' => $type->id >= 5 ? null : rand(20, 100),
                     ];
                 })
-                ->sortByDesc("count")
+                ->sortByDesc('count')
                 ->values()
                 ->all()
         );
@@ -135,27 +137,28 @@ class CompanyDashboard extends SharpDashboard
             ->select(DB::raw('ceil(capacity/10000) as label, count(*) as value'))
             ->groupBy('label')
             ->get()
-            ->map(function($capacity) {
-                $capacity->label = "<" . ($capacity->label*10) . "k";
+            ->map(function ($capacity) {
+                $capacity->label = '<'.($capacity->label * 10).'k';
+
                 return $capacity;
             })
-            ->pluck("value", "label");
-        
+            ->pluck('value', 'label');
+
         $this->addGraphDataSet(
-            "capacities",
+            'capacities',
             SharpGraphWidgetDataSet::make($capacities)
-                ->setLabel("Spaceships")
+                ->setLabel('Spaceships')
                 ->setColor(static::nextColor())
         );
 
         $this->addGraphDataSet(
-            "capacities",
+            'capacities',
             SharpGraphWidgetDataSet::make(
                 $capacities->map(function ($value) {
                     return $value * rand(1, 3);
                 })
             )
-                ->setLabel("Something else")
+                ->setLabel('Something else')
                 ->setColor(static::nextColor())
         );
     }
@@ -166,13 +169,13 @@ class CompanyDashboard extends SharpDashboard
             ->select(DB::raw('type_id, count(*) as count'))
             ->groupBy('type_id')
             ->get();
-        
-        SpaceshipType::whereIn("id", $counts->pluck("type_id"))
-            ->each(function(SpaceshipType $type) use($counts) {
+
+        SpaceshipType::whereIn('id', $counts->pluck('type_id'))
+            ->each(function (SpaceshipType $type) use ($counts) {
                 $this->addGraphDataSet(
-                    "types_pie",
+                    'types_pie',
                     SharpGraphWidgetDataSet::make([
-                        $counts->where("type_id", $type->id)->first()->count
+                        $counts->where('type_id', $type->id)->first()->count,
                     ])
                         ->setLabel($type->label)
                         ->setColor(static::nextColor())
@@ -185,22 +188,22 @@ class CompanyDashboard extends SharpDashboard
         $counts = DB::table('feature_spaceship')
             ->select(DB::raw('feature_id, count(*) as count'))
             ->groupBy('feature_id')
-            ->orderBy("count")
+            ->orderBy('count')
             ->limit(8)
             ->get();
-        
-        $data = Feature::whereIn("id", $counts->pluck("feature_id"))
+
+        $data = Feature::whereIn('id', $counts->pluck('feature_id'))
             ->get()
-            ->map(function(Feature $feature) use($counts) {
+            ->map(function (Feature $feature) use ($counts) {
                 return [
-                    "value" => $counts->where("feature_id", $feature->id)->first()->count,
-                    "label" => $feature->name
+                    'value' => $counts->where('feature_id', $feature->id)->first()->count,
+                    'label' => $feature->name,
                 ];
             })
-            ->pluck("value", "label");
+            ->pluck('value', 'label');
 
         $this->addGraphDataSet(
-            "features_bars",
+            'features_bars',
             SharpGraphWidgetDataSet::make($data)
                 ->setColor(static::nextColor())
         );
@@ -208,10 +211,10 @@ class CompanyDashboard extends SharpDashboard
 
     private static function nextColor(): string
     {
-        if(static::$colorsIndex >= sizeof(static::$colors)) {
+        if (static::$colorsIndex >= sizeof(static::$colors)) {
             static::$colorsIndex = 0;
         }
-        
+
         return static::$colors[static::$colorsIndex++];
     }
 }

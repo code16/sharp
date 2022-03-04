@@ -8,23 +8,23 @@ use Illuminate\Support\Facades\Storage;
 
 class MarkdownFormatter extends SharpFieldFormatter
 {
-
     /**
      * @param SharpFormField $field
      * @param $value
+     *
      * @return mixed
      */
-    function toFront(SharpFormField $field, $value)
+    public function toFront(SharpFormField $field, $value)
     {
         $array = [
-            "text" => $value
+            'text' => $value,
         ];
 
-        foreach($this->extractEmbeddedUploads($value) as $filename) {
+        foreach ($this->extractEmbeddedUploads($value) as $filename) {
             $upload = $this->getUpload($filename);
 
-            if($upload) {
-                $array["files"][] = $upload;
+            if ($upload) {
+                $array['files'][] = $upload;
             }
         }
 
@@ -33,48 +33,48 @@ class MarkdownFormatter extends SharpFieldFormatter
 
     /**
      * @param SharpFormField $field
-     * @param string $attribute
+     * @param string         $attribute
      * @param $value
+     *
      * @return mixed
      */
-    function fromFront(SharpFormField $field, string $attribute, $value)
+    public function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $text = $value['text'] ?? '';
 
-        if(isset($value["files"])) {
+        if (isset($value['files'])) {
             $uploadFormatter = app(UploadFormatter::class);
 
-            foreach($value["files"] as $file) {
+            foreach ($value['files'] as $file) {
                 // Fist we remove the disk from the file name in order to make
                 // the UploadFormatter fromFront code work properly
-                $originalName = $file["name"];
-                if(($pos = strpos($originalName, ':')) !== false) {
-                    $file["name"] = substr($originalName, $pos+1);
+                $originalName = $file['name'];
+                if (($pos = strpos($originalName, ':')) !== false) {
+                    $file['name'] = substr($originalName, $pos + 1);
                 }
 
                 $upload = $uploadFormatter
                     ->setInstanceId($this->instanceId)
                     ->fromFront($field, $attribute, $file);
 
-                if(isset($upload["file_name"])) {
+                if (isset($upload['file_name'])) {
                     // New file was uploaded. We have to update the name of the file in the markdown
                     $text = str_replace(
                         "![]({$originalName})",
-                        "![]({$field->storageDisk()}:{$upload["file_name"]})",
+                        "![]({$field->storageDisk()}:{$upload['file_name']})",
                         $text
                     );
-
-                } elseif($upload["transformed"] ?? false) {
+                } elseif ($upload['transformed'] ?? false) {
                     // File was pre-existing and was transformed: we must
                     // refresh all its thumbnails (meaning delete them)
                     $this->deleteThumbnails($originalName);
                 }
             }
         }
-        
+
         // Normalize \n
         $text = preg_replace('/\R/', "\n", $text);
-        
+
         // Ensure \n\n before file...
         $text = preg_replace('/([^\n])\n!\[/', "$1\n\n![", $text);
         // ... and \n\n after file.
@@ -85,63 +85,66 @@ class MarkdownFormatter extends SharpFieldFormatter
 
     /**
      * @param string|array $texts
+     *
      * @return array
      */
     protected function extractEmbeddedUploads($texts): array
     {
         $matches = [];
 
-        foreach((array)$texts as $md) {
+        foreach ((array) $texts as $md) {
             preg_match_all(
                 '/!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/',
-                $md, $localeMatches, PREG_SET_ORDER, 0
+                $md,
+                $localeMatches,
+                PREG_SET_ORDER,
+                0
             );
 
             $matches = array_merge($matches, $localeMatches);
         }
 
         return collect($matches)
-            ->map(function($match) {
-                return trim($match["filename"]);
+            ->map(function ($match) {
+                return trim($match['filename']);
             })
             ->all();
     }
 
     protected function getUpload(string $fullFileName): array
     {
-        list($disk, $filename) = explode(":", $fullFileName);
+        list($disk, $filename) = explode(':', $fullFileName);
 
         $model = new SharpUploadModel([
-            "file_name" => $filename,
-            "disk" => $disk,
-            "size" => $this->getFileSize($fullFileName)
+            'file_name' => $filename,
+            'disk'      => $disk,
+            'size'      => $this->getFileSize($fullFileName),
         ]);
 
         return [
-            "name" => $fullFileName,
-            "size" => $model->size,
-            "thumbnail" => $model->thumbnail(1000, 400)
+            'name'      => $fullFileName,
+            'size'      => $model->size,
+            'thumbnail' => $model->thumbnail(1000, 400),
         ];
     }
 
     protected function deleteThumbnails(string $fullFileName): void
     {
-        list($disk, $filename) = explode(":", $fullFileName);
+        list($disk, $filename) = explode(':', $fullFileName);
 
         (new SharpUploadModel([
-            "file_name" => $filename,
-            "disk" => $disk
+            'file_name' => $filename,
+            'disk'      => $disk,
         ]))->deleteAllThumbnails();
     }
 
     protected function getFileSize(string $fullFileName): ?int
     {
         try {
-            list($disk, $filename) = explode(":", $fullFileName);
+            list($disk, $filename) = explode(':', $fullFileName);
 
             return Storage::disk($disk)->size($filename);
-
-        } catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return null;
         }
     }

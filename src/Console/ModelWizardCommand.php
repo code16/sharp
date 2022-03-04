@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Console;
 
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
 class ModelWizardCommand extends Command
@@ -40,11 +40,11 @@ class ModelWizardCommand extends Command
 
         $this->call('make:model', ['name' => $fullModelClass]);
 
-        $listClass = $this->ask("List class name", "{$pluralModelClass}/{$modelClass}List");
+        $listClass = $this->ask('List class name', "{$pluralModelClass}/{$modelClass}List");
         $this->call('sharp:make:entity-list', ['name' => $listClass, '--model' => $inputModelClass]);
         $config->push(['list' => "\\{$this->parseClassname($listClass, 'Sharp')}::class"]);
 
-        $formClass = $this->ask("Form class name", "{$pluralModelClass}/{$modelClass}Form");
+        $formClass = $this->ask('Form class name', "{$pluralModelClass}/{$modelClass}Form");
         $this->call('sharp:make:form', ['name' => $formClass, '--model' => $inputModelClass]);
         $config->push(['form' => "\\{$this->parseClassname($formClass, 'Sharp')}::class"]);
 
@@ -73,10 +73,11 @@ class ModelWizardCommand extends Command
     /**
      * Get the fully-qualified class name.
      *
-     * @param  string  $class
-     * @return string
+     * @param string $class
      *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     protected function parseClassname($class, $additionalNamespace = null)
     {
@@ -86,8 +87,8 @@ class ModelWizardCommand extends Command
 
         $class = trim(str_replace('/', '\\', $class), '\\');
 
-        if (! Str::startsWith($class, $rootNamespace = $this->laravel->getNamespace())) {
-            $namespace = $rootNamespace . ($additionalNamespace ? trim(str_replace('/', '\\', $additionalNamespace), '\\') . '\\' : '');
+        if (!Str::startsWith($class, $rootNamespace = $this->laravel->getNamespace())) {
+            $namespace = $rootNamespace.($additionalNamespace ? trim(str_replace('/', '\\', $additionalNamespace), '\\').'\\' : '');
             $class = $namespace.$class;
         }
 

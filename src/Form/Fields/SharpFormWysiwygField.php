@@ -8,26 +8,27 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 
 class SharpFormWysiwygField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithDataLocalization;
 
-    const FIELD_TYPE = "wysiwyg";
+    const FIELD_TYPE = 'wysiwyg';
 
-    const B = "bold";
-    const I = "italic";
-    const A = "link";
-    const S = "strike";
+    const B = 'bold';
+    const I = 'italic';
+    const A = 'link';
+    const S = 'strike';
 
-    const UL = "bullet";
-    const OL = "number";
-    const H1 = "heading1";
-    const CODE = "code";
-    const QUOTE = "quote";
-    const INCREASE_NESTING = "increaseNestingLevel";
-    const DECREASE_NESTING = "decreaseNestingLevel";
+    const UL = 'bullet';
+    const OL = 'number';
+    const H1 = 'heading1';
+    const CODE = 'code';
+    const QUOTE = 'quote';
+    const INCREASE_NESTING = 'increaseNestingLevel';
+    const DECREASE_NESTING = 'decreaseNestingLevel';
 
-    const UNDO = "undo";
-    const REDO = "redo";
-    const SEPARATOR = "|";
+    const UNDO = 'undo';
+    const REDO = 'redo';
+    const SEPARATOR = '|';
 
     protected ?int $height = null;
     protected array $toolbar = [
@@ -75,18 +76,18 @@ class SharpFormWysiwygField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "height" => "integer|nullable",
-            "toolbar" => "array|nullable",
+            'height'  => 'integer|nullable',
+            'toolbar' => 'array|nullable',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "height" => $this->height,
-            "toolbar" => $this->showToolbar ? $this->toolbar : null,
-            "placeholder" => $this->placeholder,
-            "localized" => $this->localized
+            'height'      => $this->height,
+            'toolbar'     => $this->showToolbar ? $this->toolbar : null,
+            'placeholder' => $this->placeholder,
+            'localized'   => $this->localized,
         ]);
     }
 }
