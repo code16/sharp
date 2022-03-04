@@ -3,5 +3,5 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect("/docs/index.html");
+    return redirect('/docs/index.html');
 });

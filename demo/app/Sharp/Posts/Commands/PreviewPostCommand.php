@@ -7,19 +7,18 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 class PreviewPostCommand extends InstanceCommand
 {
-
     public function label(): ?string
     {
-        return "Preview post";
+        return 'Preview post';
     }
 
     public function execute(mixed $instanceId, array $data = []): array
     {
         return $this->view('sharp.post-preview', [
-            'post' => Post::findOrFail($instanceId)
+            'post' => Post::findOrFail($instanceId),
         ]);
     }
-    
+
     public function authorizeFor(mixed $instanceId): bool
     {
         if (auth()->user()->isAdmin()) {

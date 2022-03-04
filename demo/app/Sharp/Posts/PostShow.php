@@ -120,11 +120,11 @@ class PostShow extends SharpShow
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->transform(Post::findOrFail($id));
     }
-    
+
     public function getInstanceCommands(): ?array
     {
         return [
-            PreviewPostCommand::class
+            PreviewPostCommand::class,
         ];
     }
 }

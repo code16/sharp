@@ -84,7 +84,7 @@ class PostList extends SharpEntityList
     public function getInstanceCommands(): ?array
     {
         return [
-            PreviewPostCommand::class
+            PreviewPostCommand::class,
         ];
     }
 
