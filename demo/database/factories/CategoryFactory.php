@@ -12,7 +12,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->randomElement(static::$categoryNames),
+            'name' => $this->faker->unique()->randomElement(static::$categoryNames),
         ];
     }
 }
