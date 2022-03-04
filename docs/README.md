@@ -40,6 +40,10 @@ A Command is an action presented to the user (with permissions handled via polic
 
 ![Commands](./img/readme/command-form.jpg)
 
+#### Present synthetic data, graphs and direct links in dashboards
+
+TODO
+
 #### Choose your theme color!
 
 Choose one color, and the UI will adapt itself.
