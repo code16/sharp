@@ -5,12 +5,12 @@ const loadLanguages = require('prismjs/components/');
 loadLanguages(['php']);
 
 require('dotenv').config({
-    path: path.resolve(__dirname, '../../saturn/.env'),
+    path: path.resolve(__dirname, '../../demo/.env'),
 });
 
 const {
-    APP_NAME = 'Sharp',
     APP_URL = 'https://sharp.code16.fr',
+    DOCS_TITLE = 'Sharp',
     DOCS_ENABLE_VERSIONING = 'false',
     DOCS_VERSION = '7.0',
     DOCS_VERSION_ITEMS = '[]',
@@ -21,7 +21,7 @@ const {
 const DOCS_HOME_URL = DOCS_MAIN_URL === APP_URL ? '/' : DOCS_MAIN_URL;
 
 module.exports = {
-    title: APP_NAME,
+    title: DOCS_TITLE,
     base: '/docs/',
     head: [
         ['link', { rel: 'icon', type:'image/png', href: '/docs/favicon.png' }],
@@ -29,6 +29,8 @@ module.exports = {
     ],
     theme: path.resolve(__dirname, './theme'),
     themeConfig: {
+        logo: '/logo.svg',
+        logoDark: '/logo-dark.svg',
         navbar: [
             DOCS_ENABLE_VERSIONING === 'true' && {
                 text: DOCS_VERSION,
@@ -175,6 +177,11 @@ module.exports = {
         },
     ],
     bundler: '@vuepress/bundler-vite',
+    bundlerConfig: {
+        viteOptions: {
+            plugins: [require('vite-svg-loader')({ svgo: false })],
+        },
+    },
     // scss: {
     //     implementation: require('sass'),
     // },

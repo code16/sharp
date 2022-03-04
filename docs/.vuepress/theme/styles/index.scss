@@ -120,38 +120,43 @@ a.sidebar-link {
 }
 
 .navbar {
+  display: flex;
+  align-items: center;
   padding-top: 0;
   padding-bottom: 0;
-  .search-box {
-    @media (min-width: 720px) {
-      margin-right: 2rem;
-    }
-    input {
-      border-radius: 4px;
-      background-position: 0.45rem 0.45rem;
-    }
-  }
+  line-height: 1.5;
+  padding-left: var(--navbar-padding-h)!important;
   .site-name {
-    line-height: var(--navbar-height);
     font-size: 1.5rem;
+    line-height: 1.5rem;
     @media (min-width: 720px) {
       font-size: 2rem;
     }
     .version {
       opacity: .5;
       font-weight: 400;
-      margin-left: .125em;
       font-size: .75em;
     }
   }
-  .sidebar-button {
-    box-sizing: content-box;
-    top: calc(var(--navbar-height) / 2);
-    transform: translateY(-50%);
+  .toggle-sidebar-button {
+    position: static;
+    margin-right: 1rem;
+  }
+  .logo {
+    display: block;
+    width: 100px;
+    height: auto;
+    vertical-align: baseline;
+    fill: currentColor;
+    margin: 0;
+    @media (min-width: 720px) {
+      width: 120px;
+    }
   }
 }
 
-.navbar-links-wrapper {
+
+.navbar-items-wrapper {
   align-items: center;
 }
 
