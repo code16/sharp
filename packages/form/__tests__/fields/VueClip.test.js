@@ -517,12 +517,14 @@ describe('vue-clip',() => {
         expect(handleSuccess).toHaveBeenCalledTimes(1);
         expect(handleSuccess).toHaveBeenCalledWith({
             fileName: 'storage/Fichier.pdf',
+            name: 'Fichier.pdf',
             uploaded: true
         });
 
         expect(handleInput).toHaveBeenCalledTimes(1);
         expect(handleInput).toHaveBeenCalledWith({
             fileName: 'storage/Fichier.pdf',
+            name: 'Fichier.pdf',
             uploaded: true
         });
     });
