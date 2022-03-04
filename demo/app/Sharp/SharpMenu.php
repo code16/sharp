@@ -14,9 +14,9 @@ class SharpMenu extends BaseSharpMenu
                 $section
                     ->addEntityLink('posts', 'Posts', 'fas fa-file')
                     ->addEntityLink('categories', 'Categories', 'fas fa-tags')
-                    ->addEntityLink('authors', 'Authors', 'fas fa-user');
+                    ->addEntityLink('authors', 'Authors', 'fas fa-users');
             })
-            ->addEntityLink('myprofile', 'My account', 'fas fa-user')
+            ->addEntityLink('profile', 'Profile', 'fa fa-user')
             ->addEntityLink('test', 'Fields test', 'fas fa-cog');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sharp\MyProfile;
+namespace App\Sharp\Profile;
 
 use Code16\Sharp\Form\Validator\SharpFormRequest;
 

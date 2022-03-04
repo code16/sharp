@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sharp\MyProfile;
+namespace App\Sharp\Profile;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
@@ -11,7 +11,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class MyProfileSingleForm extends SharpSingleForm
+class ProfileSingleForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
 

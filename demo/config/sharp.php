@@ -11,7 +11,7 @@ return [
         'categories' => \App\Sharp\Entities\CategoryEntity::class,
         'authors' => \App\Sharp\Entities\AuthorEntity::class,
 
-        'myprofile' => \App\Sharp\MyProfile\MyProfileEntity::class,
+        'profile' => \App\Sharp\Profile\ProfileEntity::class,
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 

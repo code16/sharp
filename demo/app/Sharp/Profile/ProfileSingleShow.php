@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sharp\MyProfile;
+namespace App\Sharp\Profile;
 
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -11,7 +11,7 @@ use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 
-class MyProfileSingleShow extends SharpSingleShow
+class ProfileSingleShow extends SharpSingleShow
 {
     protected function buildShowFields(FieldsContainer $showFields): void
     {
