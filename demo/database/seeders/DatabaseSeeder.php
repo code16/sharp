@@ -16,36 +16,22 @@ class DatabaseSeeder extends Seeder
     {
         $admin = User::factory(['email' => 'admin@example.org', 'role' => 'admin'])
             ->create();
-
-        Media::factory([
-            'model_id' => $admin->id,
-            'model_type' => User::class,
-            'model_key' => 'avatar',
-        ])
-            ->withFile(storage_path('app/seed/users/01.jpeg'))
-            ->create();
-
         $editor1 = User::factory(['email' => 'editor@example.org'])
             ->create();
-
-        Media::factory([
-            'model_id' => $editor1->id,
-            'model_type' => User::class,
-            'model_key' => 'avatar',
-        ])
-            ->withFile(storage_path('app/seed/users/02.jpeg'))
-            ->create();
-
         $editor2 = User::factory(['email' => 'editor2@example.org'])
             ->create();
-
-        Media::factory([
-            'model_id' => $editor2->id,
-            'model_type' => User::class,
-            'model_key' => 'avatar',
-        ])
-            ->withFile(storage_path('app/seed/users/03.jpeg'))
-            ->create();
+        
+        collect([$admin,$editor1,$editor2])
+            ->shuffle()
+            ->each(function(User $user, int $k) {
+                Media::factory([
+                    'model_id' => $user->id,
+                    'model_type' => User::class,
+                    'model_key' => 'avatar',
+                ])
+                    ->withFile(database_path('seeders/files/users/' . $k+1 . '.jpg'))
+                    ->create();
+            });
 
         $categories = Category::factory()
             ->count(8)
