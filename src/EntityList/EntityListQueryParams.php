@@ -100,7 +100,7 @@ class EntityListQueryParams
      */
     public function hasSearch()
     {
-        return strlen(trim($this->search)) > 0;
+        return strlen(trim($this->search ?: "")) > 0;
     }
 
     /**
