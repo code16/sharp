@@ -19,26 +19,26 @@ Sharp is a content management framework built for Laravel, a toolset which provi
 
 #### Build complex lists with total control on how the data is presented
 
-![Entity list](./img/readme/list.jpg)
+![Entity list](./img/readme/list.png)
 
 #### Organize forms withs various fields, a customizable layout system and data validation
 You will find a powerful HTML / Markdown editor, autocompletes with templates, lists (repeaters) with custom items, files with bulk upload and image transformation...
 
-![Entity list](./img/readme/form.jpg)
+![Entity list](./img/readme/form.png)
 
 #### Optionally create show pages for your resources, with embedded lists for linked data, and breadcrumb
 
-![Show page](./img/readme/show.jpg)
+![Show page](./img/readme/show.png)
 
 #### Add filters, sorting columns and search to your lists
 
-![Filters](./img/readme/filters.jpg)
+<p><img src="./img/readme/filters.png" alt="Filters" style="max-width: 800px"></p>
 
 #### Add individual or bulk commands, with dedicated forms, user confirmation...
 
 A Command is an action presented to the user (with permissions handled via policies, like everywhere in Sharp) which can lead to refreshing data after update, previewing a public page, downloading a file...
 
-![Commands](./img/readme/command-form.jpg)
+<p><img src="./img/readme/command-form.png" alt="Commands" style="max-width: 800px"></p>
 
 #### Present synthetic data, graphs and direct links in dashboards
 
