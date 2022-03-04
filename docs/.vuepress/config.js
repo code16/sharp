@@ -4,8 +4,12 @@ const loadLanguages = require('prismjs/components/');
 
 loadLanguages(['php']);
 
+const demoEnvPath = path.resolve(__dirname, '../../demo/.env');
+
 require('dotenv').config({
-    path: path.resolve(__dirname, '../../demo/.env'),
+    path: fs.existsSync(demoEnvPath)
+        ? demoEnvPath
+        : path.resolve(__dirname, '../../saturn/.env'),
 });
 
 const {
