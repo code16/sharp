@@ -13,6 +13,13 @@ class PostBlockFactory extends Factory
         ];
     }
 
+    public function visuals(): self
+    {
+        return $this->state(fn () => [
+            'type' => 'visuals',
+        ]);
+    }
+
     public function text(): self
     {
         return $this->state(fn () => [

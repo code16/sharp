@@ -33,7 +33,7 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                         ->setStorageDisk('local')
                         ->setStorageBasePath(function () {
                             return sprintf(
-                                'data/Post/%s/PostBlock/{id}',
+                                'data/posts/%s/blocks/{id}',
                                 currentSharpRequest()->getPreviousShowFromBreadcrumbItems('posts')->instanceId(),
                             );
                         }),
