@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\PreviewPostCommand;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -118,5 +119,12 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->transform(Post::findOrFail($id));
+    }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            PreviewPostCommand::class
+        ];
     }
 }

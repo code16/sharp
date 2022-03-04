@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
@@ -77,6 +78,13 @@ class PostList extends SharpEntityList
             AuthorFilter::class,
             CategoryFilter::class,
             PeriodFilter::class,
+        ];
+    }
+
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            PreviewPostCommand::class
         ];
     }
 
