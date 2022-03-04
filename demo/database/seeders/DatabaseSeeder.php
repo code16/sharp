@@ -94,5 +94,6 @@ class DatabaseSeeder extends Seeder
     private function deleteStorageFiles(): void
     {
         Storage::disk('local')->deleteDirectory('data');
+        Storage::disk('local')->deleteDirectory('public/thumbnails');
     }
 }
