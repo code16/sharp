@@ -303,9 +303,13 @@
                 }
                 catch(e) { console.log(e); }
 
-                data.uploaded = true;
-                this.$emit('success', data);
-                this.$emit('input', data);
+                const value = {
+                    ...this.value,
+                    ...data,
+                    uploaded: true,
+                }
+                this.$emit('success', value);
+                this.$emit('input', value);
 
                 this.setPending(false);
             },
