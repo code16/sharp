@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -49,9 +50,7 @@ class AuthorList extends SharpEntityList
             );
 
         return $this
-            ->setCustomTransformer('avatar', function ($value, User $user) {
-                return '<img src="'.$user->avatar->thumbnail(140).'" alt="" class="img-fluid">';
-            })
+            ->setCustomTransformer('avatar', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->transform($users->get());
     }
 
@@ -77,8 +76,8 @@ class AuthorList extends SharpEntityList
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         $fieldsLayout
-            ->addColumn('avatar', 2)
+            ->addColumn('avatar', 1)
             ->addColumn('name', 5)
-            ->addColumn('email', 5);
+            ->addColumn('email', 6);
     }
 }

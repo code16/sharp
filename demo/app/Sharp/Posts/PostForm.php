@@ -105,7 +105,7 @@ class PostForm extends SharpForm
                             ->setFileFilter(['pdf', 'zip'])
                             ->setMaxFileSize(1)
                             ->setStorageDisk('local')
-                            ->setStorageBasePath('data/Post/{id}')
+                            ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
                     ),
             );

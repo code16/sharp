@@ -9,6 +9,5 @@ class MyProfileEntity extends SharpEntity
     protected bool $isSingle = true;
     protected ?string $show = MyProfileSingleShow::class;
     protected ?string $form = MyProfileSingleForm::class;
-    protected ?string $policy = MyProfilePolicy::class;
     protected string $label = 'My profile';
 }

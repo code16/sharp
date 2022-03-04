@@ -9,10 +9,7 @@ class MyProfileValidator extends SharpFormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'max:300',
-            ],
+            'name' => ['required', 'string', 'max:300',],
         ];
     }
 }

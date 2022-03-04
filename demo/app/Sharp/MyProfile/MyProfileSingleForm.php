@@ -28,7 +28,7 @@ class MyProfileSingleForm extends SharpSingleForm
                     ->shouldOptimizeImage()
                     ->setStorageDisk('local')
                     ->setCropRatio('1:1')
-                    ->setStorageBasePath('data/User/{id}'),
+                    ->setStorageBasePath('data/users/{id}'),
             )
             ->addField(
                 SharpFormTextField::make('name')
