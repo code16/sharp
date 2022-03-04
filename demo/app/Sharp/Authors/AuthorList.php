@@ -3,6 +3,7 @@
 namespace App\Sharp\Authors;
 
 use App\Models\User;
+use App\Sharp\Authors\Commands\InviteUserCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -16,7 +17,15 @@ class AuthorList extends SharpEntityList
     public function buildListConfig(): void
     {
         $this->configureSearchable()
+            ->configurePrimaryEntityCommand(InviteUserCommand::class)
             ->configureDefaultSort('name');
+    }
+    
+    protected function getEntityCommands(): ?array
+    {
+        return [
+            InviteUserCommand::class
+        ];
     }
 
     public function getListData(): array|Arrayable

@@ -3,6 +3,7 @@
 namespace App\Sharp\Categories;
 
 use App\Models\Category;
+use App\Sharp\Categories\Commands\CleanUnusedCategoriesCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -16,6 +17,13 @@ class CategoryList extends SharpEntityList
     {
         $this
             ->configureDefaultSort('name');
+    }
+    
+    protected function getEntityCommands(): ?array
+    {
+        return [
+            CleanUnusedCategoriesCommand::class
+        ];
     }
 
     public function getListData(): array|Arrayable
