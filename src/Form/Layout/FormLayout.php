@@ -21,21 +21,21 @@ class FormLayout implements HasLayout
     final public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new FormLayoutColumn($size));
-        
+
         if ($callback) {
             $callback($column);
         }
 
         return $this;
     }
-    
+
     final public function addColumnLayout(FormLayoutColumn $layoutColumn): FormLayoutColumn
     {
         return $this
             ->getLonelyTab()
             ->addColumnLayout($layoutColumn);
     }
-    
+
     final public function setTabbed(bool $tabbed = true): self
     {
         $this->tabbed = $tabbed;

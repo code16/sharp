@@ -11,14 +11,14 @@ class Form extends Component
 {
     public LayoutColumn $currentColumn;
     public self $formComponent;
-    
+
     public function __construct(
         public SharpForm $form,
     ) {
         $this->currentColumn = new FormLayoutColumn(12);
         $this->formComponent = $this;
     }
-    
+
     public function addColumn(int $size)
     {
         $this->currentColumn->setSize($size);

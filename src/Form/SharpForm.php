@@ -26,14 +26,14 @@ abstract class SharpForm
     {
         return $this->formLayoutInstance()->toArray();
     }
-    
+
     final public function formLayoutInstance(): FormLayout
     {
         if ($this->formLayout === null) {
             $this->formLayout = new FormLayout();
             $this->buildFormLayout($this->formLayout);
         }
-        
+
         return $this->formLayout;
     }
 

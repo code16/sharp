@@ -14,7 +14,7 @@ abstract class LayoutColumn
     {
         $this->size = $size;
     }
-    
+
     public function setSize(int $size)
     {
         $this->size = $size;

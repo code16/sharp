@@ -22,12 +22,12 @@ abstract class SharpShow
 
     protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;
-    
+
     final public function showLayout(): array
     {
         return $this->showLayoutInstance()->toArray();
     }
-    
+
     final public function showLayoutInstance(): ShowLayout
     {
         if ($this->showLayout === null) {

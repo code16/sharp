@@ -30,10 +30,10 @@ trait HasFieldRows
 
         return $this;
     }
-    
+
     public function appendLastRowField(string $fieldKey)
     {
-        if(count($this->rows)) {
+        if (count($this->rows)) {
             $this->rows[count($this->rows) - 1][] = $this->newLayoutField($fieldKey);
         } else {
             $this->withSingleField($fieldKey);
