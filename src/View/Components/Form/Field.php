@@ -4,19 +4,26 @@ namespace Code16\Sharp\View\Components\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\View\Components\Col;
+use Code16\Sharp\View\Components\Form;
+use Code16\Sharp\View\Utils\InjectComponentData;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Component;
 
 abstract class Field extends Component
 {
-    protected SharpForm $form;
+    use InjectComponentData;
+    
     public string $name;
     public ?string $label = null;
 
     abstract public function makeField(): SharpFormField;
 
-    public function registerField(SharpForm $form)
-    {
-        $this->form = $form;
+    public function registerField(
+        Form $formComponent,
+        ?Col $colComponent,
+    ) {
         $this->field = $this->makeField();
 
         collect($this->extractPublicProperties())
@@ -30,7 +37,8 @@ abstract class Field extends Component
                 }
             });
 
-        $this->form->fieldsContainer()->addField($this->field);
+        $formComponent->form->fieldsContainer()->addField($this->field);
+        $colComponent?->addField($this->name);
     }
 
     public function render(): callable
@@ -43,7 +51,10 @@ abstract class Field extends Component
                     }
                 });
 
-            return 'sharp::components.form.field';
+            $this->registerField(
+                $this->aware('formComponent'),
+                $this->aware('colComponent'),
+            );
         };
     }
 }
