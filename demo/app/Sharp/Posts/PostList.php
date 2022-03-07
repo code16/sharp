@@ -12,6 +12,7 @@ use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
@@ -164,6 +165,13 @@ class PostList extends SharpEntityList
                         ->map(fn ($name) => '<span class="badge">'.$name.'</span>')
                         ->implode(' '),
                 );
+            })
+            ->setCustomTransformer('author:name', function ($value, $instance) {
+                return $instance->author_id
+                    ? LinkToEntityList::make('posts')
+                        ->addFilter(AuthorFilter::class, $instance->author_id)
+                        ->renderAsText($instance->author->name)
+                    : null;
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
