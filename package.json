@@ -55,7 +55,6 @@
     "bootstrap": "^5.0.0-beta2",
     "bootstrap-vue": "^2.21.2",
     "carbon-components": "^7.26.2",
-    "element-ui": "^2.9.2",
     "filesize": "^6.1.0",
     "font-awesome-filetypes": "^2.1.0",
     "fuse.js": "^2.6.2",
