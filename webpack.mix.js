@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 
-mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
+mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js').vue()
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
     .sass('resources/assets/sass/app.scss', 'resources/assets/dist/sharp.css', { implementation:require('node-sass') })
     .sass('resources/assets/sass/vendors.scss', 'resources/assets/dist/vendors.css', { implementation:require('node-sass') })
@@ -26,8 +26,10 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .setPublicPath('resources/assets/dist')
     .webpackConfig({
         plugins: [
-            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-            new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en'),
+            new webpack.IgnorePlugin({
+                resourceRegExp: /^\.\/locale$/,
+                contextRegExp: /moment$/,
+            }),
         ],
         // transpile vue-clip package
         module: {
