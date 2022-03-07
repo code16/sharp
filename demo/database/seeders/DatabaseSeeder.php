@@ -89,6 +89,10 @@ class DatabaseSeeder extends Seeder
                     }
                 }
             });
+
+        Post::orderBy('published_at', 'desc')->first()->update([
+            'state' => 'draft',
+        ]);
     }
 
     private function deleteStorageFiles(): void
