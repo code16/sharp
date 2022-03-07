@@ -2,20 +2,18 @@
     <div class="SharpFilterDateRange" :class="classes">
         <FilterControl :opened="opened" :label="label" @click="handleClicked">
             <DateRange
-                class="SharpFilterDateRange__field input-group-sm"
+                class="SharpFilterDateRange__field"
                 :value="value"
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"
                 :clearable="!required"
                 :read-only="disabled"
+                small
                 @input="handleInput"
                 @focus="handlePickerFocused"
                 @blur="handlePickerBlur"
                 ref="range"
             />
-<!--            <template v-if="required || !value">-->
-<!--                <div class="form-control dropdown-toggle"></div>-->
-<!--            </template>-->
         </FilterControl>
     </div>
 </template>

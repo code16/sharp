@@ -7,6 +7,7 @@
                 :valid-hours="validHours"
                 :minute-increment="stepTime"
                 :monday-first="mondayFirst"
+                :update-on-input="false"
                 @input="handleDateChanged"
                 v-slot="{ inputEvents, togglePopover }"
             >
@@ -47,7 +48,7 @@
     import { lang } from 'sharp';
     import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
-    import DatePicker from './Datepicker';
+    import DatePicker from './DatePicker';
 
 
     export default {

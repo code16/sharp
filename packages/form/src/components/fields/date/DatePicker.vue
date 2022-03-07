@@ -1,10 +1,9 @@
 <template>
     <v-date-picker
-        class="vc-datepicker"
+        class="SharpDatePicker"
         :value="value"
         :popover="popoverOptions"
         :is-range="isRange"
-        :update-on-input="false"
         :locale="locale"
         :first-day-of-week="firstDayOfWeek"
         color="primary"
@@ -38,7 +37,8 @@
             popoverOptions() {
                 const boundary = document.querySelector('[data-popover-boundary]');
                 return {
-                    visibility: 'focus', // 'click' to debug
+                    visibility: 'focus',
+                    // visibility: 'click', // debug
                     hideDelay: 10,
                     placement: 'bottom',
                     modifiers: [

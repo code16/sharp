@@ -4,9 +4,6 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { install as VueGoogleMaps } from 'vue2-google-maps';
 import Notifications from 'vue-notification';
-import locale from 'element-ui/lib/locale';
-import { elLang } from './util/element-ui';
-
 
 import SharpCommands from 'sharp-commands';
 import SharpDashboard from 'sharp-dashboard';
@@ -26,8 +23,6 @@ import {
 
 import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
-
-locale.use(elLang());
 
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
