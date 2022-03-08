@@ -88,11 +88,10 @@ class DatabaseSeeder extends Seeder
                             ->create();
                     }
                 }
+                if(!rand(0,3)) {
+                    $post->update(["state" => "draft"]);
+                }
             });
-
-        Post::orderBy('published_at', 'desc')->first()->update([
-            'state' => 'draft',
-        ]);
     }
 
     private function deleteStorageFiles(): void
