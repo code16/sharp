@@ -2,13 +2,13 @@
     <div class="SharpFilterDateRange" :class="classes">
         <FilterControl :opened="opened" :label="label" @click="handleClicked">
             <DateRange
-                class="SharpFilterDateRange__field form-control"
-                :class="{ 'dropdown-toggle': required || !value }"
+                class="SharpFilterDateRange__field"
                 :value="value"
                 :display-format="displayFormat"
                 :monday-first="mondayFirst"
                 :clearable="!required"
                 :read-only="disabled"
+                small
                 @input="handleInput"
                 @focus="handlePickerFocused"
                 @blur="handlePickerBlur"
@@ -60,7 +60,7 @@
 
         methods: {
             handleClicked() {
-                this.$refs.range.$refs.picker.focus();
+
             },
             handleInput(range) {
                 this.$emit('input', range);

@@ -70,6 +70,9 @@ class TestForm extends SharpSingleForm
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
                     ->setDisplayFormat('YYYY-MM-DD HH:mm')
+                    ->setMinTime(8)
+                    ->setMaxTime(16)
+                    ->setStepTime(15)
                     ->setHasTime(true),
             )
             ->addField(
@@ -215,16 +218,6 @@ class TestForm extends SharpSingleForm
     public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout
-            ->addTab('Textarea', function (FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('markdown')
-                            ->withSingleField('textarea');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('wysiwyg');
-                    });
-            })
             ->addTab('Simple', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
@@ -235,6 +228,16 @@ class TestForm extends SharpSingleForm
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withSingleField('number')
                             ->withSingleField('html');
+                    });
+            })
+            ->addTab('Textarea', function (FormLayoutTab $tab) {
+                $tab
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withSingleField('markdown')
+                            ->withSingleField('textarea');
+                    })
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withSingleField('wysiwyg');
                     });
             })
             ->addTab('Select', function (FormLayoutTab $tab) {
