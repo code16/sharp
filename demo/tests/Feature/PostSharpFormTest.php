@@ -58,7 +58,7 @@ class PostSharpFormTest extends TestCase
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'admin']));
         $post = Post::factory()->create(['content' => ['fr' => 'old', 'en' => 'old']]);
-        
+
         $this
             ->updateSharpForm(
                 'posts',
@@ -68,10 +68,10 @@ class PostSharpFormTest extends TestCase
                     [
                         'content' => [
                             'text' => [
-                                'fr' => 'new', 
+                                'fr' => 'new',
                                 'en' => 'new',
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ),
             )
@@ -89,7 +89,7 @@ class PostSharpFormTest extends TestCase
         $this->loginAsSharpUser(User::factory()->create(['role' => 'editor']));
 
         $post = Post::factory()
-            ->for(User::factory(), "author")
+            ->for(User::factory(), 'author')
             ->create();
 
         $this->getSharpForm('posts', $post->id)
