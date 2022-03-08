@@ -48,10 +48,10 @@ class FieldWithDataLocalizationFormatterTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_stand_to_null_when_formatting_a_null_localized_text_value_from_front_in_a_text_field()
+    public function we_set_all_locales_to_null_when_formatting_a_null_localized_text_value_from_front_in_a_text_field()
     {
         $this->assertEquals(
-            null,
+            ['fr' => null, 'en' => null, 'es' => null],
             (new TextFormatter())
                 ->setDataLocalizations(['fr', 'en', 'es'])
                 ->fromFront(

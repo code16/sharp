@@ -31,7 +31,7 @@
             @close="close"
         />
 
-        <FilterControl :label="label" @click="handleClick">
+        <FilterControl :label="label" @click="handleClicked">
             <!-- value text & tags -->
             <Select
                 class="SharpFilterSelect__select text-wrap"
@@ -107,7 +107,7 @@
             handleAutocompleteInput(value) {
                 this.$emit('input', this.multiple ? value.map(v=>v.id) : (value||{}).id);
             },
-            handleClick() {
+            handleClicked() {
                 if(this.opened) {
                     this.close();
                 } else {

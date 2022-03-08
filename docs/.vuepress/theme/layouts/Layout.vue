@@ -1,5 +1,5 @@
 <template>
-    <ParentLayout :class="classes" />
+    <ParentLayout />
 </template>
 
 <script>
@@ -8,37 +8,6 @@
     export default {
         components: {
             ParentLayout,
-        },
-        data() {
-            return {
-                showLogo: false,
-            }
-        },
-        computed: {
-            classes() {
-                return {
-                    'show-logo': this.showLogo,
-                }
-            },
-        },
-        methods: {
-            handleScroll() {
-                this.showLogo = window.scrollY > 500;
-            },
-            init() {
-                const siteName = this.$el.querySelector('.site-name');
-                const match = siteName.innerHTML.match(/(Sharp )(.+)/i);
-                if(match) {
-                    siteName.innerHTML = `${match[1]}<span class="version">${match[2]}</span>`
-                }
-            },
-        },
-        mounted() {
-            window.addEventListener('scroll', this.handleScroll);
-            this.init();
-        },
-        destroyed() {
-            window.removeEventListener('scroll', this.handleScroll);
         },
     }
 </script>

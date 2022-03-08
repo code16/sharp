@@ -1,6 +1,7 @@
 
 .SharpFilterControl {
   font-size: .875rem;
+  min-height: 1.9375rem;
 
   .form-control {
     min-width: 2rem;
@@ -8,5 +9,7 @@
   .input-group-text {
     color: $ui-primary-color;
   }
-
+  .SharpClearButton {
+    width: 1.75rem;
+  }
 }

@@ -1,1 +1,1 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{1:function(n,o,u){n.exports=u("1Zub")},"1Zub":function(n,o,u){"use strict";u.r(o);var w=u("XuX8"),i=u.n(w);window.Vue=i.a}},[[1,0,1]]]);
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[340],{63227:function(n,u,e){var t=e(70538);window.Vue=t.default}},function(n){n.O(0,[660],(function(){return u=63227,n(n.s=u);var u}));n.O()}]);

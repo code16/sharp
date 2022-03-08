@@ -272,7 +272,7 @@ abstract class SharpEntityList
     /**
      * Retrieve all rows data as an array.
      */
-    abstract protected function getListData(): array|Arrayable;
+    abstract public function getListData(): array|Arrayable;
 
     /**
      * Build list fields.

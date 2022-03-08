@@ -1,30 +1,60 @@
 <template>
-    <el-date-picker
-        class="SharpDateRange"
-        :class="classes"
-        :value="transformedValue"
-        :format="transformedFormat"
-        :start-placeholder="startPlaceholder"
-        :end-placeholder="endPlaceholder"
-        :disabled="readOnly"
-        :clearable="clearable"
-        :picker-options="pickerOptions"
-        type="daterange"
-        popper-class="SharpDateRange__popper"
-        ref="picker"
+    <DatePicker
+        class="SharpDateRange position-relative"
+        :value="value"
+        :monday-first="mondayFirst"
+        :display-format="displayFormat"
+        :columns="$screens({ default: 1, lg: 2 })"
+        is-range
         @input="handleChanged"
-        @focus="handleFocused"
-        @blur="handleBlur"
-    />
+        v-slot="{ inputValue, inputEvents }"
+    >
+        <div class="input-group" :class="{ 'input-group-sm': small }">
+            <template v-if="small && !value">
+                <div class="form-control dropdown-toggle" tabindex="0" v-on="inputEvents.start">
+                    <span></span>
+                </div>
+            </template>
+            <template v-else>
+                <input
+                    class="form-control border-end-0"
+                    :value="inputValue.start"
+                    :placeholder="startPlaceholder"
+                    :disabled="readOnly"
+                    v-bind="$props"
+                    autocomplete="off"
+                    v-on="inputEvents.start"
+                />
+                <div class="form-control SharpDateRange__dash px-0 border-start-0 border-end-0">
+                    -
+                </div>
+                <input
+                    class="form-control border-start-0"
+                    :class="{ 'clearable': hasClearButton }"
+                    :value="inputValue.end"
+                    :placeholder="endPlaceholder"
+                    :disabled="readOnly"
+                    v-bind="$props"
+                    autocomplete="off"
+                    v-on="inputEvents.end"
+                />
+            </template>
+        </div>
+        <template v-if="hasClearButton">
+            <ClearButton @click="handleClearClicked" />
+        </template>
+    </DatePicker>
 </template>
 
 <script>
     import { lang } from "sharp";
-    import ElDatePicker from 'element-ui/lib/date-picker';
+    import { ClearButton } from "sharp-ui";
+    import DatePicker from "../date/DatePicker";
 
     export default {
         components: {
-            ElDatePicker,
+            DatePicker,
+            ClearButton,
         },
         props: {
             value: {
@@ -51,44 +81,30 @@
             },
             readOnly: Boolean,
             mondayFirst: Boolean,
+            small: Boolean,
         },
         computed: {
-            transformedValue() {
-                const value = this.value || {};
-                return value.start || value.end ? [
-                    value.start,
-                    value.end,
-                ] : null;
-            },
-            transformedFormat() {
-                return this.displayFormat
-                    .replace(/D/g, 'd')
-                    .replace(/Y/g, 'y');
-            },
-            pickerOptions() {
-                return {
-                    firstDayOfWeek: this.mondayFirst ? 1 : 7,
-                }
-            },
-            classes() {
-                return {
-                    'SharpDateRange--clearable': this.clearable,
-                }
-            },
+           hasClearButton() {
+               return this.clearable && !!this.value?.start && !!this.value?.end;
+           },
         },
         methods: {
             handleChanged(value) {
-                const range = value || [];
-                this.$emit('input', {
-                    start: range[0],
-                    end: range[1],
+                if(value?.start?.toDateString() === this.oldValue?.start?.toDateString()
+                    && value?.end?.toDateString() === this.oldValue?.end?.toDateString()
+                ) {
+                    return;
+                }
+                this.$emit('input', value);
+                this.oldValue = value;
+            },
+            handleClearClicked() {
+                this.$emit('input', null);
+            },
+            focus() {
+                setTimeout(() => {
+                    this.$el.querySelector('.form-control').focus();
                 });
-            },
-            handleFocused() {
-                this.$emit('focus');
-            },
-            handleBlur() {
-                this.$emit('blur');
             },
         },
     }
