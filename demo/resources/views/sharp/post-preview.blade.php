@@ -15,9 +15,11 @@
          */
         @endphp
         <div class="mx-auto pb-5" style="width: 800px;">
-            <div class="my-4">
-                <img class="img-fluid" src="{{ $post->cover->thumbnail(1200) }}" alt="">
-            </div>
+            @if($post->cover)
+                <div class="my-4">
+                    <img class="img-fluid" src="{{ $post->cover->thumbnail(1200) }}" alt="">
+                </div>
+            @endif
 
             <h1 class="mb-3" style="font-weight: 600">
                 {{ $post->title }}
