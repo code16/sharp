@@ -25,12 +25,17 @@ abstract class SharpShow
 
     final public function showLayout(): array
     {
+        return $this->showLayoutInstance()->toArray();
+    }
+
+    final public function showLayoutInstance(): ShowLayout
+    {
         if ($this->showLayout === null) {
             $this->showLayout = new ShowLayout();
             $this->buildShowLayout($this->showLayout);
         }
 
-        return $this->showLayout->toArray();
+        return $this->showLayout;
     }
 
     /**

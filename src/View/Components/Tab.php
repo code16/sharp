@@ -3,28 +3,28 @@
 namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Illuminate\View\Component;
 
-class Form extends Component
+class Tab extends Component
 {
+    public FormLayoutTab $tab;
     public LayoutColumn $currentColumn;
-    public self $formComponent;
+    public self $tabComponent;
 
     public function __construct(
-        public SharpForm $form,
+        public ?string $title = null,
     ) {
+        $this->tab = new FormLayoutTab($title);
         $this->currentColumn = new FormLayoutColumn(12);
-        $this->formComponent = $this;
+        $this->tabComponent = $this;
     }
 
     public function addColumn(int $size)
     {
         $this->currentColumn->setSize($size);
-        $this->form
-            ->formLayoutInstance()
-            ->addColumnLayout($this->currentColumn);
+        $this->tab->addColumnLayout($this->currentColumn);
         $this->currentColumn = new FormLayoutColumn(12);
     }
 

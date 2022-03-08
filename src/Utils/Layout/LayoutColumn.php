@@ -15,6 +15,11 @@ abstract class LayoutColumn
         $this->size = $size;
     }
 
+    public function setSize(int $size)
+    {
+        $this->size = $size;
+    }
+
     public function toArray(): array
     {
         return array_merge(
