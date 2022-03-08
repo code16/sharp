@@ -16,7 +16,6 @@ const config = {
     moduleNameMapper: {
         "^vue$": "vue/dist/vue.common.js",
         "^sharp((/(.*))|$)": "<rootDir>/resources/assets/js$1",
-        "^babel-runtime/core-js/(.+)": "core-js/stable/$1", // for vue-clip
         "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/styleMock.js"
     },
     transformIgnorePatterns: [

@@ -56,7 +56,6 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js').vue()
             alias: {
                 // resolve core-js@2.0 polyfills (now 3.0)
                 'core-js/fn': 'core-js/features',
-                'babel-runtime/core-js/symbol': 'core-js/stable/symbol', // vue-clip
                 'sharp/scss': path.resolve(__dirname, 'resources/assets/sass'),
             },
         }
