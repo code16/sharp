@@ -45,7 +45,7 @@ A Command is an action presented to the user (with permissions handled via polic
 
 ### Present synthetic data, graphs and direct links in dashboards
 
-TODO
+![Dashboard](./img/readme/dashboard.png)
 
 ### Choose your theme color!
 
