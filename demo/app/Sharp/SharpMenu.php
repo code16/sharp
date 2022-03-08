@@ -10,6 +10,7 @@ class SharpMenu extends BaseSharpMenu
     public function build(): self
     {
         return $this
+            ->addEntityLink('dashboard', 'Dashboard', 'fas fa-meter')
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
                     ->addEntityLink('posts', 'Posts', 'fas fa-file')

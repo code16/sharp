@@ -10,8 +10,9 @@ return [
         'blocks' => \App\Sharp\Entities\PostBlockEntity::class,
         'categories' => \App\Sharp\Entities\CategoryEntity::class,
         'authors' => \App\Sharp\Entities\AuthorEntity::class,
-
-        'profile' => \App\Sharp\Profile\ProfileEntity::class,
+        'profile' => \App\Sharp\Entities\ProfileEntity::class,
+        'dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
+        
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 

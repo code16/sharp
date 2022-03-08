@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Sharp\Profile;
+namespace App\Sharp\Entities;
 
+use App\Sharp\Profile\ProfileSingleForm;
+use App\Sharp\Profile\ProfileSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class ProfileEntity extends SharpEntity
