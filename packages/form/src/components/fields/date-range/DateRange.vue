@@ -1,6 +1,6 @@
 <template>
     <DatePicker
-        class="position-relative"
+        class="SharpDateRange position-relative"
         :value="value"
         :monday-first="mondayFirst"
         :display-format="displayFormat"
@@ -10,19 +10,35 @@
         v-slot="{ inputValue, inputEvents }"
     >
         <div class="input-group" :class="{ 'input-group-sm': small }">
-            <DateRangeInput
-                v-bind="$props"
-                :value="inputValue.start"
-                :placeholder="startPlaceholder"
-                v-on="inputEvents.start"
-            />
-            <DateRangeInput
-                :class="{ 'clearable': hasClearButton }"
-                v-bind="$props"
-                :value="inputValue.end"
-                :placeholder="endPlaceholder"
-                v-on="inputEvents.end"
-            />
+            <template v-if="small && !value">
+                <div class="form-control dropdown-toggle" tabindex="0" v-on="inputEvents.start">
+                    <span></span>
+                </div>
+            </template>
+            <template v-else>
+                <input
+                    class="form-control border-end-0"
+                    :value="inputValue.start"
+                    :placeholder="startPlaceholder"
+                    :disabled="readOnly"
+                    v-bind="$props"
+                    autocomplete="off"
+                    v-on="inputEvents.start"
+                />
+                <div class="form-control SharpDateRange__dash px-0 border-start-0 border-end-0">
+                    -
+                </div>
+                <input
+                    class="form-control border-start-0"
+                    :class="{ 'clearable': hasClearButton }"
+                    :value="inputValue.end"
+                    :placeholder="endPlaceholder"
+                    :disabled="readOnly"
+                    v-bind="$props"
+                    autocomplete="off"
+                    v-on="inputEvents.end"
+                />
+            </template>
         </div>
         <template v-if="hasClearButton">
             <ClearButton @click="handleClearClicked" />
@@ -34,11 +50,9 @@
     import { lang } from "sharp";
     import { ClearButton } from "sharp-ui";
     import DatePicker from "../date/DatePicker";
-    import DateRangeInput from "./DateRangeInput";
 
     export default {
         components: {
-            DateRangeInput,
             DatePicker,
             ClearButton,
         },
@@ -84,14 +98,13 @@
                 this.$emit('input', value);
                 this.oldValue = value;
             },
-            handleFocused() {
-                this.$emit('focus');
-            },
-            handleBlur() {
-                this.$emit('blur');
-            },
             handleClearClicked() {
                 this.$emit('input', null);
+            },
+            focus() {
+                setTimeout(() => {
+                    this.$el.querySelector('.form-control').focus();
+                });
             },
         },
     }

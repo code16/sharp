@@ -1,4 +1,10 @@
 
 .SharpDateRange {
-
+  .form-control {
+    text-align: center;
+  }
+  &__dash.form-control {
+    width: auto;
+    flex: 0 0 auto;
+  }
 }

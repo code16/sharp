@@ -2,9 +2,16 @@
 .SharpFilterDateRange {
   &__field {
     max-width: 220px;
+    .input-group {
+      height: 100%;
+    }
   }
 
   .form-control {
+    font-weight: bold;
+    font-size: .8125rem;
+    height: 100%;
+
     &:first-child {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
@@ -12,5 +19,13 @@
     &.clearable {
       padding-right: 1.5rem;
     }
+  }
+
+  .SharpDateRange__dash {
+    min-width: auto;
+  }
+
+  .dropdown-toggle {
+    font-size: .875rem;
   }
 }

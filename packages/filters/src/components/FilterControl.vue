@@ -1,7 +1,7 @@
 <template>
     <div class="input-group input-group-sm flex-nowrap SharpFilterControl" @click="handleClicked">
         <template v-if="label">
-            <div class="input-group-text bg-white">
+            <div class="input-group-text bg-white" @click="handleLabelClicked">
                 {{ label }}
             </div>
         </template>
@@ -14,10 +14,12 @@
     export default {
         name: 'SharpFilterControl',
         props: {
-            opened: Boolean,
             label: String,
         },
         methods: {
+            handleLabelClicked() {
+                this.$emit('label-click');
+            },
             handleClicked() {
                 this.$emit('click');
             },
