@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Str;
 
 class AutocompleteField extends Field
@@ -31,14 +31,14 @@ class AutocompleteField extends Field
     {
         return SharpFormAutocompleteField::make($this->name, $this->mode);
     }
-    
+
     public function setRemoteMethod()
     {
-        if(Str::lower($this->remoteMethod) === 'post') {
+        if (Str::lower($this->remoteMethod) === 'post') {
             $this->field->setRemoteMethodPOST();
         }
     }
-    
+
     public function setDebounceDelay()
     {
         $this->field->setDebounceDelayInMilliseconds($this->debounceDelay);

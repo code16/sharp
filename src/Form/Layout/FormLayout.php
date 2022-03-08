@@ -17,7 +17,7 @@ class FormLayout implements HasLayout
 
         return $this;
     }
-    
+
     final public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this
@@ -25,11 +25,11 @@ class FormLayout implements HasLayout
             ->addColumnLayout(
                 new FormLayoutColumn($size),
             );
-        
+
         if ($callback) {
             $callback($column);
         }
-        
+
         return $this;
     }
 

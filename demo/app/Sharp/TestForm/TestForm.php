@@ -28,7 +28,7 @@ class TestForm extends SharpSingleForm
     {
         return view('sharp.forms.test-form');
     }
-    
+
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields

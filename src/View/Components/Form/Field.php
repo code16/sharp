@@ -5,7 +5,6 @@ namespace Code16\Sharp\View\Components\Form;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\View\Components\Col;
-use Code16\Sharp\View\Components\Form;
 use Illuminate\View\Component;
 
 abstract class Field extends Component
@@ -20,7 +19,7 @@ abstract class Field extends Component
     private function registerField()
     {
         $this->field = $this->makeField();
-        
+
         collect($this->extractPublicProperties())
             ->filter(fn ($value) => ! is_null($value))
             ->each(function ($value, $key) {
@@ -35,7 +34,7 @@ abstract class Field extends Component
         $this->form->fieldsContainer()->addField($this->field);
         $this->parentColComponent?->addField($this->name);
     }
-    
+
     private function updateProperties(array $viewData)
     {
         collect($this->extractPublicProperties())
@@ -50,7 +49,7 @@ abstract class Field extends Component
     {
         $this->form = view()->getConsumableComponentData('form');
         $this->parentColComponent = view()->getConsumableComponentData('colComponent');
-        
+
         return function ($data) {
             $this->updateProperties($data);
             $this->registerField();

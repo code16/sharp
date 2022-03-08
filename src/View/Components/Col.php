@@ -34,27 +34,27 @@ class Col extends Component
         $this->tab = view()->getConsumableComponentData('tab');
         $this->form = view()->getConsumableComponentData('form');
         $this->fieldset = view()->getConsumableComponentData('fieldset');
-        if($class) {
-            $this->sizeXs ??= (int)Str::match("/col-(\d+)/", $class) ?: null;
-            $this->size ??= (int)Str::match("/col-md-(\d+)/", $class) ?: $this->sizeXs;
+        if ($class) {
+            $this->sizeXs ??= (int) Str::match("/col-(\d+)/", $class) ?: null;
+            $this->size ??= (int) Str::match("/col-md-(\d+)/", $class) ?: $this->sizeXs;
         }
-        
+
         if ($this->fieldset) {
             $this->rowsContainer = $this->fieldset;
-        } elseif($this->parentColComponent) {
+        } elseif ($this->parentColComponent) {
             $this->column = $this->parentColComponent->column;
             $this->rowsContainer = $this->parentColComponent->column;
-        } elseif($this->tab) {
+        } elseif ($this->tab) {
             $this->tab->addColumn($this->size, function (FormLayoutColumn $column) {
                 $this->column = $column;
             });
-        } elseif($this->form) {
+        } elseif ($this->form) {
             $this->form->formLayoutInstance()->addColumn($this->size, function (FormLayoutColumn $column) {
                 $this->column = $column;
             });
         }
     }
-    
+
     public function addField(string $fieldKey)
     {
         if ($this->rowsContainer) {
@@ -63,20 +63,22 @@ class Col extends Component
             $this->column?->withSingleField($fieldKey);
         }
     }
-    
+
     private function fieldLayoutKey(string $fieldKey): string
     {
-        if($this->size) {
+        if ($this->size) {
             $fieldKey .= "|$this->size";
-            if($this->sizeXs) {
+            if ($this->sizeXs) {
                 $fieldKey .= ",$this->sizeXs";
             }
         }
+
         return $fieldKey;
     }
-    
+
     public function render(): callable
     {
-        return function () {};
+        return function () {
+        };
     }
 }
