@@ -16,14 +16,8 @@
 @import "~leaflet/dist/leaflet.css";
 
 
-@import '~element-ui/packages/theme-chalk/src/icon';
-
-
 $animationDuration: 300ms;
 
 @import "~vue2-animate/src/sass/make-transitions";
 @import "~vue2-animate/src/sass/animations/sliding/all";
 
-
-// DateRange field
-@import '~element-ui/packages/theme-chalk/src/date-picker';

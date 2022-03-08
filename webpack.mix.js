@@ -8,7 +8,6 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js').vue()
     .sass('resources/assets/sass/app.scss', 'sharp.css', { implementation:require('node-sass') })
     .sass('resources/assets/sass/vendors.scss', 'vendors.css', { implementation:require('node-sass') })
     .copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'resources/assets/dist/fonts')
-    .copy('node_modules/element-ui/lib/theme-chalk/fonts/*', 'resources/assets/dist/fonts')
     .copy('node_modules/leaflet/dist/images/*', 'resources/assets/dist/images')
     .options({
         processCssUrls: false,
@@ -57,6 +56,7 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js').vue()
             alias: {
                 // resolve core-js@2.0 polyfills (now 3.0)
                 'core-js/fn': 'core-js/features',
+                'babel-runtime/core-js/symbol': 'core-js/stable/symbol', // vue-clip
                 'sharp/scss': path.resolve(__dirname, 'resources/assets/sass'),
             },
         }
