@@ -4,32 +4,30 @@ namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Illuminate\View\Component;
 
 class Tab extends Component
 {
     public FormLayoutTab $tab;
-    public LayoutColumn $currentColumn;
-    public self $tabComponent;
+    public SharpForm $form;
 
     public function __construct(
         public ?string $title = null,
     ) {
-        $this->tab = new FormLayoutTab($title);
-        $this->currentColumn = new FormLayoutColumn(12);
-        $this->tabComponent = $this;
+        $this->form = view()->getConsumableComponentData('form');
+        $this->form
+            ->formLayoutInstance()
+            ->addTab($this->title ?? '', function (FormLayoutTab $tab) {
+                $this->tab = $tab;
+            });
     }
 
-    public function addColumn(int $size)
+    public function render(): callable
     {
-        $this->currentColumn->setSize($size);
-        $this->tab->addColumnLayout($this->currentColumn);
-        $this->currentColumn = new FormLayoutColumn(12);
-    }
-
-    public function render()
-    {
-        return view('sharp::components.form');
+        return function ($data) {
+            $this->tab->setTitle($data['title']);
+        };
     }
 }

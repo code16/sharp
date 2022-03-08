@@ -22,6 +22,11 @@ class FormLayoutTab implements HasLayout
 
         return $this;
     }
+    
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+    }
 
     public function toArray(): array
     {

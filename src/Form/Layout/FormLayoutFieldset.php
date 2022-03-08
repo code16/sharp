@@ -12,6 +12,11 @@ class FormLayoutFieldset implements HasLayout
     {
         $this->legend = $legend;
     }
+    
+    public function setLegend(string $legend)
+    {
+        $this->legend = $legend;
+    }
 
     public function toArray(): array
     {

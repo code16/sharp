@@ -24,14 +24,19 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestForm extends SharpSingleForm
 {
+    public function render()
+    {
+        return view('sharp.forms.test-form');
+    }
+    
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
-            ->addField(
-                SharpFormTextField::make('text')
-                    ->setLocalized()
-                    ->setLabel('Text'),
-            )
+//            ->addField(
+//                SharpFormTextField::make('text')
+//                    ->setLocalized()
+//                    ->setLabel('Text'),
+//            )
             ->addField(
                 SharpFormAutocompleteField::make('autocomplete_local', 'local')
                     ->setLocalized()
@@ -217,65 +222,65 @@ class TestForm extends SharpSingleForm
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout
-            ->addTab('Simple', function (FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('text')
-                            ->withSingleField('date')
-                            ->withSingleField('check');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('number')
-                            ->withSingleField('html');
-                    });
-            })
-            ->addTab('Textarea', function (FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('markdown')
-                            ->withSingleField('textarea');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('wysiwyg');
-                    });
-            })
-            ->addTab('Select', function (FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('autocomplete_local')
-                            ->withSingleField('autocomplete_remote')
-                            ->withSingleField('select_dropdown');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('select_list')
-                            ->withSingleField('select_list_multiple')
-                            ->withSingleField('tags');
-                    });
-            })
-            ->addTab('List', function (FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('autocomplete_list', function (FormLayoutColumn $listItem) {
-                            $listItem->withSingleField('item');
-                        });
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('list', function (FormLayoutColumn $listItem) {
-                            $listItem->withFields('date|5', 'check|7')
-                                ->withSingleField('markdown2');
-                        });
-                    });
-            })
-            ->addTab('Special', function (FormLayoutTab $tab) {
-                $tab
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('upload');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-//                        $column->withSingleField("geolocation");
-                    });
-            });
+//        $formLayout
+//            ->addTab('Simple', function (FormLayoutTab $tab) {
+//                $tab
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('text')
+//                            ->withSingleField('date')
+//                            ->withSingleField('check');
+//                    })
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('number')
+//                            ->withSingleField('html');
+//                    });
+//            })
+//            ->addTab('Textarea', function (FormLayoutTab $tab) {
+//                $tab
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('markdown')
+//                            ->withSingleField('textarea');
+//                    })
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('wysiwyg');
+//                    });
+//            })
+//            ->addTab('Select', function (FormLayoutTab $tab) {
+//                $tab
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('autocomplete_local')
+//                            ->withSingleField('autocomplete_remote')
+//                            ->withSingleField('select_dropdown');
+//                    })
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('select_list')
+//                            ->withSingleField('select_list_multiple')
+//                            ->withSingleField('tags');
+//                    });
+//            })
+//            ->addTab('List', function (FormLayoutTab $tab) {
+//                $tab
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('autocomplete_list', function (FormLayoutColumn $listItem) {
+//                            $listItem->withSingleField('item');
+//                        });
+//                    })
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('list', function (FormLayoutColumn $listItem) {
+//                            $listItem->withFields('date|5', 'check|7')
+//                                ->withSingleField('markdown2');
+//                        });
+//                    });
+//            })
+//            ->addTab('Special', function (FormLayoutTab $tab) {
+//                $tab
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+//                        $column->withSingleField('upload');
+//                    })
+//                    ->addColumn(6, function (FormLayoutColumn $column) {
+////                        $column->withSingleField("geolocation");
+//                    });
+//            });
     }
 
     protected function findSingle()

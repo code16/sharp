@@ -3,26 +3,24 @@
 namespace Code16\Sharp\View\Components\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\View\Components\Col;
 use Code16\Sharp\View\Components\Form;
-use Code16\Sharp\View\Utils\InjectComponentData;
 use Illuminate\View\Component;
 
 abstract class Field extends Component
 {
-    use InjectComponentData;
-
     public string $name;
     public ?string $label = null;
+    public ?SharpForm $form = null;
+    public ?Col $parentColComponent = null;
 
     abstract public function makeField(): SharpFormField;
 
-    public function registerField(
-        Form $formComponent,
-        ?Col $colComponent,
-    ) {
+    private function registerField()
+    {
         $this->field = $this->makeField();
-
+        
         collect($this->extractPublicProperties())
             ->filter(fn ($value) => ! is_null($value))
             ->each(function ($value, $key) {
@@ -34,24 +32,28 @@ abstract class Field extends Component
                 }
             });
 
-        $formComponent->form->fieldsContainer()->addField($this->field);
-        $colComponent?->addField($this->name);
+        $this->form->fieldsContainer()->addField($this->field);
+        $this->parentColComponent?->addField($this->name);
+    }
+    
+    private function updateProperties(array $viewData)
+    {
+        collect($this->extractPublicProperties())
+            ->each(function ($value, $key) use ($viewData) {
+                if (array_key_exists($key, $viewData)) {
+                    $this->{$key} = $viewData[$key];
+                }
+            });
     }
 
     public function render(): callable
     {
+        $this->form = view()->getConsumableComponentData('form');
+        $this->parentColComponent = view()->getConsumableComponentData('colComponent');
+        
         return function ($data) {
-            collect($this->extractPublicProperties())
-                ->each(function ($value, $key) use ($data) {
-                    if (array_key_exists($key, $data)) {
-                        $this->{$key} = $data[$key];
-                    }
-                });
-
-            $this->registerField(
-                $this->aware('formComponent'),
-                $this->aware('colComponent'),
-            );
+            $this->updateProperties($data);
+            $this->registerField();
         };
     }
 }
