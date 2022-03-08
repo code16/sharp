@@ -8,6 +8,7 @@ use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
+use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -76,6 +77,7 @@ class PostList extends SharpEntityList
     protected function getFilters(): ?array
     {
         return [
+            StateFilter::class,
             AuthorFilter::class,
             CategoryFilter::class,
             PeriodFilter::class,
@@ -103,6 +105,12 @@ class PostList extends SharpEntityList
             )
 
             // Handle filters
+            ->when(
+                $this->queryParams->filterFor(StateFilter::class),
+                function (Builder $builder, string $state) {
+                    $builder->where('state', $state);
+                },
+            )
             ->when(
                 $this->queryParams->filterFor(PeriodFilter::class),
                 function (Builder $builder, array $dates) {
