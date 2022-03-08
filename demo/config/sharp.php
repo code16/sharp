@@ -12,7 +12,7 @@ return [
         'authors' => \App\Sharp\Entities\AuthorEntity::class,
         'profile' => \App\Sharp\Entities\ProfileEntity::class,
         'dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
-        
+
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 

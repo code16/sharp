@@ -88,8 +88,8 @@ class DatabaseSeeder extends Seeder
                             ->create();
                     }
                 }
-                if(!rand(0,3)) {
-                    $post->update(["state" => "draft"]);
+                if (! rand(0, 3)) {
+                    $post->update(['state' => 'draft']);
                 }
             });
     }

@@ -14,8 +14,8 @@ class PeriodRequiredFilter extends DashboardDateRangeRequiredFilter
     public function defaultValue(): array
     {
         return [
-            "start" => today()->subDays(30),
-            "end" => today()->subDay(),
+            'start' => today()->subDays(30),
+            'end' => today()->subDay(),
         ];
     }
 }

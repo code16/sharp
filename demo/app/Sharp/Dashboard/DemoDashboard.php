@@ -61,12 +61,12 @@ class DemoDashboard extends SharpDashboard
             ->addWidget(
                 SharpPanelWidget::make('draft_panel')
                     ->setInlineTemplate('<h1>{{count}}</h1> draft post(s)')
-                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, "draft")),
+                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'draft')),
             )
             ->addWidget(
                 SharpPanelWidget::make('online_panel')
                     ->setInlineTemplate('<h1>{{count}}</h1> online post(s)')
-                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, "online")),
+                    ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
             );
     }
 
@@ -85,11 +85,11 @@ class DemoDashboard extends SharpDashboard
                     ->addWidget(6, 'online_panel');
             });
     }
-    
+
     public function getFilters(): ?array
     {
         return [
-            PeriodRequiredFilter::class
+            PeriodRequiredFilter::class,
         ];
     }
 
@@ -112,14 +112,14 @@ class DemoDashboard extends SharpDashboard
                 'online_panel', ['count' => $posts->where('state', 'online')->first()->count ?? 0],
             );
     }
-    
+
     protected function setLineGraphDataSet(): void
     {
         $visits = collect(CarbonPeriod::create($this->getStartDate(), $this->getEndDate()))
-            ->mapWithKeys(function(Carbon $day, $k) {
-                return [$day->isoFormat('L') => (int)(rand(10000, 20000) * 1.02)];
+            ->mapWithKeys(function (Carbon $day, $k) {
+                return [$day->isoFormat('L') => (int) (rand(10000, 20000) * 1.02)];
             });
-        
+
         $this
             ->addGraphDataSet(
                 'visits_line',
@@ -140,7 +140,7 @@ class DemoDashboard extends SharpDashboard
         $data = User::withCount([
             'posts' => function (Builder $query) {
                 $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }])
+            }, ])
             ->orderBy('posts_count', 'desc')
             ->limit(8)
             ->get()
@@ -158,9 +158,9 @@ class DemoDashboard extends SharpDashboard
         Category::withCount([
             'posts' => function (Builder $query) {
                 $query->whereBetween('published_at', [$this->getStartDate(), $this->getEndDate()]);
-            }])
+            }, ])
             ->limit(8)
-            ->orderBy("posts_count")
+            ->orderBy('posts_count')
             ->limit(5)
             ->get()
             ->each(function (Category $category) {
@@ -184,14 +184,14 @@ class DemoDashboard extends SharpDashboard
 
     protected function getStartDate(): Carbon
     {
-        return $this->queryParams->filterFor(PeriodRequiredFilter::class)["start"];
+        return $this->queryParams->filterFor(PeriodRequiredFilter::class)['start'];
     }
 
     protected function getEndDate(): Carbon
     {
         return min(
-            $this->queryParams->filterFor(PeriodRequiredFilter::class)["end"],
-            today()->subDay()
+            $this->queryParams->filterFor(PeriodRequiredFilter::class)['end'],
+            today()->subDay(),
         );
     }
 }

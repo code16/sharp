@@ -14,8 +14,8 @@ class StateFilter extends EntityListSelectFilter
     public function values(): array
     {
         return [
-            "online" => "Online",
-            "draft" => "Draft",
+            'online' => 'Online',
+            'draft' => 'Draft',
         ];
     }
 }
