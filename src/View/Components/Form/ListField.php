@@ -4,8 +4,6 @@ namespace Code16\Sharp\View\Components\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Utils\Layout\LayoutColumn;
-use Illuminate\Support\Str;
 
 class ListField extends Field
 {
@@ -29,12 +27,12 @@ class ListField extends Field
         $this->listField = $this->field;
         $this->listFieldComponent = $this;
     }
-    
+
     protected function setItemLayout($itemLayout)
     {
         $this->itemLayout = $itemLayout;
     }
-    
+
     protected function updateFromSlots(array $slots)
     {
         if ($template = $slots['collapsed_item'] ?? null) {

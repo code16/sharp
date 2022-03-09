@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\View\Components;
 
-use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
