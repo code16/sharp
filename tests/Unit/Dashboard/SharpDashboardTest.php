@@ -372,7 +372,7 @@ class SharpDashboardTest extends SharpTestCase
             public function buildWidgetsData(): void
             {
                 $this->setPageAlertData([
-                    'name' => "Bob"
+                    'name' => 'Bob',
                 ]);
             }
         };

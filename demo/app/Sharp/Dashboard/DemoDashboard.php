@@ -92,7 +92,7 @@ class DemoDashboard extends SharpDashboard
             PeriodRequiredFilter::class,
         ];
     }
-    
+
     public function buildDashboardConfig(): void
     {
         $this->configurePageAlert(
@@ -120,7 +120,7 @@ class DemoDashboard extends SharpDashboard
                 'online_panel', ['count' => $posts->where('state', 'online')->first()->count ?? 0],
             )
             ->setPageAlertData([
-                'attr' => "It works!"
+                'attr' => 'It works!',
             ]);
     }
 

@@ -161,7 +161,7 @@ abstract class SharpDashboard
                     ];
                 }),
         );
-        
+
         // And then, pageAlert
         return $data
             ->when($this->pageAlertData, function (Collection $data, array $pageAlertData) {
