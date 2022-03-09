@@ -29,6 +29,13 @@ class SharpFormSelectField extends SharpFormField
 
         return $instance;
     }
+    
+    public function setOptions(array $options): self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
 
     public function setMultiple(bool $multiple = true): self
     {

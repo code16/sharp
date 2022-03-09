@@ -157,12 +157,12 @@ class TestForm extends SharpSingleForm
                 ->setMin(1)
                 ->setMax(100),
             )
-            ->addField(
-                SharpFormSelectField::make('select_dropdown', $this->options(true))
-                    ->setLocalized()
-                    ->setLabel('Select dropdown')
-                    ->setDisplayAsDropdown(),
-            )
+//            ->addField(
+//                SharpFormSelectField::make('select_dropdown', $this->options(true))
+//                    ->setLocalized()
+//                    ->setLabel('Select dropdown')
+//                    ->setDisplayAsDropdown(),
+//            )
             ->addField(
                 SharpFormSelectField::make('select_list', $this->options(true))
                     ->setLocalized()
