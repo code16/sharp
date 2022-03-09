@@ -3,8 +3,6 @@
 namespace Code16\Sharp\View\Components\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
-use Code16\Sharp\Form\Fields\SharpFormField;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class AutocompleteField extends Field
@@ -30,23 +28,23 @@ class AutocompleteField extends Field
         public ?string $resultItemTemplatePath = null,
     ) {
         $this->field = SharpFormAutocompleteField::make($this->name, $this->mode);
-    
+
         if (Str::lower($this->remoteMethod) === 'post') {
             $this->field->setRemoteMethodPOST();
         }
-        
+
         if ($this->debounceDelay) {
             $this->field->setDebounceDelayInMilliseconds($this->debounceDelay);
         }
     }
-    
+
     public function updateFromSlots(array $slots)
     {
-        if($template = $slots['list_item'] ?? null) {
+        if ($template = $slots['list_item'] ?? null) {
             $this->field->setListItemInlineTemplate($template);
         }
-        
-        if($template = $slots['result_item'] ?? null) {
+
+        if ($template = $slots['result_item'] ?? null) {
             $this->field->setResultItemInlineTemplate($template);
         }
     }

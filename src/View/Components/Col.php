@@ -34,13 +34,13 @@ class Col extends Component
         $this->form = view()->getConsumableComponentData('form');
         $this->tab = view()->getConsumableComponentData('tab');
         $this->fieldset = view()->getConsumableComponentData('fieldset');
-        
+
         if ($class) {
             $this->sizeXs ??= (int) Str::match("/col-(\d+)/", $class) ?: null;
             $this->size ??= (int) Str::match("/col-md-(\d+)/", $class) ?: $this->sizeXs;
         }
 
-        if($this->form) {
+        if ($this->form) {
             if ($this->fieldset) {
                 $this->fieldRowContainer = $this->fieldset;
             } elseif ($this->parentColComponent) {
@@ -65,10 +65,10 @@ class Col extends Component
             $this->column?->withSingleField($fieldKey);
         }
     }
-    
+
     public function inFieldset(): bool
     {
-        return !!$this->fieldset;
+        return (bool) $this->fieldset;
     }
 
     private function fieldLayoutKey(string $fieldKey): string
