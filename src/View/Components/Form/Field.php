@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Code16\Sharp\View\Components\Col;
 use Illuminate\View\Component;
 
@@ -11,12 +13,22 @@ abstract class Field extends Component
 {
     public string $name;
     public ?string $label = null;
-    public ?SharpForm $form = null;
-    public ?Col $parentColComponent = null;
-    public ?FormLayoutFieldset $fieldset = null;
+    protected ?SharpForm $form = null;
+    protected ?Col $parentColComponent = null;
+    protected ?FormLayoutFieldset $fieldset = null;
+    protected ?SharpFormListField $parentListField = null;
 
     protected function updateFromSlots(array $slots)
     {
+    }
+    
+    private function subLayoutCallback(): ?callable
+    {
+        if(method_exists($this, 'setItemLayout')) {
+            return fn ($column) => $this->setItemLayout($column);
+        }
+        
+        return null;
     }
 
     private function registerField(array $viewData)
@@ -37,13 +49,10 @@ abstract class Field extends Component
                 }
             });
 
-        $this->form->fieldsContainer()->addField($this->field);
-        if ($this->parentColComponent) {
-            if ($this->fieldset && ! $this->parentColComponent->inFieldset()) {
-                $this->fieldset->withSingleField($this->name);
-            } else {
-                $this->parentColComponent->addField($this->name);
-            }
+        if($this->parentListField) {
+            $this->parentListField->addItemField($this->field);
+        } else {
+            $this->form->fieldsContainer()->addField($this->field);
         }
     }
 
@@ -51,7 +60,16 @@ abstract class Field extends Component
     {
         $this->form = view()->getConsumableComponentData('form');
         $this->fieldset = view()->getConsumableComponentData('fieldset');
+        $this->parentListField = view()->getConsumableComponentData('listField');
         $this->parentColComponent = view()->getConsumableComponentData('colComponent');
+    
+        if ($this->parentColComponent) {
+            if ($this->fieldset && ! $this->parentColComponent->inFieldset()) {
+                $this->fieldset->withSingleField($this->name, $this->subLayoutCallback());
+            } else {
+                $this->parentColComponent->addField($this->name, $this->subLayoutCallback());
+            }
+        }
 
         return function ($data) {
             $this->updateFromSlots($data);

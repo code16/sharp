@@ -7,7 +7,7 @@ abstract class LayoutField
     protected string $fieldKey;
     protected int $size = 12;
     protected int $sizeXS = 12;
-    protected array $itemLayout = [];
+    protected ?LayoutColumn $itemLayout = null;
 
     public function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
     {
@@ -26,9 +26,8 @@ abstract class LayoutField
         }
 
         if ($subLayoutCallback) {
-            $itemFormLayout = $this->getLayoutColumn();
-            $subLayoutCallback($itemFormLayout);
-            $this->itemLayout = $itemFormLayout->toArray()['fields'];
+            $this->itemLayout = $this->getLayoutColumn();
+            $subLayoutCallback($this->itemLayout);
         }
     }
 
@@ -43,7 +42,7 @@ abstract class LayoutField
                 'sizeXS' => $this->sizeXS,
             ],
             $this->itemLayout
-                ? ['item' => $this->itemLayout]
+                ? ['item' => $this->itemLayout->toArray()['fields']]
                 : [],
         );
     }

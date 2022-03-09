@@ -2,12 +2,14 @@
 
 namespace Code16\Sharp\View\Components;
 
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\Layout\HasFieldRows;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Layout\LayoutColumn;
+use Code16\Sharp\View\Components\Form\ListField;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
@@ -23,6 +25,7 @@ class Col extends Component
     protected ?SharpForm $form;
     protected ?FormLayoutTab $tab;
     protected ?FormLayoutFieldset $fieldset;
+    protected ?ListField $listFieldComponent;
 
     public function __construct(
         public ?int $size = null,
@@ -34,6 +37,7 @@ class Col extends Component
         $this->form = view()->getConsumableComponentData('form');
         $this->tab = view()->getConsumableComponentData('tab');
         $this->fieldset = view()->getConsumableComponentData('fieldset');
+        $this->listFieldComponent = view()->getConsumableComponentData('listFieldComponent');
 
         if ($class) {
             $this->sizeXs ??= (int) Str::match("/col-(\d+)/", $class) ?: null;
@@ -41,7 +45,9 @@ class Col extends Component
         }
 
         if ($this->form) {
-            if ($this->fieldset) {
+            if ($this->listFieldComponent) {
+                $this->fieldRowContainer = $this->listFieldComponent->itemLayout;
+            } elseif ($this->fieldset) {
                 $this->fieldRowContainer = $this->fieldset;
             } elseif ($this->parentColComponent) {
                 $this->fieldRowContainer = $this->parentColComponent->column;
@@ -57,12 +63,12 @@ class Col extends Component
         }
     }
 
-    public function addField(string $fieldKey)
+    public function addField(string $fieldKey, ?callable $subLayoutCallback = null)
     {
         if ($this->fieldRowContainer) {
             $this->fieldRowContainer->appendLastRowField($this->fieldLayoutKey($fieldKey));
         } else {
-            $this->column?->withSingleField($fieldKey);
+            $this->column?->withSingleField($fieldKey, $subLayoutCallback);
         }
     }
 

@@ -6,6 +6,21 @@
 @endphp
 
 <x-sharp::form>
+    <x-sharp::tab title="List">
+        <x-sharp::col class="col-md-6">
+            <x-sharp::form.list-field name="list" :addable="true">
+                <x-sharp::col class="col-md-5">
+                    <x-sharp::form.text-field
+                        label="date"
+                        name="date"
+                    />
+                </x-sharp::col>
+                <x-sharp::col class="col-md-7">
+
+                </x-sharp::col>
+            </x-sharp::form.list-field>
+        </x-sharp::col>
+    </x-sharp::tab>
     <x-sharp::tab title="Simple">
         <x-sharp::col class="col-md-6">
             <x-sharp::form.fieldset legend="Text fields">
@@ -50,6 +65,21 @@
                     @{{ label }} (@{{ id }})
                 </x-slot>
             </x-sharp::form.autocomplete-field>
+
+            <x-sharp::form.autocomplete-field
+                name="autocomplete_remote"
+                mode="remote"
+                label="Autocomplete remote"
+                :remote-endpoint="url('/passengers')"
+            >
+                <x-slot name="list_item">
+                    @{{ name }}
+                </x-slot>
+                <x-slot name="result_item">
+                    @{{ name }} (@{{ num }})
+                </x-slot>
+            </x-sharp::form.autocomplete-field>
         </x-sharp::col>
     </x-sharp::tab>
+
 </x-sharp::form>

@@ -46,14 +46,14 @@ class TestForm extends SharpSingleForm
 //                    ->setResultItemInlineTemplate('{{label}} ({{id}})')
 //                    ->setLocalValues($this->options(true)),
 //            )
-            ->addField(
-                SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
-                    ->setLabel('Autocomplete remote')
-                    ->setRemoteSearchAttribute('query')
-                    ->setListItemInlineTemplate('{{name}}')
-                    ->setResultItemInlineTemplate('{{name}} ({{num}})')
-                    ->setRemoteEndpoint(url('/passengers')),
-            )
+//            ->addField(
+//                SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
+//                    ->setLabel('Autocomplete remote')
+//                    ->setRemoteSearchAttribute('query')
+//                    ->setListItemInlineTemplate('{{name}}')
+//                    ->setResultItemInlineTemplate('{{name}} ({{num}})')
+//                    ->setRemoteEndpoint(url('/passengers')),
+//            )
             ->addField(
                 SharpFormAutocompleteListField::make('autocomplete_list')
                     ->setLabel('Autocomplete_list')
@@ -94,30 +94,30 @@ class TestForm extends SharpSingleForm
                     ->setLabel('Html')
                     ->setInlineTemplate('Your name is <strong>{{name}}</strong>'),
             )
-            ->addField(
-                SharpFormListField::make('list')
-                    ->setLabel('List')
-                    ->setAddable()
-                    ->setSortable()
-                    ->setRemovable()
-                    ->setItemIdAttribute('id')
-                    ->addItemField(
-                        SharpFormDateField::make('date')
-                            ->setLabel('Date')
-                            ->setDisplayFormat('YYYY/MM/DD')
-                            ->setHasTime(false),
-                    )
-                    ->addItemField(
-                        SharpFormCheckField::make('check', 'check this'),
-                    )
-                    ->addItemField(SharpFormEditorField::make('markdown2')
-                        ->setLocalized()
-                        ->setLabel('Markdown')
-                        ->setToolbar([
-                            SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
-                        ]),
-                    ),
-            )
+//            ->addField(
+//                SharpFormListField::make('list')
+//                    ->setLabel('List')
+//                    ->setAddable()
+//                    ->setSortable()
+//                    ->setRemovable()
+//                    ->setItemIdAttribute('id')
+//                    ->addItemField(
+//                        SharpFormDateField::make('date')
+//                            ->setLabel('Date')
+//                            ->setDisplayFormat('YYYY/MM/DD')
+//                            ->setHasTime(false),
+//                    )
+//                    ->addItemField(
+//                        SharpFormCheckField::make('check', 'check this'),
+//                    )
+//                    ->addItemField(SharpFormEditorField::make('markdown2')
+//                        ->setLocalized()
+//                        ->setLabel('Markdown')
+//                        ->setToolbar([
+//                            SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
+//                        ]),
+//                    ),
+//            )
             ->addField(
                 SharpFormEditorField::make('markdown')
                     ->setRenderContentAsMarkdown()
