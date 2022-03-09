@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +24,16 @@ class Post extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    public static function scopeOnline(Builder $builder): void
+    {
+        $builder->where("state", "online");
+    }
+
+    public static function scopePublishedSince(Builder $builder, Carbon $since): void
+    {
+        $builder->where("published_at", ">=", $since);
+    }
 
     public function author(): BelongsTo
     {
