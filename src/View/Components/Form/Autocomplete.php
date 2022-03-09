@@ -5,7 +5,7 @@ namespace Code16\Sharp\View\Components\Form;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Illuminate\Support\Str;
 
-class AutocompleteField extends Field
+class Autocomplete extends Field
 {
     protected SharpFormAutocompleteField $field;
 

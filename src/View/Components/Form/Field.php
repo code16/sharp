@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\SharpForm;
@@ -17,6 +18,7 @@ abstract class Field extends Component
     protected ?Col $parentColComponent = null;
     protected ?FormLayoutFieldset $fieldset = null;
     protected ?SharpFormListField $parentListField = null;
+    protected ?DisplayIf $displayIfComponent = null;
 
     protected function updateFromSlots(array $slots)
     {
@@ -62,6 +64,7 @@ abstract class Field extends Component
         $this->fieldset = view()->getConsumableComponentData('fieldset');
         $this->parentListField = view()->getConsumableComponentData('listField');
         $this->parentColComponent = view()->getConsumableComponentData('colComponent');
+        $this->displayIfComponent = view()->getConsumableComponentData('displayIfComponent');
     
         if ($this->parentColComponent) {
             if ($this->fieldset && ! $this->parentColComponent->inFieldset()) {
@@ -70,6 +73,8 @@ abstract class Field extends Component
                 $this->parentColComponent->addField($this->name, $this->subLayoutCallback());
             }
         }
+        
+        $this->displayIfComponent?->addConditionalDisplay($this->field);
 
         return function ($data) {
             $this->updateFromSlots($data);

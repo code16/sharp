@@ -6,9 +6,9 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Illuminate\Support\Str;
 
-class SelectField extends Field
+class Select extends Field
 {
-    protected ?SharpFormSelectField $field = null;
+    protected SharpFormSelectField $field;
     public self $selectFieldComponent;
 
     public function __construct(

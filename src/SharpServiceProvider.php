@@ -62,6 +62,7 @@ class SharpServiceProvider extends ServiceProvider
 
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
         Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
+        Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Form', 'sharp-form');
         Blade::component(Content::class, 'sharp-content');
         Blade::component(File::class, 'sharp-file');
         Blade::component(Image::class, 'sharp-image');

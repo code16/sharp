@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class Option extends Component
 {
-    public SelectField $selectFieldComponent;
+    public Select $selectFieldComponent;
 
     public function __construct(
         public string|int $value,
