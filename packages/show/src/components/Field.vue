@@ -8,7 +8,10 @@
             :layout="layout"
             :collapsable="collapsable"
             :root="root"
+            :locale="locale"
+            :locales="locales"
             v-bind="props"
+            v-on="$listeners"
             @visible-change="handleVisiblityChanged"
         />
     </div>
@@ -24,6 +27,8 @@
             value: {},
             options: Object,
             layout: Object,
+            locale: String,
+            locales: Array,
             collapsable: Boolean,
             root: {
                 type: Boolean,

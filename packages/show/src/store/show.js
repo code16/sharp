@@ -52,6 +52,9 @@ export default {
         data(state) {
             return state.show.data;
         },
+        locales(state) {
+            return state.show?.locales;
+        },
         breadcrumb(state) {
             return state.show.breadcrumb;
         },

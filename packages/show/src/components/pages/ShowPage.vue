@@ -1,5 +1,5 @@
 <template>
-    <div class="ShowPage">
+    <div class="ShowPage" :class="classes">
         <div class="container">
             <template v-if="ready">
                 <ActionBarShow
@@ -17,7 +17,7 @@
                     @state-change="handleStateChanged"
                 />
 
-                <div class="mt-4 pt-2">
+                <div class="ShowPage__content">
                     <template v-if="config.globalMessage">
                         <GlobalMessage
                             class="mb-3"
@@ -25,6 +25,16 @@
                             :data="data"
                             :fields="fields"
                         />
+                    </template>
+
+                    <template v-if="localized">
+                        <div class="mb-4">
+                            <LocaleSelect
+                                :locales="locales"
+                                :locale="currentLocale"
+                                @change="handleLocaleChanged"
+                            />
+                        </div>
                     </template>
 
                     <template v-for="section in layout.sections">
@@ -41,10 +51,13 @@
                                 <ShowField
                                     :options="fieldOptions(fieldLayout)"
                                     :value="fieldValue(fieldLayout)"
+                                    :locale="fieldLocale(fieldLayout)"
+                                    :locales="locales"
                                     :config-identifier="fieldLayout.key"
                                     :layout="fieldLayout"
                                     :collapsable="section.collapsable"
                                     @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                    @locale-change="handleFieldLocaleChanged(fieldLayout.key, $event)"
                                     :key="refreshKey"
                                 />
                             </template>
@@ -78,6 +91,7 @@
     import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid, GlobalMessage } from 'sharp-ui';
+    import { LocaleSelect } from "sharp-form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
     import ActionBarShow from "../ActionBar";
@@ -97,12 +111,14 @@
             CommandFormModal,
             CommandViewPanel,
             GlobalMessage,
+            LocaleSelect,
         },
 
         data() {
             return {
                 ready: false,
                 fieldsVisible: null,
+                fieldsLocale: null,
                 refreshKey: 0,
             }
         },
@@ -115,6 +131,7 @@
                 'layout',
                 'data',
                 'config',
+                'locales',
                 'breadcrumb',
                 'instanceState',
                 'canEdit',
@@ -122,7 +139,11 @@
                 'stateValues',
                 'canChangeState',
             ]),
-
+            classes() {
+                return {
+                    'ShowPage--localized': this.localized,
+                }
+            },
             formUrl() {
                 const formKey = this.config.multiformAttribute
                     ? this.data[this.config.multiformAttribute]
@@ -145,25 +166,38 @@
             breadcrumbItems() {
                 return this.breadcrumb.items;
             },
+            localized() {
+                return this.locales?.length > 0;
+            },
+            currentLocale() {
+                const locales = [...new Set(Object.values(this.fieldsLocale ?? {}))];
+                if(!locales.length) {
+                    return this.locales?.[0]
+                }
+                return locales.length === 1 ? locales[0] : null;
+            },
         },
 
         methods: {
             fieldOptions(layout) {
-                const options = this.fields
-                    ? this.fields[layout.key]
-                    : null;
+                const options = this.fields?.[layout.key];
                 if(!options) {
                     console.error(`Show page: unknown field "${layout.key}"`);
                 }
                 return options;
             },
             fieldValue(layout) {
-                return this.data
-                    ? this.data[layout.key]
-                    : null;
+                return this.data?.[layout.key];
+            },
+            fieldLocale(layout) {
+                const options = this.fieldOptions(layout);
+                if(!options.localized) {
+                    return null;
+                }
+                return this.fieldsLocale?.[layout.key] ?? this.locales?.[0];
             },
             isFieldVisible(layout) {
-                return !this.fieldsVisible || this.fieldsVisible[layout.key] !== false;
+                return this.fieldsVisible?.[layout.key] !== false;
             },
             isSectionCollapsable(section) {
                 return section.collapsable && !this.sectionHasField(section, 'entityList');
@@ -198,11 +232,27 @@
                     return options && options.type === type;
                 });
             },
+            setLocale(locale) {
+                this.fieldsLocale = Object.fromEntries(
+                    Object.values(this.fields)
+                        .filter(fieldOptions => fieldOptions.localized)
+                        .map(fieldOptions => [fieldOptions.key, locale])
+                );
+            },
             handleFieldVisibilityChanged(key, visible) {
                 this.fieldsVisible = {
                     ...this.fieldsVisible,
                     [key]: visible,
                 }
+            },
+            handleFieldLocaleChanged(key, locale) {
+                this.fieldsLocale = {
+                    ...this.fieldsLocale,
+                    [key]: locale,
+                }
+            },
+            handleLocaleChanged(locale) {
+                this.setLocale(locale);
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
@@ -254,6 +304,9 @@
 
                 handleNotifications(show.notifications);
                 this.updateDocumentTitle(show);
+                if(this.localized) {
+                    this.setLocale(this.locales[0]);
+                }
 
                 this.ready = true;
                 this.refreshKey++;
