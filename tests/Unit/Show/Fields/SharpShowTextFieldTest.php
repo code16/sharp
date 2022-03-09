@@ -95,4 +95,23 @@ class SharpShowTextFieldTest extends SharpTestCase
             $field->toArray(),
         );
     }
+
+    /** @test */
+    public function we_can_define_the_localized_attribute()
+    {
+        $field = SharpShowTextField::make('text')
+            ->setLocalized(false);
+
+        $this->assertArrayNotHasKey(
+            'localized',
+            $field->toArray(),
+        );
+
+        $field->setLocalized();
+
+        $this->assertArraySubset(
+            ['localized' => true],
+            $field->toArray(),
+        );
+    }
 }
