@@ -20,6 +20,7 @@ class DashboardController extends ApiController
             'config' => $dashboard->dashboardConfig(),
             'layout' => $dashboard->widgetsLayout(),
             'data' => $dashboard->data(),
+            'fields' => $dashboard->dashboardMetaFields(),
         ]);
     }
 }
