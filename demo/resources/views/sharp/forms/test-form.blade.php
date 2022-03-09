@@ -66,6 +66,9 @@
                         <x-slot name="label">
                             Text
                         </x-slot>
+                        <x-slot name="help_message">
+                            Hello there
+                        </x-slot>
                     </x-sharp-form::text-field>
                 </x-sharp::col>
             </x-sharp-form::fieldset>

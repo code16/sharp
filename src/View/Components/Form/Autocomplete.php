@@ -13,6 +13,8 @@ class Autocomplete extends Field
         public string $name,
         public string $mode,
         public ?string $label = null,
+        public ?string $helpMessage = null,
+        public ?bool $readOnly = null,
         public ?bool $localized = null,
         public ?string $placeholder = null,
         public $localValues = null,

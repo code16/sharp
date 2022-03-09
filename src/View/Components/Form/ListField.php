@@ -16,6 +16,9 @@ class ListField extends Field
 
     public function __construct(
         public string $name,
+        public ?string $label = null,
+        public ?string $helpMessage = null,
+        public ?bool $readOnly = null,
         public ?bool $addable = null,
         public ?bool $sortable = null,
         public ?bool $removable = null,

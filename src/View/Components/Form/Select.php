@@ -14,6 +14,8 @@ class Select extends Field
     public function __construct(
         public string $name,
         public ?string $label = null,
+        public ?string $helpMessage = null,
+        public ?bool $readOnly = null,
         public ?bool $localized = null,
         public ?array $options = null,
         public ?bool $multiple = null,

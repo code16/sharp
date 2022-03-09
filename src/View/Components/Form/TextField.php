@@ -11,6 +11,8 @@ class TextField extends Field
     public function __construct(
         public string $name,
         public ?string $label = null,
+        public ?string $helpMessage = null,
+        public ?bool $readOnly = null,
         public ?bool $localized = null,
         public ?string $placeholder = null,
         public ?string $type = null,
