@@ -22,18 +22,22 @@ class ShowController extends ApiController
         $show->buildShowConfig();
 
         return response()->json(
-            [
-                'config' => $show->showConfig($instanceId),
-                'fields' => $show->fields(),
-                'layout' => $show->showLayout(),
-                'data' => $show->instance($instanceId),
-            ]
-            + $this->dataLocalizations($show),
+            array_merge(
+                [
+                    'config' => $show->showConfig($instanceId),
+                    'fields' => $show->fields(),
+                    'layout' => $show->showLayout(),
+                    'data' => $show->instance($instanceId),
+                ],
+                $this->dataLocalizations($show)
+            )
         );
     }
 
     protected function dataLocalizations(SharpShow $show): array
     {
-        return [];
+        return $show->hasDataLocalizations()
+            ? ['locales' => $show->getDataLocalizations()]
+            : [];
     }
 }
