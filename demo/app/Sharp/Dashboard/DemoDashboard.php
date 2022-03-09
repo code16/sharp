@@ -96,7 +96,7 @@ class DemoDashboard extends SharpDashboard
     public function buildDashboardConfig(): void
     {
         $this->configurePageAlert(
-            'Visits are randomly generated {{attr}}; note that the period filter acts on all graphs, but not links panels.',
+            'Graphs below are delimited by period {period} (and yes, visits figures are randomly generated)',
             static::$pageAlertLevelSecondary,
         );
     }
@@ -120,7 +120,11 @@ class DemoDashboard extends SharpDashboard
                 'online_panel', ['count' => $posts->where('state', 'online')->first()->count ?? 0],
             )
             ->setPageAlertData([
-                'attr' => 'It works!',
+                'period' => sprintf(
+                    '%s - %s', 
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)["start"]->isoFormat('L'),
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)["end"]->isoFormat('L'),
+                )
             ]);
     }
 
