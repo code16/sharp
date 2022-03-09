@@ -117,7 +117,7 @@ module.exports = {
                     'page-alerts',
                     'context.md',
                     'sharp-uploads.md',
-                    'form-data-localization.md',
+                    'data-localization.md',
                     'testing-with-sharp.md',
                     'artisan-generators.md',
                     'style-visual-theme.md'
