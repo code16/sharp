@@ -2,8 +2,8 @@
     <div class="SharpSearch" role="search">
         <form class="h-100" @submit.prevent="handleSubmitted">
             <label id="ab-search-label" class="SharpSearch__label visually-hidden" for="ab-search-input">{{ placeholder }}</label>
-            <div class="input-group input-group-sm">
-                <div class="position-relative">
+            <div class="input-group input-group-sm flex-nowrap">
+                <div class="position-relative flex-fill" style="min-width: 0">
                     <input class="SharpSearch__input form-control form-control-sm"
                         v-model="search"
                         :placeholder="placeholder"
