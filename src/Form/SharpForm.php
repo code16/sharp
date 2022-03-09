@@ -119,6 +119,8 @@ abstract class SharpForm
 
     public function buildFromView(): void
     {
+        view()->share('form', $this);
+        
         $this->render()
             ?->with([
                 'form' => $this,

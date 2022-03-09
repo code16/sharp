@@ -18,7 +18,7 @@ class Col extends Component
     /**
      * @var HasFieldRows
      */
-    protected $rowsContainer = null;
+    protected $fieldRowContainer = null;
     protected ?self $parentColComponent = null;
     protected ?SharpForm $form;
     protected ?FormLayoutTab $tab;
@@ -31,37 +31,44 @@ class Col extends Component
     ) {
         $this->colComponent = $this;
         $this->parentColComponent = view()->getConsumableComponentData('colComponent');
-        $this->tab = view()->getConsumableComponentData('tab');
         $this->form = view()->getConsumableComponentData('form');
+        $this->tab = view()->getConsumableComponentData('tab');
         $this->fieldset = view()->getConsumableComponentData('fieldset');
+        
         if ($class) {
             $this->sizeXs ??= (int) Str::match("/col-(\d+)/", $class) ?: null;
             $this->size ??= (int) Str::match("/col-md-(\d+)/", $class) ?: $this->sizeXs;
         }
 
-        if ($this->fieldset) {
-            $this->rowsContainer = $this->fieldset;
-        } elseif ($this->parentColComponent) {
-            $this->column = $this->parentColComponent->column;
-            $this->rowsContainer = $this->parentColComponent->column;
-        } elseif ($this->tab) {
-            $this->tab->addColumn($this->size, function (FormLayoutColumn $column) {
-                $this->column = $column;
-            });
-        } elseif ($this->form) {
-            $this->form->formLayoutInstance()->addColumn($this->size, function (FormLayoutColumn $column) {
-                $this->column = $column;
-            });
+        if($this->form) {
+            if ($this->fieldset) {
+                $this->fieldRowContainer = $this->fieldset;
+            } elseif ($this->parentColComponent) {
+                $this->fieldRowContainer = $this->parentColComponent->column;
+            } elseif ($this->tab) {
+                $this->tab->addColumn($this->size, function (FormLayoutColumn $column) {
+                    $this->column = $column;
+                });
+            } else {
+                $this->form->formLayoutInstance()->addColumn($this->size, function (FormLayoutColumn $column) {
+                    $this->column = $column;
+                });
+            }
         }
     }
 
     public function addField(string $fieldKey)
     {
-        if ($this->rowsContainer) {
-            $this->rowsContainer->appendLastRowField($this->fieldLayoutKey($fieldKey));
+        if ($this->fieldRowContainer) {
+            $this->fieldRowContainer->appendLastRowField($this->fieldLayoutKey($fieldKey));
         } else {
             $this->column?->withSingleField($fieldKey);
         }
+    }
+    
+    public function inFieldset(): bool
+    {
+        return !!$this->fieldset;
     }
 
     private function fieldLayoutKey(string $fieldKey): string

@@ -17,15 +17,8 @@ class TextField extends Field
         public ?string $type = null,
         public ?int $maxLength = null,
     ) {
-    }
-
-    public function makeField(): SharpFormField
-    {
-        return SharpFormTextField::make($this->name);
-    }
-
-    public function setType()
-    {
+        $this->field = SharpFormTextField::make($this->name);
+    
         if ($this->type === 'password') {
             $this->field->setInputTypePassword();
         }

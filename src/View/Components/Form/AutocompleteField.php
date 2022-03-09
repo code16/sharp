@@ -4,6 +4,7 @@ namespace Code16\Sharp\View\Components\Form;
 
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class AutocompleteField extends Field
@@ -17,6 +18,7 @@ class AutocompleteField extends Field
         public ?bool $localized = null,
         public ?string $placeholder = null,
         public ?array $localSearchKeys = null,
+        public $localValues = null,
         public ?string $remoteMethod = null,
         public ?string $remoteEndpoint = null,
         public ?string $remoteSearchAttribute = null,
@@ -24,23 +26,28 @@ class AutocompleteField extends Field
         public ?int $searchMinChars = null,
         public ?string $dataWrapper = null,
         public ?int $debounceDelay = null,
+        public ?string $listItemTemplatePath = null,
+        public ?string $resultItemTemplatePath = null,
     ) {
-    }
-
-    public function makeField(): SharpFormField
-    {
-        return SharpFormAutocompleteField::make($this->name, $this->mode);
-    }
-
-    public function setRemoteMethod()
-    {
+        $this->field = SharpFormAutocompleteField::make($this->name, $this->mode);
+    
         if (Str::lower($this->remoteMethod) === 'post') {
             $this->field->setRemoteMethodPOST();
         }
+        
+        if ($this->debounceDelay) {
+            $this->field->setDebounceDelayInMilliseconds($this->debounceDelay);
+        }
     }
-
-    public function setDebounceDelay()
+    
+    public function updateFromSlots(array $slots)
     {
-        $this->field->setDebounceDelayInMilliseconds($this->debounceDelay);
+        if($template = $slots['list_item'] ?? null) {
+            $this->field->setListItemInlineTemplate($template);
+        }
+        
+        if($template = $slots['result_item'] ?? null) {
+            $this->field->setResultItemInlineTemplate($template);
+        }
     }
 }

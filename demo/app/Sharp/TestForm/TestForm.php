@@ -37,15 +37,15 @@ class TestForm extends SharpSingleForm
 //                    ->setLocalized()
 //                    ->setLabel('Text'),
 //            )
-            ->addField(
-                SharpFormAutocompleteField::make('autocomplete_local', 'local')
-                    ->setLocalized()
-                    ->setLabel('Autocomplete local')
-                    ->setLocalSearchKeys(['label'])
-                    ->setListItemInlineTemplate('{{label}}')
-                    ->setResultItemInlineTemplate('{{label}} ({{id}})')
-                    ->setLocalValues($this->options(true)),
-            )
+//            ->addField(
+//                SharpFormAutocompleteField::make('autocomplete_local', 'local')
+//                    ->setLocalized()
+//                    ->setLabel('Autocomplete local')
+//                    ->setLocalSearchKeys(['label'])
+//                    ->setListItemInlineTemplate('{{label}}')
+//                    ->setResultItemInlineTemplate('{{label}} ({{id}})')
+//                    ->setLocalValues($this->options(true)),
+//            )
             ->addField(
                 SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
                     ->setLabel('Autocomplete remote')
@@ -329,7 +329,7 @@ class TestForm extends SharpSingleForm
         return ['fr', 'en'];
     }
 
-    protected function options(bool $localized = false): array
+    public function options(bool $localized = false): array
     {
         if (! $localized) {
             return [

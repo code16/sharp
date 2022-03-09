@@ -8,8 +8,9 @@ use Illuminate\View\Component;
 class Form extends Component
 {
     public function __construct(
-        public SharpForm $form,
+        public ?SharpForm $form = null,
     ) {
+        $this->form ??= view()->shared('form');
     }
 
     public function render()
