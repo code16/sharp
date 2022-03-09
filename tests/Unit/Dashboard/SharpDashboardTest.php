@@ -9,6 +9,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -335,6 +336,71 @@ class SharpDashboardTest extends SharpTestCase
                 ],
             ],
             $dashboard->data(),
+        );
+    }
+
+    /** @test */
+    public function we_can_configure_a_global_message_field_without_data()
+    {
+        $dashboard = new class extends FakeSharpDashboard
+        {
+            public function buildDashboardConfig(): void
+            {
+                $this->configurePageAlert('template', null, 'test-key');
+            }
+        };
+
+        $dashboard->buildDashboardConfig();
+
+        $this->assertEquals('test-key', $dashboard->dashboardConfig()['globalMessage']['fieldKey']);
+        $this->assertEquals(
+            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray(),
+            $dashboard->dashboardMetaFields()['test-key'],
+        );
+    }
+
+    /** @test */
+    public function we_can_configure_a_global_message_field_with_template_data()
+    {
+        $dashboard = new class extends FakeSharpDashboard
+        {
+            public function buildDashboardConfig(): void
+            {
+                $this->configurePageAlert('Hello {{name}}', null, 'test-key');
+            }
+
+            public function buildWidgetsData(): void
+            {
+                $this->setPageAlertData([
+                    'name' => "Bob"
+                ]);
+            }
+        };
+
+        $dashboard->buildDashboardConfig();
+
+        $this->assertEquals(
+            ['name' => 'Bob'],
+            $dashboard->data()['test-key'],
+        );
+    }
+
+    /** @test */
+    public function we_can_configure_a_global_message_field_with_alert_level()
+    {
+        $dashboard = new class extends FakeSharpDashboard
+        {
+            public function buildDashboardConfig(): void
+            {
+                $this->configurePageAlert('alert', static::$pageAlertLevelDanger);
+            }
+        };
+
+        $dashboard->buildDashboardConfig();
+
+        $this->assertEquals(
+            'danger',
+            $dashboard->dashboardConfig()['globalMessage']['alertLevel'],
         );
     }
 }
