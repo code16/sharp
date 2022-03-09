@@ -121,10 +121,10 @@ class DemoDashboard extends SharpDashboard
             )
             ->setPageAlertData([
                 'period' => sprintf(
-                    '%s - %s', 
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)["start"]->isoFormat('L'),
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)["end"]->isoFormat('L'),
-                )
+                    '%s - %s',
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
+                ),
             ]);
     }
 
