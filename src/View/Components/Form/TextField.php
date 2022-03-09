@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 
 class TextField extends Field
@@ -18,7 +17,7 @@ class TextField extends Field
         public ?int $maxLength = null,
     ) {
         $this->field = SharpFormTextField::make($this->name);
-    
+
         if ($this->type === 'password') {
             $this->field->setInputTypePassword();
         }

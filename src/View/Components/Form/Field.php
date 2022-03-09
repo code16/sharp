@@ -2,11 +2,9 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\View\Components\Col;
-use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 abstract class Field extends Component
@@ -16,7 +14,7 @@ abstract class Field extends Component
     public ?SharpForm $form = null;
     public ?Col $parentColComponent = null;
     public ?FormLayoutFieldset $fieldset = null;
-    
+
     protected function updateFromSlots(array $slots)
     {
     }
@@ -29,7 +27,7 @@ abstract class Field extends Component
                     $this->{$key} = $viewData[$key];
                 }
             });
-        
+
         collect($this->extractPublicProperties())
             ->filter(fn ($value) => ! is_null($value))
             ->each(function ($value, $key) {
@@ -40,8 +38,8 @@ abstract class Field extends Component
             });
 
         $this->form->fieldsContainer()->addField($this->field);
-        if($this->parentColComponent) {
-            if($this->fieldset && !$this->parentColComponent->inFieldset()) {
+        if ($this->parentColComponent) {
+            if ($this->fieldset && ! $this->parentColComponent->inFieldset()) {
                 $this->fieldset->withSingleField($this->name);
             } else {
                 $this->parentColComponent->addField($this->name);
