@@ -1,14 +1,5 @@
 <template>
-    <FieldLayout
-        class="ShowTextField"
-        :class="classes"
-        :label="label"
-        :localized="localized"
-        :locale="locale"
-        :value="resolvedValue"
-        v-bind="$attrs"
-        v-on="$listeners"
-    >
+    <FieldLayout class="ShowTextField" :class="classes" :label="label">
         <template v-if="html">
             <TextRenderer
                 class="ShowTextField__content"

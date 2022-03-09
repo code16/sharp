@@ -31,7 +31,7 @@
                         <div class="mb-4">
                             <LocaleSelect
                                 :locales="locales"
-                                :locale="currentLocale"
+                                :locale="locale"
                                 @change="handleLocaleChanged"
                             />
                         </div>
@@ -51,13 +51,12 @@
                                 <ShowField
                                     :options="fieldOptions(fieldLayout)"
                                     :value="fieldValue(fieldLayout)"
-                                    :locale="fieldLocale(fieldLayout)"
+                                    :locale="locale"
                                     :locales="locales"
                                     :config-identifier="fieldLayout.key"
                                     :layout="fieldLayout"
                                     :collapsable="section.collapsable"
                                     @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                    @locale-change="handleFieldLocaleChanged(fieldLayout.key, $event)"
                                     :key="refreshKey"
                                 />
                             </template>
@@ -118,7 +117,7 @@
             return {
                 ready: false,
                 fieldsVisible: null,
-                fieldsLocale: null,
+                locale: null,
                 refreshKey: 0,
             }
         },
@@ -169,13 +168,6 @@
             localized() {
                 return this.locales?.length > 0;
             },
-            currentLocale() {
-                const locales = [...new Set(Object.values(this.fieldsLocale ?? {}))];
-                if(!locales.length) {
-                    return this.locales?.[0]
-                }
-                return locales.length === 1 ? locales[0] : null;
-            },
         },
 
         methods: {
@@ -188,13 +180,6 @@
             },
             fieldValue(layout) {
                 return this.data?.[layout.key];
-            },
-            fieldLocale(layout) {
-                const options = this.fieldOptions(layout);
-                if(!options.localized) {
-                    return null;
-                }
-                return this.fieldsLocale?.[layout.key] ?? this.locales?.[0];
             },
             isFieldVisible(layout) {
                 return this.fieldsVisible?.[layout.key] !== false;
@@ -232,27 +217,14 @@
                     return options && options.type === type;
                 });
             },
-            setLocale(locale) {
-                this.fieldsLocale = Object.fromEntries(
-                    Object.values(this.fields)
-                        .filter(fieldOptions => fieldOptions.localized)
-                        .map(fieldOptions => [fieldOptions.key, locale])
-                );
-            },
             handleFieldVisibilityChanged(key, visible) {
                 this.fieldsVisible = {
                     ...this.fieldsVisible,
                     [key]: visible,
                 }
             },
-            handleFieldLocaleChanged(key, locale) {
-                this.fieldsLocale = {
-                    ...this.fieldsLocale,
-                    [key]: locale,
-                }
-            },
             handleLocaleChanged(locale) {
-                this.setLocale(locale);
+                this.locale = locale;
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
@@ -305,7 +277,7 @@
                 handleNotifications(show.notifications);
                 this.updateDocumentTitle(show);
                 if(this.localized) {
-                    this.setLocale(this.locales[0]);
+                    this.locale = this.locales?.[0];
                 }
 
                 this.ready = true;
