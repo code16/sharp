@@ -1,16 +1,16 @@
 # Add global page alert
 
 This feature makes it possible to add a message (with an alert or not) at the top of an EntityList, a Form (including a
-Command Form), or a Show Page.
+Command Form), a Show Page or a Dashboard.
 
-![Example of a message in a Show Page](./img/page-alert.jpg)
+![Example of a message in a Show Page](./img/page-alert.png)
 
-A Page Alert can be great to provide feedback to the user, to remind him of a particular state, to warn him of potential
+A global page alert can be great to provide feedback to the user, to remind him of a particular state, to warn him of potential
 consequences of a Command...
 
 ## Declaration
 
-Use the `configurePageAlert()` method, in the `buildXXXConfig()` method of your EntityList, Show Page, Command or Form.
+Use the `configurePageAlert()` method, in the `buildXXXConfig()` method of your EntityList, Show Page, Command, Form or Dashboard:
 
 ```php
 function buildShowConfig(): void
@@ -73,5 +73,26 @@ function find($id): array
 
 Note that we use the dynamic data in two ways, in this example:
 
-- the Page Alert will appear only if the spaceship state is "building" or "conception"
+- the page alert will appear only if the spaceship state is "building" or "conception"
 - and the actual state will be injected in the text message.
+
+## The Dashboard case
+
+For the Dashboard, the API is slightly different: first the 3rd argument of `configurePageAlert()`, `$fieldKey`, is not really used, since there is no field in a Dashboard.
+
+Second, and more importantly, here's how you can handle data binding for dynamic messages:
+
+```php
+public function buildDashboardConfig(): void
+{
+    $this->configurePageAlert('Graphs below are delimited by period {{period}}.');
+}
+
+protected function buildWidgetsData(): void
+{
+    $period = $this->getQueryParams()->filterFor(PeriodFilter::class);
+    $this->setPageAlertData([
+        'period' => sprintf('%s - %s', $period['start'], $period['end']),
+    ]);
+}
+```
