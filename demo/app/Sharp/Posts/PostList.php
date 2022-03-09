@@ -91,11 +91,11 @@ class PostList extends SharpEntityList
             PreviewPostCommand::class,
         ];
     }
-    
+
     protected function getEntityCommands(): ?array
     {
         return [
-            ComposeEmailWithPostsWizardCommand::class
+            ComposeEmailWithPostsWizardCommand::class,
         ];
     }
 

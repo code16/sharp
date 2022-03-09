@@ -8,7 +8,7 @@ trait IsWizardCommand
     {
         dd(get_class($this));
     }
-    
+
     protected function toStep(string $step): array
     {
         return [

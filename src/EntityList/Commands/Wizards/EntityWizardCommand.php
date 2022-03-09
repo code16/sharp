@@ -11,16 +11,17 @@ use Illuminate\Support\Str;
 abstract class EntityWizardCommand extends EntityCommand
 {
     use IsWizardCommand;
-    
+
     public function execute(array $data = []): array
     {
         $step = request()->query('command_step');
 
-        if(!$step) {
+        if (! $step) {
             return $this->executeFirstStep($data);
         }
 
-        $methodName = 'executeStep' . Str::ucfirst(Str::camel($step));
+        $methodName = 'executeStep'.Str::ucfirst(Str::camel($step));
+
         return method_exists($this, $methodName)
             ? $this->$methodName($data)
             : $this->executeStep($step, $data);
@@ -40,10 +41,10 @@ abstract class EntityWizardCommand extends EntityCommand
     {
         $step = request()->query('command_step');
 
-        if(!$step) {
+        if (! $step) {
             $this->buildFormFieldsForFirstStep($formFields);
         } else {
-            $methodName = 'buildFormFieldsForStep' . Str::ucfirst(Str::camel($step));
+            $methodName = 'buildFormFieldsForStep'.Str::ucfirst(Str::camel($step));
             if (method_exists($this, $methodName)) {
                 $this->$methodName($formFields);
             } else {
@@ -69,10 +70,10 @@ abstract class EntityWizardCommand extends EntityCommand
     {
         $step = request()->query('command_step');
 
-        if(!$step) {
+        if (! $step) {
             $this->buildFormLayoutForFirstStep($column);
         } else {
-            $methodName = 'buildFormLayoutForStep' . Str::ucfirst(Str::camel($step));
+            $methodName = 'buildFormLayoutForStep'.Str::ucfirst(Str::camel($step));
             if (method_exists($this, $methodName)) {
                 $this->$methodName($column);
             } else {
@@ -93,11 +94,12 @@ abstract class EntityWizardCommand extends EntityCommand
     {
         $step = request()->query('command_step');
 
-        if(!$step) {
+        if (! $step) {
             return $this->initialDataForFirstStep();
         }
 
-        $methodName = 'initialDataForStep' . Str::ucfirst(Str::camel($step));
+        $methodName = 'initialDataForStep'.Str::ucfirst(Str::camel($step));
+
         return method_exists($this, $methodName)
             ? $this->$methodName()
             : $this->initialDataForStep($step);

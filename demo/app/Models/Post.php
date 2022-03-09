@@ -27,12 +27,12 @@ class Post extends Model
 
     public static function scopeOnline(Builder $builder): void
     {
-        $builder->where("state", "online");
+        $builder->where('state', 'online');
     }
 
     public static function scopePublishedSince(Builder $builder, Carbon $since): void
     {
-        $builder->where("published_at", ">=", $since);
+        $builder->where('published_at', '>=', $since);
     }
 
     public function author(): BelongsTo
