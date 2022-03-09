@@ -7,7 +7,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 class SharpShowTextField extends SharpShowField
 {
     use SharpFormFieldWithDataLocalization;
-    
+
     const FIELD_TYPE = 'text';
 
     protected ?string $label = null;

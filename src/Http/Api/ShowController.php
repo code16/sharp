@@ -29,8 +29,8 @@ class ShowController extends ApiController
                     'layout' => $show->showLayout(),
                     'data' => $show->instance($instanceId),
                 ],
-                $this->dataLocalizations($show)
-            )
+                $this->dataLocalizations($show),
+            ),
         );
     }
 
