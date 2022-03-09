@@ -96,7 +96,7 @@ class DemoDashboard extends SharpDashboard
     public function buildDashboardConfig(): void
     {
         $this->configurePageAlert(
-            'Graphs below are delimited by period {period} (and yes, visits figures are randomly generated)',
+            'Graphs below are delimited by period {{period}} (and yes, visits figures are randomly generated)',
             static::$pageAlertLevelSecondary,
         );
     }
