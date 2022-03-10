@@ -54,7 +54,7 @@ abstract class SharpForm
     final public function instance($id): array
     {
         $this->instance = $this->find($id);
-        
+
         return collect($this->instance)
             // Filter model attributes on actual form fields
             ->only(

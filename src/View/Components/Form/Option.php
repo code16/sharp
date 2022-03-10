@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
-
 use Illuminate\View\Component;
 
 class Option extends Component
@@ -15,7 +14,7 @@ class Option extends Component
     ) {
         $this->selectFieldComponent = view()->getConsumableComponentData('selectFieldComponent');
     }
-    
+
     public function render(): callable
     {
         return function ($data) {
