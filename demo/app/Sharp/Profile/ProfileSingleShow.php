@@ -57,10 +57,10 @@ class ProfileSingleShow extends SharpSingleShow
         return $this
             ->setCustomTransformer('avatar', new SharpUploadModelThumbnailUrlTransformer(140))
             ->setCustomTransformer('role', function ($value, User $user) {
-                return match($value) {
-                    "admin" => "Admin",
-                    "editor" => "Editor",
-                    default => "Unknown",
+                return match ($value) {
+                    'admin' => 'Admin',
+                    'editor' => 'Editor',
+                    default => 'Unknown',
                 };
             })
             ->transform(auth()->user());

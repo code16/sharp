@@ -61,10 +61,10 @@ class AuthorList extends SharpEntityList
         return $this
             ->setCustomTransformer('avatar', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->setCustomTransformer('role', function ($value, User $user) {
-                return match($value) {
-                    "admin" => "Admin",
-                    "editor" => "Editor",
-                    default => "Unknown",
+                return match ($value) {
+                    'admin' => 'Admin',
+                    'editor' => 'Editor',
+                    default => 'Unknown',
                 };
             })
             ->transform($users->get());
