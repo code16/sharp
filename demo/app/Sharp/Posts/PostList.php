@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\ExportPostsToCsvCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
@@ -88,6 +89,13 @@ class PostList extends SharpEntityList
     {
         return [
             PreviewPostCommand::class,
+        ];
+    }
+
+    public function getEntityCommands(): ?array
+    {
+        return [
+            ExportPostsToCsvCommand::class,
         ];
     }
 
