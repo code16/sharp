@@ -13,7 +13,7 @@ class VisitFacebookProfileCommand extends InstanceCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureDescription("You will leave sharp");
+        $this->configureDescription('You will leave sharp');
     }
 
     public function execute(mixed $instanceId, array $data = []): array
