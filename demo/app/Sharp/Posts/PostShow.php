@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
@@ -125,6 +126,7 @@ class PostShow extends SharpShow
     {
         return [
             PreviewPostCommand::class,
+            EvaluateDraftPostWizardCommand::class,
         ];
     }
 }
