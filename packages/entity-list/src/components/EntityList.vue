@@ -588,7 +588,7 @@
                 this.sendCommand(command, {
                     postCommand: () => this.axiosInstance.post(endpoint, { query }, { responseType:'blob' }),
                     postForm: data => api.post(endpoint, { query, data }, { responseType:'blob' }),
-                    getFormData: () => this.axiosInstance.get(`${endpoint}/data`, { params:query }).then(response => response.data.data),
+                    getForm: () => this.axiosInstance.get(`${endpoint}/form`, { params:query }).then(response => response.data),
                 });
             },
             handleRefreshCommand(data) {

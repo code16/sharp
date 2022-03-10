@@ -89,7 +89,7 @@
                 this.sendCommand(command, {
                     postCommand: () => this.$store.dispatch('dashboard/postCommand', { command, query }),
                     postForm: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
-                    getFormData: () => this.$store.dispatch('dashboard/getCommandFormData', { command, query }),
+                    getForm: () => this.$store.dispatch('dashboard/getCommandForm', { command, query }),
                 });
             },
             async init() {

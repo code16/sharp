@@ -15,10 +15,10 @@ export function postDashboardCommand({ dashboardKey, commandKey, query, data }) 
     }, { responseType: 'blob' });
 }
 
-export function getDashboardCommandFormData({ dashboardKey, commandKey, query }) {
-    return api.get(`dashboard/${dashboardKey}/command/${commandKey}/data`, {
+export function getDashboardCommandForm({ dashboardKey, commandKey, query }) {
+    return api.get(`dashboard/${dashboardKey}/command/${commandKey}/form`, {
         params: {
             ...query,
         },
-    }).then(response => response.data.data);
+    }).then(response => response.data);
 }
