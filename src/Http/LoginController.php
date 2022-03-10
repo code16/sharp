@@ -40,8 +40,8 @@ class LoginController extends Controller
             [
                 $this->getSharpLoginAttribute() => request('login'),
                 $this->getSharpPasswordAttribute() => request('password'),
-            ], 
-            request()->filled('remember'))
+            ],
+            request()->filled('remember'), )
         ) {
             return redirect()->intended('/'.sharp_base_url_segment());
         }
