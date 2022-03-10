@@ -21,6 +21,7 @@ abstract class SharpForm
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
     protected ?string $formValidatorClass = null;
+    public $instance = null;
 
     final public function formLayout(): array
     {
@@ -52,7 +53,9 @@ abstract class SharpForm
 
     final public function instance($id): array
     {
-        return collect($this->find($id))
+        $this->instance = $this->find($id);
+        
+        return collect($this->instance)
             // Filter model attributes on actual form fields
             ->only(
                 array_merge(
@@ -124,6 +127,7 @@ abstract class SharpForm
         $this->render()
             ?->with([
                 'form' => $this,
+                'instance' => $this->instance,
             ])
             ->render();
     }

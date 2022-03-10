@@ -9,21 +9,23 @@
     <x-sharp::tab title="Select">
         <x-sharp::col class="col-md-6">
             <x-sharp-form::display-if field="select_dropdown" equals="1">
-                <x-sharp-form::autocomplete
-                    name="autocomplete_local"
-                    mode="local"
-                    label="Autocomplete local"
-                    :localized="true"
-                    :local-search-keys="['label']"
-                    :local-values="$form->options(true)"
-                >
-                    <x-slot name="list_item">
-                        @{{ label }}
-                    </x-slot>
-                    <x-slot name="result_item">
-                        @{{ label }} (@{{ id }})
-                    </x-slot>
-                </x-sharp-form::autocomplete>
+                @if($instance['autocomplete_local'] ?? null)
+                    <x-sharp-form::autocomplete
+                        name="autocomplete_local"
+                        mode="local"
+                        label="Autocomplete local"
+                        :localized="true"
+                        :local-search-keys="['label']"
+                        :local-values="$form->options(true)"
+                    >
+                        <x-slot name="list_item">
+                            @{{ label }}
+                        </x-slot>
+                        <x-slot name="result_item">
+                            @{{ label }} (@{{ id }})
+                        </x-slot>
+                    </x-sharp-form::autocomplete>
+                @endif
 
                 <x-sharp-form::autocomplete
                     name="autocomplete_remote"

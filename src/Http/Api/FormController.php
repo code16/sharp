@@ -13,6 +13,7 @@ class FormController extends ApiController
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
+        $data = $form->instance($instanceId);
         $form->buildFormConfig();
         $form->buildFromView();
 
@@ -22,7 +23,7 @@ class FormController extends ApiController
                     'fields' => $form->fields(),
                     'layout' => $form->formLayout(),
                     'config' => $form->formConfig(),
-                    'data' => $form->instance($instanceId),
+                    'data' => $data,
                 ],
                 $this->dataLocalizations($form),
             ),
