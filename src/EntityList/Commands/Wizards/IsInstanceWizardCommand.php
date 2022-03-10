@@ -7,12 +7,12 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
 
-trait IsEntityWizardCommand
+trait IsInstanceWizardCommand
 {
-    public function execute(array $data = []): array
+    public function execute(mixed $instanceId, array $data = []): array
     {
         if (! $step = $this->extractStepFromRequest()) {
-            return $this->executeFirstStep($data);
+            return $this->executeFirstStep($instanceId, $data);
         }
 
         $this->getWizardContext()->setCurrentStep($step);
@@ -20,13 +20,13 @@ trait IsEntityWizardCommand
         $methodName = 'executeStep'.Str::ucfirst(Str::camel($step));
 
         return method_exists($this, $methodName)
-            ? $this->$methodName($data)
-            : $this->executeStep($step, $data);
+            ? $this->$methodName($instanceId, $data)
+            : $this->executeStep($step, $instanceId, $data);
     }
 
-    abstract protected function executeFirstStep(array $data): array;
+    abstract protected function executeFirstStep(mixed $instanceId, array $data): array;
 
-    public function executeStep(string $step, array $data = []): array
+    public function executeStep(string $step, mixed $instanceId, array $data = []): array
     {
         // You can either implement this method and test $step (quick for small commands)
         // or leave this and implement for each step executeStepXXX
@@ -34,25 +34,25 @@ trait IsEntityWizardCommand
         throw new SharpMethodNotImplementedException();
     }
 
-    protected function initialData(): array
+    protected function initialData(mixed $instanceId): array
     {
         if (! $step = $this->extractStepFromRequest()) {
-            return $this->initialDataForFirstStep();
+            return $this->initialDataForFirstStep($instanceId);
         }
 
         $methodName = 'initialDataForStep'.Str::ucfirst(Str::camel($step));
 
         return method_exists($this, $methodName)
-            ? $this->$methodName()
-            : $this->initialDataForStep($step);
+            ? $this->$methodName($instanceId)
+            : $this->initialDataForStep($step, $instanceId);
     }
 
-    protected function initialDataForFirstStep(): array
+    protected function initialDataForFirstStep(mixed $instanceId): array
     {
         return [];
     }
 
-    protected function initialDataForStep(string $step): array
+    protected function initialDataForStep(string $step, mixed $instanceId): array
     {
         return [];
     }

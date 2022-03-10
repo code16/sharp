@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Commands\Wizards;
 
+use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
 
 trait IsWizardCommand
@@ -51,5 +54,54 @@ trait IsWizardCommand
         }
 
         return $this->key;
+    }
+
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        if (! $step = $this->extractStepFromRequest()) {
+            $this->buildFormFieldsForFirstStep($formFields);
+        } else {
+            $methodName = 'buildFormFieldsForStep'.Str::ucfirst(Str::camel($step));
+            if (method_exists($this, $methodName)) {
+                $this->$methodName($formFields);
+            } else {
+                $this->buildFormFieldsForStep($step, $formFields);
+            }
+        }
+    }
+
+    protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+    {
+        throw new SharpMethodNotImplementedException();
+    }
+
+    protected function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
+    {
+        // You can either implement this method and test $step (quick for small commands)
+        // or leave this and implement for each step buildFormFieldsForStepXXX
+        // where XXX is the camel cased name of your step
+        throw new SharpMethodNotImplementedException();
+    }
+
+    public function buildFormLayout(FormLayoutColumn &$column): void
+    {
+        if (! $step = $this->extractStepFromRequest()) {
+            $this->buildFormLayoutForFirstStep($column);
+        } else {
+            $methodName = 'buildFormLayoutForStep'.Str::ucfirst(Str::camel($step));
+            if (method_exists($this, $methodName)) {
+                $this->$methodName($column);
+            } else {
+                $this->buildFormLayoutForStep($step, $column);
+            }
+        }
+    }
+
+    protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void
+    {
+    }
+
+    protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void
+    {
     }
 }
