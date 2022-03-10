@@ -29,7 +29,7 @@
                 <div class="col-auto">
                     <form action="{{ route('code16.sharp.logout') }}" method="post">
                         @csrf
-                        <button class="btn btn-link p-2 m-n2 lh-1 d-block" type="submit">
+                        <button class="btn btn-link p-2 m-n2 lh-1 d-block" type="submit" title="{{ __('sharp::menu.logout_label') }}">
                             <span class="visually-hidden">{{ __('sharp::menu.logout_label') }}</span>
                             <i class="fas fa-fw fa-sign-out-alt"></i>
                         </button>
