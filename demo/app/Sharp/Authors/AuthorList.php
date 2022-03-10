@@ -60,6 +60,13 @@ class AuthorList extends SharpEntityList
 
         return $this
             ->setCustomTransformer('avatar', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
+            ->setCustomTransformer('role', function ($value, User $user) {
+                return match($value) {
+                    "admin" => "Admin",
+                    "editor" => "Editor",
+                    default => "Unknown",
+                };
+            })
             ->transform($users->get());
     }
 
@@ -79,6 +86,11 @@ class AuthorList extends SharpEntityList
                 EntityListField::make('email')
                     ->setLabel('Email')
                     ->setSortable(),
+            )
+            ->addField(
+                EntityListField::make('role')
+                    ->setLabel('Role')
+                    ->setSortable(),
             );
     }
 
@@ -86,7 +98,8 @@ class AuthorList extends SharpEntityList
     {
         $fieldsLayout
             ->addColumn('avatar', 1)
-            ->addColumn('name', 5)
-            ->addColumn('email', 6);
+            ->addColumn('name', 3)
+            ->addColumn('email', 4)
+            ->addColumn('role', 4);
     }
 }

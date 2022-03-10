@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Profile;
 
+use App\Models\User;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -25,6 +26,10 @@ class ProfileSingleShow extends SharpSingleShow
                     ->setLabel('Email address'),
             )
             ->addField(
+                SharpShowTextField::make('role')
+                    ->setLabel('Role'),
+            )
+            ->addField(
                 SharpShowPictureField::make('avatar'),
             );
     }
@@ -37,7 +42,8 @@ class ProfileSingleShow extends SharpSingleShow
                     ->addColumn(6, function (ShowLayoutColumn $column) {
                         $column
                             ->withSingleField('name')
-                            ->withSingleField('email');
+                            ->withSingleField('email')
+                            ->withSingleField('role');
                     })
                     ->addColumn(6, function (ShowLayoutColumn $column) {
                         $column
@@ -50,6 +56,13 @@ class ProfileSingleShow extends SharpSingleShow
     {
         return $this
             ->setCustomTransformer('avatar', new SharpUploadModelThumbnailUrlTransformer(140))
+            ->setCustomTransformer('role', function ($value, User $user) {
+                return match($value) {
+                    "admin" => "Admin",
+                    "editor" => "Editor",
+                    default => "Unknown",
+                };
+            })
             ->transform(auth()->user());
     }
 }
