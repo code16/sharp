@@ -21,7 +21,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configureDescription('Use this wizard command to compose a message with chose posts links');
+        $this->configureDescription('Use this wizard command to compose a message with chosen posts links');
     }
 
     public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
@@ -82,7 +82,8 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
                     ->setRowCount(8),
             )
             ->addField(
-                SharpFormCheckField::make('test', 'Send me a test email'),
+                SharpFormCheckField::make('test', 'Send me a test email')
+                    ->setHelpMessage("If checked, the command will stop here; if not, there is one final step"),
             );
     }
 

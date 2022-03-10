@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 class CommandWizardContext
 {
     protected array $attributes = [];
-
+    
     public function setCurrentStep(string $step): self
     {
         $this->attributes["_step"] = $step;
