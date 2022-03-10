@@ -6,6 +6,10 @@
 @endphp
 
 <x-sharp::form>
+    <x-sharp::page-alert class="alert-info">
+        Some info alert
+    </x-sharp::page-alert>
+
     <x-sharp::tab title="Select">
         <x-sharp::col class="col-md-6">
             <x-sharp-form::display-if field="select_dropdown" equals="1">

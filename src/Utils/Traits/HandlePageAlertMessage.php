@@ -16,7 +16,7 @@ trait HandlePageAlertMessage
     protected static string $pageAlertLevelPrimary = 'primary';
     protected static string $pageAlertLevelSecondary = 'secondary';
 
-    protected function configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false): self
+    public function configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false): self
     {
         $this->pageAlertHtmlField = SharpShowHtmlField::make($fieldKey ?: uniqid('f'));
         $this->pageAlertLevel = $alertLevel ?? static::$pageAlertLevelNone;
