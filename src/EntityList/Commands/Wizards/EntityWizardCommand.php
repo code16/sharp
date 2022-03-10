@@ -14,11 +14,13 @@ abstract class EntityWizardCommand extends EntityCommand
 
     public function execute(array $data = []): array
     {
-        $step = request()->query('command_step');
+        $step = request()->get('command_step');
 
         if (! $step) {
             return $this->executeFirstStep($data);
         }
+        
+        $this->getWizardContext()->setCurrentStep($step);
 
         $methodName = 'executeStep'.Str::ucfirst(Str::camel($step));
 
@@ -39,7 +41,7 @@ abstract class EntityWizardCommand extends EntityCommand
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
-        $step = request()->query('command_step');
+        $step = request()->get('command_step');
 
         if (! $step) {
             $this->buildFormFieldsForFirstStep($formFields);
@@ -68,7 +70,7 @@ abstract class EntityWizardCommand extends EntityCommand
 
     public function buildFormLayout(FormLayoutColumn &$column): void
     {
-        $step = request()->query('command_step');
+        $step = request()->get('command_step');
 
         if (! $step) {
             $this->buildFormLayoutForFirstStep($column);
@@ -92,7 +94,7 @@ abstract class EntityWizardCommand extends EntityCommand
 
     protected function initialData(): array
     {
-        $step = request()->query('command_step');
+        $step = request()->get('command_step');
 
         if (! $step) {
             return $this->initialDataForFirstStep();

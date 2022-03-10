@@ -10,6 +10,7 @@ use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Str;
 
 class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
 {
@@ -50,6 +51,28 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
         return $this->toStep('compose_message');
     }
 
+    protected function initialDataForStepComposeMessage(): array
+    {
+        $this->getWizardContext()->validate(['posts' => ['required', 'array']]);
+
+        return [
+            'message' => collect(
+                [
+                    'Here’s a list of posts I think you may like:',
+                ], )
+                ->merge(
+                    Post::whereIn('id', $this->getWizardContext()->get('posts'))
+                        ->get()
+                        ->map(fn (Post $post) => sprintf(
+                            ' - %s (%s)',
+                            $post->getTranslation('title', 'en'),
+                            url("post/{$post->id}"),
+                        )),
+                )
+                ->implode("\n"),
+        ];
+    }
+
     public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
     {
         $formFields
@@ -78,11 +101,26 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
         return $this->toStep('choose_recipients');
     }
 
+    protected function initialDataForStepChooseRecipients(): array
+    {
+        $this->getWizardContext()->validate([
+            'posts' => ['required', 'array'],
+            'message' => ['required'],
+        ]);
+
+        return [
+            'message' => [
+                'text' => Str::markdown($this->getWizardContext()->get('message'))
+            ],
+        ];
+    }
+
     public function buildFormFieldsForStepChooseRecipients(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
                 SharpFormHtmlField::make('message')
+                    ->setInlineTemplate('<div style="max-height: 100px; overflow: auto; border: 1px solid #ddd; padding: 10px 15px; font-size: .85em;" v-html="text"></div>')
                     ->setLabel('Message'),
             )
             ->addField(
@@ -99,39 +137,5 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
         ]);
 
         return $this->info('Message sent to all of them!');
-    }
-
-    protected function initialDataForStepComposeMessage(): array
-    {
-        $this->getWizardContext()->validate(['posts' => ['required', 'array']]);
-
-        return [
-            'message' => collect(
-                [
-                    'Here’s a list of posts I think you may like:',
-                ], )
-                ->merge(
-                    Post::whereIn('id', $this->getWizardContext()->get('posts'))
-                        ->get()
-                        ->map(fn (Post $post) => sprintf(
-                            ' - %s (%s)',
-                            $post->getTranslation('title', 'en'),
-                            url("post/{$post->id}"),
-                        )),
-                )
-                ->implode("\n"),
-        ];
-    }
-
-    protected function initialDataForStepChooseRecipients(): array
-    {
-        $this->getWizardContext()->validate([
-            'posts' => ['required', 'array'],
-            'message' => ['required'],
-        ]);
-
-        return [
-            'message' => $this->getWizardContext()->get('message'),
-        ];
     }
 }
