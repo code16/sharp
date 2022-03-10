@@ -90,7 +90,7 @@ class PostList extends SharpEntityList
     {
         return [
             PreviewPostCommand::class,
-            EvaluateDraftPostWizardCommand::class
+            EvaluateDraftPostWizardCommand::class,
         ];
     }
 

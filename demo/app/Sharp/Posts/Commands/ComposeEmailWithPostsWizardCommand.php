@@ -83,7 +83,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
             )
             ->addField(
                 SharpFormCheckField::make('test', 'Send me a test email')
-                    ->setHelpMessage("If checked, the command will stop here; if not, there is one final step"),
+                    ->setHelpMessage('If checked, the command will stop here; if not, there is one final step'),
             );
     }
 
@@ -111,7 +111,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
 
         return [
             'message' => [
-                'text' => Str::markdown($this->getWizardContext()->get('message'))
+                'text' => Str::markdown($this->getWizardContext()->get('message')),
             ],
         ];
     }

@@ -8,18 +8,18 @@ use Illuminate\Contracts\Validation\Factory as Validator;
 class WizardCommandContext
 {
     protected array $attributes = [];
-    
+
     public function setCurrentStep(string $step): self
     {
-        $this->attributes["_step"] = $step;
-        
+        $this->attributes['_step'] = $step;
+
         return $this;
     }
 
     public function put(string $name, mixed $value): self
     {
         $this->attributes[$name] = $value;
-        
+
         return $this;
     }
 
@@ -35,10 +35,10 @@ class WizardCommandContext
         if ($validator->fails()) {
             throw new SharpInvalidStepException(
                 sprintf(
-                    "Illegal step %s for wizard command %s", 
+                    'Illegal step %s for wizard command %s',
                     $this->attributes['_step'] ?? 'null',
-                    class_basename(get_class($this))
-                )
+                    class_basename(get_class($this)),
+                ),
             );
         }
     }
