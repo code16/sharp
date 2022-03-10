@@ -50,7 +50,7 @@ class DashboardCommandController extends ApiController
                 throw new SharpAuthorizationException();
             }
 
-            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest('query'));
+            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest());
         }
 
         return $handler;
