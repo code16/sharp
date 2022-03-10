@@ -62,12 +62,6 @@ export default {
                     form: this.transformCommandForm(form),
                 };
             }
-
-            this.$refs.commandForm.$on('submit', this.postCommandForm);
-            this.$refs.commandForm.$once('close', () => {
-                this.$refs.commandForm.$off('submit', this.postCommandForm);
-                this.currentCommand = null;
-            });
         },
         async sendCommand(command, { postCommand, getForm }) {
             this.commandEndpoints = { postCommand, getForm };
@@ -140,7 +134,13 @@ export default {
         });
     },
     mounted() {
-        if(!this.$refs.commandForm) {
+        if(this.$refs.commandForm) {
+            this.$refs.commandForm.$on('submit', this.postCommandForm);
+            this.$refs.commandForm.$once('close', () => {
+                this.$refs.commandForm.$off('submit', this.postCommandForm);
+                this.currentCommand = null;
+            });
+        } else {
             console.error('withCommands: CommandForm not found');
         }
     }

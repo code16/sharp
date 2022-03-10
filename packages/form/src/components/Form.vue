@@ -135,6 +135,9 @@
                 curFieldsetId: 0,
             }
         },
+        watch: {
+            'form': 'init',
+        },
         computed: {
             apiPath() {
                 let path = `form/${this.entityKey}`;
