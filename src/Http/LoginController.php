@@ -36,12 +36,14 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if ($this->guard()->attempt(
-            [
-                $this->getSharpLoginAttribute() => request('login'),
-                $this->getSharpPasswordAttribute() => request('password'),
-            ], 
-            request()->filled('remember'))
+        if (
+            $this->guard()->attempt(
+                [
+                    $this->getSharpLoginAttribute() => request('login'),
+                    $this->getSharpPasswordAttribute() => request('password'),
+                ], 
+                request()->filled('remember'),
+            )
         ) {
             return redirect()->intended('/'.sharp_base_url_segment());
         }
