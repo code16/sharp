@@ -29,7 +29,7 @@ trait IsWizardCommand
         
         return [
             'action' => 'step',
-            'step' => "{$step}:{$this->key}",
+            'step' => "{$step}:{$this->getKey()}",
         ];
     }
 
