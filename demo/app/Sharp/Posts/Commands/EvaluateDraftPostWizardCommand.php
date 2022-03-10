@@ -32,7 +32,7 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
 
         if ($data['decision'] === 'yes') {
             Post::find($instanceId)->update(['state' => 'online']);
-            
+
             return $this->reload();
         }
 
