@@ -19,8 +19,20 @@ class EntityListEntityCommandController extends ApiController
         $list->initQueryParams();
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
+        $formFields = $commandHandler->form();
+        $locales = $commandHandler->getDataLocalizations();
 
         return response()->json([
+            'form' => count($formFields)
+                ? array_merge(
+                    [
+                        'config' => $commandHandler->commandFormConfig(),
+                        'fields' => $formFields,
+                        'layout' => $commandHandler->formLayout(),
+                    ],
+                    $locales ? ["locales" => $locales] : []
+                )
+                : null,
             'data' => $commandHandler->formData(),
         ]);
     }

@@ -9,9 +9,6 @@ class ShowInstanceCommandController extends ApiController
 {
     use HandleCommandReturn;
 
-    /**
-     * Display the Command form.
-     */
     public function show(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);

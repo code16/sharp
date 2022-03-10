@@ -81,22 +81,105 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_get_the_form_of_the_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->getJson('/sharp/api/list/person/command/instance_form/1/form')
+            ->assertOk()
+            ->assertJsonFragment([
+                'form' => [
+                    'config' => null,
+                    'fields' => [
+                        'name' => [
+                            'key' => 'name',
+                            'type' => 'text',
+                            'inputType' => 'text',
+                        ],
+                    ],
+                    'layout' => [
+                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                    ],
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function we_can_configure_a_global_message_on_an_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->getJson('/sharp/api/list/person/command/instance_global_message/1/form')
+            ->assertOk()
+            ->assertJsonFragment([
+                'form' => [
+                    'config' => [
+                        'globalMessage' => [
+                            'fieldKey' => 'global_message',
+                            'alertLevel' => null,
+                        ],
+                    ],
+                    'fields' => [
+                        'global_message' => [
+                            'key' => 'global_message',
+                            'type' => 'html',
+                            'emptyVisible' => false,
+                            'template' => 'template',
+                        ],
+                        'name' => [
+                            'key' => 'name',
+                            'type' => 'text',
+                            'inputType' => 'text',
+                        ],
+                    ],
+                    'layout' => [
+                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                    ],
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function we_can_get_a_localized_form_of_the_instance_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->getJson('/sharp/api/list/person/command/instance_form_localized/1/form')
+            ->assertOk()
+            ->assertJsonFragment([
+                'form' => [
+                    'config' => null,
+                    'fields' => [
+                        'name' => [
+                            'key' => 'name',
+                            'type' => 'text',
+                            'inputType' => 'text',
+                        ],
+                    ],
+                    'layout' => [
+                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                    ],
+                    'locales' => ['fr', 'en', 'it'],
+                ],
+            ]);
+    }
+
+    /** @test */
     public function we_can_initialize_form_data_in_an_instance_command()
     {
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $response = $this->getJson('/sharp/api/list/person')
-            ->assertStatus(200)
-            ->json();
-
-        $this->assertTrue(
-            collect($response['config']['commands']['instance'][0])->where('key', 'instance_with_init_data')->first()['fetch_initial_data'],
-        );
-
-        $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
-            ->assertStatus(200)
-            ->assertExactJson([
+        $this
+            ->getJson('/sharp/api/list/person/command/instance_with_init_data/25/form')
+            ->assertOk()
+            ->assertJsonFragment([
                 'data' => [
                     'name' => 'John Wayne [25]',
                 ],
@@ -170,6 +253,64 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                 public function execute($instanceId, array $params = []): array
                 {
                     return $this->reload();
+                }
+            },
+            'instance_form' => new class() extends InstanceCommand
+            {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function buildFormFields(FieldsContainer $formFields): void
+                {
+                    $formFields->addField(SharpFormTextField::make('name'));
+                }
+
+                public function execute($instanceId, array $data = []): array
+                {
+                }
+            },
+            'instance_form_localized' => new class() extends InstanceCommand
+            {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function buildFormFields(FieldsContainer $formFields): void
+                {
+                    $formFields->addField(SharpFormTextField::make('name'));
+                }
+
+                public function execute($instanceId, array $data = []): array
+                {
+                }
+
+                public function getDataLocalizations(): array
+                {
+                    return ['fr', 'en', 'it'];
+                }
+            },
+            'instance_global_message' => new class() extends InstanceCommand
+            {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function buildCommandConfig(): void
+                {
+                    $this->configurePageAlert('template', null, 'global_message');
+                }
+
+                public function buildFormFields(FieldsContainer $formFields): void
+                {
+                    $formFields->addField(SharpFormTextField::make('name'));
+                }
+
+                public function execute($instanceId, array $data = []): array
+                {
                 }
             },
             'instance_with_init_data' => new class() extends InstanceCommand
