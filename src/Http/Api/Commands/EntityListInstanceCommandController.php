@@ -20,7 +20,7 @@ class EntityListInstanceCommandController extends ApiController
             array_merge(
                 $this->getCommandForm($commandHandler),
                 ['data' => $commandHandler->formData($instanceId)],
-            )
+            ),
         );
     }
 

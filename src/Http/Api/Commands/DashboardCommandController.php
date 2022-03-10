@@ -22,7 +22,7 @@ class DashboardCommandController extends ApiController
             array_merge(
                 $this->getCommandForm($commandHandler),
                 ['data' => $commandHandler->formData()],
-            )
+            ),
         );
     }
 
