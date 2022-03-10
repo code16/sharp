@@ -249,6 +249,7 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
                 'layout' => [
                     [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
+                'data' => null,
             ]);
     }
 

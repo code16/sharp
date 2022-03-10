@@ -21,7 +21,7 @@ class DashboardCommandController extends ApiController
         return response()->json(
             array_merge(
                 $this->getCommandForm($commandHandler),
-                ['data' => $commandHandler->formData()],
+                ['data' => $commandHandler->formData() ?: null],
             ),
         );
     }
@@ -50,7 +50,7 @@ class DashboardCommandController extends ApiController
                 throw new SharpAuthorizationException();
             }
 
-            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest('query'));
+            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest());
         }
 
         return $handler;

@@ -16,14 +16,14 @@ class ExportStatsAsCsvCommand extends DashboardCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configurePageAlert('For the period {start} - {end}', static::$pageAlertLevelInfo, 'period');
+        $this->configurePageAlert('For the period {{start}} - {{end}}', static::$pageAlertLevelInfo, 'period');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
             ->addField(
-                SharpFormSelectField::make('stats', ['1' => 'Posts by author', '2' => 'Posts by category', '3' => 'Visits'])
+                SharpFormSelectField::make('stats', ['authors' => 'Posts by author', 'category' => 'Posts by category', 'visits' => 'Visits'])
                     ->setMultiple()
                     ->setLabel('Stats to export'),
             );
@@ -42,8 +42,8 @@ class ExportStatsAsCsvCommand extends DashboardCommand
     {
         return [
             'period' => [
-                'start' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['start'],
-                'end' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['end'],
+                'start' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                'end' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
             ],
         ];
     }
