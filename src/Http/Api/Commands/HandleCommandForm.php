@@ -10,19 +10,19 @@ trait HandleCommandForm
 {
     protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler): ?array
     {
-        if(!count($formFields = $commandHandler->form())) {
+        if (! count($formFields = $commandHandler->form())) {
             return null;
         }
-        
+
         $locales = $commandHandler->getDataLocalizations();
-        
+
         return array_merge(
             [
                 'config' => $commandHandler->commandFormConfig(),
                 'fields' => $formFields,
                 'layout' => $commandHandler->formLayout(),
             ],
-            $locales ? ["locales" => $locales] : []
+            $locales ? ['locales' => $locales] : [],
         );
     }
 }

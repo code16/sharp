@@ -49,8 +49,8 @@ class DashboardCommandTest extends SharpTestCase
                         ],
                     ],
                 ],
-            ], 
-            $dashboard->dashboardConfig()
+            ],
+            $dashboard->dashboardConfig(),
         );
     }
 
@@ -73,7 +73,7 @@ class DashboardCommandTest extends SharpTestCase
                         {
                             $formFields->addField(SharpFormTextField::make('message'));
                         }
-                        
+
                         public function execute(array $data = []): array
                         {
                         }
@@ -93,13 +93,13 @@ class DashboardCommandTest extends SharpTestCase
                                 'key' => 'dashboardCommand',
                                 'label' => 'My Dashboard Command',
                                 'type' => 'dashboard',
-                                'has_form' => true
-                            ]
+                                'has_form' => true,
+                            ],
                         ],
                     ],
                 ],
-            ], 
-            $dashboard->dashboardConfig()
+            ],
+            $dashboard->dashboardConfig(),
         );
     }
 

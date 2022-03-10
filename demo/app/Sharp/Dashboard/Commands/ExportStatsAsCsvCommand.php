@@ -9,12 +9,11 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class ExportStatsAsCsvCommand extends DashboardCommand
 {
-
     public function label(): ?string
     {
-        return "Export stats as a CSV file...";
+        return 'Export stats as a CSV file...';
     }
-    
+
     public function buildCommandConfig(): void
     {
         $this->configurePageAlert('For the period {start} - {end}', static::$pageAlertLevelInfo, 'period');
@@ -24,28 +23,28 @@ class ExportStatsAsCsvCommand extends DashboardCommand
     {
         $formFields
             ->addField(
-                SharpFormSelectField::make("stats", ["1" => "Posts by author", "2" => "Posts by category", "3" => "Visits"])
+                SharpFormSelectField::make('stats', ['1' => 'Posts by author', '2' => 'Posts by category', '3' => 'Visits'])
                     ->setMultiple()
-                    ->setLabel("Stats to export")
+                    ->setLabel('Stats to export'),
             );
     }
-    
+
     public function execute(array $data = []): array
     {
         $this->validate($data, [
-            "stats" => ["required", "array"]
+            'stats' => ['required', 'array'],
         ]);
-        
-        return $this->streamDownload("some stats", "stats.csv");
+
+        return $this->streamDownload('some stats', 'stats.csv');
     }
 
     protected function initialData(): array
     {
         return [
             'period' => [
-                'start' => $this->queryParams->filterFor(PeriodRequiredFilter::class)["start"],
-                'end' => $this->queryParams->filterFor(PeriodRequiredFilter::class)["end"],
-            ]
+                'start' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['start'],
+                'end' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['end'],
+            ],
         ];
     }
 }

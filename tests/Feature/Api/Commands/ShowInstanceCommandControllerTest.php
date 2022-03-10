@@ -56,7 +56,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
-        
+
         $this->getJson('/sharp/api/show/person/command/instance_with_init_data/25/form')
             ->assertOk()
             ->assertJsonFragment([

@@ -101,7 +101,6 @@ class DemoDashboard extends SharpDashboard
         ];
     }
 
-
     protected function buildWidgetsData(): void
     {
         $this->setPieGraphDataSet();
