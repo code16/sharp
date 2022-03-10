@@ -9,7 +9,7 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class DashboardCommandController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandleCommandReturn, HandleCommandForm;
 
     public function show(string $entityKey, string $commandKey)
     {
@@ -18,9 +18,12 @@ class DashboardCommandController extends ApiController
 
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
 
-        return response()->json([
-            'data' => $commandHandler->formData(),
-        ]);
+        return response()->json(
+            array_merge(
+                $this->getCommandForm($commandHandler),
+                ['data' => $commandHandler->formData() ?: null],
+            ),
+        );
     }
 
     public function update(string $entityKey, string $commandKey)
@@ -41,11 +44,13 @@ class DashboardCommandController extends ApiController
     protected function getCommandHandler(SharpDashboard $dashboard, string $commandKey)
     {
         if ($handler = $dashboard->findDashboardCommandHandler($commandKey)) {
-            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest('query'));
-        }
+            $handler->buildCommandConfig();
 
-        if (! $handler->authorize()) {
-            throw new SharpAuthorizationException();
+            if (! $handler->authorize()) {
+                throw new SharpAuthorizationException();
+            }
+
+            $handler->initQueryParams(DashboardQueryParams::create()->fillWithRequest());
         }
 
         return $handler;

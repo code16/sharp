@@ -43,6 +43,7 @@ trait HandleCommandReturn
     protected function getInstanceCommandHandler(SharpEntityList|SharpShow $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
     {
         $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
+        $commandHandler->buildCommandConfig();
 
         if (! $commandHandler->authorize() || ! $commandHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();

@@ -36,18 +36,16 @@ export default {
             await this.handleCommandResponse(response);
             this.currentCommand = null;
         },
-        async showCommandForm(command, { postForm, getFormData }) {
-            const data = command.fetch_initial_data
-                ? await withLoadingOverlay(getFormData())
+        async showCommandForm(command, { postForm, getForm }) {
+            const form = command.has_form
+                ? await withLoadingOverlay(getForm())
                 : {};
             const post = () => this.postCommandForm({ postFn:postForm });
 
+
             this.currentCommand = {
                 ...command,
-                form: this.transformCommandForm({
-                    ...command.form,
-                    data,
-                }),
+                form: this.transformCommandForm(form),
             };
 
             this.$refs.commandForm.$on('submit', post);
@@ -56,14 +54,13 @@ export default {
                 this.currentCommand = null;
             });
         },
-        async sendCommand(command, { postCommand, getFormData, postForm }) {
-            const { form, confirmation } = command;
-            if(form) {
-                return this.showCommandForm(command, { postForm, getFormData });
+        async sendCommand(command, { postCommand, getForm, postForm }) {
+            if(command.has_form) {
+                return this.showCommandForm(command, { postForm, getForm });
             }
-            if(confirmation) {
+            if(command.confirmation) {
                 await new Promise(resolve => {
-                    showConfirm(confirmation, {
+                    showConfirm(command.confirmation, {
                         title: lang('modals.command.confirm.title'),
                         okCallback: resolve,
                     });

@@ -2,7 +2,7 @@
     <Dropdown v-bind="$attrs" :text="l('action_bar.list.forms_dropdown')">
         <template v-for="form in visibleForms">
             <DropdownItem @click="handleSelected(form)" :key="form.key">
-                <div class="row gx-2">
+                <div class="row gx-2 flex-nowrap">
                     <template v-if="hasIcon">
                         <div class="col-auto">
                             <div class="fa-fw">
@@ -10,7 +10,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class="col" style="min-width: 0">
+                    <div class="col">
                         {{ form.label }}
                     </div>
                 </div>

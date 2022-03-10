@@ -208,7 +208,7 @@
                 this.sendCommand(command, {
                     postCommand: () => this.$store.dispatch('show/postCommand', { command }),
                     postForm: data => this.$store.dispatch('show/postCommand', { command, data }),
-                    getFormData: () => this.$store.dispatch('show/getCommandFormData', { command }),
+                    getForm: () => this.$store.dispatch('show/getCommandForm', { command }),
                 });
             },
             handleStateChanged(state) {
