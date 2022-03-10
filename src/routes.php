@@ -66,13 +66,13 @@ Route::group([
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
 
-//    Route::get('/show/{entityKey}/command/{commandKey}/{instanceId}/data', [ShowInstanceCommandController::class, 'show'])
-//        ->name('code16.sharp.api.show.command.instance.data');
+    Route::get('/show/{entityKey}/command/{commandKey}/{instanceId}/form', [ShowInstanceCommandController::class, 'show'])
+        ->name('code16.sharp.api.show.command.instance.form');
 
     // Specific route for single shows, because /show/{entityKey}/command/{commandKey}/{instanceId?}/data
     // does not work since instanceId is optional but not the last segment.
-//    Route::get('/show/{entityKey}/command/{commandKey}/data', [ShowInstanceCommandController::class, 'show'])
-//        ->name('code16.sharp.api.show.command.singleInstance.data');
+    Route::get('/show/{entityKey}/command/{commandKey}/form', [ShowInstanceCommandController::class, 'show'])
+        ->name('code16.sharp.api.show.command.singleInstance.form');
 
     Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');

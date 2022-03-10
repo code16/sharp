@@ -6,7 +6,7 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class EntityListInstanceCommandController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandleCommandReturn, HandleCommandForm;
 
     public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {
@@ -15,20 +15,9 @@ class EntityListInstanceCommandController extends ApiController
         $list->initQueryParams();
 
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
-        $formFields = $commandHandler->form();
-        $locales = $commandHandler->getDataLocalizations();
         
         return response()->json([
-            'form' => count($formFields)
-                ? array_merge(
-                    [
-                        'config' => $commandHandler->commandFormConfig(),
-                        'fields' => $formFields,
-                        'layout' => $commandHandler->formLayout(),
-                    ],
-                    $locales ? ["locales" => $locales] : []
-                )
-                : null,
+            'form' => $this->getInstanceCommandForm($commandHandler),
             'data' => $commandHandler->formData($instanceId),
         ]);
     }
