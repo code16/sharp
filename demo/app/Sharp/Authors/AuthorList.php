@@ -4,6 +4,7 @@ namespace App\Sharp\Authors;
 
 use App\Models\User;
 use App\Sharp\Authors\Commands\InviteUserCommand;
+use App\Sharp\Authors\Commands\VisitFacebookProfileCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -25,6 +26,13 @@ class AuthorList extends SharpEntityList
     {
         return [
             InviteUserCommand::class,
+        ];
+    }
+
+    protected function getInstanceCommands(): ?array
+    {
+        return [
+            VisitFacebookProfileCommand::class,
         ];
     }
 
