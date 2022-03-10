@@ -161,7 +161,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
                     [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
                 'locales' => ['fr', 'en', 'it'],
-                'data' => null
+                'data' => null,
             ]);
     }
 
