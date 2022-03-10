@@ -224,60 +224,6 @@ class SharpEntityListCommandTest extends SharpTestCase
     }
 
     /** @test */
-    // TODO MOVE
-    public function if_no_form_layout_is_configured_a_default_is_provided()
-    {
-        $list = new class extends SharpEntityDefaultTestList
-        {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'entityCommand' => new class extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
-
-                        public function buildFormFields(FieldsContainer $formFields): void
-                        {
-                            $formFields->addField(SharpFormTextField::make('message'))
-                                ->addField(SharpFormTextField::make('message2'));
-                        }
-
-                        public function execute(array $data = []): array
-                        {
-                        }
-                    },
-                ];
-            }
-        };
-
-        $list->buildListConfig();
-        $list->initQueryParams();
-
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'form' => [
-                                    'layout' => [
-                                        [['key' => 'message', 'size' => 12, 'sizeXS' => 12]],
-                                        [['key' => 'message2', 'size' => 12, 'sizeXS' => 12]],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
-    }
-
-    /** @test */
     public function we_can_define_a_form_modal_title_on_a_command()
     {
         $list = new class extends SharpEntityDefaultTestList
