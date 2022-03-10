@@ -41,18 +41,16 @@ class DashboardCommandControllerTest extends BaseApiTest
                 'data' => [
                     'name' => 'John Wayne',
                 ],
-                'form' => [
-                    'config' => null,
-                    'fields' => [
-                        'name' => [
-                            'key' => 'name',
-                            'type' => 'text',
-                            'inputType' => 'text',
-                        ],
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
                     ],
-                    'layout' => [
-                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
-                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
             ]);
     }

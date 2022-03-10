@@ -8,10 +8,10 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 trait HandleCommandForm
 {
-    protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler): ?array
+    protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler): array
     {
         if (! count($formFields = $commandHandler->form())) {
-            return null;
+            return [];
         }
 
         $locales = $commandHandler->getDataLocalizations();

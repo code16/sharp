@@ -203,18 +203,16 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
             ->getJson('/sharp/api/list/person/command/entity_form/form')
             ->assertOk()
             ->assertJsonFragment([
-                'form' => [
-                    'config' => null,
-                    'fields' => [
-                        'name' => [
-                            'key' => 'name',
-                            'type' => 'text',
-                            'inputType' => 'text',
-                        ],
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
                     ],
-                    'layout' => [
-                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
-                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
             ]);
     }
@@ -229,29 +227,27 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
             ->getJson('/sharp/api/list/person/command/entity_global_message/form')
             ->assertOk()
             ->assertJsonFragment([
-                'form' => [
-                    'config' => [
-                        'globalMessage' => [
-                            'fieldKey' => 'global_message',
-                            'alertLevel' => null,
-                        ],
+                'config' => [
+                    'globalMessage' => [
+                        'fieldKey' => 'global_message',
+                        'alertLevel' => null,
                     ],
-                    'fields' => [
-                        'global_message' => [
-                            'key' => 'global_message',
-                            'type' => 'html',
-                            'emptyVisible' => false,
-                            'template' => 'template',
-                        ],
-                        'name' => [
-                            'key' => 'name',
-                            'type' => 'text',
-                            'inputType' => 'text',
-                        ],
+                ],
+                'fields' => [
+                    'global_message' => [
+                        'key' => 'global_message',
+                        'type' => 'html',
+                        'emptyVisible' => false,
+                        'template' => 'template',
                     ],
-                    'layout' => [
-                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
                     ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
             ]);
     }
@@ -266,20 +262,18 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
             ->getJson('/sharp/api/list/person/command/entity_form_localized/form')
             ->assertOk()
             ->assertJsonFragment([
-                'form' => [
-                    'config' => null,
-                    'fields' => [
-                        'name' => [
-                            'key' => 'name',
-                            'type' => 'text',
-                            'inputType' => 'text',
-                        ],
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
                     ],
-                    'layout' => [
-                        [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
-                    ],
-                    'locales' => ['fr', 'en', 'it'],
                 ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                ],
+                'locales' => ['fr', 'en', 'it'],
             ]);
     }
 

@@ -14,10 +14,12 @@ class ShowInstanceCommandController extends ApiController
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
-        return response()->json([
-            'form' => $this->getCommandForm($commandHandler),
-            'data' => $commandHandler->formData($instanceId),
-        ]);
+        return response()->json(
+            array_merge(
+                $this->getCommandForm($commandHandler),
+                ['data' => $commandHandler->formData($instanceId)],
+            )
+        );
     }
 
     public function update(string $entityKey, string $commandKey, mixed $instanceId = null)

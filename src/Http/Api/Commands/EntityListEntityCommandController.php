@@ -20,10 +20,12 @@ class EntityListEntityCommandController extends ApiController
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
-        return response()->json([
-            'form' => $this->getCommandForm($commandHandler),
-            'data' => $commandHandler->formData(),
-        ]);
+        return response()->json(
+            array_merge(
+                $this->getCommandForm($commandHandler),
+                ['data' => $commandHandler->formData()],
+            )
+        );
     }
 
     public function update(string $entityKey, string $commandKey)
