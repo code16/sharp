@@ -6,7 +6,8 @@ trait IsWizardCommand
 {
     protected function getWizardContext(): CommandWizardContext
     {
-        dd(get_class($this));
+//        dd(get_class($this));
+        return new CommandWizardContext();
     }
 
     protected function toStep(string $step): array
