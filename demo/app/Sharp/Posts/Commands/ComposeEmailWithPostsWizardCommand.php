@@ -111,7 +111,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
                     'Here’s a list of posts I think you may like:',
                 ], )
                 ->merge(
-                    Post::whereIn('id', [1,2])//$this->getWizardContext()->get('posts'))
+                    Post::whereIn('id', $this->getWizardContext()->get('posts'))
                         ->get()
                         ->map(fn (Post $post) => sprintf(
                             ' - %s (%s)',
@@ -131,7 +131,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
         ]);
 
         return [
-            'message' => "TEST",//$this->getWizardContext()->get('message'),
+            'message' => $this->getWizardContext()->get('message'),
         ];
     }
 }
