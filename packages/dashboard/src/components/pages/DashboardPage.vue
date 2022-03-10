@@ -87,9 +87,8 @@
             handleCommandRequested(command) {
                 const query = this.commandsQuery;
                 this.sendCommand(command, {
-                    postCommand: () => this.$store.dispatch('dashboard/postCommand', { command, query }),
-                    postForm: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
-                    getForm: () => this.$store.dispatch('dashboard/getCommandForm', { command, query }),
+                    postCommand: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
+                    getForm: commandQuery => this.$store.dispatch('dashboard/getCommandForm', { command, query: { ...query, ...commandQuery } }),
                 });
             },
             async init() {

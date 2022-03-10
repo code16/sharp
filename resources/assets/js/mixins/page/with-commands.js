@@ -6,7 +6,12 @@ export default {
     data() {
         return {
             currentCommand: null,
+            currentCommandStep: null,
             commandViewContent: null,
+            commandEndpoints: {
+                postCommand: null,
+                getForm: null,
+            },
         }
     },
     methods: {
@@ -24,40 +29,53 @@ export default {
             $link.click();
         },
         async handleCommandResponse(response) {
-            if(response.data.type === 'application/json') {
-                const data = await parseBlobJSONContent(response.data);
-                this.handleCommandActionRequested(data.action, data);
-            } else {
+            if(response.data.type !== 'application/json') {
                 this.downloadCommandFile(response);
+                return null;
+            }
+            const data = await parseBlobJSONContent(response.data);
+            this.handleCommandActionRequested(data.action, data);
+            return data;
+        },
+        async postCommandForm() {
+            const { postCommand } = this.commandEndpoints;
+            const response = await this.$refs.commandForm.submit({
+                postFn: data => postCommand({ data, command_step: this.currentCommandStep }),
+            });
+            const data = await this.handleCommandResponse(response);
+            if(data?.action === 'step') {
+                this.currentCommandStep = data.step;
+                await this.showCommandForm(this.currentCommand);
+            } else {
+                this.currentCommand = null;
             }
         },
-        async postCommandForm({ postFn }) {
-            const response = await this.$refs.commandForm.submit({ postFn });
-            await this.handleCommandResponse(response);
-            this.currentCommand = null;
-        },
-        async showCommandForm(command, { postForm, getForm }) {
-            const form = command.has_form
-                ? await withLoadingOverlay(getForm())
-                : {};
-            const post = () => this.postCommandForm({ postFn:postForm });
+        async showCommandForm(command) {
+            const { getForm } = this.commandEndpoints;
 
+            if(command.has_form) {
+                const form = await withLoadingOverlay(getForm({
+                    command_step: this.currentCommandStep,
+                }));
+                this.currentCommand = {
+                    ...command,
+                    form: this.transformCommandForm(form),
+                };
+            }
 
-            this.currentCommand = {
-                ...command,
-                form: this.transformCommandForm(form),
-            };
-
-            this.$refs.commandForm.$on('submit', post);
+            this.$refs.commandForm.$on('submit', this.postCommandForm);
             this.$refs.commandForm.$once('close', () => {
-                this.$refs.commandForm.$off('submit', post);
+                this.$refs.commandForm.$off('submit', this.postCommandForm);
                 this.currentCommand = null;
             });
         },
-        async sendCommand(command, { postCommand, getForm, postForm }) {
+        async sendCommand(command, { postCommand, getForm }) {
+            this.commandEndpoints = { postCommand, getForm };
+
             if(command.has_form) {
-                return this.showCommandForm(command, { postForm, getForm });
+                return this.showCommandForm(command);
             }
+
             if(command.confirmation) {
                 await new Promise(resolve => {
                     showConfirm(command.confirmation, {
@@ -66,6 +84,7 @@ export default {
                     });
                 });
             }
+
             try {
                 let response = await withLoadingOverlay(postCommand());
                 await this.handleCommandResponse(response);
@@ -117,6 +136,7 @@ export default {
             'info': this.handleInfoCommand,
             'link': this.handleLinkCommand,
             'view': this.handleViewCommand,
+            'step': this.handleStepCommand,
         });
     },
     mounted() {

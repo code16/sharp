@@ -586,9 +586,10 @@
 
                 this.currentCommandInstanceId = instanceId;
                 this.sendCommand(command, {
-                    postCommand: () => this.axiosInstance.post(endpoint, { query }, { responseType:'blob' }),
-                    postForm: data => api.post(endpoint, { query, data }, { responseType:'blob' }),
-                    getForm: () => this.axiosInstance.get(`${endpoint}/form`, { params:query }).then(response => response.data),
+                    postCommand: data => api.post(endpoint, { query, ...data }, { responseType:'blob' }),
+                    getForm: commandQuery => api.get(`${endpoint}/form`, {
+                        params: { ...query, ...commandQuery },
+                    }).then(response => response.data),
                 });
             },
             handleRefreshCommand(data) {
