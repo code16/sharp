@@ -94,7 +94,11 @@
                 this.$emit('input', value, { error });
             },
             setDefault() {
-                if(!this.clearable && this.value == null && this.options.length > 0) {
+                if(!this.clearable
+                    && !this.multiple
+                    && this.value == null
+                    && this.options.length > 0
+                ) {
                     this.$emit('input', this.options[0].id, { force:true });
                 }
             },
