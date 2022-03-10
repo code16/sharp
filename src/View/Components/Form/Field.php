@@ -2,12 +2,10 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\View\Components\Col;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 use Illuminate\View\ComponentSlot;
@@ -21,7 +19,7 @@ abstract class Field extends Component
     protected ?FormLayoutFieldset $fieldset = null;
     protected ?SharpFormListField $parentListField = null;
     protected ?DisplayIf $displayIfComponent = null;
-    
+
     private function mount()
     {
         $this->form = view()->getConsumableComponentData('form');
@@ -39,18 +37,18 @@ abstract class Field extends Component
 
         return null;
     }
-    
+
     protected function updateFromSlots(array $slots)
     {
     }
-    
+
     private function updatePropertiesWithSlots(array $slots)
     {
         $publicProperties = $this->extractPublicProperties();
-        
+
         collect($slots)
             ->mapWithKeys(fn ($value, $key) => [
-                Str::camel($key) => $value
+                Str::camel($key) => $value,
             ])
             ->each(function ($value, $key) use ($publicProperties) {
                 if (array_key_exists($key, $publicProperties)) {
@@ -58,7 +56,7 @@ abstract class Field extends Component
                 }
             });
     }
-    
+
     private function updateFieldWithProperties()
     {
         collect($this->extractPublicProperties())
@@ -70,7 +68,7 @@ abstract class Field extends Component
                 }
             });
     }
-    
+
     private function registerLayout()
     {
         if ($this->parentColComponent) {
