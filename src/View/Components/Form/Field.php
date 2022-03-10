@@ -6,7 +6,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Code16\Sharp\View\Components\Col;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -31,13 +30,13 @@ abstract class Field extends Component
         $this->parentColComponent = view()->getConsumableComponentData('colComponent');
         $this->displayIfComponent = view()->getConsumableComponentData('displayIfComponent');
     }
-    
+
     private function subLayoutCallback(): ?callable
     {
-        if(method_exists($this, 'setItemLayout')) {
+        if (method_exists($this, 'setItemLayout')) {
             return fn ($column) => $this->setItemLayout($column);
         }
-        
+
         return null;
     }
     
@@ -85,7 +84,7 @@ abstract class Field extends Component
 
     private function registerField()
     {
-        if($this->parentListField) {
+        if ($this->parentListField) {
             $this->parentListField->addItemField($this->field);
         } else {
             $this->form->fieldsContainer()->addField($this->field);
