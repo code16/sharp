@@ -3,8 +3,8 @@
 namespace Code16\Sharp\Http;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class LoginController extends Controller
 {
