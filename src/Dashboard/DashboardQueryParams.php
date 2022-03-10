@@ -15,7 +15,7 @@ class DashboardQueryParams
 
     public function fillWithRequest(): self
     {
-        $query = request()->method() === "GET" ? request()->all() : request('query');
+        $query = request()->method() === 'GET' ? request()->all() : request('query');
 
         $this->fillFilterWithRequest($query);
 

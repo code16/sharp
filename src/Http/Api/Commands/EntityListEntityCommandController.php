@@ -50,7 +50,7 @@ class EntityListEntityCommandController extends ApiController
         $commandHandler->buildCommandConfig();
         $commandHandler->initQueryParams(
             EntityListQueryParams::create()
-                ->fillWithRequest('query')
+                ->fillWithRequest('query'),
         );
 
         if (! $commandHandler->authorize()) {
