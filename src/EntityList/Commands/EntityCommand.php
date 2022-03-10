@@ -8,7 +8,7 @@ abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
 
-    final public function type(): string
+    public function type(): string
     {
         return 'entity';
     }

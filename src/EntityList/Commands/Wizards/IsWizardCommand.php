@@ -6,25 +6,25 @@ use Illuminate\Support\Str;
 
 trait IsWizardCommand
 {
-    protected ?CommandWizardContext $commandWizardContext = null;
+    protected ?WizardCommandContext $wizardCommandContext = null;
     private string $key;
     
-    protected function getWizardContext(): CommandWizardContext
+    protected function getWizardContext(): WizardCommandContext
     {
-        if(!$this->commandWizardContext) {
-            $this->commandWizardContext = session()->get(sprintf("CWC.%s.%s", get_class($this), $this->getKey()));
-            if(!$this->commandWizardContext) {
-                $this->commandWizardContext = new CommandWizardContext();
+        if(!$this->wizardCommandContext) {
+            $this->wizardCommandContext = session()->get(sprintf("CWC.%s.%s", get_class($this), $this->getKey()));
+            if(!$this->wizardCommandContext) {
+                $this->wizardCommandContext = new WizardCommandContext();
             }
         }
         
-        return $this->commandWizardContext;
+        return $this->wizardCommandContext;
     }
 
     protected function toStep(string $step): array
     {
-        if($this->commandWizardContext) {
-            session()->put(sprintf("CWC.%s.%s", get_class($this), $this->getKey()), $this->commandWizardContext);
+        if($this->wizardCommandContext) {
+            session()->put(sprintf("CWC.%s.%s", get_class($this), $this->getKey()), $this->wizardCommandContext);
         }
         
         return [

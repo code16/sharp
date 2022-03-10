@@ -5,7 +5,7 @@ namespace Code16\Sharp\EntityList\Commands\Wizards;
 use Code16\Sharp\Exceptions\Commands\SharpInvalidStepException;
 use Illuminate\Contracts\Validation\Factory as Validator;
 
-class CommandWizardContext
+class WizardCommandContext
 {
     protected array $attributes = [];
     
