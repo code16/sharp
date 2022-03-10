@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Http;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class LoginController extends Controller
@@ -30,17 +29,20 @@ class LoginController extends Controller
         return view('sharp::login');
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $this->validate(request(), [
             'login' => 'required',
             'password' => 'required',
         ]);
 
-        if ($this->guard()->attempt([
-            $this->getSharpLoginAttribute() => request('login'),
-            $this->getSharpPasswordAttribute() => request('password'),
-        ], $request->filled('remember'))) {
+        if ($this->guard()->attempt(
+            [
+                $this->getSharpLoginAttribute() => request('login'),
+                $this->getSharpPasswordAttribute() => request('password'),
+            ], 
+            request()->filled('remember'))
+        ) {
             return redirect()->intended('/'.sharp_base_url_segment());
         }
 
