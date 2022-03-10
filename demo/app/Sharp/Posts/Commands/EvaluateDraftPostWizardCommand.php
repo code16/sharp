@@ -3,15 +3,10 @@
 namespace App\Sharp\Posts\Commands;
 
 use App\Models\Post;
-use App\Models\User;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
-use Code16\Sharp\Form\Fields\SharpFormCheckField;
-use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Illuminate\Support\Str;
 
 class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
 {
@@ -34,25 +29,26 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
         $this->validate($data, [
             'decision' => ['required'],
         ]);
-        
-        if($data['decision'] === 'yes') {
-            Post::find($instanceId)->update(["state" => "online"]);
+
+        if ($data['decision'] === 'yes') {
+            Post::find($instanceId)->update(['state' => 'online']);
+
             return $this->refresh($instanceId);
         }
-        
+
         $this->getWizardContext()->put('post_title', Post::find($instanceId)->getTranslation('title', 'en'));
-        
+
         return $this->toStep('refusal_reason');
     }
 
     protected function initialDataForStepRefusalReason(mixed $instanceId): array
     {
         $this->getWizardContext()->validate(['post_title' => ['required']]);
-        
+
         return [
             'reason' => sprintf(
-                "I choose to refuse your “%s” post because:\n\n", 
-                $this->getWizardContext()->get('post_title')
+                "I choose to refuse your “%s” post because:\n\n",
+                $this->getWizardContext()->get('post_title'),
             ),
         ];
     }
@@ -75,9 +71,9 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
 
         return $this->info('Message sent.');
     }
-    
+
     public function authorizeFor(mixed $instanceId): bool
     {
-        return auth()->user()->isAdmin() && !Post::find($instanceId)->isOnline();
+        return auth()->user()->isAdmin() && ! Post::find($instanceId)->isOnline();
     }
 }
