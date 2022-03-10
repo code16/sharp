@@ -19,7 +19,7 @@ class EntityListInstanceCommandController extends ApiController
         return response()->json(
             array_merge(
                 $this->getCommandForm($commandHandler),
-                ['data' => $commandHandler->formData($instanceId)],
+                ['data' => $commandHandler->formData($instanceId) ?: null],
             ),
         );
     }
