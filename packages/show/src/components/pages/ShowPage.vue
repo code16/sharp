@@ -64,7 +64,8 @@
             :command="currentCommand"
             :entity-key="entityKey"
             :instance-id="instanceId"
-            ref="commandForm"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
         />
         <CommandViewPanel
             :content="commandViewContent"

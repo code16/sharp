@@ -85,7 +85,8 @@
             :command="currentCommand"
             :entity-key="entityKey"
             :instance-id="currentCommandInstanceId"
-            ref="commandForm"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
         />
         <CommandViewPanel
             :content="commandViewContent"
@@ -587,9 +588,8 @@
                 this.currentCommandInstanceId = instanceId;
                 this.sendCommand(command, {
                     postCommand: data => api.post(endpoint, { query, ...data }, { responseType:'blob' }),
-                    getForm: commandQuery => api.get(`${endpoint}/form`, {
-                        params: { ...query, ...commandQuery },
-                    }).then(response => response.data),
+                    getForm: commandQuery => api.get(`${endpoint}/form`, { params: { ...query, ...commandQuery } })
+                        .then(response => response.data),
                 });
             },
             handleRefreshCommand(data) {
