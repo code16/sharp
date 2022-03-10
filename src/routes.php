@@ -31,8 +31,8 @@ Route::group([
         ->name('code16.sharp.api.dashboard')
         ->middleware(['sharp_api_append_breadcrumb']);
 
-//    Route::get('/dashboard/{dashboardKey}/command/{commandKey}/data', [DashboardCommandController::class, 'show'])
-//        ->name('code16.sharp.api.dashboard.command.data');
+    Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [DashboardCommandController::class, 'show'])
+        ->name('code16.sharp.api.dashboard.command.form');
 
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [DashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');

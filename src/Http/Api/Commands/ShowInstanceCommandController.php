@@ -15,7 +15,7 @@ class ShowInstanceCommandController extends ApiController
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
         return response()->json([
-            'form' => $this->getInstanceCommandForm($commandHandler),
+            'form' => $this->getCommandForm($commandHandler),
             'data' => $commandHandler->formData($instanceId),
         ]);
     }

@@ -10,7 +10,7 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class EntityListEntityCommandController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandleCommandReturn, HandleCommandForm;
 
     public function show(string $entityKey, string $commandKey)
     {
@@ -19,20 +19,9 @@ class EntityListEntityCommandController extends ApiController
         $list->initQueryParams();
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
-        $formFields = $commandHandler->form();
-        $locales = $commandHandler->getDataLocalizations();
 
         return response()->json([
-            'form' => count($formFields)
-                ? array_merge(
-                    [
-                        'config' => $commandHandler->commandFormConfig(),
-                        'fields' => $formFields,
-                        'layout' => $commandHandler->formLayout(),
-                    ],
-                    $locales ? ["locales" => $locales] : []
-                )
-                : null,
+            'form' => $this->getCommandForm($commandHandler),
             'data' => $commandHandler->formData(),
         ]);
     }

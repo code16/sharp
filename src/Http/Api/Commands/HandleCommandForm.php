@@ -2,11 +2,13 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\Dashboard\Commands\DashboardCommand;
+use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 trait HandleCommandForm
 {
-    protected function getInstanceCommandForm(InstanceCommand $commandHandler): ?array
+    protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler): ?array
     {
         if(!count($formFields = $commandHandler->form())) {
             return null;

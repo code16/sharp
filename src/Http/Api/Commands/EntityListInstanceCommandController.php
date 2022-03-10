@@ -17,7 +17,7 @@ class EntityListInstanceCommandController extends ApiController
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
         
         return response()->json([
-            'form' => $this->getInstanceCommandForm($commandHandler),
+            'form' => $this->getCommandForm($commandHandler),
             'data' => $commandHandler->formData($instanceId),
         ]);
     }
