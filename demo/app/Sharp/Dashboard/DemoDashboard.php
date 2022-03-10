@@ -4,6 +4,7 @@ namespace App\Sharp\Dashboard;
 
 use App\Models\Category;
 use App\Models\User;
+use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Carbon\Carbon;
@@ -92,6 +93,14 @@ class DemoDashboard extends SharpDashboard
             PeriodRequiredFilter::class,
         ];
     }
+
+    public function getDashboardCommands(): ?array
+    {
+        return [
+            ExportStatsAsCsvCommand::class,
+        ];
+    }
+
 
     protected function buildWidgetsData(): void
     {
