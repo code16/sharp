@@ -19,7 +19,8 @@
         <CommandFormModal
             :command="currentCommand"
             :entity-key="dashboardKey"
-            ref="commandForm"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
         />
         <CommandViewPanel
             :content="commandViewContent"

@@ -6,13 +6,26 @@ export default {
     data() {
         return {
             currentCommand: null,
-            currentCommandStep: null,
             commandViewContent: null,
             commandEndpoints: {
                 postCommand: null,
                 getForm: null,
             },
+            commandFormProps: {
+                loading: false,
+            },
         }
+    },
+    computed: {
+        commandFormListeners() {
+            return {
+                'submit': this.handleCommandFormSubmitClicked,
+                'close': this.handleCommandFormClosed,
+                'update:loading': loading => {
+                    this.commandFormProps.loading = loading;
+                },
+            }
+        },
     },
     methods: {
         transformCommandForm(form) {
@@ -37,37 +50,45 @@ export default {
             this.handleCommandActionRequested(data.action, data);
             return data;
         },
-        async postCommandForm() {
+        /**
+         * @param {import('sharp-commands').CommandFormModal} commandForm
+         */
+        async postCommandForm(commandForm) {
             const { postCommand } = this.commandEndpoints;
-            const response = await this.$refs.commandForm.submit({
-                postFn: data => postCommand({ data, command_step: this.currentCommandStep }),
+            const response = await commandForm.submit({
+                postFn: data => postCommand({ data, command_step: this.currentCommand.step }),
             });
             const data = await this.handleCommandResponse(response);
+
             if(data?.action === 'step') {
-                this.currentCommandStep = data.step;
+                this.currentCommand = {
+                    ...this.currentCommand,
+                    step: data.step,
+                };
                 await this.showCommandForm(this.currentCommand);
             } else {
                 this.currentCommand = null;
             }
         },
-        async showCommandForm(command) {
+        async getCommandForm() {
             const { getForm } = this.commandEndpoints;
 
-            if(command.has_form) {
-                const form = await withLoadingOverlay(getForm({
-                    command_step: this.currentCommandStep,
-                }));
-                this.currentCommand = {
-                    ...command,
-                    form: this.transformCommandForm(form),
-                };
+            if(this.currentCommand) {
+                this.commandFormProps.loading = true;
+                return getForm({ command_step: this.currentCommand.step })
+                    .finally(() => {
+                        this.commandFormProps.loading = false;
+                    });
             }
 
-            this.$refs.commandForm.$on('submit', this.postCommandForm);
-            this.$refs.commandForm.$once('close', () => {
-                this.$refs.commandForm.$off('submit', this.postCommandForm);
-                this.currentCommand = null;
-            });
+            return withLoadingOverlay(getForm());
+        },
+        async showCommandForm(command) {
+            const form = await this.getCommandForm();
+            this.currentCommand = {
+                ...command,
+                form: this.transformCommandForm(form),
+            };
         },
         async sendCommand(command, { postCommand, getForm }) {
             this.commandEndpoints = { postCommand, getForm };
@@ -125,6 +146,12 @@ export default {
         },
 
         /** Events */
+        handleCommandFormSubmitClicked(commandForm) {
+            this.postCommandForm(commandForm);
+        },
+        handleCommandFormClosed() {
+            this.currentCommand = null;
+        },
         handleCommandViewPanelClosed() {
             this.commandViewContent = null;
         },
@@ -136,12 +163,6 @@ export default {
             'info': this.handleInfoCommand,
             'link': this.handleLinkCommand,
             'view': this.handleViewCommand,
-            'step': this.handleStepCommand,
         });
     },
-    mounted() {
-        if(!this.$refs.commandForm) {
-            console.error('withCommands: CommandForm not found');
-        }
-    }
 }

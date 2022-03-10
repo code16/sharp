@@ -39,11 +39,11 @@
             command: Object,
             entityKey: String,
             instanceId: [Number, String],
+            loading: Boolean,
         },
         data() {
             return {
                 visible: false,
-                loading: false,
             }
         },
         watch: {
@@ -62,14 +62,14 @@
             },
             handleSubmitButtonClicked(e) {
                 e.preventDefault();
-                this.$emit('submit');
+                this.$emit('submit', this);
             },
             handleClosed() {
                 this.$emit('close');
             },
             handleLoadingChanged(loading) {
-                this.loading = loading;
-            }
+                this.$emit('update:loading', loading);
+            },
         },
     }
 </script>
