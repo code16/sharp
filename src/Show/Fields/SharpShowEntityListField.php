@@ -18,7 +18,7 @@ class SharpShowEntityListField extends SharpShowField
     protected bool $showReorderButton = true;
     protected bool $showCreateButton = true;
     protected bool $showSearchField = true;
-    protected bool $showCount = true;
+    protected bool $showCount = false;
     protected ?string $label = null;
 
     public static function make(string $key, string $entityListKey): SharpShowEntityListField
