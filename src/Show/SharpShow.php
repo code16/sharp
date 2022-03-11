@@ -8,6 +8,7 @@ use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
@@ -18,7 +19,8 @@ abstract class SharpShow
         HandleEntityState,
         HandleInstanceCommands,
         HandlePageAlertMessage,
-        HandleCustomBreadcrumb;
+        HandleCustomBreadcrumb,
+        HandleLocalizedFields;
 
     protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;

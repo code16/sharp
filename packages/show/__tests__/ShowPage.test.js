@@ -220,7 +220,7 @@ describe('show page', () => {
             }
         });
         consoleErrorSpy.mockClear();
-        expect(wrapper.vm.fieldOptions('name')).toBe(null);
+        expect(wrapper.vm.fieldOptions('name')).toBeUndefined();
         expect(console.error).toHaveBeenCalled();
     });
 
@@ -249,7 +249,7 @@ describe('show page', () => {
                 fields: () => null,
             }
         });
-        expect(wrapper.vm.fieldValue({ key:'name' })).toBe(null);
+        expect(wrapper.vm.fieldValue({ key:'name' })).toBeUndefined();
         expect(console.error).toHaveBeenCalled();
     });
 

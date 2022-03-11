@@ -1,6 +1,6 @@
-# Form data localization
+# Data localization in Forms and Shows
 
-Sharp can help in data localization handling. But first, let's start mentionning that it could be perfectly fine to handle data localization with a `locale` field in a Model, and a [List Filter](filters.md): we can call this a full separated localization strategy, where each instance is in one locale only.
+Sharp can help in data localization handling, both in the Form and in the Show. But first, let's mention that it could be perfectly fine to handle data localization with a `locale` field in a Model, and a [List Filter](filters.md): we can call this a full separated localization strategy, where each instance is in one locale only.
 
 This chapter is about another strategy, where a `Book` can have English and French title and summary, but a common author name and cover picture.
 
@@ -21,10 +21,9 @@ class SpaceshipSharpForm extends SharpForm
 }
 ```
 
-
 ## Configure the form fields
 
-Next, each localized field must be marqued, using `setLocalized()`:
+Next, each localized field must be marked, using `setLocalized()`:
 
 ```php
 function buildFormFields()
@@ -35,6 +34,12 @@ function buildFormFields()
             ->setLabel("Name")
 }
 ```
+
+Once one field at least is localized, here's what appears on the front side:
+
+![Form field localization](./img/form-localization.png))
+
+A global locale selector is added, as well as individual ones on each localized field.
 
 ## Transform the data accordingly
 
@@ -56,7 +61,6 @@ function find($id): array
         );
 }
 ```
-
 
 The `update()` method should of course be updated too:
 
@@ -95,18 +99,15 @@ class Book extends Model
 
 And since the package, like other, is using this array with locales convention, it should work right away, without any tricks in the Sharp Form:
 
-
 ```php
 function find($id): array
 {
     return $this->transform(Book::findOrFail($id));
 }
 
-
 function update($id, array $data)
 {
     $instance = $id ? Book::findOrFail($id) : new Book;
-
     $this->save($instance, $data);
 
     return $instance->id;
@@ -115,7 +116,7 @@ function update($id, array $data)
 
 ## Validation
 
-Validation is not more complicated, and allows to differenciate rules between locales:
+Validation allows differentiating rules between locales:
 
 ```php
 public function rules()
@@ -126,9 +127,28 @@ public function rules()
 }
 ```
 
+## Display locales on the Show
 
-## The front side
+First, like expressed before, a solution could be to display both versions for each localized field, mentioning the locale in the field label:
 
-On the front side of the Form, here's how localized fields are displayed:
+![Form field localization](./img/form-localization.png))
 
-\[TODO add screenshot\]
+But you can also let Sharp display a locale selector, by configuring locales, defining which fields are localized, and transforming data accordingly, very much like for the Form (see above):
+
+```php
+protected function buildShowFields(FieldsContainer $showFields): void
+{
+    $showFields->addField(
+        SharpShowTextField::make('title')
+            ->setLabel('Title')
+            ->setLocalized()
+    );
+}
+
+[...]
+
+public function getDataLocalizations(): array
+{
+    return ['en', 'fr'];
+}
+```

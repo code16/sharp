@@ -1,4 +1,9 @@
 .ShowPage {
+  --content-margin-top: 2rem;
+
+  &__content {
+    margin-top: var(--content-margin-top);
+  }
 
   &__section {
     margin-bottom: 2rem;
@@ -18,5 +23,9 @@
     &:first-child {
       margin-top: 0;
     }
+  }
+
+  &--localized {
+    --content-margin-top: 1.25rem;
   }
 }
