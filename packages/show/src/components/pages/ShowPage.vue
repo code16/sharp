@@ -76,7 +76,8 @@
             :command="currentCommand"
             :entity-key="entityKey"
             :instance-id="instanceId"
-            ref="commandForm"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
         />
         <CommandViewPanel
             :content="commandViewContent"
@@ -228,9 +229,8 @@
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
-                    postCommand: () => this.$store.dispatch('show/postCommand', { command }),
-                    postForm: data => this.$store.dispatch('show/postCommand', { command, data }),
-                    getForm: () => this.$store.dispatch('show/getCommandForm', { command }),
+                    postCommand: data => this.$store.dispatch('show/postCommand', { command, data }),
+                    getForm: commandQuery => this.$store.dispatch('show/getCommandForm', { command, query: { ...commandQuery } }),
                 });
             },
             handleStateChanged(state) {

@@ -104,11 +104,12 @@ export default {
                 data,
             });
         },
-        getCommandForm({ state }, { command }) {
+        getCommandForm({ state }, { command, query }) {
             return getShowCommandForm({
                 entityKey: state.entityKey,
                 instanceId: state.instanceId,
                 commandKey: command.key,
+                query,
             });
         },
         postState({ state, getters }, value) {

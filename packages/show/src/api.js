@@ -7,13 +7,16 @@ export function getShowView({ entityKey, instanceId }) {
 
 export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
     return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
-        data,
+        ...data,
     }, { responseType: 'blob' });
 }
 
-export function getShowCommandForm({ entityKey, instanceId, commandKey }) {
-    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/form`)
-        .then(response => response.data);
+export function getShowCommandForm({ entityKey, instanceId, commandKey, query }) {
+    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/form`, {
+        params: {
+            ...query,
+        },
+    }).then(response => response.data);
 }
 
 export function postShowState({ entityKey, instanceId, value }) {

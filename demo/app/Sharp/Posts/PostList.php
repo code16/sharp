@@ -3,6 +3,8 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\ComposeEmailWithPostsWizardCommand;
+use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\DateTimeCustomTransformer;
 use App\Sharp\Utils\Filters\AuthorFilter;
@@ -88,6 +90,14 @@ class PostList extends SharpEntityList
     {
         return [
             PreviewPostCommand::class,
+            EvaluateDraftPostWizardCommand::class,
+        ];
+    }
+
+    protected function getEntityCommands(): ?array
+    {
+        return [
+            ComposeEmailWithPostsWizardCommand::class,
         ];
     }
 

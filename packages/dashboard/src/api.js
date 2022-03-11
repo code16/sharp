@@ -11,7 +11,7 @@ export function getDashboard({ dashboardKey, filters }) {
 export function postDashboardCommand({ dashboardKey, commandKey, query, data }) {
     return api.post(`dashboard/${dashboardKey}/command/${commandKey}`, {
         query,
-        data,
+        ...data,
     }, { responseType: 'blob' });
 }
 

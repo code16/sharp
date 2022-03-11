@@ -63,12 +63,12 @@ export default {
                 filtersValues,
             });
         },
-        postCommand({ state }, { command, data, query }) {
+        postCommand({ state }, { command, query, data }) {
             return postDashboardCommand({
                 dashboardKey: state.dashboardKey,
                 commandKey: command.key,
-                data,
                 query,
+                data,
             });
         },
         getCommandForm({ state }, { command, query }) {

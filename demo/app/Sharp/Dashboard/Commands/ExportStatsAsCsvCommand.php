@@ -16,7 +16,7 @@ class ExportStatsAsCsvCommand extends DashboardCommand
 
     public function buildCommandConfig(): void
     {
-        $this->configurePageAlert('For the period {{start}} - {{end}}', static::$pageAlertLevelInfo, 'period');
+        $this->configurePageAlert('For the period {{start}} - {{end}}', null, 'period');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
