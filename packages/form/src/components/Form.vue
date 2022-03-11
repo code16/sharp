@@ -132,7 +132,11 @@
             }
         },
         watch: {
-            'form': 'init',
+            form() {
+                if(this.independant) {
+                    this.init();
+                }
+            },
         },
         computed: {
             apiPath() {
