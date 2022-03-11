@@ -14,7 +14,8 @@
             @change="handleChanged"
         >
             <template v-slot:action-bar="{ props, listeners }">
-                <ActionBar class="ShowEntityListField__action-bar"
+                <ActionBar
+                    class="ShowEntityListField__action-bar"
                     v-bind="props"
                     v-on="listeners"
                     :collapsed="collapsed"
@@ -22,18 +23,33 @@
                     :has-active-query="hasActiveQuery"
                 >
                     <template v-if="hasCollapse">
-                        <details :open="!collapsed" @toggle="handleDetailsToggle">
-                            <summary>
-                                <h2 class="ShowEntityListField__label ShowSection__title mb-0 d-inline-block">
-                                    {{ label || ' ' }}
-                                </h2>
-                            </summary>
-                        </details>
+                        <div class="ShowSection__header ShowSection__header--collapsable position-relative">
+                            <div class="row align-items-center gx-0 h-100">
+                                <div class="col-auto">
+                                    <details :open="!collapsed" @toggle="handleDetailsToggle">
+                                        <summary class="stretched-link">
+                                            <span class="visually-hidden">{{ label }}</span>
+                                        </summary>
+                                    </details>
+                                </div>
+                                <div class="col">
+                                    <EntityListTitle :count="showCount ? props.count : null">
+                                        <h2 class="ShowEntityListField__label ShowSection__title mb-0">
+                                            {{ label }}
+                                        </h2>
+                                    </EntityListTitle>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                     <template v-else>
-                        <h2 class="ShowEntityListField__label ShowSection__title mb-0">
-                            {{ label }}
-                        </h2>
+                        <div class="ShowSection__header d-grid">
+                            <EntityListTitle :count="showCount ? props.count : null">
+                                <h2 class="ShowEntityListField__label ShowSection__title mb-0">
+                                    {{ label }}
+                                </h2>
+                            </EntityListTitle>
+                        </div>
                     </template>
                 </ActionBar>
             </template>
@@ -45,17 +61,17 @@
     import { entitiesMatch } from "sharp";
     import { getReferrerRoute } from "sharp/router";
     import { Localization } from "sharp/mixins";
-    import { EntityList, entityListModule } from 'sharp-entity-list';
+    import { EntityList, EntityListTitle, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
 
     import ActionBar from "./ActionBar";
     import FieldLayout from "../../FieldLayout";
     import { syncVisibility } from "../../../util/fields/visiblity";
 
-
     export default {
         mixins: [Localization],
         components: {
+            EntityListTitle,
             EntityList,
             CommandsDropdown,
             ActionBar,
@@ -68,6 +84,7 @@
             showReorderButton: Boolean,
             showSearchField: Boolean,
             showEntityState: Boolean,
+            showCount: Boolean,
             hiddenFilters: Object,
             hiddenCommands: Object,
             label: String,

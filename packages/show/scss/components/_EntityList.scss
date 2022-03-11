@@ -1,7 +1,9 @@
-.ShowEntityListField {
 
+.ShowEntityListField {
   --global-message-margin-top: .5rem;
   --global-message-margin-bottom: 1.5rem;
+  --entity-list-title-info-opacity: .5;
+  --entity-list-title-font-size: .75rem;
 
   .SharpDataList__table {
     border: 0;
@@ -11,12 +13,6 @@
   }
 
   &__action-bar {
-    .action-bar__row {
-      min-height: 2.5rem;
-      .action-bar__row {
-        min-height: auto;
-      }
-    }
     .SharpButton--secondary-accent {
       border-color: $ui-04;
     }
