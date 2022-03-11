@@ -70,11 +70,6 @@ trait IsWizardCommand
         }
     }
 
-    protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
-    {
-        throw new SharpMethodNotImplementedException();
-    }
-
     protected function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
     {
         // You can either implement this method and test $step (quick for small commands)

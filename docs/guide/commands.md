@@ -1,4 +1,4 @@
-# Commands
+# Write a Command
 
 Commands in Sharp are a powerful way to integrate functional processes in the content management. They can be used for instance to re-send an order to the customer, on synchronize pictures of a product, or preview a page...
 
