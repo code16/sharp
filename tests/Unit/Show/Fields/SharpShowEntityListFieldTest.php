@@ -12,17 +12,21 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey');
 
-        $this->assertEquals([
-            'key' => 'entityListField',
-            'type' => 'entityList',
-            'entityListKey' => 'entityKey',
-            'showEntityState' => true,
-            'showCreateButton' => true,
-            'showReorderButton' => true,
-            'showSearchField' => true,
-            'emptyVisible' => false,
-            'hiddenCommands' => ['entity' => [], 'instance' => []],
-        ], $field->toArray());
+        $this->assertEquals(
+            [
+                'key' => 'entityListField',
+                'type' => 'entityList',
+                'entityListKey' => 'entityKey',
+                'showEntityState' => true,
+                'showCreateButton' => true,
+                'showReorderButton' => true,
+                'showSearchField' => true,
+                'emptyVisible' => false,
+                'showCount' => false,
+                'hiddenCommands' => ['entity' => [], 'instance' => []],
+            ],
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -31,11 +35,14 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideFilterWithValue('f1', 'value1');
 
-        $this->assertArraySubset([
-            'hiddenFilters' => [
-                'f1' => 'value1',
+        $this->assertArraySubset(
+            [
+                'hiddenFilters' => [
+                    'f1' => 'value1',
+                ],
             ],
-        ], $field->toArray());
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -46,11 +53,14 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                 return 'computed';
             });
 
-        $this->assertArraySubset([
-            'hiddenFilters' => [
-                'f1' => 'computed',
+        $this->assertArraySubset(
+            [
+                'hiddenFilters' => [
+                    'f1' => 'computed',
+                ],
             ],
-        ], $field->toArray());
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -59,9 +69,10 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showEntityState(false);
 
-        $this->assertArraySubset([
-            'showEntityState' => false,
-        ], $field->toArray());
+        $this->assertArraySubset(
+            ['showEntityState' => false],
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -70,9 +81,10 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showReorderButton(false);
 
-        $this->assertArraySubset([
-            'showReorderButton' => false,
-        ], $field->toArray());
+        $this->assertArraySubset(
+            ['showReorderButton' => false],
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -81,9 +93,10 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showCreateButton(false);
 
-        $this->assertArraySubset([
-            'showCreateButton' => false,
-        ], $field->toArray());
+        $this->assertArraySubset(
+            ['showCreateButton' => false],
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -92,9 +105,22 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->showSearchField(false);
 
-        $this->assertArraySubset([
-            'showSearchField' => false,
-        ], $field->toArray());
+        $this->assertArraySubset(
+            ['showSearchField' => false],
+            $field->toArray(),
+        );
+    }
+
+    /** @test */
+    public function we_can_define_showCount()
+    {
+        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+            ->showCount();
+
+        $this->assertArraySubset(
+            ['showCount' => true],
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -103,23 +129,29 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideEntityCommand(['c1', 'c2']);
 
-        $this->assertArraySubset([
-            'hiddenCommands' => [
-                'entity' => [
-                    'c1', 'c2',
+        $this->assertArraySubset(
+            [
+                'hiddenCommands' => [
+                    'entity' => [
+                        'c1', 'c2',
+                    ],
                 ],
             ],
-        ], $field->toArray());
+            $field->toArray(),
+        );
 
         $field->hideEntityCommand('c3');
 
-        $this->assertArraySubset([
-            'hiddenCommands' => [
-                'entity' => [
-                    'c1', 'c2', 'c3',
+        $this->assertArraySubset(
+            [
+                'hiddenCommands' => [
+                    'entity' => [
+                        'c1', 'c2', 'c3',
+                    ],
                 ],
             ],
-        ], $field->toArray());
+            $field->toArray(),
+        );
     }
 
     /** @test */
@@ -128,22 +160,28 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')
             ->hideInstanceCommand(['c1', 'c2']);
 
-        $this->assertArraySubset([
-            'hiddenCommands' => [
-                'instance' => [
-                    'c1', 'c2',
+        $this->assertArraySubset(
+            [
+                'hiddenCommands' => [
+                    'instance' => [
+                        'c1', 'c2',
+                    ],
                 ],
             ],
-        ], $field->toArray());
+            $field->toArray(),
+        );
 
         $field->hideInstanceCommand('c3');
 
-        $this->assertArraySubset([
-            'hiddenCommands' => [
-                'instance' => [
-                    'c1', 'c2', 'c3',
+        $this->assertArraySubset(
+            [
+                'hiddenCommands' => [
+                    'instance' => [
+                        'c1', 'c2', 'c3',
+                    ],
                 ],
             ],
-        ], $field->toArray());
+            $field->toArray(),
+        );
     }
 }
