@@ -2,7 +2,17 @@
     <div class="SharpDashboardPage">
         <template v-if="ready">
             <div class="container">
-                <ActionBarDashboard :commands="commands" @command="handleCommandRequested" />
+                <ActionBarDashboard
+                    :commands="commands"
+                    @command="handleCommandRequested"
+                />
+                <template v-if="config.globalMessage">
+                    <GlobalMessage
+                        :options="config.globalMessage"
+                        :data="data"
+                        :fields="fields"
+                    />
+                </template>
                 <Grid :rows="layout.rows" row-class="gx-3" v-slot="{ itemLayout }">
                     <Widget
                         :widget-type="widgets[itemLayout.key].type"
@@ -30,7 +40,7 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { Grid, ActionBar } from 'sharp-ui';
+    import { Grid, ActionBar, GlobalMessage, } from 'sharp-ui';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { withCommands } from "sharp/mixins";
     import { withLoadingOverlay } from "sharp";
@@ -46,6 +56,7 @@
             Widget,
             ActionBar,
             ActionBarDashboard,
+            GlobalMessage,
             CommandFormModal,
             CommandViewPanel,
         },
@@ -62,7 +73,9 @@
             ...mapState('dashboard', {
                 data: state => state.data,
                 widgets: state => state.widgets,
-                layout: state => state.layout
+                layout: state => state.layout,
+                config: state => state.config,
+                fields: state => state.fields,
             }),
             ...mapGetters('dashboard', {
                 filtersValues: 'filters/values',

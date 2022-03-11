@@ -53,9 +53,7 @@ abstract class SharpShow
     public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
-            ->merge([
-                'multiformAttribute' => $this->multiformAttribute,
-            ])
+            ->merge(['multiformAttribute' => $this->multiformAttribute])
             ->all();
 
         return tap($config, function (&$config) use ($instanceId) {
