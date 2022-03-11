@@ -90,11 +90,11 @@ class SharpShowEntityListField extends SharpShowField
 
         return $this;
     }
-    
+
     public function showCount(bool $showCount = true): self
     {
         $this->showCount = $showCount;
-        
+
         return $this;
     }
 
