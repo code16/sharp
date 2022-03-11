@@ -62,23 +62,19 @@
 </template>
 
 <script>
-    import {
-        getBackUrl,
-        logError,
-        showAlert,
-    } from "sharp";
+  import { getBackUrl, logError, showAlert, } from "sharp";
 
-    import { TabbedLayout, Grid, Dropdown, DropdownItem, GlobalMessage } from 'sharp-ui';
-    import { Localization, DynamicView } from 'sharp/mixins';
+  import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+  import { DynamicView, Localization } from 'sharp/mixins';
 
-    import FieldsLayout from './ui/FieldsLayout';
-    import LocaleSelect from './ui/LocaleSelect';
-    import localize from '../mixins/localize/form';
+  import FieldsLayout from './ui/FieldsLayout';
+  import LocaleSelect from './ui/LocaleSelect';
+  import localize from '../mixins/localize/form';
 
-    import { getDependantFieldsResetData, transformFields } from "../util";
+  import { getDependantFieldsResetData, transformFields } from "../util";
 
 
-    const noop = ()=>{};
+  const noop = ()=>{};
 
     export default {
         name:'SharpForm',
@@ -134,6 +130,13 @@
                 uploadingFields: {},
                 curFieldsetId: 0,
             }
+        },
+        watch: {
+            form() {
+                if(this.independant) {
+                    this.init();
+                }
+            },
         },
         computed: {
             apiPath() {

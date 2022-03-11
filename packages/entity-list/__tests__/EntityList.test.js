@@ -767,8 +767,7 @@ describe('EntityList', () => {
             wrapper.vm.handleCommandRequested('command', { endpoint:'endpoint' });
             expect(wrapper.vm.sendCommand).toHaveBeenCalledWith('command', expect.objectContaining({
                 postCommand: expect.any(Function),
-                postForm: expect.any(Function),
-                getFormData: expect.any(Function),
+                getForm: expect.any(Function),
             }));
         });
 

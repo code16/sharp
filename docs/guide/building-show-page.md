@@ -4,12 +4,9 @@ sidebarDepth: 3
 
 # Building a Show Page
 
-Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to
-interact with it through Commands.
+Between an Entity List and a Form, you might want to add a Show page to display a whole instance, and allow the user to interact with it through Commands.
 
-Note that building a Show Page is really optional; but in some situations it could be really helpful to add this layer —
-and it can be even a must-have when dealing with "single" resources, such as a personal account, or a configuration
-entity, for which it's weird to build an Entity List.
+Note that building a Show Page is really optional; but in some situations it could be really helpful to add this layer — and it can be even a must-have when dealing with "single" resources, such as a personal account, or a configuration entity, for which it's weird to build an Entity List.
 
 ## Generator
 
@@ -21,19 +18,16 @@ php artisan sharp:make:show-page <class_name> [--model=<model_name>]
 
 First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\SharpShow`; and we'll have to implement:
 
-- `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields
-  presenting the instance.
+- `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields presenting the instance.
 
 - `find($id): array` to retrieve the instance.
-
 - `buildShowConfig()` (optional).
 
 In detail:
 
 ### `buildShowFields(FieldsContainer $showFields): void`
 
-Very much like Form's `buildFormFields()`, this method is meant to host the code responsible for the declaration and
-configuration of each show field. This must be done by calling `$showFields->addField`:
+Very much like Form's `buildFormFields()`, this method is meant to host the code responsible for the declaration and configuration of each show field. This must be done by calling `$showFields->addField`:
 
 ```php
 function buildShowFields(FieldsContainer $showFields): void
@@ -53,8 +47,7 @@ function buildShowFields(FieldsContainer $showFields): void
 
 Each available Show field is detailed below; here are the attributes they all share:
 
-- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not
-  displayed at all in the Show UI. You can change this behaviour with this attribute.
+- `setShowIfEmpty(bool $show = true): self`: by default, an empty field (meaning: with null or empty data) is not displayed at all in the Show UI. You can change this behaviour with this attribute.
 
 #### Available simple Show fields
 
@@ -62,7 +55,6 @@ Each available Show field is detailed below; here are the attributes they all sh
 - [Picture](show-fields/picture.md)
 - [File](show-fields/file.md)
 - [List](show-fields/list.md)
-
 
 #### Embedding an Entity List in a Show
 
@@ -77,21 +69,14 @@ function buildShowFields(FieldsContainer $showFields): void
 }
 ```
 
-Sharp will consider this as a regular Entity List, meaning it will look for a `sharp.entities.pilot.list` config key
-containing an EntityList class name, build it and display it the Show as a field (see below for layout), with the full
-feature set of an Entity List: filters, commands, reorder, entity state, search...
+Sharp will consider this as a regular Entity List, meaning it will look for a `sharp.entities.pilot.list` config key containing an EntityList class name, build it and display it the Show as a field (see below for layout), with the full feature set of an Entity List: filters, commands, reorder, entity state, search...
 
-Clicking a row in the EntityList can lead to whatever you've configured for this entity: a Show Page or a Form. Sharp
-will maintain a navigation breadcrumb under the hood to, in this case, get back to the spaceship Show after a pilot
-update.
+Clicking a row in the EntityList can lead to whatever you've configured for this entity: a Show Page or a Form. Sharp will maintain a navigation breadcrumb under the hood to, in this case, get back to the spaceship Show after a pilot update.
 
 Notice that you have three possibilities for the actual code of this EntityList:
 
-- if you want to have a "pilots" entity in the main menu, you can reuse the same EntityList instance for the Show Page (
-  and configure it to scope the data, as we'll discuss below),
-
+- if you want to have a "pilots" entity in the main menu, you can reuse the same EntityList instance for the Show Page (and configure it to scope the data, as we'll discuss below),
 - or you can build a specific EntityList without declaring it in the main menu,
-
 - or you can have both, making the spaceship Show version of the  pilots EntityList extend the other.
 
 As always with Sharp, implementation is up to you.
@@ -102,8 +87,7 @@ But at this stage we still have a major issue: how to scope the data of the Enti
 
 ### `buildShowLayout(ShowLayout $showLayout): void`
 
-The show layout is a simplified version of the Form layout, and is made of sections which contains `columns` of `fields`
-.
+The show layout is a simplified version of the Form layout, and is made of sections which contains `columns` of `fields`.
 
 #### Sections
 
@@ -156,8 +140,7 @@ function buildShowLayout(ShowLayout $showLayout): void
 }
 ```
 
-A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report
-to the [Form layout documentation](building-form.md#buildformlayout) to find out how.
+A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single field rows and multi fields rows. Report to the [Form layout documentation](building-form.md#buildformlayout) to find out how.
 
 #### SharpShowListField's layout
 
@@ -241,28 +224,23 @@ function buildShowConfig()
 
 Here is the full list of available methods:
 
-- `configureBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute)`: declare the data attribute to use for the
-  breadcrumb; [see detailed doc](sharp-breadcrumb.md)
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
-  display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
+- `configureBreadcrumbCustomLabelAttribute(string $breadcrumbAttribute)`: declare the data attribute to use for the breadcrumb; [see detailed doc](sharp-breadcrumb.md)
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
   toggle, [see detailed doc](entity-states.md)
 
 ## Accessing the navigation breadcrumb
 
-A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation
-from there. Taking back our spaceship / pilots example, we may need to add a pilot to the spaceship. Question is: how
-can we attach a newly created pilot to a spaceship?
+A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation from there. Taking back our spaceship / pilots example, we may need to add a pilot to the spaceship. Question is: how can we attach a newly created pilot to a spaceship?
 
-Answer is: accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with
-its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
+Answer is: accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
 
 ```php
 class PilotSharpForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater, WithSharpContext;
 
-    [...]
+    // ...
 
     function update($id, array $data)
     {
@@ -282,4 +260,4 @@ class PilotSharpForm extends SharpForm
 
 ## Declare the Show Page
 
-The show Page must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).
+The show Page must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md).

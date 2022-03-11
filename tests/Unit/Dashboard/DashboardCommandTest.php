@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Unit\Dashboard;
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -36,26 +35,29 @@ class DashboardCommandTest extends SharpTestCase
 
         $dashboard->buildDashboardConfig();
 
-        $this->assertArraySubset([
-            'commands' => [
-                'dashboard' => [
-                    [
+        $this->assertArraySubset(
+            [
+                'commands' => [
+                    'dashboard' => [
                         [
-                            'key' => 'dashboardCommand',
-                            'label' => 'My Dashboard Command',
-                            'type' => 'dashboard',
-                            'authorization' => true,
+                            [
+                                'key' => 'dashboardCommand',
+                                'label' => 'My Dashboard Command',
+                                'type' => 'dashboard',
+                                'authorization' => true,
+                            ],
                         ],
                     ],
                 ],
             ],
-        ], $dashboard->dashboardConfig());
+            $dashboard->dashboardConfig(),
+        );
     }
 
     /** @test */
-    public function we_can_define_a_form_on_a_dashboard_command()
+    public function we_can_define_that_the_dashboard_command_has_a_form()
     {
-        $list = new class extends FakeSharpDashboard
+        $dashboard = new class extends FakeSharpDashboard
         {
             public function getDashboardCommands(): ?array
             {
@@ -72,11 +74,6 @@ class DashboardCommandTest extends SharpTestCase
                             $formFields->addField(SharpFormTextField::make('message'));
                         }
 
-                        public function buildFormLayout(FormLayoutColumn &$column): void
-                        {
-                            $column->withSingleField('message');
-                        }
-
                         public function execute(array $data = []): array
                         {
                         }
@@ -85,33 +82,25 @@ class DashboardCommandTest extends SharpTestCase
             }
         };
 
-        $list->buildDashboardConfig();
+        $dashboard->buildDashboardConfig();
 
-        $this->assertArraySubset([
-            'commands' => [
-                'dashboard' => [
-                    [
+        $this->assertArraySubset(
+            [
+                'commands' => [
+                    'dashboard' => [
                         [
-                            'key' => 'dashboardCommand',
-                            'label' => 'My Dashboard Command',
-                            'type' => 'dashboard',
-                            'form' => [
-                                'fields' => [
-                                    'message' => [
-                                        'key' => 'message',
-                                        'type' => 'text',
-                                        'inputType' => 'text',
-                                    ],
-                                ],
-                                'layout' => [
-                                    [['key' => 'message', 'size' => 12, 'sizeXS' => 12]],
-                                ],
+                            [
+                                'key' => 'dashboardCommand',
+                                'label' => 'My Dashboard Command',
+                                'type' => 'dashboard',
+                                'has_form' => true,
                             ],
                         ],
                     ],
                 ],
             ],
-        ], $list->dashboardConfig());
+            $dashboard->dashboardConfig(),
+        );
     }
 
     // Note: all other command test already are in SharpEntityListCommandTest

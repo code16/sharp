@@ -4,6 +4,7 @@ namespace App\Sharp\Dashboard;
 
 use App\Models\Category;
 use App\Models\User;
+use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Carbon\Carbon;
@@ -93,6 +94,21 @@ class DemoDashboard extends SharpDashboard
         ];
     }
 
+    public function getDashboardCommands(): ?array
+    {
+        return [
+            ExportStatsAsCsvCommand::class,
+        ];
+    }
+
+    public function buildDashboardConfig(): void
+    {
+        $this->configurePageAlert(
+            'Graphs below are delimited by period {{period}} (and yes, visits figures are randomly generated)',
+            static::$pageAlertLevelSecondary,
+        );
+    }
+
     protected function buildWidgetsData(): void
     {
         $this->setPieGraphDataSet();
@@ -110,7 +126,14 @@ class DemoDashboard extends SharpDashboard
             )
             ->setPanelData(
                 'online_panel', ['count' => $posts->where('state', 'online')->first()->count ?? 0],
-            );
+            )
+            ->setPageAlertData([
+                'period' => sprintf(
+                    '%s - %s',
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
+                ),
+            ]);
     }
 
     protected function setLineGraphDataSet(): void

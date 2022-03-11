@@ -1,35 +1,22 @@
 <template>
     <ActionBar class="SharpActionBarList">
         <template v-slot:left>
-            <div class="ui-font-size">
-                <div class="row align-items-center gx-1">
-                    <template v-if="currentEntity">
-                        <div class="col-sm-auto">
-                            <div class="ui-title-font">
-                                <div class="row flex-nowrap gx-2">
-                                    <div class="col-auto">
-                                        <i class="fa" :class="currentEntity.icon"></i>
-                                    </div>
-                                    <div class="col">
-                                        {{ currentEntity.label }}
-                                    </div>
-                                </div>
+            <EntityListTitle :count="count" :search="search">
+                <template v-if="currentEntity">
+                    <div class="ui-font-size">
+                        <div class="row align-items-center flex-nowrap gx-2">
+                            <div class="col-auto">
+                                <i class="fa" :class="currentEntity.icon"></i>
+                            </div>
+                            <div class="col">
+                                <h1 class="ui-title-font mb-0" style="font-size: inherit">
+                                    {{ currentEntity.label }}
+                                </h1>
                             </div>
                         </div>
-                    </template>
-                    <div class="col">
-                        <div class="small" style="opacity: .75">
-                            &bull;
-                            <span class="text-nowrap">{{ count }} {{ l('action_bar.list.items_count') }}</span>
-                            <template v-if="search">
-                                <span>
-                                    &bull; {{ searchLabel }}
-                                </span>
-                            </template>
-                        </div>
                     </div>
-                </div>
-            </div>
+                </template>
+            </EntityListTitle>
         </template>
         <template v-slot:right>
             <div class="row justify-content-end flex-nowrap gx-3 gx-md-4">
@@ -119,6 +106,7 @@
 
     import { Localization } from 'sharp/mixins';
     import MultiformDropdown from "./MultiformDropdown";
+    import EntityListTitle from "./EntityListTitle";
 
     export default {
         name: 'SharpActionBarList',
@@ -126,6 +114,7 @@
         mixins: [Localization],
 
         components : {
+            EntityListTitle,
             MultiformDropdown,
             ActionBar,
             Dropdown,
@@ -156,9 +145,6 @@
             },
             currentEntity() {
                 return this.$store.state.currentEntity;
-            },
-            searchLabel() {
-                return lang('action_bar.list.search.title').replace(':search', this.search);
             },
         },
         methods: {
