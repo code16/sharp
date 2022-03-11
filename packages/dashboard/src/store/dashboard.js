@@ -1,7 +1,7 @@
 import {
     getDashboard,
     postDashboardCommand,
-    getDashboardCommandFormData,
+    getDashboardCommandForm,
 } from "../api";
 import { filtersModule as filters } from 'sharp-filters';
 import { commandsModule as commands } from 'sharp-commands';
@@ -71,8 +71,8 @@ export default {
                 query,
             });
         },
-        getCommandFormData({ state }, { command, query }) {
-            return getDashboardCommandFormData({
+        getCommandForm({ state }, { command, query }) {
+            return getDashboardCommandForm({
                 dashboardKey: state.dashboardKey,
                 commandKey: command.key,
                 query,

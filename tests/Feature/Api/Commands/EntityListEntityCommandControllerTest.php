@@ -12,7 +12,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class EntityCommandControllerTest extends BaseApiTest
+class EntityListEntityCommandControllerTest extends BaseApiTest
 {
     protected function setUp(): void
     {
@@ -194,26 +194,100 @@ class EntityCommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_get_the_form_of_the_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->getJson('/sharp/api/list/person/command/entity_form/form')
+            ->assertOk()
+            ->assertJsonFragment([
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
+                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function we_can_configure_a_global_message_on_an_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->getJson('/sharp/api/list/person/command/entity_global_message/form')
+            ->assertOk()
+            ->assertJsonFragment([
+                'config' => [
+                    'globalMessage' => [
+                        'fieldKey' => 'global_message',
+                        'alertLevel' => null,
+                    ],
+                ],
+                'fields' => [
+                    'global_message' => [
+                        'key' => 'global_message',
+                        'type' => 'html',
+                        'emptyVisible' => false,
+                        'template' => 'template',
+                    ],
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
+                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                ],
+                'data' => null,
+            ]);
+    }
+
+    /** @test */
+    public function we_can_get_a_localized_form_of_the_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->getJson('/sharp/api/list/person/command/entity_form_localized/form')
+            ->assertOk()
+            ->assertJsonFragment([
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
+                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                ],
+                'locales' => ['fr', 'en', 'it'],
+            ]);
+    }
+
+    /** @test */
     public function we_can_initialize_form_data_in_an_entity_command()
     {
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $response = $this
-            ->getJson('/sharp/api/list/person')
-            ->assertOk()
-            ->json();
-
-        $this->assertTrue(
-            collect($response['config']['commands']['entity'][0])
-                ->where('key', 'entity_with_init_data')
-                ->first()['fetch_initial_data'],
-        );
-
         $this
-            ->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
+            ->getJson('/sharp/api/list/person/command/entity_with_init_data/form')
             ->assertOk()
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'data' => [
                     'name' => 'John Wayne',
                 ],
@@ -313,6 +387,48 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                     $this->validate($data, ['name' => 'required']);
 
                     return $this->reload();
+                }
+            },
+            'entity_global_message' => new class() extends EntityCommand
+            {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function buildCommandConfig(): void
+                {
+                    $this->configurePageAlert('template', null, 'global_message');
+                }
+
+                public function buildFormFields(FieldsContainer $formFields): void
+                {
+                    $formFields->addField(SharpFormTextField::make('name'));
+                }
+
+                public function execute(array $data = []): array
+                {
+                }
+            },
+            'entity_form_localized' => new class() extends EntityCommand
+            {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function buildFormFields(FieldsContainer $formFields): void
+                {
+                    $formFields->addField(SharpFormTextField::make('name'));
+                }
+
+                public function execute(array $data = []): array
+                {
+                }
+
+                public function getDataLocalizations(): array
+                {
+                    return ['fr', 'en', 'it'];
                 }
             },
             'entity_download' => new class() extends EntityCommand

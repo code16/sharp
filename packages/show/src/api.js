@@ -11,9 +11,9 @@ export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
     }, { responseType: 'blob' });
 }
 
-export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
-    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/data`)
-        .then(response => response.data.data);
+export function getShowCommandForm({ entityKey, instanceId, commandKey }) {
+    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/form`)
+        .then(response => response.data);
 }
 
 export function postShowState({ entityKey, instanceId, value }) {

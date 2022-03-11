@@ -31,15 +31,26 @@ class DashboardCommandControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_initialize_form_data_in_an_dashboard_command()
+    public function we_can_get_form_and_initialize_form_data_in_an_dashboard_command()
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/data')
-            ->assertStatus(200)
+        $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/form')
+            ->assertOk()
             ->assertJson([
                 'data' => [
                     'name' => 'John Wayne',
+                ],
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
+                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
             ]);
     }
