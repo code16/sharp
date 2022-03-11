@@ -4,7 +4,9 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DataLocalizationTest extends BaseApiTest
@@ -75,6 +77,18 @@ class DataLocalizationTest extends BaseApiTest
         $this->getJson('/sharp/api/form/person/50')
             ->assertJson(['locales' => ['fr', 'en']]);
     }
+
+    /** @test */
+    public function we_add_the_locales_array_if_configured_to_the_show()
+    {
+        $this->app['config']->set(
+            'sharp.entities.person.show',
+            DataLocalizationTestShow::class,
+        );
+
+        $this->getJson('/sharp/api/show/person/50')
+            ->assertJson(['locales' => ['fr', 'en']]);
+    }
 }
 
 class DataLocalizationTestForm extends PersonSharpForm
@@ -108,6 +122,19 @@ class DataLocalizationWithLocalizedFormListTestForm extends PersonSharpForm
                     SharpFormTextField::make('name')->setLocalized(),
                 ),
         );
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['fr', 'en'];
+    }
+}
+
+class DataLocalizationTestShow extends PersonSharpShow
+{
+    public function buildShowFields(FieldsContainer $showFields): void
+    {
+        $showFields->addField(SharpShowTextField::make('name')->setLocalized());
     }
 
     public function getDataLocalizations(): array

@@ -18,27 +18,30 @@ export default {
         dashboardKey: null,
         data: null,
         widgets: null,
+        fields: null,
         config: null,
         layout: null,
     },
     mutations: {
-        [UPDATE](state, { data, layout, widgets, config }) {
+        [UPDATE](state, { data, layout, widgets, config, fields }) {
             state.data = data;
             state.widgets = widgets;
             state.layout = layout;
             state.config = config;
+            state.fields = fields;
         },
         setDashboardKey(state, dashboardKey) {
             state.dashboardKey = dashboardKey;
         },
     },
     actions: {
-        update({ commit, dispatch }, { data, widgets, layout, config, filtersValues }) {
+        update({ commit, dispatch }, { data, widgets, layout, config, fields, filtersValues }) {
             commit(UPDATE, {
                 data,
                 widgets,
                 layout,
                 config,
+                fields,
             });
             return Promise.all([
                 dispatch('filters/update', {
@@ -56,10 +59,7 @@ export default {
                 filters: getters['filters/getQueryParams'](filtersValues)
             });
             await dispatch('update', {
-                data: data.data,
-                widgets: data.widgets,
-                layout: data.layout,
-                config: data.config,
+                ...data,
                 filtersValues,
             });
         },
