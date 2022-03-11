@@ -67,7 +67,6 @@ module.exports = {
                 children: [
                     'building-entity-list.md',
                     'filters.md',
-                    'commands.md',
                     'entity-states.md',
                     'reordering-instances.md',
                 ].map(page => `/guide/${page}`),
@@ -99,6 +98,13 @@ module.exports = {
                         'ordered-list.md',
                     ].map(page => `/guide/dashboard-widgets/${page}`),
                 ],
+            },
+            {
+                text: 'Commands',
+                children: [
+                    'commands.md',
+                    'commands-wizard.md',
+                ].map(page => `/guide/${page}`),
             },
             {
                 text: 'Authentication and authorizations',
