@@ -24,8 +24,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                 'emptyVisible' => false,
                 'showCount' => false,
                 'hiddenCommands' => ['entity' => [], 'instance' => []],
-            ], 
-            $field->toArray()
+            ],
+            $field->toArray(),
         );
     }
 
@@ -40,8 +40,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                 'hiddenFilters' => [
                     'f1' => 'value1',
                 ],
-            ], 
-            $field->toArray()
+            ],
+            $field->toArray(),
         );
     }
 
@@ -58,8 +58,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                 'hiddenFilters' => [
                     'f1' => 'computed',
                 ],
-            ], 
-            $field->toArray()
+            ],
+            $field->toArray(),
         );
     }
 
@@ -70,8 +70,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             ->showEntityState(false);
 
         $this->assertArraySubset(
-            ['showEntityState' => false,], 
-            $field->toArray()
+            ['showEntityState' => false],
+            $field->toArray(),
         );
     }
 
@@ -82,8 +82,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             ->showReorderButton(false);
 
         $this->assertArraySubset(
-            ['showReorderButton' => false,], 
-            $field->toArray()
+            ['showReorderButton' => false],
+            $field->toArray(),
         );
     }
 
@@ -94,8 +94,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             ->showCreateButton(false);
 
         $this->assertArraySubset(
-            ['showCreateButton' => false,], 
-            $field->toArray()
+            ['showCreateButton' => false],
+            $field->toArray(),
         );
     }
 
@@ -106,8 +106,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             ->showSearchField(false);
 
         $this->assertArraySubset(
-            ['showSearchField' => false,], 
-            $field->toArray()
+            ['showSearchField' => false],
+            $field->toArray(),
         );
     }
 
@@ -118,8 +118,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
             ->showCount();
 
         $this->assertArraySubset(
-            ['showCount' => true,],
-            $field->toArray()
+            ['showCount' => true],
+            $field->toArray(),
         );
     }
 
@@ -136,8 +136,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                         'c1', 'c2',
                     ],
                 ],
-            ], 
-            $field->toArray()
+            ],
+            $field->toArray(),
         );
 
         $field->hideEntityCommand('c3');
@@ -149,8 +149,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                         'c1', 'c2', 'c3',
                     ],
                 ],
-            ], 
-            $field->toArray()
+            ],
+            $field->toArray(),
         );
     }
 
@@ -168,7 +168,7 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                     ],
                 ],
             ],
-            $field->toArray()
+            $field->toArray(),
         );
 
         $field->hideInstanceCommand('c3');
@@ -180,8 +180,8 @@ class SharpShowEntityListFieldTest extends SharpTestCase
                         'c1', 'c2', 'c3',
                     ],
                 ],
-            ], 
-            $field->toArray()
+            ],
+            $field->toArray(),
         );
     }
 }
