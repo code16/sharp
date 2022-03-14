@@ -64,7 +64,7 @@ class SharpAuthorizationManager
                 $forbidden = ! $policy->$ability(auth()->user());
             } elseif (in_array($ability, ['view', 'update', 'delete'])) {
                 // Not checked in create case, as it could lead to unwanted errors in functional policy code (with findOrFail for instance)
-                if($instanceId || $entity->isSingle()) {
+                if ($instanceId || $entity->isSingle()) {
                     $forbidden = ! $policy->$ability(auth()->user(), $instanceId);
                 }
             }

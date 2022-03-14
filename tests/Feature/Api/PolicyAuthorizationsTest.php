@@ -136,7 +136,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setPolicy(AuthorizationsTestPersonWithExceptionsPolicy::class);
-        
+
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
@@ -185,16 +185,16 @@ class AuthorizationsTestPersonWithExceptionsPolicy extends SharpEntityPolicy
 {
     public function view($user, $id): bool
     {
-        throw new \Exception("nope");
+        throw new \Exception('nope');
     }
 
     public function update($user, $id): bool
     {
-        throw new \Exception("nope");
+        throw new \Exception('nope');
     }
 
     public function delete($user, $id): bool
     {
-        throw new \Exception("nope");
+        throw new \Exception('nope');
     }
 }
