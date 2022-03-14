@@ -29,14 +29,14 @@
     import { Form } from "../../../../index";
 
     export default {
+        components: {
+            Modal,
+            Form,
+        },
         inject: {
             '$form': {
                 default: null,
             }
-        },
-        components: {
-            Modal,
-            Form,
         },
         props: {
             visible: Boolean,
