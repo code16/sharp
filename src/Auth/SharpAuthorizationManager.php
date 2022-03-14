@@ -55,14 +55,18 @@ class SharpAuthorizationManager
     protected function isPolicyForbidden(string $ability, string $entityKey, ?string $instanceId = null): bool
     {
         if (! Arr::exists($this->cachedPolicies, "$ability-$entityKey-$instanceId")) {
-            $policy = $this->entityManager->entityFor($entityKey)->getPolicyOrDefault();
+            $entity = $this->entityManager->entityFor($entityKey);
+            $policy = $entity->getPolicyOrDefault();
 
+            $forbidden = true;
             if (in_array($ability, ['entity', 'create'])) {
+                // Always checked
                 $forbidden = ! $policy->$ability(auth()->user());
             } elseif (in_array($ability, ['view', 'update', 'delete'])) {
-                $forbidden = ! $policy->$ability(auth()->user(), $instanceId);
-            } else {
-                $forbidden = true;
+                // Not checked in create case, as it could lead to unwanted errors in functional policy code (with findOrFail for instance)
+                if($instanceId || $entity->isSingle()) {
+                    $forbidden = ! $policy->$ability(auth()->user(), $instanceId);
+                }
             }
 
             $this->cachedPolicies["$ability-$entityKey-$instanceId"] = $forbidden;

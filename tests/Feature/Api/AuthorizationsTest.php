@@ -56,7 +56,7 @@ class AuthorizationsTest extends BaseApiTest
             ->entityFor('person')
             ->setProhibitedActions(['delete', 'update']);
 
-        // Create
+        // Create (no instanceId, only create is allowed)
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
@@ -64,7 +64,7 @@ class AuthorizationsTest extends BaseApiTest
                     'delete' => false,
                     'update' => false,
                     'create' => true,
-                    'view' => true,
+                    'view' => false,
                 ],
             ]);
 
@@ -98,19 +98,19 @@ class AuthorizationsTest extends BaseApiTest
     }
 
     /** @test */
-    public function prohibited_actions_are_true_by_default()
+    public function actions_are_not_prohibited_by_default()
     {
         $this->withoutExceptionHandling();
 
-        // Create
+        // Create (no instanceId, only create is allowed)
         $this
             ->getJson('/sharp/api/form/person')
             ->assertJson([
                 'authorizations' => [
-                    'delete' => true,
-                    'update' => true,
+                    'delete' => false,
+                    'update' => false,
                     'create' => true,
-                    'view' => true,
+                    'view' => false,
                 ],
             ]);
 
