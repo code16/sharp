@@ -18,6 +18,7 @@ class SharpShowEntityListField extends SharpShowField
     protected bool $showReorderButton = true;
     protected bool $showCreateButton = true;
     protected bool $showSearchField = true;
+    protected bool $showCount = false;
     protected ?string $label = null;
 
     public static function make(string $key, string $entityListKey): SharpShowEntityListField
@@ -90,6 +91,13 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
+    public function showCount(bool $showCount = true): self
+    {
+        $this->showCount = $showCount;
+
+        return $this;
+    }
+
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -109,6 +117,7 @@ class SharpShowEntityListField extends SharpShowField
             'showCreateButton' => $this->showCreateButton,
             'showReorderButton' => $this->showReorderButton,
             'showSearchField' => $this->showSearchField,
+            'showCount' => $this->showCount,
             'hiddenCommands' => $this->hiddenCommands,
             'hiddenFilters' => sizeof($this->hiddenFilters)
                 ? collect($this->hiddenFilters)
@@ -133,6 +142,7 @@ class SharpShowEntityListField extends SharpShowField
             'showEntityState' => 'required|boolean',
             'showCreateButton' => 'required|boolean',
             'showReorderButton' => 'required|boolean',
+            'showCount' => 'required|boolean',
             'hiddenCommands' => 'required|array',
             'hiddenCommands.entity' => 'array',
             'hiddenCommands.instance' => 'array',

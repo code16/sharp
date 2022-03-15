@@ -7,24 +7,21 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class ShowInstanceCommandController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandleCommandReturn, HandleCommandForm;
 
-    /**
-     * Display the Command form.
-     */
     public function show(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
-        return response()->json([
-            'data' => $commandHandler->formData($instanceId),
-        ]);
+        return response()->json(
+            array_merge(
+                $this->getCommandForm($commandHandler),
+                ['data' => $commandHandler->formData($instanceId) ?: null],
+            ),
+        );
     }
 
-    /**
-     * Execute the Command.
-     */
     public function update(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);

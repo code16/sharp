@@ -17,15 +17,12 @@ class ShowControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->getJson('/sharp/api/show/person/1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 'data' => [
                     'name' => 'John Wayne',
                 ],
             ]);
-
-        $this->getJson('/sharp/api/show/person')
-            ->assertStatus(404);
     }
 
     /** @test */

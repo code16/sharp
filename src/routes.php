@@ -31,8 +31,8 @@ Route::group([
         ->name('code16.sharp.api.dashboard')
         ->middleware(['sharp_api_append_breadcrumb']);
 
-    Route::get('/dashboard/{dashboardKey}/command/{commandKey}/data', [DashboardCommandController::class, 'show'])
-        ->name('code16.sharp.api.dashboard.command.data');
+    Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [DashboardCommandController::class, 'show'])
+        ->name('code16.sharp.api.dashboard.command.form');
 
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [DashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
@@ -50,14 +50,14 @@ Route::group([
     Route::post('/list/{entityKey}/command/{commandKey}', [EntityListEntityCommandController::class, 'update'])
         ->name('code16.sharp.api.list.command.entity');
 
-    Route::get('/list/{entityKey}/command/{commandKey}/data', [EntityListEntityCommandController::class, 'show'])
-        ->name('code16.sharp.api.list.command.entity.data');
+    Route::get('/list/{entityKey}/command/{commandKey}/form', [EntityListEntityCommandController::class, 'show'])
+        ->name('code16.sharp.api.list.command.entity.form');
 
     Route::post('/list/{entityKey}/command/{commandKey}/{instanceId}', [EntityListInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.list.command.instance');
 
-    Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/data', [EntityListInstanceCommandController::class, 'show'])
-        ->name('code16.sharp.api.list.command.instance.data');
+    Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [EntityListInstanceCommandController::class, 'show'])
+        ->name('code16.sharp.api.list.command.instance.form');
 
     Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
         ->name('code16.sharp.api.show.show')
@@ -66,13 +66,13 @@ Route::group([
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
 
-    Route::get('/show/{entityKey}/command/{commandKey}/{instanceId}/data', [ShowInstanceCommandController::class, 'show'])
-        ->name('code16.sharp.api.show.command.instance.data');
+    Route::get('/show/{entityKey}/command/{commandKey}/{instanceId}/form', [ShowInstanceCommandController::class, 'show'])
+        ->name('code16.sharp.api.show.command.instance.form');
 
     // Specific route for single shows, because /show/{entityKey}/command/{commandKey}/{instanceId?}/data
     // does not work since instanceId is optional but not the last segment.
-    Route::get('/show/{entityKey}/command/{commandKey}/data', [ShowInstanceCommandController::class, 'show'])
-        ->name('code16.sharp.api.show.command.singleInstance.data');
+    Route::get('/show/{entityKey}/command/{commandKey}/form', [ShowInstanceCommandController::class, 'show'])
+        ->name('code16.sharp.api.show.command.singleInstance.form');
 
     Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');

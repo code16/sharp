@@ -8,6 +8,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
@@ -16,7 +17,8 @@ abstract class SharpForm
     use WithCustomTransformers,
         HandleFormFields,
         HandlePageAlertMessage,
-        HandleCustomBreadcrumb;
+        HandleCustomBreadcrumb,
+        HandleLocalizedFields;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
@@ -84,30 +86,6 @@ abstract class SharpForm
             // Validation is automatically called (FormRequest)
             app($formRequest);
         }
-    }
-
-    final public function hasDataLocalizations(): bool
-    {
-        foreach ($this->fields() as $field) {
-            if ($field['localized'] ?? false) {
-                return true;
-            }
-
-            if ($field['type'] === 'list') {
-                foreach ($field['itemFields'] as $itemField) {
-                    if ($itemField['localized'] ?? false) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public function getDataLocalizations(): array
-    {
-        return [];
     }
 
     /**

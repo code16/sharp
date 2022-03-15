@@ -1,15 +1,21 @@
 
 .ShowSection {
-  summary {
-    cursor: pointer;
-    user-select: none;
-    transition: background-color .125s ease-in-out;
-    line-height: 1.2;
-    &:hover, &:focus-visible {
-      background-color: rgba(0,0,0,.075);
-    }
-    &:focus:not(:focus-visible) {
-      outline: 0;
+  &__header {
+    min-height: 2.75rem;
+
+    &--collapsable {
+      cursor: pointer;
+      user-select: none;
+      line-height: 1.2;
+      transition: background-color .125s ease-in-out;
+      --title-margin-left: .25rem;
+
+      &:hover {
+        background-color: rgba(0,0,0,.075);
+      }
+      &:focus:not(:focus-visible) {
+        outline: 0;
+      }
     }
   }
 
@@ -19,6 +25,7 @@
     padding-top: .75rem;
     padding-bottom: .75rem;
     margin-bottom: 0;
+    margin-left: var(--title-margin-left);
   }
 
   &__grid {

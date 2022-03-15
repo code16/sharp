@@ -23,7 +23,7 @@ class PostPolicy extends SharpEntityPolicy
     public function update($user, $instanceId): bool
     {
         return $user->isAdmin()
-            || Post::find($instanceId)?->author_id === $user->id;
+            || Post::find($instanceId)->author_id === $user->id;
     }
 
     public function delete($user, $instanceId): bool

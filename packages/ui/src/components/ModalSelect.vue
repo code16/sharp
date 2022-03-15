@@ -77,6 +77,9 @@
             visible(visible) {
                 this.modalVisible = visible;
             },
+            value(value) {
+                this.selected = value;
+            },
         },
         methods: {
             itemClass(option) {

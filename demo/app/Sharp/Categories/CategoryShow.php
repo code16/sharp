@@ -32,6 +32,7 @@ class CategoryShow extends SharpShow
                 SharpShowEntityListField::make('posts', 'posts')
                     ->setLabel('Related posts')
                     ->showCreateButton(false)
+                    ->showCount()
                     ->hideFilterWithValue(CategoryFilter::class, function ($instanceId) {
                         return $instanceId;
                     }),
