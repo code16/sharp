@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { Embed } from "./embed";
-import { postResolveEmbeds } from "sharp-embeds";
-import { filesEquals } from "sharp-files";
+import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "sharp-embeds";
+
 
 
 export function getEmbedExtension({
@@ -11,10 +11,15 @@ export function getEmbedExtension({
 }) {
 
     const state = Vue.observable({
+        embeds: [],
+        currentIndex: 0,
         created: false,
-        embeds: {},
-        currentId: 0,
+        resolving: false,
+        resolved: null,
+        onResolve: null,
     });
+
+    state.resolved = new Promise(resolve => state.onResolve = resolve);
 
     const resolveEmbeds = embeds => {
         return postResolveEmbeds({
@@ -28,46 +33,66 @@ export function getEmbedExtension({
     const config = {
         name: `embed:${embedKey}`,
         onCreate: async () => {
-            if(state.embeds.length > 0) {
-                state.embeds = {
-                    ...await resolveEmbeds(state.embeds)
-                };
+            if(!state.resolving && state.currentIndex > 0) {
+                state.resolving = true;
+                state.embeds = await resolveEmbeds(state.embeds);
+                state.onResolve();
             }
             state.created = true;
         },
     }
 
     const options = {
+        label: props.label,
         tag: props.tag,
         attributes: props.attributes,
-        template: props.template,
+        template: props.previewTemplate,
+        state,
         isReady: () => {
             return state.created;
         },
         getEmbed: id => {
             return state.embeds[id];
         },
-        registerEmbed: async (attrs) => {
-            const id = state.currentId++;
-            if(state.created) {
-                // const embeds = await resolveEmbeds([attrs]);
-                // state.embeds = {
-                //     ...state.embeds,
-                //     [id]: embeds[0],
-                // };
-            } else {
-                state.embeds = {
-                    ...state.embeds,
-                    [id]: attrs,
-                };
-            }
-            return id;
+        // registerEmbed: (attrs) => {
+        //     const id = state.currentId++;
+        //     state.embeds = {
+        //         ...state.embeds,
+        //         [id]: attrs,
+        //     };
+        //     return id;
+        // },
+        async getAdditionalData(attrs) {
+            const index = state.currentIndex++;
+            state.embeds.push(attrs);
+            await state.resolved;
+            return state.embeds[index];
         },
         onUpdate: (id, data) => {
             state.embeds = {
                 ...state.embeds,
                 [id]: data,
             }
+        },
+        onRemove: (id) => {
+            const { [id]:removedEmbed, ...embed } = state.embeds;
+            state.embeds = embed;
+        },
+        resolveForm(attributes) {
+            return postResolveEmbedForm({
+                entityKey: form.entityKey,
+                instanceId: form.instanceId,
+                embedKey,
+                attributes,
+            });
+        },
+        postForm(data) {
+            return postEmbedForm({
+                entityKey: form.entityKey,
+                instanceId: form.instanceId,
+                embedKey,
+                data,
+            });
         },
     }
 

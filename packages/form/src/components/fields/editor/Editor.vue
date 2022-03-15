@@ -9,6 +9,7 @@
                         :toolbar="toolbar"
                         :disabled="readOnly"
                         :options="toolbarOptions"
+                        :embeds="embeds"
                     />
                 </template>
             </div>
@@ -51,6 +52,7 @@
             maxHeight: Number,
             readOnly: Boolean,
             toolbarOptions: Array,
+            embeds: Array,
         },
         data() {
             return {

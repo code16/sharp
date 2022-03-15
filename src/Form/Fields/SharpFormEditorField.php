@@ -127,6 +127,17 @@ class SharpFormEditorField extends SharpFormField
                     'markdown' => $this->renderAsMarkdown,
                     'innerComponents' => [
                         'upload' => $this->innerComponentUploadConfiguration(),
+                        
+                        // todo (test data)
+                        'text' => [
+                            'key' => 'text',
+                            'label' => 'Texte',
+                            'tag' => 'x-text',
+                            'attributes' => [
+                                'content' => null,
+                            ],
+                            'previewTemplate' => '{{ content }} ({{ status }})'
+                        ],
                     ],
                 ],
                 $this->editorCustomConfiguration(),

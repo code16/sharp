@@ -25,11 +25,10 @@
 </template>
 
 <script>
-    import { Button, Dropdown, DropdownItem } from "sharp-ui";
+    import { Dropdown, DropdownItem } from "sharp-ui";
 
     export default {
         components: {
-            Button,
             Dropdown,
             DropdownItem,
         },

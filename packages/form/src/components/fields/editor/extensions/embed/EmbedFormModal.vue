@@ -2,9 +2,14 @@
     <Modal
         :visible="visible"
         :loading="loading"
-        title=""
+        v-on="$listeners"
         @ok="handleSubmitButtonClicked"
+        @close="handleCancelClicked"
+        @cancel="handleCancelClicked"
     >
+        <template v-slot:title>
+            <slot name="title"></slot>
+        </template>
         <transition>
             <template v-if="visible">
                 <Form
@@ -15,7 +20,7 @@
                     :show-alert="false"
                     independant
                     ignore-authorizations
-                    @loading="handleLoadingChanged"
+                    no-tabs
                     style="transition-duration: 300ms"
                     ref="form"
                 />
@@ -26,7 +31,7 @@
 
 <script>
     import { Modal } from "sharp-ui";
-    import { Form } from "../../../../index";
+    import Form from "../../../../Form";
 
     export default {
         components: {
@@ -41,6 +46,7 @@
         props: {
             visible: Boolean,
             form: Object,
+            post: Function,
         },
         data() {
             return {
@@ -48,13 +54,15 @@
             }
         },
         methods: {
-            handleLoadingChanged(loading) {
-                this.loading = loading;
-            },
             handleSubmitButtonClicked() {
-                this.$refs.form.submit({
-
-                });
+                this.loading = true;
+                this.$refs.form.submit({ postFn:this.post })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            },
+            handleCancelClicked() {
+                this.$emit('cancel');
             },
         }
     }

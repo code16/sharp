@@ -5,6 +5,7 @@
                 v-bind="$props"
                 v-on="$listeners"
                 :extensions="extensions"
+                :embeds="embeds"
             />
         </template>
         <template v-else>
@@ -12,6 +13,7 @@
                 v-bind="$props"
                 v-on="$listeners"
                 :extensions="extensions"
+                :embeds="embeds"
             />
         </template>
     </div>
@@ -67,6 +69,10 @@
                             form: this.$form,
                         })
                     );
+            },
+            embeds() {
+                const { upload, ...embeds } = this.innerComponents ?? {};
+                return Object.values(embeds);
             },
         },
     }

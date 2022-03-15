@@ -7,6 +7,7 @@ use Code16\Sharp\Http\Api\Commands\EntityListInstanceStateController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceStateController;
 use Code16\Sharp\Http\Api\DownloadController;
+use Code16\Sharp\Http\Api\EmbedsController;
 use Code16\Sharp\Http\Api\EntityListController;
 use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\Api\FormController;
@@ -105,6 +106,16 @@ Route::group([
 
     Route::post('/files/{entityKey}/{instanceId?}', [FilesController::class, 'show'])
         ->name('code16.sharp.api.files.show');
+    
+    
+    Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}', [EmbedsController::class, 'show'])
+        ->name('code16.sharp.api.embed.show');
+    
+    Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form/init', [EmbedsController::class, 'showForm'])
+        ->name('code16.sharp.api.embed.form.show');
+    
+    Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form', [EmbedsController::class, 'update'])
+        ->name('code16.sharp.api.embed.form');
 });
 
 // Web routes

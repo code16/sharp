@@ -99,6 +99,7 @@
             /// Extras props for customization
             independant: Boolean,
             ignoreAuthorizations: Boolean,
+            noTabs: Boolean,
             showAlert: {
                 type: Boolean,
                 default: true,
@@ -277,9 +278,14 @@
             },
 
             patchLayout(layout) {
-                if(!layout)return;
+                if(!layout) {
+                    return null;
+                }
+                if(this.noTabs) {
+                    layout = { tabs: [{ columns: [{ fields:layout}] }] };
+                }
                 let curFieldsetId = 0;
-                let mapFields = layout => {
+                const mapFields = layout => {
                     if(layout.legend)
                         layout.id = `${curFieldsetId++}#${layout.legend}`;
                     else if(layout.fields)

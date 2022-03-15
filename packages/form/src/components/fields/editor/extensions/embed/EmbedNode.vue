@@ -7,11 +7,23 @@
                     :template-data="embedData"
                     :template="extension.options.template"
                 />
-                <Button outline small @click="handleEditClicked">
-                    {{ lang('form.upload.edit_button') }}
-                </Button>
+                <div class="mt-2">
+                    <Button outline small @click="handleEditClicked">
+                        {{ lang('form.upload.edit_button') }}
+                    </Button>
+                </div>
             </div>
         </div>
+        <EmbedFormModal
+            :visible.sync="modalVisible"
+            :form="modalForm"
+            :post="postForm"
+            @cancel="handleCancelClicked"
+        >
+            <template v-slot:title>
+                {{ extension.options.label }}
+            </template>
+        </EmbedFormModal>
     </NodeRenderer>
 </template>
 
@@ -20,13 +32,16 @@
     import { Button } from "sharp-ui";
     import { TemplateRenderer } from "sharp/components";
     import NodeRenderer from "../../NodeRenderer";
+    import EmbedFormModal from "./EmbedFormModal";
 
     export default {
         components: {
+            EmbedFormModal,
             NodeRenderer,
             TemplateRenderer,
             Button,
         },
+        inject: ['$form'],
         props: {
             editor: Object,
             node: Object,
@@ -39,21 +54,63 @@
         data() {
            return {
                id: null,
+               modalVisible: false,
+               modalForm: null,
            }
         },
         computed: {
             embedData() {
-                return this.extension.options.getEmbed(this.id);
+                return {
+                    ...this.embedAttributes,
+                    ...this.node.attrs.additionalData,
+                }
+            },
+            embedAttributes() {
+                return Object.fromEntries(
+                    Object.entries(this.node.attrs)
+                        .filter(([name]) =>
+                            name in this.extension.options.attributes
+                        )
+                );
             },
         },
         methods: {
             lang,
             handleEditClicked() {
-
+                this.showForm();
+            },
+            handleCancelClicked() {
+                if(this.node.attrs.isNew) {
+                    this.deleteNode();
+                    setTimeout(() => {
+                        this.editor.commands.focus();
+                    }, 0);
+                }
+            },
+            async showForm() {
+                this.modalForm = await this.extension.options.resolveForm(this.embedAttributes);
+                this.modalVisible = true;
+            },
+            async postForm(data) {
+                const { attributes } = await this.extension.options.postForm(data);
+                this.updateAttributes(attributes);
+            },
+            async init() {
+                if(this.node.attrs.isNew) {
+                    await this.showForm();
+                } else {
+                    const data = await this.extension.options.getAdditionalData(this.embedAttributes);
+                    this.updateAttributes({
+                        additionalData: data,
+                    });
+                }
             },
         },
         created() {
-            this.id = this.extension.options.registerEmbed(this.node.attrs);
+            this.init();
         },
+        beforeDestroy() {
+            // this.extension.options.onRemove(this.id);
+        }
     }
 </script>
