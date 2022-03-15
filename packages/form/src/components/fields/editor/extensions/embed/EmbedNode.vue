@@ -1,19 +1,24 @@
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <div class="card">
-            <div class="card-body">
-                <TemplateRenderer
-                    name="Embed"
-                    :template-data="embedData"
-                    :template="extension.options.template"
-                />
-                <div class="mt-2">
-                    <Button outline small @click="handleEditClicked">
-                        {{ lang('form.upload.edit_button') }}
-                    </Button>
+        <template v-if="!node.attrs.isNew">
+            <div class="card">
+                <div class="card-body">
+                    <TemplateRenderer
+                        name="Embed"
+                        :template-data="embedData"
+                        :template="extension.options.template"
+                    />
+                    <div class="mt-2">
+                        <Button outline small @click="handleEditClicked">
+                            {{ lang('form.upload.edit_button') }}
+                        </Button>
+                        <Button variant="danger" outline small @click="handleRemoveClicked">
+                            {{ lang('form.upload.remove_button') }}
+                        </Button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
         <EmbedFormModal
             :visible.sync="modalVisible"
             :form="modalForm"
@@ -87,13 +92,22 @@
                     }, 0);
                 }
             },
+            handleRemoveClicked() {
+                this.deleteNode();
+            },
             async showForm() {
                 this.modalForm = await this.extension.options.resolveForm(this.embedAttributes);
                 this.modalVisible = true;
             },
             async postForm(data) {
-                const { attributes } = await this.extension.options.postForm(data);
-                this.updateAttributes(attributes);
+                const attributes = await this.extension.options.postForm(data);
+                this.updateAttributes({
+                    ...attributes,
+                    isNew: false,
+                    additionalData: {
+                        ...attributes
+                    },
+                });
             },
             async init() {
                 if(this.node.attrs.isNew) {
@@ -109,8 +123,5 @@
         created() {
             this.init();
         },
-        beforeDestroy() {
-            // this.extension.options.onRemove(this.id);
-        }
     }
 </script>

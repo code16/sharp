@@ -40,9 +40,8 @@ class EmbedsController extends Controller
     public function update(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         return [
-            'attributes' => [
-                'content' => request()->get('content'),
-            ],
+            'content' => request()->get('content'),
+            'status' => 'updated',
         ];
     }
 }
