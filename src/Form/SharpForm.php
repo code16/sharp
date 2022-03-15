@@ -20,7 +20,7 @@ abstract class SharpForm
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
-    protected ?string $confirmationTextOnDeletion = null;
+    protected ?string $confirmTextOnDeletion = null;
     protected ?string $formValidatorClass = null;
 
     final public function formLayout(): array
@@ -111,9 +111,9 @@ abstract class SharpForm
     {
     }
 
-    protected function configureConfirmationTextOnDeletion(?string $text = null): self
+    protected function configureConfirmTextOnDeletion(?string $text = null): self
     {
-        $this->confirmationTextOnDeletion = $text ?: trans('sharp::form.default_confirmation_text_on_deletion');
+        $this->confirmTextOnDeletion = $text ?: trans('sharp::form.default_confirm_text_on_deletion');
 
         return $this;
     }
