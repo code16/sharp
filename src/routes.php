@@ -115,13 +115,13 @@ Route::group([
 
     Route::post('/embeds/{embedKey}/{entityKey}/form', [EmbedsController::class, 'update'])
         ->name('code16.sharp.api.embed.form');
-    
+
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}', [EmbedsController::class, 'show'])
         ->name('code16.sharp.api.embed.instance.show');
-    
+
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form/init', [EmbedsController::class, 'showForm'])
         ->name('code16.sharp.api.embed.instance.form.show');
-    
+
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form', [EmbedsController::class, 'update'])
         ->name('code16.sharp.api.embed.instance.form');
 });
