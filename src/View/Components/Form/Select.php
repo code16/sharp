@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\View\Components\Form;
 
-use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
-use Illuminate\Support\Str;
 
 class Select extends Field
 {
@@ -28,12 +26,12 @@ class Select extends Field
     ) {
         $this->field = SharpFormSelectField::make($this->name, $this->options ?? []);
         $this->selectFieldComponent = $this;
-    
-        if($this->display === 'dropdown') {
+
+        if ($this->display === 'dropdown') {
             $this->field->setDisplayAsDropdown();
         }
     }
-    
+
     public function addOption(string|int $value, string $label)
     {
         $this->options ??= [];
@@ -42,7 +40,7 @@ class Select extends Field
             'label' => $label,
         ];
     }
-    
+
     protected function updateFromSlots(array $slots)
     {
         $this->field->setOptions($this->options);
