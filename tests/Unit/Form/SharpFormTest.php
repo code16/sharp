@@ -199,7 +199,7 @@ class SharpFormTest extends SharpTestCase
         {
             public function buildFormConfig(): void
             {
-                $this->configureConfirmTextOnDeletion("Vous êtes sûr ?");
+                $this->configureConfirmTextOnDeletion('Vous êtes sûr ?');
             }
         };
 
@@ -208,7 +208,7 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(
             [
                 'hasShowPage' => false,
-                'confirmTextOnDeletion' => "Vous êtes sûr ?",
+                'confirmTextOnDeletion' => 'Vous êtes sûr ?',
             ],
             $sharpForm->formConfig(),
         );
@@ -230,7 +230,7 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(
             [
                 'hasShowPage' => false,
-                'confirmTextOnDeletion' => "Are you sure you want to delete this item ?",
+                'confirmTextOnDeletion' => 'Are you sure you want to delete this item ?',
             ],
             $sharpForm->formConfig(),
         );
