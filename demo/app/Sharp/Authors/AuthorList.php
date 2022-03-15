@@ -95,7 +95,6 @@ class AuthorList extends SharpEntityList
             );
     }
 
-
     protected function getInstanceCommands(): ?array
     {
         return [
