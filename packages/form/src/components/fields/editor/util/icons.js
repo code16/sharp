@@ -24,6 +24,7 @@ const toolbarIcons = {
     'iframe': 'far fa-caret-square-right',
     'table': 'fas fa-table',
     'html': 'far fa-file-code',
+    'code-block': 'fas fa-file-code',
 };
 
 export function getToolbarIcon(key) {
