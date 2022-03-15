@@ -4,6 +4,7 @@ namespace App\Sharp\Authors;
 
 use App\Models\User;
 use App\Sharp\Authors\Commands\InviteUserCommand;
+use App\Sharp\Authors\Commands\VisitFacebookProfileCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -60,6 +61,13 @@ class AuthorList extends SharpEntityList
 
         return $this
             ->setCustomTransformer('avatar', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
+            ->setCustomTransformer('role', function ($value, User $user) {
+                return match ($value) {
+                    'admin' => 'Admin',
+                    'editor' => 'Editor',
+                    default => 'Unknown',
+                };
+            })
             ->transform($users->get());
     }
 
@@ -79,14 +87,28 @@ class AuthorList extends SharpEntityList
                 EntityListField::make('email')
                     ->setLabel('Email')
                     ->setSortable(),
+            )
+            ->addField(
+                EntityListField::make('role')
+                    ->setLabel('Role')
+                    ->setSortable(),
             );
+    }
+
+
+    protected function getInstanceCommands(): ?array
+    {
+        return [
+            VisitFacebookProfileCommand::class,
+        ];
     }
 
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
         $fieldsLayout
             ->addColumn('avatar', 1)
-            ->addColumn('name', 5)
-            ->addColumn('email', 6);
+            ->addColumn('name', 3)
+            ->addColumn('email', 4)
+            ->addColumn('role', 4);
     }
 }
