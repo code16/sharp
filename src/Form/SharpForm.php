@@ -38,7 +38,7 @@ abstract class SharpForm
         return tap(
             [
                 'hasShowPage' => $this->displayShowPageAfterCreation,
-                'confirmationTextOnDeletion' => $this->confirmationTextOnDeletion,
+                'confirmTextOnDeletion' => $this->confirmTextOnDeletion,
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
