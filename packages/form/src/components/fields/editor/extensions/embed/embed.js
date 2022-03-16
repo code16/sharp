@@ -2,6 +2,23 @@ import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import EmbedNode from "./EmbedNode";
 
+function parseAttributeValue(value) {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return value;
+    }
+}
+
+function serializeAttributeValue(value) {
+    if(value && typeof value === 'object') {
+        return JSON.stringify(value);
+    }
+
+    return value;
+}
+
+
 export const Embed = Node.create({
     name: 'embed',
 
@@ -27,6 +44,10 @@ export const Embed = Node.create({
                     ...res,
                     [attributeName]: {
                         default: null,
+                        parseHTML: (element) => parseAttributeValue(element.getAttribute(attributeName)),
+                        renderHTML: (attributes) => ({
+                            [attributeName]: serializeAttributeValue(attributes[attributeName]),
+                        }),
                     }
                 }), {})
         return {
