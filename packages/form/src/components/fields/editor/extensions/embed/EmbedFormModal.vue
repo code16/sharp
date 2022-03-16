@@ -54,7 +54,8 @@
             }
         },
         methods: {
-            handleSubmitButtonClicked() {
+            handleSubmitButtonClicked(e) {
+                e.preventDefault();
                 this.loading = true;
                 this.$refs.form.submit({ postFn:this.post })
                     .finally(() => {

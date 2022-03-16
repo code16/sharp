@@ -222,6 +222,12 @@
                     'cancel': this.handleCancelClicked,
                 }
             },
+            mergedErrorIdentifier() {
+                return null;
+            },
+            mergedConfigIdentifier() {
+                return null;
+            },
         },
         methods: {
             async updateData(key, value, { forced } = {}) {

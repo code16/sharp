@@ -101,6 +101,7 @@
             },
             async postForm(data) {
                 const attributes = await this.extension.options.postForm(data);
+                this.modalVisible = false;
                 this.updateAttributes({
                     ...attributes,
                     isNew: false,
