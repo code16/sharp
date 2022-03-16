@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Fields\Embeds;
 
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
+use Illuminate\Support\Str;
 
 abstract class SharpFormEditorEmbed
 {
@@ -17,14 +18,12 @@ abstract class SharpFormEditorEmbed
     {
         return [
             'key' => $this->key(),
-            'label' => $this->label ?: $this->key(),
-            'tag' => $this->tagName ?: 'x-' . $this->key(),
+            'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
+            'tag' => $this->tagName ?: 'x-' . Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'previewTemplate' => $this->templates['form'] ?? null,
         ];
     }
-
-    abstract public function key(): string;
 
     public function buildEmbedConfig(): void
     {
@@ -49,6 +48,11 @@ abstract class SharpFormEditorEmbed
     protected function configureInlineFormTemplate(string $template): self
     {
         return $this->setTemplate($template, 'form');
+    }
+
+    final public function key(): string
+    {
+        return Str::replace('\\', '.', get_class($this));
     }
 
     private function setTemplate(string $template, string $key) :self

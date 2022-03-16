@@ -12,10 +12,11 @@ class EmbedsController extends Controller
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         return response()->json([
-            'embeds' => collect(request()->get('embeds'))->map(fn ($attributes) => [
-                ...$attributes,
-                'status' => 'active', // todo (test data)
-            ]),
+            'embeds' => collect(request()->get('embeds'))
+                ->map(fn ($attributes) => [
+                    ...$attributes,
+                    'status' => 'active', // todo (test data)
+                ]),
         ]);
     }
 

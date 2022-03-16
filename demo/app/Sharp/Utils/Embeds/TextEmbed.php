@@ -8,14 +8,10 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TextEmbed extends SharpFormEditorEmbed
 {
-    public function key(): string
-    {
-        return 'text';
-    }
-
     public function buildEmbedConfig(): void
     {
-        $this->configureLabel('Text')
+        $this
+            ->configureLabel('Text')
             ->configureTagName('x-text')
             ->configureInlineFormTemplate('{{ content }} ({{ status }})');
     }
