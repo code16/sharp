@@ -45,7 +45,7 @@ export function getEmbedExtension({
     const options = {
         label: props.label,
         tag: props.tag,
-        attributes: props.attributes,
+        attributes: props.attributes ?? [],
         template: props.previewTemplate,
         state,
         isReady: () => {

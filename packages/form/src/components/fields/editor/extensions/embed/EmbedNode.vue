@@ -74,7 +74,7 @@
                 return Object.fromEntries(
                     Object.entries(this.node.attrs)
                         .filter(([name]) =>
-                            name in this.extension.options.attributes
+                            this.extension.options.attributes.includes(name)
                         )
                 );
             },

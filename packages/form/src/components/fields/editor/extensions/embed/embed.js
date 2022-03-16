@@ -16,20 +16,19 @@ export const Embed = Node.create({
     addOptions: () => ({
         label: null,
         tag: null,
-        attributes: {},
+        attributes: [],
         template: null,
     }),
 
     addAttributes() {
-        const attributes = Object.fromEntries(
-            Object.entries(this.options.attributes)
-                .map(([attributeName, options]) => [
-                    attributeName,
-                    {
+        const attributes =
+            this.options.attributes
+                .reduce((res, attributeName) => ({
+                    ...res,
+                    [attributeName]: {
                         default: null,
                     }
-                ])
-        );
+                }), {})
         return {
             ...attributes,
             additionalData: {
