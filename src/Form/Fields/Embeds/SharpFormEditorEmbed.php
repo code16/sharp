@@ -29,6 +29,11 @@ abstract class SharpFormEditorEmbed
     {
     }
 
+    public function fillTemplateWith(array $data): array
+    {
+        return $data;
+    }
+
     abstract public function buildFormFields(FieldsContainer $formFields): void;
 
     protected function configureLabel(string $label): self

@@ -1,26 +1,15 @@
 <?php
 
-namespace Code16\Sharp\Http\Api;
+namespace Code16\Sharp\Http\Api\Embeds;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Routing\Controller;
 
-class EmbedsController extends Controller
+class EmbedsFormController extends Controller
 {
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
-    {
-        return response()->json([
-            'embeds' => collect(request()->get('embeds'))
-                ->map(fn ($attributes) => [
-                    ...$attributes,
-                    'status' => 'active', // todo (test data)
-                ]),
-        ]);
-    }
-
-    public function showForm(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         return [
             'config' => null,

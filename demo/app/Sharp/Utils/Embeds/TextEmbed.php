@@ -23,4 +23,12 @@ class TextEmbed extends SharpFormEditorEmbed
                 ->setLabel('Content'),
         );
     }
+
+    public function fillTemplateWith(array $data): array
+    {
+        return [
+            ...$data,
+            'status' => 'active',
+        ];
+    }
 }
