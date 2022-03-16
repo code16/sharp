@@ -42,11 +42,12 @@ class AuthorEmbed extends SharpFormEditorEmbed
             )
             ->addField(
                 SharpFormEditorField::make('biography')
+//                    ->setLocalized()
                     ->setLabel('Biography'),
             );
     }
     
-    public function fillTemplateWith(array $data, bool $isForm): array
+    public function transformData(array $data, bool $isForm): array
     {
         $data["name"] = $data["author"] 
             ? (User::find($data["author"])?->name ?: null) 
@@ -55,7 +56,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
         return $data;
     }
     
-    public function fillFormWith(array $data): array
+    public function transformDataForForm(array $data): array
     {
         return $this
             ->setCustomTransformer('author', function ($value) {
@@ -75,4 +76,9 @@ class AuthorEmbed extends SharpFormEditorEmbed
         
         return $data;
     }
+    
+//    public function getDataLocalizations(): array
+//    {
+//        return ["en", "fr"];
+//    }
 }

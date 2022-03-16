@@ -2,25 +2,23 @@
 
 namespace Code16\Sharp\Http\Api\Embeds;
 
-use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
 
 class EmbedsFormController extends Controller
 {
+    use HandleEmbed;
+    
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 
-        /** @var SharpFormEditorEmbed $embed */
-        $embed = app(Str::replace('.', '\\', $embedKey));
-        $embed->buildEmbedConfig();
+        $embed = $this->getEmbedFromKey($embedKey);
         
         return [
             'fields' => $embed->fields(),
             'layout' => $embed->formLayout(),
             'config' => $embed->formConfig(),
-            'data' => $embed->fillFormWith(request()->all()),
+            'data' => $embed->transformDataForForm(request()->all()),
         ];
     }
 
@@ -28,14 +26,12 @@ class EmbedsFormController extends Controller
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 
-        /** @var SharpFormEditorEmbed $embed */
-        $embed = app(Str::replace('.', '\\', $embedKey));
-        $embed->buildEmbedConfig();
+        $embed = $this->getEmbedFromKey($embedKey);
         
         $data = $embed->updateContent(
             $embed->formatRequestData(request()->all())
         );
         
-        return $embed->fillTemplateWith($data, true);
+        return $embed->transformData($data, true);
     }
 }

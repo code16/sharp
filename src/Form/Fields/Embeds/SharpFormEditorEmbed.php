@@ -39,7 +39,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Must return all the data needed by the templates
      */
-    public function fillTemplateWith(array $data, bool $isForm): array
+    public function transformData(array $data, bool $isForm): array
     {
         return $data;
     }
@@ -47,7 +47,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Must return all the data needed by the fields of the form
      */
-    public function fillFormWith(array $data): array
+    public function transformDataForForm(array $data): array
     {
         $data = collect($data)
             ->only($this->getDataKeys())
@@ -96,21 +96,21 @@ abstract class SharpFormEditorEmbed
         });
     }
 
-    protected function configureLabel(string $label): self
+    final protected function configureLabel(string $label): self
     {
         $this->label = $label;
         
         return $this;
     }
 
-    protected function configureTagName(string $tagName): self
+    final protected function configureTagName(string $tagName): self
     {
         $this->tagName = $tagName;
 
         return $this;
     }
 
-    protected function configureInlineFormTemplate(string $template): self
+    final protected function configureInlineFormTemplate(string $template): self
     {
         return $this->setTemplate($template, 'form');
     }
@@ -127,12 +127,12 @@ abstract class SharpFormEditorEmbed
         return $this;
     }
 
-    protected function configureInlineShowTemplate(string $template): self
+    final protected function configureInlineShowTemplate(string $template): self
     {
         return $this->setTemplate($template, 'show');
     }
 
-    protected function configureInlineFormTemplatePath(string $templatePath): self
+    final protected function configureInlineFormTemplatePath(string $templatePath): self
     {
         return $this->setTemplate(
             file_get_contents(resource_path('views/'.$templatePath)),
@@ -140,7 +140,7 @@ abstract class SharpFormEditorEmbed
         );
     }
 
-    protected function configureInlineShowTemplatePath(string $templatePath): self
+    final protected function configureInlineShowTemplatePath(string $templatePath): self
     {
         return $this->setTemplate(
             file_get_contents(resource_path('views/'.$templatePath)),
