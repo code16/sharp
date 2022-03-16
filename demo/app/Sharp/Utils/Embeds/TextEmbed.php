@@ -24,11 +24,10 @@ class TextEmbed extends SharpFormEditorEmbed
         );
     }
 
-    public function fillTemplateWith(array $data): array
+    public function fillTemplateWith(array $data, bool $isForm): array
     {
-        return [
-            ...$data,
-            'status' => 'active',
-        ];
+        return $isForm 
+            ? [...$data, 'status' => 'active']
+            : $data;
     }
 }

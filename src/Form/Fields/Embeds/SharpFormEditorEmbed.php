@@ -29,7 +29,10 @@ abstract class SharpFormEditorEmbed
     {
     }
 
-    public function fillTemplateWith(array $data): array
+    /**
+     * Must return all the data needed by the templates
+     */
+    public function fillTemplateWith(array $data, bool $isForm): array
     {
         return $data;
     }

@@ -18,7 +18,7 @@ class EmbedsController extends Controller
         
         return response()->json([
             'embeds' => collect(request()->get('embeds'))
-                ->map(fn (array $attributes) => $embed->fillTemplateWith($attributes)),
+                ->map(fn (array $attributes) => $embed->fillTemplateWith($attributes, request()->boolean('form'))),
         ]);
     }
 }
