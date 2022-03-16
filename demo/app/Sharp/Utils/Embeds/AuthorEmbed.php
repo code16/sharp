@@ -17,6 +17,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Author')
             ->configureTagName('x-author')
+            ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
             ->configureInlineFormTemplate('<div><strong>{{ name }}</strong></div><div><small v-html="biography"></small></div>');
     }
 

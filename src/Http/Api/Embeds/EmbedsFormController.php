@@ -14,11 +14,12 @@ class EmbedsFormController extends Controller
 
         /** @var SharpFormEditorEmbed $embed */
         $embed = app(Str::replace('.', '\\', $embedKey));
+        $embed->buildEmbedConfig();
         
         return [
             'fields' => $embed->fields(),
             'layout' => $embed->formLayout(),
-            'config' => null, //$embed->formConfig(),
+            'config' => $embed->formConfig(),
             'data' => $embed->fillFormWith(request()->all()),
         ];
     }
@@ -29,6 +30,8 @@ class EmbedsFormController extends Controller
 
         /** @var SharpFormEditorEmbed $embed */
         $embed = app(Str::replace('.', '\\', $embedKey));
+        $embed->buildEmbedConfig();
+        
         $data = $embed->updateContent(
             $embed->formatRequestData(request()->all())
         );

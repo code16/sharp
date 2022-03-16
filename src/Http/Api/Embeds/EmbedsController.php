@@ -17,6 +17,7 @@ class EmbedsController extends Controller
 
         /** @var SharpFormEditorEmbed $embed */
         $embed = app(Str::replace('.', '\\', $embedKey));
+        $embed->buildEmbedConfig();
         
         return response()->json([
             'embeds' => collect(request()->get('embeds'))

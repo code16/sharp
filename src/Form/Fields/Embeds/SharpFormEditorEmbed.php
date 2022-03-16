@@ -85,6 +85,17 @@ abstract class SharpFormEditorEmbed
         return null;
     }
 
+    final public function formConfig()
+    {
+        if ($this->pageAlertHtmlField === null) {
+            return null;
+        }
+
+        return tap([], function (&$config) {
+            $this->appendGlobalMessageToConfig($config);
+        });
+    }
+
     protected function configureLabel(string $label): self
     {
         $this->label = $label;
