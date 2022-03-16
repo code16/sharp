@@ -2,6 +2,8 @@
 
 .editor {
 
+  --card-border-color: #{$input-border-color};
+
   &__header {
     position: sticky;
     top: var(--navbar-height);
@@ -16,10 +18,6 @@
       z-index: 3;
       box-shadow: $box-shadow-sm;
     }
-  }
-
-  .card {
-    border-color: $input-border-color;
   }
 
   .card-body {
@@ -132,9 +130,11 @@
       border-radius: $card-border-radius;
       margin-bottom: 1rem;
       transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
-      &.ProseMirror-selectednode {
+
+      &.selected {
         border-color: var(--primary);
         box-shadow: $box-shadow;
+        outline: 2px solid hsl(var(--primary-h), var(--primary-s), 50%);
       }
     }
 
@@ -169,10 +169,21 @@
     .btn-light {
       --bs-btn-color: rgba(0,0,0,.675);
     }
+
+    .Prosemirror-selectednode {
+      outline: 0;
+    }
   }
 
   &__node {
     margin-bottom: 1rem;
+    border-radius: 4px;
+
+    &.selected {
+      box-shadow: $box-shadow;
+      --card-border-color: var(--primary);
+      //outline: 2px solid hsl(var(--primary-h), var(--primary-s), 70%);
+    }
   }
 
   &__dropdown {

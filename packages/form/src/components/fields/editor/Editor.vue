@@ -35,6 +35,7 @@
     import { onLabelClicked } from "../../../util/accessibility";
 
     export default {
+        inheritAttrs: false,
         components: {
             EditorContent,
             MenuBar,
