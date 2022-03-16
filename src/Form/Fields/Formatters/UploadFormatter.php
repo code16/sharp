@@ -92,14 +92,11 @@ class UploadFormatter extends SharpFieldFormatter
                     $this->handleImageTransformations($storage->get($value['name']), $value),
                 );
             }
-
-            return [
-                'filters' => $value['filters'] ?? null,
-            ];
+            
+            return $this->returnAfterTransformation($value);
         }
 
-        // No change made
-        return $value === null ? null : [];
+        return $this->returnAfterNoChangeWasMade($value);
     }
 
     /**
@@ -147,5 +144,17 @@ class UploadFormatter extends SharpFieldFormatter
         }
 
         return $img->encode();
+    }
+
+    protected function returnAfterTransformation(array $data): array
+    {
+        return [
+            'filters' => $data['filters'] ?? null,
+        ];
+    }
+
+    protected function returnAfterNoChangeWasMade(array $data): ?array
+    {
+        return $data === null ? null : [];
     }
 }

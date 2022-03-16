@@ -2,9 +2,11 @@
 
 namespace Code16\Sharp\Form\Fields\Embeds;
 
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\Fields\HandleFormFields;
+use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -12,7 +14,7 @@ use Illuminate\Support\Str;
 
 abstract class SharpFormEditorEmbed
 {
-    use HandleFormFields,
+    use HandleFields,
         HandlePageAlertMessage,
         WithCustomTransformers,
         HandleValidation;
@@ -94,6 +96,40 @@ abstract class SharpFormEditorEmbed
         return tap([], function (&$config) {
             $this->appendGlobalMessageToConfig($config);
         });
+    }
+
+    /**
+     * Applies Field Formatters on $data.
+     */
+    final public function formatRequestData(array $data): array
+    {
+        return collect($data)
+            ->filter(fn ($value, $key) => in_array($key, $this->getDataKeys()))
+            ->map(function ($value, $key) {
+                if (! $field = $this->findFieldByKey($key)) {
+                    return $value;
+                }
+                
+                if(is_a($field, SharpFormUploadField::class)) {
+                    $field->setFormatter(new class extends UploadFormatter {
+                        protected function returnAfterTransformation(array $data): array
+                        {
+                            return $data;
+                        }
+                        protected function returnAfterNoChangeWasMade(array $data): ?array
+                        {
+                            return $data;
+                        }
+                    });
+                }
+
+                // Apply formatter based on field configuration
+                return $field
+                    ->formatter()
+                    ->setDataLocalizations($this->getDataLocalizations())
+                    ->fromFront($field, $key, $value);
+            })
+            ->toArray();
     }
 
     final protected function configureLabel(string $label): self

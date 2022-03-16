@@ -35,7 +35,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             return null;
         }
 
-        if ($instance->$attribute() instanceof MorphMany) {
+        if (method_exists($instance, $attribute) && $instance->$attribute() instanceof MorphMany) {
             // We are handling a list of uploads
             return $instance->$attribute
                 ->map(function ($upload) {
