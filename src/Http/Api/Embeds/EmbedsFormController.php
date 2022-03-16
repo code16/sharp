@@ -2,34 +2,37 @@
 
 namespace Code16\Sharp\Http\Api\Embeds;
 
-use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 
 class EmbedsFormController extends Controller
 {
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
+        sharp_check_ability('update', $entityKey, $instanceId);
+
+        /** @var SharpFormEditorEmbed $embed */
+        $embed = app(Str::replace('.', '\\', $embedKey));
+        
         return [
-            'config' => null,
-            'fields' => collect(
-                (new FieldsContainer())
-                ->addField(SharpFormTextField::make('content'))
-                ->getFields(),
-            )->map->toArray()->keyBy('key')->all(),
-            'layout' => (new FormLayoutColumn(12))
-                ->withSingleField('content')
-                ->fieldsToArray()['fields'],
-            'data' => request()->all(),
+            'fields' => $embed->fields(),
+            'layout' => $embed->formLayout(),
+            'config' => null, //$embed->formConfig(),
+            'data' => $embed->fillFormWith(request()->all()),
         ];
     }
 
     public function update(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
-        return [
-            'content' => request()->get('content'),
-            'status' => 'updated',
-        ];
+        sharp_check_ability('update', $entityKey, $instanceId);
+
+        /** @var SharpFormEditorEmbed $embed */
+        $embed = app(Str::replace('.', '\\', $embedKey));
+        $data = $embed->updateContent(
+            $embed->formatRequestData(request()->all())
+        );
+        
+        return $embed->fillTemplateWith($data, true);
     }
 }

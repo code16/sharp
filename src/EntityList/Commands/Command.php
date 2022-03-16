@@ -6,16 +6,15 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
+use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
-use Illuminate\Contracts\Validation\Factory as Validator;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 
 abstract class Command
 {
     use HandleFormFields,
-       HandlePageAlertMessage,
-        WithCustomTransformers;
+        HandlePageAlertMessage,
+        WithCustomTransformers,
+        HandleValidation;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -204,17 +203,6 @@ abstract class Command
     final public function getCommandKey(): string
     {
         return $this->commandKey ?? class_basename($this::class);
-    }
-
-    final public function validate(array $params, array $rules, array $messages = []): void
-    {
-        $validator = app(Validator::class)->make($params, $rules, $messages);
-
-        if ($validator->fails()) {
-            throw new ValidationException(
-                $validator, new JsonResponse($validator->errors()->getMessages(), 422),
-            );
-        }
     }
 
     public function getDataLocalizations(): array
