@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
@@ -14,6 +15,9 @@ class SharpFormEditorField extends SharpFormField
         SharpFormFieldWithDataLocalization;
 
     const FIELD_TYPE = 'editor';
+
+    /** @deprecated use UPLOAD */
+    const DOC = 'upload';
 
     const B = 'bold';
     const I = 'italic';
@@ -37,8 +41,6 @@ class SharpFormEditorField extends SharpFormField
     const UNDO = 'undo';
     const REDO = 'redo';
 
-/** @deprecated use UPLOAD */ const DOC = 'upload';
-
     protected int $minHeight = 200;
     protected ?int $maxHeight = null;
     protected array $toolbar = [
@@ -50,6 +52,7 @@ class SharpFormEditorField extends SharpFormField
     ];
     protected bool $showToolbar = true;
     protected bool $renderAsMarkdown = false;
+    protected array $embeds = [];
 
     public static function make(string $key): self
     {
@@ -98,6 +101,13 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
+    public function allowEmbeds(array $embeds): self
+    {
+        $this->embeds = $embeds;
+        
+        return $this;
+    }
+
     protected function validationRules(): array
     {
         return [
@@ -125,20 +135,10 @@ class SharpFormEditorField extends SharpFormField
                     'placeholder' => $this->placeholder,
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
-                    'innerComponents' => [
-                        'upload' => $this->innerComponentUploadConfiguration(),
-
-                        // todo (test data)
-                        'text' => [
-                            'key' => 'text',
-                            'label' => 'Texte',
-                            'tag' => 'x-text',
-                            'attributes' => [
-                                'content' => null,
-                            ],
-                            'previewTemplate' => '{{ content }} ({{ status }})',
-                        ],
-                    ],
+                    'innerComponents' => array_merge(
+                        $this->innerComponentUploadConfiguration(),
+                        $this->innerComponentEmbedsConfiguration()
+                    ),
                 ],
                 $this->editorCustomConfiguration(),
             ),
@@ -147,24 +147,37 @@ class SharpFormEditorField extends SharpFormField
 
     protected function innerComponentUploadConfiguration(): array
     {
-        $array = [
+        $uploadConfig = [
             'maxFileSize' => $this->maxFileSize ?: 2,
             'transformable' => $this->transformable,
         ];
 
         if ($this->cropRatio) {
-            $array['ratioX'] = (int) $this->cropRatio[0];
-            $array['ratioY'] = (int) $this->cropRatio[1];
-            $array['transformKeepOriginal'] = $this->transformKeepOriginal;
-            $array['transformableFileTypes'] = $this->transformableFileTypes;
+            $uploadConfig['ratioX'] = (int) $this->cropRatio[0];
+            $uploadConfig['ratioY'] = (int) $this->cropRatio[1];
+            $uploadConfig['transformKeepOriginal'] = $this->transformKeepOriginal;
+            $uploadConfig['transformableFileTypes'] = $this->transformableFileTypes;
         }
 
         if (! $this->fileFilter) {
             $this->setFileFilterImages();
         }
-        $array['fileFilter'] = $this->fileFilter;
+        $uploadConfig['fileFilter'] = $this->fileFilter;
 
-        return $array;
+        return ['upload' => $uploadConfig];
+    }
+
+    protected function innerComponentEmbedsConfiguration(): array
+    {
+        return collect($this->embeds)
+            ->map(fn (string $embedClass) => app($embedClass))
+            ->each->buildEmbedConfig()
+            ->mapWithKeys(function (SharpFormEditorEmbed $embed) {
+                return [
+                    $embed->key() => $embed->toConfigArray()
+                ];
+            })
+            ->toArray();
     }
 
     protected function editorCustomConfiguration(): array

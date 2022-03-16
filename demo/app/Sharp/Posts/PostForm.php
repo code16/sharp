@@ -4,6 +4,7 @@ namespace App\Sharp\Posts;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Sharp\Utils\Embeds\TextEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -50,6 +51,9 @@ class PostForm extends SharpForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::IFRAME,
+                    ])
+                    ->allowEmbeds([
+                        TextEmbed::class,
                     ])
                     ->setMaxFileSize(1)
                     ->setStorageDisk('local')
