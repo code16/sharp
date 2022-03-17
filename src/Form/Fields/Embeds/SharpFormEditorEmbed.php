@@ -48,7 +48,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Must return all the data needed by the fields of the form
      */
-    public function getDataForFormFields(array $data): array
+    public function transformDataForFormFields(array $data): array
     {
         $data = collect($data)
             ->only($this->getDataKeys())
