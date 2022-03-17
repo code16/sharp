@@ -29,6 +29,13 @@ class PersonEntity extends SharpEntity
         return $this;
     }
 
+    public function setForm(?string $form): self
+    {
+        $this->form = $form;
+
+        return $this;
+    }
+
     public function setValidator(string $validatorClass, ?string $subentity = null): self
     {
         if (! $subentity) {
