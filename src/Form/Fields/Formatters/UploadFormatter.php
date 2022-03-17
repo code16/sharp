@@ -154,14 +154,14 @@ class UploadFormatter extends SharpFieldFormatter
         return $img->encode();
     }
 
-    protected function returnAfterTransformation(array $data): array
+    protected function returnAfterTransformation(?array $data): array
     {
         return $this->alwaysReturnFullObject
             ? $data
             : ['filters' => $data['filters'] ?? null];
     }
 
-    protected function returnAfterNoChangeWasMade(array $data): ?array
+    protected function returnAfterNoChangeWasMade(?array $data): ?array
     {
         return $this->alwaysReturnFullObject
             ? $data
