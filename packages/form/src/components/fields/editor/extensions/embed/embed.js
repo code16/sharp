@@ -5,7 +5,6 @@ import {
     serializeAttributeValue,
     parseAttributeValue,
     kebabCase,
-    additionalDataAttributeName,
 } from "./util";
 
 export const Embed = Node.create({
@@ -43,20 +42,7 @@ export const Embed = Node.create({
             },
             additionalData: {
                 default: null,
-                parseHTML: element => parseAttributeValue(element.getAttribute(additionalDataAttributeName)),
-                renderHTML: attributes => {
-                    if(!attributes.additionalData) {
-                        return null;
-                    }
-                    return {
-                        [additionalDataAttributeName]: serializeAttributeValue(
-                            Object.fromEntries(
-                                Object.entries(attributes.additionalData)
-                                    .filter(([key]) => !this.options.attributes.includes(key))
-                            )
-                        ),
-                    }
-                },
+                renderHTML: () => null,
             },
             isNew: {
                 default: false,

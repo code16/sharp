@@ -1,5 +1,4 @@
 
-export const additionalDataAttributeName = '_additional-data';
 
 export function parseAttributeValue(value) {
     try {
@@ -20,8 +19,4 @@ export function serializeAttributeValue(value) {
 export function kebabCase(attributeName) {
     return attributeName
         .replace(/[A-Z]+(?![a-z])|[A-Z]/g, (char, ofs) => (ofs ? '-' : '') + char.toLowerCase())
-}
-
-export function serializeEmbedElement(element) {
-    element.removeAttribute(additionalDataAttributeName);
 }

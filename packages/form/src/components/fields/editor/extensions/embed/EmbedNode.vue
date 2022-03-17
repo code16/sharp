@@ -8,13 +8,19 @@
                         :template-data="embedData"
                         :template="extension.options.template"
                     />
-                    <div class="mt-2">
-                        <Button outline small @click="handleEditClicked">
-                            {{ lang('form.upload.edit_button') }}
-                        </Button>
-                        <Button variant="danger" outline small @click="handleRemoveClicked">
-                            {{ lang('form.upload.remove_button') }}
-                        </Button>
+                    <div class="mt-3">
+                        <div class="row row-cols-auto gx-2">
+                            <div>
+                                <Button outline small @click="handleEditClicked">
+                                    {{ lang('form.upload.edit_button') }}
+                                </Button>
+                            </div>
+                            <div>
+                                <Button variant="danger" outline small @click="handleRemoveClicked">
+                                    {{ lang('form.upload.remove_button') }}
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,7 +44,6 @@
     import { TemplateRenderer } from "sharp/components";
     import NodeRenderer from "../../NodeRenderer";
     import EmbedFormModal from "./EmbedFormModal";
-    import { kebabCase } from "./util";
 
     export default {
         components: {
@@ -70,8 +75,8 @@
             },
             embedData() {
                 return {
-                    ...this.embedAttributes,
                     ...this.node.attrs.additionalData,
+                    ...this.embedAttributes,
                 }
             },
         },
@@ -107,13 +112,14 @@
             async init() {
                 if(this.node.attrs.isNew) {
                     await this.showForm();
-                } else {
-                    const additionalData = await this.extension.options.getAdditionalData(this.embedAttributes);
-                    if(additionalData) {
-                        this.updateAttributes({
-                            additionalData,
-                        });
-                    }
+                    return;
+                }
+
+                const additionalData = await this.extension.options.getAdditionalData(this.embedAttributes);
+                if(additionalData) {
+                    this.updateAttributes({
+                        additionalData,
+                    });
                 }
             },
         },
