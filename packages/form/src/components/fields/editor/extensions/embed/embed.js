@@ -1,22 +1,7 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import EmbedNode from "./EmbedNode";
-
-function parseAttributeValue(value) {
-    try {
-        return JSON.parse(value);
-    } catch {
-        return value;
-    }
-}
-
-function serializeAttributeValue(value) {
-    if(value && typeof value === 'object') {
-        return JSON.stringify(value);
-    }
-
-    return value;
-}
+import { serializeAttributeValue, parseAttributeValue } from "./util";
 
 
 export const Embed = Node.create({
@@ -79,7 +64,7 @@ export const Embed = Node.create({
         return {
             insertEmbed: ({ embedKey }) => ({ commands, tr }) => {
                 return commands
-                    .insertContentAt(tr.selection, {
+                    .insertContentAt(tr.selection.to, {
                         type: `embed:${embedKey}`,
                         attrs: {
                             isNew: true,

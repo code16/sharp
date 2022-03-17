@@ -107,7 +107,7 @@ export const Upload = Node.create({
         return {
             insertUpload: ({ file, pos }) => ({ commands, tr }) => {
                 return commands
-                    .insertContentAt(pos ?? tr.selection, {
+                    .insertContentAt(pos ?? tr.selection.to, {
                         type: this.name,
                         attrs: {
                             file,

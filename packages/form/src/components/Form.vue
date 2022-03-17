@@ -62,25 +62,22 @@
 </template>
 
 <script>
-  import { getBackUrl, logError, showAlert, } from "sharp";
+    import { getBackUrl, logError, showAlert, } from "sharp";
 
-  import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
-  import { DynamicView, Localization } from 'sharp/mixins';
+    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import { DynamicView, Localization } from 'sharp/mixins';
 
-  import FieldsLayout from './ui/FieldsLayout';
-  import LocaleSelect from './ui/LocaleSelect';
-  import localize from '../mixins/localize/form';
+    import FieldsLayout from './ui/FieldsLayout';
+    import LocaleSelect from './ui/LocaleSelect';
+    import localize from '../mixins/localize/form';
 
-  import { getDependantFieldsResetData, transformFields } from "../util";
-
-
-  const noop = ()=>{};
+    import { getDependantFieldsResetData, transformFields } from "../util";
 
     export default {
-        name:'SharpForm',
+        name: 'SharpForm',
         extends: DynamicView,
 
-        mixins: [ Localization, localize('fields')],
+        mixins: [Localization, localize('fields')],
 
         components: {
             TabbedLayout,
@@ -109,7 +106,7 @@
 
         provide() {
             return {
-                $form:this
+                $form: this
             }
         },
 
@@ -134,7 +131,7 @@
         },
         watch: {
             form() {
-                if(this.independant) {
+                if (this.independant) {
                     this.init();
                 }
             },
@@ -142,7 +139,7 @@
         computed: {
             apiPath() {
                 let path = `form/${this.entityKey}`;
-                if(this.instanceId) path+=`/${this.instanceId}`;
+                if (this.instanceId) path += `/${this.instanceId}`;
                 return path;
             },
             localized() {
@@ -157,7 +154,7 @@
                 return !this.isSingle && !this.instanceId;
             },
             isReadOnly() {
-                if(this.ignoreAuthorizations) {
+                if (this.ignoreAuthorizations) {
                     return false;
                 }
                 return this.isCreation
@@ -189,7 +186,7 @@
                         : locale)
                     .flat(2);
                 const locales = [...new Set(flattened)];
-                if(!locales.length) {
+                if (!locales.length) {
                     return this.locales?.[0]
                 }
                 return locales.length === 1 ? locales[0] : null;
@@ -199,7 +196,7 @@
                     .some(uploading => !!uploading);
             },
             actionBarProps() {
-                if(!this.ready) {
+                if (!this.ready) {
                     return null;
                 }
                 return {
@@ -257,11 +254,11 @@
                 this.breadcrumb = breadcrumb;
                 this.config = config ?? {};
 
-                if(fields) {
+                if (fields) {
                     this.fieldVisible = Object.keys(this.fields).reduce((res, fKey) => {
                         res[fKey] = true;
                         return res;
-                    },{});
+                    }, {});
                     this.fieldLocale = this.defaultFieldLocaleMap({ fields, locales });
                 }
                 this.validate();
@@ -272,29 +269,29 @@
                     title: 'Data error',
                     isError: true,
                 });
-                if(localizedFields.length > 0 && !this.locales.length) {
+                if (localizedFields.length > 0 && !this.locales.length) {
                     alert("Some fields are localized but the form hasn't any locales configured");
                 }
             },
             handleError(error) {
-                if(error.response?.status === 422) {
+                if (error.response?.status === 422) {
                     this.errors = error.response.data.errors || {};
                 }
                 return Promise.reject(error);
             },
 
             patchLayout(layout) {
-                if(!layout) {
+                if (!layout) {
                     return null;
                 }
-                if(this.noTabs) {
-                    layout = { tabs: [{ columns: [{ fields:layout}] }] };
+                if (this.noTabs) {
+                    layout = { tabs: [{ columns: [{ fields: layout }] }] };
                 }
                 let curFieldsetId = 0;
                 const mapFields = layout => {
-                    if(layout.legend)
+                    if (layout.legend)
                         layout.id = `${curFieldsetId++}#${layout.legend}`;
-                    else if(layout.fields)
+                    else if (layout.fields)
                         layout.fields.forEach(row => {
                             row.forEach(mapFields);
                         });
@@ -318,32 +315,30 @@
                 return this.axiosInstance.get(this.apiPath, {
                     params: this.apiParams
                 })
-                .then(response => {
-                    this.mount(response.data);
-                    this.$emit('update:form', response.data);
-                    return response;
-                })
-                .catch(error => {
-                    this.$emit('error', error);
-                    return Promise.reject(error);
-                });
+                    .then(response => {
+                        this.mount(response.data);
+                        this.$emit('update:form', response.data);
+                        return response;
+                    })
+                    .catch(error => {
+                        this.$emit('error', error);
+                        return Promise.reject(error);
+                    });
             },
             async init() {
-                if(this.independant) {
+                if (this.independant) {
                     this.mount(this.form);
                     this.ready = true;
-                }
-                else {
-                    if(this.entityKey) {
+                } else {
+                    if (this.entityKey) {
                         await this.get();
                         this.ready = true;
-                    }
-                    else logError('no entity key provided');
+                    } else logError('no entity key provided');
                 }
             },
             redirectForResponse(response, { replace } = {}) {
                 const url = response.data.redirectUrl;
-                if(replace) {
+                if (replace) {
                     location.replace(url);
                 } else {
                     location.href = url;
@@ -352,8 +347,8 @@
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb.items);
             },
-            async submit({ postFn }={}) {
-                if(this.isUploading) {
+            async submit({ postFn } = {}) {
+                if (this.isUploading) {
                     return;
                 }
 
@@ -370,7 +365,7 @@
                         this.setLoading(false);
                     });
 
-                if(this.independant) {
+                if (this.independant) {
                     this.$emit('submit', response);
                     return response;
                 }
@@ -380,12 +375,13 @@
                 this.redirectForResponse(response);
             },
             handleSubmitClicked() {
-                this.submit().catch(()=>{});
+                this.submit().catch(() => {
+                });
             },
             handleDeleteClicked() {
                 this.axiosInstance.delete(this.apiPath)
                     .then(response => {
-                        this.redirectForResponse(response, { replace:true });
+                        this.redirectForResponse(response, { replace: true });
                     });
             },
             handleCancelClicked() {
