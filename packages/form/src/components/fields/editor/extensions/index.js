@@ -10,6 +10,7 @@ import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { Highlight } from "@tiptap/extension-highlight";
+import { CodeBlock } from "@tiptap/extension-code-block";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
@@ -91,6 +92,12 @@ function getSmallExtension(toolbar) {
     }
 }
 
+function getCodeBlockExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'code-block')) {
+        return CodeBlock;
+    }
+}
+
 function getPasteExtension(toolbar) {
     const extensions = getToolbarExtensions(toolbar);
     const schema = getSchema(extensions);
@@ -136,6 +143,7 @@ function getToolbarExtensions(toolbar) {
         getHighlightExtension(toolbar),
         getSmallExtension(toolbar),
         getIframeExtension(toolbar),
+        getCodeBlockExtension(toolbar),
     ];
     return extensions
         .flat()

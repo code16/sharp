@@ -6,7 +6,7 @@ class DashboardController extends ApiController
 {
     public function show(string $dashboardKey)
     {
-        sharp_check_ability('view', $dashboardKey);
+        sharp_check_ability('entity', $dashboardKey);
 
         if (! $dashboard = $this->getDashboardInstance($dashboardKey)) {
             abort(404, 'Dashboard not found');

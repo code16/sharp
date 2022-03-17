@@ -112,6 +112,18 @@
 
     pre {
       overflow-wrap: anywhere;
+      code {
+        display: block;
+        padding: .5rem .75rem;
+      }
+    }
+
+    code {
+      display: inline;
+      color: inherit;
+      background-color: #f0f2f4;
+      border-radius: 3px;
+      padding: .25em .5em;
     }
 
     ul, ol {

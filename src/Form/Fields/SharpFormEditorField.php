@@ -38,6 +38,7 @@ class SharpFormEditorField extends SharpFormField
     const TABLE = 'table';
     const IFRAME = 'iframe';
     const RAW_HTML = 'html';
+    const CODE_BLOCK = 'code-block';
     const UNDO = 'undo';
     const REDO = 'redo';
 
