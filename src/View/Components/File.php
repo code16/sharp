@@ -27,6 +27,7 @@ class File extends ContentComponent
         ]);
         $this->disk = Storage::disk($this->fileModel->disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);
+        $this->name ??= basename($this->fileModel->file_name);
     }
 
     public function render(): View
