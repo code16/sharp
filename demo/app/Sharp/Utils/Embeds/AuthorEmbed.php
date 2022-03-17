@@ -19,7 +19,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->configureLabel('Author')
             ->configureTagName('x-author')
             ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
-            ->configureInlineFormTemplate('<div><strong>{{ name }}</strong></div><div><small v-html="biography.text"></small></div>');
+            ->configureInlineFormTemplate('<div><strong>{{ name }}</strong></div><div><small v-html="biography"></small></div>');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -49,16 +49,15 @@ class AuthorEmbed extends SharpFormEditorEmbed
     
     public function getDataForTemplate(array $data, bool $isForm): array
     {
-        return $this
-            ->setCustomTransformer('name', function($value, $instance) {
-                return $instance["author"]
-                    ? (User::find($instance["author"])?->name ?: null)
-                    : null;
-            })
-            ->transform($data);
+        return [
+            ...$data, 
+            "name" => ($data["author"] ?? null)
+                ? (User::find($data["author"])?->name ?: null)
+                : null
+        ];
     }
     
-    public function getDataForFormFields(array $data): array
+    public function transformDataForFormFields(array $data): array
     {
         return $this
             ->setCustomTransformer('author', function ($value) {
