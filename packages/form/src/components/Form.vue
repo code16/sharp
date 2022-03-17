@@ -72,6 +72,7 @@
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
+    import { serializePostData } from "../util/serialize";
 
     export default {
         name: 'SharpForm',
@@ -219,6 +220,9 @@
                     'cancel': this.handleCancelClicked,
                 }
             },
+            serializedData() {
+                return serializePostData(this.data, this.fields);
+            },
             mergedErrorIdentifier() {
                 return null;
             },
@@ -300,12 +304,6 @@
                 return layout;
             },
 
-            serialize(data = this.data) {
-                return Object.fromEntries(
-                    Object.entries(data ?? {})
-                        .filter(([key]) => this.fields[key]?.type !== 'html')
-                );
-            },
             setLoading(loading) {
                 this.$emit('loading', loading);
                 this.loading = loading;
@@ -354,7 +352,7 @@
 
                 this.setLoading(true);
 
-                const data = this.serialize();
+                const data = this.serializedData;
                 const post = () => postFn
                     ? postFn(data)
                     : this.post(this.apiPath, data);

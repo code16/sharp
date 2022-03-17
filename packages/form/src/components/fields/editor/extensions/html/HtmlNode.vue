@@ -39,7 +39,7 @@
     import { lang } from "sharp";
     import { Button, Modal } from "sharp-ui";
     import { NodeViewWrapper } from '@tiptap/vue-2';
-    import { elementFromString } from "./util";
+    import { elementFromString } from "../../util/dom";
 
     export default {
         components: {

@@ -1,8 +1,12 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import EmbedNode from "./EmbedNode";
-import { serializeAttributeValue, parseAttributeValue } from "./util";
-
+import {
+    serializeAttributeValue,
+    parseAttributeValue,
+    kebabCase,
+    additionalDataAttributeName,
+} from "./util";
 
 export const Embed = Node.create({
     name: 'embed',
@@ -23,23 +27,36 @@ export const Embed = Node.create({
     }),
 
     addAttributes() {
-        const attributes =
-            this.options.attributes
-                .reduce((res, attributeName) => ({
-                    ...res,
-                    [attributeName]: {
-                        default: null,
-                        parseHTML: (element) => parseAttributeValue(element.getAttribute(attributeName)),
-                        renderHTML: (attributes) => ({
-                            [attributeName]: serializeAttributeValue(attributes[attributeName]),
-                        }),
-                    }
-                }), {})
         return {
-            ...attributes,
+            attributes: {
+                default: {},
+                parseHTML: element => this.options.attributes
+                    .reduce((res, attributeName) => ({
+                        ...res,
+                        [attributeName]: parseAttributeValue(element.getAttribute(kebabCase(attributeName))),
+                    }), {}),
+                renderHTML: attributes => this.options.attributes
+                    .reduce((res, attributeName) => ({
+                        ...res,
+                        [kebabCase(attributeName)]: serializeAttributeValue(attributes.attributes[attributeName]),
+                    }), {}),
+            },
             additionalData: {
                 default: null,
-                renderHTML: () => null,
+                parseHTML: element => parseAttributeValue(element.getAttribute(additionalDataAttributeName)),
+                renderHTML: attributes => {
+                    if(!attributes.additionalData) {
+                        return null;
+                    }
+                    return {
+                        [additionalDataAttributeName]: serializeAttributeValue(
+                            Object.fromEntries(
+                                Object.entries(attributes.additionalData)
+                                    .filter(([key]) => !this.options.attributes.includes(key))
+                            )
+                        ),
+                    }
+                },
             },
             isNew: {
                 default: false,

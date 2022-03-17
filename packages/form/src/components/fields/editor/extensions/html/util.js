@@ -1,12 +1,5 @@
 import { DOMParser } from "prosemirror-model";
-
-/**
- * @returns HTMLElement
- */
-export function elementFromString(value) {
-    const wrappedValue = `<body>${value}</body>`
-    return new window.DOMParser().parseFromString(wrappedValue, 'text/html').body
-}
+import { elementFromString } from "../../util/dom";
 
 function prosemirrorParse(node, schema) {
     const parser = DOMParser.fromSchema(schema);

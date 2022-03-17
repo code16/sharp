@@ -38,6 +38,7 @@
     import { TemplateRenderer } from "sharp/components";
     import NodeRenderer from "../../NodeRenderer";
     import EmbedFormModal from "./EmbedFormModal";
+    import { kebabCase } from "./util";
 
     export default {
         components: {
@@ -64,19 +65,14 @@
            }
         },
         computed: {
+            embedAttributes() {
+                return this.node.attrs.attributes;
+            },
             embedData() {
                 return {
                     ...this.embedAttributes,
                     ...this.node.attrs.additionalData,
                 }
-            },
-            embedAttributes() {
-                return Object.fromEntries(
-                    Object.entries(this.node.attrs)
-                        .filter(([name]) =>
-                            this.extension.options.attributes.includes(name)
-                        )
-                );
             },
         },
         methods: {
@@ -96,28 +92,28 @@
                 this.deleteNode();
             },
             async showForm() {
-                this.modalForm = await this.extension.options.resolveForm(this.embedAttributes);
+                this.modalForm = await this.extension.options.resolveForm(this.embedData);
                 this.modalVisible = true;
             },
             async postForm(data) {
                 const attributes = await this.extension.options.postForm(data);
-                this.modalVisible = false;
                 this.updateAttributes({
-                    ...attributes,
+                    attributes,
+                    additionalData: attributes,
                     isNew: false,
-                    additionalData: {
-                        ...attributes
-                    },
                 });
+                this.modalVisible = false;
             },
             async init() {
                 if(this.node.attrs.isNew) {
                     await this.showForm();
                 } else {
-                    const data = await this.extension.options.getAdditionalData(this.embedAttributes);
-                    this.updateAttributes({
-                        additionalData: data,
-                    });
+                    const additionalData = await this.extension.options.getAdditionalData(this.embedAttributes);
+                    if(additionalData) {
+                        this.updateAttributes({
+                            additionalData,
+                        });
+                    }
                 }
             },
         },
