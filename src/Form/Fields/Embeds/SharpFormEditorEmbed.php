@@ -40,7 +40,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Must return all the data needed by the templates
      */
-    public function transformData(array $data, bool $isForm): array
+    public function getDataForTemplate(array $data, bool $isForm): array
     {
         return $data;
     }
@@ -48,7 +48,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Must return all the data needed by the fields of the form
      */
-    public function transformDataForForm(array $data): array
+    public function getDataForFormFields(array $data): array
     {
         $data = collect($data)
             ->only($this->getDataKeys())

@@ -18,7 +18,7 @@ class EmbedsFormController extends Controller
             'fields' => $embed->fields(),
             'layout' => $embed->formLayout(),
             'config' => $embed->formConfig(),
-            'data' => $embed->transformDataForForm(request()->all()),
+            'data' => $embed->getDataForFormFields(request()->all()),
         ];
     }
 
@@ -32,6 +32,6 @@ class EmbedsFormController extends Controller
             $embed->formatRequestData(request()->all())
         );
         
-        return $embed->transformData($data, true);
+        return $embed->getDataForTemplate($data, true);
     }
 }

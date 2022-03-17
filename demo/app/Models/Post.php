@@ -35,6 +35,11 @@ class Post extends Model
         $builder->where('published_at', '>=', $since);
     }
 
+    public static function scopeByAuthor(Builder $builder, User $author): void
+    {
+        $builder->where('author_id', $author->id);
+    }
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class);
