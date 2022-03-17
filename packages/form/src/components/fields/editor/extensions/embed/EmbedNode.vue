@@ -8,13 +8,19 @@
                         :template-data="embedData"
                         :template="extension.options.template"
                     />
-                    <div class="mt-2">
-                        <Button outline small @click="handleEditClicked">
-                            {{ lang('form.upload.edit_button') }}
-                        </Button>
-                        <Button variant="danger" outline small @click="handleRemoveClicked">
-                            {{ lang('form.upload.remove_button') }}
-                        </Button>
+                    <div class="mt-3">
+                        <div class="row row-cols-auto gx-2">
+                            <div>
+                                <Button outline small @click="handleEditClicked">
+                                    {{ lang('form.upload.edit_button') }}
+                                </Button>
+                            </div>
+                            <div>
+                                <Button variant="danger" outline small @click="handleRemoveClicked">
+                                    {{ lang('form.upload.remove_button') }}
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,19 +70,14 @@
            }
         },
         computed: {
+            embedAttributes() {
+                return this.node.attrs.attributes;
+            },
             embedData() {
                 return {
-                    ...this.embedAttributes,
                     ...this.node.attrs.additionalData,
+                    ...this.embedAttributes,
                 }
-            },
-            embedAttributes() {
-                return Object.fromEntries(
-                    Object.entries(this.node.attrs)
-                        .filter(([name]) =>
-                            this.extension.options.attributes.includes(name)
-                        )
-                );
             },
         },
         methods: {
@@ -96,27 +97,28 @@
                 this.deleteNode();
             },
             async showForm() {
-                this.modalForm = await this.extension.options.resolveForm(this.embedAttributes);
+                this.modalForm = await this.extension.options.resolveForm(this.embedData);
                 this.modalVisible = true;
             },
             async postForm(data) {
                 const attributes = await this.extension.options.postForm(data);
-                this.modalVisible = false;
                 this.updateAttributes({
-                    ...attributes,
+                    attributes,
+                    additionalData: attributes,
                     isNew: false,
-                    additionalData: {
-                        ...attributes
-                    },
                 });
+                this.modalVisible = false;
             },
             async init() {
                 if(this.node.attrs.isNew) {
                     await this.showForm();
-                } else {
-                    const data = await this.extension.options.getAdditionalData(this.embedAttributes);
+                    return;
+                }
+
+                const additionalData = await this.extension.options.getAdditionalData(this.embedAttributes);
+                if(additionalData) {
                     this.updateAttributes({
-                        additionalData: data,
+                        additionalData,
                     });
                 }
             },

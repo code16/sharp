@@ -8,6 +8,7 @@ export function elementFromString(value) {
     return new window.DOMParser().parseFromString(wrappedValue, 'text/html').body
 }
 
+
 function prosemirrorParse(node, schema) {
     const parser = DOMParser.fromSchema(schema);
     const dom = elementFromString(node.outerHTML);

@@ -36,6 +36,7 @@ export function getEmbedExtension({
             if(!state.resolving && state.currentIndex > 0) {
                 state.resolving = true;
                 state.embeds = await resolveEmbeds(state.embeds);
+                state.resolving = false;
                 state.onResolve();
             }
             state.created = true;
@@ -54,15 +55,10 @@ export function getEmbedExtension({
         getEmbed: id => {
             return state.embeds[id];
         },
-        // registerEmbed: (attrs) => {
-        //     const id = state.currentId++;
-        //     state.embeds = {
-        //         ...state.embeds,
-        //         [id]: attrs,
-        //     };
-        //     return id;
-        // },
         async getAdditionalData(attrs) {
+            if(state.created) {
+                return null;
+            }
             const index = state.currentIndex++;
             state.embeds.push(attrs);
             await state.resolved;

@@ -15,3 +15,8 @@ export function serializeAttributeValue(value) {
 
     return value;
 }
+
+export function kebabCase(attributeName) {
+    return attributeName
+        .replace(/[A-Z]+(?![a-z])|[A-Z]/g, (char, ofs) => (ofs ? '-' : '') + char.toLowerCase())
+}

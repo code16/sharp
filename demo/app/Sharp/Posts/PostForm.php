@@ -61,8 +61,7 @@ class PostForm extends SharpForm
                     ])
                     ->setMaxFileSize(1)
                     ->setStorageDisk('local')
-                    ->setStorageBasePath('data/posts/{id}/embed')
-                    ->setHeight(250),
+                    ->setStorageBasePath('data/posts/{id}/embed'),
             )
             ->addField(
                 SharpFormTagsField::make('categories', Category::pluck('name', 'id')->toArray())
@@ -152,15 +151,15 @@ class PostForm extends SharpForm
                         $column
                             ->withFields('published_at')
                             ->withSingleField('categories')
-                            ->withSingleField('cover');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('content')
+                            ->withSingleField('cover')
                             ->withSingleField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields('title|8', 'is_link|4')
                                     ->withSingleField('link_url')
                                     ->withSingleField('document');
                             });
+                    })
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withSingleField('content');
                     });
             })
             ->addTab('Metadata', function (FormLayoutTab $tab) {
