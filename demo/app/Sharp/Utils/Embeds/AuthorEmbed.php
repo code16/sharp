@@ -19,7 +19,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->configureLabel('Author')
             ->configureTagName('x-author')
             ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
-            ->configureInlineFormTemplate('<div><strong>{{ name }}</strong></div><div><small v-html="biography"></small></div>');
+            ->configureInlineFormTemplate('<div><strong>{{ name }}</strong></div><div><small v-html="biographyText"></small></div>');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -42,7 +42,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
                     ->setStorageBasePath('data/embeds'),
             )
             ->addField(
-                SharpFormEditorField::make('biography')
+                SharpFormEditorField::make('biographyText')
                     ->setLabel('Biography'),
             );
     }
