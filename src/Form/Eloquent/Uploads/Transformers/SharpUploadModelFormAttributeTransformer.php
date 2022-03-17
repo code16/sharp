@@ -13,12 +13,20 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     protected bool $withThumbnails;
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;
+    private bool $fakeSharpUploadModel = false;
 
     public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
     {
         $this->withThumbnails = $withThumbnails;
         $this->thumbnailWidth = $thumbnailWidth;
         $this->thumbnailHeight = $thumbnailHeight;
+    }
+
+    public function fakeInstance(): self
+    {
+        $this->fakeSharpUploadModel = true;
+        
+        return $this;
     }
 
     /**
@@ -31,6 +39,20 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
      */
     public function apply($value, $instance = null, $attribute = null)
     {
+        if($this->fakeSharpUploadModel) {
+            // In this case, $instance is not a SharpUploadModel object, and we have to fake one first
+            if(! $value || ! is_array($value)) {
+                return null;
+            }
+
+            if(Arr::has($value, ['name', 'disk', 'thumbnail'])) {
+                // Value is already well formatted
+                return $value;
+            }
+
+            $instance = (object)[$attribute => new SharpUploadModel($value)];
+        }
+        
         if (! $instance->$attribute) {
             return null;
         }

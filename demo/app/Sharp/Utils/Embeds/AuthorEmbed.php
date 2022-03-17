@@ -3,7 +3,6 @@
 namespace App\Sharp\Utils\Embeds;
 
 use App\Models\User;
-use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -67,20 +66,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
                     ? Arr::only($user, ["id", "name", "email"])
                     : null;
             })
-            ->setCustomTransformer('picture', function($value, $instance, $attribute) {
-                if(!$value) {
-                    return null;
-                }
-                
-                if($value['name'] ?? null) {
-                    return $value;
-                } 
-                
-                $media = new SharpUploadModel($value);
-                
-                return (new SharpUploadModelFormAttributeTransformer())
-                    ->apply($value, (object)[$attribute => $media], $attribute);
-            })
+            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer())->fakeInstance())
             ->transform($data);
     }
 

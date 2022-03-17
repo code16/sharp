@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form\Fields\Embeds;
 
-use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -111,16 +110,8 @@ abstract class SharpFormEditorEmbed
                 }
                 
                 if(is_a($field, SharpFormUploadField::class)) {
-                    $field->setFormatter(new class extends UploadFormatter {
-                        protected function returnAfterTransformation(array $data): array
-                        {
-                            return $data;
-                        }
-                        protected function returnAfterNoChangeWasMade(array $data): ?array
-                        {
-                            return $data;
-                        }
-                    });
+                    // Uploads are a bit different in this case
+                    $field->formatter()->setAlwaysReturnFullObject();
                 }
 
                 // Apply formatter based on field configuration
