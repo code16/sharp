@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { Embed } from "./embed";
 import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "sharp-embeds";
+import debounce from "lodash/debounce";
 
 
 
@@ -14,7 +15,6 @@ export function getEmbedExtension({
         embeds: [],
         currentIndex: 0,
         created: false,
-        resolving: false,
         resolved: null,
         onResolve: null,
     });
@@ -32,15 +32,13 @@ export function getEmbedExtension({
 
     const config = {
         name: `embed:${embedKey}`,
-        onCreate: async () => {
-            if(!state.resolving && state.currentIndex > 0) {
-                state.resolving = true;
+        onCreate: debounce(async () => {
+            if(state.currentIndex > 0) {
                 state.embeds = await resolveEmbeds(state.embeds);
-                state.resolving = false;
                 state.onResolve();
             }
             state.created = true;
-        },
+        }),
     }
 
     const options = {
