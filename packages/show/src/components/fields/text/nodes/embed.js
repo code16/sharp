@@ -7,7 +7,8 @@ export function createEmbedComponent(embedOptions) {
         template: `
             <EmbedRenderer 
                 :embed-data="embedData" 
-                :embed-options="embedOptions" 
+                :embed-options="embedOptions"
+                v-bind="$props"
             />
         `,
         components: {
