@@ -7,7 +7,7 @@ import debounce from "lodash/debounce";
 
 export function getEmbedExtension({
     embedKey,
-    props,
+    embedOptions,
     form,
 }) {
 
@@ -42,10 +42,10 @@ export function getEmbedExtension({
     }
 
     const options = {
-        label: props.label,
-        tag: props.tag,
-        attributes: props.attributes ?? [],
-        template: props.previewTemplate,
+        label: embedOptions.label,
+        tag: embedOptions.tag,
+        attributes: embedOptions.attributes ?? [],
+        template: embedOptions.template,
         state,
         isReady: () => {
             return state.created;

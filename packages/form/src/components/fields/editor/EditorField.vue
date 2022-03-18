@@ -60,10 +60,10 @@
             embedExtensions() {
                 const { upload, ...embeds } = this.embeds ?? {};
                 return Object.entries(embeds)
-                    .map(([embedKey, embedProps]) =>
+                    .map(([embedKey, embedOptions]) =>
                         getEmbedExtension({
                             embedKey,
-                            props: embedProps,
+                            embedOptions,
                             form: this.$form,
                         })
                     );

@@ -29,7 +29,7 @@ abstract class SharpFormEditorEmbed
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
             'tag' => $this->tagName ?: 'x-' . Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
-            'previewTemplate' => $this->templates['form'] ?? null,
+            'template' => $this->templates['form'] ?? null,
         ];
     }
 
@@ -126,7 +126,7 @@ abstract class SharpFormEditorEmbed
     final protected function transformForTemplate(array $data): array
     {
         // This transformer is used for template and tag attributes. Here we should apply
-        // custom use defined transformers, but ignore field formatters 
+        // custom use defined transformers, but ignore field formatters
         return $this->applyTransformers($data);
     }
 
