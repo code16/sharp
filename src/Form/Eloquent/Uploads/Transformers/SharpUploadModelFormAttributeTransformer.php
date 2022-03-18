@@ -13,7 +13,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     protected bool $withThumbnails;
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;
-    private bool $fakeSharpUploadModel = false;
+    private bool $dynamicSharpUploadModel = false;
 
     public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
     {
@@ -22,9 +22,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         $this->thumbnailHeight = $thumbnailHeight;
     }
 
-    public function fakeInstance(): self
+    public function dynamicInstance(): self
     {
-        $this->fakeSharpUploadModel = true;
+        $this->dynamicSharpUploadModel = true;
         
         return $this;
     }
@@ -39,18 +39,21 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
      */
     public function apply($value, $instance = null, $attribute = null)
     {
-        if($this->fakeSharpUploadModel) {
+        if($this->dynamicSharpUploadModel) {
             // In this case, $instance is not a SharpUploadModel object, and we have to fake one first
+            // This happens in an embed case: there is no SharpUploadModel object
             if(! $value || ! is_array($value)) {
                 return null;
             }
-
-            if(Arr::has($value, ['name', 'disk', 'thumbnail'])) {
-                // Value is already well formatted
-                return $value;
-            }
-
-            $instance = (object)[$attribute => new SharpUploadModel($value)];
+            
+            $instance = (object)[
+                $attribute => new SharpUploadModel([
+                    "file_name" => $value["file_name"] ?? $value["path"],
+                    "filters" => $value["filters"],
+                    "disk" => $value["disk"],
+                    "size" => $value["size"]
+                ])
+            ];
         }
         
         if (! $instance->$attribute) {

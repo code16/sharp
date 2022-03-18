@@ -31,7 +31,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
             );
     }
     
-    public function getDataForTemplate(array $data, bool $isForm): array
+    public function transformDataForTemplate(array $data, bool $isForm): array
     {
         $post = Post::find($data["post"]);
         

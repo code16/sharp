@@ -47,14 +47,15 @@ class AuthorEmbed extends SharpFormEditorEmbed
             );
     }
     
-    public function getDataForTemplate(array $data, bool $isForm): array
+    public function transformDataForTemplate(array $data, bool $isForm): array
     {
-        return [
-            ...$data, 
-            "name" => ($data["author"] ?? null)
-                ? (User::find($data["author"])?->name ?: null)
-                : null
-        ];
+        return $this
+            ->setCustomTransformer('name', function ($value, $instance) {
+                $user = ($instance['author'] ?? null) ? User::find($instance['author']) : null;
+                return $user?->name;
+            })
+            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
+            ->transformForTemplate($data);
     }
     
     public function transformDataForFormFields(array $data): array
@@ -66,7 +67,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
                     ? Arr::only($user, ["id", "name", "email"])
                     : null;
             })
-            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer())->fakeInstance())
+            ->setCustomTransformer('picture', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->transform($data);
     }
 

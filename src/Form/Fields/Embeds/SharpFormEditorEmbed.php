@@ -40,7 +40,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Must return all the data needed by the templates
      */
-    public function getDataForTemplate(array $data, bool $isForm): array
+    public function transformDataForTemplate(array $data, bool $isForm): array
     {
         return $data;
     }
@@ -121,6 +121,13 @@ abstract class SharpFormEditorEmbed
                     ->fromFront($field, $key, $value);
             })
             ->toArray();
+    }
+
+    final protected function transformForTemplate(array $data): array
+    {
+        // This transformer is used for template and tag attributes. Here we should apply
+        // custom use defined transformers, but ignore field formatters 
+        return $this->applyTransformers($data);
     }
 
     final protected function configureLabel(string $label): self

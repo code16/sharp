@@ -188,7 +188,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
             'disk' => 'local',
         ];
 
-        $transformer = (new SharpUploadModelFormAttributeTransformer())->fakeInstance();
+        $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
 
         $this->assertEquals(
             [

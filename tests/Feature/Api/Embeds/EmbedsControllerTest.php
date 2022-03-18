@@ -157,7 +157,7 @@ class TestEmbed extends SharpFormEditorEmbed
         $this->configureTagName('x-test');
     }
 
-    public function getDataForTemplate(array $data, bool $isForm): array
+    public function transformDataForTemplate(array $data, bool $isForm): array
     {
         if(static::$templateTransformMode == "none") {
             return $data;
