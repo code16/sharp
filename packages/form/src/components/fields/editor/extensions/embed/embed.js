@@ -1,11 +1,8 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
+import { serializeAttributeValue, parseAttributeValue } from "sharp-embeds";
 import EmbedNode from "./EmbedNode";
-import {
-    serializeAttributeValue,
-    parseAttributeValue,
-    kebabCase,
-} from "./util";
+import { hyphenate } from "./util";
 
 export const Embed = Node.create({
     name: 'embed',
@@ -32,12 +29,12 @@ export const Embed = Node.create({
                 parseHTML: element => this.options.attributes
                     .reduce((res, attributeName) => ({
                         ...res,
-                        [attributeName]: parseAttributeValue(element.getAttribute(kebabCase(attributeName))),
+                        [attributeName]: parseAttributeValue(element.getAttribute(hyphenate(attributeName))),
                     }), {}),
                 renderHTML: attributes => this.options.attributes
                     .reduce((res, attributeName) => ({
                         ...res,
-                        [kebabCase(attributeName)]: serializeAttributeValue(attributes.attributes[attributeName]),
+                        [hyphenate(attributeName)]: serializeAttributeValue(attributes.attributes[attributeName]),
                     }), {}),
             },
             additionalData: {
