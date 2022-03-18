@@ -163,13 +163,14 @@ abstract class SharpForm
      */
     final protected function getFormValidator(string $entityKey): ?string
     {
-        if($validator = $this->getFormValidatorClass()) {
+        if ($validator = $this->getFormValidatorClass()) {
             return $validator;
         }
 
         // Legacy stuff: backward compatibility with Sharp 6
-        if(Str::contains($entityKey, ':')) {
+        if (Str::contains($entityKey, ':')) {
             [$main, $sub] = explode(':', $entityKey);
+
             return config("sharp.entities.{$main}.forms.{$sub}.validator");
         }
 
