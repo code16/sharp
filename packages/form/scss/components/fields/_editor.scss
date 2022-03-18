@@ -202,11 +202,15 @@
     .dropdown-menu {
       width: max-content;
       @include media-breakpoint-up(sm) {
-        min-width: 18rem;
+        min-width: var(--dropdown-min-width, 10rem);
       }
       &[x-placement^=top] {
         bottom: auto;
       }
+    }
+
+    &--link, &--table {
+      --dropdown-min-width: 18rem;
     }
   }
 

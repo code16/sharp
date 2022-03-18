@@ -21,7 +21,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
                     SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
                     SharpFormEditorField::UL, SharpFormEditorField::SEPARATOR, SharpFormEditorField::A,
                 ],
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 2,
                         'transformable' => true,
@@ -70,7 +70,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'transformable' => true,
@@ -84,7 +84,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'transformable' => true,
@@ -100,7 +100,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'ratioX' => 16,
@@ -117,7 +117,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'ratioX' => 16,

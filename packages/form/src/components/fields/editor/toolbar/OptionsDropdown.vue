@@ -1,6 +1,6 @@
 <template>
     <Dropdown
-        class="editor__dropdown editor__dropdown--list"
+        class="editor__dropdown"
         variant="light"
         small
         :disabled="disabled"

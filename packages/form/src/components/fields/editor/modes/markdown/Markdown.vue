@@ -39,7 +39,6 @@
         props: {
             ...editorProps,
             extensions: Array,
-            embeds: Array,
             toolbar: Array,
             nl2br: Boolean,
             tightListsOnly: Boolean,

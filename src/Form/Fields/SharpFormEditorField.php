@@ -136,7 +136,7 @@ class SharpFormEditorField extends SharpFormField
                     'placeholder' => $this->placeholder,
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
-                    'innerComponents' => array_merge(
+                    'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),
                         $this->innerComponentEmbedsConfiguration()
                     ),
