@@ -4,7 +4,6 @@
             :value="value"
             :root="false"
             :options="options"
-            :focused="selected"
             :invalid="!!error"
             persist-thumbnails
             v-bind="fieldProps"

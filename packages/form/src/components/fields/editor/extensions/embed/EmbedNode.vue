@@ -1,9 +1,10 @@
 <template>
-    <NodeRenderer class="editor__node" :node="node">
+    <NodeRenderer class="editor__node embed-node" :node="node">
         <template v-if="!node.attrs.isNew">
             <div class="card">
                 <div class="card-body">
                     <TemplateRenderer
+                        class="embed-node__template"
                         name="Embed"
                         :template-data="embedData"
                         :template="extension.options.template"

@@ -60,6 +60,7 @@ class PostForm extends SharpForm
                         CodeEmbed::class,
                     ])
                     ->setMaxFileSize(1)
+                    ->setHeight(300, 0)
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}/embed'),
             )

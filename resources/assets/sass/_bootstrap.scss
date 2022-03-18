@@ -123,6 +123,7 @@ $bv-enable-tooltip-variants: false;
 
 .card {
   border-color: var(--card-border-color, #{$card-border-color});
+  transition: var(--card-transition);
 }
 
 .card.form-control {
