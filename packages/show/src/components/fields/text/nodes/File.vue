@@ -1,6 +1,6 @@
 <template>
     <ShowFile
-        class="text-component"
+        class="embed"
         :value="value"
         :root="false"
     />

@@ -1,10 +1,9 @@
 <template>
-    <component :is="embedOptions.tag">
+    <component class="embed" :is="embedOptions.tag">
         <TemplateRenderer
             name="Embed"
             :template-data="embedData"
             :template="embedOptions.previewTemplate"
-            style="max-width: 500px"
         />
     </component>
 </template>

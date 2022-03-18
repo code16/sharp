@@ -19,7 +19,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->configureLabel('Author')
             ->configureTagName('x-author')
             ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
-            ->configureInlineFormTemplate('<div><strong>{{ name }}</strong></div><div><small v-html="biographyText"></small></div>');
+            ->configureInlineFormTemplatePath('sharp/templates/author_embed.vue');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -63,7 +63,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
         return $this
             ->setCustomTransformer('author', function ($value) {
                 $user = $value ? User::find($value)?->toArray() : null;
-                return $user 
+                return $user
                     ? Arr::only($user, ["id", "name", "email"])
                     : null;
             })

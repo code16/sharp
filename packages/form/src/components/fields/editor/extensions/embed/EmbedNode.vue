@@ -70,13 +70,10 @@
            }
         },
         computed: {
-            embedAttributes() {
-                return this.node.attrs.attributes;
-            },
             embedData() {
                 return {
+                    ...this.node.attrs.attributes,
                     ...this.node.attrs.additionalData,
-                    ...this.embedAttributes,
                 }
             },
         },
@@ -115,7 +112,7 @@
                     return;
                 }
 
-                const additionalData = await this.extension.options.getAdditionalData(this.embedAttributes);
+                const additionalData = await this.extension.options.getAdditionalData(this.node.attrs.attributes);
                 if(additionalData) {
                     this.updateAttributes({
                         additionalData,

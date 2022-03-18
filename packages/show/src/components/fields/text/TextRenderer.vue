@@ -76,14 +76,15 @@
                 Object.entries(this.state.embeds)
                     .filter(([embedKey, embeds]) => embeds.length > 0)
                     .forEach(async ([embedKey, embeds]) => {
+                        const resolved = await postResolveEmbeds({
+                            entityKey,
+                            instanceId,
+                            embedKey,
+                            embeds,
+                        });
                         this.state.embeds = {
                             ...this.state.embeds,
-                            [embedKey]: await postResolveEmbeds({
-                                entityKey,
-                                instanceId,
-                                embedKey,
-                                embeds,
-                            }),
+                            [embedKey]: resolved,
                         }
                     });
             },
