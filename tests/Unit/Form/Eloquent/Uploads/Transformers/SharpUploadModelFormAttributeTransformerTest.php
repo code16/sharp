@@ -186,6 +186,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
             'file_name' => $file,
             'size' => 120,
             'disk' => 'local',
+            'filters' => [],
         ];
 
         $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
@@ -198,6 +199,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
                 'disk' => 'local',
                 'size' => 120,
                 'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
+                'filters' => [],
             ],
             $transformer->apply($uploadData, null, 'picture'),
         );
