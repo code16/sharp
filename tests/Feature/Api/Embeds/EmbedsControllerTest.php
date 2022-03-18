@@ -22,7 +22,7 @@ class EmbedsControllerTest extends BaseApiTest
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.show', [TestEmbed::$key, 'person']), 
+                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]), 
                 [
                     'embeds' => [
                         ['text' => $text]
@@ -37,15 +37,6 @@ class EmbedsControllerTest extends BaseApiTest
             ]);
     }
 
-    protected function buildTheWorld($singleShow = false)
-    {
-        parent::buildTheWorld($singleShow);
-
-        app(SharpEntityManager::class)
-            ->entityFor('person')
-            ->setForm(PersonWithEmbedsForm::class);
-    }
-
     /** @test */
     public function we_can_get_a_updated_template_data_of_an_embed()
     {
@@ -56,7 +47,7 @@ class EmbedsControllerTest extends BaseApiTest
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.show', [TestEmbed::$key, 'person']),
+                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => [
                         ['text' => $text]
@@ -84,7 +75,7 @@ class EmbedsControllerTest extends BaseApiTest
         
         $this
             ->postJson(
-                route('code16.sharp.api.embed.show', [TestEmbed::$key, 'person']),
+                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => $texts
                         ->map(fn ($text) => ["text" => $text])
@@ -112,7 +103,7 @@ class EmbedsControllerTest extends BaseApiTest
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.show', [TestEmbed::$key, 'person']),
+                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]),
                 [
                     'form' => true,
                     'embeds' => [
@@ -131,6 +122,15 @@ class EmbedsControllerTest extends BaseApiTest
         parent::setUp();
 
         $this->login();
+    }
+
+    protected function buildTheWorld($singleShow = false)
+    {
+        parent::buildTheWorld($singleShow);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(PersonWithEmbedsForm::class);
     }
 }
 
