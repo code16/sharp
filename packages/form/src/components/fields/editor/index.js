@@ -19,7 +19,7 @@ export const editorProps = {
     toolbar: Array,
     minHeight: Number,
     maxHeight: Number,
-    innerComponents: Object,
+    embeds: Object,
     uniqueIdentifier: String,
     fieldConfigIdentifier: String,
 }

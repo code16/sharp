@@ -38,6 +38,7 @@ class SharpFormEditorField extends SharpFormField
     const TABLE = 'table';
     const IFRAME = 'iframe';
     const RAW_HTML = 'html';
+    const CODE_BLOCK = 'code-block';
     const UNDO = 'undo';
     const REDO = 'redo';
 
@@ -135,7 +136,7 @@ class SharpFormEditorField extends SharpFormField
                     'placeholder' => $this->placeholder,
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
-                    'innerComponents' => array_merge(
+                    'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),
                         $this->innerComponentEmbedsConfiguration()
                     ),

@@ -50,9 +50,9 @@
                     <OptionsDropdown :options="options" :editor="editor" />
                 </div>
             </template>
-            <template v-if="embeds && embeds.length > 0">
+            <template v-if="customEmbeds && customEmbeds.length > 0">
                 <div class="btn-group">
-                    <EmbedDropdown :embeds="embeds" :editor="editor" />
+                    <EmbedDropdown :embeds="customEmbeds" :editor="editor" />
                 </div>
             </template>
         </div>
@@ -82,7 +82,7 @@
             toolbar: Array,
             disabled: Boolean,
             options: Array,
-            embeds: Array,
+            embeds: Object,
         },
         computed: {
             toolbarGroups() {
@@ -94,6 +94,10 @@
                         res[res.length - 1].push(btn);
                         return res;
                     }, [[]]);
+            },
+            customEmbeds() {
+                const { upload, ...customEmbeds } = this.embeds;
+                return Object.values(customEmbeds);
             },
         },
         methods: {

@@ -53,7 +53,7 @@
             maxHeight: Number,
             readOnly: Boolean,
             toolbarOptions: Array,
-            embeds: Array,
+            embeds: Object,
         },
         data() {
             return {

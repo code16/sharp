@@ -1,4 +1,8 @@
-
+@php
+/**
+ * @see \Code16\Sharp\View\Components\File
+ */
+@endphp
 
 <p {{ $attributes->class('sharp-file') }}>
     <svg class="sharp-file__icon" width="1.5em" height="1.25em" viewBox="0 0 1024 1024" fill="currentColor" opacity=".75" aria-hidden="true">
@@ -6,6 +10,6 @@
     </svg>
 
     <small class="sharp-file__name">
-        {{ basename($fileModel->file_name) }}
+        {{ $name }}
     </small>
 </p>

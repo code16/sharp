@@ -37,7 +37,6 @@
         props: {
             ...editorProps,
             extensions: Array,
-            embeds: Array,
 
             readOnly: Boolean,
             uniqueIdentifier: String,

@@ -112,6 +112,18 @@
 
     pre {
       overflow-wrap: anywhere;
+      code {
+        display: block;
+        padding: .5rem .75rem;
+      }
+    }
+
+    code {
+      display: inline;
+      color: inherit;
+      background-color: #f0f2f4;
+      border-radius: 3px;
+      padding: .25em .5em;
     }
 
     ul, ol {
@@ -190,11 +202,15 @@
     .dropdown-menu {
       width: max-content;
       @include media-breakpoint-up(sm) {
-        min-width: 18rem;
+        min-width: var(--dropdown-min-width, 10rem);
       }
       &[x-placement^=top] {
         bottom: auto;
       }
+    }
+
+    &--link, &--table {
+      --dropdown-min-width: 18rem;
     }
   }
 

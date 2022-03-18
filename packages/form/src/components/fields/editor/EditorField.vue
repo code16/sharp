@@ -5,7 +5,6 @@
                 v-bind="$props"
                 v-on="$listeners"
                 :extensions="extensions"
-                :embeds="embeds"
             />
         </template>
         <template v-else>
@@ -13,7 +12,6 @@
                 v-bind="$props"
                 v-on="$listeners"
                 :extensions="extensions"
-                :embeds="embeds"
             />
         </template>
     </div>
@@ -49,18 +47,18 @@
                 return extensions.filter(extension => !!extension);
             },
             uploadExtension() {
-                if(!this.innerComponents?.upload) {
+                if(!this.embeds?.upload) {
                     return null;
                 }
                 return getUploadExtension.call(this, {
-                    fieldProps: this.innerComponents.upload,
+                    fieldProps: this.embeds.upload,
                     uniqueIdentifier: this.uniqueIdentifier,
                     fieldConfigIdentifier: this.fieldConfigIdentifier,
                     form: this.$form,
                 });
             },
             embedExtensions() {
-                const { upload, ...embeds } = this.innerComponents ?? {};
+                const { upload, ...embeds } = this.embeds ?? {};
                 return Object.entries(embeds)
                     .map(([embedKey, embedProps]) =>
                         getEmbedExtension({
@@ -69,10 +67,6 @@
                             form: this.$form,
                         })
                     );
-            },
-            embeds() {
-                const { upload, ...embeds } = this.innerComponents ?? {};
-                return Object.values(embeds);
             },
         },
     }

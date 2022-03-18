@@ -140,6 +140,7 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::HIGHLIGHT,
                         SharpFormEditorField::SMALL,
+                        SharpFormEditorField::CODE_BLOCK,
                     ])
                     ->setCropRatio('1:1')
                     ->setHeight(350)
