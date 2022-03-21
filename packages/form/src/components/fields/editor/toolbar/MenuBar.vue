@@ -96,7 +96,7 @@
                     }, [[]]);
             },
             customEmbeds() {
-                const { upload, ...customEmbeds } = this.embeds;
+                const { upload, ...customEmbeds } = this.embeds ?? {};
                 return Object.values(customEmbeds);
             },
         },
