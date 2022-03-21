@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 class EmbedsControllerTest extends BaseApiTest
 {
     /** @test */
-    public function we_can_get_template_data_of_an_embed_which_is_identical_by_default()
+    public function we_can_get_data_of_an_embed_which_is_identical_by_default()
     {
         $this->buildTheWorld();
 
@@ -38,7 +38,7 @@ class EmbedsControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_a_updated_template_data_of_an_embed()
+    public function we_can_get_updated_data_of_an_embed()
     {
         $this->buildTheWorld();
 
@@ -66,7 +66,7 @@ class EmbedsControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_template_data_for_multiple_embeds()
+    public function we_can_get_data_for_multiple_embeds()
     {
         $this->buildTheWorld();
 

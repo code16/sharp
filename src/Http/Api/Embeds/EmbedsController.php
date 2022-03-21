@@ -13,7 +13,11 @@ class EmbedsController extends Controller
      */
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
-        sharp_check_ability('view', $entityKey, $instanceId);
+        if($instanceId) {
+            sharp_check_ability('view', $entityKey, $instanceId);
+        } else {
+            sharp_check_ability('entity', $entityKey);
+        }
 
         $embed = $this->getEmbedFromKey($embedKey);
         
