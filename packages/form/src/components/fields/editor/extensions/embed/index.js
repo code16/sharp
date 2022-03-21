@@ -27,6 +27,7 @@ export function getEmbedExtension({
             instanceId: form.instanceId,
             embedKey,
             embeds,
+            form: true,
         })
     }
 

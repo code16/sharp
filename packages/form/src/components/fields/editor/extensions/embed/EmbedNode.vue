@@ -7,6 +7,7 @@
                         class="embed-node__template"
                         name="Embed"
                         :template-data="embedData"
+                        :template-props="extension.options.attributes"
                         :template="extension.options.template"
                     />
                     <div class="mt-3">

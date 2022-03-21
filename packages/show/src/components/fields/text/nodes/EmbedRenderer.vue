@@ -3,6 +3,7 @@
         <TemplateRenderer
             name="Embed"
             :template-data="embedData"
+            :template-props="embedOptions.attributes"
             :template="embedOptions.template"
         />
     </component>
