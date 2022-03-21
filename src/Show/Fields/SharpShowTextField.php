@@ -3,10 +3,12 @@
 namespace Code16\Sharp\Show\Fields;
 
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 
 class SharpShowTextField extends SharpShowField
 {
-    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithDataLocalization,
+        SharpFormFieldWithEmbeds;
 
     const FIELD_TYPE = 'text';
 
@@ -54,6 +56,7 @@ class SharpShowTextField extends SharpShowField
             'html' => $this->html,
             'collapseToWordCount' => $this->collapseToWordCount,
             'localized' => $this->localized,
+            'embeds' => $this->innerComponentEmbedsConfiguration(false) ?: null,
         ]);
     }
 

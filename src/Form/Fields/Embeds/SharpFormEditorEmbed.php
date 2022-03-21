@@ -22,14 +22,16 @@ abstract class SharpFormEditorEmbed
     protected ?string $tagName = null;
     protected array $templates = [];
 
-    public function toConfigArray(): array
+    public function toConfigArray(bool $isForm): array
     {
+        $templateKey = $isForm ? 'form' : 'show';
+        
         return [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
             'tag' => $this->tagName ?: 'x-' . Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
-            'template' => $this->templates['form'] ?? null,
+            'template' => $this->templates[$templateKey] ?? $this->templates['form'],
         ];
     }
 
@@ -144,14 +146,30 @@ abstract class SharpFormEditorEmbed
         return $this;
     }
 
-    final protected function configureInlineFormTemplate(string $template): self
+    final protected function configureFormInlineTemplate(string $template): self
     {
         return $this->setTemplate($template, 'form');
     }
 
-    final public function key(): string
+    final protected function configureShowInlineTemplate(string $template): self
     {
-        return Str::replace('\\', '.', get_class($this));
+        return $this->setTemplate($template, 'show');
+    }
+
+    final protected function configureFormTemplatePath(string $templatePath): self
+    {
+        return $this->setTemplate(
+            file_get_contents(resource_path('views/'.$templatePath)),
+            'form',
+        );
+    }
+
+    final protected function configureShowTemplatePath(string $templatePath): self
+    {
+        return $this->setTemplate(
+            file_get_contents(resource_path('views/'.$templatePath)),
+            'show',
+        );
     }
 
     private function setTemplate(string $template, string $key) :self
@@ -161,25 +179,9 @@ abstract class SharpFormEditorEmbed
         return $this;
     }
 
-    final protected function configureInlineShowTemplate(string $template): self
+    final public function key(): string
     {
-        return $this->setTemplate($template, 'show');
-    }
-
-    final protected function configureInlineFormTemplatePath(string $templatePath): self
-    {
-        return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
-            'form',
-        );
-    }
-
-    final protected function configureInlineShowTemplatePath(string $templatePath): self
-    {
-        return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
-            'show',
-        );
+        return Str::replace('\\', '.', get_class($this));
     }
 
     public function getDataLocalizations(): array

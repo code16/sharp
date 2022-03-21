@@ -13,16 +13,16 @@ use Illuminate\Support\Str;
 class EmbedsControllerTest extends BaseApiTest
 {
     /** @test */
-    public function we_can_get_template_data_of_an_embed_which_is_identical_by_default()
+    public function we_can_get_data_of_an_embed_which_is_identical_by_default()
     {
         $this->buildTheWorld();
 
-        TestEmbed::$templateTransformMode = "none";
+        EmbedsControllerTestEmbed::$templateTransformMode = "none";
         $text = Str::random();
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]), 
+                route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]), 
                 [
                     'embeds' => [
                         ['text' => $text]
@@ -38,16 +38,16 @@ class EmbedsControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_a_updated_template_data_of_an_embed()
+    public function we_can_get_updated_data_of_an_embed()
     {
         $this->buildTheWorld();
 
-        TestEmbed::$templateTransformMode = "upper";
+        EmbedsControllerTestEmbed::$templateTransformMode = "upper";
         $text = Str::random();
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]),
+                route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => [
                         ['text' => $text]
@@ -66,16 +66,16 @@ class EmbedsControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_get_template_data_for_multiple_embeds()
+    public function we_can_get_data_for_multiple_embeds()
     {
         $this->buildTheWorld();
 
-        TestEmbed::$templateTransformMode = "lower";
+        EmbedsControllerTestEmbed::$templateTransformMode = "lower";
         $texts = collect([Str::random(), Str::random(), Str::random()]);
         
         $this
             ->postJson(
-                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]),
+                route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => $texts
                         ->map(fn ($text) => ["text" => $text])
@@ -98,12 +98,12 @@ class EmbedsControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        TestEmbed::$templateTransformMode = "upper";
+        EmbedsControllerTestEmbed::$templateTransformMode = "upper";
         $text = Str::random();
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.instance.show', [TestEmbed::$key, 'person', 1]),
+                route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]),
                 [
                     'form' => true,
                     'embeds' => [
@@ -141,15 +141,15 @@ class PersonWithEmbedsForm extends PersonSharpForm
         $formFields->addField(
             SharpFormEditorField::make('editor')
                 ->allowEmbeds([
-                    TestEmbed::class
+                    EmbedsControllerTestEmbed::class
                 ])
         );
     }
 }
 
-class TestEmbed extends SharpFormEditorEmbed
+class EmbedsControllerTestEmbed extends SharpFormEditorEmbed
 {
-    public static string $key = 'Code16.Sharp.Tests.Feature.Api.Embeds.TestEmbed';
+    public static string $key = 'Code16.Sharp.Tests.Feature.Api.Embeds.EmbedsControllerTestEmbed';
     public static string $templateTransformMode = "none";
 
     public function buildEmbedConfig(): void
