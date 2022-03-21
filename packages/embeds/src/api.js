@@ -1,9 +1,10 @@
 import { api } from 'sharp';
 
 
-export function postResolveEmbeds({ entityKey, instanceId, embedKey, embeds }) {
+export function postResolveEmbeds({ entityKey, instanceId, embedKey, embeds, form=false }) {
     return api.post(`/embeds/${embedKey}/${entityKey}/${instanceId ?? ''}`, {
         embeds,
+        form,
     })
     .then(response => response.data.embeds);
 }
