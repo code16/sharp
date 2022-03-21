@@ -56,7 +56,7 @@ class SharpShowTextField extends SharpShowField
             'html' => $this->html,
             'collapseToWordCount' => $this->collapseToWordCount,
             'localized' => $this->localized,
-            'embeds' => $this->innerComponentEmbedsConfiguration() ?: null,
+            'embeds' => $this->innerComponentEmbedsConfiguration(false) ?: null,
         ]);
     }
 

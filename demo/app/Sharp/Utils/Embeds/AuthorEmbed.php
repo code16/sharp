@@ -19,7 +19,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->configureLabel('Author')
             ->configureTagName('x-author')
             ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
-            ->configureInlineFormTemplatePath('sharp/templates/author_embed.vue');
+            ->configureFormTemplatePath('sharp/templates/author_embed.vue');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

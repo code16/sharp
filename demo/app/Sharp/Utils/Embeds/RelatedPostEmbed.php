@@ -14,7 +14,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Related Post')
             ->configureTagName('x-related-post')
-            ->configureInlineFormTemplate('<div><span v-if="online" style="color: blue">●</span><i v-if="!online" style="color: orange">●</i> <i class="fa fa-link"></i> <em>{{ title }}</em></div>');
+            ->configureFormInlineTemplate('<div><span v-if="online" style="color: blue">●</span><i v-if="!online" style="color: orange">●</i> <i class="fa fa-link"></i> <em>{{ title }}</em></div>');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

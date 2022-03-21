@@ -15,14 +15,14 @@ trait SharpFormFieldWithEmbeds
         return $this;
     }
 
-    protected function innerComponentEmbedsConfiguration(): array
+    protected function innerComponentEmbedsConfiguration(bool $isForm = true): array
     {
         return collect($this->embeds)
             ->map(fn (string $embedClass) => app($embedClass))
             ->each->buildEmbedConfig()
-            ->mapWithKeys(function (SharpFormEditorEmbed $embed) {
+            ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
                 return [
-                    $embed->key() => $embed->toConfigArray()
+                    $embed->key() => $embed->toConfigArray($isForm)
                 ];
             })
             ->toArray();
