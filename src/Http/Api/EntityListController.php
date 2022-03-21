@@ -33,7 +33,7 @@ class EntityListController extends ApiController
      */
     public function update(string $entityKey)
     {
-        sharp_check_ability('update', $entityKey);
+        sharp_check_ability('entity', $entityKey);
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
