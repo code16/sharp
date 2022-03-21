@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
@@ -12,7 +12,8 @@ class SharpFormEditorField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder,
         SharpFormFieldWithUpload,
-        SharpFormFieldWithDataLocalization;
+        SharpFormFieldWithDataLocalization,
+        SharpFormFieldWithEmbeds;
 
     const FIELD_TYPE = 'editor';
 
@@ -53,7 +54,6 @@ class SharpFormEditorField extends SharpFormField
     ];
     protected bool $showToolbar = true;
     protected bool $renderAsMarkdown = false;
-    protected array $embeds = [];
 
     public static function make(string $key): self
     {
@@ -99,13 +99,6 @@ class SharpFormEditorField extends SharpFormField
     {
         $this->renderAsMarkdown = $renderAsMarkdown;
 
-        return $this;
-    }
-
-    public function allowEmbeds(array $embeds): self
-    {
-        $this->embeds = $embeds;
-        
         return $this;
     }
 
@@ -166,19 +159,6 @@ class SharpFormEditorField extends SharpFormField
         $uploadConfig['fileFilter'] = $this->fileFilter;
 
         return ['upload' => $uploadConfig];
-    }
-
-    protected function innerComponentEmbedsConfiguration(): array
-    {
-        return collect($this->embeds)
-            ->map(fn (string $embedClass) => app($embedClass))
-            ->each->buildEmbedConfig()
-            ->mapWithKeys(function (SharpFormEditorEmbed $embed) {
-                return [
-                    $embed->key() => $embed->toConfigArray()
-                ];
-            })
-            ->toArray();
     }
 
     protected function editorCustomConfiguration(): array

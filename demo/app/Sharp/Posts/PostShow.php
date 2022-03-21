@@ -5,6 +5,9 @@ namespace App\Sharp\Posts;
 use App\Models\Post;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
+use App\Sharp\Utils\Embeds\AuthorEmbed;
+use App\Sharp\Utils\Embeds\CodeEmbed;
+use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -24,7 +27,16 @@ class PostShow extends SharpShow
     {
         $showFields
             ->addField(SharpShowTextField::make('title')->setLabel('Title')->setLocalized())
-            ->addField(SharpShowTextField::make('content')->collapseToWordCount(30)->setLocalized())
+            ->addField(
+                SharpShowTextField::make('content')
+                    ->allowEmbeds([
+                        RelatedPostEmbed::class,
+                        AuthorEmbed::class,
+                        CodeEmbed::class,
+                    ])
+                    ->collapseToWordCount(30)
+                    ->setLocalized()
+            )
             ->addField(SharpShowTextField::make('author')->setLabel('Author'))
             ->addField(SharpShowTextField::make('categories')->setLabel('Categories'))
             ->addField(SharpShowPictureField::make('cover'))
