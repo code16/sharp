@@ -6,7 +6,9 @@ return [
     '419.title' => 'No válido',
     '419.message' => 'El recuros requerido no está disponible, seguramente debido a un largo periodo de inactividad. Recargue la página para continuar.',
 
-    'command.confirm.title' => 'Confirmar',
+    'confirm.ok_button' => 'Confirmar',
+    
+    
     'command.info.title' => 'Información',
     'state.422.title' => 'No se puede cambiar el estado',
     'cropper.title' => 'Adaptar imagen',
