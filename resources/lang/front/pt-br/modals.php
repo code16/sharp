@@ -7,8 +7,7 @@ return [
     '419.message' => 'Esta ação não é mais válida, provavelmente devido a um longo período de inatividade. A página será recarregada automaticamente.',
 
     'confirm.ok_button' => 'Confirmar',
-    
-    
+
     'command.info.title' => 'Informação',
     'state.422.title' => 'Não pode mudar de estado',
     'cropper.title' => 'Transformar a imagem',

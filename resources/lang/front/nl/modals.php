@@ -7,8 +7,7 @@ return [
     '419.message' => 'Deze actie is niet meer geldig, waarschijnlijk door inactiviteit. De pagina zal automatisch worden herladen.',
 
     'confirm.ok_button' => 'Bevestig',
-    
-    
+
     'command.info.title' => 'Info',
     'state.422.title' => 'Kan staat niet wijzigen',
     'cropper.title' => 'Transformeer afbeelding',
