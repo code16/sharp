@@ -164,7 +164,7 @@ class SharpFormTest extends SharpTestCase
             [
                 'isSingle' => true,
                 'hasShowPage' => false,
-                'confirmTextOnDeletion' => null,
+                'deleteConfirmationText' => null,
             ],
             $sharpForm->formConfig(),
         );
@@ -186,7 +186,7 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(
             [
                 'hasShowPage' => true,
-                'confirmTextOnDeletion' => null,
+                'deleteConfirmationText' => null,
             ],
             $sharpForm->formConfig(),
         );
@@ -208,7 +208,7 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(
             [
                 'hasShowPage' => false,
-                'confirmTextOnDeletion' => 'Vous êtes sûr ?',
+                'deleteConfirmationText' => 'Vous êtes sûr ?',
             ],
             $sharpForm->formConfig(),
         );
@@ -230,7 +230,7 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(
             [
                 'hasShowPage' => false,
-                'confirmTextOnDeletion' => 'Are you sure you want to delete this item ?',
+                'deleteConfirmationText' => 'Are you sure you want to delete this item ?',
             ],
             $sharpForm->formConfig(),
         );
