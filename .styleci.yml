@@ -3,3 +3,5 @@ version: 8.0
 enabled:
   - heredoc_indentation
   - unalign_double_arrow
+disabled:
+  - trailing_comma_in_multiline_call
