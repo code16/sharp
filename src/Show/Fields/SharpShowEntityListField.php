@@ -34,7 +34,7 @@ class SharpShowEntityListField extends SharpShowField
             $key = tap(
                 app($filterFullClassNameOrKey), function (Filter $filter) {
                     $filter->buildFilterConfig();
-                }, )
+                })
                 ->getKey();
         } else {
             $key = $filterFullClassNameOrKey;

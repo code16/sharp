@@ -105,7 +105,7 @@ class SharpDashboardTest extends SharpTestCase
                         'a' => 10,
                         'b' => 20,
                         'c' => 30,
-                    ])->setLabel('test')->setColor('blue'), );
+                    ])->setLabel('test')->setColor('blue'));
             }
         };
 
@@ -148,13 +148,13 @@ class SharpDashboardTest extends SharpTestCase
                         'a' => 10,
                         'b' => 20,
                         'c' => 30,
-                    ])->setLabel('test')->setColor('blue'), );
+                    ])->setLabel('test')->setColor('blue'));
                 $this->addGraphDataSet('widget',
                     SharpGraphWidgetDataSet::make([
                         'a' => 40,
                         'b' => 50,
                         'c' => 60,
-                    ])->setLabel('test2')->setColor('red'), );
+                    ])->setLabel('test2')->setColor('red'));
             }
         };
 

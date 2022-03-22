@@ -24,7 +24,7 @@ class LinkToEntityList extends SharpLinkTo
             $key = tap(
                 app($filterFullClassNameOrKey), function (Filter $filter) {
                     $filter->buildFilterConfig();
-                }, )
+                })
                 ->getKey();
         } else {
             $key = $filterFullClassNameOrKey;

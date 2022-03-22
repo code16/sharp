@@ -159,7 +159,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
             public function buildFormFields(FieldsContainer $formFields): void
             {
                 $formFields->addField(SharpFormSelectField::make(
-                    'elderSon', Person::all()->pluck('name', 'id')->all(), ),
+                    'elderSon', Person::all()->pluck('name', 'id')->all()),
                 );
             }
         };

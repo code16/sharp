@@ -97,7 +97,7 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow
             {
                 return $instanceId != 100;
             }
-        }, );
+        });
     }
 }
 
@@ -124,6 +124,6 @@ class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow
             {
                 return true;
             }
-        }, );
+        });
     }
 }

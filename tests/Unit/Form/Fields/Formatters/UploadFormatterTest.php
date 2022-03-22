@@ -54,9 +54,10 @@ class UploadFormatterTest extends SharpTestCase
             $formatter->fromFront(
                 $field,
                 'attribute',
-                ['name' => 'test.png'],
-            ),
-        );
+                [
+                    'name' => 'test.png',
+                ]),
+            );
     }
 
     /** @test */
@@ -158,7 +159,7 @@ class UploadFormatterTest extends SharpTestCase
                 {
                     return true;
                 }
-            });
+            }, );
 
         $field = SharpFormUploadField::make('upload')
             ->shouldOptimizeImage()
@@ -277,87 +278,5 @@ class UploadFormatterTest extends SharpTestCase
                 ],
             ),
         );
-    }
-
-    /** @test */
-    public function the_formater_returns_an_empty_array_if_no_change_was_made()
-    {
-        $field = SharpFormUploadField::make('upload')
-            ->setStorageDisk('local')
-            ->setTransformable(true, false)
-            ->setStorageBasePath('data/Test');
-
-        $result = (new UploadFormatter)
-            ->fromFront(
-                $field,
-                'attribute',
-                [
-                    'name' => '/image.jpg',
-                    'uploaded' => false,
-                    'transformed' => false,
-                ],
-            );
-
-        $this->assertEquals([], $result);
-    }
-
-    /** @test */
-    public function the_formater_returns_an_array_with_only_filters_if_file_was_just_transformed()
-    {
-        $existingFile = UploadedFile::fake()->image('image.jpg', 600, 600);
-        $existingFile->storeAs('/data/Test', 'image.jpg', ['disk' => 'local']);
-
-        $filters = [
-            'crop' => [
-                'height' => .5,
-                'width' => .75,
-                'x' => .3,
-                'y' => .34,
-            ],
-            'rotate' => [
-                'angle' => 45,
-            ],
-        ];
-
-        $field = SharpFormUploadField::make('upload')
-            ->setStorageDisk('local')
-            ->setTransformable()
-            ->setStorageBasePath('data/Test');
-
-        $result = (new UploadFormatter)
-            ->fromFront(
-                $field,
-                'attribute',
-                [
-                    'name' => '/image.jpg',
-                    'uploaded' => false,
-                    'transformed' => true,
-                    'filters' => $filters,
-                ],
-            );
-
-        $this->assertEquals(['filters' => $filters], $result);
-    }
-
-    /** @test */
-    public function we_can_configure_the_formater_to_always_return_all_the_data()
-    {
-        $uploadData = [
-            'name' => '/image.jpg',
-            'uploaded' => false,
-            'transformed' => false,
-        ];
-
-        $field = SharpFormUploadField::make('upload')
-            ->setStorageDisk('local')
-            ->setTransformable(true, false)
-            ->setStorageBasePath('data/Test');
-
-        // Post "no change"
-        $result = (new UploadFormatter)
-            ->setAlwaysReturnFullObject()
-            ->fromFront($field, 'attribute', $uploadData);
-
-        $this->assertEquals($uploadData, $result);
     }
 }
