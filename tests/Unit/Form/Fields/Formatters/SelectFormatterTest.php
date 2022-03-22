@@ -61,15 +61,13 @@ class SelectFormatterTest extends SharpTestCase
             ->setMultiple();
 
         $this->assertEquals([1, 2], $formatter->toFront($field, [
-            new class
-            {
+            new class {
                 public function toArray()
                 {
                     return ['id' => 1, 'label' => 'A'];
                 }
             },
-            new class
-            {
+            new class {
                 public function toArray()
                 {
                     return ['id' => 2, 'label' => 'B'];

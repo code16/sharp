@@ -159,7 +159,7 @@ class EmbedsControllerTestEmbed extends SharpFormEditorEmbed
 
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
-        if(static::$templateTransformMode == 'none') {
+        if (static::$templateTransformMode == 'none') {
             return $data;
         }
 

@@ -10,7 +10,7 @@ class EmbedsFormController extends Controller
 
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
-        if($instanceId) {
+        if ($instanceId) {
             sharp_check_ability('view', $entityKey, $instanceId);
         } else {
             sharp_check_ability('entity', $entityKey);
@@ -28,7 +28,7 @@ class EmbedsFormController extends Controller
 
     public function update(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
-        if($instanceId) {
+        if ($instanceId) {
             sharp_check_ability('update', $entityKey, $instanceId);
         } else {
             sharp_check_ability('create', $entityKey);

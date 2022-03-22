@@ -111,7 +111,7 @@ abstract class SharpFormEditorEmbed
                     return $value;
                 }
 
-                if(is_a($field, SharpFormUploadField::class)) {
+                if (is_a($field, SharpFormUploadField::class)) {
                     // Uploads are a bit different in this case
                     $field->formatter()->setAlwaysReturnFullObject();
                 }

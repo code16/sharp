@@ -39,10 +39,10 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
      */
     public function apply($value, $instance = null, $attribute = null)
     {
-        if($this->dynamicSharpUploadModel) {
+        if ($this->dynamicSharpUploadModel) {
             // In this case, $instance is not a SharpUploadModel object, and we have to fake one first
             // This happens in an embed case: there is no SharpUploadModel object
-            if(! $value || ! is_array($value)) {
+            if (! $value || ! is_array($value)) {
                 return null;
             }
 
