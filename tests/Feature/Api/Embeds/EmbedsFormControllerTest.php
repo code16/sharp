@@ -125,6 +125,46 @@ class EmbedsFormControllerTest extends BaseApiTest
             )
             ->assertOk();
     }
+
+    /** @test */
+    public function we_can_update_an_embed_and_get_transformed_data()
+    {
+        $this->buildTheWorld();
+
+        $name = Str::random();
+        $bio = Str::random();
+
+        $this
+            ->postJson(
+                route('code16.sharp.api.embed.instance.form.update', [EmbedsFormControllerTestEmbed::$key, 'person', 1]),
+                [
+                    'name' => $name,
+                    'bio' => ['text' => $bio],
+                    'another' => 'thing',
+                ]
+            )
+            ->assertOk()
+            ->assertJson([
+                'name' => $name,
+                'bio' => $bio,
+            ]);
+    }
+
+    /** @test */
+    public function validation_is_called_when_updating_an_embed()
+    {
+        $this->buildTheWorld();
+
+        $this
+            ->postJson(
+                route('code16.sharp.api.embed.instance.form.update', [EmbedsFormControllerTestEmbed::$key, 'person', 1]),
+                [
+                    'name' => null,
+                    'bio' => ['text' => 'aaa'],
+                ]
+            )
+            ->assertJsonValidationErrorFor('name');
+    }
 }
 
 class EmbedsFormControllerTestEmbed extends SharpFormEditorEmbed
@@ -145,6 +185,11 @@ class EmbedsFormControllerTestEmbed extends SharpFormEditorEmbed
 
     public function updateContent(array $data = []): array
     {
+        $this->validate($data, [
+            'name' => ['required'],
+        ]);
+
+        return $data;
     }
 }
 
