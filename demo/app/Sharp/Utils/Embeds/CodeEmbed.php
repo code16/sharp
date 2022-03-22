@@ -23,11 +23,11 @@ class CodeEmbed extends SharpFormEditorEmbed
                 ->setRowCount(8)
         );
     }
-    
+
     public function updateContent(array $data = []): array
     {
         $this->validate($data, ['code' => 'required']);
-        
+
         return $data;
     }
 }

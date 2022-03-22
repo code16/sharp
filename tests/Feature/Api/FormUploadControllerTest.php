@@ -51,7 +51,7 @@ class FormUploadControllerTest extends BaseApiTest
             ->postJson('/sharp/api/upload', [
                 'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
             ]);
-        
+
         $this->assertTrue(Storage::disk('local')->exists('/tmp/image.jpg'));
     }
 }

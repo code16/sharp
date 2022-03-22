@@ -181,7 +181,7 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
     public function we_can_fake_an_sharpUpload_and_transform_a_single_upload()
     {
         $file = $this->createImage();
-        
+
         $uploadData = [
             'file_name' => $file,
             'size' => 120,

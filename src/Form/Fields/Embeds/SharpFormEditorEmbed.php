@@ -17,7 +17,7 @@ abstract class SharpFormEditorEmbed
         HandlePageAlertMessage,
         WithCustomTransformers,
         HandleValidation;
-    
+
     protected ?string $label = null;
     protected ?string $tagName = null;
     protected array $templates = [];
@@ -25,11 +25,11 @@ abstract class SharpFormEditorEmbed
     public function toConfigArray(bool $isForm): array
     {
         $templateKey = $isForm ? 'form' : 'show';
-        
+
         return [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
-            'tag' => $this->tagName ?: 'x-' . Str::snake(class_basename(get_class($this)), '-'),
+            'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'template' => $this->templates[$templateKey] ?? $this->templates['form'],
         ];
@@ -40,7 +40,7 @@ abstract class SharpFormEditorEmbed
     }
 
     /**
-     * Must return all the data needed by the templates
+     * Must return all the data needed by the templates.
      */
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
@@ -48,14 +48,14 @@ abstract class SharpFormEditorEmbed
     }
 
     /**
-     * Must return all the data needed by the fields of the form
+     * Must return all the data needed by the fields of the form.
      */
     public function transformDataForFormFields(array $data): array
     {
         $data = collect($data)
             ->only($this->getDataKeys())
             ->all();
-        
+
         return $this->transform($data);
     }
 
@@ -110,7 +110,7 @@ abstract class SharpFormEditorEmbed
                 if (! $field = $this->findFieldByKey($key)) {
                     return $value;
                 }
-                
+
                 if(is_a($field, SharpFormUploadField::class)) {
                     // Uploads are a bit different in this case
                     $field->formatter()->setAlwaysReturnFullObject();
@@ -135,7 +135,7 @@ abstract class SharpFormEditorEmbed
     final protected function configureLabel(string $label): self
     {
         $this->label = $label;
-        
+
         return $this;
     }
 
@@ -172,7 +172,7 @@ abstract class SharpFormEditorEmbed
         );
     }
 
-    private function setTemplate(string $template, string $key) :self
+    private function setTemplate(string $template, string $key): self
     {
         $this->templates[$key] = $template;
 

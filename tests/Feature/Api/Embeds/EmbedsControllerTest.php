@@ -17,23 +17,23 @@ class EmbedsControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        EmbedsControllerTestEmbed::$templateTransformMode = "none";
+        EmbedsControllerTestEmbed::$templateTransformMode = 'none';
         $text = Str::random();
 
         $this
             ->postJson(
-                route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]), 
+                route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => [
-                        ['text' => $text]
-                    ]
+                        ['text' => $text],
+                    ],
                 ]
             )
             ->assertOk()
             ->assertJson([
                 'embeds' => [
-                    ['text' => $text]
-                ]
+                    ['text' => $text],
+                ],
             ]);
     }
 
@@ -42,7 +42,7 @@ class EmbedsControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        EmbedsControllerTestEmbed::$templateTransformMode = "upper";
+        EmbedsControllerTestEmbed::$templateTransformMode = 'upper';
         $text = Str::random();
 
         $this
@@ -50,8 +50,8 @@ class EmbedsControllerTest extends BaseApiTest
                 route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => [
-                        ['text' => $text]
-                    ]
+                        ['text' => $text],
+                    ],
                 ]
             )
             ->assertOk()
@@ -60,8 +60,8 @@ class EmbedsControllerTest extends BaseApiTest
                     [
                         'text' => $text,
                         'formatted' => Str::upper($text),
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -70,26 +70,26 @@ class EmbedsControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        EmbedsControllerTestEmbed::$templateTransformMode = "lower";
+        EmbedsControllerTestEmbed::$templateTransformMode = 'lower';
         $texts = collect([Str::random(), Str::random(), Str::random()]);
-        
+
         $this
             ->postJson(
                 route('code16.sharp.api.embed.instance.show', [EmbedsControllerTestEmbed::$key, 'person', 1]),
                 [
                     'embeds' => $texts
-                        ->map(fn ($text) => ["text" => $text])
-                        ->toArray()
+                        ->map(fn ($text) => ['text' => $text])
+                        ->toArray(),
                 ]
             )
             ->assertOk()
             ->assertJson([
                 'embeds' => $texts
                     ->map(fn ($text) => [
-                        "text" => $text, 
-                        "formatted" => Str::lower($text)
+                        'text' => $text,
+                        'formatted' => Str::lower($text),
                     ])
-                    ->toArray()
+                    ->toArray(),
             ]);
     }
 
@@ -98,7 +98,7 @@ class EmbedsControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        EmbedsControllerTestEmbed::$templateTransformMode = "upper";
+        EmbedsControllerTestEmbed::$templateTransformMode = 'upper';
         $text = Str::random();
 
         $this
@@ -107,13 +107,13 @@ class EmbedsControllerTest extends BaseApiTest
                 [
                     'form' => true,
                     'embeds' => [
-                        ['text' => $text]
-                    ]
+                        ['text' => $text],
+                    ],
                 ]
             )
             ->assertOk()
             ->assertJsonFragment([
-                'form' => true
+                'form' => true,
             ]);
     }
 
@@ -141,7 +141,7 @@ class PersonWithEmbedsForm extends PersonSharpForm
         $formFields->addField(
             SharpFormEditorField::make('editor')
                 ->allowEmbeds([
-                    EmbedsControllerTestEmbed::class
+                    EmbedsControllerTestEmbed::class,
                 ])
         );
     }
@@ -150,7 +150,7 @@ class PersonWithEmbedsForm extends PersonSharpForm
 class EmbedsControllerTestEmbed extends SharpFormEditorEmbed
 {
     public static string $key = 'Code16.Sharp.Tests.Feature.Api.Embeds.EmbedsControllerTestEmbed';
-    public static string $templateTransformMode = "none";
+    public static string $templateTransformMode = 'none';
 
     public function buildEmbedConfig(): void
     {
@@ -159,16 +159,16 @@ class EmbedsControllerTestEmbed extends SharpFormEditorEmbed
 
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
-        if(static::$templateTransformMode == "none") {
+        if(static::$templateTransformMode == 'none') {
             return $data;
         }
 
         $transformMethodName = static::$templateTransformMode;
 
         return [
-            "text" => $data["text"],
-            "formatted" => Str::$transformMethodName($data["text"]),
-            "form" => $isForm
+            'text' => $data['text'],
+            'formatted' => Str::$transformMethodName($data['text']),
+            'form' => $isForm,
         ];
     }
 

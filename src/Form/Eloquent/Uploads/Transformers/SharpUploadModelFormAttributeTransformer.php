@@ -25,7 +25,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     public function dynamicInstance(): self
     {
         $this->dynamicSharpUploadModel = true;
-        
+
         return $this;
     }
 
@@ -45,17 +45,17 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             if(! $value || ! is_array($value)) {
                 return null;
             }
-            
-            $instance = (object)[
+
+            $instance = (object) [
                 $attribute => new SharpUploadModel([
-                    "file_name" => $value["file_name"] ?? $value["path"],
-                    "filters" => $value["filters"],
-                    "disk" => $value["disk"],
-                    "size" => $value["size"]
-                ])
+                    'file_name' => $value['file_name'] ?? $value['path'],
+                    'filters' => $value['filters'],
+                    'disk' => $value['disk'],
+                    'size' => $value['size'],
+                ]),
             ];
         }
-        
+
         if (! $instance->$attribute) {
             return null;
         }

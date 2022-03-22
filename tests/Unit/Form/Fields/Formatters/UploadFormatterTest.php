@@ -54,7 +54,7 @@ class UploadFormatterTest extends SharpTestCase
             $formatter->fromFront(
                 $field,
                 'attribute',
-                ['name' => 'test.png'], 
+                ['name' => 'test.png'],
             ),
         );
     }
@@ -317,7 +317,7 @@ class UploadFormatterTest extends SharpTestCase
                 'angle' => 45,
             ],
         ];
-        
+
         $field = SharpFormUploadField::make('upload')
             ->setStorageDisk('local')
             ->setTransformable()
@@ -331,7 +331,7 @@ class UploadFormatterTest extends SharpTestCase
                     'name' => '/image.jpg',
                     'uploaded' => false,
                     'transformed' => true,
-                    'filters' => $filters
+                    'filters' => $filters,
                 ],
             );
 
@@ -356,7 +356,7 @@ class UploadFormatterTest extends SharpTestCase
         $result = (new UploadFormatter)
             ->setAlwaysReturnFullObject()
             ->fromFront($field, 'attribute', $uploadData);
-        
+
         $this->assertEquals($uploadData, $result);
     }
 }

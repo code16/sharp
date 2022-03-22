@@ -20,37 +20,37 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $posts = Post::byAuthor(auth()->user())
-            ->orderBy("title")
-            ->pluck("title", "id")
+            ->orderBy('title')
+            ->pluck('title', 'id')
             ->toArray();
-        
+
         $formFields
             ->addField(
                 SharpFormSelectField::make('post', $posts)
                     ->setLabel('Post')
             );
     }
-    
+
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
-        $post = Post::find($data["post"]);
-        
+        $post = Post::find($data['post']);
+
         return $this
-            ->setCustomTransformer('title', function($value) use ($post) {
+            ->setCustomTransformer('title', function ($value) use ($post) {
                 return $post?->title;
             })
-            ->setCustomTransformer('online', function($value) use ($post) {
+            ->setCustomTransformer('online', function ($value) use ($post) {
                 return $post?->state === 'online';
             })
             ->transform($data);
     }
-    
+
     public function updateContent(array $data = []): array
     {
         $this->validate($data, [
             'post' => ['required'],
         ]);
-        
+
         return $data;
     }
 }

@@ -24,7 +24,7 @@ class EmbedsFormControllerTest extends BaseApiTest
             ->postJson(
                 route('code16.sharp.api.embed.instance.form.show', [EmbedsFormControllerTestEmbed::$key, 'person', 1]),
                 [
-                    'name' => $name
+                    'name' => $name,
                 ]
             )
             ->assertOk()
@@ -34,7 +34,7 @@ class EmbedsFormControllerTest extends BaseApiTest
                         'key' => 'name',
                         'type' => 'text',
                         'inputType' => 'text',
-                    ]
+                    ],
                 ],
                 'layout' => [
                     [
@@ -42,9 +42,9 @@ class EmbedsFormControllerTest extends BaseApiTest
                             'key' => 'name',
                             'size' => 12,
                             'sizeXS' => 12,
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -70,9 +70,9 @@ class EmbedsFormControllerTest extends BaseApiTest
                 'data' => [
                     'name' => $name,
                     'bio' => [
-                        'text' => $bio
-                    ]
-                ]
+                        'text' => $bio,
+                    ],
+                ],
             ]);
     }
 
@@ -160,6 +160,6 @@ class EmbedsFormControllerTestViewDenyOddPolicy extends SharpEntityPolicy
 {
     public function view($user, $instanceId): bool
     {
-        return $instanceId%2 === 0;
+        return $instanceId % 2 === 0;
     }
 }

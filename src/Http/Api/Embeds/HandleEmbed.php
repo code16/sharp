@@ -11,7 +11,7 @@ trait HandleEmbed
     {
         $embed = app(Str::replace('.', '\\', $embedKey));
         $embed->buildEmbedConfig();
-        
+
         return $embed;
     }
 }

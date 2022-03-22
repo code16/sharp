@@ -31,7 +31,7 @@ class UploadFormatter extends SharpFieldFormatter
     public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
     {
         $this->alwaysReturnFullObject = $returnFullObject;
-        
+
         return $this;
     }
 
@@ -100,7 +100,7 @@ class UploadFormatter extends SharpFieldFormatter
                     $this->handleImageTransformations($storage->get($value['name']), $value),
                 );
             }
-            
+
             return $this->returnAfterTransformation($value);
         }
 

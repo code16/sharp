@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 class EmbedsFormController extends Controller
 {
     use HandleEmbed;
-    
+
     public function show(string $embedKey, string $entityKey, ?string $instanceId = null)
     {
         if($instanceId) {
@@ -17,7 +17,7 @@ class EmbedsFormController extends Controller
         }
 
         $embed = $this->getEmbedFromKey($embedKey);
-        
+
         return [
             'fields' => $embed->fields(),
             'layout' => $embed->formLayout(),
@@ -35,11 +35,11 @@ class EmbedsFormController extends Controller
         }
 
         $embed = $this->getEmbedFromKey($embedKey);
-        
+
         $data = $embed->updateContent(
             $embed->formatRequestData(request()->all())
         );
-        
+
         return $embed->transformDataForTemplate($data, true);
     }
 }
