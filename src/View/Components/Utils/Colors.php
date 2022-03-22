@@ -42,7 +42,7 @@ class Colors
         [$hue, $saturation, $lightness] = self::rgbValueToHsl(
             hexdec($red),
             hexdec($green),
-            hexdec($blue)
+            hexdec($blue),
         );
 
         return [$hue, $saturation, $lightness];

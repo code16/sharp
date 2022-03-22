@@ -36,12 +36,12 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
 
         $this->assertEquals(
             [
-                'id'        => $upload->id,
-                'name'      => $upload->file_name,
-                'size'      => (string) $upload->size,
+                'id' => $upload->id,
+                'name' => $upload->file_name,
+                'size' => (string) $upload->size,
                 'thumbnail' => $upload->thumbnail(1000, 400),
             ],
-            $transformer->apply('', $picturable, 'picture')
+            $transformer->apply('', $picturable, 'picture'),
         );
     }
 
@@ -58,21 +58,21 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
             [
                 [
                     'file' => [
-                        'name'      => $upload->file_name,
-                        'size'      => (string) $upload->size,
+                        'name' => $upload->file_name,
+                        'size' => (string) $upload->size,
                         'thumbnail' => $upload->thumbnail(1000, 400),
                     ],
                     'id' => $upload->id,
                 ], [
                     'file' => [
-                        'name'      => $upload2->file_name,
-                        'size'      => (string) $upload2->size,
+                        'name' => $upload2->file_name,
+                        'size' => (string) $upload2->size,
                         'thumbnail' => $upload2->thumbnail(1000, 400),
                     ],
                     'id' => $upload2->id,
                 ],
             ],
-            $transformer->apply('', $picturable, 'pictures')
+            $transformer->apply('', $picturable, 'pictures'),
         );
     }
 }

@@ -29,7 +29,7 @@ class ExportUsersCommand extends EntityCommand
                 ->map(function (User $user) {
                     return implode(',', $user->toArray());
                 })
-                ->implode("\n")
+                ->implode("\n"),
         );
 
         return $this->download($filePath, 'users.txt', 'local');
@@ -38,7 +38,7 @@ class ExportUsersCommand extends EntityCommand
     public function buildFormFields(): void
     {
         $this->addField(
-            SharpFormCheckField::make('sample', 'Download a file sample')
+            SharpFormCheckField::make('sample', 'Download a file sample'),
         );
     }
 }

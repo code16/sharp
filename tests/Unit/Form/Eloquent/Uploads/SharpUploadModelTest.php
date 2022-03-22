@@ -21,13 +21,13 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         $upload->thumbnail(100, 100);
 
         $this->assertTrue(
-            Storage::disk('public')->exists('thumbnails/data/100-100/'.basename($file))
+            Storage::disk('public')->exists('thumbnails/data/100-100/'.basename($file)),
         );
 
         $upload->transformed = true;
 
         $this->assertFalse(
-            Storage::disk('public')->exists('thumbnails/data/100-100/'.basename($file))
+            Storage::disk('public')->exists('thumbnails/data/100-100/'.basename($file)),
         );
     }
 
@@ -41,7 +41,7 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
         $upload->file = [
             'file_name' => 'test/test.png',
             'mime_type' => 'test_mime',
-            'size'      => 1,
+            'size' => 1,
         ];
 
         $this->assertEquals('test/test.png', $upload->file_name);
@@ -58,11 +58,11 @@ class SharpUploadModelTest extends SharpFormEloquentBaseTest
 
         $this->assertStringStartsWith(
             '/storage/thumbnails/data/-150/'.basename($file),
-            $upload->thumbnail(null, 150)
+            $upload->thumbnail(null, 150),
         );
 
         $this->assertTrue(
-            Storage::disk('public')->exists('thumbnails/data/-150/'.basename($file))
+            Storage::disk('public')->exists('thumbnails/data/-150/'.basename($file)),
         );
     }
 

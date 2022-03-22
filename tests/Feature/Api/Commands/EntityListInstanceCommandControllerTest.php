@@ -25,7 +25,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/instance_info/1')
             ->assertStatus(200)
             ->assertJson([
-                'action'  => 'info',
+                'action' => 'info',
                 'message' => 'ok',
             ]);
     }
@@ -40,7 +40,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'link',
-                'link'   => '/link/out',
+                'link' => '/link/out',
             ]);
     }
 
@@ -54,11 +54,11 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'refresh',
-                'items'  => [
+                'items' => [
                     [
-                        'id'   => 1,
+                        'id' => 1,
                         'name' => 'John <b>Wayne</b>',
-                        'age'  => 22,
+                        'age' => 22,
                     ],
                 ],
             ])
@@ -90,7 +90,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
             ->json();
 
         $this->assertTrue(
-            collect($response['config']['commands']['instance'][0])->where('key', 'instance_with_init_data')->first()['fetch_initial_data']
+            collect($response['config']['commands']['instance'][0])->where('key', 'instance_with_init_data')->first()['fetch_initial_data'],
         );
 
         $this->getJson('/sharp/api/list/person/command/instance_with_init_data/25/data')
@@ -108,7 +108,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.list',
-            EntityListInstanceCommandPersonSharpEntityList::class
+            EntityListInstanceCommandPersonSharpEntityList::class,
         );
     }
 }
@@ -118,7 +118,8 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
     public function buildListConfig(): void
     {
         $this
-            ->addInstanceCommand('instance_info', new class() extends InstanceCommand {
+            ->addInstanceCommand('instance_info', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -128,8 +129,9 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                 {
                     return $this->info('ok');
                 }
-            })
-            ->addInstanceCommand('instance_refresh', new class() extends InstanceCommand {
+            }, )
+            ->addInstanceCommand('instance_refresh', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -139,8 +141,9 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                 {
                     return $this->refresh(1);
                 }
-            })
-            ->addInstanceCommand('instance_link', new class() extends InstanceCommand {
+            }, )
+            ->addInstanceCommand('instance_link', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -150,8 +153,9 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                 {
                     return $this->link('/link/out');
                 }
-            })
-            ->addInstanceCommand('instance_unauthorized_odd_id', new class() extends InstanceCommand {
+            }, )
+            ->addInstanceCommand('instance_unauthorized_odd_id', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -166,8 +170,9 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                 {
                     return $this->reload();
                 }
-            })
-            ->addInstanceCommand('instance_with_init_data', new class() extends InstanceCommand {
+            }, )
+            ->addInstanceCommand('instance_with_init_data', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -182,13 +187,13 @@ class EntityListInstanceCommandPersonSharpEntityList extends PersonSharpEntityLi
                 {
                     return [
                         'name' => "John Wayne [$instanceId]",
-                        'age'  => 32,
+                        'age' => 32,
                     ];
                 }
 
                 public function execute($instanceId, array $data = []): array
                 {
                 }
-            });
+            }, );
     }
 }

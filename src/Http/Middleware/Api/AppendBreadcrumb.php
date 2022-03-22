@@ -46,7 +46,7 @@ class AppendBreadcrumb
                         '%s/%s/%s',
                         $url,
                         $item->type,
-                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
+                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
                     );
                     $isLeaf = $index === sizeof($breadcrumb) - 1;
 
@@ -56,8 +56,8 @@ class AppendBreadcrumb
                             ? $this->getBreadcrumbLabelFor($item, $isLeaf)
                             : '',
                         'documentTitleLabel' => $this->getDocumentTitleLabelFor($item, $isLeaf),
-                        'entityKey'          => $item->key,
-                        'url'                => url($url),
+                        'entityKey' => $item->key,
+                        'url' => url($url),
                     ];
                 }),
             'visible' => $displayBreadcrumb,
@@ -70,9 +70,9 @@ class AppendBreadcrumb
     private function getFrontTypeNameFor(string $type): string
     {
         return [
-            's-list'      => 'entityList',
-            's-form'      => 'form',
-            's-show'      => 'show',
+            's-list' => 'entityList',
+            's-form' => 'form',
+            's-show' => 'show',
             's-dashboard' => 'dashboard',
         ][$type] ?? '';
     }
@@ -92,7 +92,7 @@ class AppendBreadcrumb
                 // A Form is always a leaf
                 $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth - 1];
 
-                if ($previousItem->type === 's-show' /*&& isset($previousItem->instance)*/ && !$this->isSameEntityKeys($previousItem->key, $item->key, true)) {
+                if ($previousItem->type === 's-show' /*&& isset($previousItem->instance)*/ && ! $this->isSameEntityKeys($previousItem->key, $item->key, true)) {
                     // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
                     return isset($item->instance)
                         ? trans('sharp::breadcrumb.form.edit_entity', [
@@ -103,7 +103,7 @@ class AppendBreadcrumb
                         ]);
                 }
 
-                return isset($item->instance) || ($previousItem->type === 's-show' && !isset($previousItem->instance))
+                return isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
                     ? trans('sharp::breadcrumb.form.edit')
                     : trans('sharp::breadcrumb.form.create');
         }
@@ -117,7 +117,7 @@ class AppendBreadcrumb
      */
     private function getDocumentTitleLabelFor(object $item, bool $isLeaf)
     {
-        if (!$isLeaf) {
+        if (! $isLeaf) {
             return null;
         }
 
@@ -153,7 +153,7 @@ class AppendBreadcrumb
             }
         }
 
-        if (!$isLeaf) {
+        if (! $isLeaf) {
             // The breadcrumb custom label may have been cached on the way up
             if ($value = Cache::get("sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}")) {
                 return $value;
@@ -161,7 +161,7 @@ class AppendBreadcrumb
         }
 
         if (strpos($item->key, ':') !== false) {
-            list($itemKey, $itemSubKey) = explode(':', $item->key);
+            [$itemKey, $itemSubKey] = explode(':', $item->key);
             if ($value = config("sharp.entities.{$itemKey}.forms.{$itemSubKey}.label")) {
                 return $value;
             }

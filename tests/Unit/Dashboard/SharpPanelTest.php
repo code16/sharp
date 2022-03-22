@@ -16,7 +16,7 @@ class SharpPanelTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['template' => '<b>test</b>'],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -29,7 +29,7 @@ class SharpPanelTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['link' => url('sharp/s-list/entity')],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 }

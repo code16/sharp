@@ -49,7 +49,7 @@ class SharpOrderedListWidget extends SharpWidget
         return parent::buildArray(
             [
                 'html' => $this->html,
-            ]
+            ],
         );
     }
 }

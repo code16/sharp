@@ -39,21 +39,20 @@ class TravelSendEmail extends InstanceCommand
     {
         $this->addField(
             SharpFormHtmlField::make('explanation')
-                ->setInlineTemplate('This message will be sent to the passenger preferred language.')
+                ->setInlineTemplate('This message will be sent to the passenger preferred language.'),
         )->addField(
             SharpFormTextField::make('subject')
                 ->setLabel('Subject')
-                ->setLocalized()
+                ->setLocalized(),
         )->addField(
             SharpFormTextareaField::make('message')
                 ->setLabel('Message')
-                ->setLocalized()
+                ->setLocalized(),
         );
     }
 
     /**
      * @param $instanceId
-     *
      * @return array
      */
     protected function initialData($instanceId): array
@@ -74,7 +73,7 @@ class TravelSendEmail extends InstanceCommand
                 ];
             })
             ->transform(
-                Travel::findOrFail($instanceId)
+                Travel::findOrFail($instanceId),
             );
     }
 

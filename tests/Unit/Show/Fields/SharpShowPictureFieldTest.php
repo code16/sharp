@@ -13,8 +13,8 @@ class SharpShowPictureFieldTest extends SharpTestCase
         $field = SharpShowPictureField::make('pictureField');
 
         $this->assertEquals([
-            'key'          => 'pictureField',
-            'type'         => 'picture',
+            'key' => 'pictureField',
+            'type' => 'picture',
             'emptyVisible' => false,
         ], $field->toArray());
     }

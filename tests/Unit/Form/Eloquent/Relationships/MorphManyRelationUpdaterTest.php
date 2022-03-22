@@ -16,14 +16,14 @@ class MorphManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new MorphManyRelationUpdater();
 
         $updater->update($person, 'pictures', [[
-            'id'   => null,
+            'id' => null,
             'file' => 'test.jpg',
         ]]);
 
         $this->assertDatabaseHas('pictures', [
             'picturable_type' => Person::class,
-            'picturable_id'   => $person->id,
-            'file'            => 'test.jpg',
+            'picturable_id' => $person->id,
+            'file' => 'test.jpg',
         ]);
     }
 
@@ -38,20 +38,20 @@ class MorphManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new MorphManyRelationUpdater();
 
         $updater->update($person, 'pictures', [[
-            'id'   => $person->pictures->first()->id,
+            'id' => $person->pictures->first()->id,
             'file' => 'test.jpg',
         ]]);
 
         $this->assertDatabaseHas('pictures', [
             'picturable_type' => Person::class,
-            'picturable_id'   => $person->id,
-            'file'            => 'test.jpg',
+            'picturable_id' => $person->id,
+            'file' => 'test.jpg',
         ]);
 
         $this->assertDatabaseMissing('pictures', [
             'picturable_type' => Person::class,
-            'picturable_id'   => $person->id,
-            'file'            => 'old.jpg',
+            'picturable_id' => $person->id,
+            'file' => 'old.jpg',
         ]);
     }
 }

@@ -48,19 +48,18 @@ abstract class EntityState extends InstanceCommand
     }
 
     /**
-     * @param mixed $instanceId
-     * @param array $data
+     * @param  mixed  $instanceId
+     * @param  array  $data
+     * @return array
      *
      * @throws SharpInvalidEntityStateException
-     *
-     * @return array
      */
     public function execute($instanceId, array $data = []): array
     {
         $stateId = $data['value'];
         $this->buildStates();
 
-        if (!in_array($stateId, array_keys($this->states))) {
+        if (! in_array($stateId, array_keys($this->states))) {
             throw new SharpInvalidEntityStateException($stateId);
         }
 
@@ -75,9 +74,8 @@ abstract class EntityState extends InstanceCommand
     abstract protected function buildStates(): void;
 
     /**
-     * @param mixed  $instanceId
-     * @param string $stateId
-     *
+     * @param  mixed  $instanceId
+     * @param  string  $stateId
      * @return mixed
      */
     abstract protected function updateState($instanceId, string $stateId): array;

@@ -53,7 +53,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
                 'delete' => true,
                 'update' => true,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
 
@@ -62,7 +62,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
                 'delete' => false,
                 'update' => true,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
 
@@ -71,7 +71,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
                 'delete' => false,
                 'update' => false,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
     }
@@ -85,7 +85,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             'authorizations' => [
                 'update' => [1],
                 'create' => true,
-                'view'   => [1, 2],
+                'view' => [1, 2],
             ],
         ]);
     }
@@ -100,7 +100,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             [
                 'delete' => true,
                 'update' => false,
-            ]
+            ],
         );
 
         $this->getJson('/sharp/api/form/person')->assertJson([
@@ -108,7 +108,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
                 'delete' => true,
                 'update' => false,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
     }

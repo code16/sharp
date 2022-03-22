@@ -17,7 +17,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('name'));
@@ -27,7 +28,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $form->updateInstance($person->id, ['name' => 'Claire Trevor']);
 
         $this->assertDatabaseHas('people', [
-            'id'   => $person->id,
+            'id' => $person->id,
             'name' => 'Claire Trevor',
         ]);
     }
@@ -35,7 +36,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     /** @test */
     public function we_can_store_a_new_instance()
     {
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('name'));
@@ -59,7 +61,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $form->updateInstance($person->id, ['id' => 1200, 'job' => 'Actor']);
 
         $this->assertDatabaseHas('people', [
-            'id'   => $person->id,
+            'id' => $person->id,
             'name' => 'John Wayne',
         ]);
     }
@@ -69,7 +71,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $person = Person::create(['name' => 'A', 'age' => 21]);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function update($id, array $data)
             {
                 return $this->ignore('age')
@@ -86,9 +89,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $form->updateInstance($person->id, ['name' => 'John Wayne', 'age' => 40]);
 
         $this->assertDatabaseHas('people', [
-            'id'   => $person->id,
+            'id' => $person->id,
             'name' => 'John Wayne',
-            'age'  => 21,
+            'age' => 21,
         ]);
     }
 
@@ -97,7 +100,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $person = Person::create(['name' => 'A', 'age' => 21]);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function update($id, array $data)
             {
                 return $this->ignore(['name', 'age'])
@@ -114,9 +118,9 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $form->updateInstance($person->id, ['name' => 'John Wayne', 'age' => 40]);
 
         $this->assertDatabaseHas('people', [
-            'id'   => $person->id,
+            'id' => $person->id,
             'name' => 'A',
-            'age'  => 21,
+            'age' => 21,
         ]);
     }
 
@@ -126,7 +130,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(['name' => 'Jane Wayne']);
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormSelectField::make('mother', Person::all()->pluck('name', 'id')->all()));
@@ -136,7 +141,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $form->updateInstance($person->id, ['mother' => $mother->id]);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $person->id,
+            'id' => $person->id,
             'mother_id' => $mother->id,
         ]);
     }
@@ -147,14 +152,15 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'John Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormSelectField::make(
                     'elderSon',
-                    Person::all()->pluck('name', 'id')->all()
-                )
+                    Person::all()->pluck('name', 'id')->all(),
+                ),
                 );
             }
         };
@@ -162,7 +168,7 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $form->updateInstance($mother->id, ['elderSon' => $son->id]);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $son->id,
+            'id' => $son->id,
             'mother_id' => $mother->id,
         ]);
     }
@@ -173,12 +179,13 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormListField::make('sons')
-                        ->addItemField(SharpFormTextField::make('name'))
+                        ->addItemField(SharpFormTextField::make('name')),
                 );
             }
         };
@@ -191,14 +198,14 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         ]);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $son->id,
+            'id' => $son->id,
             'mother_id' => $mother->id,
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
         ]);
 
         $this->assertDatabaseHas('people', [
             'mother_id' => $mother->id,
-            'name'      => 'Mary Wayne',
+            'name' => 'Mary Wayne',
         ]);
     }
 
@@ -208,14 +215,15 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $person1 = Person::create(['name' => 'John Ford']);
         $person2 = Person::create(['name' => 'John Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTagsField::make(
                     'friends',
-                    Person::all()->pluck('name', 'id')->all()
-                )->setCreatable()
+                    Person::all()->pluck('name', 'id')->all(),
+                )->setCreatable(),
                 );
             }
         };
@@ -237,15 +245,16 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $person1 = Person::create(['name' => 'John Ford']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTagsField::make(
                     'friends',
-                    Person::all()->pluck('name', 'id')->all()
+                    Person::all()->pluck('name', 'id')->all(),
                 )->setCreatable()
-                    ->setCreateAttribute('name')
+                    ->setCreateAttribute('name'),
                 );
             }
         };
@@ -273,13 +282,14 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormListField::make('sons')
                         ->addItemField(SharpFormTextField::make('name'))
-                        ->setSortable()->setOrderAttribute('order')
+                        ->setSortable()->setOrderAttribute('order'),
                 );
             }
         };
@@ -293,14 +303,14 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $this->assertDatabaseHas('people', [
             'mother_id' => $mother->id,
-            'name'      => 'John Wayne',
-            'order'     => 1,
+            'name' => 'John Wayne',
+            'order' => 1,
         ]);
 
         $this->assertDatabaseHas('people', [
             'mother_id' => $mother->id,
-            'name'      => 'Mary Wayne',
-            'order'     => 2,
+            'name' => 'Mary Wayne',
+            'order' => 2,
         ]);
     }
 
@@ -308,16 +318,17 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     public function we_handle_the_order_attribute_in_a_hasMany_relation_in_an_update_case()
     {
         $mother = Person::create(['name' => 'A']);
-        $son = Person::create(['name' => 'B', 'order' => 30, 'mother_id'=>$mother->id]);
-        $daughter = Person::create(['name' => 'C', 'order' => 50, 'mother_id'=>$mother->id]);
+        $son = Person::create(['name' => 'B', 'order' => 30, 'mother_id' => $mother->id]);
+        $daughter = Person::create(['name' => 'C', 'order' => 50, 'mother_id' => $mother->id]);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormListField::make('sons')
                         ->addItemField(SharpFormTextField::make('name'))
-                        ->setSortable()->setOrderAttribute('order')
+                        ->setSortable()->setOrderAttribute('order'),
                 );
             }
         };
@@ -330,12 +341,12 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         ]);
 
         $this->assertDatabaseHas('people', [
-            'id'    => $daughter->id,
+            'id' => $daughter->id,
             'order' => 1,
         ]);
 
         $this->assertDatabaseHas('people', [
-            'id'    => $son->id,
+            'id' => $son->id,
             'order' => 2,
         ]);
     }
@@ -345,7 +356,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $person = Person::create(['name' => 'John Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('picture:file'));
@@ -356,8 +368,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $this->assertDatabaseHas('pictures', [
             'picturable_type' => Person::class,
-            'picturable_id'   => $person->id,
-            'file'            => 'picture',
+            'picturable_id' => $person->id,
+            'file' => 'picture',
         ]);
     }
 
@@ -367,7 +379,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(['name' => 'AAA']);
         $son = Person::create(['name' => 'John Wayne', 'mother_id' => $mother->id]);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('mother:name'));
@@ -377,12 +390,12 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form->updateInstance($son->id, [
             'mother:name' => 'Jane Wayne',
-            'mother:age'  => 92,
+            'mother:age' => 92,
         ]);
 
         $this->assertDatabaseHas('people', [
-            'id'   => $mother->id,
-            'age'  => 92,
+            'id' => $mother->id,
+            'age' => 92,
             'name' => 'Jane Wayne',
         ]);
     }
@@ -393,7 +406,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(['name' => 'Jane Wayne']);
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('elderSon:name'));
@@ -403,13 +417,13 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form->updateInstance($mother->id, [
             'elderSon:name' => 'John Wayne',
-            'elderSon:age'  => 52,
+            'elderSon:age' => 52,
         ]);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $son->id,
-            'name'      => 'John Wayne',
-            'age'       => 52,
+            'id' => $son->id,
+            'name' => 'John Wayne',
+            'age' => 52,
             'mother_id' => $mother->id,
         ]);
     }
@@ -419,7 +433,8 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
     {
         $mother = Person::create(['name' => 'Jane Wayne']);
 
-        $form = new class() extends WithSharpFormEloquentUpdaterTestForm {
+        $form = new class() extends WithSharpFormEloquentUpdaterTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('elderSon:name'));
@@ -429,12 +444,12 @@ class WithSharpFormEloquentUpdaterTest extends SharpFormEloquentBaseTest
 
         $form->updateInstance($mother->id, [
             'elderSon:name' => 'John Wayne',
-            'elderSon:age'  => 52,
+            'elderSon:age' => 52,
         ]);
 
         $this->assertDatabaseHas('people', [
-            'name'      => 'John Wayne',
-            'age'       => 52,
+            'name' => 'John Wayne',
+            'age' => 52,
             'mother_id' => $mother->id,
         ]);
     }

@@ -43,7 +43,7 @@ class SharpFormHtmlField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'template'     => 'required',
+            'template' => 'required',
             'templateData' => 'nullable|array',
         ];
     }
@@ -51,7 +51,7 @@ class SharpFormHtmlField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'template'     => $this->template(),
+            'template' => $this->template(),
             'templateData' => $this->additionalTemplateData,
         ]);
     }

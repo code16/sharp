@@ -48,21 +48,20 @@ trait TestWithSharpUploadModel
 
     /**
      * @param $file
-     * @param null   $model
-     * @param string $modelKey
-     *
+     * @param  null  $model
+     * @param  string  $modelKey
      * @return $this|\Illuminate\Database\Eloquent\Model
      */
     protected function createSharpUploadModel($file, $model = null, $modelKey = 'test')
     {
         return SharpUploadModel::create([
-            'file_name'  => $file,
-            'size'       => 120,
-            'mime_type'  => 'image/png',
-            'disk'       => 'local',
+            'file_name' => $file,
+            'size' => 120,
+            'mime_type' => 'image/png',
+            'disk' => 'local',
             'model_type' => $model ? get_class($model) : Person::class,
-            'model_id'   => $model ? $model->id : Person::create(['name' => 'A'])->id,
-            'model_key'  => $modelKey,
+            'model_id' => $model ? $model->id : Person::create(['name' => 'A'])->id,
+            'model_key' => $modelKey,
         ]);
     }
 }

@@ -76,7 +76,7 @@ class SharpFormWysiwygField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'height'  => 'integer|nullable',
+            'height' => 'integer|nullable',
             'toolbar' => 'array|nullable',
         ];
     }
@@ -84,10 +84,10 @@ class SharpFormWysiwygField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'height'      => $this->height,
-            'toolbar'     => $this->showToolbar ? $this->toolbar : null,
+            'height' => $this->height,
+            'toolbar' => $this->showToolbar ? $this->toolbar : null,
             'placeholder' => $this->placeholder,
-            'localized'   => $this->localized,
+            'localized' => $this->localized,
         ]);
     }
 }

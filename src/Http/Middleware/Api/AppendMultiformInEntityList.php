@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 class AppendMultiformInEntityList
 {
     /**
-     * @param Request $request
-     * @param Closure $next
-     *
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)
@@ -26,7 +25,7 @@ class AppendMultiformInEntityList
 
     protected function addMultiformDataToJsonResponse(JsonResponse $jsonResponse)
     {
-        if (!$multiformAttribute = $jsonResponse->getData()->config->multiformAttribute) {
+        if (! $multiformAttribute = $jsonResponse->getData()->config->multiformAttribute) {
             return $jsonResponse;
         }
 
@@ -39,8 +38,8 @@ class AppendMultiformInEntityList
                     ->pluck($instanceIdAttribute);
 
                 return [
-                    'key'       => $value,
-                    'label'     => $this->getMultiformLabelFor($value),
+                    'key' => $value,
+                    'label' => $this->getMultiformLabelFor($value),
                     'instances' => $instanceIds,
                 ] + $this->getIconConfigFor($value);
             })

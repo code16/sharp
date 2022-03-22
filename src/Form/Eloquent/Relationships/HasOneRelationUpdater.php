@@ -12,7 +12,7 @@ class HasOneRelationUpdater
     {
         if (strpos($attribute, ':') !== false) {
             // This is a relation attribute update case (eg: mother:name)
-            list($attribute, $subAttribute) = explode(':', $attribute);
+            [$attribute, $subAttribute] = explode(':', $attribute);
 
             if ($instance->$attribute) {
                 $instance->$attribute->$subAttribute = $value;
@@ -21,7 +21,7 @@ class HasOneRelationUpdater
                 $this->createRelatedModel(
                     $instance,
                     $attribute,
-                    [$subAttribute => $value]
+                    [$subAttribute => $value],
                 );
             }
 
@@ -42,7 +42,7 @@ class HasOneRelationUpdater
                 $this->createRelatedModel(
                     $instance,
                     $attribute,
-                    $value
+                    $value,
                 );
             } else {
                 $instance->$attribute->update($value);
@@ -56,7 +56,7 @@ class HasOneRelationUpdater
 
         $relatedModel->find($value)->setAttribute(
             $foreignKeyName,
-            $instance->id
+            $instance->id,
         )->save();
     }
 }

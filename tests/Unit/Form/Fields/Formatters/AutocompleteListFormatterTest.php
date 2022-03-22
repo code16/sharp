@@ -16,12 +16,12 @@ class AutocompleteListFormatterTest extends SharpTestCase
         $field = SharpFormAutocompleteListField::make('list')
             ->setItemField(
                 SharpFormAutocompleteField::make('item', 'remote')
-                ->setRemoteEndpoint('/endpoint')
+                ->setRemoteEndpoint('/endpoint'),
             );
 
         $expectedData = collect($this->getData())->map(function ($item) {
             return [
-                'id'   => $item['id'],
+                'id' => $item['id'],
                 'item' => $item,
             ];
         })->all();
@@ -36,7 +36,7 @@ class AutocompleteListFormatterTest extends SharpTestCase
         $field = SharpFormAutocompleteListField::make('list')
             ->setItemField(
                 SharpFormAutocompleteField::make('item', 'remote')
-                ->setRemoteEndpoint('/endpoint')
+                ->setRemoteEndpoint('/endpoint'),
             );
 
         $expectedData = collect($this->getData())->map(function ($item) {
@@ -55,10 +55,10 @@ class AutocompleteListFormatterTest extends SharpTestCase
     {
         return [
             [
-                'id'   => 1,
+                'id' => 1,
                 'item' => 'A',
             ], [
-                'id'   => 2,
+                'id' => 2,
                 'item' => 'B',
             ],
         ];

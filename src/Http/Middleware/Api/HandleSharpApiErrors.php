@@ -15,10 +15,9 @@ use Illuminate\Validation\ValidationException;
 class HandleSharpApiErrors
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     * @param string|null              $guard
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string|null  $guard
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
@@ -35,7 +34,7 @@ class HandleSharpApiErrors
             if ($code != 500) {
                 return response()->json(
                     ['message' => $response->exception->getMessage()],
-                    $code
+                    $code,
                 );
             }
 
@@ -77,14 +76,13 @@ class HandleSharpApiErrors
 
     /**
      * @param $response
-     *
      * @return JsonResponse
      */
     protected function handleValidationException($response)
     {
         return response()->json([
             'message' => $response->exception->getMessage(),
-            'errors'  => $response->exception->errors(),
+            'errors' => $response->exception->errors(),
         ], 422);
     }
 }

@@ -39,7 +39,7 @@ trait HandleDashboardCommands
     {
         $this->appendCommandsToConfig(
             collect($this->dashboardCommandHandlers),
-            $config
+            $config,
         );
     }
 

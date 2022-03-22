@@ -22,10 +22,10 @@ class MenuComponentTest extends SharpTestCase
             [
                 [
                     'label' => 'external',
-                    'icon'  => 'fa-globe',
-                    'url'   => 'https://google.com',
+                    'icon' => 'fa-globe',
+                    'url' => 'https://google.com',
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
@@ -33,11 +33,11 @@ class MenuComponentTest extends SharpTestCase
         $this->assertArraySubset(
             [
                 'label' => 'external',
-                'icon'  => 'fa-globe',
-                'url'   => 'https://google.com',
-                'type'  => 'url',
+                'icon' => 'fa-globe',
+                'url' => 'https://google.com',
+                'type' => 'url',
             ],
-            (array) $menu->getItems()[0]
+            (array) $menu->getItems()[0],
         );
     }
 
@@ -48,24 +48,24 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'  => 'people',
-                    'icon'   => 'fa-user',
+                    'label' => 'people',
+                    'icon' => 'fa-user',
                     'entity' => 'person',
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
 
         $this->assertArraySubset(
             [
-                'key'   => 'person',
+                'key' => 'person',
                 'label' => 'people',
-                'icon'  => 'fa-user',
-                'type'  => 'entity',
-                'url'   => route('code16.sharp.list', 'person'),
+                'icon' => 'fa-user',
+                'type' => 'entity',
+                'url' => route('code16.sharp.list', 'person'),
             ],
-            (array) $menu->getItems()[0]
+            (array) $menu->getItems()[0],
         );
     }
 
@@ -76,16 +76,16 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'    => 'Data',
+                    'label' => 'Data',
                     'entities' => [
                         [
-                            'label'  => 'people',
-                            'icon'   => 'fa-user',
+                            'label' => 'people',
+                            'icon' => 'fa-user',
                             'entity' => 'person',
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
@@ -95,13 +95,13 @@ class MenuComponentTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'key'   => 'person',
+                'key' => 'person',
                 'label' => 'people',
-                'icon'  => 'fa-user',
-                'type'  => 'entity',
-                'url'   => route('code16.sharp.list', 'person'),
+                'icon' => 'fa-user',
+                'type' => 'entity',
+                'url' => route('code16.sharp.list', 'person'),
             ],
-            (array) $menu->getItems()[0]->entities[0]
+            (array) $menu->getItems()[0]->entities[0],
         );
     }
 
@@ -112,24 +112,24 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'     => 'My Dashboard',
-                    'icon'      => 'fa-dashboard',
+                    'label' => 'My Dashboard',
+                    'icon' => 'fa-dashboard',
                     'dashboard' => 'personal_dashboard',
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
 
         $this->assertArraySubset(
             [
-                'key'   => 'personal_dashboard',
+                'key' => 'personal_dashboard',
                 'label' => 'My Dashboard',
-                'icon'  => 'fa-dashboard',
-                'type'  => 'dashboard',
-                'url'   => route('code16.sharp.dashboard', 'personal_dashboard'),
+                'icon' => 'fa-dashboard',
+                'type' => 'dashboard',
+                'url' => route('code16.sharp.dashboard', 'personal_dashboard'),
             ],
-            (array) $menu->getItems()[0]
+            (array) $menu->getItems()[0],
         );
     }
 
@@ -140,25 +140,25 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'  => 'people',
-                    'icon'   => 'fa-user',
+                    'label' => 'people',
+                    'icon' => 'fa-user',
                     'entity' => 'person',
                     'single' => true,
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
 
         $this->assertArraySubset(
             [
-                'key'   => 'person',
+                'key' => 'person',
                 'label' => 'people',
-                'icon'  => 'fa-user',
-                'type'  => 'entity',
-                'url'   => route('code16.sharp.single-show', 'person'),
+                'icon' => 'fa-user',
+                'type' => 'entity',
+                'url' => route('code16.sharp.single-show', 'person'),
             ],
-            (array) $menu->getItems()[0]
+            (array) $menu->getItems()[0],
         );
     }
 
@@ -169,25 +169,25 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'    => 'Data',
+                    'label' => 'Data',
                     'entities' => [
                         [
-                            'label'  => 'people',
-                            'icon'   => 'fa-user',
+                            'label' => 'people',
+                            'icon' => 'fa-user',
                             'entity' => 'person',
                         ],
                         [
                             'separator' => true,
-                            'label'     => 'Separator',
+                            'label' => 'Separator',
                         ],
                         [
-                            'label'  => 'other people',
-                            'icon'   => 'fa-user-o',
+                            'label' => 'other people',
+                            'icon' => 'fa-user-o',
                             'entity' => 'person',
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
@@ -197,11 +197,11 @@ class MenuComponentTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'type'  => 'separator',
-                'key'   => null,
+                'type' => 'separator',
+                'key' => null,
                 'label' => 'Separator',
             ],
-            (array) $menu->getItems()[0]->entities[1]
+            (array) $menu->getItems()[0]->entities[1],
         );
     }
 
@@ -212,20 +212,20 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'    => 'Data',
+                    'label' => 'Data',
                     'entities' => [
                         [
-                            'label'  => 'people',
-                            'icon'   => 'fa-user',
+                            'label' => 'people',
+                            'icon' => 'fa-user',
                             'entity' => 'person',
                         ],
                         [
                             'separator' => true,
-                            'label'     => 'Separator',
+                            'label' => 'Separator',
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);
@@ -240,29 +240,29 @@ class MenuComponentTest extends SharpTestCase
             'sharp.menu',
             [
                 [
-                    'label'    => 'Data',
+                    'label' => 'Data',
                     'entities' => [
                         [
-                            'label'  => 'people',
-                            'icon'   => 'fa-user',
+                            'label' => 'people',
+                            'icon' => 'fa-user',
                             'entity' => 'person',
                         ],
                         [
                             'separator' => true,
-                            'label'     => 'Not wanted',
+                            'label' => 'Not wanted',
                         ],
                         [
                             'separator' => true,
-                            'label'     => 'Separator',
+                            'label' => 'Separator',
                         ],
                         [
-                            'label'  => 'people',
-                            'icon'   => 'fa-user',
+                            'label' => 'people',
+                            'icon' => 'fa-user',
                             'entity' => 'person',
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $menu = app(Menu::class);

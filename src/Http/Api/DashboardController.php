@@ -8,7 +8,7 @@ class DashboardController extends ApiController
     {
         sharp_check_ability('view', $dashboardKey);
 
-        if (!$dashboard = $this->getDashboardInstance($dashboardKey)) {
+        if (! $dashboard = $this->getDashboardInstance($dashboardKey)) {
             abort(404, 'Dashboard not found');
         }
 
@@ -16,9 +16,9 @@ class DashboardController extends ApiController
 
         return response()->json([
             'widgets' => $dashboard->widgets(),
-            'config'  => $dashboard->dashboardConfig(),
-            'layout'  => $dashboard->widgetsLayout(),
-            'data'    => $dashboard->data(),
+            'config' => $dashboard->dashboardConfig(),
+            'layout' => $dashboard->widgetsLayout(),
+            'data' => $dashboard->data(),
         ]);
     }
 }

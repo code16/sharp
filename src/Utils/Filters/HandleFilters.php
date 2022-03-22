@@ -11,10 +11,9 @@ trait HandleFilters
     protected array $filterHandlers = [];
 
     /**
-     * @param string        $filterName
-     * @param string|Filter $filterHandler
-     * @param Closure|null  $callback
-     *
+     * @param  string  $filterName
+     * @param  string|Filter  $filterHandler
+     * @param  Closure|null  $callback
      * @return $this
      */
     protected function addFilter(string $filterName, $filterHandler, Closure $callback = null): self
@@ -33,35 +32,35 @@ trait HandleFilters
     }
 
     /**
-     * @param array $config
+     * @param  array  $config
      */
     protected function appendFiltersToConfig(array &$config): void
     {
         foreach ($this->filterHandlers as $filterName => $handler) {
             $filterConfigData = [
-                'key'     => $filterName,
+                'key' => $filterName,
                 'default' => $this->getFilterDefaultValue($handler, $filterName),
-                'label'   => method_exists($handler, 'label') ? $handler->label() : $filterName,
+                'label' => method_exists($handler, 'label') ? $handler->label() : $filterName,
             ];
 
             if ($handler instanceof SelectFilter) {
                 $multiple = $handler instanceof SelectMultipleFilter;
 
                 $filterConfigData += [
-                    'type'       => 'select',
-                    'multiple'   => $multiple,
-                    'required'   => !$multiple && $handler instanceof SelectRequiredFilter,
-                    'values'     => $this->formatSelectFilterValues($handler),
-                    'master'     => method_exists($handler, 'isMaster') ? $handler->isMaster() : false,
+                    'type' => 'select',
+                    'multiple' => $multiple,
+                    'required' => ! $multiple && $handler instanceof SelectRequiredFilter,
+                    'values' => $this->formatSelectFilterValues($handler),
+                    'master' => method_exists($handler, 'isMaster') ? $handler->isMaster() : false,
                     'searchable' => method_exists($handler, 'isSearchable') ? $handler->isSearchable() : false,
                     'searchKeys' => method_exists($handler, 'searchKeys') ? $handler->searchKeys() : ['label'],
-                    'template'   => $this->formatSelectFilterTemplate($handler),
+                    'template' => $this->formatSelectFilterTemplate($handler),
                 ];
             } elseif ($handler instanceof DateRangeFilter) {
                 $filterConfigData += [
-                    'type'          => 'daterange',
-                    'required'      => $handler instanceof DateRangeRequiredFilter,
-                    'mondayFirst'   => method_exists($handler, 'isMondayFirst') ? $handler->isMondayFirst() : true,
+                    'type' => 'daterange',
+                    'required' => $handler instanceof DateRangeRequiredFilter,
+                    'mondayFirst' => method_exists($handler, 'isMondayFirst') ? $handler->isMondayFirst() : true,
                     'displayFormat' => method_exists($handler, 'dateFormat') ? $handler->dateFormat() : 'MM-DD-YYYY',
                 ];
             }
@@ -72,7 +71,7 @@ trait HandleFilters
 
     protected function formatSelectFilterValues(SelectFilter $handler): array
     {
-        if (!method_exists($handler, 'template')) {
+        if (! method_exists($handler, 'template')) {
             return collect($handler->values())
                 ->map(function ($label, $id) {
                     return compact('id', 'label');
@@ -87,7 +86,7 @@ trait HandleFilters
 
     protected function formatSelectFilterTemplate(SelectFilter $handler): string
     {
-        if (!method_exists($handler, 'template')) {
+        if (! method_exists($handler, 'template')) {
             return '{{label}}';
         }
 
@@ -104,7 +103,7 @@ trait HandleFilters
 
             // Only filters which aren't in the request
             ->filter(function ($handler, $attribute) {
-                return !request()->has("filter_$attribute");
+                return ! request()->has("filter_$attribute");
             })
 
             // Only required filters or retained filters with value saved in session
@@ -117,13 +116,13 @@ trait HandleFilters
             ->map(function ($handler, $attribute) {
                 if ($this->isRetainedFilter($handler, $attribute, true)) {
                     return [
-                        'name'  => $attribute,
+                        'name' => $attribute,
                         'value' => session("_sharp_retained_filter_$attribute"),
                     ];
                 }
 
                 return [
-                    'name'  => $attribute,
+                    'name' => $attribute,
                     'value' => $handler->defaultValue(),
                 ];
             })
@@ -157,7 +156,7 @@ trait HandleFilters
                 } else {
                     session()->put(
                         "_sharp_retained_filter_$attribute",
-                        $value
+                        $value,
                     );
                 }
             });
@@ -169,7 +168,7 @@ trait HandleFilters
     {
         return method_exists($handler, 'retainValueInSession')
             && $handler->retainValueInSession()
-            && (!$onlyValued || session()->has("_sharp_retained_filter_$attribute"));
+            && (! $onlyValued || session()->has("_sharp_retained_filter_$attribute"));
     }
 
     protected function isGlobalFilter(Filter $handler): bool
@@ -184,8 +183,7 @@ trait HandleFilters
      * - or null.
      *
      * @param $handler
-     * @param string $attribute
-     *
+     * @param  string  $attribute
      * @return int|string|array|null
      */
     protected function getFilterDefaultValue(Filter $handler, string $attribute)
@@ -202,7 +200,7 @@ trait HandleFilters
             }
 
             if ($handler instanceof DateRangeFilter) {
-                list($start, $end) = collect(explode('..', $sessionValue))
+                [$start, $end] = collect(explode('..', $sessionValue))
                     ->map(function ($date) {
                         if (strlen($date) == 8) {
                             // Date was stored with a Ymd format, we need Y-m-d
@@ -210,7 +208,7 @@ trait HandleFilters
                                 '%s-%s-%s',
                                 substr($date, 0, 4),
                                 substr($date, 4, 2),
-                                substr($date, 6, 2)
+                                substr($date, 6, 2),
                             );
                         }
 

@@ -17,7 +17,7 @@ class SharpLinkToTest extends SharpTestCase
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity" title="">test</a>',
             LinkToEntityList::make('my-entity')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -27,7 +27,7 @@ class SharpLinkToTest extends SharpTestCase
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity/s-form/my-entity/23" title="">test</a>',
             LinkToForm::make('my-entity', 23)
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -38,7 +38,7 @@ class SharpLinkToTest extends SharpTestCase
             '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
             LinkToForm::make('my-entity', 23)
                 ->throughShowPage()
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -48,7 +48,7 @@ class SharpLinkToTest extends SharpTestCase
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23" title="">test</a>',
             LinkToShowPage::make('my-entity', 23)
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -58,7 +58,7 @@ class SharpLinkToTest extends SharpTestCase
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-show/my-entity" title="">test</a>',
             LinkToSingleShowPage::make('my-entity')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -68,7 +68,7 @@ class SharpLinkToTest extends SharpTestCase
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-show/my-entity/s-form/my-entity" title="">test</a>',
             LinkToSingleForm::make('my-entity')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -79,7 +79,7 @@ class SharpLinkToTest extends SharpTestCase
             '<a href="http://localhost/sharp/s-list/my-entity?search=my-search" title="">test</a>',
             LinkToEntityList::make('my-entity')
                 ->setSearch('my-search')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -91,7 +91,7 @@ class SharpLinkToTest extends SharpTestCase
             LinkToEntityList::make('my-entity')
                 ->addFilter('country', 'France')
                 ->addFilter('city', 'Paris')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -102,7 +102,7 @@ class SharpLinkToTest extends SharpTestCase
             '<a href="http://localhost/sharp/s-list/my-entity?sort=name&dir=desc" title="">test</a>',
             LinkToEntityList::make('my-entity')
                 ->setSort('name', 'desc')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -113,7 +113,7 @@ class SharpLinkToTest extends SharpTestCase
             '<a href="http://localhost/sharp/s-list/my-entity" title="tooltip">test</a>',
             LinkToEntityList::make('my-entity')
                 ->setTooltip('tooltip')
-                ->renderAsText('test')
+                ->renderAsText('test'),
         );
     }
 
@@ -123,7 +123,7 @@ class SharpLinkToTest extends SharpTestCase
         $this->assertEquals(
             'http://localhost/sharp/s-list/my-entity',
             LinkToEntityList::make('my-entity')
-                ->renderAsUrl()
+                ->renderAsUrl(),
         );
     }
 }

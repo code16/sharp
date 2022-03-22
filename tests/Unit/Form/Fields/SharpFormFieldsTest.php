@@ -11,7 +11,8 @@ class SharpFormFieldsTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_field()
     {
-        $form = new class() extends FormFieldsTestForm {
+        $form = new class() extends FormFieldsTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('name'));
@@ -25,7 +26,8 @@ class SharpFormFieldsTest extends SharpTestCase
     /** @test */
     public function we_can_see_fields_as_array()
     {
-        $form = new class() extends FormFieldsTestForm {
+        $form = new class() extends FormFieldsTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('name'));
@@ -35,11 +37,11 @@ class SharpFormFieldsTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['type' => 'text'],
-            $form->fields()['name']
+            $form->fields()['name'],
         );
         $this->assertArraySubset(
             ['type' => 'text'],
-            $form->fields()['first_name']
+            $form->fields()['first_name'],
         );
     }
 }

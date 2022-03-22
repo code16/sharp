@@ -112,8 +112,8 @@ class SharpFormTagsField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'options'     => 'array',
-            'creatable'   => 'boolean',
+            'options' => 'array',
+            'creatable' => 'boolean',
             'maxTagCount' => 'integer',
         ];
     }
@@ -121,11 +121,11 @@ class SharpFormTagsField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'creatable'   => $this->creatable,
-            'createText'  => $this->createText,
+            'creatable' => $this->creatable,
+            'createText' => $this->createText,
             'maxTagCount' => $this->maxTagCount,
-            'options'     => $this->options,
-            'localized'   => $this->localized,
+            'options' => $this->options,
+            'localized' => $this->localized,
         ]);
     }
 }

@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 class AppendNotifications
 {
     /**
-     * @param Request $request
-     * @param Closure $next
-     *
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)
@@ -25,7 +24,7 @@ class AppendNotifications
 
     protected function addNotificationsToResponse(JsonResponse $jsonResponse)
     {
-        if (!$notifications = session('sharp_notifications')) {
+        if (! $notifications = session('sharp_notifications')) {
             return $jsonResponse;
         }
 

@@ -25,7 +25,7 @@ abstract class SharpLinkTo
             '<a href="%s" title="%s">%s</a>',
             $this->renderAsUrl(),
             $this->tooltip,
-            $text
+            $text,
         );
     }
 

@@ -30,7 +30,7 @@ class AccountUpdateName extends SingleInstanceCommand
     {
         $this->addField(
             SharpFormTextField::make('name')
-                ->setLabel('Name')
+                ->setLabel('Name'),
         );
     }
 

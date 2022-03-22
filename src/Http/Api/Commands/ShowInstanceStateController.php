@@ -11,22 +11,21 @@ class ShowInstanceStateController extends ApiController
     use HandleCommandReturn;
 
     /**
-     * @param string      $entityKey
-     * @param string|null $instanceId
+     * @param  string  $entityKey
+     * @param  string|null  $instanceId
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update($entityKey, $instanceId = null)
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $stateHandler = $showPage->entityStateHandler();
 
-        if (!$stateHandler->authorize()
-            || !$stateHandler->authorizeFor($instanceId)) {
+        if (! $stateHandler->authorize()
+            || ! $stateHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
 
@@ -34,27 +33,26 @@ class ShowInstanceStateController extends ApiController
             $showPage,
             array_merge(
                 $stateHandler->execute($instanceId, request()->only('value')),
-                ['value' => request('value')]
-            )
+                ['value' => request('value')],
+            ),
         );
     }
 
     /**
-     * @param string      $entityKey
-     * @param string|null $instanceId
+     * @param  string  $entityKey
+     * @param  string|null  $instanceId
+     * @return \Code16\Sharp\Show\SharpShow
      *
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     *
-     * @return \Code16\Sharp\Show\SharpShow
      */
     private function getShowPage(string $entityKey, $instanceId = null)
     {
         $showPage = $this->getShowInstance($entityKey);
 
         abort_if(
-            (!$instanceId && !$showPage instanceof SharpSingleShow)
+            (! $instanceId && ! $showPage instanceof SharpSingleShow)
             || ($instanceId && $showPage instanceof SharpSingleShow),
-            404
+            404,
         );
 
         $showPage->buildShowConfig();

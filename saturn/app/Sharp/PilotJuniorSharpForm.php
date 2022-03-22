@@ -19,7 +19,7 @@ class PilotJuniorSharpForm extends SharpForm
             SharpCustomFormFieldTextIcon::make('name')
                 ->setLabel('Name')
                 ->setHelpMessage('This input is an example of a custom form field (SharpCustomFormFieldTextIcon)')
-                ->setIcon('fa-user')
+                ->setIcon('fa-user'),
         );
     }
 

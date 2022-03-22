@@ -25,7 +25,7 @@ class DashboardCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/dashboard/my_dashboard/command/dashboard_info')
             ->assertStatus(200)
             ->assertJson([
-                'action'  => 'info',
+                'action' => 'info',
                 'message' => 'ok',
             ]);
     }
@@ -50,7 +50,7 @@ class DashboardCommandControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.dashboards.my_dashboard.view',
-            EntityCommandTestSharpDashboard::class
+            EntityCommandTestSharpDashboard::class,
         );
     }
 }
@@ -60,7 +60,8 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
     public function buildDashboardConfig(): void
     {
         $this
-            ->addDashboardCommand('dashboard_info', new class() extends DashboardCommand {
+            ->addDashboardCommand('dashboard_info', new class() extends DashboardCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -70,8 +71,9 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
                 {
                     return $this->info('ok');
                 }
-            })
-            ->addDashboardCommand('dashboard_form', new class() extends DashboardCommand {
+            }, )
+            ->addDashboardCommand('dashboard_form', new class() extends DashboardCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -86,13 +88,13 @@ class EntityCommandTestSharpDashboard extends SharpDashboard
                 {
                     return [
                         'name' => 'John Wayne',
-                        'age'  => 32,
+                        'age' => 32,
                     ];
                 }
 
                 public function execute(DashboardQueryParams $params, array $data = []): array
                 {
                 }
-            });
+            }, );
     }
 }

@@ -11,7 +11,8 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_get_fields()
     {
-        $form = new class() extends SharpFormTestForm {
+        $form = new class() extends SharpFormTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('name'));
@@ -19,8 +20,8 @@ class SharpFormTest extends SharpTestCase
         };
 
         $this->assertEquals(['name' => [
-            'key'       => 'name',
-            'type'      => 'text',
+            'key' => 'name',
+            'type' => 'text',
             'inputType' => 'text',
         ]], $form->fields());
     }
@@ -28,7 +29,8 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_get_layout()
     {
-        $form = new class() extends SharpFormTestForm {
+        $form = new class() extends SharpFormTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('name'))
@@ -47,23 +49,23 @@ class SharpFormTest extends SharpTestCase
 
         $this->assertEquals([
             'tabbed' => true,
-            'tabs'   => [[
-                'title'   => 'one',
+            'tabs' => [[
+                'title' => 'one',
                 'columns' => [[
-                    'size'   => 6,
+                    'size' => 6,
                     'fields' => [[
                         [
-                            'key'    => 'name',
-                            'size'   => 12,
+                            'key' => 'name',
+                            'size' => 12,
                             'sizeXS' => 12,
                         ],
                     ]],
                 ], [
-                    'size'   => 6,
+                    'size' => 6,
                     'fields' => [[
                         [
-                            'key'    => 'age',
-                            'size'   => 12,
+                            'key' => 'age',
+                            'size' => 12,
                             'sizeXS' => 12,
                         ],
                     ]],
@@ -75,13 +77,14 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_can_get_instance()
     {
-        $form = new class() extends SharpFormTestForm {
+        $form = new class() extends SharpFormTestForm
+        {
             public function find($id): array
             {
                 return [
                     'name' => 'John Wayne',
-                    'age'  => 22,
-                    'job'  => 'actor',
+                    'age' => 22,
+                    'job' => 'actor',
                 ];
             }
 
@@ -94,7 +97,7 @@ class SharpFormTest extends SharpTestCase
 
         $this->assertEquals([
             'name' => 'John Wayne',
-            'age'  => 22,
+            'age' => 22,
         ], $form->instance(1));
     }
 }

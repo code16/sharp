@@ -108,16 +108,17 @@ class FiltersInRequestTest extends BaseApiTest
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList {
+                return new class() extends PersonSharpEntityList
+                {
                     public function buildListConfig(): void
                     {
                         $this->addFilter(
                             'active',
-                            FiltersInRequestTestRetainedActiveFilter::class
+                            FiltersInRequestTestRetainedActiveFilter::class,
                         );
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
@@ -137,7 +138,8 @@ class FiltersInRequestTest extends BaseApiTest
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList {
+                return new class() extends PersonSharpEntityList
+                {
                     public function getListData(EntityListQueryParams $params)
                     {
                         $items = [
@@ -160,11 +162,11 @@ class FiltersInRequestTest extends BaseApiTest
                     {
                         $this->addFilter(
                             'active',
-                            FiltersInRequestTestRetainedActiveFilter::class
+                            FiltersInRequestTestRetainedActiveFilter::class,
                         );
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
@@ -207,7 +209,8 @@ class FiltersInRequestTest extends BaseApiTest
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList {
+                return new class() extends PersonSharpEntityList
+                {
                     public function getListData(EntityListQueryParams $params)
                     {
                         $items = [
@@ -229,11 +232,11 @@ class FiltersInRequestTest extends BaseApiTest
                     {
                         $this->addFilter(
                             'age',
-                            FiltersInRequestTestRetainedAgeMultipleFilter::class
+                            FiltersInRequestTestRetainedAgeMultipleFilter::class,
                         );
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();
@@ -269,7 +272,8 @@ class FiltersInRequestTest extends BaseApiTest
         app()->bind(
             PersonSharpEntityList::class,
             function () {
-                return new class() extends PersonSharpEntityList {
+                return new class() extends PersonSharpEntityList
+                {
                     public function getListData(EntityListQueryParams $params)
                     {
                         $items = [
@@ -289,11 +293,11 @@ class FiltersInRequestTest extends BaseApiTest
                     {
                         $this->addFilter(
                             'age',
-                            FiltersInRequestTestRetainedAgeRequiredFilter::class
+                            FiltersInRequestTestRetainedAgeRequiredFilter::class,
                         );
                     }
                 };
-            }
+            },
         );
 
         $this->buildTheWorld();

@@ -14,7 +14,7 @@ class PilotSeniorSharpForm extends PilotJuniorSharpForm
 
         $this->addField(
             SharpFormNumberField::make('xp')
-                ->setLabel('Experience (in years)')
+                ->setLabel('Experience (in years)'),
         );
     }
 

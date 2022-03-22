@@ -17,7 +17,7 @@ class GlobalFilterController extends ApiController
         return response()->json(
             tap([], function (&$filters) {
                 $this->appendFiltersToConfig($filters);
-            })
+            }),
         );
     }
 
@@ -34,7 +34,7 @@ class GlobalFilterController extends ApiController
         if ($value) {
             session()->put(
                 "_sharp_retained_global_filter_$filterName",
-                $value
+                $value,
             );
         } else {
             session()->forget("_sharp_retained_global_filter_$filterName");

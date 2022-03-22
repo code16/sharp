@@ -25,7 +25,7 @@ trait HasFieldRows
                     ->map(function ($key) {
                         return $this->newLayoutField($key);
                     })
-                    ->all()
+                    ->all(),
             );
 
         return $this;

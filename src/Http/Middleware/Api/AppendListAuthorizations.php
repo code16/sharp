@@ -17,7 +17,7 @@ class AppendListAuthorizations
     protected $gate;
 
     /**
-     * @param Gate $gate
+     * @param  Gate  $gate
      */
     public function __construct(Gate $gate)
     {
@@ -25,9 +25,8 @@ class AppendListAuthorizations
     }
 
     /**
-     * @param Request $request
-     * @param Closure $next
-     *
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return JsonResponse
      */
     public function handle(Request $request, Closure $next)
@@ -41,8 +40,7 @@ class AppendListAuthorizations
     }
 
     /**
-     * @param JsonResponse $jsonResponse
-     *
+     * @param  JsonResponse  $jsonResponse
      * @return JsonResponse
      */
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse)
@@ -54,7 +52,7 @@ class AppendListAuthorizations
         if ($this->hasPolicyFor($entityKey)) {
             // Have to dig into policies
 
-            if (!isset($authorizations['create'])) {
+            if (! isset($authorizations['create'])) {
                 // Create doesn't need instanceId
                 $authorizations['create'] = $this->gate->check("sharp.{$entityKey}.create");
             }
@@ -69,7 +67,7 @@ class AppendListAuthorizations
                 foreach ($missingAbilities as $missingAbility) {
                     if ($this->gate->check("sharp.{$entityKey}.{$missingAbility}", $instanceId)) {
                         $authorizations[$missingAbility][] = $instanceId;
-                    } elseif (!isset($authorizations[$missingAbility])) {
+                    } elseif (! isset($authorizations[$missingAbility])) {
                         $authorizations[$missingAbility] = [];
                     }
                 }
@@ -85,7 +83,7 @@ class AppendListAuthorizations
         // All missing abilities are true by default
         $authorizations = array_merge(
             ['view' => true, 'create' => true, 'update' => true],
-            $authorizations
+            $authorizations,
         );
 
         $data = $jsonResponse->getData();
@@ -99,7 +97,6 @@ class AppendListAuthorizations
 
     /**
      * @param $entityKey
-     *
      * @return bool
      */
     protected function hasPolicyFor($entityKey)
@@ -108,8 +105,7 @@ class AppendListAuthorizations
     }
 
     /**
-     * @param string $entityKey
-     *
+     * @param  string  $entityKey
      * @return \Illuminate\Config\Repository|mixed
      */
     protected function getGlobalAuthorizations(string $entityKey)

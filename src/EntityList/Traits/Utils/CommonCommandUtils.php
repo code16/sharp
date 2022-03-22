@@ -17,23 +17,23 @@ trait CommonCommandUtils
                     : false;
 
                 $config['commands'][$handler->type()][$handler->groupIndex()][] = [
-                    'key'          => $commandName,
-                    'label'        => $handler->label(),
-                    'description'  => $handler->description(),
-                    'type'         => $handler->type(),
+                    'key' => $commandName,
+                    'label' => $handler->label(),
+                    'description' => $handler->description(),
+                    'type' => $handler->type(),
                     'confirmation' => $handler->confirmationText() ?: null,
-                    'modal_title'  => $handler->formModalTitle() ?: null,
-                    'form'         => $formFields ? array_merge(
+                    'modal_title' => $handler->formModalTitle() ?: null,
+                    'form' => $formFields ? array_merge(
                         [
                             'fields' => $formFields,
                             'layout' => $formLayout,
                         ],
                         method_exists($handler, 'getDataLocalizations')
                             ? ['locales' => $handler->getDataLocalizations()]
-                            : []
+                            : [],
                     ) : null,
                     'fetch_initial_data' => $hasFormInitialData,
-                    'authorization'      => $instanceId
+                    'authorization' => $instanceId
                         ? $handler->authorizeFor($instanceId)
                         : $handler->getGlobalAuthorization(),
                 ];

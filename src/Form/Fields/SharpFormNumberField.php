@@ -52,9 +52,9 @@ class SharpFormNumberField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'min'          => 'integer',
-            'max'          => 'integer',
-            'step'         => 'required|integer',
+            'min' => 'integer',
+            'max' => 'integer',
+            'step' => 'required|integer',
             'showControls' => 'required|bool',
         ];
     }
@@ -62,11 +62,11 @@ class SharpFormNumberField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'min'          => $this->min,
-            'max'          => $this->max,
-            'step'         => $this->step,
+            'min' => $this->min,
+            'max' => $this->max,
+            'step' => $this->step,
             'showControls' => $this->showControls,
-            'placeholder'  => $this->placeholder,
+            'placeholder' => $this->placeholder,
         ]);
     }
 }

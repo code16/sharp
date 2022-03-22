@@ -15,19 +15,19 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'             => 'field', 'type' => 'list',
-                'addable'         => false, 'removable' => false, 'sortable' => false,
-                'addText'         => 'Add an item', 'itemIdAttribute' => 'id',
+                'key' => 'field', 'type' => 'list',
+                'addable' => false, 'removable' => false, 'sortable' => false,
+                'addText' => 'Add an item', 'itemIdAttribute' => 'id',
                 'bulkUploadLimit' => 10,
-                'itemFields'      => [
+                'itemFields' => [
                     'text' => [
-                        'key'       => 'text',
-                        'type'      => 'text',
+                        'key' => 'text',
+                        'type' => 'text',
                         'inputType' => 'text',
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -41,7 +41,7 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['addable' => true, 'removable' => true, 'sortable' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -53,7 +53,7 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['addText' => 'Add'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -65,7 +65,7 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['itemIdAttribute' => 'key'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -86,14 +86,14 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['maxItemCount' => 10],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField->setMaxItemCountUnlimited();
 
         $this->assertArrayNotHasKey(
             'maxItemCount',
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -105,14 +105,14 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['bulkUploadField' => 'itemFieldKey'],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField->doNotAllowBulkUpload();
 
         $this->assertArrayNotHasKey(
             'bulkUploadField',
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -124,7 +124,7 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['bulkUploadLimit' => 8],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -136,7 +136,7 @@ class SharpFormListFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['collapsedItemTemplate' => 'template'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -145,7 +145,7 @@ class SharpFormListFieldTest extends SharpTestCase
     {
         $formField = $this->getDefaultList()
             ->addItemField(
-                SharpFormTextField::make('name')
+                SharpFormTextField::make('name'),
             );
 
         $this->assertArraySubset(
@@ -154,7 +154,7 @@ class SharpFormListFieldTest extends SharpTestCase
                     'text' => ['key' => 'text', 'type' => 'text', 'inputType' => 'text'],
                     'name' => ['key' => 'name', 'type' => 'text', 'inputType' => 'text'],
                 ], ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -163,7 +163,7 @@ class SharpFormListFieldTest extends SharpTestCase
     {
         $formField = $this->getDefaultList()
             ->addItemField(
-                SharpFormTextField::make('name')
+                SharpFormTextField::make('name'),
             );
 
         $this->assertEquals('name', $formField->findItemFormFieldByKey('name')->toArray()['key']);
@@ -176,7 +176,7 @@ class SharpFormListFieldTest extends SharpTestCase
     {
         return SharpFormListField::make('field')
             ->addItemField(
-                SharpFormTextField::make('text')
+                SharpFormTextField::make('text'),
             );
     }
 }

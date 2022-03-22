@@ -23,7 +23,7 @@ abstract class Command
     protected function info(string $message): array
     {
         return [
-            'action'  => 'info',
+            'action' => 'info',
             'message' => $message,
         ];
     }
@@ -32,7 +32,7 @@ abstract class Command
     {
         return [
             'action' => 'link',
-            'link'   => $link,
+            'link' => $link,
         ];
     }
 
@@ -47,7 +47,7 @@ abstract class Command
     {
         return [
             'action' => 'refresh',
-            'items'  => (array) $ids,
+            'items' => (array) $ids,
         ];
     }
 
@@ -55,7 +55,7 @@ abstract class Command
     {
         return [
             'action' => 'view',
-            'html'   => view($bladeView, $params)->render(),
+            'html' => view($bladeView, $params)->render(),
         ];
     }
 
@@ -63,9 +63,9 @@ abstract class Command
     {
         return [
             'action' => 'download',
-            'file'   => $filePath,
-            'disk'   => $diskName,
-            'name'   => $fileName,
+            'file' => $filePath,
+            'disk' => $diskName,
+            'name' => $fileName,
         ];
     }
 
@@ -111,7 +111,7 @@ abstract class Command
 
     public function formLayout(): ?array
     {
-        if (!$this->fields) {
+        if (! $this->fields) {
             return null;
         }
 
@@ -144,7 +144,7 @@ abstract class Command
         if ($validator->fails()) {
             throw new ValidationException(
                 $validator,
-                new JsonResponse($validator->errors()->getMessages(), 422)
+                new JsonResponse($validator->errors()->getMessages(), 422),
             );
         }
     }

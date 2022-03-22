@@ -19,12 +19,12 @@ class SharpFormUploadField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'maxFileSize'         => 'numeric',
-            'ratioX'              => 'integer|nullable',
-            'ratioY'              => 'integer|nullable',
-            'croppable'           => 'boolean',
-            'croppableFileTypes'  => 'array',
-            'compactThumbnail'    => 'boolean',
+            'maxFileSize' => 'numeric',
+            'ratioX' => 'integer|nullable',
+            'ratioY' => 'integer|nullable',
+            'croppable' => 'boolean',
+            'croppableFileTypes' => 'array',
+            'compactThumbnail' => 'boolean',
             'shouldOptimizeImage' => 'boolean',
         ];
     }
@@ -32,13 +32,13 @@ class SharpFormUploadField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'maxFileSize'         => $this->maxFileSize,
-            'fileFilter'          => $this->fileFilter,
-            'ratioX'              => $this->cropRatio ? (int) $this->cropRatio[0] : null,
-            'ratioY'              => $this->cropRatio ? (int) $this->cropRatio[1] : null,
-            'croppable'           => $this->croppable,
-            'croppableFileTypes'  => $this->croppableFileTypes,
-            'compactThumbnail'    => (bool) $this->compactThumbnail,
+            'maxFileSize' => $this->maxFileSize,
+            'fileFilter' => $this->fileFilter,
+            'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
+            'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
+            'croppable' => $this->croppable,
+            'croppableFileTypes' => $this->croppableFileTypes,
+            'compactThumbnail' => (bool) $this->compactThumbnail,
             'shouldOptimizeImage' => (bool) $this->shouldOptimizeImage,
         ]);
     }

@@ -24,7 +24,7 @@ class SharpValidatorTest extends SharpTestCase
         $validator = $this->app->validator->make([
             'name' => 'John Wayne',
         ], [
-            'name'     => 'required',
+            'name' => 'required',
             'bio.text' => 'required',
         ]);
 

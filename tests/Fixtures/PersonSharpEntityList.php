@@ -62,11 +62,11 @@ class PersonSharpEntityList extends SharpEntityList
             EntityListDataContainer::make('name')
                 ->setLabel('Name')
                 ->setHtml()
-                ->setSortable()
+                ->setSortable(),
         )->addDataContainer(
             EntityListDataContainer::make('age')
                 ->setLabel('Age')
-                ->setSortable()
+                ->setSortable(),
         );
     }
 
@@ -95,7 +95,7 @@ class PersonSharpEntityListAgeFilter implements EntityListSelectFilter
 {
     public function values(): array
     {
-        return [22=>22, 23=>23, 24=>24, 25=>25, 26=>26];
+        return [22 => 22, 23 => 23, 24 => 24, 25 => 25, 26 => 26];
     }
 }
 

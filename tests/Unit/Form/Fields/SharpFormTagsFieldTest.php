@@ -19,14 +19,14 @@ class SharpFormTagsFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'     => 'field', 'type' => 'tags',
+                'key' => 'field', 'type' => 'tags',
                 'options' => [
                     ['id' => '1', 'label' => 'Elem 1'],
                     ['id' => '2', 'label' => 'Elem 2'],
                 ], 'creatable' => false,
                 'createText' => 'Create',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -38,7 +38,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['creatable' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -50,7 +50,7 @@ class SharpFormTagsFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['createText' => 'A'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -62,13 +62,12 @@ class SharpFormTagsFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['maxTagCount' => 2],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
     /**
-     * @param array|null $options
-     *
+     * @param  array|null  $options
      * @return SharpFormTagsField
      */
     private function getDefaultTags($options = null)

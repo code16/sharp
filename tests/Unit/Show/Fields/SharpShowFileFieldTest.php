@@ -14,9 +14,9 @@ class SharpShowFileFieldTest extends SharpTestCase
             ->setLabel('test');
 
         $this->assertEquals([
-            'key'          => 'fileField',
-            'type'         => 'file',
-            'label'        => 'test',
+            'key' => 'fileField',
+            'type' => 'file',
+            'label' => 'test',
             'emptyVisible' => false,
         ], $field->toArray());
     }

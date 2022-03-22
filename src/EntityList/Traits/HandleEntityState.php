@@ -30,7 +30,7 @@ trait HandleEntityState
         if ($this->entityStateAttribute) {
             $config['state'] = [
                 'attribute' => $this->entityStateAttribute,
-                'values'    => collect($this->entityStateHandler->states())
+                'values' => collect($this->entityStateHandler->states())
                     ->map(function ($state, $key) {
                         return [
                             'value' => $key,

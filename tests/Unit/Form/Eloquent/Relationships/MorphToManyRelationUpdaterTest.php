@@ -38,12 +38,12 @@ class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new MorphToManyRelationUpdater();
 
         $updater->update($person, 'tags', [
-            ['id'=>$tag->id],
+            ['id' => $tag->id],
         ]);
 
         $this->assertDatabaseHas('taggables', [
-            'tag_id'        => $tag->id,
-            'taggable_id'   => $person->id,
+            'tag_id' => $tag->id,
+            'taggable_id' => $person->id,
             'taggable_type' => TaggablePerson::class,
         ]);
     }
@@ -56,24 +56,24 @@ class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $newTag = Tag::create(['name' => 'B']);
 
         $person->tags()->sync([
-            ['id'=>$oldTag->id],
+            ['id' => $oldTag->id],
         ]);
 
         $updater = new MorphToManyRelationUpdater();
 
         $updater->update($person, 'tags', [
-            ['id'=>$newTag->id],
+            ['id' => $newTag->id],
         ]);
 
         $this->assertDatabaseHas('taggables', [
-            'tag_id'        => $newTag->id,
-            'taggable_id'   => $person->id,
+            'tag_id' => $newTag->id,
+            'taggable_id' => $person->id,
             'taggable_type' => TaggablePerson::class,
         ]);
 
         $this->assertDatabaseMissing('taggables', [
-            'tag_id'        => $oldTag->id,
-            'taggable_id'   => $person->id,
+            'tag_id' => $oldTag->id,
+            'taggable_id' => $person->id,
             'taggable_type' => TaggablePerson::class,
         ]);
     }
@@ -86,7 +86,7 @@ class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new MorphToManyRelationUpdater();
 
         $updater->update($person, 'tags', [
-            ['id'=>null, 'name'=>'Z'],
+            ['id' => null, 'name' => 'Z'],
         ]);
 
         $this->assertDatabaseHas('tags', [
@@ -94,8 +94,8 @@ class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         ]);
 
         $this->assertDatabaseHas('taggables', [
-            'tag_id'        => Tag::first()->id,
-            'taggable_id'   => $person->id,
+            'tag_id' => Tag::first()->id,
+            'taggable_id' => $person->id,
             'taggable_type' => TaggablePerson::class,
         ]);
     }

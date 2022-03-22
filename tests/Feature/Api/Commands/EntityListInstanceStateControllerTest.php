@@ -25,12 +25,12 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
                 'attribute' => 'state',
-                'value'     => 'ok',
+                'value' => 'ok',
             ])
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'refresh',
-                'value'  => 'ok',
+                'value' => 'ok',
             ]);
     }
 
@@ -42,12 +42,12 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
                 'attribute' => 'state',
-                'value'     => 'ok_reload',
+                'value' => 'ok_reload',
             ])
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'reload',
-                'value'  => 'ok_reload',
+                'value' => 'ok_reload',
             ]);
     }
 
@@ -58,16 +58,16 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this->json('post', '/sharp/api/list/person/state/1', [
             'attribute' => 'state',
-            'value'     => 'ok_refresh_items',
+            'value' => 'ok_refresh_items',
         ])
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'refresh',
-                'items'  => [
+                'items' => [
                     [
-                        'id'   => 1,
+                        'id' => 1,
                         'name' => 'John <b>Wayne</b>',
-                        'age'  => 22,
+                        'age' => 22,
                     ],
                 ],
                 'value' => 'ok_refresh_items',
@@ -82,7 +82,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
                 'attribute' => 'state',
-                'value'     => 'invalid',
+                'value' => 'invalid',
             ])
             ->assertStatus(422);
     }
@@ -95,7 +95,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
         $this
             ->json('post', '/sharp/api/list/person/state/1', [
                 'attribute' => 'state',
-                'value'     => 'ko',
+                'value' => 'ko',
             ])
             ->assertStatus(417);
     }
@@ -108,7 +108,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
         $this
             ->json('post', '/sharp/api/list/person/state/100', [
                 'attribute' => 'state',
-                'value'     => 'anything',
+                'value' => 'anything',
             ])
             ->assertStatus(403);
     }
@@ -119,7 +119,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.list',
-            EntityListInstanceStatePersonSharpEntityList::class
+            EntityListInstanceStatePersonSharpEntityList::class,
         );
     }
 }
@@ -128,7 +128,8 @@ class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList
 {
     public function buildListConfig(): void
     {
-        $this->setEntityState('state', new class() extends EntityState {
+        $this->setEntityState('state', new class() extends EntityState
+        {
             protected function buildStates(): void
             {
                 $this->addState('ok', 'OK', 'blue');
@@ -158,6 +159,6 @@ class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList
             {
                 return $instanceId != 100;
             }
-        });
+        }, );
     }
 }

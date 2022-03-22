@@ -11,9 +11,8 @@ use Illuminate\Support\Facades\Storage;
 trait HandleCommandReturn
 {
     /**
-     * @param HandleInstanceCommands $commandContainer
-     * @param array                  $returnedValue
-     *
+     * @param  HandleInstanceCommands  $commandContainer
+     * @param  array  $returnedValue
      * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\File\Stream
      */
     protected function returnCommandResult($commandContainer, array $returnedValue)
@@ -22,7 +21,7 @@ trait HandleCommandReturn
             // Download case is specific: we return a File Stream
             return Storage::disk($returnedValue['disk'])->download(
                 $returnedValue['file'],
-                $returnedValue['name']
+                $returnedValue['name'],
             );
         }
 
@@ -31,9 +30,9 @@ trait HandleCommandReturn
             $returnedValue['items'] = $commandContainer->data(
                 $commandContainer->getListData(
                     EntityListQueryParams::createFromArrayOfIds(
-                        $returnedValue['items']
-                    )
-                )
+                        $returnedValue['items'],
+                    ),
+                ),
             )['items'];
         }
 
@@ -41,20 +40,19 @@ trait HandleCommandReturn
     }
 
     /**
-     * @param HandleInstanceCommands $commandContainer
-     * @param string                 $commandKey
+     * @param  HandleInstanceCommands  $commandContainer
+     * @param  string  $commandKey
      * @param $instanceId
+     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
      *
      * @throws SharpAuthorizationException
-     *
-     * @return \Code16\Sharp\EntityList\Commands\InstanceCommand|null
      */
     protected function getInstanceCommandHandler($commandContainer, $commandKey, $instanceId)
     {
         $commandHandler = $commandContainer->instanceCommandHandler($commandKey);
 
-        if (!$commandHandler->authorize()
-            || !$commandHandler->authorizeFor($instanceId)) {
+        if (! $commandHandler->authorize()
+            || ! $commandHandler->authorizeFor($instanceId)) {
             throw new SharpAuthorizationException();
         }
 

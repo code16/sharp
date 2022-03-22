@@ -10,7 +10,7 @@ class DashboardLayoutRow
     {
         $this->widgets[] = [
             'size' => $size,
-            'key'  => $widgetKey,
+            'key' => $widgetKey,
         ];
 
         return $this;

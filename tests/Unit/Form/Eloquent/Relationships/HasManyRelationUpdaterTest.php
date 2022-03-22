@@ -17,14 +17,14 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new HasManyRelationUpdater();
 
         $updater->update($mother, 'sons', [[
-            'id'   => $son1->id,
+            'id' => $son1->id,
             'name' => 'John Wayne',
         ]]);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $son1->id,
+            'id' => $son1->id,
             'mother_id' => $mother->id,
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
         ]);
     }
 
@@ -36,13 +36,13 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new HasManyRelationUpdater();
 
         $updater->update($mother, 'sons', [[
-            'id'   => null,
+            'id' => null,
             'name' => 'John Wayne',
         ]]);
 
         $this->assertDatabaseHas('people', [
             'mother_id' => $mother->id,
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
         ]);
     }
 
@@ -52,7 +52,7 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::create(['name' => 'Jane Wayne']);
 
         (new HasManyRelationUpdater())->update($mother, 'sons', [[
-            'id'   => 'ABC', // Set a invalid id here to ensure it will be unset
+            'id' => 'ABC', // Set a invalid id here to ensure it will be unset
             'name' => 'John Wayne',
         ]]);
 
@@ -66,20 +66,21 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $mother = PersonWithFixedId::create(['name' => 'Jane Wayne']);
 
         (new HasManyRelationUpdater())->update($mother, 'sons', [[
-            'id'   => 123,
+            'id' => 123,
             'name' => 'John Wayne',
         ]]);
 
         $this->assertDatabaseHas('people', [
             'mother_id' => $mother->id,
-            'id'        => 123,
+            'id' => 123,
         ]);
     }
 
     /** @test */
     public function the_optional_getDefaultAttributesFor_method_is_called_on_an_item_creation()
     {
-        $mother = new class() extends Person {
+        $mother = new class() extends Person
+        {
             protected $table = 'people';
 
             public function getDefaultAttributesFor($attribute)
@@ -98,8 +99,8 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $this->assertDatabaseHas('people', [
             'mother_id' => $mother->id,
-            'name'      => 'John Wayne',
-            'age'       => 18,
+            'name' => 'John Wayne',
+            'age' => 18,
         ]);
     }
 
@@ -117,7 +118,7 @@ class HasManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         ]]);
 
         $this->assertDatabaseMissing('people', [
-            'id'        => $son2->id,
+            'id' => $son2->id,
             'mother_id' => $mother->id,
         ]);
     }

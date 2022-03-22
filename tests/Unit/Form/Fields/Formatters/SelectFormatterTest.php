@@ -36,7 +36,7 @@ class SelectFormatterTest extends SharpTestCase
             ->setMultiple();
 
         $this->assertEquals([1, 2], $formatter->toFront($field, [
-            ['id'=>1, 'label'=>'A'], ['id'=>2, 'label'=>'B'],
+            ['id' => 1, 'label' => 'A'], ['id' => 2, 'label' => 'B'],
         ]));
     }
 
@@ -48,8 +48,8 @@ class SelectFormatterTest extends SharpTestCase
             ->setMultiple();
 
         $this->assertEquals([1, 2], $formatter->toFront($field, [
-            (object) ['id'=>1, 'label'=>'A'],
-            (object) ['id'=>2, 'label'=>'B'],
+            (object) ['id' => 1, 'label' => 'A'],
+            (object) ['id' => 2, 'label' => 'B'],
         ]));
     }
 
@@ -61,16 +61,18 @@ class SelectFormatterTest extends SharpTestCase
             ->setMultiple();
 
         $this->assertEquals([1, 2], $formatter->toFront($field, [
-            new class() {
+            new class()
+            {
                 public function toArray()
                 {
-                    return ['id'=>1, 'label'=>'A'];
+                    return ['id' => 1, 'label' => 'A'];
                 }
             },
-            new class() {
+            new class()
+            {
                 public function toArray()
                 {
-                    return ['id'=>2, 'label'=>'B'];
+                    return ['id' => 2, 'label' => 'B'];
                 }
             },
         ]));
@@ -85,7 +87,7 @@ class SelectFormatterTest extends SharpTestCase
             ->setIdAttribute('number');
 
         $this->assertEquals([1, 2], $formatter->toFront($field, [
-            ['number'=>1, 'label'=>'A'], ['number'=>2, 'label'=>'B'],
+            ['number' => 1, 'label' => 'A'], ['number' => 2, 'label' => 'B'],
         ]));
     }
 
@@ -108,7 +110,7 @@ class SelectFormatterTest extends SharpTestCase
         $field = SharpFormSelectField::make('select', $this->getSelectData())
             ->setMultiple();
 
-        $this->assertEquals([['id'=>1], ['id'=>2]], $formatter->fromFront($field, $attribute, [1, 2]));
+        $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->fromFront($field, $attribute, [1, 2]));
     }
 
     /** @test */
@@ -120,8 +122,8 @@ class SelectFormatterTest extends SharpTestCase
             ->setIdAttribute('number');
 
         $this->assertEquals(
-            [['number'=>1], ['number'=>2]],
-            $formatter->fromFront($field, 'attribute', [1, 2])
+            [['number' => 1], ['number' => 2]],
+            $formatter->fromFront($field, 'attribute', [1, 2]),
         );
     }
 

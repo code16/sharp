@@ -36,9 +36,9 @@ class ShowLayoutSection implements HasLayout
     public function toArray(): array
     {
         return [
-            'title'       => $this->title,
+            'title' => $this->title,
             'collapsable' => $this->collapsable,
-            'columns'     => collect($this->columns)
+            'columns' => collect($this->columns)
                 ->map(function ($column) {
                     return $column->toArray();
                 })

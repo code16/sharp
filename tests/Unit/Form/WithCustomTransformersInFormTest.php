@@ -27,7 +27,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             [
                 'name' => 'John Wayne',
             ],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -37,11 +37,12 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $person = Person::create([
             'name' => 'John Wayne',
         ]);
-        $form = new class() extends WithCustomTransformersTestForm {
+        $form = new class() extends WithCustomTransformersTestForm
+        {
             public function find($id): array
             {
                 return $this->transform(
-                    DB::table((new Person())->getTable())->where(['id'=>$id])->first()
+                    DB::table((new Person())->getTable())->where(['id' => $id])->first(),
                 );
             }
         };
@@ -49,7 +50,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             [
                 'name' => 'John Wayne',
             ],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -61,7 +62,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         ]);
 
         $person = Person::create([
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
             'mother_id' => $mother->id,
         ]);
 
@@ -70,9 +71,9 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $this->assertArraySubset(
             [
                 'mother_id' => $person->mother_id,
-                'mother'    => ['id' => $mother->id, 'name' => $mother->name],
+                'mother' => ['id' => $mother->id, 'name' => $mother->name],
             ],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -84,7 +85,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         ]);
 
         $son = Person::create([
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
             'mother_id' => $mother->id,
         ]);
 
@@ -94,7 +95,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             [
                 'elder_son' => ['id' => $son->id, 'name' => $son->name],
             ],
-            $form->find($mother->id)
+            $form->find($mother->id),
         );
     }
 
@@ -106,12 +107,12 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         ]);
 
         $son1 = Person::create([
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
             'mother_id' => $mother->id,
         ]);
 
         $son2 = Person::create([
-            'name'      => 'Bill Wayne',
+            'name' => 'Bill Wayne',
             'mother_id' => $mother->id,
         ]);
 
@@ -124,7 +125,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
                     ['id' => $son2->id, 'name' => $son2->name],
                 ],
             ],
-            $form->find($mother->id)
+            $form->find($mother->id),
         );
     }
 
@@ -156,7 +157,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
                     ['id' => $person3->id, 'name' => $person3->name],
                 ],
             ],
-            $form->find($person1->id)
+            $form->find($person1->id),
         );
     }
 
@@ -172,7 +173,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             [
                 'picture' => ['file' => 'test.jpg'],
             ],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -188,7 +189,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             [
                 'pictures' => [['file' => 'test.jpg']],
             ],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -199,7 +200,8 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         $son = Person::create(['name' => 'AAA', 'mother_id' => $mother->id]);
         $person = Person::create(['name' => 'BBB']);
 
-        $form = new class() extends WithCustomTransformersTestForm {
+        $form = new class() extends WithCustomTransformersTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(SharpFormTextField::make('mother:name'));
@@ -210,14 +212,14 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             [
                 'mother:name' => 'Jane Wayne',
             ],
-            $form->find($son->id)
+            $form->find($son->id),
         );
 
         $this->assertArraySubset(
             [
                 'mother:name' => null,
             ],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -235,7 +237,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ['name' => 'JOHN WAYNE'],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -251,7 +253,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ['name' => 'JOHN WAYNE'],
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -267,14 +269,14 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $this->assertArrayNotHasKey(
             'slug_name',
-            $form->find($person->id)
+            $form->find($person->id),
         );
 
         $form->setCustomTransformer('slug_name', SharpAttributeSlugNameWithMissingTransformer::class);
 
         $this->assertArrayHasKey(
             'slug_name',
-            $form->find($person->id)
+            $form->find($person->id),
         );
     }
 
@@ -285,12 +287,13 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
         Person::create(['name' => 'aaa', 'mother_id' => $mother->id]);
         Person::create(['name' => 'bbb', 'mother_id' => $mother->id]);
 
-        $form = new class() extends WithCustomTransformersTestForm {
+        $form = new class() extends WithCustomTransformersTestForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormListField::make('sons')
-                    ->addItemField(SharpFormTextField::make('name'))
+                    ->addItemField(SharpFormTextField::make('name')),
                 );
             }
         };
@@ -301,26 +304,27 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ['name' => 'AAA'],
-            $form->find($mother->id)['sons'][0]
+            $form->find($mother->id)['sons'][0],
         );
 
         $this->assertArraySubset(
             ['name' => 'BBB'],
-            $form->find($mother->id)['sons'][1]
+            $form->find($mother->id)['sons'][1],
         );
     }
 
     /** @test */
     public function we_can_apply_a_custom_transformer_to_a_field_in_a_list_on_an_array_model()
     {
-        $form = new class() extends WithCustomTransformersTestForm {
+        $form = new class() extends WithCustomTransformersTestForm
+        {
             public function find($id): array
             {
                 return $this->transform([
                     'name' => 'Jane Wayne',
                     'sons' => [
                         [
-                            'id'   => 12,
+                            'id' => 12,
                             'name' => 'aaa',
                         ],
                     ],
@@ -331,7 +335,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
             {
                 $this->addField(
                     SharpFormListField::make('sons')
-                    ->addItemField(SharpFormTextField::make('name'))
+                    ->addItemField(SharpFormTextField::make('name')),
                 );
             }
         };
@@ -343,7 +347,7 @@ class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
 
         $this->assertArraySubset(
             ['name' => 'AAA'],
-            $form->find(null)['sons'][0]
+            $form->find(null)['sons'][0],
         );
     }
 }
@@ -357,7 +361,7 @@ class WithCustomTransformersTestForm extends SharpForm
         return $this->transform(
             Person::whereId($id)
                 ->with(['sons', 'elderSon', 'mother', 'friends', 'picture', 'pictures'])
-                ->firstOrFail()
+                ->firstOrFail(),
         );
     }
 

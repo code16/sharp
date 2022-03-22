@@ -15,10 +15,10 @@ class SharpFormTextareaFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'  => 'text',
+                'key' => 'text',
                 'type' => 'textarea',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -30,7 +30,7 @@ class SharpFormTextareaFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['rows' => 5],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -52,7 +52,7 @@ class SharpFormTextareaFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['maxLength' => 10],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

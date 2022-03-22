@@ -8,9 +8,8 @@ use Code16\Sharp\Utils\Transformers\ArrayConverter;
 class AutocompleteFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -23,10 +22,9 @@ class AutocompleteFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
-     *
      * @return mixed
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)

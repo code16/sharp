@@ -12,7 +12,7 @@ class BelongsToRelationUpdater
     {
         if (strpos($attribute, ':') !== false) {
             // This is a relation attribute update case (eg: mother:name)
-            list($attribute, $subAttribute) = explode(':', $attribute);
+            [$attribute, $subAttribute] = explode(':', $attribute);
 
             if ($instance->$attribute) {
                 $instance->$attribute()->update([
@@ -23,7 +23,7 @@ class BelongsToRelationUpdater
             }
 
             // Creation case
-            if (!$value) {
+            if (! $value) {
                 return;
             }
 

@@ -20,7 +20,7 @@ class EntityListQueryParamsTest extends SharpTestCase
     {
         $this->assertEquals(
             ['%the%', '%little%', '%cat%', '%is%', '%dead%'],
-            $this->buildParams(1, 'the little cat is dead')->searchWords()
+            $this->buildParams(1, 'the little cat is dead')->searchWords(),
         );
     }
 
@@ -29,7 +29,7 @@ class EntityListQueryParamsTest extends SharpTestCase
     {
         $this->assertEquals(
             ['the', 'little', 'cat', 'is', 'dead'],
-            $this->buildParams(1, 'the little cat is dead')->searchWords(false)
+            $this->buildParams(1, 'the little cat is dead')->searchWords(false),
         );
     }
 
@@ -38,12 +38,12 @@ class EntityListQueryParamsTest extends SharpTestCase
     {
         $this->assertEquals(
             ['cat%'],
-            $this->buildParams(1, 'cat*')->searchWords()
+            $this->buildParams(1, 'cat*')->searchWords(),
         );
 
         $this->assertEquals(
             ['%cat'],
-            $this->buildParams(1, '*cat')->searchWords()
+            $this->buildParams(1, '*cat')->searchWords(),
         );
     }
 
@@ -52,7 +52,7 @@ class EntityListQueryParamsTest extends SharpTestCase
     {
         $this->assertEquals(
             '1',
-            $this->buildParams(1, '', null, null, ['type' => 1])->filterFor('type')
+            $this->buildParams(1, '', null, null, ['type' => 1])->filterFor('type'),
         );
 
         $this->assertEquals(
@@ -61,25 +61,26 @@ class EntityListQueryParamsTest extends SharpTestCase
                 'titi',
                 'tata',
             ],
-            $this->buildParams(1, '', null, null, ['type' => 'toto,titi,tata'])->filterFor('type')
+            $this->buildParams(1, '', null, null, ['type' => 'toto,titi,tata'])->filterFor('type'),
         );
 
         $this->assertEquals(
             [
                 'start' => Carbon::createFromFormat('Y-m-d', '2019-02-01')->setTime(0, 0, 0, 0),
-                'end'   => Carbon::createFromFormat('Y-m-d', '2019-02-10')->setTime(23, 59, 59, 999999),
+                'end' => Carbon::createFromFormat('Y-m-d', '2019-02-10')->setTime(23, 59, 59, 999999),
             ],
-            $this->buildParams(1, '', null, null, ['range' => '20190201..20190210'])->filterFor('range')
+            $this->buildParams(1, '', null, null, ['range' => '20190201..20190210'])->filterFor('range'),
         );
 
         $this->assertNull(
-            $this->buildParams()->filterFor('type')
+            $this->buildParams()->filterFor('type'),
         );
     }
 
     private function buildParams($p = 1, $s = '', $sb = null, $sd = null, $f = null)
     {
-        return new class($p, $s, $sb, $sd, $f) extends EntityListQueryParams {
+        return new class($p, $s, $sb, $sd, $f) extends EntityListQueryParams
+        {
             public function __construct($p, $s, $sb, $sd, $f)
             {
                 $this->page = $p;

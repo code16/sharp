@@ -26,7 +26,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
         $this->postJson('/sharp/api/show/person/command/instance_info/1')
             ->assertStatus(200)
             ->assertJson([
-                'action'  => 'info',
+                'action' => 'info',
                 'message' => 'ok',
             ]);
 
@@ -42,7 +42,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
         $this->postJson('/sharp/api/show/person/command/instance_info')
             ->assertStatus(200)
             ->assertJson([
-                'action'  => 'info',
+                'action' => 'info',
                 'message' => 'ok',
             ]);
 
@@ -62,7 +62,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
 
         $this->assertTrue(
             collect($response['config']['commands']['instance'][0])
-                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data']
+                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data'],
         );
 
         $this->getJson('/sharp/api/show/person/command/instance_with_init_data/25/data')
@@ -86,7 +86,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
 
         $this->assertTrue(
             collect($response['config']['commands']['instance'][0])
-                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data']
+                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data'],
         );
 
         $this->getJson('/sharp/api/show/person/command/instance_with_init_data/data')
@@ -106,7 +106,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
             'sharp.entities.person.show',
             $singleShow
                 ? ShowInstanceCommandPersonSharpSingleShow::class
-                : ShowInstanceCommandPersonSharpShow::class
+                : ShowInstanceCommandPersonSharpShow::class,
         );
     }
 }
@@ -116,7 +116,8 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
     public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand('instance_info', new class() extends InstanceCommand {
+            ->addInstanceCommand('instance_info', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -126,8 +127,9 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
                 {
                     return $this->info('ok');
                 }
-            })
-            ->addInstanceCommand('instance_with_init_data', new class() extends InstanceCommand {
+            }, )
+            ->addInstanceCommand('instance_with_init_data', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -142,14 +144,14 @@ class ShowInstanceCommandPersonSharpShow extends PersonSharpShow
                 {
                     return [
                         'name' => "John Wayne [$instanceId]",
-                        'age'  => 32,
+                        'age' => 32,
                     ];
                 }
 
                 public function execute($instanceId, array $data = []): array
                 {
                 }
-            });
+            }, );
     }
 }
 
@@ -158,7 +160,8 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
     public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand('instance_info', new class() extends SingleInstanceCommand {
+            ->addInstanceCommand('instance_info', new class() extends SingleInstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -168,8 +171,9 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
                 {
                     return $this->info('ok');
                 }
-            })
-            ->addInstanceCommand('instance_with_init_data', new class() extends SingleInstanceCommand {
+            }, )
+            ->addInstanceCommand('instance_with_init_data', new class() extends SingleInstanceCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -184,13 +188,13 @@ class ShowInstanceCommandPersonSharpSingleShow extends PersonSharpSingleShow
                 {
                     return [
                         'name' => 'John Wayne',
-                        'age'  => 32,
+                        'age' => 32,
                     ];
                 }
 
                 public function executeSingle(array $data = []): array
                 {
                 }
-            });
+            }, );
     }
 }

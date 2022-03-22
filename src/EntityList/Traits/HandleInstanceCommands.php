@@ -21,7 +21,7 @@ trait HandleInstanceCommands
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
 
-        if (!$commandHandler instanceof InstanceCommand) {
+        if (! $commandHandler instanceof InstanceCommand) {
             throw new SharpException("Handler class for instance command [{$commandName}] is not an subclass of ".InstanceCommand::class);
         }
 
@@ -47,7 +47,7 @@ trait HandleInstanceCommands
         $this->appendCommandsToConfig(
             collect($this->instanceCommandHandlers),
             $config,
-            $instanceId
+            $instanceId,
         );
     }
 
@@ -55,7 +55,7 @@ trait HandleInstanceCommands
      * Set the value of authorization key for instance commands and entity state,
      * which is an array of ids from the $items collection.
      *
-     * @param array|Arrayable $items
+     * @param  array|Arrayable  $items
      */
     protected function addInstanceCommandsAuthorizationsToConfigForItems($items)
     {
@@ -74,7 +74,7 @@ trait HandleInstanceCommands
             ->each(function ($commandHandler) use ($items) {
                 foreach ($items as $item) {
                     $commandHandler->checkAndStoreAuthorizationFor(
-                        $item[$this->instanceIdAttribute]
+                        $item[$this->instanceIdAttribute],
                     );
                 }
             });

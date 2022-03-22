@@ -23,26 +23,26 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     public function only_default_values_are_set()
     {
         $localValues = [
-            1  => 'bob',
+            1 => 'bob',
         ];
 
         $defaultFormField = $this->getDefaultLocalAutocomplete($localValues);
 
         $this->assertEquals(
             [
-                'key'                => 'field', 'type' => 'autocomplete',
-                'mode'               => 'local', 'searchKeys' => ['value'],
-                'remoteMethod'       => 'GET', 'itemIdAttribute' => 'id',
-                'listItemTemplate'   => 'LIT-content',
+                'key' => 'field', 'type' => 'autocomplete',
+                'mode' => 'local', 'searchKeys' => ['value'],
+                'remoteMethod' => 'GET', 'itemIdAttribute' => 'id',
+                'listItemTemplate' => 'LIT-content',
                 'resultItemTemplate' => 'RIT-content',
-                'searchMinChars'     => 1, 'localValues' => [
+                'searchMinChars' => 1, 'localValues' => [
                     ['id' => 1, 'label' => 'bob'],
                 ],
                 'remoteSearchAttribute' => 'query',
-                'dataWrapper'           => '',
-                'debounceDelay'         => 300,
+                'dataWrapper' => '',
+                'debounceDelay' => 300,
             ],
-            $defaultFormField->toArray()
+            $defaultFormField->toArray(),
         );
     }
 
@@ -58,10 +58,10 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'remoteMethod'          => 'POST', 'remoteEndpoint' => 'endpoint',
+                'remoteMethod' => 'POST', 'remoteEndpoint' => 'endpoint',
                 'remoteSearchAttribute' => 'attribute',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -78,7 +78,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 ['id' => 1, 'label' => 'Elem 1'],
                 ['id' => 2, 'label' => 'Elem 2'],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -95,7 +95,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                 (object) ['id' => 1, 'label' => 'Elem 1'],
                 (object) ['id' => 2, 'label' => 'Elem 2'],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -109,7 +109,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             [
                 'searchMinChars' => 3,
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -123,7 +123,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             [
                 'debounceDelay' => 500,
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -137,7 +137,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             [
                 'dataWrapper' => 'test',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -150,10 +150,10 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'listItemTemplate'   => '<strong>LIT</strong>',
+                'listItemTemplate' => '<strong>LIT</strong>',
                 'resultItemTemplate' => '<strong>RIT</strong>',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -171,7 +171,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     'lang' => ['fr', 'de'],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -211,7 +211,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ['id' => 'B2', 'label' => 'test B2'],
                 ],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -240,7 +240,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ['id' => 'B2', 'label' => ['fr' => 'test B2 fr', 'en' => 'test B2 en']],
                 ],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -285,7 +285,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ],
                 ],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -293,12 +293,12 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
     public function we_can_define_linked_remote_endpoint_with_dynamic_attributes()
     {
         $formField = $this->getDefaultDynamicRemoteAutocomplete(
-            'autocomplete/{{master}}/endpoint'
+            'autocomplete/{{master}}/endpoint',
         );
 
         $this->assertArraySubset(
             [
-                'remoteEndpoint'    => 'autocomplete/{{master}}/endpoint',
+                'remoteEndpoint' => 'autocomplete/{{master}}/endpoint',
                 'dynamicAttributes' => [
                     [
                         'name' => 'remoteEndpoint',
@@ -306,7 +306,7 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -319,21 +319,21 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             'autocomplete/{{master}}/endpoint',
             [
                 'master' => $master,
-            ]
+            ],
         );
 
         $this->assertArraySubset(
             [
-                'remoteEndpoint'    => 'autocomplete/{{master}}/endpoint',
+                'remoteEndpoint' => 'autocomplete/{{master}}/endpoint',
                 'dynamicAttributes' => [
                     [
-                        'name'    => 'remoteEndpoint',
-                        'type'    => 'template',
+                        'name' => 'remoteEndpoint',
+                        'type' => 'template',
                         'default' => "autocomplete/$master/endpoint",
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -346,29 +346,28 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
         $formField = $this->getDefaultDynamicRemoteAutocomplete(
             'autocomplete/{{master}}/{{secondary}}/endpoint',
             [
-                'master'    => $master,
+                'master' => $master,
                 'secondary' => $secondary,
-            ]
+            ],
         );
 
         $this->assertArraySubset(
             [
-                'remoteEndpoint'    => 'autocomplete/{{master}}/{{secondary}}/endpoint',
+                'remoteEndpoint' => 'autocomplete/{{master}}/{{secondary}}/endpoint',
                 'dynamicAttributes' => [
                     [
-                        'name'    => 'remoteEndpoint',
-                        'type'    => 'template',
+                        'name' => 'remoteEndpoint',
+                        'type' => 'template',
                         'default' => "autocomplete/$master/$secondary/endpoint",
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
     /**
-     * @param array|null $localValues
-     *
+     * @param  array|null  $localValues
      * @return SharpFormAutocompleteField
      */
     private function getDefaultLocalAutocomplete($localValues = null)
@@ -377,14 +376,13 @@ class SharpFormAutocompleteFieldTest extends SharpTestCase
             ->setListItemTemplatePath('LIT.vue')
             ->setResultItemTemplatePath('RIT.vue')
             ->setLocalValues($localValues ?: [
-                1  => 'bob',
+                1 => 'bob',
             ]);
     }
 
     /**
-     * @param string $remoteEndpoint
-     * @param array  $defaultValues
-     *
+     * @param  string  $remoteEndpoint
+     * @param  array  $defaultValues
      * @return SharpFormAutocompleteField
      */
     private function getDefaultDynamicRemoteAutocomplete($remoteEndpoint, array $defaultValues = [])

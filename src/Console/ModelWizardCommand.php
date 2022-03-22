@@ -73,11 +73,10 @@ class ModelWizardCommand extends Command
     /**
      * Get the fully-qualified class name.
      *
-     * @param string $class
+     * @param  string  $class
+     * @return string
      *
      * @throws \InvalidArgumentException
-     *
-     * @return string
      */
     protected function parseClassname($class, $additionalNamespace = null)
     {
@@ -87,7 +86,7 @@ class ModelWizardCommand extends Command
 
         $class = trim(str_replace('/', '\\', $class), '\\');
 
-        if (!Str::startsWith($class, $rootNamespace = $this->laravel->getNamespace())) {
+        if (! Str::startsWith($class, $rootNamespace = $this->laravel->getNamespace())) {
             $namespace = $rootNamespace.($additionalNamespace ? trim(str_replace('/', '\\', $additionalNamespace), '\\').'\\' : '');
             $class = $namespace.$class;
         }

@@ -47,10 +47,10 @@ class SpaceshipSendMessage extends InstanceCommand
     {
         $this->addField(
             SharpFormTextareaField::make('message')
-                ->setLabel('Message')
+                ->setLabel('Message'),
         )->addField(
             SharpFormCheckField::make('now', 'Send right now?')
-                ->setHelpMessage('Otherwise it will be sent next night.')
+                ->setHelpMessage('Otherwise it will be sent next night.'),
         )->addField(
             SharpFormAutocompleteField::make('level', 'local')
                 ->setListItemInlineTemplate('{{label}}')
@@ -60,13 +60,12 @@ class SpaceshipSendMessage extends InstanceCommand
                     'm' => 'Medium',
                     'h' => 'High',
                 ])
-                ->setLabel('Level')
+                ->setLabel('Level'),
         );
     }
 
     /**
      * @param $instanceId
-     *
      * @return array
      */
     protected function initialData($instanceId): array
@@ -79,7 +78,7 @@ class SpaceshipSendMessage extends InstanceCommand
                 return Arr::random(['l', 'm', 'h', null]);
             })
             ->transform(
-                Spaceship::findOrFail($instanceId)
+                Spaceship::findOrFail($instanceId),
             );
     }
 

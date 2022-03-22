@@ -35,15 +35,15 @@ class SpaceshipSharpForm extends SharpForm
                 SharpFormTextField::make('name')
                     ->setLocalized()
                     ->setMaxLength(30)
-                    ->setLabel('Name')
+                    ->setLabel('Name'),
             )
             ->addField(
                 SharpFormHtmlField::make('html')
-                    ->setInlineTemplate('The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>')
+                    ->setInlineTemplate('The name of the spaceship localized in FR is <strong>{{nameFr}}</strong>'),
             )
             ->addField(
                 SharpFormTextField::make('capacity')
-                    ->setLabel('Capacity (x1000)')
+                    ->setLabel('Capacity (x1000)'),
             )
             ->addField(
                 SharpFormMarkdownField::make('description')
@@ -59,13 +59,13 @@ class SpaceshipSharpForm extends SharpForm
                     ->setMaxFileSize(4)
                     ->setFileFilter(['jpg', 'png', 'pdf'])
                     ->setStorageDisk('local')
-                    ->setStorageBasePath('data/Spaceship/{id}/markdown')
+                    ->setStorageBasePath('data/Spaceship/{id}/markdown'),
             )
             ->addField(
                 SharpFormDateField::make('construction_date')
                     ->setLabel('Construction date')
                     ->setDisplayFormat('YYYY/MM/DD')
-                    ->setHasTime(false)
+                    ->setHasTime(false),
             )
             ->addField(
                 SharpFormAutocompleteField::make('type_id', 'local')
@@ -77,8 +77,8 @@ class SpaceshipSharpForm extends SharpForm
                     ->setListItemTemplatePath('/sharp/templates/spaceshipType_list.vue')
                     ->setResultItemTemplatePath('/sharp/templates/spaceshipType_result.vue')
                     ->setLocalValues(
-                        SpaceshipType::orderBy('label')->get()->pluck('label', 'id')->all()
-                    )
+                        SpaceshipType::orderBy('label')->get()->pluck('label', 'id')->all(),
+                    ),
             )
             ->addField(
                 SharpFormSelectField::make(
@@ -92,11 +92,11 @@ class SpaceshipSharpForm extends SharpForm
                                     })->all(),
                             ];
                         })
-                    ->all()
+                    ->all(),
                 )
                     ->setLabel('Brand (depends on type)')
                     ->setDisplayAsDropdown()
-                    ->setOptionsLinkedTo('type_id')
+                    ->setOptionsLinkedTo('type_id'),
             )
             ->addField(
                 SharpFormUploadField::make('manual')
@@ -105,7 +105,7 @@ class SpaceshipSharpForm extends SharpForm
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/Spaceship/{id}/Manual')
                     ->setFileFilter('pdf')
-                    ->setMaxFileSize(20)
+                    ->setMaxFileSize(20),
             )
             ->addField(
                 SharpFormSelectField::make(
@@ -123,11 +123,11 @@ class SpaceshipSharpForm extends SharpForm
                                     })->all(),
                             ];
                         })
-                        ->all()
+                        ->all(),
                 )
                     ->setLabel('Model (depends on brand)')
                     ->setDisplayAsDropdown()
-                    ->setOptionsLinkedTo('type_id', 'brand')
+                    ->setOptionsLinkedTo('type_id', 'brand'),
             )
             ->addField(
                 SharpFormAutocompleteField::make('serial_number', 'remote')
@@ -135,7 +135,7 @@ class SpaceshipSharpForm extends SharpForm
                     ->setLabel('S/N')
                     ->setListItemInlineTemplate('{{serial}}')
                     ->setResultItemInlineTemplate('{{serial}}')
-                    ->setDynamicRemoteEndpoint('/spaceships/serial_numbers/{{type_id}}')
+                    ->setDynamicRemoteEndpoint('/spaceships/serial_numbers/{{type_id}}'),
             )
             ->addField(
                 SharpFormUploadField::make('picture')
@@ -144,32 +144,32 @@ class SpaceshipSharpForm extends SharpForm
                     ->shouldOptimizeImage()
                     ->setCroppable(false)
                     ->setStorageDisk('local')
-                    ->setStorageBasePath('data/Spaceship/{id}')
+                    ->setStorageBasePath('data/Spaceship/{id}'),
             )
             ->addField(
                 SharpFormTextField::make('picture:legend')
                     ->setLocalized()
-                    ->setLabel('Legend')
+                    ->setLabel('Legend'),
             )
             ->addField(
                 SharpFormTagsField::make(
                     'pilots',
-                    Pilot::orderBy('name')->get()->pluck('name', 'id')->all()
+                    Pilot::orderBy('name')->get()->pluck('name', 'id')->all(),
                 )
                     ->setLabel('Pilots')
                     ->setCreatable(true)
                     ->setCreateAttribute('name')
-                    ->setMaxTagCount(4)
+                    ->setMaxTagCount(4),
             )
             ->addField(
                 SharpFormSelectField::make(
                     'features',
-                    Feature::orderBy('name')->get()->pluck('name', 'id')->all()
+                    Feature::orderBy('name')->get()->pluck('name', 'id')->all(),
                 )
                     ->setLabel('Features')
                     ->setMultiple()
                     ->setDisplayAsList()
-                    ->allowSelectAll()
+                    ->allowSelectAll(),
             )
             ->addField(
                 SharpFormListField::make('reviews')
@@ -182,18 +182,18 @@ class SpaceshipSharpForm extends SharpForm
                             ->setLabel('Date')
                             ->setDisplayFormat('YYYY/MM/DD HH:mm')
                             ->setMinTime(8)
-                            ->setHasTime(true)
+                            ->setHasTime(true),
                     )->addItemField(
                         SharpFormSelectField::make('status', [
                             'ok' => 'Passed', 'ko' => 'Failed',
                         ])->setLabel('Status')
-                        ->setDisplayAsList()->setInline()
+                        ->setDisplayAsList()->setInline(),
                     )->addItemField(
                         SharpFormTextareaField::make('comment')
                             ->setLabel('Comment')
                             ->setMaxLength(50)
-                            ->addConditionalDisplay('status', 'ko')
-                    )
+                            ->addConditionalDisplay('status', 'ko'),
+                    ),
             )
             ->addField(
                 SharpFormListField::make('pictures')
@@ -213,13 +213,13 @@ class SpaceshipSharpForm extends SharpForm
                             ->setCropRatio('16:9')
                             ->setStorageDisk('local')
 //                            ->setMaxFileSize(.5)
-                            ->setStorageBasePath('data/Spaceship/{id}/Pictures')
+                            ->setStorageBasePath('data/Spaceship/{id}/Pictures'),
                     )
                     ->addItemField(
                         SharpFormTextField::make('legend')
                             ->setLocalized()
-                            ->setPlaceholder('Legend')
-                    )
+                            ->setPlaceholder('Legend'),
+                    ),
             );
     }
 
@@ -294,7 +294,7 @@ class SpaceshipSharpForm extends SharpForm
             })
             ->setCustomTransformer('serial_number', function ($serial) {
                 return $serial ? [
-                    'id'     => $serial,
+                    'id' => $serial,
                     'serial' => str_pad($serial, 5, '0', STR_PAD_LEFT),
                 ] : null;
             })
@@ -307,7 +307,7 @@ class SpaceshipSharpForm extends SharpForm
                 ];
             })
             ->transform(
-                Spaceship::with('reviews', 'pilots', 'manual', 'picture', 'pictures', 'features')->findOrFail($id)
+                Spaceship::with('reviews', 'pilots', 'manual', 'picture', 'pictures', 'features')->findOrFail($id),
             );
     }
 

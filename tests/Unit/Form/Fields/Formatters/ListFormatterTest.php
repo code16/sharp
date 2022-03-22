@@ -108,12 +108,12 @@ class ListFormatterTest extends SharpTestCase
 
         $data = [
             [
-                'id'     => 1,
+                'id' => 1,
                 'mother' => [
                     'name' => 'Jane',
                 ],
             ], [
-                'id'     => 2,
+                'id' => 2,
                 'mother' => [
                     'name' => 'Alicia',
                 ],
@@ -122,10 +122,10 @@ class ListFormatterTest extends SharpTestCase
 
         $this->assertEquals([
             [
-                'id'          => 1,
+                'id' => 1,
                 'mother:name' => 'Jane',
             ], [
-                'id'          => 2,
+                'id' => 2,
                 'mother:name' => 'Alicia',
             ],
         ], $formatter->toFront($field, $data));
@@ -138,13 +138,13 @@ class ListFormatterTest extends SharpTestCase
     {
         return [
             [
-                'id'   => 1,
+                'id' => 1,
                 'name' => 'John Wayne',
-                'job'  => 'Actor',
+                'job' => 'Actor',
             ], [
-                'id'   => 2,
+                'id' => 2,
                 'name' => 'John Ford',
-                'job'  => 'Director',
+                'job' => 'Director',
             ],
         ];
     }

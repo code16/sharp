@@ -16,15 +16,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_filters_config_with_an_instance()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() implements EntityListSelectFilter {
+                $this->addFilter('test', new class() implements EntityListSelectFilter
+                {
                     public function values(): array
                     {
                         return [1 => 'A', 2 => 'B'];
                     }
-                });
+                }, );
             }
         };
 
@@ -33,11 +35,11 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
-                    'label'    => 'test',
+                    'key' => 'test',
+                    'label' => 'test',
                     'multiple' => false,
                     'required' => false,
-                    'values'   => [
+                    'values' => [
                         ['id' => 1, 'label' => 'A'],
                         ['id' => 2, 'label' => 'B'],
                     ],
@@ -49,7 +51,8 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_filters_config_with_a_class_name()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->addFilter('test', SharpEntityListTestFilter::class);
@@ -61,10 +64,10 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
+                    'key' => 'test',
                     'multiple' => false,
                     'required' => false,
-                    'values'   => [
+                    'values' => [
                         ['id' => 1, 'label' => 'A'],
                         ['id' => 2, 'label' => 'B'],
                     ],
@@ -76,7 +79,8 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_list_filters_can_be_multiple()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->addFilter('test', SharpEntityListTestMultipleFilter::class);
@@ -88,7 +92,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
+                    'key' => 'test',
                     'multiple' => true,
                     'required' => false,
                 ],
@@ -99,7 +103,8 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_list_filter_can_be_required()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->addFilter('test', SharpEntityListTestRequiredFilter::class);
@@ -111,10 +116,10 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
+                    'key' => 'test',
                     'multiple' => false,
                     'required' => true,
-                    'values'   => [
+                    'values' => [
                         ['id' => 1, 'label' => 'A'],
                         ['id' => 2, 'label' => 'B'],
                     ],
@@ -127,15 +132,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_label_for_the_filter()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestFilter
+                {
                     public function label()
                     {
                         return 'test label';
                     }
-                });
+                }, );
             }
         };
 
@@ -144,7 +151,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'   => 'test',
+                    'key' => 'test',
                     'label' => 'test label',
                 ],
             ],
@@ -154,15 +161,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_filter_is_master()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestFilter
+                {
                     public function isMaster()
                     {
                         return true;
                     }
-                });
+                }, );
             }
         };
 
@@ -171,7 +180,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'    => 'test',
+                    'key' => 'test',
                     'master' => true,
                 ],
             ],
@@ -181,15 +190,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_filter_is_searchable()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestFilter
+                {
                     public function isSearchable()
                     {
                         return true;
                     }
-                });
+                }, );
             }
         };
 
@@ -198,7 +209,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'        => 'test',
+                    'key' => 'test',
                     'searchable' => true,
                     'searchKeys' => ['label'],
                 ],
@@ -209,10 +220,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_searchKeys_on_a_filter()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestFilter
+                {
                     public function isSearchable()
                     {
                         return true;
@@ -222,7 +235,7 @@ class EntityListFilterTest extends SharpTestCase
                     {
                         return ['a', 'b'];
                     }
-                });
+                }, );
             }
         };
 
@@ -231,7 +244,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'        => 'test',
+                    'key' => 'test',
                     'searchable' => true,
                     'searchKeys' => ['a', 'b'],
                 ],
@@ -242,15 +255,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_an_inline_template_for_a_filter()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestFilter
+                {
                     public function values(): array
                     {
                         return [
-                            ['id'=>1, 'letter'=>'a', 'maj'=>'A'],
-                            ['id'=> 2, 'letter'=>'b', 'maj'=>'B'],
+                            ['id' => 1, 'letter' => 'a', 'maj' => 'A'],
+                            ['id' => 2, 'letter' => 'b', 'maj' => 'B'],
                         ];
                     }
 
@@ -258,7 +273,7 @@ class EntityListFilterTest extends SharpTestCase
                     {
                         return '{{letter}} {{maj}}';
                     }
-                });
+                }, );
             }
         };
 
@@ -267,10 +282,10 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'    => 'test',
+                    'key' => 'test',
                     'values' => [
-                        ['id'=>1, 'letter'=>'a', 'maj'=>'A'],
-                        ['id'=> 2, 'letter'=>'b', 'maj'=>'B'],
+                        ['id' => 1, 'letter' => 'a', 'maj' => 'A'],
+                        ['id' => 2, 'letter' => 'b', 'maj' => 'B'],
                     ],
                     'template' => '{{letter}} {{maj}}',
                 ],
@@ -281,15 +296,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_that_a_filter_is_retained_and_sets_its_default_value()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestFilter
+                {
                     public function retainValueInSession()
                     {
                         return true;
                     }
-                });
+                }, );
             }
         };
 
@@ -301,7 +318,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'     => 'test',
+                    'key' => 'test',
                     'default' => 2,
                 ],
             ],
@@ -311,10 +328,12 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_required_and_retained_filters_returns_retained_value_as_its_default_value()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListTestRequiredFilter {
+                $this->addFilter('test', new class() extends SharpEntityListTestRequiredFilter
+                {
                     public function retainValueInSession()
                     {
                         return true;
@@ -324,7 +343,7 @@ class EntityListFilterTest extends SharpTestCase
                     {
                         return 1;
                     }
-                });
+                }, );
             }
         };
 
@@ -336,7 +355,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'     => 'test',
+                    'key' => 'test',
                     'default' => 2,
                 ],
             ],
@@ -346,15 +365,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function date_range_filter_retained_value_is_formatted()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListDateRangeTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListDateRangeTestFilter
+                {
                     public function retainValueInSession()
                     {
                         return true;
                     }
-                });
+                }, );
             }
         };
 
@@ -366,10 +387,10 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'     => 'test',
+                    'key' => 'test',
                     'default' => [
                         'start' => '2019-09-22',
-                        'end'   => '2019-09-25',
+                        'end' => '2019-09-25',
                     ],
                 ],
             ],
@@ -379,7 +400,8 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_date_range_filters_config_with_a_class_name()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->addFilter('test', SharpEntityListDateRangeTestFilter::class);
@@ -391,8 +413,8 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
-                    'type'     => 'daterange',
+                    'key' => 'test',
+                    'type' => 'daterange',
                     'required' => false,
                 ],
             ],
@@ -402,7 +424,8 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function a_date_range_filter_can_be_required()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->addFilter('test', SharpEntityListDateRangeRequiredTestFilter::class);
@@ -416,7 +439,7 @@ class EntityListFilterTest extends SharpTestCase
                 [
                     'default' => [
                         'start' => Carbon::now()->subDay()->format('Y-m-d'),
-                        'end'   => Carbon::now()->format('Y-m-d'),
+                        'end' => Carbon::now()->format('Y-m-d'),
                     ],
                 ],
             ],
@@ -426,15 +449,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_date_display_format_for_a_date_range_filter()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListDateRangeTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListDateRangeTestFilter
+                {
                     public function dateFormat()
                     {
                         return 'YYYY-MM-DD';
                     }
-                });
+                }, );
             }
         };
 
@@ -443,7 +468,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'           => 'test',
+                    'key' => 'test',
                     'displayFormat' => 'YYYY-MM-DD',
                 ],
             ],
@@ -453,15 +478,17 @@ class EntityListFilterTest extends SharpTestCase
     /** @test */
     public function we_can_define_the_monday_first_attribute_for_a_date_range_filter()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addFilter('test', new class() extends SharpEntityListDateRangeTestFilter {
+                $this->addFilter('test', new class() extends SharpEntityListDateRangeTestFilter
+                {
                     public function isMondayFirst()
                     {
                         return false;
                     }
-                });
+                }, );
             }
         };
 
@@ -470,7 +497,7 @@ class EntityListFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'         => 'test',
+                    'key' => 'test',
                     'mondayFirst' => false,
                 ],
             ],

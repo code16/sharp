@@ -28,23 +28,23 @@ class BreadcrumbTest extends BaseApiTest
             ->assertJson([
                 'breadcrumb' => [
                     'visible' => config('sharp.display_breadcrumb'),
-                    'items'   => [
+                    'items' => [
                         [
-                            'type'      => 'entityList',
-                            'url'       => url('/sharp/s-list/person'),
-                            'name'      => 'List',
+                            'type' => 'entityList',
+                            'url' => url('/sharp/s-list/person'),
+                            'name' => 'List',
                             'entityKey' => 'person',
                         ],
                         [
-                            'type'      => 'show',
-                            'url'       => url('/sharp/s-list/person/s-show/person/1'),
-                            'name'      => 'person',
+                            'type' => 'show',
+                            'url' => url('/sharp/s-list/person/s-show/person/1'),
+                            'name' => 'person',
                             'entityKey' => 'person',
                         ],
                         [
-                            'type'      => 'form',
-                            'url'       => url('/sharp/s-list/person/s-show/person/1/s-form/person/1'),
-                            'name'      => 'Edit',
+                            'type' => 'form',
+                            'url' => url('/sharp/s-list/person/s-show/person/1/s-form/person/1'),
+                            'name' => 'Edit',
                             'entityKey' => 'person',
                         ],
                     ],
@@ -75,15 +75,15 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.label',
-            'Worker'
+            'Worker',
         );
 
         $this->app['config']->set(
             'sharp.entities.friend',
             [
                 'label' => 'Colleague',
-                'show'  => PersonSharpShow::class,
-            ]
+                'show' => PersonSharpShow::class,
+            ],
         );
 
         $this
@@ -95,23 +95,23 @@ class BreadcrumbTest extends BaseApiTest
             ->assertJson([
                 'breadcrumb' => [
                     'visible' => config('sharp.display_breadcrumb'),
-                    'items'   => [
+                    'items' => [
                         [
-                            'type'      => 'entityList',
-                            'url'       => url('/sharp/s-list/person'),
-                            'name'      => 'List',
+                            'type' => 'entityList',
+                            'url' => url('/sharp/s-list/person'),
+                            'name' => 'List',
                             'entityKey' => 'person',
                         ],
                         [
-                            'type'      => 'show',
-                            'url'       => url('/sharp/s-list/person/s-show/person/2'),
-                            'name'      => 'Worker',
+                            'type' => 'show',
+                            'url' => url('/sharp/s-list/person/s-show/person/2'),
+                            'name' => 'Worker',
                             'entityKey' => 'person',
                         ],
                         [
-                            'type'      => 'show',
-                            'url'       => url('/sharp/s-list/person/s-show/person/2/s-show/friend/1'),
-                            'name'      => 'Colleague',
+                            'type' => 'show',
+                            'url' => url('/sharp/s-list/person/s-show/person/2/s-show/friend/1'),
+                            'name' => 'Colleague',
                             'entityKey' => 'friend',
                         ],
                     ],
@@ -126,7 +126,7 @@ class BreadcrumbTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.show',
-            PersonWithBreadcrumbConfigSharpShow::class
+            PersonWithBreadcrumbConfigSharpShow::class,
         );
 
         $this
@@ -138,17 +138,17 @@ class BreadcrumbTest extends BaseApiTest
             ->assertJson([
                 'breadcrumb' => [
                     'visible' => config('sharp.display_breadcrumb'),
-                    'items'   => [
+                    'items' => [
                         [
-                            'type'      => 'entityList',
-                            'url'       => url('/sharp/s-list/person'),
-                            'name'      => 'List',
+                            'type' => 'entityList',
+                            'url' => url('/sharp/s-list/person'),
+                            'name' => 'List',
                             'entityKey' => 'person',
                         ],
                         [
-                            'type'      => 'show',
-                            'url'       => url('/sharp/s-list/person/s-show/person/1'),
-                            'name'      => 'John Wayne',
+                            'type' => 'show',
+                            'url' => url('/sharp/s-list/person/s-show/person/1'),
+                            'name' => 'John Wayne',
                             'entityKey' => 'person',
                         ],
                     ],

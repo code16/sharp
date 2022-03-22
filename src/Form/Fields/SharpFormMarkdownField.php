@@ -77,12 +77,12 @@ class SharpFormMarkdownField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'height'             => 'integer',
-            'toolbar'            => 'array|nullable',
-            'maxImageSize'       => 'numeric',
-            'ratioX'             => 'integer|nullable',
-            'ratioY'             => 'integer|nullable',
-            'boolean'            => 'croppable',
+            'height' => 'integer',
+            'toolbar' => 'array|nullable',
+            'maxImageSize' => 'numeric',
+            'ratioX' => 'integer|nullable',
+            'ratioY' => 'integer|nullable',
+            'boolean' => 'croppable',
             'croppableFileTypes' => 'array|nullable',
         ];
     }
@@ -90,10 +90,10 @@ class SharpFormMarkdownField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'height'          => $this->height,
-            'toolbar'         => $this->showToolbar ? $this->toolbar : null,
-            'placeholder'     => $this->placeholder,
-            'localized'       => $this->localized,
+            'height' => $this->height,
+            'toolbar' => $this->showToolbar ? $this->toolbar : null,
+            'placeholder' => $this->placeholder,
+            'localized' => $this->localized,
             'innerComponents' => [
                 'upload' => $this->innerComponentUploadConfiguration(),
             ],
@@ -104,7 +104,7 @@ class SharpFormMarkdownField extends SharpFormField
     {
         $array = [
             'maxFileSize' => $this->maxFileSize ?: 2,
-            'croppable'   => $this->croppable,
+            'croppable' => $this->croppable,
         ];
 
         if ($this->cropRatio) {
@@ -113,7 +113,7 @@ class SharpFormMarkdownField extends SharpFormField
             $array['croppableFileTypes'] = $this->croppableFileTypes;
         }
 
-        if (!$this->fileFilter) {
+        if (! $this->fileFilter) {
             $this->setFileFilterImages();
         }
         $array['fileFilter'] = $this->fileFilter;

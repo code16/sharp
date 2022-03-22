@@ -32,7 +32,7 @@ class LoginController extends Controller
     public function store()
     {
         $this->validate(request(), [
-            'login'    => 'required',
+            'login' => 'required',
             'password' => 'required',
         ]);
 
@@ -51,7 +51,7 @@ class LoginController extends Controller
         $this->guard()->logout();
 
         return redirect()->to(
-            config('sharp.auth.login_page_url', route('code16.sharp.login'))
+            config('sharp.auth.login_page_url', route('code16.sharp.login')),
         );
     }
 

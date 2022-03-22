@@ -41,7 +41,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
         $this->getJson('/sharp/api/form/person:big/1')
             ->assertStatus(200)
             ->assertJson(['data' => [
-                'name'   => 'John Wayne',
+                'name' => 'John Wayne',
                 'height' => 180,
             ]]);
     }
@@ -79,7 +79,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.forms.big.validator',
-            BigPersonSharpValidator::class
+            BigPersonSharpValidator::class,
         );
 
         $this->postJson('/sharp/api/form/person:big/1', [
@@ -134,7 +134,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
             'authorizations' => [
                 'delete' => false,
                 'update' => false,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
     }
@@ -149,13 +149,13 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
             'sharp.entities.person.forms',
             [
                 'big' => [
-                    'form'  => BigPersonSharpForm::class,
+                    'form' => BigPersonSharpForm::class,
                     'label' => 'Big person',
                 ], 'small' => [
-                    'form'  => SmallPersonSharpForm::class,
+                    'form' => SmallPersonSharpForm::class,
                     'label' => 'Small person',
                 ],
-            ]
+            ],
         );
     }
 }

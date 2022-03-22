@@ -14,13 +14,13 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'                 => 'file',
-                'type'                => 'upload',
-                'compactThumbnail'    => false,
-                'croppable'           => true,
+                'key' => 'file',
+                'type' => 'upload',
+                'compactThumbnail' => false,
+                'croppable' => true,
                 'shouldOptimizeImage' => false,
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -32,7 +32,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['maxFileSize' => 0.5],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -44,7 +44,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['compactThumbnail' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -56,7 +56,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['croppable' => false],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -68,7 +68,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['fileFilter' => ['.jpg']],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField = SharpFormUploadField::make('file')
@@ -76,7 +76,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['fileFilter' => ['.jpg', '.gif']],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField = SharpFormUploadField::make('file')
@@ -84,7 +84,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['fileFilter' => ['.jpg', '.gif']],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -96,7 +96,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['ratioX' => 16, 'ratioY' => 9],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -108,7 +108,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['ratioX' => 16, 'ratioY' => 9, 'croppableFileTypes' => ['.jpg', '.jpeg']],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField = SharpFormUploadField::make('file')
@@ -116,7 +116,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['ratioX' => 16, 'ratioY' => 9, 'croppableFileTypes' => ['.jpg', '.jpeg']],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -128,7 +128,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['shouldOptimizeImage' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField2 = SharpFormUploadField::make('file')
@@ -136,7 +136,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['shouldOptimizeImage' => false],
-            $formField2->toArray()
+            $formField2->toArray(),
         );
     }
 }

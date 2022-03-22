@@ -18,7 +18,7 @@ class TravelsDashboard extends SharpDashboard
         $this->addWidget(
             SharpBarGraphWidget::make('travels')
                 ->setDisplayHorizontalAxisAsTimeline()
-                ->setTitle('Travel counts')
+                ->setTitle('Travel counts'),
         );
     }
 
@@ -61,7 +61,7 @@ class TravelsDashboard extends SharpDashboard
             'travels',
             SharpGraphWidgetDataSet::make($data)
                 ->setLabel('Travels')
-                ->setColor('red')
+                ->setColor('red'),
         );
     }
 }

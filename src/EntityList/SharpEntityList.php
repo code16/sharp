@@ -47,7 +47,7 @@ abstract class SharpEntityList
 
     final public function listLayout(): array
     {
-        if (!$this->layoutBuilt) {
+        if (! $this->layoutBuilt) {
             $this->buildListLayout();
             $this->layoutBuilt = true;
         }
@@ -67,7 +67,7 @@ abstract class SharpEntityList
             EntityListQueryParams::create()
                 ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
                 ->fillWithRequest()
-                ->setDefaultFilters($this->getFilterDefaultValues())
+                ->setDefaultFilters($this->getFilterDefaultValues()),
         );
 
         if ($items instanceof LengthAwarePaginator) {
@@ -91,8 +91,8 @@ abstract class SharpEntityList
                                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
                                     $this->multiformAttribute ? [$this->multiformAttribute] : [],
                                     [$this->instanceIdAttribute],
-                                    $keys
-                                )
+                                    $keys,
+                                ),
                             )
                             ->all();
                     })
@@ -104,13 +104,13 @@ abstract class SharpEntityList
     {
         $config = [
             'instanceIdAttribute' => $this->instanceIdAttribute,
-            'multiformAttribute'  => $this->multiformAttribute,
-            'searchable'          => $this->searchable,
-            'paginated'           => $this->paginated,
-            'reorderable'         => !is_null($this->reorderHandler),
-            'defaultSort'         => $this->defaultSort,
-            'defaultSortDir'      => $this->defaultSortDir,
-            'hasShowPage'         => $hasShowPage,
+            'multiformAttribute' => $this->multiformAttribute,
+            'searchable' => $this->searchable,
+            'paginated' => $this->paginated,
+            'reorderable' => ! is_null($this->reorderHandler),
+            'defaultSort' => $this->defaultSort,
+            'defaultSortDir' => $this->defaultSortDir,
+            'hasShowPage' => $hasShowPage,
         ];
 
         $this->appendFiltersToConfig($config);
@@ -208,7 +208,7 @@ abstract class SharpEntityList
 
     private function checkListIsBuilt(): void
     {
-        if (!$this->listBuilt) {
+        if (! $this->listBuilt) {
             $this->buildListDataContainers();
             $this->listBuilt = true;
         }
@@ -224,8 +224,7 @@ abstract class SharpEntityList
     /**
      * Retrieve all rows data as array.
      *
-     * @param EntityListQueryParams $params
-     *
+     * @param  EntityListQueryParams  $params
      * @return array|Arrayable
      */
     abstract public function getListData(EntityListQueryParams $params);

@@ -28,7 +28,7 @@ class PersonSharpForm extends SharpForm
 
     public function update($id, array $data): bool
     {
-        if (!is_null($id) && !intval($id)) {
+        if (! is_null($id) && ! intval($id)) {
             // Throw an applicative exception
             throw new SharpApplicativeException("$id is not a valid id");
         }

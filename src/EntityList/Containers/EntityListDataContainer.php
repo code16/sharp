@@ -41,10 +41,10 @@ class EntityListDataContainer
     public function toArray(): array
     {
         return [
-            'key'      => $this->key,
-            'label'    => $this->label,
+            'key' => $this->key,
+            'label' => $this->label,
             'sortable' => $this->sortable,
-            'html'     => $this->html,
+            'html' => $this->html,
         ];
     }
 }

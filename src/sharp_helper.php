@@ -51,12 +51,11 @@ function sharp_markdown_embedded_files(
     int $height = null,
     array $filters = [],
     string $viewName = 'public.markdown-embedded-file'
-): string
-{
+): string {
     preg_match_all('/<p><img src="(.*)".*><\/p>/U', $html, $matches, PREG_SET_ORDER);
 
     foreach ($matches as $match) {
-        list($disk, $file_name) = explode(':', $match[1]);
+        [$disk, $file_name] = explode(':', $match[1]);
 
         $model = new Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel(compact('disk', 'file_name'));
 
@@ -65,14 +64,14 @@ function sharp_markdown_embedded_files(
             $html = str_replace(
                 $match[0],
                 view("sharp::$viewName", [
-                    'fileModel'  => $model,
-                    'isImage'    => in_array($disk->mimeType($model->file_name), ['image/jpeg', 'image/gif', 'image/png', 'image/bmp']),
+                    'fileModel' => $model,
+                    'isImage' => in_array($disk->mimeType($model->file_name), ['image/jpeg', 'image/gif', 'image/png', 'image/bmp']),
                     'classNames' => $classNames,
-                    'width'      => $width,
-                    'height'     => $height,
-                    'filters'    => $filters,
+                    'width' => $width,
+                    'height' => $height,
+                    'filters' => $filters,
                 ]),
-                $html
+                $html,
             );
         }
     }
@@ -103,8 +102,8 @@ function sharp_custom_fields(): string
  */
 function sharp_laravel_version_gte(string $version): bool
 {
-    list($major, $minor) = explode('.', $version);
-    list($laravelMajor, $laravelMinor, $bugfix) = explode('.', app()::VERSION);
+    [$major, $minor] = explode('.', $version);
+    [$laravelMajor, $laravelMinor, $bugfix] = explode('.', app()::VERSION);
 
     return $laravelMajor > $major
         || ($laravelMajor == $major && $laravelMinor >= $minor);

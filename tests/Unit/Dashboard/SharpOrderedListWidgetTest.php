@@ -15,7 +15,7 @@ class SharpOrderedListWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['html' => true],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 }

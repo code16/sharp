@@ -18,13 +18,13 @@ class HasManyRelationUpdater
             $id = $this->findItemId($item, $relatedModelKeyName);
             $relatedInstance = $instance->$attribute()->findOrNew($id);
 
-            if (!$relatedInstance->exists) {
+            if (! $relatedInstance->exists) {
                 // Creation: we call the optional getDefaultAttributesFor($attribute)
                 // on the model, to get some default values for required attributes
                 $relatedInstance->fill(
                     method_exists($instance, 'getDefaultAttributesFor')
                         ? $instance->getDefaultAttributesFor($attribute)
-                        : []
+                        : [],
                 );
             }
 

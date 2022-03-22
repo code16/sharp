@@ -25,14 +25,14 @@ abstract class SharpForm
      */
     public function formLayout(): array
     {
-        if (!$this->layoutBuilt) {
+        if (! $this->layoutBuilt) {
             $this->buildFormLayout();
             $this->layoutBuilt = true;
         }
 
         return [
             'tabbed' => $this->tabbed,
-            'tabs'   => collect($this->tabs)
+            'tabs' => collect($this->tabs)
                 ->map->toArray()
                 ->all(),
         ];
@@ -48,8 +48,8 @@ abstract class SharpForm
             ->only(
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
-                    $this->getDataKeys()
-                )
+                    $this->getDataKeys(),
+                ),
             )
             ->all();
     }
@@ -61,8 +61,8 @@ abstract class SharpForm
             ->only(
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
-                    $this->getDataKeys()
-                )
+                    $this->getDataKeys(),
+                ),
             )
             ->all();
 
@@ -105,7 +105,7 @@ abstract class SharpForm
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
-            }
+            },
         );
     }
 
@@ -139,7 +139,7 @@ abstract class SharpForm
         $this->layoutBuilt = false;
 
         $column = $this->getLonelyTab()->addColumnLayout(
-            new FormLayoutColumn($size)
+            new FormLayoutColumn($size),
         );
 
         if ($callback) {
@@ -165,7 +165,7 @@ abstract class SharpForm
 
     private function getLonelyTab(): FormLayoutTab
     {
-        if (!sizeof($this->tabs)) {
+        if (! sizeof($this->tabs)) {
             $this->addTabLayout(new FormLayoutTab('one'));
         }
 
@@ -174,7 +174,7 @@ abstract class SharpForm
 
     public function updateInstance($id, $data)
     {
-        list($formattedData, $delayedData) = $this->formatRequestData($data, $id, true);
+        [$formattedData, $delayedData] = $this->formatRequestData($data, $id, true);
 
         $id = $this->update($id, $formattedData);
 
@@ -182,9 +182,9 @@ abstract class SharpForm
             // Some formatters asked to delay their handling after a first pass.
             // Typically, this is used if the formatter needs the id of the
             // instance: in a creation case, we must store it first.
-            if (!$id) {
+            if (! $id) {
                 throw new SharpFormUpdateException(
-                    sprintf('The update method of [%s] must return the instance id', basename(get_class($this)))
+                    sprintf('The update method of [%s] must return the instance id', basename(get_class($this))),
                 );
             }
 
@@ -213,7 +213,8 @@ abstract class SharpForm
             })->all();
 
         // Build a fake Model class based on attributes
-        return $this->transform(new class($attributes) extends \stdClass {
+        return $this->transform(new class($attributes) extends \stdClass
+        {
             public function __construct($attributes)
             {
                 $this->attributes = $attributes;
@@ -227,14 +228,13 @@ abstract class SharpForm
             {
                 return $this->attributes;
             }
-        });
+        }, );
     }
 
     /**
      * Display a notification next time entity list is shown.
      *
-     * @param string $title
-     *
+     * @param  string  $title
      * @return SharpNotification
      */
     public function notify(string $title): SharpNotification
@@ -246,15 +246,13 @@ abstract class SharpForm
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param $id
-     *
      * @return array
      */
     abstract public function find($id): array;
 
     /**
      * @param $id
-     * @param array $data
-     *
+     * @param  array  $data
      * @return mixed the instance id
      */
     abstract public function update($id, array $data);

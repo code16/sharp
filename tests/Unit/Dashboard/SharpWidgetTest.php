@@ -30,7 +30,7 @@ class SharpWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['key' => 'name', 'type' => 'test'],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -41,7 +41,7 @@ class SharpWidgetTest extends SharpTestCase
 
         $this->assertEquals(
             ['key' => 'name', 'type' => 'test'],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -53,7 +53,7 @@ class SharpWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['title' => 'title'],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -65,7 +65,7 @@ class SharpWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['link' => route('code16.sharp.list', 'entity')],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 }

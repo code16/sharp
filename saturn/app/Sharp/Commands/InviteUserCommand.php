@@ -19,7 +19,7 @@ class InviteUserCommand extends EntityCommand
             $data,
             [
                 'email' => 'required|email',
-            ]
+            ],
         );
 
         return $this->info('Invitation sent!');
@@ -29,7 +29,7 @@ class InviteUserCommand extends EntityCommand
     {
         $this->addField(
             SharpFormTextField::make('email')
-                ->setLabel('E-mail address')
+                ->setLabel('E-mail address'),
         );
     }
 }

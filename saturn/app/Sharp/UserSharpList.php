@@ -20,16 +20,16 @@ class UserSharpList extends SharpEntityList
             ->addDataContainer(
                 EntityListDataContainer::make('name')
                     ->setLabel('Name')
-                    ->setSortable()
+                    ->setSortable(),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('email')
                     ->setLabel('Email')
-                    ->setSortable()
+                    ->setSortable(),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('group')
-                    ->setLabel('Group')
+                    ->setLabel('Group'),
             );
     }
 
@@ -55,7 +55,7 @@ class UserSharpList extends SharpEntityList
                 return implode('<br>', explode(',', $group));
             })
             ->transform(
-                User::orderBy($params->sortedBy(), $params->sortedDir())->get()
+                User::orderBy($params->sortedBy(), $params->sortedDir())->get(),
             );
     }
 }

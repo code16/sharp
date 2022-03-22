@@ -11,8 +11,7 @@ abstract class SharpGraphWidget extends SharpWidget
     protected bool $minimal = false;
 
     /**
-     * @param string $ratio 16:9, 1:1, ...
-     *
+     * @param  string  $ratio  16:9, 1:1, ...
      * @return self
      */
     public function setRatio(string $ratio): self
@@ -23,8 +22,7 @@ abstract class SharpGraphWidget extends SharpWidget
     }
 
     /**
-     * @param int $height an arbitrary height (ratio will be ignored)
-     *
+     * @param  int  $height  an arbitrary height (ratio will be ignored)
      * @return self
      */
     public function setHeight(int $height): self
@@ -51,11 +49,11 @@ abstract class SharpGraphWidget extends SharpWidget
     public function toArray(): array
     {
         return parent::buildArray([
-            'display'    => $this->display,
-            'ratioX'     => $this->ratio ? (int) $this->ratio[0] : null,
-            'ratioY'     => $this->ratio ? (int) $this->ratio[1] : null,
-            'height'     => $this->height,
-            'minimal'    => $this->minimal,
+            'display' => $this->display,
+            'ratioX' => $this->ratio ? (int) $this->ratio[0] : null,
+            'ratioY' => $this->ratio ? (int) $this->ratio[1] : null,
+            'height' => $this->height,
+            'minimal' => $this->minimal,
             'showLegend' => $this->showLegend,
         ]);
     }

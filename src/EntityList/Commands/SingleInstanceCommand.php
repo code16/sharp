@@ -10,8 +10,7 @@ abstract class SingleInstanceCommand extends InstanceCommand
     }
 
     /**
-     * @param mixed $instanceId
-     *
+     * @param  mixed  $instanceId
      * @return array
      */
     final protected function initialData($instanceId): array
@@ -25,9 +24,8 @@ abstract class SingleInstanceCommand extends InstanceCommand
     }
 
     /**
-     * @param mixed $instanceId
-     * @param array $data
-     *
+     * @param  mixed  $instanceId
+     * @param  array  $data
      * @return array
      */
     final public function execute($instanceId, array $data = []): array
@@ -36,8 +34,7 @@ abstract class SingleInstanceCommand extends InstanceCommand
     }
 
     /**
-     * @param mixed $instanceId
-     *
+     * @param  mixed  $instanceId
      * @return bool
      */
     final public function authorizeFor($instanceId): bool

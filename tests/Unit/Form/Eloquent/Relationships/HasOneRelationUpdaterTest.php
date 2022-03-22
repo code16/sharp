@@ -19,7 +19,7 @@ class HasOneRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater->update($mother, 'elderSon', $son->id);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $son->id,
+            'id' => $son->id,
             'mother_id' => $mother->id,
         ]);
     }
@@ -34,7 +34,7 @@ class HasOneRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater->update($mother, 'elderSon:name', 'John Wayne');
 
         $this->assertDatabaseHas('people', [
-            'name'      => 'John Wayne',
+            'name' => 'John Wayne',
             'mother_id' => $mother->id,
         ]);
     }

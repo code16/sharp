@@ -19,7 +19,7 @@ class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater->update($person, 'mother', $mother->id);
 
         $this->assertDatabaseHas('people', [
-            'id'        => $person->id,
+            'id' => $person->id,
             'mother_id' => $mother->id,
         ]);
     }
@@ -37,7 +37,7 @@ class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
         $mother = Person::where('name', 'Jane Wayne')->first();
 
         $this->assertDatabaseHas('people', [
-            'id'        => $person->id,
+            'id' => $person->id,
             'mother_id' => $mother->id,
         ]);
     }
@@ -52,7 +52,7 @@ class BelongsToRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $this->assertDatabaseHas('people', [
             'name' => 'Jane Wayne',
-            'age'  => 60,
+            'age' => 60,
         ]);
     }
 }

@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         foreach ($types as $type) {
             for ($k = 0; $k < rand(8, 16); $k++) {
                 $spaceship = factory(\App\Spaceship::class)->create([
-                    'type_id'        => $type->id,
+                    'type_id' => $type->id,
                     'corporation_id' => $corporations->random()->id,
                 ]);
 
@@ -55,16 +55,16 @@ class DatabaseSeeder extends Seeder
                     ]);
 
                     $travel->delegates()->sync(
-                        $passengers->random(rand(1, 3))->pluck('id')->all()
+                        $passengers->random(rand(1, 3))->pluck('id')->all(),
                     );
                 }
 
                 $spaceship->pilots()->sync(
-                    $pilots->random(rand(1, 3))->pluck('id')->all()
+                    $pilots->random(rand(1, 3))->pluck('id')->all(),
                 );
 
                 $spaceship->features()->sync(
-                    $features->random(rand(1, 3))->pluck('id')->all()
+                    $features->random(rand(1, 3))->pluck('id')->all(),
                 );
             }
         }

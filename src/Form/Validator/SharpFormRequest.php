@@ -10,8 +10,7 @@ abstract class SharpFormRequest extends FormRequest
     /**
      * Handle RTF (markdown and wysiwyg) fields.
      *
-     * @param Validator $validator
-     *
+     * @param  Validator  $validator
      * @return void
      */
     public function withValidator(Validator $validator): void
@@ -24,7 +23,7 @@ abstract class SharpFormRequest extends FormRequest
         // Initialize rules by getting all those which DO NOT refer to a RTF
         $newRules = collect($validator->getRules())
             ->filter(function ($messages, $key) use ($richTextFields) {
-                return !in_array($key, $richTextFields);
+                return ! in_array($key, $richTextFields);
             })
             ->all();
 

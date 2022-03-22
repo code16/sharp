@@ -16,11 +16,11 @@ class SharpFormHtmlFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'      => 'html',
-                'type'     => 'html',
+                'key' => 'html',
+                'type' => 'html',
                 'template' => '<b>test</b>',
             ],
-            $defaultFormField->toArray()
+            $defaultFormField->toArray(),
         );
     }
 
@@ -48,7 +48,7 @@ class SharpFormHtmlFieldTest extends SharpTestCase
                     'lang' => ['fr', 'de'],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

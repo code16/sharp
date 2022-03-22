@@ -17,7 +17,7 @@ class FormLayoutFieldset implements HasLayout
     {
         return array_merge(
             ['legend' => $this->legend],
-            $this->fieldsToArray()
+            $this->fieldsToArray(),
         );
     }
 }

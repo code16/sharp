@@ -8,8 +8,7 @@ class ArrayConverter
      * Convert a class or Model into an array.
      * If $model is not an array or model, simply return it.
      *
-     * @param array|object|mixed $model
-     *
+     * @param  array|object|mixed  $model
      * @return array|mixed
      */
     public static function modelToArray($model)

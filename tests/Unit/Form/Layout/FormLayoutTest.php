@@ -10,7 +10,8 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_tab()
     {
-        $form = new class() extends FormLayoutTestForm {
+        $form = new class() extends FormLayoutTestForm
+        {
             public function buildFormLayout(): void
             {
                 $this->addTab('label');
@@ -23,7 +24,8 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_column()
     {
-        $form = new class() extends FormLayoutTestForm {
+        $form = new class() extends FormLayoutTestForm
+        {
             public function buildFormLayout(): void
             {
                 $this->addColumn(2);
@@ -36,7 +38,8 @@ class FormLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_see_layout_as_array()
     {
-        $form = new class() extends FormLayoutTestForm {
+        $form = new class() extends FormLayoutTestForm
+        {
             public function buildFormLayout(): void
             {
                 $this->addTab('label');
@@ -45,10 +48,11 @@ class FormLayoutTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['title' => 'label', 'columns' => []],
-            $form->formLayout()['tabs'][0]
+            $form->formLayout()['tabs'][0],
         );
 
-        $form2 = new class() extends FormLayoutTestForm {
+        $form2 = new class() extends FormLayoutTestForm
+        {
             public function buildFormLayout(): void
             {
                 $this->addColumn(2);
@@ -60,14 +64,15 @@ class FormLayoutTest extends SharpTestCase
                 'columns' => [
                     ['size' => 2],
                 ], ],
-            $form2->formLayout()['tabs'][0]
+            $form2->formLayout()['tabs'][0],
         );
     }
 
     /** @test */
     public function we_can_set_tabbed_to_false()
     {
-        $form = new class() extends FormLayoutTestForm {
+        $form = new class() extends FormLayoutTestForm
+        {
             public function buildFormLayout(): void
             {
                 $this->addTab('label')->setTabbed(false);

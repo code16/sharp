@@ -25,7 +25,7 @@ class Media extends SharpUploadModel
         parent::boot();
 
         Event::listen(TranslationHasBeenSet::class, function (TranslationHasBeenSet $event) {
-            if (!$event->model instanceof self) {
+            if (! $event->model instanceof self) {
                 return;
             }
 

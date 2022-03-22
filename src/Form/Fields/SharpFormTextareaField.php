@@ -39,10 +39,10 @@ class SharpFormTextareaField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'rows'        => $this->rows,
+            'rows' => $this->rows,
             'placeholder' => $this->placeholder,
-            'maxLength'   => $this->maxLength,
-            'localized'   => $this->localized,
+            'maxLength' => $this->maxLength,
+            'localized' => $this->localized,
         ]);
     }
 }

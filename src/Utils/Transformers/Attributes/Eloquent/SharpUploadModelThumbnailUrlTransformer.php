@@ -34,21 +34,20 @@ class SharpUploadModelThumbnailUrlTransformer implements SharpAttributeTransform
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param mixed  $value
-     * @param object $instance
-     * @param string $attribute
+     * @param  mixed  $value
+     * @param  object  $instance
+     * @param  string  $attribute
+     * @return mixed
      *
      * @throws SharpException
-     *
-     * @return mixed
      */
     public function apply($value, $instance = null, $attribute = null)
     {
-        if (!$instance->$attribute) {
+        if (! $instance->$attribute) {
             return null;
         }
 
-        if (!$instance->$attribute instanceof SharpUploadModel) {
+        if (! $instance->$attribute instanceof SharpUploadModel) {
             throw new SharpException("[$attribute] must be an instance of SharpUploadModel");
         }
 

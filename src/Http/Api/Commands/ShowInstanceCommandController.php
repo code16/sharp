@@ -13,14 +13,13 @@ class ShowInstanceCommandController extends ApiController
     /**
      * Display the Command form.
      *
-     * @param string      $entityKey
-     * @param string      $commandKey
-     * @param string|null $instanceId
+     * @param  string  $entityKey
+     * @param  string  $commandKey
+     * @param  string|null  $instanceId
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show($entityKey, $commandKey, $instanceId = null)
     {
@@ -35,14 +34,13 @@ class ShowInstanceCommandController extends ApiController
     /**
      * Execute the Command.
      *
-     * @param string      $entityKey
-     * @param string      $commandKey
-     * @param string|null $instanceId
+     * @param  string  $entityKey
+     * @param  string  $commandKey
+     * @param  string|null  $instanceId
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws SharpAuthorizationException
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update($entityKey, $commandKey, $instanceId = null)
     {
@@ -53,27 +51,26 @@ class ShowInstanceCommandController extends ApiController
             $showPage,
             $commandHandler->execute(
                 $instanceId,
-                $commandHandler->formatRequestData((array) request('data'), $instanceId)
-            )
+                $commandHandler->formatRequestData((array) request('data'), $instanceId),
+            ),
         );
     }
 
     /**
-     * @param string      $entityKey
-     * @param string|null $instanceId
+     * @param  string  $entityKey
+     * @param  string|null  $instanceId
+     * @return \Code16\Sharp\Show\SharpShow
      *
      * @throws \Code16\Sharp\Exceptions\SharpInvalidEntityKeyException
-     *
-     * @return \Code16\Sharp\Show\SharpShow
      */
     private function getShowPage(string $entityKey, $instanceId = null)
     {
         $showPage = $this->getShowInstance($entityKey);
 
         abort_if(
-            (!$instanceId && !$showPage instanceof SharpSingleShow)
+            (! $instanceId && ! $showPage instanceof SharpSingleShow)
             || ($instanceId && $showPage instanceof SharpSingleShow),
-            404
+            404,
         );
 
         $showPage->buildShowConfig();

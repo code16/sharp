@@ -17,10 +17,10 @@ class AccountSharpForm extends SharpSingleForm
         $this
             ->addField(
                 SharpFormTextField::make('name')
-                    ->setLabel('Name')
+                    ->setLabel('Name'),
             )->addField(
                 SharpFormTextField::make('email')
-                    ->setLabel('Email address')
+                    ->setLabel('Email address'),
             );
     }
 

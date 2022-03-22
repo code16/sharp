@@ -40,24 +40,24 @@ class CompanyDashboard extends SharpDashboard
                 SharpBarGraphWidget::make('features_bars')
                     ->setTitle('Main features')
                     ->setShowLegend(false)
-                    ->setHorizontal()
+                    ->setHorizontal(),
             )->addWidget(
                 SharpPieGraphWidget::make('types_pie')
-                    ->setTitle('Spaceships by type')
+                    ->setTitle('Spaceships by type'),
             )->addWidget(
                 SharpLineGraphWidget::make('capacities')
                     ->setTitle('Spaceships by capacity')
                     ->setHeight(200)
                     ->setShowLegend()
                     ->setMinimal()
-                    ->setCurvedLines()
+                    ->setCurvedLines(),
             )->addWidget(
                 SharpPanelWidget::make('activeSpaceships')
                     ->setInlineTemplate('<h1>{{count}}</h1> spaceships in activity')
-                    ->setLink(LinkToEntityList::make('spaceship'))
+                    ->setLink(LinkToEntityList::make('spaceship')),
             )->addWidget(
                 SharpPanelWidget::make('inactiveSpaceships')
-                    ->setInlineTemplate('<h1>{{count}}</h1> inactive spaceships')
+                    ->setInlineTemplate('<h1>{{count}}</h1> inactive spaceships'),
             )->addWidget(
                 SharpOrderedListWidget::make('topTravelledSpaceshipModels')
                     ->setTitle('Top travelled spaceship types')
@@ -69,7 +69,7 @@ class CompanyDashboard extends SharpDashboard
 
                         return LinkToEntityList::make('spaceship')
                             ->addFilter('type', $item['id']);
-                    })
+                    }),
             );
     }
 
@@ -106,11 +106,11 @@ class CompanyDashboard extends SharpDashboard
         $this
             ->setPanelData(
                 'activeSpaceships',
-                ['count' => $spaceships->where('state', 'active')->first()->count]
+                ['count' => $spaceships->where('state', 'active')->first()->count],
             )
             ->setPanelData(
                 'inactiveSpaceships',
-                ['count' => $spaceships->where('state', 'inactive')->first()->count]
+                ['count' => $spaceships->where('state', 'inactive')->first()->count],
             );
 
         $this->setOrderedListData(
@@ -120,14 +120,14 @@ class CompanyDashboard extends SharpDashboard
                 ->get()
                 ->map(function (SpaceshipType $type) {
                     return [
-                        'id'    => $type->id,
+                        'id' => $type->id,
                         'label' => sprintf('<em>%s</em>', $type->label),
                         'count' => $type->id >= 5 ? null : rand(20, 100),
                     ];
                 })
                 ->sortByDesc('count')
                 ->values()
-                ->all()
+                ->all(),
         );
     }
 
@@ -148,7 +148,7 @@ class CompanyDashboard extends SharpDashboard
             'capacities',
             SharpGraphWidgetDataSet::make($capacities)
                 ->setLabel('Spaceships')
-                ->setColor(static::nextColor())
+                ->setColor(static::nextColor()),
         );
 
         $this->addGraphDataSet(
@@ -156,10 +156,10 @@ class CompanyDashboard extends SharpDashboard
             SharpGraphWidgetDataSet::make(
                 $capacities->map(function ($value) {
                     return $value * rand(1, 3);
-                })
+                }),
             )
                 ->setLabel('Something else')
-                ->setColor(static::nextColor())
+                ->setColor(static::nextColor()),
         );
     }
 
@@ -178,7 +178,7 @@ class CompanyDashboard extends SharpDashboard
                         $counts->where('type_id', $type->id)->first()->count,
                     ])
                         ->setLabel($type->label)
-                        ->setColor(static::nextColor())
+                        ->setColor(static::nextColor()),
                 );
             });
     }
@@ -205,7 +205,7 @@ class CompanyDashboard extends SharpDashboard
         $this->addGraphDataSet(
             'features_bars',
             SharpGraphWidgetDataSet::make($data)
-                ->setColor(static::nextColor())
+                ->setColor(static::nextColor()),
         );
     }
 

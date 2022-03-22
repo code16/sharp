@@ -40,9 +40,8 @@ abstract class SharpFormField
     }
 
     /**
-     * @param string            $fieldKey
-     * @param array|string|bool $values
-     *
+     * @param  string  $fieldKey
+     * @param  array|string|bool  $values
      * @return static
      */
     public function addConditionalDisplay(string $fieldKey, $values = true): self
@@ -53,7 +52,7 @@ abstract class SharpFormField
         }
 
         $this->conditionalDisplayFields[] = [
-            'key'    => $fieldKey,
+            'key' => $fieldKey,
             'values' => $values,
         ];
 
@@ -125,14 +124,14 @@ abstract class SharpFormField
     /**
      * Throw an exception in case of invalid attribute value.
      *
-     * @param array $properties
+     * @param  array  $properties
      *
      * @throws SharpFormFieldValidationException
      */
     protected function validate(array $properties)
     {
         $validator = Validator::make($properties, [
-            'key'  => 'required',
+            'key' => 'required',
             'type' => 'required',
         ] + $this->validationRules());
 
@@ -145,14 +144,14 @@ abstract class SharpFormField
     {
         $array = collect(
             [
-                'key'                => $this->key,
-                'type'               => $this->type,
-                'label'              => $this->label,
-                'readOnly'           => $this->readOnly,
+                'key' => $this->key,
+                'type' => $this->type,
+                'label' => $this->label,
+                'readOnly' => $this->readOnly,
                 'conditionalDisplay' => $this->buildConditionalDisplayArray(),
-                'helpMessage'        => $this->helpMessage,
-                'extraStyle'         => $this->extraStyle,
-            ]
+                'helpMessage' => $this->helpMessage,
+                'extraStyle' => $this->extraStyle,
+            ],
         )
             ->merge($childArray)
             ->filter(function ($value) {
@@ -167,13 +166,13 @@ abstract class SharpFormField
 
     private function buildConditionalDisplayArray(): ?array
     {
-        if (!sizeof($this->conditionalDisplayFields)) {
+        if (! sizeof($this->conditionalDisplayFields)) {
             return null;
         }
 
         return [
             'operator' => $this->conditionalDisplayOperator,
-            'fields'   => $this->conditionalDisplayFields,
+            'fields' => $this->conditionalDisplayFields,
         ];
     }
 }

@@ -20,7 +20,7 @@ Route::get('/spaceships/serial_numbers/{typeId}', function ($typeId) {
         'data' => collect(range($type->id * 100, ($type->id * 100) + 99))
             ->map(function ($number) {
                 return [
-                    'id'     => $number,
+                    'id' => $number,
                     'serial' => str_pad($number, 5, '0', STR_PAD_LEFT),
                 ];
             })

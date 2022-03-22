@@ -46,8 +46,8 @@ class SharpShowTextField extends SharpShowField
     public function toArray(): array
     {
         return parent::buildArray([
-            'label'               => $this->label,
-            'html'                => $this->html,
+            'label' => $this->label,
+            'html' => $this->html,
             'collapseToWordCount' => $this->collapseToWordCount,
         ]);
     }
@@ -56,7 +56,7 @@ class SharpShowTextField extends SharpShowField
     {
         return [
             'collapseToWordCount' => 'int|nullable',
-            'html'                => 'bool|required',
+            'html' => 'bool|required',
         ];
     }
 }

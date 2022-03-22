@@ -48,7 +48,7 @@ class SharpFormDateField extends SharpFormField
 
     public function setSundayFirst(bool $sundayFirst = true): self
     {
-        return $this->setMondayFirst(!$sundayFirst);
+        return $this->setMondayFirst(! $sundayFirst);
     }
 
     public function setMinTime(int $hours, int $minutes = 0): self
@@ -92,27 +92,27 @@ class SharpFormDateField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'hasDate'       => 'required|boolean',
-            'hasTime'       => 'required|boolean',
+            'hasDate' => 'required|boolean',
+            'hasTime' => 'required|boolean',
             'displayFormat' => 'required',
-            'minTime'       => 'regex:/[0-9]{2}:[0-9]{2}/',
-            'maxTime'       => 'regex:/[0-9]{2}:[0-9]{2}/',
-            'stepTime'      => 'integer|min:1|max:60',
-            'mondayFirst'   => 'required|boolean',
+            'minTime' => 'regex:/[0-9]{2}:[0-9]{2}/',
+            'maxTime' => 'regex:/[0-9]{2}:[0-9]{2}/',
+            'stepTime' => 'integer|min:1|max:60',
+            'mondayFirst' => 'required|boolean',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            'hasDate'       => $this->hasDate,
-            'hasTime'       => $this->hasTime,
-            'minTime'       => $this->minTime,
-            'maxTime'       => $this->maxTime,
-            'stepTime'      => $this->stepTime,
-            'mondayFirst'   => $this->mondayFirst,
+            'hasDate' => $this->hasDate,
+            'hasTime' => $this->hasTime,
+            'minTime' => $this->minTime,
+            'maxTime' => $this->maxTime,
+            'stepTime' => $this->stepTime,
+            'mondayFirst' => $this->mondayFirst,
             'displayFormat' => $this->displayFormat ?: $this->detectDisplayFormat(),
-            'language'      => $this->language,
+            'language' => $this->language,
         ]);
     }
 

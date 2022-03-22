@@ -17,25 +17,26 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_widgets()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(
-                    SharpBarGraphWidget::make('widget')
+                    SharpBarGraphWidget::make('widget'),
                 );
             }
         };
 
         $this->assertEquals(['widget' => [
-            'key'        => 'widget',
-            'type'       => 'graph',
-            'display'    => 'bar',
-            'ratioX'     => 16,
-            'ratioY'     => 9,
-            'minimal'    => false,
+            'key' => 'widget',
+            'type' => 'graph',
+            'display' => 'bar',
+            'ratioX' => 16,
+            'ratioY' => 9,
+            'minimal' => false,
             'showLegend' => true,
             'dateLabels' => false,
-            'options'    => [
+            'options' => [
                 'horizontal' => false,
             ],
         ]], $dashboard->widgets());
@@ -44,7 +45,8 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_widgets_layout()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(SharpBarGraphWidget::make('widget'))
@@ -77,7 +79,8 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_graph_widget_data()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(SharpBarGraphWidget::make('widget'));
@@ -93,10 +96,10 @@ class SharpDashboardTest extends SharpTestCase
 
         $this->assertEquals([
             'widget' => [
-                'key'      => 'widget',
+                'key' => 'widget',
                 'datasets' => [
                     [
-                        'data'  => [10, 20, 30],
+                        'data' => [10, 20, 30],
                         'label' => 'test',
                         'color' => 'blue',
                     ],
@@ -110,7 +113,8 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_graph_widget_data_with_multiple_datasets()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(SharpBarGraphWidget::make('widget'));
@@ -129,14 +133,14 @@ class SharpDashboardTest extends SharpTestCase
 
         $this->assertEquals([
             'widget' => [
-                'key'      => 'widget',
+                'key' => 'widget',
                 'datasets' => [
                     [
-                        'data'  => [10, 20, 30],
+                        'data' => [10, 20, 30],
                         'label' => 'test',
                         'color' => 'blue',
                     ], [
-                        'data'  => [40, 50, 60],
+                        'data' => [40, 50, 60],
                         'label' => 'test2',
                         'color' => 'red',
                     ],
@@ -150,11 +154,12 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_panel_widget_data()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(
-                    SharpPanelWidget::make('widget')->setInlineTemplate('<b>Hello {{user}}</b>')
+                    SharpPanelWidget::make('widget')->setInlineTemplate('<b>Hello {{user}}</b>'),
                 );
             }
 
@@ -166,7 +171,7 @@ class SharpDashboardTest extends SharpTestCase
 
         $this->assertEquals([
             'widget' => [
-                'key'  => 'widget',
+                'key' => 'widget',
                 'data' => [
                     'user' => 'John Wayne',
                 ],
@@ -177,7 +182,8 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_ordered_list_widget_data()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(SharpOrderedListWidget::make('widget'));
@@ -203,17 +209,17 @@ class SharpDashboardTest extends SharpTestCase
 
         $this->assertEquals([
             'widget' => [
-                'key'  => 'widget',
+                'key' => 'widget',
                 'data' => [
                     [
                         'label' => 'John Wayne',
                         'count' => 888,
-                        'url'   => null,
+                        'url' => null,
                     ],
                     [
                         'label' => 'Toto',
                         'count' => 771,
-                        'url'   => null,
+                        'url' => null,
                     ],
                 ],
             ],
@@ -223,7 +229,8 @@ class SharpDashboardTest extends SharpTestCase
     /** @test */
     public function we_can_get_ordered_list_widget_item_url()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             protected function buildWidgets(): void
             {
                 $this->addWidget(
@@ -233,7 +240,7 @@ class SharpDashboardTest extends SharpTestCase
                                 ? null
                                 : LinkToEntityList::make('my-entity')
                                     ->addFilter('type', $item['id']);
-                        })
+                        }),
                 );
             }
 
@@ -241,17 +248,17 @@ class SharpDashboardTest extends SharpTestCase
             {
                 $this->setOrderedListData('widget', [
                     [
-                        'id'    => 1,
+                        'id' => 1,
                         'label' => 'John Wayne',
                         'count' => 888,
                     ],
                     [
-                        'id'    => 2,
+                        'id' => 2,
                         'label' => 'Jane Wayne',
                         'count' => 771,
                     ],
                     [
-                        'id'    => 3,
+                        'id' => 3,
                         'label' => 'John Ford',
                         'count' => 112,
                     ],
@@ -264,25 +271,25 @@ class SharpDashboardTest extends SharpTestCase
 
         $this->assertEquals([
             'widget' => [
-                'key'  => 'widget',
+                'key' => 'widget',
                 'data' => [
                     [
-                        'id'    => 1,
+                        'id' => 1,
                         'label' => 'John Wayne',
                         'count' => 888,
-                        'url'   => 'http://localhost/sharp/s-list/my-entity?filter_type=1',
+                        'url' => 'http://localhost/sharp/s-list/my-entity?filter_type=1',
                     ],
                     [
-                        'id'    => 2,
+                        'id' => 2,
                         'label' => 'Jane Wayne',
                         'count' => 771,
-                        'url'   => 'http://localhost/sharp/s-list/my-entity?filter_type=2',
+                        'url' => 'http://localhost/sharp/s-list/my-entity?filter_type=2',
                     ],
                     [
-                        'id'    => 3,
+                        'id' => 3,
                         'label' => 'John Ford',
                         'count' => 112,
-                        'url'   => null,
+                        'url' => null,
                     ],
                 ],
             ],

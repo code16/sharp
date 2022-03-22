@@ -31,8 +31,7 @@ class ListFilterMakeCommand extends GeneratorCommand
     /**
      * Build the class with the given name.
      *
-     * @param string $name
-     *
+     * @param  string  $name
      * @return string
      */
     protected function buildClass($name)
@@ -40,29 +39,28 @@ class ListFilterMakeCommand extends GeneratorCommand
         $namespace = $this->getNamespace($name);
 
         $replace = [];
-        if (!$this->option('multiple')) {
+        if (! $this->option('multiple')) {
             $replace = $this->removeMultipleInterface($replace);
         }
 
         return str_replace(
             array_keys($replace),
             array_values($replace),
-            parent::buildClass($name)
+            parent::buildClass($name),
         );
     }
 
     /**
      * Build replacements required to remove the EntityListMultipleFilter interface.
      *
-     * @param array $replace
-     *
+     * @param  array  $replace
      * @return array
      */
     protected function removeMultipleInterface(array $replace)
     {
         return array_merge($replace, [
             "use Code16\Sharp\EntityList\EntityListMultipleFilter;\n" => '',
-            ', EntityListMultipleFilter'                              => '',
+            ', EntityListMultipleFilter' => '',
         ]);
     }
 
@@ -81,8 +79,7 @@ class ListFilterMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param string $rootNamespace
-     *
+     * @param  string  $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)

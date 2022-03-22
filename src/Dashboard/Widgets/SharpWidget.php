@@ -49,11 +49,11 @@ abstract class SharpWidget
             $properties,
             array_merge(
                 [
-                    'key'  => 'required',
+                    'key' => 'required',
                     'type' => 'required',
                 ],
-                $this->validationRules()
-            )
+                $this->validationRules(),
+            ),
         );
 
         if ($validator->fails()) {
@@ -64,14 +64,14 @@ abstract class SharpWidget
     protected function buildArray(array $childArray): array
     {
         $array = collect([
-            'key'   => $this->key,
-            'type'  => $this->type,
+            'key' => $this->key,
+            'type' => $this->type,
             'title' => $this->title,
-            'link'  => $this->link,
+            'link' => $this->link,
         ])
             ->merge($childArray)
             ->filter(function ($value) {
-                return !is_null($value);
+                return ! is_null($value);
             })
             ->all();
 

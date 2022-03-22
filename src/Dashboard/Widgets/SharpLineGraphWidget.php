@@ -35,10 +35,10 @@ class SharpLineGraphWidget extends SharpGraphWidget
             parent::toArray(),
             [
                 'dateLabels' => $this->displayHorizontalAxisAsTimeline,
-                'options'    => [
+                'options' => [
                     'curved' => $this->curvedLines,
                 ],
-            ]
+            ],
         );
     }
 }

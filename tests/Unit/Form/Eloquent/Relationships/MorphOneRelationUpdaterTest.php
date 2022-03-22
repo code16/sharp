@@ -20,8 +20,8 @@ class MorphOneRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $this->assertDatabaseHas('pictures', [
             'picturable_type' => Person::class,
-            'picturable_id'   => $person->id,
-            'file'            => 'test.jpg',
+            'picturable_id' => $person->id,
+            'file' => 'test.jpg',
         ]);
     }
 
@@ -39,8 +39,8 @@ class MorphOneRelationUpdaterTest extends SharpFormEloquentBaseTest
 
         $this->assertDatabaseHas('pictures', [
             'picturable_type' => Person::class,
-            'picturable_id'   => $person->id,
-            'file'            => 'test.jpg',
+            'picturable_id' => $person->id,
+            'file' => 'test.jpg',
         ]);
     }
 

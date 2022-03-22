@@ -24,17 +24,17 @@ class TravelSharpForm extends SharpForm
         $this->addField(
             SharpFormDateField::make('departure_date')
                 ->setHasTime(true)
-                ->setLabel('Departure date')
+                ->setLabel('Departure date'),
         )->addField(
             SharpFormSelectField::make(
                 'spaceship_id',
-                Spaceship::orderBy('name')->get()->pluck('name', 'id')->all()
+                Spaceship::orderBy('name')->get()->pluck('name', 'id')->all(),
             )
                 ->setLabel('Spaceship')
-                ->setDisplayAsDropdown()
+                ->setDisplayAsDropdown(),
         )->addField(
             SharpFormTextField::make('destination')
-                ->setLabel('Destination')
+                ->setLabel('Destination'),
         )->addField(
             SharpFormWysiwygField::make('description')
                 ->setToolbar([
@@ -54,14 +54,14 @@ class TravelSharpForm extends SharpForm
                     SharpFormWysiwygField::UNDO,
                     SharpFormWysiwygField::REDO,
                 ])
-                ->setLabel('Description')
+                ->setLabel('Description'),
         )->addField(
             SharpFormGeolocationField::make('destination_coordinates')
                 ->setDisplayUnitDegreesMinutesSeconds()
                 ->setGeocoding()
                 ->setInitialPosition(48.5838961, 7.742182599999978)
                 ->setApiKey(env('GMAPS_KEY', 'my-api-key'))
-                ->setLabel('Destination coordinates')
+                ->setLabel('Destination coordinates'),
         )->addField(
             SharpFormAutocompleteListField::make('delegates')
                 ->setLabel('Travel delegates')
@@ -73,8 +73,8 @@ class TravelSharpForm extends SharpForm
                         ->setPlaceholder('test')
                         ->setListItemInlineTemplate('{{ name }}')
                         ->setResultItemTemplatePath('sharp/templates/delegate_result.vue')
-                        ->setRemoteEndpoint(url('/passengers'))
-                )
+                        ->setRemoteEndpoint(url('/passengers')),
+                ),
         );
     }
 
@@ -96,7 +96,7 @@ class TravelSharpForm extends SharpForm
     public function find($id): array
     {
         return $this->transform(
-            Travel::with(['spaceship', 'delegates'])->findOrFail($id)
+            Travel::with(['spaceship', 'delegates'])->findOrFail($id),
         );
     }
 

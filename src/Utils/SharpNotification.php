@@ -12,9 +12,9 @@ class SharpNotification
         $notifications = session('sharp_notifications') ?? [];
 
         $notifications[$this->id] = [
-            'title'    => $title,
-            'level'    => 'info',
-            'message'  => null,
+            'title' => $title,
+            'level' => 'info',
+            'message' => null,
             'autoHide' => true,
         ];
 

@@ -42,7 +42,7 @@ class AssetViewComposer
     /**
      * Bind data to the view.
      *
-     * @param View $view
+     * @param  View  $view
      *
      * @throws SharpInvalidAssetRenderStrategy
      */
@@ -53,7 +53,7 @@ class AssetViewComposer
 
         foreach ((array) config('sharp.extensions.assets') as $position => $paths) {
             foreach ((array) $paths as $assetPath) {
-                if (!isset($output[$position])) {
+                if (! isset($output[$position])) {
                     $output[$position] = [];
                 }
 
@@ -82,8 +82,7 @@ class AssetViewComposer
     /**
      * Get the asset file type.
      *
-     * @param string $assetPath
-     *
+     * @param  string  $assetPath
      * @return string
      */
     protected function getAssetFileType($assetPath): string
@@ -96,9 +95,8 @@ class AssetViewComposer
     /**
      * Apply the strategy to the asset path to insert into the html template.
      *
-     * @param string $strategy
-     * @param string $assetPath
-     *
+     * @param  string  $strategy
+     * @param  string  $assetPath
      * @return string
      */
     protected function getAssetPathWithStrategyApplied($strategy, $assetPath): string
@@ -118,19 +116,19 @@ class AssetViewComposer
     /**
      * Get the strategy to render the assets.
      *
-     * @throws SharpInvalidAssetRenderStrategy
-     *
      * @return string
+     *
+     * @throws SharpInvalidAssetRenderStrategy
      */
     protected function getValidatedStrategyFromConfig(): string
     {
         $strategy = config('sharp.extensions.assets.strategy', 'raw');
 
-        if (!is_string($strategy)) {
+        if (! is_string($strategy)) {
             throw new SharpInvalidAssetRenderStrategy('The asset strategy defined at sharp.extensions.assets.strategy is not a string');
         }
 
-        if (!in_array($strategy, $this->renderStrategies)) {
+        if (! in_array($strategy, $this->renderStrategies)) {
             throw new SharpInvalidAssetRenderStrategy("The asset strategy [$strategy] is not raw, asset, or mix");
         }
 

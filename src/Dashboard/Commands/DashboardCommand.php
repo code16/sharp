@@ -25,8 +25,7 @@ abstract class DashboardCommand extends Command
     }
 
     /**
-     * @param mixed $ids
-     *
+     * @param  mixed  $ids
      * @return array
      */
     protected function refresh($ids): array
@@ -36,9 +35,8 @@ abstract class DashboardCommand extends Command
     }
 
     /**
-     * @param DashboardQueryParams $params
-     * @param array                $data
-     *
+     * @param  DashboardQueryParams  $params
+     * @param  array  $data
      * @return array
      */
     abstract public function execute(DashboardQueryParams $params, array $data = []): array;

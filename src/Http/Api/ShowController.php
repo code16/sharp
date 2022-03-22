@@ -14,9 +14,9 @@ class ShowController extends ApiController
         $show = $this->getShowInstance($entityKey);
 
         abort_if(
-            (!$instanceId && !$show instanceof SharpSingleShow)
+            (! $instanceId && ! $show instanceof SharpSingleShow)
             || ($instanceId && $show instanceof SharpSingleShow),
-            404
+            404,
         );
 
         $show->buildShowConfig();
@@ -26,9 +26,9 @@ class ShowController extends ApiController
                 'config' => $show->showConfig($instanceId),
                 'fields' => $show->fields(),
                 'layout' => $show->showLayout(),
-                'data'   => $show->instance($instanceId),
+                'data' => $show->instance($instanceId),
             ]
-            + $this->dataLocalizations($show)
+            + $this->dataLocalizations($show),
         );
     }
 

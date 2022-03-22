@@ -21,7 +21,7 @@ class SharpValidator extends Validator
 
         // First grab all messages which do not refer to a Rich Text Field (RTF)
         $newMessages = collect($this->messages->getMessages())->filter(function ($messages, $key) {
-            return !Str::endsWith($key, '.text');
+            return ! Str::endsWith($key, '.text');
         })->all();
 
         // Then for all RFT fields, remove the .text in their key (description.text -> description)

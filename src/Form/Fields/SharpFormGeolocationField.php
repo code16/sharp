@@ -125,12 +125,12 @@ class SharpFormGeolocationField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'geocoding'              => 'required|bool',
-            'displayUnit'            => 'required|in:DD,DMS',
-            'zoomLevel'              => 'int|min:0|max:25|required',
-            'initialPosition'        => 'array|nullable',
-            'boundaries'             => 'array|nullable',
-            'mapsProvider.name'      => 'required|in:gmaps,osm',
+            'geocoding' => 'required|bool',
+            'displayUnit' => 'required|in:DD,DMS',
+            'zoomLevel' => 'int|min:0|max:25|required',
+            'initialPosition' => 'array|nullable',
+            'boundaries' => 'array|nullable',
+            'mapsProvider.name' => 'required|in:gmaps,osm',
             'geocodingProvider.name' => 'required|in:gmaps,osm',
         ];
     }
@@ -138,17 +138,17 @@ class SharpFormGeolocationField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray([
-            'geocoding'       => $this->geocoding,
-            'displayUnit'     => $this->displayUnit,
-            'zoomLevel'       => $this->zoomLevel,
+            'geocoding' => $this->geocoding,
+            'displayUnit' => $this->displayUnit,
+            'zoomLevel' => $this->zoomLevel,
             'initialPosition' => $this->initialPosition,
-            'boundaries'      => $this->boundaries,
-            'mapsProvider'    => [
-                'name'    => $this->mapsProvider,
+            'boundaries' => $this->boundaries,
+            'mapsProvider' => [
+                'name' => $this->mapsProvider,
                 'options' => $this->mapsProviderOptions,
             ],
             'geocodingProvider' => [
-                'name'    => $this->geocodingProvider,
+                'name' => $this->geocodingProvider,
                 'options' => $this->geocodingProviderOptions,
             ],
         ]);

@@ -17,14 +17,13 @@ trait WithCustomTransformers
     protected array $transformers = [];
 
     /**
-     * @param string                                   $attribute
-     * @param string|Closure|SharpAttributeTransformer $transformer
-     *
+     * @param  string  $attribute
+     * @param  string|Closure|SharpAttributeTransformer  $transformer
      * @return $this
      */
     public function setCustomTransformer(string $attribute, $transformer)
     {
-        if (!$transformer instanceof SharpAttributeTransformer) {
+        if (! $transformer instanceof SharpAttributeTransformer) {
             $transformer = $transformer instanceof Closure
                 ? $this->normalizeToSharpAttributeTransformer($transformer)
                 : app($transformer);
@@ -39,7 +38,6 @@ trait WithCustomTransformers
      * Transforms a model or a models collection into an array.
      *
      * @param $models
-     *
      * @return array|LengthAwarePaginator
      */
     public function transform($models)
@@ -48,7 +46,7 @@ trait WithCustomTransformers
             // It's a Form (full entity or from a Command), there's only one model.
             // We must add Form Field Formatters in the process
             return $this->applyFormatters(
-                $this->applyTransformers($models)
+                $this->applyTransformers($models),
             );
         }
 
@@ -64,7 +62,7 @@ trait WithCustomTransformers
                 $this->transform($models->items()),
                 $models->total(),
                 $models->perPage(),
-                $models->currentPage()
+                $models->currentPage(),
             );
         }
 
@@ -77,7 +75,8 @@ trait WithCustomTransformers
 
     protected static function normalizeToSharpAttributeTransformer(Closure $closure): SharpAttributeTransformer
     {
-        return new class($closure) implements SharpAttributeTransformer {
+        return new class($closure) implements SharpAttributeTransformer
+        {
             private $closure;
 
             public function __construct($closure)
@@ -93,9 +92,8 @@ trait WithCustomTransformers
     }
 
     /**
-     * @param array|object $model           the base model (Eloquent for instance), or an array of attributes
-     * @param bool         $forceFullObject if true all data keys of the model will be force set
-     *
+     * @param  array|object  $model  the base model (Eloquent for instance), or an array of attributes
+     * @param  bool  $forceFullObject  if true all data keys of the model will be force set
      * @return array
      */
     protected function applyTransformers($model, bool $forceFullObject = true): array
@@ -125,7 +123,7 @@ trait WithCustomTransformers
                 $listAttribute = substr($attribute, 0, strpos($attribute, '['));
                 $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
 
-                if (!array_key_exists($listAttribute, $attributes)) {
+                if (! array_key_exists($listAttribute, $attributes)) {
                     continue;
                 }
 
@@ -133,13 +131,13 @@ trait WithCustomTransformers
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
                         $attributes[$listAttribute][$k][$itemAttribute] ?? null,
                         $itemModel,
-                        $itemAttribute
+                        $itemAttribute,
                     );
                 }
             } else {
-                if (!isset($attributes[$attribute])) {
+                if (! isset($attributes[$attribute])) {
                     if (method_exists($transformer, 'applyIfAttributeIsMissing')
-                        && !$transformer->applyIfAttributeIsMissing()) {
+                        && ! $transformer->applyIfAttributeIsMissing()) {
                         // The attribute is missing, and the transformer code specifically
                         // decide to be ignored in this case
                         continue;
@@ -149,7 +147,7 @@ trait WithCustomTransformers
                 $attributes[$attribute] = $transformer->apply(
                     $attributes[$attribute] ?? null,
                     $model,
-                    $attribute
+                    $attribute,
                 );
             }
         }
@@ -159,7 +157,6 @@ trait WithCustomTransformers
 
     /**
      * @param $attributes
-     *
      * @return array
      */
     protected function applyFormatters($attributes): array

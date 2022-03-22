@@ -9,7 +9,7 @@ class SharpShowEntityListField extends SharpShowField
     protected string $entityListKey;
     protected array $hiddenFilters = [];
     protected array $hiddenCommands = [
-        'entity'   => [],
+        'entity' => [],
         'instance' => [],
     ];
     protected bool $showEntityState = true;
@@ -26,9 +26,8 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
-     * @param string $filterName
-     * @param mixed  $value
-     *
+     * @param  string  $filterName
+     * @param  mixed  $value
      * @return $this
      */
     public function hideFilterWithValue(string $filterName, $value): self
@@ -39,8 +38,7 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
-     * @param array|string $commands
-     *
+     * @param  array|string  $commands
      * @return $this
      */
     public function hideEntityCommand($commands): self
@@ -53,8 +51,7 @@ class SharpShowEntityListField extends SharpShowField
     }
 
     /**
-     * @param array|string $commands
-     *
+     * @param  array|string  $commands
      * @return $this
      */
     public function hideInstanceCommand($commands): self
@@ -107,14 +104,14 @@ class SharpShowEntityListField extends SharpShowField
     public function toArray(): array
     {
         return parent::buildArray([
-            'label'             => $this->label,
-            'entityListKey'     => $this->entityListKey,
-            'showEntityState'   => $this->showEntityState,
-            'showCreateButton'  => $this->showCreateButton,
+            'label' => $this->label,
+            'entityListKey' => $this->entityListKey,
+            'showEntityState' => $this->showEntityState,
+            'showCreateButton' => $this->showCreateButton,
             'showReorderButton' => $this->showReorderButton,
-            'showSearchField'   => $this->showSearchField,
-            'hiddenCommands'    => $this->hiddenCommands,
-            'hiddenFilters'     => sizeof($this->hiddenFilters)
+            'showSearchField' => $this->showSearchField,
+            'hiddenCommands' => $this->hiddenCommands,
+            'hiddenFilters' => sizeof($this->hiddenFilters)
                 ? collect($this->hiddenFilters)
                     ->map(function ($value, $filter) {
                         // Filter value can be a Closure
@@ -133,14 +130,14 @@ class SharpShowEntityListField extends SharpShowField
     protected function validationRules(): array
     {
         return [
-            'entityListKey'           => 'required',
-            'showEntityState'         => 'required|boolean',
-            'showCreateButton'        => 'required|boolean',
-            'showReorderButton'       => 'required|boolean',
-            'hiddenCommands'          => 'required|array',
-            'hiddenCommands.entity'   => 'array',
+            'entityListKey' => 'required',
+            'showEntityState' => 'required|boolean',
+            'showCreateButton' => 'required|boolean',
+            'showReorderButton' => 'required|boolean',
+            'hiddenCommands' => 'required|array',
+            'hiddenCommands.entity' => 'array',
             'hiddenCommands.instance' => 'array',
-            'hiddenFilters'           => 'array',
+            'hiddenFilters' => 'array',
         ];
     }
 }

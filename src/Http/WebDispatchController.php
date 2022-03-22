@@ -10,14 +10,14 @@ class WebDispatchController extends SharpProtectedController
     {
         if ($request->isShow()) {
             return view('sharp::show', [
-                'entityKey'  => $request->entityKey(),
+                'entityKey' => $request->entityKey(),
                 'instanceId' => $request->instanceId(),
             ]);
         }
 
         if ($request->isForm()) {
             return view('sharp::form', [
-                'entityKey'  => $request->entityKey(),
+                'entityKey' => $request->entityKey(),
                 'instanceId' => $request->instanceId(),
             ]);
         }

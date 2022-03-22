@@ -7,9 +7,8 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 class AutocompleteListFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -20,9 +19,9 @@ class AutocompleteListFormatter extends SharpFieldFormatter
             ->map(function ($item) use ($autocompleteField) {
                 return [
                     $autocompleteField->itemIdAttribute() => $item[$autocompleteField->itemIdAttribute()],
-                    $autocompleteField->key()             => $autocompleteField->formatter()->toFront(
+                    $autocompleteField->key() => $autocompleteField->formatter()->toFront(
                         $autocompleteField,
-                        $item
+                        $item,
                     ),
                 ];
             })
@@ -30,10 +29,9 @@ class AutocompleteListFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
-     *
      * @return array
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
@@ -48,7 +46,7 @@ class AutocompleteListFormatter extends SharpFieldFormatter
                     $autocompleteField->itemIdAttribute() => $autocompleteField->formatter()->fromFront(
                         $autocompleteField,
                         $autocompleteField->key(),
-                        $item
+                        $item,
                     ),
                 ];
             })

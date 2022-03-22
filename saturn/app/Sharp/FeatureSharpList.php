@@ -14,10 +14,10 @@ class FeatureSharpList extends SharpEntityList
     {
         $this->addDataContainer(
             EntityListDataContainer::make('name')
-                ->setLabel('Name')
+                ->setLabel('Name'),
         )->addDataContainer(
             EntityListDataContainer::make('type')
-                ->setLabel('Type')
+                ->setLabel('Type'),
         );
     }
 
@@ -42,7 +42,7 @@ class FeatureSharpList extends SharpEntityList
                     .(Feature::SUBTYPES[$instance->type][$instance->subtype] ?? '?');
             })
             ->transform(
-                Feature::orderBy('order', 'asc')->get()
+                Feature::orderBy('order', 'asc')->get(),
             );
     }
 }

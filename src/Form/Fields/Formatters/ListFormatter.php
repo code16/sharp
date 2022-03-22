@@ -7,9 +7,8 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 class ListFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -27,7 +26,7 @@ class ListFormatter extends SharpFieldFormatter
 
                         if (strpos($key, ':') !== false) {
                             // It's a sub attribute (like mother:name)
-                            list($attribute, $subAttribute) = explode(':', $key);
+                            [$attribute, $subAttribute] = explode(':', $key);
                             $itemArray[$key] = isset($item[$attribute][$subAttribute])
                                 ? $itemField->formatter()->toFront($itemField, $item[$attribute][$subAttribute])
                                 : null;
@@ -44,10 +43,9 @@ class ListFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
-     *
      * @return array
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)

@@ -13,9 +13,9 @@ class EntityListController extends ApiController
 
         return response()->json([
             'containers' => $list->dataContainers(),
-            'layout'     => $list->listLayout(),
-            'data'       => $list->data(),
-            'config'     => $list->listConfig(config()->has("sharp.entities.{$entityKey}.show")),
+            'layout' => $list->listLayout(),
+            'data' => $list->data(),
+            'config' => $list->listConfig(config()->has("sharp.entities.{$entityKey}.show")),
         ]);
     }
 
@@ -30,7 +30,7 @@ class EntityListController extends ApiController
         $list->buildListConfig();
 
         $list->reorderHandler()->reorder(
-            request('instances')
+            request('instances'),
         );
 
         return response()->json([

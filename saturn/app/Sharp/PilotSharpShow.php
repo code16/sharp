@@ -18,13 +18,13 @@ class PilotSharpShow extends SharpShow
         $this
             ->addField(
                 SharpShowTextField::make('name')
-                    ->setLabel('Name')
+                    ->setLabel('Name'),
             )->addField(
                 SharpShowTextField::make('role')
-                    ->setLabel('Role')
+                    ->setLabel('Role'),
             )->addField(
                 SharpShowTextField::make('xp')
-                    ->setLabel('Xp')
+                    ->setLabel('Xp'),
             )->addField(
                 SharpShowEntityListField::make('spaceships', 'spaceship')
                     ->setLabel('Spaceships')
@@ -32,7 +32,7 @@ class PilotSharpShow extends SharpShow
                         return $instanceId;
                     })
                     ->hideEntityCommand(['synchronize', 'reload'])
-                    ->showCreateButton(false)
+                    ->showCreateButton(false),
             );
     }
 

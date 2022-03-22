@@ -10,7 +10,7 @@ abstract class SharpSingleForm extends SharpForm
     {
         return array_merge(
             parent::formConfig(),
-            ['isSingle' => true]
+            ['isSingle' => true],
         );
     }
 

@@ -16,15 +16,15 @@ class PassengerSharpList extends SharpEntityList
         $this->addDataContainer(
             EntityListDataContainer::make('name')
                 ->setSortable()
-                ->setLabel('Name')
+                ->setLabel('Name'),
         )->addDataContainer(
             EntityListDataContainer::make('birth_date')
                 ->setSortable()
-                ->setLabel('Birth date')
+                ->setLabel('Birth date'),
         )->addDataContainer(
             EntityListDataContainer::make('travel')
                 ->setSortable()
-                ->setLabel('Travel')
+                ->setLabel('Travel'),
         );
     }
 
@@ -76,7 +76,7 @@ class PassengerSharpList extends SharpEntityList
             ->setCustomTransformer('travel', function ($value, $passenger) {
                 $travel = $passenger->travel;
 
-                if (!$travel) {
+                if (! $travel) {
                     return '';
                 }
 

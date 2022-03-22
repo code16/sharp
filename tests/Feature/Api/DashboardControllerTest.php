@@ -56,27 +56,27 @@ class DashboardControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(['data' => [
                 'bars1' => [
-                    'key'      => 'bars1',
+                    'key' => 'bars1',
                     'datasets' => [
                         [
-                            'data'  => [10, 20, 30],
+                            'data' => [10, 20, 30],
                             'label' => 'Bars 1',
                         ],
                     ],
                     'labels' => ['a', 'b', 'c'],
                 ],
                 'bars2' => [
-                    'key'      => 'bars2',
+                    'key' => 'bars2',
                     'datasets' => [
                         [
-                            'data'  => [10, 20, 30],
+                            'data' => [10, 20, 30],
                             'label' => 'Bars 2',
                         ],
                     ],
                     'labels' => ['a', 'b', 'c'],
                 ],
                 'panel' => [
-                    'key'  => 'panel',
+                    'key' => 'panel',
                     'data' => [
                         'name' => 'John Wayne',
                     ],

@@ -12,15 +12,17 @@ class DashboardFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_dashboard_filters_config()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             public function buildDashboardConfig(): void
             {
-                $this->addFilter('test', new class() implements DashboardSelectFilter {
+                $this->addFilter('test', new class() implements DashboardSelectFilter
+                {
                     public function values(): array
                     {
                         return [1 => 'A', 2 => 'B'];
                     }
-                });
+                }, );
             }
         };
 
@@ -29,11 +31,11 @@ class DashboardFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
-                    'label'    => 'test',
+                    'key' => 'test',
+                    'label' => 'test',
                     'multiple' => false,
                     'required' => false,
-                    'values'   => [
+                    'values' => [
                         ['id' => 1, 'label' => 'A'],
                         ['id' => 2, 'label' => 'B'],
                     ],
@@ -45,15 +47,17 @@ class DashboardFilterTest extends SharpTestCase
     /** @test */
     public function we_can_get_dashboard_date_range_filter_config()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             public function buildDashboardConfig(): void
             {
-                $this->addFilter('test', new class() implements DashboardDateRangeFilter {
+                $this->addFilter('test', new class() implements DashboardDateRangeFilter
+                {
                     public function values()
                     {
                         return [];
                     }
-                });
+                }, );
             }
         };
 
@@ -62,9 +66,9 @@ class DashboardFilterTest extends SharpTestCase
         $this->assertArraySubset([
             'filters' => [
                 [
-                    'key'      => 'test',
-                    'type'     => 'daterange',
-                    'label'    => 'test',
+                    'key' => 'test',
+                    'type' => 'daterange',
+                    'label' => 'test',
                     'required' => false,
                 ],
             ],

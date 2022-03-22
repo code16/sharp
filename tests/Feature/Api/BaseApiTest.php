@@ -17,7 +17,7 @@ abstract class BaseApiTest extends SharpTestCase
     {
         parent::getEnvironmentSetUp($app);
 
-        if (!file_exists(public_path('vendor/sharp'))) {
+        if (! file_exists(public_path('vendor/sharp'))) {
             mkdir(public_path('vendor/sharp'), 0777, true);
         }
         touch(public_path('vendor/sharp/mix-manifest.json'));
@@ -30,8 +30,8 @@ abstract class BaseApiTest extends SharpTestCase
         $this->app['config']->set(
             'app.key',
             'base64:'.base64_encode(random_bytes(
-                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
-            ))
+                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32,
+            )),
         );
     }
 
@@ -44,7 +44,7 @@ abstract class BaseApiTest extends SharpTestCase
     {
         $this->app['config']->set(
             'sharp.entities.person.validator',
-            PersonSharpValidator::class
+            PersonSharpValidator::class,
         );
     }
 
@@ -52,28 +52,28 @@ abstract class BaseApiTest extends SharpTestCase
     {
         $this->app['config']->set(
             'sharp.entities.person.list',
-            PersonSharpEntityList::class
+            PersonSharpEntityList::class,
         );
 
         $this->app['config']->set(
             'sharp.entities.person.form',
-            PersonSharpForm::class
+            PersonSharpForm::class,
         );
 
         $this->app['config']->set(
             'sharp.dashboards.personal_dashboard.view',
-            SharpDashboard::class
+            SharpDashboard::class,
         );
 
         if ($singleShow) {
             $this->app['config']->set(
                 'sharp.entities.person.show',
-                PersonSharpSingleShow::class
+                PersonSharpSingleShow::class,
             );
         } else {
             $this->app['config']->set(
                 'sharp.entities.person.show',
-                PersonSharpShow::class
+                PersonSharpShow::class,
             );
         }
     }

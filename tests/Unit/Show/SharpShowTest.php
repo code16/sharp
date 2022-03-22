@@ -15,12 +15,13 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_add_and_entity_list_section_to_the_layout()
     {
-        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow {
+        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
             public function buildShowFields(): void
             {
                 $this->addField(
                     SharpShowEntityListField::make('entityList', 'entityKey')
-                        ->setLabel('Test')
+                        ->setLabel('Test'),
                 );
             }
 
@@ -34,15 +35,15 @@ class SharpShowTest extends SharpTestCase
             'sections' => [
                 [
                     'collapsable' => false,
-                    'title'       => '',
-                    'columns'     => [
+                    'title' => '',
+                    'columns' => [
                         [
-                            'size'   => 12,
+                            'size' => 12,
                             'fields' => [
                                 [
                                     [
-                                        'key'    => 'entityList',
-                                        'size'   => 12,
+                                        'key' => 'entityList',
+                                        'size' => 12,
                                         'sizeXS' => 12,
                                     ],
                                 ],
@@ -57,12 +58,13 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_collapsable_section()
     {
-        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow {
+        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
             public function buildShowFields(): void
             {
                 $this->addField(
                     SharpShowTextField::make('test')
-                        ->setLabel('Test')
+                        ->setLabel('Test'),
                 );
             }
 
@@ -81,15 +83,15 @@ class SharpShowTest extends SharpTestCase
             'sections' => [
                 [
                     'collapsable' => true,
-                    'title'       => 'test',
-                    'columns'     => [
+                    'title' => 'test',
+                    'columns' => [
                         [
-                            'size'   => 12,
+                            'size' => 12,
                             'fields' => [
                                 [
                                     [
-                                        'key'    => 'test',
-                                        'size'   => 12,
+                                        'key' => 'test',
+                                        'size' => 12,
                                         'sizeXS' => 12,
                                     ],
                                 ],
@@ -104,7 +106,8 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_multiformAttribute()
     {
-        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow {
+        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
             public function buildShowConfig(): void
             {
                 $this->setMultiformAttribute('role');
@@ -121,15 +124,16 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow {
+        $sharpShow = new class() extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow
+        {
         };
 
         $this->assertEquals(
             [
                 'multiformAttribute' => null,
-                'isSingle'           => true,
+                'isSingle' => true,
             ],
-            $sharpShow->showConfig(null)
+            $sharpShow->showConfig(null),
         );
     }
 }

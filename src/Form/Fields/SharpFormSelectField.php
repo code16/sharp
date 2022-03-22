@@ -120,13 +120,13 @@ class SharpFormSelectField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'options'       => 'array',
-            'multiple'      => 'boolean',
+            'options' => 'array',
+            'multiple' => 'boolean',
             'showSelectAll' => 'boolean',
-            'inline'        => 'boolean',
-            'clearable'     => 'boolean',
-            'display'       => 'required|in:list,dropdown',
-            'maxSelected'   => 'int',
+            'inline' => 'boolean',
+            'clearable' => 'boolean',
+            'display' => 'required|in:list,dropdown',
+            'maxSelected' => 'int',
         ];
     }
 
@@ -138,18 +138,18 @@ class SharpFormSelectField extends SharpFormField
                     'options' => $this->dynamicAttributes
                         ? self::formatDynamicOptions($this->options, count($this->dynamicAttributes[0]['path']))
                         : self::formatOptions($this->options, $this->idAttribute),
-                    'multiple'      => $this->multiple,
+                    'multiple' => $this->multiple,
                     'showSelectAll' => $this->showSelectAll,
-                    'clearable'     => $this->clearable,
-                    'display'       => $this->display,
-                    'inline'        => $this->inline,
-                    'maxSelected'   => $this->maxSelected,
-                    'localized'     => $this->localized,
+                    'clearable' => $this->clearable,
+                    'display' => $this->display,
+                    'inline' => $this->inline,
+                    'maxSelected' => $this->maxSelected,
+                    'localized' => $this->localized,
                 ],
                 $this->dynamicAttributes
                     ? ['dynamicAttributes' => $this->dynamicAttributes]
-                    : []
-            )
+                    : [],
+            ),
         );
     }
 }

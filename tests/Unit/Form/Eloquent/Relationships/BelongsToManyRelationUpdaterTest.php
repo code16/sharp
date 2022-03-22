@@ -17,7 +17,7 @@ class BelongsToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new BelongsToManyRelationUpdater();
 
         $updater->update($person1, 'friends', [
-            ['id'=>$person2->id],
+            ['id' => $person2->id],
         ]);
 
         $this->assertDatabaseHas('friends', [
@@ -36,13 +36,13 @@ class BelongsToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $person3 = Person::create(['name' => 'C']);
 
         $person1->friends()->sync([
-            ['id'=>$person2->id],
+            ['id' => $person2->id],
         ]);
 
         $updater = new BelongsToManyRelationUpdater();
 
         $updater->update($person1, 'friends', [
-            ['id'=>$person3->id],
+            ['id' => $person3->id],
         ]);
 
         $this->assertDatabaseHas('friends', [
@@ -64,7 +64,7 @@ class BelongsToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
         $updater = new BelongsToManyRelationUpdater();
 
         $updater->update($person1, 'friends', [
-            ['id'=>null, 'name'=>'John Wayne'],
+            ['id' => null, 'name' => 'John Wayne'],
         ]);
 
         $this->assertDatabaseHas('people', [

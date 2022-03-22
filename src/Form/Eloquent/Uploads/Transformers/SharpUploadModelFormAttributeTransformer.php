@@ -26,13 +26,12 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
      *
      * @param $value
      * @param $instance
-     * @param string $attribute
-     *
+     * @param  string  $attribute
      * @return mixed
      */
     public function apply($value, $instance = null, $attribute = null)
     {
-        if (!$instance->$attribute) {
+        if (! $instance->$attribute) {
             return null;
         }
 
@@ -46,7 +45,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 
                     return array_merge(
                         ['file' => sizeof($file) ? $file : null],
-                        Arr::except($array, ['name', 'thumbnail', 'size'])
+                        Arr::except($array, ['name', 'thumbnail', 'size']),
                     );
                 })
                 ->all();
@@ -60,19 +59,19 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         return array_merge(
             $upload->file_name
                 ? [
-                    'name'      => $upload->file_name,
+                    'name' => $upload->file_name,
                     'thumbnail' => $this->getThumbnailUrl($upload),
-                    'size'      => $upload->size,
+                    'size' => $upload->size,
                 ]
                 : [],
             $upload->custom_properties ?? [],
-            ['id' => $upload->id]
+            ['id' => $upload->id],
         );
     }
 
     private function getThumbnailUrl(SharpUploadModel $upload): ?string
     {
-        if (!$this->withThumbnails) {
+        if (! $this->withThumbnails) {
             return null;
         }
 

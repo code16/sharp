@@ -10,22 +10,22 @@ class Feature extends Model
 
     const TYPES = [
         'tech' => 'Technical',
-        'ser'  => 'Services',
-        'oth'  => 'Other',
+        'ser' => 'Services',
+        'oth' => 'Other',
     ];
 
     const SUBTYPES = [
         'tech' => [
-            'eng'  => 'Fast engine',
+            'eng' => 'Fast engine',
             'eng+' => 'Super Fast© engine',
-            'eco'  => 'Eco mode',
+            'eco' => 'Eco mode',
         ],
         'ser' => [
-            'bar'  => 'Bar aboard',
+            'bar' => 'Bar aboard',
             'golf' => 'Golf course',
         ],
         'oth' => [
-            'ac'  => 'Air conditioning',
+            'ac' => 'Air conditioning',
             'col' => 'Rainbow colors',
         ],
     ];

@@ -19,7 +19,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
                     SharpFormWysiwygField::UL, SharpFormWysiwygField::SEPARATOR, SharpFormWysiwygField::A,
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -31,7 +31,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['height' => 500],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -51,7 +51,7 @@ class SharpFormWysiwygFieldTest extends SharpTestCase
                 SharpFormWysiwygField::SEPARATOR,
                 SharpFormWysiwygField::UL,
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 

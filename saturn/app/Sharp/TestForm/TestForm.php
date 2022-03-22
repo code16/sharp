@@ -28,7 +28,7 @@ class TestForm extends SharpForm
         $this->addField(
             SharpFormTextField::make('text')
                 ->setLocalized()
-                ->setLabel('Text')
+                ->setLabel('Text'),
         )->addField(
             SharpFormAutocompleteField::make('autocomplete_local', 'local')
                 ->setLocalized()
@@ -36,14 +36,14 @@ class TestForm extends SharpForm
                 ->setLocalSearchKeys(['label'])
                 ->setListItemInlineTemplate('{{label}}')
                 ->setResultItemInlineTemplate('{{label}} ({{id}})')
-                ->setLocalValues($this->options(true))
+                ->setLocalValues($this->options(true)),
         )->addField(
             SharpFormAutocompleteField::make('autocomplete_remote', 'remote')
                 ->setLabel('Autocomplete remote')
                 ->setRemoteSearchAttribute('query')
                 ->setListItemInlineTemplate('{{name}}')
                 ->setResultItemInlineTemplate('{{name}} ({{num}})')
-                ->setRemoteEndpoint(url('/passengers'))
+                ->setRemoteEndpoint(url('/passengers')),
         )->addField(
             SharpFormAutocompleteListField::make('autocomplete_list')
                 ->setLabel('Autocomplete_list')
@@ -55,15 +55,15 @@ class TestForm extends SharpForm
                         ->setPlaceholder('test')
                         ->setListItemInlineTemplate('{{ name }}')
                         ->setResultItemInlineTemplate('{{name}} ({{num}})')
-                        ->setRemoteEndpoint(url('/passengers'))
-                )
+                        ->setRemoteEndpoint(url('/passengers')),
+                ),
         )->addField(
-            SharpFormCheckField::make('check', 'Check')
+            SharpFormCheckField::make('check', 'Check'),
         )->addField(
             SharpFormDateField::make('date')
                 ->setLabel('Date')
                 ->setDisplayFormat('YYYY-MM-DD HH:mm')
-                ->setHasTime(true)
+                ->setHasTime(true),
         )->addField(
             SharpFormGeolocationField::make('geolocation')
                 ->setLabel('Geolocation')
@@ -71,11 +71,11 @@ class TestForm extends SharpForm
 //                ->setDisplayUnitDecimalDegrees()
                 ->setDisplayUnitDegreesMinutesSeconds()
                 ->setGeocoding()
-                ->setInitialPosition(48.5838961, 7.742182599999978)
+                ->setInitialPosition(48.5838961, 7.742182599999978),
         )->addField(
             SharpFormHtmlField::make('html')
                 ->setLabel('Html')
-                ->setInlineTemplate('Your name is <strong>{{name}}</strong>')
+                ->setInlineTemplate('Your name is <strong>{{name}}</strong>'),
         )->addField(
             SharpFormListField::make('list')
                 ->setLabel('List')
@@ -87,17 +87,17 @@ class TestForm extends SharpForm
                     SharpFormDateField::make('date')
                         ->setLabel('Date')
                         ->setDisplayFormat('YYYY/MM/DD')
-                        ->setHasTime(false)
+                        ->setHasTime(false),
                 )->addItemField(
-                    SharpFormCheckField::make('check', 'check this')
+                    SharpFormCheckField::make('check', 'check this'),
                 )->addItemField(
                     SharpFormMarkdownField::make('markdown2')
                     ->setLocalized()
                     ->setLabel('Markdown')
                     ->setToolbar([
                         SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::A,
-                    ])
-                )
+                    ]),
+                ),
         )->addField(
             SharpFormMarkdownField::make('markdown')
                 ->setLocalized()
@@ -119,49 +119,49 @@ class TestForm extends SharpForm
                 ->setCropRatio('1:1')
                 ->setHeight(350)
                 ->setStorageDisk('local')
-                ->setStorageBasePath('data')
+                ->setStorageBasePath('data'),
         )->addField(
             SharpFormNumberField::make('number')
                 ->setLabel('Number')
             ->setMin(1)
-            ->setMax(100)
+            ->setMax(100),
         )->addField(
             SharpFormSelectField::make('select_dropdown', $this->options(true))
                 ->setLocalized()
                 ->setLabel('Select dropdown')
-                ->setDisplayAsDropdown()
+                ->setDisplayAsDropdown(),
         )->addField(
             SharpFormSelectField::make('select_list', $this->options(true))
                 ->setLocalized()
                 ->setLabel('Select list')
-                ->setDisplayAsList()
+                ->setDisplayAsList(),
         )->addField(
             SharpFormSelectField::make('select_list_multiple', $this->options(true))
                 ->setLocalized()
                 ->setLabel('Select list multiple')
                 ->setMultiple()
                 ->setDisplayAsList()
-                ->setMaxSelected(2)
+                ->setMaxSelected(2),
         )->addField(
             SharpFormTagsField::make('tags', $this->options(true))
                 ->setLocalized()
                 ->setLabel('Tags')
                 ->setCreatable(true)
                 ->setCreateAttribute('label')
-                ->setMaxTagCount(4)
+                ->setMaxTagCount(4),
         )->addField(
             SharpFormTextareaField::make('textarea')
                 ->setLocalized()
                 ->setLabel('Textarea')
                 ->setMaxLength(50)
-                ->setRowCount(4)
+                ->setRowCount(4),
         )->addField(
             SharpFormUploadField::make('upload')
                 ->setLabel('Upload')
                 ->setFileFilterImages()
                 ->setCropRatio('1:1')
                 ->setStorageDisk('local')
-                ->setStorageBasePath('data')
+                ->setStorageBasePath('data'),
         )->addField(
             SharpFormWysiwygField::make('wysiwyg')
                 ->setLocalized()
@@ -180,7 +180,7 @@ class TestForm extends SharpForm
                     SharpFormWysiwygField::UNDO,
                     SharpFormWysiwygField::REDO,
                 ])
-                ->setHeight(150)
+                ->setHeight(150),
         );
     }
 
@@ -241,19 +241,19 @@ class TestForm extends SharpForm
                 'fr' => $faker->words(3, true),
                 'en' => $faker->words(3, true),
             ],
-            'autocomplete_local'  => 1,
+            'autocomplete_local' => 1,
             'autocomplete_remote' => null,
-            'autocomplete_list'   => null,
-            'check'               => true,
-            'date'                => $faker->date('Y-m-d H:i'),
-            'html'                => [
+            'autocomplete_list' => null,
+            'check' => true,
+            'date' => $faker->date('Y-m-d H:i'),
+            'html' => [
                 'name' => $faker->name,
             ],
             'markdown' => [
                 'fr' => 'Du **texte** avec *style*',
                 'en' => 'Some **text** with *style*',
             ],
-            'number'   => $faker->numberBetween(1, 100),
+            'number' => $faker->numberBetween(1, 100),
             'textarea' => [
                 'fr' => $faker->paragraph(3),
                 'en' => $faker->paragraph(3),
@@ -286,7 +286,7 @@ class TestForm extends SharpForm
 
     protected function options(bool $localized = false): array
     {
-        if (!$localized) {
+        if (! $localized) {
             return [
                 '1' => 'Option one',
                 '2' => 'Option two',

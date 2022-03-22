@@ -49,7 +49,7 @@ class CurrentSharpRequest
     public function getUrlForBreadcrumbItem(BreadcrumbItem $item): string
     {
         $breadcrumb = $this->breadcrumb();
-        while ($breadcrumb->count() && !$breadcrumb->last()->is($item)) {
+        while ($breadcrumb->count() && ! $breadcrumb->last()->is($item)) {
             $breadcrumb = $breadcrumb->slice(0, -1);
         }
 
@@ -66,10 +66,10 @@ class CurrentSharpRequest
                     return sprintf(
                         '%s/%s',
                         $item->type,
-                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
+                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
                     );
                 })
-                ->implode('/')
+                ->implode('/'),
         );
     }
 
@@ -130,7 +130,7 @@ class CurrentSharpRequest
         $current = $this->getCurrentBreadcrumbItem();
 
         return $current
-            ? $current->isForm() && !$current->isSingleForm() && $current->instanceId() === null
+            ? $current->isForm() && ! $current->isSingleForm() && $current->instanceId() === null
             : false;
     }
 
@@ -158,13 +158,12 @@ class CurrentSharpRequest
     }
 
     /**
-     * @param string $filterName
-     *
+     * @param  string  $filterName
      * @return array|string|null
      */
     public function globalFilterFor(string $filterName)
     {
-        if (!$handlerClass = config("sharp.global_filters.$filterName")) {
+        if (! $handlerClass = config("sharp.global_filters.$filterName")) {
             return null;
         }
 
@@ -183,7 +182,7 @@ class CurrentSharpRequest
 
         if (count($segments) !== 0) {
             $this->breadcrumb->add(
-                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++)
+                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
             );
 
             $segments = $segments->slice(2)->values();
@@ -193,7 +192,7 @@ class CurrentSharpRequest
                 $key = $instance = null;
                 $segments
                     ->takeWhile(function (string $segment) {
-                        return !in_array($segment, ['s-show', 's-form']);
+                        return ! in_array($segment, ['s-show', 's-form']);
                     })
                     ->values()
                     ->each(function (string $segment, $index) use (&$key, &$instance) {
@@ -209,7 +208,7 @@ class CurrentSharpRequest
                 $this->breadcrumb->add(
                     (new BreadcrumbItem($type, $key))
                         ->setDepth($depth++)
-                        ->setInstance($instance)
+                        ->setInstance($instance),
                 );
             }
         }

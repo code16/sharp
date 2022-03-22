@@ -23,7 +23,7 @@ abstract class SharpShow
 
     final public function showLayout(): array
     {
-        if (!$this->layoutBuilt) {
+        if (! $this->layoutBuilt) {
             $this->buildShowLayout();
             $this->layoutBuilt = true;
         }
@@ -38,8 +38,7 @@ abstract class SharpShow
     /**
      * Return the entity instance, as an array.
      *
-     * @param mixed $id
-     *
+     * @param  mixed  $id
      * @return array
      */
     final public function instance($id): array
@@ -50,8 +49,8 @@ abstract class SharpShow
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                    $this->getDataKeys()
-                )
+                    $this->getDataKeys(),
+                ),
             )
             ->all();
     }
@@ -59,9 +58,8 @@ abstract class SharpShow
     /**
      * Return the show config values (commands and state).
      *
-     * @param mixed $instanceId
-     * @param array $config
-     *
+     * @param  mixed  $instanceId
+     * @param  array  $config
      * @return array
      */
     public function showConfig($instanceId, $config = []): array
@@ -134,8 +132,7 @@ abstract class SharpShow
     /**
      * Retrieve a Model for the form and pack all its data as JSON.
      *
-     * @param mixed $id
-     *
+     * @param  mixed  $id
      * @return array
      */
     abstract public function find($id): array;

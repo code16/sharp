@@ -16,16 +16,16 @@ class SharpShowListFieldTest extends SharpTestCase
             ->setLabel('test');
 
         $this->assertEquals([
-            'key'          => 'listField',
-            'type'         => 'list',
-            'label'        => 'test',
+            'key' => 'listField',
+            'type' => 'list',
+            'label' => 'test',
             'emptyVisible' => false,
-            'itemFields'   => [
+            'itemFields' => [
                 'textField' => [
-                    'key'          => 'textField',
+                    'key' => 'textField',
                     'emptyVisible' => false,
-                    'html'         => true,
-                    'type'         => 'text',
+                    'html' => true,
+                    'type' => 'text',
                 ],
             ],
         ], $field->toArray());

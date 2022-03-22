@@ -22,7 +22,7 @@ class FormLayoutFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['key' => 'name', 'size' => 6],
-            $formTab->toArray()
+            $formTab->toArray(),
         );
     }
 
@@ -33,7 +33,7 @@ class FormLayoutFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['key' => 'name', 'size' => 6, 'sizeXS' => 8],
-            $formTab->toArray()
+            $formTab->toArray(),
         );
     }
 
@@ -46,7 +46,7 @@ class FormLayoutFieldTest extends SharpTestCase
         });
 
         $this->assertArraySubset([
-            'key'  => 'name',
+            'key' => 'name',
             'item' => [[
                 [
                     'key' => 'age',

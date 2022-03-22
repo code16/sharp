@@ -12,12 +12,11 @@ class DashboardCommandController extends ApiController
     use HandleCommandReturn;
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
+     * @param  string  $entityKey
+     * @param  string  $commandKey
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show($entityKey, $commandKey)
     {
@@ -31,12 +30,11 @@ class DashboardCommandController extends ApiController
     }
 
     /**
-     * @param string $entityKey
-     * @param string $commandKey
+     * @param  string  $entityKey
+     * @param  string  $commandKey
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update($entityKey, $commandKey)
     {
@@ -48,24 +46,23 @@ class DashboardCommandController extends ApiController
             $dashboard,
             $commandHandler->execute(
                 DashboardQueryParams::create()->fillWithRequest('query'),
-                $commandHandler->formatRequestData((array) request('data'))
-            )
+                $commandHandler->formatRequestData((array) request('data')),
+            ),
         );
     }
 
     /**
-     * @param SharpDashboard $dashboard
-     * @param string         $commandKey
+     * @param  SharpDashboard  $dashboard
+     * @param  string  $commandKey
+     * @return \Code16\Sharp\Dashboard\Commands\DashboardCommand|null
      *
      * @throws \Code16\Sharp\Exceptions\Auth\SharpAuthorizationException
-     *
-     * @return \Code16\Sharp\Dashboard\Commands\DashboardCommand|null
      */
     protected function getCommandHandler(SharpDashboard $dashboard, $commandKey)
     {
         $commandHandler = $dashboard->dashboardCommandHandler($commandKey);
 
-        if (!$commandHandler->authorize()) {
+        if (! $commandHandler->authorize()) {
             throw new SharpAuthorizationException();
         }
 

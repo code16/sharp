@@ -18,7 +18,7 @@ class LinkToShowPage extends SharpLinkTo
     {
         return route('code16.sharp.list.subpage', [
             'entityKey' => $this->entityKey,
-            'uri'       => $this->generateUri(),
+            'uri' => $this->generateUri(),
         ]);
     }
 

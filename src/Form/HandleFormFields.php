@@ -37,8 +37,7 @@ trait HandleFormFields
     /**
      * Find a field by its key.
      *
-     * @param string $key
-     *
+     * @param  string  $key
      * @return SharpFormField|SharpShowField
      */
     public function findFieldByKey(string $key)
@@ -48,7 +47,7 @@ trait HandleFormFields
         $fields = collect($this->fields);
 
         if (strpos($key, '.') !== false) {
-            list($key, $itemKey) = explode('.', $key);
+            [$key, $itemKey] = explode('.', $key);
             $listField = $fields->where('key', $key)->first();
 
             return $listField->findItemFormFieldByKey($itemKey);
@@ -60,8 +59,7 @@ trait HandleFormFields
     /**
      * Add a field.
      *
-     * @param SharpFormField|SharpShowField $field
-     *
+     * @param  SharpFormField|SharpShowField  $field
      * @return $this
      */
     protected function addField($field): self
@@ -75,10 +73,9 @@ trait HandleFormFields
     /**
      * Applies Field Formatters on $data.
      *
-     * @param array       $data
-     * @param string|null $instanceId
-     * @param bool        $handleDelayedData
-     *
+     * @param  array  $data
+     * @param  string|null  $instanceId
+     * @param  bool  $handleDelayedData
      * @return array
      */
     public function formatRequestData(array $data, $instanceId = null, bool $handleDelayedData = false): array
@@ -92,7 +89,7 @@ trait HandleFormFields
             })
 
             ->map(function ($value, $key) use ($handleDelayedData, $delayedData, $instanceId) {
-                if (!$field = $this->findFieldByKey($key)) {
+                if (! $field = $this->findFieldByKey($key)) {
                     return $value;
                 }
 
@@ -118,7 +115,7 @@ trait HandleFormFields
             return [
                 $formattedData
                     ->filter(function ($value, $key) use ($delayedData) {
-                        return !$delayedData->has($key);
+                        return ! $delayedData->has($key);
                     })
                     ->all(),
                 $delayedData->all(),
@@ -133,7 +130,7 @@ trait HandleFormFields
      */
     private function checkFormIsBuilt(): void
     {
-        if (!$this->formBuilt) {
+        if (! $this->formBuilt) {
             $this->buildFormFields();
             $this->formBuilt = true;
         }

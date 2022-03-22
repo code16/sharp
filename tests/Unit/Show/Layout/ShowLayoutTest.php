@@ -12,7 +12,8 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_section()
     {
-        $show = new class() extends ShowLayoutTestShow {
+        $show = new class() extends ShowLayoutTestShow
+        {
             public function buildShowLayout(): void
             {
                 $this->addSection('label');
@@ -25,7 +26,8 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_column_to_a_section()
     {
-        $show = new class() extends ShowLayoutTestShow {
+        $show = new class() extends ShowLayoutTestShow
+        {
             public function buildShowLayout(): void
             {
                 $this->addSection('label', function (ShowLayoutSection $section) {
@@ -41,7 +43,8 @@ class ShowLayoutTest extends SharpTestCase
     /** @test */
     public function we_can_add_a_field_to_a_column()
     {
-        $show = new class() extends ShowLayoutTestShow {
+        $show = new class() extends ShowLayoutTestShow
+        {
             public function buildShowLayout(): void
             {
                 $this->addSection('label', function (ShowLayoutSection $section) {
@@ -55,18 +58,19 @@ class ShowLayoutTest extends SharpTestCase
         $this->assertCount(1, $show->showLayout()['sections'][0]['columns'][0]['fields']);
         $this->assertEqualsCanonicalizing(
             [
-                'key'    => 'name',
-                'size'   => 12,
+                'key' => 'name',
+                'size' => 12,
                 'sizeXS' => 12,
             ],
-            $show->showLayout()['sections'][0]['columns'][0]['fields'][0][0]
+            $show->showLayout()['sections'][0]['columns'][0]['fields'][0][0],
         );
     }
 
     /** @test */
     public function we_can_add_a_field_with_layout_to_a_column()
     {
-        $show = new class() extends ShowLayoutTestShow {
+        $show = new class() extends ShowLayoutTestShow
+        {
             public function buildShowLayout(): void
             {
                 $this->addSection('label', function (ShowLayoutSection $section) {
@@ -82,20 +86,20 @@ class ShowLayoutTest extends SharpTestCase
         $this->assertCount(1, $show->showLayout()['sections'][0]['columns'][0]['fields']);
         $this->assertEqualsCanonicalizing(
             [
-                'key'    => 'list',
-                'size'   => 12,
+                'key' => 'list',
+                'size' => 12,
                 'sizeXS' => 12,
-                'item'   => [
+                'item' => [
                     [
                         [
-                            'key'    => 'item',
-                            'size'   => 12,
+                            'key' => 'item',
+                            'size' => 12,
                             'sizeXS' => 12,
                         ],
                     ],
                 ],
             ],
-            $show->showLayout()['sections'][0]['columns'][0]['fields'][0][0]
+            $show->showLayout()['sections'][0]['columns'][0]['fields'][0][0],
         );
     }
 }

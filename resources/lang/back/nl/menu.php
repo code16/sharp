@@ -2,7 +2,7 @@
 
 return [
 
-    'dashboard'            => 'Dashboard',
+    'dashboard' => 'Dashboard',
     'no-dashboard-message' => 'Welkom bij Sharp!',
 
 ];

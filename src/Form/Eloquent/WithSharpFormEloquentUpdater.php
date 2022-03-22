@@ -11,15 +11,14 @@ trait WithSharpFormEloquentUpdater
     protected array $ignoredAttributes = [];
 
     /**
-     * @param string|array $attribute
-     *
+     * @param  string|array  $attribute
      * @return $this
      */
     public function ignore($attribute): self
     {
         $this->ignoredAttributes = array_merge(
             $this->ignoredAttributes,
-            (array) $attribute
+            (array) $attribute,
         );
 
         return $this;
@@ -28,9 +27,8 @@ trait WithSharpFormEloquentUpdater
     /**
      * Update an Eloquent Model with $data (which is already Form Field formatted).
      *
-     * @param Model $instance
-     * @param array $data
-     *
+     * @param  Model  $instance
+     * @param  array  $data
      * @return Model
      */
     public function save(Model $instance, array $data): Model
@@ -71,7 +69,7 @@ trait WithSharpFormEloquentUpdater
             })
             ->map(function ($listField) {
                 return [
-                    'key'            => $listField->key(),
+                    'key' => $listField->key(),
                     'orderAttribute' => $listField->orderAttribute(),
                 ];
             })

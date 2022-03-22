@@ -15,13 +15,13 @@ class SharpShowTextFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'          => 'textfield',
-                'type'         => 'text',
+                'key' => 'textfield',
+                'type' => 'text',
                 'emptyVisible' => false,
-                'html'         => true,
-                'label'        => 'Label',
+                'html' => true,
+                'label' => 'Label',
             ],
-            $field->toArray()
+            $field->toArray(),
         );
     }
 
@@ -33,13 +33,13 @@ class SharpShowTextFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'                 => 'textfield',
-                'type'                => 'text',
-                'emptyVisible'        => false,
-                'html'                => true,
+                'key' => 'textfield',
+                'type' => 'text',
+                'emptyVisible' => false,
+                'html' => true,
                 'collapseToWordCount' => 15,
             ],
-            $field->toArray()
+            $field->toArray(),
         );
     }
 
@@ -51,12 +51,12 @@ class SharpShowTextFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'          => 'textfield',
-                'type'         => 'text',
+                'key' => 'textfield',
+                'type' => 'text',
                 'emptyVisible' => true,
-                'html'         => true,
+                'html' => true,
             ],
-            $field->toArray()
+            $field->toArray(),
         );
     }
 
@@ -68,12 +68,12 @@ class SharpShowTextFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'          => 'textfield',
-                'type'         => 'text',
+                'key' => 'textfield',
+                'type' => 'text',
                 'emptyVisible' => false,
-                'html'         => false,
+                'html' => false,
             ],
-            $field->toArray()
+            $field->toArray(),
         );
     }
 
@@ -87,12 +87,12 @@ class SharpShowTextFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'          => 'textfield',
-                'type'         => 'text',
+                'key' => 'textfield',
+                'type' => 'text',
                 'emptyVisible' => false,
-                'html'         => true,
+                'html' => true,
             ],
-            $field->toArray()
+            $field->toArray(),
         );
     }
 }

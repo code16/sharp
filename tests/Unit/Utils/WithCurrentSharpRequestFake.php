@@ -12,7 +12,8 @@ trait WithCurrentSharpRequestFake
         app()->bind(
             CurrentSharpRequest::class,
             function () use ($url) {
-                return new class($url) extends CurrentSharpRequest {
+                return new class($url) extends CurrentSharpRequest
+                {
                     public string $url;
 
                     public function __construct(string $url)
@@ -29,7 +30,7 @@ trait WithCurrentSharpRequestFake
                             ->values();
                     }
                 };
-            }
+            },
         );
     }
 }

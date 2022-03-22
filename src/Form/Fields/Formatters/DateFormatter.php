@@ -9,9 +9,8 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 class DateFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -24,10 +23,9 @@ class DateFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
-     *
      * @return string
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
@@ -40,17 +38,16 @@ class DateFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormDateField $field
-     *
+     * @param  SharpFormDateField  $field
      * @return string
      */
     protected function getFormat($field)
     {
-        if (!$field->hasTime()) {
+        if (! $field->hasTime()) {
             return 'Y-m-d';
         }
 
-        if (!$field->hasDate()) {
+        if (! $field->hasDate()) {
             return 'H:i:s';
         }
 

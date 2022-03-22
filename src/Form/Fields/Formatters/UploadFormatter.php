@@ -24,9 +24,8 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -38,15 +37,14 @@ class UploadFormatter extends SharpFieldFormatter
      * Handle file operations on newly uploaded files
      * + image transformations (crop, rotations) on transformed ones.
      *
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
+     * @return array|null
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws SharpFormFieldFormattingMustBeDelayedException
-     *
-     * @return array|null
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
@@ -59,13 +57,13 @@ class UploadFormatter extends SharpFieldFormatter
                 // > By default the package will not throw any errors and just operate silently.
                 $optimizerChain->optimize(
                     $this->filesystem->disk('local')->path(
-                        config('sharp.uploads.tmp_dir', 'tmp').'/'.$value['name']
-                    )
+                        config('sharp.uploads.tmp_dir', 'tmp').'/'.$value['name'],
+                    ),
                 );
             }
 
             $fileContent = $this->filesystem->disk('local')->get(
-                config('sharp.uploads.tmp_dir', 'tmp').'/'.$value['name']
+                config('sharp.uploads.tmp_dir', 'tmp').'/'.$value['name'],
             );
 
             $storedFilePath = $this->getStoragePath($value['name'], $field);
@@ -78,10 +76,10 @@ class UploadFormatter extends SharpFieldFormatter
             $storage->put($storedFilePath, $fileContent);
 
             return [
-                'file_name'   => $storedFilePath,
-                'size'        => $storage->size($storedFilePath),
-                'mime_type'   => $storage->mimeType($storedFilePath),
-                'disk'        => $field->storageDisk(),
+                'file_name' => $storedFilePath,
+                'size' => $storage->size($storedFilePath),
+                'mime_type' => $storage->mimeType($storedFilePath),
+                'disk' => $field->storageDisk(),
                 'transformed' => $transformed,
             ];
         }
@@ -89,12 +87,12 @@ class UploadFormatter extends SharpFieldFormatter
         if ($this->isTransformed($value, $field)) {
             // Just transform image, without updating value in DB
             $fileContent = $storage->get(
-                $value['name']
+                $value['name'],
             );
 
             $storage->put(
                 $value['name'],
-                $this->handleImageTransformations($fileContent, $value['cropData'])
+                $this->handleImageTransformations($fileContent, $value['cropData']),
             );
 
             return [
@@ -107,8 +105,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param array $value
-     *
+     * @param  array  $value
      * @return bool
      */
     protected function isUploaded($value): bool
@@ -117,9 +114,8 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param array                    $value
-     * @param SharpFormFieldWithUpload $field
-     *
+     * @param  array  $value
+     * @param  SharpFormFieldWithUpload  $field
      * @return bool
      */
     protected function isTransformed($value, $field): bool
@@ -128,19 +124,18 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param string                   $fileName
-     * @param SharpFormFieldWithUpload $field
+     * @param  string  $fileName
+     * @param  SharpFormFieldWithUpload  $field
+     * @return string
      *
      * @throws SharpFormFieldFormattingMustBeDelayedException
-     *
-     * @return string
      */
     protected function getStoragePath(string $fileName, $field): string
     {
         $basePath = $field->storageBasePath();
 
         if (strpos($basePath, '{id}') !== false) {
-            if (!$this->instanceId) {
+            if (! $this->instanceId) {
                 // Well, we need the instance id for the storage path, and we are
                 // in a store() case. Let's delay this formatter, it will be
                 // called again after a first save() on the model.
@@ -153,7 +148,7 @@ class UploadFormatter extends SharpFieldFormatter
         $fileName = $this->fileUtil->findAvailableName(
             $fileName,
             $basePath,
-            $field->storageDisk()
+            $field->storageDisk(),
         );
 
         return "{$basePath}/{$fileName}";
@@ -161,11 +156,10 @@ class UploadFormatter extends SharpFieldFormatter
 
     /**
      * @param $fileContent
-     * @param array $cropData
+     * @param  array  $cropData
+     * @return \Intervention\Image\Image
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     *
-     * @return \Intervention\Image\Image
      */
     protected function handleImageTransformations($fileContent, array $cropData)
     {
@@ -179,7 +173,7 @@ class UploadFormatter extends SharpFieldFormatter
             intval(round($img->width() * $cropData['width'])),
             intval(round($img->height() * $cropData['height'])),
             intval(round($img->width() * $cropData['x'])),
-            intval(round($img->height() * $cropData['y']))
+            intval(round($img->height() * $cropData['y'])),
         );
 
         return $img->encode();

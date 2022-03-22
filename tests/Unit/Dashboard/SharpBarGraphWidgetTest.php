@@ -14,7 +14,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['display' => 'bar'],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -25,7 +25,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['ratioX' => 16, 'ratioY' => 9],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -37,7 +37,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['ratioX' => 2, 'ratioY' => 3],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -49,7 +49,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['minimal' => true],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -61,7 +61,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['showLegend' => false],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -73,7 +73,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['height' => 150],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -85,7 +85,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['dateLabels' => true],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 
@@ -101,7 +101,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
                     'horizontal' => true,
                 ],
             ],
-            $widget->toArray()
+            $widget->toArray(),
         );
     }
 }

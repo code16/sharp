@@ -32,9 +32,8 @@ class SharpFormAutocompleteField extends SharpFormField
     protected int $debounceDelay = 300;
 
     /**
-     * @param string $key
-     * @param string $mode "local" or "remote"
-     *
+     * @param  string  $key
+     * @param  string  $mode  "local" or "remote"
      * @return static
      */
     public static function make(string $key, string $mode): self
@@ -46,8 +45,7 @@ class SharpFormAutocompleteField extends SharpFormField
     }
 
     /**
-     * @param array|Collection $localValues
-     *
+     * @param  array|Collection  $localValues
      * @return $this
      */
     public function setLocalValues($localValues): self
@@ -86,12 +84,12 @@ class SharpFormAutocompleteField extends SharpFormField
         $this->dynamicAttributes = [
             array_merge(
                 [
-                    'name'  => 'remoteEndpoint',
-                    'type'  => 'template',
+                    'name' => 'remoteEndpoint',
+                    'type' => 'template',
                 ],
                 ($defaultEndpoint ?? false)
                     ? ['default' => $defaultEndpoint]
-                    : []
+                    : [],
             ),
         ];
 
@@ -207,18 +205,18 @@ class SharpFormAutocompleteField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'mode'                  => 'required|in:local,remote',
-            'itemIdAttribute'       => 'required',
-            'listItemTemplate'      => 'required',
-            'resultItemTemplate'    => 'required',
-            'searchMinChars'        => 'required|integer',
-            'localValues'           => 'array',
-            'templateData'          => 'nullable|array',
-            'searchKeys'            => 'required_if:mode,local|array',
-            'remoteEndpoint'        => 'required_if:mode,remote',
-            'remoteMethod'          => 'required_if:mode,remote|in:GET,POST',
+            'mode' => 'required|in:local,remote',
+            'itemIdAttribute' => 'required',
+            'listItemTemplate' => 'required',
+            'resultItemTemplate' => 'required',
+            'searchMinChars' => 'required|integer',
+            'localValues' => 'array',
+            'templateData' => 'nullable|array',
+            'searchKeys' => 'required_if:mode,local|array',
+            'remoteEndpoint' => 'required_if:mode,remote',
+            'remoteMethod' => 'required_if:mode,remote|in:GET,POST',
             'remoteSearchAttribute' => 'required_if:mode,remote',
-            'debounceDelay'         => 'required|integer',
+            'debounceDelay' => 'required|integer',
         ];
     }
 
@@ -227,28 +225,28 @@ class SharpFormAutocompleteField extends SharpFormField
         return parent::buildArray(
             array_merge(
                 [
-                    'mode'        => $this->mode,
+                    'mode' => $this->mode,
                     'placeholder' => $this->placeholder,
                     'localValues' => $this->isLocal() && $this->dynamicAttributes
                         ? self::formatDynamicOptions($this->localValues, count($this->dynamicAttributes[0]['path']))
                         : ($this->isLocal() ? self::formatOptions($this->localValues, $this->itemIdAttribute) : []),
-                    'itemIdAttribute'       => $this->itemIdAttribute,
-                    'searchKeys'            => $this->localSearchKeys,
-                    'remoteEndpoint'        => $this->remoteEndpoint,
-                    'dataWrapper'           => $this->dataWrapper,
-                    'remoteMethod'          => $this->remoteMethod,
+                    'itemIdAttribute' => $this->itemIdAttribute,
+                    'searchKeys' => $this->localSearchKeys,
+                    'remoteEndpoint' => $this->remoteEndpoint,
+                    'dataWrapper' => $this->dataWrapper,
+                    'remoteMethod' => $this->remoteMethod,
                     'remoteSearchAttribute' => $this->remoteSearchAttribute,
-                    'debounceDelay'         => $this->debounceDelay,
-                    'templateData'          => $this->additionalTemplateData,
-                    'listItemTemplate'      => $this->template('list'),
-                    'resultItemTemplate'    => $this->template('result'),
-                    'searchMinChars'        => $this->searchMinChars,
-                    'localized'             => $this->localized,
+                    'debounceDelay' => $this->debounceDelay,
+                    'templateData' => $this->additionalTemplateData,
+                    'listItemTemplate' => $this->template('list'),
+                    'resultItemTemplate' => $this->template('result'),
+                    'searchMinChars' => $this->searchMinChars,
+                    'localized' => $this->localized,
                 ],
                 $this->dynamicAttributes
                     ? ['dynamicAttributes' => $this->dynamicAttributes]
-                    : []
-            )
+                    : [],
+            ),
         );
     }
 }

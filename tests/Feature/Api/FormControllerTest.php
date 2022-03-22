@@ -86,11 +86,11 @@ class FormControllerTest extends BaseApiTest
             ->assertJson([
                 'layout' => [
                     'tabbed' => true,
-                    'tabs'   => [[
-                        'title'   => 'one',
+                    'tabs' => [[
+                        'title' => 'one',
                         'columns' => [
                             [
-                                'size'   => 6,
+                                'size' => 6,
                                 'fields' => [
                                     [
                                         ['key' => 'name'],
@@ -207,10 +207,11 @@ class FormControllerTest extends BaseApiTest
         app()->bind(
             PersonSharpForm::class,
             function () {
-                return new class() extends PersonSharpForm {
+                return new class() extends PersonSharpForm
+                {
                     protected bool $displayShowPageAfterCreation = true;
                 };
-            }
+            },
         );
 
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person');
@@ -303,7 +304,7 @@ class FormControllerTest extends BaseApiTest
         if ($singleShow) {
             $this->app['config']->set(
                 'sharp.entities.person.form',
-                PersonSharpSingleForm::class
+                PersonSharpSingleForm::class,
             );
         }
     }

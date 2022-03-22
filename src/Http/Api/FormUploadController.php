@@ -10,7 +10,7 @@ class FormUploadController extends Controller
 {
     public function store(FileUtil $fileUtil)
     {
-        if (!$file = request()->file('file')) {
+        if (! $file = request()->file('file')) {
             throw new FileNotFoundException();
         }
 
@@ -18,7 +18,7 @@ class FormUploadController extends Controller
 
         $filename = $fileUtil->findAvailableName(
             $file->getClientOriginalName(),
-            $baseDir
+            $baseDir,
         );
 
         $file->storeAs($baseDir, $filename, 'local');

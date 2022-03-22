@@ -88,10 +88,10 @@ class GlobalFiltersTest extends BaseApiTest
             ->assertJson([
                 'filters' => [
                     [
-                        'key'      => 'test',
+                        'key' => 'test',
                         'multiple' => false,
                         'required' => true,
-                        'default'  => 'default',
+                        'default' => 'default',
                     ],
                 ],
             ]);

@@ -50,9 +50,8 @@ class EntityListQueryParams
     }
 
     /**
-     * @param string $defaultSortedBy
-     * @param string $defaultSortedDir
-     *
+     * @param  string  $defaultSortedBy
+     * @param  string  $defaultSortedDir
      * @return $this
      */
     public function setDefaultSort($defaultSortedBy, $defaultSortedDir)
@@ -64,8 +63,7 @@ class EntityListQueryParams
     }
 
     /**
-     * @param string|null $queryPrefix
-     *
+     * @param  string|null  $queryPrefix
      * @return $this
      */
     public function fillWithRequest(string $queryPrefix = null)
@@ -86,8 +84,7 @@ class EntityListQueryParams
     }
 
     /**
-     * @param array $ids
-     *
+     * @param  array  $ids
      * @return static
      */
     public static function createFromArrayOfIds(array $ids)
@@ -123,11 +120,10 @@ class EntityListQueryParams
     }
 
     /**
-     * @param bool   $isLike
-     * @param bool   $handleStar
-     * @param string $noStarTermPrefix
-     * @param string $noStarTermSuffix
-     *
+     * @param  bool  $isLike
+     * @param  bool  $handleStar
+     * @param  string  $noStarTermPrefix
+     * @param  string  $noStarTermSuffix
      * @return array
      */
     public function searchWords($isLike = true, $handleStar = true, $noStarTermPrefix = '%', $noStarTermSuffix = '%')
@@ -136,7 +132,7 @@ class EntityListQueryParams
 
         foreach (explode(' ', $this->search) as $term) {
             $term = trim($term);
-            if (!$term) {
+            if (! $term) {
                 continue;
             }
 

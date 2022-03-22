@@ -19,7 +19,8 @@ class PersonSharpShow extends SharpShow
     public function buildShowConfig(): void
     {
         $this
-            ->addInstanceCommand('test_command', new class() extends InstanceCommand {
+            ->addInstanceCommand('test_command', new class() extends InstanceCommand
+            {
                 public function label(): string
                 {
                     return 'Label';
@@ -33,8 +34,9 @@ class PersonSharpShow extends SharpShow
                 {
                     return $instanceId < 10;
                 }
-            })
-            ->setEntityState('state', new class() extends EntityState {
+            }, )
+            ->setEntityState('state', new class() extends EntityState
+            {
                 protected function buildStates(): void
                 {
                     $this->addState('active', 'Label', 'blue');
@@ -48,7 +50,7 @@ class PersonSharpShow extends SharpShow
                 {
                     return $instanceId < 10;
                 }
-            });
+            }, );
     }
 
     public function buildShowLayout(): void

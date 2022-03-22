@@ -21,7 +21,7 @@ class HtmlFormatterTest extends SharpTestCase
     public function we_can_format_value_from_front()
     {
         $this->assertNull(
-            (new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random())
+            (new HtmlFormatter())->fromFront(SharpFormHtmlField::make('html'), 'attribute', Str::random()),
         );
     }
 }

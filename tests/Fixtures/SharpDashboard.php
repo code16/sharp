@@ -14,12 +14,12 @@ class SharpDashboard extends AbstractSharpDashboard
     protected function buildWidgets(): void
     {
         $this->addWidget(
-            SharpBarGraphWidget::make('bars')
+            SharpBarGraphWidget::make('bars'),
         )->addWidget(
             SharpPanelWidget::make('panel')
-                ->setInlineTemplate('<b>test</b>')
+                ->setInlineTemplate('<b>test</b>'),
         )->addWidget(
-            SharpBarGraphWidget::make('bars2')
+            SharpBarGraphWidget::make('bars2'),
         );
     }
 
@@ -37,14 +37,14 @@ class SharpDashboard extends AbstractSharpDashboard
         $this->addGraphDataSet(
             'bars1',
             SharpGraphWidgetDataSet::make(['a' => 10, 'b' => 20, 'c' => 30])
-                ->setLabel('Bars 1')
+                ->setLabel('Bars 1'),
         )->addGraphDataSet(
             'bars2',
             SharpGraphWidgetDataSet::make(['a' => 10, 'b' => 20, 'c' => 30])
-                ->setLabel('Bars 2')
+                ->setLabel('Bars 2'),
         )->setPanelData(
             'panel',
-            ['name' => 'John Wayne']
+            ['name' => 'John Wayne'],
         );
     }
 }

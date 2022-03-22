@@ -20,7 +20,7 @@ class DataLocalizationTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
-            DataLocalizationTestForm::class
+            DataLocalizationTestForm::class,
         );
 
         $this->getJson('/sharp/api/form/person')
@@ -35,7 +35,7 @@ class DataLocalizationTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
-            PersonSharpForm::class
+            PersonSharpForm::class,
         );
 
         $this->getJson('/sharp/api/form/person')
@@ -50,7 +50,7 @@ class DataLocalizationTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
-            DataLocalizationWithoutLocalizedFieldTestForm::class
+            DataLocalizationWithoutLocalizedFieldTestForm::class,
         );
 
         $this->getJson('/sharp/api/form/person')
@@ -65,7 +65,7 @@ class DataLocalizationTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.form',
-            DataLocalizationWithLocalizedFormListTestForm::class
+            DataLocalizationWithLocalizedFormListTestForm::class,
         );
 
         $this->getJson('/sharp/api/form/person')
@@ -104,8 +104,8 @@ class DataLocalizationWithLocalizedFormListTestForm extends PersonSharpForm
         $this->addField(
             SharpFormListField::make('name')
                 ->addItemField(
-                    SharpFormTextField::make('name')->setLocalized()
-                )
+                    SharpFormTextField::make('name')->setLocalized(),
+                ),
         );
     }
 

@@ -9,8 +9,7 @@ interface SharpAttributeTransformer
      *
      * @param $value
      * @param $instance
-     * @param string $attribute
-     *
+     * @param  string  $attribute
      * @return mixed
      */
     public function apply($value, $instance = null, $attribute = null);

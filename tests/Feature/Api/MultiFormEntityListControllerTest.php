@@ -25,11 +25,11 @@ class MultiFormEntityListControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(['forms' => [
                 'big' => [
-                    'label'     => 'Big person',
+                    'label' => 'Big person',
                     'instances' => [2],
                 ],
                 'small' => [
-                    'label'     => 'Small person',
+                    'label' => 'Small person',
                     'instances' => [1],
                 ],
             ]]);
@@ -39,27 +39,27 @@ class MultiFormEntityListControllerTest extends BaseApiTest
     {
         $this->app['config']->set(
             'sharp.entities.person.list',
-            PersonWithMultiformSharpEntityList::class
+            PersonWithMultiformSharpEntityList::class,
         );
 
         $this->app['config']->set(
             'sharp.entities.person.forms',
             [
                 'big' => [
-                    'form'  => PersonSharpForm::class,
+                    'form' => PersonSharpForm::class,
                     'label' => 'Big person',
                 ], 'small' => [
-                    'form'  => PersonSharpForm::class,
+                    'form' => PersonSharpForm::class,
                     'label' => 'Small person',
                 ],
-            ]
+            ],
         );
 
         $this->app['config']->set(
             'app.key',
             'base64:'.base64_encode(random_bytes(
-                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32
-            ))
+                $this->app['config']['app.cipher'] == 'AES-128-CBC' ? 16 : 32,
+            )),
         );
     }
 }
@@ -81,7 +81,7 @@ class PersonWithMultiformSharpEntityList extends SharpEntityList
     public function buildListDataContainers(): void
     {
         $this->addDataContainer(
-            EntityListDataContainer::make('name')
+            EntityListDataContainer::make('name'),
         );
     }
 

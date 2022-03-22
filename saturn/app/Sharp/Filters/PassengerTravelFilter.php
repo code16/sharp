@@ -13,8 +13,8 @@ class PassengerTravelFilter implements EntityListSelectFilter
             ->get()
             ->map(function (Travel $travel) {
                 return [
-                    'id'        => $travel->id,
-                    'label'     => $travel->destination,
+                    'id' => $travel->id,
+                    'label' => $travel->destination,
                     'continent' => ['Europe', 'America', 'Oceania', 'Asia', 'Africa'][rand(0, 4)],
                 ];
             })

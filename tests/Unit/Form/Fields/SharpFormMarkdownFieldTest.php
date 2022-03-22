@@ -14,7 +14,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'     => 'text', 'type' => 'markdown',
+                'key' => 'text', 'type' => 'markdown',
                 'toolbar' => [
                     SharpFormMarkdownField::B, SharpFormMarkdownField::I, SharpFormMarkdownField::SEPARATOR,
                     SharpFormMarkdownField::UL, SharpFormMarkdownField::SEPARATOR, SharpFormMarkdownField::A,
@@ -22,12 +22,12 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 'innerComponents' => [
                     'upload' => [
                         'maxFileSize' => 2,
-                        'croppable'   => true,
-                        'fileFilter'  => ['.jpg', '.jpeg', '.gif', '.png'],
+                        'croppable' => true,
+                        'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -39,7 +39,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['height' => 50],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -53,7 +53,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
             'innerComponents' => [
                 'upload' => [
                     'maxFileSize' => 50,
-                    'croppable'   => true,
+                    'croppable' => true,
                 ],
             ],
         ], $formField->toArray());
@@ -65,13 +65,13 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 'innerComponents' => [
                     'upload' => [
                         'maxFileSize' => 50,
-                        'croppable'   => true,
-                        'ratioX'      => 16,
-                        'ratioY'      => 9,
+                        'croppable' => true,
+                        'ratioX' => 16,
+                        'ratioY' => 9,
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField->setFileFilter(['jpg', 'pdf']);
@@ -81,14 +81,14 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 'innerComponents' => [
                     'upload' => [
                         'maxFileSize' => 50,
-                        'ratioX'      => 16,
-                        'ratioY'      => 9,
-                        'croppable'   => true,
-                        'fileFilter'  => ['.jpg', '.pdf'],
+                        'ratioX' => 16,
+                        'ratioY' => 9,
+                        'croppable' => true,
+                        'fileFilter' => ['.jpg', '.pdf'],
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField->setCroppable(false);
@@ -98,14 +98,14 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 'innerComponents' => [
                     'upload' => [
                         'maxFileSize' => 50,
-                        'ratioX'      => 16,
-                        'ratioY'      => 9,
-                        'croppable'   => false,
-                        'fileFilter'  => ['.jpg', '.pdf'],
+                        'ratioX' => 16,
+                        'ratioY' => 9,
+                        'croppable' => false,
+                        'fileFilter' => ['.jpg', '.pdf'],
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -125,7 +125,7 @@ class SharpFormMarkdownFieldTest extends SharpTestCase
                 SharpFormMarkdownField::SEPARATOR,
                 SharpFormMarkdownField::UL,
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 

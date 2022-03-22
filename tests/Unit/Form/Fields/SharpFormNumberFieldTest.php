@@ -14,10 +14,10 @@ class SharpFormNumberFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'  => 'text', 'type' => 'number',
+                'key' => 'text', 'type' => 'number',
                 'step' => 1, 'showControls' => false,
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -30,7 +30,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['min' => 5, 'max' => 15],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -42,7 +42,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['step' => 5],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -54,7 +54,7 @@ class SharpFormNumberFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['showControls' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

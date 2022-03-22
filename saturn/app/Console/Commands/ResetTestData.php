@@ -26,7 +26,7 @@ class ResetTestData extends Command
     protected $filesystem;
 
     /**
-     * @param Filesystem $filesystem
+     * @param  Filesystem  $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {

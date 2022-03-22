@@ -19,19 +19,19 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'     => 'field',
-                'type'    => 'select',
+                'key' => 'field',
+                'type' => 'select',
                 'options' => [
                     ['id' => '1', 'label' => 'Elem 1'],
                     ['id' => '2', 'label' => 'Elem 2'],
                 ],
-                'multiple'      => false,
-                'clearable'     => false,
-                'inline'        => false,
+                'multiple' => false,
+                'clearable' => false,
+                'inline' => false,
                 'showSelectAll' => false,
-                'display'       => 'list',
+                'display' => 'list',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -43,7 +43,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['multiple' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -55,7 +55,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['inline' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -67,7 +67,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['maxSelected' => 12],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -79,7 +79,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['clearable' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -91,7 +91,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['display' => 'list'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -103,7 +103,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['display' => 'dropdown'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -115,7 +115,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['showSelectAll' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -132,7 +132,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                 ['id' => 1, 'label' => 'Elem 1'],
                 ['id' => 2, 'label' => 'Elem 2'],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -149,7 +149,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                 ['key' => 'Elem-1'],
                 ['key' => 'Elem-2'],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -166,7 +166,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                 ['id' => 1, 'label' => ['en' => 'Option one', 'fr' => 'Option un']],
                 ['id' => 2, 'label' => ['en' => 'Option two', 'fr' => 'Option deux']],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -183,7 +183,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                 ['id' => 1, 'label' => ['en' => 'Option one', 'fr' => 'Option un']],
                 ['id' => 2, 'label' => ['en' => 'Option two', 'fr' => 'Option deux']],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -212,7 +212,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                     ['id' => 'B2', 'label' => 'test B2'],
                 ],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -241,7 +241,7 @@ class SharpFormSelectFieldTest extends SharpTestCase
                     ['id' => 'B2', 'label' => ['fr' => 'test B2 fr', 'en' => 'test B2 en']],
                 ],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -286,13 +286,12 @@ class SharpFormSelectFieldTest extends SharpTestCase
                     ],
                 ],
             ]],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
     /**
-     * @param array|null $options
-     *
+     * @param  array|null  $options
      * @return SharpFormSelectField
      */
     private function getDefaultSelect($options = null)

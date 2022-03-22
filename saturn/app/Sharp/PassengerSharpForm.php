@@ -19,38 +19,38 @@ class PassengerSharpForm extends SharpForm
     {
         $this->addField(
             SharpFormTextField::make('name')
-                ->setLabel('Name')
+                ->setLabel('Name'),
         )->addField(
             SharpFormDateField::make('birth_date')
                 ->setHasTime(false)
-                ->setLabel('Birth date')
+                ->setLabel('Birth date'),
         )->addField(
-            SharpFormSelectField::make('gender', ['M'=>'Mr', 'F'=>'Mrs'])
+            SharpFormSelectField::make('gender', ['M' => 'Mr', 'F' => 'Mrs'])
                 ->setDisplayAsDropdown()
                 ->setLabel('Gender')
-                ->setClearable()
+                ->setClearable(),
         )->addField(
             SharpFormSelectField::make('travel_category', [
-                'Business'   => 'Business',
-                'First class'=> 'First class',
-                'Classic'    => 'Classic',
-                'Third class'=> 'Third class',
+                'Business' => 'Business',
+                'First class' => 'First class',
+                'Classic' => 'Classic',
+                'Third class' => 'Third class',
             ])
                 ->setDisplayAsDropdown()
-                ->setLabel('Travel category')
+                ->setLabel('Travel category'),
         )->addField(
             SharpFormSelectField::make(
                 'travel_id',
                 Travel::orderBy('departure_date')->get()->map(function ($travel) {
                     return [
-                        'id'    => $travel->id,
+                        'id' => $travel->id,
                         'label' => $travel->departure_date->format('Y-m-d (H:i)')
                             .' — '.$travel->destination,
                     ];
-                })->all()
+                })->all(),
             )
                 ->setLabel('Travel')
-                ->setDisplayAsList()
+                ->setDisplayAsList(),
         );
     }
 

@@ -57,7 +57,7 @@ class Thumbnail
             ."/$width-$height".$thumbDirNameAppender
             .'/'.basename($this->uploadModel->file_name);
 
-        $wasCreated = !$thumbnailDisk->exists($thumbnailPath);
+        $wasCreated = ! $thumbnailDisk->exists($thumbnailPath);
 
         $url = $this->generateThumbnail(
             $this->uploadModel->disk,
@@ -65,7 +65,7 @@ class Thumbnail
             $thumbnailPath,
             $width,
             $height,
-            $filters
+            $filters,
         );
 
         if ($closure = $this->afterClosure) {
@@ -91,8 +91,7 @@ class Thumbnail
         $width,
         $height,
         $filters
-    ): ?string
-    {
+    ): ?string {
         if ($width == 0) {
             $width = null;
         }
@@ -102,15 +101,15 @@ class Thumbnail
 
         $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
 
-        if (!$thumbnailDisk->exists($thumbnailPath)) {
+        if (! $thumbnailDisk->exists($thumbnailPath)) {
             // Create thumbnail directories if needed
-            if (!$thumbnailDisk->exists(dirname($thumbnailPath))) {
+            if (! $thumbnailDisk->exists(dirname($thumbnailPath))) {
                 $thumbnailDisk->makeDirectory(dirname($thumbnailPath));
             }
 
             try {
                 $sourceImg = $this->imageManager->make(
-                    $this->storage->disk($sourceDisk)->get($sourceRelativeFilePath)
+                    $this->storage->disk($sourceDisk)->get($sourceRelativeFilePath),
                 );
 
                 // Filters
@@ -124,7 +123,7 @@ class Thumbnail
                 }
 
                 // Resize if needed
-                if (!$alreadyResized) {
+                if (! $alreadyResized) {
                     $sourceImg->resize($width, $height, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
@@ -144,7 +143,7 @@ class Thumbnail
 
     private function resolveFilterClass(string $class, array $params): ?ThumbnailFilter
     {
-        if (!Str::contains($class, '\\')) {
+        if (! Str::contains($class, '\\')) {
             $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
         }
 

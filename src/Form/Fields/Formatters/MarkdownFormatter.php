@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Storage;
 class MarkdownFormatter extends SharpFieldFormatter
 {
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -32,10 +31,9 @@ class MarkdownFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
-     *
      * @return mixed
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
@@ -62,7 +60,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                     $text = str_replace(
                         "![]({$originalName})",
                         "![]({$field->storageDisk()}:{$upload['file_name']})",
-                        $text
+                        $text,
                     );
                 } elseif ($upload['transformed'] ?? false) {
                     // File was pre-existing and was transformed: we must
@@ -84,8 +82,7 @@ class MarkdownFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param string|array $texts
-     *
+     * @param  string|array  $texts
      * @return array
      */
     protected function extractEmbeddedUploads($texts): array
@@ -98,7 +95,7 @@ class MarkdownFormatter extends SharpFieldFormatter
                 $md,
                 $localeMatches,
                 PREG_SET_ORDER,
-                0
+                0,
             );
 
             $matches = array_merge($matches, $localeMatches);
@@ -113,35 +110,35 @@ class MarkdownFormatter extends SharpFieldFormatter
 
     protected function getUpload(string $fullFileName): array
     {
-        list($disk, $filename) = explode(':', $fullFileName);
+        [$disk, $filename] = explode(':', $fullFileName);
 
         $model = new SharpUploadModel([
             'file_name' => $filename,
-            'disk'      => $disk,
-            'size'      => $this->getFileSize($fullFileName),
+            'disk' => $disk,
+            'size' => $this->getFileSize($fullFileName),
         ]);
 
         return [
-            'name'      => $fullFileName,
-            'size'      => $model->size,
+            'name' => $fullFileName,
+            'size' => $model->size,
             'thumbnail' => $model->thumbnail(1000, 400),
         ];
     }
 
     protected function deleteThumbnails(string $fullFileName): void
     {
-        list($disk, $filename) = explode(':', $fullFileName);
+        [$disk, $filename] = explode(':', $fullFileName);
 
         (new SharpUploadModel([
             'file_name' => $filename,
-            'disk'      => $disk,
+            'disk' => $disk,
         ]))->deleteAllThumbnails();
     }
 
     protected function getFileSize(string $fullFileName): ?int
     {
         try {
-            list($disk, $filename) = explode(':', $fullFileName);
+            [$disk, $filename] = explode(':', $fullFileName);
 
             return Storage::disk($disk)->size($filename);
         } catch (\Exception $ex) {

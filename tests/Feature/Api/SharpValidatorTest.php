@@ -21,7 +21,7 @@ class SharpValidatorTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.validator',
-            ValidatorTestPersonSharpValidator::class
+            ValidatorTestPersonSharpValidator::class,
         );
 
         $this->postJson('/sharp/api/form/person/1', [
@@ -41,7 +41,7 @@ class SharpValidatorTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.validator',
-            ValidatorTestPersonExtendingSharpFormRequestSharpValidator::class
+            ValidatorTestPersonExtendingSharpFormRequestSharpValidator::class,
         );
 
         $this->postJson('/sharp/api/form/person/1', [

@@ -19,7 +19,7 @@ abstract class LayoutColumn
     {
         return array_merge(
             ['size' => $this->size],
-            $this->fieldsToArray()
+            $this->fieldsToArray(),
         );
     }
 }

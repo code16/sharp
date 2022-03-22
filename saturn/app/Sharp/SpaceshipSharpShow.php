@@ -27,32 +27,32 @@ class SpaceshipSharpShow extends SharpShow
         $this
             ->addField(
                 SharpShowTitleField::make('name')
-                    ->setTitleLevel(2)
+                    ->setTitleLevel(2),
             )
             ->addField(
                 SharpShowTextField::make('type:label')
-                    ->setLabel('Type')
+                    ->setLabel('Type'),
             )
             ->addField(
                 SharpShowTextField::make('serial_number')
-                    ->setLabel('S/N')
+                    ->setLabel('S/N'),
             )
             ->addField(
                 SharpShowTextField::make('brand')
-                    ->setLabel('Brand / model')
+                    ->setLabel('Brand / model'),
             )
             ->addField(
                 SharpShowFileField::make('manual')
                     ->setLabel('Manual')
                     ->setStorageDisk('local')
-                    ->setStorageBasePath('data/Spaceship/{id}/Manual')
+                    ->setStorageBasePath('data/Spaceship/{id}/Manual'),
             )
             ->addField(
-                SharpShowPictureField::make('picture')
+                SharpShowPictureField::make('picture'),
             )
             ->addField(
                 SharpShowTextField::make('description')
-                    ->collapseToWordCount(50)
+                    ->collapseToWordCount(50),
             )
             ->addField(
                 SharpShowListField::make('pictures')
@@ -60,9 +60,9 @@ class SpaceshipSharpShow extends SharpShow
                     ->addItemField(
                         SharpShowFileField::make('file')
                             ->setStorageDisk('local')
-                            ->setStorageBasePath('data/Spaceship/{id}/Pictures')
+                            ->setStorageBasePath('data/Spaceship/{id}/Pictures'),
                     )
-                    ->addItemField(SharpShowTextField::make('legend')->setLabel('Legend'))
+                    ->addItemField(SharpShowTextField::make('legend')->setLabel('Legend')),
             )
             ->addField(
                 SharpShowEntityListField::make('pilots', 'spaceship_pilot')
@@ -78,7 +78,7 @@ class SpaceshipSharpShow extends SharpShow
 //                    ->hideEntityCommand("updateXP")
 //                    ->hideInstanceCommand("download")
                     ->showReorderButton(true)
-                    ->showCreateButton()
+                    ->showCreateButton(),
             );
     }
 
@@ -135,7 +135,7 @@ class SpaceshipSharpShow extends SharpShow
                 return sprintf(
                     '%s / %s',
                     $spaceship->brand ?: '<em>no brand</em>',
-                    $spaceship->model ?: '<em>no model</em>'
+                    $spaceship->model ?: '<em>no model</em>',
                 );
             })
             ->setCustomTransformer('name', function ($value, $spaceship) {

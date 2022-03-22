@@ -16,7 +16,7 @@ class AppendFormAuthorizations
     protected $gate;
 
     /**
-     * @param Gate $gate
+     * @param  Gate  $gate
      */
     public function __construct(Gate $gate)
     {
@@ -35,7 +35,7 @@ class AppendFormAuthorizations
 
     protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse)
     {
-        list($entityKey, $instanceId) = $this->determineEntityKeys();
+        [$entityKey, $instanceId] = $this->determineEntityKeys();
 
         $policies = [];
 
@@ -46,7 +46,7 @@ class AppendFormAuthorizations
 
             if ($instanceId) {
                 $policies += [
-                    'view'   => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
+                    'view' => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
                     'update' => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
                     'delete' => $this->gate->check("sharp.{$entityKey}.delete", $instanceId),
                 ];
@@ -59,7 +59,7 @@ class AppendFormAuthorizations
         $data->authorizations = array_merge(
             ['view' => true, 'create' => true, 'update' => true, 'delete' => true],
             $policies,
-            (array) $globalAuthorizations
+            (array) $globalAuthorizations,
         );
 
         $jsonResponse->setData($data);

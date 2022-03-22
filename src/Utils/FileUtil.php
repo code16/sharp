@@ -10,7 +10,7 @@ class FileUtil
     {
         $k = 1;
 
-        list($baseFileName, $ext) = $this->explodeExtension($fileName);
+        [$baseFileName, $ext] = $this->explodeExtension($fileName);
         $baseFileName = $this->normalizeName($baseFileName);
         $fileName = $baseFileName.$ext;
 

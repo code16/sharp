@@ -12,7 +12,7 @@ class CustomUrlSegmentTest extends BaseApiTest
 
         app()['config']->set(
             'sharp.custom_url_segment',
-            'test'
+            'test',
         );
     }
 

@@ -25,8 +25,7 @@ abstract class SharpDashboard
     /**
      * Add a widget.
      *
-     * @param SharpWidget $widget
-     *
+     * @param  SharpWidget  $widget
      * @return $this
      */
     protected function addWidget(SharpWidget $widget): self
@@ -40,8 +39,7 @@ abstract class SharpDashboard
     /**
      * Add a new row with a single widget.
      *
-     * @param string $widgetKey
-     *
+     * @param  string  $widgetKey
      * @return $this
      */
     protected function addFullWidthWidget(string $widgetKey): self
@@ -58,8 +56,7 @@ abstract class SharpDashboard
     /**
      * Add a new row.
      *
-     * @param \Closure $callback
-     *
+     * @param  \Closure  $callback
      * @return $this
      */
     protected function addRow(\Closure $callback): self
@@ -90,7 +87,7 @@ abstract class SharpDashboard
      */
     public function widgetsLayout(): array
     {
-        if (!$this->layoutBuilt) {
+        if (! $this->layoutBuilt) {
             $this->buildWidgetsLayout();
             $this->layoutBuilt = true;
         }
@@ -129,7 +126,7 @@ abstract class SharpDashboard
         $this->buildWidgetsData(
             DashboardQueryParams::create()
                 ->fillWithRequest()
-                ->setDefaultFilters($this->getFilterDefaultValues())
+                ->setDefaultFilters($this->getFilterDefaultValues()),
         );
 
         // First, graph widgets dataSets
@@ -138,7 +135,7 @@ abstract class SharpDashboard
                 $dataSetsValues = collect($dataSets)->map->toArray();
 
                 return [
-                    'key'      => $key,
+                    'key' => $key,
                     'datasets' => $dataSetsValues->map(function ($dataSet) {
                         return Arr::except($dataSet, 'labels');
                     })->all(),
@@ -151,10 +148,10 @@ abstract class SharpDashboard
             collect($this->panelWidgetsData)
                 ->map(function ($value, $key) {
                     return [
-                        'key'  => $key,
+                        'key' => $key,
                         'data' => $value,
                     ];
-                })
+                }),
         );
 
         // Then, list group widgets data
@@ -168,16 +165,16 @@ abstract class SharpDashboard
                             ->map(function ($item) use ($widget) {
                                 return array_merge(
                                     $item,
-                                    ['url' => $widget->getItemUrl($item)]
+                                    ['url' => $widget->getItemUrl($item)],
                                 );
                             })
                             ->all();
 
                         return [
-                            'key'  => $key,
+                            'key' => $key,
                             'data' => $data,
                         ];
-                    })
+                    }),
             )
             ->all();
     }
@@ -205,7 +202,7 @@ abstract class SharpDashboard
 
     private function checkDashboardIsBuilt(): void
     {
-        if (!$this->dashboardBuilt) {
+        if (! $this->dashboardBuilt) {
             $this->buildWidgets();
             $this->dashboardBuilt = true;
         }
@@ -233,7 +230,7 @@ abstract class SharpDashboard
     /**
      * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData.
      *
-     * @param DashboardQueryParams $params
+     * @param  DashboardQueryParams  $params
      */
     abstract protected function buildWidgetsData(DashboardQueryParams $params): void;
 }

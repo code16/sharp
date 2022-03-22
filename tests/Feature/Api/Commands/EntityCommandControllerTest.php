@@ -30,7 +30,7 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->json('post', '/sharp/api/list/person/command/entity_info')
             ->assertStatus(200)
             ->assertJson([
-                'action'  => 'info',
+                'action' => 'info',
                 'message' => 'ok',
             ]);
     }
@@ -71,15 +71,15 @@ class EntityCommandControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'refresh',
-                'items'  => [
+                'items' => [
                     [
-                        'id'   => 1,
+                        'id' => 1,
                         'name' => 'John <b>Wayne</b>',
-                        'age'  => 22,
+                        'age' => 22,
                     ], [
-                        'id'   => 2,
+                        'id' => 2,
                         'name' => 'Mary <b>Wayne</b>',
-                        'age'  => 26,
+                        'age' => 26,
                     ],
                 ],
             ]);
@@ -109,8 +109,8 @@ class EntityCommandControllerTest extends BaseApiTest
         $this->assertTrue(
             Str::contains(
                 $response->headers->get('content-disposition'),
-                'account.pdf'
-            )
+                'account.pdf',
+            ),
         );
 
         $this->json('post', '/sharp/api/list/person/command/entity_download_no_disk')
@@ -156,7 +156,7 @@ class EntityCommandControllerTest extends BaseApiTest
         ])
             ->assertStatus(200)
             ->assertJson([
-                'action'  => 'info',
+                'action' => 'info',
                 'message' => 'namedesc',
             ]);
     }
@@ -181,7 +181,7 @@ class EntityCommandControllerTest extends BaseApiTest
             ->json();
 
         $this->assertTrue(
-            collect($response['config']['commands']['entity'][0])->where('key', 'entity_with_init_data')->first()['fetch_initial_data']
+            collect($response['config']['commands']['entity'][0])->where('key', 'entity_with_init_data')->first()['fetch_initial_data'],
         );
 
         $this->getJson('/sharp/api/list/person/command/entity_with_init_data/data')
@@ -199,7 +199,7 @@ class EntityCommandControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.list',
-            EntityCommandTestPersonSharpEntityList::class
+            EntityCommandTestPersonSharpEntityList::class,
         );
     }
 }
@@ -209,7 +209,8 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
     public function buildListConfig(): void
     {
         $this
-            ->addEntityCommand('entity_info', new class() extends EntityCommand {
+            ->addEntityCommand('entity_info', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -219,8 +220,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return $this->info('ok');
                 }
-            })
-            ->addEntityCommand('entity_reload', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_reload', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -230,8 +232,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return $this->reload();
                 }
-            })
-            ->addEntityCommand('entity_view', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_view', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -241,8 +244,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return $this->view('welcome');
                 }
-            })
-            ->addEntityCommand('entity_refresh', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_refresh', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -252,8 +256,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return $this->refresh([1, 2]);
                 }
-            })
-            ->addEntityCommand('entity_exception', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_exception', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -263,8 +268,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     throw new SharpApplicativeException('error');
                 }
-            })
-            ->addEntityCommand('entity_form', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_form', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -277,12 +283,13 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
 
                 public function execute(EntityListQueryParams $params, array $data = []): array
                 {
-                    $this->validate($data, ['name'=>'required']);
+                    $this->validate($data, ['name' => 'required']);
 
                     return $this->reload();
                 }
-            })
-            ->addEntityCommand('entity_download', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_download', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -291,12 +298,13 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 public function execute(EntityListQueryParams $params, array $data = []): array
                 {
                     Storage::fake('files');
-                    UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk'=>'files']);
+                    UploadedFile::fake()->create('account.pdf', 100)->storeAs('pdf', 'account.pdf', ['disk' => 'files']);
 
                     return $this->download('pdf/account.pdf', 'account.pdf', 'files');
                 }
-            })
-            ->addEntityCommand('entity_download_no_disk', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_download_no_disk', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -309,8 +317,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
 
                     return $this->download('pdf/account.pdf');
                 }
-            })
-            ->addEntityCommand('entity_unauthorized', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_unauthorized', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -325,8 +334,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return $this->reload();
                 }
-            })
-            ->addEntityCommand('entity_params', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_params', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -336,8 +346,9 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return $this->info($params->sortedBy().$params->sortedDir());
                 }
-            })
-            ->addEntityCommand('entity_with_init_data', new class() extends EntityCommand {
+            }, )
+            ->addEntityCommand('entity_with_init_data', new class() extends EntityCommand
+            {
                 public function label(): string
                 {
                     return 'label';
@@ -352,13 +363,13 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return [
                         'name' => 'John Wayne',
-                        'age'  => 32,
+                        'age' => 32,
                     ];
                 }
 
                 public function execute(EntityListQueryParams $params, array $data = []): array
                 {
                 }
-            });
+            }, );
     }
 }

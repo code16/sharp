@@ -15,10 +15,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_commands_config_with_an_instance()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -27,8 +29,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
-                $this->addInstanceCommand('instanceCommand', new class() extends InstanceCommand {
+                }, );
+                $this->addInstanceCommand('instanceCommand', new class() extends InstanceCommand
+                {
                     public function label(): string
                     {
                         return 'My Instance Command';
@@ -37,7 +40,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute($instanceId, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -48,18 +51,18 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'           => 'entityCommand',
-                            'label'         => 'My Entity Command',
-                            'type'          => 'entity',
+                            'key' => 'entityCommand',
+                            'label' => 'My Entity Command',
+                            'type' => 'entity',
                             'authorization' => true,
                         ],
                     ],
                 ], 'instance' => [
                     [
                         [
-                            'key'           => 'instanceCommand',
-                            'label'         => 'My Instance Command',
-                            'type'          => 'instance',
+                            'key' => 'instanceCommand',
+                            'label' => 'My Instance Command',
+                            'type' => 'instance',
                             'authorization' => [],
                         ],
                     ],
@@ -71,7 +74,8 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_entity_command_config_with_a_class()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->addEntityCommand('entityCommand', SharpEntityListCommandTestCommand::class);
@@ -85,9 +89,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'   => 'entityCommand',
+                            'key' => 'entityCommand',
                             'label' => 'My Entity Command',
-                            'type'  => 'entity',
+                            'type' => 'entity',
                         ],
                     ],
                 ],
@@ -98,10 +102,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_ask_for_a_confirmation_on_a_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -115,7 +121,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -126,9 +132,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'          => 'entityCommand',
-                            'label'        => 'My Entity Command',
-                            'type'         => 'entity',
+                            'key' => 'entityCommand',
+                            'label' => 'My Entity Command',
+                            'type' => 'entity',
                             'confirmation' => 'Sure?',
                         ],
                     ],
@@ -140,10 +146,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_form_on_a_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -162,7 +170,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -173,14 +181,14 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'   => 'entityCommand',
+                            'key' => 'entityCommand',
                             'label' => 'My Entity Command',
-                            'type'  => 'entity',
-                            'form'  => [
+                            'type' => 'entity',
+                            'form' => [
                                 'fields' => [
                                     'message' => [
-                                        'key'       => 'message',
-                                        'type'      => 'text',
+                                        'key' => 'message',
+                                        'type' => 'text',
                                         'inputType' => 'text',
                                     ],
                                 ],
@@ -198,10 +206,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_localized_form_on_a_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addInstanceCommand('instanceCommand', new class() extends InstanceCommand {
+                $this->addInstanceCommand('instanceCommand', new class() extends InstanceCommand
+                {
                     public function label(): string
                     {
                         return 'My Instance Command';
@@ -225,7 +235,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     {
                         return ['fr', 'en', 'it'];
                     }
-                });
+                }, );
             }
         };
 
@@ -236,14 +246,14 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'instance' => [
                     [
                         [
-                            'key'   => 'instanceCommand',
+                            'key' => 'instanceCommand',
                             'label' => 'My Instance Command',
-                            'type'  => 'instance',
-                            'form'  => [
+                            'type' => 'instance',
+                            'form' => [
                                 'fields' => [
                                     'message' => [
-                                        'key'       => 'message',
-                                        'type'      => 'text',
+                                        'key' => 'message',
+                                        'type' => 'text',
                                         'inputType' => 'text',
                                     ],
                                 ],
@@ -262,10 +272,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function if_no_form_layout_is_configured_a_default_is_provided()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -280,7 +292,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -307,10 +319,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_form_modal_title_on_a_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -324,7 +338,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -335,9 +349,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'         => 'entityCommand',
-                            'label'       => 'My Entity Command',
-                            'type'        => 'entity',
+                            'key' => 'entityCommand',
+                            'label' => 'My Entity Command',
+                            'type' => 'entity',
                             'modal_title' => 'My title',
                         ],
                     ],
@@ -349,10 +363,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_handle_authorization_in_an_entity_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -366,7 +382,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -377,9 +393,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'           => 'entityCommand',
-                            'label'         => 'My Entity Command',
-                            'type'          => 'entity',
+                            'key' => 'entityCommand',
+                            'label' => 'My Entity Command',
+                            'type' => 'entity',
                             'authorization' => false,
                         ],
                     ],
@@ -391,10 +407,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_handle_authorization_in_an_instance_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addInstanceCommand('command', new class() extends InstanceCommand {
+                $this->addInstanceCommand('command', new class() extends InstanceCommand
+                {
                     public function label(): string
                     {
                         return 'My Instance Command';
@@ -408,7 +426,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute($instanceId, array $params = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -423,9 +441,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'instance' => [
                     [
                         [
-                            'key'           => 'command',
-                            'label'         => 'My Instance Command',
-                            'type'          => 'instance',
+                            'key' => 'command',
+                            'label' => 'My Instance Command',
+                            'type' => 'instance',
                             'authorization' => [1, 2],
                         ],
                     ],
@@ -437,10 +455,12 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_description_on_a_command()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
-                $this->addEntityCommand('entityCommand', new class() extends EntityCommand {
+                $this->addEntityCommand('entityCommand', new class() extends EntityCommand
+                {
                     public function label(): string
                     {
                         return 'My Entity Command';
@@ -454,7 +474,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                     public function execute(EntityListQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -465,10 +485,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'         => 'entityCommand',
-                            'label'       => 'My Entity Command',
+                            'key' => 'entityCommand',
+                            'label' => 'My Entity Command',
                             'description' => 'My Entity Command description',
-                            'type'        => 'entity',
+                            'type' => 'entity',
                         ],
                     ],
                 ],
@@ -479,11 +499,13 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_separators_in_instance_commands()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this
-                    ->addInstanceCommand('command-1', new class() extends InstanceCommand {
+                    ->addInstanceCommand('command-1', new class() extends InstanceCommand
+                    {
                         public function label(): string
                         {
                             return '';
@@ -492,8 +514,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute($instanceId, array $data = []): array
                         {
                         }
-                    })
-                    ->addInstanceCommand('command-2', new class() extends InstanceCommand {
+                    }, )
+                    ->addInstanceCommand('command-2', new class() extends InstanceCommand
+                    {
                         public function label(): string
                         {
                             return '';
@@ -502,9 +525,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute($instanceId, array $data = []): array
                         {
                         }
-                    })
+                    }, )
                     ->addInstanceCommandSeparator()
-                    ->addInstanceCommand('command-3', new class() extends InstanceCommand {
+                    ->addInstanceCommand('command-3', new class() extends InstanceCommand
+                    {
                         public function label(): string
                         {
                             return '';
@@ -513,7 +537,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute($instanceId, array $data = []): array
                         {
                         }
-                    });
+                    }, );
             }
         };
 
@@ -542,11 +566,13 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_separators_in_entity_commands()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this
-                    ->addEntityCommand('command-1', new class() extends EntityCommand {
+                    ->addEntityCommand('command-1', new class() extends EntityCommand
+                    {
                         public function label(): string
                         {
                             return '';
@@ -555,9 +581,10 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute(EntityListQueryParams $params, array $data = []): array
                         {
                         }
-                    })
+                    }, )
                     ->addEntityCommandSeparator()
-                    ->addEntityCommand('command-2', new class() extends EntityCommand {
+                    ->addEntityCommand('command-2', new class() extends EntityCommand
+                    {
                         public function label(): string
                         {
                             return '';
@@ -566,8 +593,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute(EntityListQueryParams $params, array $data = []): array
                         {
                         }
-                    })
-                    ->addEntityCommand('command-3', new class() extends EntityCommand {
+                    }, )
+                    ->addEntityCommand('command-3', new class() extends EntityCommand
+                    {
                         public function label(): string
                         {
                             return '';
@@ -576,7 +604,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute(EntityListQueryParams $params, array $data = []): array
                         {
                         }
-                    });
+                    }, );
             }
         };
 
@@ -605,11 +633,13 @@ class SharpEntityListCommandTest extends SharpTestCase
     /** @test */
     public function we_can_declare_an_entity_command_as_primary()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this
-                    ->addEntityCommand('entity', new class() extends EntityCommand {
+                    ->addEntityCommand('entity', new class() extends EntityCommand
+                    {
                         public function label(): string
                         {
                             return 'My Entity Command';
@@ -618,8 +648,9 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute(EntityListQueryParams $params, array $data = []): array
                         {
                         }
-                    })
-                    ->setPrimaryEntityCommand('primary-entity', new class() extends EntityCommand {
+                    }, )
+                    ->setPrimaryEntityCommand('primary-entity', new class() extends EntityCommand
+                    {
                         public function label(): string
                         {
                             return 'My Primary Entity Command';
@@ -628,7 +659,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                         public function execute(EntityListQueryParams $params, array $data = []): array
                         {
                         }
-                    });
+                    }, );
             }
         };
 
@@ -639,14 +670,14 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'entity' => [
                     [
                         [
-                            'key'   => 'entity',
+                            'key' => 'entity',
                             'label' => 'My Entity Command',
-                            'type'  => 'entity',
+                            'type' => 'entity',
                         ],
                         [
-                            'key'     => 'primary-entity',
-                            'label'   => 'My Primary Entity Command',
-                            'type'    => 'entity',
+                            'key' => 'primary-entity',
+                            'label' => 'My Primary Entity Command',
+                            'type' => 'entity',
                             'primary' => true,
                         ],
                     ],

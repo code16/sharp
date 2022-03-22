@@ -15,7 +15,7 @@ class SharpUploadModel extends Model
      */
     protected $casts = [
         'custom_properties' => 'array',
-        'size'              => 'integer',
+        'size' => 'integer',
     ];
 
     public function model(): MorphTo
@@ -47,13 +47,12 @@ class SharpUploadModel extends Model
     }
 
     /**
-     * @param string $key
-     *
+     * @param  string  $key
      * @return mixed|null
      */
     public function getAttribute($key)
     {
-        if (!$this->isRealAttribute($key)) {
+        if (! $this->isRealAttribute($key)) {
             return $this->getAttribute('custom_properties')[$key] ?? null;
         }
 
@@ -61,14 +60,13 @@ class SharpUploadModel extends Model
     }
 
     /**
-     * @param string $key
-     * @param mixed  $value
-     *
+     * @param  string  $key
+     * @param  mixed  $value
      * @return Model
      */
     public function setAttribute($key, $value)
     {
-        if (!$this->isRealAttribute($key)) {
+        if (! $this->isRealAttribute($key)) {
             return $this->updateCustomProperty($key, $value);
         }
 

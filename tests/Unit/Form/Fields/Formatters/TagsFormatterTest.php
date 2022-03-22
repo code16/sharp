@@ -14,8 +14,8 @@ class TagsFormatterTest extends SharpTestCase
         $formatter = new TagsFormatter();
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
-        $this->assertEquals([['id'=>1]], $formatter->toFront($field, 1));
-        $this->assertEquals([['id'=>1], ['id'=>2]], $formatter->toFront($field, [1, 2]));
+        $this->assertEquals([['id' => 1]], $formatter->toFront($field, 1));
+        $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->toFront($field, [1, 2]));
     }
 
     /** @test */
@@ -25,12 +25,12 @@ class TagsFormatterTest extends SharpTestCase
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals(
-            [['id'=>1]],
-            $formatter->toFront($field, [(object) ['id'=>1, 'name'=>'A']])
+            [['id' => 1]],
+            $formatter->toFront($field, [(object) ['id' => 1, 'name' => 'A']]),
         );
         $this->assertEquals(
-            [['id'=>1], ['id'=>2]],
-            $formatter->toFront($field, [(object) ['id'=>1, 'name'=>'A'], (object) ['id'=>2, 'name'=>'B']])
+            [['id' => 1], ['id' => 2]],
+            $formatter->toFront($field, [(object) ['id' => 1, 'name' => 'A'], (object) ['id' => 2, 'name' => 'B']]),
         );
     }
 
@@ -41,12 +41,12 @@ class TagsFormatterTest extends SharpTestCase
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals(
-            [['id'=>1]],
-            $formatter->toFront($field, [['id'=>1, 'name'=>'A']])
+            [['id' => 1]],
+            $formatter->toFront($field, [['id' => 1, 'name' => 'A']]),
         );
         $this->assertEquals(
-            [['id'=>1], ['id'=>2]],
-            $formatter->toFront($field, [['id'=>1, 'name'=>'A'], ['id'=>2, 'name'=>'B']])
+            [['id' => 1], ['id' => 2]],
+            $formatter->toFront($field, [['id' => 1, 'name' => 'A'], ['id' => 2, 'name' => 'B']]),
         );
     }
 
@@ -58,12 +58,12 @@ class TagsFormatterTest extends SharpTestCase
             ->setIdAttribute('number');
 
         $this->assertEquals(
-            [['id'=>1]],
-            $formatter->toFront($field, [(object) ['number'=>1, 'name'=>'A']])
+            [['id' => 1]],
+            $formatter->toFront($field, [(object) ['number' => 1, 'name' => 'A']]),
         );
         $this->assertEquals(
-            [['id'=>1], ['id'=>2]],
-            $formatter->toFront($field, [(object) ['number'=>1, 'name'=>'A'], (object) ['number'=>2, 'name'=>'B']])
+            [['id' => 1], ['id' => 2]],
+            $formatter->toFront($field, [(object) ['number' => 1, 'name' => 'A'], (object) ['number' => 2, 'name' => 'B']]),
         );
     }
 
@@ -74,8 +74,8 @@ class TagsFormatterTest extends SharpTestCase
         $attribute = 'attribute';
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
-        $this->assertEquals([['id'=>1]], $formatter->fromFront($field, $attribute, [['id'=>1]]));
-        $this->assertEquals([['id'=>1], ['id'=>2]], $formatter->fromFront($field, $attribute, [['id'=>1], ['id'=>2]]));
+        $this->assertEquals([['id' => 1]], $formatter->fromFront($field, $attribute, [['id' => 1]]));
+        $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->fromFront($field, $attribute, [['id' => 1], ['id' => 2]]));
     }
 
     /** @test */
@@ -86,12 +86,12 @@ class TagsFormatterTest extends SharpTestCase
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals(
-            [['id'=>1], ['id'=>2]],
+            [['id' => 1], ['id' => 2]],
             $formatter->fromFront(
             $field,
             $attribute,
-            [['id'=>1], ['id'=>2], ['id'=>3]]
-        )
+            [['id' => 1], ['id' => 2], ['id' => 3]],
+        ),
         );
     }
 
@@ -105,12 +105,12 @@ class TagsFormatterTest extends SharpTestCase
             ->setCreateAttribute('name');
 
         $this->assertEquals(
-            [['id'=>1], ['id'=>2], ['id'=>null, 'name'=>'green']],
+            [['id' => 1], ['id' => 2], ['id' => null, 'name' => 'green']],
             $formatter->fromFront(
             $field,
             $attribute,
-            [['id'=>1], ['id'=>2], ['id'=>null, 'label'=>'green']]
-        )
+            [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']],
+        ),
         );
     }
 
@@ -124,12 +124,12 @@ class TagsFormatterTest extends SharpTestCase
             ->setCreateAttribute('name');
 
         $this->assertEquals(
-            [['id'=>1], ['id'=>2]],
+            [['id' => 1], ['id' => 2]],
             $formatter->fromFront(
             $field,
             $attribute,
-            [['id'=>1], ['id'=>2], ['id'=>null, 'label'=>'green']]
-        )
+            [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']],
+        ),
         );
     }
 
@@ -141,8 +141,8 @@ class TagsFormatterTest extends SharpTestCase
         $field = SharpFormTagsField::make('tags', $this->getTagsData())
             ->setIdAttribute('number');
 
-        $this->assertEquals([['number'=>1]], $formatter->fromFront($field, $attribute, [['id'=>1]]));
-        $this->assertEquals([['number'=>1], ['number'=>2]], $formatter->fromFront($field, $attribute, [['id'=>1], ['id'=>2]]));
+        $this->assertEquals([['number' => 1]], $formatter->fromFront($field, $attribute, [['id' => 1]]));
+        $this->assertEquals([['number' => 1], ['number' => 2]], $formatter->fromFront($field, $attribute, [['id' => 1], ['id' => 2]]));
     }
 
     /** @test */
@@ -156,8 +156,8 @@ class TagsFormatterTest extends SharpTestCase
             ->setCreateAttribute('name');
 
         $this->assertEquals(
-            [['number'=>null, 'name'=>'green']],
-            $formatter->fromFront($field, $attribute, [['id'=>null, 'label'=>'green']])
+            [['number' => null, 'name' => 'green']],
+            $formatter->fromFront($field, $attribute, [['id' => null, 'label' => 'green']]),
         );
     }
 
@@ -174,12 +174,12 @@ class TagsFormatterTest extends SharpTestCase
             ->setCreateAttribute('name');
 
         $this->assertEquals(
-            [['id'=>1], ['id'=>2], ['id'=>null, 'name'=>'green', 'group'=>'test']],
+            [['id' => 1], ['id' => 2], ['id' => null, 'name' => 'green', 'group' => 'test']],
             $formatter->fromFront(
                 $field,
                 $attribute,
-                [['id'=>1], ['id'=>2], ['id'=>null, 'label'=>'green']]
-            )
+                [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']],
+            ),
         );
     }
 

@@ -8,18 +8,18 @@ use Illuminate\Contracts\Auth\Access\Gate;
 class SharpAuthorizationManagerForDashboards
 {
     /**
-     * @param string $ability
-     * @param string $dashboardKey
+     * @param  string  $ability
+     * @param  string  $dashboardKey
      *
      * @throws SharpAuthorizationException
      */
     public function checkForDashboard(string $ability, string $dashboardKey): void
     {
-        if (!$this->hasPolicyFor($dashboardKey)) {
+        if (! $this->hasPolicyFor($dashboardKey)) {
             return;
         }
 
-        if (!app(Gate::class)->check("sharp.{$dashboardKey}.{$ability}")) {
+        if (! app(Gate::class)->check("sharp.{$dashboardKey}.{$ability}")) {
             $this->deny();
         }
     }
@@ -33,8 +33,7 @@ class SharpAuthorizationManagerForDashboards
     }
 
     /**
-     * @param string $entityKey
-     *
+     * @param  string  $entityKey
      * @return bool
      */
     private function hasPolicyFor(string $entityKey): bool

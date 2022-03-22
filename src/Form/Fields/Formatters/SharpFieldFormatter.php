@@ -12,8 +12,7 @@ abstract class SharpFieldFormatter
     protected $instanceId;
 
     /**
-     * @param string|null $instanceId
-     *
+     * @param  string|null  $instanceId
      * @return $this
      */
     public function setInstanceId($instanceId)
@@ -24,18 +23,16 @@ abstract class SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
-     *
      * @return mixed
      */
     abstract public function toFront(SharpFormField $field, $value);
 
     /**
-     * @param SharpFormField $field
-     * @param string         $attribute
+     * @param  SharpFormField  $field
+     * @param  string  $attribute
      * @param $value
-     *
      * @return mixed
      */
     abstract public function fromFront(SharpFormField $field, string $attribute, $value);

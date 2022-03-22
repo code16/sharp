@@ -22,7 +22,7 @@ class SharpAssertionsTest extends SharpTestCase
                     'create' => true,
                     'update' => false,
                 ],
-            ])
+            ]),
         );
 
         $response->assertSharpHasAuthorization('create');
@@ -32,7 +32,8 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_getSharpForm()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -47,14 +48,15 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             route('code16.sharp.api.form.edit', ['leaves', 6]),
-            $response->uri
+            $response->uri,
         );
     }
 
     /** @test */
     public function we_can_test_updateSharpForm()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -70,19 +72,20 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             route('code16.sharp.api.form.update', ['leaves', 6]),
-            $response->uri
+            $response->uri,
         );
 
         $this->assertEquals(
             ['attr' => 'some_value'],
-            $response->postedData
+            $response->postedData,
         );
     }
 
     /** @test */
     public function we_can_test_storeSharpForm()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -98,19 +101,20 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             route('code16.sharp.api.form.store', ['leaves']),
-            $response->uri
+            $response->uri,
         );
 
         $this->assertEquals(
             ['attr' => 'some_value'],
-            $response->postedData
+            $response->postedData,
         );
     }
 
     /** @test */
     public function we_can_test_deleteSharpForm()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -125,14 +129,15 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             route('code16.sharp.api.form.delete', ['leaves', 6]),
-            $response->uri
+            $response->uri,
         );
     }
 
     /** @test */
     public function we_can_test_callSharpInstanceCommandFromList()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -152,23 +157,24 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             route('code16.sharp.api.list.command.instance', [
-                'entityKey'  => 'leaves',
+                'entityKey' => 'leaves',
                 'instanceId' => 6,
                 'commandKey' => 'command',
             ]),
-            $response->uri
+            $response->uri,
         );
 
         $this->assertEquals(
             ['data' => ['attr' => 'some_value']],
-            $response->postedData
+            $response->postedData,
         );
     }
 
     /** @test */
     public function we_can_test_callSharpInstanceCommandFromShow()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -188,23 +194,24 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             route('code16.sharp.api.show.command.instance', [
-                'entityKey'  => 'leaves',
+                'entityKey' => 'leaves',
                 'instanceId' => 6,
                 'commandKey' => 'command',
             ]),
-            $response->uri
+            $response->uri,
         );
 
         $this->assertEquals(
             ['data' => ['attr' => 'some_value']],
-            $response->postedData
+            $response->postedData,
         );
     }
 
     /** @test */
     public function we_can_define_a_current_breadcrumb()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -225,14 +232,15 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6',
-            $response->referer
+            $response->referer,
         );
     }
 
     /** @test */
     public function when_no_current_breadcrumb_is_defined_a_default_one_is_set()
     {
-        $fake = new class() extends SharpTestCase {
+        $fake = new class() extends SharpTestCase
+        {
             use SharpAssertions;
 
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -245,7 +253,7 @@ class SharpAssertionsTest extends SharpTestCase
 
         $this->assertEquals(
             'http://localhost/sharp/s-list/trees/s-form/trees/6',
-            $response->defaultHeaders['referer']
+            $response->defaultHeaders['referer'],
         );
     }
 }

@@ -12,10 +12,10 @@ abstract class LayoutField
     public function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
     {
         if (strpos($fieldKey, '|')) {
-            list($this->fieldKey, $sizes) = explode('|', $fieldKey);
+            [$this->fieldKey, $sizes] = explode('|', $fieldKey);
 
             if (strpos($fieldKey, ',')) {
-                list($this->size, $this->sizeXS) = collect(explode(',', $sizes))->map(function ($size) {
+                [$this->size, $this->sizeXS] = collect(explode(',', $sizes))->map(function ($size) {
                     return (int) $size;
                 });
             } else {
@@ -38,13 +38,13 @@ abstract class LayoutField
     {
         return array_merge(
             [
-                'key'    => $this->fieldKey,
-                'size'   => $this->size,
+                'key' => $this->fieldKey,
+                'size' => $this->size,
                 'sizeXS' => $this->sizeXS,
             ],
             $this->itemLayout
                 ? ['item' => $this->itemLayout]
-                : []
+                : [],
         );
     }
 }

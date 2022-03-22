@@ -23,31 +23,31 @@ class SpaceshipSharpList extends SharpEntityList
     {
         $this
             ->addDataContainer(
-                EntityListDataContainer::make('picture')
+                EntityListDataContainer::make('picture'),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('name')
                     ->setLabel('Name')
-                    ->setSortable()
+                    ->setSortable(),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('capacity')
                     ->setLabel('Capacity')
                     ->setSortable()
-                    ->setHtml(false)
+                    ->setHtml(false),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('type:label')
-                    ->setLabel('Type')
+                    ->setLabel('Type'),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('pilots')
                     ->setLabel('Pilots')
-                    ->setHtml()
+                    ->setHtml(),
             )
             ->addDataContainer(
                 EntityListDataContainer::make('messages_sent_count')
-                    ->setLabel('Messages sent')
+                    ->setLabel('Messages sent'),
             );
     }
 
@@ -136,7 +136,7 @@ class SpaceshipSharpList extends SharpEntityList
             ->setCustomTransformer('picture', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->transform(
                 $spaceships->with('picture', 'type', 'pilots')
-                    ->paginate(10, ['spaceships.*'])
+                    ->paginate(10, ['spaceships.*']),
             );
     }
 }

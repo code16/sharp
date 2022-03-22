@@ -16,10 +16,10 @@ class BelongsToManyRelationUpdater
         $instance->$attribute()->sync(
             $collection
                 ->filter(function ($item) use ($keyName) {
-                    return !is_null($item[$keyName]);
+                    return ! is_null($item[$keyName]);
                 })
                 ->pluck($keyName)
-                ->all()
+                ->all(),
         );
 
         // Then create all non-existing related items (only for SharpFormTagsField "creatable" mode)

@@ -7,8 +7,7 @@ use App\User;
 class SpaceshipPolicy
 {
     /**
-     * @param User $user
-     *
+     * @param  User  $user
      * @return bool
      */
     public function entity(User $user)
@@ -17,9 +16,8 @@ class SpaceshipPolicy
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @param $spaceshipId
-     *
      * @return bool
      */
     public function view(User $user, $spaceshipId)
@@ -28,9 +26,8 @@ class SpaceshipPolicy
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @param $spaceshipId
-     *
      * @return bool
      */
     public function update(User $user, $spaceshipId)
@@ -39,8 +36,7 @@ class SpaceshipPolicy
     }
 
     /**
-     * @param User $user
-     *
+     * @param  User  $user
      * @return bool
      */
     public function create(User $user)
@@ -49,9 +45,8 @@ class SpaceshipPolicy
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @param $spaceshipId
-     *
      * @return bool
      */
     public function delete(User $user, $spaceshipId)

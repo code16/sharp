@@ -72,10 +72,10 @@ class ShowControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(['layout' => [
                 'sections' => [[
-                    'title'   => 'Identity',
+                    'title' => 'Identity',
                     'columns' => [
                         [
-                            'size'   => 6,
+                            'size' => 6,
                             'fields' => [
                                 [
                                     ['key' => 'name'],
@@ -99,7 +99,7 @@ class ShowControllerTest extends BaseApiTest
                     'instance' => [
                         [
                             [
-                                'key'   => 'test_command',
+                                'key' => 'test_command',
                                 'label' => 'Label',
                             ],
                         ],
@@ -107,7 +107,7 @@ class ShowControllerTest extends BaseApiTest
                 ],
                 'state' => [
                     'attribute' => 'state',
-                    'values'    => [
+                    'values' => [
                         [
                             'value' => 'active',
                             'label' => 'Label',
@@ -147,14 +147,14 @@ class ShowControllerTest extends BaseApiTest
                     'instance' => [
                         [
                             [
-                                'key'           => 'test_command',
+                                'key' => 'test_command',
                                 'authorization' => false,
                             ],
                         ],
                     ],
                 ],
                 'state' => [
-                    'attribute'     => 'state',
+                    'attribute' => 'state',
                     'authorization' => false,
                 ],
             ]]);
@@ -166,14 +166,14 @@ class ShowControllerTest extends BaseApiTest
                     'instance' => [
                         [
                             [
-                                'key'           => 'test_command',
+                                'key' => 'test_command',
                                 'authorization' => true,
                             ],
                         ],
                     ],
                 ],
                 'state' => [
-                    'attribute'     => 'state',
+                    'attribute' => 'state',
                     'authorization' => true,
                 ],
             ]]);

@@ -10,8 +10,7 @@ trait HasFiltersInQuery
     protected array $filters;
 
     /**
-     * @param string $filterName
-     *
+     * @param  string  $filterName
      * @return mixed|null
      */
     public function filterFor(string $filterName)
@@ -20,16 +19,16 @@ trait HasFiltersInQuery
             return $this->filterFor("/forced/$filterName");
         }
 
-        if (!isset($this->filters[$filterName])) {
+        if (! isset($this->filters[$filterName])) {
             return null;
         }
 
         if (Str::contains($this->filters[$filterName], '..')) {
-            list($start, $end) = explode('..', $this->filters[$filterName]);
+            [$start, $end] = explode('..', $this->filters[$filterName]);
 
             return [
                 'start' => Carbon::createFromFormat('Ymd', $start)->setTime(0, 0, 0, 0),
-                'end'   => Carbon::createFromFormat('Ymd', $end)->setTime(23, 59, 59, 999999),
+                'end' => Carbon::createFromFormat('Ymd', $end)->setTime(23, 59, 59, 999999),
             ];
         }
 
@@ -67,8 +66,8 @@ trait HasFiltersInQuery
     }
 
     /**
-     * @param string            $filter
-     * @param string|array|null $value
+     * @param  string  $filter
+     * @param  string|array|null  $value
      */
     protected function setFilterValue(string $filter, $value)
     {

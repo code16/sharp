@@ -52,8 +52,8 @@ class LinkToEntityList extends SharpLinkTo
             'code16.sharp.list',
             array_merge(
                 ['entityKey' => $this->entityKey],
-                $this->generateQuerystring()
-            )
+                $this->generateQuerystring(),
+            ),
         );
     }
 

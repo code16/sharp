@@ -13,9 +13,8 @@ abstract class SingleEntityState extends EntityState
     }
 
     /**
-     * @param mixed  $instanceId
-     * @param string $stateId
-     *
+     * @param  mixed  $instanceId
+     * @param  string  $stateId
      * @return array
      */
     final protected function updateState($instanceId, string $stateId): array

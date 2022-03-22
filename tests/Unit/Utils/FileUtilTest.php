@@ -22,7 +22,7 @@ class FileUtilTest extends SharpTestCase
 
         $this->assertEquals(
             'test.txt',
-            $fileUtil->findAvailableName('test.txt', 'tmp', 'local')
+            $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
         );
     }
 
@@ -36,14 +36,14 @@ class FileUtilTest extends SharpTestCase
 
         $this->assertEquals(
             'test-1.txt',
-            $fileUtil->findAvailableName('test.txt', 'tmp', 'local')
+            $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
         );
 
         touch(storage_path('app/tmp/test-1.txt'));
 
         $this->assertEquals(
             'test-2.txt',
-            $fileUtil->findAvailableName('test.txt', 'tmp', 'local')
+            $fileUtil->findAvailableName('test.txt', 'tmp', 'local'),
         );
     }
 
@@ -54,7 +54,7 @@ class FileUtilTest extends SharpTestCase
 
         $this->assertEquals(
             'test.txt',
-            $fileUtil->findAvailableName('ôéàtest*.txt', 'tmp', 'local')
+            $fileUtil->findAvailableName('ôéàtest*.txt', 'tmp', 'local'),
         );
     }
 }

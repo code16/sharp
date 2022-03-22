@@ -9,8 +9,7 @@ class FitFilter extends ThumbnailFilter
     /**
      * Applies filter effects to given image.
      *
-     * @param Image $image
-     *
+     * @param  Image  $image
      * @return Image
      */
     public function applyFilter(Image $image)

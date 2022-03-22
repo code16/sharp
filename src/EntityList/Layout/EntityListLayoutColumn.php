@@ -24,9 +24,9 @@ class EntityListLayoutColumn
     public function toArray(): array
     {
         return [
-            'key'      => $this->key,
-            'size'     => $this->size,
-            'sizeXS'   => $this->sizeXS,
+            'key' => $this->key,
+            'size' => $this->size,
+            'sizeXS' => $this->sizeXS,
             'hideOnXS' => $this->largeOnly,
         ];
     }

@@ -26,9 +26,8 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string     $ratio              16:9, 1:1, ...
-     * @param array|null $croppableFileTypes
-     *
+     * @param  string  $ratio  16:9, 1:1, ...
+     * @param  array|null  $croppableFileTypes
      * @return static
      */
     public function setCropRatio(string $ratio = null, array $croppableFileTypes = null): self
@@ -81,8 +80,7 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string|Closure $storageBasePath
-     *
+     * @param  string|Closure  $storageBasePath
      * @return static
      */
     public function setStorageBasePath($storageBasePath): self
@@ -93,8 +91,7 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string|array $fileFilter
-     *
+     * @param  string|array  $fileFilter
      * @return static
      */
     public function setFileFilter($fileFilter): self
@@ -127,13 +124,12 @@ trait SharpFormFieldWithUpload
     }
 
     /**
-     * @param string|array $fileFilter
-     *
+     * @param  string|array  $fileFilter
      * @return array
      */
     private function formatFileExtension($fileFilter): array
     {
-        if (!is_array($fileFilter)) {
+        if (! is_array($fileFilter)) {
             $fileFilter = explode(',', $fileFilter);
         }
 

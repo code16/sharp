@@ -24,15 +24,14 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param mixed  $value
-     * @param object $instance
-     * @param string $attribute
-     *
+     * @param  mixed  $value
+     * @param  object  $instance
+     * @param  string  $attribute
      * @return mixed
      */
     public function apply($value, $instance = null, $attribute = null)
     {
-        if (!$instance->$attribute) {
+        if (! $instance->$attribute) {
             return null;
         }
 
@@ -47,7 +46,7 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
                 $this->imageWidth,
                 $this->imageHeight,
                 $this->imageFilters,
-                'partials.markdown-embedded-file'
+                'partials.markdown-embedded-file',
             );
         }
 

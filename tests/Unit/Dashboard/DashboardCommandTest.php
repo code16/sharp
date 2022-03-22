@@ -14,10 +14,12 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_commands_config_of_a_dashboard()
     {
-        $dashboard = new class() extends FakeSharpDashboard {
+        $dashboard = new class() extends FakeSharpDashboard
+        {
             public function buildDashboardConfig(): void
             {
-                $this->addDashboardCommand('dashboardCommand', new class() extends DashboardCommand {
+                $this->addDashboardCommand('dashboardCommand', new class() extends DashboardCommand
+                {
                     public function label(): string
                     {
                         return 'My Dashboard Command';
@@ -26,7 +28,7 @@ class DashboardCommandTest extends SharpTestCase
                     public function execute(DashboardQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -37,9 +39,9 @@ class DashboardCommandTest extends SharpTestCase
                 'dashboard' => [
                     [
                         [
-                            'key'           => 'dashboardCommand',
-                            'label'         => 'My Dashboard Command',
-                            'type'          => 'dashboard',
+                            'key' => 'dashboardCommand',
+                            'label' => 'My Dashboard Command',
+                            'type' => 'dashboard',
                             'authorization' => true,
                         ],
                     ],
@@ -51,10 +53,12 @@ class DashboardCommandTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_form_on_a_dashboard_command()
     {
-        $list = new class() extends FakeSharpDashboard {
+        $list = new class() extends FakeSharpDashboard
+        {
             public function buildDashboardConfig(): void
             {
-                $this->addDashboardCommand('dashboardCommand', new class() extends DashboardCommand {
+                $this->addDashboardCommand('dashboardCommand', new class() extends DashboardCommand
+                {
                     public function label(): string
                     {
                         return 'My Dashboard Command';
@@ -73,7 +77,7 @@ class DashboardCommandTest extends SharpTestCase
                     public function execute(DashboardQueryParams $params, array $data = []): array
                     {
                     }
-                });
+                }, );
             }
         };
 
@@ -84,14 +88,14 @@ class DashboardCommandTest extends SharpTestCase
                 'dashboard' => [
                     [
                         [
-                            'key'   => 'dashboardCommand',
+                            'key' => 'dashboardCommand',
                             'label' => 'My Dashboard Command',
-                            'type'  => 'dashboard',
-                            'form'  => [
+                            'type' => 'dashboard',
+                            'form' => [
                                 'fields' => [
                                     'message' => [
-                                        'key'       => 'message',
-                                        'type'      => 'text',
+                                        'key' => 'message',
+                                        'type' => 'text',
                                         'inputType' => 'text',
                                     ],
                                 ],

@@ -77,13 +77,13 @@ class EntityListControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(['containers' => [
                 'name' => [
-                    'key'      => 'name',
-                    'label'    => 'Name',
+                    'key' => 'name',
+                    'label' => 'Name',
                     'sortable' => true,
-                    'html'     => true,
+                    'html' => true,
                 ], 'age' => [
-                    'key'      => 'age',
-                    'label'    => 'Age',
+                    'key' => 'age',
+                    'label' => 'Age',
                     'sortable' => true,
                 ],
             ]]);
@@ -98,12 +98,12 @@ class EntityListControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(['layout' => [
                 [
-                    'key'    => 'name',
-                    'size'   => 6,
+                    'key' => 'name',
+                    'size' => 6,
                     'sizeXS' => 12,
                 ], [
-                    'key'      => 'age',
-                    'size'     => 6,
+                    'key' => 'age',
+                    'size' => 6,
                     'hideOnXS' => true,
                 ],
             ]]);
@@ -118,8 +118,8 @@ class EntityListControllerTest extends BaseApiTest
             ->assertStatus(200)
             ->assertJson(['config' => [
                 'instanceIdAttribute' => 'id',
-                'searchable'          => true,
-                'paginated'           => false,
+                'searchable' => true,
+                'paginated' => false,
             ]]);
     }
 
@@ -136,9 +136,9 @@ class EntityListControllerTest extends BaseApiTest
         $this->json('get', '/sharp/api/list/person')
             ->assertStatus(200)
             ->assertJson(['notifications' => [[
-                'level'    => 'success',
-                'title'    => 'title',
-                'message'  => 'body',
+                'level' => 'success',
+                'title' => 'title',
+                'message' => 'body',
                 'autoHide' => false,
             ]]]);
 
@@ -183,7 +183,7 @@ class EntityListControllerTest extends BaseApiTest
         // Configure a Show Page for the entity
         $this->app['config']->set(
             'sharp.entities.person.show',
-            PersonSharpShow::class
+            PersonSharpShow::class,
         );
 
         $this->json('get', '/sharp/api/list/person')

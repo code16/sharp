@@ -22,7 +22,7 @@ use Code16\Sharp\Http\WebDispatchController;
 
 // API routes
 Route::group([
-    'prefix'     => '/'.sharp_base_url_segment().'/api',
+    'prefix' => '/'.sharp_base_url_segment().'/api',
     'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_validation', 'sharp_locale'],
 ], function () {
     Route::get('/dashboard/{dashboardKey}', [\Code16\Sharp\Http\Api\DashboardController::class, 'show'])
@@ -107,7 +107,7 @@ Route::group([
 
 // Web routes
 Route::group([
-    'prefix'     => '/'.sharp_base_url_segment(),
+    'prefix' => '/'.sharp_base_url_segment(),
     'middleware' => ['sharp_web', 'sharp_invalidate_cache'],
 ], function () {
     Route::get('/login', [LoginController::class, 'create'])

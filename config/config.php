@@ -82,13 +82,13 @@ return [
 
         // These two configs are used for thumbnail generation inside Sharp.
         'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
-        'thumbnails_dir'  => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
+        'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
     ],
 
     // Optional. Auth related configuration.
     'auth' => [
         // Name of the login and password attributes of the User Model.
-        'login_attribute'    => 'email',
+        'login_attribute' => 'email',
         'password_attribute' => 'password',
 
         // Name of the attribute used to display the current user in the UI.

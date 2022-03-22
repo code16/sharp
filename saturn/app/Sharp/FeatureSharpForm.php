@@ -18,16 +18,16 @@ class FeatureSharpForm extends SharpForm
         $this
             ->addField(
                 SharpFormTextField::make('name')
-                    ->setLabel('Name')
+                    ->setLabel('Name'),
             )->addField(
                 SharpFormSelectField::make('type', Feature::TYPES)
                     ->setDisplayAsDropdown()
-                    ->setLabel('Type')
+                    ->setLabel('Type'),
             )->addField(
                 SharpFormSelectField::make('subtype', Feature::SUBTYPES)
                     ->setDisplayAsDropdown()
                     ->setOptionsLinkedTo('type')
-                    ->setLabel('Sub-type')
+                    ->setLabel('Sub-type'),
             );
     }
 
@@ -42,7 +42,7 @@ class FeatureSharpForm extends SharpForm
     public function find($id): array
     {
         return $this->transform(
-            Feature::findOrFail($id)
+            Feature::findOrFail($id),
         );
     }
 

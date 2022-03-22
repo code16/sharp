@@ -18,19 +18,20 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_get_formatted_data_in_creation_with_the_default_create_function()
     {
-        $sharpForm = new class() extends BaseSharpForm {
+        $sharpForm = new class() extends BaseSharpForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
-                    SharpFormMarkdownField::make('md')
+                    SharpFormMarkdownField::make('md'),
                 )->addField(
-                    SharpFormCheckField::make('check', 'text')
+                    SharpFormCheckField::make('check', 'text'),
                 );
             }
         };
 
         $this->assertEquals([
-            'md'    => ['text' => null],
+            'md' => ['text' => null],
             'check' => false,
         ], $sharpForm->newInstance());
     }
@@ -38,19 +39,20 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function we_get_formatted_data_in_creation_with_the_default_create_function_with_subclasses()
     {
-        $sharpForm = new class() extends BaseSharpForm {
+        $sharpForm = new class() extends BaseSharpForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
-                    SharpFormTextField::make('name')
+                    SharpFormTextField::make('name'),
                 )->addField(
-                    SharpFormMarkdownField::make('subclass:company')
+                    SharpFormMarkdownField::make('subclass:company'),
                 );
             }
         };
 
         $this->assertEquals([
-            'name'             => '',
+            'name' => '',
             'subclass:company' => ['text' => null],
         ], $sharpForm->newInstance());
     }
@@ -58,35 +60,37 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function if_the_field_formatter_needs_it_we_can_delay_its_execution_after_first_save()
     {
-        $sharpForm = new class() extends BaseSharpForm {
+        $sharpForm = new class() extends BaseSharpForm
+        {
             public $instance;
 
             public function buildFormFields(): void
             {
                 $this->addField(
-                    SharpFormTextField::make('normal')
+                    SharpFormTextField::make('normal'),
                 )->addField(
                     SharpFormTextField::make('delayed')
-                        ->setFormatter(new class() extends SharpFieldFormatter {
+                        ->setFormatter(new class() extends SharpFieldFormatter
+                        {
                             public function toFront(SharpFormField $field, $value)
                             {
                             }
 
                             public function fromFront(SharpFormField $field, string $attribute, $value)
                             {
-                                if (!$this->instanceId) {
+                                if (! $this->instanceId) {
                                     throw new SharpFormFieldFormattingMustBeDelayedException();
                                 }
 
                                 return $value.'-'.$this->instanceId;
                             }
-                        })
+                        }, ),
                 );
             }
 
             public function update($id, array $data)
             {
-                if (!$id) {
+                if (! $id) {
                     $this->instance = ['id' => 1] + $data;
                 } else {
                     $this->instance += $data;
@@ -97,13 +101,13 @@ class SharpFormTest extends SharpTestCase
         };
 
         $sharpForm->storeInstance([
-            'normal'  => 'abc',
+            'normal' => 'abc',
             'delayed' => 'abc',
         ]);
 
         $this->assertEquals([
-            'id'      => 1,
-            'normal'  => 'abc',
+            'id' => 1,
+            'normal' => 'abc',
             'delayed' => 'abc-1',
         ], $sharpForm->instance);
     }
@@ -111,12 +115,14 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function an_exception_is_raised_if_we_try_to_delay_but_the_update_does_not_return_the_instance_id()
     {
-        $sharpForm = new class() extends BaseSharpForm {
+        $sharpForm = new class() extends BaseSharpForm
+        {
             public function buildFormFields(): void
             {
                 $this->addField(
                     SharpFormTextField::make('delayed')
-                        ->setFormatter(new class() extends SharpFieldFormatter {
+                        ->setFormatter(new class() extends SharpFieldFormatter
+                        {
                             public function toFront(SharpFormField $field, $value)
                             {
                             }
@@ -125,7 +131,7 @@ class SharpFormTest extends SharpTestCase
                             {
                                 throw new SharpFormFieldFormattingMustBeDelayedException();
                             }
-                        })
+                        }, ),
                 );
             }
         };
@@ -139,24 +145,26 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function single_forms_are_declared_in_config()
     {
-        $sharpForm = new class() extends BaseSharpSingleForm {
+        $sharpForm = new class() extends BaseSharpSingleForm
+        {
         };
 
         $sharpForm->buildFormConfig();
 
         $this->assertEquals(
             [
-                'isSingle'    => true,
+                'isSingle' => true,
                 'hasShowPage' => false,
             ],
-            $sharpForm->formConfig()
+            $sharpForm->formConfig(),
         );
     }
 
     /** @test */
     public function we_can_declare_setDisplayShowPageAfterCreation_in_config()
     {
-        $sharpForm = new class() extends BaseSharpForm {
+        $sharpForm = new class() extends BaseSharpForm
+        {
             public function buildFormConfig(): void
             {
                 $this->setDisplayShowPageAfterCreation(true);
@@ -167,7 +175,7 @@ class SharpFormTest extends SharpTestCase
 
         $this->assertEquals(
             ['hasShowPage' => true],
-            $sharpForm->formConfig()
+            $sharpForm->formConfig(),
         );
     }
 }

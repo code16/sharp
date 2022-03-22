@@ -73,7 +73,7 @@ class SharpServiceProvider extends ServiceProvider
 
         view()->composer(
             ['sharp::form', 'sharp::show', 'sharp::list', 'sharp::dashboard', 'sharp::welcome', 'sharp::login', 'sharp::unauthorized'],
-            AssetViewComposer::class
+            AssetViewComposer::class,
         );
     }
 
@@ -85,12 +85,12 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             SharpAuthorizationManager::class,
-            SharpAuthorizationManager::class
+            SharpAuthorizationManager::class,
         );
 
         $this->app->singleton(
             CurrentSharpRequest::class,
-            CurrentSharpRequest::class
+            CurrentSharpRequest::class,
         );
 
         $this->commands([
@@ -162,47 +162,47 @@ class SharpServiceProvider extends ServiceProvider
         $this->app['router']
             ->aliasMiddleware(
                 'sharp_api_append_form_authorizations',
-                AppendFormAuthorizations::class
+                AppendFormAuthorizations::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_list_authorizations',
-                AppendListAuthorizations::class
+                AppendListAuthorizations::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_multiform_in_list',
-                AppendMultiformInEntityList::class
+                AppendMultiformInEntityList::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_notifications',
-                AppendNotifications::class
+                AppendNotifications::class,
             )
             ->aliasMiddleware(
                 'sharp_api_errors',
-                HandleSharpApiErrors::class
+                HandleSharpApiErrors::class,
             )
             ->aliasMiddleware(
                 'sharp_api_validation',
-                BindSharpValidationResolver::class
+                BindSharpValidationResolver::class,
             )
             ->aliasMiddleware(
                 'sharp_api_append_breadcrumb',
-                AppendBreadcrumb::class
+                AppendBreadcrumb::class,
             )
             ->aliasMiddleware(
                 'sharp_locale',
-                SetSharpLocale::class
+                SetSharpLocale::class,
             )
             ->aliasMiddleware(
                 'sharp_auth',
-                SharpAuthenticate::class
+                SharpAuthenticate::class,
             )
             ->aliasMiddleware(
                 'sharp_guest',
-                SharpRedirectIfAuthenticated::class
+                SharpRedirectIfAuthenticated::class,
             )
             ->aliasMiddleware(
                 'sharp_invalidate_cache',
-                InvalidateCache::class
+                InvalidateCache::class,
             );
     }
 }

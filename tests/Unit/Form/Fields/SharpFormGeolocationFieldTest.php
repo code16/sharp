@@ -15,13 +15,13 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'               => 'geo', 'type' => 'geolocation',
-                'displayUnit'       => 'DMS', 'geocoding' => false,
-                'mapsProvider'      => ['name' => 'gmaps', 'options' => []],
+                'key' => 'geo', 'type' => 'geolocation',
+                'displayUnit' => 'DMS', 'geocoding' => false,
+                'mapsProvider' => ['name' => 'gmaps', 'options' => []],
                 'geocodingProvider' => ['name' => 'gmaps', 'options' => []],
-                'zoomLevel'         => 10,
+                'zoomLevel' => 10,
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -33,7 +33,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['displayUnit' => 'DMS'],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField = SharpFormGeolocationField::make('geo')
@@ -41,7 +41,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['displayUnit' => 'DD'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -53,7 +53,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['geocoding' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -65,10 +65,10 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'mapsProvider'      => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
+                'mapsProvider' => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
                 'geocodingProvider' => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -80,10 +80,10 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'mapsProvider'      => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
+                'mapsProvider' => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
                 'geocodingProvider' => ['name' => 'gmaps', 'options' => []],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField = SharpFormGeolocationField::make('geo')
@@ -91,10 +91,10 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'mapsProvider'      => ['name' => 'gmaps', 'options' => []],
+                'mapsProvider' => ['name' => 'gmaps', 'options' => []],
                 'geocodingProvider' => ['name' => 'gmaps', 'options' => ['apiKey' => 'my-key']],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -106,7 +106,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['zoomLevel' => 15],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -122,7 +122,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
                     'lat' => 12.4, 'lng' => -3.461894989013672,
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -136,7 +136,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArrayNotHasKey(
             'initialPosition',
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -157,7 +157,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -170,10 +170,10 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'mapsProvider'      => ['name' => 'osm', 'options' => []],
+                'mapsProvider' => ['name' => 'osm', 'options' => []],
                 'geocodingProvider' => ['name' => 'osm', 'options' => []],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -193,7 +193,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
         $formField->setMapsApiKey('my-key');
@@ -203,11 +203,11 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
                 'mapsProvider' => [
                     'name' => 'osm', 'options' => [
                         'tilesUrl' => 'test',
-                        'apiKey'   => 'my-key',
+                        'apiKey' => 'my-key',
                     ],
                 ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -241,7 +241,7 @@ class SharpFormGeolocationFieldTest extends SharpTestCase
 
         $this->assertArrayNotHasKey(
             'boundaries',
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

@@ -26,7 +26,7 @@ class FormLayoutTab implements HasLayout
     public function toArray(): array
     {
         return [
-            'title'   => $this->title,
+            'title' => $this->title,
             'columns' => collect($this->columns)->map(function ($column) {
                 return $column->toArray();
             })->all(),

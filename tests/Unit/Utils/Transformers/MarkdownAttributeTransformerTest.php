@@ -18,7 +18,7 @@ class MarkdownAttributeTransformerTest extends SharpTestCase
 
         $this->assertEquals(
             '<p>some basic <em>markdown</em> <strong>test</strong></p>',
-            (new MarkdownAttributeTransformer())->apply($object->text, $object, 'text')
+            (new MarkdownAttributeTransformer())->apply($object->text, $object, 'text'),
         );
     }
 
@@ -37,7 +37,7 @@ class MarkdownAttributeTransformerTest extends SharpTestCase
 
         $this->assertStringContainsString(
             sprintf('<img src="/storage/%s/markdown/10-/test.jpg?', config('sharp.uploads.thumbnails_dir')),
-            (new MarkdownAttributeTransformer())->handleImages(10)->apply($object->text, $object, 'text')
+            (new MarkdownAttributeTransformer())->handleImages(10)->apply($object->text, $object, 'text'),
         );
     }
 }

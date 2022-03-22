@@ -17,7 +17,7 @@ trait HandleEntityCommands
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
 
-        if (!$commandHandler instanceof EntityCommand) {
+        if (! $commandHandler instanceof EntityCommand) {
             throw new SharpException("Handler class for entity command [{$commandName}] is not an subclass of ".EntityCommand::class);
         }
 
@@ -50,7 +50,7 @@ trait HandleEntityCommands
     {
         $this->appendCommandsToConfig(
             collect($this->entityCommandHandlers),
-            $config
+            $config,
         );
 
         // If a command is defined as [primary], we have to update its config for the front:

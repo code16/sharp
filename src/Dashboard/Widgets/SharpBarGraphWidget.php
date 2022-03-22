@@ -35,10 +35,10 @@ class SharpBarGraphWidget extends SharpGraphWidget
             parent::toArray(),
             [
                 'dateLabels' => $this->displayHorizontalAxisAsTimeline,
-                'options'    => [
+                'options' => [
                     'horizontal' => $this->horizontal,
                 ],
-            ]
+            ],
         );
     }
 }

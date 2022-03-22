@@ -159,31 +159,31 @@ class SharpFormListField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'itemFields'               => 'required|array',
-            'itemIdAttribute'          => 'required',
-            'addable'                  => 'boolean',
-            'removable'                => 'boolean',
-            'sortable'                 => 'boolean',
-            'allowBulkUpload'          => 'boolean',
-            'bulkUploadItemFieldKey'   => 'nullable|string',
+            'itemFields' => 'required|array',
+            'itemIdAttribute' => 'required',
+            'addable' => 'boolean',
+            'removable' => 'boolean',
+            'sortable' => 'boolean',
+            'allowBulkUpload' => 'boolean',
+            'bulkUploadItemFieldKey' => 'nullable|string',
             'bulkUploadFileCountLimit' => 'integer',
-            'maxItemCount'             => 'nullable|integer',
+            'maxItemCount' => 'nullable|integer',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            'addable'               => $this->addable,
-            'removable'             => $this->removable,
-            'sortable'              => $this->sortable,
-            'addText'               => $this->addText,
+            'addable' => $this->addable,
+            'removable' => $this->removable,
+            'sortable' => $this->sortable,
+            'addText' => $this->addText,
             'collapsedItemTemplate' => $this->template('item'),
-            'maxItemCount'          => $this->maxItemCount,
-            'bulkUploadField'       => $this->allowBulkUpload ? $this->bulkUploadItemFieldKey : null,
-            'bulkUploadLimit'       => $this->bulkUploadFileCountLimit,
-            'itemIdAttribute'       => $this->itemIdAttribute,
-            'itemFields'            => collect($this->itemFields)
+            'maxItemCount' => $this->maxItemCount,
+            'bulkUploadField' => $this->allowBulkUpload ? $this->bulkUploadItemFieldKey : null,
+            'bulkUploadLimit' => $this->bulkUploadFileCountLimit,
+            'itemIdAttribute' => $this->itemIdAttribute,
+            'itemFields' => collect($this->itemFields)
                 ->map(function ($field) {
                     return $field->toArray();
                 })

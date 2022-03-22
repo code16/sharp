@@ -61,7 +61,7 @@ class AuthenticationTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.auth.check_handler',
-            AuthenticationTestCheckHandler::class
+            AuthenticationTestCheckHandler::class,
         );
 
         $this->actingAs(new User(['name' => 'ok']));
@@ -89,15 +89,15 @@ class AuthenticationTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.auth.guard',
-            'sharp'
+            'sharp',
         );
 
         $this->app['config']->set(
             'auth.guards.sharp',
             [
-                'driver'   => 'sharp',
+                'driver' => 'sharp',
                 'provider' => 'users',
-            ]
+            ],
         );
 
         return $authGuard;
@@ -120,7 +120,7 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
     public function guest()
     {
-        return !$this->isValid;
+        return ! $this->isValid;
     }
 
     public function user()

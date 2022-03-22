@@ -14,7 +14,7 @@ class AssetViewComposerTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.extensions.assets.head',
-            ['/path/to/asset.css']
+            ['/path/to/asset.css'],
         );
 
         $this->get(route('code16.sharp.login'))

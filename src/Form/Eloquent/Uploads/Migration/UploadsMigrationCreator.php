@@ -14,12 +14,11 @@ class UploadsMigrationCreator extends MigrationCreator
     /**
      * Get the migration stub file.
      *
-     * @param string $table
-     * @param bool   $create
+     * @param  string  $table
+     * @param  bool  $create
+     * @return string
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     *
-     * @return string
      */
     protected function getStub($table, $create)
     {

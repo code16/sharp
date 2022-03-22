@@ -16,9 +16,9 @@ abstract class SharpFormEloquentBaseTest extends SharpTestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         Schema::create('people', function (Blueprint $table) {

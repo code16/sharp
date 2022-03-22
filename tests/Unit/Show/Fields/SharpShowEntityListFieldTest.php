@@ -13,15 +13,15 @@ class SharpShowEntityListFieldTest extends SharpTestCase
         $field = SharpShowEntityListField::make('entityListField', 'entityKey');
 
         $this->assertEquals([
-            'key'               => 'entityListField',
-            'type'              => 'entityList',
-            'entityListKey'     => 'entityKey',
-            'showEntityState'   => true,
-            'showCreateButton'  => true,
+            'key' => 'entityListField',
+            'type' => 'entityList',
+            'entityListKey' => 'entityKey',
+            'showEntityState' => true,
+            'showCreateButton' => true,
             'showReorderButton' => true,
-            'showSearchField'   => true,
-            'emptyVisible'      => false,
-            'hiddenCommands'    => ['entity' => [], 'instance' => []],
+            'showSearchField' => true,
+            'emptyVisible' => false,
+            'hiddenCommands' => ['entity' => [], 'instance' => []],
         ], $field->toArray());
     }
 

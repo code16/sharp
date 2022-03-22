@@ -14,13 +14,13 @@ class SharpFormDateFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'         => 'date', 'type' => 'date',
-                'hasDate'     => true, 'hasTime' => false,
-                'minTime'     => '00:00', 'maxTime' => '23:59',
-                'stepTime'    => 30, 'displayFormat' => 'YYYY-MM-DD',
+                'key' => 'date', 'type' => 'date',
+                'hasDate' => true, 'hasTime' => false,
+                'minTime' => '00:00', 'maxTime' => '23:59',
+                'stepTime' => 30, 'displayFormat' => 'YYYY-MM-DD',
                 'mondayFirst' => true, 'language' => $this->app->getLocale(),
             ],
-            $defaultFormField->toArray()
+            $defaultFormField->toArray(),
         );
     }
 
@@ -39,17 +39,17 @@ class SharpFormDateFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['key' => 'date', 'type' => 'date', 'hasDate' => true, 'hasTime' => false],
-            $dateFormField->toArray()
+            $dateFormField->toArray(),
         );
 
         $this->assertArraySubset(
             ['key' => 'date', 'type' => 'date', 'hasTime' => true, 'hasDate' => true],
-            $dateTimeFormField->toArray()
+            $dateTimeFormField->toArray(),
         );
 
         $this->assertArraySubset(
             ['key' => 'date', 'type' => 'date', 'hasTime' => true, 'hasDate' => false],
-            $timeFormField->toArray()
+            $timeFormField->toArray(),
         );
     }
 
@@ -65,7 +65,7 @@ class SharpFormDateFieldTest extends SharpTestCase
                 'minTime' => '08:00',
                 'maxTime' => '20:30',
             ],
-            $dateTimeFormField->toArray()
+            $dateTimeFormField->toArray(),
         );
     }
 
@@ -77,7 +77,7 @@ class SharpFormDateFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['stepTime' => 45],
-            $dateFormField->toArray()
+            $dateFormField->toArray(),
         );
     }
 
@@ -89,7 +89,7 @@ class SharpFormDateFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['mondayFirst' => true],
-            $dateFormField->toArray()
+            $dateFormField->toArray(),
         );
     }
 
@@ -101,7 +101,7 @@ class SharpFormDateFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['displayFormat' => 'DD/MM/YYYY'],
-            $dateFormField->toArray()
+            $dateFormField->toArray(),
         );
     }
 
@@ -120,17 +120,17 @@ class SharpFormDateFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['displayFormat' => 'YYYY-MM-DD'],
-            $dateFormField->toArray()
+            $dateFormField->toArray(),
         );
 
         $this->assertArraySubset(
             ['displayFormat' => 'YYYY-MM-DD HH:mm'],
-            $dateTimeFormField->toArray()
+            $dateTimeFormField->toArray(),
         );
 
         $this->assertArraySubset(
             ['displayFormat' => 'HH:mm'],
-            $timeFormField->toArray()
+            $timeFormField->toArray(),
         );
     }
 }

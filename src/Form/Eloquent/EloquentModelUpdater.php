@@ -33,8 +33,7 @@ class EloquentModelUpdater
     }
 
     /**
-     * @param array|Arrayable $configuration
-     *
+     * @param  array|Arrayable  $configuration
      * @return $this
      */
     public function initRelationshipsConfiguration($configuration): self
@@ -49,9 +48,9 @@ class EloquentModelUpdater
     /**
      * Valuates the $attribute with $value.
      *
-     * @param Model  $instance
-     * @param string $attribute
-     * @param mixed  $value
+     * @param  Model  $instance
+     * @param  string  $attribute
+     * @param  mixed  $value
      */
     protected function valuateAttribute(Model $instance, string $attribute, $value): void
     {
@@ -71,13 +70,13 @@ class EloquentModelUpdater
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
                 .(new \ReflectionClass($type))->getShortName()
-                .'RelationUpdater');
+                .'RelationUpdater', );
 
             $relationshipUpdater->update(
                 $instance,
                 $attribute,
                 $value,
-                $this->relationshipsConfiguration[$attribute] ?? null
+                $this->relationshipsConfiguration[$attribute] ?? null,
             );
         }
     }

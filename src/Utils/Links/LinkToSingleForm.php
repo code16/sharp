@@ -9,7 +9,7 @@ class LinkToSingleForm extends LinkToSingleShowPage
         return sprintf(
             '%s/s-form/%s',
             parent::renderAsUrl(),
-            $this->entityKey
+            $this->entityKey,
         );
     }
 }

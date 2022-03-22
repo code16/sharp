@@ -44,8 +44,8 @@ class UploadFormatterTest extends SharpTestCase
             'attribute',
             [
                 'name' => 'test.png',
-            ]
-        )
+            ],
+        ),
         );
     }
 
@@ -62,20 +62,20 @@ class UploadFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'file_name'   => 'data/image.jpg',
-                'size'        => $uploadedFile->getSize(),
-                'mime_type'   => 'image/jpeg',
-                'disk'        => 'local',
+                'file_name' => 'data/image.jpg',
+                'size' => $uploadedFile->getSize(),
+                'mime_type' => 'image/jpeg',
+                'disk' => 'local',
                 'transformed' => false,
             ],
             (new UploadFormatter())->fromFront(
                 $field,
                 'attribute',
                 [
-                    'name'     => '/image.jpg',
+                    'name' => '/image.jpg',
                     'uploaded' => true,
-                ]
-            )
+                ],
+            ),
         );
 
         Storage::disk('local')->assertExists('data/image.jpg');
@@ -98,9 +98,9 @@ class UploadFormatterTest extends SharpTestCase
             $field,
             'attribute',
             [
-                'name'     => '/image.jpg',
+                'name' => '/image.jpg',
                 'uploaded' => true,
-            ]
+            ],
         );
     }
 
@@ -121,10 +121,10 @@ class UploadFormatterTest extends SharpTestCase
                 $field,
                 'attribute',
                 [
-                    'name'     => 'image.jpg',
+                    'name' => 'image.jpg',
                     'uploaded' => true,
-                ]
-            )
+                ],
+            ),
         );
 
         Storage::disk('local')->assertExists('data/Test/50/image.jpg');
@@ -148,13 +148,13 @@ class UploadFormatterTest extends SharpTestCase
                 $field,
                 'attribute',
                 [
-                    'name'     => '/test/image.jpg',
+                    'name' => '/test/image.jpg',
                     'cropData' => [
                         'height' => .8, 'width' => .6, 'x' => 0, 'y' => .1, 'rotate' => 1,
                     ],
                     'uploaded' => false,
-                ]
-            )
+                ],
+            ),
         );
     }
 
@@ -176,13 +176,13 @@ class UploadFormatterTest extends SharpTestCase
                 $field,
                 'attribute',
                 [
-                    'name'     => '/data/test/image.jpg',
+                    'name' => '/data/test/image.jpg',
                     'cropData' => [
                         'height' => .8, 'width' => .6, 'x' => 0, 'y' => .1, 'rotate' => 1,
                     ],
                     'uploaded' => false,
-                ]
-            )
+                ],
+            ),
         );
     }
 
@@ -196,19 +196,20 @@ class UploadFormatterTest extends SharpTestCase
         \Mockery::mock('alias:\Spatie\ImageOptimizer\OptimizerChainFactory')
             ->shouldReceive('create')
             ->once()
-            ->andReturn(new class() {
+            ->andReturn(new class()
+            {
                 public function optimize()
                 {
                     return true;
                 }
-            });
+            }, );
 
         $field = SharpFormUploadField::make('upload')
             ->shouldOptimizeImage()
             ->setStorageDisk('local');
 
         (new UploadFormatter())->fromFront($field, 'attribute', [
-            'name'     => 'image.jpg',
+            'name' => 'image.jpg',
             'uploaded' => true,
         ]);
     }
@@ -237,10 +238,10 @@ class UploadFormatterTest extends SharpTestCase
                 $field,
                 'attribute',
                 [
-                    'name'     => '/image.jpg',
+                    'name' => '/image.jpg',
                     'uploaded' => true,
-                ]
-            )
+                ],
+            ),
         );
     }
 }

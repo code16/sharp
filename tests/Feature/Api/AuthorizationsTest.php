@@ -18,8 +18,8 @@ class AuthorizationsTest extends BaseApiTest
                 'delete' => false,
                 'create' => false,
                 'update' => false,
-                'view'   => false,
-            ]
+                'view' => false,
+            ],
         );
 
         $this->postJson('/sharp/api/form/person/50', [])->assertStatus(403);
@@ -45,7 +45,7 @@ class AuthorizationsTest extends BaseApiTest
             [
                 'delete' => false,
                 'update' => false,
-            ]
+            ],
         );
 
         $this->getJson('/sharp/api/list/person')->assertStatus(200);
@@ -67,7 +67,7 @@ class AuthorizationsTest extends BaseApiTest
             [
                 'delete' => false,
                 'update' => false,
-            ]
+            ],
         );
 
         // Create
@@ -76,7 +76,7 @@ class AuthorizationsTest extends BaseApiTest
                 'delete' => false,
                 'update' => false,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
 
@@ -86,7 +86,7 @@ class AuthorizationsTest extends BaseApiTest
                 'delete' => false,
                 'update' => false,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
     }
@@ -102,14 +102,14 @@ class AuthorizationsTest extends BaseApiTest
             [
                 'delete' => false,
                 'update' => false,
-            ]
+            ],
         );
 
         $this->getJson('/sharp/api/list/person')->assertJson([
             'authorizations' => [
                 'update' => false,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
     }
@@ -127,7 +127,7 @@ class AuthorizationsTest extends BaseApiTest
                 'delete' => true,
                 'update' => true,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
 
@@ -137,7 +137,7 @@ class AuthorizationsTest extends BaseApiTest
                 'delete' => true,
                 'update' => true,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
 
@@ -146,7 +146,7 @@ class AuthorizationsTest extends BaseApiTest
             'authorizations' => [
                 'update' => true,
                 'create' => true,
-                'view'   => true,
+                'view' => true,
             ],
         ]);
     }
@@ -160,12 +160,12 @@ class AuthorizationsTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.entities.person.form',
-            null
+            null,
         );
 
         $this->app['config']->set(
             'sharp.entities.person.forms.big.form',
-            PersonSharpForm::class
+            PersonSharpForm::class,
         );
 
         $this->app['config']->set(
@@ -174,8 +174,8 @@ class AuthorizationsTest extends BaseApiTest
                 'delete' => false,
                 'create' => true,
                 'update' => true,
-                'view'   => true,
-            ]
+                'view' => true,
+            ],
         );
 
         $this->postJson('/sharp/api/form/person:big/50', [])->assertStatus(200);

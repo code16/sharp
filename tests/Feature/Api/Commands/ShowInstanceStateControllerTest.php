@@ -24,17 +24,17 @@ class ShowInstanceStateControllerTest extends BaseApiTest
 
         $this->postJson('/sharp/api/show/person/state/1', [
             'attribute' => 'state',
-            'value'     => 'ok',
+            'value' => 'ok',
         ])
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'refresh',
-                'value'  => 'ok',
+                'value' => 'ok',
             ]);
 
         $this->postJson('/sharp/api/show/person/state', [
             'attribute' => 'state',
-            'value'     => 'ok',
+            'value' => 'ok',
         ])
             ->assertStatus(404);
     }
@@ -46,17 +46,17 @@ class ShowInstanceStateControllerTest extends BaseApiTest
 
         $this->postJson('/sharp/api/show/person/state', [
             'attribute' => 'state',
-            'value'     => 'ok',
+            'value' => 'ok',
         ])
             ->assertStatus(200)
             ->assertJson([
                 'action' => 'reload',
-                'value'  => 'ok',
+                'value' => 'ok',
             ]);
 
         $this->postJson('/sharp/api/show/person/state/1', [
             'attribute' => 'state',
-            'value'     => 'ok',
+            'value' => 'ok',
         ])
             ->assertStatus(404);
     }
@@ -69,7 +69,7 @@ class ShowInstanceStateControllerTest extends BaseApiTest
             'sharp.entities.person.show',
             $singleShow
                 ? ShowInstanceStatePersonSharpSingleShow::class
-                : ShowInstanceStatePersonSharpShow::class
+                : ShowInstanceStatePersonSharpShow::class,
         );
     }
 }
@@ -78,7 +78,8 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow
 {
     public function buildShowConfig(): void
     {
-        $this->setEntityState('state', new class() extends EntityState {
+        $this->setEntityState('state', new class() extends EntityState
+        {
             protected function buildStates(): void
             {
                 $this->addState('ok', 'OK', 'blue');
@@ -96,7 +97,7 @@ class ShowInstanceStatePersonSharpShow extends PersonSharpShow
             {
                 return $instanceId != 100;
             }
-        });
+        }, );
     }
 }
 
@@ -104,7 +105,8 @@ class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow
 {
     public function buildShowConfig(): void
     {
-        $this->setEntityState('state', new class() extends SingleEntityState {
+        $this->setEntityState('state', new class() extends SingleEntityState
+        {
             protected function buildStates(): void
             {
                 $this->addState('ok', 'OK', 'blue');
@@ -122,6 +124,6 @@ class ShowInstanceStatePersonSharpSingleShow extends PersonSharpSingleShow
             {
                 return true;
             }
-        });
+        }, );
     }
 }

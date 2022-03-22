@@ -21,10 +21,10 @@ class FormController extends ApiController
                     'fields' => $form->fields(),
                     'layout' => $form->formLayout(),
                     'config' => $form->formConfig(),
-                    'data'   => $form->instance($instanceId),
+                    'data' => $form->instance($instanceId),
                 ],
-                $this->dataLocalizations($form)
-            )
+                $this->dataLocalizations($form),
+            ),
         );
     }
 
@@ -45,10 +45,10 @@ class FormController extends ApiController
                     'fields' => $form->fields(),
                     'layout' => $form->formLayout(),
                     'config' => $form->formConfig(),
-                    'data'   => $form->newInstance(),
+                    'data' => $form->newInstance(),
                 ],
-                $this->dataLocalizations($form)
-            )
+                $this->dataLocalizations($form),
+            ),
         );
     }
 
@@ -114,7 +114,7 @@ class FormController extends ApiController
     protected function validateRequest(string $entityKey)
     {
         if ($this->isSubEntity($entityKey)) {
-            list($entityKey, $subEntityKey) = explode(':', $entityKey);
+            [$entityKey, $subEntityKey] = explode(':', $entityKey);
             $validatorClass = config("sharp.entities.{$entityKey}.forms.{$subEntityKey}.validator");
         } else {
             $validatorClass = config("sharp.entities.{$entityKey}.validator");
@@ -135,7 +135,7 @@ class FormController extends ApiController
 
     protected function checkFormImplementation(SharpForm $form, ?string $instanceId)
     {
-        if (!$instanceId && !$form instanceof SharpSingleForm) {
+        if (! $instanceId && ! $form instanceof SharpSingleForm) {
             abort(404);
         }
 

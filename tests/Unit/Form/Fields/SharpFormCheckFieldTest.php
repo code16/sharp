@@ -14,10 +14,10 @@ class SharpFormCheckFieldTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'key'  => 'check', 'type' => 'check',
+                'key' => 'check', 'type' => 'check',
                 'text' => 'text',
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -29,7 +29,7 @@ class SharpFormCheckFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['text' => 'text 2'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

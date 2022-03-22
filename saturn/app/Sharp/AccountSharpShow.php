@@ -17,13 +17,13 @@ class AccountSharpShow extends SharpSingleShow
         $this
             ->addField(
                 SharpShowTextField::make('name')
-                    ->setLabel('Name:')
+                    ->setLabel('Name:'),
             )->addField(
                 SharpShowTextField::make('email')
-                    ->setLabel('Email:')
+                    ->setLabel('Email:'),
             )->addField(
                 SharpShowTextField::make('groups')
-                    ->setLabel('Groups:')
+                    ->setLabel('Groups:'),
             );
     }
 

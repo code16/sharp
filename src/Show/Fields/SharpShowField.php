@@ -27,13 +27,13 @@ abstract class SharpShowField
     protected function buildArray(array $childArray): array
     {
         $array = collect([
-            'key'          => $this->key,
-            'type'         => $this->type,
+            'key' => $this->key,
+            'type' => $this->type,
             'emptyVisible' => $this->emptyVisible,
         ])
             ->merge($childArray)
             ->filter(function ($value) {
-                return !is_null($value);
+                return ! is_null($value);
             })
             ->all();
 
@@ -45,7 +45,7 @@ abstract class SharpShowField
     /**
      * Throw an exception in case of invalid attribute value.
      *
-     * @param array $properties
+     * @param  array  $properties
      *
      * @throws SharpShowFieldValidationException
      */
@@ -55,12 +55,12 @@ abstract class SharpShowField
             $properties,
             array_merge(
                 [
-                    'key'          => 'required',
-                    'type'         => 'required',
+                    'key' => 'required',
+                    'type' => 'required',
                     'emptyVisible' => 'required|bool',
                 ],
-                $this->validationRules()
-            )
+                $this->validationRules(),
+            ),
         );
 
         if ($validator->fails()) {

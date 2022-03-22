@@ -29,7 +29,7 @@ class SharpFormFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['key' => 'name', 'type' => 'test'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -40,7 +40,7 @@ class SharpFormFieldTest extends SharpTestCase
 
         $this->assertEquals(
             ['key' => 'name', 'type' => 'test'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -52,7 +52,7 @@ class SharpFormFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['label' => 'label'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -64,7 +64,7 @@ class SharpFormFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['helpMessage' => 'message'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -82,21 +82,21 @@ class SharpFormFieldTest extends SharpTestCase
         $this->assertArraySubset([
             'conditionalDisplay' => [
                 'operator' => 'or',
-                'fields'   => [
+                'fields' => [
                     [
-                        'key'    => 'is_displayed',
+                        'key' => 'is_displayed',
                         'values' => true,
                     ], [
-                        'key'    => 'color',
+                        'key' => 'color',
                         'values' => ['blue', 'red'],
                     ], [
-                        'key'    => 'size',
+                        'key' => 'size',
                         'values' => '!xl',
                     ], [
-                        'key'    => 'hidden',
+                        'key' => 'hidden',
                         'values' => false,
                     ], [
-                        'key'    => 'really_hidden',
+                        'key' => 'really_hidden',
                         'values' => false,
                     ],
                 ],
@@ -112,7 +112,7 @@ class SharpFormFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['readOnly' => true],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
@@ -124,7 +124,7 @@ class SharpFormFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             ['extraStyle' => 'font-weight: bold'],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

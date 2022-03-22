@@ -20,8 +20,7 @@ class SharpAuthorizationManager
     /**
      * Return base entityKey in case of sub entity (for instance: returns "car" in car:hybrid).
      *
-     * @param string $entityKey
-     *
+     * @param  string  $entityKey
      * @return string
      */
     protected function getBaseEntityKey(string $entityKey): string

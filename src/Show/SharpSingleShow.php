@@ -12,8 +12,7 @@ abstract class SharpSingleShow extends SharpShow
      * Return the show config values (commands and state).
      *
      * @param $instanceId
-     * @param array $config
-     *
+     * @param  array  $config
      * @return array
      */
     public function showConfig($instanceId, $config = []): array
@@ -27,7 +26,6 @@ abstract class SharpSingleShow extends SharpShow
      * Retrieve a Model for the form and pack all its data as JSON.
      *
      * @param $id
-     *
      * @return array
      */
     public function find($id): array
@@ -41,13 +39,13 @@ abstract class SharpSingleShow extends SharpShow
             ? app($commandHandlerOrClassName)
             : $commandHandlerOrClassName;
 
-        if (!$commandHandler instanceof SingleInstanceCommand) {
+        if (! $commandHandler instanceof SingleInstanceCommand) {
             throw new SharpException(
                 sprintf(
                     "Handler class for instance command [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
                     $commandName,
-                    SingleInstanceCommand::class
-                )
+                    SingleInstanceCommand::class,
+                ),
             );
         }
 
@@ -60,13 +58,13 @@ abstract class SharpSingleShow extends SharpShow
             ? app($stateHandlerOrClassName)
             : $stateHandlerOrClassName;
 
-        if (!$entityStateHandler instanceof SingleEntityState) {
+        if (! $entityStateHandler instanceof SingleEntityState) {
             throw new SharpException(
                 sprintf(
                     "Handler class for entity state handler [%s] is not an subclass of %s as it should be since it's a part of a SharpSingleShow",
                     $stateAttribute,
-                    SingleEntityState::class
-                )
+                    SingleEntityState::class,
+                ),
             );
         }
 

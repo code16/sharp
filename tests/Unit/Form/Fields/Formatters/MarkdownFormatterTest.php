@@ -43,7 +43,7 @@ class MarkdownFormatterTest extends SharpTestCase
 
         $this->assertEquals(
             'local:data/test.png',
-            $formatter->toFront($field, $value)['files'][0]['name']
+            $formatter->toFront($field, $value)['files'][0]['name'],
         );
     }
 
@@ -85,7 +85,7 @@ class MarkdownFormatterTest extends SharpTestCase
         $value = Str::random();
         $attribute = 'attribute';
 
-        $this->assertEquals($value, $formatter->fromFront($field, $attribute, ['text'=>$value]));
+        $this->assertEquals($value, $formatter->fromFront($field, $attribute, ['text' => $value]));
     }
 
     /** @test */
@@ -97,7 +97,8 @@ class MarkdownFormatterTest extends SharpTestCase
         $attribute = 'attribute';
 
         app()->bind(UploadFormatter::class, function () {
-            return new class() extends UploadFormatter {
+            return new class() extends UploadFormatter
+            {
                 public function fromFront(SharpFormField $field, string $attribute, $value)
                 {
                     return [
@@ -110,12 +111,12 @@ class MarkdownFormatterTest extends SharpTestCase
         $this->assertEquals(
             '![](local:uploaded_test.png)',
             $formatter->fromFront($field, $attribute, [
-                'text'  => $value,
+                'text' => $value,
                 'files' => [[
-                    'name'     => 'local:new_test.png',
+                    'name' => 'local:new_test.png',
                     'uploaded' => true,
                 ]],
-            ])
+            ]),
         );
     }
 
@@ -141,7 +142,8 @@ class MarkdownFormatterTest extends SharpTestCase
         // in order to check that it's called without changing anything
         // else in the class. The fact that deleteThumbnails() is called
         // is a proof that the image was transformed.
-        $formatter = new class() extends MarkdownFormatter {
+        $formatter = new class() extends MarkdownFormatter
+        {
             public $thumbnailsDeleted = false;
 
             protected function deleteThumbnails(string $fullFileName): void
@@ -157,15 +159,15 @@ class MarkdownFormatterTest extends SharpTestCase
         $this->assertEquals(
             '![](local:data/Test/image.png)',
             $formatter->fromFront($field, 'attribute', [
-                'text'  => '![](local:data/Test/image.png)',
+                'text' => '![](local:data/Test/image.png)',
                 'files' => [[
-                    'name'     => 'local:data/Test/image.png',
+                    'name' => 'local:data/Test/image.png',
                     'uploaded' => false,
                     'cropData' => [
                         'height' => .8, 'width' => .6, 'x' => 0, 'y' => .1, 'rotate' => 0,
                     ],
                 ]],
-            ])
+            ]),
         );
 
         $this->assertTrue($formatter->thumbnailsDeleted);
@@ -180,12 +182,12 @@ class MarkdownFormatterTest extends SharpTestCase
         $this->assertEquals(
             "before file\n\n![](local:test.png)\n\nafter file with a [link](http://www.google.fr)",
             $formatter->fromFront($field, 'attribute', [
-                'text'  => "before file\n![](local:test.png)\nafter file with a [link](http://www.google.fr)",
+                'text' => "before file\n![](local:test.png)\nafter file with a [link](http://www.google.fr)",
                 'files' => [[
-                    'name'     => 'local:test.png',
+                    'name' => 'local:test.png',
                     'uploaded' => false,
                 ]],
-            ])
+            ]),
         );
     }
 }

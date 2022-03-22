@@ -21,28 +21,28 @@ class DownloadController extends ApiController
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
-        list($disk, $path) = $this->determineDiskAndFilePath(
+        [$disk, $path] = $this->determineDiskAndFilePath(
             request('fileName'),
             $fieldKey,
             $entityKey,
-            $instanceId
+            $instanceId,
         );
 
-        abort_if(!$disk->exists($path), 404, trans('sharp::errors.file_not_found'));
+        abort_if(! $disk->exists($path), 404, trans('sharp::errors.file_not_found'));
 
         return response(
             $disk->get($path),
             200,
             [
-                'Content-Type'        => $disk->mimeType($path),
+                'Content-Type' => $disk->mimeType($path),
                 'Content-Disposition' => 'attachment',
-            ]
+            ],
         );
     }
 
     protected function determineDiskAndFilePath(string $fileName, string $fieldKey, string $entityKey, string $instanceId = null): array
     {
-        if (!$field = $this->getField($entityKey, $fieldKey)) {
+        if (! $field = $this->getField($entityKey, $fieldKey)) {
             throw new SharpException("Field [$fieldKey] can't be found in Form or Show of [$entityKey]");
         }
 
@@ -55,7 +55,7 @@ class DownloadController extends ApiController
         if (strpos($fileName, ':') !== false) {
             // Disk name is part of the file name, as in "local:/my/file.jpg".
             // This is the case in markdown embedded images.
-            list($storageDisk, $fileName) = explode(':', $fileName);
+            [$storageDisk, $fileName] = explode(':', $fileName);
         }
 
         $disk = $this->filesystem->disk($storageDisk);

@@ -16,7 +16,7 @@ class PassengerBirthdateFilter implements EntityListDateRangeRequiredFilter
     {
         return [
             'start' => (new Carbon())->setDate(2014, 1, 1),
-            'end'   => (new Carbon())->setDate(2014, 12, 31),
+            'end' => (new Carbon())->setDate(2014, 12, 31),
         ];
     }
 

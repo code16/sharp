@@ -13,34 +13,36 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_containers()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
                     EntityListDataContainer::make('name')
-                        ->setLabel('Name')
+                        ->setLabel('Name'),
                 );
             }
         };
 
         $this->assertEquals(['name' => [
-            'key'      => 'name',
-            'label'    => 'Name',
+            'key' => 'name',
+            'label' => 'Name',
             'sortable' => false,
-            'html'     => true,
+            'html' => true,
         ]], $list->dataContainers());
     }
 
     /** @test */
     public function we_can_get_layout()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make('name')
+                    EntityListDataContainer::make('name'),
                 )->addDataContainer(
-                    EntityListDataContainer::make('age')
+                    EntityListDataContainer::make('age'),
                 );
             }
 
@@ -63,7 +65,8 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_data()
     {
-        $form = new class() extends SharpEntityDefaultTestList {
+        $form = new class() extends SharpEntityDefaultTestList
+        {
             public function getListData(EntityListQueryParams $params): array
             {
                 return [
@@ -75,9 +78,9 @@ class SharpEntityListTest extends SharpTestCase
             public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make('name')
+                    EntityListDataContainer::make('name'),
                 )->addDataContainer(
-                    EntityListDataContainer::make('age')
+                    EntityListDataContainer::make('age'),
                 );
             }
         };
@@ -93,7 +96,8 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_paginated_list_data()
     {
-        $form = new class() extends SharpEntityDefaultTestList {
+        $form = new class() extends SharpEntityDefaultTestList
+        {
             public function getListData(EntityListQueryParams $params)
             {
                 $data = [
@@ -107,9 +111,9 @@ class SharpEntityListTest extends SharpTestCase
             public function buildListDataContainers(): void
             {
                 $this->addDataContainer(
-                    EntityListDataContainer::make('name')
+                    EntityListDataContainer::make('name'),
                 )->addDataContainer(
-                    EntityListDataContainer::make('age')
+                    EntityListDataContainer::make('age'),
                 );
             }
         };
@@ -125,7 +129,8 @@ class SharpEntityListTest extends SharpTestCase
     /** @test */
     public function we_can_get_list_config()
     {
-        $list = new class() extends SharpEntityDefaultTestList {
+        $list = new class() extends SharpEntityDefaultTestList
+        {
             public function buildListConfig(): void
             {
                 $this->setSearchable()
@@ -136,14 +141,14 @@ class SharpEntityListTest extends SharpTestCase
         $list->buildListConfig();
 
         $this->assertEquals([
-            'searchable'          => true,
-            'paginated'           => true,
-            'reorderable'         => false,
-            'hasShowPage'         => false,
+            'searchable' => true,
+            'paginated' => true,
+            'reorderable' => false,
+            'hasShowPage' => false,
             'instanceIdAttribute' => 'id',
-            'multiformAttribute'  => null,
-            'defaultSort'         => null,
-            'defaultSortDir'      => null,
+            'multiformAttribute' => null,
+            'defaultSort' => null,
+            'defaultSortDir' => null,
         ], $list->listConfig());
     }
 }

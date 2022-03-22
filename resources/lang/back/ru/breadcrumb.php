@@ -2,12 +2,12 @@
 
 return [
 
-    'dashboard'  => 'Панель',
+    'dashboard' => 'Панель',
     'entityList' => 'Список',
-    'show'       => ':entity',
-    'form'       => [
-        'edit'        => 'Редактирование',
+    'show' => ':entity',
+    'form' => [
+        'edit' => 'Редактирование',
         'edit_entity' => 'Редактирование “:entity”', // for sub entities: forms displayed from an EEL
-        'create'      => 'Создание “:entity”',
+        'create' => 'Создание “:entity”',
     ],
 ];

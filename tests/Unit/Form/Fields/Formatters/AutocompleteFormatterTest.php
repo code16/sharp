@@ -19,27 +19,28 @@ class AutocompleteFormatterTest extends SharpTestCase
         // Front always need an object
         $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
-            $value
+            $value,
         ));
 
         $this->assertEquals(['num' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local')->setItemIdAttribute('num'),
-            $value
+            $value,
         ));
 
         $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
-            ['id' => $value]
+            ['id' => $value],
         ));
 
         $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
-            (object) ['id' => $value]
+            (object) ['id' => $value],
         ));
 
         $this->assertEquals(['id' => $value], (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
-            new class($value) {
+            new class($value)
+            {
                 public function __construct($value)
                 {
                     $this->value = $value;
@@ -49,7 +50,7 @@ class AutocompleteFormatterTest extends SharpTestCase
                 {
                     return ['id' => $this->value];
                 }
-            }
+            },
         ));
     }
 
@@ -57,13 +58,13 @@ class AutocompleteFormatterTest extends SharpTestCase
     public function we_can_format_remote_value_to_front()
     {
         $value = [
-            'id'    => Str::random(),
+            'id' => Str::random(),
             'label' => Str::random(),
         ];
 
         $this->assertEquals($value, (new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'remote'),
-            $value
+            $value,
         ));
     }
 
@@ -72,7 +73,7 @@ class AutocompleteFormatterTest extends SharpTestCase
     {
         $this->assertNull((new AutocompleteFormatter())->toFront(
             SharpFormAutocompleteField::make('text', 'local'),
-            null
+            null,
         ));
     }
 
@@ -83,8 +84,8 @@ class AutocompleteFormatterTest extends SharpTestCase
             (new AutocompleteFormatter())->fromFront(
                 SharpFormAutocompleteField::make('text', 'local'),
                 'attribute',
-                null
-            )
+                null,
+            ),
         );
     }
 
@@ -93,7 +94,7 @@ class AutocompleteFormatterTest extends SharpTestCase
     {
         // Front always send an object
         $value = [
-            'id'    => Str::random(),
+            'id' => Str::random(),
             'label' => Str::random(),
         ];
 
@@ -103,8 +104,8 @@ class AutocompleteFormatterTest extends SharpTestCase
             (new AutocompleteFormatter())->fromFront(
                 SharpFormAutocompleteField::make('text', 'local'),
                 'attribute',
-                $value
-            )
+                $value,
+            ),
         );
     }
 }
