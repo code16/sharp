@@ -159,7 +159,7 @@ abstract class SharpFormEditorEmbed
     final protected function configureFormTemplatePath(string $templatePath): self
     {
         return $this->setTemplate(
-            file_get_contents(resource_path('views/'.$templatePath)),
+            file_get_contents(resource_path("views/" . $templatePath)),
             'form',
         );
     }
