@@ -165,7 +165,6 @@ $rules = [
     'trailing_comma_in_multiline' => [
         'elements' => [
             'arrays',
-            'arguments',
         ],
     ],
     'trim_array_spaces' => true,
