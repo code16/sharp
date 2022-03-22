@@ -29,7 +29,7 @@
                 </button>
             </template>
 
-            <button class="btn btn-primary position-relative" :class="{ 'btn-lg': okOnly }" :disabled="loading" @click="ok">
+            <button class="btn position-relative" :class="okClasses" :disabled="loading" @click="ok">
                 <span :class="{ 'invisible': loading }">
                     {{ okTitle || l('modals.ok_button') }}
                 </span>
@@ -37,7 +37,6 @@
                     <LoadingOverlay class="bg-transparent" absolute small />
                 </template>
             </button>
-
         </template>
     </b-modal>
 </template>
@@ -66,11 +65,24 @@
             title: String,
             okTitle: String,
             okOnly: Boolean,
+            okVariant: {
+                type: String,
+                default: 'primary',
+            },
             static: Boolean,
 
             // custom props
             isError: Boolean,
             loading: Boolean,
+        },
+
+        computed: {
+            okClasses() {
+                return {
+                    'btn-lg': this.okOnly,
+                    [`btn-${this.okVariant}`]: !!this.okVariant,
+                }
+            },
         },
 
         methods: {

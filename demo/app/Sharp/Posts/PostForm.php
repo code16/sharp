@@ -170,7 +170,7 @@ class PostForm extends SharpForm
     {
         $this
             ->configureDisplayShowPageAfterCreation()
-            ->configureConfirmTextOnDeletion('This will delete this posts and its data permanently. Are-you sure ?');
+            ->configureDeleteConfirmation('Are you sure to delete this post ? (This will permanently delete its data).');
     }
 
     public function find($id): array

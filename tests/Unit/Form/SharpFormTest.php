@@ -199,7 +199,7 @@ class SharpFormTest extends SharpTestCase
         {
             public function buildFormConfig(): void
             {
-                $this->configureConfirmTextOnDeletion('Vous êtes sûr ?');
+                $this->configureDeleteConfirmation('Vous êtes sûr ?');
             }
         };
 
@@ -221,7 +221,7 @@ class SharpFormTest extends SharpTestCase
         {
             public function buildFormConfig(): void
             {
-                $this->configureConfirmTextOnDeletion();
+                $this->configureDeleteConfirmation();
             }
         };
 

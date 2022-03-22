@@ -64,8 +64,10 @@
 <script>
     import {
         getBackUrl,
+        lang,
         logError,
         showAlert,
+        showConfirm,
     } from "sharp";
 
     import { TabbedLayout, Grid, Dropdown, DropdownItem, GlobalMessage } from 'sharp-ui';
@@ -367,7 +369,13 @@
             handleSubmitClicked() {
                 this.submit().catch(()=>{});
             },
-            handleDeleteClicked() {
+            async handleDeleteClicked() {
+                if(this.config.deleteConfirmationText) {
+                    await showConfirm(this.config.deleteConfirmationText, {
+                        okTitle: lang('modals.confirm.delete.ok_button'),
+                        okVariant: 'danger',
+                    });
+                }
                 this.axiosInstance.delete(this.apiPath)
                     .then(response => {
                         this.redirectForResponse(response, { replace:true });
