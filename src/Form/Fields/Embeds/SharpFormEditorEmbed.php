@@ -24,15 +24,30 @@ abstract class SharpFormEditorEmbed
 
     public function toConfigArray(bool $isForm): array
     {
-        $templateKey = $isForm ? 'form' : 'show';
+        if (!$template = $this->templates[$isForm ? 'form' : 'show'] ?? ($this->templates['form'] ?? null)) {
+            $template = 'Empty template';
+        }
 
-        return [
+        $config = [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
-            'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
+            'tag' => $this->tagName ?: 'x-' . Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
-            'template' => $this->templates[$templateKey] ?? $this->templates['form'],
+            'template' => $template,
         ];
+
+        $this->validate($config, [
+            'key' => ['required'],
+            'label' => ['required'],
+            'tag' => ['required', 'regex:/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/'],
+            'attributes' => ['required', 'array'],
+            'template' => ['required'],
+        ], [
+            'attributes.required' => 'Your Embed should at least have one form field',
+            'tag.regex' => 'the tag name should only contain letters, figures and carets',
+        ]);
+
+        return $config;
     }
 
     public function buildEmbedConfig(): void
@@ -159,7 +174,7 @@ abstract class SharpFormEditorEmbed
     final protected function configureFormTemplatePath(string $templatePath): self
     {
         return $this->setTemplate(
-            file_get_contents(resource_path("views/" . $templatePath)),
+            file_get_contents(resource_path('views/' . $templatePath)),
             'form',
         );
     }
