@@ -156,6 +156,7 @@ $rules = [
     'single_import_per_statement' => true,
     'single_line_after_imports' => true,
     'single_quote' => true,
+    'single_space_after_construct' => true,
     'space_after_semicolon' => true,
     'standardize_not_equals' => true,
     'switch_case_semicolon_to_colon' => true,
