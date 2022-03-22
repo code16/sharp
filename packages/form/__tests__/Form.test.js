@@ -512,7 +512,12 @@ describe('sharp-form', ()=>{
     });
 
     test('redirect on delete', async () => {
-        const wrapper = createWrapper();
+        const wrapper = createWrapper({
+            propsData: {
+                independant: true,
+                form: createForm(),
+            }
+        });
 
         jest.spyOn(window.location, 'replace')
 

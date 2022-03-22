@@ -34,10 +34,10 @@ exports[`action-view can mount with multiple modals 1`] = `
 	<router-view-stub></router-view-stub>
 	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
 	    max="Infinity" closeonclick="true" style="top: 6rem; right: 1rem;"></notifications-stub>
-	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
+	<modal-stub visible="true" okonly="true" okvariant="primary" nocloseonbackdrop="true" nocloseonesc="true">
 		<div>Modal 1</div>
 	</modal-stub>
-	<modal-stub visible="true">
+	<modal-stub visible="true" oktitle="modals.confirm.ok_button" okvariant="primary" size="sm" hideheader="true" bodyclass="pt-4">
 		<div>Modal 2</div>
 	</modal-stub>
 	<loadingoverlay-stub fade="true" class="SharpActionView__loading"></loadingoverlay-stub>
@@ -49,10 +49,10 @@ exports[`action-view loading 1`] = `
 	<router-view-stub></router-view-stub>
 	<notifications-stub group="" width="300" reverse="true" position="top right" classes="vue-notification" animationtype="css" animation="[object Object]" animationname="slideRight" speed="300" cooldown="0" duration="3000" delay="0"
 	    max="Infinity" closeonclick="true" style="top: 6rem; right: 1rem;"></notifications-stub>
-	<modal-stub visible="true" okonly="true" nocloseonbackdrop="true" nocloseonesc="true">
+	<modal-stub visible="true" okonly="true" okvariant="primary" nocloseonbackdrop="true" nocloseonesc="true">
 		<div>Modal 1</div>
 	</modal-stub>
-	<modal-stub visible="true">
+	<modal-stub visible="true" oktitle="modals.confirm.ok_button" okvariant="primary" size="sm" hideheader="true" bodyclass="pt-4">
 		<div>Modal 2</div>
 	</modal-stub>
 	<loadingoverlay-stub fade="true" class="SharpActionView__loading" visible="true"></loadingoverlay-stub>

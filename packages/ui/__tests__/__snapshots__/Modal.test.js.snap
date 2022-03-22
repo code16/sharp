@@ -15,7 +15,7 @@ exports[`modal mount 1`] = `
 					<button class="btn btn-outline-primary">
 						cancel title
 					</button>
-					<button class="btn btn-primary position-relative">
+					<button class="btn position-relative btn-primary">
 						<span class="">
 							ok title
 						</span>
@@ -43,7 +43,7 @@ exports[`modal mount ok only 1`] = `
 				<div id="mocked___BV_modal_body_" class="modal-body"></div>
 				<footer id="mocked___BV_modal_footer_" class="modal-footer">
 					<!---->
-					<button class="btn btn-primary position-relative btn-lg">
+					<button class="btn position-relative btn-lg btn-primary">
 						<span class="">
 							{{ modals.ok_button }}
 						</span>
@@ -73,7 +73,7 @@ exports[`modal mount visible 1`] = `
 					<button class="btn btn-outline-primary">
 						{{ modals.cancel_button }}
 					</button>
-					<button class="btn btn-primary position-relative">
+					<button class="btn position-relative btn-primary">
 						<span class="">
 							{{ modals.ok_button }}
 						</span>
@@ -103,7 +103,7 @@ exports[`modal mount with modifiers classes 1`] = `
 					<button class="btn btn-outline-primary">
 						{{ modals.cancel_button }}
 					</button>
-					<button class="btn btn-primary position-relative">
+					<button class="btn position-relative btn-primary">
 						<span class="">
 							{{ modals.ok_button }}
 						</span>
