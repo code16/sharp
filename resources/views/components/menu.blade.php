@@ -35,7 +35,7 @@
                             <form action="{{ route('code16.sharp.logout') }}" method="post">
                                 @csrf
                                 <button class="dropdown-item" type="submit">
-                                    <span class="row align-items-center gx-2">
+                                    <span class="row align-items-center flex-nowrap gx-2">
                                         <span class="col-auto">
                                             <i class="fas fa-fw fa-sign-out-alt" style="font-size: 1em"></i>
                                         </span>
