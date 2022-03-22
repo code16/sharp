@@ -30,6 +30,6 @@ trait WithCurrentSharpRequestFake
                             ->values();
                     }
                 };
-            }, );
+            });
     }
 }

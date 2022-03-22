@@ -212,7 +212,7 @@ class FormControllerTest extends BaseApiTest
                 {
                     protected bool $displayShowPageAfterCreation = true;
                 };
-            }, );
+            });
 
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person');
 
