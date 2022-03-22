@@ -218,6 +218,7 @@
                     loading: this.loading,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
+                    hasDeleteConfirmation: !!this.config.deleteConfirmationText,
                 }
             },
             actionBarListeners() {

@@ -47,6 +47,7 @@ export function showConfirm(message, { title, ...props } = {}) {
         size: 'sm',
         hideHeader: true,
         okTitle: lang('modals.confirm.ok_button'),
+        bodyClass: 'pt-4',
         ...props
     });
 }
