@@ -56,7 +56,7 @@ class UploadFormatterTest extends SharpTestCase
                 'attribute',
                 [
                     'name' => 'test.png',
-                ], ),
+                ]),
             );
     }
 
@@ -159,7 +159,7 @@ class UploadFormatterTest extends SharpTestCase
                 {
                     return true;
                 }
-            }, );
+            });
 
         $field = SharpFormUploadField::make('upload')
             ->shouldOptimizeImage()

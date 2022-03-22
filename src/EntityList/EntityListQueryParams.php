@@ -32,9 +32,9 @@ class EntityListQueryParams
         return $this;
     }
 
-    public function fillWithRequest(string $queryPrefix = null): self
+    public function fillWithRequest(): self
     {
-        $query = $queryPrefix ? request($queryPrefix) : request()->all();
+        $query = request()->method() === 'GET' ? request()->all() : request('query');
 
         $this->search = $query['search'] ?? null ? urldecode($query['search']) : null;
         $this->page = $query['page'] ?? null;

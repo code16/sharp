@@ -90,7 +90,7 @@ class SharpFormTest extends SharpTestCase
 
                                     return $value.'-'.$this->instanceId;
                                 }
-                            }, ),
+                            }),
                     );
             }
 
@@ -140,7 +140,7 @@ class SharpFormTest extends SharpTestCase
                             {
                                 throw new SharpFormFieldFormattingMustBeDelayedException();
                             }
-                        }, ),
+                        }),
                 );
             }
         };

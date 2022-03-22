@@ -1,0 +1,7 @@
+
+.SharpEntityListTitle {
+  &__info {
+    font-size: var(--entity-list-title-info-font-size, .8125rem);
+    opacity: var(--entity-list-title-info-opacity, .625);
+  }
+}

@@ -12,7 +12,7 @@ return [
     'list.reorder_button.cancel' => 'Annuler',
     'locale_selector.label' => 'Choisissez une langue',
     'form.submit_button.create' => 'Créer',
-    'form.submit_button.update' => 'Modifier',
+    'form.submit_button.update' => 'Valider',
     'form.cancel_button' => 'Annuler',
     'form.delete_button' => 'Supprimer',
     'form.back_button' => 'Retour',

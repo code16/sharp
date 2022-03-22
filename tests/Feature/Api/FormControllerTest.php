@@ -2,16 +2,11 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Layout\FormLayout;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FormControllerTest extends BaseApiTest
 {
@@ -217,7 +212,7 @@ class FormControllerTest extends BaseApiTest
                 {
                     protected bool $displayShowPageAfterCreation = true;
                 };
-            }, );
+            });
 
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person');
 
@@ -261,7 +256,7 @@ class FormControllerTest extends BaseApiTest
         $this->buildTheWorld(true);
 
         $this->getJson('/sharp/api/form/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['data' => [
                 'name' => 'Single John Wayne',
             ]]);
@@ -300,42 +295,5 @@ class FormControllerTest extends BaseApiTest
 
         $this->deleteJson('/sharp/api/form/person/1')
             ->assertStatus(404);
-    }
-
-    protected function buildTheWorld($singleShow = false)
-    {
-        parent::buildTheWorld($singleShow);
-
-        if ($singleShow) {
-            $this->app['config']->set(
-                'sharp.entities.person.form',
-                PersonSharpSingleForm::class,
-            );
-        }
-    }
-}
-
-class PersonSharpSingleForm extends SharpSingleForm
-{
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-        $formFields->addField(SharpFormTextField::make('name'));
-    }
-
-    public function buildFormLayout(FormLayout $formLayout): void
-    {
-        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            return $column->withSingleField('name');
-        });
-    }
-
-    protected function findSingle()
-    {
-        return ['name' => 'Single John Wayne', 'job' => 'actor'];
-    }
-
-    protected function updateSingle(array $data)
-    {
-        return 1;
     }
 }

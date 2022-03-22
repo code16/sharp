@@ -70,8 +70,8 @@
         showConfirm,
     } from "sharp";
 
-    import { TabbedLayout, Grid, Dropdown, DropdownItem, GlobalMessage } from 'sharp-ui';
-    import { Localization, DynamicView } from 'sharp/mixins';
+    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import { DynamicView, Localization } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
     import LocaleSelect from './ui/LocaleSelect';
@@ -136,6 +136,13 @@
                 uploadingFields: {},
                 curFieldsetId: 0,
             }
+        },
+        watch: {
+            form() {
+                if(this.independant) {
+                    this.init();
+                }
+            },
         },
         computed: {
             apiPath() {

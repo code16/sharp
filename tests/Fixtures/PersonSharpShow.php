@@ -59,7 +59,7 @@ class PersonSharpShow extends SharpShow
                 {
                     return $instanceId < 10;
                 }
-            }, );
+            });
     }
 
     public function buildShowLayout(ShowLayout $showLayout): void

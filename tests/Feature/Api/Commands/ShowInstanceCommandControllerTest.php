@@ -52,49 +52,53 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function we_can_initialize_form_data_in_an_instance_command_from_a_show()
+    public function we_can_get_form_and_initialize_form_data_in_an_instance_command_from_a_show()
     {
         $this->buildTheWorld();
         $this->withoutExceptionHandling();
 
-        $response = $this->getJson('/sharp/api/show/person/25')
-            ->assertStatus(200)
-            ->json();
-
-        $this->assertTrue(
-            collect($response['config']['commands']['instance'][0])
-                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data'],
-        );
-
-        $this->getJson('/sharp/api/show/person/command/instance_with_init_data/25/data')
-            ->assertStatus(200)
-            ->assertExactJson([
+        $this->getJson('/sharp/api/show/person/command/instance_with_init_data/25/form')
+            ->assertOk()
+            ->assertJsonFragment([
                 'data' => [
                     'name' => 'John Wayne [25]',
+                ],
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
+                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
             ]);
     }
 
     /** @test */
-    public function we_can_initialize_form_data_in_an_instance_command_from_a_single_show()
+    public function we_can_get_form_and_initialize_form_data_in_an_instance_command_from_a_single_show()
     {
         $this->buildTheWorld(true);
         $this->withoutExceptionHandling();
 
-        $response = $this->getJson('/sharp/api/show/person')
-            ->assertStatus(200)
-            ->json();
-
-        $this->assertTrue(
-            collect($response['config']['commands']['instance'][0])
-                ->where('key', 'instance_with_init_data')->first()['fetch_initial_data'],
-        );
-
-        $this->getJson('/sharp/api/show/person/command/instance_with_init_data/data')
-            ->assertStatus(200)
-            ->assertExactJson([
+        $this->getJson('/sharp/api/show/person/command/instance_with_init_data/form')
+            ->assertOk()
+            ->assertJsonFragment([
                 'data' => [
                     'name' => 'John Wayne',
+                ],
+                'config' => null,
+                'fields' => [
+                    'name' => [
+                        'key' => 'name',
+                        'type' => 'text',
+                        'inputType' => 'text',
+                    ],
+                ],
+                'layout' => [
+                    [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
                 ],
             ]);
     }

@@ -67,7 +67,6 @@ module.exports = {
                 children: [
                     'building-entity-list.md',
                     'filters.md',
-                    'commands.md',
                     'entity-states.md',
                     'reordering-instances.md',
                 ].map(page => `/guide/${page}`),
@@ -101,6 +100,13 @@ module.exports = {
                 ],
             },
             {
+                text: 'Commands',
+                children: [
+                    'commands.md',
+                    'commands-wizard.md',
+                ].map(page => `/guide/${page}`),
+            },
+            {
                 text: 'Authentication and authorizations',
                 children: [
                     'authentication.md',
@@ -117,7 +123,7 @@ module.exports = {
                     'page-alerts',
                     'context.md',
                     'sharp-uploads.md',
-                    'form-data-localization.md',
+                    'data-localization.md',
                     'testing-with-sharp.md',
                     'artisan-generators.md',
                     'style-visual-theme.md'

@@ -6,7 +6,7 @@
                     <slot name="nav-prepend" />
                 </template>
                 <template v-for="(tab, i) in layout.tabs">
-                    <Tab :title="tab.title" :key="`tab-${i}`">
+                    <Tab :title="tab.title" :active="isActive(tab)" @active="handleTabActivated(tab)" :key="`tab-${i}`">
                         <slot :tab="tab" />
                     </Tab>
                 </template>
@@ -32,6 +32,14 @@
     import Tabs from './Tabs';
     import Tab from './Tab';
 
+    function slugify(text) {
+        return text
+            .toLowerCase()
+            .normalize("NFD").replace(/\p{Diacritic}/gu, "")
+            .replace(/[^\w ]+/g, '')
+            .replace(/ +/g, '-');
+    }
+
     export default {
         name:'SharpTabbedLayout',
         props : {
@@ -44,7 +52,20 @@
         computed: {
             showTabs() {
                 return this.layout.tabbed && this.layout.tabs.length > 1;
-            }
-        }
+            },
+        },
+        methods: {
+            isActive(tab) {
+                return this.$route.query.tab === slugify(tab.title);
+            },
+            handleTabActivated(tab) {
+                this.$router.replace({
+                    query: {
+                        ...this.$route.query,
+                        tab: slugify(tab.title),
+                    },
+                })
+            },
+        },
     }
 </script>

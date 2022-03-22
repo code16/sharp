@@ -29,7 +29,7 @@ class SharpEntityListStateTest extends SharpTestCase
                     protected function updateState($instanceId, $stateId): array
                     {
                     }
-                }, );
+                });
             }
         };
 
@@ -103,7 +103,7 @@ class SharpEntityListStateTest extends SharpTestCase
                     protected function updateState($instanceId, $stateId): array
                     {
                     }
-                }, );
+                });
             }
         };
 
@@ -142,7 +142,7 @@ class SharpEntityListStateTest extends SharpTestCase
                     protected function updateState($instanceId, $stateId): array
                     {
                     }
-                }, );
+                });
             }
         };
 

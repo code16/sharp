@@ -7,7 +7,25 @@ export default {
         return {
             currentCommand: null,
             commandViewContent: null,
+            commandEndpoints: {
+                postCommand: null,
+                getForm: null,
+            },
+            commandFormProps: {
+                loading: false,
+            },
         }
+    },
+    computed: {
+        commandFormListeners() {
+            return {
+                'submit': this.handleCommandFormSubmitClicked,
+                'close': this.handleCommandFormClosed,
+                'update:loading': loading => {
+                    this.commandFormProps.loading = loading;
+                },
+            }
+        },
     },
     methods: {
         transformCommandForm(form) {
@@ -24,51 +42,70 @@ export default {
             $link.click();
         },
         async handleCommandResponse(response) {
-            if(response.data.type === 'application/json') {
-                const data = await parseBlobJSONContent(response.data);
-                this.handleCommandActionRequested(data.action, data);
-            } else {
+            if(response.data.type !== 'application/json') {
                 this.downloadCommandFile(response);
+                return null;
+            }
+            const data = await parseBlobJSONContent(response.data);
+            this.handleCommandActionRequested(data.action, data);
+            return data;
+        },
+        /**
+         * @param {import('sharp-commands').CommandFormModal} commandForm
+         */
+        async postCommandForm(commandForm) {
+            const { postCommand } = this.commandEndpoints;
+            const response = await commandForm.submit({
+                postFn: data => postCommand({ data, command_step: this.currentCommand.step }),
+            });
+            const data = await this.handleCommandResponse(response);
+
+            if(data?.action === 'step') {
+                this.currentCommand = {
+                    ...this.currentCommand,
+                    step: data.step,
+                };
+                await this.showCommandForm(this.currentCommand);
+            } else {
+                this.currentCommand = null;
             }
         },
-        async postCommandForm({ postFn }) {
-            const response = await this.$refs.commandForm.submit({ postFn });
-            await this.handleCommandResponse(response);
-            this.currentCommand = null;
-        },
-        async showCommandForm(command, { postForm, getFormData }) {
-            const data = command.fetch_initial_data
-                ? await withLoadingOverlay(getFormData())
-                : {};
-            const post = () => this.postCommandForm({ postFn:postForm });
+        async getCommandForm() {
+            const { getForm } = this.commandEndpoints;
 
+            if(this.currentCommand) {
+                this.commandFormProps.loading = true;
+                return getForm({ command_step: this.currentCommand.step })
+                    .finally(() => {
+                        this.commandFormProps.loading = false;
+                    });
+            }
+
+            return withLoadingOverlay(getForm());
+        },
+        async showCommandForm(command) {
+            const form = await this.getCommandForm();
             this.currentCommand = {
                 ...command,
-                form: this.transformCommandForm({
-                    ...command.form,
-                    data,
-                }),
+                form: this.transformCommandForm(form),
             };
-
-            this.$refs.commandForm.$on('submit', post);
-            this.$refs.commandForm.$once('close', () => {
-                this.$refs.commandForm.$off('submit', post);
-                this.currentCommand = null;
-            });
         },
-        async sendCommand(command, { postCommand, getFormData, postForm }) {
-            const { form, confirmation } = command;
-            if(form) {
-                return this.showCommandForm(command, { postForm, getFormData });
+        async sendCommand(command, { postCommand, getForm }) {
+            this.commandEndpoints = { postCommand, getForm };
+
+            if(command.has_form) {
+                return this.showCommandForm(command);
             }
-            if(confirmation) {
+
+            if(command.confirmation) {
                 await new Promise(resolve => {
-                    showConfirm(confirmation, {
+                    showConfirm(command.confirmation, {
                         title: lang('modals.command.confirm.title'),
                         okCallback: resolve,
                     });
                 });
             }
+
             try {
                 let response = await withLoadingOverlay(postCommand());
                 await this.handleCommandResponse(response);
@@ -109,6 +146,12 @@ export default {
         },
 
         /** Events */
+        handleCommandFormSubmitClicked(commandForm) {
+            this.postCommandForm(commandForm);
+        },
+        handleCommandFormClosed() {
+            this.currentCommand = null;
+        },
         handleCommandViewPanelClosed() {
             this.commandViewContent = null;
         },
@@ -122,9 +165,4 @@ export default {
             'view': this.handleViewCommand,
         });
     },
-    mounted() {
-        if(!this.$refs.commandForm) {
-            console.error('withCommands: CommandForm not found');
-        }
-    }
 }

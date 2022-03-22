@@ -5,6 +5,7 @@ Object {
   "config": null,
   "dashboardKey": null,
   "data": null,
+  "fields": null,
   "layout": null,
   "widgets": null,
 }

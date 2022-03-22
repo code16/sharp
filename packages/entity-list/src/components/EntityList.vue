@@ -85,7 +85,8 @@
             :command="currentCommand"
             :entity-key="entityKey"
             :instance-id="currentCommandInstanceId"
-            ref="commandForm"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
         />
         <CommandViewPanel
             :content="commandViewContent"
@@ -586,9 +587,9 @@
 
                 this.currentCommandInstanceId = instanceId;
                 this.sendCommand(command, {
-                    postCommand: () => this.axiosInstance.post(endpoint, { query }, { responseType:'blob' }),
-                    postForm: data => api.post(endpoint, { query, data }, { responseType:'blob' }),
-                    getFormData: () => this.axiosInstance.get(`${endpoint}/data`, { params:query }).then(response => response.data.data),
+                    postCommand: data => api.post(endpoint, { query, ...data }, { responseType:'blob' }),
+                    getForm: commandQuery => api.get(`${endpoint}/form`, { params: { ...query, ...commandQuery } })
+                        .then(response => response.data),
                 });
             },
             handleRefreshCommand(data) {

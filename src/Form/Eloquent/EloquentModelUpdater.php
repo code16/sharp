@@ -70,7 +70,7 @@ class EloquentModelUpdater
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
                 .(new \ReflectionClass($type))->getShortName()
-                .'RelationUpdater', );
+                .'RelationUpdater');
 
             $relationshipUpdater->update(
                 $instance, $attribute, $value, $this->relationshipsConfiguration[$attribute] ?? null,

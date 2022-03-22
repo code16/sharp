@@ -6,11 +6,8 @@ use Code16\Sharp\Http\Api\ApiController;
 
 class EntityListInstanceCommandController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandleCommandReturn, HandleCommandForm;
 
-    /**
-     * Display the Command form.
-     */
     public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {
         $list = $this->getListInstance($entityKey);
@@ -19,9 +16,12 @@ class EntityListInstanceCommandController extends ApiController
 
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
-        return response()->json([
-            'data' => $commandHandler->formData($instanceId),
-        ]);
+        return response()->json(
+            array_merge(
+                $this->getCommandForm($commandHandler),
+                ['data' => $commandHandler->formData($instanceId) ?: null],
+            ),
+        );
     }
 
     /**
