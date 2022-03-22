@@ -152,7 +152,8 @@ class UploadFormatterTest extends SharpTestCase
         \Mockery::mock('alias:\Spatie\ImageOptimizer\OptimizerChainFactory')
             ->shouldReceive('create')
             ->once()
-            ->andReturn(new class {
+            ->andReturn(new class
+            {
                 public function optimize()
                 {
                     return true;
