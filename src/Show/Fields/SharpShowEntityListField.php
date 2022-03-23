@@ -48,6 +48,10 @@ class SharpShowEntityListField extends SharpShowField
     public function hideEntityCommand(array|string $commands): self
     {
         foreach ((array) $commands as $command) {
+            if (class_exists($command)) {
+                $command = app($command)->getCommandKey();
+            }
+
             $this->hiddenCommands['entity'][] = $command;
         }
 
@@ -57,6 +61,10 @@ class SharpShowEntityListField extends SharpShowField
     public function hideInstanceCommand(array|string $commands): self
     {
         foreach ((array) $commands as $command) {
+            if (class_exists($command)) {
+                $command = app($command)->getCommandKey();
+            }
+
             $this->hiddenCommands['instance'][] = $command;
         }
 
