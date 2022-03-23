@@ -2,6 +2,6 @@
 
 return [
 
-    'delete_confirmation_text' => 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+    'delete_confirmation_text' => 'Êtes-vous sûr(e) de vouloir supprimer cet élément ?',
 
 ];
