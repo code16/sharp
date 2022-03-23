@@ -24,14 +24,14 @@ abstract class SharpFormEditorEmbed
 
     public function toConfigArray(bool $isForm): array
     {
-        if (!$template = $this->templates[$isForm ? 'form' : 'show'] ?? ($this->templates['form'] ?? null)) {
+        if (! $template = $this->templates[$isForm ? 'form' : 'show'] ?? ($this->templates['form'] ?? null)) {
             $template = 'Empty template';
         }
 
         $config = [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
-            'tag' => $this->tagName ?: 'x-' . Str::snake(class_basename(get_class($this)), '-'),
+            'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'template' => $template,
         ];
@@ -174,7 +174,7 @@ abstract class SharpFormEditorEmbed
     final protected function configureFormTemplatePath(string $templatePath): self
     {
         return $this->setTemplate(
-            file_get_contents(resource_path('views/' . $templatePath)),
+            file_get_contents(resource_path('views/'.$templatePath)),
             'form',
         );
     }

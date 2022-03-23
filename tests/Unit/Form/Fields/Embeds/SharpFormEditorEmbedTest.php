@@ -30,7 +30,8 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_tag()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed {
+        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        {
             public function buildEmbedConfig(): void
             {
                 $this->configureTagName('my-tag');
@@ -48,7 +49,8 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_label()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed {
+        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        {
             public function buildEmbedConfig(): void
             {
                 $this->configureTagName('my-tag')
@@ -67,7 +69,8 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_form_template()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed {
+        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        {
             public function buildEmbedConfig(): void
             {
                 $this->configureTagName('my-tag')
@@ -86,7 +89,8 @@ class SharpFormEditorEmbedTest extends SharpTestCase
     /** @test */
     public function we_can_configure_show_template()
     {
-        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed {
+        $defaultEmbed = new class() extends DefaultFakeSharpFormEditorEmbed
+        {
             public function buildEmbedConfig(): void
             {
                 $this->configureTagName('my-tag')
