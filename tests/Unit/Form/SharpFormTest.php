@@ -230,7 +230,7 @@ class SharpFormTest extends SharpTestCase
         $this->assertEquals(
             [
                 'hasShowPage' => false,
-                'deleteConfirmationText' => 'Are you sure you want to delete this item ?',
+                'deleteConfirmationText' => 'Are you sure you want to delete this item?',
             ],
             $sharpForm->formConfig(),
         );
