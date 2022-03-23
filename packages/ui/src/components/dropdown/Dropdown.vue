@@ -5,7 +5,9 @@
         :disabled="disabled"
         :no-caret="!showCaret"
         :offset="1"
+        :boundary="boundary"
         variant="custom"
+        no-flip
         v-bind="$attrs"
         v-on="$listeners"
         ref="dropdown"
@@ -44,6 +46,9 @@
              */
             toggleClass() {
                 return this.classes;
+            },
+            boundary() {
+                return document.querySelector('[data-popover-boundary]');
             },
         },
         methods: {
