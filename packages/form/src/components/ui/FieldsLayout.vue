@@ -58,7 +58,9 @@
                 const rows = this.$el.querySelectorAll(':scope > .SharpGrid__row');
                 rows.forEach(row => {
                     const hasLabel = !!row.querySelector(':scope > .SharpGrid__col > .SharpForm__form-item--has-label');
+                    const hasLocaleSelect = !!row.querySelector('.SharpFieldLocaleSelect');
                     row.classList.toggle('SharpGrid__row--has-label', hasLabel);
+                    row.classList.toggle('SharpGrid__row--has-locale-select', hasLocaleSelect);
                 });
             },
         },
