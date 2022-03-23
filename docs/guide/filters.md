@@ -135,7 +135,7 @@ function getListData()
 {
     $spaceships = Spaceship::query();
     
-    if ($range = $params->filterFor("createdAt")) {
+    if ($range = $this->queryParams->filterFor("createdAt")) {
         $spaceships->whereBetween(
             "created_at",
             [
