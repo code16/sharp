@@ -359,11 +359,16 @@ function delete($id)
 
 ### `buildFormConfig(): void`
 
-This method, entirely optional, is the place to configure thise:
+This method, entirely optional, is the place to configure these:
 
-- `setBreadcrumbCustomLabelAttribute(string $attribute)` to declare the attribute used by the breadcrumb (see [breadcrumb documentation](sharp-breadcrumb.md)).
+- `configureDeleteConfirmation(?string $text = null)` to add a custom (or standard if missing) confirm message when the
+  use clicks on the delete button.
 
-- `setDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show Page (
+- `configureBreadcrumbCustomLabelAttribute(string $attribute)` to declare the attribute used by the breadcrumb (
+  see [breadcrumb documentation](sharp-breadcrumb.md)).
+
+- `configureDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show
+  Page (
   instead of the EntityList) after the store. No existence check is done here, meaning if there is no Show Page
   configured it will end up in a 404.
 
@@ -375,7 +380,7 @@ Example
 ```php
 function buildFormConfig(): void
 {
-	$this->setBreadcrumbCustomLabelAttribute("name.en")
+	$this->configureBreadcrumbCustomLabelAttribute("name.en")
 		->setDisplayShowPageAfterCreation();
 }
 ```
