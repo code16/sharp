@@ -62,19 +62,25 @@
 </template>
 
 <script>
-  import { getBackUrl, logError, showAlert, } from "sharp";
+    import {
+        getBackUrl,
+        lang,
+        logError,
+        showAlert,
+        showConfirm,
+    } from "sharp";
 
-  import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
-  import { DynamicView, Localization } from 'sharp/mixins';
+    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import { DynamicView, Localization } from 'sharp/mixins';
 
-  import FieldsLayout from './ui/FieldsLayout';
-  import LocaleSelect from './ui/LocaleSelect';
-  import localize from '../mixins/localize/form';
+    import FieldsLayout from './ui/FieldsLayout';
+    import LocaleSelect from './ui/LocaleSelect';
+    import localize from '../mixins/localize/form';
 
-  import { getDependantFieldsResetData, transformFields } from "../util";
+    import { getDependantFieldsResetData, transformFields } from "../util";
 
 
-  const noop = ()=>{};
+    const noop = ()=>{};
 
     export default {
         name:'SharpForm',
@@ -212,6 +218,7 @@
                     loading: this.loading,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
+                    hasDeleteConfirmation: !!this.config.deleteConfirmationText,
                 }
             },
             actionBarListeners() {
@@ -370,7 +377,13 @@
             handleSubmitClicked() {
                 this.submit().catch(()=>{});
             },
-            handleDeleteClicked() {
+            async handleDeleteClicked() {
+                if(this.config.deleteConfirmationText) {
+                    await showConfirm(this.config.deleteConfirmationText, {
+                        okTitle: lang('modals.confirm.delete.ok_button'),
+                        okVariant: 'danger',
+                    });
+                }
                 this.axiosInstance.delete(this.apiPath)
                     .then(response => {
                         this.redirectForResponse(response, { replace:true });

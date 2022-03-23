@@ -6,7 +6,9 @@ return [
     '419.title' => 'Invalide',
     '419.message' => 'Cette action n’est plus valide, probablement à cause d’une trop longue période d’inactivité. La page va être rechargée automatiquement.',
 
-    'command.confirm.title' => 'Confirmer',
+    'confirm.ok_button' => 'Confirmer',
+    'confirm.delete.ok_button' => 'Supprimer',
+
     'command.info.title' => 'Information',
     'state.422.title' => "Impossible de modifier l'état",
     'cropper.title' => 'Transformer l’image',

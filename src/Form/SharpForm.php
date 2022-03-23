@@ -23,6 +23,7 @@ abstract class SharpForm
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
+    protected ?string $deleteConfirmationText = null;
     protected ?string $formValidatorClass = null;
 
     final public function formLayout(): array
@@ -40,6 +41,7 @@ abstract class SharpForm
         return tap(
             [
                 'hasShowPage' => $this->displayShowPageAfterCreation,
+                'deleteConfirmationText' => $this->deleteConfirmationText,
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
@@ -86,6 +88,13 @@ abstract class SharpForm
 
     public function buildFormConfig(): void
     {
+    }
+
+    protected function configureDeleteConfirmation(?string $text = null): self
+    {
+        $this->deleteConfirmationText = $text ?: trans('sharp::form.delete_confirmation_text');
+
+        return $this;
     }
 
     protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self

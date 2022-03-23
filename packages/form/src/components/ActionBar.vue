@@ -20,7 +20,7 @@
                             </Button>
                         </template>
                         <template v-else>
-                            <Button class="px-3" variant="light" large outline @click="deleteFocused = true">
+                            <Button class="px-3" variant="light" :disabled="loading" large outline @click="handleDeleteClicked">
                                 <svg width="1.125em" height="1.125em" viewBox="0 0 16 24" fill-rule="evenodd">
                                     <path d="M4 0h8v2H4zM0 3v4h1v17h14V7h1V3H0zm13 18H3V8h10v13z"></path>
                                     <path d="M5 10h2v9H5zm4 0h2v9H9z"></path>
@@ -68,6 +68,7 @@
             loading: Boolean,
             breadcrumb: Array,
             showBreadcrumb: Boolean,
+            hasDeleteConfirmation: Boolean,
         },
         data() {
             return {
@@ -89,7 +90,11 @@
                 this.$emit('submit');
             },
             handleDeleteClicked() {
-                this.$emit('delete');
+                if(this.deleteFocused || this.hasDeleteConfirmation) {
+                    this.$emit('delete');
+                } else {
+                    this.deleteFocused = true;
+                }
             },
             handleCancelClicked() {
                 this.$emit('cancel');

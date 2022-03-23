@@ -6,7 +6,8 @@ return [
     '419.title' => 'Ungültig',
     '419.message' => 'Diese Aktion ist ungültig, Höchstwahrscheinlich ist zu viel Zeit vergangen. Die Seite lädt neu.',
 
-    'command.confirm.title' => 'Bestätigen',
+    'confirm.ok_button' => 'Bestätigen',
+
     'command.info.title' => 'Info',
     'state.422.title' => 'Status kann nicht geändert werden',
     'cropper.title' => 'Bild transformieren',
