@@ -59,7 +59,7 @@ class ComposeEmailWithPostsWizardCommand extends EntityWizardCommand
             'message' => collect(
                 [
                     'Here’s a list of posts I think you may like:',
-                ], )
+                ])
                 ->merge(
                     Post::whereIn('id', $this->getWizardContext()->get('posts'))
                         ->get()

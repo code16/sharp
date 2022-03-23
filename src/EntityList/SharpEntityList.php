@@ -124,7 +124,7 @@ abstract class SharpEntityList
                         return $collection;
                     })
                     ->toArray(),
-            ], )
+            ])
             ->when($this->pageAlertHtmlField !== null, function (Collection $collection) {
                 $collection[$this->pageAlertHtmlField->key] = $this->getGlobalMessageData();
 

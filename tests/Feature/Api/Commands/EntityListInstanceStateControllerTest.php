@@ -159,6 +159,6 @@ class EntityListInstanceStatePersonSharpEntityList extends PersonSharpEntityList
             {
                 return $instanceId != 100;
             }
-        }, );
+        });
     }
 }
