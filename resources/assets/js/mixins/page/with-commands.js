@@ -98,12 +98,7 @@ export default {
             }
 
             if(command.confirmation) {
-                await new Promise(resolve => {
-                    showConfirm(command.confirmation, {
-                        title: lang('modals.command.confirm.title'),
-                        okCallback: resolve,
-                    });
-                });
+                await showConfirm(command.confirmation);
             }
 
             try {
