@@ -41,6 +41,14 @@ export const Upload = Node.create({
             name: {
                 default: null,
             },
+            size: {
+                default: null,
+                renderHTML: () => null
+            },
+            thumbnail: {
+                default: null,
+                renderHTML: () => null
+            },
             filters: {
                 parseHTML: element => ({
                     crop: parseFilterCrop(element.getAttribute('filter-crop')),
@@ -75,7 +83,11 @@ export const Upload = Node.create({
             uploaded: {
                 default: false,
                 renderHTML: () => null,
-            }
+            },
+            notFound: {
+                default: false,
+                renderHTML: () => null,
+            },
         }
     },
 
@@ -107,7 +119,7 @@ export const Upload = Node.create({
         return {
             insertUpload: ({ file, pos }) => ({ commands, tr }) => {
                 return commands
-                    .insertContentAt(pos ?? tr.selection, {
+                    .insertContentAt(pos ?? tr.selection.to, {
                         type: this.name,
                         attrs: {
                             file,

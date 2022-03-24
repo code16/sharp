@@ -4,6 +4,7 @@
             <TextRenderer
                 class="ShowTextField__content"
                 :content="currentContent"
+                :embeds="embeds"
             />
         </template>
         <template v-else>
@@ -46,6 +47,7 @@
             html: Boolean,
             localized: Boolean,
             locale: String,
+            embeds: Object,
         },
         data() {
             return {

@@ -21,7 +21,7 @@
 <script>
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../../Editor';
-    import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../..";
+    import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";
     import { normalizeHTML, trimHTML } from "./util";
     import LocalizedEditors from "../../LocalizedEditors";
@@ -34,32 +34,17 @@
             SharpEditor,
             LocalizedEditors,
         },
-        inject: ['$form'],
         props: {
-            id: String,
-            value: {
-                type: Object,
-                default: ()=>({})
-            },
-            placeholder: String,
-            toolbar: Array,
-            minHeight: Number,
-            maxHeight: Number,
-            innerComponents: Object,
+            ...editorProps,
+            extensions: Array,
 
             readOnly: Boolean,
             uniqueIdentifier: String,
-            fieldConfigIdentifier: String,
         },
         data() {
             return {
                 editor: null,
             }
-        },
-        computed: {
-            hasUpload() {
-                return !!this.innerComponents?.upload;
-            },
         },
         methods: {
             handleUpdate(editor) {
@@ -68,26 +53,9 @@
             },
 
             createEditor({ content }) {
-                const extensions = [
-                    ...getDefaultExtensions({
-                        placeholder: this.placeholder,
-                        toolbar: this.toolbar,
-                    }),
-                ]
-
-                if(this.hasUpload) {
-                    const Upload = getUploadExtension.call(this, {
-                        fieldProps: this.innerComponents.upload,
-                        uniqueIdentifier: this.uniqueIdentifier,
-                        fieldConfigIdentifier: this.fieldConfigIdentifier,
-                        form: this.$form,
-                    });
-                    extensions.push(Upload);
-                }
-
                 return new Editor({
                     ...defaultEditorOptions,
-                    extensions,
+                    extensions: this.extensions,
                     content: normalizeHTML(content),
                     editable: !this.readOnly,
                 });

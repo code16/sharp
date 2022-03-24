@@ -73,7 +73,7 @@
     @include media-breakpoint-up(xs) { max-height: 250px; }
     @include media-breakpoint-up(sm) { max-height: 300px; }
     @include media-breakpoint-up(md) { max-height: 400px; }
-    @include media-breakpoint-up(md) { max-height: 500px; }
+    @include media-breakpoint-up(lg) { max-height: 500px; }
   }
 
   &__card {

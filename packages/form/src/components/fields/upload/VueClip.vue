@@ -138,6 +138,7 @@
             invalid: Boolean,
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
+            persistThumbnails: Boolean,
         },
 
         data() {
@@ -240,7 +241,7 @@
                 return !this.transformableFileTypes || this.transformableFileTypes.includes(this.fileExtension);
             },
             hasInitialTransform() {
-                if(this.file?.status === 'exist') {
+                if(this.file?.status === 'exist' && !this.value.uploaded) {
                     return false;
                 }
                 return this.isTransformable && !!this.ratioX && !!this.ratioY;
@@ -267,6 +268,7 @@
                     .then(blobUrl => {
                         if(blobUrl) {
                             this.$set(this.file, 'blobUrl', blobUrl);
+                            this.$emit('thumbnail', blobUrl);
                         }
                     })
                     .catch(e => {
@@ -308,7 +310,10 @@
                     ...data,
                     uploaded: true,
                 }
-                this.$emit('success', value);
+                this.$emit('success', {
+                    ...value,
+                    size: this.file.size,
+                });
                 this.$emit('input', value);
 
                 this.setPending(false);
@@ -397,7 +402,7 @@
             },
 
             resetThumbnails() {
-                if(this.file?.blobUrl) {
+                if(this.file?.blobUrl && !this.persistThumbnails) {
                     URL.revokeObjectURL(this.file.blobUrl)
                 }
                 this.resetTransformedImage();

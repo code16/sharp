@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import { Upload } from "./upload";
+import debounce from 'lodash/debounce';
 import {
     filesEquals,
     postResolveFiles,
     defaultFileThumbnailHeight,
     defaultFileThumbnailWidth,
 } from "sharp-files";
+import { Upload } from "./upload";
 
 
 export function getUploadExtension({
@@ -16,9 +17,13 @@ export function getUploadExtension({
 }) {
 
     const state = Vue.observable({
-        created: false,
         registeredFiles: [],
+        created: false,
+        resolved: null,
+        onResolve: null,
     });
+
+    state.resolved = new Promise(resolve => state.onResolve = resolve);
 
     const updateFiles = files => {
         this.$emit('input', {
@@ -41,14 +46,15 @@ export function getUploadExtension({
         onBeforeCreate: () => {
             updateFiles([])
         },
-        onCreate: async () => {
+        onCreate: debounce(async () => {
             if(state.registeredFiles.length > 0) {
                 const files = await resolveFiles(state.registeredFiles);
                 updateFiles(files);
+                state.onResolve();
             }
             state.created = true;
             state.registeredFiles = [];
-        },
+        }),
     }
 
     const options = {
@@ -58,37 +64,18 @@ export function getUploadExtension({
             fieldConfigIdentifier,
         },
         state,
-        isReady: (attrs) => {
-            if(state.registeredFiles.find(file => filesEquals(attrs, file))) {
-                return false;
-            }
-            return state.created;
-        },
-        getFile: attrs => {
-            return this.value.files.find(file => filesEquals(attrs, file));
-        },
-        registerFile: attrs => {
-            if(attrs.uploaded) {
+        registerFile: async attrs => {
+            if(state.created) {
                 updateFiles([
                     ...this.value.files,
                     attrs,
                 ]);
-                return;
+                return attrs;
             }
 
             state.registeredFiles.push(attrs);
-
-            if(state.created && attrs.path) {
-                options.restoreFile(attrs);
-            }
-        },
-        restoreFile: async (attrs) => {
-            const files = await resolveFiles([attrs]);
-            updateFiles([
-                ...this.value.files,
-                files[0],
-            ]);
-            state.registeredFiles = state.registeredFiles.filter(file => !filesEquals(file, attrs));
+            await state.resolved;
+            return this.value.files.find(file => filesEquals(attrs, file));
         },
         onSuccess: uploadedFile => {
             updateFiles([

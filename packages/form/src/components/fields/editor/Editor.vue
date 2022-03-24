@@ -9,6 +9,7 @@
                         :toolbar="toolbar"
                         :disabled="readOnly"
                         :options="toolbarOptions"
+                        :embeds="embeds"
                     />
                 </template>
             </div>
@@ -34,6 +35,7 @@
     import { onLabelClicked } from "../../../util/accessibility";
 
     export default {
+        inheritAttrs: false,
         components: {
             EditorContent,
             MenuBar,
@@ -51,6 +53,7 @@
             maxHeight: Number,
             readOnly: Boolean,
             toolbarOptions: Array,
+            embeds: Object,
         },
         data() {
             return {

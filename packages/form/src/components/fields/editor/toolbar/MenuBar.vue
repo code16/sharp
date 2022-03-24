@@ -50,6 +50,11 @@
                     <OptionsDropdown :options="options" :editor="editor" />
                 </div>
             </template>
+            <template v-if="customEmbeds && customEmbeds.length > 0">
+                <div class="btn-group">
+                    <EmbedDropdown :embeds="customEmbeds" :editor="editor" />
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -60,9 +65,11 @@
     import LinkDropdown from "./LinkDropdown";
     import TableDropdown from "./TableDropdown";
     import OptionsDropdown from "./OptionsDropdown";
+    import EmbedDropdown from "./EmbedDropdown";
 
     export default {
         components: {
+            EmbedDropdown,
             TableDropdown,
             LinkDropdown,
             OptionsDropdown,
@@ -75,6 +82,7 @@
             toolbar: Array,
             disabled: Boolean,
             options: Array,
+            embeds: Object,
         },
         computed: {
             toolbarGroups() {
@@ -86,6 +94,10 @@
                         res[res.length - 1].push(btn);
                         return res;
                     }, [[]]);
+            },
+            customEmbeds() {
+                const { upload, ...customEmbeds } = this.embeds ?? {};
+                return Object.values(customEmbeds);
             },
         },
         methods: {

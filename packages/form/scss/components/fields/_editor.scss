@@ -2,6 +2,8 @@
 
 .editor {
 
+  --card-border-color: #{$input-border-color};
+
   &__header {
     position: sticky;
     top: var(--navbar-height);
@@ -16,10 +18,6 @@
       z-index: 3;
       box-shadow: $box-shadow-sm;
     }
-  }
-
-  .card {
-    border-color: $input-border-color;
   }
 
   .card-body {
@@ -144,7 +142,8 @@
       border-radius: $card-border-radius;
       margin-bottom: 1rem;
       transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
-      &.ProseMirror-selectednode {
+
+      &.selected {
         border-color: var(--primary);
         box-shadow: $box-shadow;
       }
@@ -181,21 +180,45 @@
     .btn-light {
       --bs-btn-color: rgba(0,0,0,.675);
     }
+
+    .Prosemirror-selectednode {
+      outline: 0;
+    }
+  }
+
+  .ProseMirror-focused {
+    --node-selected-box-shadow: #{$box-shadow};
+    --node-selected-card-border: var(--primary);
   }
 
   &__node {
     margin-bottom: 1rem;
+    border-radius: 4px;
+    --card-transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
+
+    &.selected {
+      box-shadow: var(--node-selected-box-shadow);
+      --card-border-color: var(--node-selected-card-border, #{$input-border-color});
+    }
+
+    .embed-node__template {
+      --card-border-color: #{$card-border-color};
+    }
   }
 
   &__dropdown {
     .dropdown-menu {
       width: max-content;
       @include media-breakpoint-up(sm) {
-        min-width: 18rem;
+        min-width: var(--dropdown-min-width, 10rem);
       }
       &[x-placement^=top] {
         bottom: auto;
       }
+    }
+
+    &--link, &--table {
+      --dropdown-min-width: 18rem;
     }
   }
 

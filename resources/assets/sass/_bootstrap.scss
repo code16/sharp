@@ -121,6 +121,11 @@ $bv-enable-tooltip-variants: false;
   line-height: $label-line-height;
 }
 
+.card {
+  border-color: var(--card-border-color, #{$card-border-color});
+  transition: var(--card-transition);
+}
+
 .card.form-control {
   font-size: 1rem;
   color: $body-color;
