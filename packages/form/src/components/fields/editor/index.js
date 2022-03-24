@@ -20,6 +20,7 @@ export const editorProps = {
     minHeight: Number,
     maxHeight: Number,
     embeds: Object,
+    inline: Boolean,
     uniqueIdentifier: String,
     fieldConfigIdentifier: String,
 }
