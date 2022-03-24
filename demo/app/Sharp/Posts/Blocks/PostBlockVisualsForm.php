@@ -3,10 +3,10 @@
 namespace App\Sharp\Posts\Blocks;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -15,9 +15,13 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
     protected static string $postBlockType = 'visuals';
     protected ?string $formValidatorClass = PostBlockVisualsValidator::class;
 
-    public function buildFormFields(FieldsContainer $formFields): void
+    protected function getContentField(): ?SharpFormField
     {
-        parent::buildFormFields($formFields);
+        return null;
+    }
+
+    protected function buildAdditionalFields(FieldsContainer $formFields): void
+    {
         $formFields->addField(
             SharpFormListField::make('files')
                 ->setLabel('Visuals')
@@ -45,15 +49,13 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
         );
     }
 
-    public function buildFormLayout(FormLayout $formLayout): void
+    protected function addAdditionalFieldsToLayout(FormLayoutColumn $column): void
     {
-        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            $column->withSingleField('type')
-                ->withSingleField('files', function (FormLayoutColumn $item) {
-                    $item->withSingleField('file')
-                        ->withSingleField('legend');
-                });
-        });
+        $column
+            ->withSingleField('files', function (FormLayoutColumn $item) {
+                $item->withSingleField('file')
+                    ->withSingleField('legend');
+            });
     }
 
     protected function addCustomTransformers(): self
