@@ -225,10 +225,10 @@ Example:
 ## Custom embeds
 
 This feature allows to embed any structured data in the content. A common use case is to embed a reference to another
-instance; here an example: in a blog post, you want to embed a reference to another post, that would be rendered as a "
-read also" link in the public section.
+instance; here's an example: in a blog post, you want to insert a reference to another post, that would be rendered as
+a "read also" block / link in the public section.
 
-In practice, the Editor field can allow custom Embeds, which defines how the data is stored in the field (as HTML
+In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML
 attributes), and how it is edited in the UI, via a full-featured form.
 
 <img src="./editor-embeds.png">
