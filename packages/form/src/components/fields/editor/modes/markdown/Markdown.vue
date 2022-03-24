@@ -58,7 +58,7 @@
             },
             toolbarOptions(editor) {
                 const options = [];
-                const hasList = this.toolbar.some(button => button === 'bullet-list' || button === 'ordered-list');
+                const hasList = this.toolbar?.some(button => button === 'bullet-list' || button === 'ordered-list');
 
                 if(!this.tightListsOnly && hasList) {
                     options.push({

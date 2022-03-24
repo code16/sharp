@@ -28,15 +28,14 @@
       margin: -1px;
       width: auto;
       padding: $input-padding-y $input-padding-x;
-    }
-  }
 
-  .card-body.form-control {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top-color: transparent;
-    &.is-invalid {
-      border-top-color: $form-feedback-invalid-color;
+      border-top-left-radius: var(--card-body-border-top-radius, 0);
+      border-top-right-radius: var(--card-body-border-top-radius, 0);
+      border-top-color: transparent;
+
+      &.is-invalid {
+        border-top-color: $form-feedback-invalid-color;
+      }
     }
   }
 
@@ -261,5 +260,9 @@
     pointer-events: none;
     cursor: default;
     opacity: 0.8;
+  }
+
+  &--no-toolbar {
+    --card-body-border-top-radius: #{$card-border-radius};
   }
 }

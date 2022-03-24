@@ -142,6 +142,7 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SMALL,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+//                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
                     ->setCropRatio('1:1')
                     ->setHeight(350)
@@ -214,8 +215,9 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+//                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
-                    ->setHeight(350),
+                    ->setHeight(350, 0),
             );
     }
 
