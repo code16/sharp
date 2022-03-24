@@ -19,7 +19,9 @@ class SharpFormEditorFieldTest extends SharpTestCase
                 'minHeight' => 200,
                 'toolbar' => [
                     SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
-                    SharpFormEditorField::UL, SharpFormEditorField::SEPARATOR, SharpFormEditorField::A,
+                    SharpFormEditorField::UL,
+                    SharpFormEditorField::SEPARATOR,
+                    SharpFormEditorField::A,
                 ],
                 'embeds' => [
                     'upload' => [
@@ -29,6 +31,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
                     ],
                 ],
                 'markdown' => false,
+                'inline' => false,
             ],
             $formField->toArray(),
         );
@@ -180,6 +183,18 @@ class SharpFormEditorFieldTest extends SharpTestCase
                 'tightListsOnly' => true,
                 'nl2br' => true,
             ],
+            $formField->toArray(),
+        );
+    }
+
+    /** @test */
+    public function we_can_define_setWithoutParagraphs()
+    {
+        $formField = SharpFormEditorField::make('text')
+            ->setWithoutParagraphs();
+
+        $this->assertArraySubset(
+            ['inline' => true],
             $formField->toArray(),
         );
     }
