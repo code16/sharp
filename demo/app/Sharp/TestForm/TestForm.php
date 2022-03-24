@@ -142,6 +142,7 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SMALL,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+//                    ->setWithoutParagraphs()
                     ->setCropRatio('1:1')
                     ->setHeight(350)
                     ->setStorageDisk('local')
@@ -211,7 +212,9 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::CODE,
                         SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::CODE_BLOCK,
                     ])
+//                    ->setWithoutParagraphs()
                     ->setHeight(350),
             );
     }

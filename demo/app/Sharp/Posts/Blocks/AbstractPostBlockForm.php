@@ -4,6 +4,7 @@ namespace App\Sharp\Posts\Blocks;
 
 use App\Models\PostBlock;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Layout\FormLayout;
@@ -24,20 +25,25 @@ abstract class AbstractPostBlockForm extends SharpForm
             ->addField(
                 SharpFormHtmlField::make('type')
                     ->setInlineTemplate('Post block type: <strong>{{name}}</strong><div class="small" v-if="help">{{help}}</div>'),
-            )
-            ->addField(
-                SharpFormTextareaField::make('content')
-                    ->setLabel('Content')
-                    ->setRowCount(6),
             );
+
+        if ($field = $this->getContentField()) {
+            $formFields->addField($field);
+        }
+
+        $this->buildAdditionalFields($formFields);
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-        $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            $column->withSingleField('type')
-                ->withSingleField('content');
-        });
+        $formLayout
+            ->addColumn(6, function (FormLayoutColumn $column) {
+                $column->withSingleField('type');
+                if ($this->getContentField()) {
+                    $column->withSingleField('content');
+                }
+                $this->addAdditionalFieldsToLayout($column);
+            });
     }
 
     public function buildFormConfig(): void
@@ -90,5 +96,20 @@ abstract class AbstractPostBlockForm extends SharpForm
     public function delete($id): void
     {
         PostBlock::findOrFail($id)->delete();
+    }
+
+    protected function getContentField(): ?SharpFormField
+    {
+        return SharpFormTextareaField::make('content')
+            ->setLabel('Content')
+            ->setRowCount(6);
+    }
+
+    protected function buildAdditionalFields(FieldsContainer $formFields): void
+    {
+    }
+
+    protected function addAdditionalFieldsToLayout(FormLayoutColumn $column): void
+    {
     }
 }

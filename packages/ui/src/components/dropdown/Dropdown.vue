@@ -31,7 +31,7 @@
         },
         props: {
             ...Button.props,
-            text: String,
+            text: [Boolean, String],
             showCaret: {
                 type: Boolean,
                 default: true

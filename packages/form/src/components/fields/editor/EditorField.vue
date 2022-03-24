@@ -39,6 +39,7 @@
                     ...getDefaultExtensions({
                         placeholder: this.placeholder,
                         toolbar: this.toolbar,
+                        inline: this.inline,
                     }),
                     ...this.embedExtensions,
                     this.uploadExtension,

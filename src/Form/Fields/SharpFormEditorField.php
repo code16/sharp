@@ -54,6 +54,7 @@ class SharpFormEditorField extends SharpFormField
     ];
     protected bool $showToolbar = true;
     protected bool $renderAsMarkdown = false;
+    protected bool $withoutParagraphs = false;
 
     public static function make(string $key): self
     {
@@ -95,6 +96,13 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
+    public function setWithoutParagraphs(bool $withoutParagraphs = true): self
+    {
+        $this->withoutParagraphs = $withoutParagraphs;
+
+        return $this;
+    }
+
     public function setRenderContentAsMarkdown(bool $renderAsMarkdown = true): self
     {
         $this->renderAsMarkdown = $renderAsMarkdown;
@@ -115,6 +123,7 @@ class SharpFormEditorField extends SharpFormField
             'transformableFileTypes' => 'array',
             'transformKeepOriginal' => 'boolean',
             'markdown' => 'boolean',
+            'inline' => 'boolean',
         ];
     }
 
@@ -129,6 +138,7 @@ class SharpFormEditorField extends SharpFormField
                     'placeholder' => $this->placeholder,
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
+                    'inline' => $this->withoutParagraphs,
                     'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),
                         $this->innerComponentEmbedsConfiguration()

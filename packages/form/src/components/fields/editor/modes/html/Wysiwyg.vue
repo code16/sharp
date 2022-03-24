@@ -48,7 +48,7 @@
         },
         methods: {
             handleUpdate(editor) {
-                const content = trimHTML(editor.getHTML());
+                const content = trimHTML(editor.getHTML(), { inline: this.inline });
                 this.$emit('input', this.localizedValue(content));
             },
 

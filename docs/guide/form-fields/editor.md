@@ -66,6 +66,11 @@ SharpFormEditorField::make("description")
 
 If true te front will send the content as markdown to the back, for storage. Default is false.
 
+### `setWithoutParagraphs(bool $withoutParagraphs = true)`
+
+If true the editor won’t create `<p>`, but `<br>`. This is useful on some specific cases (everytime inline HTML is
+needed, maybe for a title or a legend). Default is false.
+
 ### `setMaxFileSize(float $sizeInMB)`
 
 Max file size allowed.
