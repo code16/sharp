@@ -1,0 +1,11 @@
+name: Deploy
+on:
+  push:
+    tags:
+    - 'v7.*'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping forge to start deploy
+        run: curl https://forge.laravel.com/servers/503638/sites/1462752/deploy/http?token=Ed60G8WmUIEG5NmYbnNTLRDgpuJMW0P8L3wfm7vl

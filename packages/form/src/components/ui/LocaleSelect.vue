@@ -1,15 +1,17 @@
 <template>
-    <Dropdown class="SharpForm__locale-dropdown">
-        <template v-slot:text>
-            <template v-if="locale">{{ locale }}</template>
-            <template v-else>-</template>
-        </template>
-        <template v-for="locale in locales">
-            <DropdownItem class="text-uppercase small" :active="isActive(locale)" @click="handleChanged(locale)" :key="locale">
-                {{ locale }}
-            </DropdownItem>
-        </template>
-    </Dropdown>
+    <div style="min-width: 4rem">
+        <Dropdown class="SharpForm__locale-dropdown">
+            <template v-slot:text>
+                <template v-if="locale">{{ locale }}</template>
+                <template v-else>-</template>
+            </template>
+            <template v-for="locale in locales">
+                <DropdownItem class="text-uppercase small" :active="isActive(locale)" @click="handleChanged(locale)" :key="locale">
+                    {{ locale }}
+                </DropdownItem>
+            </template>
+        </Dropdown>
+    </div>
 </template>
 
 <script>

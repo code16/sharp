@@ -1,5 +1,8 @@
 
 .SharpDatePicker {
+  .vc-popover-content-wrapper {
+    z-index: 120!important;
+  }
   .vc-container {
     --primary-100: hsl(var(--primary-h), var(--primary-s), 90%);
     --primary-200: hsl(var(--primary-h), var(--primary-s), 85%);

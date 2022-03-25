@@ -4,6 +4,9 @@ namespace App\Sharp\Posts;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Sharp\Utils\Embeds\AuthorEmbed;
+use App\Sharp\Utils\Embeds\CodeEmbed;
+use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -51,10 +54,15 @@ class PostForm extends SharpForm
                         SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::IFRAME,
                     ])
+                    ->allowEmbeds([
+                        RelatedPostEmbed::class,
+                        AuthorEmbed::class,
+                        CodeEmbed::class,
+                    ])
                     ->setMaxFileSize(1)
+                    ->setHeight(300, 0)
                     ->setStorageDisk('local')
-                    ->setStorageBasePath('data/posts/{id}/embed')
-                    ->setHeight(250),
+                    ->setStorageBasePath('data/posts/{id}/embed'),
             )
             ->addField(
                 SharpFormTagsField::make('categories', Category::pluck('name', 'id')->toArray())
@@ -144,15 +152,15 @@ class PostForm extends SharpForm
                         $column
                             ->withFields('published_at')
                             ->withSingleField('categories')
-                            ->withSingleField('cover');
-                    })
-                    ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('content')
+                            ->withSingleField('cover')
                             ->withSingleField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields('title|8', 'is_link|4')
                                     ->withSingleField('link_url')
                                     ->withSingleField('document');
                             });
+                    })
+                    ->addColumn(6, function (FormLayoutColumn $column) {
+                        $column->withSingleField('content');
                     });
             })
             ->addTab('Metadata', function (FormLayoutTab $tab) {

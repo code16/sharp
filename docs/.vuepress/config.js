@@ -77,7 +77,8 @@ module.exports = {
                     'building-form.md',
                     'multiforms.md',
                     'single-form.md',
-                    'custom-form-fields.md'
+                    'custom-form-fields.md',
+                    'form-editor-embeds.md'
                 ].map(page => `/guide/${page}`),
             },
             {

@@ -71,6 +71,8 @@ return [
 
     'editor.dropdown.options.toggle_tight_list' => 'Toggle tight list',
 
+    'editor.dropdown.embeds' => 'Insert...',
+
     'editor.toolbar.bold.title' => 'Bold',
     'editor.toolbar.italic.title' => 'Italic',
     'editor.toolbar.strikethrough.title' => 'Strike through',

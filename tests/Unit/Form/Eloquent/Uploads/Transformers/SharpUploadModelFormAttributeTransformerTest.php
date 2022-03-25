@@ -176,6 +176,34 @@ class SharpUploadModelFormAttributeTransformerTest extends SharpFormEloquentBase
             $transformer->apply('', $picturable, 'pictures'),
         );
     }
+
+    /** @test */
+    public function we_can_fake_an_sharpUpload_and_transform_a_single_upload()
+    {
+        $file = $this->createImage();
+
+        $uploadData = [
+            'file_name' => $file,
+            'size' => 120,
+            'disk' => 'local',
+            'filters' => [],
+        ];
+
+        $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
+
+        $this->assertEquals(
+            [
+                'id' => null,
+                'name' => basename($file),
+                'path' => $file,
+                'disk' => 'local',
+                'size' => 120,
+                'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
+                'filters' => [],
+            ],
+            $transformer->apply($uploadData, null, 'picture'),
+        );
+    }
 }
 
 class Picturable extends Model

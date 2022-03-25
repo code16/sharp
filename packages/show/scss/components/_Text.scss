@@ -25,7 +25,7 @@
       font-size: .875rem;
       font-weight: bold;
     }
-    img {
+    > img {
       width: auto;
       height: auto;
       max-width: 100%;
@@ -35,7 +35,7 @@
         max-height: 300px;
       }
     }
-    ol, ul {
+    > ol, > ul {
       margin-bottom: 1rem;
       list-style: initial;
       padding-left: 2rem;
@@ -43,14 +43,16 @@
         margin-bottom: 0;
       }
     }
-    :last-child {
-      margin-bottom: 0;
-    }
-    .text-component {
-      margin-bottom: 1.5rem;
-    }
-    .html-content {
+    > .html-content {
       max-height: 200px;
+    }
+    > .embed {
+      display: block;
+      margin-bottom: 1.5rem;
+      white-space: normal;
+    }
+    > :last-child {
+      margin-bottom: 0;
     }
   }
 

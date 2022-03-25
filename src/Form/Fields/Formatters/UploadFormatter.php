@@ -19,12 +19,20 @@ class UploadFormatter extends SharpFieldFormatter
     protected FilesystemManager $filesystem;
     protected FileUtil $fileUtil;
     protected ImageManager $imageManager;
+    private bool $alwaysReturnFullObject = false;
 
     public function __construct()
     {
         $this->filesystem = app(FilesystemManager::class);
         $this->fileUtil = app(FileUtil::class);
         $this->imageManager = app(ImageManager::class);
+    }
+
+    public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
+    {
+        $this->alwaysReturnFullObject = $returnFullObject;
+
+        return $this;
     }
 
     /**
@@ -93,13 +101,10 @@ class UploadFormatter extends SharpFieldFormatter
                 );
             }
 
-            return [
-                'filters' => $value['filters'] ?? null,
-            ];
+            return $this->returnAfterTransformation($value);
         }
 
-        // No change made
-        return $value === null ? null : [];
+        return $this->returnAfterNoChangeWasMade($value);
     }
 
     /**
@@ -147,5 +152,19 @@ class UploadFormatter extends SharpFieldFormatter
         }
 
         return $img->encode();
+    }
+
+    protected function returnAfterTransformation(?array $data): array
+    {
+        return $this->alwaysReturnFullObject
+            ? $data
+            : ['filters' => $data['filters'] ?? null];
+    }
+
+    protected function returnAfterNoChangeWasMade(?array $data): ?array
+    {
+        return $this->alwaysReturnFullObject
+            ? $data
+            : ($data === null ? null : []);
     }
 }

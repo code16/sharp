@@ -1,17 +1,18 @@
 <template>
     <div class="editor" :class="classes" :style="style">
         <div class="card">
-            <div class="card-header editor__header" v-sticky ref="header">
-                <template v-if="editor">
+            <template v-if="editor && toolbar">
+                <div class="card-header editor__header" v-sticky ref="header">
                     <MenuBar
                         :id="uniqueIdentifier"
                         :editor="editor"
                         :toolbar="toolbar"
                         :disabled="readOnly"
                         :options="toolbarOptions"
+                        :embeds="embeds"
                     />
-                </template>
-            </div>
+                </div>
+            </template>
 
             <EditorContent :editor="editor" />
 
@@ -34,6 +35,7 @@
     import { onLabelClicked } from "../../../util/accessibility";
 
     export default {
+        inheritAttrs: false,
         components: {
             EditorContent,
             MenuBar,
@@ -51,6 +53,7 @@
             maxHeight: Number,
             readOnly: Boolean,
             toolbarOptions: Array,
+            embeds: Object,
         },
         data() {
             return {
@@ -66,6 +69,7 @@
             classes() {
                 return {
                     'editor--disabled': this.readOnly,
+                    'editor--no-toolbar': !this.toolbar,
                 }
             },
             style() {
@@ -90,9 +94,12 @@
                 const { from, to } = this.editor.state.selection;
                 const pos = Math.min(from, to);
                 const cursorRect = this.editor.view.coordsAtPos(pos);
-                const headerRect = this.$refs.header.getBoundingClientRect();
-                if(cursorRect.top < headerRect.bottom) {
-                    window.scrollBy(0, cursorRect.top - headerRect.bottom - 10);
+
+                if(this.toolbar) {
+                    const headerRect = this.$refs.header.getBoundingClientRect();
+                    if(cursorRect.top < headerRect.bottom) {
+                        window.scrollBy(0, cursorRect.top - headerRect.bottom - 10);
+                    }
                 }
             },
             handleUpdated() {
