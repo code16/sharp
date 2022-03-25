@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
                             ->create();
                     }
                 }
-                if (!rand(0, 3)) {
+                if (! rand(0, 3)) {
                     $post->update(['state' => 'draft']);
                 }
             });
@@ -101,7 +101,7 @@ class DatabaseSeeder extends Seeder
                     'en',
                     sprintf(
                         '<x-related-post post="%s"></x-related-post>%s',
-                        $posts->filter(fn($filteredPost) => !$filteredPost->is($post))
+                        $posts->filter(fn ($filteredPost) => ! $filteredPost->is($post))
                             ->shuffle()
                             ->first()
                             ->id,
