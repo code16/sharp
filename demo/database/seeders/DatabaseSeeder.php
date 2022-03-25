@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         $coverImages = glob(database_path('seeders/files/posts/*.*'));
-        Post::factory()
+        $posts = Post::factory()
             ->state(new Sequence(
                 ['author_id' => $admin->id],
                 ['author_id' => $editor1->id],
@@ -88,9 +88,27 @@ class DatabaseSeeder extends Seeder
                             ->create();
                     }
                 }
-                if (! rand(0, 3)) {
+                if (!rand(0, 3)) {
                     $post->update(['state' => 'draft']);
                 }
+            });
+
+        $posts->shuffle()
+            ->take(15)
+            ->each(function (Post $post) use ($posts) {
+                $post->setTranslation(
+                    'content',
+                    'en',
+                    sprintf(
+                        '<x-related-post post="%s"></x-related-post>%s',
+                        $posts->filter(fn($filteredPost) => !$filteredPost->is($post))
+                            ->shuffle()
+                            ->first()
+                            ->id,
+                        $post->getTranslation('content', 'en')
+                    )
+                );
+                $post->save();
             });
     }
 
