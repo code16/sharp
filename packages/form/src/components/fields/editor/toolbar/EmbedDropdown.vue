@@ -7,7 +7,7 @@
         ref="dropdown"
     >
         <template v-slot:text>
-            Rich content
+            {{ lang('form.editor.dropdown.embeds') }}
         </template>
 
         <template v-slot:default="{ hide }">
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+    import { lang } from 'sharp';
     import { Dropdown, DropdownItem } from "sharp-ui";
 
     export default {
@@ -33,6 +34,7 @@
             editor: Object,
         },
         methods: {
+            lang,
             handleClicked(embed) {
                 this.editor.chain()
                     .focus()
