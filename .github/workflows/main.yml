@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-      - next
-      - dev
   pull_request:
     branches:
       - main
