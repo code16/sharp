@@ -42,7 +42,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
             ->setCustomTransformer('online', function ($value) use ($post) {
                 return $post?->state === 'online';
             })
-            ->transform($data);
+            ->transformForTemplate($data);
     }
 
     public function updateContent(array $data = []): array

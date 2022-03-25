@@ -225,13 +225,20 @@ Example:
 ## Custom embeds
 
 This feature allows to embed any structured data in the content. A common use case is to embed a reference to another
-instance; here's an example: in a blog post, you want to insert a reference to another post, that would be rendered as
+instance, like for example: in a blog post, you want to insert a reference to another post, that would be rendered as
 a "read also" block / link in the public section.
+
+<img src="./editor-embeds.png">
 
 In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML
 attributes), and how it is edited in the UI, via a full-featured form.
 
-<img src="./editor-embeds.png">
+### `allowEmbeds(array $embeds)`
+
+This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed
+class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
+
+The [documentation on how to write an Embed class is available here](../form-editor-embeds.md).
 
 ## Formatter
 
