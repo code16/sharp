@@ -258,7 +258,7 @@ An EntityList can declare one (and only one) of its entity Commands as "primary"
 ```php
 function buildListConfig(): void
 {
-    $this->setPrimaryEntityCommand(InviteNewUser::class);
+    $this->configurePrimaryEntityCommand(InviteNewUser::class);
 }
 ```
 
