@@ -6,6 +6,7 @@
         :no-caret="!showCaret"
         :offset="1"
         :boundary="boundary"
+        :popper-opts="popperOptions"
         variant="custom"
         no-flip
         v-bind="$attrs"
@@ -27,7 +28,12 @@
     export default {
         name: 'SharpDropdown',
         components: {
-            BDropdown,
+            BDropdown: {
+                extends: BDropdown,
+                computed: {
+                    boundaryClass: () => null,
+                },
+            },
         },
         props: {
             ...Button.props,
@@ -48,7 +54,16 @@
                 return this.classes;
             },
             boundary() {
-                return document.querySelector('[data-popover-boundary]');
+                return document.querySelector('[data-popover-boundary]') || 'scrollParent';
+            },
+            popperOptions() {
+                return {
+                    modifiers: {
+                        preventOverflow: {
+                            padding: this.boundary === 'scrollParent' ? 5 : 0,
+                        }
+                    }
+                }
             },
         },
         methods: {
