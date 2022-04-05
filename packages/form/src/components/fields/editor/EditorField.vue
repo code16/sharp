@@ -2,14 +2,14 @@
     <div>
         <template v-if="markdown">
             <MarkdownContentEditor
-                v-bind="$props"
+                v-bind="[$props, $attrs]"
                 v-on="$listeners"
                 :extensions="extensions"
             />
         </template>
         <template v-else>
             <HtmlContentEditor
-                v-bind="$props"
+                v-bind="[$props, $attrs]"
                 v-on="$listeners"
                 :extensions="extensions"
             />

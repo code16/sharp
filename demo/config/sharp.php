@@ -50,4 +50,9 @@ return [
             ],
         ],
     ],
+
+    'markdown_editor' => [
+        'nl2br' => false,
+        'tight_lists_only' => true,
+    ],
 ];

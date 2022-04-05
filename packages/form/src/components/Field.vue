@@ -57,11 +57,11 @@
                     uniqueIdentifier: this.uniqueIdentifier,
                     fieldConfigIdentifier: this.fieldConfigIdentifier,
                     root: this.root,
-                    ...fieldProps
                 },
                 attrs: {
                     id: this.$attrs.id,
                     dynamicAttributes: fieldProps.dynamicAttributes,
+                    ...fieldProps
                 },
                 on: {
                     ...this.$listeners,
