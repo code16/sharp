@@ -73,11 +73,12 @@ describe('sharp-field', () => {
                 tabs: []
             },
             value: 'Hello',
-            placeholder: 'Titre',
             uniqueIdentifier: 'list.0.title',
             fieldConfigIdentifier: 'list.title',
             root: false,
         });
+
+        expect(renderedField.placeholder).toEqual('Titre');
     });
 
     test('call update if input emitted', async () => {
