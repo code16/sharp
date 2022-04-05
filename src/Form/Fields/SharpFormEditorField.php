@@ -175,8 +175,8 @@ class SharpFormEditorField extends SharpFormField
     {
         return $this->renderAsMarkdown
             ? [
-                'tightListsOnly' => config('sharp.markdown_editor.tight_lists_only'),
-                'nl2br' => config('sharp.markdown_editor.nl2br'),
+                'tightListsOnly' => config('sharp.markdown_editor.tight_lists_only', true),
+                'nl2br' => config('sharp.markdown_editor.nl2br', false),
             ]
             : [];
     }
