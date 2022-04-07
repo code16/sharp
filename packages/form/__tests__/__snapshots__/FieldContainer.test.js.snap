@@ -58,7 +58,7 @@ exports[`field-container can mount field container with extra style 1`] = `
 			</div>
 		</div>
 		<div class="SharpForm__field-content">
-			<div id="form-field_error.title" class="SharpField">Template field</div>
+			<div id="form-field_error.title" extrastyle="background:red" class="SharpField">Template field</div>
 		</div>
 		<!---->
 		<div class="SharpForm__help-message form-text">Do not fill this field</div>
