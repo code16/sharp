@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 
@@ -36,16 +37,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (
-            $this->guard()->attempt(
-                [
-                    $this->getSharpLoginAttribute() => request('login'),
-                    $this->getSharpPasswordAttribute() => request('password'),
-                ],
-                request()->filled('remember'),
-            )
-        ) {
-            return redirect()->intended('/'.sharp_base_url_segment());
+        if ($this->attemptToLogin()) {
+            return redirect()->intended('/' . sharp_base_url_segment());
         }
 
         return back()->with('invalid', true)->withInput();
@@ -60,17 +53,23 @@ class LoginController extends Controller
         );
     }
 
-    protected function getSharpLoginAttribute(): string
+    protected function attemptToLogin(): bool
     {
-        return config('sharp.auth.login_attribute', 'email');
+        if ($guard = $this->guard()) {
+            $loginAttr = config('sharp.auth.login_attribute', 'email');
+            $passwordAttr = config('sharp.auth.password_attribute', 'password');
+            $shouldRemember = config('sharp.auth.suggest_remember_me', false) && request()->boolean('remember');
+
+            return $guard->attempt(
+                [$loginAttr => request('login'), $passwordAttr => request('password')],
+                $shouldRemember,
+            );
+        }
+
+        throw new SharpInvalidConfigException('No auth guard was configured.');
     }
 
-    protected function getSharpPasswordAttribute(): string
-    {
-        return config('sharp.auth.password_attribute', 'password');
-    }
-
-    protected function guard()
+    protected function guard(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
     {
         return auth()->guard(config('sharp.auth.guard'));
     }

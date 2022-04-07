@@ -21,7 +21,8 @@ class AuthenticationTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->get('/sharp/s-list/person')->assertStatus(302);
+        $this->get('/sharp/s-list/person')
+            ->assertRedirect('/sharp/login');
     }
 
     /** @test */
@@ -32,7 +33,8 @@ class AuthenticationTest extends BaseApiTest
 
         $this->login();
 
-        $this->get('/sharp/login')->assertStatus(302);
+        $this->get('/sharp/login')
+            ->assertRedirect('/sharp');
     }
 
     /** @test */
@@ -44,14 +46,14 @@ class AuthenticationTest extends BaseApiTest
 
         $this->login();
 
-        $this->get('/sharp/s-list/person')->assertStatus(200);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
+        $this->get('/sharp/s-list/person')->assertOk();
+        $this->getJson('/sharp/api/list/person')->assertOk();
 
         $authGuard->setInvalid();
 
         // We're logged, but not as a sharp user (our fake guard tells us that).
-        $this->get('/sharp/s-list/person')->assertStatus(302);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
+        $this->get('/sharp/s-list/person')->assertRedirect('/sharp/login');
+        $this->getJson('/sharp/api/list/person')->assertStatus(401);
     }
 
     /** @test */
@@ -66,13 +68,13 @@ class AuthenticationTest extends BaseApiTest
 
         $this->actingAs(new User(['name' => 'ok']));
 
-        $this->get('/sharp/s-list/person')->assertStatus(200);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
+        $this->get('/sharp/s-list/person')->assertOk();
+        $this->json('get', '/sharp/api/list/person')->assertOk();
 
         $this->actingAs(new User(['name' => 'ko']));
 
         // We're logged, but not as a sharp user (our fake auth check tells us that).
-        $this->get('/sharp/s-list/person')->assertStatus(302);
+        $this->get('/sharp/s-list/person')->assertRedirect('/sharp/login');
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
     }
 
