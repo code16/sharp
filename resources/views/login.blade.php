@@ -53,14 +53,16 @@
                                     <input type="password" name="password" id="password" class="form-control" placeholder="@lang('sharp::login.password_field')">
                                 </div>
 
-                                <div class="SharpForm__form-item mb-3">
-                                    <div class="SharpCheck form-check mb-0">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="remember">
-                                            @lang('sharp::login.remember')
-                                        </label>
+                                @if(config('sharp.auth.suggest_remember_me', false))
+                                    <div class="SharpForm__form-item mb-3">
+                                        <div class="SharpCheck form-check mb-0">
+                                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="remember">
+                                                @lang('sharp::login.remember')
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
 
                                 <div class="text-center mt-4">
                                     <button type="submit" id="submit" class="btn btn-primary btn-lg">

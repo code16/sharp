@@ -38,7 +38,7 @@ class LoginController extends Controller
         ]);
 
         if ($this->attemptToLogin()) {
-            return redirect()->intended('/' . sharp_base_url_segment());
+            return redirect()->intended('/'.sharp_base_url_segment());
         }
 
         return back()->with('invalid', true)->withInput();
