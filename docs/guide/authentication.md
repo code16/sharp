@@ -18,11 +18,23 @@ The Sharp login form asks for a login and a password field; to handle the authen
 ]
 ```
 
-The third attribute, `display_attribute`, is used to display the user name in the Sharp UI. Default is `name`.
+The third attribute, `display_attribute`, is used to display the user's name in the Sharp UI. Default is `name`.
 
-## Login page
+## Login form
 
-Sharp provides a login controller and view, but you can override all this providing your custom endpoint:
+Sharp provides a login controller and view. You can tweak this default form with a custom logo and an HTML message / section: see [related documentation here](style-visual-theme.md#login-and-menu-logos).
+
+You can decide to display a "Remember me" checkbox to the user:
+
+```php
+//in config/sharp.php
+
+"auth" => [
+    "suggest_remember_me" => true
+]
+```
+
+And finally, you can override all of this providing your custom endpoint:
 
 ```php
 //in config/sharp.php

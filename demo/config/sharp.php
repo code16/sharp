@@ -27,8 +27,9 @@ return [
     'auth' => [
         'login_attribute' => 'email',
         'password_attribute' => 'password',
+        'suggest_remember_me' => false,
         'display_attribute' => 'name',
-        //        "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
+        // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],
 
     'theme' => [
