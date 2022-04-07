@@ -78,7 +78,8 @@ class LoginControllerTest extends BaseApiTest
         parent::setUp();
 
         auth()->extend('sharp', function () {
-            return new class implements Guard, StatefulGuard {
+            return new class implements Guard, StatefulGuard
+            {
                 private ?User $user = null;
 
                 public function check()
@@ -161,9 +162,9 @@ class LoginControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'auth.guards.sharp', [
-            'driver' => 'sharp',
-            'provider' => 'users',
-        ],
+                'driver' => 'sharp',
+                'provider' => 'users',
+            ],
         );
     }
 }
