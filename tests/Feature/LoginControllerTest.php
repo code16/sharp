@@ -119,10 +119,7 @@ class LoginControllerTest extends BaseApiTest
                 public function attempt(array $credentials = [], $remember = false)
                 {
                     if ($credentials['email'] === 'test@example.org' && $credentials['password'] === 'password') {
-                        $this->login(new User([
-                            ...$credentials,
-                            'shouldRemember' => $remember,
-                        ]));
+                        $this->login(new User(array_merge($credentials, ['shouldRemember' => $remember])));
 
                         return true;
                     }
