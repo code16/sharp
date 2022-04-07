@@ -133,6 +133,11 @@ export const buttons = {
         isActive: editor => editor.isActive('html'),
         icon: getToolbarIcon('html'),
     },
+    'code-block': {
+        command: editor => editor.chain().focus().toggleCodeBlock().run(),
+        isActive: editor => editor.isActive('codeBlock'),
+        icon: getToolbarIcon('code-block'),
+    },
     'undo': {
         command: editor => editor.chain().undo().run(),
         icon: getToolbarIcon('undo'),

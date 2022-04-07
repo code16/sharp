@@ -1,5 +1,9 @@
 <template>
-    <b-tab :title-link-class="classes" @update:active="handleActiveChanged">
+    <b-tab
+        :title-link-class="classes"
+        :active="active"
+        @update:active="handleActiveChanged"
+    >
         <template v-slot:title>
             {{ title }}
         </template>
@@ -23,6 +27,7 @@
         },
         props: {
             title: String,
+            active: Boolean,
         },
         data() {
             return  {

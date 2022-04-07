@@ -72,6 +72,8 @@ return [
 
     'editor.dropdown.options.toggle_tight_list' => 'Changer l’espacement de la liste',
 
+    'editor.dropdown.embeds' => 'Insérer...',
+
     'editor.toolbar.bold.title' => 'Gras',
     'editor.toolbar.italic.title' => 'Italique',
     'editor.toolbar.strikethrough.title' => 'Barré',

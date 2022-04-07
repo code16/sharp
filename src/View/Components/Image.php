@@ -33,6 +33,7 @@ class Image extends ContentComponent
         ]);
         $this->disk = Storage::disk($this->fileModel->disk);
         $this->exists = $this->disk->exists($this->fileModel->file_name);
+        $this->name ??= basename($this->fileModel->file_name);
 
         if (! $this->thumbnailWidth && ! $this->thumbnailHeight) {
             $this->thumbnailWidth = 500;

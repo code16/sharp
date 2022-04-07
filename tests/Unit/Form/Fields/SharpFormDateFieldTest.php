@@ -12,13 +12,20 @@ class SharpFormDateFieldTest extends SharpTestCase
     {
         $defaultFormField = SharpFormDateField::make('date');
 
-        $this->assertEquals([
-            'key' => 'date', 'type' => 'date',
-            'hasDate' => true, 'hasTime' => false,
-            'minTime' => '00:00', 'maxTime' => '23:59',
-            'stepTime' => 30, 'displayFormat' => 'YYYY-MM-DD',
-            'mondayFirst' => true, 'language' => $this->app->getLocale(),
-        ], $defaultFormField->toArray(),
+        $this->assertEquals(
+            [
+                'key' => 'date',
+                'type' => 'date',
+                'hasDate' => true,
+                'hasTime' => false,
+                'minTime' => '00:00',
+                'maxTime' => '23:59',
+                'stepTime' => 30,
+                'displayFormat' => 'YYYY-MM-DD',
+                'mondayFirst' => true,
+                'language' => $this->app->getLocale(),
+            ],
+            $defaultFormField->toArray(),
         );
     }
 
@@ -58,10 +65,12 @@ class SharpFormDateFieldTest extends SharpTestCase
             ->setMinTime(8)
             ->setMaxTime(20, 30);
 
-        $this->assertArraySubset([
-            'minTime' => '08:00',
-            'maxTime' => '20:30',
-        ], $dateTimeFormField->toArray(),
+        $this->assertArraySubset(
+            [
+                'minTime' => '08:00',
+                'maxTime' => '20:30',
+            ],
+            $dateTimeFormField->toArray(),
         );
     }
 

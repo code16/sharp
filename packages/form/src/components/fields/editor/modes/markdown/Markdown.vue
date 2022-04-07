@@ -23,10 +23,9 @@
     import { createMarkdownEditor } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import SharpEditor from '../../Editor';
-    import { defaultEditorOptions, getDefaultExtensions, getUploadExtension } from "../..";
+    import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
     import LocalizedEditors from "../../LocalizedEditors";
-    import ListDropdown from "../../toolbar/OptionsDropdown";
     import { lang } from "sharp";
 
     export default {
@@ -36,36 +35,21 @@
         components: {
             SharpEditor,
             LocalizedEditors,
-            ListDropdown,
         },
-        inject: ['$form'],
         props: {
-            id: String,
-            value: {
-                type: Object,
-                default: ()=>({})
-            },
-            placeholder: String,
+            ...editorProps,
+            extensions: Array,
             toolbar: Array,
-            minHeight: Number,
-            maxHeight: Number,
-            innerComponents: Object,
             nl2br: Boolean,
             tightListsOnly: Boolean,
 
             readOnly: Boolean,
             uniqueIdentifier: String,
-            fieldConfigIdentifier: String,
         },
         data() {
             return {
                 editor: null,
             }
-        },
-        computed: {
-            hasUpload() {
-                return !!this.innerComponents?.upload;
-            },
         },
         methods: {
             handleUpdate(editor) {
@@ -74,7 +58,7 @@
             },
             toolbarOptions(editor) {
                 const options = [];
-                const hasList = this.toolbar.some(button => button === 'bullet-list' || button === 'ordered-list');
+                const hasList = this.toolbar?.some(button => button === 'bullet-list' || button === 'ordered-list');
 
                 if(!this.tightListsOnly && hasList) {
                     options.push({
@@ -89,26 +73,10 @@
 
             createEditor({ content }) {
                 const MarkdownEditor = createMarkdownEditor(Editor);
-                const extensions = [
-                    ...getDefaultExtensions({
-                        placeholder: this.placeholder,
-                        toolbar: this.toolbar,
-                    }),
-                ]
-
-                if(this.hasUpload) {
-                    const Upload = getUploadExtension.call(this, {
-                        fieldProps: this.innerComponents.upload,
-                        uniqueIdentifier: this.uniqueIdentifier,
-                        fieldConfigIdentifier: this.fieldConfigIdentifier,
-                        form: this.$form,
-                    });
-                    extensions.push(Upload);
-                }
 
                 return new MarkdownEditor({
                     ...defaultEditorOptions,
-                    extensions,
+                    extensions: this.extensions,
                     content,
                     editable: !this.readOnly,
                     markdown: {

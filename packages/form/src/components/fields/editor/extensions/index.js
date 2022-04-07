@@ -1,6 +1,7 @@
 import { getExtensionField, getSchema } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Heading } from "@tiptap/extension-heading";
+import { HardBreak } from "@tiptap/extension-hard-break";
 import { Link } from "@tiptap/extension-link";
 import { Image } from "@tiptap/extension-image";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
@@ -10,6 +11,7 @@ import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { Highlight } from "@tiptap/extension-highlight";
+import { CodeBlock } from "@tiptap/extension-code-block";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
@@ -17,6 +19,7 @@ import { Iframe } from "./iframe";
 import { Paste } from "./paste";
 import { Small } from "./small";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
+
 
 function getHeadingExtension(toolbar) {
     if(!toolbar) {
@@ -91,12 +94,39 @@ function getSmallExtension(toolbar) {
     }
 }
 
-function getPasteExtension(toolbar) {
-    const extensions = getToolbarExtensions(toolbar);
+function getCodeBlockExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'code-block')) {
+        return CodeBlock;
+    }
+}
+
+function getPasteExtension({ toolbar, inline }) {
+    const extensions = getToolbarExtensions({ toolbar, inline });
     const schema = getSchema(extensions);
     return Paste.configure({
         schema,
     });
+}
+
+function getHardBreakExtension({ inline }) {
+    return HardBreak
+        .extend({
+            addKeyboardShortcuts() {
+                if(inline) {
+                    return {
+                        'Enter': () => this.editor.commands.setHardBreak(),
+                        ...this.parent(),
+                    }
+                }
+                return this.parent();
+            },
+        });
+}
+
+function getTrailingNodeExtension({ inline }) {
+    if(!inline) {
+        return TrailingNode;
+    }
 }
 
 function getStarterKitExtensions(toolbar) {
@@ -111,7 +141,7 @@ function getStarterKitExtensions(toolbar) {
         document: true,
         dropcursor: true,
         gapcursor: true,
-        hardBreak: true,
+        hardBreak: false,
         heading: false,
         history: true,
         horizontalRule: false,
@@ -125,7 +155,7 @@ function getStarterKitExtensions(toolbar) {
     return getExtensionField(starterKit, 'addExtensions', starterKit)();
 }
 
-function getToolbarExtensions(toolbar) {
+function getToolbarExtensions({ toolbar, inline }) {
     const extensions = [
         getStarterKitExtensions(toolbar),
         getHeadingExtension(toolbar),
@@ -136,19 +166,21 @@ function getToolbarExtensions(toolbar) {
         getHighlightExtension(toolbar),
         getSmallExtension(toolbar),
         getIframeExtension(toolbar),
+        getCodeBlockExtension(toolbar),
+        getHardBreakExtension({ inline }),
     ];
     return extensions
         .flat()
         .filter(extension => !!extension);
 }
 
-export function getDefaultExtensions({ placeholder, toolbar } = {}) {
+export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
     const extensions = [
-        getToolbarExtensions(toolbar),
+        getToolbarExtensions({ toolbar, inline }),
+        getPasteExtension({ toolbar, inline }),
         getPlaceholderExtension(placeholder),
-        getPasteExtension(toolbar),
+        getTrailingNodeExtension({ inline }),
         Html,
-        TrailingNode,
         Selected,
     ];
     return extensions

@@ -19,9 +19,11 @@ class SharpFormEditorFieldTest extends SharpTestCase
                 'minHeight' => 200,
                 'toolbar' => [
                     SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
-                    SharpFormEditorField::UL, SharpFormEditorField::SEPARATOR, SharpFormEditorField::A,
+                    SharpFormEditorField::UL,
+                    SharpFormEditorField::SEPARATOR,
+                    SharpFormEditorField::A,
                 ],
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 2,
                         'transformable' => true,
@@ -29,6 +31,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
                     ],
                 ],
                 'markdown' => false,
+                'inline' => false,
             ],
             $formField->toArray(),
         );
@@ -70,7 +73,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'transformable' => true,
@@ -84,7 +87,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'transformable' => true,
@@ -100,7 +103,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'ratioX' => 16,
@@ -117,7 +120,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                'innerComponents' => [
+                'embeds' => [
                     'upload' => [
                         'maxFileSize' => 50,
                         'ratioX' => 16,
@@ -180,6 +183,18 @@ class SharpFormEditorFieldTest extends SharpTestCase
                 'tightListsOnly' => true,
                 'nl2br' => true,
             ],
+            $formField->toArray(),
+        );
+    }
+
+    /** @test */
+    public function we_can_define_setWithoutParagraphs()
+    {
+        $formField = SharpFormEditorField::make('text')
+            ->setWithoutParagraphs();
+
+        $this->assertArraySubset(
+            ['inline' => true],
             $formField->toArray(),
         );
     }

@@ -130,10 +130,16 @@ abstract class SharpFormField
      */
     protected function validate(array $properties)
     {
-        $validator = Validator::make($properties, [
-            'key' => 'required',
-            'type' => 'required',
-        ] + $this->validationRules());
+        $validator = Validator::make(
+            $properties,
+            array_merge(
+                [
+                    'key' => 'required',
+                    'type' => 'required',
+                ],
+                $this->validationRules()
+            )
+        );
 
         if ($validator->fails()) {
             throw new SharpFormFieldValidationException($validator->errors());
@@ -151,7 +157,7 @@ abstract class SharpFormField
                 'conditionalDisplay' => $this->buildConditionalDisplayArray(),
                 'helpMessage' => $this->helpMessage,
                 'extraStyle' => $this->extraStyle,
-            ], )
+            ])
             ->merge($childArray)
             ->filter(function ($value) {
                 return $value !== null;

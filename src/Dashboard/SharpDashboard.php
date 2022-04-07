@@ -8,17 +8,21 @@ use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 abstract class SharpDashboard
 {
     use HandleFilters,
-        HandleDashboardCommands;
+        HandleDashboardCommands,
+        HandlePageAlertMessage;
 
     protected bool $dashboardBuilt = false;
     protected array $graphWidgetDataSets = [];
     protected array $panelWidgetsData = [];
     protected array $orderedListWidgetsData = [];
+    protected ?array $pageAlertData = null;
     protected ?DashboardQueryParams $queryParams;
     protected ?DashboardLayout $dashboardLayout = null;
     protected ?WidgetsContainer $widgetsContainer = null;
@@ -69,7 +73,7 @@ abstract class SharpDashboard
     }
 
     /**
-     * Build config id necessary.
+     * Build config if necessary.
      */
     public function buildDashboardConfig(): void
     {
@@ -96,6 +100,7 @@ abstract class SharpDashboard
         return tap([], function (&$config) {
             $this->appendFiltersToConfig($config);
             $this->appendDashboardCommandsToConfig($config);
+            $this->appendGlobalMessageToConfig($config);
         });
     }
 
@@ -136,28 +141,33 @@ abstract class SharpDashboard
         );
 
         // Then, list group widgets data
+        $data = $data->merge(
+            collect($this->orderedListWidgetsData)
+                ->map(function ($items, $key) {
+                    $widget = $this->findWidgetByKey($key);
+
+                    $data = collect($items)
+                        ->map(function ($item) use ($widget) {
+                            return array_merge(
+                                $item,
+                                ['url' => $widget->getItemUrl($item)],
+                            );
+                        })
+                        ->all();
+
+                    return [
+                        'key' => $key,
+                        'data' => $data,
+                    ];
+                }),
+        );
+
+        // And then, pageAlert
         return $data
-            ->merge(
-                collect($this->orderedListWidgetsData)
-                    ->map(function ($items, $key) {
-                        $widget = $this->findWidgetByKey($key);
-
-                        $data = collect($items)
-                            ->map(function ($item) use ($widget) {
-                                return array_merge(
-                                    $item,
-                                    ['url' => $widget->getItemUrl($item)],
-                                );
-                            })
-                            ->all();
-
-                        return [
-                            'key' => $key,
-                            'data' => $data,
-                        ];
-                    }),
-            )
-            ->all();
+            ->when($this->pageAlertData, function (Collection $data, array $pageAlertData) {
+                return $data->merge($pageAlertData);
+            })
+            ->toArray();
     }
 
     final protected function addGraphDataSet(string $graphWidgetKey, SharpGraphWidgetDataSet $dataSet): self
@@ -179,6 +189,24 @@ abstract class SharpDashboard
         $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
+    }
+
+    final protected function setPageAlertData(array $data): self
+    {
+        $this->pageAlertData = [$this->pageAlertHtmlField->key => $data];
+
+        return $this;
+    }
+
+    final public function dashboardMetaFields(): array
+    {
+        if ($this->pageAlertHtmlField) {
+            return [
+                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray(),
+            ];
+        }
+
+        return [];
     }
 
     private function checkDashboardIsBuilt(): void

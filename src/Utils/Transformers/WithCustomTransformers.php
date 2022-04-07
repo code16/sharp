@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
 use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
@@ -36,12 +37,10 @@ trait WithCustomTransformers
 
     /**
      * Transforms a model or a models collection into an array.
-     *
-     * @param $models
      */
     public function transform($models): array|LengthAwarePaginator
     {
-        if ($this instanceof SharpForm || $this instanceof Command) {
+        if ($this instanceof SharpForm || $this instanceof Command || $this instanceof SharpFormEditorEmbed) {
             // It's a Form (full entity or from a Command), there's only one model.
             // We must add Form Field Formatters in the process
             return $this->applyFormatters(

@@ -4,9 +4,10 @@
             :value="value"
             :root="false"
             :options="options"
-            :focused="selected"
             :invalid="!!error"
+            persist-thumbnails
             v-bind="fieldProps"
+            @thumbnail="handleThumbnailChanged"
             @updated="handleUpdated"
             @removed="handleRemoveClicked"
             @success="handleSuccess"
@@ -41,15 +42,6 @@
             deleteNode: Function,
         },
         computed: {
-            ready() {
-                if(this.node.attrs.file) {
-                    return true;
-                }
-                return this.extension.options.isReady(this.node.attrs);
-            },
-            file() {
-                return this.extension.options.getFile(this.node.attrs);
-            },
             value() {
                 const attrs = this.node.attrs;
                 if(attrs.file) {
@@ -58,25 +50,19 @@
                     }
                 }
                 return {
-                    ...this.serializableAttrs,
-                    ...this.file,
-                }
-            },
-            serializableAttrs() {
-                const attrs = this.node.attrs;
-                return {
                     path: attrs.path,
                     disk: attrs.disk,
                     name: attrs.name,
                     filters: attrs.filters,
+                    thumbnail: attrs.thumbnail,
+                    size: attrs.size,
                     uploaded: attrs.uploaded,
-                };
+                }
             },
             error() {
-                const attrs = this.node.attrs;
-                if(this.ready && !attrs.file && !this.file) {
+                if(this.node.attrs.notFound) {
                     return lang('form.editor.errors.unknown_file')
-                        .replace(':path', attrs.path ?? '');
+                        .replace(':path', this.node.attrs.path ?? '');
                 }
             },
             fieldProps() {
@@ -94,6 +80,11 @@
             },
         },
         methods: {
+            handleThumbnailChanged(thumbnail) {
+                this.updateAttributes({
+                    thumbnail,
+                });
+            },
             handleRemoveClicked() {
                 this.deleteNode();
                 setTimeout(() => {
@@ -117,21 +108,29 @@
             },
             handleSuccess(value) {
                 this.updateAttributes({
-                    name: value.name,
-                    disk: value.disk,
-                    path: value.path,
+                    ...value,
                     file: null,
                     uploaded: true,
                 });
                 this.extension.options.onSuccess(value);
             },
+            async init() {
+                if(this.node.attrs.file || this.node.attrs.notFound) {
+                    return;
+                }
+
+                const data = await this.extension.options.registerFile(this.value);
+                if(data) {
+                    this.updateAttributes(data);
+                } else {
+                    this.updateAttributes({
+                        notFound: true,
+                    });
+                }
+            },
         },
         created() {
-            if(!this.node.attrs.file) {
-                this.extension.options.registerFile({
-                    ...this.serializableAttrs,
-                });
-            }
+            this.init();
         },
         beforeDestroy() {
             if(!this.node.attrs.file) {

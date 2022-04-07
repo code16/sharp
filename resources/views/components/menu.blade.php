@@ -27,13 +27,26 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <form action="{{ route('code16.sharp.logout') }}" method="post">
-                        @csrf
-                        <button class="btn btn-link p-2 m-n2 lh-1 d-block" type="submit">
-                            <span class="visually-hidden">{{ __('sharp::menu.logout_label') }}</span>
-                            <i class="fas fa-fw fa-sign-out-alt"></i>
-                        </button>
-                    </form>
+                    <sharp-dropdown class="d-block my-n2 me-n1" :text="true" small right>
+                        <template v-slot:text>
+                            <i class="fas fa-user me-1" style="font-size: 1em"></i>
+                        </template>
+                        <li>
+                            <form action="{{ route('code16.sharp.logout') }}" method="post">
+                                @csrf
+                                <button class="dropdown-item" type="submit">
+                                    <span class="row align-items-center flex-nowrap gx-2">
+                                        <span class="col-auto">
+                                            <i class="fas fa-fw fa-sign-out-alt" style="font-size: 1em"></i>
+                                        </span>
+                                        <span class="col">
+                                            {{ __('sharp::menu.logout_label') }}
+                                        </span>
+                                    </span>
+                                </button>
+                            </form>
+                        </li>
+                    </sharp-dropdown>
                 </div>
             </div>
         </sharp-nav-item>

@@ -18,6 +18,7 @@ class SharpShowEntityListField extends SharpShowField
     protected bool $showReorderButton = true;
     protected bool $showCreateButton = true;
     protected bool $showSearchField = true;
+    protected bool $showCount = false;
     protected ?string $label = null;
 
     public static function make(string $key, string $entityListKey): SharpShowEntityListField
@@ -33,7 +34,7 @@ class SharpShowEntityListField extends SharpShowField
             $key = tap(
                 app($filterFullClassNameOrKey), function (Filter $filter) {
                     $filter->buildFilterConfig();
-                }, )
+                })
                 ->getKey();
         } else {
             $key = $filterFullClassNameOrKey;
@@ -47,6 +48,10 @@ class SharpShowEntityListField extends SharpShowField
     public function hideEntityCommand(array|string $commands): self
     {
         foreach ((array) $commands as $command) {
+            if (class_exists($command)) {
+                $command = app($command)->getCommandKey();
+            }
+
             $this->hiddenCommands['entity'][] = $command;
         }
 
@@ -56,6 +61,10 @@ class SharpShowEntityListField extends SharpShowField
     public function hideInstanceCommand(array|string $commands): self
     {
         foreach ((array) $commands as $command) {
+            if (class_exists($command)) {
+                $command = app($command)->getCommandKey();
+            }
+
             $this->hiddenCommands['instance'][] = $command;
         }
 
@@ -90,6 +99,13 @@ class SharpShowEntityListField extends SharpShowField
         return $this;
     }
 
+    public function showCount(bool $showCount = true): self
+    {
+        $this->showCount = $showCount;
+
+        return $this;
+    }
+
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -109,6 +125,7 @@ class SharpShowEntityListField extends SharpShowField
             'showCreateButton' => $this->showCreateButton,
             'showReorderButton' => $this->showReorderButton,
             'showSearchField' => $this->showSearchField,
+            'showCount' => $this->showCount,
             'hiddenCommands' => $this->hiddenCommands,
             'hiddenFilters' => sizeof($this->hiddenFilters)
                 ? collect($this->hiddenFilters)
@@ -133,6 +150,7 @@ class SharpShowEntityListField extends SharpShowField
             'showEntityState' => 'required|boolean',
             'showCreateButton' => 'required|boolean',
             'showReorderButton' => 'required|boolean',
+            'showCount' => 'required|boolean',
             'hiddenCommands' => 'required|array',
             'hiddenCommands.entity' => 'array',
             'hiddenCommands.instance' => 'array',

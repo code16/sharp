@@ -5,7 +5,10 @@
         :disabled="disabled"
         :no-caret="!showCaret"
         :offset="1"
+        :boundary="boundary"
+        :popper-opts="popperOptions"
         variant="custom"
+        no-flip
         v-bind="$attrs"
         v-on="$listeners"
         ref="dropdown"
@@ -25,11 +28,16 @@
     export default {
         name: 'SharpDropdown',
         components: {
-            BDropdown,
+            BDropdown: {
+                extends: BDropdown,
+                computed: {
+                    boundaryClass: () => null,
+                },
+            },
         },
         props: {
             ...Button.props,
-            text: String,
+            text: [Boolean, String],
             showCaret: {
                 type: Boolean,
                 default: true
@@ -44,6 +52,18 @@
              */
             toggleClass() {
                 return this.classes;
+            },
+            boundary() {
+                return document.querySelector('[data-popover-boundary]') || 'scrollParent';
+            },
+            popperOptions() {
+                return {
+                    modifiers: {
+                        preventOverflow: {
+                            padding: this.boundary === 'scrollParent' ? 5 : 0,
+                        }
+                    }
+                }
             },
         },
         methods: {

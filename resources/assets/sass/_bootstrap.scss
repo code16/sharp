@@ -15,6 +15,7 @@
 @import '~bootstrap/scss/helpers/text-truncation';
 @import '~bootstrap/scss/helpers/position';
 @import '~bootstrap/scss/helpers/visually-hidden';
+@import '~bootstrap/scss/helpers/stretched-link';
 
 @import '~bootstrap/scss/forms';
 @import '~bootstrap/scss/alert';
@@ -120,6 +121,11 @@ $bv-enable-tooltip-variants: false;
   line-height: $label-line-height;
 }
 
+.card {
+  border-color: var(--card-border-color, #{$card-border-color});
+  transition: var(--card-transition);
+}
+
 .card.form-control {
   font-size: 1rem;
   color: $body-color;
@@ -133,4 +139,10 @@ $bv-enable-tooltip-variants: false;
 
 .form-check-label {
   font-size: .875rem;
+}
+
+.stretched-link {
+  &::after {
+    outline: inherit;
+  }
 }

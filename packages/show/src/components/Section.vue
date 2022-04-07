@@ -2,12 +2,14 @@
     <div class="ShowSection" :class="classes">
         <component :is="wrapperElement">
             <template v-if="hasCollapse">
-                <summary>
+                <summary class="ShowSection__header ShowSection__header--collapsable">
                     <h2 class="ShowSection__title d-inline-block mb-0">{{ section.title || ' ' }}</h2>
                 </summary>
             </template>
             <template v-else-if="section.title">
-                <h2 class="ShowSection__title">{{ section.title }}</h2>
+                <div class="ShowSection__header">
+                    <h2 class="ShowSection__title">{{ section.title }}</h2>
+                </div>
             </template>
             <div class="ShowSection__content">
                 <Grid class="ShowSection__grid"

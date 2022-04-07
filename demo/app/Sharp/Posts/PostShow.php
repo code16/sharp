@@ -3,7 +3,11 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
+use App\Sharp\Utils\Embeds\AuthorEmbed;
+use App\Sharp\Utils\Embeds\CodeEmbed;
+use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -22,10 +26,17 @@ class PostShow extends SharpShow
     protected function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
-            ->addField(SharpShowTextField::make('title_fr')->setLabel('Title (FR)'))
-            ->addField(SharpShowTextField::make('title_en')->setLabel('Title (EN)'))
-            ->addField(SharpShowTextField::make('content_fr')->collapseToWordCount(30))
-            ->addField(SharpShowTextField::make('content_en')->collapseToWordCount(30))
+            ->addField(SharpShowTextField::make('title')->setLabel('Title')->setLocalized())
+            ->addField(
+                SharpShowTextField::make('content')
+                    ->allowEmbeds([
+                        RelatedPostEmbed::class,
+                        AuthorEmbed::class,
+                        CodeEmbed::class,
+                    ])
+                    ->collapseToWordCount(30)
+                    ->setLocalized()
+            )
             ->addField(SharpShowTextField::make('author')->setLabel('Author'))
             ->addField(SharpShowTextField::make('categories')->setLabel('Categories'))
             ->addField(SharpShowPictureField::make('cover'))
@@ -45,8 +56,7 @@ class PostShow extends SharpShow
                 $section
                     ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField('title_fr')
-                            ->withSingleField('title_en')
+                            ->withSingleField('title')
                             ->withSingleField('categories')
                             ->withSingleField('author');
                     })
@@ -54,16 +64,10 @@ class PostShow extends SharpShow
                         $column->withSingleField('cover');
                     });
             })
-            ->addSection('Content (FR)', function (ShowLayoutSection $section) {
+            ->addSection('Content', function (ShowLayoutSection $section) {
                 $section
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('content_fr');
-                    });
-            })
-            ->addSection('Content (EN)', function (ShowLayoutSection $section) {
-                $section
-                    ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('content_en');
+                    ->addColumn(8, function (ShowLayoutColumn $column) {
+                        $column->withSingleField('content');
                     });
             })
             ->addEntityListSection('blocks');
@@ -86,18 +90,6 @@ class PostShow extends SharpShow
         return $this
             ->setCustomTransformer('breadcrumb', function ($value, $instance) {
                 return Str::limit($instance->getTranslation('title', 'en'), 30);
-            })
-            ->setCustomTransformer('title_fr', function ($value, $instance) {
-                return $instance->getTranslation('title', 'fr');
-            })
-            ->setCustomTransformer('title_en', function ($value, $instance) {
-                return $instance->getTranslation('title', 'en');
-            })
-            ->setCustomTransformer('content_fr', function ($value, $instance) {
-                return $instance->getTranslation('content', 'fr');
-            })
-            ->setCustomTransformer('content_en', function ($value, $instance) {
-                return $instance->getTranslation('content', 'en');
             })
             ->setCustomTransformer('publication', function ($value, Post $instance) {
                 return [
@@ -125,6 +117,12 @@ class PostShow extends SharpShow
     {
         return [
             PreviewPostCommand::class,
+            EvaluateDraftPostWizardCommand::class,
         ];
+    }
+
+    public function getDataLocalizations(): array
+    {
+        return ['en', 'fr'];
     }
 }

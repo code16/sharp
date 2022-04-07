@@ -12,7 +12,7 @@
     "docs:build": "cd docs && npm run build",
     "test": "jest",
     "cy:open-ct": "cd tests-e2e && npm run cy:open-ct",
-    "update:tiptap": "npm update @tiptap/core @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/extension-highlight @tiptap/starter-kit @tiptap/vue-2"
+    "update:tiptap": "npm update @tiptap/core @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/extension-highlight @tiptap/extension-code-block @tiptap/starter-kit @tiptap/vue-2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.4",
@@ -41,6 +41,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@tiptap/core": "^2.0.0-beta.81",
+    "@tiptap/extension-code-block": "^2.0.0-beta.37",
     "@tiptap/extension-highlight": "^2.0.0-beta.26",
     "@tiptap/extension-image": "^2.0.0-beta.14",
     "@tiptap/extension-link": "^2.0.0-beta.18",
@@ -65,7 +66,9 @@
     "sharp": "file:resources/assets/js",
     "sharp-commands": "file:packages/commands",
     "sharp-dashboard": "file:packages/dashboard",
+    "sharp-embeds": "file:packages/embeds",
     "sharp-entity-list": "file:packages/entity-list",
+    "sharp-files": "file:packages/files",
     "sharp-filters": "file:packages/filters",
     "sharp-form": "file:packages/form",
     "sharp-show": "file:packages/show",

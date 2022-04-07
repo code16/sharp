@@ -1,6 +1,6 @@
 <template>
     <Dropdown
-        class="editor__dropdown editor__dropdown--list"
+        class="editor__dropdown"
         variant="light"
         small
         :disabled="disabled"
@@ -25,11 +25,10 @@
 </template>
 
 <script>
-    import { Button, Dropdown, DropdownItem } from "sharp-ui";
+    import { Dropdown, DropdownItem } from "sharp-ui";
 
     export default {
         components: {
-            Button,
             Dropdown,
             DropdownItem,
         },

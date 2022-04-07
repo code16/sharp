@@ -27,7 +27,7 @@ class PostBlockList extends SharpEntityList
                             $block->update(['order' => array_search($block->id, $ids) + 1]);
                         });
                 }
-            }, );
+            });
     }
 
     public function getListData(): array|Arrayable

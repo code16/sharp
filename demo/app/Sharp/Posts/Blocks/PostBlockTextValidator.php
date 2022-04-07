@@ -9,7 +9,7 @@ class PostBlockTextValidator extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => ['required', 'string', 'max:1000'],
+            'content.text' => ['required', 'string', 'max:1000'],
         ];
     }
 }

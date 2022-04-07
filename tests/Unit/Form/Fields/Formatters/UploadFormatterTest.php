@@ -56,7 +56,7 @@ class UploadFormatterTest extends SharpTestCase
                 'attribute',
                 [
                     'name' => 'test.png',
-                ], ),
+                ]),
             );
     }
 
@@ -277,6 +277,69 @@ class UploadFormatterTest extends SharpTestCase
                     'uploaded' => true,
                 ],
             ),
+        );
+    }
+
+    /** @test */
+    public function we_return_full_object_after_no_change_was_made_if_configured()
+    {
+        $field = SharpFormUploadField::make('upload')
+            ->setStorageDisk('local')
+            ->setTransformable()
+            ->setStorageBasePath('data/Test');
+
+        $value = [
+            'name' => 'data/Test/image.jpg',
+            'uploaded' => false,
+            'transformed' => false,
+        ];
+
+        $this->assertEquals(
+            $value,
+            (new UploadFormatter)
+                ->setAlwaysReturnFullObject()
+                ->fromFront(
+                    $field,
+                    'attribute',
+                    $value,
+                ),
+        );
+    }
+
+    /** @test */
+    public function we_return_full_object_after_only_transformations_if_configured()
+    {
+        $field = SharpFormUploadField::make('upload')
+            ->setStorageDisk('local')
+            ->setTransformable()
+            ->setStorageBasePath('data/Test');
+
+        $value = [
+            'name' => 'data/Test/image.jpg',
+            'uploaded' => false,
+            'transformed' => true,
+            'filters' => [
+                'crop' => [
+                    'height' => .5,
+                    'width' => .75,
+                    'x' => .3,
+                    'y' => .34,
+                ],
+                'rotate' => [
+                    'angle' => 45,
+                ],
+            ],
+        ];
+
+        $this->assertEquals(
+            $value,
+            (new UploadFormatter)
+                ->setAlwaysReturnFullObject()
+                ->fromFront(
+                    $field,
+                    'attribute',
+                    $value,
+                ),
         );
     }
 }

@@ -8,18 +8,22 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
+use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Support\Str;
 
 abstract class SharpForm
 {
     use WithCustomTransformers,
         HandleFormFields,
         HandlePageAlertMessage,
-        HandleCustomBreadcrumb;
+        HandleCustomBreadcrumb,
+        HandleLocalizedFields;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
+    protected ?string $deleteConfirmationText = null;
     protected ?string $formValidatorClass = null;
 
     final public function formLayout(): array
@@ -37,6 +41,7 @@ abstract class SharpForm
         return tap(
             [
                 'hasShowPage' => $this->displayShowPageAfterCreation,
+                'deleteConfirmationText' => $this->deleteConfirmationText,
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
@@ -81,32 +86,15 @@ abstract class SharpForm
         }
     }
 
-    final public function hasDataLocalizations(): bool
-    {
-        foreach ($this->fields() as $field) {
-            if ($field['localized'] ?? false) {
-                return true;
-            }
-
-            if ($field['type'] === 'list') {
-                foreach ($field['itemFields'] as $itemField) {
-                    if ($itemField['localized'] ?? false) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public function getDataLocalizations(): array
-    {
-        return [];
-    }
-
     public function buildFormConfig(): void
     {
+    }
+
+    protected function configureDeleteConfirmation(?string $text = null): self
+    {
+        $this->deleteConfirmationText = $text ?: trans('sharp::form.delete_confirmation_text');
+
+        return $this;
     }
 
     protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
@@ -176,7 +164,7 @@ abstract class SharpForm
             {
                 return $this->attributes;
             }
-        }, );
+        });
     }
 
     /**
@@ -184,8 +172,18 @@ abstract class SharpForm
      */
     final protected function getFormValidator(string $entityKey): ?string
     {
-        // Legacy stuff: backward compatibility with Sharp 6 config
-        return config("sharp.entities.{$entityKey}.validator") ?: $this->getFormValidatorClass();
+        if ($validator = $this->getFormValidatorClass()) {
+            return $validator;
+        }
+
+        // Legacy stuff: backward compatibility with Sharp 6
+        if (Str::contains($entityKey, ':')) {
+            [$main, $sub] = explode(':', $entityKey);
+
+            return config("sharp.entities.{$main}.forms.{$sub}.validator");
+        }
+
+        return config("sharp.entities.{$entityKey}.validator");
     }
 
     /**

@@ -41,6 +41,8 @@ return [
     'daterange.start_placeholder' => 'Anfangsdatum',
     'daterange.end_placeholder' => 'Enddatum',
 
+    'editor.dropdown.embeds' => 'Einfügung...',
+
     'markdown.icons.bold.title' => 'Fett',
     'markdown.icons.italic.title' => 'Kursiv',
     'markdown.icons.strikethrough.title' => 'Durchgestrichen',

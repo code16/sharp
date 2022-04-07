@@ -20,7 +20,7 @@ class SharpEntityListReorderTest extends SharpTestCase
                     public function reorder(array $ids): void
                     {
                     }
-                }, );
+                });
             }
         };
 

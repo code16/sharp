@@ -51,9 +51,9 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ->assertJson([
                 'authorizations' => [
                     'delete' => false,
-                    'update' => true,
+                    'update' => false,
                     'create' => true,
-                    'view' => true,
+                    'view' => false,
                 ],
             ]);
 
@@ -100,7 +100,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ->setProhibitedActions(['update']);
 
         $this
-            ->getJson('/sharp/api/form/person')
+            ->getJson('/sharp/api/form/person/1')
             ->assertJson([
                 'authorizations' => [
                     'delete' => false,
@@ -128,6 +128,25 @@ class PolicyAuthorizationsTest extends BaseApiTest
     {
         $this->actingAs(new User(['name' => 'Unauthorized-User']));
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
+    }
+
+    /** @test */
+    public function view_and_update_and_delete_policies_are_not_checked_on_create_case()
+    {
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setPolicy(AuthorizationsTestPersonWithExceptionsPolicy::class);
+
+        $this
+            ->getJson('/sharp/api/form/person')
+            ->assertJson([
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => false,
+                ],
+            ]);
     }
 }
 
@@ -159,5 +178,23 @@ class AuthorizationsTestPersonalDashboardPolicy extends SharpEntityPolicy
     public function entity($user): bool
     {
         return $user->name != 'Unauthorized-User';
+    }
+}
+
+class AuthorizationsTestPersonWithExceptionsPolicy extends SharpEntityPolicy
+{
+    public function view($user, $id): bool
+    {
+        throw new \Exception('nope');
+    }
+
+    public function update($user, $id): bool
+    {
+        throw new \Exception('nope');
+    }
+
+    public function delete($user, $id): bool
+    {
+        throw new \Exception('nope');
     }
 }

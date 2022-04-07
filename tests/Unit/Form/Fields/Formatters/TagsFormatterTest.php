@@ -86,7 +86,7 @@ class TagsFormatterTest extends SharpTestCase
         $field = SharpFormTagsField::make('tags', $this->getTagsData());
 
         $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->fromFront(
-            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => 3]], ),
+            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => 3]]),
         );
     }
 
@@ -100,7 +100,7 @@ class TagsFormatterTest extends SharpTestCase
             ->setCreateAttribute('name');
 
         $this->assertEquals([['id' => 1], ['id' => 2], ['id' => null, 'name' => 'green']], $formatter->fromFront(
-            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']], ),
+            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
         );
     }
 
@@ -114,7 +114,7 @@ class TagsFormatterTest extends SharpTestCase
             ->setCreateAttribute('name');
 
         $this->assertEquals([['id' => 1], ['id' => 2]], $formatter->fromFront(
-            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']], ),
+            $field, $attribute, [['id' => 1], ['id' => 2], ['id' => null, 'label' => 'green']]),
         );
     }
 

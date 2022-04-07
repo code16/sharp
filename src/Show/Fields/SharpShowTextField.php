@@ -2,8 +2,14 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
+
 class SharpShowTextField extends SharpShowField
 {
+    use SharpFormFieldWithDataLocalization,
+        SharpFormFieldWithEmbeds;
+
     const FIELD_TYPE = 'text';
 
     protected ?string $label = null;
@@ -49,6 +55,8 @@ class SharpShowTextField extends SharpShowField
             'label' => $this->label,
             'html' => $this->html,
             'collapseToWordCount' => $this->collapseToWordCount,
+            'localized' => $this->localized,
+            'embeds' => $this->innerComponentEmbedsConfiguration(false) ?: null,
         ]);
     }
 
