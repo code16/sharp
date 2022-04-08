@@ -114,7 +114,8 @@ The embed data is simply `post`, which is an id. So we find the related post, an
 template, leveraging Sharp's transformation API (see [how to transform data](how-to-transform-data.md)) — but we could
 instead directly build and return an array, as always.
 
-::: warning There is a catch on transformation: instead of simply using `->transform()`, we
+::: warning 
+There is a catch on transformation: instead of simply using `->transform()`, we
 used `->transformForTemplate()`: although this is not needed in all cases, this will ensure that field formatters are
 not called, since this could lead to unwanted transformation of the templates.
 :::
