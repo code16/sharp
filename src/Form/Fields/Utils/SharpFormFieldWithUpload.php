@@ -15,6 +15,7 @@ trait SharpFormFieldWithUpload
     protected bool $transformKeepOriginal = true;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
+    protected bool $shouldConvertToJpg = false;
     protected string|array|null $fileFilter = null;
 
     public function setMaxFileSize(float $maxFileSizeInMB): self
@@ -45,9 +46,10 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
+    public function shouldOptimizeImage(bool $shouldOptimizeImage = true, bool $shouldConvertToJpg = false): self
     {
         $this->shouldOptimizeImage = $shouldOptimizeImage;
+        $this->shouldConvertToJpg = $shouldConvertToJpg;
 
         return $this;
     }
@@ -55,6 +57,11 @@ trait SharpFormFieldWithUpload
     public function isShouldOptimizeImage(): bool
     {
         return $this->shouldOptimizeImage;
+    }
+
+    public function isShouldConvertToJpg(): bool
+    {
+        return $this->shouldConvertToJpg;
     }
 
     public function setCompactThumbnail(bool $compactThumbnail = true): self

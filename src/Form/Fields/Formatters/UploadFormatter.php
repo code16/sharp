@@ -72,6 +72,11 @@ class UploadFormatter extends SharpFieldFormatter
                 );
             }
 
+            if ($field->isShouldConvertToJpg()) {
+                //@todo convert using imagick
+                //@todo update file name
+            }
+
             $storedFilePath = $this->getStoragePath($value['name'], $field);
             $fileContent = $this->filesystem->disk('local')->get($uploadedFieldRelativePath);
 
