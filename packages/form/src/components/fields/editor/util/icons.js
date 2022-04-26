@@ -25,6 +25,7 @@ const toolbarIcons = {
     'table': 'fas fa-table',
     'html': 'far fa-file-code',
     'code-block': 'fas fa-file-code',
+    'superscript': 'fas fa-superscript',
 };
 
 export function getToolbarIcon(key) {

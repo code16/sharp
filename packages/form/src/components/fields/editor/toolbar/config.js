@@ -138,6 +138,11 @@ export const buttons = {
         isActive: editor => editor.isActive('codeBlock'),
         icon: getToolbarIcon('code-block'),
     },
+    'superscript': {
+        command: editor => editor.chain().focus().toggleSuperscript().run(),
+        isActive: editor => editor.isActive('superscript'),
+        icon: getToolbarIcon('superscript'),
+    },
     'undo': {
         command: editor => editor.chain().undo().run(),
         icon: getToolbarIcon('undo'),
