@@ -1,13 +1,15 @@
 <template>
     <TemplateRenderer
         name="Embed"
-        :template-data="data"
-        :template-props="options.attributes"
+        :template-data="templateData"
+        :template-props="templateProps"
         :template="options.template"
     >
-        <template v-if="data.slot">
-            <div v-html="data.slot"></div>
-        </template>
+        <slot>
+            <template v-if="data.slot">
+                <div v-html="data.slot"></div>
+            </template>
+        </slot>
     </TemplateRenderer>
 </template>
 
@@ -21,6 +23,16 @@
         props: {
             data: Object,
             options: Object,
+        },
+        computed: {
+            templateData() {
+                const { slot, ...data } = this.data;
+                return data;
+            },
+            templateProps() {
+                return this.options.attributes
+                    .filter(attr => attr !== 'slot');
+            },
         },
     }
 </script>
