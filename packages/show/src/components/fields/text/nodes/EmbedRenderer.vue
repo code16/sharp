@@ -1,21 +1,19 @@
 <template>
     <component class="embed" :is="embedOptions.tag">
-        <TemplateRenderer
-            name="Embed"
-            :template-data="embedData"
-            :template-props="embedOptions.attributes"
-            :template="embedOptions.template"
+        <EmbedRenderer
+            :data="embedData"
+            :options="embedOptions"
         />
     </component>
 </template>
 
 <script>
-    import { TemplateRenderer } from "sharp/components";
     import { ignoreVueElement } from "sharp";
+    import { EmbedRenderer } from 'sharp-embeds';
 
     export default {
         components: {
-            TemplateRenderer,
+            EmbedRenderer,
         },
         props: {
             embedData: Object,
