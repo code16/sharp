@@ -32,6 +32,7 @@ export const Embed = Node.create({
                         [attributeName]: parseAttributeValue(element.getAttribute(hyphenate(attributeName))),
                     }), {}),
                 renderHTML: attributes => this.options.attributes
+                    .filter(attributeName => attributes.attributes[attributeName] != null)
                     .reduce((res, attributeName) => ({
                         ...res,
                         [hyphenate(attributeName)]: serializeAttributeValue(attributes.attributes[attributeName]),
