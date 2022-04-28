@@ -1,5 +1,7 @@
 <template>
-    <component :is="component" v-bind="templateData" v-on="$listeners" />
+    <component :is="component" v-bind="templateData" v-on="$listeners">
+        <slot />
+    </component>
 </template>
 
 <script>

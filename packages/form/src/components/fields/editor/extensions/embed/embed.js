@@ -26,11 +26,19 @@ export const Embed = Node.create({
         return {
             attributes: {
                 default: {},
-                parseHTML: element => this.options.attributes
-                    .reduce((res, attributeName) => ({
-                        ...res,
-                        [attributeName]: parseAttributeValue(element.getAttribute(hyphenate(attributeName))),
-                    }), {}),
+                parseHTML: element => {
+                    const attributes = this.options.attributes
+                        .reduce((res, attributeName) => ({
+                            ...res,
+                            [attributeName]: parseAttributeValue(element.getAttribute(hyphenate(attributeName))),
+                        }), {});
+
+                    if(this.options.attributes.includes('slot')) {
+                        attributes.slot = element.innerHTML;
+                    }
+
+                    return attributes;
+                },
                 renderHTML: attributes => this.options.attributes
                     .filter(attributeName => attributes.attributes[attributeName] != null)
                     .reduce((res, attributeName) => ({
@@ -58,7 +66,19 @@ export const Embed = Node.create({
     },
 
     renderHTML({ node, HTMLAttributes }) {
-        return [this.options.tag, HTMLAttributes];
+        const element = document.createElement(this.options.tag);
+
+        Object.entries(HTMLAttributes)
+            .filter(([name]) => name !== 'slot')
+            .forEach(([name, value]) => {
+                element.setAttribute(name, value);
+            });
+
+        if(HTMLAttributes.slot) {
+            element.innerHTML = HTMLAttributes.slot;
+        }
+
+        return element;
     },
 
     addCommands() {

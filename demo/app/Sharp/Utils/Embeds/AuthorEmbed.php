@@ -42,7 +42,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
                     ->setStorageBasePath('data/embeds'),
             )
             ->addField(
-                SharpFormEditorField::make('biographyText')
+                SharpFormEditorField::make('slot')
                     ->setLabel('Biography'),
             );
     }

@@ -2,6 +2,8 @@
     'contentComponent'
 ])
 <x-dynamic-component
-    :component="$resolveComponentName()"
+    :component="$fragment->getComponentName()"
     :attributes="$resolveAttributes($contentComponent)"
-/>
+>
+    {!! $fragment->content !!}
+</x-dynamic-component>

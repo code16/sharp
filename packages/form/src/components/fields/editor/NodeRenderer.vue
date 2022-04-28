@@ -25,9 +25,18 @@
                 return this.node.type.spec.toDOM(this.node);
             },
             tag() {
+                if(this.rendered instanceof HTMLElement) {
+                    return this.rendered.tagName;
+                }
                 return this.rendered[0];
             },
             attributes() {
+                if(this.rendered instanceof HTMLElement) {
+                    return [...this.rendered.attributes].reduce((res, attr) => ({
+                        ...res,
+                        [attr.name]: attr.value,
+                    }), {});
+                }
                 return this.rendered[1];
             },
         },

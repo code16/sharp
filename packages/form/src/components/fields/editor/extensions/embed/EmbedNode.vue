@@ -3,12 +3,10 @@
         <template v-if="!node.attrs.isNew">
             <div class="card">
                 <div class="card-body">
-                    <TemplateRenderer
+                    <EmbedRenderer
                         class="embed-node__template"
-                        name="Embed"
-                        :template-data="embedData"
-                        :template-props="extension.options.attributes"
-                        :template="extension.options.template"
+                        :data="embedData"
+                        :options="extension.options"
                     />
                     <div class="mt-3">
                         <div class="row row-cols-auto gx-2">
@@ -43,7 +41,7 @@
 <script>
     import { lang } from "sharp";
     import { Button } from "sharp-ui";
-    import { TemplateRenderer } from "sharp/components";
+    import { EmbedRenderer } from 'sharp-embeds';
     import NodeRenderer from "../../NodeRenderer";
     import EmbedFormModal from "./EmbedFormModal";
 
@@ -51,7 +49,7 @@
         components: {
             EmbedFormModal,
             NodeRenderer,
-            TemplateRenderer,
+            EmbedRenderer,
             Button,
         },
         inject: ['$form'],
