@@ -13,9 +13,7 @@
                     </div>
                 @endif
                 <div class="col">
-                    @if($author)
-                        <h3>{{ $author->name }}</h3>
-                    @endif
+                    <h3>{{ $author->name }}</h3>
                     {{ $slot }}
                 </div>
             </div>
