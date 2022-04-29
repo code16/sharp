@@ -37,6 +37,10 @@ Here you can declare the form fields of the embed; the API is the same as buildi
 see [Building an Entity Form](building-form.md)). This form will appear in a modal when the use creates a new embed, or
 clicks in the edit button of an existing one.
 
+::: info
+You can choose to name one (and only one) field `slot`: it will be stored as the component content, rather than in an attribute. This could be easier to handle complex data (an Editor HTML text for instance) this way, in the public site, where you can use the standard `{{ $slot }}` attribute to display it.
+:::
+
 ### `updateContent(array $data = []): array`
 
 This method is called on posting the form. Here you should validate the input if needed, and return the data.

@@ -8,13 +8,11 @@ class ComponentFragment extends Fragment
 {
     public string $type = 'component';
 
-    protected string $name;
-    protected array $attributes;
-
-    public function __construct(string $name, array $attributes = [])
-    {
-        $this->name = $name;
-        $this->attributes = $attributes;
+    public function __construct(
+        public string $name,
+        public array $attributes = [],
+        public string $content = ''
+    ) {
     }
 
     public function getComponentName(): string
@@ -35,9 +33,15 @@ class ComponentFragment extends Fragment
             ])
             ->toArray();
 
+        $content = '';
+        foreach ($element->childNodes as $childNode) {
+            $content .= $childNode->ownerDocument->saveHTML($childNode);
+        }
+
         return new static(
             Str::after($element->tagName, 'x-'),
-            $attributes
+            $attributes,
+            $content,
         );
     }
 }
