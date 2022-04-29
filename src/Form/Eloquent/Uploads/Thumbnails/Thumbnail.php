@@ -170,7 +170,8 @@ class Thumbnail
             }
         }
 
-        return $thumbnailDisk->url($thumbnailPath).($this->appendTimestamp ? '?'.$thumbnailDisk->lastModified($thumbnailPath) : '');
+        return $thumbnailDisk->url($thumbnailPath)
+            .($this->appendTimestamp ? '?'.$thumbnailDisk->lastModified($thumbnailPath) : '');
     }
 
     private function resolveFilterClass(string $class, array $params): ?ThumbnailFilter

@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Tests\Feature\Api;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -83,8 +82,6 @@ class FilesControllerTest extends BaseApiTest
         $file2 = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file2->storeAs('/files/images', 'test.jpg', ['disk' => 's3']);
 
-        Carbon::setTestNow(now()->startOfSecond());
-
         $this
             ->withHeader(
                 'referer',
@@ -124,7 +121,7 @@ class FilesControllerTest extends BaseApiTest
                         'disk' => 's3',
                         'thumbnail' => sprintf(
                             '/storage/thumbnails/files/images/400-400/test.jpg?%s',
-                            now()->getTimestamp()
+                            Storage::disk('public')->lastModified('/thumbnails/files/images/400-400/test.jpg')
                         ),
                         'size' => 6467,
                     ],
