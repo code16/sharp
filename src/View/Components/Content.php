@@ -3,6 +3,7 @@
 namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\View\Utils\Content\ComponentAttributeBagCollection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Component;
 
 class Content extends Component
@@ -21,9 +22,41 @@ class Content extends Component
         ]);
         $this->contentComponent = $this;
     }
+    
+    public function getRenderedContent(string $content): string
+    {
+        $replacements = [
+            '@' => '&commat;',
+            '{' => '&lbrace;',
+            '}' => '&rbrace;',
+            '<?' => '&lt;?',
+            '?>' => '?&gt;',
+        ];
+        
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        $content = preg_replace_callback(
+            "/<x-([^>\s]+)([^>]*)>/",
+            function ($matches) {
+                $componentName = $matches[1];
+                $attributes = trim(preg_replace('/(^|")\s+:+/', '$1 ::', $matches[2]));
+                return "<x-$componentName :attributes=\"\$getAttributes('$componentName')\" $attributes>";
+            },
+            $content
+        );
+        
+        return Blade::render(
+            $content,
+            [
+                'getAttributes' => function ($componentName) {
+                    return $this->contentComponentAttributes->get($componentName);
+                },
+            ],
+            deleteCachedView: true
+        );
+    }
 
     public function render(): string
     {
-        return '<x-sharp::content.render-content :content="$slot" />';
+        return '{!! $getRenderedContent($slot) !!}';
     }
 }

@@ -9,21 +9,21 @@ use Illuminate\View\View;
 
 class Attributes extends Component
 {
+    public Content $content;
+    
     public function __construct(
         public string $component,
     ) {
+        $this->content = view()->getConsumableComponentData('contentComponent');
     }
-
-    public function addAttributes(Content $content, ComponentAttributeBag $attributes)
+    
+    public function render(): callable
     {
-        $content->contentComponentAttributes->put(
-            $this->component,
-            $attributes,
-        );
-    }
-
-    public function render(): View
-    {
-        return view('sharp::components.content.attributes');
+        return function () {
+            $this->content->contentComponentAttributes->put(
+                $this->component,
+                $this->attributes,
+            );
+        };
     }
 }

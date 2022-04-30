@@ -57,7 +57,5 @@ class ContentComponentTest extends SharpTestCase
             ],
             false,
         );
-
-        $this->assertFalse(app()->has(Content::class));
     }
 }
