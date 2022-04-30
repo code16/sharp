@@ -22,7 +22,7 @@ class Content extends Component
         ]);
         $this->contentComponent = $this;
     }
-    
+
     public function getRenderedContent(string $content): string
     {
         $replacements = [
@@ -32,18 +32,19 @@ class Content extends Component
             '<?' => '&lt;?',
             '?>' => '?&gt;',
         ];
-        
+
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
         $content = preg_replace_callback(
             "/<x-([^>\s]+)([^>]*)>/",
             function ($matches) {
                 $componentName = $matches[1];
                 $attributes = trim(preg_replace('/(^|")\s+:+/', '$1 ::', $matches[2]));
+
                 return "<x-$componentName :attributes=\"\$getAttributes('$componentName')\" $attributes>";
             },
             $content
         );
-        
+
         return Blade::render(
             $content,
             [
