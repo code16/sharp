@@ -73,9 +73,11 @@
                 }
             },
             style() {
+                const headingDepth = [...new Set(this.toolbar?.filter(button => button.startsWith('heading')))].length;
                 return {
                     '--min-height': this.minHeight ? `${this.minHeight}px` : null,
                     '--max-height': this.maxHeight ? `${this.maxHeight}px` : null,
+                    '--heading-depth': headingDepth,
                 }
             },
             hasUpload() {
