@@ -45,15 +45,19 @@ class Content extends Component
             $content
         );
 
-        return Blade::render(
+        $renderedContent = Blade::render(
             $content,
             [
                 'getAttributes' => function ($componentName) {
                     return $this->contentComponentAttributes->get($componentName);
                 },
-            ],
-            deleteCachedView: true
+            ]
         );
+
+        unlink($path = config('view.compiled').'/'.sha1($content).'.blade.php');
+        unlink(Blade::getCompiledPath($path));
+
+        return $renderedContent;
     }
 
     public function render(): string
