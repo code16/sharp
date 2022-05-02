@@ -19,7 +19,7 @@
 
   &--open {
     .form-control {
-      @extend .form-control:focus;
+      @extend :focus;
     }
 
     .multiselect {
