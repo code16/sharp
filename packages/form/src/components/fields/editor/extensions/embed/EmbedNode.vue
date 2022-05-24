@@ -108,7 +108,13 @@
             },
             async init() {
                 if(this.node.attrs.isNew) {
-                    await this.showForm();
+                    if(this.extension.options.attributes.length > 0) {
+                        await this.showForm();
+                    } else {
+                        this.updateAttributes({
+                            isNew: false,
+                        });
+                    }
                     return;
                 }
 
