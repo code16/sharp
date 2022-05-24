@@ -8,6 +8,7 @@ use App\Sharp\Posts\Commands\PreviewPostCommand;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
+use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -33,6 +34,7 @@ class PostShow extends SharpShow
                         RelatedPostEmbed::class,
                         AuthorEmbed::class,
                         CodeEmbed::class,
+                        TableOfContentsEmbed::class,
                     ])
                     ->collapseToWordCount(30)
                     ->setLocalized()

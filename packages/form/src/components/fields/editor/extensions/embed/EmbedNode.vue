@@ -10,11 +10,13 @@
                     />
                     <div class="mt-3">
                         <div class="row row-cols-auto gx-2">
-                            <div>
-                                <Button outline small @click="handleEditClicked">
-                                    {{ lang('form.upload.edit_button') }}
-                                </Button>
-                            </div>
+                            <template v-if="hasForm">
+                                <div>
+                                    <Button outline small @click="handleEditClicked">
+                                        {{ lang('form.upload.edit_button') }}
+                                    </Button>
+                                </div>
+                            </template>
                             <div>
                                 <Button variant="danger" outline small @click="handleRemoveClicked">
                                     {{ lang('form.upload.remove_button') }}
@@ -76,6 +78,9 @@
                     ...this.node.attrs.additionalData,
                 }
             },
+            hasForm() {
+                return this.extension.options.attributes.length > 0;
+            },
         },
         methods: {
             lang,
@@ -108,21 +113,25 @@
             },
             async init() {
                 if(this.node.attrs.isNew) {
-                    if(this.extension.options.attributes.length > 0) {
+                    if(this.hasForm) {
                         await this.showForm();
                     } else {
+                        await this.$nextTick();
                         this.updateAttributes({
                             isNew: false,
                         });
+                        this.editor.commands.focus();
                     }
                     return;
                 }
 
-                const additionalData = await this.extension.options.getAdditionalData(this.node.attrs.attributes);
-                if(additionalData) {
-                    this.updateAttributes({
-                        additionalData,
-                    });
+                if(this.hasForm) {
+                    const additionalData = await this.extension.options.getAdditionalData(this.node.attrs.attributes);
+                    if(additionalData) {
+                        this.updateAttributes({
+                            additionalData,
+                        });
+                    }
                 }
             },
         },
