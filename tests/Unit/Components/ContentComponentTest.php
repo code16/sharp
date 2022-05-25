@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Unit\Components;
 
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Components\stubs\Image;
-use Code16\Sharp\View\Components\Content;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Blade;
 
@@ -27,9 +26,9 @@ class ContentComponentTest extends SharpTestCase
                 </x-sharp-content>
             blade, [
             'content' => <<<'blade'
-                <p>Text</p>
-                <x-sharp-image path="storage/path.png"></x-sharp-image>
-            blade,
+                    <p>Text</p>
+                    <x-sharp-image path="storage/path.png"></x-sharp-image>
+                blade,
         ]);
 
         /**
