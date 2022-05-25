@@ -27,15 +27,15 @@ class ContentComponentTest extends SharpTestCase
                 </x-sharp-content>
             blade, [
             'content' => <<<'blade'
-                    <div class="markdown">
-                        <p>Text</p>
-                        <x-sharp-image path="storage/path.png"></x-sharp-image>
-                    </div>
-                blade,
+                <p>Text</p>
+                <x-sharp-image path="storage/path.png"></x-sharp-image>
+            blade,
         ]);
 
-        // Retrieve component @see to Image::__construct()
-        [$imageComponent] = view()->shared('sharp-image');
+        /**
+         * @see Image
+         */
+        $imageComponent = view()->shared('sharp-image');
 
         $this->assertEquals(
             [
@@ -50,14 +50,10 @@ class ContentComponentTest extends SharpTestCase
 
         $view->assertSeeInOrder(
             [
-                '<div class="markdown">',
                 '<p>Text</p>',
                 '<img class="sharp-image">',
-                '</div>',
             ],
             false,
         );
-
-        $this->assertFalse(app()->has(Content::class));
     }
 }
