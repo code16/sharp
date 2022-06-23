@@ -30,9 +30,10 @@ Here is the full list:
 ### Dashboard
 
 Dashboard only needs to override one protected attribute: `$view`:
+Note that the class extends `SharpDashboardEntity`, not `SharpEntity`.
 
 ```php
-class TravelsDashboardEntity extends SharpEntity
+class TravelsDashboardEntity extends SharpDashboardEntity
 {
     protected ?string $view = TravelsDashboard::class;
 ```
