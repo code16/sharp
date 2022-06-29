@@ -86,7 +86,7 @@
         },
         data() {
             return {
-                localInputValue: null
+                localInputValue: null,
             }
         },
         computed: {
@@ -152,7 +152,9 @@
                 setTimeout(() => this.$refs.input.focus());
             },
             handleBlur() {
-                this.rollback();
+                if(this.localInputValue) {
+                    this.rollback();
+                }
             },
             updatePopover() {
                 this.$refs.input.dispatchEvent(new Event('change', { bubbles:true }));

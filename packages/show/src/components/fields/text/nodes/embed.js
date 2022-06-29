@@ -1,15 +1,19 @@
 import { parseAttributeValue } from "sharp-embeds";
-import EmbedRenderer from "./EmbedRenderer";
+import { EmbedRenderer } from 'sharp-embeds';
+import { ignoreVueElement } from "sharp";
 
 export function createEmbedComponent(embedOptions) {
     return {
         name: `Embed_${embedOptions.tag}`,
         template: `
-            <EmbedRenderer 
-                :embed-data="embedData" 
-                :embed-options="embedOptions"
-                v-bind="$props"
-            />
+            <component :is="embedOptions.tag" class="embed">
+                <EmbedRenderer
+                    :data="embedData"
+                    :options="embedOptions"
+                >
+                    <slot />
+                </EmbedRenderer>
+            </component>
         `,
         components: {
             EmbedRenderer,
@@ -18,10 +22,12 @@ export function createEmbedComponent(embedOptions) {
             'state',
         ],
         props: {
-            ...embedOptions.attributes?.reduce((res, attributeName) => ({
-                ...res,
-                [attributeName]: null,
-            }), {}),
+            ...embedOptions.attributes
+                ?.filter(name => name !== 'slot')
+                .reduce((res, attributeName) => ({
+                    ...res,
+                    [attributeName]: null,
+                }), {}),
         },
         data() {
             return {
@@ -47,6 +53,8 @@ export function createEmbedComponent(embedOptions) {
         created() {
             this.index = this.state.embeds[embedOptions.key].length;
             this.state.embeds[embedOptions.key].push(this.embedData);
+
+            ignoreVueElement(this.embedOptions.tag);
         },
     }
 }

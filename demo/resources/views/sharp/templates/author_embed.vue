@@ -8,7 +8,9 @@
     <template>
         <div class="col">
             <div><strong>{{ name }}</strong></div>
-            <div class="mb-n3" style="font-size: .875rem" v-html="biographyText"></div>
+            <div style="font-size: .875rem">
+                <slot></slot>
+            </div>
         </div>
     </template>
 </div>

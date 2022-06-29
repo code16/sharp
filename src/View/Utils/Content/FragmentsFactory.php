@@ -18,12 +18,6 @@ class FragmentsFactory
         $container = $this->findContentContainer($doc);
         $fragments = $this->fromDOMNode($container);
 
-        if ($boundaries = $this->getContainerBoundaries($container)) {
-            [$start, $end] = $boundaries;
-            $fragments->prepend(new HTMLFragment($start));
-            $fragments->push(new HTMLFragment($end));
-        }
-
         return $this->groupFragments($fragments);
     }
 
@@ -62,30 +56,8 @@ class FragmentsFactory
             ->flatten();
     }
 
-    protected function getContainerBoundaries(\DOMElement $container): ?array
-    {
-        if ($container->tagName === 'body') {
-            return null;
-        }
-
-        $container->insertBefore(new \DOMComment('content-start'), $container->firstChild);
-        $container->appendChild(new \DOMComment('content-end'));
-        $body = $container->ownerDocument->getElementsByTagName('body')->item(0);
-        $html = $container->ownerDocument->saveHTML($body);
-        $html = Str::between($html, '<body>', '</body>');
-
-        return [
-            Str::before($html, '<!--content-start'),
-            Str::after($html, 'content-end-->'),
-        ];
-    }
-
     protected function findContentContainer(\DOMDocument $document): \DOMNode
     {
-        if ($container = (new \DOMXPath($document))->query('//div[not(div)]')->item(0)) {
-            return $container; // is most deep <div>
-        }
-
         return $document->getElementsByTagName('body')->item(0);
     }
 

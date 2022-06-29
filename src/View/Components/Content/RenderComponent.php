@@ -15,11 +15,6 @@ class RenderComponent extends Component
     ) {
     }
 
-    public function resolveComponentName(): string
-    {
-        return $this->fragment->getComponentName();
-    }
-
     public function resolveAttributes(Content $content): ComponentAttributeBag
     {
         $componentName = $this->fragment->getComponentName();

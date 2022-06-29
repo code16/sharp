@@ -12,6 +12,7 @@ import { TableHeader } from "@tiptap/extension-table-header";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { Highlight } from "@tiptap/extension-highlight";
 import { CodeBlock } from "@tiptap/extension-code-block";
+import { Superscript } from "@tiptap/extension-superscript";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
@@ -100,6 +101,12 @@ function getCodeBlockExtension(toolbar) {
     }
 }
 
+function getSuperscriptExtension(toolbar) {
+    if(toolbarHasButton(toolbar, 'superscript')) {
+        return Superscript;
+    }
+}
+
 function getPasteExtension({ toolbar, inline }) {
     const extensions = getToolbarExtensions({ toolbar, inline });
     const schema = getSchema(extensions);
@@ -167,6 +174,7 @@ function getToolbarExtensions({ toolbar, inline }) {
         getSmallExtension(toolbar),
         getIframeExtension(toolbar),
         getCodeBlockExtension(toolbar),
+        getSuperscriptExtension(toolbar),
         getHardBreakExtension({ inline }),
     ];
     return extensions

@@ -5,8 +5,8 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js').vue()
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
-    .sass('resources/assets/sass/app.scss', 'sharp.css', { implementation:require('node-sass') })
-    .sass('resources/assets/sass/vendors.scss', 'vendors.css', { implementation:require('node-sass') })
+    .sass('resources/assets/sass/app.scss', 'sharp.css', { implementation:require('sass-embedded') })
+    .sass('resources/assets/sass/vendors.scss', 'vendors.css', { implementation:require('sass-embedded') })
     .copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'resources/assets/dist/fonts')
     .copy('node_modules/leaflet/dist/images/*', 'resources/assets/dist/images')
     .options({

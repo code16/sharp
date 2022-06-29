@@ -141,6 +141,7 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::HIGHLIGHT,
                         SharpFormEditorField::SMALL,
                         SharpFormEditorField::CODE_BLOCK,
+                        SharpFormEditorField::SUP,
                     ])
 //                    ->hideToolbar()
 //                    ->setWithoutParagraphs()

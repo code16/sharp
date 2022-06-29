@@ -8,9 +8,7 @@ class Image extends Component
 {
     public function __construct()
     {
-        $components = view()->shared('sharp-image');
-        $components[] = $this;
-        view()->share('sharp-image', $components);
+        view()->share('sharp-image', $this);
     }
 
     public function render()
