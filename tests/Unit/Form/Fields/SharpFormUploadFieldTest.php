@@ -20,6 +20,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
                 'transformable' => true,
                 'transformKeepOriginal' => true,
                 'shouldOptimizeImage' => false,
+                'shouldConvertToJpg' => false,
             ],
             $formField->toArray(),
         );
