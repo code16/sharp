@@ -179,5 +179,29 @@ class SharpFormUploadFieldTest extends SharpTestCase
             ],
             $formField3->toArray(),
         );
+
+        $formField3 = SharpFormUploadField::make('file')
+            ->shouldOptimizeImage(false);
+
+        $this->assertArraySubset(
+            [
+                'shouldOptimizeImage' => false,
+                'shouldConvertToJpg' => false,
+            ],
+            $formField3->toArray(),
+        );
+
+        $formField4 = SharpFormUploadField::make('file')
+            ->shouldOptimizeImage(shouldOptimizeImage:false, shouldConvertToJpg: true);
+
+        $this->assertArraySubset(
+            [
+                'shouldOptimizeImage' => false,
+                'shouldConvertToJpg' => true,
+            ],
+            $formField4->toArray(),
+        );
+
+
     }
 }

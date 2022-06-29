@@ -172,6 +172,42 @@ class UploadFormatterTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_convert_to_jpg_if_configured()
+    {
+        UploadedFile::fake()
+            ->image('image.jpg')
+            ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+        \Mockery::mock('alias:\Symfony\Component\Process\Process')
+            ->shouldReceive('fromShellCommandline')
+            ->once()
+            ->andReturn(new class
+            {
+                public function setTimeout()
+                {
+                    return $this;
+                }
+                public function run()
+                {
+                    return $this;
+                }
+                public function isSuccessful()
+                {
+                    return true;
+                }
+            }, );
+
+        $field = SharpFormUploadField::make('upload')
+            ->shouldOptimizeImage(shouldOptimizeImage:false, shouldConvertToJpg: true)
+            ->setStorageDisk('local');
+
+        (new UploadFormatter)->fromFront($field, 'attribute', [
+            'name' => 'image.png',
+            'uploaded' => true,
+        ]);
+    }
+
+    /** @test */
     public function we_transform_the_newly_uploaded_file_if_isTransformOriginal_is_configured()
     {
         $uploadedFile = UploadedFile::fake()->image('image.jpg', 600, 600);
