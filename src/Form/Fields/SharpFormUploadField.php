@@ -42,6 +42,7 @@ class SharpFormUploadField extends SharpFormField
             'transformKeepOriginal' => $this->transformKeepOriginal,
             'compactThumbnail' => (bool) $this->compactThumbnail,
             'shouldOptimizeImage' => (bool) $this->shouldOptimizeImage,
+            'shouldConvertToJpg' => (bool) $this->shouldConvertToJpg,
         ]);
     }
 }
