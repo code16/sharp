@@ -66,11 +66,10 @@ class UploadFormatter extends SharpFieldFormatter
             );
 
             if ($field->isShouldConvertToJpg()) {
-
-                if (!Str::endsWith($uploadedFieldRelativePath, ['jpg', 'jpeg'])) {
+                if (! Str::endsWith($uploadedFieldRelativePath, ['jpg', 'jpeg'])) {
                     // convert to jpeg using imagick + replace file extension with .jpg
                     $pathInfo = pathinfo($uploadedFieldRelativePath);
-                    $convertedFileRelativePath = $pathInfo['dirname'] . '/'. $pathInfo['filename'] . '.jpg';
+                    $convertedFileRelativePath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'.jpg';
 
                     $process = Process::fromShellCommandline(
                         sprintf(
@@ -86,7 +85,7 @@ class UploadFormatter extends SharpFieldFormatter
 
                     if ($process->isSuccessful()) {
                         $pathInfo = pathinfo($value['name']);
-                        $value['name'] = $pathInfo['filename'] . '.jpg';
+                        $value['name'] = $pathInfo['filename'].'.jpg';
                         $uploadedFieldRelativePath = $convertedFileRelativePath;
                     }
                 }
