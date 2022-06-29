@@ -10,9 +10,11 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Symfony\Component\Process\Process;
 
 class UploadFormatter extends SharpFieldFormatter
 {
@@ -63,6 +65,33 @@ class UploadFormatter extends SharpFieldFormatter
                 $value['name'],
             );
 
+            if ($field->isShouldConvertToJpg()) {
+
+                if (!Str::endsWith($uploadedFieldRelativePath, ['jpg', 'jpeg'])) {
+                    // convert to jpeg using imagick + replace file extension with .jpg
+                    $pathInfo = pathinfo($uploadedFieldRelativePath);
+                    $convertedFileRelativePath = $pathInfo['dirname'] . '/'. $pathInfo['filename'] . '.jpg';
+
+                    $process = Process::fromShellCommandline(
+                        sprintf(
+                            'convert %s %s', // https://doc.ubuntu-fr.org/imagemagick#convert
+                            $this->filesystem->disk('local')->path($uploadedFieldRelativePath),
+                            $this->filesystem->disk('local')->path($convertedFileRelativePath),
+                        )
+                    );
+
+                    $process
+                        ->setTimeout(60) //in seconds
+                        ->run();
+
+                    if ($process->isSuccessful()) {
+                        $pathInfo = pathinfo($value['name']);
+                        $value['name'] = $pathInfo['filename'] . '.jpg';
+                        $uploadedFieldRelativePath = $convertedFileRelativePath;
+                    }
+                }
+            }
+
             if ($field->isShouldOptimizeImage()) {
                 $optimizerChain = OptimizerChainFactory::create();
                 // We do not need to check for exception nor file format because
@@ -70,11 +99,6 @@ class UploadFormatter extends SharpFieldFormatter
                 $optimizerChain->optimize(
                     $this->filesystem->disk('local')->path($uploadedFieldRelativePath),
                 );
-            }
-
-            if ($field->isShouldConvertToJpg()) {
-                //@todo convert using imagick
-                //@todo update file name
             }
 
             $storedFilePath = $this->getStoragePath($value['name'], $field);

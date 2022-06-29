@@ -75,6 +75,7 @@ class PostForm extends SharpForm
                     ->setMaxFileSize(1)
                     ->setLabel('Cover')
                     ->setFileFilterImages()
+                    ->shouldOptimizeImage(shouldConvertToJpg: true)
                     ->setCropRatio('16:9')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}'),
