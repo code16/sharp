@@ -187,10 +187,12 @@ class UploadFormatterTest extends SharpTestCase
                 {
                     return $this;
                 }
+
                 public function run()
                 {
                     return $this;
                 }
+
                 public function isSuccessful()
                 {
                     return true;

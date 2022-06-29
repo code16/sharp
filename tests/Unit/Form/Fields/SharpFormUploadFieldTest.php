@@ -201,7 +201,5 @@ class SharpFormUploadFieldTest extends SharpTestCase
             ],
             $formField4->toArray(),
         );
-
-
     }
 }
