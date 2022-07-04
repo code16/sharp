@@ -9,7 +9,7 @@
             <div class="row">
                 @if($picture = json_decode($picture ?? 'null', true))
                     <div class="col-auto">
-                        <img src="{{ (new \App\Models\Media($picture))->thumbnail(200, 200) }}" alt="{{ $author->name }}" width="100" height="100">
+                        <img src="{{ (new \App\Models\Media($picture + ['file_name' => $picture['path']]))->thumbnail(200, 200) }}" alt="{{ $author->name }}" width="100" height="100">
                     </div>
                 @endif
                 <div class="col">
