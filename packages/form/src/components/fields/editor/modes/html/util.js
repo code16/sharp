@@ -3,9 +3,7 @@
  */
 export function trimHTML(content, { inline }) {
     if(inline) {
-        return content
-            .replace('<p>', '')
-            .replace('</p>', '');
+        return content.replace(/<\/?p>/g, '');
     }
     return content.replace(/(<p>\s*<\/p>)+$/, '');
 }

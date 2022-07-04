@@ -6,6 +6,7 @@ export const Paste = Extension.create({
     name: 'paste',
     addOptions: () => ({
         schema: null,
+        inline: false,
     }),
     addProseMirrorPlugins() {
         const schema = getNormalizedSchema(
@@ -17,10 +18,30 @@ export const Paste = Extension.create({
             new Plugin({
                 props: {
                     clipboardParser: parser,
+                    clipboardTextParser: (text, $context) => {
+                        if(this.options.inline) {
+                            const dom = document.createElement('div');
+                            dom.innerHTML = text.trim().replace(/(\r\n?|\n)/g, '<br>');
+                            return parser.parseSlice(dom, {
+                                preserveWhitespace: true,
+                                context: $context,
+                            });
+                        }
+                        return null;
+                    },
+                    transformPastedHTML: html => {
+                        if(this.options.inline) {
+                            return html
+                                .replace(/<\/p>\s*<p[^>]*>/g, '<br><br>')
+                                .replace(/<p[^>]*>/g, '')
+                                .replace(/<\/p>/g, '');
+                        }
+                        return html;
+                    },
                 },
             })
         ]
-    }
+    },
 });
 
 // needed to keep same references of node/mark types

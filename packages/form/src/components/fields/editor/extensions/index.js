@@ -112,6 +112,7 @@ function getPasteExtension({ toolbar, inline }) {
     const schema = getSchema(extensions);
     return Paste.configure({
         schema,
+        inline,
     });
 }
 
