@@ -19,17 +19,16 @@ Sharp intends to provide a clean solution to the following needs:
 
 Sharp needs Laravel 8+ and PHP 8.0+.
 
-## Documentation
+## Documentation 📖
 
 The full documentation is available here: [sharp.code16.fr/docs](http://sharp.code16.fr/docs).
 
-## Online example
+## Online example 🖥️
 
 A Sharp instance for a demo project is online here: [sharp.code16.fr/sharp/](http://sharp.code16.fr/sharp/).
 
 Data of this demo is reset each hour. 
 
-## Additional resources
+## Additional resources 🖊️
 
-See the Sharp section of the Code 16 Medium account:
-[https://medium.com/code16/tagged/sharp](https://medium.com/code16/tagged/sharp)
+See [Code 16's blog](https://code16.fr/blog/), and start with this introduction post: [Leveraging Sharp, an open source content management framework, in a Laravel project](https://code16.fr/posts/leveraging-sharp-laravel-open-source-content-management-framework/).
