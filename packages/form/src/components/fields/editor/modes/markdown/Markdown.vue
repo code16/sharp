@@ -22,11 +22,13 @@
 <script>
     import { createMarkdownEditor } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
+    import { lang } from "sharp";
     import SharpEditor from '../../Editor';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
     import LocalizedEditors from "../../LocalizedEditors";
-    import { lang } from "sharp";
+    import { normalizeText } from "../../../../../util/text";
+
 
     export default {
         mixins: [
@@ -53,7 +55,7 @@
         },
         methods: {
             handleUpdate(editor) {
-                const content = editor.getMarkdown();
+                const content = normalizeText(editor.getMarkdown() ?? '');
                 this.$emit('input', this.localizedValue(content));
             },
             toolbarOptions(editor) {

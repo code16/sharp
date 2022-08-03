@@ -25,6 +25,7 @@
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";
     import { normalizeHTML, trimHTML } from "./util";
     import LocalizedEditors from "../../LocalizedEditors";
+    import { normalizeText } from "../../../../../util/text";
 
     export default {
         mixins: [
@@ -48,7 +49,7 @@
         },
         methods: {
             handleUpdate(editor) {
-                const content = trimHTML(editor.getHTML(), { inline: this.inline });
+                const content = normalizeText(trimHTML(editor.getHTML(), { inline: this.inline }));
                 this.$emit('input', this.localizedValue(content));
             },
 
