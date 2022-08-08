@@ -1,7 +1,6 @@
 @import "../mixins/left-nav";
 
 .SharpLeftNav {
-
   --item-color-l: 30%;
   $item-color: hsl(var(--primary-h), 10%, 20%);
   $item-hover-bg: hsla(var(--primary-h), var(--primary-s), var(--item-color-l), .05);
@@ -16,7 +15,6 @@
   background-color: $color__white;
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
-
   z-index: 100;
 
   &__content {
@@ -200,7 +198,7 @@
     cursor: pointer;
     color: $item-color;
     line-height: 1.4;
-    padding: .5rem 1.25rem;
+    padding: var(--link-padding-y, .5rem) var(--link-padding-x, 1.25rem);
 
     .fa, .fas, .far, .fab {
       font-size: 1.125em;

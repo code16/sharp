@@ -19,7 +19,7 @@
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
-        <sharp-nav-item disabled>
+        <sharp-nav-item disabled style="--link-padding-y: 0">
             <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
                     <div class="text-truncate" title="{{ $username }}">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <sharp-dropdown class="d-block my-n2 me-n1" :text="true" small right>
+                    <sharp-dropdown class="d-block me-n1" :text="true" small right>
                         <template v-slot:text>
                             <i class="fas fa-user me-1" style="font-size: 1em"></i>
                         </template>
