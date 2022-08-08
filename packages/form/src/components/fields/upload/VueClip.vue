@@ -349,8 +349,8 @@
                 dropzone.hiddenFileInput.click();
             },
 
-            handleDrop() {
-                if(this.file) {
+            handleDrop(e) {
+                if(this.file && e.dataTransfer?.files?.length > 0) {
                     this.remove(false);
                 }
             },
