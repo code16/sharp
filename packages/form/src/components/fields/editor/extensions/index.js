@@ -108,7 +108,10 @@ function getSuperscriptExtension(toolbar) {
 }
 
 function getPasteExtension({ toolbar, inline }) {
-    const extensions = getToolbarExtensions({ toolbar, inline });
+    const extensions = getToolbarExtensions({
+        toolbar: toolbar ?? [], // if no toolbar, prevent pasting formatted HTML
+        inline,
+    });
     const schema = getSchema(extensions);
     return Paste.configure({
         schema,
