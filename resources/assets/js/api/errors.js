@@ -7,7 +7,7 @@ export function getErrorMessage({ data, status }) {
         || lang(`modals.error.message`);
 }
 
-export function handleErrorAlert({ data, method, status }) {
+export async function handleErrorAlert({ data, method, status }) {
     const text = getErrorMessage({ data, status });
     const title = lang(`modals.${status}.title`, null) || lang(`modals.error.title`);
 
@@ -15,16 +15,9 @@ export function handleErrorAlert({ data, method, status }) {
         return;
     }
 
+    await showAlert(text, { title, isError: true });
+
     if(status === 401 || status === 419) {
-        showAlert(text, {
-            title,
-            isError: true,
-            okCallback() {
-                location.reload();
-            },
-        });
-    }
-    else {
-        showAlert(text, { title, isError:true });
+        location.reload();
     }
 }

@@ -50,6 +50,8 @@ describe('api', () => {
                 // console.error(e)
             });
 
+            location.reload = jest.fn();
+
             await nextRequestFulfilled({
                 status: 401,
                 response: {
@@ -60,18 +62,10 @@ describe('api', () => {
             expect(showAlert).toHaveBeenCalledTimes(1);
             expect(showAlert).toHaveBeenCalledWith('{{ modals.401.message }}', {
                 title: expect.stringMatching(/.+/),
-                isError: true,
-                okCallback: expect.any(Function)
+                isError: true
             });
 
-            let { okCallback } = showAlert.mock.calls[0][1];
-
-            location.reload = jest.fn();
-
-            okCallback();
-
             expect(location.reload).toHaveBeenCalled();
-
         });
 
         test('show error modal on else server response status', async () => {
