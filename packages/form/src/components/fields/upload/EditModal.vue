@@ -6,22 +6,16 @@
         v-on="$listeners"
         @ok="handleOkClicked"
         @show="handleShow"
+        dialog-class="modal-dialog-scrollable"
+        content-class="h-100"
+        size="xl"
         ref="modal"
     >
         <template v-if="ready">
             <vue-cropper
-                class="SharpUpload__modal-vue-cropper"
-                :view-mode="0"
-                drag-mode="crop"
-                :aspect-ratio="ratioX / ratioY"
-                :auto-crop-area="1"
-                :zoomable="false"
-                :guides="false"
-                :background="true"
-                :rotatable="true"
+                class="SharpUpload__modal-vue-cropper h-100"
+                v-bind="cropperOptions"
                 :src="imageSrc"
-                :data="cropData"
-                :ready="handleCropperReady"
                 alt="Source image"
                 ref="cropper"
             />
@@ -32,14 +26,23 @@
             </div>
         </template>
 
-        <div class="mt-3">
-            <Button variant="primary" @click="handleRotateClicked(-90)">
-                <i class="fas fa-undo"></i>
-            </Button>
-            <Button variant="primary" @click="handleRotateClicked(90)">
-                <i class="fas fa-redo"></i>
-            </Button>
-        </div>
+        <template v-slot:footer-prepend>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <Button text @click="handleRotateClicked(-90)">
+                        <i class="fas fa-undo"></i>
+                    </Button>
+                    <Button class="me-auto" text @click="handleRotateClicked(90)">
+                        <i class="fas fa-redo"></i>
+                    </Button>
+                </div>
+                <div class="col d-none d-lg-block">
+                    <div class="text-muted fs-7 lh-sm">
+                        {{ l('form.upload.edit_modal.description') }}
+                    </div>
+                </div>
+            </div>
+        </template>
     </Modal>
 </template>
 
@@ -85,6 +88,22 @@
         computed: {
             imageSrc() {
                 return this.originalImg || this.src;
+            },
+            /**
+             * @returns {import('cropperjs/types/index').Cropper.Options}
+             */
+            cropperOptions() {
+                return {
+                    viewMode: 2,
+                    dragMode: 'move',
+                    aspectRatio: this.ratioX / this.ratioY,
+                    autoCropArea: 1,
+                    guides: false,
+                    background: true,
+                    rotatable: true,
+                    data: this.cropData,
+                    ready: this.handleCropperReady,
+                }
             },
         },
         methods: {
