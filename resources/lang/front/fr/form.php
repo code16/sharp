@@ -27,7 +27,7 @@ return [
 
     'upload.browse_button' => 'Parcourir...',
     'upload.remove_button' => 'Supprimer',
-    'upload.edit_button' => 'Modifier',
+    'upload.edit_button' => 'Modifier...',
     'upload.download_link' => 'Télécharger',
     'upload.message.file_too_big' => 'Le fichier sélectionné est trop grand (max. :size)',
     'upload.message.bad_extension' => 'L\'extension du fichier est invalide',
@@ -61,6 +61,9 @@ return [
 
     'editor.dialogs.raw_html.insert_title' => 'Insérez du contenu HTML',
     'editor.dialogs.raw_html.edit_title' => 'Modifier du contenu HTML',
+
+    'editor.dialogs.iframe.insert_title' => 'Insérez un Iframe (video, audio...)',
+    'editor.dialogs.iframe.update_title' => 'Modifier l’Iframe (video, audio...)',
 
     'editor.dropdown.table.insert_table' => 'Insérer un tableau',
     'editor.dropdown.table.insert_row_above' => 'Insérer une ligne au-dessus',

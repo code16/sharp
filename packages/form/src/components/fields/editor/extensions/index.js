@@ -16,7 +16,7 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
-import { Iframe } from "./iframe";
+import { Iframe } from "./iframe/iframe";
 import { Paste } from "./paste";
 import { Small } from "./small";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";

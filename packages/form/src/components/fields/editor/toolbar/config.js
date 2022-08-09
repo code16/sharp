@@ -113,12 +113,7 @@ export const buttons = {
         label: lang('form.editor.toolbar.horizontal_rule.title'),
     },
     'iframe': {
-        command: editor => {
-            const html = window.prompt('Enter embed code');
-            if(html) {
-                editor.chain().focus().insertIframe(html).run();
-            }
-        },
+        command: editor => editor.chain().focus().insertIframe().run(),
         isActive: editor => editor.isActive('iframe'),
         icon: getToolbarIcon('iframe'),
         label: lang('form.editor.toolbar.iframe.title'),

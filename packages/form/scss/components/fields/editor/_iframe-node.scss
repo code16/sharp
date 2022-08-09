@@ -1,0 +1,10 @@
+
+.iframe-node {
+  &__modal-renderer {
+    iframe {
+      display: block;
+      width: 100%;
+      max-height: 260px;
+    }
+  }
+}
