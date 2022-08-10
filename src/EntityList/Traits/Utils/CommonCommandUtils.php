@@ -27,7 +27,7 @@ trait CommonCommandUtils
                 ];
             });
 
-        if($config['commands'] ?? null) {
+        if ($config['commands'] ?? null) {
             $config['commands'] = collect($config['commands'])
                 ->map(fn ($group) => collect($group)->values())
                 ->toArray();
