@@ -20,27 +20,27 @@ class DummyClass extends SharpEntityList
         // $fieldsLayout->addColumn("myCol", 6);
     }
     
-    protected function buildListConfig(): void
+    public function buildListConfig(): void
     {
         //
     }
     
     protected function getInstanceCommands(): ?array
     {
-        //
+        return null;
     }
 
     protected function getEntityCommands(): ?array
     {
-        //
+        return null;
     }
 
     protected function getFilters(): array
     {
-        //
+        return []; 
     }
     
-    protected function getListData(): array|Arrayable
+    public function getListData(): array|Arrayable
     {
         return $this->transform(DummyModelClass::all());
     }

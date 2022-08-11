@@ -35,6 +35,7 @@ class DummyClass extends SharpForm
     {
         $DummyModelVariable = $id ? DummyModelClass::findOrFail($id) : new DummyModelClass;
         $this->save($DummyModelVariable, $data);
+        return $DummyModelVariable->id;
     }
 
     function delete($id): void

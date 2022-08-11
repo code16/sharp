@@ -13,12 +13,12 @@ class DummyClass extends SharpShow
 {
     protected function buildShowFields(FieldsContainer $showFields): void
     {
-        // $showFields->addField(SharpShowTextField::make("myField"))
+        // $showFields->addField(SharpShowTextField::make("myField"));
     }
     
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
-        // $showLayout->addSection('My section', function(ShowLayoutSection $section) { ... })
+        // $showLayout->addSection('My section', function(ShowLayoutSection $section) { ... });
     }
     
     function buildShowConfig(): void
