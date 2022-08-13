@@ -54,7 +54,7 @@ class EditorFormatterTest extends SharpTestCase
     public function we_can_format_a_unicode_text_value_from_front()
     {
         // This test was created to demonstrate preg_replace failure
-        // The correct way is to use mb_ereg_replace
+        // without the unicode modifier
         $value = '<p>ąężółść</p>';
 
         $this->assertEquals(
