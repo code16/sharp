@@ -35,7 +35,7 @@ class EditorFormatter extends SharpFieldFormatter
                 ->toArray();
         }
 
-        return preg_replace('/\R/', "\n", $this->handleUploadedFiles($content, $files, $field, $attribute));
+        return preg_replace('/\R/u', "\n", $this->handleUploadedFiles($content, $files, $field, $attribute));
     }
 
     protected function handleUploadedFiles(string $text, array $files, SharpFormField $field, string $attribute): string
