@@ -75,7 +75,7 @@ class SharpFormUploadFieldTest extends SharpTestCase
             $formField->toArray(),
         );
     }
-    
+
     /** @test */
     public function we_can_define_transformKeepOriginal_with_config()
     {
