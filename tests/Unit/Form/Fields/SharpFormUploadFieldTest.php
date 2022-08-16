@@ -75,6 +75,22 @@ class SharpFormUploadFieldTest extends SharpTestCase
             $formField->toArray(),
         );
     }
+    
+    /** @test */
+    public function we_can_define_transformKeepOriginal_with_config()
+    {
+        config()->set('sharp.uploads.transform_keep_original_image', false);
+
+        $formField = SharpFormUploadField::make('file');
+
+        $this->assertArraySubset(
+            [
+                'transformable' => true,
+                'transformKeepOriginal' => false,
+            ],
+            $formField->toArray(),
+        );
+    }
 
     /** @test */
     public function we_can_define_fileFilter()
