@@ -173,9 +173,13 @@ To handle image thumbnails, you can pass the following props:
 ```
 
 ::: warning
-`<x-sharp-content>` cannot contain complex structure of elements. 
-The simple usage is to output `{!! $html !!}` as direct child. 
-However, for composition purpose the HTML can be wrapped by a `<div>{!! $html !!}</div>`.
+`<x-sharp-content>` must have the editor content as direct child.
+```diff
+  <x-sharp-content>
+-    <div>{!! $html !!}</div> {{-- this will not work --}}
++    {!! $html !!}
+  </x-sharp-content>
+```
 :::
 
 #### Advanced usages
