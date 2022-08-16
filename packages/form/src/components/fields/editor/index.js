@@ -1,4 +1,4 @@
-import { Iframe } from "./extensions/iframe";
+import { Iframe } from "./extensions/iframe/iframe";
 
 export const defaultEditorOptions = {
     injectCSS: false,

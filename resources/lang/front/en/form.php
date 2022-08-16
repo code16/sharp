@@ -27,10 +27,11 @@ return [
 
     'upload.browse_button' => 'Browse...',
     'upload.remove_button' => 'Remove',
-    'upload.edit_button' => 'Edit',
+    'upload.edit_button' => 'Edit...',
     'upload.download_link' => 'Download',
     'upload.message.file_too_big' => 'The selected file is too big (max. :size)',
     'upload.message.bad_extension' => 'File extension is incorrect',
+    'upload.edit_modal.description' => 'Use the mouse wheel to zoom. Drag to move the image or the crop area',
 
     'multiselect.placeholder' => 'Select option',
     'multiselect.max_text' => 'Maximum items reached',
@@ -59,6 +60,8 @@ return [
     'editor.dialogs.link.remove_button' => 'Remove link',
     'editor.dialogs.raw_html.insert_title' => 'Insert HTML',
     'editor.dialogs.raw_html.edit_title' => 'Edit HTML',
+    'editor.dialogs.iframe.insert_title' => 'Insert Iframe (embed)',
+    'editor.dialogs.iframe.update_title' => 'Update Iframe (embed)',
 
     'editor.dropdown.table.insert_table' => 'Insert table',
     'editor.dropdown.table.insert_row_above' => 'Insert row above',

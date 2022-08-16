@@ -22,21 +22,35 @@
         <slot />
 
         <template v-slot:modal-footer="{ cancel, ok }">
+            <div class="w-100">
+                <div class="row">
+                    <div class="col">
+                        <slot name="footer-prepend" />
+                    </div>
+                    <div class="col-auto align-self-end">
+                        <div class="row gx-2">
+                            <template v-if="!okOnly">
+                                <div class="col-auto">
+                                    <button class="btn btn-outline-primary" @click="cancel">
+                                        {{ cancelTitle || l('modals.cancel_button') }}
+                                    </button>
+                                </div>
+                            </template>
 
-            <template v-if="!okOnly">
-                <button class="btn btn-outline-primary" @click="cancel">
-                    {{ cancelTitle || l('modals.cancel_button') }}
-                </button>
-            </template>
-
-            <button class="btn position-relative" :class="okClasses" :disabled="loading" @click="ok">
-                <span :class="{ 'invisible': loading }">
-                    {{ okTitle || l('modals.ok_button') }}
-                </span>
-                <template v-if="loading">
-                    <LoadingOverlay class="bg-transparent" absolute small />
-                </template>
-            </button>
+                            <div class="col-auto">
+                                <button class="btn position-relative" :class="okClasses" :disabled="loading" @click="ok">
+                                    <span :class="{ 'invisible': loading }">
+                                        {{ okTitle || l('modals.ok_button') }}
+                                    </span>
+                                    <template v-if="loading">
+                                        <LoadingOverlay class="bg-transparent" absolute small />
+                                    </template>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </template>
     </b-modal>
 </template>

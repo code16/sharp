@@ -24,16 +24,11 @@ export function rotateTo(cropper, degree) {
     let heightOld = canvData.height;
     let heightNew = contData.height;
     let koef = heightNew / heightOld;
-    let widthNew = canvData.width * koef;
+    let widthNew = Math.min(canvData.width * koef, contData.width);
     canvData.height = heightNew;
     canvData.width = widthNew;
     canvData.top = 0;
-    if (canvData.width >= contData.width) {
-        canvData.left = 0;
-    }
-    else {
-        canvData.left = (contData.width - canvData.width) / 2;
-    }
+    canvData.left = (contData.width - canvData.width) / 2;
     cropper.setCanvasData(canvData);
     //and now set cropper "back" to full crop
     data.left = 0;

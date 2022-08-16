@@ -1,7 +1,6 @@
 <template>
     <div class="mt-2" :class="{ 'mb-2': hasLegends }">
         <ApexChart
-            class="apexchart"
             type="area"
             :series="chartData.series"
             :options="chartOptions"

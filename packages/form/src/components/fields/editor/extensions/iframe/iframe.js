@@ -1,5 +1,7 @@
 import { Node } from '@tiptap/core'
 import { PasteRule } from "@tiptap/core";
+import { VueNodeViewRenderer } from "@tiptap/vue-2";
+import IframeNode from "./IframeNode";
 
 export const Iframe =  Node.create({
     name: 'iframe',
@@ -36,6 +38,10 @@ export const Iframe =  Node.create({
                 default: this.options.allowFullscreen,
                 parseHTML: () => this.options.allowFullscreen,
             },
+            isNew: {
+                default: false,
+                renderHTML: () => null,
+            },
         }
     },
 
@@ -52,9 +58,9 @@ export const Iframe =  Node.create({
     addPasteRules() {
         return [
             new PasteRule({
-                find: /(?:^|\s)<iframe(.+)<\/iframe>/g,
+                find: /(?:^|\s)(<iframe(.+)<\/iframe>).*/g,
                 handler: ({ state, range, match }) => {
-                    const html = match[0];
+                    const html = match[1];
                     setTimeout(() => {
                         this.editor.commands.insertContentAt(range, html);
                     });
@@ -65,13 +71,18 @@ export const Iframe =  Node.create({
 
     addCommands() {
         return {
-            insertIframe: (html) => ({ commands }) => {
-                const match = html?.match(/<iframe(.+)<\/iframe>/);
-                if(match) {
-                    commands.insertContent(match[0]);
-                }
-                return true
+            insertIframe: () => ({ commands, tr }) => {
+                return commands.insertContentAt(tr.selection.to, {
+                    type: this.name,
+                    attrs: {
+                        isNew: true,
+                    },
+                });
             },
         }
+    },
+
+    addNodeView() {
+        return VueNodeViewRenderer(IframeNode);
     },
 });

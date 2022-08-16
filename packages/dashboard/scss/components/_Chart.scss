@@ -1,39 +1,28 @@
 .SharpWidgetChart {
   text-align: left;
-  &__sizer {
-    display: none;
-  }
+
   &--aspect-ratio {
     position: relative;
-    display: flex;
-    max-width: 100%;
-    .SharpWidgetChart__sizer {
+    &::before {
+      content: "";
       display: block;
-      flex: 1 0 0;
-      height: 0;
+      padding-top: calc((var(--ratio-y) / var(--ratio-x)) * 100%);
     }
-    .SharpWidgetChart__inner {
-      flex: 1 0 0;
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .apexcharts-canvas {
+    &, & > svg {
       max-width: 100%;
-      margin-left: -100%;
-    }
-    &.SharpWidgetChart--resizing {
-      .SharpWidgetChart__inner {
-        position: absolute!important;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        margin-left: 0;
-      }
     }
   }
-  &--resizing {
-    overflow: hidden;
-  }
-  svg {
-    overflow: visible;
-  }
+
   .apexcharts-zoom-icon {
     display: none;
   }

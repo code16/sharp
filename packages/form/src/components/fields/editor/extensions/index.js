@@ -16,7 +16,7 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { Selected } from "./selected";
 import { Html } from "./html";
 import { TrailingNode } from "./trailing-node";
-import { Iframe } from "./iframe";
+import { Iframe } from "./iframe/iframe";
 import { Paste } from "./paste";
 import { Small } from "./small";
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
@@ -108,7 +108,10 @@ function getSuperscriptExtension(toolbar) {
 }
 
 function getPasteExtension({ toolbar, inline }) {
-    const extensions = getToolbarExtensions({ toolbar, inline });
+    const extensions = getToolbarExtensions({
+        toolbar: toolbar ?? [], // if no toolbar, prevent pasting formatted HTML
+        inline,
+    });
     const schema = getSchema(extensions);
     return Paste.configure({
         schema,
