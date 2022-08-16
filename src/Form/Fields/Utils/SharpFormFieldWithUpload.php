@@ -86,7 +86,7 @@ trait SharpFormFieldWithUpload
         return $this->transformable && ! $this->transformKeepOriginal();
     }
 
-    public function transformKeepOriginal(): bool
+    protected function transformKeepOriginal(): bool
     {
         return $this->transformKeepOriginal ?? config('sharp.uploads.transform_keep_original_image', true);
     }
