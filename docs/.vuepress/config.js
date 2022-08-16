@@ -59,6 +59,11 @@ module.exports = defineUserConfig({
 
         sidebar,
     }),
+    markdown: {
+        code: {
+            lineNumbers: false,
+        },
+    },
     plugins: [
         docsearchPlugin({
             appId: '1A1N8XRQFM',
