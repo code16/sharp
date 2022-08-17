@@ -6,17 +6,15 @@ function nodeEqualsType({ types, node }) {
     return (Array.isArray(types) && types.includes(node.type)) || node.type === types
 }
 
-let iteration = 0;
-
 export const TrailingNode = Extension.create({
     name: 'trailingNode',
 
-    defaultOptions: {
+    addOptions: () => ({
         node: 'paragraph',
         notAfter: [
             'paragraph',
         ],
-    },
+    }),
 
     addProseMirrorPlugins() {
         const plugin = new PluginKey(this.name)

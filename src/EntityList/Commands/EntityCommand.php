@@ -7,18 +7,18 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
-    
-    public final function type(): string
+
+    public function type(): string
     {
-        return "entity";
+        return 'entity';
     }
-    
-    public final function initQueryParams(EntityListQueryParams $params): void
+
+    final public function initQueryParams(EntityListQueryParams $params): void
     {
         $this->queryParams = $params;
     }
 
-    public final function formData(): array
+    final public function formData(): array
     {
         return collect($this->initialData())
             ->only($this->getDataKeys())
@@ -30,5 +30,5 @@ abstract class EntityCommand extends Command
         return [];
     }
 
-    public abstract function execute(array $data = []): array;
+    abstract public function execute(array $data = []): array;
 }

@@ -20,8 +20,8 @@ class SharpFormAutocompleteListField extends SharpFormListField
 
     public function addItemField(SharpFormField $field): self
     {
-        if(!$field instanceof SharpFormAutocompleteField) {
-            throw new \InvalidArgumentException("AutocompleteList item can only contain one field, and it must be a SharpFormAutocompleteField");
+        if (! $field instanceof SharpFormAutocompleteField) {
+            throw new \InvalidArgumentException('AutocompleteList item can only contain one field, and it must be a SharpFormAutocompleteField');
         }
 
         return $this->setItemField($field);

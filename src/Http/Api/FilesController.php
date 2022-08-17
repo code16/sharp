@@ -10,46 +10,53 @@ class FilesController extends Controller
 {
     public function show(string $entityKey, ?string $instanceId = null)
     {
-        sharp_check_ability("view", $entityKey, $instanceId);
-        
-        $thumbnailWidth = request()->get("thumbnail_width", 400);
-        $thumbnailHeight = request()->get("thumbnail_height", 400);
-        
+        sharp_check_ability('view', $entityKey, $instanceId);
+
+        $thumbnailWidth = request()->get('thumbnail_width', 400);
+        $thumbnailHeight = request()->get('thumbnail_height', 400);
+
         return response()->json([
-            "files" => collect(request()->get("files"))
-                ->map(function(array $file) use ($thumbnailHeight, $thumbnailWidth) {
-                    $disk = Storage::disk($file["disk"]);
-                    if(!$disk->exists($file["path"])) {
+            'files' => collect(request()->get('files'))
+                ->filter(function (array $file) {
+                    return isset($file['disk'], $file['path']);
+                })
+                ->map(function (array $file) use ($thumbnailHeight, $thumbnailWidth) {
+                    $disk = Storage::disk($file['disk']);
+                    if (! $disk->exists($file['path'])) {
                         return null;
                     }
-                    
+
                     return tap(
                         [
-                            "name" => basename($file["path"]),
-                            "path" => $file["path"],
-                            "disk" => $file["disk"],
-                            "size" => $disk->size($file["path"]),
+                            'name' => basename($file['path']),
+                            'path' => $file['path'],
+                            'disk' => $file['disk'],
+                            'size' => $disk->size($file['path']),
+                            'filters' => $file['filters'] ?? null,
                         ],
-                        function(array &$file) use ($disk, $thumbnailHeight, $thumbnailWidth) {
-                            if($this->isMimetypeAnImage($disk->mimeType($file["path"]))) {
-                                $model = new SharpUploadModel([
-                                    "disk" => $file["disk"],
-                                    "file_name" => $file["path"]
+                        function (array &$file) use ($disk, $thumbnailHeight, $thumbnailWidth) {
+                            if ($this->isMimetypeAnImage($disk->mimeType($file['path']))) {
+                                $model = app()->make(SharpUploadModel::class, [
+                                    'attributes' => [
+                                        'disk' => $file['disk'],
+                                        'file_name' => $file['path'],
+                                        'filters' => $file['filters'],
+                                    ],
                                 ]);
-                                
-                                $file["thumbnail"] = $model->thumbnail($thumbnailWidth, $thumbnailHeight);
+
+                                $file['thumbnail'] = $model->thumbnail($thumbnailWidth, $thumbnailHeight);
                             }
-                        }
+                        },
                     );
                 })
                 ->filter()
                 ->values()
-                ->toArray()
+                ->toArray(),
         ]);
     }
 
     private function isMimetypeAnImage(string $mimetype): bool
     {
-        return in_array($mimetype, ['image/jpeg','image/gif','image/png','image/bmp']);
+        return in_array($mimetype, ['image/jpeg', 'image/gif', 'image/png', 'image/bmp']);
     }
 }

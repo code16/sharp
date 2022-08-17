@@ -6,7 +6,6 @@ use Closure;
 
 class SharpRedirectIfAuthenticated
 {
-
     /**
      * Handle an incoming request.
      *
@@ -18,7 +17,7 @@ class SharpRedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if ($this->checkSharpUserAuthenticated($guard)) {
-            return redirect(route("code16.sharp.home"));
+            return redirect(route('code16.sharp.home'));
         }
 
         return $next($request);
@@ -26,7 +25,7 @@ class SharpRedirectIfAuthenticated
 
     protected function checkSharpUserAuthenticated($guard)
     {
-        if(auth()->guard($guard)->check()) {
+        if (auth()->guard($guard)->check()) {
             if ($checkHandler = config('sharp.auth.check_handler')) {
                 return app($checkHandler)->check(auth()->guard($guard)->user());
             }

@@ -3,8 +3,8 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\SharpFormMarkdownField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
@@ -19,6 +19,7 @@ class UploadFormatter extends SharpFieldFormatter
     protected FilesystemManager $filesystem;
     protected FileUtil $fileUtil;
     protected ImageManager $imageManager;
+    private bool $alwaysReturnFullObject = false;
 
     public function __construct()
     {
@@ -27,89 +28,94 @@ class UploadFormatter extends SharpFieldFormatter
         $this->imageManager = app(ImageManager::class);
     }
 
+    public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
+    {
+        $this->alwaysReturnFullObject = $returnFullObject;
+
+        return $this;
+    }
+
     /**
-     * @param SharpFormField $field
+     * @param  SharpFormField  $field
      * @param $value
      * @return mixed
      */
-    function toFront(SharpFormField $field, $value)
+    public function toFront(SharpFormField $field, $value)
     {
         return $value;
     }
 
     /**
-     * @param SharpFormFieldWithUpload $field
+     * @param  SharpFormFieldWithUpload  $field
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
-    function fromFront(SharpFormField $field, string $attribute, $value): ?array
+    public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
         $storage = $this->filesystem->disk($field->storageDisk());
-        $transformed = $value["transformed"] ?? false;
+        $transformed = $value['transformed'] ?? false;
 
-        if($value["uploaded"] ?? false) {
+        if ($value['uploaded'] ?? false) {
             $uploadedFieldRelativePath = sprintf(
-                "%s/%s", 
-                config("sharp.uploads.tmp_dir", 'tmp'), 
-                $value["name"]
+                '%s/%s',
+                config('sharp.uploads.tmp_dir', 'tmp'),
+                $value['name'],
             );
-            
-            if($field->isShouldOptimizeImage()) {
+
+            if ($field->isShouldOptimizeImage()) {
                 $optimizerChain = OptimizerChainFactory::create();
                 // We do not need to check for exception nor file format because
                 // the package will not throw any errors and just operate silently.
                 $optimizerChain->optimize(
-                    $this->filesystem->disk("local")->path($uploadedFieldRelativePath)
+                    $this->filesystem->disk('local')->path($uploadedFieldRelativePath),
                 );
             }
 
-            $storedFilePath = $this->getStoragePath($value["name"], $field);
-            $fileContent = $this->filesystem->disk("local")->get($uploadedFieldRelativePath);
+            $storedFilePath = $this->getStoragePath($value['name'], $field);
+            $fileContent = $this->filesystem->disk('local')->get($uploadedFieldRelativePath);
 
-            if($transformed && $field->isTransformOriginal()) {
+            if ($transformed && $field->isTransformOriginal()) {
                 // Field was configured to handle transformation on the source image
                 $fileContent = $this->handleImageTransformations($fileContent, $value);
             }
-            
+
             $storage->put($storedFilePath, $fileContent);
 
             return [
-                "file_name" => $storedFilePath,
-                "size" => $storage->size($storedFilePath),
-                "mime_type" => $storage->mimeType($storedFilePath),
-                "disk" => $field->storageDisk(),
-                "filters" => $value["filters"] ?? null
+                'file_name' => $storedFilePath,
+                'size' => $storage->size($storedFilePath),
+                'mime_type' => $storage->mimeType($storedFilePath),
+                'disk' => $field->storageDisk(),
+                'filters' => $value['filters'] ?? null,
             ];
         }
 
-        if($transformed) {
+        if ($transformed) {
             // Existing image, but transformed (with filters)
-            if($field->isTransformOriginal()) {
+            if ($field->isTransformOriginal()) {
                 // Field was configured to handle transformation on the source image
                 $storage->put(
-                    $value["name"], 
-                    $this->handleImageTransformations($storage->get($value["name"]), $value)
+                    $value['name'],
+                    $this->handleImageTransformations($storage->get($value['name']), $value),
                 );
             }
-            
-            return [
-                "filters" => $value["filters"] ?? null
-            ];
+
+            return $this->returnAfterTransformation($value);
         }
 
-        // No change made
-        return $value === null ? null : [];
+        return $this->returnAfterNoChangeWasMade($value);
     }
 
     /**
      * @throws SharpFormFieldFormattingMustBeDelayedException
      */
-    protected function getStoragePath(string $fileName, SharpFormUploadField|SharpFormMarkdownField $field): string
+    protected function getStoragePath(string $fileName, SharpFormUploadField|SharpFormEditorField $field): string
     {
         $basePath = $field->storageBasePath();
 
-        if(str_contains($basePath, '{id}')) {
-            if(!$this->instanceId) {
+        if (str_contains($basePath, '{id}')) {
+            if (! $this->instanceId) {
                 // Well, we need the instance id for the storage path, and we are
                 // in a store() case. Let's delay this formatter, it will be
                 // called again after a first save() on the model.
@@ -120,7 +126,7 @@ class UploadFormatter extends SharpFieldFormatter
         }
 
         $fileName = $this->fileUtil->findAvailableName(
-            $fileName, $basePath, $field->storageDisk()
+            $fileName, $basePath, $field->storageDisk(),
         );
 
         return "{$basePath}/{$fileName}";
@@ -130,21 +136,35 @@ class UploadFormatter extends SharpFieldFormatter
     {
         $img = $this->imageManager->make($fileContent);
 
-        if($rotate = Arr::get($filters, "filters.rotate.angle")) {
+        if ($rotate = Arr::get($filters, 'filters.rotate.angle')) {
             $img->rotate($rotate);
-            unset($filters["filters"]["rotate"]);
+            unset($filters['filters']['rotate']);
         }
 
-        if($cropData = Arr::get($filters, "filters.crop")) {
+        if ($cropData = Arr::get($filters, 'filters.crop')) {
             $img->crop(
-                intval(round($img->width() * $cropData["width"])),
-                intval(round($img->height() * $cropData["height"])),
-                intval(round($img->width() * $cropData["x"])),
-                intval(round($img->height() * $cropData["y"]))
+                intval(round($img->width() * $cropData['width'])),
+                intval(round($img->height() * $cropData['height'])),
+                intval(round($img->width() * $cropData['x'])),
+                intval(round($img->height() * $cropData['y'])),
             );
-            unset($filters["filters"]["crop"]);
+            unset($filters['filters']['crop']);
         }
 
         return $img->encode();
+    }
+
+    protected function returnAfterTransformation(?array $data): array
+    {
+        return $this->alwaysReturnFullObject
+            ? $data
+            : ['filters' => $data['filters'] ?? null];
+    }
+
+    protected function returnAfterNoChangeWasMade(?array $data): ?array
+    {
+        return $this->alwaysReturnFullObject
+            ? $data
+            : ($data === null ? null : []);
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="ShowPage">
+    <div class="ShowPage" :class="classes">
         <div class="container">
             <template v-if="ready">
                 <ActionBarShow
@@ -17,13 +17,22 @@
                     @state-change="handleStateChanged"
                 />
 
-                <div class="mt-4 pt-2">
+                <div class="ShowPage__content">
                     <template v-if="config.globalMessage">
-                        <div class="mb-3">
-                            <GlobalMessage
-                                :options="config.globalMessage"
-                                :data="data"
-                                :fields="fields"
+                        <GlobalMessage
+                            class="mb-3"
+                            :options="config.globalMessage"
+                            :data="data"
+                            :fields="fields"
+                        />
+                    </template>
+
+                    <template v-if="localized">
+                        <div class="mb-4">
+                            <LocaleSelect
+                                :locales="locales"
+                                :locale="locale"
+                                @change="handleLocaleChanged"
                             />
                         </div>
                     </template>
@@ -42,6 +51,8 @@
                                 <ShowField
                                     :options="fieldOptions(fieldLayout)"
                                     :value="fieldValue(fieldLayout)"
+                                    :locale="locale"
+                                    :locales="locales"
                                     :config-identifier="fieldLayout.key"
                                     :layout="fieldLayout"
                                     :collapsable="section.collapsable"
@@ -61,8 +72,17 @@
             </template>
         </div>
 
-        <CommandFormModal :command="currentCommand" ref="commandForm" />
-        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal
+            :command="currentCommand"
+            :entity-key="entityKey"
+            :instance-id="instanceId"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
+        />
+        <CommandViewPanel
+            :content="commandViewContent"
+            @close="handleCommandViewPanelClosed"
+        />
     </div>
 </template>
 
@@ -71,6 +91,7 @@
     import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid, GlobalMessage } from 'sharp-ui';
+    import { LocaleSelect } from "sharp-form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
     import ActionBarShow from "../ActionBar";
@@ -90,12 +111,14 @@
             CommandFormModal,
             CommandViewPanel,
             GlobalMessage,
+            LocaleSelect,
         },
 
         data() {
             return {
                 ready: false,
                 fieldsVisible: null,
+                locale: null,
                 refreshKey: 0,
             }
         },
@@ -108,6 +131,7 @@
                 'layout',
                 'data',
                 'config',
+                'locales',
                 'breadcrumb',
                 'instanceState',
                 'canEdit',
@@ -115,7 +139,11 @@
                 'stateValues',
                 'canChangeState',
             ]),
-
+            classes() {
+                return {
+                    'ShowPage--localized': this.localized,
+                }
+            },
             formUrl() {
                 const formKey = this.config.multiformAttribute
                     ? this.data[this.config.multiformAttribute]
@@ -138,25 +166,24 @@
             breadcrumbItems() {
                 return this.breadcrumb.items;
             },
+            localized() {
+                return this.locales?.length > 0;
+            },
         },
 
         methods: {
             fieldOptions(layout) {
-                const options = this.fields
-                    ? this.fields[layout.key]
-                    : null;
+                const options = this.fields?.[layout.key];
                 if(!options) {
                     console.error(`Show page: unknown field "${layout.key}"`);
                 }
                 return options;
             },
             fieldValue(layout) {
-                return this.data
-                    ? this.data[layout.key]
-                    : null;
+                return this.data?.[layout.key];
             },
             isFieldVisible(layout) {
-                return !this.fieldsVisible || this.fieldsVisible[layout.key] !== false;
+                return this.fieldsVisible?.[layout.key] !== false;
             },
             isSectionCollapsable(section) {
                 return section.collapsable && !this.sectionHasField(section, 'entityList');
@@ -197,11 +224,13 @@
                     [key]: visible,
                 }
             },
+            handleLocaleChanged(locale) {
+                this.locale = locale;
+            },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
-                    postCommand: () => this.$store.dispatch('show/postCommand', { command }),
-                    postForm: data => this.$store.dispatch('show/postCommand', { command, data }),
-                    getFormData: () => this.$store.dispatch('show/getCommandFormData', { command }),
+                    postCommand: data => this.$store.dispatch('show/postCommand', { command, data }),
+                    getForm: commandQuery => this.$store.dispatch('show/getCommandForm', { command, query: { ...commandQuery } }),
                 });
             },
             handleStateChanged(state) {
@@ -247,6 +276,9 @@
 
                 handleNotifications(show.notifications);
                 this.updateDocumentTitle(show);
+                if(this.localized) {
+                    this.locale = this.locales?.[0];
+                }
 
                 this.ready = true;
                 this.refreshKey++;

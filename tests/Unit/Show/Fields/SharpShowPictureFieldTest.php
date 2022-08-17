@@ -8,14 +8,14 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpShowPictureFieldTest extends SharpTestCase
 {
     /** @test */
-    function we_can_define_a_picture_field()
+    public function we_can_define_a_picture_field()
     {
-        $field = SharpShowPictureField::make("pictureField");
+        $field = SharpShowPictureField::make('pictureField');
 
         $this->assertEquals([
-            "key" => "pictureField",
-            "type" => "picture",
-            "emptyVisible" => false,
+            'key' => 'pictureField',
+            'type' => 'picture',
+            'emptyVisible' => false,
         ], $field->toArray());
     }
 }

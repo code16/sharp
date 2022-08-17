@@ -33,7 +33,7 @@
                     @hidden="dialog.hiddenCallback"
                     :key="dialog.id"
                 >
-                    {{ dialog.text }}
+                    <div v-html="dialog.text"></div>
                 </Modal>
             </template>
         </template>

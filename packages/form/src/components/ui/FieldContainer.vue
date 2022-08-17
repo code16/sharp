@@ -54,15 +54,15 @@
 </template>
 
 <script>
-    import { logError, lang } from 'sharp';
-    import { Identifier, ConfigNode }  from 'sharp/mixins';
-    import Field from '../Field';
-    import FieldLocaleSelect from './FieldLocaleSelect';
-    import { resolveTextValue, isLocalizableValueField } from '../../util';
-    import { sticky } from "sharp/directives";
+  import { lang, logError } from 'sharp';
+  import { ConfigNode, Identifier } from 'sharp/mixins';
+  import Field from '../Field';
+  import FieldLocaleSelect from './FieldLocaleSelect';
+  import { isLocalizableValueField, resolveTextValue } from '../../util';
+  import { sticky } from "sharp/directives";
 
 
-    export default {
+  export default {
         name: 'SharpFieldContainer',
 
         mixins: [ Identifier, ConfigNode ],
@@ -130,7 +130,7 @@
                 return resolveTextValue({ field:this.fieldProps, value:this.originalValue });
             },
             isLocaleObject() {
-                return isLocalizableValueField(this.fieldProps);
+                return isLocalizableValueField(this.fieldProps) || this.fieldProps.type === 'editor';
             },
             mergedErrorIdentifier() {
                 return this.getMergedIdentifier('mergedErrorIdentifier', this.errorIdentifier);
@@ -143,11 +143,11 @@
             errorsLocales() {
                 return Object.entries(this.$form.errors)
                     .filter(([key, value]) => !!value)
-                    .reduce((res, [key]) => {
+                    .map(([key]) => {
                         const match = key.match(new RegExp(`^${this.mergedErrorIdentifier}\\.([^.]+)$`));
-                        const locale = match?.[1];
-                        return locale ? [...res, locale] : res;
-                    }, []);
+                        return match?.[1];
+                    })
+                    .filter(locale => locale && this.$form.locales?.includes(locale))
             },
         },
         methods: {
@@ -156,7 +156,7 @@
                 if(Array.isArray(error)) {
                     this.setError(error[0]);
                 }
-                else if(this.errorsLocales.length > 0) {
+                else if(this.fieldProps.localized && this.errorsLocales.length > 0) {
                     const locales = this.errorsLocales.join(', ').toUpperCase();
                     const message = lang('form.validation_error.localized').replace(':locales', locales);
                     this.setError(message);

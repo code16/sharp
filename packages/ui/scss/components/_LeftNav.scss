@@ -1,7 +1,6 @@
 @import "../mixins/left-nav";
 
 .SharpLeftNav {
-
   --item-color-l: 30%;
   $item-color: var(--theme-color, hsl(var(--primary-h), 10%, 20%));
   $item-hover-bg: hsla(var(--primary-h), var(--primary-s), var(--item-color-l), .05);
@@ -11,12 +10,11 @@
   $item-expanded-color: var(--theme-color, hsl(var(--primary-h), var(--primary-s), 25%));
 
   position: fixed;
-  top: 0;
+  top: var(--navbar-top, 0);
   height: 100vh;
   background-color: var(--theme-bg);
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
-
   z-index: 100;
 
   &__content {
@@ -48,9 +46,11 @@
 
   &__title {
     @extend .ui-title-font;
-    --color-l: calc((var(--accent-bg-l) - var(--l-threshold) + var(--accent-bg-amount)) * -100000);
     font-size: 1rem;
-    color: hsl(0, 0%, var(--color-l));
+    color: var(--navbar-color);
+    //text-shadow:
+    //  0 0 0.25em hsla(var(--primary-h), var(--primary-s), 30%, .25),
+    //  0 0 2em hsla(var(--primary-h), var(--primary-s), 30%, 1);
   }
 
   &__top-icon {
@@ -198,7 +198,7 @@
     cursor: pointer;
     color: $item-color;
     line-height: 1.4;
-    padding: .5rem 1.25rem;
+    padding: var(--link-padding-y, .5rem) var(--link-padding-x, 1.25rem);
 
     .fa, .fas, .far, .fab {
       font-size: 1.125em;

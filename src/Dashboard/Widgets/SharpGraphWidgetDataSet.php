@@ -12,7 +12,7 @@ class SharpGraphWidgetDataSet
     protected ?string $color = null;
 
     /**
-     * @param array|Arrayable $values
+     * @param  array|Arrayable  $values
      */
     protected function __construct($values)
     {
@@ -22,7 +22,7 @@ class SharpGraphWidgetDataSet
     }
 
     /**
-     * @param array|Arrayable $values
+     * @param  array|Arrayable  $values
      * @return static
      */
     public static function make($values): SharpGraphWidgetDataSet
@@ -47,10 +47,10 @@ class SharpGraphWidgetDataSet
     public function toArray(): array
     {
         return [
-            "data" => array_values($this->values),
-            "labels" => array_keys($this->values)
+            'data' => array_values($this->values),
+            'labels' => array_keys($this->values),
         ]
-            + ($this->label ? ["label" => $this->label] : [])
-            + ($this->color ? ["color" => $this->color] : []);
+            + ($this->label ? ['label' => $this->label] : [])
+            + ($this->color ? ['color' => $this->color] : []);
     }
 }

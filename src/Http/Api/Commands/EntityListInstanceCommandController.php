@@ -2,27 +2,26 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
 class EntityListInstanceCommandController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandleCommandReturn, HandleCommandForm;
 
-    /**
-     * Display the Command form.
-     */
     public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
         $list->initQueryParams();
-        
+
         $commandHandler = $this->getInstanceCommandHandler($list, $commandKey, $instanceId);
 
-        return response()->json([
-            "data" => $commandHandler->formData($instanceId)
-        ]);
+        return response()->json(
+            array_merge(
+                $this->getCommandForm($commandHandler),
+                ['data' => $commandHandler->formData($instanceId) ?: null],
+            ),
+        );
     }
 
     /**
@@ -40,8 +39,8 @@ class EntityListInstanceCommandController extends ApiController
             $list,
             $handler->execute(
                 $instanceId,
-                $handler->formatRequestData((array)request("data"), $instanceId)
-            )
+                $handler->formatRequestData((array) request('data'), $instanceId),
+            ),
         );
     }
 }

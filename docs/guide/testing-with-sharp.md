@@ -1,6 +1,6 @@
 # Testing with Sharp
 
-Sharp provides a few assertions and helpers to help you testing your Sharp code.
+Sharp provides a few assertions and helpers to help you test your Sharp code.
 
 
 ## The `SharpAssertions` trait
@@ -41,19 +41,17 @@ Call the Sharp API to update the Entity `$entityKey` of id `$instanceId`, with `
 Call the Sharp API to store a new Entity `$entityKey` with `$data`.
 
 
-#### `callSharpEntityCommandFromList(string $entityKey, string $commandKey, array $data)`
+#### `callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data)`
 
-Call the `$commandKey` Entity Command with the optional `$data`.
+Call the `$commandKeyOrClassName` Entity Command with the optional `$data`.
 
+#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data)`
 
-#### `callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKey, array $data)`
+Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
-Call the `$commandKey` Instance Command with the optional `$data`.
+#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data)`
 
-#### `callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKey, array $data)`
-
-Call the `$commandKey` Instance Command with the optional `$data`.
-
+Call the `$commandKeyOrClassName` Instance Command with the optional `$data`.
 
 #### `withSharpCurrentBreadcrumb(array $breadcrumb): self`
 

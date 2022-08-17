@@ -5,6 +5,8 @@ import EntityList from '../src/components/fields/entity-list/EntityList';
 import showModule from "../src/store/show";
 import { createStub } from "@sharp/test-utils";
 
+jest.mock('sharp');
+
 
 describe('show entity list field', () => {
 
@@ -71,7 +73,7 @@ describe('show entity list field', () => {
         /** has empty list */
         wrapper = createWrapper({
             data:() => ({
-                list: { data: { items:[] } }
+                list: { data: { list: { items:[] } } }
             })
         });
         expect(wrapper.vm.isVisible).toBe(false);
@@ -82,7 +84,7 @@ describe('show entity list field', () => {
                 emptyVisible: true,
             },
             data:() => ({
-                list: { data: { items:[] } }
+                list: { data: { list: { items:[] } } }
             })
         });
         expect(wrapper.vm.isVisible).toBe(true);
@@ -90,7 +92,7 @@ describe('show entity list field', () => {
         /** has items */
         wrapper = createWrapper({
             data:() => ({
-                list: { data: { items:[{ id:1 }] } }
+                list: { data: { list: { items:[{ id:1 }] } } }
             })
         });
         expect(wrapper.vm.isVisible).toBe(true);
@@ -101,7 +103,7 @@ describe('show entity list field', () => {
                 showCreateButton: true,
             },
             data:() => ({
-                list: { data: { items:[] }, authorizations: { create:true } }
+                list: { data: { list: { items:[] } }, authorizations: { create:true } }
             })
         });
         expect(wrapper.vm.isVisible).toBe(true);
@@ -109,7 +111,7 @@ describe('show entity list field', () => {
         /** has filter active */
         wrapper = createWrapper({
             data:() => ({
-                list: { data: { items:[] } }
+                list: { data: { list: { items:[] } } }
             }),
             computed: {
                 filters: () => [
@@ -125,7 +127,7 @@ describe('show entity list field', () => {
         /** has search active */
         wrapper = createWrapper({
             data:() => ({
-                list: { data: { items:[] } }
+                list: { data: { list: { items:[] } } }
             }),
             computed: {
                 query: () => ({

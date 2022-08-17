@@ -1,35 +1,41 @@
 <template>
-    <div class="SharpDataList__row container" :class="classes">
-        <div class="SharpDataList__cols">
-            <div class="row mx-n2 mx-md-n3">
-                <template v-for="column in columns">
-                    <div class="px-2 px-md-3" :class="[
-                        header ? 'SharpDataList__th' : 'SharpDataList__td',
-                        colClasses(column)
-                    ]">
-                        <slot name="cell" :row="row" :column="column">
-                            <template v-if="column.html">
-                                <div v-html="row[column.key]" class="SharpDataList__td-html-container"></div>
-                            </template>
-                            <template v-else>
-                                {{ row[column.key] }}
-                            </template>
-                        </slot>
+    <div class="SharpDataList__row px-3" :class="classes">
+        <div class="row gx-0">
+            <div class="col d-flex flex-column justify-content-center position-relative">
+                <div class="SharpDataList__cols py-3">
+                    <div class="row align-items-center gx-n2 gx-md-n3">
+                        <template v-for="(column, i) in columns">
+                            <div :class="[
+                                header ? 'SharpDataList__th' : 'SharpDataList__td',
+                                colClasses(column)
+                            ]">
+                                <slot name="cell" :row="row" :column="column">
+                                    <template v-if="column.html">
+                                        <div v-html="row[column.key]" class="SharpDataList__td-html-container"></div>
+                                    </template>
+                                    <template v-else>
+                                        {{ row[column.key] }}
+                                    </template>
+                                </slot>
+                            </div>
+                        </template>
                     </div>
+                </div>
+                <template v-if="hasLink">
+                    <a class="SharpDataList__row-link position-absolute inset-0" :href="url"></a>
                 </template>
             </div>
-            <template v-if="hasLink">
-                <a class="SharpDataList__row-link" :href="url"></a>
-            </template>
-        </div>
-        <template v-if="$scopedSlots.append">
-            <div class="SharpDataList__row-append align-self-center">
-                <slot name="append" v-bind="this" />
+            <div class="col-sm-auto align-self-center">
+                <template v-if="$scopedSlots.append">
+                    <div class="SharpDataList__row-append pb-3 pt-sm-3">
+                        <slot name="append" v-bind="this" />
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="SharpDataList__row-spacer"></div>
+                </template>
             </div>
-        </template>
-        <template v-else>
-            <div class="SharpDataList__row-spacer"></div>
-        </template>
+        </div>
     </div>
 </template>
 
@@ -64,11 +70,7 @@
                     'SharpDataList__row--header': this.header,
                     'SharpDataList__row--disabled': !this.header && !this.hasLink,
                     'SharpDataList__row--highlight': this.isHighlighted,
-                    'SharpDataList__row--full-width': this.isFullWidth,
                 }
-            },
-            isFullWidth() {
-                return !this.$scopedSlots.append;
             },
         },
         methods: {

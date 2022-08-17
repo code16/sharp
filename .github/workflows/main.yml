@@ -2,14 +2,15 @@ name: Tests
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
       - next
+      - dev
 jobs:
 
-# Unit tests back (phpunit)
+  # Unit tests back (phpunit)
   laravel-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -19,6 +20,18 @@ jobs:
             env:
               LARAVEL: 8.*
               TESTBENCH: 6.*
+          - php: 8.1
+            env:
+              LARAVEL: 8.*
+              TESTBENCH: 6.*
+          - php: 8.0
+            env:
+              LARAVEL: 9.*
+              TESTBENCH: 7.*
+          - php: 8.1
+            env:
+              LARAVEL: 9.*
+              TESTBENCH: 7.*
     env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v2
@@ -45,16 +58,16 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: ./vendor/bin/phpunit
 
-  # Front tests (jest)
+  #  Front unit tests
   front-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version: '14'
 
       - name: Install front dependencies
         run: npm ci
@@ -62,8 +75,39 @@ jobs:
       - name: Run Front tests
         run: npm run test
 
+  # Front e2e tests
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install sharp dependencies
+        run: npm ci --production
+
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v2
+        with:
+          command: npm run cy:run-ct
+          working-directory: tests-e2e
+          env: CI=true
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        continue-on-error: true
+        with:
+          name: e2e-cypress-screenshots
+          path: tests-e2e/cypress/screenshots
+
   slack:
-    needs: [laravel-tests, front-tests]
+    needs:
+      - laravel-tests
+      - front-tests
+      - e2e-tests
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:

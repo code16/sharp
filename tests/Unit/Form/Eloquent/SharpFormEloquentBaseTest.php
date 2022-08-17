@@ -26,21 +26,21 @@ abstract class SharpFormEloquentBaseTest extends SharpTestCase
             $table->string('name');
             $table->unsignedTinyInteger('age')->nullable();
             $table->unsignedTinyInteger('order')->nullable();
-            $table->unsignedInteger("mother_id")->nullable();
+            $table->unsignedInteger('mother_id')->nullable();
             $table->timestamps();
         });
 
         Schema::create('friends', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger("person1_id");
-            $table->unsignedInteger("person2_id");
+            $table->unsignedInteger('person1_id');
+            $table->unsignedInteger('person2_id');
             $table->timestamps();
         });
 
         Schema::create('pictures', function (Blueprint $table) {
             $table->increments('id');
             $table->string('file');
-            $table->morphs("picturable");
+            $table->morphs('picturable');
             $table->timestamps();
         });
     }

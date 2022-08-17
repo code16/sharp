@@ -121,19 +121,19 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
 
     protected $icon;
 
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, new TextFormatter);
     }
 
-    public function setIcon(string $iconName)
+    public function setIcon(string $iconName): self
     {
         $this->icon = $iconName;
 
         return $this;
     }
 
-    protected function validationRules()
+    protected function validationRules(): array
     {
         return [
             "icon" => "required",
@@ -152,7 +152,10 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
 A few things to note:
 
 - The `FIELD_TYPE` const must be "custom-" + your custom field name, defined on the front side.
-- To respect the Sharp API, you must define a static `make` function with at least the field key; this function must call the parent constructor, passing the `$key`, the `FIELD_TYPE` and a Formatter, which can also be a custom one (see [documentation](building-entity-form.md#formatters) and `Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter` base class).
+- To respect the Sharp API, you must define a static `make` function with at least the field key; this function must
+  call the parent constructor, passing the `$key`, the `FIELD_TYPE` and a Formatter, which can also be a custom one (
+  see [documentation](building-form.md#formatters) and `Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter` base
+  class).
 - `validationRules()` implementation is optional, but advised.
 - the `toArray()` function is mandatory, and must call `parent::buildArray()` with additional attributes.
 
@@ -164,9 +167,9 @@ Next step is using the new form field:
 *in some `Code16\Sharp\Form\SharpForm` subclass:*
 
 ```php
-function buildFormFields()
+function buildFormFields(FieldsContainer $formFields): void
 {
-    $this->addField(
+    $formFields->addField(
         SharpCustomFormFieldTextIcon::make("name")
             ->setLabel("Name")
             ->setIcon("fa-user")

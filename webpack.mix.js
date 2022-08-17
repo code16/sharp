@@ -3,12 +3,11 @@ const webpack = require('webpack');
 const path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 
-mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
+mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js').vue()
     .js('resources/assets/js/client-api.js', 'resources/assets/dist/client-api.js')
-    .sass('resources/assets/sass/app.scss', 'resources/assets/dist/sharp.css', { implementation:require('node-sass') })
-    .sass('resources/assets/sass/vendors.scss', 'resources/assets/dist/vendors.css', { implementation:require('node-sass') })
+    .sass('resources/assets/sass/app.scss', 'sharp.css', { implementation:require('sass-embedded') })
+    .sass('resources/assets/sass/vendors.scss', 'vendors.css', { implementation:require('sass-embedded') })
     .copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'resources/assets/dist/fonts')
-    .copy('node_modules/element-ui/lib/theme-chalk/fonts/*', 'resources/assets/dist/fonts')
     .copy('node_modules/leaflet/dist/images/*', 'resources/assets/dist/images')
     .options({
         processCssUrls: false,
@@ -26,8 +25,10 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
     .setPublicPath('resources/assets/dist')
     .webpackConfig({
         plugins: [
-            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-            new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en'),
+            new webpack.IgnorePlugin({
+                resourceRegExp: /^\.\/locale$/,
+                contextRegExp: /moment$/,
+            }),
         ],
         // transpile vue-clip package
         module: {
@@ -41,7 +42,7 @@ mix.js('resources/assets/js/sharp.js', 'resources/assets/dist/sharp.js')
                     use: [
                         {
                             loader: 'babel-loader',
-                            options: Config.babel()
+                            options: (new require('laravel-mix/src/BabelConfig')).default(),
                         }
                     ]
                 },
@@ -78,7 +79,8 @@ else {
         resolve: {
             alias: {
                 ...require('fs').existsSync('../packages/tiptap-markdown') && {
-                    'tiptap-markdown': path.resolve(__dirname, '../packages/tiptap-markdown')
+                    'tiptap-markdown': console.warn('\x1b[33m⚠️  Using local tiptap-markdown\n\n')
+                        || path.resolve(__dirname, '../packages/tiptap-markdown')
                 },
             },
             modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'],

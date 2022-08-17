@@ -1,0 +1,18 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter
+
+class DummyClass extends EntityListSelectMultipleFilter
+{
+    public function buildFilterConfig(): void
+    {
+        // $this->configureLabel("My Filter label")
+    }
+
+    public function values(): array
+    {
+        // return []
+    }
+}

@@ -6,14 +6,17 @@ export function getShowView({ entityKey, instanceId }) {
 }
 
 export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
-    return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
-        data,
+    return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
+        ...data,
     }, { responseType: 'blob' });
 }
 
-export function getShowCommandFormData({ entityKey, instanceId, commandKey }) {
-    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/data`)
-        .then(response => response.data.data);
+export function getShowCommandForm({ entityKey, instanceId, commandKey, query }) {
+    return api.get(`show/${entityKey}/command/${commandKey}${instanceId ? `/${instanceId}` : ''}/form`, {
+        params: {
+            ...query,
+        },
+    }).then(response => response.data);
 }
 
 export function postShowState({ entityKey, instanceId, value }) {
@@ -21,10 +24,3 @@ export function postShowState({ entityKey, instanceId, value }) {
         .then(response => response.data);
 }
 
-export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
-    return apiUrl(`show/download/${fieldKey}/${entityKey}/${instanceId}`, {
-        params: {
-            fileName,
-        },
-    })
-}

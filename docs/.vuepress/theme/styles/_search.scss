@@ -1,0 +1,22 @@
+
+
+.DocSearch {
+  --docsearch-title-color: var(--c-primary);
+  --docsearch-hit-active-background: var(--c-brand);
+
+  .dark & {
+    --docsearch-hit-active-color: rgba(255,255,255,.75);
+    --docsearch-highlight-color: var(--c-text-accent);
+    --docsearch-title-color: var(--c-text-light);
+  }
+}
+
+.DocSearch-Hit {
+  &[aria-selected=true] a {
+    background-color: var(--docsearch-hit-active-background);
+  }
+}
+
+.DocSearch-Hit-source {
+  color: var(--docsearch-title-color);
+}

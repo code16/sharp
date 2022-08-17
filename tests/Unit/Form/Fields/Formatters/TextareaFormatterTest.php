@@ -11,14 +11,14 @@ class TextareaFormatterTest extends SharpTestCase
     use WithSimpleFormatterTest;
 
     /** @test */
-    function we_can_format_value_to_front()
+    public function we_can_format_value_to_front()
     {
-        $this->checkSimpleFormatterToFront(SharpFormTextareaField::make("text"), new TextareaFormatter);
+        $this->checkSimpleFormatterToFront(SharpFormTextareaField::make('text'), new TextareaFormatter);
     }
 
     /** @test */
-    function we_can_format_value_from_front()
+    public function we_can_format_value_from_front()
     {
-        $this->checkSimpleFormatterFromFront(SharpFormTextareaField::make("text"), new TextareaFormatter, "attribute");
+        $this->checkSimpleFormatterFromFront(SharpFormTextareaField::make('text'), new TextareaFormatter, 'attribute');
     }
 }

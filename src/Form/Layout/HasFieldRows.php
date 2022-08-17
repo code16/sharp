@@ -11,7 +11,7 @@ trait HasFieldRows
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
     {
         $this->addRowLayout([
-            $this->newLayoutField($fieldKey, $subLayoutCallback)
+            $this->newLayoutField($fieldKey, $subLayoutCallback),
         ]);
 
         return $this;
@@ -22,10 +22,10 @@ trait HasFieldRows
         $this
             ->addRowLayout(
                 collect($fieldKeys)
-                    ->map(function($key) {
+                    ->map(function ($key) {
                         return $this->newLayoutField($key);
                     })
-                    ->all()
+                    ->all(),
             );
 
         return $this;
@@ -36,18 +36,18 @@ trait HasFieldRows
         $this->rows[] = $fields;
     }
 
-    function fieldsToArray(): array
+    public function fieldsToArray(): array
     {
         return [
-            "fields" => collect($this->rows)
-                ->map(function($row) {
+            'fields' => collect($this->rows)
+                ->map(function ($row) {
                     return collect($row)
-                        ->map(function($field) {
+                        ->map(function ($field) {
                             return $field->toArray();
                         })
                         ->all();
                 })
-                ->all()
+                ->all(),
         ];
     }
 

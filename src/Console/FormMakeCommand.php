@@ -10,34 +10,10 @@ class FormMakeCommand extends GeneratorCommand
 {
     use WithModel;
 
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
     protected $name = 'sharp:make:form';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a new entity form class';
-
-    /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
+    protected $description = 'Create a new Form class';
     protected $type = 'SharpForm';
 
-    /**
-     * Build the class with the given name.
-     *
-     * @param string $name
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
     protected function buildClass($name)
     {
         $replace = [];
@@ -49,38 +25,22 @@ class FormMakeCommand extends GeneratorCommand
         return str_replace(
             array_keys($replace),
             array_values($replace),
-            parent::buildClass($name)
+            parent::buildClass($name),
         );
     }
 
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
     protected function getStub()
     {
         return $this->option('model')
-            ? __DIR__.'/stubs/entity-form.model.stub'
-            : __DIR__.'/stubs/entity-form.stub';
+            ? __DIR__.'/stubs/form.model.stub'
+            : __DIR__.'/stubs/form.stub';
     }
 
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string  $rootNamespace
-     * @return string
-     */
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
     }
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
     protected function getOptions()
     {
         return [

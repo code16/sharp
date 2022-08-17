@@ -3,7 +3,7 @@
 This widget intends to display data as an ordered list of items
 
 ```php
-$this->addWidget(
+$widgetsContainer->addWidget(
     SharpOrderedListWidget::make("topTravelledShipTypes")
 );
 ```
@@ -13,7 +13,7 @@ $this->addWidget(
 Valuation is handled by a dedicated `$this->setOrderedListData(string $panelWidgetKey, array $data)` in the Dashboard class:
 
 ```php
-function buildWidgetsData()
+function buildWidgetsData(): void
 {
     $this->setOrderedListData(
         "topTravelledShipTypes", [
@@ -64,7 +64,7 @@ $this->setOrderedListData(
 You may want to add a link on each row. To do that, use the `buildItemLink()` method on the widget creation:
 
 ```php
-$this->addWidget(
+$widgetsContainer->addWidget(
     SharpOrderedListWidget::make("topTravelledShipTypes")
             ->buildItemLink(function($item) {
                   return url("some-link");
@@ -75,7 +75,7 @@ $this->addWidget(
 In order to make a link to a Sharp EntityList, Show or Form, this method can also return a [LinkTo instance](../link-to.md):
 
 ```php
-$this->addWidget(
+$widgetsContainer->addWidget(
     SharpOrderedListWidget::make("topTravelledShipTypes")
             ->buildItemLink(function($item) {
                   return LinkToEntityList::make("spaceship")->addFilter("type", $item['id']); 
@@ -87,7 +87,7 @@ As you can see, the link is built for each row, and is therefore data-dependant.
 In this example, we intend to link each row toward the "spaceship" entity list, with the filter "type" set to the value of `$item['id']`. So with this data:
 
 ```php
-function buildWidgetsData()
+function buildWidgetsData(): void
 {
     $this->setOrderedListData(
         "topTravelledShipTypes", [

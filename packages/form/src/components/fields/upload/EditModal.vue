@@ -6,22 +6,16 @@
         v-on="$listeners"
         @ok="handleOkClicked"
         @show="handleShow"
+        dialog-class="modal-dialog-scrollable"
+        content-class="h-100"
+        size="xl"
         ref="modal"
     >
         <template v-if="ready">
             <vue-cropper
-                class="SharpUpload__modal-vue-cropper"
-                :view-mode="2"
-                drag-mode="crop"
-                :aspect-ratio="ratioX / ratioY"
-                :auto-crop-area="1"
-                :zoomable="false"
-                :guides="false"
-                :background="true"
-                :rotatable="true"
+                class="SharpUpload__modal-vue-cropper h-100"
+                v-bind="cropperOptions"
                 :src="imageSrc"
-                :data="cropData"
-                :ready="handleCropperReady"
                 alt="Source image"
                 ref="cropper"
             />
@@ -32,23 +26,33 @@
             </div>
         </template>
 
-        <div class="mt-3">
-            <Button variant="primary" @click="handleRotateClicked(-90)">
-                <i class="fas fa-undo"></i>
-            </Button>
-            <Button variant="primary" @click="handleRotateClicked(90)">
-                <i class="fas fa-redo"></i>
-            </Button>
-        </div>
+        <template v-slot:footer-prepend>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <Button text @click="handleRotateClicked(-90)">
+                        <i class="fas fa-undo"></i>
+                    </Button>
+                    <Button class="me-auto" text @click="handleRotateClicked(90)">
+                        <i class="fas fa-redo"></i>
+                    </Button>
+                </div>
+                <div class="col d-none d-lg-block">
+                    <div class="text-muted fs-7 lh-sm">
+                        {{ l('form.upload.edit_modal.description') }}
+                    </div>
+                </div>
+            </div>
+        </template>
     </Modal>
 </template>
 
 <script>
+    import VueCropper from 'vue-cropperjs';
     import { lang } from "sharp";
     import { Modal, Loading, Button } from 'sharp-ui';
-    import VueCropper from 'vue-cropperjs';
+    import { postResolveFiles } from 'sharp-files';
+
     import { rotate, rotateTo } from "./util/rotate";
-    import { getOriginalThumbnail } from "../../../api";
     import { getCropDataFromFilters } from "./util/filters";
 
     export default {
@@ -58,11 +62,16 @@
             VueCropper,
             Button,
         },
+        inject: {
+            $form: {
+                default: null,
+            },
+        },
         props: {
             value: Object,
             visible: Boolean,
             src: String,
-            cropOriginal: Boolean,
+            transformOriginal: Boolean,
             ratioX: Number,
             ratioY: Number,
         },
@@ -79,6 +88,22 @@
         computed: {
             imageSrc() {
                 return this.originalImg || this.src;
+            },
+            /**
+             * @returns {import('cropperjs/types/index').Cropper.Options}
+             */
+            cropperOptions() {
+                return {
+                    viewMode: 2,
+                    dragMode: 'move',
+                    aspectRatio: this.ratioX / this.ratioY,
+                    autoCropArea: 1,
+                    guides: false,
+                    background: true,
+                    rotatable: true,
+                    data: this.cropData,
+                    ready: this.handleCropperReady,
+                }
             },
         },
         methods: {
@@ -106,12 +131,25 @@
                 if(this.originalImg) {
                     return;
                 }
-                this.originalImg = await getOriginalThumbnail({
-                    path: this.value.path,
-                    disk: this.value.disk,
-                    max_width: 800,
-                    max_height: 600,
+                const files = await postResolveFiles({
+                    entityKey: this.$form.entityKey,
+                    instanceId: this.$form.instanceId,
+                    files: [
+                        {
+                            path: this.value.path,
+                            disk: this.value.disk,
+                        }
+                    ],
+                    thumbnailWidth: 800,
+                    thumbnailHeight: 600,
                 });
+
+                this.originalImg = files[0]?.thumbnail;
+
+                if(!this.originalImg) {
+                    return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');
+                }
+
                 await new Promise(resolve => {
                     const image = new Image();
                     image.src = this.originalImg;
@@ -131,7 +169,7 @@
             },
             async init() {
                 this.ready = false;
-                if(this.cropOriginal && this.value?.path) {
+                if(this.transformOriginal && this.value?.path) {
                     await this.initOriginalThumbnail();
                 }
                 this.ready = true;

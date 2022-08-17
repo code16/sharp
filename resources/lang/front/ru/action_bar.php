@@ -4,6 +4,7 @@ return [
 
     'list.items_count' => 'элементов',
     'list.search.placeholder' => 'Поиск',
+    'list.search.title' => 'Найдено по запросу “:search”',
     'list.create_button' => 'Добавить...',
     'list.forms_dropdown' => 'Создать',
     'list.reorder_button' => 'Сортировка',

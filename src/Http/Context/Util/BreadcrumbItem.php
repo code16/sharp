@@ -2,8 +2,7 @@
 
 namespace Code16\Sharp\Http\Context\Util;
 
-use Code16\Sharp\Form\SharpSingleForm;
-use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class BreadcrumbItem
 {
@@ -21,42 +20,44 @@ class BreadcrumbItem
     public function setDepth(int $depth): self
     {
         $this->depth = $depth;
+
         return $this;
     }
 
     public function setInstance(?string $instance): self
     {
         $this->instance = $instance;
+
         return $this;
     }
 
     public function isEntityList(): bool
     {
-        return $this->type === "s-list";
+        return $this->type === 's-list';
     }
 
     public function isShow(): bool
     {
-        return $this->type === "s-show";
+        return $this->type === 's-show';
     }
 
     public function isSingleShow(): bool
     {
-        return $this->isShow() 
+        return $this->isShow()
             && $this->instanceId() === null
-            && is_subclass_of(config("sharp.entities.{$this->entityKey()}.show"), SharpSingleShow::class);
+            && app(SharpEntityManager::class)->entityFor($this->entityKey())->isSingle();
     }
 
     public function isForm(): bool
     {
-        return $this->type === "s-form";
+        return $this->type === 's-form';
     }
 
     public function isSingleForm(): bool
     {
-        return $this->isForm() 
+        return $this->isForm()
             && $this->instanceId() === null
-            && is_subclass_of(config("sharp.entities.{$this->entityKey()}.form"), SharpSingleForm::class);
+            && app(SharpEntityManager::class)->entityFor($this->entityKey())->isSingle();
     }
 
     public function is(BreadcrumbItem $item): bool

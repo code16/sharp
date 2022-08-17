@@ -1,0 +1,38 @@
+
+
+.SharpDate {
+  position: relative;
+
+  &__input {
+    @if $enable-validation-icons {
+      &--valuated.is-invalid {
+        padding-right: $form-select-feedback-icon-padding-end;
+        background-image: escape-svg($form-feedback-icon-invalid);
+        background-position: $form-select-feedback-icon-position;
+        background-size: $form-select-feedback-icon-size;
+      }
+    }
+  }
+
+  &__input-wrapper {
+    &:hover {
+      .SharpDate__clear-button {
+        opacity: 1;
+      }
+    }
+  }
+
+  .vc-date {
+    display: none!important;
+  }
+
+  .SharpDatePicker > .vc-popover-content-wrapper {
+    top: 100%!important;
+    transform: none!important;
+  }
+
+  .vc-time-picker {
+    padding: .875rem .5rem!important;
+  }
+
+}

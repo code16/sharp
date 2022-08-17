@@ -8,91 +8,110 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpShowTextFieldTest extends SharpTestCase
 {
     /** @test */
-    function we_can_define_label()
+    public function we_can_define_label()
     {
-        $field = SharpShowTextField::make("textfield")
-            ->setLabel("Label");
+        $field = SharpShowTextField::make('textfield')
+            ->setLabel('Label');
 
         $this->assertEquals(
             [
-                "key" => "textfield",
-                "type" => "text",
-                "emptyVisible" => false,
-                "html" => true,
-                "label" => "Label"
-            ], 
-            $field->toArray()
+                'key' => 'textfield',
+                'type' => 'text',
+                'emptyVisible' => false,
+                'html' => true,
+                'label' => 'Label',
+            ],
+            $field->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_collapseWordCount()
+    public function we_can_define_collapseWordCount()
     {
-        $field = SharpShowTextField::make("textfield")
+        $field = SharpShowTextField::make('textfield')
             ->collapseToWordCount(15);
 
         $this->assertEquals(
             [
-                "key" => "textfield",
-                "type" => "text",
-                "emptyVisible" => false,
-                "html" => true,
-                "collapseToWordCount" => 15
-            ], 
-            $field->toArray()
+                'key' => 'textfield',
+                'type' => 'text',
+                'emptyVisible' => false,
+                'html' => true,
+                'collapseToWordCount' => 15,
+            ],
+            $field->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_showIfEmpty()
+    public function we_can_define_showIfEmpty()
     {
-        $field = SharpShowTextField::make("textfield")
+        $field = SharpShowTextField::make('textfield')
             ->setShowIfEmpty(true);
 
         $this->assertEquals(
             [
-                "key" => "textfield",
-                "type" => "text",
-                "emptyVisible" => true,
-                "html" => true,
-            ], 
-            $field->toArray()
+                'key' => 'textfield',
+                'type' => 'text',
+                'emptyVisible' => true,
+                'html' => true,
+            ],
+            $field->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_html()
+    public function we_can_define_html()
     {
-        $field = SharpShowTextField::make("textfield")
+        $field = SharpShowTextField::make('textfield')
             ->setHtml(false);
 
         $this->assertEquals(
             [
-                "key" => "textfield",
-                "type" => "text",
-                "emptyVisible" => false,
-                "html" => false,
+                'key' => 'textfield',
+                'type' => 'text',
+                'emptyVisible' => false,
+                'html' => false,
             ],
-            $field->toArray()
+            $field->toArray(),
         );
     }
 
     /** @test */
-    function we_can_reset_collapseWordCount()
+    public function we_can_reset_collapseWordCount()
     {
-        $field = SharpShowTextField::make("textfield")
+        $field = SharpShowTextField::make('textfield')
             ->collapseToWordCount(15);
 
         $field->doNotCollapse();
 
         $this->assertEquals(
             [
-                "key" => "textfield",
-                "type" => "text",
-                "emptyVisible" => false,
-                "html" => true,
-            ], 
-            $field->toArray()
+                'key' => 'textfield',
+                'type' => 'text',
+                'emptyVisible' => false,
+                'html' => true,
+            ],
+            $field->toArray(),
+        );
+    }
+
+    /** @test */
+    public function we_can_define_the_localized_attribute()
+    {
+        $field = SharpShowTextField::make('text')
+            ->setLocalized(false);
+
+        $this->assertArrayNotHasKey(
+            'localized',
+            $field->toArray(),
+        );
+
+        $field->setLocalized();
+
+        $this->assertArraySubset(
+            ['localized' => true],
+            $field->toArray(),
         );
     }
 }

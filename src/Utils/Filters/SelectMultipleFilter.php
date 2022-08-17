@@ -2,6 +2,6 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-interface SelectMultipleFilter extends SelectFilter
+abstract class SelectMultipleFilter extends SelectFilter
 {
 }

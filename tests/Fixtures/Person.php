@@ -15,27 +15,27 @@ class Person extends Model
 
     public function elderSon()
     {
-        return $this->hasOne(Person::class, "mother_id");
+        return $this->hasOne(Person::class, 'mother_id');
     }
 
     public function sons()
     {
-        return $this->hasMany(Person::class, "mother_id");
+        return $this->hasMany(Person::class, 'mother_id');
     }
 
     public function friends()
     {
-        return $this->belongsToMany(Person::class, "friends", "person1_id", "person2_id");
+        return $this->belongsToMany(Person::class, 'friends', 'person1_id', 'person2_id');
     }
 
     public function picture()
     {
-        return $this->morphOne(Picture::class, "picturable");
+        return $this->morphOne(Picture::class, 'picturable');
     }
 
     public function pictures()
     {
-        return $this->morphMany(Picture::class, "picturable");
+        return $this->morphMany(Picture::class, 'picturable');
     }
 
     public function getQueueableRelations()

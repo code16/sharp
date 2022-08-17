@@ -4,7 +4,7 @@
             <TextRenderer
                 class="ShowTextField__content"
                 :content="currentContent"
-                :field-config-identifier="fieldConfigIdentifier"
+                :embeds="embeds"
             />
         </template>
         <template v-else>
@@ -40,12 +40,14 @@
             TextRenderer,
         },
         props: {
-            value: String,
+            value: [Object, String],
             collapseToWordCount: Number,
             label: String,
             emptyVisible: Boolean,
             html: Boolean,
-            fieldConfigIdentifier: String,
+            localized: Boolean,
+            locale: String,
+            embeds: Object,
         },
         data() {
             return {
@@ -58,17 +60,22 @@
                     'ShowTextField--html': this.html,
                 }
             },
+            resolvedValue() {
+                return this.localized
+                    ? this.value?.[this.locale]
+                    : this.value;
+            },
             currentContent() {
-                if(!this.value) {
+                if(!this.resolvedValue) {
                     return null;
                 }
                 if(this.hasCollapsed && !this.expanded) {
                     return this.collapsedContent;
                 }
                 if(!this.html) {
-                    return stripTags(this.value).trim();
+                    return stripTags(this.resolvedValue).trim();
                 }
-                return this.value;
+                return this.resolvedValue;
             },
             hasCollapsed() {
                 return !!this.collapsedContent;
@@ -77,7 +84,7 @@
                 if(!this.collapseToWordCount || !this.value) {
                     return null;
                 }
-                const value = this.value.trim();
+                const value = this.resolvedValue.trim();
                 const text = stripTags(value);
                 const content = this.html ? value : text;
                 const truncated = truncateToWords(text, this.collapseToWordCount);

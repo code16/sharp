@@ -12,4 +12,9 @@ trait SharpFormFieldWithDataLocalization
 
         return $this;
     }
+
+    public function isLocalized(): bool
+    {
+        return $this->localized ?: false;
+    }
 }

@@ -4,37 +4,35 @@ namespace Code16\Sharp\Show;
 
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
-use Code16\Sharp\Form\HandleFormFields;
-use Code16\Sharp\Show\Layout\ShowLayoutSection;
+use Code16\Sharp\Show\Layout\ShowLayout;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
-use Code16\Sharp\Utils\Traits\HandleGlobalMessage;
+use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
+use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
     use WithCustomTransformers,
-        HandleFormFields,
+        HandleFields,
         HandleEntityState,
         HandleInstanceCommands,
-        HandleGlobalMessage,
-        HandleCustomBreadcrumb;
+        HandlePageAlertMessage,
+        HandleCustomBreadcrumb,
+        HandleLocalizedFields;
 
-    protected bool $layoutBuilt = false;
-    protected array $sections = [];
+    protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;
 
     final public function showLayout(): array
     {
-        if(!$this->layoutBuilt) {
-            $this->buildShowLayout();
-            $this->layoutBuilt = true;
+        if ($this->showLayout === null) {
+            $this->showLayout = new ShowLayout();
+            $this->buildShowLayout($this->showLayout);
         }
 
-        return [
-            "sections" => collect($this->sections)
-                ->map->toArray()
-                ->all()
-        ];
+        return $this->showLayout->toArray();
     }
 
     /**
@@ -48,24 +46,19 @@ abstract class SharpShow
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                    $this->getDataKeys()
-                )
+                    $this->getDataKeys(),
+                ),
             )
             ->all();
     }
 
-    /**
-     * Return the show config values (commands and state).
-     */
     public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
-            ->merge([
-                "multiformAttribute" => $this->multiformAttribute
-            ])
+            ->merge(['multiformAttribute' => $this->multiformAttribute])
             ->all();
-        
-        return tap($config, function(&$config) use($instanceId) {
+
+        return tap($config, function (&$config) use ($instanceId) {
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
@@ -73,78 +66,46 @@ abstract class SharpShow
         });
     }
 
-    protected function setMultiformAttribute(string $attribute): self
+    final protected function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
         return $this;
     }
 
-    private function buildFormFields(): void
+    private function buildFormFields(FieldsContainer $fields): void
     {
-        $this->buildShowFields();
-    }
-
-    final protected function addSection(string $label, \Closure $callback = null): self
-    {
-        $this->layoutBuilt = false;
-
-        $section = new ShowLayoutSection($label);
-        $this->sections[] = $section;
-
-        if($callback) {
-            $callback($section);
-        }
-
-        return $this;
-    }
-
-    final protected function addEntityListSection(string $entityListKey, \Closure $callback = null): self
-    {
-        $this->layoutBuilt = false;
-
-        $section = new ShowLayoutSection("");
-        $section->addColumn(12, function($column) use($entityListKey) {
-            $column->withSingleField($entityListKey);
-        });
-
-        if($callback) {
-            $callback($section);
-        }
-
-        $this->sections[] = $section;
-
-        return $this;
+        $this->buildShowFields($fields);
     }
 
     /**
-     * Build show config using ->addInstanceCommand() and ->setEntityState()
+     * Build show config using ->addInstanceCommand() and ->setEntityState().
      */
-    function buildShowConfig(): void
+    public function buildShowConfig(): void
     {
         // No default implementation
     }
 
     /**
-     * Return all instance commands in an array of class names or instances
+     * Return all instance commands in an array of class names or instances.
      */
-    function getInstanceCommands(): ?array
+    public function getInstanceCommands(): ?array
     {
         return null;
     }
 
     /**
-     * Retrieve a Model for the form and pack all its data as JSON.
+     * Retrieve a Model for the show and pack all its data as array.
      */
-    abstract function find(mixed $id): array;
+    abstract protected function find(mixed $id): array;
 
     /**
-     * Build form fields using ->addField()
+     * Build show fields.
      */
-    abstract function buildShowFields(): void;
+    abstract protected function buildShowFields(FieldsContainer $showFields): void;
 
     /**
-     * Build form layout using ->addSection()
+     * Build show layout.
      */
-    abstract function buildShowLayout(): void;
+    abstract protected function buildShowLayout(ShowLayout $showLayout): void;
 }

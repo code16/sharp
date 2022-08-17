@@ -2,10 +2,7 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-interface SelectRequiredFilter extends SelectFilter
+abstract class SelectRequiredFilter extends SelectFilter
 {
-    /**
-     * @return string|int
-     */
-    public function defaultValue();
+    abstract public function defaultValue(): mixed;
 }

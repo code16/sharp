@@ -8,159 +8,159 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpFormUploadFieldTest extends SharpTestCase
 {
     /** @test */
-    function only_default_values_are_set()
+    public function only_default_values_are_set()
     {
-        $formField = SharpFormUploadField::make("file");
+        $formField = SharpFormUploadField::make('file');
 
         $this->assertEquals(
             [
-                "key" => "file", 
-                "type" => "upload", 
-                "compactThumbnail" => false, 
-                "transformable" => true, 
-                "transformOriginal" => false, 
-                "shouldOptimizeImage" => false
-            ], 
-            $formField->toArray()
+                'key' => 'file',
+                'type' => 'upload',
+                'compactThumbnail' => false,
+                'transformable' => true,
+                'transformKeepOriginal' => true,
+                'shouldOptimizeImage' => false,
+            ],
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_maxFileSize()
+    public function we_can_define_maxFileSize()
     {
-        $formField = SharpFormUploadField::make("file")
+        $formField = SharpFormUploadField::make('file')
             ->setMaxFileSize(.5);
 
         $this->assertArraySubset(
-            ["maxFileSize" => 0.5],
-            $formField->toArray()
+            ['maxFileSize' => 0.5],
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_compactThumbnail()
+    public function we_can_define_compactThumbnail()
     {
-        $formField = SharpFormUploadField::make("file")
+        $formField = SharpFormUploadField::make('file')
             ->setCompactThumbnail();
 
         $this->assertArraySubset(
-            ["compactThumbnail" => true],
-            $formField->toArray()
+            ['compactThumbnail' => true],
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_transformable()
+    public function we_can_define_transformable()
     {
-        $formField = SharpFormUploadField::make("file")
+        $formField = SharpFormUploadField::make('file')
             ->setTransformable(false);
 
         $this->assertArraySubset(
-            ["transformable" => false],
-            $formField->toArray()
+            ['transformable' => false],
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_transformOriginal_with_transformable()
+    public function we_can_define_transformKeepOriginal_with_transformable()
     {
-        $formField = SharpFormUploadField::make("file")
-            ->setTransformable(true, true);
+        $formField = SharpFormUploadField::make('file')
+            ->setTransformable(true, false);
 
         $this->assertArraySubset(
             [
-                "transformable" => true, 
-                "transformOriginal" => true
+                'transformable' => true,
+                'transformKeepOriginal' => false,
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_fileFilter()
+    public function we_can_define_fileFilter()
     {
-        $formField = SharpFormUploadField::make("file")
-            ->setFileFilter("jpg");
+        $formField = SharpFormUploadField::make('file')
+            ->setFileFilter('jpg');
 
         $this->assertArraySubset(
-            ["fileFilter" => [".jpg"]],
-            $formField->toArray()
+            ['fileFilter' => ['.jpg']],
+            $formField->toArray(),
         );
 
-        $formField = SharpFormUploadField::make("file")
-            ->setFileFilter("jpg, gif");
+        $formField = SharpFormUploadField::make('file')
+            ->setFileFilter('jpg, gif');
 
         $this->assertArraySubset(
-            ["fileFilter" => [".jpg", ".gif"]],
-            $formField->toArray()
+            ['fileFilter' => ['.jpg', '.gif']],
+            $formField->toArray(),
         );
 
-        $formField = SharpFormUploadField::make("file")
-            ->setFileFilter(["jpg", "gif "]);
+        $formField = SharpFormUploadField::make('file')
+            ->setFileFilter(['jpg', 'gif ']);
 
         $this->assertArraySubset(
-            ["fileFilter" => [".jpg", ".gif"]],
-            $formField->toArray()
+            ['fileFilter' => ['.jpg', '.gif']],
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_cropRatio()
+    public function we_can_define_cropRatio()
     {
-        $formField = SharpFormUploadField::make("file")
-            ->setCropRatio("16:9");
+        $formField = SharpFormUploadField::make('file')
+            ->setCropRatio('16:9');
 
         $this->assertArraySubset(
-            ["ratioX" => 16, "ratioY" => 9],
-            $formField->toArray()
+            ['ratioX' => 16, 'ratioY' => 9],
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_transformableFileTypes()
+    public function we_can_define_transformableFileTypes()
     {
-        $formField = SharpFormUploadField::make("file")
-            ->setCropRatio("16:9", ["jpg", "jpeg"]);
+        $formField = SharpFormUploadField::make('file')
+            ->setCropRatio('16:9', ['jpg', 'jpeg']);
 
         $this->assertArraySubset(
             [
-                "ratioX" => 16, 
-                "ratioY" => 9, 
-                "transformableFileTypes" => [".jpg", ".jpeg"]
+                'ratioX' => 16,
+                'ratioY' => 9,
+                'transformableFileTypes' => ['.jpg', '.jpeg'],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
 
-        $formField = SharpFormUploadField::make("file")
-            ->setCropRatio("16:9", [".jpg", ".jpeg"]);
+        $formField = SharpFormUploadField::make('file')
+            ->setCropRatio('16:9', ['.jpg', '.jpeg']);
 
         $this->assertArraySubset(
             [
-                "ratioX" => 16, 
-                "ratioY" => 9, 
-                "transformableFileTypes" => [".jpg", ".jpeg"]
+                'ratioX' => 16,
+                'ratioY' => 9,
+                'transformableFileTypes' => ['.jpg', '.jpeg'],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 
     /** @test */
-    function we_can_define_shouldOptimizeImage()
+    public function we_can_define_shouldOptimizeImage()
     {
-        $formField = SharpFormUploadField::make("file")
+        $formField = SharpFormUploadField::make('file')
             ->shouldOptimizeImage();
 
         $this->assertArraySubset(
-            ["shouldOptimizeImage" => true],
-            $formField->toArray()
+            ['shouldOptimizeImage' => true],
+            $formField->toArray(),
         );
 
-        $formField2 = SharpFormUploadField::make("file")
+        $formField2 = SharpFormUploadField::make('file')
             ->shouldOptimizeImage(false);
 
         $this->assertArraySubset(
-            ["shouldOptimizeImage" => false],
-            $formField2->toArray()
+            ['shouldOptimizeImage' => false],
+            $formField2->toArray(),
         );
     }
 }

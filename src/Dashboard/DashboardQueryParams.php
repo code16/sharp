@@ -13,9 +13,9 @@ class DashboardQueryParams
         return new static;
     }
 
-    public function fillWithRequest(string $queryPrefix = null): self
+    public function fillWithRequest(): self
     {
-        $query = $queryPrefix ? request($queryPrefix) : request()->all();
+        $query = request()->method() === 'GET' ? request()->all() : request('query');
 
         $this->fillFilterWithRequest($query);
 

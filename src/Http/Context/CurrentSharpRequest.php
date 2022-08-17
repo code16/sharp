@@ -3,6 +3,9 @@
 namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
+use Code16\Sharp\View\Components\Menu;
+use Code16\Sharp\View\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -12,10 +15,10 @@ class CurrentSharpRequest
 
     public function breadcrumb(): Collection
     {
-        if($this->breadcrumb === null) {
+        if ($this->breadcrumb === null) {
             $this->buildBreadcrumb();
         }
-        
+
         return $this->breadcrumb;
     }
 
@@ -27,17 +30,17 @@ class CurrentSharpRequest
     public function getPreviousShowFromBreadcrumbItems(?string $entityKey = null): ?BreadcrumbItem
     {
         $modeNotEquals = false;
-        if($entityKey && Str::startsWith($entityKey, '!')) {
+        if ($entityKey && Str::startsWith($entityKey, '!')) {
             $entityKey = Str::substr($entityKey, 1);
             $modeNotEquals = true;
         }
-        
+
         return $this->breadcrumb()
             ->reverse()
             ->filter->isShow()
-            ->when($entityKey !== null, function($items) use($entityKey, $modeNotEquals) {
+            ->when($entityKey !== null, function ($items) use ($entityKey, $modeNotEquals) {
                 return $items
-                    ->filter(function(BreadcrumbItem $breadcrumbItem) use($entityKey, $modeNotEquals) {
+                    ->filter(function (BreadcrumbItem $breadcrumbItem) use ($entityKey, $modeNotEquals) {
                         return $modeNotEquals
                             ? $breadcrumbItem->entityKey() !== $entityKey
                             : $breadcrumbItem->entityKey() === $entityKey;
@@ -49,10 +52,10 @@ class CurrentSharpRequest
     public function getUrlForBreadcrumbItem(BreadcrumbItem $item): string
     {
         $breadcrumb = $this->breadcrumb();
-        while($breadcrumb->count() && !$breadcrumb->last()->is($item)) {
+        while ($breadcrumb->count() && ! $breadcrumb->last()->is($item)) {
             $breadcrumb = $breadcrumb->slice(0, -1);
         }
-        
+
         return $this->getUrlForBreadcrumb($breadcrumb);
     }
 
@@ -60,27 +63,27 @@ class CurrentSharpRequest
     {
         return url(
             sharp_base_url_segment()
-            . "/"
-            . $breadcrumb
-                ->map(function(BreadcrumbItem $item) {
+            .'/'
+            .$breadcrumb
+                ->map(function (BreadcrumbItem $item) {
                     return sprintf('%s/%s',
                         $item->type,
-                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key
+                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
                     );
                 })
-                ->implode("/")
+                ->implode('/'),
         );
     }
 
     public function getUrlOfPreviousBreadcrumbItem(string $type = null): string
     {
         $breadcrumb = $this->breadcrumb()->slice(0, -1);
-        if($type) {
-            while($breadcrumb->count() && $type !== $breadcrumb->last()->type) {
+        if ($type) {
+            while ($breadcrumb->count() && $type !== $breadcrumb->last()->type) {
                 $breadcrumb = $breadcrumb->slice(0, -1);
             }
         }
-        
+
         return $this->getUrlForBreadcrumb($breadcrumb);
     }
 
@@ -91,79 +94,84 @@ class CurrentSharpRequest
 
     public function getEntityMenuLabel(string $entityKey): ?string
     {
-        return collect(config("sharp.menu"))
-                ->mapWithKeys(function($itemOrCategory) {
-                    return isset($itemOrCategory["entities"])
-                        ? collect($itemOrCategory["entities"])
-                            ->mapWithKeys(function($item) {
-                                return $this->extractMenuKeyAndLabel($item);
-                            })
-                        : $this->extractMenuKeyAndLabel($itemOrCategory);
-                })
-                ->filter()[$entityKey] ?? null;
+        return app(Menu::class)
+            ->getItems()
+            ->filter(function (MenuItem $item) {
+                return $item->isMenuItemEntity()
+                    || $item->isMenuItemDashboard()
+                    || $item->isMenuItemSection();
+            })
+            ->map(function (MenuItem $item) {
+                if ($item->isMenuItemSection()) {
+                    return $item->entities;
+                }
+
+                return $item;
+            })
+            ->flatten()
+            ->firstWhere('key', $entityKey)
+            ?->label;
     }
 
     public function isEntityList(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
+
         return $current ? $current->isEntityList() : false;
     }
 
     public function isShow(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
+
         return $current ? $current->isShow() : false;
     }
 
     public function isForm(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
+
         return $current ? $current->isForm() : false;
     }
 
     public function isCreation(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current 
-            ? $current->isForm() && !$current->isSingleForm() && $current->instanceId() === null 
-            : false;
+
+        return $current && $current->isForm() && ! $current->isSingleForm() && $current->instanceId() === null;
     }
 
     public function isUpdate(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current
-            ? $current->isForm() && ($current->isSingleForm() || $current->instanceId() !== null)
-            : false;
+
+        return $current && $current->isForm() && ($current->instanceId() !== null || $current->isSingleForm());
     }
 
     public function entityKey(): ?string
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current ? $current->entityKey() : null;
+
+        return $current?->entityKey();
     }
 
     public function instanceId(): ?string
     {
         $current = $this->getCurrentBreadcrumbItem();
-        return $current ? $current->instanceId() : null;
+
+        return $current?->instanceId();
     }
 
-    /**
-     * @param string $filterName
-     * @return array|string|null
-     */
-    public function globalFilterFor(string $filterName)
+    final public function globalFilterFor(string $handlerClass): array|string|null
     {
-        if(!$handlerClass = config("sharp.global_filters.$filterName")) {
-            return null;
-        }
+        $handler = app($handlerClass);
 
-        if(session()->has("_sharp_retained_global_filter_$filterName")) {
-            return session()->get("_sharp_retained_global_filter_$filterName");
-        }
+        abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
-        return app($handlerClass)->defaultValue();
+        return session()->get(
+            "_sharp_retained_global_filter_{$handler->getKey()}",
+            $handler->defaultValue(),
+        );
     }
 
     protected function buildBreadcrumb(): void
@@ -171,10 +179,10 @@ class CurrentSharpRequest
         $this->breadcrumb = new Collection();
         $segments = $this->getSegmentsFromRequest();
         $depth = 0;
-        
-        if(count($segments) !== 0) {
+
+        if (count($segments) !== 0) {
             $this->breadcrumb->add(
-                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++)
+                (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
             );
 
             $segments = $segments->slice(2)->values();
@@ -184,13 +192,13 @@ class CurrentSharpRequest
                 $key = $instance = null;
                 $segments
                     ->takeWhile(function (string $segment) {
-                        return !in_array($segment, ["s-show", "s-form"]);
+                        return ! in_array($segment, ['s-show', 's-form']);
                     })
                     ->values()
-                    ->each(function(string $segment, $index) use(&$key, &$instance) {
-                        if($index === 0) {
+                    ->each(function (string $segment, $index) use (&$key, &$instance) {
+                        if ($index === 0) {
                             $key = $segment;
-                        } elseif($index === 1) {
+                        } elseif ($index === 1) {
                             $instance = $segment;
                         }
                     });
@@ -200,7 +208,7 @@ class CurrentSharpRequest
                 $this->breadcrumb->add(
                     (new BreadcrumbItem($type, $key))
                         ->setDepth($depth++)
-                        ->setInstance($instance)
+                        ->setInstance($instance),
                 );
             }
         }
@@ -208,30 +216,17 @@ class CurrentSharpRequest
 
     protected function getSegmentsFromRequest(): Collection
     {
-        if(request()->wantsJson() || request()->segment(2) === "api") {
+        if (request()->wantsJson() || request()->segment(2) === 'api') {
             // API case: we use the referer
-            $urlToParse = request()->header("referer");
-            
-            return collect(explode("/", parse_url($urlToParse)["path"]))
-                ->filter(function(string $segment) {
+            $urlToParse = request()->header('referer');
+
+            return collect(explode('/', parse_url($urlToParse)['path']))
+                ->filter(function (string $segment) {
                     return strlen(trim($segment)) && $segment !== sharp_base_url_segment();
                 })
                 ->values();
         }
-        
+
         return collect(request()->segments())->slice(1)->values();
-    }
-
-    private function extractMenuKeyAndLabel(array $item): array
-    {
-        if(isset($item["entity"])) {
-            return [$item["entity"] => $item["label"] ?? ""];
-        }
-
-        if(isset($item["dashboard"])) {
-            return [$item["dashboard"] => $item["label"] ?? ""];
-        }
-
-        return [];
     }
 }

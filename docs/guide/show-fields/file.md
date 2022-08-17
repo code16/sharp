@@ -33,7 +33,8 @@ Sharp expects an array with 3 keys:
 ]
 ```
 
-I you are using Sharp solution for uploads, meaning the `SharpUploadModel` class [detailed here](../sharp-built-in-solution-for-uploads.md), you can simply call the built-in transformer:
+I you are using Sharp solution for uploads, meaning the `SharpUploadModel` class [detailed here](../sharp-uploads.md),
+you can simply call the built-in transformer:
 
 ```php
 $this->setCustomTransformer("file", new SharpUploadModelFormAttributeTransformer());

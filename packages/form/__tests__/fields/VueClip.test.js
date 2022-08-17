@@ -52,7 +52,7 @@ describe('vue-clip',() => {
                     :ratio-x="ratioX" 
                     :ratio-y="ratioY"
                     :read-only="readOnly"
-                    :croppable-file-types="croppableFileTypes"
+                    :transformable-file-types="transformableFileTypes"
                 />
             </div>
         `;
@@ -81,6 +81,8 @@ describe('vue-clip',() => {
             data: () => ({
                 value: {
                     name: 'Fichier.pdf',
+                    path: 'storage/data/Fichier.pdf',
+                    disk: 'local',
                     size: 15000
                 }
             })
@@ -97,6 +99,8 @@ describe('vue-clip',() => {
             data: () => ({
                 value: {
                     name: 'Image.jpg',
+                    path: 'storage/data/Image.jpg',
+                    disk: 'local',
                     thumbnail: '/image.jpg',
                     size: 15000
                 }
@@ -106,14 +110,16 @@ describe('vue-clip',() => {
         expect(document.body.innerHTML).toMatchSnapshot();
     });
 
-    test('can mount non croppable image', async () => {
+    test('can mount non transformable image', async () => {
         await createVm({
             propsData: {
-                ratioX: 1, ratioY: 2, croppableFileTypes: ['.png']
+                ratioX: 1, ratioY: 2, transformableFileTypes: ['.png']
             },
             data: () => ({
                 value: {
                     name: 'Image.jpg',
+                    path: 'storage/data/Image.jpg',
+                    disk: 'local',
                     thumbnail: '/image.jpg',
                     size: 15000
                 }
@@ -221,7 +227,7 @@ describe('vue-clip',() => {
             })
         });
 
-        expect($vueClip.croppedImg).toBeFalsy();
+        expect($vueClip.transformedImg).toBeFalsy();
 
         expect($vueClip.originalImageSrc).toBe($vueClip.file.thumbnail);
         expect($vueClip.imageSrc).toBe($vueClip.file.thumbnail);
@@ -238,11 +244,11 @@ describe('vue-clip',() => {
         expect($vueClip.originalImageSrc).toBe($vueClip.file.blobUrl);
         expect($vueClip.imageSrc).toBe($vueClip.file.blobUrl);
 
-        $vueClip.croppedImg = 'blob:<<cropped image>>';
+        $vueClip.transformedImg = 'blob:<<cropped image>>';
 
         await Vue.nextTick();
 
-        expect($vueClip.imageSrc).toBe($vueClip.croppedImg);
+        expect($vueClip.imageSrc).toBe($vueClip.transformedImg);
     });
 
     test('operations finished without any active', async () =>{
@@ -255,10 +261,10 @@ describe('vue-clip',() => {
             })
         });
 
-        expect($vueClip.operations).toEqual(['crop']);
+        expect($vueClip.operations).toEqual(['transform']);
 
         expect($vueClip.operationFinished).toEqual({
-            crop: null
+            transform: null
         });
 
         expect($vueClip.activeOperationsCount).toBe(0);
@@ -283,18 +289,18 @@ describe('vue-clip',() => {
         $vueClip.file.status = null;
 
         expect($vueClip.operationFinished).toEqual({
-            crop: false
+            transform: false
         });
 
         expect($vueClip.activeOperationsCount).toBe(1);
         expect($vueClip.operationFinishedCount).toBe(0);
 
 
-        $vueClip.croppedImg = 'data:image/jpeg';
+        $vueClip.transformedImg = 'data:image/jpeg';
 
         expect($vueClip.operationFinishedCount).toBe(1);
         expect($vueClip.operationFinished).toEqual({
-            crop: true
+            transform: true
         });
     });
 
@@ -323,7 +329,7 @@ describe('vue-clip',() => {
 
         expect($vueClip.progress).toBe(95);
 
-        $vueClip.croppedImg = 'data:image/jpeg';
+        $vueClip.transformedImg = 'data:image/jpeg';
 
         expect($vueClip.progress).toBe(100);
     });
@@ -349,7 +355,7 @@ describe('vue-clip',() => {
         expect($vueClip.size).toBe('0.75 KB');
     });
 
-    test('has crop', async () => {
+    test('has transform', async () => {
         let $vueClip = await createVm({
             propsData: {
                 ratioX:1, ratioY:1
@@ -364,32 +370,32 @@ describe('vue-clip',() => {
 
         let { $root:vm } = $vueClip;
 
-        expect($vueClip.hasInitialCrop).toBe(false);
-        expect($vueClip.isCroppable).toBe(true);
+        expect($vueClip.hasInitialTransform).toBe(false);
+        expect($vueClip.isTransformable).toBe(true);
 
         vm.ratioX = 0;
 
         await Vue.nextTick();
 
-        expect($vueClip.hasInitialCrop).toBe(false);
+        expect($vueClip.hasInitialTransform).toBe(false);
 
-        vm.croppableFileTypes = ['.jpg'];
+        vm.transformableFileTypes = ['.jpg'];
 
         await Vue.nextTick();
 
-        expect($vueClip.isCroppable).toBe(true);
-        expect($vueClip.hasInitialCrop).toBe(false);
+        expect($vueClip.hasInitialTransform).toBe(false);
+        expect($vueClip.isTransformable).toBe(true);
 
         vm.ratioX = 1;
         $vueClip.file.status = null;
         await Vue.nextTick();
 
-        expect($vueClip.hasInitialCrop).toBe(true);
+        expect($vueClip.hasInitialTransform).toBe(true);
 
         $vueClip.file.name = 'visual.png';
 
-        expect($vueClip.isCroppable).toBe(false);
-        expect($vueClip.hasInitialCrop).toBe(false);
+        expect($vueClip.isTransformable).toBe(false);
+        expect($vueClip.hasInitialTransform).toBe(false);
     });
 
     test('file extension', async () => {
@@ -425,7 +431,8 @@ describe('vue-clip',() => {
         let $vueClip = await createVm({
             data:()=> ({
                 value: {
-                    name: 'Fichier.pdf'
+                    name: 'Fichier.pdf',
+                    type: '',
                 }
             })
         });
@@ -447,14 +454,21 @@ describe('vue-clip',() => {
     });
 
     test('on status added', async () => {
-        let $vueClip = await createVm();
+        let $vueClip = await createVm({
+            data:()=> ({
+                value: {
+                    name: 'Fichier.pdf',
+                    type: 'application/pdf',
+                }
+            })
+        });
 
-        let handleReset = jest.fn();
+        let handleAdd = jest.fn();
 
-        $vueClip.$on('reset', handleReset);
+        $vueClip.$on('add', handleAdd);
         $vueClip.onStatusAdded();
 
-        expect(handleReset).toHaveBeenCalled();
+        expect(handleAdd).toHaveBeenCalled();
     });
 
     test('on status error', async () => {
@@ -477,7 +491,7 @@ describe('vue-clip',() => {
         await $vueClip.$nextTick();
 
         expect(handleError).toHaveBeenCalledTimes(1);
-        expect(handleError).toHaveBeenCalledWith("Can't upload");
+        expect(handleError).toHaveBeenCalledWith("Can't upload", expect.anything());
     });
 
     test('on status success', async () => {
@@ -503,12 +517,14 @@ describe('vue-clip',() => {
         expect(handleSuccess).toHaveBeenCalledTimes(1);
         expect(handleSuccess).toHaveBeenCalledWith({
             fileName: 'storage/Fichier.pdf',
+            name: 'Fichier.pdf',
             uploaded: true
         });
 
         expect(handleInput).toHaveBeenCalledTimes(1);
         expect(handleInput).toHaveBeenCalledWith({
             fileName: 'storage/Fichier.pdf',
+            name: 'Fichier.pdf',
             uploaded: true
         });
     });
@@ -589,10 +605,10 @@ describe('vue-clip',() => {
         await Vue.nextTick();
 
         expect($vueClip.allowCrop).toBe(true);
-        expect($vueClip.isCroppable).toBe(true);
+        expect($vueClip.isTransformable).toBe(true);
         expect($vueClip.onCropperReady).toHaveBeenCalled();
 
-        expect($vueClip.croppedImg).toBe('data:image/jpeg');
+        expect($vueClip.transformedImg).toBe('data:image/jpeg');
 
         let testEmit = handler => {
             expect(handler).toHaveBeenCalledTimes(1);
@@ -646,7 +662,7 @@ describe('vue-clip',() => {
 
         $vueClip.remove();
 
-        expect($vueClip.croppedImg).toBe(null);
+        expect($vueClip.transformedImg).toBe(null);
     });
 
     test('cropper modal', async () => {
@@ -664,12 +680,12 @@ describe('vue-clip',() => {
 
         const modal = $vueClip.$refs.modal;
 
-        $vueClip.updateCroppedImage = jest.fn();
+        $vueClip.updateTransformedImage = jest.fn();
         $vueClip.updateFilters = jest.fn();
 
         modal.$emit('submit');
 
-        expect($vueClip.updateCroppedImage).toHaveBeenCalledTimes(1);
+        expect($vueClip.updateTransformedImage).toHaveBeenCalledTimes(1);
         expect($vueClip.updateFilters).toHaveBeenCalledTimes(1);
 
         $vueClip.handleEditButtonClick();
@@ -692,7 +708,7 @@ async function createVm(customOptions={}) {
             }
         },
 
-        props:['readOnly', 'ratioX', 'ratioY', 'croppableFileTypes'],
+        props:['readOnly', 'ratioX', 'ratioY', 'transformableFileTypes'],
 
         'extends': {
             data:() => ({

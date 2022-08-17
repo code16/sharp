@@ -12,15 +12,28 @@ exports[`modal mount 1`] = `
 				</header>
 				<div id="modal-id___BV_modal_body_" class="modal-body"></div>
 				<footer id="modal-id___BV_modal_footer_" class="modal-footer">
-					<button class="btn btn-outline-primary">
-						cancel title
-					</button>
-					<button class="btn btn-primary position-relative">
-						<span class="">
-							ok title
-						</span>
-						<!---->
-					</button>
+					<div class="w-100">
+						<div class="row">
+							<div class="col"></div>
+							<div class="col-auto align-self-end">
+								<div class="row gx-2">
+									<div class="col-auto">
+										<button class="btn btn-outline-primary">
+											cancel title
+										</button>
+									</div>
+									<div class="col-auto">
+										<button class="btn position-relative btn-primary">
+											<span class="">
+												ok title
+											</span>
+											<!---->
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</footer>
 			</div>
 			<!---->
@@ -42,13 +55,24 @@ exports[`modal mount ok only 1`] = `
 				</header>
 				<div id="mocked___BV_modal_body_" class="modal-body"></div>
 				<footer id="mocked___BV_modal_footer_" class="modal-footer">
-					<!---->
-					<button class="btn btn-primary position-relative btn-lg">
-						<span class="">
-							{{ modals.ok_button }}
-						</span>
-						<!---->
-					</button>
+					<div class="w-100">
+						<div class="row">
+							<div class="col"></div>
+							<div class="col-auto align-self-end">
+								<div class="row gx-2">
+									<!---->
+									<div class="col-auto">
+										<button class="btn position-relative btn-lg btn-primary">
+											<span class="">
+												{{ modals.ok_button }}
+											</span>
+											<!---->
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</footer>
 			</div>
 			<!---->
@@ -70,15 +94,28 @@ exports[`modal mount visible 1`] = `
 				</header>
 				<div id="mocked___BV_modal_body_" class="modal-body"></div>
 				<footer id="mocked___BV_modal_footer_" class="modal-footer">
-					<button class="btn btn-outline-primary">
-						{{ modals.cancel_button }}
-					</button>
-					<button class="btn btn-primary position-relative">
-						<span class="">
-							{{ modals.ok_button }}
-						</span>
-						<!---->
-					</button>
+					<div class="w-100">
+						<div class="row">
+							<div class="col"></div>
+							<div class="col-auto align-self-end">
+								<div class="row gx-2">
+									<div class="col-auto">
+										<button class="btn btn-outline-primary">
+											{{ modals.cancel_button }}
+										</button>
+									</div>
+									<div class="col-auto">
+										<button class="btn position-relative btn-primary">
+											<span class="">
+												{{ modals.ok_button }}
+											</span>
+											<!---->
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</footer>
 			</div>
 			<!---->
@@ -100,15 +137,28 @@ exports[`modal mount with modifiers classes 1`] = `
 				</header>
 				<div id="mocked___BV_modal_body_" class="modal-body"></div>
 				<footer id="mocked___BV_modal_footer_" class="modal-footer">
-					<button class="btn btn-outline-primary">
-						{{ modals.cancel_button }}
-					</button>
-					<button class="btn btn-primary position-relative">
-						<span class="">
-							{{ modals.ok_button }}
-						</span>
-						<!---->
-					</button>
+					<div class="w-100">
+						<div class="row">
+							<div class="col"></div>
+							<div class="col-auto align-self-end">
+								<div class="row gx-2">
+									<div class="col-auto">
+										<button class="btn btn-outline-primary">
+											{{ modals.cancel_button }}
+										</button>
+									</div>
+									<div class="col-auto">
+										<button class="btn position-relative btn-primary">
+											<span class="">
+												{{ modals.ok_button }}
+											</span>
+											<!---->
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</footer>
 			</div>
 			<!---->

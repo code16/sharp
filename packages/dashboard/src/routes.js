@@ -4,7 +4,7 @@ export default [
     /** New spec */
     {
         name: 'dashboard',
-        path: '/s-dashboard/:id',
+        path: '/s-dashboard/:dashboardKey',
         component: DashboardPage,
     },
 ]

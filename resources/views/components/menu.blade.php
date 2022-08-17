@@ -19,15 +19,34 @@
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
-        <sharp-nav-item disabled>
-            <div class="row gx-2 flex-nowrap">
+        <sharp-nav-item disabled style="--link-padding-y: 0">
+            <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
                     <div class="text-truncate" title="{{ $username }}">
                         {{ $username }}
                     </div>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ route('code16.sharp.logout') }}"> <sharp-item-visual :item="{ icon:'fas fa-sign-out-alt' }" icon-class="fa-fw"></sharp-item-visual></a>
+                    <sharp-dropdown class="d-block me-n1" :text="true" small right>
+                        <template v-slot:text>
+                            <i class="fas fa-user me-1" style="font-size: 1em"></i>
+                        </template>
+                        <li>
+                            <form action="{{ route('code16.sharp.logout') }}" method="post">
+                                @csrf
+                                <button class="dropdown-item" type="submit">
+                                    <span class="row align-items-center flex-nowrap gx-2">
+                                        <span class="col-auto">
+                                            <i class="fas fa-fw fa-sign-out-alt" style="font-size: 1em"></i>
+                                        </span>
+                                        <span class="col">
+                                            {{ __('sharp::menu.logout_label') }}
+                                        </span>
+                                    </span>
+                                </button>
+                            </form>
+                        </li>
+                    </sharp-dropdown>
                 </div>
             </div>
         </sharp-nav-item>
@@ -41,7 +60,7 @@
                     @endif
                 >
                     @foreach($menuItem->entities as $entity)
-                        <x-sharp::menu-item
+                        <x-sharp::menu.menu-item
                             :item="$entity"
                             :is-current="$currentEntity == $entity->key"
                             nested
@@ -49,7 +68,7 @@
                     @endforeach
                 </sharp-collapsible-item>
             @else
-                <x-sharp::menu-item
+                <x-sharp::menu.menu-item
                     :item="$menuItem"
                     :is-current="$currentEntity == $menuItem->key"
                 />

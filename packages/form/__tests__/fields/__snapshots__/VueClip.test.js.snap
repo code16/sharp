@@ -94,7 +94,7 @@ exports[`vue-clip can mount initially image VueClip component 1`] = `
 								<div class="row g-2">
 									<div class="col-auto">14.65 KB</div>
 									<div class="col-auto">
-										<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Image.jpg" download="Image.jpg" class="SharpUpload__download-link">
+										<a href="/sharp/api/download/entityKey/instanceId?disk=local&amp;path=storage%2Fdata%2FImage.jpg" download="Image.jpg" class="SharpUpload__download-link">
 											<i class="fas fa-download"></i>
 											{{ form.upload.download_link }}
 										</a>
@@ -140,7 +140,7 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 								<div class="row g-2">
 									<div class="col-auto">14.65 KB</div>
 									<div class="col-auto">
-										<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Fichier.pdf" download="Fichier.pdf" class="SharpUpload__download-link">
+										<a href="/sharp/api/download/entityKey/instanceId?disk=local&amp;path=storage%2Fdata%2FFichier.pdf" download="Fichier.pdf" class="SharpUpload__download-link">
 											<i class="fas fa-download"></i>
 											{{ form.upload.download_link }}
 										</a>
@@ -170,7 +170,7 @@ exports[`vue-clip can mount initially non image VueClip component 1`] = `
 <input type="file" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
 `;
 
-exports[`vue-clip can mount non croppable image 1`] = `
+exports[`vue-clip can mount non transformable image 1`] = `
 <div id="app">
 	<div class="SharpUpload">
 		<div class="dz-clickable">
@@ -186,7 +186,7 @@ exports[`vue-clip can mount non croppable image 1`] = `
 								<div class="row g-2">
 									<div class="col-auto">14.65 KB</div>
 									<div class="col-auto">
-										<a href="/sharp/api/form/download/my_upload/entityKey/instanceId?fileName=Image.jpg" download="Image.jpg" class="SharpUpload__download-link">
+										<a href="/sharp/api/download/entityKey/instanceId?disk=local&amp;path=storage%2Fdata%2FImage.jpg" download="Image.jpg" class="SharpUpload__download-link">
 											<i class="fas fa-download"></i>
 											{{ form.upload.download_link }}
 										</a>

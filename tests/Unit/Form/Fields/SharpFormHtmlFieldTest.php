@@ -9,46 +9,46 @@ use Code16\Sharp\Tests\SharpTestCase;
 class SharpFormHtmlFieldTest extends SharpTestCase
 {
     /** @test */
-    function we_can_define_inline_template()
+    public function we_can_define_inline_template()
     {
-        $defaultFormField = SharpFormHtmlField::make("html")
-            ->setInlineTemplate("<b>test</b>");
+        $defaultFormField = SharpFormHtmlField::make('html')
+            ->setInlineTemplate('<b>test</b>');
 
         $this->assertEquals(
             [
-                "key" => "html", 
-                "type" => "html",
-                "template" => "<b>test</b>"
-            ], 
-            $defaultFormField->toArray()
+                'key' => 'html',
+                'type' => 'html',
+                'template' => '<b>test</b>',
+            ],
+            $defaultFormField->toArray(),
         );
     }
 
     /** @test */
-    function inline_template_is_mandatory()
+    public function inline_template_is_mandatory()
     {
-        $defaultFormField = SharpFormHtmlField::make("html");
+        $defaultFormField = SharpFormHtmlField::make('html');
 
         $this->expectException(SharpFormFieldValidationException::class);
         $defaultFormField->toArray();
     }
 
     /** @test */
-    function we_can_define_templateData()
+    public function we_can_define_templateData()
     {
-        $formField = SharpFormHtmlField::make("html")
-            ->setInlineTemplate("<b>test</b>")
+        $formField = SharpFormHtmlField::make('html')
+            ->setInlineTemplate('<b>test</b>')
             ->setAdditionalTemplateData([
-                "lang" => ["fr", "de"]
+                'lang' => ['fr', 'de'],
             ]);
 
         $this->assertArraySubset(
             [
-                "templateData" => [
-                    "lang" => ["fr", "de"]
-                ]
+                'templateData' => [
+                    'lang' => ['fr', 'de'],
+                ],
             ],
-            $formField->toArray()
+            $formField->toArray(),
         );
     }
 }

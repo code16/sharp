@@ -19,7 +19,7 @@
 
   &--open {
     .form-control {
-      @extend .form-control:focus;
+      @extend :focus;
     }
 
     .multiselect {
@@ -112,8 +112,11 @@
         font-weight: bold;
         color: $body-color;
         margin-right: .125rem;
+        margin-bottom: 0;
 
         padding-right: 23px!important;
+        padding-top: 0!important;
+        padding-bottom: 0!important;
 
         &:not(:first-child){
           border-left: 1px solid $ui-03;
@@ -129,15 +132,20 @@
         }
       }
 
+      &__placeholder {
+        margin-bottom: 0;
+      }
+
       &__single {
         font-weight: bold;
         font-size: .8125rem;
         margin-right: 0.25rem;
+        margin-bottom: 0;
       }
 
       &__tags {
-        line-height: 1;
         box-shadow: none;
+        margin-bottom: 0;
         border: none;
         min-height: 0;
         border-bottom-left-radius: 0;

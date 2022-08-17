@@ -1,13 +1,12 @@
 import {
     getDashboard,
     postDashboardCommand,
-    getDashboardCommandFormData,
+    getDashboardCommandForm,
 } from "../api";
 import { filtersModule as filters } from 'sharp-filters';
 import { commandsModule as commands } from 'sharp-commands';
 
 export const UPDATE = 'UPDATE';
-export const SET_DASHBOARD_KEY = 'SET_DASHBOARD_KEY';
 
 export default {
     namespaced: true,
@@ -19,27 +18,30 @@ export default {
         dashboardKey: null,
         data: null,
         widgets: null,
+        fields: null,
         config: null,
         layout: null,
     },
     mutations: {
-        [UPDATE](state, { data, layout, widgets, config }) {
+        [UPDATE](state, { data, layout, widgets, config, fields }) {
             state.data = data;
             state.widgets = widgets;
             state.layout = layout;
             state.config = config;
+            state.fields = fields;
         },
-        [SET_DASHBOARD_KEY](state, dashboardKey) {
+        setDashboardKey(state, dashboardKey) {
             state.dashboardKey = dashboardKey;
-        }
+        },
     },
     actions: {
-        update({ commit, dispatch }, { data, widgets, layout, config, filtersValues }) {
+        update({ commit, dispatch }, { data, widgets, layout, config, fields, filtersValues }) {
             commit(UPDATE, {
                 data,
                 widgets,
                 layout,
                 config,
+                fields,
             });
             return Promise.all([
                 dispatch('filters/update', {
@@ -57,30 +59,24 @@ export default {
                 filters: getters['filters/getQueryParams'](filtersValues)
             });
             await dispatch('update', {
-                data: data.data,
-                widgets: data.widgets,
-                layout: data.layout,
-                config: data.config,
+                ...data,
                 filtersValues,
             });
         },
-        postCommand({ state }, { command, data, query }) {
+        postCommand({ state }, { command, query, data }) {
             return postDashboardCommand({
                 dashboardKey: state.dashboardKey,
                 commandKey: command.key,
-                data,
                 query,
+                data,
             });
         },
-        getCommandFormData({ state }, { command, query }) {
-            return getDashboardCommandFormData({
+        getCommandForm({ state }, { command, query }) {
+            return getDashboardCommandForm({
                 dashboardKey: state.dashboardKey,
                 commandKey: command.key,
                 query,
             });
         },
-        setDashboardKey({ commit }, dashboardKey) {
-            commit(SET_DASHBOARD_KEY, dashboardKey);
-        }
     }
 }

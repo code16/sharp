@@ -421,19 +421,6 @@ describe('EntityList', () => {
             expect(wrapper.vm.reorderActive).toEqual(false);
         });
 
-        test('handleEntityCommandRequested', () => {
-            const wrapper = createWrapper();
-            wrapper.setMethods({
-                handleCommandRequested: jest.fn(),
-                commandEndpoint: jest.fn(()=>'commandEndpoint'),
-            });
-            wrapper.vm.handleEntityCommandRequested({ key:'sync' });
-            expect(wrapper.vm.handleCommandRequested).toHaveBeenCalledWith({ key:'sync' }, {
-                endpoint: 'commandEndpoint',
-            });
-            expect(wrapper.vm.commandEndpoint).toHaveBeenCalledWith('sync');
-        });
-
         test('handleCreateButtonClicked', () => {
             const wrapper = createWrapper();
             wrapper.setMethods({
@@ -780,8 +767,7 @@ describe('EntityList', () => {
             wrapper.vm.handleCommandRequested('command', { endpoint:'endpoint' });
             expect(wrapper.vm.sendCommand).toHaveBeenCalledWith('command', expect.objectContaining({
                 postCommand: expect.any(Function),
-                postForm: expect.any(Function),
-                getFormData: expect.any(Function),
+                getForm: expect.any(Function),
             }));
         });
 

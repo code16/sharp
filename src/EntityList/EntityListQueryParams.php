@@ -32,29 +32,21 @@ class EntityListQueryParams
         return $this;
     }
 
-    public function fillWithRequest(string $queryPrefix = null): self
+    public function fillWithRequest(): self
     {
-        $query = $queryPrefix ? request($queryPrefix) : request()->all();
+        $query = request()->method() === 'GET' ? request()->all() : request('query');
 
-        $this->search = $query["search"] ?? null ? urldecode($query["search"]) : null;
-        $this->page = $query["page"] ?? null;
+        $this->search = $query['search'] ?? null ? urldecode($query['search']) : null;
+        $this->page = $query['page'] ?? null;
 
-        if(isset($query["sort"])) {
-            $this->sortedBy = $query["sort"];
-            $this->sortedDir = $query["dir"];
+        if (isset($query['sort'])) {
+            $this->sortedBy = $query['sort'];
+            $this->sortedDir = $query['dir'];
         }
 
         $this->fillFilterWithRequest($query);
 
         return $this;
-    }
-
-    public static function createFromArrayOfIds(array $ids): self
-    {
-        $instance = new static;
-        $instance->specificIds = $ids;
-
-        return $instance;
     }
 
     public function hasSearch(): bool
@@ -76,9 +68,9 @@ class EntityListQueryParams
     {
         $terms = [];
 
-        foreach (explode(" ", $this->search) as $term) {
+        foreach (explode(' ', $this->search) as $term) {
             $term = trim($term);
-            if (!$term) {
+            if (! $term) {
                 continue;
             }
 
@@ -88,7 +80,7 @@ class EntityListQueryParams
                     continue;
                 }
 
-                $terms[] = $noStarTermPrefix . $term . $noStarTermSuffix;
+                $terms[] = $noStarTermPrefix.$term.$noStarTermSuffix;
                 continue;
             }
 
@@ -96,6 +88,13 @@ class EntityListQueryParams
         }
 
         return $terms;
+    }
+
+    final public function setSpecificIds(array $specificIds): self
+    {
+        $this->specificIds = $specificIds;
+
+        return $this;
     }
 
     public function specificIds(): array

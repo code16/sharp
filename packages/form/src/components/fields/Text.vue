@@ -26,8 +26,8 @@
             maxLength: Number,
 
             inputType:  {
-                type:String,
-                default:'text'
+                type: String,
+                default: 'text'
             },
         },
         methods: {

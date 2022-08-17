@@ -1,0 +1,15 @@
+
+:root {
+  --c-text: #233140;
+  --code-bg-color: #282c34;
+}
+
+:root, html.dark {
+  --c-brand: #004c9b;
+  --c-brand-rgb: 0, 76, 155;
+  --navbar-height: 4.5rem;
+}
+
+html.dark {
+  --c-text-accent: #99caff;
+}

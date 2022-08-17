@@ -20,6 +20,10 @@ describe('sharp-form', ()=>{
         const localVue = createLocalVue();
         localVue.use(Vuex);
 
+        const axiosInstance = axios.create();
+
+        moxios.install(axiosInstance);
+
         return shallowMount(Form, {
             propsData: {
                 entityKey: 'spaceship',
@@ -28,7 +32,7 @@ describe('sharp-form', ()=>{
                 ...propsData,
             },
             provide: {
-                axiosInstance: axios.create(),
+                axiosInstance,
             },
             store: new Vuex.Store(store),
             // language=Vue
@@ -46,10 +50,6 @@ describe('sharp-form', ()=>{
                     `<div id="MOCKED_TABBED_LAYOUT">
                         <slot :tab="layout.tabs[0]" />
                     </div>`,
-            },
-            created() {
-                moxios.install(this.axiosInstance);
-                moxios.uninstall = moxios.uninstall.bind(moxios, this.axiosInstance);
             },
             localVue
         });
@@ -95,12 +95,6 @@ describe('sharp-form', ()=>{
 
     afterAll(() => {
         moxios.delay = oldDelay;
-    });
-    // beforeEach(() => {
-    //     moxios.install();
-    // });
-    afterEach(()=>{
-        moxios.uninstall();
     });
 
     test('can mount sharp-form', async ()=>{
@@ -518,7 +512,12 @@ describe('sharp-form', ()=>{
     });
 
     test('redirect on delete', async () => {
-        const wrapper = createWrapper();
+        const wrapper = createWrapper({
+            propsData: {
+                independant: true,
+                form: createForm(),
+            }
+        });
 
         jest.spyOn(window.location, 'replace')
 

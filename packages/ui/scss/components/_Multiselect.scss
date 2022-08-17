@@ -93,11 +93,11 @@
 
     &--selected {
       &, &:hover {
-        @extend .dropdown-item.active;
+        @extend .active;
       }
     }
     &--highlight {
-      @extend .dropdown-item:hover;
+      @extend :hover;
     }
   }
 
@@ -143,8 +143,12 @@
     }
   }
 
-  &.multiselect--active {
-    @extend .form-control:focus;
+  &--active {
+    color: $input-focus-color;
+    background-color: $input-focus-bg;
+    border-color: $input-focus-border-color;
+    outline: 0;
+    box-shadow: $input-focus-box-shadow;
   }
 
   &--disabled {

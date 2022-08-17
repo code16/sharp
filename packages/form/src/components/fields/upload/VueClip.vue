@@ -67,14 +67,14 @@
             :value="value"
             :visible.sync="showEditModal"
             :src="originalImageSrc"
-            :crop-original="cropOriginal"
+            :transform-original="transformKeepOriginal"
             :ratio-x="ratioX"
             :ratio-y="ratioY"
             @submit="handleEditSubmitted"
             ref="modal"
         />
 
-        <template v-if="hasInitialCrop">
+        <template v-if="hasInitialTransform">
             <vue-cropper
                 class="d-none"
                 :src="originalImageSrc"
@@ -93,12 +93,12 @@
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { Button } from 'sharp-ui';
-    import { Localization } from 'sharp/mixins';
     import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
-
-    import { downloadFileUrl } from "../../../api";
+    import { Localization } from 'sharp/mixins';
+    import { Button } from 'sharp-ui';
+    import { downloadFileUrl } from "sharp-files";
     import { getFiltersFromCropData } from "./util/filters";
+    import { getImageBlobUrl } from "./util/image";
     import EditModal from "./EditModal";
 
     export default {
@@ -112,7 +112,11 @@
             Button,
         },
 
-        inject : [ '$form' ],
+        inject: {
+            $form: {
+                default: null,
+            },
+        },
 
         mixins: [ Localization ],
 
@@ -120,33 +124,31 @@
             ratioX: Number,
             ratioY: Number,
             value: Object,
-            croppable: {
+            transformable: {
                 type: Boolean,
                 default: true,
             },
-            croppableFileTypes: Array,
-            cropOriginal: Boolean,
+            transformableFileTypes: Array,
+            transformKeepOriginal: Boolean,
 
             readOnly: Boolean,
             root: Boolean,
             compactThumbnail: Boolean,
             focused: Boolean,
+            invalid: Boolean,
             uniqueIdentifier: String,
             fieldConfigIdentifier: String,
+            persistThumbnails: Boolean,
         },
 
         data() {
             return {
                 showEditModal: false,
-                croppedImg: null,
+                transformedImg: null,
             }
         },
         watch: {
-            value(value) {
-                if(!value) {
-                    this.files = [];
-                }
-            },
+            value: 'init',
             'file.status'(status) {
                 (status in this.statusFunction) && this[this.statusFunction[status]]();
             },
@@ -167,7 +169,7 @@
                 return this.file?.thumbnail || this.file?.blobUrl;
             },
             imageSrc() {
-                return this.croppedImg || this.originalImageSrc;
+                return this.transformedImg || this.originalImageSrc;
             },
             size() {
                 return this.file.size != null
@@ -176,7 +178,7 @@
             },
             operationFinished() {
                 return {
-                    crop: this.hasInitialCrop ? !!this.croppedImg : null
+                    transform: this.hasInitialTransform ? !!this.transformedImg : null
                 }
             },
             operations() {
@@ -208,7 +210,7 @@
                 }
             },
             hasError() {
-                return this.file?.status === 'error';
+                return this.file?.status === 'error' || this.invalid;
             },
             fileName() {
                 let splitted = this.file.name.split('/');
@@ -220,35 +222,35 @@
             },
             downloadUrl() {
                 return downloadFileUrl({
-                    entityKey: this.$form.entityKey,
-                    instanceId: this.$form.instanceId,
-                    fieldKey: this.fieldConfigIdentifier,
-                    fileName: this.fileName,
+                    entityKey: this.$form?.entityKey,
+                    instanceId: this.$form?.instanceId,
+                    disk: this.value.disk,
+                    path: this.value.path,
                 });
             },
             showThumbnail() {
                 return !!this.imageSrc;
             },
-            isCroppable() {
-                if(!this.croppable || !this.originalImageSrc) {
+            isTransformable() {
+                if(!this.transformable || !this.originalImageSrc) {
                     return false;
                 }
                 if(this.file?.type && !this.file.type.match(/^image\//)) {
                     return false;
                 }
-                return !this.croppableFileTypes || this.croppableFileTypes.includes(this.fileExtension);
+                return !this.transformableFileTypes || this.transformableFileTypes.includes(this.fileExtension);
             },
-            hasInitialCrop() {
-                if(this.file?.status === 'exist') {
+            hasInitialTransform() {
+                if(this.file?.status === 'exist' && !this.value.uploaded) {
                     return false;
                 }
-                return this.isCroppable && !!this.ratioX && !!this.ratioY;
+                return this.isTransformable && !!this.ratioX && !!this.ratioY;
             },
             hasEdit() {
-                return this.isCroppable && !this.inProgress;
+                return this.isTransformable && !this.inProgress;
             },
             hasDownload() {
-                return this.file?.status === 'exist';
+                return this.file?.status === 'exist' && !!this.value.path;
             },
         },
         methods: {
@@ -257,8 +259,21 @@
             },
             // status callbacks
             onStatusAdded() {
-                this.$emit('reset');
+                const htmlFile = this.file._file;
+
+                this.$emit('add', htmlFile);
                 this.setPending(true);
+
+                getImageBlobUrl(htmlFile)
+                    .then(blobUrl => {
+                        if(blobUrl) {
+                            this.$set(this.file, 'blobUrl', blobUrl);
+                            this.$emit('thumbnail', blobUrl);
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
             },
             async onStatusError() {
                 const xhr = this.file.xhrResponse;
@@ -266,7 +281,7 @@
                 this.setPending(false);
                 await this.$nextTick();
                 if(!xhr?.statusCode) {
-                    this.$emit('error', msg);
+                    this.$emit('error', msg, this.file._file);
                 } else {
                    this.handleUploadError(xhr);
                 }
@@ -290,19 +305,18 @@
                 }
                 catch(e) { console.log(e); }
 
-                data.uploaded = true;
-                this.$emit('success', data);
-                this.$emit('input', data);
+                const value = {
+                    ...this.value,
+                    ...data,
+                    uploaded: true,
+                }
+                this.$emit('success', {
+                    ...value,
+                    size: this.file.size,
+                });
+                this.$emit('input', value);
 
                 this.setPending(false);
-
-                this.$nextTick(() => {
-                    this.isCropperReady() && this.onCropperReady();
-                });
-            },
-
-            onThumbnail() {
-                this.$set(this.file, 'blobUrl', URL.createObjectURL(this.file._file));
             },
 
             // actions
@@ -313,7 +327,7 @@
                 this.setPending(false);
 
                 this.resetThumbnails();
-                this.croppedImg = null;
+                this.transformedImg = null;
 
                 if(emits) {
                     this.$emit('input', null);
@@ -335,24 +349,20 @@
                 dropzone.hiddenFileInput.click();
             },
 
-            handleDrop() {
-                if(this.file) {
+            handleDrop(e) {
+                if(this.file && e.dataTransfer?.files?.length > 0) {
                     this.remove(false);
                 }
             },
 
             handleEditSubmitted(cropper) {
-                this.updateCroppedImage(cropper);
+                this.updateTransformedImage(cropper);
                 this.updateFilters(cropper);
             },
 
-            isCropperReady() {
-                return this.$refs.cropper?.cropper.ready;
-            },
-
             onCropperReady() {
-                if(this.hasInitialCrop) {
-                    this.updateCroppedImage(this.$refs.cropper);
+                if(this.hasInitialTransform) {
+                    this.updateTransformedImage(this.$refs.cropper);
                     this.updateFilters(this.$refs.cropper);
                 }
             },
@@ -378,24 +388,24 @@
                 this.$emit('updated', value);
             },
 
-            updateCroppedImage(cropper) {
-                this.resetCroppedImage();
-                cropper.getCroppedCanvas().toBlob(blob => {
-                    this.croppedImg = URL.createObjectURL(blob);
+            updateTransformedImage(cropper) {
+                this.resetTransformedImage();
+                cropper.getCroppedCanvas({ width: 300, height: 300 }).toBlob(blob => {
+                    this.transformedImg = URL.createObjectURL(blob);
                 });
             },
 
-            resetCroppedImage() {
-                if(this.croppedImg) {
-                    URL.revokeObjectURL(this.croppedImg);
+            resetTransformedImage() {
+                if(this.transformedImg) {
+                    URL.revokeObjectURL(this.transformedImg);
                 }
             },
 
             resetThumbnails() {
-                if(this.file?.blobUrl) {
+                if(this.file?.blobUrl && !this.persistThumbnails) {
                     URL.revokeObjectURL(this.file.blobUrl)
                 }
-                this.resetCroppedImage();
+                this.resetTransformedImage();
             },
 
             validateValue() {
@@ -403,6 +413,19 @@
                     return logError(`Upload field '${this.downloadId}' has an invalid value: expects to have a "name", given :`, JSON.parse(JSON.stringify(this.value)));
                 }
                 return true;
+            },
+
+            init() {
+                if(this.value) {
+                    if(this.file) {
+                        Object.assign(this.file, this.value);
+                    } else {
+                        this.addedFile({ ...this.value, upload: {} });
+                    }
+                    this.$set(this.file, 'thumbnail', this.value.thumbnail ?? null);
+                } else {
+                    this.files = [];
+                }
             },
         },
         created() {
@@ -418,8 +441,7 @@
                 return;
             }
 
-            this.addedFile({ ...this.value, upload: {} });
-            this.file.thumbnail = this.value.thumbnail;
+            this.init();
             this.file.status = 'exist';
         },
         mounted() {

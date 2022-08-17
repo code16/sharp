@@ -2,34 +2,26 @@
 
 namespace DummyNamespace;
 
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\SharpDashboard;
-use Code16\Sharp\Dashboard\DashboardQueryParams;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 
 class DummyClass extends SharpDashboard
 {
-    /**
-     * Build dashboard's widget using ->addWidget.
-     */
-    protected function buildWidgets(): void
+    protected function buildWidgets(WidgetsContainer $widgetContainer): void
     {
-        //
+        // $widgetContainer->addWidget(...)
     }
 
-    /**
-     * Build dashboard's widgets layout.
-     */
-    protected function buildWidgetsLayout(): void
+    protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        //
+        // $dashboardLayout->addRow(function (DashboardLayoutRow $row) { ... })
     }
 
-    /**
-     * Build dashboard's widgets data, using ->addGraphDataSet and ->setPanelData
-     *
-     * @param DashboardQueryParams $params
-     */
-    protected function buildWidgetsData(DashboardQueryParams $params): void
+    protected function buildWidgetsData(): void
     {
-        //
+        // $this->setPanelData(...)
+        // $this->addGraphDataSet(...)
+        // $this->setOrderedListData(...)
     }
 }

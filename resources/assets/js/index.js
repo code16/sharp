@@ -12,6 +12,7 @@ export { isCustomField, resolveCustomField } from './util/fields';
 export { handleNotifications } from './util/notifications';
 export { withLoadingOverlay } from './util/loading';
 export { getUniqueId } from './util/id';
+export { ignoreVueElement } from './util/vue';
 export { formUrl } from 'sharp-form/src/util/url';
 export { showUrl } from 'sharp-show/src/util/url';
 export { listUrl } from 'sharp-entity-list/src/util/url';

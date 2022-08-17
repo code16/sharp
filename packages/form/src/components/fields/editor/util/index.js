@@ -6,3 +6,7 @@ export function getAllowedHeadingLevels(toolbar) {
         .filter(match => !!match)
         .map(match => Number(match[1]));
 }
+
+export function toolbarHasButton(toolbar, buttonName) {
+    return !toolbar || toolbar.some(button => button === buttonName);
+}

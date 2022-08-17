@@ -2,116 +2,118 @@
 
 namespace Code16\Sharp\Tests\Unit\Show;
 
-use App\Spaceship;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
+use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpShowTest extends SharpTestCase
 {
-
     /** @test */
-    function we_can_add_and_entity_list_section_to_the_layout()
+    public function we_can_add_and_entity_list_section_to_the_layout()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields(): void
+            public function buildShowFields(FieldsContainer $showFields): void
             {
-                $this->addField(
-                    SharpShowEntityListField::make("entityList", "entityKey")
-                        ->setLabel("Test")
+                $showFields->addField(
+                    SharpShowEntityListField::make('entityList', 'entityKey')
+                        ->setLabel('Test'),
                 );
             }
-            function buildShowLayout(): void
+
+            public function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addEntityListSection("entityList");
+                $showLayout->addEntityListSection('entityList');
             }
         };
 
         $this->assertEquals([
-            "sections" => [
+            'sections' => [
                 [
-                    "collapsable" => false,
-                    "title" => "",
-                    "columns" => [
+                    'collapsable' => false,
+                    'title' => '',
+                    'columns' => [
                         [
-                            "size" => 12,
-                            "fields" => [
+                            'size' => 12,
+                            'fields' => [
                                 [
                                     [
-                                        "key" => "entityList",
-                                        "size" => 12,
-                                        "sizeXS" => 12,
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                        'key' => 'entityList',
+                                        'size' => 12,
+                                        'sizeXS' => 12,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ], $sharpShow->showLayout());
     }
 
     /** @test */
-    function we_can_declare_a_collapsable_section()
+    public function we_can_declare_a_collapsable_section()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
-            function buildShowFields(): void
+            public function buildShowFields(FieldsContainer $showFields): void
             {
-                $this->addField(
-                    SharpShowTextField::make("test")
-                        ->setLabel("Test")
+                $showFields->addField(
+                    SharpShowTextField::make('test')
+                        ->setLabel('Test'),
                 );
             }
-            function buildShowLayout(): void
+
+            public function buildShowLayout(ShowLayout $showLayout): void
             {
-                $this->addSection("test", function(ShowLayoutSection $section) {
+                $showLayout->addSection('test', function (ShowLayoutSection $section) {
                     $section->setCollapsable()
-                        ->addColumn(12, function(ShowLayoutColumn $column) {
-                            $column->withSingleField("test");
+                        ->addColumn(12, function (ShowLayoutColumn $column) {
+                            $column->withSingleField('test');
                         });
                 });
             }
         };
 
         $this->assertEquals([
-            "sections" => [
+            'sections' => [
                 [
-                    "collapsable" => true,
-                    "title" => "test",
-                    "columns" => [
+                    'collapsable' => true,
+                    'title' => 'test',
+                    'columns' => [
                         [
-                            "size" => 12,
-                            "fields" => [
+                            'size' => 12,
+                            'fields' => [
                                 [
                                     [
-                                        "key" => "test",
-                                        "size" => 12,
-                                        "sizeXS" => 12,
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                        'key' => 'test',
+                                        'size' => 12,
+                                        'sizeXS' => 12,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ], $sharpShow->showLayout());
     }
 
     /** @test */
-    function we_can_declare_a_multiformAttribute()
+    public function we_can_declare_a_multiformAttribute()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
             public function buildShowConfig(): void
             {
-                $this->setMultiformAttribute("role");
+                $this->configureMultiformAttribute('role');
             }
         };
 
@@ -119,47 +121,57 @@ class SharpShowTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                "multiformAttribute" => "role",
-            ], 
-            $sharpShow->showConfig(1)
+                'multiformAttribute' => 'role',
+            ],
+            $sharpShow->showConfig(1),
         );
     }
 
     /** @test */
-    function we_can_declare_a_global_message_field()
+    public function we_can_declare_a_global_message_field()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
             public function buildShowConfig(): void
             {
-                $this->setGlobalMessage("template", "test-key");
+                $this->configurePageAlert('template', static::$pageAlertLevelWarning, 'test-key');
             }
         };
 
         $sharpShow->buildShowConfig();
 
-        $this->assertEquals("test-key", $sharpShow->showConfig(1)["globalMessage"]["fieldKey"]);
         $this->assertEquals(
-            SharpShowHtmlField::make("test-key")->setInlineTemplate("template")->toArray(),
-            $sharpShow->fields()["test-key"]
+            'test-key',
+            $sharpShow->showConfig(1)['globalMessage']['fieldKey'],
+        );
+
+        $this->assertEquals(
+            'warning',
+            $sharpShow->showConfig(1)['globalMessage']['alertLevel'],
+        );
+
+        $this->assertEquals(
+            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray(),
+            $sharpShow->fields()['test-key'],
         );
     }
 
     /** @test */
-    function we_can_associate_data_to_a_global_message_field()
+    public function we_can_associate_data_to_a_global_message_field()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
             public function buildShowConfig(): void
             {
-                $this->setGlobalMessage("Hello {{name}}", "test-key");
+                $this->configurePageAlert('Hello {{name}}', null, 'test-key');
             }
-            function find($id): array
+
+            public function find($id): array
             {
                 return [
-                    "test-key" => [
-                        "name" => "Bob"
-                    ]
+                    'test-key' => [
+                        'name' => 'Bob',
+                    ],
                 ];
             }
         };
@@ -167,13 +179,13 @@ class SharpShowTest extends SharpTestCase
         $sharpShow->buildShowConfig();
 
         $this->assertEquals(
-            ["name" => "Bob"],
-            $sharpShow->instance(1)["test-key"]
+            ['name' => 'Bob'],
+            $sharpShow->instance(1)['test-key'],
         );
     }
 
     /** @test */
-    function single_shows_have_are_declared_in_config()
+    public function single_shows_have_are_declared_in_config()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow
         {
@@ -181,35 +193,39 @@ class SharpShowTest extends SharpTestCase
 
         $this->assertArraySubset(
             [
-                "isSingle" => true
-            ], 
-            $sharpShow->showConfig(null)
+                'isSingle' => true,
+            ],
+            $sharpShow->showConfig(null),
         );
     }
 }
 
 class BaseSharpShow extends SharpShow
 {
-    function find($id): array
+    public function find($id): array
     {
     }
-    function buildShowFields(): void
+
+    public function buildShowFields(FieldsContainer $showFields): void
     {
     }
-    function buildShowLayout(): void
+
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
     }
 }
 
 class BaseSharpSingleShow extends SharpSingleShow
 {
-    function buildShowFields(): void
+    public function buildShowFields(FieldsContainer $showFields): void
     {
     }
-    function buildShowLayout(): void
+
+    public function buildShowLayout(ShowLayout $showLayout): void
     {
     }
-    function findSingle(): array
+
+    public function findSingle(): array
     {
     }
 }

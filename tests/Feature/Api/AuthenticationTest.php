@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class AuthenticationTest extends BaseApiTest
 {
-
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
@@ -22,7 +21,8 @@ class AuthenticationTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->get('/sharp/s-list/person')->assertStatus(302);
+        $this->get('/sharp/s-list/person')
+            ->assertRedirect('/sharp/login');
     }
 
     /** @test */
@@ -33,7 +33,8 @@ class AuthenticationTest extends BaseApiTest
 
         $this->login();
 
-        $this->get('/sharp/login')->assertStatus(302);
+        $this->get('/sharp/login')
+            ->assertRedirect('/sharp');
     }
 
     /** @test */
@@ -45,14 +46,14 @@ class AuthenticationTest extends BaseApiTest
 
         $this->login();
 
-        $this->get('/sharp/s-list/person')->assertStatus(200);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
+        $this->get('/sharp/s-list/person')->assertOk();
+        $this->getJson('/sharp/api/list/person')->assertOk();
 
         $authGuard->setInvalid();
 
         // We're logged, but not as a sharp user (our fake guard tells us that).
-        $this->get('/sharp/s-list/person')->assertStatus(302);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
+        $this->get('/sharp/s-list/person')->assertRedirect('/sharp/login');
+        $this->getJson('/sharp/api/list/person')->assertStatus(401);
     }
 
     /** @test */
@@ -62,18 +63,18 @@ class AuthenticationTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.auth.check_handler',
-            AuthenticationTestCheckHandler::class
+            AuthenticationTestCheckHandler::class,
         );
 
-        $this->actingAs(new User(["name" => "ok"]));
+        $this->actingAs(new User(['name' => 'ok']));
 
-        $this->get('/sharp/s-list/person')->assertStatus(200);
-        $this->json('get', '/sharp/api/list/person')->assertStatus(200);
+        $this->get('/sharp/s-list/person')->assertOk();
+        $this->json('get', '/sharp/api/list/person')->assertOk();
 
-        $this->actingAs(new User(["name" => "ko"]));
+        $this->actingAs(new User(['name' => 'ko']));
 
         // We're logged, but not as a sharp user (our fake auth check tells us that).
-        $this->get('/sharp/s-list/person')->assertStatus(302);
+        $this->get('/sharp/s-list/person')->assertRedirect('/sharp/login');
         $this->json('get', '/sharp/api/list/person')->assertStatus(401);
     }
 
@@ -90,14 +91,14 @@ class AuthenticationTest extends BaseApiTest
 
         $this->app['config']->set(
             'sharp.auth.guard',
-            'sharp'
+            'sharp',
         );
 
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',
                 'provider' => 'users',
-            ]
+            ],
         );
 
         return $authGuard;
@@ -106,33 +107,43 @@ class AuthenticationTest extends BaseApiTest
 
 class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 {
-    private $isValid;
-
-    public function __construct(bool $isValid)
+    public function __construct(private bool $isValid)
     {
-        $this->isValid = $isValid;
     }
+
     public function check()
     {
         return $this->isValid;
     }
+
     public function guest()
     {
-        return !$this->isValid;
+        return ! $this->isValid;
     }
+
     public function user()
     {
         return $this->isValid ? new User() : null;
     }
+
     public function id()
     {
         return $this->isValid ? 1 : null;
     }
+
     public function validate(array $credentials = [])
     {
         return true;
     }
-    public function setUser(Authenticatable $user) {}
+
+    public function setUser(Authenticatable $user)
+    {
+    }
+
+    public function hasUser()
+    {
+        return $this->isValid;
+    }
 
     public function setInvalid()
     {
@@ -150,9 +161,8 @@ class AuthenticationTestGuard implements \Illuminate\Contracts\Auth\Guard
 
 class AuthenticationTestCheckHandler
 {
-
     public function check($user)
     {
-        return $user->name == "ok";
+        return $user->name == 'ok';
     }
 }

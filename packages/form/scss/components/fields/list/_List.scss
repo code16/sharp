@@ -69,6 +69,10 @@
           margin-top: 0;
         }
       }
+
+      &--has-locale-select:first-child {
+        margin-top: .75rem;
+      }
     }
 
     // adjust button size

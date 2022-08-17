@@ -1,0 +1,15 @@
+
+.SharpEntityList {
+  .SharpDataList__row-append {
+    width: 7.5rem;
+    background: var(--theme-bg);
+  }
+
+  &--has-state-only {
+    .SharpEntityList__actions {
+      @include media-breakpoint-up(sm) {
+        justify-content: flex-start;
+      }
+    }
+  }
+}

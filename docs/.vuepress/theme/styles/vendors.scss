@@ -1,4 +1,4 @@
-@import '~bootstrap/scss/bootstrap-grid';
 
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/utilities/text';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/bootstrap-grid';
+@import 'node_modules/bootstrap/scss/helpers/visually-hidden';

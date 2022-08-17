@@ -8,15 +8,14 @@ use Illuminate\Support\Str;
 
 trait WithSimpleFormatterTest
 {
-
-    function checkSimpleFormatterToFront(SharpFormField $field, AbstractSimpleFormatter $formatter)
+    public function checkSimpleFormatterToFront(SharpFormField $field, AbstractSimpleFormatter $formatter)
     {
         $value = Str::random();
 
         $this->assertEquals($value, $formatter->toFront($field, $value));
     }
 
-    function checkSimpleFormatterFromFront(SharpFormField $field, AbstractSimpleFormatter $formatter, string $attribute)
+    public function checkSimpleFormatterFromFront(SharpFormField $field, AbstractSimpleFormatter $formatter, string $attribute)
     {
         $value = Str::random();
 

@@ -4,25 +4,21 @@ sidebarDepth: 3
 
 # Using SingleForm for unique resources
 
-Sometimes you will need to configure a "unique" resource that does not fit into a List / Form schema, like for instance an account, or a configuration item. SingleForms are the natural companions for SingleShows, [documented here](single-show.md).
-
-
-## Generator
-
-```sh
-php artisan sharp:make:single-form <class_name> [--model=<model_name>]
-```
-
+Sometimes you will need to configure a "unique" resource that does not fit into a List / Form schema, like for example
+an account, or a configuration item. SingleForms are the natural companions for
+SingleShows, [documented here](single-show.md).
 
 ## Write the class
 
-Instead of extending `SharpForm`, our SingleForm implementation should extend `Code16\Sharp\Form\SharpSingleForm`. We still have to implement `buildFormFields()` and `buildFormLayout()` to declare the fields presenting the instance, but other methods are a bit different. First, `find()` and `update()` don't need any `$instanceId` parameter:
+Instead of extending `SharpForm`, our SingleForm implementation should extend `Code16\Sharp\Form\SharpSingleForm`. We
+still have to implement `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to
+declare the fields presenting the instance, but other methods are a bit different. First, `find()` and `update()` don't
+need any `$instanceId` parameter:
 
 - `findSingle(): array`
 - `updateSingle(array $data)`
 
 And then, since SingleForms will not accept `store` and `delete` actions, related methods are unavailable.
-
 
 ### Full example
 
@@ -33,9 +29,9 @@ class AccountSharpForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
 
-    function buildFormFields()
+    function buildFormFields(FieldsContainer $formFields): void
     {
-        $this
+        $formFields
             ->addField(
                 SharpFormTextField::make("name")
                     ->setLabel("Name")
@@ -46,9 +42,9 @@ class AccountSharpForm extends SharpSingleForm
             );
     }
 
-    function buildFormLayout()
+    function buildFormLayout(FormLayout $formLayout): void
     {
-        $this->addColumn(6, function($column) {
+        $formLayout->addColumn(6, function($column) {
             return $column
                 ->withSingleField("name")
                 ->withSingleField("email");

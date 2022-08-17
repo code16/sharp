@@ -5,15 +5,16 @@
         :disabled="disabled"
         :no-caret="!showCaret"
         :offset="1"
+        :boundary="boundary"
+        :popper-opts="popperOptions"
         variant="custom"
+        no-flip
         v-bind="$attrs"
         v-on="$listeners"
         ref="dropdown"
     >
         <template v-slot:button-content>
-            <span class="d-inline-block">
-                <slot name="text">{{ text }}</slot>
-            </span>
+            <slot name="text">{{ text }}</slot>
         </template>
 
         <slot :hide="hide" />
@@ -27,15 +28,21 @@
     export default {
         name: 'SharpDropdown',
         components: {
-            BDropdown,
+            BDropdown: {
+                extends: BDropdown,
+                computed: {
+                    boundaryClass: () => null,
+                },
+            },
         },
         props: {
             ...Button.props,
-            text: String,
+            text: [Boolean, String],
             showCaret: {
                 type: Boolean,
                 default: true
             },
+            title: String,
             disabled: Boolean,
         },
         computed: {
@@ -46,11 +53,28 @@
             toggleClass() {
                 return this.classes;
             },
+            boundary() {
+                return document.querySelector('[data-popover-boundary]') || 'scrollParent';
+            },
+            popperOptions() {
+                return {
+                    modifiers: {
+                        preventOverflow: {
+                            padding: this.boundary === 'scrollParent' ? 5 : 0,
+                        }
+                    }
+                }
+            },
         },
         methods: {
             hide() {
                 this.$refs.dropdown.hide();
             },
+        },
+        mounted() {
+            if(this.title) {
+                this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
+            }
         },
     }
 </script>

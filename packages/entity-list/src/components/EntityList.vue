@@ -36,11 +36,11 @@
 
                     <template v-slot:append-head>
                         <template v-if="hasEntityCommands">
-                            <div class="d-flex justify-content-end">
+                            <div class="d-flex align-items-center justify-content-end">
                                 <CommandsDropdown
                                     :commands="dropdownEntityCommands"
                                     :disabled="reorderActive"
-                                    @select="handleEntityCommandRequested"
+                                    @select="handleCommandRequested"
                                 >
                                     <template v-slot:text>
                                         {{ l('entity_list.commands.entity.label') }}
@@ -53,20 +53,18 @@
                     <template v-slot:item="{ item }">
                         <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
                             <template v-if="hasActionsColumn" v-slot:append="props">
-                                <div class="SharpEntityList__actions d-flex">
-                                    <EntityActions
-                                        :config="config"
-                                        :has-state="instanceHasState(item)"
-                                        :state="instanceState(item)"
-                                        :state-options="instanceStateOptions(item)"
-                                        :state-disabled="!instanceHasStateAuthorization(item)"
-                                        :has-commands="instanceHasCommands(item)"
-                                        :commands="instanceCommands(item)"
-                                        @command="handleInstanceCommandRequested(item, $event)"
-                                        @state-change="handleInstanceStateChanged(item, $event)"
-                                        @selecting="props.toggleHighlight($event)"
-                                    />
-                                </div>
+                                <EntityActions
+                                    :config="config"
+                                    :has-state="instanceHasState(item)"
+                                    :state="instanceState(item)"
+                                    :state-options="instanceStateOptions(item)"
+                                    :state-disabled="!instanceHasStateAuthorization(item)"
+                                    :has-commands="instanceHasCommands(item)"
+                                    :commands="instanceCommands(item)"
+                                    @command="handleInstanceCommandRequested(item, $event)"
+                                    @state-change="handleInstanceStateChanged(item, $event)"
+                                    @selecting="props.toggleHighlight($event)"
+                                />
                             </template>
                         </DataListRow>
                     </template>
@@ -83,8 +81,17 @@
             <Loading small fade />
         </template>
 
-        <CommandFormModal :command="currentCommand" ref="commandForm" />
-        <CommandViewPanel :content="commandViewContent" @close="handleCommandViewPanelClosed" />
+        <CommandFormModal
+            :command="currentCommand"
+            :entity-key="entityKey"
+            :instance-id="currentCommandInstanceId"
+            v-bind="commandFormProps"
+            v-on="commandFormListeners"
+        />
+        <CommandViewPanel
+            :content="commandViewContent"
+            @close="handleCommandViewPanelClosed"
+        />
     </div>
 </template>
 
@@ -190,6 +197,8 @@
                 config: null,
                 authorizations: null,
                 forms: null,
+
+                currentCommandInstanceId: null,
             }
         },
         watch: {
@@ -268,7 +277,7 @@
             },
             actionBarListeners() {
                 return {
-                    'command': this.handleEntityCommandRequested,
+                    'command': this.handleCommandRequested,
                     'search-submit': this.handleSearchSubmitted,
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
@@ -382,11 +391,6 @@
                     this.data.list.items = [...this.reorderedItems];
                     this.reorderedItems = null;
                     this.reorderActive = false;
-                });
-            },
-            handleEntityCommandRequested(command) {
-                this.handleCommandRequested(command, {
-                    endpoint: this.commandEndpoint(command.key),
                 });
             },
             handleCreateButtonClicked(multiform) {
@@ -509,12 +513,9 @@
             },
             handleInstanceCommandRequested(instance, command) {
                 const instanceId = this.instanceId(instance);
-                this.handleCommandRequested(command, {
-                    endpoint: this.commandEndpoint(command.key, instanceId),
-                });
+                this.handleCommandRequested(command, { instanceId });
             },
             handleSortChanged({ prop, dir }) {
-
                 this.storeDispatch('setQuery', {
                     ...this.query,
                     page: 1,
@@ -580,13 +581,15 @@
                     'refresh': this.handleRefreshCommand
                 });
             },
-            handleCommandRequested(command, { endpoint }) {
+            handleCommandRequested(command, { instanceId } = {}) {
                 const query = this.commandsQuery;
+                const endpoint = this.commandEndpoint(command.key, instanceId);
 
+                this.currentCommandInstanceId = instanceId;
                 this.sendCommand(command, {
-                    postCommand: () => this.axiosInstance.post(endpoint, { query }, { responseType:'blob' }),
-                    postForm: data => api.post(endpoint, { query, data }, { responseType:'blob' }),
-                    getFormData: () => this.axiosInstance.get(`${endpoint}/data`, { params:query }).then(response => response.data.data),
+                    postCommand: data => api.post(endpoint, { query, ...data }, { responseType:'blob' }),
+                    getForm: commandQuery => api.get(`${endpoint}/form`, { params: { ...query, ...commandQuery } })
+                        .then(response => response.data),
                 });
             },
             handleRefreshCommand(data) {

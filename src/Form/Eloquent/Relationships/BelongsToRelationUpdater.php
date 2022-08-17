@@ -7,23 +7,23 @@ use Code16\Sharp\Form\Eloquent\Relationships\Utils\CanCreateRelatedModel;
 class BelongsToRelationUpdater
 {
     use CanCreateRelatedModel;
-    
+
     public function update(object $instance, string $attribute, $value)
     {
-        if(strpos($attribute, ":") !== false) {
+        if (strpos($attribute, ':') !== false) {
             // This is a relation attribute update case (eg: mother:name)
-            list($attribute, $subAttribute) = explode(":", $attribute);
+            [$attribute, $subAttribute] = explode(':', $attribute);
 
-            if($instance->$attribute) {
+            if ($instance->$attribute) {
                 $instance->$attribute()->update([
-                    $subAttribute => $value
+                    $subAttribute => $value,
                 ]);
 
                 return;
             }
 
             // Creation case
-            if(!$value) {
+            if (! $value) {
                 return;
             }
 

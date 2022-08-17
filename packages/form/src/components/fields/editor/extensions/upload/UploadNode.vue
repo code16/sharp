@@ -1,29 +1,35 @@
 <template>
-    <NodeViewWrapper>
+    <NodeRenderer class="editor__node" :node="node">
         <VueClip
-            class="editor__node"
             :value="value"
             :root="false"
             :options="options"
-            :focused="selected"
+            :invalid="!!error"
+            persist-thumbnails
             v-bind="fieldProps"
-            @updated="handleUpdate"
+            @thumbnail="handleThumbnailChanged"
+            @updated="handleUpdated"
             @removed="handleRemoveClicked"
             @success="handleSuccess"
             @error="handleError"
         />
-    </NodeViewWrapper>
+        <template v-if="error">
+            <div class="invalid-feedback d-block" style="font-size: .75rem">
+                {{ error }}
+            </div>
+        </template>
+    </NodeRenderer>
 </template>
 
 <script>
     import VueClip from "../../../upload/VueClip";
-    import { NodeViewWrapper } from '@tiptap/vue-2';
+    import NodeRenderer from "../../NodeRenderer";
     import { lang, showAlert, getUniqueId } from "sharp";
     import { getUploadOptions } from "../../../../../util/upload";
 
     export default {
         components: {
-            NodeViewWrapper,
+            NodeRenderer,
             VueClip,
         },
         props: {
@@ -37,7 +43,27 @@
         },
         computed: {
             value() {
-                return this.node.attrs.value;
+                const attrs = this.node.attrs;
+                if(attrs.file) {
+                    return {
+                        file: attrs.file,
+                    }
+                }
+                return {
+                    path: attrs.path,
+                    disk: attrs.disk,
+                    name: attrs.name,
+                    filters: attrs.filters,
+                    thumbnail: attrs.thumbnail,
+                    size: attrs.size,
+                    uploaded: attrs.uploaded,
+                }
+            },
+            error() {
+                if(this.node.attrs.notFound) {
+                    return lang('form.editor.errors.unknown_file')
+                        .replace(':path', this.node.attrs.path ?? '');
+                }
             },
             fieldProps() {
                 const props = this.extension.options.fieldProps;
@@ -54,33 +80,62 @@
             },
         },
         methods: {
+            handleThumbnailChanged(thumbnail) {
+                this.updateAttributes({
+                    thumbnail,
+                });
+            },
             handleRemoveClicked() {
                 this.deleteNode();
                 setTimeout(() => {
                     this.editor.commands.focus();
                 }, 0);
             },
-            handleError(message) {
-                showAlert(message, {
+            handleError(message, file) {
+                this.deleteNode();
+                showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
                     isError: true,
                     title: lang(`modals.error.title`),
                 });
             },
-            handleUpdate(value) {
+            handleUpdated(value) {
                 this.updateAttributes({
-                    value,
+                    filters: value.filters,
                 });
-                this.extension.options.onUpdate(value);
+                if(!this.node.attrs.file) {
+                    this.extension.options.onUpdate(value);
+                }
             },
             handleSuccess(value) {
                 this.updateAttributes({
-                    value,
+                    ...value,
+                    file: null,
+                    uploaded: true,
                 });
                 this.extension.options.onSuccess(value);
             },
+            async init() {
+                if(this.node.attrs.file || this.node.attrs.notFound) {
+                    return;
+                }
+
+                const data = await this.extension.options.registerFile(this.value);
+                if(data) {
+                    this.updateAttributes(data);
+                } else {
+                    this.updateAttributes({
+                        notFound: true,
+                    });
+                }
+            },
+        },
+        created() {
+            this.init();
         },
         beforeDestroy() {
-            this.extension.options.onRemove(this.value);
+            if(!this.node.attrs.file) {
+                this.extension.options.onRemove(this.value);
+            }
         },
     }
 </script>

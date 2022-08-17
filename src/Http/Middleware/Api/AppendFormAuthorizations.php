@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Illuminate\Contracts\Auth\Access\Gate;
+use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,81 +12,40 @@ use Illuminate\Http\Request;
  */
 class AppendFormAuthorizations
 {
-
-    /** @var Gate */
-    protected $gate;
-
-    /**
-     * @param Gate $gate
-     */
-    public function __construct(Gate $gate)
+    public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager)
     {
-        $this->gate = $gate;
     }
 
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 
-        // Add authorization to the JSON returned
         return $response->status() == 200
             ? $this->addAuthorizationsToJsonResponse($response)
             : $response;
     }
 
-    protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse)
+    protected function addAuthorizationsToJsonResponse(JsonResponse $jsonResponse): JsonResponse
     {
-        list($entityKey, $instanceId) = $this->determineEntityKeys();
+        [$entityKey, $instanceId] = $this->determineEntityKeyAndInstanceId();
 
-        $policies = [];
-
-        if($this->hasPolicyFor($entityKey)) {
-            $policies = [
-                "create" => $this->gate->check("sharp.{$entityKey}.create"),
-            ];
-
-            if($instanceId) {
-                $policies += [
-                    "view" => $this->gate->check("sharp.{$entityKey}.view", $instanceId),
-                    "update" => $this->gate->check("sharp.{$entityKey}.update", $instanceId),
-                    "delete" => $this->gate->check("sharp.{$entityKey}.delete", $instanceId)
-                ];
-            }
-        }
-
-        $globalAuthorizations = $this->getGlobalAuthorizations($entityKey);
         $data = $jsonResponse->getData();
-
-        $data->authorizations = array_merge(
-            ["view" => true, "create" => true, "update" => true, "delete" => true],
-            $policies,
-            (array)$globalAuthorizations
-        );
-
+        $data->authorizations = [
+            'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
+            'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
+            'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
+            'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
+        ];
         $jsonResponse->setData($data);
 
         return $jsonResponse;
     }
 
-    protected function hasPolicyFor($entityKey)
-    {
-        return config("sharp.entities.{$entityKey}.policy") != null;
-    }
-
-    protected function getGlobalAuthorizations(string $entityKey)
-    {
-        return config("sharp.entities.{$entityKey}.authorizations", []);
-    }
-
-    protected function determineEntityKeys()
+    protected function determineEntityKeyAndInstanceId(): array
     {
         $entityKey = request()->segment(4);
         $instanceId = request()->segment(5) ?? null;
 
-        if(($pos = strpos($entityKey, ':')) !== false) {
-            $entityKey = substr($entityKey, 0, $pos);
-        }
-
-        return [$entityKey, $instanceId];
+        return [sharp_normalize_entity_key($entityKey)[0], $instanceId];
     }
 }

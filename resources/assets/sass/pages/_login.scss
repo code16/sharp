@@ -37,9 +37,9 @@
   }
 
   .logo svg {
-    --width: 250px;
+    --width: 225px;
     width: var(--width);
-    height: calc(var(--width) * 0.13);
+    height: calc(var(--width) * 15 / 100);
     fill: currentColor;
     color: hsl(var(--primary-h), var(--primary-s), calc(var(--primary-l) + 12.5%));
   }

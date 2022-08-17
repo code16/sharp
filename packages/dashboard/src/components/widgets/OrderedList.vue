@@ -28,11 +28,8 @@
 
         props: {
             value: Object,
-            withCounts: {
-                type: Boolean,
-                default: true,
-            },
             title: String,
+            html: Boolean,
         },
 
         computed: {
@@ -45,13 +42,14 @@
                         key: 'label',
                         size: 12,
                         sizeXS: 12,
+                        html: this.html,
                     }
                 ]
             },
         },
         methods: {
             hasCount(item) {
-                return this.withCounts && typeof item.count === 'number';
+                return typeof item.count === 'number' || !!item.count;
             }
         },
     }

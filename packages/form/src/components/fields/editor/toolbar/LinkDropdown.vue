@@ -1,6 +1,6 @@
 <template>
     <Dropdown
-        class="editor__link-dropdown"
+        class="editor__dropdown editor__dropdown--link"
         variant="light"
         :active="active"
         v-bind="$attrs"
@@ -15,10 +15,19 @@
 
         <template v-slot:default="{ hide }">
             <b-dropdown-form @submit.prevent="handleLinkSubmitted">
+                <template v-if="isEdit">
+                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"
+                        type="button"
+                        @click="handleCancelClicked"
+                    >
+                        <span class="visually-hidden">{{ lang('modals.cancel_button', 'Cancel') }}</span>
+                    </button>
+                </template>
+
                 <template v-if="hasLabelInput">
                     <div class="mb-3">
                         <label class="form-label" :for="fieldId('label')">
-                            Label
+                            {{ lang('form.editor.dialogs.link.text_label', 'Text') }}
                         </label>
                         <TextInput :id="fieldId('label')" v-model="label" />
                     </div>
@@ -26,30 +35,36 @@
 
                 <div class="mb-3">
                     <label class="form-label" :for="fieldId('href')">
-                        URL Address
+                        {{ lang('form.editor.dialogs.link.url_label', 'URL') }}
                     </label>
-                    <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" ref="input" />
+                    <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
 
                 <div class="mt-3">
-                    <Button type="submit" variant="primary">
-                        <template v-if="isEdit">
-                            Update
-                        </template>
-                        <template v-else>
-                            Insert
-                        </template>
-                    </Button>
-                    <template v-if="isEdit">
-                        <Button type="button" variant="danger" outline @click="handleRemoveClicked">
-                            Remove
-                        </Button>
-                    </template>
-                    <template v-else>
-                        <Button type="button" variant="light" @click="hide">
-                            Cancel
-                        </Button>
-                    </template>
+                    <div class="row g-2 flex-sm-nowrap">
+                        <div class="col-auto">
+                            <Button type="submit" small variant="primary">
+                                <template v-if="isEdit">
+                                    {{ lang('form.editor.dialogs.link.update_button', 'Update') }}
+                                </template>
+                                <template v-else>
+                                    {{ lang('form.editor.dialogs.link.insert_button', 'Insert link') }}
+                                </template>
+                            </Button>
+                        </div>
+                        <div class="col-auto">
+                            <template v-if="isEdit">
+                                <Button type="button" small variant="danger" outline @click="handleRemoveClicked">
+                                    {{ lang('form.editor.dialogs.link.remove_button', 'Remove link') }}
+                                </Button>
+                            </template>
+                            <template v-else>
+                                <Button type="button" small variant="light" @click="handleCancelClicked">
+                                    {{ lang('modals.cancel_button', 'Cancel') }}
+                                </Button>
+                            </template>
+                        </div>
+                    </div>
                 </div>
             </b-dropdown-form>
         </template>
@@ -60,6 +75,7 @@
     import { BFormGroup, BDropdownForm } from 'bootstrap-vue';
     import { Button, Dropdown } from "sharp-ui";
     import TextInput from '../../Text';
+    import { lang } from "sharp";
 
     export default {
         components: {
@@ -92,8 +108,15 @@
             },
         },
         methods: {
+            lang,
             fieldId(name) {
                 return `${this.id}-${name}`;
+            },
+            hide(focusEditor = true) {
+                this.$refs.dropdown.hide();
+                if(focusEditor) {
+                    this.editor.chain().focus().run();
+                }
             },
             handleDropdownShow() {
                 const selection = this.editor.state.selection;
@@ -131,9 +154,12 @@
                         .run();
                 }
             },
+            handleCancelClicked() {
+                this.hide();
+            },
             handleLinkSubmitted() {
                 if(!this.href) {
-                    this.$refs.dropdown.hide();
+                    this.hide();
                     return;
                 }
                 this.$emit('submit', {

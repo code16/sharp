@@ -1,0 +1,47 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
+use Code16\Sharp\EntityList\SharpEntityList;
+use Illuminate\Contracts\Support\Arrayable;
+
+class DummyClass extends SharpEntityList
+{
+    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    {
+        // $fieldsContainer->addField(EntityListField::make("myCol"))
+    }
+    
+    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+        // $fieldsLayout->addColumn("myCol", 6);
+    }
+    
+    public function buildListConfig(): void
+    {
+        //
+    }
+    
+    protected function getInstanceCommands(): ?array
+    {
+        return null;
+    }
+
+    protected function getEntityCommands(): ?array
+    {
+        return null;
+    }
+
+    protected function getFilters(): array
+    {
+        return []; 
+    }
+    
+    public function getListData(): array|Arrayable
+    {
+        return $this->transform(DummyModelClass::all());
+    }
+}

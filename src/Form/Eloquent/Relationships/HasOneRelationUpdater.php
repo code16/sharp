@@ -10,38 +10,36 @@ class HasOneRelationUpdater
 
     public function update(object $instance, string $attribute, $value)
     {
-        if(strpos($attribute, ":") !== false) {
+        if (strpos($attribute, ':') !== false) {
             // This is a relation attribute update case (eg: mother:name)
-            list($attribute, $subAttribute) = explode(":", $attribute);
+            [$attribute, $subAttribute] = explode(':', $attribute);
 
-            if($instance->$attribute) {
+            if ($instance->$attribute) {
                 $instance->$attribute->$subAttribute = $value;
                 $instance->$attribute->save();
-
-            } elseif($value) {
+            } elseif ($value) {
                 $this->createRelatedModel(
-                    $instance, $attribute, [$subAttribute => $value]
+                    $instance, $attribute, [$subAttribute => $value],
                 );
             }
 
             return;
         }
 
-        if(is_null($value)) {
-            if($instance->$attribute) {
+        if (is_null($value)) {
+            if ($instance->$attribute) {
                 $instance->$attribute()->delete();
             }
 
             return;
         }
 
-        if(is_array($value)) {
+        if (is_array($value)) {
             // We set more than one attribute on the related model
-            if(is_null($instance->$attribute)) {
+            if (is_null($instance->$attribute)) {
                 $this->createRelatedModel(
-                    $instance, $attribute, $value
+                    $instance, $attribute, $value,
                 );
-
             } else {
                 $instance->$attribute->update($value);
             }
@@ -53,7 +51,7 @@ class HasOneRelationUpdater
         $foreignKeyName = $instance->$attribute()->getForeignKeyName();
 
         $relatedModel->find($value)->setAttribute(
-            $foreignKeyName, $instance->id
+            $foreignKeyName, $instance->id,
         )->save();
     }
 }

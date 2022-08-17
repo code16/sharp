@@ -6,8 +6,11 @@ return [
     'entityList' => 'Список',
     'show' => ':entity',
     'form' => [
-        'edit' => 'Редактирование',
-        'edit_entity' => 'Редактирование “:entity”', // for sub entities: forms displayed from an EEL
-        'create' => 'Создание “:entity”'
+        'edit' => 'Изменить',
+        'create' => 'Создать',
+
+        // for sub entities: forms displayed from an EEL
+        'edit_entity' => 'Редактировать “:entity”',
+        'create_entity' => 'Создать “:entity”',
     ],
 ];

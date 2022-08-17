@@ -2,9 +2,15 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
+
 class SharpShowTextField extends SharpShowField
 {
-    const FIELD_TYPE = "text";
+    use SharpFormFieldWithDataLocalization,
+        SharpFormFieldWithEmbeds;
+
+    const FIELD_TYPE = 'text';
 
     protected ?string $label = null;
     protected ?int $collapseToWordCount = null;
@@ -35,7 +41,7 @@ class SharpShowTextField extends SharpShowField
 
         return $this;
     }
-    
+
     public function setHtml(bool $html = true): self
     {
         $this->html = $html;
@@ -46,17 +52,19 @@ class SharpShowTextField extends SharpShowField
     public function toArray(): array
     {
         return parent::buildArray([
-            "label" => $this->label,
-            "html" => $this->html,
-            "collapseToWordCount" => $this->collapseToWordCount,
+            'label' => $this->label,
+            'html' => $this->html,
+            'collapseToWordCount' => $this->collapseToWordCount,
+            'localized' => $this->localized,
+            'embeds' => $this->innerComponentEmbedsConfiguration(false) ?: null,
         ]);
     }
 
     protected function validationRules(): array
     {
         return [
-            "collapseToWordCount" => "int|nullable",
-            "html" => "bool|required",
+            'collapseToWordCount' => 'int|nullable',
+            'html' => 'bool|required',
         ];
     }
 }

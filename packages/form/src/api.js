@@ -34,23 +34,3 @@ export function getAutocompleteSuggestions({
             : response.data ?? [];
     });
 }
-
-export function downloadFileUrl({ entityKey, instanceId, fieldKey, fileName }) {
-    return apiUrl(`form/download/${fieldKey}/${entityKey}/${instanceId}`, {
-        params: {
-            fileName,
-        },
-    })
-}
-
-
-export function getOriginalThumbnail({ path, disk, max_width, max_height }) {
-    return api.get('/thumbnail', {
-        params: {
-            path,
-            disk,
-            max_width,
-            max_height,
-        }
-    }).then(response => response.data.thumbnail);
-}

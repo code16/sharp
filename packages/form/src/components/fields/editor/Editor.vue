@@ -1,26 +1,22 @@
 <template>
     <div class="editor" :class="classes" :style="style">
         <div class="card">
-            <div class="card-header">
-                <template v-if="editor">
+            <template v-if="editor && toolbar">
+                <div class="card-header editor__header" v-sticky ref="header">
                     <MenuBar
                         :id="uniqueIdentifier"
                         :editor="editor"
                         :toolbar="toolbar"
                         :disabled="readOnly"
+                        :options="toolbarOptions"
+                        :embeds="embeds"
                     />
-                </template>
-            </div>
+                </div>
+            </template>
 
             <EditorContent :editor="editor" />
 
             <template v-if="editor && !readOnly">
-                <BubbleMenu
-                    :id="uniqueIdentifier"
-                    :editor="editor"
-                    :toolbar="toolbar"
-                    :ignored-extensions="bubbleMenuIgnoredExtensions"
-                />
                 <template v-if="hasUpload">
                     <UploadFileInput :editor="editor"/>
                 </template>
@@ -30,32 +26,34 @@
 </template>
 
 <script>
+    import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-2';
-    import HorizontalRule from "@tiptap/extension-horizontal-rule";
     import { Upload } from "./extensions/upload/upload";
     import UploadFileInput from "./extensions/upload/UploadFileInput";
     import MenuBar from "./toolbar/MenuBar";
-    import BubbleMenu from "./BubbleMenu";
+    import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
-    import { Image } from "@tiptap/extension-image";
 
     export default {
+        inheritAttrs: false,
         components: {
             EditorContent,
             MenuBar,
             UploadFileInput,
-            BubbleMenu,
         },
         props: {
             id: String,
             editor: Object,
             uniqueIdentifier: String,
             toolbar: Array,
-            height: {
+            minHeight: {
                 type: Number,
                 default: 300
             },
+            maxHeight: Number,
             readOnly: Boolean,
+            toolbarOptions: Array,
+            embeds: Object,
         },
         data() {
             return {
@@ -71,19 +69,16 @@
             classes() {
                 return {
                     'editor--disabled': this.readOnly,
+                    'editor--no-toolbar': !this.toolbar,
                 }
             },
             style() {
+                const headingDepth = [...new Set(this.toolbar?.filter(button => button.startsWith('heading')))].length;
                 return {
-                    '--height': `${this.height}px`,
+                    '--min-height': this.minHeight ? `${this.minHeight}px` : null,
+                    '--max-height': this.maxHeight ? `${this.maxHeight}px` : null,
+                    '--heading-depth': headingDepth,
                 }
-            },
-            bubbleMenuIgnoredExtensions() {
-                return [
-                    Upload,
-                    Image,
-                    HorizontalRule,
-                ]
             },
             hasUpload() {
                 return this.editor.options.extensions?.find(extension => extension.name === Upload.name);
@@ -97,6 +92,21 @@
                 const position = this.firstFocus ? 'end' : null;
                 this.editor.commands.focus(position);
             },
+            handleSelectionUpdated() {
+                const { from, to } = this.editor.state.selection;
+                const pos = Math.min(from, to);
+                const cursorRect = this.editor.view.coordsAtPos(pos);
+
+                if(this.toolbar) {
+                    const headerRect = this.$refs.header.getBoundingClientRect();
+                    if(cursorRect.top < headerRect.bottom) {
+                        window.scrollBy(0, cursorRect.top - headerRect.bottom - 10);
+                    }
+                }
+            },
+            handleUpdated() {
+                this.$emit('update', this.editor);
+            },
         },
         async mounted() {
             await this.$nextTick();
@@ -106,7 +116,13 @@
                 'editor__content',
             );
             this.editor.on('focus', this.handleFocus);
+            this.editor.on('selectionUpdate', this.handleSelectionUpdated);
+            this.editor.on('update', debounce(this.handleUpdated, 50));
+
             onLabelClicked(this, this.id, () => this.focus());
+        },
+        directives: {
+            sticky,
         },
     }
 </script>

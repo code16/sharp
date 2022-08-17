@@ -69,13 +69,6 @@
     }
   }
 
-  &__modal-vue-cropper {
-    @include media-breakpoint-up(xs) { max-height: 250px; }
-    @include media-breakpoint-up(sm) { max-height: 300px; }
-    @include media-breakpoint-up(md) { max-height: 400px; }
-    @include media-breakpoint-up(md) { max-height: 500px; }
-  }
-
   &__card {
     transition: border .125s ease-in-out, box-shadow .125s ease-in-out;
   }

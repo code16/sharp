@@ -7,34 +7,30 @@ use Illuminate\Validation\Validator;
 
 abstract class SharpFormRequest extends FormRequest
 {
-    /**
-     * Handle RTF (markdown and wysiwyg) fields
-     *
-     * @param  Validator $validator
-     * @return void
-     */
     public function withValidator(Validator $validator): void
     {
-        // Find RTF (markdown, wysiwyg) based on their posted structure ($field["text"])
-        $richTextFields = collect($this->all())->filter(function($value, $key) {
-            return is_array($value) && array_key_exists("text", $value);
-        })->keys()->all();
+        // Find SharpFormEditorField based on their posted structure ($field["text"])
+        $editorFields = collect($this->all())
+            ->filter(fn ($value) => is_array($value) && array_key_exists('text', $value))
+            ->map(function ($value, $key) {
+                return is_array($value['text'])
+                    ? collect($value['text'])->map(fn ($value, $locale) => "$key.$locale")->toArray()
+                    : $key;
+            })
+            ->flatten()
+            ->values()
+            ->toArray();
 
-        // Initialize rules by getting all those which DO NOT refer to a RTF
+        // Replace Editor rules with .text suffix
         $newRules = collect($validator->getRules())
-            ->filter(function($messages, $key) use($richTextFields) {
-                return !in_array($key, $richTextFields);
-            })
-            ->all();
+            ->mapWithKeys(function ($messages, $key) use ($editorFields) {
+                if (in_array($key, $editorFields)) {
+                    return ["$key.text" => $messages];
+                }
 
-        // And then replace RTF rules with .text suffix
-        collect($validator->getRules())
-            ->filter(function($messages, $key) use($richTextFields) {
-                return in_array($key, $richTextFields);
+                return [$key => $messages];
             })
-            ->each(function($messages, $key) use(&$newRules) {
-                $newRules["$key.text"] = $messages;
-            });
+            ->toArray();
 
         $validator->setRules($newRules);
     }

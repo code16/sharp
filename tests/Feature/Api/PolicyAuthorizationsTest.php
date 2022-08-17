@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Tests\Fixtures\User;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class PolicyAuthorizationsTest extends BaseApiTest
 {
@@ -11,21 +13,21 @@ class PolicyAuthorizationsTest extends BaseApiTest
         parent::setUp();
 
         $this->login();
-    }
 
-    protected function getEnvironmentSetUp($app)
-    {
-        parent::getEnvironmentSetUp($app);
+        $this->buildTheWorld();
 
-        $app['config']['sharp.entities.person.policy'] = AuthorizationsTestPersonPolicy::class;
-        app()['config']['sharp.dashboards.personal_dashboard.policy'] = AuthorizationsTestPersonalDashboardPolicy::class;
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setPolicy(AuthorizationsTestPersonPolicy::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('personal_dashboard')
+            ->setPolicy(AuthorizationsTestPersonalDashboardPolicy::class);
     }
 
     /** @test */
     public function we_can_configure_a_policy()
     {
-        $this->buildTheWorld();
-
         // Update policy returns true
         $this->postJson('/sharp/api/form/person/1', [])->assertStatus(200);
         $this->getJson('/sharp/api/list/person')->assertStatus(200);
@@ -44,79 +46,75 @@ class PolicyAuthorizationsTest extends BaseApiTest
     /** @test */
     public function policy_authorizations_are_appended_to_the_response_on_a_form_case()
     {
-        $this->buildTheWorld();
+        $this
+            ->getJson('/sharp/api/form/person')
+            ->assertJson([
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => false,
+                ],
+            ]);
 
-        $this->getJson('/sharp/api/form/person')->assertJson([
-            "authorizations" => [
-                // Delete policy is false, but in a create case it will return true
-                // because there is no entity to check for.
-                "delete" => true,
-                "update" => true,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person/1')
+            ->assertJson([
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => true,
+                    'create' => true,
+                    'view' => true,
+                ],
+            ]);
 
-        $this->getJson('/sharp/api/form/person/1')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => true,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
-
-        $this->getJson('/sharp/api/form/person/10')->assertJson([
-            "authorizations" => [
-                "delete" => false,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person/10')
+            ->assertJson([
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => true,
+                ],
+            ]);
     }
 
     /** @test */
     public function policy_authorizations_are_appended_to_the_response_on_a_list_case()
     {
-        $this->buildTheWorld();
-
         $this->getJson('/sharp/api/list/person')->assertJson([
-            "authorizations" => [
-                "update" => [1],
-                "create" => true,
-                "view" => [1,2],
-            ]
+            'authorizations' => [
+                'update' => [1],
+                'create' => true,
+                'view' => [1, 2],
+            ],
         ]);
     }
 
     /** @test */
     public function global_authorizations_override_policies()
     {
-        $this->buildTheWorld();
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setProhibitedActions(['update']);
 
-        $this->app['config']->set(
-            'sharp.entities.person.authorizations', [
-                "delete" => true,
-                "update" => false,
-            ]
-        );
-
-        $this->getJson('/sharp/api/form/person')->assertJson([
-            "authorizations" => [
-                "delete" => true,
-                "update" => false,
-                "create" => true,
-                "view" => true,
-            ]
-        ]);
+        $this
+            ->getJson('/sharp/api/form/person/1')
+            ->assertJson([
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => true,
+                ],
+            ]);
     }
 
     /** @test */
     public function entity_policy_can_be_set_to_handle_whole_entity_visibility()
     {
-        $this->buildTheWorld();
-        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->actingAs(new User(['name' => 'Unauthorized-User']));
 
         $this->getJson('/sharp/api/form/person')->assertStatus(403);
         $this->postJson('/sharp/api/form/person/1', [])->assertStatus(403);
@@ -128,33 +126,75 @@ class PolicyAuthorizationsTest extends BaseApiTest
     /** @test */
     public function dashboard_policy_can_be_set_to_handle_whole_dashboard_visibility()
     {
-        $this->buildTheWorld();
-
-        $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(200);
-
-        $this->actingAs(new User(["name" => "Unauthorized-User"]));
+        $this->actingAs(new User(['name' => 'Unauthorized-User']));
         $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
     }
+
+    /** @test */
+    public function view_and_update_and_delete_policies_are_not_checked_on_create_case()
+    {
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setPolicy(AuthorizationsTestPersonWithExceptionsPolicy::class);
+
+        $this
+            ->getJson('/sharp/api/form/person')
+            ->assertJson([
+                'authorizations' => [
+                    'delete' => false,
+                    'update' => false,
+                    'create' => true,
+                    'view' => false,
+                ],
+            ]);
+    }
 }
 
-class AuthorizationsTestPersonPolicy
+class AuthorizationsTestPersonPolicy extends SharpEntityPolicy
 {
-    public function entity(User $user)
+    public function entity($user): bool
     {
-        return $user->name != "Unauthorized-User";
+        return $user->name != 'Unauthorized-User';
     }
 
-    public function view(User $user, $id) { return true; }
+    public function view($user, $id): bool
+    {
+        return true;
+    }
 
-    public function update(User $user, $id) { return $id < 2; }
+    public function update($user, $id): bool
+    {
+        return $id < 2;
+    }
 
-    public function delete(User $user, $id) { return false; }
+    public function delete($user, $id): bool
+    {
+        return false;
+    }
 }
 
-class AuthorizationsTestPersonalDashboardPolicy
+class AuthorizationsTestPersonalDashboardPolicy extends SharpEntityPolicy
 {
-    public function view(User $user)
+    public function entity($user): bool
     {
-        return $user->name != "Unauthorized-User";
+        return $user->name != 'Unauthorized-User';
+    }
+}
+
+class AuthorizationsTestPersonWithExceptionsPolicy extends SharpEntityPolicy
+{
+    public function view($user, $id): bool
+    {
+        throw new \Exception('nope');
+    }
+
+    public function update($user, $id): bool
+    {
+        throw new \Exception('nope');
+    }
+
+    public function delete($user, $id): bool
+    {
+        throw new \Exception('nope');
     }
 }

@@ -1,0 +1,6 @@
+# Refer also to configuration in StyleCI setings
+preset: laravel
+version: 8.0
+enabled:
+  - heredoc_indentation
+  - unalign_double_arrow
