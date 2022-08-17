@@ -9,4 +9,6 @@ $btn-close-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' v
   --body-color: var(--theme-color);
   --body-bg: #222;
   --btn-close-bg-image: #{escape-svg($btn-close-bg)};
+
+  --gradient-bg-opacity: .75;
 }
