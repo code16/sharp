@@ -15,15 +15,14 @@
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     background: $brand-01;
-    margin-left: -$grid-gutter-width/2;
-    margin-right: -$grid-gutter-width/2;
+    margin-left: -$grid-gutter-width * .5;
+    margin-right: -$grid-gutter-width * .5;
 
     transition: $transition-leftnav-collapse;
     transition-property: left;
 
     --threshold: var(--l-threshold);
 
-    color: white;
     color: var(--navbar-color);
 
     background: $primary;

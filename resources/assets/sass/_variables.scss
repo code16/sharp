@@ -26,10 +26,10 @@ $primary: #004c9b;
 $info: #5aaafa;
 $success: #3dc322;
 
-$body-color: var(--body-color);
 $text-muted: var(--theme-color, #6c757d);
 
 $enable-negative-margins: true;
+$prefix: ''; // variables prefix
 
 $container-max-widths: (
   sm: 540px,
@@ -91,6 +91,7 @@ $dropdown-border-color: rgba(0,0,0,.075);
 
 $dropdown-item-padding-y: .375rem;
 $dropdown-link-color: $ui-primary-color;
+$dropdown-link-hover-color: $ui-primary-color;
 $dropdown-link-disabled-color: var(--theme-color, hsla(var(--primary-h), var(--primary-s), 20%, .65));
 
 $link-color: var(--theme-color, hsl(var(--primary-h), var(--primary-s), 30%));
