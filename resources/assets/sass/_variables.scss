@@ -30,6 +30,7 @@ $body-bg-hsl: hsl(var(--primary-h), 20%, 95%); // we're not using $body-bg becau
 $body-color: #152935;
 
 $enable-negative-margins: true;
+$prefix: ''; // variables prefix
 
 $container-max-widths: (
   sm: 540px,
@@ -88,6 +89,7 @@ $dropdown-border-color: rgba(0,0,0,.075);
 
 $dropdown-item-padding-y: .375rem;
 $dropdown-link-color: $ui-primary-color;
+$dropdown-link-hover-color: $ui-primary-color;
 $dropdown-link-disabled-color: hsla(var(--primary-h), var(--primary-s), 20%, .65);
 
 $link-color: hsl(var(--primary-h), var(--primary-s), 30%);
