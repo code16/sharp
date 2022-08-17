@@ -22,66 +22,48 @@
   --hover-bg-l: calc(var(--primary-l) + clamp(-#{$btn-hover-bg-shade-amount}, var(--color-l), #{$btn-hover-bg-tint-amount}));
   --active-bg-l: calc(var(--primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}));
 
-  @include button-variant(
-    $background: var(--primary-hsl),
-    $border: transparent,
-    $color: white,
-    $hover-background: hsl(var(--primary-h), var(--primary-s), var(--hover-bg-l)),
-    $hover-border: hsl(
-        var(--primary-h),
-        var(--primary-s),
-        calc(var(--primary-l) + clamp(-#{$btn-hover-border-shade-amount}, var(--color-l), #{$btn-hover-border-tint-amount}))
-    ),
-    $hover-color: hsl(0, 0%, calc((var(--hover-bg-l) - var(--threshold)) * -100000)),
-    $active-background: hsl(var(--primary-h), var(--primary-s), var(--active-bg-l)),
-    $active-border: hsl(
-        var(--primary-h),
-        var(--primary-s),
-        calc(var(--primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}))
-    ),
-    $active-color: hsl(0, 0%, calc((var(--active-bg-l) - var(--threshold)) * -100000)),
-    $disabled-background: var(--primary),
-    $disabled-border: var(--primary),
-    $disabled-color: white
+  --bs-btn-bg: var(--primary-hsl);
+  --bs-btn-color: hsl(0, 0%, var(--color-l));
+  --bs-btn-border-color: var(--primary-hsl);
+  --bs-btn-hover-bg: hsl(var(--primary-h), var(--primary-s), var(--hover-bg-l));
+  --bs-btn-hover-border-color: hsl(
+      var(--primary-h),
+      var(--primary-s),
+      calc(var(--primary-l) + clamp(-#{$btn-hover-border-shade-amount}, var(--color-l), #{$btn-hover-border-tint-amount}))
   );
-
-  color: hsl(0, 0%, var(--color-l));
-  border-color: var(--primary-hsl);
-
-  &:focus {
-    box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), calc(var(--primary-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
-  }
+  --bs-btn-hover-color: hsl(0, 0%, calc((var(--hover-bg-l) - var(--threshold)) * -100000));
+  --bs-btn-active-bg: hsl(var(--primary-h), var(--primary-s), var(--active-bg-l));
+  --bs-btn-active-border-color: hsl(
+      var(--primary-h),
+      var(--primary-s),
+      calc(var(--primary-l) + clamp(-#{$btn-active-bg-shade-amount}, var(--color-l), #{$btn-active-bg-tint-amount}))
+  );
+  --bs-btn-active-color: hsl(0, 0%, calc((var(--active-bg-l) - var(--threshold)) * -100000));
+  --bs-btn-disabled-bg: var(--primary);
+  --bs-btn-disabled-border-color: var(--primary);
+  --bs-btn-disabled-color: white;
+  --bs-btn-focus-box-shadow: 0 0 0 #{$btn-focus-width} hsla(var(--primary-h), var(--primary-s), calc(var(--primary-l) + clamp(-15%, var(--color-l), 15%)), .5);
 }
 
 
 
 .btn-text {
   --color-l: 30%;
-  --color: hsl(var(--primary-h), var(--primary-s), var(--color-l));
+  --color-hsl: var(--primary-h), var(--primary-s), var(--color-l);
 
-  @include button-variant(
-    $background: hsla(var(--primary-h), var(--primary-s), var(--color-l), .1),
-    $border: transparent,
-    $color: $primary,
-    //$hover-background: hsl(var(--primary-h), var(--primary-s), var(--primary-l)),
-    //$hover-border: transparent,
-    //$hover-color: white,
-    $hover-background: hsla(var(--primary-h), var(--primary-s), var(--color-l), .15),
-    $hover-border: hsla(var(--primary-h), var(--primary-s), var(--color-l), .25),
-    $hover-color: var(--color),
-    $active-background: var(--color),
-    $active-border: var(--color),
-    $active-color:  hsl(0, 0%, calc((var(--color-l) - var(--l-threshold)) * -100000)),
-    $disabled-background: transparent,
-    $disabled-border: transparent,
-    $disabled-color: var(--color)
-  );
-
-  color: var(--theme-color, hsla(var(--primary-h), var(--primary-s), var(--color-l), .875));
-
-  &:focus {
-    box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), calc(var(--color-l) + clamp(-15%, var(--color-l), 15%)), .5)!important;
-  }
+  --bs-btn-bg: hsla(var(--color-hsl), .1);
+  --bs-btn-border-color: transparent;
+  --bs-btn-color: var(--theme-color, hsla(var(--color-hsl), .875));
+  --bs-btn-hover-bg: hsla(var(--color-hsl), .15);
+  --bs-btn-hover-border-color: hsla(var(--color-hsl), .25);
+  --bs-btn-hover-color: hsl(var(--color-hsl));
+  --bs-btn-active-bg: hsl(var(--color-hsl));
+  --bs-btn-active-border-color: hsl(var(--color-hsl));
+  --bs-btn-active-color: hsl(0, 0%, calc((var(--color-l) - var(--l-threshold)) * -100000));
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: transparent;
+  --bs-btn-disabled-color: hsl(var(--color-hsl));
+  --bs-btn-focus-box-shadow: 0 0 0 #{$btn-focus-width} hsla(var(--primary-h), var(--primary-s), 45%, .5);
 }
 
 
@@ -94,53 +76,33 @@
     $active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000))
   );
 
-  color: var(--theme-color, var(--primary-hsl));
-  border-color: var(--theme-border-color, hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375));
-
-  &:focus {
-    box-shadow: 0 0 0 $btn-focus-width hsla(var(--primary-h), var(--primary-s), var(--primary-l), .5)!important;
-  }
-}
-
-@mixin default {
-  &:not(:hover):not(:active):not(.active) {
-    @content;
-  }
+  --bs-btn-color: var(--theme-color, var(--primary-hsl));
+  --bs-btn-border-color: var(--theme-border-color, hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375));
+  --bs-btn-focus-box-shadow: 0 0 0 #{$btn-focus-width} hsla(var(--primary-h), var(--primary-s), var(--primary-l), .5);
 }
 
 .btn-light {
+  --bs-btn-bg: var(--bs-light);
+  --bs-btn-border-color: transparent;
   --bs-btn-color: black;
-  --active-color: hsl(var(--primary-h), var(--primary-s), 30%);
-
-  @include button-variant(
-    $background: var(--bs-light),
-    $border: transparent,
-    $color: black,
-    $hover-background: var(--bs-light),
-    $hover-border: transparent,
-    $hover-color: hsl(var(--primary-h), var(--primary-s), 30%),
-    $active-background: hsl(var(--primary-h), 75%, 94%),
-    $active-border: transparent,
-    $active-color: hsl(var(--primary-h), var(--primary-s), 25%),
-    $disabled-background: var(--bs-light),
-    $disabled-border: transparent,
-    $disabled-color: var(--bs-btn-color)
-  );
-
-  color: var(--bs-btn-color);
+  --bs-btn-hover-bg: var(--bs-light);
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-hover-color: hsl(var(--primary-h), var(--primary-s), 30%);
+  --bs-btn-active-bg: hsl(var(--primary-h), 75%, 94%);
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-active-color: hsl(var(--primary-h), var(--primary-s), 25%);
+  --bs-btn-disabled-bg: var(--bs-light);
+  --bs-btn-disabled-border-color: transparent;
+  --bs-btn-disabled-color: var(--bs-btn-color);
 }
 
 .btn-outline-light {
-  @include default {
-    border-color: rgba($light, .5);
-  }
+  --bs-btn-border-color: rgba(var(--bs-light-rgb), .5);
 }
 
 .btn-outline-danger {
-  @include default {
-    background-color: white;
-    border-color: rgba($danger, .375);
-  }
+  --bs-btn-bg: white;
+  --bs-btn-border-color: rgba(var(--bs-danger-rgb), .375);
 }
 
 .btn-block {
@@ -153,9 +115,7 @@
 
 .btn--outline-hover {
   background-color: transparent!important;
-  @include default {
-    border-color: transparent;
-  }
+  --bs-btn-border-color: transparent;
 }
 
 .btn--opacity-1 {
