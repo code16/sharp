@@ -1,8 +1,10 @@
 
 :root {
   --theme-bg: white;
-  --body-color: #152935;
-  --body-bg: hsl(var(--primary-h), 20%, 95%);
+  --theme-color: #152935;
+  --theme-border-color: hsl(var(--primary-h), 20%, 90%);
+  --bs-body-color: var(--theme-color);
+  --bs-body-bg: hsl(var(--primary-h), 20%, 95%);
 
   --gradient-bg-opacity: 1;
 }

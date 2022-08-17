@@ -14,7 +14,6 @@
   &__bar {
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
-    background: $brand-01;
     margin-left: -$grid-gutter-width * .5;
     margin-right: -$grid-gutter-width * .5;
 
@@ -25,11 +24,11 @@
 
     color: var(--navbar-color);
 
-    background: $primary;
-    background: linear-gradient(
+    background-color: var(--theme-bg);
+    background-image: linear-gradient(
       45deg,
-      hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l)),
-      hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 70%
+      hsla(var(--primary-h), var(--primary-s), var(--accent-bg-l), var(--gradient-bg-opacity)),
+      hsla(var(--primary-h), var(--primary-s), var(--primary-l), var(--gradient-bg-opacity)) 70%
     );
 
     position: relative;

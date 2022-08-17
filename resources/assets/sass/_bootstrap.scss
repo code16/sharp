@@ -104,6 +104,7 @@ $bv-enable-tooltip-variants: false;
 
 .input-group-text {
   background-color: var(--theme-bg);
+  border-color: var(--theme-border-color);
 }
 
 .btn,
@@ -144,6 +145,8 @@ $bv-enable-tooltip-variants: false;
 .dropdown-menu {
   background-color: var(--theme-bg);
   box-shadow: $box-shadow;
+
+  --bs-dropdown-link-hover-bg: hsla(var(--primary-h), 30%, 50%, 0.125);
 }
 
 .form-check-label {

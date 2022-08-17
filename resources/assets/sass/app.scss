@@ -31,10 +31,6 @@
 @import "utilities";
 
 
-body {
-  background-color: var(--body-bg);
-}
-
 input[type="number"].hide-controls {
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
     -webkit-appearance: none;
