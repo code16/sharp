@@ -12,7 +12,7 @@ trait SharpFormFieldWithUpload
     protected string $storageDisk = 'local';
     protected string|Closure $storageBasePath = 'data';
     protected bool $transformable = true;
-    protected bool $transformKeepOriginal = true;
+    protected ?bool $transformKeepOriginal = null;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
     protected string|array|null $fileFilter = null;
@@ -70,10 +70,11 @@ trait SharpFormFieldWithUpload
         return $this->setTransformable($croppable);
     }
 
-    public function setTransformable(bool $transformable = true, bool $transformKeepOriginal = true): self
+    public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
     {
         $this->transformable = $transformable;
-        if ($transformable) {
+
+        if ($transformable && ! is_null($transformKeepOriginal)) {
             $this->transformKeepOriginal = $transformKeepOriginal;
         }
 
@@ -82,7 +83,12 @@ trait SharpFormFieldWithUpload
 
     public function isTransformOriginal(): bool
     {
-        return $this->transformable && ! $this->transformKeepOriginal;
+        return $this->transformable && ! $this->transformKeepOriginal();
+    }
+
+    protected function transformKeepOriginal(): bool
+    {
+        return $this->transformKeepOriginal ?? config('sharp.uploads.transform_keep_original_image', true);
     }
 
     public function setStorageDisk(string $storageDisk): self

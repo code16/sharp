@@ -39,7 +39,7 @@ class SharpFormUploadField extends SharpFormField
             'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
             'transformable' => $this->transformable,
             'transformableFileTypes' => $this->transformableFileTypes,
-            'transformKeepOriginal' => $this->transformKeepOriginal,
+            'transformKeepOriginal' => $this->transformKeepOriginal(),
             'compactThumbnail' => (bool) $this->compactThumbnail,
             'shouldOptimizeImage' => (bool) $this->shouldOptimizeImage,
         ]);
