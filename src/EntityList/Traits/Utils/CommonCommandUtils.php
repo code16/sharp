@@ -27,6 +27,7 @@ trait CommonCommandUtils
                 ];
             });
 
+        // force JSON arrays when groupIndex starts at 1 (https://github.com/code16/sharp-dev/issues/33)
         if($config['commands'] ?? null) {
             $config['commands'] = collect($config['commands'])
                 ->map(fn ($group) => collect($group)->values())
