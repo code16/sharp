@@ -1,17 +1,19 @@
-const fs = require('fs');
-const path = require('path');
-const { defineUserConfig } = require('vuepress');
-const { docsearchPlugin } = require('@vuepress/plugin-docsearch');
-const { viteBundler } = require('@vuepress/bundler-vite');
-const sidebar = require('./sidebar');
-const theme = require('./theme');
-const fathomPlugin = require('./plugins/fathom');
-const markdownPlugin = require('./plugins/markdown');
+import * as fs from 'fs';
+import * as path from 'path';
+import { defineUserConfig } from 'vuepress';
+import { docsearchPlugin } from '@vuepress/plugin-docsearch';
+import { viteBundler } from '@vuepress/bundler-vite';
+import * as dotenv from 'dotenv';
+import svgLoader from 'vite-svg-loader';
+import sidebar from './sidebar';
+import theme from './theme';
+import fathomPlugin from './plugins/fathom';
+import markdownPlugin from './plugins/markdown';
 
 
 const demoEnvPath = path.resolve(__dirname, '../../demo/.env');
 
-require('dotenv').config({
+dotenv.config({
     path: fs.existsSync(demoEnvPath)
         ? demoEnvPath
         : path.resolve(__dirname, '../../saturn/.env'),
@@ -29,7 +31,7 @@ const {
 
 const DOCS_HOME_URL = DOCS_MAIN_URL === APP_URL ? '/' : DOCS_MAIN_URL;
 
-module.exports = defineUserConfig({
+export default defineUserConfig({
     title: DOCS_TITLE,
     base: '/docs/',
     head: [
@@ -81,7 +83,7 @@ module.exports = defineUserConfig({
     ],
     bundler: viteBundler({
         viteOptions: {
-            plugins: [require('vite-svg-loader')({ svgo: false })],
+            plugins: [svgLoader({ svgo: false })],
         },
     }),
     // scss: {
