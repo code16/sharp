@@ -1,13 +1,14 @@
-const { defaultTheme } = require('@vuepress/theme-default');
-const { path } = require('@vuepress/utils');
+import { defaultTheme } from '@vuepress/theme-default';
+import { path } from '@vuepress/utils';
 
 /**
  * @param {import('@vuepress/theme-default').DefaultThemeOptions} options
+ * @return {import('@vuepress/core').ThemeObject}
  */
-module.exports = (options) => ({
+export default (options) => ({
     name: 'vuepress-theme-local',
     extends: defaultTheme(options),
-    layouts: path.resolve(__dirname, './layouts'),
+    clientConfigFile: path.resolve(__dirname, './client.js'),
     alias: {
         '@theme/NavbarBrand.vue': path.resolve(__dirname, './components/NavbarBrand.vue'),
     },

@@ -1,9 +1,9 @@
-const Prism = require('prismjs');
-const loadLanguages = require('prismjs/components/');
+import Prism from 'prismjs';
+import loadLanguages from 'prismjs/components/index.js';
 
 loadLanguages(['php']);
 
-module.exports = {
+export default {
     name: 'markdown',
     extendsMarkdown: md => {
         md.renderer.rules['code_inline'] = (tokens, idx, options, env, slf) => {

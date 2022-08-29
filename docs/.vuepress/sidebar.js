@@ -1,6 +1,6 @@
 
 
-module.exports = [
+export default [
     {
         text: 'Introduction',
         children: [

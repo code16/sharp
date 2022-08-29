@@ -1,6 +1,6 @@
-const path = require('path')
+import * as path from 'path';
 
-module.exports = ({ siteId, domains, url }) => ({
+export default ({ siteId, domains, url }) => ({
     name: 'fathom',
     clientConfigFile: path.resolve(__dirname, './clientConfig.js'),
     define: {
