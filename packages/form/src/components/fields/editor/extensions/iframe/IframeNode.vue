@@ -112,6 +112,7 @@
                 const iframe = this.getIframe(this.html);
                 this.invalid = !iframe;
                 if(iframe) {
+                    iframe.removeAttribute('style');
                     this.previewHtml = iframe.outerHTML;
                 }
             },

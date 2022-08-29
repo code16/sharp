@@ -175,6 +175,10 @@
       max-height: 200px;
       max-width: 100%;
       margin-bottom: 1rem;
+
+      &[height$="%"] { // e.g 100%
+        height: 200px;
+      }
     }
 
     [data-node-view-wrapper] {
