@@ -25,9 +25,17 @@ This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel
 
 Max file size allowed.
 
-### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
+### `setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
 
 Allow the user to crop or rotate the visual, after the upload.  
+The argument `$transformKeepOriginal` overrides the following config which is `true` by default.
+```php
+// config/sharp.php
+
+"uploads" => [
+    'transform_keep_original_image' => true,
+]
+```
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
 stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the
 Formatter part below.
