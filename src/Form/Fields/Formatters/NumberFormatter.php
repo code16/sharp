@@ -13,7 +13,7 @@ class NumberFormatter extends SharpFieldFormatter
      */
     public function toFront(SharpFormField $field, $value)
     {
-        return (int) $value;
+        return (float) $value;
     }
 
     /**
