@@ -89,7 +89,11 @@ class CurrentSharpRequest
 
     public function getCurrentEntityMenuLabel(): ?string
     {
-        return $this->getEntityMenuLabel($this->entityKey());
+        if ($currentEntityKey = $this->entityKey()) {
+            return $this->getEntityMenuLabel($currentEntityKey);
+        }
+
+        return null;
     }
 
     public function getEntityMenuLabel(string $entityKey): ?string

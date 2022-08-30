@@ -11,9 +11,9 @@ class SharpFormNumberField extends SharpFormField
 
     const FIELD_TYPE = 'number';
 
-    protected ?int $min = null;
-    protected ?int $max = null;
-    protected int $step = 1;
+    protected ?float $min = null;
+    protected ?float $max = null;
+    protected float $step = 1;
     protected bool $showControls = false;
 
     public static function make(string $key): self
@@ -21,21 +21,21 @@ class SharpFormNumberField extends SharpFormField
         return new static($key, static::FIELD_TYPE, new NumberFormatter);
     }
 
-    public function setMin(int $min): self
+    public function setMin(float $min): self
     {
         $this->min = $min;
 
         return $this;
     }
 
-    public function setMax(int $max): self
+    public function setMax(float $max): self
     {
         $this->max = $max;
 
         return $this;
     }
 
-    public function setStep(int $step): self
+    public function setStep(float $step): self
     {
         $this->step = $step;
 
@@ -52,9 +52,9 @@ class SharpFormNumberField extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            'min' => 'integer',
-            'max' => 'integer',
-            'step' => 'required|integer',
+            'min' => 'numeric',
+            'max' => 'numeric',
+            'step' => 'required|numeric',
             'showControls' => 'required|bool',
         ];
     }

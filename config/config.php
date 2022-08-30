@@ -53,6 +53,8 @@ return [
         // These two configs are used for thumbnail generation inside Sharp.
         'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
+
+        'transform_keep_original_image' => true,
     ],
 
     // Optional. Options for form markdown editor (SharpFormMarkdownField)

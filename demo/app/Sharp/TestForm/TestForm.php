@@ -24,6 +24,8 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestForm extends SharpSingleForm
 {
+    protected ?string $formValidatorClass = TestValidator::class;
+
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -153,8 +155,9 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormNumberField::make('number')
                     ->setLabel('Number')
-                ->setMin(1)
-                ->setMax(100),
+                    ->setMin(0)
+                    ->setMax(1)
+                    ->setStep(.1),
             )
             ->addField(
                 SharpFormSelectField::make('select_dropdown', $this->options(true))
@@ -323,6 +326,8 @@ class TestForm extends SharpSingleForm
 
     protected function updateSingle(array $data)
     {
+        ray($data);
+
         session()->put('sharp_test_form', $data);
     }
 

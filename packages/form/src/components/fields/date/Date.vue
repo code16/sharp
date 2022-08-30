@@ -45,11 +45,17 @@
 
 <script>
     import moment from 'moment';
+    import 'moment/locale/fr';
     import { lang } from 'sharp';
     import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
     import DatePicker from './DatePicker';
 
+    moment.locale(
+        moment.locales().includes(document.documentElement.lang)
+            ? document.documentElement.lang
+            : 'en'
+    );
 
     export default {
         name:'SharpDate',
@@ -133,8 +139,16 @@
                     ? moment(this.value, this.format)
                     : moment();
             },
+            formatDateValue(date) {
+                if(!this.hasTime) {
+                    date.setUTCHours(0);
+                    date.setUTCMinutes(0);
+                    date.setUTCSeconds(0);
+                }
+                return date;
+            },
             handleDateChanged(date) {
-                this.$emit('input', date);
+                this.$emit('input', this.formatDateValue(date));
             },
             handleInput(e) {
                 const m = moment(e.target.value, this.displayFormat, true);
@@ -144,7 +158,7 @@
                 }
                 else {
                     this.rollback();
-                    this.$emit('input', m.toDate());
+                    this.$emit('input', this.formatDateValue(m.toDate()));
                     this.updatePopover();
                 }
             },
@@ -177,7 +191,7 @@
             add(amount, unit) {
                 const date = this.getMoment();
                 date.add(amount, unit)
-                this.$emit('input', date.toDate());
+                this.$emit('input', this.formatDateValue(date.toDate()));
             },
             nearestMinutesDist(dir) { //dir = 1 or -1
                 let curM = this.getMoment().minutes(); //current minutes

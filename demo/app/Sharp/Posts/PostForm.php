@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
+use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
@@ -58,6 +59,7 @@ class PostForm extends SharpForm
                         RelatedPostEmbed::class,
                         AuthorEmbed::class,
                         CodeEmbed::class,
+                        TableOfContentsEmbed::class,
                     ])
                     ->setMaxFileSize(1)
                     ->setHeight(300, 0)

@@ -160,7 +160,7 @@ class SharpFormEditorField extends SharpFormField
         if ($this->cropRatio) {
             $uploadConfig['ratioX'] = (int) $this->cropRatio[0];
             $uploadConfig['ratioY'] = (int) $this->cropRatio[1];
-            $uploadConfig['transformKeepOriginal'] = $this->transformKeepOriginal;
+            $uploadConfig['transformKeepOriginal'] = $this->transformKeepOriginal();
             $uploadConfig['transformableFileTypes'] = $this->transformableFileTypes;
         }
 

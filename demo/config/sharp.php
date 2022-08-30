@@ -22,6 +22,7 @@ return [
         'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
         'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
+        'transform_keep_original_image' => true,
     ],
 
     'auth' => [

@@ -40,7 +40,7 @@ abstract class SharpFormEditorEmbed
             'key' => ['required'],
             'label' => ['required'],
             'tag' => ['required', 'regex:/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/'],
-            'attributes' => ['required', 'array'],
+            'attributes' => ['array'],
             'template' => ['required'],
         ], [
             'attributes.required' => 'Your Embed should at least have one form field',
