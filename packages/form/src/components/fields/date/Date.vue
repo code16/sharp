@@ -45,11 +45,17 @@
 
 <script>
     import moment from 'moment';
+    import 'moment/locale/fr';
     import { lang } from 'sharp';
     import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
     import DatePicker from './DatePicker';
 
+    moment.locale(
+        moment.locales().includes(document.documentElement.lang)
+            ? document.documentElement.lang
+            : 'en'
+    );
 
     export default {
         name:'SharpDate',
