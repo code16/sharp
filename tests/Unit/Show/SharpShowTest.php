@@ -16,7 +16,7 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 class SharpShowTest extends SharpTestCase
 {
     /** @test */
-    public function we_can_add_and_entity_list_section_to_the_layout()
+    public function we_can_add_an_entity_list_section_to_the_layout()
     {
         $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
         {
@@ -104,6 +104,52 @@ class SharpShowTest extends SharpTestCase
                 ],
             ],
         ], $sharpShow->showLayout());
+    }
+
+    /** @test */
+    public function we_can_define_a_collapsable_entity_list_section_with_a_boolean()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowFields(FieldsContainer $showFields): void
+            {
+                $showFields->addField(
+                    SharpShowEntityListField::make('entityList', 'entityKey')
+                        ->setLabel('Test'),
+                );
+            }
+
+            public function buildShowLayout(ShowLayout $showLayout): void
+            {
+                $showLayout->addEntityListSection('entityList', true);
+            }
+        };
+
+        $this->assertTrue($sharpShow->showLayout()['sections'][0]['collapsable']);
+    }
+
+    /** @test */
+    public function we_can_define_a_collapsable_entity_list_section_with_a_legacy_closure()
+    {
+        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        {
+            public function buildShowFields(FieldsContainer $showFields): void
+            {
+                $showFields->addField(
+                    SharpShowEntityListField::make('entityList', 'entityKey')
+                        ->setLabel('Test'),
+                );
+            }
+
+            public function buildShowLayout(ShowLayout $showLayout): void
+            {
+                $showLayout->addEntityListSection('entityList', function (ShowLayoutSection $section) {
+                    $section->setCollapsable();
+                });
+            }
+        };
+
+        $this->assertTrue($sharpShow->showLayout()['sections'][0]['collapsable']);
     }
 
     /** @test */
