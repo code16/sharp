@@ -48,6 +48,6 @@ class CategoryShow extends SharpShow
                         $column->withSingleField('name');
                     });
             })
-            ->addEntityListSection('posts');
+            ->addEntityListSection('posts', collapsable: true);
     }
 }
