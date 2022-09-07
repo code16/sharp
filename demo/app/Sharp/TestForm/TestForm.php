@@ -81,6 +81,8 @@ class TestForm extends SharpSingleForm
                 SharpFormGeolocationField::make('geolocation')
                     ->setLabel('Geolocation')
                     ->setApiKey(env('GMAPS_KEY'))
+                    ->setMapsProvider('osm')
+                    ->setGeocodingProvider('osm')
     //                ->setDisplayUnitDecimalDegrees()
                     ->setDisplayUnitDegreesMinutesSeconds()
                     ->setGeocoding()
@@ -283,7 +285,7 @@ class TestForm extends SharpSingleForm
                         $column->withSingleField('upload');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-//                        $column->withSingleField("geolocation");
+                        $column->withSingleField("geolocation");
                     });
             });
     }

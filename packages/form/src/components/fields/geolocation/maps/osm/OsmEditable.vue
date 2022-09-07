@@ -16,6 +16,7 @@
 <script>
     import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
     import { toLatLngBounds } from "./util";
+    import { triggerResize } from "../../util";
 
     export default {
         name: 'SharpOsmEditable',
@@ -53,6 +54,9 @@
             handleMarkerDragEnd(e) {
                 this.$emit('change', e.target.getLatLng());
             },
-        }
+        },
+        mounted() {
+            triggerResize();
+        },
     }
 </script>
