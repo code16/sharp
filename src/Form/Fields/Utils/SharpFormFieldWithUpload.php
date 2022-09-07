@@ -155,7 +155,7 @@ trait SharpFormFieldWithUpload
         return collect($fileFilter)
             ->map(function ($filter) {
                 $filter = trim($filter);
-                if (substr($filter, 0, 1) != '.') {
+                if (! str_starts_with($filter, '.')) {
                     $filter = ".$filter";
                 }
 
