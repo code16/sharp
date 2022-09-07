@@ -155,14 +155,11 @@ class SharpFormEditorField extends SharpFormField
         $uploadConfig = [
             'maxFileSize' => $this->maxFileSize ?: 2,
             'transformable' => $this->transformable,
+            'transformKeepOriginal' => $this->transformKeepOriginal(),
+            'transformableFileTypes' => $this->transformableFileTypes,
+            'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
+            'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
         ];
-
-        if ($this->cropRatio) {
-            $uploadConfig['ratioX'] = (int) $this->cropRatio[0];
-            $uploadConfig['ratioY'] = (int) $this->cropRatio[1];
-            $uploadConfig['transformKeepOriginal'] = $this->transformKeepOriginal();
-            $uploadConfig['transformableFileTypes'] = $this->transformableFileTypes;
-        }
 
         if (! $this->fileFilter) {
             $this->setFileFilterImages();
