@@ -285,7 +285,7 @@ class TestForm extends SharpSingleForm
                         $column->withSingleField('upload');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField("geolocation");
+                        $column->withSingleField('geolocation');
                     });
             });
     }
