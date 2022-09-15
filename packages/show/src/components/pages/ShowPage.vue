@@ -3,7 +3,7 @@
         <div class="container">
             <template v-if="ready">
                 <ActionBarShow
-                    :commands="authorizedCommands"
+                    :commands="dropdownCommands"
                     :state="instanceState"
                     :state-values="stateValues"
                     :form-url="formUrl"
@@ -45,6 +45,8 @@
                             :layout="sectionLayout(section)"
                             :fields-row-class="fieldsRowClass"
                             :collapsable="isSectionCollapsable(section)"
+                            :commands="sectionCommands(section)"
+                            @command="handleCommandRequested"
                             v-slot="{ fieldLayout }"
                         >
                             <template v-if="fieldOptions(fieldLayout)">
@@ -169,6 +171,14 @@
             localized() {
                 return this.locales?.length > 0;
             },
+            dropdownCommands() {
+                const sectionCommands = this.layout.sections.map(section => section.commands)
+                    .filter(Boolean)
+                    .flat();
+
+                return this.authorizedCommands
+                    .map(group => group.filter(command => !sectionCommands.includes(command.key)));
+            },
         },
 
         methods: {
@@ -194,6 +204,16 @@
                 }
                 return 'card';
             },
+            sectionCommands(section) {
+                if(!section.commands?.length) {
+                    return null;
+                }
+                return section.commands
+                    .map(commandKey =>
+                        this.authorizedCommands.flat().find(command => command.key === commandKey)
+                    )
+                    .filter(command => !!command);
+            },
             fieldsRowClass(row) {
                 const fieldsTypeClasses = row.map(fieldLayout => {
                     const field = this.fieldOptions(fieldLayout);
@@ -209,7 +229,8 @@
             },
             isSectionVisible(section) {
                 const sectionFields = this.sectionFields(section);
-                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout));
+                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout))
+                    || this.sectionCommands(section).flat().length;
             },
             sectionHasField(section, type) {
                 const sectionFields = this.sectionFields(section);
