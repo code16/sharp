@@ -108,7 +108,7 @@
         },
         computed: {
             hasCommands() {
-                return this.commands && this.commands.some(group => group && group.length > 0);
+                return this.commands?.flat().length > 0;
             },
             hasState() {
                 return !!this.state;
