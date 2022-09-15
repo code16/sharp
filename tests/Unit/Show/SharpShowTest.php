@@ -8,9 +8,9 @@ use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Show\SharpShow;
-use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpShowDefaultTest;
+use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpSingleShowDefaultTest;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpShowTest extends SharpTestCase
@@ -18,7 +18,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_add_an_entity_list_section_to_the_layout()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -65,7 +65,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_collapsable_section()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -117,7 +117,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_boolean()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -139,7 +139,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_legacy_closure()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -163,7 +163,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_custom_key_to_a_section()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -190,7 +190,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_multiformAttribute()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowConfig(): void
             {
@@ -211,7 +211,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_global_message_field()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowConfig(): void
             {
@@ -240,7 +240,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_associate_data_to_a_global_message_field()
     {
-        $sharpShow = new class extends BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowConfig(): void
             {
@@ -268,7 +268,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends BaseSharpSingleShow
+        $sharpShow = new class extends BaseSharpSingleShowDefaultTest
         {
         };
 
@@ -278,35 +278,5 @@ class SharpShowTest extends SharpTestCase
             ],
             $sharpShow->showConfig(null),
         );
-    }
-}
-
-class BaseSharpShow extends SharpShow
-{
-    public function find($id): array
-    {
-    }
-
-    public function buildShowFields(FieldsContainer $showFields): void
-    {
-    }
-
-    public function buildShowLayout(ShowLayout $showLayout): void
-    {
-    }
-}
-
-class BaseSharpSingleShow extends SharpSingleShow
-{
-    public function buildShowFields(FieldsContainer $showFields): void
-    {
-    }
-
-    public function buildShowLayout(ShowLayout $showLayout): void
-    {
-    }
-
-    public function findSingle(): array
-    {
     }
 }
