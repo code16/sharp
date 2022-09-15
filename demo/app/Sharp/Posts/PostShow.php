@@ -68,6 +68,7 @@ class PostShow extends SharpShow
             })
             ->addSection('Content', function (ShowLayoutSection $section) {
                 $section
+                    ->setKey('content-section')
                     ->addColumn(8, function (ShowLayoutColumn $column) {
                         $column->withSingleField('content');
                     });
@@ -85,6 +86,16 @@ class PostShow extends SharpShow
                 static::$pageAlertLevelInfo,
                 'publication',
             );
+    }
+
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            'content-section' => [
+                PreviewPostCommand::class,
+            ],
+            EvaluateDraftPostWizardCommand::class,
+        ];
     }
 
     public function find(mixed $id): array
@@ -113,14 +124,6 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
             ->transform(Post::findOrFail($id));
-    }
-
-    public function getInstanceCommands(): ?array
-    {
-        return [
-            PreviewPostCommand::class,
-            EvaluateDraftPostWizardCommand::class,
-        ];
     }
 
     public function getDataLocalizations(): array

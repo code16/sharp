@@ -18,7 +18,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_add_an_entity_list_section_to_the_layout()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -34,34 +34,38 @@ class SharpShowTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            'sections' => [
-                [
-                    'collapsable' => false,
-                    'title' => '',
-                    'columns' => [
-                        [
-                            'size' => 12,
-                            'fields' => [
-                                [
+        $this->assertEquals(
+            [
+                'sections' => [
+                    [
+                        'collapsable' => false,
+                        'title' => '',
+                        'columns' => [
+                            [
+                                'size' => 12,
+                                'fields' => [
                                     [
-                                        'key' => 'entityList',
-                                        'size' => 12,
-                                        'sizeXS' => 12,
+                                        [
+                                            'key' => 'entityList',
+                                            'size' => 12,
+                                            'sizeXS' => 12,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
+                        'key' => null,
                     ],
                 ],
             ],
-        ], $sharpShow->showLayout());
+            $sharpShow->showLayout()
+        );
     }
 
     /** @test */
     public function we_can_declare_a_collapsable_section()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -82,34 +86,38 @@ class SharpShowTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            'sections' => [
-                [
-                    'collapsable' => true,
-                    'title' => 'test',
-                    'columns' => [
-                        [
-                            'size' => 12,
-                            'fields' => [
-                                [
+        $this->assertEquals(
+            [
+                'sections' => [
+                    [
+                        'collapsable' => true,
+                        'title' => 'test',
+                        'columns' => [
+                            [
+                                'size' => 12,
+                                'fields' => [
                                     [
-                                        'key' => 'test',
-                                        'size' => 12,
-                                        'sizeXS' => 12,
+                                        [
+                                            'key' => 'test',
+                                            'size' => 12,
+                                            'sizeXS' => 12,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
+                        'key' => null,
                     ],
                 ],
             ],
-        ], $sharpShow->showLayout());
+            $sharpShow->showLayout()
+        );
     }
 
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_boolean()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -131,7 +139,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_legacy_closure()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -153,9 +161,36 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_can_define_a_custom_key_to_a_section()
+    {
+        $sharpShow = new class extends BaseSharpShow
+        {
+            public function buildShowFields(FieldsContainer $showFields): void
+            {
+                $showFields->addField(
+                    SharpShowTextField::make('test'),
+                );
+            }
+
+            public function buildShowLayout(ShowLayout $showLayout): void
+            {
+                $showLayout->addSection('test', function (ShowLayoutSection $section) {
+                    $section
+                        ->setKey('my-section')
+                        ->addColumn(12, function (ShowLayoutColumn $column) {
+                            $column->withSingleField('test');
+                        });
+                });
+            }
+        };
+
+        $this->assertEquals('my-section', $sharpShow->showLayout()['sections'][0]['key']);
+    }
+
+    /** @test */
     public function we_can_declare_a_multiformAttribute()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowConfig(): void
             {
@@ -176,7 +211,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_global_message_field()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowConfig(): void
             {
@@ -205,7 +240,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_associate_data_to_a_global_message_field()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShow
         {
             public function buildShowConfig(): void
             {
@@ -233,7 +268,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow
+        $sharpShow = new class extends BaseSharpSingleShow
         {
         };
 

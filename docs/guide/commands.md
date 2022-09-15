@@ -221,7 +221,18 @@ function getDashboardCommands(): ?array
 }
 ```
 
-You can optionally specify a command key (like "message" in the example); Sharp will use the command class name if it is missing. For the command itself, you can type a class name, a class instance or a Closure.
+For the command itself, you can type a class name (as show in these examples), a class instance or a Closure.
+
+You can optionally specify a command key. Sharp will use the command class name if it is missing as a default behavior, which should be ok in most cases.
+
+```php
+function getInstanceCommands(): ?array
+{
+    return [
+        'message' => SpaceshipSendMessage::class
+    ];
+}
+```
 
 ## Handle authorizations
 

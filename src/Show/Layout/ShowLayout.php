@@ -46,7 +46,7 @@ class ShowLayout implements HasLayout
     {
         return [
             'sections' => collect($this->sections)
-                ->map->toArray()
+                ->map(fn ($section) => $section->toArray())
                 ->all(),
         ];
     }
