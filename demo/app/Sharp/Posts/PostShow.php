@@ -95,6 +95,7 @@ class PostShow extends SharpShow
                 PreviewPostCommand::class,
             ],
             EvaluateDraftPostWizardCommand::class,
+            PreviewPostCommand::class,
         ];
     }
 
