@@ -280,4 +280,3 @@ class SharpShowTest extends SharpTestCase
         );
     }
 }
-
