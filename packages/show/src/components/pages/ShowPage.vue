@@ -3,7 +3,7 @@
         <div class="container">
             <template v-if="ready">
                 <ActionBarShow
-                    :commands="dropdownCommands"
+                    :commands="authorizedCommands"
                     :state="instanceState"
                     :state-values="stateValues"
                     :form-url="formUrl"
@@ -171,14 +171,6 @@
             localized() {
                 return this.locales?.length > 0;
             },
-            dropdownCommands() {
-                const sectionCommands = this.layout.sections.map(section => section.commands)
-                    .filter(Boolean)
-                    .flat();
-
-                return this.authorizedCommands
-                    .map(group => group.filter(command => !sectionCommands.includes(command.key)));
-            },
         },
 
         methods: {
@@ -205,14 +197,11 @@
                 return 'card';
             },
             sectionCommands(section) {
-                if(!section.commands?.length) {
+                if(!section.key) {
                     return null;
                 }
-                return section.commands
-                    .map(commandKey =>
-                        this.authorizedCommands.flat().find(command => command.key === commandKey)
-                    )
-                    .filter(command => !!command);
+                return (this.config.commands[section.key] ?? [])
+                    .map(group => group.filter(command => command.authorization));
             },
             fieldsRowClass(row) {
                 const fieldsTypeClasses = row.map(fieldLayout => {

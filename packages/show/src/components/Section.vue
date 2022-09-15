@@ -1,32 +1,34 @@
 <template>
     <div class="ShowSection" :class="classes">
-        <component :is="wrapperElement">
-            <div class="row">
-                <template v-if="hasCollapse || section.title">
-                    <div class="col">
-                        <template v-if="hasCollapse">
+        <div class="row">
+            <template v-if="hasCollapse || section.title">
+                <div class="col">
+                    <template v-if="hasCollapse">
+                        <details :open="!collapsed" @toggle="handleDetailsToggle">
                             <summary class="ShowSection__header ShowSection__header--collapsable">
                                 <h2 class="ShowSection__title d-inline-block mb-0">{{ section.title || ' ' }}</h2>
                             </summary>
+                        </details>
+                    </template>
+                    <template v-else-if="section.title">
+                        <div class="ShowSection__header">
+                            <h2 class="ShowSection__title">{{ section.title }}</h2>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template v-if="hasCommands && !collapsed">
+                <div class="col-auto align-self-end mb-2">
+                    <CommandsDropdown :commands="commands" @select="handleCommandSelected">
+                        <template v-slot:text>
+                            {{ lang('entity_list.commands.instance.label') }}
                         </template>
-                        <template v-else-if="section.title">
-                            <div class="ShowSection__header">
-                                <h2 class="ShowSection__title">{{ section.title }}</h2>
-                            </div>
-                        </template>
-                    </div>
-                </template>
-                <template v-if="hasCommands">
-                    <div class="col-auto">
-                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">
-                            <template v-slot:text>
-                                {{ lang('entity_list.commands.instance.label') }}
-                            </template>
-                        </CommandsDropdown>
-                    </div>
-                </template>
-            </div>
+                    </CommandsDropdown>
+                </div>
+            </template>
+        </div>
 
+        <template v-if="!collapsed">
             <div class="ShowSection__content">
                 <Grid class="ShowSection__grid"
                     :rows="[section.columns]"
@@ -42,7 +44,7 @@
                     </Grid>
                 </Grid>
             </div>
-        </component>
+        </template>
     </div>
 </template>
 
@@ -67,6 +69,11 @@
             },
             commands: Array,
         },
+        data() {
+            return {
+                collapsed: this.collapsable,
+            }
+        },
         computed: {
             classes() {
                 return [
@@ -87,6 +94,9 @@
             lang,
             handleCommandSelected(command) {
                 this.$emit('command', command);
+            },
+            handleDetailsToggle(e) {
+                this.collapsed = !e.target.open;
             },
         },
     }
