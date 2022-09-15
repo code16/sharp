@@ -11,7 +11,6 @@ export const Iframe =  Node.create({
     atom: true,
 
     addOptions: () => ({
-        allowFullscreen: false,
         HTMLAttributes: {
             class: 'iframe-wrapper',
         },
@@ -35,8 +34,7 @@ export const Iframe =  Node.create({
                 default: null,
             },
             allowfullscreen: {
-                default: this.options.allowFullscreen,
-                parseHTML: () => this.options.allowFullscreen,
+                default: null,
             },
             isNew: {
                 default: false,

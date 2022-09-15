@@ -51,6 +51,19 @@
       margin-bottom: 1.5rem;
       white-space: normal;
     }
+    .iframe-wrapper {
+      iframe {
+        display: block;
+        width: 450px;
+        max-height: 200px;
+        max-width: 100%;
+        margin-bottom: 1rem;
+
+        &[height$="%"] { // e.g 100%
+          height: 200px;
+        }
+      }
+    }
     > :last-child {
       margin-bottom: 0;
     }
