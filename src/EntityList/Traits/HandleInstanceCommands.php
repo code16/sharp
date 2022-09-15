@@ -105,7 +105,7 @@ trait HandleInstanceCommands
                         })
                         ->filter()
                         ->values();
-                    });
+                });
         }
 
         return $this->instanceCommandHandlers;
