@@ -219,7 +219,7 @@
             isSectionVisible(section) {
                 const sectionFields = this.sectionFields(section);
                 return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout))
-                    || this.sectionCommands(section).flat().length;
+                    || this.sectionCommands(section)?.flat().length;
             },
             sectionHasField(section, type) {
                 const sectionFields = this.sectionFields(section);
