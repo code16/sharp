@@ -57,11 +57,6 @@ describe('store filters', () => {
             expect(filters.getters.defaultValue()({ default:'default' })).toEqual('default');
         });
 
-        test('isDateRange', ()=>{
-            expect(filters.getters.isDateRange()(null)).toBe(false);
-            expect(filters.getters.isDateRange()({ type:'daterange' })).toBe(true);
-        });
-
         test('filterQueryKey', ()=>{
             expect(filters.getters.filterQueryKey()('key')).toBe('filter_key');
         });
