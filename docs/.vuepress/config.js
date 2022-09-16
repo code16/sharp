@@ -77,7 +77,7 @@ export default defineUserConfig({
         }),
         fathomPlugin({
             siteId: 'EELMENOG',
-            domains: '*.code16.fr',
+            domains: 'sharp.code16.fr',
         }),
         markdownPlugin,
     ],
