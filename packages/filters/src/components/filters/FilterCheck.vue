@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpFilterCheckbox form-check mt-1 mx-2">
+    <div class="SharpFilterCheck form-check mt-1 mx-2">
         <input
             :id="id"
             class="form-check-input"
