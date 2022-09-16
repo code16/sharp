@@ -32,7 +32,7 @@ class CategoryList extends SharpEntityList
                 public function buildFilterConfig(): void
                 {
                     $this->configureKey('orphan')
-                        ->configureLabel('Orphan categories only');
+                        ->configureLabel('Orphan categories only.');
                 }
             },
         ];
@@ -42,7 +42,7 @@ class CategoryList extends SharpEntityList
     {
         $categories = Category::withCount('posts')
             ->when(
-                $this->queryParams->filterFor('orphan') === true,
+                $this->queryParams->filterFor('orphan'),
                 fn ($q) => $q->having('posts_count', 0)
             )
 
