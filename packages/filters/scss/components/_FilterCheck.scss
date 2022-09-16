@@ -2,4 +2,8 @@
 .SharpFilterCheck {
   color: $ui-primary-color;
   line-height: 1.25;
+
+  :first-child > & {
+    margin-left: 0!important;
+  }
 }
