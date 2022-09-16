@@ -65,9 +65,11 @@
                         </template>
 
                         <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
-                        <template v-if="dragActive">
-                            <div class="SharpList__overlay-handle"></div>
-                        </template>
+<!--                        <template v-if="dragActive">-->
+                        <div class="SharpList__drag-handle d-flex align-items-center px-1">
+                            <i class="fas fa-grip-vertical opacity-25 fs-8"></i>
+                        </div>
+<!--                        </template>-->
                     </div>
                 </template>
                 <template v-if="hasUpload">
@@ -177,8 +179,8 @@
             },
             dragOptions() {
                 return {
-                    disabled: !this.dragActive,
-                    handle: '.SharpList__overlay-handle',
+                    // disabled: !this.dragActive,
+                    handle: '.SharpList__drag-handle',
                     filter: '.SharpListUpload',
                 };
             },

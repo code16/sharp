@@ -112,14 +112,16 @@
     //@include module-contextual-close-button;
     ///
 
-    .SharpList__overlay-handle {
+    .SharpList__drag-handle {
       position: absolute;
-      top:0;
-      left:0;
-      width: 100%;
+      top: 0;
+      left: 0;
+      width: 1rem;
       height: 100%;
       z-index: 40;
       cursor: move;
+      opacity: var(--drag-handle-opacity, 0);
+      transition: opacity .15s ease-in-out;
     }
 
     &.sortable-chosen {
@@ -141,6 +143,10 @@
 
     &--no-transition {
       transition: unset;
+    }
+
+    &:hover {
+      --drag-handle-opacity: 1;
     }
   }
 
@@ -165,6 +171,12 @@
       &:focus {
         opacity: 1;
       }
+    }
+  }
+
+  &:has(.sortable-chosen) {
+    .SharpList__item {
+      --drag-handle-opacity: 0;
     }
   }
 }
