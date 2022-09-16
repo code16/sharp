@@ -24,11 +24,12 @@ trait HandleEntityCommands
     /**
      * Append the commands to the config returned to the front.
      */
-    protected function appendEntityCommandsToConfig(array &$config)
+    protected function appendEntityCommandsToConfig(array &$config): void
     {
         $this->appendCommandsToConfig(
             $this->getEntityCommandsHandlers(),
             $config,
+            'entity'
         );
 
         // If a command is defined as [primary], we have to update its config for the front:

@@ -190,7 +190,7 @@ function getListData()
 }
 ```
 
-## Configure the Command
+## Declare the Command
 
 Once the Command class is written, we must add it to the EntityList:
 
@@ -221,7 +221,18 @@ function getDashboardCommands(): ?array
 }
 ```
 
-You can optionally specify a command key (like "message" in the example); Sharp will use the command class name if it is missing. For the command itself, you can type a class name, a class instance or a Closure.
+For the command itself, you can type a class name (as show in these examples), a class instance or a Closure.
+
+You can optionally specify a command key. Sharp will use the command class name if it is missing as a default behavior, which should be ok in most cases.
+
+```php
+function getInstanceCommands(): ?array
+{
+    return [
+        'message' => SpaceshipSendMessage::class
+    ];
+}
+```
 
 ## Handle authorizations
 
@@ -266,10 +277,47 @@ A use case could be to provide a Command with a form for the "create" task, leav
 
 ## Commands for Show Page
 
-Show Page can only define instance commands (obviously); apart from that, the API is the same.
+Show Pages can only define instance commands (obviously); apart from that, the API is the same.
 
 It's a common pattern to reuse the same instance commands in an EntityList and in a Show Page.
 One small difference is that `reload()` action is treated as a `refresh()`.
+
+### Attach Commands to sections
+
+One small difference between Commands in EntityList and in Show Page is that in the latter case it's possible to move the Command to a specific section (of the Show Page layout).
+
+To achieve this, you must choose a unique key and attach it to the layout section, and use this key on instance commands declaration:
+
+```php
+// In a SharpShow
+
+protected function buildShowLayout(ShowLayout $showLayout): void
+{
+    $showLayout
+        ->addSection('General', function (ShowLayoutSection $section) {
+            // ...
+        })
+        ->addSection('Content', function (ShowLayoutSection $section) {
+            $section
+                ->setKey('content-section') // <- The key could be anything
+                ->addColumn(8, function (ShowLayoutColumn $column) {
+                    // ...
+                });
+        });
+}
+
+public function getInstanceCommands(): ?array
+{
+    return [
+        'content-section' => [  // <- Use the same key here
+            PreviewPostCommand::class,
+        ],
+        EvaluateDraftPostWizardCommand::class,
+    ];
+}
+```
+
+With that, the `PreviewPostCommand` will appear alongside the "Content" section.
 
 ## Commands for Dashboard
 

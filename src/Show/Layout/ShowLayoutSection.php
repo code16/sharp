@@ -9,6 +9,7 @@ class ShowLayoutSection implements HasLayout
     protected ?string $title = null;
     protected array $columns = [];
     protected bool $collapsable = false;
+    protected ?string $sectionKey = null;
 
     public function __construct(string $title)
     {
@@ -33,9 +34,17 @@ class ShowLayoutSection implements HasLayout
         return $this;
     }
 
+    public function setKey(string $key): self
+    {
+        $this->sectionKey = $key;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [
+            'key' => $this->sectionKey,
             'title' => $this->title,
             'collapsable' => $this->collapsable,
             'columns' => collect($this->columns)

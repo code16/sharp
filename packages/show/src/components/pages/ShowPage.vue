@@ -45,6 +45,8 @@
                             :layout="sectionLayout(section)"
                             :fields-row-class="fieldsRowClass"
                             :collapsable="isSectionCollapsable(section)"
+                            :commands="sectionCommands(section)"
+                            @command="handleCommandRequested"
                             v-slot="{ fieldLayout }"
                         >
                             <template v-if="fieldOptions(fieldLayout)">
@@ -194,6 +196,13 @@
                 }
                 return 'card';
             },
+            sectionCommands(section) {
+                if(!section.key) {
+                    return null;
+                }
+                return (this.config.commands[section.key] ?? [])
+                    .map(group => group.filter(command => command.authorization));
+            },
             fieldsRowClass(row) {
                 const fieldsTypeClasses = row.map(fieldLayout => {
                     const field = this.fieldOptions(fieldLayout);
@@ -209,7 +218,8 @@
             },
             isSectionVisible(section) {
                 const sectionFields = this.sectionFields(section);
-                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout));
+                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout))
+                    || this.sectionCommands(section)?.flat().length;
             },
             sectionHasField(section, type) {
                 const sectionFields = this.sectionFields(section);

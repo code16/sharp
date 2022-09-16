@@ -2,14 +2,17 @@
 
 exports[`show section can mount 1`] = `
 <div class="ShowSection ShowSection--layout-card">
-	<div>
-		<div class="ShowSection__header">
-			<h2 class="ShowSection__title">Section title</h2>
-		</div>
-		<div class="ShowSection__content">
-			<div class="MOCKED_SharpGrid ShowSection__grid">
-				<div class="MOCKED_SharpGrid ShowPage__fields-grid row-class"></div>
+	<div class="row">
+		<div class="col">
+			<div class="ShowSection__header">
+				<h2 class="ShowSection__title">Section title</h2>
 			</div>
+		</div>
+		<!---->
+	</div>
+	<div class="ShowSection__content">
+		<div class="MOCKED_SharpGrid ShowSection__grid">
+			<div class="MOCKED_SharpGrid ShowPage__fields-grid row-class"></div>
 		</div>
 	</div>
 </div>
@@ -17,15 +20,16 @@ exports[`show section can mount 1`] = `
 
 exports[`show section can mount: collapsable + contents layout 1`] = `
 <div class="ShowSection ShowSection--layout-contents">
-	<details>
-		<summary class="ShowSection__header ShowSection__header--collapsable">
-			<h2 class="ShowSection__title d-inline-block mb-0">Section title</h2>
-		</summary>
-		<div class="ShowSection__content">
-			<div class="MOCKED_SharpGrid ShowSection__grid">
-				<div class="MOCKED_SharpGrid ShowPage__fields-grid"></div>
-			</div>
+	<div class="row">
+		<div class="col">
+			<details>
+				<summary class="ShowSection__header ShowSection__header--collapsable">
+					<h2 class="ShowSection__title d-inline-block mb-0">Section title</h2>
+				</summary>
+			</details>
 		</div>
-	</details>
+		<!---->
+	</div>
+	<!---->
 </div>
 `;
