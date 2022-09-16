@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             });
 
         $categories = Category::factory()
-            ->count(8)
+            ->count(16)
             ->create();
 
         $coverImages = glob(database_path('seeders/files/posts/*.*'));
