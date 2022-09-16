@@ -70,7 +70,7 @@
             </template>
             <template v-else-if="hasState">
                 <div class="col" style="min-width: 0">
-                    <div class="ui-font btn-sm text-muted text-start text-truncate mw-100 px-0" ref="stateLabel">
+                    <div class="ui-font text-muted text-start text-truncate mw-100 fs-8" ref="stateLabel">
                         {{ stateOptions.label }}
                     </div>
                     <Tooltip :target="() => $refs.stateLabel" overflow-only>
