@@ -4,20 +4,18 @@ namespace App\Sharp\Categories;
 
 use App\Models\Category;
 use App\Sharp\Categories\Commands\CleanUnusedCategoriesCommand;
-use App\Sharp\Utils\Filters\WithoutPostFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Utils\Filters\CheckFilter;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Builder;
 
 class CategoryList extends SharpEntityList
 {
     public function buildListConfig(): void
     {
-        $this
-            ->configureDefaultSort('name');
+        $this->configureDefaultSort('posts_count', 'desc');
     }
 
     protected function getEntityCommands(): ?array
@@ -30,7 +28,14 @@ class CategoryList extends SharpEntityList
     protected function getFilters(): ?array
     {
         return [
-            WithoutPostFilter::class,
+            new class extends CheckFilter
+            {
+                public function buildFilterConfig(): void
+                {
+                    $this->configureKey('orphan')
+                        ->configureLabel('Orphan categories only.');
+                }
+            },
         ];
     }
 
@@ -38,20 +43,15 @@ class CategoryList extends SharpEntityList
     {
         $categories = Category::withCount('posts')
             ->when(
-                $this->queryParams->filterFor(WithoutPostFilter::class),
-                fn (Builder $builder) => $builder->having('posts_count', 0)
+                $this->queryParams->filterFor('orphan'),
+                fn ($q) => $q->having('posts_count', 0)
             )
 
             // Handle sorting
             ->when(
                 $this->queryParams->sortedBy() === 'name',
-                function (Builder $builder) {
-                    $builder
-                        ->orderBy('name', $this->queryParams->sortedDir());
-                },
-                function (Builder $builder) {
-                    $builder->orderBy('posts_count', $this->queryParams->sortedDir() ?: 'asc');
-                },
+                fn ($q) => $q->orderBy('name', $this->queryParams->sortedDir()),
+                fn ($q) => $q->orderBy('posts_count', $this->queryParams->sortedDir())
             );
 
         return $this->transform($categories->get());
