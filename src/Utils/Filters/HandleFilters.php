@@ -39,6 +39,10 @@ trait HandleFilters
                         'mondayFirst' => $filterHandler->isMondayFirst(),
                         'displayFormat' => $filterHandler->getDateFormat(),
                     ];
+                } elseif ($filterHandler instanceof CheckFilter) {
+                    $filterConfigData += [
+                        'type' => 'check',
+                    ];
                 }
 
                 $config['filters'][] = $filterConfigData;

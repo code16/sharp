@@ -589,6 +589,34 @@ class EntityListFilterTest extends SharpTestCase
             $list->listConfig(),
         );
     }
+
+    /** @test */
+    public function we_can_define_a_check_filter()
+    {
+        $list = new class extends SharpEntityDefaultTestList
+        {
+            public function getFilters(): array
+            {
+                return [
+                    SharpEntityListTestCheckFilter::class,
+                ];
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset(
+            [
+                'filters' => [
+                    [
+                        'key' => class_basename(SharpEntityListTestCheckFilter::class),
+                        'type' => 'check',
+                    ],
+                ],
+            ],
+            $list->listConfig(),
+        );
+    }
 }
 
 class SharpEntityListTestFilter extends \Code16\Sharp\EntityList\Filters\EntityListSelectFilter
@@ -630,4 +658,8 @@ class SharpEntityListDateRangeRequiredTestFilter extends \Code16\Sharp\EntityLis
     {
         return ['start' => Carbon::now()->subDay(), 'end' => Carbon::now()];
     }
+}
+
+class SharpEntityListTestCheckFilter extends \Code16\Sharp\EntityList\Filters\EntityListCheckFilter
+{
 }

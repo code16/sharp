@@ -13,7 +13,7 @@
                             <template v-for="filter in filters">
                                 <div class="col-auto mb-1">
                                     <div class="action-bar__element">
-                                        <FilterDropdown
+                                        <SharpFilter
                                             class="h-100"
                                             :filter="filter"
                                             :value="filtersValues[filter.key]"
@@ -111,7 +111,7 @@
 <script>
     import { Localization } from 'sharp/mixins';
     import { Search, ItemVisual, Button } from 'sharp-ui';
-    import { FilterDropdown } from 'sharp-filters';
+    import { SharpFilter } from 'sharp-filters';
     import { MultiformDropdown } from "sharp-entity-list";
     import { lang } from "sharp";
 
@@ -120,7 +120,7 @@
         components: {
             ItemVisual,
             Search,
-            FilterDropdown,
+            SharpFilter,
             MultiformDropdown,
             Button,
         },

@@ -12,8 +12,7 @@ php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple]
 
 ## Write the filter class
 
-First, we need to write a class which extends `Code16\Sharp\EntityList\Filters\EntityListSelectFilter`, and therefore
-declare a `values()` function. This function must return an `["id" => "label"]` array. For instance, with Eloquent:
+First, we need to write a class which extends `Code16\Sharp\EntityList\Filters\EntityListSelectFilter`, and therefore declare a `values()` function. This function must return an `["id" => "label"]` array. For instance, with Eloquent:
 
 ```php
 class SpaceshipTypeFilter extends EntityListSelectFilter
@@ -41,8 +40,7 @@ public function buildFilterConfig(): void
 ```
 
 - `configureLabel(string $label)`: use this to define the filter label displayed in the UI
-- `configureKey(string $key)`: the default key, meaning identifier, of a filter is its class name; if you need to change
-  this, you can do so with this method
+- `configureKey(string $key)`: the default key, meaning identifier, of a filter is its class name; if you need to change this, you can do so with this method
 - `configureRetainInSession()`: to keep the filter value in session, see below.
 
 ## Declare the filter
@@ -62,8 +60,7 @@ Sharp will display a dropdown with those values for a "type" filter.
 
 ## Handle filter selection
 
-Once the user clicked on a filter, Sharp will call EntityList's `getListData()`; the filter value will be accessible
-either with :
+Once the user clicked on a filter, Sharp will call EntityList's `getListData()`; the filter value will be accessible either with :
 - classname : `$this->queryParams->filterFor(MyFilter::class)`
 - key : `$this->queryParams->filterFor("key")` (this only works if it was set in the filter class with `configureKey()`)
 
@@ -99,12 +96,9 @@ function getListData()
 
 ## Multiple filter
 
-First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate
-something else: allowing the user to select more than one value for a filter. To achieve this, make your filter
-extend `Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter`.
+First, notice that you can have as many filters as you want for an EntityList. The "multiple filter" here designate something else: allowing the user to select more than one value for a filter. To achieve this, make your filter extend `Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter`.
 
-In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp
-will return either null, and id or an array of id, depending on the user selection):
+In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
 ```php
 function getListData()
@@ -123,12 +117,9 @@ Note that a filter can't be required AND multiple.
 
 ## Date range filter
 
-You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data
-that meets a given time period. To implement such a filter, your filter class must
-extend `Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter`.
+You might find useful to filter list elements on a specific date range. Date range filters enable you to show only data that meets a given time period. To implement such a filter, your filter class must extend `Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter`.
 
-Then you need to adjust the query with selected range (Sharp will return an associative array of two Carbon date
-objects). In this case, with Eloquent for instance, you might add a condition like:
+Then you need to adjust the query with selected range (Sharp will return an associative array of two Carbon date objects). In this case, with Eloquent for instance, you might add a condition like:
 
 ```php
 function getListData()
@@ -163,8 +154,7 @@ public function buildFilterConfig(): void
 
 ## Required filters
 
-It is sometimes useful to have a filter which can't be null: to achieve this you need to extend the right "Required"
-subclass (`EntityListSelectRequiredFilter` or `EntityListDateRangeRequiredFilter`), and define a proper default value.
+It is sometimes useful to have a filter which can't be null: to achieve this you need to extend the right "Required" subclass (`EntityListSelectRequiredFilter` or `EntityListDateRangeRequiredFilter`), and define a proper default value.
 
 Example for a select filter:
 
@@ -210,8 +200,7 @@ public function buildFilterConfig(): void
 
 ## Filter template
 
-Sometimes you need your select filter results to be a little more than a label. For this, configure a template (similar
-to form fields with templates):
+Sometimes you need your select filter results to be a little more than a label. For this, configure a template (similar to form fields with templates):
 
 ```php
 public function buildFilterConfig(): void
@@ -222,9 +211,7 @@ public function buildFilterConfig(): void
 
 You can also, for more control, return a view here.
 
-The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data
-placeholders, DOM structure but also directives, and anything that Vue will parse. It's the same
-as [Autocomplete's templates](form-fields/autocomplete.md).
+The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. It's the same as [Autocomplete's templates](form-fields/autocomplete.md).
 
 You'll need also to change your `values()` function, returning more than an `["id"=>"value"]` array. For instance:
 
@@ -245,8 +232,7 @@ public function values()
 
 Note that **the label attribute is mandatory**: it is used for the result display of the filter.
 
-Finally, if your filter is also searchable, you'll need to configure attributes which should be searched in the
-template:
+Finally, if your filter is also searchable, you'll need to configure attributes which should be searched in the template:
 
 ```php
 public function buildFilterConfig(): void
@@ -256,10 +242,13 @@ public function buildFilterConfig(): void
 }
 ```
 
+## Check filter
+
+Sometimes a filter is just a matter on true / false. For instance, "only show orphans", or "only show admins". Just make your filter class extend `Code16\Sharp\EntityList\Filters\EntityListCheckFilter`.
+
 ## Master filter
 
-In some cases (like linked filters, for instance: the second filter values depends on the first one), you want to ensure
-that selecting a filter value will reset all other filters. It's called: "master".
+In some cases (like linked filters, for instance: the second filter values depends on the first one), you want to ensure that selecting a filter value will reset all other filters. It's called: "master".
 
 ```php
 public function buildFilterConfig(): void
@@ -279,25 +268,18 @@ public function buildFilterConfig(): void
 }
 ```
 
-And that's it, Sharp will keep the filter value in session and ensure it is valued on next requests (if not overridden).
-This feature works for all types of filters (required, multiple).
+And that's it, Sharp will keep the filter value in session and ensure it is valued on next requests (if not overridden). This feature works for all types of filters (required, multiple).
 
-::: warning In order to make this feature work, since filters are generalized, you'll need to have unique filters key (
-the filter class name by default).
+::: warning In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
 ## Filters for Dashboards
 
-[Dashboards](building-dashboard.md) also can take advantage of filters; the API is almost the same, except there is
-obviously no Entity or Instance distinction: the only available options are `Code16\Sharp\Dashboard\DashboardFilter`
-, `Code16\Sharp\Dashboard\DashboardMultipleFilter` and `Code16\Sharp\Dashboard\DashboardRequiredFilter`.
+[Dashboards](building-dashboard.md) also can take advantage of filters; the API the same, but base classes are specific: `Code16\Sharp\Dashboard\Filters\DashboardSelectFilter`, `Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter`,`Code16\Sharp\Dashboard\DashboardCheckFilter` and so on.
 
 ## Global menu Filters
 
-You may want to "scope" the entire data set: an example of this could be a user which can manage several organizations
-Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear
-like this (on the left menu):
-
+You may want to "scope" the entire data set: an example of this could be a user which can manage several organizations. Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear like this (on the left menu):
 
 <table>
 <tr>

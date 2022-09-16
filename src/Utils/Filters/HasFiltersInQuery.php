@@ -26,6 +26,7 @@ trait HasFiltersInQuery
         }
 
         if (Str::contains($this->filters[$key], '..')) {
+            // DateRangeFilter
             [$start, $end] = explode('..', $this->filters[$key]);
 
             return [
@@ -35,6 +36,7 @@ trait HasFiltersInQuery
         }
 
         if (Str::contains($this->filters[$key], ',')) {
+            // Multiple
             return explode(',', $this->filters[$key]);
         }
 
