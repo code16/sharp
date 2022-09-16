@@ -663,4 +663,3 @@ class SharpEntityListDateRangeRequiredTestFilter extends \Code16\Sharp\EntityLis
 class SharpEntityListTestCheckFilter extends \Code16\Sharp\EntityList\Filters\EntityListCheckFilter
 {
 }
-

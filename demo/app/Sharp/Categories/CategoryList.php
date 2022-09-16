@@ -28,7 +28,8 @@ class CategoryList extends SharpEntityList
     protected function getFilters(): ?array
     {
         return [
-            new class extends CheckFilter {
+            new class extends CheckFilter
+            {
                 public function buildFilterConfig(): void
                 {
                     $this->configureKey('orphan')
