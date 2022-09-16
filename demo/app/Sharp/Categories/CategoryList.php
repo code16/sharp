@@ -4,6 +4,7 @@ namespace App\Sharp\Categories;
 
 use App\Models\Category;
 use App\Sharp\Categories\Commands\CleanUnusedCategoriesCommand;
+use App\Sharp\Utils\Filters\WithoutPostFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
@@ -26,9 +27,20 @@ class CategoryList extends SharpEntityList
         ];
     }
 
+    protected function getFilters(): ?array
+    {
+        return [
+            WithoutPostFilter::class,
+        ];
+    }
+
     public function getListData(): array|Arrayable
     {
         $categories = Category::withCount('posts')
+            ->when(
+                $this->queryParams->filterFor(WithoutPostFilter::class),
+                fn (Builder $builder) => $builder->having('posts_count', 0)
+            )
 
             // Handle sorting
             ->when(
@@ -38,7 +50,7 @@ class CategoryList extends SharpEntityList
                         ->orderBy('name', $this->queryParams->sortedDir());
                 },
                 function (Builder $builder) {
-                    $builder->orderBy('post_count', $this->queryParams->sortedDir() ?: 'asc');
+                    $builder->orderBy('posts_count', $this->queryParams->sortedDir() ?: 'asc');
                 },
             );
 
