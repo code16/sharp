@@ -70,9 +70,9 @@ export default {
                 return value;
             }
         },
-        serializeValue(state, getters) {
+        serializeValue() {
             return ({ filter, value }) => {
-                if(getters.isDateRange(filter)) {
+                if(filter.type === 'daterange') {
                     return serializeRange(value);
                 }
                 if(filter.type === 'check') {
