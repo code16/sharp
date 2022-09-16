@@ -71,10 +71,10 @@
             </div>
         </template>
         <template v-slot:extras>
-            <div class="row mx-n2">
+            <div class="row gx-2 gy-1">
                 <template v-for="filter in filters">
-                    <div class="col-auto px-2">
-                        <FilterDropdown
+                    <div class="col-auto">
+                        <SharpFilter
                             :filter="filter"
                             :value="filtersValues[filter.key]"
                             :disabled="reorderActive"
@@ -100,9 +100,8 @@
 </template>
 
 <script>
-    import { lang } from 'sharp';
-    import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search, Button, } from 'sharp-ui';
-    import { FilterDropdown } from 'sharp-filters';
+    import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search, Button } from 'sharp-ui';
+    import { SharpFilter } from 'sharp-filters';
 
     import { Localization } from 'sharp/mixins';
     import MultiformDropdown from "./MultiformDropdown";
@@ -120,7 +119,7 @@
             Dropdown,
             DropdownItem,
             ItemVisual,
-            FilterDropdown,
+            SharpFilter,
             Search,
             Button,
         },

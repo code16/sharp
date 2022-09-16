@@ -1,6 +1,7 @@
 <template>
     <component
         :is="filterComponent"
+        :filter-key="filter.key"
         :value="value"
         :disabled="disabled"
         v-bind="filter"

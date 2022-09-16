@@ -4,7 +4,7 @@
             <div class="row mx-n2">
                 <template v-for="filter in filters">
                     <div class="col-auto px-2">
-                        <FilterDropdown
+                        <SharpFilter
                             :filter="filter"
                             :value="filterValue(filter.key)"
                             @input="handleFilterChanged(filter, $event)"
@@ -27,7 +27,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import { ActionBar } from 'sharp-ui';
-    import { FilterDropdown } from 'sharp-filters';
+    import { SharpFilter } from 'sharp-filters';
     import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
 
@@ -36,7 +36,7 @@
         mixins: [Localization],
         components: {
             ActionBar,
-            FilterDropdown,
+            SharpFilter,
             CommandsDropdown,
         },
         props: {
