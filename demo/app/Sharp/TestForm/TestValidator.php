@@ -9,7 +9,7 @@ class TestValidator extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'required|before_or_equals:'.date('Y-m-d'),
+            'date' => 'required|before_or_equal:'.date('Y-m-d'),
         ];
     }
 }

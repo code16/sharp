@@ -75,7 +75,7 @@ class TestForm extends SharpSingleForm
                     ->setMinTime(8)
                     ->setMaxTime(16)
                     ->setStepTime(15)
-                    ->setHasTime(true),
+//                    ->setHasTime(true),
             )
             ->addField(
                 SharpFormGeolocationField::make('geolocation')
