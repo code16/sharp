@@ -4,7 +4,6 @@
             <DatePicker
                 :value="pickerValue"
                 :mode="mode"
-                :valid-hours="validHours"
                 :minute-increment="stepTime"
                 :monday-first="mondayFirst"
                 :update-on-input="false"
@@ -149,7 +148,9 @@
                     date.setSeconds(0);
                     date.setMilliseconds(0);
                 }
-                return moment(date).format(); // format date with to ISO 8601 with timezone offset (e.g. 2022-09-23T00:00:00+02:00)
+                // format date with to ISO 8601 with timezone offset (e.g. 2022-09-23T00:00:00+02:00)
+                // or in "HH:mm" for hour only
+                return moment(date).format(this.format);
             },
             handleDateChanged(date) {
                 this.$emit('input', this.formatDateValue(date));

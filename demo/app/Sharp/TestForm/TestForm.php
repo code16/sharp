@@ -72,10 +72,20 @@ class TestForm extends SharpSingleForm
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
                     ->setDisplayFormat('YYYY-MM-DD HH:mm')
-                    ->setMinTime(8)
-                    ->setMaxTime(16)
+//                    ->setMinTime(8)
+//                    ->setMaxTime(16)
                     ->setStepTime(15)
-//                    ->setHasTime(true),
+                    ->setHasTime(),
+            )
+            ->addField(
+                SharpFormDateField::make('time')
+                    ->setLabel('Time')
+                    ->setDisplayFormat('HH:mm')
+//                    ->setMinTime(8)
+//                    ->setMaxTime(16)
+                    ->setStepTime(15)
+                    ->setHasDate(false)
+                    ->setHasTime(),
             )
             ->addField(
                 SharpFormGeolocationField::make('geolocation')
@@ -234,7 +244,7 @@ class TestForm extends SharpSingleForm
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withSingleField('text')
-                            ->withSingleField('date')
+                            ->withFields('date|6', 'time|6')
                             ->withSingleField('check');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
@@ -303,7 +313,8 @@ class TestForm extends SharpSingleForm
                 'autocomplete_remote' => null,
                 'autocomplete_list' => null,
                 'check' => true,
-                'date' => $faker->date('Y-m-d H:i'),
+//                'date' => $faker->date('Y-m-d H:i:s'),
+//                'time' => $faker->date('H:i:s'),
                 'html' => [
                     'name' => $faker->name,
                 ],
