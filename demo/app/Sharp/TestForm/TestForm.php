@@ -339,8 +339,6 @@ class TestForm extends SharpSingleForm
 
     protected function updateSingle(array $data)
     {
-        ray($data);
-
         session()->put('sharp_test_form', $data);
     }
 

@@ -2,55 +2,41 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
-use Carbon\Carbon;
-use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Illuminate\Support\Carbon;
 
 class DateFormatter extends SharpFieldFormatter
 {
-    /**
-     * @param  SharpFormField  $field
-     * @param $value
-     * @return mixed
-     */
     public function toFront(SharpFormField $field, $value)
     {
-        if ($value instanceof Carbon || $value instanceof \DateTime) {
-            return $value->format($this->getFormat($field));
+        if ($value instanceof \DateTime || is_string($value)) {
+            $value = (new Carbon($value))
+                ->setTimezone(config('app.timezone'));
         }
 
-        return $value;
+        if (! $value instanceof Carbon) {
+            return $value;
+        }
+
+        return $field->hasDate()
+            ? $value->toJSON()
+            : $value->format('H:i');
     }
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  string  $attribute
-     * @param $value
-     * @return string
-     */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
+        $format = 'Y-m-d H:i:s';
+        if (! $field->hasTime()) {
+            $format = 'Y-m-d';
+        }
+        if (! $field->hasDate()) {
+            $format = 'H:i:s';
+        }
+
         return $value
             ? Carbon::parse($value)
                 ->setTimezone(config('app.timezone'))
-                ->format($this->getFormat($field))
+                ->format($format)
             : null;
-    }
-
-    /**
-     * @param  SharpFormDateField  $field
-     * @return string
-     */
-    protected function getFormat($field)
-    {
-        if (! $field->hasTime()) {
-            return 'Y-m-d';
-        }
-
-        if (! $field->hasDate()) {
-            return 'H:i:s';
-        }
-
-        return 'Y-m-d H:i:s';
     }
 }

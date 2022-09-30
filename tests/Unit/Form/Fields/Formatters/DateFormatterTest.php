@@ -14,12 +14,12 @@ class DateFormatterTest extends SharpTestCase
     {
         $formatter = new DateFormatter;
         $field = SharpFormDateField::make('date');
-        $field->setHasDate(true);
-        $field->setHasTime(true);
+        $field->setHasDate();
+        $field->setHasTime();
 
-        $this->assertEquals('2017-05-31 10:30:00', $formatter->toFront($field, '2017-05-31 10:30:00'));
-        $this->assertEquals('2017-05-31 10:30:00', $formatter->toFront($field, Carbon::create(2017, 05, 31, 10, 30, 0)));
-        $this->assertEquals('2017-05-31 10:30:00', $formatter->toFront($field, new \DateTime('2017-05-31 10:30:00')));
+        $this->assertEquals('2017-05-31T10:30:00.000000Z', $formatter->toFront($field, '2017-05-31 10:30:00'));
+        $this->assertEquals('2017-05-31T10:30:00.000000Z', $formatter->toFront($field, Carbon::create(2017, 05, 31, 10, 30, 0)));
+        $this->assertEquals('2017-05-31T10:30:00.000000Z', $formatter->toFront($field, new \DateTime('2017-05-31 10:30:00')));
     }
 
     /** @test */
@@ -27,12 +27,12 @@ class DateFormatterTest extends SharpTestCase
     {
         $formatter = new DateFormatter;
         $field = SharpFormDateField::make('date');
-        $field->setHasDate(true);
+        $field->setHasDate();
         $field->setHasTime(false);
 
-        $this->assertEquals('2017-05-31', $formatter->toFront($field, '2017-05-31'));
-        $this->assertEquals('2017-05-31', $formatter->toFront($field, Carbon::create(2017, 05, 31)->startOfDay()));
-        $this->assertEquals('2017-05-31', $formatter->toFront($field, new \DateTime('2017-05-31')));
+        $this->assertEquals('2017-05-31T00:00:00.000000Z', $formatter->toFront($field, '2017-05-31'));
+        $this->assertEquals('2017-05-31T00:00:00.000000Z', $formatter->toFront($field, Carbon::create(2017, 05, 31)->startOfDay()));
+        $this->assertEquals('2017-05-31T00:00:00.000000Z', $formatter->toFront($field, new \DateTime('2017-05-31')));
     }
 
     /** @test */
@@ -43,9 +43,9 @@ class DateFormatterTest extends SharpTestCase
         $field->setHasDate(false);
         $field->setHasTime(true);
 
-        $this->assertEquals('10:30:00', $formatter->toFront($field, '10:30:00'));
-        $this->assertEquals('10:30:00', $formatter->toFront($field, Carbon::create(2017, 05, 31, 10, 30, 00)));
-        $this->assertEquals('10:30:00', $formatter->toFront($field, new \DateTime('10:30:00')));
+        $this->assertEquals('10:30', $formatter->toFront($field, '10:30:00'));
+        $this->assertEquals('10:30', $formatter->toFront($field, Carbon::create(2017, 05, 31, 10, 30, 00)));
+        $this->assertEquals('10:30', $formatter->toFront($field, new \DateTime('10:30:00')));
     }
 
     /** @test */
@@ -53,8 +53,8 @@ class DateFormatterTest extends SharpTestCase
     {
         $formatter = new DateFormatter;
         $field = SharpFormDateField::make('date');
-        $field->setHasDate(true);
-        $field->setHasTime(true);
+        $field->setHasDate();
+        $field->setHasTime();
         $attribute = 'attribute';
 
         $this->assertEquals('2017-05-31 10:30:00', $formatter->fromFront($field, $attribute, '2017-05-31 10:30:00'));
@@ -65,7 +65,7 @@ class DateFormatterTest extends SharpTestCase
     {
         $formatter = new DateFormatter;
         $field = SharpFormDateField::make('date');
-        $field->setHasDate(true);
+        $field->setHasDate();
         $field->setHasTime(false);
         $attribute = 'attribute';
 
@@ -79,7 +79,7 @@ class DateFormatterTest extends SharpTestCase
         $formatter = new DateFormatter;
         $field = SharpFormDateField::make('date');
         $field->setHasDate(false);
-        $field->setHasTime(true);
+        $field->setHasTime();
         $attribute = 'attribute';
 
         $this->assertEquals('10:30:00', $formatter->fromFront($field, $attribute, '2017-05-31 10:30:00'));
@@ -91,13 +91,13 @@ class DateFormatterTest extends SharpTestCase
     {
         $formatter = new DateFormatter;
         $field = SharpFormDateField::make('date');
-        $field->setHasTime(true);
+        $field->setHasTime();
         $attribute = 'attribute';
 
         config(['app.timezone' => 'Europe/Paris']); //GMT+2
-        $this->assertEquals('2017-05-31 15:00:00', $formatter->fromFront($field, $attribute, '2017-05-31T13:00:00.000Z'));
+        $this->assertEquals('2017-05-31 15:00:00', $formatter->fromFront($field, $attribute, '2017-05-31T13:00:00.000000Z'));
 
         config(['app.timezone' => 'America/Montreal']); //GMT-4
-        $this->assertEquals('2017-05-31 09:00:00', $formatter->fromFront($field, $attribute, '2017-05-31T13:00:00.000Z'));
+        $this->assertEquals('2017-05-31 09:00:00', $formatter->fromFront($field, $attribute, '2017-05-31T13:00:00.000000Z'));
     }
 }
