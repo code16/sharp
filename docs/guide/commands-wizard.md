@@ -105,7 +105,7 @@ protected function buildFormFieldsForStep(string $step, FieldsContainer $formFie
 This should be a better option in many cases, to clarify things in the Wizard class; you can define a `buildFormFieldsForStepXXX(FieldsContainer $formFields): void`, where `XXX` is the camel cased name of you step. So in our example:
 
 ```php
-public function buildFormFieldsForComposeMessage(FieldsContainer $formFields): void
+public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
 {
     $formFields
         ->addField(

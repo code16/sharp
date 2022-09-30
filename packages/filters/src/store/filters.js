@@ -72,6 +72,9 @@ export default {
         },
         serializeValue() {
             return ({ filter, value }) => {
+                if(!filter) {
+                    return value;
+                }
                 if(filter.type === 'daterange') {
                     return serializeRange(value);
                 }

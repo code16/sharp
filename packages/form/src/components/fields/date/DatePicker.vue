@@ -6,6 +6,7 @@
         :is-range="isRange"
         :locale="locale"
         :first-day-of-week="firstDayOfWeek"
+        :attributes="attributes"
         color="primary"
         is24hr
         trim-weeks
@@ -65,6 +66,15 @@
             },
             firstDayOfWeek() {
                 return this.mondayFirst ? 2 : 1;
+            },
+            attributes() {
+                return [
+                    {
+                        key: 'today',
+                        dot: true,
+                        dates: new Date(),
+                    }
+                ];
             },
         },
         methods: {
