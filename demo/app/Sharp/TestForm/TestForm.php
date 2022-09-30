@@ -69,21 +69,21 @@ class TestForm extends SharpSingleForm
                 SharpFormCheckField::make('check', 'Check'),
             )
             ->addField(
+                SharpFormDateField::make('datetime')
+                    ->setLabel('Datetime')
+                    ->setDisplayFormat('YYYY-MM-DD HH:mm')
+                    ->setHasTime(),
+            )
+            ->addField(
                 SharpFormDateField::make('date')
                     ->setLabel('Date')
-                    ->setDisplayFormat('YYYY-MM-DD HH:mm')
-//                    ->setMinTime(8)
-//                    ->setMaxTime(16)
-                    ->setStepTime(15)
-                    ->setHasTime(),
+                    ->setDisplayFormat('YYYY-MM-DD')
+                    ->setHasTime(false),
             )
             ->addField(
                 SharpFormDateField::make('time')
                     ->setLabel('Time')
                     ->setDisplayFormat('HH:mm')
-//                    ->setMinTime(8)
-//                    ->setMaxTime(16)
-                    ->setStepTime(15)
                     ->setHasDate(false)
                     ->setHasTime(),
             )
@@ -244,6 +244,7 @@ class TestForm extends SharpSingleForm
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withSingleField('text')
+                            ->withFields('datetime')
                             ->withFields('date|6', 'time|6')
                             ->withSingleField('check');
                     })
@@ -313,8 +314,9 @@ class TestForm extends SharpSingleForm
                 'autocomplete_remote' => null,
                 'autocomplete_list' => null,
                 'check' => true,
-                //                'date' => $faker->date('Y-m-d H:i:s'),
-                //                'time' => $faker->date('H:i:s'),
+                'datetime' => $faker->date('Y-m-d H:i:s'),
+                'date' => $faker->date('Y-m-d'),
+                'time' => $faker->date('H:i:s'),
                 'html' => [
                     'name' => $faker->name,
                 ],

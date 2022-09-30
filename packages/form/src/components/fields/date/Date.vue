@@ -142,15 +142,14 @@
                 if(!date) {
                     return null;
                 }
+                if(!this.hasDate) {
+                    return moment(date).format('HH:mm');
+                }
                 if(!this.hasTime) {
-                    date.setHours(0);
-                    date.setMinutes(0);
-                    date.setSeconds(0);
-                    date.setMilliseconds(0);
+                    return moment(date).format('YYYY-MM-DD');
                 }
                 // format date with to ISO 8601 with timezone offset (e.g. 2022-09-23T00:00:00+02:00)
-                // or in "HH:mm" for hour only
-                return moment(date).format(this.format);
+                return moment(date).format();
             },
             handleDateChanged(date) {
                 this.$emit('input', this.formatDateValue(date));
