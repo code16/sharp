@@ -1,5 +1,9 @@
 <template>
-    <div class="SharpList" :class="classes">
+    <div class="SharpList"
+        :class="classes"
+        @dragstart="dragging = true"
+        @dragend="dragging = false"
+    >
         <div class="SharpList__sticky-wrapper text-end">
             <template v-if="showSortButton">
                 <Button
@@ -18,7 +22,7 @@
             </template>
         </div>
 
-        <Draggable :options="dragOptions" :list="list" @choose="dragging = true" @end="dragging = false" ref="draggable">
+        <Draggable :options="dragOptions" :list="list" ref="draggable">
             <transition-group name="expand" tag="div" class="list-group shadow-sm">
                 <template v-for="(listItemData, i) in list">
                     <div class="SharpList__item list-group-item"
