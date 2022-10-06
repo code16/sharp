@@ -27,13 +27,24 @@
                         />
                     </template>
 
-                    <template v-if="localized">
+                    <template v-if="title || localized">
                         <div class="mb-4">
-                            <LocaleSelect
-                                :locales="locales"
-                                :locale="locale"
-                                @change="handleLocaleChanged"
-                            />
+                            <div class="row align-items-center gx-3 gx-md-4">
+                                <template v-if="localized">
+                                    <div class="col-auto">
+                                        <LocaleSelect
+                                            :locales="locales"
+                                            :locale="locale"
+                                            @change="handleLocaleChanged"
+                                        />
+                                    </div>
+                                </template>
+                                <template v-if="title">
+                                    <div class="col" style="min-width: 0">
+                                        <h1 class="mb-0 text-truncate" v-html="title"></h1>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
                     </template>
 
@@ -170,6 +181,15 @@
             },
             localized() {
                 return this.locales?.length > 0;
+            },
+            title() {
+                if(!this.config.titleAttribute) {
+                    return null;
+                }
+                if(this.fields[this.config.titleAttribute]?.localized) {
+                    return this.data[this.config.titleAttribute]?.[this.locale];
+                }
+                return this.data[this.config.titleAttribute];
             },
         },
 
