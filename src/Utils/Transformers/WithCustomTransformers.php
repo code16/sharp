@@ -17,12 +17,7 @@ trait WithCustomTransformers
 {
     protected array $transformers = [];
 
-    /**
-     * @param  string  $attribute
-     * @param  string|Closure|SharpAttributeTransformer  $transformer
-     * @return $this
-     */
-    public function setCustomTransformer(string $attribute, $transformer)
+    public function setCustomTransformer(string $attribute, string|Closure|SharpAttributeTransformer $transformer): self
     {
         if (! $transformer instanceof SharpAttributeTransformer) {
             $transformer = $transformer instanceof Closure
@@ -116,7 +111,7 @@ trait WithCustomTransformers
 
         // Apply transformers
         foreach ($this->transformers as $attribute => $transformer) {
-            if (strpos($attribute, '[') !== false) {
+            if (str_contains($attribute, '[')) {
                 // List item case: apply transformer to each item
                 $listAttribute = substr($attribute, 0, strpos($attribute, '['));
                 $itemAttribute = substr($attribute, strpos($attribute, '[') + 1, -1);
