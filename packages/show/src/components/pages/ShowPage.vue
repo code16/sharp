@@ -28,7 +28,7 @@
                     </template>
 
                     <template v-if="title || localized">
-                        <div class="mb-4">
+                        <div :class="title ? 'mb-3' : 'mb-4'">
                             <div class="row align-items-center gx-3 gx-md-4">
                                 <template v-if="localized">
                                     <div class="col-auto">
@@ -41,7 +41,7 @@
                                 </template>
                                 <template v-if="title">
                                     <div class="col" style="min-width: 0">
-                                        <h1 class="mb-0 text-truncate" v-html="title"></h1>
+                                        <h1 class="mb-0 text-truncate h2" v-html="title"></h1>
                                     </div>
                                 </template>
                             </div>
@@ -155,6 +155,7 @@
             classes() {
                 return {
                     'ShowPage--localized': this.localized,
+                    'ShowPage--title': this.title,
                 }
             },
             formUrl() {
@@ -183,7 +184,7 @@
                 return this.locales?.length > 0;
             },
             title() {
-                if(!this.config.titleAttribute) {
+                if(!this.ready || !this.config.titleAttribute) {
                     return null;
                 }
                 if(this.fields[this.config.titleAttribute]?.localized) {
