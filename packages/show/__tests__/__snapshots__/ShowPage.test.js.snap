@@ -14,8 +14,8 @@ exports[`show page can mount hidden section 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
+		<!---->
 		<div class="ShowPage__content">
-			<!---->
 			<!---->
 			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section" style="display: none;"></section-stub>
 		</div>
@@ -29,8 +29,8 @@ exports[`show page can mount with fields 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
+		<!---->
 		<div class="ShowPage__content">
-			<!---->
 			<!---->
 			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
 		</div>
@@ -44,8 +44,8 @@ exports[`show page can mount with no container section 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
+		<!---->
 		<div class="ShowPage__content">
-			<!---->
 			<!---->
 			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="contents" class="ShowPage__section"></section-stub>
 		</div>
@@ -59,8 +59,8 @@ exports[`show page can mount with unknown field 1`] = `
 <div class="ShowPage">
 	<div class="container">
 		<actionbarshow-stub formurl="formUrl"></actionbarshow-stub>
+		<!---->
 		<div class="ShowPage__content">
-			<!---->
 			<!---->
 			<section-stub section="[object Object]" fieldsrowclass="function () { [native code] }" layout="card" class="ShowPage__section"></section-stub>
 		</div>
