@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Media;
 use App\Models\Post;
+use App\Models\PostAttachment;
 use App\Models\PostBlock;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -64,6 +65,25 @@ class DatabaseSeeder extends Seeder
                         sprintf('posts/%s', $post->id),
                     )
                     ->create();
+
+                for ($i = 0; $i < rand(1, 3); $i++) {
+                    $attachment = PostAttachment::factory()
+                        ->create([
+                            'post_id' => $post->id,
+                        ]);
+                    if (! $attachment->is_link) {
+                        Media::factory([
+                            'model_id' => $attachment->id,
+                            'model_type' => PostAttachment::class,
+                            'model_key' => 'document',
+                        ])
+                            ->withFile(
+                                database_path('seeders/files/doc.pdf'),
+                                sprintf('posts/%s', $post->id),
+                            )
+                            ->create();
+                    }
+                }
 
                 $post->categories()->attach($categories->shuffle()->take(rand(1, 3))->pluck('id'));
 

@@ -53,6 +53,7 @@ class PostShow extends SharpShow
                     )
                     ->addItemField(
                         SharpShowFileField::make('document')
+                            ->setLabel('File')
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                     )
