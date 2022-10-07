@@ -30,5 +30,6 @@
 
     <script src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script src="{{ mix('sharp.js', '/vendor/sharp') }}"></script>
+    @stack('script')
 </body>
 </html>
