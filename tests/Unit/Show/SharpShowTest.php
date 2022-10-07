@@ -8,9 +8,9 @@ use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Show\SharpShow;
-use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Tests\SharpTestCase;
+use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpShowDefaultTest;
+use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpSingleShowDefaultTest;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class SharpShowTest extends SharpTestCase
@@ -18,7 +18,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_add_an_entity_list_section_to_the_layout()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -34,34 +34,38 @@ class SharpShowTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            'sections' => [
-                [
-                    'collapsable' => false,
-                    'title' => '',
-                    'columns' => [
-                        [
-                            'size' => 12,
-                            'fields' => [
-                                [
+        $this->assertEquals(
+            [
+                'sections' => [
+                    [
+                        'collapsable' => false,
+                        'title' => '',
+                        'columns' => [
+                            [
+                                'size' => 12,
+                                'fields' => [
                                     [
-                                        'key' => 'entityList',
-                                        'size' => 12,
-                                        'sizeXS' => 12,
+                                        [
+                                            'key' => 'entityList',
+                                            'size' => 12,
+                                            'sizeXS' => 12,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
+                        'key' => null,
                     ],
                 ],
             ],
-        ], $sharpShow->showLayout());
+            $sharpShow->showLayout()
+        );
     }
 
     /** @test */
     public function we_can_declare_a_collapsable_section()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -82,34 +86,38 @@ class SharpShowTest extends SharpTestCase
             }
         };
 
-        $this->assertEquals([
-            'sections' => [
-                [
-                    'collapsable' => true,
-                    'title' => 'test',
-                    'columns' => [
-                        [
-                            'size' => 12,
-                            'fields' => [
-                                [
+        $this->assertEquals(
+            [
+                'sections' => [
+                    [
+                        'collapsable' => true,
+                        'title' => 'test',
+                        'columns' => [
+                            [
+                                'size' => 12,
+                                'fields' => [
                                     [
-                                        'key' => 'test',
-                                        'size' => 12,
-                                        'sizeXS' => 12,
+                                        [
+                                            'key' => 'test',
+                                            'size' => 12,
+                                            'sizeXS' => 12,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
+                        'key' => null,
                     ],
                 ],
             ],
-        ], $sharpShow->showLayout());
+            $sharpShow->showLayout()
+        );
     }
 
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_boolean()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -131,7 +139,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_collapsable_entity_list_section_with_a_legacy_closure()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowFields(FieldsContainer $showFields): void
             {
@@ -153,9 +161,36 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_can_define_a_custom_key_to_a_section()
+    {
+        $sharpShow = new class extends BaseSharpShowDefaultTest
+        {
+            public function buildShowFields(FieldsContainer $showFields): void
+            {
+                $showFields->addField(
+                    SharpShowTextField::make('test'),
+                );
+            }
+
+            public function buildShowLayout(ShowLayout $showLayout): void
+            {
+                $showLayout->addSection('test', function (ShowLayoutSection $section) {
+                    $section
+                        ->setKey('my-section')
+                        ->addColumn(12, function (ShowLayoutColumn $column) {
+                            $column->withSingleField('test');
+                        });
+                });
+            }
+        };
+
+        $this->assertEquals('my-section', $sharpShow->showLayout()['sections'][0]['key']);
+    }
+
+    /** @test */
     public function we_can_declare_a_multiformAttribute()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowConfig(): void
             {
@@ -176,7 +211,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_declare_a_global_message_field()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowConfig(): void
             {
@@ -205,7 +240,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function we_can_associate_data_to_a_global_message_field()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpShow
+        $sharpShow = new class extends BaseSharpShowDefaultTest
         {
             public function buildShowConfig(): void
             {
@@ -231,9 +266,71 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_can_declare_a_simple_page_title_field()
+    {
+        $sharpShow = new class extends BaseSharpShowDefaultTest
+        {
+            public function buildShowConfig(): void
+            {
+                $this->configurePageTitleAttribute('title');
+            }
+
+            public function find($id): array
+            {
+                return [
+                    'title' => 'Some title',
+                ];
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            'title',
+            $sharpShow->showConfig(1)['titleAttribute'],
+        );
+
+        $this->assertEquals(
+            SharpShowTextField::make('title')->toArray(),
+            $sharpShow->fields()['title'],
+        );
+
+        $this->assertArrayHasKey('title', $sharpShow->instance(1));
+    }
+
+    /** @test */
+    public function we_can_declare_a_localized_page_title_field()
+    {
+        $sharpShow = new class extends BaseSharpShowDefaultTest
+        {
+            public function buildShowConfig(): void
+            {
+                $this->configurePageTitleAttribute('title', localized: true);
+            }
+
+            public function find($id): array
+            {
+                return [
+                    'title' => ['en' => 'Some title', 'fr' => 'Un titre'],
+                ];
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            SharpShowTextField::make('title')->setLocalized()->toArray(),
+            $sharpShow->fields()['title'],
+        );
+
+        $this->assertArrayHasKey('title', $sharpShow->instance(1));
+        $this->assertIsArray($sharpShow->instance(1)['title']);
+    }
+
+    /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends \Code16\Sharp\Tests\Unit\Show\BaseSharpSingleShow
+        $sharpShow = new class extends BaseSharpSingleShowDefaultTest
         {
         };
 
@@ -243,35 +340,5 @@ class SharpShowTest extends SharpTestCase
             ],
             $sharpShow->showConfig(null),
         );
-    }
-}
-
-class BaseSharpShow extends SharpShow
-{
-    public function find($id): array
-    {
-    }
-
-    public function buildShowFields(FieldsContainer $showFields): void
-    {
-    }
-
-    public function buildShowLayout(ShowLayout $showLayout): void
-    {
-    }
-}
-
-class BaseSharpSingleShow extends SharpSingleShow
-{
-    public function buildShowFields(FieldsContainer $showFields): void
-    {
-    }
-
-    public function buildShowLayout(ShowLayout $showLayout): void
-    {
-    }
-
-    public function findSingle(): array
-    {
     }
 }

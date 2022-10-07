@@ -17,11 +17,12 @@ trait HandleDashboardCommands
     /**
      * Append the commands to the config returned to the front.
      */
-    protected function appendDashboardCommandsToConfig(array &$config)
+    protected function appendDashboardCommandsToConfig(array &$config): void
     {
         $this->appendCommandsToConfig(
             $this->getDashboardCommandHandlers(),
             $config,
+            'dashboard',
         );
     }
 

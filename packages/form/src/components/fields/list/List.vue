@@ -1,5 +1,9 @@
 <template>
-    <div class="SharpList" :class="classes">
+    <div class="SharpList"
+        :class="classes"
+        @dragstart="dragging = true"
+        @dragend="dragging = false"
+    >
         <div class="SharpList__sticky-wrapper text-end">
             <template v-if="showSortButton">
                 <Button
@@ -22,7 +26,7 @@
             <transition-group name="expand" tag="div" class="list-group shadow-sm">
                 <template v-for="(listItemData, i) in list">
                     <div class="SharpList__item list-group-item"
-                        :class="{'SharpList__item--collapsed': dragActive}"
+                        :class="{'SharpList__item--drag-active': dragActive}"
                         :key="listItemData[indexSymbol]"
                     >
                         <template v-if="showInsertButton">
@@ -64,10 +68,9 @@
                             </template>
                         </template>
 
-                        <!-- Full size div use to handle the item when drag n drop (c.f draggable options) -->
-                        <template v-if="dragActive">
-                            <div class="SharpList__overlay-handle"></div>
-                        </template>
+                        <div class="SharpList__drag-handle d-flex align-items-center px-1">
+                            <i class="fas fa-grip-vertical opacity-25"></i>
+                        </div>
                     </div>
                 </template>
                 <template v-if="hasUpload">
@@ -162,6 +165,7 @@
             return {
                 list: [],
                 dragActive: false,
+                dragging: false,
                 lastIndex: 0
             }
         },
@@ -173,12 +177,13 @@
             classes() {
                 return {
                     'SharpList--can-sort': this.showSortButton,
+                    'SharpList--dragging': this.dragging,
                 }
             },
             dragOptions() {
                 return {
-                    disabled: !this.dragActive,
-                    handle: '.SharpList__overlay-handle',
+                    // disabled: !this.dragActive,
+                    handle: this.dragActive ? '.SharpList__item' : '.SharpList__drag-handle',
                     filter: '.SharpListUpload',
                 };
             },

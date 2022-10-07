@@ -123,6 +123,7 @@
                 const iframe = this.getIframe(this.html);
                 if(iframe) {
                     this.updateAttributes({
+                        ...this.node.type.defaultAttrs,
                         ...Object.fromEntries(
                             [...iframe.attributes].map(attr => [attr.name, attr.value])
                         ),

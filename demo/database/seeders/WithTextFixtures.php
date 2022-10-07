@@ -15,6 +15,13 @@ trait WithTextFixtures
         'True story',
         'Incredible',
         'Help',
+        'Great story',
+        'Legend',
+        'WTF',
+        'Beautiful',
+        'Ugly',
+        'Too bad',
+        'Inspirational',
     ];
 
     protected static array $titlesFR = [

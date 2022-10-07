@@ -4,7 +4,6 @@ namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Show\Fields\SharpShowField;
-use Illuminate\Support\Collection;
 
 trait HandleFields
 {
@@ -28,10 +27,9 @@ trait HandleFields
         $this->checkFormIsBuilt();
 
         return collect($this->fieldsContainer()->getFields())
-            ->when($this->pageAlertHtmlField ?? null, function (Collection $collection) {
-                return $collection->push($this->pageAlertHtmlField);
-            })
-            ->map->toArray()
+            ->when($this->pageAlertHtmlField ?? null, fn ($collection) => $collection->push($this->pageAlertHtmlField))
+            ->when($this->pageTitleField ?? null, fn ($collection) => $collection->push($this->pageTitleField))
+            ->map(fn ($collection) => $collection->toArray())
             ->keyBy('key')
             ->all();
     }

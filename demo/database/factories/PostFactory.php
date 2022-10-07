@@ -21,7 +21,9 @@ class PostFactory extends Factory
                 'en' => collect($this->faker->randomElements(static::$paragraphsEN, rand(1, 3)))->map(fn ($paragraph) => "<p>$paragraph</p>")->implode(''),
             ],
             'state' => 'online',
-            'published_at' => now()->subMinutes($this->faker->numberBetween(-60 * 24 * 3, 60 * 24 * 50)),
+            'published_at' => $this->faker->boolean(90)
+                ? now()->subMinutes($this->faker->numberBetween(1, 60 * 24 * 50))
+                : now()->addMinutes($this->faker->numberBetween(1, 60 * 24 * 50)),
         ];
     }
 }

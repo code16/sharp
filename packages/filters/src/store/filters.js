@@ -39,9 +39,6 @@ export default {
         defaultValue() {
             return filter => (filter||{}).default;
         },
-        isDateRange() {
-            return filter => (filter||{}).type === 'daterange';
-        },
 
         filterQueryKey() {
             return key => filterQueryKey(key);
@@ -64,27 +61,38 @@ export default {
                 if(filter.multiple && !Array.isArray(value)) {
                     return [value];
                 }
-                if(getters.isDateRange(filter)) {
+                if(filter.type === 'daterange') {
                     return parseRange(value);
+                }
+                if(filter.type === 'check') {
+                    return value === '1';
                 }
                 return value;
             }
         },
-        serializeValue(state, getters) {
+        serializeValue() {
             return ({ filter, value }) => {
-                if(getters.isDateRange(filter)) {
+                if(!filter) {
+                    return value;
+                }
+                if(filter.type === 'daterange') {
                     return serializeRange(value);
+                }
+                if(filter.type === 'check') {
+                    return value ? '1' : null;
                 }
                 return value;
             };
         },
         nextValues(state) {
             return ({ filter, value }) => {
-                let base = state.values;
                 if(filter.master) {
-                    base = Object.keys(state.values).reduce((res, key) => ({ ...res, [key]:null }), {});
+                    return {
+                        ...Object.fromEntries(Object.entries(state.values).map(([key, value]) => [key, null])),
+                        [filter.key]: value,
+                    };
                 }
-                return { ...base, [filter.key]: value };
+                return { ...state.values, [filter.key]: value };
             };
         },
         nextQuery(state, getters) {

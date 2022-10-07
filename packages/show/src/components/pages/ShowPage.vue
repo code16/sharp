@@ -27,13 +27,24 @@
                         />
                     </template>
 
-                    <template v-if="localized">
-                        <div class="mb-4">
-                            <LocaleSelect
-                                :locales="locales"
-                                :locale="locale"
-                                @change="handleLocaleChanged"
-                            />
+                    <template v-if="title || localized">
+                        <div :class="title ? 'mb-3' : 'mb-4'">
+                            <div class="row align-items-center gx-3 gx-md-4">
+                                <template v-if="localized">
+                                    <div class="col-auto">
+                                        <LocaleSelect
+                                            :locales="locales"
+                                            :locale="locale"
+                                            @change="handleLocaleChanged"
+                                        />
+                                    </div>
+                                </template>
+                                <template v-if="title">
+                                    <div class="col" style="min-width: 0">
+                                        <h1 class="mb-0 text-truncate h2" v-html="title"></h1>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
                     </template>
 
@@ -45,6 +56,8 @@
                             :layout="sectionLayout(section)"
                             :fields-row-class="fieldsRowClass"
                             :collapsable="isSectionCollapsable(section)"
+                            :commands="sectionCommands(section)"
+                            @command="handleCommandRequested"
                             v-slot="{ fieldLayout }"
                         >
                             <template v-if="fieldOptions(fieldLayout)">
@@ -142,6 +155,7 @@
             classes() {
                 return {
                     'ShowPage--localized': this.localized,
+                    'ShowPage--title': this.title,
                 }
             },
             formUrl() {
@@ -169,6 +183,15 @@
             localized() {
                 return this.locales?.length > 0;
             },
+            title() {
+                if(!this.ready || !this.config.titleAttribute) {
+                    return null;
+                }
+                if(this.fields[this.config.titleAttribute]?.localized) {
+                    return this.data[this.config.titleAttribute]?.[this.locale];
+                }
+                return this.data[this.config.titleAttribute];
+            },
         },
 
         methods: {
@@ -194,6 +217,13 @@
                 }
                 return 'card';
             },
+            sectionCommands(section) {
+                if(!section.key) {
+                    return null;
+                }
+                return (this.config.commands[section.key] ?? [])
+                    .map(group => group.filter(command => command.authorization));
+            },
             fieldsRowClass(row) {
                 const fieldsTypeClasses = row.map(fieldLayout => {
                     const field = this.fieldOptions(fieldLayout);
@@ -209,7 +239,8 @@
             },
             isSectionVisible(section) {
                 const sectionFields = this.sectionFields(section);
-                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout));
+                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout))
+                    || this.sectionCommands(section)?.flat().length;
             },
             sectionHasField(section, type) {
                 const sectionFields = this.sectionFields(section);

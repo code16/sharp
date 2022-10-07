@@ -7,13 +7,13 @@ use Illuminate\Support\Collection;
 
 trait CommonCommandUtils
 {
-    protected function appendCommandsToConfig(Collection $commandHandlers, array &$config, $instanceId = null): void
+    protected function appendCommandsToConfig(Collection $commandHandlers, array &$config, string $positionKey, $instanceId = null): void
     {
         $commandHandlers
-            ->each(function (Command $handler) use (&$config, $instanceId) {
+            ->each(function (Command $handler) use (&$config, $instanceId, $positionKey) {
                 $handler->buildCommandConfig();
 
-                $config['commands'][$handler->type()][$handler->groupIndex()][] = [
+                $config['commands'][$positionKey][$handler->groupIndex()][] = [
                     'key' => $handler->getCommandKey(),
                     'label' => $handler->label(),
                     'description' => $handler->getDescription(),

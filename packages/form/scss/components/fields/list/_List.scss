@@ -42,6 +42,8 @@
     position: relative;
     padding-top: 1.5rem;
     padding-bottom: 2rem;
+    transition: outline-color .15s ease-in-out;
+    outline: 1px solid transparent;
 
     &:first-child {
       padding-top: 1.5rem;
@@ -112,18 +114,17 @@
     //@include module-contextual-close-button;
     ///
 
-    .SharpList__overlay-handle {
+    .SharpList__drag-handle {
       position: absolute;
-      top:0;
-      left:0;
-      width: 100%;
+      top: 0;
+      left: 0;
+      width: 1rem;
       height: 100%;
       z-index: 40;
       cursor: move;
-    }
-
-    &.sortable-chosen {
-      box-shadow: $box-shadow;
+      opacity: var(--drag-handle-opacity, 0);
+      transition: opacity .15s ease-in-out;
+      font-size: .625rem;
     }
 
     &.expand-enter-active {
@@ -141,6 +142,32 @@
 
     &--no-transition {
       transition: unset;
+    }
+
+    &[style*="display: none"]:first-child + & {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+      border-top-width: var(--bs-list-group-border-width);
+    }
+
+    &--drag-active {
+      cursor: move;
+      * {
+        pointer-events: none;
+      }
+      &:hover {
+        outline: var(--hover-outline, 1px solid rgba(var(--bs-body-color-rgb), .5));
+        z-index: 1;
+      }
+    }
+
+    &.sortable-chosen {
+      outline: 1px solid rgba(var(--bs-body-color-rgb), .5);
+      z-index: 1;
+    }
+
+    &:hover {
+      --drag-handle-opacity: 1;
     }
   }
 
@@ -165,6 +192,13 @@
       &:focus {
         opacity: 1;
       }
+    }
+  }
+
+  &--dragging {
+    .SharpList__item {
+      --drag-handle-opacity: 0;
+      --hover-outline: 0;
     }
   }
 }

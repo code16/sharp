@@ -20,22 +20,24 @@ trait HandleInstanceCommands
      */
     protected function appendInstanceCommandsToConfig(array &$config, $instanceId = null): void
     {
-        $this->appendCommandsToConfig(
-            $this->getInstanceCommandsHandlers(),
-            $config,
-            $instanceId,
-        );
+        $this->getInstanceCommandsHandlers()
+            ->each(function ($handlers, $positionKey) use (&$config, $instanceId) {
+                $this->appendCommandsToConfig(
+                    $handlers,
+                    $config,
+                    $positionKey,
+                    $instanceId,
+                );
+            });
     }
 
     /**
      * Set the value of authorization key for instance commands and entity state,
      * which is an array of ids from the $items collection.
-     *
-     * @param  array|Arrayable  $items
      */
-    protected function addInstanceCommandsAuthorizationsToConfigForItems($items)
+    protected function addInstanceCommandsAuthorizationsToConfigForItems(array|Arrayable $items): void
     {
-        $this->getInstanceCommandsHandlers()
+        $this->getInstanceCommandsHandlers()['instance']
             // Take all authorized instance commands...
             ->filter->authorize()
 
@@ -57,37 +59,53 @@ trait HandleInstanceCommands
     final public function getInstanceCommandsHandlers(): Collection
     {
         if ($this->instanceCommandHandlers === null) {
-            $groupIndex = 0;
             $this->instanceCommandHandlers = collect($this->getInstanceCommands())
-                ->map(function ($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
-                    if (is_string($commandHandlerOrClassName)) {
-                        if (Str::startsWith($commandHandlerOrClassName, '-')) {
-                            // It's a separator
-                            $groupIndex++;
 
-                            return null;
-                        }
-                        if (! class_exists($commandHandlerOrClassName)) {
-                            throw new SharpException("Handler for instance command [{$commandHandlerOrClassName}] is invalid");
-                        }
-                        $commandHandler = app($commandHandlerOrClassName);
-                    } else {
-                        $commandHandler = $commandHandlerOrClassName;
-                    }
+                // First get commands which are section-based...
+                ->filter(fn ($value, $index) => is_array($value))
 
-                    if (! $commandHandler instanceof InstanceCommand) {
-                        throw new SharpException("Handler class for instance command [{$commandHandlerOrClassName}] is not an subclass of ".InstanceCommand::class);
-                    }
+                // ... and merge commands set for the whole instance
+                ->merge(
+                    [
+                        'instance' => collect($this->getInstanceCommands())
+                            ->filter(fn ($value, $index) => ! is_array($value)),
+                    ]
+                )
 
-                    $commandHandler->setGroupIndex($groupIndex);
-                    if (is_string($commandKey)) {
-                        $commandHandler->setCommandKey($commandKey);
-                    }
+                ->map(function ($handlers) {
+                    $groupIndex = 0;
 
-                    return $commandHandler;
-                })
-                ->filter()
-                ->values();
+                    return collect($handlers)
+                        ->map(function ($handlerOrClassName, $commandKey) use (&$groupIndex) {
+                            if (is_string($handlerOrClassName)) {
+                                if (Str::startsWith($handlerOrClassName, '-')) {
+                                    // It's a separator
+                                    $groupIndex++;
+
+                                    return null;
+                                }
+                                if (! class_exists($handlerOrClassName)) {
+                                    throw new SharpException("Handler for instance command [{$handlerOrClassName}] is invalid");
+                                }
+                                $commandHandler = app($handlerOrClassName);
+                            } else {
+                                $commandHandler = $handlerOrClassName;
+                            }
+
+                            if (! $commandHandler instanceof InstanceCommand) {
+                                throw new SharpException("Handler class for instance command [{$handlerOrClassName}] is not an subclass of ".InstanceCommand::class);
+                            }
+
+                            $commandHandler->setGroupIndex($groupIndex);
+                            if (is_string($commandKey)) {
+                                $commandHandler->setCommandKey($commandKey);
+                            }
+
+                            return $commandHandler;
+                        })
+                        ->filter()
+                        ->values();
+                });
         }
 
         return $this->instanceCommandHandlers;
@@ -97,6 +115,8 @@ trait HandleInstanceCommands
     {
         return $this
             ->getInstanceCommandsHandlers()
+            ->map(fn ($handlers, $positionKey) => $handlers)
+            ->flatten()
             ->filter(function (InstanceCommand $command) use ($commandKey) {
                 return $command->getCommandKey() === $commandKey;
             })
