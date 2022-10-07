@@ -4,6 +4,7 @@ namespace Code16\Sharp\Show;
 
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
@@ -24,6 +25,7 @@ abstract class SharpShow
 
     protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;
+    protected ?SharpShowTextField $pageTitleField = null;
 
     final public function showLayout(): array
     {
@@ -43,11 +45,10 @@ abstract class SharpShow
         return collect($this->find($id))
             // Filter model attributes on actual show labels
             ->only(
-                array_merge(
-                    $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
-                    $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                    $this->getDataKeys(),
-                ),
+                collect($this->getDataKeys())
+                    ->when($this->breadcrumbAttribute, fn ($collect) => $collect->push($this->breadcrumbAttribute))
+                    ->when($this->entityStateAttribute, fn ($collect) => $collect->push($this->entityStateAttribute))
+                    ->toArray()
             )
             ->all();
     }
@@ -55,7 +56,12 @@ abstract class SharpShow
     public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
-            ->merge(['multiformAttribute' => $this->multiformAttribute])
+            ->when($this->multiformAttribute, fn ($collection) => $collection->merge([
+                'multiformAttribute' => $this->multiformAttribute,
+            ]))
+            ->when($this->pageTitleField, fn ($collection) => $collection->merge([
+                'titleAttribute' => $this->pageTitleField->key,
+            ]))
             ->all();
 
         return tap($config, function (&$config) use ($instanceId) {
@@ -69,6 +75,13 @@ abstract class SharpShow
     final protected function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
+
+        return $this;
+    }
+
+    final protected function configurePageTitleAttribute(string $attribute, bool $localized = false): self
+    {
+        $this->pageTitleField = SharpShowTextField::make($attribute)->setLocalized($localized);
 
         return $this;
     }
