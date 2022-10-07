@@ -17,16 +17,15 @@
                     @state-change="handleStateChanged"
                 />
 
-                <div class="ShowPage__content">
-                    <template v-if="config.globalMessage">
-                        <GlobalMessage
-                            class="mb-3"
-                            :options="config.globalMessage"
-                            :data="data"
-                            :fields="fields"
-                        />
-                    </template>
+                <template v-if="config.globalMessage">
+                    <GlobalMessage
+                        :options="config.globalMessage"
+                        :data="data"
+                        :fields="fields"
+                    />
+                </template>
 
+                <div class="ShowPage__content">
                     <template v-if="title || localized">
                         <div :class="title ? 'mb-3' : 'mb-4'">
                             <div class="row align-items-center gx-3 gx-md-4">
