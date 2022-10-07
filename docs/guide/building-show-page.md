@@ -211,13 +211,14 @@ Transformers are explained in the detailed [How to transform data](how-to-transf
 
 ### `buildShowConfig(): void`
 
-Very much like EntityLists, a Show can declare a config with `EntityState` handler, or Breadcrumb configuration:
+Very much like EntityLists, a Show can declare a config with `EntityState` handler, or Breadcrumb configuration; you can also define here an attribute that will be used as page title.
 
 ```php
 function buildShowConfig()
 {
    $this
         ->configureBreadcrumbCustomLabelAttribute("name")
+        ->configurePageTitleAttribute("title")
         ->configureEntityState("state", SpaceshipEntityState::class);
 }
 ```
@@ -228,6 +229,7 @@ Here is the full list of available methods:
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
   toggle, [see detailed doc](entity-states.md)
+`configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
 
 ## Accessing the navigation breadcrumb
 

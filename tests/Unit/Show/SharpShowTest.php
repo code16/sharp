@@ -266,6 +266,68 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_can_declare_a_simple_page_title_field()
+    {
+        $sharpShow = new class extends BaseSharpShowDefaultTest
+        {
+            public function buildShowConfig(): void
+            {
+                $this->configurePageTitleAttribute('title');
+            }
+
+            public function find($id): array
+            {
+                return [
+                    'title' => 'Some title',
+                ];
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            'title',
+            $sharpShow->showConfig(1)['titleAttribute'],
+        );
+
+        $this->assertEquals(
+            SharpShowTextField::make('title')->toArray(),
+            $sharpShow->fields()['title'],
+        );
+
+        $this->assertArrayHasKey('title', $sharpShow->instance(1));
+    }
+
+    /** @test */
+    public function we_can_declare_a_localized_page_title_field()
+    {
+        $sharpShow = new class extends BaseSharpShowDefaultTest
+        {
+            public function buildShowConfig(): void
+            {
+                $this->configurePageTitleAttribute('title', localized: true);
+            }
+
+            public function find($id): array
+            {
+                return [
+                    'title' => ['en' => 'Some title', 'fr' => 'Un titre'],
+                ];
+            }
+        };
+
+        $sharpShow->buildShowConfig();
+
+        $this->assertEquals(
+            SharpShowTextField::make('title')->setLocalized()->toArray(),
+            $sharpShow->fields()['title'],
+        );
+
+        $this->assertArrayHasKey('title', $sharpShow->instance(1));
+        $this->assertIsArray($sharpShow->instance(1)['title']);
+    }
+
+    /** @test */
     public function single_shows_have_are_declared_in_config()
     {
         $sharpShow = new class extends BaseSharpSingleShowDefaultTest
