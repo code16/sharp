@@ -45,7 +45,3 @@ input[type="number"].hide-controls {
 [v-cloak] {
   display: none;
 }
-
-.sortable-chosen {
-  @include focus-outline('border');
-}
