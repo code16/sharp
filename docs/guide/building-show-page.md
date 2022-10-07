@@ -229,7 +229,7 @@ Here is the full list of available methods:
 - `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Show Page; [see detailed doc](page-alerts.md)
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
   toggle, [see detailed doc](entity-states.md)
-`configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
+- `configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
 
 ## Accessing the navigation breadcrumb
 
