@@ -5,8 +5,10 @@
 }
 
 :root, html.dark {
-  --c-brand: #004c9b;
+  --c-brand: hsl(211deg, 100%, 30%);
+  --c-brand-light: hsl(211deg, 100%, 50%);
   --c-brand-rgb: 0, 76, 155;
+  --c-tip: hsl(211deg, 50%, 50%);
   --navbar-height: 4.5rem;
 }
 
