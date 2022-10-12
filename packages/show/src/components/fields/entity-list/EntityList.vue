@@ -21,6 +21,7 @@
                     :collapsed="collapsed"
                     :filters="visibleFilters"
                     :has-active-query="hasActiveQuery"
+                    v-sticky
                 >
                     <template v-if="hasCollapse">
                         <div class="ShowSection__header ShowSection__header--collapsable position-relative">
@@ -63,6 +64,7 @@
     import { Localization } from "sharp/mixins";
     import { EntityList, EntityListTitle, entityListModule } from 'sharp-entity-list';
     import { CommandsDropdown } from 'sharp-commands';
+    import { sticky } from "sharp/directives";
 
     import ActionBar from "./ActionBar";
     import FieldLayout from "../../FieldLayout";
@@ -187,6 +189,9 @@
                 const rect = this.$el.getBoundingClientRect();
                 window.scrollBy(0, rect.top - 100);
             }
-        }
+        },
+        directives: {
+            sticky,
+        },
     }
 </script>

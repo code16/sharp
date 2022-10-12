@@ -1,11 +1,23 @@
 <template>
     <ActionBar>
         <template v-slot:left>
-            <template v-if="showBackButton">
-                <Button :href="backUrl" outline variant="light" large>
-                    {{ l('action_bar.show.back_button') }}
-                </Button>
-            </template>
+            <div class="row align-items-center gx-4">
+                <template v-if="showBackButton">
+                    <div class="col-auto">
+                        <Button :href="backUrl" outline variant="light" large>
+                            {{ l('action_bar.show.back_button') }}
+                        </Button>
+                    </div>
+                </template>
+                <template v-if="title">
+                    <div class="col">
+                        <div class="ui-title-font ui-font-size">
+                            {{ title }}
+                        </div>
+                    </div>
+                </template>
+            </div>
+
         </template>
         <template v-slot:right>
             <template v-if="canEdit">
@@ -112,6 +124,9 @@
             },
             hasState() {
                 return !!this.state;
+            },
+            title() {
+                return this.breadcrumb ? this.breadcrumb[this.breadcrumb.length - 1]?.name : null;
             },
         },
         methods: {

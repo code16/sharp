@@ -13,8 +13,38 @@
   }
 
   &__action-bar {
+    position: sticky;
+    top: calc(var(--navbar-height) + var(--bg-padding-top));
+    z-index: 10;
+    transition: padding .2s ease-in-out;
+
+    --bg-padding-top: 1rem;
+    --bg-padding-bottom: .75rem;
+
     .SharpButton--secondary-accent {
       border-color: $ui-04;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--bg-padding-top) * -1);
+      bottom: calc(var(--bg-padding-bottom) * -1);
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: $box-shadow;
+      opacity: 0;
+      transition: opacity .2s ease-in-out;
+    }
+
+    &.stuck {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+
+      &::before {
+        opacity: 1;
+      }
     }
   }
 
