@@ -13,7 +13,6 @@
   }
 
   &__action-bar {
-    position: sticky;
     top: calc(var(--navbar-height) + var(--bg-padding-top));
     z-index: 10;
     transition: padding .2s ease-in-out;
@@ -36,6 +35,7 @@
       box-shadow: $box-shadow;
       opacity: 0;
       transition: opacity .2s ease-in-out;
+      pointer-events: none;
     }
 
     &.stuck {

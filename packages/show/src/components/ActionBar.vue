@@ -11,7 +11,7 @@
                 </template>
                 <template v-if="title">
                     <div class="col">
-                        <div class="ui-title-font ui-font-size">
+                        <div class="h5 mb-0" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">
                             {{ title }}
                         </div>
                     </div>
@@ -21,7 +21,7 @@
         </template>
         <template v-slot:right>
             <template v-if="canEdit">
-                <Button :href="formUrl" variant="light" large>
+                <Button :href="formUrl" :disabled="editDisabled" variant="light" large>
                     {{ l('action_bar.show.edit_button') }}
                 </Button>
             </template>
@@ -111,12 +111,18 @@
             formUrl: String,
             backUrl: String,
             canEdit: Boolean,
+            editDisabled: Boolean,
             canChangeState: Boolean,
             showBackButton: Boolean,
             state: Object,
             stateValues: Array,
             breadcrumb: Array,
             showBreadcrumb: Boolean,
+        },
+        data() {
+            return {
+                showTitle: false,
+            }
         },
         computed: {
             hasCommands() {
@@ -126,7 +132,9 @@
                 return !!this.state;
             },
             title() {
-                return this.breadcrumb ? this.breadcrumb[this.breadcrumb.length - 1]?.name : null;
+                return this.breadcrumb && this.showBreadcrumb
+                    ? this.breadcrumb[this.breadcrumb.length - 1]?.name
+                    : null;
             },
         },
         methods: {
@@ -139,6 +147,12 @@
             handleStateChanged(state) {
                 this.$emit('state-change', state);
             },
-        }
+            handleScroll() {
+                this.showTitle = document.querySelector('.ShowPage__content').getBoundingClientRect().top < 0;
+            },
+        },
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll);
+        },
     }
 </script>

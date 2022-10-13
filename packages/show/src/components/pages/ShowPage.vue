@@ -13,6 +13,7 @@
                     :show-back-button="showBackButton"
                     :breadcrumb="breadcrumbItems"
                     :show-breadcrumb="breadcrumb.visible"
+                    :edit-disabled="isReordering"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                 />
@@ -69,6 +70,7 @@
                                     :layout="fieldLayout"
                                     :collapsable="section.collapsable"
                                     @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                    @reordering="handleReordering(fieldLayout.key, $event)"
                                     :key="refreshKey"
                                 />
                             </template>
@@ -132,6 +134,7 @@
                 fieldsVisible: null,
                 locale: null,
                 refreshKey: 0,
+                reorderingLists: {},
             }
         },
 
@@ -190,6 +193,9 @@
                     return this.data[this.config.titleAttribute]?.[this.locale];
                 }
                 return this.data[this.config.titleAttribute];
+            },
+            isReordering() {
+                return Object.values(this.reorderingLists).some(reordering => reordering);
             },
         },
 
@@ -256,6 +262,11 @@
             },
             handleLocaleChanged(locale) {
                 this.locale = locale;
+            },
+            handleReordering(key, reordering) {
+                this.reorderingLists = {
+                    [key]: reordering,
+                };
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {

@@ -12,10 +12,12 @@
             :focused-item="focusedItem"
             inline
             @change="handleChanged"
+            @reordering="$emit('reordering', $event)"
         >
             <template v-slot:action-bar="{ props, listeners }">
                 <ActionBar
                     class="ShowEntityListField__action-bar"
+                    :class="{ 'position-sticky': sticky }"
                     v-bind="props"
                     v-on="listeners"
                     :collapsed="collapsed"
@@ -60,6 +62,7 @@
 
 <script>
     import { entitiesMatch } from "sharp";
+    import { getNavbarHeight } from "sharp-ui";
     import { getReferrerRoute } from "sharp/router";
     import { Localization } from "sharp/mixins";
     import { EntityList, EntityListTitle, entityListModule } from 'sharp-entity-list';
@@ -98,6 +101,7 @@
                 list: null,
                 collapsed: this.collapsable && !this.getFocusedItem(),
                 focusedItem: this.getFocusedItem(),
+                sticky: false,
             }
         },
         computed: {
@@ -156,8 +160,10 @@
             storeGetter(name) {
                 return this.$store.getters[`${this.storeModule}/${name}`];
             },
-            handleChanged(list) {
+            async handleChanged(list) {
                 this.list = list;
+                await this.$nextTick();
+                this.layout();
             },
             handleDetailsToggle(e) {
                 this.collapsed = !e.target.open;
@@ -171,6 +177,9 @@
                 ) {
                     return Number(route.params.instanceId);
                 }
+            },
+            layout() {
+                this.sticky = this.$el.offsetHeight > (window.innerHeight - getNavbarHeight());
             },
         },
         created() {
@@ -189,6 +198,8 @@
                 const rect = this.$el.getBoundingClientRect();
                 window.scrollBy(0, rect.top - 100);
             }
+
+            window.addEventListener('resize', () => this.layout());
         },
         directives: {
             sticky,
