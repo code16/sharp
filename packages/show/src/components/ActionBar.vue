@@ -10,14 +10,13 @@
                     </div>
                 </template>
                 <template v-if="title">
-                    <div class="col">
+                    <div class="col d-none d-md-block">
                         <div class="h5 mb-0" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">
                             {{ title }}
                         </div>
                     </div>
                 </template>
             </div>
-
         </template>
         <template v-slot:right>
             <template v-if="canEdit">

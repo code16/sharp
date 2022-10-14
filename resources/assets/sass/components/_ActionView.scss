@@ -1,5 +1,5 @@
 .SharpActionView {
-  --content-top: 0;
+  //--content-top: 0;
   --content-left: #{$leftnav-collapsed-width};
 
   position: relative;
@@ -10,9 +10,9 @@
   padding-bottom: 3rem;
   min-height: 100vh;
 
-  @include media-breakpoint-up(sm) {
+  //@include media-breakpoint-up(sm) {
     --content-top: var(--navbar-height);
-  }
+  //}
   @include media-breakpoint-up($breakpoint-fixed-menu) {
     --content-left: #{$leftnav-width};
     overflow: visible;

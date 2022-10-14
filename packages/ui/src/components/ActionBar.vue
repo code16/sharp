@@ -15,13 +15,13 @@
         <template v-if="hasExtras">
             <div :class="{ 'container':container }">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm">
                         <div class="SharpActionBar__extras">
                             <slot name="extras" />
                         </div>
                     </div>
                     <template v-if="$slots['extras-right']">
-                        <div class="col-auto">
+                        <div class="col-sm-auto">
                             <div class="SharpActionBar__extras">
                                 <slot name="extras-right" />
                             </div>
