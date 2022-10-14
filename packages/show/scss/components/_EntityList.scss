@@ -13,7 +13,7 @@
   }
 
   &__action-bar {
-    top: calc(var(--navbar-height) + var(--bg-padding-top));
+    top: calc(var(--navbar-height) + var(--bg-padding-top) + var(--sticky-offset, 0px));
     z-index: 10;
     transition: padding .2s ease-in-out;
 
@@ -27,7 +27,7 @@
     &::before {
       content: "";
       position: absolute;
-      top: calc(var(--bg-padding-top) * -1);
+      top: calc(var(--bg-padding-top) * -1 - var(--sticky-offset, 0px));
       bottom: calc(var(--bg-padding-bottom) * -1);
       left: 0;
       right: 0;

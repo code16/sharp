@@ -1,13 +1,17 @@
 <template>
-    <div class="action-bar">
-        <template v-if="hasOuterTitle">
-            <div class="mb-2">
-                <slot />
-            </div>
-        </template>
-        <template v-if="ready && barVisible">
-            <div class="position-relative">
-                <div class="row align-items-end">
+    <div class="action-bar"
+        :class="{ 'position-sticky': sticky }"
+        v-sticky="sticky"
+        @sticky-change="stuck = $event.detail"
+    >
+        <div class="position-relative h-100">
+            <template v-if="hasOuterTitle">
+                <div class="mb-2">
+                    <slot />
+                </div>
+            </template>
+            <template v-if="ready && barVisible">
+                <div class="row align-items-end align-content-end h-100">
                     <template v-if="hasLeftControls">
                         <div class="col-sm mb-2">
                             <div class="row gy-1 gx-2 gx-md-3">
@@ -105,8 +109,8 @@
                         </div>
                     </template>
                 </div>
-            </div>
-        </template>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -116,6 +120,7 @@
     import { SharpFilter } from 'sharp-filters';
     import { MultiformDropdown } from "sharp-entity-list";
     import { lang } from "sharp";
+    import { sticky } from "sharp/directives";
 
     export default {
         mixins: [Localization],
@@ -146,6 +151,12 @@
             // show field props
             collapsed: Boolean,
             hasActiveQuery: Boolean,
+            sticky: Boolean,
+        },
+        data() {
+            return {
+                stuck: false,
+            }
         },
         computed: {
             hasForms() {
@@ -193,6 +204,9 @@
             handleCreateFormSelected(form) {
                 this.$emit('create', form);
             },
-        }
+        },
+        directives: {
+            sticky,
+        },
     }
 </script>

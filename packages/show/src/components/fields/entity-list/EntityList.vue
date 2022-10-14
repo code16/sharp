@@ -17,13 +17,12 @@
             <template v-slot:action-bar="{ props, listeners }">
                 <ActionBar
                     class="ShowEntityListField__action-bar"
-                    :class="{ 'position-sticky': sticky }"
                     v-bind="props"
                     v-on="listeners"
                     :collapsed="collapsed"
                     :filters="visibleFilters"
                     :has-active-query="hasActiveQuery"
-                    v-sticky
+                    :sticky="sticky"
                 >
                     <template v-if="hasCollapse">
                         <div class="ShowSection__header ShowSection__header--collapsable position-relative">
@@ -200,9 +199,6 @@
             }
 
             window.addEventListener('resize', () => this.layout());
-        },
-        directives: {
-            sticky,
         },
     }
 </script>
