@@ -9,7 +9,10 @@ use App\Sharp\Utils\Embeds\AuthorEmbed;
 use App\Sharp\Utils\Embeds\CodeEmbed;
 use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Show\Fields\SharpShowFileField;
+use Code16\Sharp\Show\Fields\SharpShowListField;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -27,7 +30,6 @@ class PostShow extends SharpShow
     protected function buildShowFields(FieldsContainer $showFields): void
     {
         $showFields
-            ->addField(SharpShowTextField::make('title')->setLabel('Title')->setLocalized())
             ->addField(
                 SharpShowTextField::make('content')
                     ->allowEmbeds([
@@ -42,6 +44,20 @@ class PostShow extends SharpShow
             ->addField(SharpShowTextField::make('author')->setLabel('Author'))
             ->addField(SharpShowTextField::make('categories')->setLabel('Categories'))
             ->addField(SharpShowPictureField::make('cover'))
+            ->addField(
+                SharpShowListField::make('attachments')
+                    ->setLabel('Attachments')
+                    ->addItemField(
+                        SharpShowTextField::make('link_url')
+                            ->setLabel('External link')
+                    )
+                    ->addItemField(
+                        SharpShowFileField::make('document')
+                            ->setLabel('File')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data/posts/{id}')
+                    )
+            )
             ->addField(
                 SharpShowEntityListField::make('blocks', 'blocks')
                     ->setLabel('Blocks')
@@ -58,9 +74,12 @@ class PostShow extends SharpShow
                 $section
                     ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField('title')
                             ->withSingleField('categories')
-                            ->withSingleField('author');
+                            ->withSingleField('author')
+                            ->withSingleField('attachments', function (ShowLayoutColumn $item) {
+                                $item->withSingleField('link_url')
+                                    ->withSingleField('document');
+                            });
                     })
                     ->addColumn(5, function (ShowLayoutColumn $column) {
                         $column->withSingleField('cover');
@@ -81,6 +100,7 @@ class PostShow extends SharpShow
         $this
             ->configureEntityState('state', PostStateHandler::class)
             ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
+            ->configurePageTitleAttribute('title', localized: true)
             ->configurePageAlert(
                 '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>',
                 static::$pageAlertLevelInfo,
@@ -124,7 +144,13 @@ class PostShow extends SharpShow
                     ->implode(', ');
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
-            ->transform(Post::findOrFail($id));
+            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(false))
+            ->setCustomTransformer('attachments[link_url]', function ($value, $instance) {
+                return $instance->is_link
+                    ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))
+                    : null;
+            })
+            ->transform(Post::with('attachments', 'attachments.document')->findOrFail($id));
     }
 
     public function getDataLocalizations(): array
