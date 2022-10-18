@@ -8,7 +8,7 @@ class DummyClass extends EntityState
 {
     protected function buildStates(): void
     {
-        // $this->addState("active", "Active", "green");
+        // $this->addState('active', 'Active', 'green');
     }
 
     protected function updateState($instanceId, string $stateId): array
