@@ -6,13 +6,7 @@ use Illuminate\Support\Str;
 
 trait WithModel
 {
-    /**
-     * Build the model replacement values.
-     *
-     * @param  array  $replace
-     * @return array
-     */
-    protected function buildModelReplacements(array $replace)
+    protected function buildModelReplacements(array $replace): array
     {
         $modelClass = $this->parseModel($this->option('model'));
 
@@ -31,13 +25,8 @@ trait WithModel
 
     /**
      * Get the fully-qualified model class name.
-     *
-     * @param  string  $model
-     * @return string
-     *
-     * @throws \InvalidArgumentException
      */
-    protected function parseModel($model)
+    protected function parseModel(string $model): string
     {
         if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
             throw new \InvalidArgumentException('Model name contains invalid characters.');

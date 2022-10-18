@@ -10,27 +10,27 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DummyClass extends SharpForm
 {
-    function buildFormFields(FieldsContainer $formFields): void
+    public function buildFormFields(FieldsContainer $formFields): void
     {
-        // $formFields->addField(SharpFormTextField::make("myField"))
+        // $formFields->addField(SharpFormTextField::make('myField'))
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
         // $formLayout->addColumn(6, function(FormLayoutColumn $column) { ... })
     }
 
-    function find($id): array
+    public function find($id): array
     {
         // return $this->transform(...);
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         //
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
         //
     }
