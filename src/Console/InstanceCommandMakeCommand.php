@@ -12,11 +12,20 @@ class InstanceCommandMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__.'/stubs/instance-command.stub';
+        return $this->option('with-form')
+            ? __DIR__.'/stubs/instance-command-with-form.stub'
+            : __DIR__.'/stubs/instance-command.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
+    }
+
+    protected function getOptions()
+    {
+        return [
+            ['with-form', null, null, 'Create a command with a form.'],
+        ];
     }
 }

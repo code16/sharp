@@ -3,6 +3,8 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DummyClass extends InstanceCommand
 {
@@ -14,6 +16,16 @@ class DummyClass extends InstanceCommand
     public function buildCommandConfig(): void
     {
         // $this->configureDescription(...)
+    }
+
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        // $formFields->addField(...)
+    }
+
+    public function buildFormLayout(FormLayoutColumn &$column): void
+    {
+        // $column->withSingleField(...)
     }
 
     public function execute($instanceId, array $data = []): array
