@@ -84,12 +84,7 @@ trait WithCustomTransformers
         };
     }
 
-    /**
-     * @param  array|object  $model  the base model (Eloquent for instance), or an array of attributes
-     * @param  bool  $forceFullObject  if true all data keys of the model will be force set
-     * @return array
-     */
-    protected function applyTransformers($model, bool $forceFullObject = true): array
+    protected function applyTransformers(array|object $model, bool $forceFullObject = true): array
     {
         $attributes = ArrayConverter::modelToArray($model);
 
@@ -98,9 +93,7 @@ trait WithCustomTransformers
             // all attributes which the front code needed.
             $attributes = collect($this->getDataKeys())
                 ->flip()
-                ->map(function () {
-                    return null;
-                })
+                ->map(fn () => null)
                 ->merge($attributes)
                 ->all();
         }
@@ -144,11 +137,7 @@ trait WithCustomTransformers
         return $attributes;
     }
 
-    /**
-     * @param $attributes
-     * @return array
-     */
-    protected function applyFormatters($attributes): array
+    protected function applyFormatters(array $attributes): array
     {
         return collect($attributes)
             ->map(function ($value, $key) {

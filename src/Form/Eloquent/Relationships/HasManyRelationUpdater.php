@@ -8,13 +8,13 @@ class HasManyRelationUpdater
 {
     protected array $handledIds = [];
 
-    public function update(object $instance, string $attribute, array $value, ?array $sortConfiguration = null)
+    public function update(object $instance, string $attribute, array $value, ?array $sortConfiguration = null): void
     {
         $relatedModel = $instance->$attribute()->getRelated();
         $relatedModelKeyName = $relatedModel->getKeyName();
 
         // Add / update sent items
-        foreach ((array) $value as $k => $item) {
+        foreach ($value as $k => $item) {
             $id = $this->findItemId($item, $relatedModelKeyName);
             $relatedInstance = $instance->$attribute()->findOrNew($id);
 

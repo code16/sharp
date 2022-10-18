@@ -2,15 +2,11 @@
 
 namespace Code16\Sharp\Form\Eloquent\Relationships\Utils;
 
+use Illuminate\Database\Eloquent\Model;
+
 trait CanCreateRelatedModel
 {
-    /**
-     * @param $instance
-     * @param $attribute
-     * @param  array  $data
-     * @return mixed
-     */
-    protected function createRelatedModel($instance, $attribute, $data = [])
+    protected function createRelatedModel($instance, string $attribute, array $data = []): Model
     {
         // Creation: we call the optional getDefaultAttributesFor($attribute)
         // on the model, to get some default values for required attributes
@@ -22,8 +18,7 @@ trait CanCreateRelatedModel
             array_merge($defaultAttributes, $data),
         );
 
-        // Force relation reload, in case there is
-        // more attributes to update in the request
+        // Force relation reload, in case there is more attributes to update in the request
         $instance->load($attribute);
 
         return $related;

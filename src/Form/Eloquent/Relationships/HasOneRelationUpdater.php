@@ -8,9 +8,9 @@ class HasOneRelationUpdater
 {
     use CanCreateRelatedModel;
 
-    public function update(object $instance, string $attribute, $value)
+    public function update(object $instance, string $attribute, $value): void
     {
-        if (strpos($attribute, ':') !== false) {
+        if (str_contains($attribute, ':')) {
             // This is a relation attribute update case (eg: mother:name)
             [$attribute, $subAttribute] = explode(':', $attribute);
 
@@ -50,8 +50,9 @@ class HasOneRelationUpdater
         $relatedModel = $instance->$attribute()->getRelated();
         $foreignKeyName = $instance->$attribute()->getForeignKeyName();
 
-        $relatedModel->find($value)->setAttribute(
-            $foreignKeyName, $instance->id,
-        )->save();
+        $relatedModel
+            ->find($value)
+            ->setAttribute($foreignKeyName, $instance->id)
+            ->save();
     }
 }

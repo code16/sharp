@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Form\Eloquent\Exceptions;
 
-class SharpFormEloquentUpdateException extends \Exception
+use Code16\Sharp\Exceptions\SharpException;
+
+class SharpFormEloquentUpdateException extends SharpException
 {
 }
