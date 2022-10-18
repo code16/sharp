@@ -13,7 +13,7 @@ class BelongsToManyRelationUpdater
         // Can be from SharpFormTagsField or SharpFormSelectField "multiple"
         $instance->$attribute()->sync(
             $collection
-                ->filter(fn ($item) =>  ! is_null($item[$keyName]))
+                ->filter(fn ($item) => ! is_null($item[$keyName]))
                 ->pluck($keyName)
                 ->all(),
         );
