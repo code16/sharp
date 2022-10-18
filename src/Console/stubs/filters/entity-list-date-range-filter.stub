@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
+
+class DummyClass extends EntityListDateRangeFilter
+{
+    public function buildFilterConfig(): void
+    {
+        // $this->configureLabel('My Filter')
+    }
+}
