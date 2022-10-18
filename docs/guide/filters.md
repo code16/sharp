@@ -7,7 +7,7 @@ This documentation is written for the EntityList case, but the API is the same f
 ## Generator
 
 ```bash
-php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple]
+php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple,--date-range,--check]
 ```
 
 ## Write the filter class
