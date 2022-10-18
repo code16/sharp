@@ -11,35 +11,35 @@ class DummyClass extends SharpEntityList
 {
     protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
     {
-        // $fieldsContainer->addField(EntityListField::make("myCol"))
+        // $fieldsContainer->addField(EntityListField::make('myCol')->setLabel('Label...'));
     }
-    
+
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
     {
-        // $fieldsLayout->addColumn("myCol", 6);
+        // $fieldsLayout->addColumn('myCol', 6);
     }
-    
-    protected function buildListConfig(): void
+
+    public function buildListConfig(): void
     {
         //
     }
-    
+
     protected function getInstanceCommands(): ?array
     {
-        //
+        return [];
     }
 
     protected function getEntityCommands(): ?array
     {
-        //
+        return [];
     }
 
     protected function getFilters(): array
     {
-        //
+        return [];
     }
-    
-    protected function getListData(): array|Arrayable
+
+    public function getListData(): array|Arrayable
     {
         // return $this->transform(...)
     }
