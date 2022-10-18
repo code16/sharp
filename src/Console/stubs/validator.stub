@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Validator\SharpFormRequest;
 
 class DummyClass extends SharpFormRequest
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             //

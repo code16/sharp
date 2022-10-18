@@ -14,14 +14,22 @@ class EntityListFilterMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('required')) {
-            return __DIR__.'/stubs/entity-list-filter.required.stub';
+            return $this->option('date-range')
+                ? __DIR__.'/stubs/filters/entity-list-date-range-filter.required.stub'
+                : __DIR__.'/stubs/filters/entity-list-select-filter.required.stub';
         }
 
-        if ($this->option('multiple')) {
-            return __DIR__.'/stubs/entity-list-filter.multiple.stub';
+        if ($this->option('date-range')) {
+            return __DIR__.'/stubs/filters/entity-list-date-range-filter.stub';
         }
 
-        return __DIR__.'/stubs/entity-list-filter.stub';
+        if ($this->option('check')) {
+            return __DIR__.'/stubs/filters/entity-list-check-filter.stub';
+        }
+
+        return $this->option('multiple')
+            ? __DIR__.'/stubs/filters/entity-list-select-filter.multiple.stub'
+            : __DIR__.'/stubs/filters/entity-list-select-filter.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
@@ -33,7 +41,9 @@ class EntityListFilterMakeCommand extends GeneratorCommand
     {
         return [
             ['required', 'r', InputOption::VALUE_NONE, 'Create a filter for which value is required'],
-            ['multiple', 'm', InputOption::VALUE_NONE, 'Create a filter that can have multiple values'],
+            ['multiple', 'm', InputOption::VALUE_NONE, 'Create a select filter that can have multiple values'],
+            ['date-range', 'd', InputOption::VALUE_NONE, 'Create a date-range filter'],
+            ['check', 'c', InputOption::VALUE_NONE, 'Create a check filter'],
         ];
     }
 }

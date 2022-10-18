@@ -10,11 +10,7 @@ trait WithSharpFormEloquentUpdater
 {
     protected array $ignoredAttributes = [];
 
-    /**
-     * @param  string|array  $attribute
-     * @return $this
-     */
-    public function ignore($attribute): self
+    public function ignore(string|array $attribute): self
     {
         $this->ignoredAttributes = array_merge(
             $this->ignoredAttributes,
@@ -26,10 +22,6 @@ trait WithSharpFormEloquentUpdater
 
     /**
      * Update an Eloquent Model with $data (which is already Form Field formatted).
-     *
-     * @param  Model  $instance
-     * @param  array  $data
-     * @return Model
      */
     public function save(Model $instance, array $data): Model
     {
@@ -41,9 +33,7 @@ trait WithSharpFormEloquentUpdater
         // Then handle manually ignored attributes...
         if (count($this->ignoredAttributes)) {
             $data = collect($data)
-                ->filter(function ($value, $attribute) {
-                    return array_search($attribute, $this->ignoredAttributes) === false;
-                })
+                ->filter(fn ($value, $attribute) => ! in_array($attribute, $this->ignoredAttributes))
                 ->all();
         }
 
@@ -55,10 +45,7 @@ trait WithSharpFormEloquentUpdater
 
     /**
      * Get all List fields which are sortable and their "orderAttribute"
-     * configuration to be used by EloquentModelUpdater
-     * for automatic ordering.
-     *
-     * @return Collection
+     * configuration to be used by EloquentModelUpdater for automatic ordering.
      */
     protected function getFormListFieldsConfiguration(): Collection
     {

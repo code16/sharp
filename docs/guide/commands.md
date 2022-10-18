@@ -7,13 +7,13 @@ Commands can be defined in an EntityList, in a Show Page or in a Dashboard. This
 ## Generator for an 'Entity' command
 
 ```bash
-php artisan sharp:make:entity-command <class_name>
+php artisan sharp:make:entity-command <class_name> [--with-form]
 ```
 
 ## Generator for an 'Instance' command
 
 ```bash
-php artisan sharp:make:instance-command <class_name>
+php artisan sharp:make:instance-command <class_name> [--with-form]
 ```
 
 

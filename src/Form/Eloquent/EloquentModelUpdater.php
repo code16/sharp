@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
+use ReflectionClass;
 
 class EloquentModelUpdater
 {
@@ -32,11 +33,7 @@ class EloquentModelUpdater
         return $instance;
     }
 
-    /**
-     * @param  array|Arrayable  $configuration
-     * @return $this
-     */
-    public function initRelationshipsConfiguration($configuration): self
+    public function initRelationshipsConfiguration(array|Arrayable $configuration): self
     {
         $this->relationshipsConfiguration = is_array($configuration)
             ? $configuration
@@ -45,13 +42,6 @@ class EloquentModelUpdater
         return $this;
     }
 
-    /**
-     * Valuates the $attribute with $value.
-     *
-     * @param  Model  $instance
-     * @param  string  $attribute
-     * @param  mixed  $value
-     */
     protected function valuateAttribute(Model $instance, string $attribute, $value): void
     {
         $instance->setAttribute($attribute, $value);
@@ -59,17 +49,17 @@ class EloquentModelUpdater
 
     protected function isRelationship(Model $instance, string $attribute): bool
     {
-        return strpos($attribute, ':') !== false || method_exists($instance, $attribute);
+        return str_contains($attribute, ':') || method_exists($instance, $attribute);
     }
 
-    protected function saveRelationships(Model $instance, array $relationships)
+    protected function saveRelationships(Model $instance, array $relationships): void
     {
         foreach ($relationships as $attribute => $value) {
             $relAttribute = explode(':', $attribute)[0];
             $type = get_class($instance->{$relAttribute}());
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
-                .(new \ReflectionClass($type))->getShortName()
+                .(new ReflectionClass($type))->getShortName()
                 .'RelationUpdater');
 
             $relationshipUpdater->update(

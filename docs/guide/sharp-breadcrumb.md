@@ -63,3 +63,7 @@ function find($id): array
         ->transform(Spaceship::findOrFail($id));
 }
 ```
+
+::: tip
+In the Form, the breadcrumb label is only used in one particular case: when coming from an Embedded Entity List of a Show. In this case, the Show and the Form entity are different, and the breadcrumb helps to keep track of the current edited entity.
+:::
