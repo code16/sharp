@@ -4,8 +4,8 @@ exports[`action-bar can mount ActionBar 1`] = `
 <div class="SharpActionBar">
 	<div class="SharpActionBar__bar sticky-top">
 		<div class="container">
-			<div class="row align-items-center g-2">
-				<div class="col SharpActionBar__col--left"></div>
+			<div class="row align-items-center g-2 gx-md-4">
+				<div class="col SharpActionBar__col--left" style="min-width: 0;"></div>
 				<div class="col-auto SharpActionBar__col--right"></div>
 			</div>
 		</div>
@@ -18,8 +18,8 @@ exports[`action-bar can mount with slots ActionBar 1`] = `
 <div class="SharpActionBar">
 	<div class="SharpActionBar__bar sticky-top">
 		<div class="container">
-			<div class="row align-items-center g-2">
-				<div class="col SharpActionBar__col--left">
+			<div class="row align-items-center g-2 gx-md-4">
+				<div class="col SharpActionBar__col--left" style="min-width: 0;">
 					<div>LEFT CONTENT</div>
 				</div>
 				<div class="col-auto SharpActionBar__col--right">
@@ -30,7 +30,7 @@ exports[`action-bar can mount with slots ActionBar 1`] = `
 	</div>
 	<div class="">
 		<div class="row">
-			<div class="col">
+			<div class="col-sm">
 				<div class="SharpActionBar__extras">
 					<div>EXTRAS CONTENT</div>
 				</div>
