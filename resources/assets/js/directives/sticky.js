@@ -1,20 +1,24 @@
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 
 class StickyObserver {
     /**
      * @type HTMLElement
      */
     el;
+    /**
+     * @type HTMLElement
+     */
+    sentinel;
+    /**
+     * @type Function
+     */
     listener;
 
     async observe(el) {
         this.el = el;
-        this.listener = debounce(() => this.refresh(), 100, {
-            leading: true,
-            trailing: true,
-            maxWait: 100,
-        });
+        this.listener = throttle(() => this.refresh(), 100);
         this.sentinel = document.createElement('div');
+
         this.sentinel.dataset.stickySentinel = true;
         this.el.parentElement.insertBefore(this.sentinel, this.el);
 
@@ -23,11 +27,16 @@ class StickyObserver {
     }
 
     destroy() {
+        this.el = null;
+        this.sentinel.remove();
         window.removeEventListener('scroll', this.listener);
         window.removeEventListener('resize', this.listener);
     }
 
     refresh() {
+        if(!this.el) {
+            return;
+        }
         const rect = this.el.getBoundingClientRect();
         const anchor = this.el.querySelector('[data-sticky-anchor]');
 
