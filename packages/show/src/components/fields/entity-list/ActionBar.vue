@@ -4,15 +4,15 @@
         v-sticky="sticky"
         @sticky-change="stuck = $event.detail"
     >
-        <div class="position-relative h-100">
+        <div class="position-relative">
             <template v-if="hasOuterTitle">
                 <div class="mb-2">
                     <slot />
                 </div>
             </template>
             <template v-if="ready && barVisible">
-                <div class="row align-items-end align-content-end h-100">
-                    <template v-if="hasLeftControls">
+                <div class="row align-items-end align-content-end" data-sticky-anchor>
+                    <template v-if="hasLeftControls && !stuck">
                         <div class="col-sm mb-2">
                             <div class="row gy-1 gx-2 gx-md-3">
                                 <template v-for="filter in filters">

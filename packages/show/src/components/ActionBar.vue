@@ -10,8 +10,8 @@
                     </div>
                 </template>
                 <template v-if="title">
-                    <div class="col d-none d-md-block">
-                        <div class="h5 mb-0" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">
+                    <div class="col d-none d-md-block" style="min-width: 0">
+                        <div class="h5 mb-0 text-truncate" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">
                             {{ title }}
                         </div>
                     </div>
