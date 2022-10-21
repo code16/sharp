@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputOption;
 
 class InstanceCommandMakeCommand extends GeneratorCommand
 {
@@ -12,11 +13,20 @@ class InstanceCommandMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__.'/stubs/instance-command.stub';
+        return $this->option('with-form')
+            ? __DIR__.'/stubs/instance-command-with-form.stub'
+            : __DIR__.'/stubs/instance-command.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
+    }
+
+    protected function getOptions()
+    {
+        return [
+            ['with-form', 'f', InputOption::VALUE_NONE, 'Create a command with a form.'],
+        ];
     }
 }

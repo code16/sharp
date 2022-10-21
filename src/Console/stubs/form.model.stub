@@ -13,32 +13,33 @@ use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 class DummyClass extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
-    
-    function buildFormFields(FieldsContainer $formFields): void
+
+    public function buildFormFields(FieldsContainer $formFields): void
     {
-        // $formFields->addField(SharpFormTextField::make("myField"))
+        // $formFields->addField(SharpFormTextField::make('myField'))
     }
 
-    function buildFormLayout(FormLayout $formLayout): void
+    public function buildFormLayout(FormLayout $formLayout): void
     {
         // $formLayout->addColumn(6, function(FormLayoutColumn $column) { ... })
     }
 
-    function find($id): array
+    public function find($id): array
     {
         return $this->transform(
             DummyModelClass::findOrFail($id)
         );
     }
 
-    function update($id, array $data)
+    public function update($id, array $data)
     {
         $DummyModelVariable = $id ? DummyModelClass::findOrFail($id) : new DummyModelClass;
         $this->save($DummyModelVariable, $data);
+
         return $DummyModelVariable->id;
     }
 
-    function delete($id): void
+    public function delete($id): void
     {
         DummyModelClass::findOrFail($id)->delete();
     }

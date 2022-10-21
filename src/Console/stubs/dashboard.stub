@@ -8,9 +8,9 @@ use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 
 class DummyClass extends SharpDashboard
 {
-    protected function buildWidgets(WidgetsContainer $widgetContainer): void
+    protected function buildWidgets(WidgetsContainer $widgetsContainer): void
     {
-        // $widgetContainer->addWidget(...)
+        // $widgetsContainer->addWidget(...)
     }
 
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void

@@ -8,7 +8,7 @@ class DummyClass extends EntityListSelectRequiredFilter
 {
     public function buildFilterConfig(): void
     {
-        // $this->configureLabel("My Filter label")
+        // $this->configureLabel('My Filter')
     }
 
     public function values(): array
@@ -18,6 +18,6 @@ class DummyClass extends EntityListSelectRequiredFilter
 
     public function defaultValue(): mixed
     {
-        //
+        // return
     }
 }

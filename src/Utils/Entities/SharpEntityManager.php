@@ -10,14 +10,23 @@ class SharpEntityManager
     {
         $entityKey = sharp_normalize_entity_key($entityKey)[0];
 
-        if (! $entity = config("sharp.entities.$entityKey")) {
-            if (! $entity = config("sharp.dashboards.$entityKey")) {
-                throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
+        if (is_array(config('sharp.entities'))) {
+            $entity = config("sharp.entities.$entityKey") ?: config("sharp.dashboards.$entityKey");
+        } elseif (class_exists(config('sharp.entities'))) {
+            // A custom SharpEntityResolver is used
+            if (! ($resolver = app(config('sharp.entities'))) instanceof SharpEntityResolver) {
+                throw new SharpInvalidEntityKeyException(config('sharp.entities').' is an invalid entity resolver.');
             }
+
+            $entity = $resolver->entityClassName($entityKey);
+        }
+
+        if (! $entity) {
+            throw new SharpInvalidEntityKeyException("The entity [{$entityKey}] was not found.");
         }
 
         if (is_string($entity)) {
-            // New Sharp 7 format: SharpEntity
+            // Sharp 7 format: SharpEntity
             if (! app()->bound($entity)) {
                 app()->singleton($entity, function () use ($entity, $entityKey) {
                     return (new $entity())->setEntityKey($entityKey);
@@ -59,19 +68,19 @@ class SharpEntityManager
 
                 // Single is tricky... It's defined in the menu!
                 $this->isSingle = collect(config('sharp.menu', []))
-                        ->map(function ($values) {
-                            if (isset($values['entities'])) {
-                                return $values['entities'];
-                            }
-                            if (isset($values['entity'])) {
-                                return [$values];
-                            }
+                    ->map(function ($values) {
+                        if (isset($values['entities'])) {
+                            return $values['entities'];
+                        }
+                        if (isset($values['entity'])) {
+                            return [$values];
+                        }
 
-                            return null;
-                        })
-                        ->flatten(1)
-                        ->filter(fn ($values) => ($values['entity'] ?? null) === $entityKey)
-                        ->first()['single'] ?? false;
+                        return null;
+                    })
+                    ->flatten(1)
+                    ->filter(fn ($values) => ($values['entity'] ?? null) === $entityKey)
+                    ->first()['single'] ?? false;
             }
 
             public function getMultiforms(): array

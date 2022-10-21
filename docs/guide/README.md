@@ -71,6 +71,10 @@ Almost each one is optional, in fact: we could skip the `show` and go straight t
 
 We'll get into all those classes in this document. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 
+::: tip
+Instead of directly declaring an array of entities in the config file, you can type the full path of a class that implements the `Code16\Sharp\Utils\Entities\SharpEntityResolver` interface, and define here a `public function entityClassName(string $entityKey): ?string` method.
+:::
+
 ## Access to Sharp
 
 Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to define the `custom_url_segment` config value, in `config/sharp.php`:

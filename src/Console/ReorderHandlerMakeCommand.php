@@ -63,8 +63,8 @@ class ReorderHandlerMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->option('model')
-                    ? __DIR__.'/stubs/reorder-handler.model.stub'
-                    : __DIR__.'/stubs/reorder-handler.stub';
+            ? __DIR__.'/stubs/reorder-handler.model.stub'
+            : __DIR__.'/stubs/reorder-handler.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
