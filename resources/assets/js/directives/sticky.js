@@ -14,9 +14,9 @@ class StickyObserver {
      */
     listener;
 
-    async observe(el) {
+    constructor(el) {
         this.el = el;
-        this.listener = throttle(() => this.refresh(), 100);
+        this.listener = throttle(() => this.refresh(), 50);
         this.sentinel = document.createElement('div');
 
         this.sentinel.dataset.stickySentinel = true;
@@ -54,18 +54,18 @@ class StickyObserver {
 }
 
 export default {
-    inserted(el, bindings, vnode) {
-        el._stickyObserver = new StickyObserver();
-        el._stickyObserver.observe(el);
-
-        if(bindings.expression) {
-            el._stickyUnwatch = vnode.context.$watch(bindings.expression, () => {
-                el._stickyObserver.refresh();
-            });
+    inserted(el, { value, expression }) {
+        if(value || !expression) {
+            el._stickyObserver = new StickyObserver(el);
         }
     },
+    update(el, { value }) {
+        if(value && !el._stickyObserver) {
+            el._stickyObserver = new StickyObserver(el);
+        }
+        el._stickyObserver?.refresh();
+    },
     unbind(el) {
-        el._stickyObserver.destroy();
-        el._stickyUnwatch();
+        el._stickyObserver?.destroy();
     },
 }

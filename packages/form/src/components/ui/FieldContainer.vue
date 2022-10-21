@@ -1,6 +1,6 @@
 <template>
     <div class="SharpFieldContainer SharpForm__form-item" :class="formGroupClasses" :style="extraStyle">
-        <div class="SharpForm__field-header" v-sticky>
+        <div class="SharpForm__field-header" v-sticky="fieldType === 'list'">
             <div class="row align-items-end">
                 <div class="col d-flex">
                     <template v-if="showLabel">
