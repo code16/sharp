@@ -15,7 +15,7 @@ class SharpEntityManager
         } elseif (class_exists(config('sharp.entities'))) {
             // A custom SharpEntityResolver is used
             if (! ($resolver = app(config('sharp.entities'))) instanceof SharpEntityResolver) {
-                throw new SharpInvalidEntityKeyException(config('sharp.entities') . ' is an invalid entity resolver.');
+                throw new SharpInvalidEntityKeyException(config('sharp.entities').' is an invalid entity resolver.');
             }
 
             $entity = $resolver->entityClassName($entityKey);
