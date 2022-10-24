@@ -68,9 +68,11 @@
                             </template>
                         </template>
 
-                        <div class="SharpList__drag-handle d-flex align-items-center px-1">
-                            <i class="fas fa-grip-vertical opacity-25"></i>
-                        </div>
+                        <template v-if="showSortButton">
+                            <div class="SharpList__drag-handle d-flex align-items-center px-1">
+                                <i class="fas fa-grip-vertical opacity-25"></i>
+                            </div>
+                        </template>
                     </div>
                 </template>
                 <template v-if="hasUpload">
