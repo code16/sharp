@@ -4,6 +4,7 @@
         class="SharpButton btn"
         :class="classes"
         :href="href"
+        :disabled="disabled"
         v-on="$listeners"
     >
         <slot />
@@ -24,6 +25,7 @@
             active: Boolean,
             block: Boolean,
             href: String,
+            disabled: Boolean,
         },
         computed: {
             variantClass() {
@@ -40,6 +42,7 @@
                         'btn-text': this.hasTextStyle,
                         'btn-block': this.block,
                         'active': this.active,
+                        'disabled': this.disabled,
                     }
                 ]
             },

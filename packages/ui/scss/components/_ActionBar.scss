@@ -12,11 +12,16 @@
   margin-bottom: 1rem;
 
   &__bar {
+    position: fixed!important;
+    z-index: $zindex-sticky;
+    top: var(--navbar-top, 0);
+    right: 0;
+    left: $leftnav-collapsed-width;
+    min-height: $navbar-min-height;
+
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     background: $brand-01;
-    margin-left: -$grid-gutter-width * .5;
-    margin-right: -$grid-gutter-width * .5;
 
     transition: $transition-leftnav-collapse;
     transition-property: left;
@@ -32,23 +37,10 @@
       hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 70%
     );
 
-    position: relative;
-    z-index: 1;
-
-    @include media-breakpoint-up(sm) {
-      position: absolute!important;
-      top: var(--navbar-top, 0);
-      right: 0;
-      left: $leftnav-collapsed-width;
-      min-height: $navbar-min-height;
-      margin-left: 0;
-      margin-right: 0!important;
-    }
     @include media-breakpoint-up($breakpoint-fixed-menu) {
-      position: fixed!important;
-      z-index: $zindex-sticky;
       left: $leftnav-width;
     }
+
     & > .container {
       & > .row {
         min-height: calc(2.5rem + var(--bs-gutter-y));

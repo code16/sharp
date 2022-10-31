@@ -383,6 +383,7 @@
             handleReorderButtonClicked() {
                 this.reorderActive = !this.reorderActive;
                 this.reorderedItems = this.reorderActive ? [...this.items] : null;
+                this.$emit('reordering', this.reorderActive);
             },
             handleReorderSubmitted() {
                 return this.storeDispatch('reorder', {
@@ -391,6 +392,7 @@
                     this.data.list.items = [...this.reorderedItems];
                     this.reorderedItems = null;
                     this.reorderActive = false;
+                    this.$emit('reordering', false);
                 });
             },
             handleCreateButtonClicked(multiform) {
@@ -656,6 +658,11 @@
                     });
                 this.bindParams(this.query);
 
+                await this.storeDispatch('update', {
+                    config: this.config,
+                    filtersValues: this.getFiltersValuesFromQuery(this.query),
+                });
+
                 this.$emit('change', {
                     data: this.data,
                     layout: this.layout,
@@ -665,10 +672,6 @@
                     forms: this.forms,
                 });
 
-                await this.storeDispatch('update', {
-                    config: this.config,
-                    filtersValues: this.getFiltersValuesFromQuery(this.query),
-                });
                 this.ready = true;
                 this.loading = false;
             },

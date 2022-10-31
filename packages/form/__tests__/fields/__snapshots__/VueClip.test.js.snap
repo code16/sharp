@@ -220,7 +220,7 @@ exports[`vue-clip can mount read-only VueClip component 1`] = `
 <div id="app">
 	<div class="SharpUpload SharpUpload--empty SharpUpload--disabled">
 		<div class="dz-clickable">
-			<button class="SharpButton btn SharpUpload__browse dz-message btn-text btn-block" disabled="disabled" type="button">
+			<button disabled="disabled" class="SharpButton btn SharpUpload__browse dz-message btn-text btn-block disabled" type="button">
 				{{ form.upload.browse_button }}
 			</button>
 			<div class="clip-preview-template" style="display: none;">
