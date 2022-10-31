@@ -1,15 +1,26 @@
 <template>
     <ActionBar>
         <template v-slot:left>
-            <template v-if="showBackButton">
-                <Button :href="backUrl" outline variant="light" large>
-                    {{ l('action_bar.show.back_button') }}
-                </Button>
-            </template>
+            <div class="row align-items-center gx-4">
+                <template v-if="showBackButton">
+                    <div class="col-auto">
+                        <Button :href="backUrl" outline variant="light" large>
+                            {{ l('action_bar.show.back_button') }}
+                        </Button>
+                    </div>
+                </template>
+                <template v-if="title">
+                    <div class="col d-none d-md-block" style="min-width: 0">
+                        <div class="h5 mb-0 text-truncate" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">
+                            {{ title }}
+                        </div>
+                    </div>
+                </template>
+            </div>
         </template>
         <template v-slot:right>
             <template v-if="canEdit">
-                <Button :href="formUrl" variant="light" large>
+                <Button :href="formUrl" :disabled="editDisabled" variant="light" large>
                     {{ l('action_bar.show.edit_button') }}
                 </Button>
             </template>
@@ -99,6 +110,7 @@
             formUrl: String,
             backUrl: String,
             canEdit: Boolean,
+            editDisabled: Boolean,
             canChangeState: Boolean,
             showBackButton: Boolean,
             state: Object,
@@ -106,12 +118,22 @@
             breadcrumb: Array,
             showBreadcrumb: Boolean,
         },
+        data() {
+            return {
+                showTitle: false,
+            }
+        },
         computed: {
             hasCommands() {
                 return this.commands?.flat().length > 0;
             },
             hasState() {
                 return !!this.state;
+            },
+            title() {
+                return this.breadcrumb && this.showBreadcrumb
+                    ? this.breadcrumb[this.breadcrumb.length - 1]?.name
+                    : null;
             },
         },
         methods: {
@@ -124,6 +146,12 @@
             handleStateChanged(state) {
                 this.$emit('state-change', state);
             },
-        }
+            handleScroll() {
+                this.showTitle = document.querySelector('.ShowPage__content').getBoundingClientRect().top < 0;
+            },
+        },
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll);
+        },
     }
 </script>

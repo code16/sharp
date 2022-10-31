@@ -44,7 +44,7 @@ exports[`list-field can mount collapsed list field 1`] = `
 				</div>
 			</div>
 			<div class="mt-3">
-				<button class="SharpButton btn SharpList__add-button btn-text btn-block" disabled="disabled">
+				<button class="SharpButton btn SharpList__add-button btn-text btn-block disabled" disabled="disabled">
 					＋ Ajouter un élément
 				</button>
 			</div>

@@ -15,7 +15,7 @@
   background-color: $color__white;
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
-  z-index: 100;
+  z-index: 1030;
 
   &__content {
     box-shadow: 1px 0 3px 0 hsla(var(--primary-h), var(--primary-s), 30%, 0.075);
