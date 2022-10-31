@@ -18,9 +18,7 @@ exports[`list-field can mount "read only" filled list field 1`] = `
 						</div>
 					</div>
 					<!---->
-					<div class="SharpList__drag-handle d-flex align-items-center px-1">
-						<i class="fas fa-grip-vertical opacity-25"></i>
-					</div>
+					<!---->
 				</div>
 			</div>
 		</div>
@@ -42,9 +40,7 @@ exports[`list-field can mount collapsed list field 1`] = `
 					<div class="SharpTemplate SharpTemplate--has-children">
 						<span> Antoine </span>
 					</div>
-					<div class="SharpList__drag-handle d-flex align-items-center px-1">
-						<i class="fas fa-grip-vertical opacity-25"></i>
-					</div>
+					<!---->
 				</div>
 			</div>
 			<div class="mt-3">
@@ -170,9 +166,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 						</div>
 					</div>
 					<!---->
-					<div class="SharpList__drag-handle d-flex align-items-center px-1">
-						<i class="fas fa-grip-vertical opacity-25"></i>
-					</div>
+					<!---->
 				</div>
 				<div class="SharpList__item list-group-item">
 					<!---->
@@ -184,9 +178,7 @@ exports[`list-field can mount non addable, non removable, non sortable list fiel
 						</div>
 					</div>
 					<!---->
-					<div class="SharpList__drag-handle d-flex align-items-center px-1">
-						<i class="fas fa-grip-vertical opacity-25"></i>
-					</div>
+					<!---->
 				</div>
 			</div>
 		</div>
