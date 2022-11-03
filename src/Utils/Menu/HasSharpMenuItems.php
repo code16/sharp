@@ -19,7 +19,7 @@ trait HasSharpMenuItems
 
         return $this;
     }
-    
+
     /**
      * @return SharpMenuItem[]
      */

@@ -35,7 +35,7 @@ class MenuComponentTest extends SharpTestCase
                 ],
             ],
         );
-        
+
         $item = app(Menu::class)->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('external', $item->getLabel());
@@ -58,7 +58,7 @@ class MenuComponentTest extends SharpTestCase
         });
 
         $this->app['config']->set('sharp.menu', 'test_sharp_menu');
-    
+
         $item = app(Menu::class)->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('external', $item->getLabel());
@@ -84,7 +84,7 @@ class MenuComponentTest extends SharpTestCase
                 ],
             ],
         );
-    
+
         $item = app(Menu::class)->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('person', $item->getKey());
@@ -108,7 +108,7 @@ class MenuComponentTest extends SharpTestCase
         });
         $this->app['config']->set('sharp.menu', 'test_sharp_menu');
         $this->app['config']->set('sharp.entities.person', PersonEntity::class);
-    
+
         $item = app(Menu::class)->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('person', $item->getKey());
@@ -142,11 +142,11 @@ class MenuComponentTest extends SharpTestCase
         );
 
         $menu = app(Menu::class);
-    
+
         $section = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemSection::class, $section);
         $this->assertEquals('Data', $section->getLabel());
-    
+
         $item = $section->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('person', $item->getKey());
@@ -174,11 +174,11 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']->set('sharp.entities.person', PersonEntity::class);
 
         $menu = app(Menu::class);
-    
+
         $section = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemSection::class, $section);
         $this->assertEquals('Data', $section->getLabel());
-    
+
         $item = $section->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('person', $item->getKey());
@@ -207,7 +207,7 @@ class MenuComponentTest extends SharpTestCase
         );
 
         $menu = app(Menu::class);
-        
+
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('personal_dashboard', $item->getKey());
@@ -235,9 +235,9 @@ class MenuComponentTest extends SharpTestCase
             'sharp.entities.personal_dashboard',
             PersonalDashboardEntity::class,
         );
-    
+
         $menu = app(Menu::class);
-        
+
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('personal_dashboard', $item->getKey());
@@ -267,7 +267,7 @@ class MenuComponentTest extends SharpTestCase
         );
 
         $menu = app(Menu::class);
-    
+
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('person', $item->getKey());
@@ -295,9 +295,9 @@ class MenuComponentTest extends SharpTestCase
             };
         });
         $this->app['config']->set('sharp.menu', 'test_sharp_menu');
-    
+
         $menu = app(Menu::class);
-        
+
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
         $this->assertEquals('person', $item->getKey());
@@ -377,12 +377,12 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']->set('sharp.menu', 'test_sharp_menu');
 
         $menu = app(Menu::class);
-    
+
         $section = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemSection::class, $section);
         $this->assertEquals('people', $section->getItems()[0]->getLabel());
         $this->assertEquals('other people', $section->getItems()[2]->getLabel());
-    
+
         $item = $section->getItems()[1];
         $this->assertInstanceOf(SharpMenuItemSeparator::class, $item);
         $this->assertEquals('Separator', $item->getLabel());

@@ -9,12 +9,13 @@ trait HasMenuItems
 {
     public function isItemVisible(SharpMenuItem $item): bool
     {
-        if($item->isSection()) {
+        if ($item->isSection()) {
             return count((new MenuSection($item))->getItems()) > 0;
         }
-        if($item->isEntity()) {
+        if ($item->isEntity()) {
             return sharp_has_ability('entity', $item->getKey());
         }
+
         return true;
     }
 }
