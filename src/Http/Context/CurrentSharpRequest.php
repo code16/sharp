@@ -99,22 +99,8 @@ class CurrentSharpRequest
     public function getEntityMenuLabel(string $entityKey): ?string
     {
         return app(Menu::class)
-            ->getItems()
-            ->filter(function (MenuItem $item) {
-                return $item->isMenuItemEntity()
-                    || $item->isMenuItemDashboard()
-                    || $item->isMenuItemSection();
-            })
-            ->map(function (MenuItem $item) {
-                if ($item->isMenuItemSection()) {
-                    return $item->entities;
-                }
-
-                return $item;
-            })
-            ->flatten()
-            ->firstWhere('key', $entityKey)
-            ?->label;
+            ->getEntityMenuItem($entityKey)
+            ?->getLabel();
     }
 
     public function isEntityList(): bool

@@ -6,51 +6,66 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
+use Code16\Sharp\View\Utils\HasMenuItems;
 use Code16\Sharp\View\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Menu extends Component
 {
+    use HasMenuItems;
+    
     public string $title;
     public ?string $username;
-    public ?string $currentEntity;
+    public ?string $currentEntityKey;
+    public ?SharpMenuItemLink $currentEntityItem;
     public bool $hasGlobalFilters;
-    public Collection $items;
 
     public function __construct()
     {
         $this->title = config('sharp.name', 'Sharp');
         $this->username = sharp_user()->{config('sharp.auth.display_attribute', 'name')};
-        $this->currentEntity = currentSharpRequest()->breadcrumb()->first()->key ?? null;
+        $this->currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
+        $this->currentEntityItem = $this->currentEntityKey
+            ? $this->getEntityMenuItem($this->currentEntityKey)
+            : null;
         $this->hasGlobalFilters = sizeof(config('sharp.global_filters') ?? []) > 0;
-        $this->items = $this->getItems();
     }
-
-    public function getItems(): Collection
-    {
-        $sharpMenu = config('sharp.menu', []) ?? [];
-
-        $items = is_array($sharpMenu)
-            ? $this->getItemFromLegacyConfig($sharpMenu)
-            : app($sharpMenu)->build()->items();
-
-        return $items
-            ->map(function (SharpMenuItem $item) {
-                return MenuItem::buildFromItemClass($item);
-            })
-            ->filter()
-            ->values();
-    }
-
+    
     public function render()
     {
         return view('sharp::components.menu', [
             'self' => $this,
         ]);
     }
+    
+    public function getItems(): Collection
+    {
+        $sharpMenu = config('sharp.menu', []) ?? [];
+        
+        $items = is_array($sharpMenu)
+            ? $this->getItemFromLegacyConfig($sharpMenu)
+            : app($sharpMenu)->build()->items();
+        
+        return $items->filter(fn ($item) => $this->isItemVisible($item));
+    }
+    
+    public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
+    {
+        return $this->getItems()
+            ->map(function (SharpMenuItem $item) {
+                if ($item->isSection()) {
+                    return $item->getItems();
+                }
+                return $item;
+            })
+            ->flatten()
+            ->first(fn (SharpMenuItem $item) =>
+                $item->isEntity() && $item->getKey() === $entityKey
+            );
+    }
 
-    public function getItemFromLegacyConfig(array $sharpMenuConfig): Collection
+    private function getItemFromLegacyConfig(array $sharpMenuConfig): Collection
     {
         // Sanitize legacy Sharp 6 config format to new Sharp 7 format
         return collect($sharpMenuConfig)
