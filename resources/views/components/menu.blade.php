@@ -19,7 +19,7 @@
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
-        <sharp-nav-item disabled style="--link-padding-y: 0">
+        <sharp-nav-item class="SharpLeftNav__item--unstyled" style="--link-padding-y: 0" disabled>
             <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
                     <div class="text-truncate" title="{{ $username }}">
@@ -53,8 +53,9 @@
 
         @foreach($items as $menuItem)
             @if($menuItem->type === 'category')
-                <sharp-collapsible-item
+                <sharp-nav-section
                     label="{{ $menuItem->label }}"
+                    :collapsible="{{ json_encode($menuItem->collapsible) }}"
                     @if(collect($menuItem->entities)->some(fn ($entity) => $entity->key === $currentEntity))
                         opened
                     @endif
@@ -66,7 +67,7 @@
                             nested
                         />
                     @endforeach
-                </sharp-collapsible-item>
+                </sharp-nav-section>
             @else
                 <x-sharp::menu.menu-item
                     :item="$menuItem"

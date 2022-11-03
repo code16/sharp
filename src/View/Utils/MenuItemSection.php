@@ -9,6 +9,7 @@ class MenuItemSection extends MenuItem
 {
     public string $type = 'category';
     public array $entities = [];
+    public bool $collapsible = true;
 
     public function __construct(SharpMenuItemSection $section)
     {
@@ -19,6 +20,7 @@ class MenuItemSection extends MenuItem
             })
             ->filter()
             ->toArray();
+        $this->collapsible = $section->isCollapsible();
 
         $this->sanitizeItems();
     }
