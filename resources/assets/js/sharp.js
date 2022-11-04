@@ -17,7 +17,7 @@ import ActionView from './components/ActionView';
 import LeftNav from './components/LeftNav';
 import {
     ItemVisual,
-    CollapsibleItem,
+    NavSection,
     NavItem,
 } from 'sharp-ui';
 
@@ -46,7 +46,7 @@ Vue.use(SharpUI, { store, router });
 
 Vue.component('sharp-action-view', ActionView);
 Vue.component('sharp-left-nav', LeftNav);
-Vue.component('sharp-collapsible-item', CollapsibleItem);
+Vue.component('sharp-nav-section', NavSection);
 Vue.component('sharp-nav-item', NavItem);
 Vue.component('sharp-item-visual', ItemVisual);
 
