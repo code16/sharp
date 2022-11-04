@@ -7,14 +7,13 @@ use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
 use Code16\Sharp\View\Utils\HasMenuItems;
-use Code16\Sharp\View\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Menu extends Component
 {
     use HasMenuItems;
-    
+
     public string $title;
     public ?string $username;
     public ?string $currentEntityKey;
@@ -31,25 +30,25 @@ class Menu extends Component
             : null;
         $this->hasGlobalFilters = sizeof(config('sharp.global_filters') ?? []) > 0;
     }
-    
+
     public function render()
     {
         return view('sharp::components.menu', [
             'self' => $this,
         ]);
     }
-    
+
     public function getItems(): Collection
     {
         $sharpMenu = config('sharp.menu', []) ?? [];
-        
+
         $items = is_array($sharpMenu)
             ? $this->getItemFromLegacyConfig($sharpMenu)
             : app($sharpMenu)->build()->items();
-        
+
         return $items->filter(fn ($item) => $this->isItemVisible($item));
     }
-    
+
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
         return $this->getItems()
@@ -57,11 +56,11 @@ class Menu extends Component
                 if ($item->isSection()) {
                     return $item->getItems();
                 }
+
                 return $item;
             })
             ->flatten()
-            ->first(fn (SharpMenuItem $item) =>
-                $item->isEntity() && $item->getKey() === $entityKey
+            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getKey() === $entityKey
             );
     }
 
