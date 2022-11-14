@@ -10,12 +10,12 @@ use Illuminate\View\View;
 
 class Image extends ContentComponent
 {
-    public SharpUploadModel $fileModel;
-    public FilesystemAdapter $disk;
-    public bool $exists;
+    public ?SharpUploadModel $fileModel = null;
+    public ?FilesystemAdapter $disk = null;
+    public bool $exists = false;
 
     public function __construct(
-        string $path,
+        ?string $path = null,
         ?string $disk = null,
         public ?string $name = null,
         public ?string $filterCrop = null,
@@ -24,16 +24,18 @@ class Image extends ContentComponent
         public ?int $thumbnailHeight = null,
         public ?array $filters = [],
     ) {
-        $this->fileModel = app()->make(SharpUploadModel::class, [
-            'attributes' => [
-                'disk' => $disk,
-                'file_name' => $path,
-                'filters' => $this->getTransformationFilters(),
-            ],
-        ]);
-        $this->disk = Storage::disk($this->fileModel->disk);
-        $this->exists = $this->disk->exists($this->fileModel->file_name);
-        $this->name ??= basename($this->fileModel->file_name);
+        if($path) {
+            $this->fileModel = app()->make(SharpUploadModel::class, [
+                'attributes' => [
+                    'disk' => $disk,
+                    'file_name' => $path,
+                    'filters' => $this->getTransformationFilters(),
+                ],
+            ]);
+            $this->disk = Storage::disk($this->fileModel->disk);
+            $this->exists = $this->disk->exists($this->fileModel->file_name);
+            $this->name ??= basename($this->fileModel->file_name);
+        }
 
         if (! $this->thumbnailWidth && ! $this->thumbnailHeight) {
             $this->thumbnailWidth = 500;
@@ -65,6 +67,11 @@ class Image extends ContentComponent
 
     public function render(): View
     {
+        if(!$this->fileModel) {
+            return view('sharp::components.file-error', [
+                'message' => "<x-sharp-image name=\"$this->name\"> has no path defined. An error must have occured during the form submission.",
+            ]);
+        }
         return view('sharp::components.image');
     }
 }
