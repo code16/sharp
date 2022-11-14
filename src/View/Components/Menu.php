@@ -6,6 +6,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
+use Code16\Sharp\View\Components\Menu\MenuSection;
 use Code16\Sharp\View\Utils\HasMenuItems;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
@@ -37,7 +38,7 @@ class Menu extends Component
             'self' => $this,
         ]);
     }
-
+    
     public function getItems(): Collection
     {
         $sharpMenu = config('sharp.menu', []) ?? [];
@@ -51,17 +52,22 @@ class Menu extends Component
 
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
+        return $this->getFlattenedItems()
+            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getKey() === $entityKey
+            );
+    }
+    
+    public function getFlattenedItems(): Collection
+    {
         return $this->getItems()
             ->map(function (SharpMenuItem $item) {
                 if ($item->isSection()) {
-                    return $item->getItems();
+                    return (new MenuSection($item))->getItems();
                 }
-
+        
                 return $item;
             })
-            ->flatten()
-            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getKey() === $entityKey
-            );
+            ->flatten();
     }
 
     private function getItemFromLegacyConfig(array $sharpMenuConfig): Collection

@@ -23,7 +23,7 @@
         @if($item->isExternalLink())
             target="_blank"
         @endif
-        @if($item->isEntity() && $item->key() === $currentEntityKey)
+        @if($item->isEntity() && $item->getKey() === $currentEntityKey)
             current
         @endif
     >
