@@ -19,7 +19,7 @@ class File extends ContentComponent
         ?string $disk = null,
         public ?string $name = null,
     ) {
-        if($path) {
+        if ($path) {
             $this->fileModel = app()->make(SharpUploadModel::class, [
                 'attributes' => [
                     'disk' => $disk,
@@ -34,11 +34,12 @@ class File extends ContentComponent
 
     public function render(): View
     {
-        if(!$this->fileModel) {
+        if (! $this->fileModel) {
             return view('sharp::components.file-error', [
                 'message' => "<x-sharp-file name=\"$this->name\"> has no path defined. An error must have occured during the form submission.",
             ]);
         }
+
         return view('sharp::components.file');
     }
 }
