@@ -24,7 +24,7 @@ class Image extends ContentComponent
         public ?int $thumbnailHeight = null,
         public ?array $filters = [],
     ) {
-        if($path) {
+        if ($path) {
             $this->fileModel = app()->make(SharpUploadModel::class, [
                 'attributes' => [
                     'disk' => $disk,
@@ -67,11 +67,12 @@ class Image extends ContentComponent
 
     public function render(): View
     {
-        if(!$this->fileModel) {
+        if (! $this->fileModel) {
             return view('sharp::components.file-error', [
                 'message' => "<x-sharp-image name=\"$this->name\"> has no path defined. An error must have occured during the form submission.",
             ]);
         }
+
         return view('sharp::components.image');
     }
 }
