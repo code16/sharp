@@ -38,7 +38,7 @@ class Menu extends Component
             'self' => $this,
         ]);
     }
-    
+
     public function getItems(): Collection
     {
         $sharpMenu = config('sharp.menu', []) ?? [];
@@ -56,7 +56,7 @@ class Menu extends Component
             ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getKey() === $entityKey
             );
     }
-    
+
     public function getFlattenedItems(): Collection
     {
         return $this->getItems()
@@ -64,7 +64,7 @@ class Menu extends Component
                 if ($item->isSection()) {
                     return (new MenuSection($item))->getItems();
                 }
-        
+
                 return $item;
             })
             ->flatten();

@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Http;
 
-use Code16\Sharp\View\Components\Menu;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
+use Code16\Sharp\View\Components\Menu;
 
 class HomeController extends SharpProtectedController
 {
