@@ -88,11 +88,11 @@ abstract class Command
 
         return $this;
     }
-    
+
     final protected function configureFormModalConfirmLabel(string $formModalConfirmLabel): self
     {
         $this->formModalConfirmLabel = $formModalConfirmLabel;
-        
+
         return $this;
     }
 
@@ -137,7 +137,7 @@ abstract class Command
     {
         return $this->formModalTitle;
     }
-    
+
     final public function getFormModalConfirmLabel(): ?string
     {
         return $this->formModalConfirmLabel;
