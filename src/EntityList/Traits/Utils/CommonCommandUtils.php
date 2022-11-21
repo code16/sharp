@@ -20,6 +20,7 @@ trait CommonCommandUtils
                     'type' => $handler->type(),
                     'confirmation' => $handler->getConfirmationText() ?: null,
                     'modal_title' => $handler->getFormModalTitle() ?: null,
+                    'modal_confirm_label' => $handler->getFormModalConfirmLabel() ?: null,
                     'has_form' => count($handler->form()) > 0,
                     'authorization' => $instanceId
                         ? $handler->authorizeFor($instanceId)
