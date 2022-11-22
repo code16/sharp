@@ -5,6 +5,7 @@
         :monday-first="mondayFirst"
         :display-format="displayFormat"
         :columns="$screens({ default: 1, lg: 2 })"
+        :update-on-input="updateOnInput"
         is-range
         @input="handleChanged"
         v-slot="{ inputValue, inputEvents }"
@@ -82,6 +83,10 @@
             readOnly: Boolean,
             mondayFirst: Boolean,
             small: Boolean,
+            updateOnInput: {
+                type: Boolean,
+                default: true,
+            },
         },
         computed: {
            hasClearButton() {

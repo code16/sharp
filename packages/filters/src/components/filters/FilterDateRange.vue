@@ -8,6 +8,7 @@
                 :monday-first="mondayFirst"
                 :clearable="!required"
                 :read-only="disabled"
+                :update-on-input="false"
                 small
                 @input="handleInput"
                 ref="range"
