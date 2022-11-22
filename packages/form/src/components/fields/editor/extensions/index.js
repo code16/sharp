@@ -38,6 +38,10 @@ function getLinkExtension(toolbar) {
     if(toolbarHasButton(toolbar, 'link')) {
         return Link.configure({
             openOnClick: false,
+            HTMLAttributes: {
+                rel: null,
+                target: null,
+            },
         });
     }
 }
