@@ -23,7 +23,7 @@ exports[`modal mount 1`] = `
 										</button>
 									</div>
 									<div class="col-auto">
-										<button class="btn position-relative btn-primary">
+										<button class="btn position-relative btn-primary" style="min-width: 70px;">
 											<span class="">
 												ok title
 											</span>
@@ -62,7 +62,7 @@ exports[`modal mount ok only 1`] = `
 								<div class="row gx-2">
 									<!---->
 									<div class="col-auto">
-										<button class="btn position-relative btn-lg btn-primary">
+										<button class="btn position-relative btn-lg btn-primary" style="min-width: 70px;">
 											<span class="">
 												{{ modals.ok_button }}
 											</span>
@@ -105,7 +105,7 @@ exports[`modal mount visible 1`] = `
 										</button>
 									</div>
 									<div class="col-auto">
-										<button class="btn position-relative btn-primary">
+										<button class="btn position-relative btn-primary" style="min-width: 70px;">
 											<span class="">
 												{{ modals.ok_button }}
 											</span>
@@ -148,7 +148,7 @@ exports[`modal mount with modifiers classes 1`] = `
 										</button>
 									</div>
 									<div class="col-auto">
-										<button class="btn position-relative btn-primary">
+										<button class="btn position-relative btn-primary" style="min-width: 70px;">
 											<span class="">
 												{{ modals.ok_button }}
 											</span>
