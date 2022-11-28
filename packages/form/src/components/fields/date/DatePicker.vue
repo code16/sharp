@@ -36,19 +36,20 @@
         },
         computed: {
             popoverOptions() {
-                const boundary = document.querySelector('[data-popover-boundary]');
+                const boundary = document.querySelector('[data-popover-boundary]') ?? 'clippingParents';
                 return {
                     visibility: 'focus',
                     // visibility: 'click', // debug
                     hideDelay: 10,
                     placement: 'bottom',
                     modifiers: [
-                    //     {
-                    //         name: 'preventOverflow',
-                    //         options: {
-                    //             boundary,
-                    //         },
-                    //     },
+                        {
+                            name: 'preventOverflow',
+                            options: {
+                                boundary,
+                                padding: 8,
+                            },
+                        },
                         {
                             name: 'flip',
                             enabled: false,

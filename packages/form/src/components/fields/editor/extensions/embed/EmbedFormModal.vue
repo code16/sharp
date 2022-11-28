@@ -1,5 +1,6 @@
 <template>
     <Modal
+        modal-class="form-modal"
         :visible="visible"
         :loading="loading"
         v-on="$listeners"
@@ -13,7 +14,6 @@
         <transition>
             <template v-if="visible">
                 <Form
-                    class="SharpCommandForm"
                     :entity-key="$form.entityKey"
                     :instance-id="$form.instanceId"
                     :form="form"

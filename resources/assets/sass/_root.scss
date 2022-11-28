@@ -21,4 +21,6 @@
   --navbar-height: #{$navbar-min-height};
   --navbar-top: 0;
   --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
+
+  --field-header-sticky-top: var(--navbar-height);
 }

@@ -18,18 +18,19 @@ class StickyObserver {
         this.el = el;
         this.listener = throttle(() => this.refresh(), 50);
         this.sentinel = document.createElement('div');
+        this.scrollContainer = el.closest('.modal') ?? window;
 
         this.sentinel.dataset.stickySentinel = true;
         this.el.parentElement.insertBefore(this.sentinel, this.el);
 
-        window.addEventListener('scroll', this.listener);
+        this.scrollContainer.addEventListener('scroll', this.listener);
         window.addEventListener('resize', this.listener);
     }
 
     destroy() {
         this.el = null;
         this.sentinel.remove();
-        window.removeEventListener('scroll', this.listener);
+        this.scrollContainer.removeEventListener('scroll', this.listener);
         window.removeEventListener('resize', this.listener);
     }
 

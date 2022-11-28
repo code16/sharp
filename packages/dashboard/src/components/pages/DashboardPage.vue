@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpDashboardPage">
+    <div class="SharpDashboardPage" data-popover-boundary>
         <template v-if="ready">
             <div class="container">
                 <ActionBarDashboard

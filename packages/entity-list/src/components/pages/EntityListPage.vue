@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpEntityListPage">
+    <div class="SharpEntityListPage" data-popover-boundary>
         <div class="container">
             <template v-if="ready">
                 <!-- Action bar is defined inside entity list component -->

@@ -5,7 +5,7 @@
         :visible="visible"
         :ok-only="okOnly"
         :static="static"
-        modal-class="SharpModal"
+        :modal-class="[modalClass, 'SharpModal']"
         :title-class="{ 'text-danger': isError }"
         :header-class="{ 'pb-0':!title }"
         no-enforce-focus
@@ -38,7 +38,13 @@
                             </template>
 
                             <div class="col-auto">
-                                <button class="btn position-relative" :class="okClasses" :disabled="loading" @click="ok">
+                                <button
+                                    class="btn position-relative"
+                                    style="min-width: 70px"
+                                    :class="okClasses"
+                                    :disabled="loading"
+                                    @click="ok"
+                                >
                                     <span :class="{ 'invisible': loading }">
                                         {{ okTitle || l('modals.ok_button') }}
                                     </span>
@@ -84,6 +90,7 @@
                 default: 'primary',
             },
             static: Boolean,
+            modalClass: String,
 
             // custom props
             isError: Boolean,

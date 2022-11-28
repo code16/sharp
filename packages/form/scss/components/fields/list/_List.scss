@@ -9,7 +9,7 @@
 
   &__sort-button {
     position: sticky;
-    top: calc(var(--navbar-height) + .675rem);
+    top: calc(var(--field-header-sticky-top) + .675rem);
     margin-top: .675rem;
     z-index: $zindex-field-header-sticky + 1;
     pointer-events: auto;

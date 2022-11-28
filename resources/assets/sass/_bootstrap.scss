@@ -147,3 +147,7 @@ $bv-enable-tooltip-variants: false;
     outline: inherit;
   }
 }
+
+.modal-open {
+  overflow: hidden;
+}

@@ -44,7 +44,7 @@
         margin-top: -1rem;
         > .SharpForm__field-header {
           position: sticky;
-          top: var(--navbar-height);
+          top: var(--field-header-sticky-top);
           padding-top: 1rem;
           padding-left: .5rem;
           padding-right: .5rem;
