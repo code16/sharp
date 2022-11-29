@@ -6,7 +6,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
-use Code16\Sharp\View\Utils\MenuItem;
+use Code16\Sharp\View\Components\Menu\MenuSection;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
@@ -14,17 +14,26 @@ class Menu extends Component
 {
     public string $title;
     public ?string $username;
-    public ?string $currentEntity;
+    public ?string $currentEntityKey;
+    public ?SharpMenuItemLink $currentEntityItem;
     public bool $hasGlobalFilters;
-    public Collection $items;
 
     public function __construct()
     {
         $this->title = config('sharp.name', 'Sharp');
         $this->username = sharp_user()->{config('sharp.auth.display_attribute', 'name')};
-        $this->currentEntity = currentSharpRequest()->breadcrumb()->first()->key ?? null;
+        $this->currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
+        $this->currentEntityItem = $this->currentEntityKey
+            ? $this->getEntityMenuItem($this->currentEntityKey)
+            : null;
         $this->hasGlobalFilters = sizeof(config('sharp.global_filters') ?? []) > 0;
-        $this->items = $this->getItems();
+    }
+
+    public function render()
+    {
+        return view('sharp::components.menu', [
+            'self' => $this,
+        ]);
     }
 
     public function getItems(): Collection
@@ -36,21 +45,33 @@ class Menu extends Component
             : app($sharpMenu)->build()->items();
 
         return $items
-            ->map(function (SharpMenuItem $item) {
-                return MenuItem::buildFromItemClass($item);
-            })
-            ->filter()
-            ->values();
+            ->filter(fn (SharpMenuItem $item) => $item->isSection()
+                ? count((new MenuSection($item))->getItems()) > 0
+                : $item->isAllowed()
+            );
     }
 
-    public function render()
+    public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
-        return view('sharp::components.menu', [
-            'self' => $this,
-        ]);
+        return $this->getFlattenedItems()
+            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getEntityKey() === $entityKey
+            );
     }
 
-    public function getItemFromLegacyConfig(array $sharpMenuConfig): Collection
+    public function getFlattenedItems(): Collection
+    {
+        return $this->getItems()
+            ->map(function (SharpMenuItem $item) {
+                if ($item->isSection()) {
+                    return (new MenuSection($item))->getItems();
+                }
+
+                return $item;
+            })
+            ->flatten();
+    }
+
+    private function getItemFromLegacyConfig(array $sharpMenuConfig): Collection
     {
         // Sanitize legacy Sharp 6 config format to new Sharp 7 format
         return collect($sharpMenuConfig)

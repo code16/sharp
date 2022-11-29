@@ -49,8 +49,7 @@
         },
 
         props: {
-            items: Array,
-            current: String,
+            currentEntity: Object,
             title: String,
             collapseable: {
                 type: Boolean,
@@ -78,18 +77,7 @@
             }
         },
         computed: {
-            flattenedItems() {
-                return this.items
-                    .map(item => item.type === 'category' ? item.entities : item)
-                    .flat();
-            },
-            currentEntity() {
-                return this.flattenedItems.find(entity => entity.key === this.current);
-            },
             currentIcon() {
-                if(this.current === 'dashboard') {
-                    return 'fas fa-tachometer-alt';
-                }
                 return this.currentEntity?.icon;
             },
             classes() {

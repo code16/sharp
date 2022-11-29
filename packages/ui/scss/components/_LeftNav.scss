@@ -164,13 +164,13 @@
       }
     }
 
-    &:not(.SharpLeftNav__item--disabled) {
+    &:not(.SharpLeftNav__item--unstyled) {
       @extend .ui-font;
       letter-spacing: -.025em;
     }
 
     &.SharpLeftNav__item--disabled {
-      .SharpLeftNav__item-link {
+      > .SharpLeftNav__item-link {
         cursor: default;
       }
     }
@@ -211,9 +211,9 @@
       width: 100%;
     }
 
-    &:focus {
+    &:focus-visible {
       color: $item-hover-color;
-      background-color: $item-hover-bg;
+      background-color: transparent;
     }
   }
 
