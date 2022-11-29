@@ -45,7 +45,7 @@ class Menu extends Component
             : app($sharpMenu)->build()->items();
 
         return $items
-            ->filter(fn ($item) => $item->isSection()
+            ->filter(fn (SharpMenuItem $item) => $item->isSection()
                 ? count((new MenuSection($item))->getItems()) > 0
                 : $item->isAllowed()
             );
