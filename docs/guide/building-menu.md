@@ -110,6 +110,25 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
+### Set a section to be non-collapsible
+
+A section is collapsible by default but you may want to always show it to the user
+
+```php
+class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->addSection("Admin", function(SharpMenuItemSection $section) {
+                $section
+                    ->setCollapsible(false)
+                    ->addEntityLink("account", "My account", "fas fa-user");
+            });
+    }
+}
+```
+
 ## Define the menu directly in the config file (legacy)
 
 ### Link to an entity list
