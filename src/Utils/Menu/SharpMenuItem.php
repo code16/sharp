@@ -28,4 +28,9 @@ class SharpMenuItem
     {
         return false;
     }
+
+    public function isAllowed(): bool
+    {
+        return true;
+    }
 }

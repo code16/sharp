@@ -46,7 +46,7 @@ class SharpMenuItemLink extends SharpMenuItem
         return $this->entityKey !== null;
     }
 
-    public function getKey(): string
+    public function getEntityKey(): string
     {
         return $this->entityKey;
     }
@@ -76,5 +76,11 @@ class SharpMenuItemLink extends SharpMenuItem
     public function isExternalLink(): bool
     {
         return ! $this->isEntity();
+    }
+
+    public function isAllowed(): bool
+    {
+        return $this->isExternalLink()
+            || sharp_has_ability('entity', $this->getEntityKey());
     }
 }
