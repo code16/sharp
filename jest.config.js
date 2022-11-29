@@ -13,6 +13,7 @@ const config = {
     snapshotSerializers: [
         "<rootDir>/packages/test-utils/src/htmlSnapshotBeautifier.js"
     ],
+    moduleDirectories: ['node_modules', 'packages'],
     moduleNameMapper: {
         "^vue$": "vue/dist/vue.common.js",
         "^sharp((/(.*))|$)": "<rootDir>/resources/assets/js$1",

@@ -49,7 +49,6 @@
         },
 
         props: {
-            items: Array,
             currentEntity: Object,
             title: String,
             collapseable: {
