@@ -4,9 +4,9 @@
 ])
 
 @php
-/**
- * @var \Code16\Sharp\Utils\Menu\SharpMenuItem $item
- */
+    /**
+     * @var \Code16\Sharp\Utils\Menu\SharpMenuItem $item
+     */
 @endphp
 
 @if($item->isSeparator())
@@ -19,13 +19,13 @@
     </div>
 @else
     <sharp-nav-item
-        href="{{ $item->getUrl() }}"
-        @if($item->isExternalLink())
-            target="_blank"
-        @endif
-        @if($item->isEntity() && $item->getKey() === $currentEntityKey)
-            current
-        @endif
+            href="{{ $item->getUrl() }}"
+            @if($item->isExternalLink())
+                target="_blank"
+            @endif
+            @if($item->isEntity() && $item->getEntityKey() === $currentEntityKey)
+                current
+            @endif
     >
         <div class="row flex-nowrap gx-3">
             @if($item->getIcon())

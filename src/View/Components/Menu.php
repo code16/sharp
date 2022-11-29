@@ -7,14 +7,11 @@ use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
 use Code16\Sharp\View\Components\Menu\MenuSection;
-use Code16\Sharp\View\Utils\HasMenuItems;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Menu extends Component
 {
-    use HasMenuItems;
-
     public string $title;
     public ?string $username;
     public ?string $currentEntityKey;
@@ -47,13 +44,17 @@ class Menu extends Component
             ? $this->getItemFromLegacyConfig($sharpMenu)
             : app($sharpMenu)->build()->items();
 
-        return $items->filter(fn ($item) => $this->isItemVisible($item));
+        return $items
+            ->filter(fn ($item) => $item->isSection()
+                ? count((new MenuSection($item))->getItems()) > 0
+                : $item->isAllowed()
+            );
     }
 
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
         return $this->getFlattenedItems()
-            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getKey() === $entityKey
+            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getEntityKey() === $entityKey
             );
     }
 

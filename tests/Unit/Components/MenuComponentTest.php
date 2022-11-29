@@ -87,7 +87,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = app(Menu::class)->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('person', $item->getKey());
+        $this->assertEquals('person', $item->getEntityKey());
         $this->assertEquals('people', $item->getLabel());
         $this->assertEquals('fa-user', $item->getIcon());
         $this->assertEquals(route('code16.sharp.list', 'person'), $item->getUrl());
@@ -111,7 +111,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = app(Menu::class)->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('person', $item->getKey());
+        $this->assertEquals('person', $item->getEntityKey());
         $this->assertEquals('people', $item->getLabel());
         $this->assertEquals('fa-user', $item->getIcon());
         $this->assertEquals(route('code16.sharp.list', 'person'), $item->getUrl());
@@ -149,7 +149,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = $section->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('person', $item->getKey());
+        $this->assertEquals('person', $item->getEntityKey());
         $this->assertEquals('people', $item->getLabel());
         $this->assertEquals('fa-user', $item->getIcon());
         $this->assertEquals(route('code16.sharp.list', 'person'), $item->getUrl());
@@ -181,7 +181,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = $section->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('person', $item->getKey());
+        $this->assertEquals('person', $item->getEntityKey());
         $this->assertEquals('people', $item->getLabel());
         $this->assertEquals('fa-user', $item->getIcon());
         $this->assertEquals(route('code16.sharp.list', 'person'), $item->getUrl());
@@ -210,7 +210,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('personal_dashboard', $item->getKey());
+        $this->assertEquals('personal_dashboard', $item->getEntityKey());
         $this->assertEquals('My Dashboard', $item->getLabel());
         $this->assertEquals('fa-dashboard', $item->getIcon());
         $this->assertEquals(route('code16.sharp.dashboard', 'personal_dashboard'), $item->getUrl());
@@ -240,7 +240,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('personal_dashboard', $item->getKey());
+        $this->assertEquals('personal_dashboard', $item->getEntityKey());
         $this->assertEquals('My Dashboard', $item->getLabel());
         $this->assertEquals('fa-dashboard', $item->getIcon());
         $this->assertEquals(route('code16.sharp.dashboard', 'personal_dashboard'), $item->getUrl());
@@ -270,7 +270,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('person', $item->getKey());
+        $this->assertEquals('person', $item->getEntityKey());
         $this->assertEquals('people', $item->getLabel());
         $this->assertEquals('fa-user', $item->getIcon());
         $this->assertEquals(route('code16.sharp.single-show', 'person'), $item->getUrl());
@@ -300,7 +300,7 @@ class MenuComponentTest extends SharpTestCase
 
         $item = $menu->getItems()[0];
         $this->assertInstanceOf(SharpMenuItemLink::class, $item);
-        $this->assertEquals('person', $item->getKey());
+        $this->assertEquals('person', $item->getEntityKey());
         $this->assertEquals('people', $item->getLabel());
         $this->assertEquals('fa-user', $item->getIcon());
         $this->assertEquals(route('code16.sharp.single-show', 'person'), $item->getUrl());
