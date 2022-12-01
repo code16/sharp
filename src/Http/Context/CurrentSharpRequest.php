@@ -5,7 +5,6 @@ namespace Code16\Sharp\Http\Context;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\View\Components\Menu;
-use Code16\Sharp\View\Utils\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -99,22 +98,8 @@ class CurrentSharpRequest
     public function getEntityMenuLabel(string $entityKey): ?string
     {
         return app(Menu::class)
-            ->getItems()
-            ->filter(function (MenuItem $item) {
-                return $item->isMenuItemEntity()
-                    || $item->isMenuItemDashboard()
-                    || $item->isMenuItemSection();
-            })
-            ->map(function (MenuItem $item) {
-                if ($item->isMenuItemSection()) {
-                    return $item->entities;
-                }
-
-                return $item;
-            })
-            ->flatten()
-            ->firstWhere('key', $entityKey)
-            ?->label;
+            ->getEntityMenuItem($entityKey)
+            ?->getLabel();
     }
 
     public function isEntityList(): bool

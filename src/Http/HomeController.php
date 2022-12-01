@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\View\Components\Menu;
 
 class HomeController extends SharpProtectedController
@@ -17,20 +18,9 @@ class HomeController extends SharpProtectedController
 
     private function getFirstConfiguredEntityUrl(): ?string
     {
-        if ($menuItem = app(Menu::class)->getItems()[0] ?? null) {
-            if ($menuItem->isMenuItemEntity() || $menuItem->isMenuItemDashboard()) {
-                return $menuItem->url;
-            }
-
-            if ($menuItem->isMenuItemSection()) {
-                foreach ($menuItem->entities as $menuItemEntity) {
-                    if ($menuItemEntity->isMenuItemEntity() || $menuItemEntity->isMenuItemDashboard()) {
-                        return $menuItemEntity->url;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return app(Menu::class)
+            ->getFlattenedItems()
+            ->first(fn (SharpMenuItem $menuItem) => $menuItem->isEntity())
+            ?->getUrl();
     }
 }

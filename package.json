@@ -1,5 +1,9 @@
 {
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "resources/assets/js"
+  ],
   "scripts": {
     "dev": "npm run development",
     "development": "mix",
@@ -65,16 +69,6 @@
     "leaflet": "^1.4.0",
     "moment": "^2.19.1",
     "qs": "^6.6.0",
-    "sharp": "file:resources/assets/js",
-    "sharp-commands": "file:packages/commands",
-    "sharp-dashboard": "file:packages/dashboard",
-    "sharp-embeds": "file:packages/embeds",
-    "sharp-entity-list": "file:packages/entity-list",
-    "sharp-files": "file:packages/files",
-    "sharp-filters": "file:packages/filters",
-    "sharp-form": "file:packages/form",
-    "sharp-show": "file:packages/show",
-    "sharp-ui": "file:packages/ui",
     "text-clipper": "^1.3.0",
     "tiptap-markdown": "^0.6.0",
     "v-calendar": "^2.4.1",

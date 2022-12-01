@@ -23,9 +23,6 @@ describe('left-nav', ()=>{
             slots: {
                 default: '<div>NAV CONTENT</div>'
             },
-            propsData: {
-                items: [{ entities:[] }]
-            },
             created() {
                 jest.spyOn(this, 'updateState');
             },
@@ -84,37 +81,6 @@ describe('left-nav', ()=>{
             jest.runOnlyPendingTimers();
             expect(wrapper.vm.updateState).toHaveBeenCalledTimes(2);
         });
-    });
-
-    test('flattenedItems', ()=>{
-        const wrapper = createWrapper();
-        wrapper.setProps({
-            items: [
-                { entities:[{ id:1 }], type:'category' },
-                { id: 2 },
-            ]
-        });
-        expect(wrapper.vm.flattenedItems).toEqual([{ id:1 }, { id: 2 }]);
-    });
-
-    test('currentIcon', ()=>{
-        let wrapper = createWrapper();
-        wrapper.setProps({ current:'dashboard' });
-        expect(wrapper.vm.currentIcon).toBe('fas fa-tachometer-alt');
-
-        wrapper = createWrapper({
-            computed: {
-               flattenedItems: ()=>[
-                    { key:1, icon:'firstIcon' },
-                    { key:2, icon:'secondIcon' }
-                ]
-            }
-        });
-
-        wrapper.setProps({ current:1 });
-        expect(wrapper.vm.currentIcon).toBe('firstIcon');
-        wrapper.setProps({ current:2 });
-        expect(wrapper.vm.currentIcon).toBe('secondIcon');
     });
 
     test('updateState', ()=>{

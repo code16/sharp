@@ -1,14 +1,20 @@
 @php
 /**
  * @var \Code16\Sharp\View\Components\Menu $self
+ * @var \Code16\Sharp\Utils\Menu\SharpMenuItem[] $items
+ * @var \Code16\Sharp\Utils\Menu\SharpMenuItemLink $currentEntityItem
  */
 @endphp
 
 <sharp-left-nav
     class="SharpLeftNav"
-    current="{{ $currentEntity }}"
+    @if($currentEntityItem)
+        :current-entity="{{ json_encode([
+            'label' => $currentEntityItem->getLabel(),
+            'icon' => $currentEntityItem->getIcon(),
+        ]) }}"
+    @endif
     title="{{ $title }}"
-    :items="{{ json_encode($items) }}"
     :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
     <template v-slot:title>
@@ -19,7 +25,7 @@
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
-        <sharp-nav-item disabled style="--link-padding-y: 0">
+        <sharp-nav-item class="SharpLeftNav__item--unstyled" style="--link-padding-y: 0" disabled>
             <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
                     <div class="text-truncate" title="{{ $username }}">
@@ -51,26 +57,16 @@
             </div>
         </sharp-nav-item>
 
-        @foreach($items as $menuItem)
-            @if($menuItem->type === 'category')
-                <sharp-collapsible-item
-                    label="{{ $menuItem->label }}"
-                    @if(collect($menuItem->entities)->some(fn ($entity) => $entity->key === $currentEntity))
-                        opened
-                    @endif
-                >
-                    @foreach($menuItem->entities as $entity)
-                        <x-sharp::menu.menu-item
-                            :item="$entity"
-                            :is-current="$currentEntity == $entity->key"
-                            nested
-                        />
-                    @endforeach
-                </sharp-collapsible-item>
+        @foreach($self->getItems() as $item)
+            @if($item->isSection())
+                <x-sharp::menu.menu-section
+                    :item="$item"
+                    :current-entity-key="$currentEntityKey"
+                />
             @else
                 <x-sharp::menu.menu-item
-                    :item="$menuItem"
-                    :is-current="$currentEntity == $menuItem->key"
+                    :item="$item"
+                    :current-entity-key="$currentEntityKey"
                 />
             @endif
         @endforeach
