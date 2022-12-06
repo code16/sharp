@@ -60,7 +60,8 @@
                 return {
                     modifiers: {
                         preventOverflow: {
-                            padding: this.boundary === 'scrollParent' ? 5 : 0,
+                            padding: 8,
+                            priority: ['left', 'right'],
                         }
                     }
                 }
