@@ -139,7 +139,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->setUserMenu(function (SharpUserMenu $menu) {
+            ->setUserMenu(function (SharpMenuUserMenu $menu) {
                 $menu->addEntityLink('account', 'My account', 'fas fa-user');
             });
     }
