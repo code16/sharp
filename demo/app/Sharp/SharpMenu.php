@@ -4,12 +4,17 @@ namespace App\Sharp;
 
 use Code16\Sharp\Utils\Menu\SharpMenu as BaseSharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
+use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
 
 class SharpMenu extends BaseSharpMenu
 {
     public function build(): self
     {
         return $this
+            ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
+                $userMenu
+                    ->addEntityLink('profile', 'Profile', 'fa fa-user');
+            })
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
@@ -18,7 +23,6 @@ class SharpMenu extends BaseSharpMenu
                     ->addEntityLink('authors', 'Authors', 'fas fa-users');
             })
             ->addEntityLink('dashboard', 'Dashboard', 'fas fa-chart-line')
-            ->addEntityLink('profile', 'Profile', 'fa fa-user')
             ->addEntityLink('test', 'Fields test', 'fas fa-cog');
     }
 }
