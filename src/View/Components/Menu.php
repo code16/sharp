@@ -73,7 +73,7 @@ class Menu extends Component
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
         return $this->getFlattenedItems()
-            ->first(fn (SharpMenuItem $item) => $item->isEntity() 
+            ->first(fn (SharpMenuItem $item) => $item->isEntity()
                 && $item->getEntityKey() === $entityKey
             );
     }
@@ -147,6 +147,7 @@ class Menu extends Component
         if ($this->sharpMenu === null) {
             $this->sharpMenu = app($sharpMenu)->build();
         }
+
         return $this->sharpMenu;
     }
 }
