@@ -37,6 +37,18 @@
                         <template v-slot:text>
                             <i class="fas fa-user me-1" style="font-size: 1em"></i>
                         </template>
+                        @if($userMenu = $self->getUserMenu())
+                            @foreach($userMenu->getItems() as $item)
+                                <li>
+                                    <x-sharp::menu.dropdown-item
+                                        :item="$item"
+                                    />
+                                </li>
+                            @endforeach
+                            @if(count($userMenu->getItems()))
+                                <li><hr class="dropdown-divider"></li>
+                            @endif
+                        @endif
                         <li>
                             <form action="{{ route('code16.sharp.logout') }}" method="post">
                                 @csrf

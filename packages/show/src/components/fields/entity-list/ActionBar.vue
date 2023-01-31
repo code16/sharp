@@ -116,7 +116,7 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search, ItemVisual, Button } from 'sharp-ui';
+    import { Search,  Button } from 'sharp-ui';
     import { SharpFilter } from 'sharp-filters';
     import { MultiformDropdown } from "sharp-entity-list";
     import { lang } from "sharp";
@@ -125,7 +125,6 @@
     export default {
         mixins: [Localization],
         components: {
-            ItemVisual,
             Search,
             SharpFilter,
             MultiformDropdown,

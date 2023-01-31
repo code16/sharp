@@ -16,7 +16,6 @@ import SharpUI from 'sharp-ui';
 import ActionView from './components/ActionView';
 import LeftNav from './components/LeftNav';
 import {
-    ItemVisual,
     NavSection,
     NavItem,
 } from 'sharp-ui';
@@ -48,7 +47,6 @@ Vue.component('sharp-action-view', ActionView);
 Vue.component('sharp-left-nav', LeftNav);
 Vue.component('sharp-nav-section', NavSection);
 Vue.component('sharp-nav-item', NavItem);
-Vue.component('sharp-item-visual', ItemVisual);
 
 new Vue({
     el: "#sharp-app",

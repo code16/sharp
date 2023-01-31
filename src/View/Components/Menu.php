@@ -6,6 +6,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
+use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
 use Code16\Sharp\View\Components\Menu\MenuSection;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
@@ -49,6 +50,19 @@ class Menu extends Component
                 ? count((new MenuSection($item))->getItems()) > 0
                 : $item->isAllowed()
             );
+    }
+
+    public function getUserMenu(): ?SharpMenuUserMenu
+    {
+        $sharpMenu = config('sharp.menu') ?? null;
+
+        if ($sharpMenu === null || is_array($sharpMenu)) {
+            // Legacy format is not supported for user menu
+            return null;
+        }
+
+        // TODO avoid to build the menu twice
+        return app($sharpMenu)->build()->userMenu();
     }
 
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
