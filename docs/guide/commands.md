@@ -42,13 +42,9 @@ public function execute(array $data=[]): array
 
 ### Command scope: instance or entity
 
-The example above is an "entity" case, reserved to EntityLists: Command applies to a subset of instances, or all of
-them. To get the EntityList context (search, page, filters...), you can check `$this->queryParams`, just like in the
-EntityList itself.
+The example above is an "entity" case, reserved to EntityLists: Command applies to a subset of instances, or all of them. To get the EntityList context (search, page, filters...), you can check `$this->queryParams`, just like in the EntityList itself.
 
-To create an instance Command (relative to a specific instance, which can be placed on each EntityList row, or in a Sho
-Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is
-a bit different:
+To create an instance Command (relative to a specific instance, which can be placed on each EntityList row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
 public function execute($instanceId, array $params = []): array
@@ -81,8 +77,7 @@ function buildFormFields(FieldsContainer $formFields): void
 
 The API is the same as building a standard Form (see [Building an Entity Form](building-form.md)).
 
-Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The
-optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed.
+Once this method has been declared, a form will be prompted in a modal to the user as he clicks on the Command. The optional `public function formModalTitle(): string` method may return the custom title of this modal, if needed.
 
 Then, in the `execute()` method, you can grab the entered value, and even to handle the validation:
 
@@ -120,8 +115,7 @@ For an Instance command, add the `$instanceId` as a parameter:
  }
 ```
 
-This method must return an array of formatted values, like for a regular [Entity Form](building-form.md). This means you
-can [transform data](how-to-transform-data.md) here:
+This method must return an array of formatted values, like for a regular [Entity Form](building-form.md). This means you can [transform data](how-to-transform-data.md) here:
 
 ```php
 protected function initialData($instanceId): array
@@ -148,19 +142,17 @@ public function buildCommandConfig(): void
     $this->configureConfirmationText('Sure, really?')
         ->configureDescription('This action will send a text message to your boss')
         ->configureFormModalTitle('Text message')
-        ->configureFormModalTitle('Text message');
+        ->configureFormModalButtonLabel('Execute');
 }
 ```
 
 Here is the full list of available methods:
 
-- `configureConfirmationText(string $confirmationText)`: is set the Command will ask a confirmation to the user before
-  executing
+- `configureConfirmationText(string $confirmationText)`: if set the Command will ask a confirmation to the user before executing
 - `configureDescription(string $description)`: this text will appear under the Command label
-- `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its
-  label, or `$formModalTitle` if defined
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
-  display a dynamic message above the Form; [see detailed doc](page-alerts.md)
+- `configureFormModalTitle(string $formModalTitle)`: if the Command has a Form, the title of the modal will be its label, or `$formModalTitle` if defined
+- `configureFormModalButtonLabel(string $formModalButtonLabel)`: if the Command has a Form, the label of the OK button will be `$formModalButtonLabel`
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Form; [see detailed doc](page-alerts.md)
 
 ### Command return types
 
