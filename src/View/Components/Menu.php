@@ -56,8 +56,8 @@ class Menu extends Component
     {
         $sharpMenu = config('sharp.menu') ?? null;
 
-        if($sharpMenu === null || is_array($sharpMenu)) {
-            // Legacy format is not supported for user menu 
+        if ($sharpMenu === null || is_array($sharpMenu)) {
+            // Legacy format is not supported for user menu
             return null;
         }
 
