@@ -4,6 +4,7 @@
         :visible.sync="visible"
         :loading="loading"
         :title="title"
+        :ok-title="confirmLabel"
         @ok="handleSubmitButtonClicked"
         @hidden="handleClosed"
     >
@@ -54,6 +55,9 @@
         computed: {
             title() {
                 return this.command?.modal_title ?? this.command?.label;
+            },
+            confirmLabel() {
+                return this.command?.modal_confirm_label;
             },
         },
         methods: {

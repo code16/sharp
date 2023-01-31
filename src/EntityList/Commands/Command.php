@@ -20,6 +20,7 @@ abstract class Command
     protected ?string $commandKey = null;
 
     private ?string $formModalTitle = null;
+    private ?string $formModalConfirmLabel = null;
     private ?string $confirmationText = null;
     private ?string $description = null;
 
@@ -88,6 +89,13 @@ abstract class Command
         return $this;
     }
 
+    final protected function configureFormModalConfirmLabel(string $formModalConfirmLabel): self
+    {
+        $this->formModalConfirmLabel = $formModalConfirmLabel;
+
+        return $this;
+    }
+
     final protected function configureDescription(string $description): self
     {
         $this->description = $description;
@@ -128,6 +136,11 @@ abstract class Command
     final public function getFormModalTitle(): ?string
     {
         return $this->formModalTitle;
+    }
+
+    final public function getFormModalConfirmLabel(): ?string
+    {
+        return $this->formModalConfirmLabel;
     }
 
     /**
