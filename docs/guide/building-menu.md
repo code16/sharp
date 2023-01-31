@@ -40,7 +40,7 @@ And should be declared in the config file:
 // sharp.php
 
 [...]
-"menu" => MySharpMenu::class
+'menu' => MySharpMenu::class
 ```
 
 ### Link to an entity list, a dashboard or to a single show
@@ -51,8 +51,8 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink("person", "People", "fas fa-user")
-            ->addEntityLink("feature", "Features", "fas fa-superpowers");
+            ->addEntityLink('person', 'People', 'fas fa-user')
+            ->addEntityLink('feature', 'Features', 'fas fa-superpowers');
     }
 }
 ```
@@ -66,7 +66,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 {
     public function build(): self
     {
-        return $this->addExternalLink("https://google.com", "Some external link", "fas fa-globe");
+        return $this->addExternalLink('https://google.com', 'Some external link', 'fas fa-globe');
     }
 }
 ```
@@ -81,18 +81,18 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addSection("Admin", function(SharpMenuItemSection $section) {
+            ->addSection('Admin', function(SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink("account", "My account", "fas fa-user")
-                    ->addEntityLink("user", "Sharp users", "fas fa-user-secret");
+                    ->addEntityLink('account', 'My account', 'fas fa-user')
+                    ->addEntityLink('user', 'Sharp users', 'fas fa-user-secret');
             });
     }
 }
 ```
 
-### Add separators in categories
+### Add separators in sections
 
-You can add a simple labelled separator in categories, as sub-categories
+You can add a simple labelled separator in sections:
 
 ```php
 class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
@@ -100,11 +100,11 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addSection("Admin", function(SharpMenuItemSection $section) {
+            ->addSection('Admin', function(SharpMenuItemSection $section) {
                 $section
-                    ->addEntityLink("account", "My account", "fas fa-user")
-                    ->addSeparator("Other users")
-                    ->addEntityLink("user", "Sharp users", "fas fa-user-secret");
+                    ->addEntityLink('account', 'My account', 'fas fa-user')
+                    ->addSeparator('Other users')
+                    ->addEntityLink('user', 'Sharp users', 'fas fa-user-secret');
             });
     }
 }
@@ -120,10 +120,27 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addSection("Admin", function(SharpMenuItemSection $section) {
+            ->addSection('Admin', function(SharpMenuItemSection $section) {
                 $section
                     ->setCollapsible(false)
-                    ->addEntityLink("account", "My account", "fas fa-user");
+                    ->addEntityLink('account', 'My account', 'fas fa-user');
+            });
+    }
+}
+```
+
+### Add links in the user (profile) menu
+
+Next to the user name or email, Sharp displays a dropdown menu with a logout link. You can add your own links in this menu:
+
+```php
+class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->setUserMenu(function (SharpUserMenu $menu) {
+                $menu->addEntityLink('account', 'My account', 'fas fa-user');
             });
     }
 }
@@ -131,17 +148,21 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 
 ## Define the menu directly in the config file (legacy)
 
+::: warning
+This method is deprecated and will be removed in a future version. Please use the [SharpMenu class](#create-a-sharpmenu-class-preferred-option) instead.
+:::
+
 ### Link to an entity list
 
 ```php
 // sharp.php
 
 [...]
-"menu" => [
+'menu' => [
     [
-        "label" => "Features",
-        "icon" => "fa-superpowers",
-        "entity" => "feature"
+        'label' => 'Features',
+        'icon' => 'fa-superpowers',
+        'entity' => 'feature'
     ]
 ]
 ```
@@ -154,12 +175,12 @@ The `entity` value must correspond to some entity key described in the same `sha
 // sharp.php
 
 [...]
-"menu" => [
+'menu' => [
     [
-        "label" => "Account",
-        "icon" => "fa-user",
-        "entity" => "account",
-        "single" => true
+        'label' => 'Account',
+        'icon' => 'fa-user',
+        'entity' => 'account',
+        'single' => true
     ]
 ]
 ```
@@ -174,11 +195,11 @@ Very similar to entity lists, except that `entity` is replaced by a `dashboard` 
 // sharp.php
 
 [...]
-"menu" => [
+'menu' => [
     [
-        "label" => "Dashboard",
-        "icon" => "fa-dashboard",
-        "dashboard" => "company_dashboard"
+        'label' => 'Dashboard',
+        'icon' => 'fa-dashboard',
+        'dashboard' => 'company_dashboard'
     ]
 ]
 ```
@@ -189,11 +210,11 @@ Very similar to entity lists, except that `entity` is replaced by a `dashboard` 
 // sharp.php
 
 [...]
-"menu" => [
+'menu' => [
     [
-        "label" => "Some external link",
-        "icon" => "fa-globe",
-        "url" => "https://google.com"
+        'label' => 'Some external link',
+        'icon' => 'fa-globe',
+        'url' => 'https://google.com'
     ]
 ]
 ```
@@ -203,19 +224,19 @@ Very similar to entity lists, except that `entity` is replaced by a `dashboard` 
 Categories are groups that can be collapsed
 
 ```php
-"menu" => [
+'menu' => [
     [
-        "label" => "Company",
-        "entities" => [
+        'label' => 'Company',
+        'entities' => [
             [
-                "label" => "Dashboard",
-                "icon" => "fa-dashboard",
-                "dashboard" => "company_dashboard"
+                'label' => 'Dashboard',
+                'icon' => 'fa-dashboard',
+                'dashboard' => 'company_dashboard'
             ],
             [
-                "label" => "Spaceships",
-                "icon" => "fa-space-shuttle",
-                "entity" => "spaceship"
+                'label' => 'Spaceships',
+                'icon' => 'fa-space-shuttle',
+                'entity' => 'spaceship'
             ],
             [...]
         ]
@@ -228,23 +249,23 @@ Categories are groups that can be collapsed
 You can add a simple labelled separator in categories, as sub-categories
 
 ```php
-"menu" => [
+'menu' => [
     [
-        "label" => "Company",
-        "entities" => [
+        'label' => 'Company',
+        'entities' => [
             [
-                "label" => "Dashboard",
-                "icon" => "fa-dashboard",
-                "dashboard" => "company_dashboard"
+                'label' => 'Dashboard',
+                'icon' => 'fa-dashboard',
+                'dashboard' => 'company_dashboard'
             ],
             [
-                "separator" => true,
-                "label" => "Separator",
+                'separator' => true,
+                'label' => 'Separator',
             ],
             [
-                "label" => "Spaceships",
-                "icon" => "fa-space-shuttle",
-                "entity" => "spaceship"
+                'label' => 'Spaceships',
+                'icon' => 'fa-space-shuttle',
+                'entity' => 'spaceship'
             ],
             [...]
         ]
