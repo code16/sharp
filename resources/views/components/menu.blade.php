@@ -37,6 +37,16 @@
                         <template v-slot:text>
                             <i class="fas fa-user me-1" style="font-size: 1em"></i>
                         </template>
+                        @if($userMenu = $self->getUserMenu())
+                            @foreach($userMenu->getItems() as $item)
+                                <li>
+                                    <x-sharp::menu.menu-item
+                                            :item="$item"
+                                            :current-entity-key="$currentEntityKey"
+                                    />
+                                </li>
+                            @endforeach
+                        @endif
                         <li>
                             <form action="{{ route('code16.sharp.logout') }}" method="post">
                                 @csrf
