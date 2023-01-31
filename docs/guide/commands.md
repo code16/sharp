@@ -26,7 +26,7 @@ First one is `label(): string`, and must return the text label of the Command, d
 ```php
 public function label(): string
 {
-    return "Reload full list";
+    return 'Reload full list';
 }
 ```
 
@@ -69,12 +69,12 @@ function buildFormFields(FieldsContainer $formFields): void
 {
     $formFields
         ->addField(
-            SharpFormTextareaField::make("message")
-                ->setLabel("Message")
+            SharpFormTextareaField::make('message')
+                ->setLabel('Message')
         )
         ->addField(
-            SharpFormCheckField::make("now", "Send right now?")
-                ->setHelpMessage("Otherwise it will be sent next night.")
+            SharpFormCheckField::make('now', 'Send right now?')
+                ->setHelpMessage('Otherwise it will be sent next night.')
         );
 }
 ```
@@ -90,7 +90,7 @@ Then, in the `execute()` method, you can grab the entered value, and even to han
 public function execute($instanceId, array $data= []): array
 {
     $this->validate($data, [
-        "message" => "required"
+        'message' => 'required'
     ]);
 
     $text = $data["message"];
@@ -106,7 +106,7 @@ You may need to initialize the form with some data; in order to do that, you hav
 protected function initialData(): array
 {
     return [
-        "message" => "Some initial value"
+        'message' => 'Some initial value'
     ];
 }
 ```
@@ -127,8 +127,8 @@ can [transform data](how-to-transform-data.md) here:
 protected function initialData($instanceId): array
 {
     return $this
-        ->setCustomTransformer("message", function($value, Spaceship $instance) {
-            return sprintf("Message #%s:", $instance->messages_sent_count);
+        ->setCustomTransformer('message', function($value, Spaceship $instance) {
+            return sprintf('Message #%s:', $instance->messages_sent_count);
         })
         ->transform(
             Spaceship::findOrFail($instanceId)
@@ -145,9 +145,9 @@ You can tweak this in an optional `buildCommandConfig()` function:
 ```php
 public function buildCommandConfig(): void
 {
-    $this->configureConfirmationText("Sure, really?")
-        ->configureDescription("This action will send a text message to your boss")
-        ->configureFormModalTitle("Text message");
+    $this->configureConfirmationText('Sure, really?')
+        ->configureDescription('This action will send a text message to your boss')
+        ->configureFormModalTitle('Text message');
 }
 ```
 
@@ -163,17 +163,16 @@ Here is the full list of available methods:
 
 ### Command return types
 
-Finally, let's review the return possibilities. After a Command has been executed, the code must return a "command
-return" to tell to the front what to do next. There are six of them:
+Finally, let's review the return possibilities. After a Command has been executed, the code must return a "command return" to tell to the front what to do next. There are six of them:
 
-- `return $this->info("some text")`: displays the entered text in a modal.
+- `return $this->info('some text')`: displays the entered text in a modal.
 - `return $this->reload()`: reload the current entity list (with context).
 - `return $this->refresh(1)`*: refresh only the instance with an id on `1`. We can pass an id array also to refresh more
   than one instance.
-- `return $this->view("view.name", ["some"=>"params"])`: display a view right in Sharp. Useful for page previews.
-- `return $this->link("/path/to/redirect")`: redirect to the given path
-- `return $this->download("path", "diskName")`: the browser will download the specified file.
-- `return $this->streamDownload("path", "name")`: the browser will stream the specified file.
+- `return $this->view('view.name', ['some'=>'params'])`: display a view right in Sharp. Useful for page previews.
+- `return $this->link('/path/to/redirect')`: redirect to the given path
+- `return $this->download('path', 'diskName')`: the browser will download the specified file.
+- `return $this->streamDownload('path', 'name')`: the browser will stream the specified file.
 
 \* In order for `refresh()` to work properly, your Entity List's  `getListData()` will be called, and `$params` will return all the wanted `id`s with `specificIds()`. Here's a code example:
 
@@ -183,7 +182,7 @@ function getListData()
     $spaceships = Spaceship::distinct();
 
     if($params->specificIds()) {
-        $spaceships->whereIn("id", $this->queryParams->specificIds());
+        $spaceships->whereIn('id', $this->queryParams->specificIds());
     }
 
     [...]
@@ -247,7 +246,7 @@ based on any logic of yours. It can be for instance:
 ```php
 public function authorize(): bool
 {
-    return auth()->user()->hasGroup("boss");
+    return auth()->user()->hasGroup('boss');
 }
 ```
 
@@ -262,7 +261,7 @@ public function authorizeFor($instanceId): bool
 }
 ```
 
-### Define an entity Command as "primary"
+### Define an entity Command as primary
 
 An EntityList can declare one (and only one) of its entity Commands as "primary". In this case, the command will appear at the top, right next to the creation button ("New..."). The idea is to provide more visibility to an important Command, but could also be to replace the creation button entirely (you need to remove the "create" authorization to achieve this). 
 
