@@ -147,6 +147,7 @@ public function buildCommandConfig(): void
 {
     $this->configureConfirmationText('Sure, really?')
         ->configureDescription('This action will send a text message to your boss')
+        ->configureFormModalTitle('Text message')
         ->configureFormModalTitle('Text message');
 }
 ```
