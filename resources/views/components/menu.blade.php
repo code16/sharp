@@ -40,12 +40,14 @@
                         @if($userMenu = $self->getUserMenu())
                             @foreach($userMenu->getItems() as $item)
                                 <li>
-                                    <x-sharp::menu.menu-item
-                                            :item="$item"
-                                            :current-entity-key="$currentEntityKey"
+                                    <x-sharp::menu.dropdown-item
+                                        :item="$item"
                                     />
                                 </li>
                             @endforeach
+                            @if(count($userMenu->getItems()))
+                                <li><hr class="dropdown-divider"></li>
+                            @endif
                         @endif
                         <li>
                             <form action="{{ route('code16.sharp.logout') }}" method="post">

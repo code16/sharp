@@ -100,7 +100,7 @@
 </template>
 
 <script>
-    import { ActionBar, Dropdown,  DropdownItem, ItemVisual, Search, Button } from 'sharp-ui';
+    import { ActionBar, Dropdown,  DropdownItem, Search, Button } from 'sharp-ui';
     import { SharpFilter } from 'sharp-filters';
 
     import { Localization } from 'sharp/mixins';
@@ -118,7 +118,6 @@
             ActionBar,
             Dropdown,
             DropdownItem,
-            ItemVisual,
             SharpFilter,
             Search,
             Button,

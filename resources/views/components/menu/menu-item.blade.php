@@ -1,12 +1,13 @@
 @props([
     'item',
     'currentEntityKey',
+    'nested' => false,
 ])
 
 @php
-    /**
-     * @var \Code16\Sharp\Utils\Menu\SharpMenuItem $item
-     */
+/**
+ * @var \Code16\Sharp\Utils\Menu\SharpMenuItem $item
+ */
 @endphp
 
 @if($item->isSeparator())
@@ -19,20 +20,20 @@
     </div>
 @else
     <sharp-nav-item
-            href="{{ $item->getUrl() }}"
-            @if($item->isExternalLink())
-                target="_blank"
-            @endif
-            @if($item->isEntity() && $item->getEntityKey() === $currentEntityKey)
-                current
-            @endif
+        href="{{ $item->getUrl() }}"
+        @if($item->isExternalLink())
+            target="_blank"
+        @endif
+        @if($item->isEntity() && $item->getEntityKey() === $currentEntityKey)
+            current
+        @endif
     >
         <div class="row flex-nowrap gx-3">
             @if($item->getIcon())
                 <div class="col-auto">
-                    <sharp-item-visual :item="{{ json_encode(['icon' => $item->getIcon()]) }}" icon-class="fa-fw"></sharp-item-visual>
+                    <i class="fa fa-fw {{ $item->getIcon() }}"></i>
                 </div>
-            @elseif($nested ?? false)
+            @elseif($nested)
                 <div class="col-auto">
                     <div class="fa-fw"></div>
                 </div>

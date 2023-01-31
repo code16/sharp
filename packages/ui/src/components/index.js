@@ -10,7 +10,6 @@ export { default as DropdownItem } from './dropdown/DropdownItem';
 export { default as DropdownSeparator } from './dropdown/DropdownSeparator';
 export { default as GlobalMessage } from './global-message/GlobalMessage';
 export { default as Grid } from './Grid';
-export { default as ItemVisual } from './ItemVisual';
 export { default as Loading } from './loading/Loading';
 export { default as LoadingOverlay } from './loading/LoadingOverlay';
 export { default as Modal } from './Modal';
