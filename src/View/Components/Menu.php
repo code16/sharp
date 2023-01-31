@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\View\Components;
 
+use Code16\Sharp\Utils\Menu\SharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
@@ -18,6 +19,7 @@ class Menu extends Component
     public ?string $currentEntityKey;
     public ?SharpMenuItemLink $currentEntityItem;
     public bool $hasGlobalFilters;
+    private ?SharpMenu $sharpMenu = null;
 
     public function __construct()
     {
@@ -39,11 +41,15 @@ class Menu extends Component
 
     public function getItems(): Collection
     {
-        $sharpMenu = config('sharp.menu', []) ?? [];
+        $sharpMenu = config('sharp.menu', []) ?? null;
 
-        $items = is_array($sharpMenu)
+        if ($sharpMenu === null) {
+            return collect();
+        }
+
+        $items = $this->isLegacyMenu($sharpMenu)
             ? $this->getItemFromLegacyConfig($sharpMenu)
-            : app($sharpMenu)->build()->items();
+            : $this->getSharpMenu($sharpMenu)->items();
 
         return $items
             ->filter(fn (SharpMenuItem $item) => $item->isSection()
@@ -56,32 +62,29 @@ class Menu extends Component
     {
         $sharpMenu = config('sharp.menu') ?? null;
 
-        if ($sharpMenu === null || is_array($sharpMenu)) {
+        if ($sharpMenu === null || $this->isLegacyMenu($sharpMenu)) {
             // Legacy format is not supported for user menu
             return null;
         }
 
-        // TODO avoid to build the menu twice
-        return app($sharpMenu)->build()->userMenu();
+        return $this->getSharpMenu($sharpMenu)->userMenu();
     }
 
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
         return $this->getFlattenedItems()
-            ->first(fn (SharpMenuItem $item) => $item->isEntity() && $item->getEntityKey() === $entityKey
+            ->first(fn (SharpMenuItem $item) => $item->isEntity() 
+                && $item->getEntityKey() === $entityKey
             );
     }
 
     public function getFlattenedItems(): Collection
     {
         return $this->getItems()
-            ->map(function (SharpMenuItem $item) {
-                if ($item->isSection()) {
-                    return (new MenuSection($item))->getItems();
-                }
-
-                return $item;
-            })
+            ->map(fn (SharpMenuItem $item) => $item->isSection()
+                ? (new MenuSection($item))->getItems()
+                : $item
+            )
             ->flatten();
     }
 
@@ -132,5 +135,18 @@ class Menu extends Component
 
                 return $item;
             });
+    }
+
+    private function isLegacyMenu(mixed $sharpMenu): bool
+    {
+        return is_array($sharpMenu);
+    }
+
+    private function getSharpMenu(string $sharpMenu): SharpMenu
+    {
+        if ($this->sharpMenu === null) {
+            $this->sharpMenu = app($sharpMenu)->build();
+        }
+        return $this->sharpMenu;
     }
 }
