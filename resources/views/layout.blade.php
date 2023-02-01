@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
+    <meta name="robots" content="noindex, nofollow" />
 
     <x-sharp::root-styles />
 
