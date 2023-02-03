@@ -9,7 +9,11 @@ class FormController extends ApiController
 {
     public function edit(string $entityKey, string $instanceId = null)
     {
-        sharp_check_ability('view', $entityKey, $instanceId);
+        sharp_check_ability(
+            $this->entityManager->entityFor($entityKey)->hasShow() ? 'update' : 'view',
+            $entityKey,
+            $instanceId
+        );
 
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);

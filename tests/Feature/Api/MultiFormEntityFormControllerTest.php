@@ -25,6 +25,7 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setList(PersonWithMultiformSharpEntityList::class)
+            ->setShow(null)
             ->setPolicy(AuthorizationsTestMultiPersonPolicy::class)
             ->setMultiforms([
                 'big' => [BigPersonSharpForm::class, 'Big person'],
