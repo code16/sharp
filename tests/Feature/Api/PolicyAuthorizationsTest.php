@@ -29,22 +29,22 @@ class PolicyAuthorizationsTest extends BaseApiTest
     public function we_can_configure_a_policy()
     {
         // Update policy returns true
-        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(200);
-        $this->getJson('/sharp/api/list/person')->assertStatus(200);
+        $this->postJson('/sharp/api/form/person/1', [])->assertOk();
+        $this->getJson('/sharp/api/list/person')->assertOk();
 
         // Create has no policy, and should therefore return 200
-        $this->getJson('/sharp/api/form/person')->assertStatus(200);
-        $this->postJson('/sharp/api/form/person', [])->assertStatus(200);
+        $this->getJson('/sharp/api/form/person')->assertOk();
+        $this->postJson('/sharp/api/form/person', [])->assertOk();
 
         // Delete policy returns false
-        $this->deleteJson('/sharp/api/form/person/50')->assertStatus(403);
+        $this->deleteJson('/sharp/api/form/person/50')->assertForbidden();
 
         // Update policy with an id > 1 returns 403
-        $this->postJson('/sharp/api/form/person/10', [])->assertStatus(403);
+        $this->postJson('/sharp/api/form/person/10', [])->assertForbidden();
     }
 
     /** @test */
-    public function policy_authorizations_are_appended_to_the_response_on_a_form_case()
+    public function policy_authorizations_are_appended_to_the_response_on_a_create_or_show_case()
     {
         $this
             ->getJson('/sharp/api/form/person')
@@ -58,7 +58,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]);
 
         $this
-            ->getJson('/sharp/api/form/person/1')
+            ->getJson('/sharp/api/show/person/1')
             ->assertJson([
                 'authorizations' => [
                     'delete' => false,
@@ -69,7 +69,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ]);
 
         $this
-            ->getJson('/sharp/api/form/person/10')
+            ->getJson('/sharp/api/show/person/10')
             ->assertJson([
                 'authorizations' => [
                     'delete' => false,
@@ -78,6 +78,18 @@ class PolicyAuthorizationsTest extends BaseApiTest
                     'view' => true,
                 ],
             ]);
+    }
+
+    /** @test */
+    public function view_policy_applies_to_show_if_defined_and_form_edit_in_readonly_mode_if_not()
+    {
+        // There is a show page by default:
+        $this->getJson('/sharp/api/show/person/50')->assertOk();
+        $this->getJson('/sharp/api/form/person/50')->assertForbidden();
+
+        // Without show page, form edit become accessible:
+        app(SharpEntityManager::class)->entityFor('person')->setShow(null);
+        $this->getJson('/sharp/api/form/person/50')->assertOk();
     }
 
     /** @test */
@@ -100,7 +112,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
             ->setProhibitedActions(['update']);
 
         $this
-            ->getJson('/sharp/api/form/person/1')
+            ->getJson('/sharp/api/show/person/1')
             ->assertJson([
                 'authorizations' => [
                     'delete' => false,
@@ -116,18 +128,18 @@ class PolicyAuthorizationsTest extends BaseApiTest
     {
         $this->actingAs(new User(['name' => 'Unauthorized-User']));
 
-        $this->getJson('/sharp/api/form/person')->assertStatus(403);
-        $this->postJson('/sharp/api/form/person/1', [])->assertStatus(403);
-        $this->getJson('/sharp/api/list/person')->assertStatus(403);
-        $this->postJson('/sharp/api/form/person', [])->assertStatus(403);
-        $this->deleteJson('/sharp/api/form/person/50')->assertStatus(403);
+        $this->getJson('/sharp/api/form/person')->assertForbidden();
+        $this->postJson('/sharp/api/form/person/1', [])->assertForbidden();
+        $this->getJson('/sharp/api/list/person')->assertForbidden();
+        $this->postJson('/sharp/api/form/person', [])->assertForbidden();
+        $this->deleteJson('/sharp/api/form/person/50')->assertForbidden();
     }
 
     /** @test */
     public function dashboard_policy_can_be_set_to_handle_whole_dashboard_visibility()
     {
         $this->actingAs(new User(['name' => 'Unauthorized-User']));
-        $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertStatus(403);
+        $this->getJson('/sharp/api/dashboard/personal_dashboard')->assertForbidden();
     }
 
     /** @test */
