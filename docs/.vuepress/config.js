@@ -37,6 +37,7 @@ export default defineUserConfig({
     head: [
         ['link', { rel: 'icon', type:'image/png', href: '/docs/favicon.png' }],
         ['link', { rel: 'icon', type:'image/svg+xml', href: '/docs/favicon.svg' }],
+        ['meta', { name: 'og:image', content: '/docs/img/og-image.png' }],
     ],
     theme: theme({
         logo: '/logo.svg',
