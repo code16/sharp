@@ -47,6 +47,11 @@ trait IsWizardCommand
         return null;
     }
 
+    protected function isStep(string $step): bool
+    {
+        return $this->extractStepFromRequest() == $step;
+    }
+
     protected function getKey(): string
     {
         if (! isset($this->key)) {
