@@ -1,5 +1,6 @@
 ---
 home: true
+title: Sharp - The Laravel Content Management Framework
 heroImage: /img/sharplogo.png
 heroText: null
 actionText: Get Started →
