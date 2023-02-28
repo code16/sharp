@@ -9,7 +9,12 @@
         </template>
         <template v-else>
 
-            <router-view @error="handlePageError" />
+            <template v-if="$slots.default">
+                <slot />
+            </template>
+            <template v-else>
+                <router-view @error="handlePageError" />
+            </template>
 
             <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>
                 <template slot="body" slot-scope="{ item, close }">

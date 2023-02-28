@@ -32,6 +32,7 @@ use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
@@ -114,6 +115,7 @@ class SharpServiceProvider extends ServiceProvider
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Code16\Sharp\Http\Middleware\HandleInertiaRequests::class
         ]);
 
         $this->app['router']

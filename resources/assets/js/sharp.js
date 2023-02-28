@@ -22,6 +22,7 @@ import {
 
 import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
+import { createInertiaApp } from "@inertiajs/vue2";
 
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
@@ -48,12 +49,32 @@ Vue.component('sharp-left-nav', LeftNav);
 Vue.component('sharp-nav-section', NavSection);
 Vue.component('sharp-nav-item', NavItem);
 
-new Vue({
-    el: "#sharp-app",
 
-    store,
-    router,
-});
+if(document.querySelector('[data-page]')) {
+    createInertiaApp({
+        resolve: name => require(`./Pages/${name}`),
+        setup({ el, App, props, plugin }) {
+            Vue.use(plugin);
+
+            new Vue({
+                store,
+                router,
+            }).$mount('#menu');
+
+            new Vue({
+                render: h => h(App, props),
+                store,
+                router,
+            }).$mount(el);
+        },
+    })
+} else {
+    new Vue({
+        store,
+        router,
+    }).$mount('#app');
+}
+
 
 
 

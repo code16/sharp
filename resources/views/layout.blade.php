@@ -17,6 +17,7 @@
     <x-sharp::extensions.injected-assets />
 
     @include('sharp::partials.head')
+    @yield('head')
 </head>
 <body class="{{ $bodyClass ?? '' }}">
     <x-sharp::alert.assets-outdated />

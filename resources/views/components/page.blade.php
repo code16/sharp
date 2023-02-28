@@ -1,5 +1,5 @@
 
-<div id="sharp-app" {{ $attributes }}>
+<div id="app" {{ $attributes }}>
     <x-sharp::menu />
 
     {{ $slot }}
