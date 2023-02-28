@@ -46,11 +46,11 @@
                             @endif
                             <div class="card-body p-5 py-4">
                                 <div class="SharpForm__form-item mb-3">
-                                    <input type="text" name="login" id="login" class="form-control" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')">
+                                    <input type="text" name="login" id="login" class="form-control" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')" autocomplete="username">
                                 </div>
 
                                 <div class="SharpForm__form-item mb-3">
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="@lang('sharp::login.password_field')">
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="@lang('sharp::login.password_field')" autocomplete="current-password">
                                 </div>
 
                                 @if(config('sharp.auth.suggest_remember_me', false))

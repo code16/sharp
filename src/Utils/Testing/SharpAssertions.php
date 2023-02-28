@@ -154,7 +154,7 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [])
+    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
     {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
@@ -172,11 +172,11 @@ trait SharpAssertions
                     'code16.sharp.api.list.command.instance',
                     compact('entityKey', 'instanceId', 'commandKey'),
                 ),
-                ['data' => $data],
+                ['data' => $data, 'command_step' => $commandStep],
             );
     }
 
-    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [])
+    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
     {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
@@ -195,11 +195,11 @@ trait SharpAssertions
                     'code16.sharp.api.show.command.instance',
                     compact('entityKey', 'instanceId', 'commandKey'),
                 ),
-                ['data' => $data],
+                ['data' => $data, 'command_step' => $commandStep],
             );
     }
 
-    public function callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data = [])
+    public function callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
     {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
@@ -214,7 +214,7 @@ trait SharpAssertions
             )
             ->postJson(
                 route('code16.sharp.api.list.command.entity', compact('entityKey', 'commandKey')),
-                ['data' => $data],
+                ['data' => $data, 'command_step' => $commandStep],
             );
     }
 

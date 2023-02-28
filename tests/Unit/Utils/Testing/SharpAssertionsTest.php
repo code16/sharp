@@ -143,11 +143,7 @@ class SharpAssertionsTest extends SharpTestCase
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
             {
                 $this->uri = $uri;
-                $this->postedData = collect(get_object_vars(json_decode($content)))
-                    ->map(function ($item) {
-                        return get_object_vars($item);
-                    })
-                    ->toArray();
+                $this->postedData = json_decode($content);
 
                 return $this;
             }
@@ -164,10 +160,7 @@ class SharpAssertionsTest extends SharpTestCase
             $response->uri,
         );
 
-        $this->assertEquals(
-            ['data' => ['attr' => 'some_value']],
-            $response->postedData,
-        );
+        $this->assertEquals('some_value', $response->postedData->data->attr);
     }
 
     /** @test */
@@ -180,11 +173,7 @@ class SharpAssertionsTest extends SharpTestCase
             public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
             {
                 $this->uri = $uri;
-                $this->postedData = collect(get_object_vars(json_decode($content)))
-                    ->map(function ($item) {
-                        return get_object_vars($item);
-                    })
-                    ->toArray();
+                $this->postedData = json_decode($content);
 
                 return $this;
             }
@@ -201,10 +190,28 @@ class SharpAssertionsTest extends SharpTestCase
             $response->uri,
         );
 
-        $this->assertEquals(
-            ['data' => ['attr' => 'some_value']],
-            $response->postedData,
-        );
+        $this->assertEquals('some_value', $response->postedData->data->attr);
+    }
+
+    /** @test */
+    public function we_can_test_callSharpInstanceCommandFromList_with_a_wizard_step()
+    {
+        $fake = new class extends SharpTestCase
+        {
+            use SharpAssertions;
+
+            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+            {
+                $this->uri = $uri;
+                $this->postedData = json_decode($content);
+
+                return $this;
+            }
+        };
+
+        $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
+
+        $this->assertEquals('my-step:123', $response->postedData->command_step);
     }
 
     /** @test */
