@@ -2,8 +2,8 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 
 class ConfigureZiggy
 {
@@ -12,7 +12,7 @@ class ConfigureZiggy
         config()->set('ziggy', [
             'only' => ['code16.sharp.*'],
         ]);
-        
+
         return $next($request);
     }
 }
