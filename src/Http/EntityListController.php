@@ -36,19 +36,19 @@ class EntityListController extends SharpProtectedController
         ];
 
         $data['authorizations'] = $this->getAuthorizationsForEntityList(
-            $entityKey, 
-            $data['data']['list']['items'], 
+            $entityKey,
+            $data['data']['list']['items'],
             $data['config'],
         );
-        
+
         $data['forms'] = $this->getMultiformDataForEntityList(
-            $entityKey, 
-            $data['data']['list']['items'], 
+            $entityKey,
+            $data['data']['list']['items'],
             $data['config'],
         );
-        
+
         $data['notifications'] = $this->getSharpNotifications();
-        
+
         // TODO handle breadcrumb
 
         return Inertia::render('List', $data);
@@ -114,7 +114,7 @@ class EntityListController extends SharpProtectedController
 
             return array_values($notifications);
         }
-        
+
         return [];
     }
 }
