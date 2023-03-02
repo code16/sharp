@@ -2,7 +2,11 @@
     <Layout>
         <div class="SharpEntityListPage" data-popover-boundary>
             <div class="container">
-                <EntityList :entity-key="entityKey" module="entity-list">
+                <EntityList
+                    :entity-key="entityKey"
+                    :initial-data="$props"
+                    module="entity-list"
+                >
                     <template v-slot:action-bar="{ props, listeners }">
                         <ActionBar v-bind="props" v-on="listeners" />
                     </template>
@@ -25,6 +29,13 @@
         },
         props: {
             entityKey: String,
+            containers: null,
+            layout: null,
+            data: null,
+            fields: null,
+            config: null,
+            authorizations: null,
+            forms: null,
         },
     }
 </script>

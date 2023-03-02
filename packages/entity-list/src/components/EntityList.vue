@@ -97,7 +97,7 @@
 
 <script>
     import isEqual from 'lodash/isEqual';
-    import { formUrl, showUrl, lang, showAlert, api } from 'sharp';
+    import { formUrl, showUrl, lang, showAlert, api, handleNotifications } from 'sharp';
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
     import {
         DataList,
@@ -175,6 +175,7 @@
                 default: true,
             },
             focusedItem: Number,
+            initialData: Object,
         },
         data() {
             return {
@@ -352,6 +353,9 @@
                     !this.instanceHasCommands(instance) &&
                     this.instanceHasState(instance) && !this.instanceHasStateAuthorization(instance)
                 );
+            },
+            synchronous() {
+                return !!this.initialData;
             },
         },
         methods: {
@@ -651,11 +655,16 @@
                 this.loading = true;
                 await this.storeDispatch('setEntityKey', this.entityKey);
                 // legacy
-                await this.get()
-                    .catch(error => {
-                        this.$emit('error', error);
-                        return Promise.reject(error);
-                    });
+                if(this.initialData) {
+                    this.mount(this.initialData);
+                    handleNotifications(this.data.notifications);
+                } else {
+                    await this.get()
+                        .catch(error => {
+                            this.$emit('error', error);
+                            return Promise.reject(error);
+                        });
+                }
                 this.bindParams(this.query);
 
                 await this.storeDispatch('update', {

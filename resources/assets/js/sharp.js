@@ -57,15 +57,15 @@ if(document.querySelector('[data-page]')) {
             Vue.use(plugin);
 
             new Vue({
-                store,
-                router,
-            }).$mount('#menu');
-
-            new Vue({
                 render: h => h(App, props),
                 store,
                 router,
             }).$mount(el);
+
+            new Vue({
+                store,
+                router,
+            }).$mount('#menu');
         },
     })
 } else {
