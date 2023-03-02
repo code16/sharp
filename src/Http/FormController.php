@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class FormController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    
+
     public function __construct(
         private SharpAuthorizationManager $sharpAuthorizationManager,
         private SharpEntityManager $entityManager,
@@ -29,11 +29,11 @@ class FormController extends SharpProtectedController
         $form = $this->entityManager->entityFor($entityKey)->getFormOrFail();
 
         abort_if(
-            (!$instanceId && !$form instanceof SharpSingleForm)
+            (! $instanceId && ! $form instanceof SharpSingleForm)
             || ($instanceId && $form instanceof SharpSingleForm),
             404,
         );
-        
+
         $form->buildFormConfig();
 
         $data = [
@@ -51,7 +51,7 @@ class FormController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ];
-        
+
         // TODO handle breadcrumb
 
         return Inertia::render('Form', $data);

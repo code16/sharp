@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class ShowController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    
+
     public function __construct(
         private SharpAuthorizationManager $sharpAuthorizationManager,
         private SharpEntityManager $entityManager,
@@ -25,7 +25,7 @@ class ShowController extends SharpProtectedController
         $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
 
         abort_if(
-            (!$instanceId && !$show instanceof SharpSingleShow)
+            (! $instanceId && ! $show instanceof SharpSingleShow)
             || ($instanceId && $show instanceof SharpSingleShow),
             404,
         );
@@ -48,7 +48,7 @@ class ShowController extends SharpProtectedController
             ],
             'notifications' => $this->getSharpNotifications(),
         ];
-        
+
         // TODO handle breadcrumb
 
         return Inertia::render('Show', $data);
