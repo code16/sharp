@@ -20,6 +20,8 @@
     import Layout from "../Layouts/Layout.vue";
     import { EntityList } from "sharp-entity-list";
     import ActionBar from "sharp-entity-list/src/components/ActionBar.vue";
+    import { router } from "@inertiajs/vue2";
+    import { mapGetters } from "vuex";
 
     export default {
         components: {
@@ -36,6 +38,27 @@
             config: null,
             authorizations: null,
             forms: null,
+        },
+        watch: {
+            'query': 'handleQueryChanged',
+        },
+        computed: {
+            ...mapGetters('entity-list', [
+                'query',
+            ]),
+        },
+        methods: {
+            handleQueryChanged(query) {
+                const search = new URLSearchParams(query).toString();
+                if(location.search.replace('?', '') !== search) {
+                    router.get(location.pathname, { ...query });
+                }
+            },
+        },
+        created() {
+            this.$store.dispatch('entity-list/setQuery', {
+                ...Object.fromEntries(new URLSearchParams(location.search).entries()),
+            });
         },
     }
 </script>
