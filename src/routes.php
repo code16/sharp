@@ -9,17 +9,17 @@ use Code16\Sharp\Http\Api\Commands\ShowInstanceStateController;
 use Code16\Sharp\Http\Api\DownloadController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsFormController;
-use Code16\Sharp\Http\Api\EntityListController;
+use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\Api\FormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\GlobalFilterController;
-use Code16\Sharp\Http\Api\ShowController;
 use Code16\Sharp\Http\DashboardController;
+use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
-use Code16\Sharp\Http\ListController;
 use Code16\Sharp\Http\LoginController;
+use Code16\Sharp\Http\ShowController;
 use Code16\Sharp\Http\SingleShowController;
 use Code16\Sharp\Http\WebDispatchController;
 use Illuminate\Support\Facades\Route;
@@ -39,11 +39,11 @@ Route::group([
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [DashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
 
-    Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
-        ->name('code16.sharp.api.list')
-        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+//    Route::get('/list/{entityKey}', [ApiEntityListController::class, 'show'])
+//        ->name('code16.sharp.api.list')
+//        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
-    Route::post('/list/{entityKey}/reorder', [EntityListController::class, 'update'])
+    Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
 
     Route::post('/list/{entityKey}/state/{instanceId}', [EntityListInstanceStateController::class, 'update'])
@@ -61,9 +61,9 @@ Route::group([
     Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [EntityListInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.instance.form');
 
-    Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
-        ->name('code16.sharp.api.show.show')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+//    Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
+//        ->name('code16.sharp.api.show.show')
+//        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
@@ -144,15 +144,19 @@ Route::group([
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('code16.sharp.logout');
 
-    Route::get('/s-list/{entityKey}', [ListController::class, 'show'])
+    Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
 
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
 
-    Route::get('/s-list/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
+    Route::get('/s-list/{entityKey}/{uri}s-show/{showEntityKey}/{instanceId}', [ShowController::class, 'show'])
         ->where('uri', '.*')
-        ->name('code16.sharp.list.subpage');
+        ->name('code16.sharp.show');
+
+    Route::get('/s-list/{entityKey}/{uri}s-form/{formEntityKey}', [FormController::class, 'show'])
+        ->where('uri', '.*')
+        ->name('code16.sharp.form');
 
     Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
         ->where('uri', '.*')
