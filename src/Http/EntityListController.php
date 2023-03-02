@@ -39,14 +39,14 @@ class EntityListController extends SharpProtectedController
         ];
 
         $data['authorizations'] = $this->getAuthorizationsForEntityList(
-            $entityKey, 
-            $data['data']['list']['items'], 
+            $entityKey,
+            $data['data']['list']['items'],
             $data['config'],
         );
-        
+
         $data['forms'] = $this->getMultiformDataForEntityList(
-            $entityKey, 
-            $data['data']['list']['items'], 
+            $entityKey,
+            $data['data']['list']['items'],
             $data['config'],
         );
         
@@ -106,5 +106,16 @@ class EntityListController extends SharpProtectedController
             })
             ->keyBy('key')
             ->all();
+    }
+
+    private function getSharpNotifications(): array
+    {
+        if ($notifications = session('sharp_notifications')) {
+            session()->forget('sharp_notifications');
+
+            return array_values($notifications);
+        }
+        
+        return [];
     }
 }
