@@ -213,6 +213,12 @@
                     this.init();
                 }
             },
+            initialData: {
+                handler() {
+                    this.init();
+                },
+                deep: true,
+            },
         },
         computed: {
             classes() {

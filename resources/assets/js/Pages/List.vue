@@ -2,15 +2,17 @@
     <Layout>
         <div class="SharpEntityListPage" data-popover-boundary>
             <div class="container">
-                <EntityList
-                    :entity-key="entityKey"
-                    :initial-data="$props"
-                    module="entity-list"
-                >
-                    <template v-slot:action-bar="{ props, listeners }">
-                        <ActionBar v-bind="props" v-on="listeners" />
-                    </template>
-                </EntityList>
+                <template v-if="ready">
+                    <EntityList
+                        :entity-key="entityKey"
+                        :initial-data="$props"
+                        module="entity-list"
+                    >
+                        <template v-slot:action-bar="{ props, listeners }">
+                            <ActionBar v-bind="props" v-on="listeners" />
+                        </template>
+                    </EntityList>
+                </template>
             </div>
         </div>
     </Layout>
@@ -22,6 +24,7 @@
     import ActionBar from "sharp-entity-list/src/components/ActionBar.vue";
     import { router } from "@inertiajs/vue2";
     import { mapGetters } from "vuex";
+    import { parseQuery, stringifyQuery } from "../util/querystring";
 
     export default {
         components: {
@@ -39,6 +42,11 @@
             authorizations: null,
             forms: null,
         },
+        data() {
+            return {
+                ready: false,
+            }
+        },
         watch: {
             'query': 'handleQueryChanged',
         },
@@ -49,16 +57,23 @@
         },
         methods: {
             handleQueryChanged(query) {
-                const search = new URLSearchParams(query).toString();
-                if(location.search.replace('?', '') !== search) {
-                    router.get(location.pathname, { ...query });
+                if(location.search !== stringifyQuery(query)) {
+                    this.$store.dispatch('setLoading', true);
+                    router.visit(location.pathname + stringifyQuery(query), {
+                        preserveState: true,
+                        preserveScroll: true,
+                        onFinish: () => {
+                            this.$store.dispatch('setLoading', false);
+                        }
+                    });
                 }
             },
         },
-        created() {
-            this.$store.dispatch('entity-list/setQuery', {
-                ...Object.fromEntries(new URLSearchParams(location.search).entries()),
+        async created() {
+            await this.$store.dispatch('entity-list/setQuery', {
+                ...parseQuery(location.search),
             });
+            this.ready = true;
         },
     }
 </script>
