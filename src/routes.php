@@ -11,11 +11,12 @@ use Code16\Sharp\Http\Api\Embeds\EmbedsController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsFormController;
 use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
-use Code16\Sharp\Http\Api\FormController;
+use Code16\Sharp\Http\Api\FormController as ApiFormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\GlobalFilterController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
+use Code16\Sharp\Http\FormController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
 use Code16\Sharp\Http\LoginController;
@@ -79,21 +80,21 @@ Route::group([
     Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
 
-    Route::get('/form/{entityKey}', [FormController::class, 'create'])
-        ->name('code16.sharp.api.form.create')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
+//    Route::get('/form/{entityKey}', [ApiFormController::class, 'create'])
+//        ->name('code16.sharp.api.form.create')
+//        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
 
-    Route::post('/form/{entityKey}', [FormController::class, 'store'])
+    Route::post('/form/{entityKey}', [ApiFormController::class, 'store'])
         ->name('code16.sharp.api.form.store');
 
-    Route::get('/form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
+    Route::get('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'edit'])
         ->name('code16.sharp.api.form.edit')
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
 
-    Route::post('/form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
+    Route::post('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'update'])
         ->name('code16.sharp.api.form.update');
 
-    Route::delete('/form/{entityKey}/{instanceId?}', [FormController::class, 'delete'])
+    Route::delete('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'delete'])
         ->name('code16.sharp.api.form.delete');
 
     Route::get('/filters', [GlobalFilterController::class, 'index'])
