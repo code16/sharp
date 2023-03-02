@@ -13,11 +13,12 @@
     ],
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^8.64|^9.0|^10.0",
         "inertiajs/inertia-laravel": "^0.6.9",
         "intervention/image": "^2.5",
+        "laravel/framework": "^8.64|^9.0|^10.0",
+        "league/commonmark": "^2.0",
         "spatie/image-optimizer": "^1.2",
-        "league/commonmark": "^2.0"
+        "tightenco/ziggy": "^1.5"
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
