@@ -56,7 +56,7 @@ if(document.querySelector('[data-page]')) {
         resolve: name => require(`./Pages/${name}`),
         setup({ el, App, props, plugin }) {
             Vue.use(plugin);
-            // Vue.use(ZiggyVue, Ziggy);
+            Vue.use(ZiggyVue, Ziggy);
 
             new Vue({
                 render: h => h(App, props),

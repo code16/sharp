@@ -2,7 +2,7 @@
 
 
 @section('head')
-{{--    @routes--}}
+    @routes
     @inertiaHead
 @endsection
 

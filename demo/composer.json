@@ -10,7 +10,8 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "spatie/image-optimizer": "^1.6",
-        "spatie/laravel-translatable": "^5.2"
+        "spatie/laravel-translatable": "^5.2",
+        "tightenco/ziggy": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
