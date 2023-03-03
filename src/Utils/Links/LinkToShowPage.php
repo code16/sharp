@@ -18,6 +18,7 @@ class LinkToShowPage extends SharpLinkTo
     {
         // TODO refactor this
         return '';
+
         return route('code16.sharp.show', [
             'entityKey' => $this->entityKey,
             'uri' => $this->generateUri(),

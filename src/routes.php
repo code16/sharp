@@ -153,7 +153,7 @@ Route::group([
 
     Route::group([
         'prefix' => '/s-list/{uri}',
-        'where' => ['uri' => '.*']
+        'where' => ['uri' => '.*'],
     ], function () {
         Route::get('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show');
