@@ -2,7 +2,10 @@
     <Layout>
         <div class="FormPage">
             <div class="container">
-                <Form :form="form">
+                <Form :form="form"
+                    :entity-key="route().params.entityKey"
+                    :instance-id="route().params.instanceId"
+                >
                     <template v-slot:action-bar="{ props, listeners }">
                         <ActionBarForm v-bind="props" v-on="listeners" />
                     </template>

@@ -54,8 +54,6 @@ class ShowController extends SharpProtectedController
 
         return Inertia::render('Show', [
             'show' => $data,
-            'entityKey' => $entityKey,
-            'instanceId' => $instanceId,
         ]);
     }
 }

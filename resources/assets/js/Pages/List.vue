@@ -2,17 +2,15 @@
     <Layout>
         <div class="SharpEntityListPage" data-popover-boundary>
             <div class="container">
-                <template v-if="ready">
-                    <EntityList
-                        :entity-key="entityKey"
-                        :entity-list="entityList"
-                        module="entity-list"
-                    >
-                        <template v-slot:action-bar="{ props, listeners }">
-                            <ActionBarList v-bind="props" v-on="listeners" />
-                        </template>
-                    </EntityList>
-                </template>
+                <EntityList
+                    :entity-key="route().params.entityKey"
+                    :entity-list="entityList"
+                    module="entity-list"
+                >
+                    <template v-slot:action-bar="{ props, listeners }">
+                        <ActionBarList v-bind="props" v-on="listeners" />
+                    </template>
+                </EntityList>
             </div>
         </div>
     </Layout>
@@ -47,9 +45,6 @@
             ...mapGetters('entity-list', [
                 'query',
             ]),
-            entityKey() {
-                return route().params.entityKey;
-            },
         },
         methods: {
             handleQueryChanged(query) {
@@ -65,11 +60,10 @@
                 }
             },
         },
-        async created() {
-            await this.$store.dispatch('entity-list/setQuery', {
+        created() {
+            this.$store.dispatch('entity-list/setQuery', {
                 ...parseQuery(location.search),
             });
-            this.ready = true;
         },
     }
 </script>
