@@ -151,11 +151,11 @@ Route::group([
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
 
-    Route::get('/s-list/{entityKey}/{uri}s-show/{showEntityKey}/{instanceId}', [ShowController::class, 'show'])
+    Route::get('/s-list/{listEntityKey}/{uri}s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
         ->where('uri', '.*')
         ->name('code16.sharp.show');
 
-    Route::get('/s-list/{entityKey}/{uri}s-form/{formEntityKey}', [FormController::class, 'show'])
+    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}', [FormController::class, 'show'])
         ->where('uri', '.*')
         ->name('code16.sharp.form');
 
