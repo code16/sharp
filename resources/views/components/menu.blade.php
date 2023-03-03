@@ -8,12 +8,6 @@
 
 <sharp-left-nav
     class="SharpLeftNav"
-    @if($currentEntityItem)
-        :current-entity="{{ json_encode([
-            'label' => $currentEntityItem->getLabel(),
-            'icon' => $currentEntityItem->getIcon(),
-        ]) }}"
-    @endif
     title="{{ $title }}"
     :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >

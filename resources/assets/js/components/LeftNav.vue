@@ -49,7 +49,6 @@
         },
 
         props: {
-            currentEntity: Object,
             title: String,
             collapseable: {
                 type: Boolean,
@@ -74,11 +73,15 @@
                     this.state = val ? 'collapsing' : 'expanding';
                     setTimeout(this.updateState, 250);
                 }
-            }
+            },
+            currentEntity: 'init',
         },
         computed: {
             currentIcon() {
                 return this.currentEntity?.icon;
+            },
+            currentEntity() {
+                return this.$page.props.currentEntity;
             },
             classes() {
                 return [

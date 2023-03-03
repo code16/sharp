@@ -9,27 +9,44 @@
              </span>
          </template>
          <template v-else>
-             <a class="SharpLeftNav__item-link" :href="href" :target="target">
+             <component
+                 :is="target === '_blank' ? 'a' : Link"
+                 class="SharpLeftNav__item-link"
+                 :href="href"
+                 :target="target"
+             >
                  <slot></slot>
-             </a>
+             </component>
          </template>
      </li>
 </template>
 
 <script>
+    import { Link } from "@inertiajs/vue2";
+
     export default {
         name: 'SharpNavItem',
+        components: {
+            Link
+        },
         props: {
-            current: {
-                type:Boolean,
-                default: false
-            },
             disabled: {
                 type: Boolean,
                 default: false
             },
             href: String,
             target: String,
+            entityKey: String,
         },
+        data() {
+            return {
+                Link,
+            }
+        },
+        computed: {
+            current() {
+                return this.$page.props.currentEntity?.key === this.entityKey;
+            },
+        }
     }
 </script>
