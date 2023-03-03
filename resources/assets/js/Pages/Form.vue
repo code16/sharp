@@ -1,21 +1,25 @@
 <template>
-    <div class="FormPage">
-        <div class="container">
-            <Form :form="form">
-                <template v-slot:action-bar="{ props, listeners }">
-                    <ActionBarForm v-bind="props" v-on="listeners" />
-                </template>
-            </Form>
+    <Layout>
+        <div class="FormPage">
+            <div class="container">
+                <Form :form="form">
+                    <template v-slot:action-bar="{ props, listeners }">
+                        <ActionBarForm v-bind="props" v-on="listeners" />
+                    </template>
+                </Form>
+            </div>
         </div>
-    </div>
+    </Layout>
 </template>
 
 <script>
     import { Form } from "sharp-form";
     import ActionBarForm from 'sharp-form/src/components/ActionBar.vue';
+    import Layout from "../Layouts/Layout.vue";
 
     export default {
         components: {
+            Layout,
             Form,
             ActionBarForm,
         },

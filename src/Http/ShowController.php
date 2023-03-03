@@ -47,6 +47,7 @@ class ShowController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
             'notifications' => $this->getSharpNotifications(),
+            'breadcrumb' => ['items' => []],
         ];
 
         // TODO handle breadcrumb

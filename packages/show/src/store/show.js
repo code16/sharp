@@ -3,7 +3,7 @@ import { getShowView, postShowCommand, getShowCommandForm, postShowState } from 
 
 const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
 const SET_INSTANCE_ID = 'SET_INSTANCE_ID';
-const SET_SHOW = 'SET_SHOW_VIEW';
+const SET_SHOW = 'SET_SHOW';
 
 
 export default {

@@ -1,103 +1,105 @@
 <template>
-    <div class="ShowPage" :class="classes">
-        <div class="container">
-            <template v-if="ready">
-                <ActionBarShow
-                    :commands="authorizedCommands"
-                    :state="instanceState"
-                    :state-values="stateValues"
-                    :form-url="formUrl"
-                    :back-url="backUrl"
-                    :can-edit="canEdit"
-                    :can-change-state="canChangeState"
-                    :show-back-button="showBackButton"
-                    :breadcrumb="breadcrumbItems"
-                    :show-breadcrumb="breadcrumb.visible"
-                    :edit-disabled="isReordering"
-                    @command="handleCommandRequested"
-                    @state-change="handleStateChanged"
-                />
-
-                <template v-if="config.globalMessage">
-                    <GlobalMessage
-                        :options="config.globalMessage"
-                        :data="data"
-                        :fields="fields"
+    <Layout>
+        <div class="ShowPage" :class="classes">
+            <div class="container">
+                <template v-if="ready">
+                    <ActionBarShow
+                        :commands="authorizedCommands"
+                        :state="instanceState"
+                        :state-values="stateValues"
+                        :form-url="formUrl"
+                        :back-url="backUrl"
+                        :can-edit="canEdit"
+                        :can-change-state="canChangeState"
+                        :show-back-button="showBackButton"
+                        :breadcrumb="breadcrumbItems"
+                        :show-breadcrumb="breadcrumb.visible"
+                        :edit-disabled="isReordering"
+                        @command="handleCommandRequested"
+                        @state-change="handleStateChanged"
                     />
-                </template>
 
-                <div class="ShowPage__content">
-                    <template v-if="title || localized">
-                        <div :class="title ? 'mb-3' : 'mb-4'">
-                            <div class="row align-items-center gx-3 gx-md-4">
-                                <template v-if="localized">
-                                    <div class="col-auto">
-                                        <LocaleSelect
-                                            :locales="locales"
-                                            :locale="locale"
-                                            @change="handleLocaleChanged"
-                                        />
-                                    </div>
-                                </template>
-                                <template v-if="title">
-                                    <div class="col" style="min-width: 0">
-                                        <h1 class="mb-0 text-truncate h2" v-html="title"></h1>
-                                    </div>
-                                </template>
+                    <template v-if="config.globalMessage">
+                        <GlobalMessage
+                            :options="config.globalMessage"
+                            :data="data"
+                            :fields="fields"
+                        />
+                    </template>
+
+                    <div class="ShowPage__content">
+                        <template v-if="title || localized">
+                            <div :class="title ? 'mb-3' : 'mb-4'">
+                                <div class="row align-items-center gx-3 gx-md-4">
+                                    <template v-if="localized">
+                                        <div class="col-auto">
+                                            <LocaleSelect
+                                                :locales="locales"
+                                                :locale="locale"
+                                                @change="handleLocaleChanged"
+                                            />
+                                        </div>
+                                    </template>
+                                    <template v-if="title">
+                                        <div class="col" style="min-width: 0">
+                                            <h1 class="mb-0 text-truncate h2" v-html="title"></h1>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
-                        </div>
-                    </template>
+                        </template>
 
-                    <template v-for="section in layout.sections">
-                        <Section
-                            class="ShowPage__section"
-                            v-show="isSectionVisible(section)"
-                            :section="section"
-                            :layout="sectionLayout(section)"
-                            :fields-row-class="fieldsRowClass"
-                            :collapsable="isSectionCollapsable(section)"
-                            :commands="sectionCommands(section)"
-                            @command="handleCommandRequested"
-                            v-slot="{ fieldLayout }"
-                        >
-                            <template v-if="fieldOptions(fieldLayout)">
-                                <ShowField
-                                    :options="fieldOptions(fieldLayout)"
-                                    :value="fieldValue(fieldLayout)"
-                                    :locale="locale"
-                                    :locales="locales"
-                                    :config-identifier="fieldLayout.key"
-                                    :layout="fieldLayout"
-                                    :collapsable="section.collapsable"
-                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                    @reordering="handleReordering(fieldLayout.key, $event)"
-                                    :key="refreshKey"
-                                />
-                            </template>
-                            <template v-else>
-                                <UnknownField :name="fieldLayout.key" />
-                            </template>
-                        </Section>
-                    </template>
-                </div>
-            </template>
-            <template v-else>
-                <ActionBarShow />
-            </template>
+                        <template v-for="section in layout.sections">
+                            <Section
+                                class="ShowPage__section"
+                                v-show="isSectionVisible(section)"
+                                :section="section"
+                                :layout="sectionLayout(section)"
+                                :fields-row-class="fieldsRowClass"
+                                :collapsable="isSectionCollapsable(section)"
+                                :commands="sectionCommands(section)"
+                                @command="handleCommandRequested"
+                                v-slot="{ fieldLayout }"
+                            >
+                                <template v-if="fieldOptions(fieldLayout)">
+                                    <ShowField
+                                        :options="fieldOptions(fieldLayout)"
+                                        :value="fieldValue(fieldLayout)"
+                                        :locale="locale"
+                                        :locales="locales"
+                                        :config-identifier="fieldLayout.key"
+                                        :layout="fieldLayout"
+                                        :collapsable="section.collapsable"
+                                        @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                        @reordering="handleReordering(fieldLayout.key, $event)"
+                                        :key="refreshKey"
+                                    />
+                                </template>
+                                <template v-else>
+                                    <UnknownField :name="fieldLayout.key" />
+                                </template>
+                            </Section>
+                        </template>
+                    </div>
+                </template>
+                <template v-else>
+                    <ActionBarShow />
+                </template>
+            </div>
+
+            <CommandFormModal
+                :command="currentCommand"
+                :entity-key="entityKey"
+                :instance-id="instanceId"
+                v-bind="commandFormProps"
+                v-on="commandFormListeners"
+            />
+            <CommandViewPanel
+                :content="commandViewContent"
+                @close="handleCommandViewPanelClosed"
+            />
         </div>
-
-        <CommandFormModal
-            :command="currentCommand"
-            :entity-key="entityKey"
-            :instance-id="instanceId"
-            v-bind="commandFormProps"
-            v-on="commandFormListeners"
-        />
-        <CommandViewPanel
-            :content="commandViewContent"
-            @close="handleCommandViewPanelClosed"
-        />
-    </div>
+    </Layout>
 </template>
 
 <script>
@@ -112,11 +114,13 @@
     import ShowField from 'sharp-show/src/components/Field';
     import Section from "sharp-show/src/components/Section";
     import { router } from "@inertiajs/vue2";
+    import Layout from "../Layouts/Layout.vue";
 
     export default {
         mixins: [withCommands],
 
         components: {
+            Layout,
             Section,
             ActionBarShow,
             Grid,
