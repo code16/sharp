@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class EntityListController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    
+
     public function __construct(
         private SharpAuthorizationManager $sharpAuthorizationManager,
         private SharpEntityManager $entityManager,
@@ -27,7 +27,6 @@ class EntityListController extends SharpProtectedController
         $list->initQueryParams();
 
         $data = [
-            'entityKey' => $entityKey,
             'containers' => $list->fields(),
             'layout' => $list->listLayout(),
             'data' => $list->data(),
@@ -49,10 +48,12 @@ class EntityListController extends SharpProtectedController
             $data['data']['list']['items'],
             $data['config'],
         );
-        
+
         // TODO handle breadcrumb
 
-        return Inertia::render('List', $data);
+        return Inertia::render('List', [
+            'entityList' => $data,
+        ]);
     }
 
     private function getAuthorizationsForEntityList(string $entityKey, array $listItems, array $listConfig): array
@@ -115,7 +116,7 @@ class EntityListController extends SharpProtectedController
 
             return array_values($notifications);
         }
-        
+
         return [];
     }
 }

@@ -175,7 +175,7 @@
                 default: true,
             },
             focusedItem: Number,
-            initialData: Object,
+            entityList: Object,
         },
         data() {
             return {
@@ -212,6 +212,9 @@
                 if(visible && !this.ready) {
                     this.init();
                 }
+            },
+            entityList() {
+                this.init();
             },
         },
         computed: {
@@ -355,7 +358,7 @@
                 );
             },
             synchronous() {
-                return !!this.initialData;
+                return !!this.entityKey;
             },
         },
         methods: {
@@ -655,8 +658,8 @@
                 this.loading = true;
                 await this.storeDispatch('setEntityKey', this.entityKey);
                 // legacy
-                if(this.initialData) {
-                    this.mount(this.initialData);
+                if(this.entityList) {
+                    this.mount(this.entityList);
                     handleNotifications(this.data.notifications);
                 } else {
                     await this.get()

@@ -108,10 +108,10 @@
     import { LocaleSelect } from "sharp-form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
-    import ActionBarShow from "../ActionBar";
-
-    import ShowField from '../Field';
-    import Section from "../Section";
+    import ActionBarShow from "sharp-show/src/components/ActionBar.vue";
+    import ShowField from 'sharp-show/src/components/Field';
+    import Section from "sharp-show/src/components/Section";
+    import { router } from "@inertiajs/vue2";
 
     export default {
         mixins: [withCommands],
@@ -129,8 +129,6 @@
         },
 
         props: {
-            entityKey: String,
-            instanceId: String,
             show: Object,
         },
 
@@ -146,8 +144,6 @@
 
         computed: {
             ...mapGetters('show', [
-                'entityKey',
-                'instanceId',
                 'fields',
                 'layout',
                 'data',
@@ -165,6 +161,12 @@
                     'ShowPage--localized': this.localized,
                     'ShowPage--title': this.title,
                 }
+            },
+            entityKey() {
+                return route().params.entityKey;
+            },
+            instanceId() {
+                return route().params.instanceId;
             },
             formUrl() {
                 const formKey = this.config.multiformAttribute
@@ -296,7 +298,7 @@
                     });
             },
             handleRefreshCommand() {
-                this.init();
+                router.reload();
             },
             initCommands() {
                 this.addCommandActionHandlers({
@@ -310,19 +312,12 @@
                 }
             },
             async init() {
-                await this.$store.dispatch('show/setEntityKey', this.entityKey ?? this.$route.params.entityKey);
-                await this.$store.dispatch('show/setInstanceId', this.instanceId ?? this.$route.params.instanceId);
+                this.$store.commit('show/SET_ENTITY_KEY', this.entityKey);
+                this.$store.commit('show/SET_INSTANCE_ID', this.instanceId);
+                this.$store.commit('show/SET_SHOW', this.show);
 
-                const show = this.show ?? await withLoadingOverlay(
-                    this.$store.dispatch('show/get')
-                        .catch(error => {
-                            this.$emit('error', error);
-                            return Promise.reject(error);
-                        })
-                );
-
-                handleNotifications(show.notifications);
-                this.updateDocumentTitle(show);
+                handleNotifications(this.show.notifications);
+                this.updateDocumentTitle(this.show);
                 if(this.localized) {
                     this.locale = this.locales?.[0];
                 }

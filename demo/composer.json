@@ -10,10 +10,12 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "spatie/image-optimizer": "^1.6",
-        "spatie/laravel-translatable": "^5.2"
+        "spatie/laravel-translatable": "^5.2",
+        "tightenco/ziggy": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "itsgoingd/clockwork": "^5.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",

@@ -24,6 +24,8 @@ use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
 use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
 use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
+use Code16\Sharp\Http\Middleware\ConfigureZiggy;
+use Code16\Sharp\Http\Middleware\HandleInertiaRequests;
 use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
@@ -114,7 +116,8 @@ class SharpServiceProvider extends ServiceProvider
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Code16\Sharp\Http\Middleware\HandleInertiaRequests::class,
+            HandleInertiaRequests::class,
+            ConfigureZiggy::class,
         ]);
 
         $this->app['router']

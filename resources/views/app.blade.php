@@ -2,6 +2,7 @@
 
 
 @section('head')
+    @routes
     @inertiaHead
 @endsection
 

@@ -23,6 +23,7 @@ import {
 import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
 import { createInertiaApp } from "@inertiajs/vue2";
+import { ZiggyVue } from '../../../vendor/tightenco/ziggy/dist/vue.m';
 
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
@@ -55,6 +56,7 @@ if(document.querySelector('[data-page]')) {
         resolve: name => require(`./Pages/${name}`),
         setup({ el, App, props, plugin }) {
             Vue.use(plugin);
+            Vue.use(ZiggyVue, Ziggy);
 
             new Vue({
                 render: h => h(App, props),
