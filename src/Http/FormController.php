@@ -54,6 +54,8 @@ class FormController extends SharpProtectedController
 
         // TODO handle breadcrumb
 
-        return Inertia::render('Form', $data);
+        return Inertia::render('Form', [
+            'form' => $data,
+        ]);
     }
 }

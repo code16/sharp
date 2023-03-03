@@ -27,7 +27,6 @@ class EntityListController extends SharpProtectedController
         $list->initQueryParams();
 
         $data = [
-            'entityKey' => $entityKey,
             'containers' => $list->fields(),
             'layout' => $list->listLayout(),
             'data' => $list->data(),
@@ -52,7 +51,9 @@ class EntityListController extends SharpProtectedController
 
         // TODO handle breadcrumb
 
-        return Inertia::render('List', $data);
+        return Inertia::render('List', [
+            'entityList' => $data,
+        ]);
     }
 
     private function getAuthorizationsForEntityList(string $entityKey, array $listItems, array $listConfig): array

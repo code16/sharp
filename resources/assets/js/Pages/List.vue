@@ -5,11 +5,11 @@
                 <template v-if="ready">
                     <EntityList
                         :entity-key="entityKey"
-                        :initial-data="$props"
+                        :entity-list="entityList"
                         module="entity-list"
                     >
                         <template v-slot:action-bar="{ props, listeners }">
-                            <ActionBar v-bind="props" v-on="listeners" />
+                            <ActionBarList v-bind="props" v-on="listeners" />
                         </template>
                     </EntityList>
                 </template>
@@ -21,7 +21,7 @@
 <script>
     import Layout from "../Layouts/Layout.vue";
     import { EntityList } from "sharp-entity-list";
-    import ActionBar from "sharp-entity-list/src/components/ActionBar.vue";
+    import ActionBarList from "sharp-entity-list/src/components/ActionBar.vue";
     import { router } from "@inertiajs/vue2";
     import { mapGetters } from "vuex";
     import { parseQuery, stringifyQuery } from "../util/querystring";
@@ -30,17 +30,10 @@
         components: {
             Layout,
             EntityList,
-            ActionBar,
+            ActionBarList,
         },
         props: {
-            entityKey: String,
-            containers: null,
-            layout: null,
-            data: null,
-            fields: null,
-            config: null,
-            authorizations: null,
-            forms: null,
+            entityList: Object,
         },
         data() {
             return {
@@ -54,6 +47,9 @@
             ...mapGetters('entity-list', [
                 'query',
             ]),
+            entityKey() {
+                return route().params.entityKey;
+            },
         },
         methods: {
             handleQueryChanged(query) {

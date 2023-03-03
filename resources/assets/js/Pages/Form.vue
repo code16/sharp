@@ -1,15 +1,9 @@
 <template>
     <div class="FormPage">
         <div class="container">
-            <Form
-                :form.sync="form"
-                :entity-key="entityKey"
-                :instance-id="instanceId"
-                @update:form="handleFormUpdated"
-                @error="handleError"
-            >
+            <Form :form="form">
                 <template v-slot:action-bar="{ props, listeners }">
-                    <ActionBar v-bind="props" v-on="listeners" />
+                    <ActionBarForm v-bind="props" v-on="listeners" />
                 </template>
             </Form>
         </div>
@@ -18,29 +12,17 @@
 
 <script>
     import { Form } from "sharp-form";
-    import ActionBar from 'sharp-form/src/components/ActionBar.vue';
+    import ActionBarForm from 'sharp-form/src/components/ActionBar.vue';
 
     export default {
+        components: {
+            Form,
+            ActionBarForm,
+        },
         props: {
             entityKey: String,
             instanceId: String,
-        },
-        components: {
-            Form,
-            ActionBar,
-        },
-        data() {
-            return {
-                form: null,
-            }
-        },
-        computed: {
-            entityKey() {
-                return this.$route.params.entityKey;
-            },
-            instanceId() {
-                return this.$route.params.instanceId;
-            }
+            form: Object,
         },
         methods: {
         }

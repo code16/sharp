@@ -51,6 +51,8 @@ class ShowController extends SharpProtectedController
 
         // TODO handle breadcrumb
 
-        return Inertia::render('Show', $data);
+        return Inertia::render('Show', [
+            'show' => $data,
+        ]);
     }
 }

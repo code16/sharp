@@ -128,6 +128,12 @@
             LocaleSelect,
         },
 
+        props: {
+            entityKey: String,
+            instanceId: String,
+            show: Object,
+        },
+
         data() {
             return {
                 ready: false,
@@ -304,10 +310,10 @@
                 }
             },
             async init() {
-                await this.$store.dispatch('show/setEntityKey', this.$route.params.entityKey);
-                await this.$store.dispatch('show/setInstanceId', this.$route.params.instanceId);
+                await this.$store.dispatch('show/setEntityKey', this.entityKey ?? this.$route.params.entityKey);
+                await this.$store.dispatch('show/setInstanceId', this.instanceId ?? this.$route.params.instanceId);
 
-                const show = await withLoadingOverlay(
+                const show = this.show ?? await withLoadingOverlay(
                     this.$store.dispatch('show/get')
                         .catch(error => {
                             this.$emit('error', error);
