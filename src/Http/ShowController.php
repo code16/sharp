@@ -18,7 +18,7 @@ class ShowController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $entityKey, string $instanceId = null)
+    public function show(string $uri, string $entityKey, string $instanceId = null)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
@@ -53,6 +53,8 @@ class ShowController extends SharpProtectedController
 
         return Inertia::render('Show', [
             'show' => $data,
+            'entityKey' => $entityKey,
+            'instanceId' => $instanceId,
         ]);
     }
 }

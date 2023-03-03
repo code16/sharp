@@ -18,7 +18,7 @@ class FormController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $entityKey, string $instanceId = null)
+    public function show(string $uri, string $entityKey, string $instanceId = null)
     {
         sharp_check_ability(
             $this->entityManager->entityFor($entityKey)->hasShow() ? 'update' : 'view',

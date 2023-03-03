@@ -151,13 +151,24 @@ Route::group([
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
 
-    Route::get('/s-list/{listEntityKey}/{uri}s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
-        ->where('uri', '.*')
-        ->name('code16.sharp.show');
+    Route::group([
+        'prefix' => '/s-list/{uri}',
+        'where' => ['uri' => '.*']
+    ], function () {
+        Route::get('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
+            ->name('code16.sharp.show');
 
-    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
-        ->where('uri', '.*')
-        ->name('code16.sharp.form');
+        Route::get('/s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
+            ->name('code16.sharp.form');
+    });
+
+//    Route::get('/s-list/{uri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
+//        ->where('uri', '.*')
+//        ->name('code16.sharp.show');
+
+//    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
+//        ->where('uri', '.*')
+//        ->name('code16.sharp.form');
 
     Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
         ->where('uri', '.*')
