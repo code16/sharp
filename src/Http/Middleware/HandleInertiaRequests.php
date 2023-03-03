@@ -13,7 +13,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         $currentEntityItem = app(Menu::class)->getEntityMenuItem(currentSharpRequest()->breadcrumb()->first()->key ?? null);
-        
+
         return array_merge(
             parent::share($request),
             [
