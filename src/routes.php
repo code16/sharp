@@ -155,7 +155,7 @@ Route::group([
         ->where('uri', '.*')
         ->name('code16.sharp.show');
 
-    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}', [FormController::class, 'show'])
+    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
         ->where('uri', '.*')
         ->name('code16.sharp.form');
 
