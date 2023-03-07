@@ -189,17 +189,17 @@
             },
             emitClear(identifier) {
                 this.$tab?.$emit('clear', identifier);
-                this.$form.$emit('error-cleared', identifier);
+                this.$form.updateFieldError(identifier, null);
             },
             triggerFocus() {
-                this.$set(this.fieldProps,'focused',true);
+                this.$set(this.fieldProps, 'focused', true);
             },
             handleBlur() {
-                this.$set(this.fieldProps,'focused',false);
+                this.$set(this.fieldProps, 'focused', false);
             },
             handleValueChanged(value, { error } = {}) {
                 if(error) {
-                    this.setError(error);
+                    this.$form.updateFieldError(this.mergedLocalizedErrorIdentifier ?? this.mergedErrorIdentifier, [error]);
                 } else if(this.state === 'error') {
                     this.clear();
                 }

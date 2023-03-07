@@ -106,6 +106,12 @@
         },
         methods: {
             lang,
+            validate() {
+                if(this.maxLength && !this.showCount && this.characterCount > this.maxLength) {
+                    return lang('form.text.validation.maxlength').replace(':maxlength', this.maxLength);
+                }
+                return null;
+            },
             handleFocus() {
                 this.firstFocus = false;
             },
@@ -126,7 +132,8 @@
                 }
             },
             handleUpdated() {
-                this.$emit('update', this.editor);
+                const error = this.validate();
+                this.$emit('update', this.editor, { error });
             },
         },
         async mounted() {

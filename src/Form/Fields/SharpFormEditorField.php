@@ -151,7 +151,7 @@ class SharpFormEditorField extends SharpFormField
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
                     'inline' => $this->withoutParagraphs,
-                    'showCount' => $this->showCount || $this->maxLength != null,
+                    'showCount' => $this->showCount,
                     'maxLength' => $this->maxLength,
                     'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),
