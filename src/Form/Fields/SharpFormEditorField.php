@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Fields;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
@@ -13,7 +14,8 @@ class SharpFormEditorField extends SharpFormField
     use SharpFormFieldWithPlaceholder,
         SharpFormFieldWithUpload,
         SharpFormFieldWithDataLocalization,
-        SharpFormFieldWithEmbeds;
+        SharpFormFieldWithEmbeds,
+        SharpFormFieldWithMaxLength;
 
     const FIELD_TYPE = 'editor';
 
@@ -56,6 +58,7 @@ class SharpFormEditorField extends SharpFormField
     protected bool $showToolbar = true;
     protected bool $renderAsMarkdown = false;
     protected bool $withoutParagraphs = false;
+    protected bool $showCount = false;
 
     public static function make(string $key): self
     {
@@ -96,6 +99,13 @@ class SharpFormEditorField extends SharpFormField
 
         return $this;
     }
+    
+    public function setShowCount(bool $showCount = true): self
+    {
+        $this->showCount = $showCount;
+        
+        return $this;
+    }
 
     public function setWithoutParagraphs(bool $withoutParagraphs = true): self
     {
@@ -125,6 +135,7 @@ class SharpFormEditorField extends SharpFormField
             'transformKeepOriginal' => 'boolean',
             'markdown' => 'boolean',
             'inline' => 'boolean',
+            'showCount' => 'boolean',
         ];
     }
 
@@ -140,6 +151,8 @@ class SharpFormEditorField extends SharpFormField
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
                     'inline' => $this->withoutParagraphs,
+                    'showCount' => $this->showCount || $this->maxLength != null,
+                    'maxLength' => $this->maxLength,
                     'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),
                         $this->innerComponentEmbedsConfiguration()

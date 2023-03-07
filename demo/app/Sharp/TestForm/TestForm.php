@@ -130,6 +130,8 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormEditorField::make('markdown')
                     ->setRenderContentAsMarkdown()
+                    ->setShowCount()
+                    ->setMaxLength(200)
                     ->setLocalized()
                     ->setLabel('Markdown')
                     ->setToolbar([
@@ -163,6 +165,28 @@ class TestForm extends SharpSingleForm
                     ->setHeight(350)
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
+            )
+            ->addField(
+                SharpFormEditorField::make('wysiwyg')
+                    ->setRenderContentAsMarkdown(false)
+                    ->setShowCount()
+                    ->setLocalized()
+                    ->setLabel('Wysiwyg')
+                    ->setToolbar([
+                        SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::H1,
+                        SharpFormEditorField::OL,
+                        SharpFormEditorField::UL,
+                        SharpFormEditorField::UPLOAD,
+                        SharpFormEditorField::QUOTE,
+                        SharpFormEditorField::CODE,
+                        SharpFormEditorField::SEPARATOR,
+                        SharpFormEditorField::CODE_BLOCK,
+                    ])
+//                    ->hideToolbar()
+//                    ->setWithoutParagraphs()
+                    ->setHeight(350, 0),
             )
             ->addField(
                 SharpFormNumberField::make('number')
@@ -213,27 +237,6 @@ class TestForm extends SharpSingleForm
                     ->setCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
-            )
-            ->addField(
-                SharpFormEditorField::make('wysiwyg')
-                    ->setRenderContentAsMarkdown(false)
-                    ->setLocalized()
-                    ->setLabel('Wysiwyg')
-                    ->setToolbar([
-                        SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::A,
-                        SharpFormEditorField::SEPARATOR,
-                        SharpFormEditorField::H1,
-                        SharpFormEditorField::OL,
-                        SharpFormEditorField::UL,
-                        SharpFormEditorField::UPLOAD,
-                        SharpFormEditorField::QUOTE,
-                        SharpFormEditorField::CODE,
-                        SharpFormEditorField::SEPARATOR,
-                        SharpFormEditorField::CODE_BLOCK,
-                    ])
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
-                    ->setHeight(350, 0),
             );
     }
 

@@ -23,6 +23,8 @@ export const editorProps = {
     inline: Boolean,
     uniqueIdentifier: String,
     fieldConfigIdentifier: String,
+    showCount: Boolean,
+    maxLength: Number,
 }
 
 export * from './extensions';

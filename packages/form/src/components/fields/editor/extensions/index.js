@@ -1,4 +1,4 @@
-import { getExtensionField, getSchema } from "@tiptap/core";
+import { Extension, getExtensionField, getSchema } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Heading } from "@tiptap/extension-heading";
 import { HardBreak } from "@tiptap/extension-hard-break";
@@ -19,6 +19,7 @@ import { TrailingNode } from "./trailing-node";
 import { Iframe } from "./iframe/iframe";
 import { Paste } from "./paste";
 import { Small } from "./small";
+import CharacterCount from '@tiptap/extension-character-count';
 import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
 
 
@@ -144,6 +145,16 @@ function getTrailingNodeExtension({ inline }) {
     }
 }
 
+function getCharacterCountExtension() {
+    return Extension.create({
+        addExtensions() { // use addExtension to ensure unique state
+            return [
+                CharacterCount.configure(),
+            ]
+        }
+    });
+}
+
 function getStarterKitExtensions(toolbar) {
     const bulletList = toolbarHasButton(toolbar, 'bullet-list');
     const orderedList = toolbarHasButton(toolbar, 'ordered-list');
@@ -196,6 +207,7 @@ export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
         getPasteExtension({ toolbar, inline }),
         getPlaceholderExtension(placeholder),
         getTrailingNodeExtension({ inline }),
+        getCharacterCountExtension(),
         Html,
         Selected,
     ];
