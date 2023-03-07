@@ -79,6 +79,8 @@
 
     import { getDependantFieldsResetData, transformFields } from "../util";
 
+    const isLocal = Symbol('isLocal');
+
     export default {
         name: 'SharpForm',
         extends: DynamicView,
@@ -172,7 +174,7 @@
                 return this.independant;
             },
             hasErrors() {
-                return Object.values(this.errors).some(error => !!error);
+                return Object.values(this.errors).some(error => !!error && !error[isLocal]);
             },
 
             baseEntityKey() {
@@ -248,6 +250,15 @@
             },
             updateLocale(key, locale) {
                 this.$set(this.fieldLocale, key, locale);
+            },
+            updateFieldError(key, error) { // used in FieldContainer
+                if(error) {
+                    error[isLocal] = true;
+                }
+                this.errors = {
+                    ...this.errors,
+                    [key]: error,
+                };
             },
             handleLocaleChanged(locale) {
                 this.fieldLocale = this.defaultFieldLocaleMap({ fields: this.fields, locales: this.locales }, locale);
@@ -418,12 +429,6 @@
             },
         },
         created() {
-            this.$on('error-cleared', errorId => {
-                this.errors = {
-                    ...this.errors,
-                    [errorId]: null,
-                }
-            });
             this.init();
         },
     }
