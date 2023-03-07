@@ -17,7 +17,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
                 'key' => 'text',
                 'type' => 'editor',
                 'minHeight' => 200,
-                'showCount' => false,
+                'showCharacterCount' => false,
                 'toolbar' => [
                     SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
                     SharpFormEditorField::UL,
