@@ -144,7 +144,7 @@ class SharpFormEditorField extends SharpFormField
             'transformKeepOriginal' => 'boolean',
             'markdown' => 'boolean',
             'inline' => 'boolean',
-            'showCount' => 'boolean',
+            'showCharacterCount' => 'boolean',
         ];
     }
 
@@ -160,7 +160,7 @@ class SharpFormEditorField extends SharpFormField
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
                     'inline' => $this->withoutParagraphs,
-                    'showCount' => $this->showCharacterCount,
+                    'showCharacterCount' => $this->showCharacterCount,
                     'maxLength' => $this->maxLength,
                     'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),

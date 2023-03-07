@@ -22,7 +22,7 @@
                 </template>
             </template>
 
-            <template v-if="editor && showCount">
+            <template v-if="editor && showCharacterCount">
                 <div class="card-footer fs-8 text-muted bg-white">
                     <template v-if="maxLength">
                         <span :class="{ 'text-danger': characterCount > maxLength }">
@@ -47,7 +47,6 @@
     import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
     import { lang } from "sharp";
-    import { validateTextField } from "../../../util/validation";
 
     export default {
         inheritAttrs: false,
@@ -69,7 +68,7 @@
             readOnly: Boolean,
             toolbarOptions: Array,
             embeds: Object,
-            showCount: Boolean,
+            showCharacterCount: Boolean,
             maxLength: Number,
         },
         data() {
@@ -107,7 +106,7 @@
         methods: {
             lang,
             validate() {
-                if(this.maxLength && !this.showCount && this.characterCount > this.maxLength) {
+                if(this.maxLength && !this.showCharacterCount && this.characterCount > this.maxLength) {
                     return lang('form.text.validation.maxlength').replace(':maxlength', this.maxLength);
                 }
                 return null;

@@ -23,7 +23,7 @@ export const editorProps = {
     inline: Boolean,
     uniqueIdentifier: String,
     fieldConfigIdentifier: String,
-    showCount: Boolean,
+    showCharacterCount: Boolean,
     maxLength: Number,
 }
 

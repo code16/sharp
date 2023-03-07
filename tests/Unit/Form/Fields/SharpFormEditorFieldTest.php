@@ -208,12 +208,12 @@ class SharpFormEditorFieldTest extends SharpTestCase
     public function we_can_define_maxLength_and_showCount()
     {
         $this->assertArraySubset(
-            ['maxLength' => 500, 'showCount' => true],
+            ['maxLength' => 500, 'showCharacterCount' => true],
             SharpFormEditorField::make('text')->setMaxLength(500)->toArray(),
         );
 
         $this->assertArraySubset(
-            ['showCount' => true],
+            ['showCharacterCount' => true],
             SharpFormEditorField::make('text')->showCharacterCount()->toArray(),
         );
     }
