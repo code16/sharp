@@ -17,6 +17,7 @@ class SharpFormEditorFieldTest extends SharpTestCase
                 'key' => 'text',
                 'type' => 'editor',
                 'minHeight' => 200,
+                'showCount' => false,
                 'toolbar' => [
                     SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
                     SharpFormEditorField::UL,
@@ -200,6 +201,20 @@ class SharpFormEditorFieldTest extends SharpTestCase
         $this->assertArraySubset(
             ['inline' => true],
             $formField->toArray(),
+        );
+    }
+
+    /** @test */
+    public function we_can_define_maxLength_and_showCount()
+    {
+        $this->assertArraySubset(
+            ['maxLength' => 500, 'showCount' => true],
+            SharpFormEditorField::make('text')->setMaxLength(500)->toArray(),
+        );
+
+        $this->assertArraySubset(
+            ['showCount' => true],
+            SharpFormEditorField::make('text')->showCharacterCount()->toArray(),
         );
     }
 }
