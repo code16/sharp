@@ -99,11 +99,11 @@ class SharpFormEditorField extends SharpFormField
 
         return $this;
     }
-    
+
     public function setShowCount(bool $showCount = true): self
     {
         $this->showCount = $showCount;
-        
+
         return $this;
     }
 
