@@ -28,7 +28,7 @@ class InjectedAssets extends Component
      *
      * @var array
      */
-    protected $renderStrategies = ['raw', 'asset', 'mix'];
+    protected $renderStrategies = ['raw', 'asset', 'mix', 'vite'];
 
     /**
      * The templates to inject asset paths into based on file type.
@@ -114,7 +114,9 @@ class InjectedAssets extends Component
             case 'mix':
                 return $strategy($assetPath);
                 break;
-
+            case 'vite':
+                return app('Illuminate\Foundation\Vite')->asset($assetPath);
+                break;
             default:
                 return $assetPath;
                 break;
