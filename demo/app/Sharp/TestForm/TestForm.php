@@ -168,7 +168,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormEditorField::make('wysiwyg')
                     ->setRenderContentAsMarkdown(false)
-                    ->setShowCount()
+                    ->showCharacterCount()
                     ->setLocalized()
                     ->setLabel('Wysiwyg')
                     ->setToolbar([
