@@ -67,7 +67,6 @@
             :value="value"
             :visible.sync="showEditModal"
             :src="originalImageSrc"
-            :transform-original="transformKeepOriginal"
             :ratio-x="ratioX"
             :ratio-y="ratioY"
             @submit="handleEditSubmitted"
