@@ -225,6 +225,7 @@ class UploadFormatterTest extends SharpTestCase
             [
                 'filters' => [],
                 'file_name' => 'data/Test/image-1.jpg',
+                'disk' => 'local',
                 'size' => 6467,
             ],
             (new UploadFormatter)
@@ -234,6 +235,7 @@ class UploadFormatterTest extends SharpTestCase
                     [
                         'name' => 'image.jpg',
                         'path' => 'data/Test/image.jpg',
+                        'disk' => 'local',
                         'uploaded' => false,
                         'transformed' => true,
                         'size' => $originalSize,

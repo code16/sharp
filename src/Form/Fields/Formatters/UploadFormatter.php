@@ -175,6 +175,7 @@ class UploadFormatter extends SharpFieldFormatter
             : [
                 'file_name' => $data['path'],
                 'size' => $data['size'],
+                'disk' => $data['disk'],
                 'filters' => $data['filters'] ?? null
             ];
     }
