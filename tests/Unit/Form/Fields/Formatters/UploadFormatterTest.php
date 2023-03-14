@@ -57,7 +57,7 @@ class UploadFormatterTest extends SharpTestCase
                 [
                     'name' => 'test.png',
                 ]),
-            );
+        );
     }
 
     /** @test */
@@ -255,10 +255,10 @@ class UploadFormatterTest extends SharpTestCase
         );
 
         $this->assertNotEquals(
-            $originalSize, 
+            $originalSize,
             Storage::disk('local')->size('data/Test/image-1.jpg')
         );
-        
+
         $this->assertFalse(Storage::disk('local')->exists('data/Test/image.jpg'));
     }
 
