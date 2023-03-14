@@ -101,7 +101,7 @@ class UploadFormatter extends SharpFieldFormatter
                     dirname($value['path']),
                     $field->storageDisk(),
                 );
-                $newPath = dirname($value['path']) . '/' . $newName;
+                $newPath = dirname($value['path']).'/'.$newName;
 
                 $storage->put(
                     $newPath,
@@ -110,11 +110,11 @@ class UploadFormatter extends SharpFieldFormatter
 
                 // Delete old file
                 $storage->delete($value['path']);
-                
+
                 $value['path'] = $newPath;
                 $value['name'] = $newName;
             }
-            
+
             return $this->returnAfterTransformation($value);
         }
 
@@ -176,7 +176,7 @@ class UploadFormatter extends SharpFieldFormatter
                 'file_name' => $data['path'],
                 'size' => $data['size'],
                 'disk' => $data['disk'],
-                'filters' => $data['filters'] ?? null
+                'filters' => $data['filters'] ?? null,
             ];
     }
 

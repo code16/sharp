@@ -154,8 +154,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function single_forms_are_declared_in_config()
     {
-        $sharpForm = new class extends BaseSharpSingleForm
-        {
+        $sharpForm = new class extends BaseSharpSingleForm {
         };
 
         $sharpForm->buildFormConfig();
