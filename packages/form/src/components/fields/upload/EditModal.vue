@@ -71,7 +71,6 @@
             value: Object,
             visible: Boolean,
             src: String,
-            transformOriginal: Boolean,
             ratioX: Number,
             ratioY: Number,
         },
@@ -101,6 +100,7 @@
                     guides: false,
                     background: true,
                     rotatable: true,
+                    restore: false, // reset crop area on resize because it's buggy
                     data: this.cropData,
                     ready: this.handleCropperReady,
                 }
@@ -140,8 +140,8 @@
                             disk: this.value.disk,
                         }
                     ],
-                    thumbnailWidth: 800,
-                    thumbnailHeight: 600,
+                    thumbnailWidth: 1200,
+                    thumbnailHeight: 1000,
                 });
 
                 this.originalImg = files[0]?.thumbnail;
@@ -169,14 +169,17 @@
             },
             async init() {
                 this.ready = false;
-                if(this.transformOriginal && this.value?.path) {
+                if(this.value?.path) {
                     await this.initOriginalThumbnail();
                 }
                 this.ready = true;
             },
             handleCropperReady() {
+                /**
+                 * @type import('cropperjs/types/index').Cropper
+                 */
+                const cropper = this.$refs.cropper.cropper;
                 if(this.cropData?.rotate) {
-                    const cropper = this.$refs.cropper.cropper;
                     rotateTo(cropper, this.cropData.rotate);
                     cropper.setData(this.cropData);
                 }

@@ -57,7 +57,7 @@ class UploadFormatterTest extends SharpTestCase
                 [
                     'name' => 'test.png',
                 ]),
-            );
+        );
     }
 
     /** @test */
@@ -222,15 +222,23 @@ class UploadFormatterTest extends SharpTestCase
             ->setStorageBasePath('data/Test');
 
         $this->assertEquals(
-            ['filters' => []],
+            [
+                'filters' => [],
+                'file_name' => 'data/Test/image-1.jpg',
+                'disk' => 'local',
+                'size' => 6467,
+            ],
             (new UploadFormatter)
                 ->fromFront(
                     $field,
                     'attribute',
                     [
-                        'name' => 'data/Test/image.jpg',
+                        'name' => 'image.jpg',
+                        'path' => 'data/Test/image.jpg',
+                        'disk' => 'local',
                         'uploaded' => false,
                         'transformed' => true,
+                        'size' => $originalSize,
                         'filters' => [
                             'crop' => [
                                 'height' => .5,
@@ -246,7 +254,12 @@ class UploadFormatterTest extends SharpTestCase
                 ),
         );
 
-        $this->assertNotEquals($originalSize, Storage::disk('local')->size('data/Test/image.jpg'));
+        $this->assertNotEquals(
+            $originalSize,
+            Storage::disk('local')->size('data/Test/image-1.jpg')
+        );
+
+        $this->assertFalse(Storage::disk('local')->exists('data/Test/image.jpg'));
     }
 
     /** @test */

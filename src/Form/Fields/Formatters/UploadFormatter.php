@@ -95,10 +95,24 @@ class UploadFormatter extends SharpFieldFormatter
             // Existing image, but transformed (with filters)
             if ($field->isTransformOriginal()) {
                 // Field was configured to handle transformation on the source image
-                $storage->put(
+                // In this case we create a new copy of the file to avoid cache
+                $newName = $this->fileUtil->findAvailableName(
                     $value['name'],
-                    $this->handleImageTransformations($storage->get($value['name']), $value),
+                    dirname($value['path']),
+                    $field->storageDisk(),
                 );
+                $newPath = dirname($value['path']).'/'.$newName;
+
+                $storage->put(
+                    $newPath,
+                    $this->handleImageTransformations($storage->get($value['path']), $value),
+                );
+
+                // Delete old file
+                $storage->delete($value['path']);
+
+                $value['path'] = $newPath;
+                $value['name'] = $newName;
             }
 
             return $this->returnAfterTransformation($value);
@@ -158,7 +172,12 @@ class UploadFormatter extends SharpFieldFormatter
     {
         return $this->alwaysReturnFullObject
             ? $data
-            : ['filters' => $data['filters'] ?? null];
+            : [
+                'file_name' => $data['path'],
+                'size' => $data['size'],
+                'disk' => $data['disk'],
+                'filters' => $data['filters'] ?? null,
+            ];
     }
 
     protected function returnAfterNoChangeWasMade(?array $data): ?array

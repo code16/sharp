@@ -330,8 +330,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends BaseSharpSingleShowDefaultTest
-        {
+        $sharpShow = new class extends BaseSharpSingleShowDefaultTest {
         };
 
         $this->assertArraySubset(
