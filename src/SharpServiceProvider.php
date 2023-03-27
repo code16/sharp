@@ -7,8 +7,11 @@ use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
 use Code16\Sharp\Console\EntityListMakeCommand;
+use Code16\Sharp\Console\EntityPolicyCommand;
+use Code16\Sharp\Console\EntityWizardCommand;
 use Code16\Sharp\Console\FormMakeCommand;
 use Code16\Sharp\Console\InstanceCommandMakeCommand;
+use Code16\Sharp\Console\MakeEntityCommand;
 use Code16\Sharp\Console\MediaMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
@@ -96,6 +99,9 @@ class SharpServiceProvider extends ServiceProvider
             ValidatorMakeCommand::class,
             EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
+            EntityWizardCommand::class,
+            MakeEntityCommand::class,
+            EntityPolicyCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravelRecent::class);
