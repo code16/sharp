@@ -1,0 +1,18 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Sharp\DummyModelPluralName\DummyModelNameForm;
+use App\Sharp\DummyModelPluralName\DummyModelNameList;
+use App\Sharp\DummyModelPluralName\DummyModelNamePolicy;
+use App\Sharp\DummyModelPluralName\DummyModelNameShow;
+use Code16\Sharp\Utils\Entities\SharpEntity;
+
+class DummyClass extends SharpEntity
+{
+    public string $label = "DummyModelName";
+    protected ?string $list = DummyModelNameList::class;
+    protected ?string $form = DummyModelNameForm::class;
+    // protected ?string $show = DummyModelNameShow::class;
+    // protected ?string $policy = DummyModelNamePolicy::class;
+}
