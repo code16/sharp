@@ -37,7 +37,7 @@ class EntityWizardCommand extends Command
 
         if ($this->option('policy') || $this->confirm('Would you like to generate a policy class for this model?')) {
             $policyClass = $this->ask('Policy class name', "{$pluralModelClass}/{$modelClass}Policy");
-            $this->call('sharp:make:policy', ['name' => $policyClass, '--model' => $fullModelClass]);
+            $this->call('sharp:make:policy', ['name' => $policyClass]);
             $config->push(['policy' => "\\{$this->parseClassname($policyClass, 'Sharp')}::class"]);
         }
 
