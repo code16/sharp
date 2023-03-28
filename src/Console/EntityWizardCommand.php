@@ -2,11 +2,10 @@
 
 namespace Code16\Sharp\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Support\Facades\Log;
 
 class EntityWizardCommand extends Command
 {
@@ -75,7 +74,6 @@ class EntityWizardCommand extends Command
             $class = $namespace.$class;
         }
 
-        Log::debug($class);
         return $class;
     }
 
