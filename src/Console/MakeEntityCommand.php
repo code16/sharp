@@ -4,8 +4,8 @@ namespace Code16\Sharp\Console;
 
 use Code16\Sharp\Console\Utils\WithModel;
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\InputOption;
 
 class MakeEntityCommand extends GeneratorCommand
 {
@@ -25,7 +25,7 @@ class MakeEntityCommand extends GeneratorCommand
         $replace = $this->buildModelReplacements($replace);
         $replace = array_merge($replace, [
             'DummyModelName' => ucfirst(class_basename($inputModelClass)),
-            'DummyModelPluralName' => ucfirst(class_basename($pluralModelClass))
+            'DummyModelPluralName' => ucfirst(class_basename($pluralModelClass)),
         ]);
 
         return str_replace(
