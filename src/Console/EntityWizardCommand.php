@@ -9,13 +9,11 @@ use Symfony\Component\Console\Input\InputOption;
 
 class EntityWizardCommand extends Command
 {
-
     protected $name = 'sharp:model-wizard';
     protected $description = 'Create a new Entity Wizard';
 
     public function handle()
     {
-
         $inputModelClass = $this->option('model') ?? $this->ask('Model class name');
         $pluralModelClass = Str::plural($inputModelClass);
         $fullModelClass = $this->parseClassname($inputModelClass, 'Models');
