@@ -28,10 +28,10 @@ class SharpMenuItemLink extends SharpMenuItem
 
     public function getLabel(): string
     {
-        return $this->label;
+        return $this->label ?? $this->entityKey ?? '';
     }
 
-    public function getIcon(): string
+    public function getIcon(): ?string
     {
         return $this->icon;
     }
