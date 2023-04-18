@@ -29,12 +29,12 @@ class MultiFormEntityShowControllerTest extends BaseApiTest
             ->assertOk()
             ->assertJson([
                 'config' => [
-                    'multiformAttribute' => 'type'
+                    'multiformAttribute' => 'type',
                 ],
                 'data' => [
                     'name' => 'John Wayne',
                     'type' => 'small',
-                ]
+                ],
             ]);
     }
 }
@@ -53,7 +53,7 @@ class PersonWithMultiformSharpShow extends SharpShow
                 return 'small';
             })
             ->transform([
-                'id' => 1, 
+                'id' => 1,
                 'name' => 'John Wayne',
             ]);
     }
