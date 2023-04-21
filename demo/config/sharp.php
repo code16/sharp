@@ -17,7 +17,7 @@ return [
     ],
 
     'global_filters' => [
-        'f' => \App\Sharp\MyGlobalFilter::class
+        'f' => \App\Sharp\MyGlobalFilter::class,
     ],
 
     'menu' => \App\Sharp\SharpMenu::class,
