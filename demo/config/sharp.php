@@ -16,6 +16,10 @@ return [
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 
+    'global_filters' => [
+        'f' => \App\Sharp\MyGlobalFilter::class
+    ],
+
     'menu' => \App\Sharp\SharpMenu::class,
 
     'uploads' => [
