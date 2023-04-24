@@ -16,7 +16,7 @@ return [
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 
-    'global_filters' => fn () => auth()->id() === 1 ? [] : ['f' => \App\Sharp\MyGlobalFilter::class],
+    'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],
 
     'menu' => \App\Sharp\SharpMenu::class,
 
