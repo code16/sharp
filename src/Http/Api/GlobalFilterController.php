@@ -11,7 +11,7 @@ class GlobalFilterController extends ApiController
 
     public function getFilters(): array
     {
-        return config('sharp.global_filters');
+        return value(config('sharp.global_filters'));
     }
 
     public function index()
@@ -25,7 +25,7 @@ class GlobalFilterController extends ApiController
 
     public function update(string $filterKey)
     {
-        $handler = collect(config('sharp.global_filters'))
+        $handler = collect($this->getFilters())
             ->map(function (string $filterClass) {
                 return app($filterClass);
             })

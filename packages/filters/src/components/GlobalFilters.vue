@@ -1,5 +1,9 @@
 <template>
     <div class="SharpGlobalFilters">
+        <template v-if="open">
+            <div class="position-absolute inset-0" style="z-index: 1">
+            </div>
+        </template>
         <template v-for="filter in filters">
             <FilterSelect
                 :label="null"
@@ -11,10 +15,10 @@
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
                 :key="filter.key"
-                form-select
                 @input="handleFilterChanged(filter, $event)"
                 @open="handleOpened(filter)"
                 @close="handleClosed(filter)"
+                style="z-index: 2"
             />
         </template>
     </div>
@@ -24,16 +28,23 @@
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
     import FilterSelect from './filters/FilterSelect';
+    import { Dropdown } from "sharp-ui";
 
     export default {
         components: {
-            FilterSelect
+            FilterSelect,
+            Dropdown,
         },
         computed: {
             ...mapGetters('global-filters', {
                 filters: 'filters/filters',
                 filterValue: 'filters/value',
             }),
+        },
+        data() {
+            return {
+                open: false,
+            }
         },
         methods: {
             handleFilterChanged(filter, value) {
@@ -44,11 +55,17 @@
                     });
             },
             handleOpened() {
-                this.$emit('open');
+                this.open = true;
             },
             handleClosed() {
-                this.$emit('close');
+                this.open = false;
             },
+            async init() {
+                await this.$store.dispatch('global-filters/get');
+            },
+        },
+        created() {
+            this.init();
         },
     }
 </script>

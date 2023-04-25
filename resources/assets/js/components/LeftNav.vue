@@ -18,9 +18,6 @@
         <div class="flex-grow-1 position-relative" style="min-height: 0">
             <div class="SharpLeftNav__content d-flex flex-column">
                 <div class="SharpLeftNav__inner flex-grow-1 pb-5" style="min-height: 0">
-                    <template v-if="hasGlobalFilters">
-                        <GlobalFilters @open="handleGlobalFilterOpened" @close="handleGlobalFilterClosed" />
-                    </template>
                     <slot />
                 </div>
                 <a class="SharpLeftNav__collapse-button btn btn-text" href="#" @click.prevent.stop="collapsed = !collapsed">
@@ -35,7 +32,6 @@
 
 <script>
     import { Loading } from 'sharp-ui';
-    import { GlobalFilters } from "sharp-filters";
     import { Responsive } from 'sharp/mixins';
 
     export default {
@@ -44,7 +40,6 @@
         mixins: [Responsive('lg')],
 
         components: {
-            GlobalFilters,
             Loading,
         },
 
@@ -55,15 +50,12 @@
                 type: Boolean,
                 default: true,
             },
-            hasGlobalFilters: Boolean,
         },
         data() {
             return {
                 ready: false,
                 collapsed: false,
                 state: 'expanded',
-
-                filterOpened: false,
             }
         },
         watch: {
@@ -84,7 +76,6 @@
                 return [
                     `SharpLeftNav--${this.state}`,
                     {
-                        'SharpLeftNav--filter-opened': this.filterOpened,
                         'SharpLeftNav--collapseable': this.collapseable,
                     }
                 ]
@@ -94,21 +85,12 @@
             updateState() {
                 this.state = this.collapsed ? 'collapsed' : 'expanded';
             },
-            handleGlobalFilterOpened() {
-                this.filterOpened = true;
-            },
-            handleGlobalFilterClosed() {
-                this.filterOpened = false;
-            },
             handleClicked() {
                 if(this.collapsed) {
                     this.collapsed = false;
                 }
             },
             async init() {
-                if(this.hasGlobalFilters) {
-                    await this.$store.dispatch('global-filters/get');
-                }
                 this.$store.dispatch('setCurrentEntity', this.currentEntity);
                 this.ready = true;
             },
