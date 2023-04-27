@@ -44,7 +44,7 @@ trait HasFieldRows
         $rows->splice($index, 0, [
             collect($fieldKeys)
                 ->map(fn ($key) => $this->newLayoutField($key))
-                ->all()
+                ->all(),
         ]);
         $this->rows = $rows->values()->all();
 
