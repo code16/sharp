@@ -13,6 +13,28 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class CategoryList extends SharpEntityList
 {
+    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    {
+        $fieldsContainer
+            ->addField(
+                EntityListField::make('name')
+                    ->setLabel('Name')
+                    ->setSortable(),
+            )
+            ->addField(
+                EntityListField::make('posts_count')
+                    ->setLabel('# posts')
+                    ->setSortable(),
+            );
+    }
+
+    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout
+            ->addColumn('name', 7)
+            ->addColumn('posts_count', 5);
+    }
+
     public function buildListConfig(): void
     {
         $this->configureDefaultSort('posts_count', 'desc');
@@ -55,27 +77,5 @@ class CategoryList extends SharpEntityList
             );
 
         return $this->transform($categories->get());
-    }
-
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-    {
-        $fieldsContainer
-            ->addField(
-                EntityListField::make('name')
-                    ->setLabel('Name')
-                    ->setSortable(),
-            )
-            ->addField(
-                EntityListField::make('posts_count')
-                    ->setLabel('# posts')
-                    ->setSortable(),
-            );
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('name', 7)
-            ->addColumn('posts_count', 5);
     }
 }
