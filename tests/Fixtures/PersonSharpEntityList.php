@@ -89,7 +89,7 @@ class PersonSharpEntityList extends SharpEntityList
                     ->setSortable(),
             );
     }
-    
+
     public function getFilters(): ?array
     {
         return [
