@@ -8,8 +8,8 @@ class EntityListField
     protected string $label = '';
     protected bool $sortable = false;
     protected bool $html = true;
-    protected ?int $width = null;
-    protected ?int $widthXs = null;
+    protected ?int $width;
+    protected int|bool|null $widthXs;
     protected bool $hideOnXs = false;
 
     public static function make(string $key): self
@@ -41,22 +41,30 @@ class EntityListField
         return $this;
     }
 
-    public function setWidth(int $width = null, int|bool|null $widthOnSmallScreens = null): self
+    public function setWidth(int $width): self
     {
         $this->width = $width;
-        if($widthOnSmallScreens === false) {
-            $this->widthXs = null;
-            $this->hideOnXs = true;
-        } elseif($widthOnSmallScreens !== null) {
-            $this->widthXs = $widthOnSmallScreens;
-        }
 
         return $this;
     }
 
-    public function setWidthOnSmallScreens(int $widthOnSmallScreens = null): self
+    public function setWidthFill(): self
+    {
+        $this->width = null;
+
+        return $this;
+    }
+
+    public function setWidthOnSmallScreens(int $widthOnSmallScreens): self
     {
         $this->widthXs = $widthOnSmallScreens;
+
+        return $this;
+    }
+
+    public function setWidthOnSmallScreensFill(): self
+    {
+        $this->widthXs = true;
 
         return $this;
     }
@@ -82,9 +90,11 @@ class EntityListField
     {
         return [
             'key' => $this->key,
-            'size' => $this->width ?: 'fill',
+            'size' => $this->width ?? 'fill',
             'hideOnXS' => $this->hideOnXs,
-            'sizeXS' => $this->widthXs ?: 'fill',
+            'sizeXS' => isset($this->widthXs)
+                ? ($this->widthXs === true ? 'fill' : $this->widthXs)
+                : ($this->width ?? 'fill'),
         ];
     }
 }

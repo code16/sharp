@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
@@ -48,24 +47,15 @@ class SharpEntityListTest extends SharpTestCase
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
                 $fieldsContainer
-                    ->addField(EntityListField::make('name'))
-                    ->addField(EntityListField::make('age'));
-            }
-
-            public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-            {
-                $fieldsLayout->addColumn('name', 6)
-                    ->addColumn('age', 6);
+                    ->addField(EntityListField::make('name')->setWidth(6))
+                    ->addField(EntityListField::make('age')->setWidth(6));
             }
         };
 
         $this->assertEquals(
             [
-                [
-                    'key' => 'name', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false,
-                ], [
-                    'key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false,
-                ],
+                ['key' => 'name', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false], 
+                ['key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false],
             ],
             $list->listLayout(),
         );
@@ -79,29 +69,15 @@ class SharpEntityListTest extends SharpTestCase
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
                 $fieldsContainer
-                    ->addField(EntityListField::make('name'))
-                    ->addField(EntityListField::make('age'));
-            }
-
-            public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-            {
-                $fieldsLayout->addColumn('name', 6)
-                    ->addColumn('age', 6);
-            }
-
-            public function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-            {
-                $fieldsLayout->addColumn('name', 12);
+                    ->addField(EntityListField::make('name')->setWidth(6)->setWidthOnSmallScreens(12))
+                    ->addField(EntityListField::make('age')->setWidth(6)->hideOnSmallScreens());
             }
         };
 
         $this->assertEquals(
             [
-                [
-                    'key' => 'name', 'size' => 6, 'sizeXS' => 12, 'hideOnXS' => false,
-                ], [
-                    'key' => 'age', 'size' => 6, 'sizeXS' => 'fill', 'hideOnXS' => true,
-                ],
+                ['key' => 'name', 'size' => 6, 'sizeXS' => 12, 'hideOnXS' => false], 
+                ['key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => true],
             ],
             $list->listLayout(),
         );
@@ -115,24 +91,15 @@ class SharpEntityListTest extends SharpTestCase
             public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
             {
                 $fieldsContainer
-                    ->addField(EntityListField::make('name'))
+                    ->addField(EntityListField::make('name')->setWidthOnSmallScreens(4))
                     ->addField(EntityListField::make('age'));
-            }
-
-            public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-            {
-                $fieldsLayout->addColumn('name', 4)
-                    ->addColumn('age');
             }
         };
 
         $this->assertEquals(
             [
-                [
-                    'key' => 'name', 'size' => 4, 'sizeXS' => 4, 'hideOnXS' => false,
-                ], [
-                    'key' => 'age', 'size' => 'fill', 'sizeXS' => 'fill', 'hideOnXS' => false,
-                ],
+                ['key' => 'name', 'size' => 'fill', 'sizeXS' => 4, 'hideOnXS' => false], 
+                ['key' => 'age', 'size' => 'fill', 'sizeXS' => 'fill', 'hideOnXS' => false],
             ],
             $list->listLayout(),
         );
