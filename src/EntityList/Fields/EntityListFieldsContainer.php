@@ -17,14 +17,14 @@ class EntityListFieldsContainer
 
     public function setWidthOfField(string $fieldKey, ?int $width, int|bool|null $widthOnSmallScreens): self
     {
-        if($field = collect($this->fields)->firstWhere('key', $fieldKey)) {
+        if ($field = collect($this->fields)->firstWhere('key', $fieldKey)) {
             $field->setWidth($width, $widthOnSmallScreens);
 //            if($widthOnSmallScreens === null) {
 //                $field->setWidthOnSmallScreens();
 //            }
 //            $field->setWidthOnSmallScreens($widthOnSmallScreens);
         }
-        
+
         return $this;
     }
 

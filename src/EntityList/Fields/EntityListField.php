@@ -44,10 +44,10 @@ class EntityListField
     public function setWidth(int $width = null, int|bool|null $widthOnSmallScreens = null): self
     {
         $this->width = $width;
-        if($widthOnSmallScreens === false) {
+        if ($widthOnSmallScreens === false) {
             $this->widthXs = null;
             $this->hideOnXs = true;
-        } elseif($widthOnSmallScreens !== null) {
+        } elseif ($widthOnSmallScreens !== null) {
             $this->widthXs = $widthOnSmallScreens;
         }
 
