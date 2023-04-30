@@ -260,7 +260,7 @@ abstract class SharpEntityList
     abstract public function getListData(): array|Arrayable;
 
     /**
-     * Build list fields and layout
+     * Build list fields and layout.
      */
     protected function buildList(EntityListFieldsContainer $fields): void
     {
@@ -273,24 +273,24 @@ abstract class SharpEntityList
         $this->buildListLayout($fieldsLayout);
         $xsFieldsLayout = new EntityListFieldsLayout();
         $this->buildListLayoutForSmallScreens($xsFieldsLayout);
-        
+
         $this->fieldsContainer
             ->getFields()
             ->pluck('key')
             ->each(function ($key) use ($fieldsLayout, $xsFieldsLayout) {
-                if(isset($fieldsLayout->getColumns()[$key])) {
+                if (isset($fieldsLayout->getColumns()[$key])) {
                     $width = $fieldsLayout->getColumns()[$key];
-                    $widthXs = $xsFieldsLayout->hasColumns() 
+                    $widthXs = $xsFieldsLayout->hasColumns()
                         ? $xsFieldsLayout->getColumns()[$key] ?? null
                         : $width;
                     $this->fieldsContainer
                         ->setWidthOfField(
                             $key,
-                            match($width) {
+                            match ($width) {
                                 'fill' => null,
                                 default => $width,
                             },
-                            match($widthXs) {
+                            match ($widthXs) {
                                 'fill' => null,
                                 null => false,
                                 default => $widthXs,
@@ -302,6 +302,7 @@ abstract class SharpEntityList
 
     /**
      * Build list fields.
+     *
      * @deprecated use buildList instead
      */
     protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
@@ -310,6 +311,7 @@ abstract class SharpEntityList
 
     /**
      * Build list layout.
+     *
      * @deprecated use buildList instead
      */
     protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
@@ -318,6 +320,7 @@ abstract class SharpEntityList
 
     /**
      * Build layout for small screen. Optional, only if needed.
+     *
      * @deprecated use buildList instead
      */
     protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
