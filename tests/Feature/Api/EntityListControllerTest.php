@@ -96,8 +96,8 @@ class EntityListControllerTest extends BaseApiTest
     /** @test */
     public function we_can_get_list_layout_for_an_entity()
     {
-        $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+        $this->getJson('/sharp/api/list/person')
+            ->assertOk()
             ->assertJson(['layout' => [
                 [
                     'key' => 'name',
@@ -107,7 +107,7 @@ class EntityListControllerTest extends BaseApiTest
                 ], [
                     'key' => 'age',
                     'size' => 6,
-                    'sizeXS' => 6,
+                    'sizeXS' => 'fill',
                     'hideOnXS' => true,
                 ],
             ]]);

@@ -100,7 +100,7 @@ class SharpEntityListTest extends SharpTestCase
                 [
                     'key' => 'name', 'size' => 6, 'sizeXS' => 12, 'hideOnXS' => false,
                 ], [
-                    'key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => true,
+                    'key' => 'age', 'size' => 6, 'sizeXS' => 'fill', 'hideOnXS' => true,
                 ],
             ],
             $list->listLayout(),

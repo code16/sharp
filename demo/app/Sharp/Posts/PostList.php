@@ -13,7 +13,6 @@ use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
@@ -22,42 +21,34 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PostList extends SharpEntityList
 {
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    protected function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer
+        $fields
             ->addField(
-                EntityListField::make('cover'),
+                EntityListField::make('cover')
+                    ->setWidth(1)
+                    ->hideOnSmallScreens(),
             )
             ->addField(
                 EntityListField::make('title')
-                    ->setLabel('Title'),
+                    ->setLabel('Title')
+                    ->setWidth(4)
+                    ->setWidthOnSmallScreens(6),
             )
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
+                    ->setWidth(3)
+                    ->hideOnSmallScreens()
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
+                    ->setWidth(4)
+                    ->setWidthOnSmallScreens(6)
                     ->setSortable(),
             );
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('cover', 1)
-            ->addColumn('title', 4)
-            ->addColumn('author:name', 3)
-            ->addColumn('published_at', 4);
-    }
-
-    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('title', 6)
-            ->addColumn('published_at', 6);
     }
 
     public function buildListConfig(): void

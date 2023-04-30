@@ -14,6 +14,20 @@ use Illuminate\Support\Str;
 
 class PostBlockList extends SharpEntityList
 {
+    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    {
+        $fieldsContainer
+            ->addField(EntityListField::make('type_label')->setLabel('Type'))
+            ->addField(EntityListField::make('content'));
+    }
+
+    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout
+            ->addColumn('type_label', 2)
+            ->addColumn('content');
+    }
+
     public function buildListConfig(): void
     {
         $this->configureMultiformAttribute('type')
@@ -57,19 +71,5 @@ class PostBlockList extends SharpEntityList
                 };
             })
             ->transform($postBlocks);
-    }
-
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-    {
-        $fieldsContainer
-            ->addField(EntityListField::make('type_label')->setLabel('Type'))
-            ->addField(EntityListField::make('content'));
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('type_label', 2)
-            ->addColumn('content');
     }
 }
