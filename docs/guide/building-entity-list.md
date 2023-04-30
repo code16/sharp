@@ -14,17 +14,15 @@ php artisan sharp:make:entity-list <class_name> [--model=<model_name>]
 
 ## Write the class
 
-First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore, there are four abstract methods to implement:
+First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore, there are two methods to implement:
 
-- `buildListFields(EntityListFieldsContainer $fieldsContainer)` and `buildListLayout(EntityListFieldsLayout $fieldsLayout)` for the structure,
+- `buildList(EntityListFieldsContainer $fields)` for the structure,
 
-- `getListData()` for the data,
+- and `getListData()` for the actual data of the list.
 
-- and `buildListConfig()` for... the list config.
+There are a third optional method, for the list config. Each one is detailed here:
 
-Each one is detailed here:
-
-### `buildListFields(EntityListFieldsContainer $fieldsContainer)`
+### `buildListFields(EntityListFieldsContainer $fields)`
 
 A field is a column in the `Entity List`. This first function is responsible to describe each column:
 
@@ -36,6 +34,8 @@ function buildListFields(EntityListFieldsContainer $fieldsContainer)
             EntityListField::make("name")
                 ->setLabel("Full name")
                 ->setSortable()
+                ->setWidth(6)
+                ->setWidthOnSmallScreens(8)
                 ->setHtml()
         )
         ->addField([...]);
@@ -44,38 +44,8 @@ function buildListFields(EntityListFieldsContainer $fieldsContainer)
 
 Setting the label, allowing the column to be sortable and to display html is optional.
 
-### `buildListLayout(EntityListFieldsLayout $fieldsLayout)`
-
-Next step, define how those columns are displayed:
-
-```php
-function buildListLayout(EntityListFieldsLayout $fieldsLayout)
-{
-    $fieldsLayout->addColumn("picture", 1)
-        ->addColumn("name")
-        ->addColumnLarge("capacity", 2);
-}
-```
-
-We add columns giving:
-
-- the column key, which must match those defined in `buildListFields()`,
-
-- and the "width" of the column, as an integer on a 12-based grid. If missing, it will be deduced.
-
-In this example, `picture` and `capacity` will be displayed respectively on 1/12 and 2/12 of the viewport width. The column `name` will fill the rest, 9/12.
-
-To handle small screens, you can declare an optional `buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout)` function: 
-
-```php
-function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout)
-{
-    $fieldsLayout->addColumn("picture", 4)
-        ->addColumn("name");
-}
-```
-
-With this configuration, `picture` and `name` will have a width of 4/12 and 8/12 (respectively). The third column, `capacity`, will be hidden.
+The `->setWidth(int)` method accepts an integer on a 12-based grid, and is optional too: if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
+You can also call `->widthOnSmallScreens(int)` or `->widthOnSmallScreensFill)` to define a custom width value for small screens. To hide the column on small screens, use `->hideOnSmallScreens()`.
 
 ### `getListData()`
 

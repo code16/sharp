@@ -6,16 +6,15 @@ use App\Models\Category;
 use App\Sharp\Categories\Commands\CleanUnusedCategoriesCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Filters\CheckFilter;
 use Illuminate\Contracts\Support\Arrayable;
 
 class CategoryList extends SharpEntityList
 {
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    protected function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer
+        $fields
             ->addField(
                 EntityListField::make('name')
                     ->setLabel('Name')
@@ -26,13 +25,6 @@ class CategoryList extends SharpEntityList
                     ->setLabel('# posts')
                     ->setSortable(),
             );
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('name', 7)
-            ->addColumn('posts_count', 5);
     }
 
     public function buildListConfig(): void
