@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
     use UsesSharpUploadModel;
-    
+
     protected bool $withThumbnails;
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;

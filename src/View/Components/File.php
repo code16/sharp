@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class File extends ContentComponent
 {
     use UsesSharpUploadModel;
-    
+
     public ?SharpUploadModel $fileModel = null;
     public ?FilesystemAdapter $disk = null;
     public bool $exists = false;

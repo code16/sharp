@@ -58,7 +58,7 @@ class Thumbnail
 
     public function make(?int $width, ?int $height = null, array $filters = []): ?string
     {
-        if (!$this->uploadModel->disk || !$this->uploadModel->file_name) {
+        if (! $this->uploadModel->disk || ! $this->uploadModel->file_name) {
             return null;
         }
 
