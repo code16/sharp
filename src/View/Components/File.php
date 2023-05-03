@@ -24,10 +24,8 @@ class File extends ContentComponent
     ) {
         if ($path) {
             $this->fileModel = static::getUploadModelClass()::make([
-                'attributes' => [
-                    'disk' => $disk,
-                    'file_name' => $path,
-                ],
+                'disk' => $disk,
+                'file_name' => $path,
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);
             $this->exists = $this->disk->exists($this->fileModel->file_name);
