@@ -55,6 +55,8 @@ return [
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
 
         'transform_keep_original_image' => true,
+        
+        'model_class' => null,
     ],
 
     // Optional. Options for form markdown editor (SharpFormMarkdownField)

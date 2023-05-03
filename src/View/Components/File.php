@@ -3,6 +3,7 @@
 namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Code16\Sharp\View\Utils\ContentComponent;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +11,8 @@ use Illuminate\View\View;
 
 class File extends ContentComponent
 {
+    use UsesSharpUploadModel;
+    
     public ?SharpUploadModel $fileModel = null;
     public ?FilesystemAdapter $disk = null;
     public bool $exists = false;
@@ -20,7 +23,7 @@ class File extends ContentComponent
         public ?string $name = null,
     ) {
         if ($path) {
-            $this->fileModel = app()->make(SharpUploadModel::class, [
+            $this->fileModel = static::getUploadModelClass()::make([
                 'attributes' => [
                     'disk' => $disk,
                     'file_name' => $path,
