@@ -15,30 +15,30 @@ return [
     'display_breadcrumb' => false,
 
     // Optional. Handle extensions.
-    //    "extensions" => [
-    //        "assets" => [
-    //            "strategy" => "asset",
-    //            "head" => [
-    //                "/css/inject.css",
+    //    'extensions' => [
+    //        'assets' => [
+    //            'strategy' => 'asset',
+    //            'head' => [
+    //                '/css/inject.css',
     //            ],
     //        ],
     //
-    //        "activate_custom_fields" => false,
+    //        'activate_custom_fields' => false,
     //    ],
 
     // Required. Your entities list, as entityKey => \App\Sharp\Entities\SharpEntity implementation
     'entities' => [
-        //        "my_entity" => \App\Sharp\Entities\MyEntity::class,
+        // 'my_entity' => \App\Sharp\Entities\MyEntity::class,
     ],
 
     // Optional. Your dashboards list, as entityKey => \App\Sharp\Entities\SharpDashboardEntity implementation
     'dashboards' => [
-        //        "my_dashboard" => \App\Sharp\Entities\MyDashboardEntity::class,
+        // 'my_dashboard' => \App\Sharp\Entities\MyDashboardEntity::class,
     ],
 
     // Optional. Your global filters list, which will be displayed in the main menu.
     'global_filters' => [
-        //        "my_global_filter" => \App\Sharp\Filters\MyGlobalFilter::class
+        // 'my_global_filter' => \App\Sharp\Filters\MyGlobalFilter::class
     ],
 
     // Required. The main menu (left bar), which may contain links to entities, dashboards
@@ -55,6 +55,9 @@ return [
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
 
         'transform_keep_original_image' => true,
+
+        // Optional SharpUploadModel implementation class name
+        // 'model_class' => null,
     ],
 
     // Optional. Options for form markdown editor (SharpFormMarkdownField)
@@ -78,21 +81,21 @@ return [
         'display_attribute' => 'name',
 
         // Optional additional auth check.
-        //        "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
+        // 'check_handler' => \App\Sharp\Auth\MySharpCheckHandler::class,
 
         // Optional custom guard
-        //        "guard" => "sharp",
+        // 'guard' => 'sharp',
     ],
 
-    //    "login_page_message_blade_path" => env("SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH", "sharp/_login-page-message"),
+    // 'login_page_message_blade_path' => env('SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH', 'sharp/_login-page-message'),
 
     'theme' => [
         'primary_color' => '#004c9b',
-        //        "favicon_url" => "",
-        //        "logo_urls" => [
-        //            "menu" => "/sharp-assets/menu-icon.png",
-        //            "login" => "/sharp-assets/login-icon.png",
-        //        ],
+        // 'favicon_url' => '',
+        // 'logo_urls' => [
+        //     'menu' => '/sharp-assets/menu-icon.png',
+        //     'login' => '/sharp-assets/login-icon.png',
+        // ],
     ],
 
 ];

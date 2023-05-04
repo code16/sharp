@@ -217,7 +217,7 @@ php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=
 
 Here are the parameters passed to the components:
 
-- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-uploads.md))
+- `$fileModel` which is a `SharpUploadModel` instance (see the [documentation](../sharp-uploads.md)); if you want to inject here your own `SharpUploadModel` implementation, you can do it by typing the full class path in the `sharp.uploads.model_class` config key.
 - `$width`, `$height`, `$filters`: whatever you passed as attribute
 
 #### Handle markdown
