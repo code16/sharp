@@ -33,6 +33,13 @@ class FormLayout implements HasLayout
         return $this;
     }
 
+    final public function getColumn(int $index): FormLayoutColumn
+    {
+        return $this
+            ->getLonelyTab()
+            ->getColumn($index);
+    }
+
     final public function setTabbed(bool $tabbed = true): self
     {
         $this->tabbed = $tabbed;

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Code16\Sharp\View\Utils\ContentComponent;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +11,8 @@ use Illuminate\View\View;
 
 class Image extends ContentComponent
 {
+    use UsesSharpUploadModel;
+
     public ?SharpUploadModel $fileModel = null;
     public ?FilesystemAdapter $disk = null;
     public bool $exists = false;
@@ -25,12 +28,10 @@ class Image extends ContentComponent
         public ?array $filters = [],
     ) {
         if ($path) {
-            $this->fileModel = app()->make(SharpUploadModel::class, [
-                'attributes' => [
-                    'disk' => $disk,
-                    'file_name' => $path,
-                    'filters' => $this->getTransformationFilters(),
-                ],
+            $this->fileModel = static::getUploadModelClass()::make([
+                'disk' => $disk,
+                'file_name' => $path,
+                'filters' => $this->getTransformationFilters(),
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);
             $this->exists = $this->disk->exists($this->fileModel->file_name);
@@ -69,7 +70,7 @@ class Image extends ContentComponent
     {
         if (! $this->fileModel) {
             return view('sharp::components.file-error', [
-                'message' => "<x-sharp-image name=\"$this->name\"> has no path defined. An error must have occured during the form submission.",
+                'message' => "<x-sharp-image name=\"$this->name\"> has no path defined. An error must have occurred during the form submission.",
             ]);
         }
 

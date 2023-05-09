@@ -62,6 +62,7 @@ class PostForm extends SharpForm
                         TableOfContentsEmbed::class,
                     ])
                     ->setMaxFileSize(1)
+                    ->setMaxLength(1000)
                     ->setHeight(300, 0)
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}/embed'),

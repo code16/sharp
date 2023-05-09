@@ -15,7 +15,6 @@
         ]) }}"
     @endif
     title="{{ $title }}"
-    :has-global-filters="{{ json_encode($hasGlobalFilters) }}"
 >
     <template v-slot:title>
         @if($icon = config('sharp.theme.logo_urls.menu'))
@@ -25,7 +24,11 @@
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
-        <sharp-nav-item class="SharpLeftNav__item--unstyled" style="--link-padding-y: 0" disabled>
+        <sharp-nav-item
+            class="SharpLeftNav__item--unstyled position-static"
+            link-class="position-static py-0"
+            disabled
+        >
             <div class="row align-items-center flex-nowrap gx-2">
                 <div class="col" style="min-width: 0">
                     <div class="text-truncate" title="{{ $username }}">
@@ -67,6 +70,14 @@
                     </sharp-dropdown>
                 </div>
             </div>
+            @if($hasGlobalFilters)
+                <div class="mt-2 pt-1 ms-n2 me-n1">
+                    <sharp-global-filters
+                        class="d-block"
+                        style="min-height: 2rem"
+                    />
+                </div>
+            @endif
         </sharp-nav-item>
 
         @foreach($self->getItems() as $item)

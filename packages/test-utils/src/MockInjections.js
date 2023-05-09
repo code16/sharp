@@ -21,6 +21,7 @@ const injectedComponents = {
         }),
         methods: {
             setUploading() {},
+            updateFieldError() {},
             hasUploadingFields() {}
         },
         created() {

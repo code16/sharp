@@ -51,6 +51,7 @@ return [
 
     'text.validation.maxlength' => 'Text too long (:maxlength characters max.)',
 
+    'editor.character_count' => ':count characters',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
 
     'editor.dialogs.link.text_label' => 'Text',

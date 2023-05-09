@@ -54,9 +54,9 @@
             }
         },
         methods: {
-            handleUpdate(editor) {
+            handleUpdate(editor, { error } = {}) {
                 const content = normalizeText(editor.getMarkdown() ?? '');
-                this.$emit('input', this.localizedValue(content));
+                this.$emit('input', this.localizedValue(content), { error });
             },
             toolbarOptions(editor) {
                 const options = [];

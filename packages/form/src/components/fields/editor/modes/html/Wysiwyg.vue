@@ -48,9 +48,9 @@
             }
         },
         methods: {
-            handleUpdate(editor) {
+            handleUpdate(editor, { error } = {}) {
                 const content = normalizeText(trimHTML(editor.getHTML(), { inline: this.inline }));
-                this.$emit('input', this.localizedValue(content));
+                this.$emit('input', this.localizedValue(content), { error });
             },
 
             createEditor({ content }) {

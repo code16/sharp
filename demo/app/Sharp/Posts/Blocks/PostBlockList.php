@@ -52,7 +52,7 @@ class PostBlockList extends SharpEntityList
 
                             return null;
                         },
-                    )
+                        )
                         ->implode(' ')
                 };
             })

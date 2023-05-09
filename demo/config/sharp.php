@@ -16,6 +16,8 @@ return [
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 
+    'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],
+
     'menu' => \App\Sharp\SharpMenu::class,
 
     'uploads' => [
@@ -23,6 +25,7 @@ return [
         'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
         'transform_keep_original_image' => true,
+        'model_class' => \App\Models\Media::class,
     ],
 
     'auth' => [

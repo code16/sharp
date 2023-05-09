@@ -21,6 +21,19 @@
                     <UploadFileInput :editor="editor"/>
                 </template>
             </template>
+
+            <template v-if="editor && showCharacterCount">
+                <div class="card-footer fs-8 text-muted bg-white">
+                    <template v-if="maxLength">
+                        <span :class="{ 'text-danger': characterCount > maxLength }">
+                            {{ lang('form.editor.character_count').replace(':count', `${characterCount} / ${maxLength}`) }}
+                        </span>
+                    </template>
+                    <template v-else>
+                        {{ lang('form.editor.character_count').replace(':count', characterCount) }}
+                    </template>
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -33,6 +46,7 @@
     import MenuBar from "./toolbar/MenuBar";
     import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
+    import { lang } from "sharp";
 
     export default {
         inheritAttrs: false,
@@ -54,6 +68,8 @@
             readOnly: Boolean,
             toolbarOptions: Array,
             embeds: Object,
+            showCharacterCount: Boolean,
+            maxLength: Number,
         },
         data() {
             return {
@@ -83,8 +99,18 @@
             hasUpload() {
                 return this.editor.options.extensions?.find(extension => extension.name === Upload.name);
             },
+            characterCount() {
+                return this.editor.storage.characterCount.characters();
+            },
         },
         methods: {
+            lang,
+            validate() {
+                if(this.maxLength && !this.showCharacterCount && this.characterCount > this.maxLength) {
+                    return lang('form.text.validation.maxlength').replace(':maxlength', this.maxLength);
+                }
+                return null;
+            },
             handleFocus() {
                 this.firstFocus = false;
             },
@@ -105,7 +131,8 @@
                 }
             },
             handleUpdated() {
-                this.$emit('update', this.editor);
+                const error = this.validate();
+                this.$emit('update', this.editor, { error });
             },
         },
         async mounted() {
