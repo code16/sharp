@@ -5,8 +5,6 @@ namespace Code16\Sharp\View\Components;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
-use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
-use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
 use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
 use Code16\Sharp\View\Components\Menu\MenuSection;
 use Illuminate\Support\Collection;
@@ -47,9 +45,7 @@ class Menu extends Component
             return collect();
         }
 
-        $items = $this->isLegacyMenu($sharpMenu)
-            ? $this->getItemFromLegacyConfig($sharpMenu)
-            : $this->getSharpMenu($sharpMenu)->items();
+        $items = $this->getSharpMenu($sharpMenu)->items();
 
         return $items
             ->filter(fn (SharpMenuItem $item) => $item->isSection()
@@ -62,8 +58,7 @@ class Menu extends Component
     {
         $sharpMenu = config('sharp.menu') ?? null;
 
-        if ($sharpMenu === null || $this->isLegacyMenu($sharpMenu)) {
-            // Legacy format is not supported for user menu
+        if ($sharpMenu === null) {
             return null;
         }
 
@@ -86,60 +81,6 @@ class Menu extends Component
                 : $item
             )
             ->flatten();
-    }
-
-    private function getItemFromLegacyConfig(array $sharpMenuConfig): Collection
-    {
-        // Sanitize legacy Sharp 6 config format to new Sharp 7 format
-        return collect($sharpMenuConfig)
-            ->map(function (array $itemConfig) {
-                if ($itemConfig['entities'] ?? false) {
-                    return tap(
-                        new SharpMenuItemSection($itemConfig['label'] ?? null),
-                        function (SharpMenuItemSection $section) use ($itemConfig) {
-                            collect($itemConfig['entities'])
-                                ->each(function (array $entityConfig) use (&$section) {
-                                    if ($entityConfig['separator'] ?? false) {
-                                        $section->addSeparator($entityConfig['label']);
-                                    } elseif ($entityConfig['url'] ?? false) {
-                                        $section->addExternalLink(
-                                            $entityConfig['url'],
-                                            $entityConfig['label'] ?? null,
-                                            $entityConfig['icon'] ?? null,
-                                        );
-                                    } else {
-                                        $section->addEntityLink(
-                                            $entityConfig['entity'] ?? ($entityConfig['dashboard'] ?? null),
-                                            $entityConfig['label'] ?? null,
-                                            $entityConfig['icon'] ?? null,
-                                        );
-                                    }
-                                });
-                        },
-                    );
-                }
-
-                if ($itemConfig['separator'] ?? false) {
-                    return new SharpMenuItemSeparator($itemConfig['label']);
-                }
-
-                $item = new SharpMenuItemLink(
-                    $itemConfig['label'] ?? null,
-                    $itemConfig['icon'] ?? null,
-                );
-                if ($itemConfig['url'] ?? false) {
-                    $item->setUrl($itemConfig['url']);
-                } else {
-                    $item->setEntity($itemConfig['entity'] ?? ($itemConfig['dashboard'] ?? null));
-                }
-
-                return $item;
-            });
-    }
-
-    private function isLegacyMenu(mixed $sharpMenu): bool
-    {
-        return is_array($sharpMenu);
     }
 
     private function getSharpMenu(string $sharpMenu): SharpMenu

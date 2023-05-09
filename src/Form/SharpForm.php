@@ -11,7 +11,6 @@ use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
-use Illuminate\Support\Str;
 
 abstract class SharpForm
 {
@@ -174,13 +173,6 @@ abstract class SharpForm
     {
         if ($validator = $this->getFormValidatorClass()) {
             return $validator;
-        }
-
-        // Legacy stuff: backward compatibility with Sharp 6
-        if (Str::contains($entityKey, ':')) {
-            [$main, $sub] = explode(':', $entityKey);
-
-            return config("sharp.entities.{$main}.forms.{$sub}.validator");
         }
 
         return config("sharp.entities.{$entityKey}.validator");

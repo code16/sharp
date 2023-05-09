@@ -64,12 +64,6 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    /** @deprecated use setTransformable() */
-    public function setCroppable(bool $croppable = true): self
-    {
-        return $this->setTransformable($croppable);
-    }
-
     public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
     {
         $this->transformable = $transformable;

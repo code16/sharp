@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Show\Layout;
 
-use Closure;
 use Code16\Sharp\Form\Layout\HasLayout;
 
 class ShowLayout implements HasLayout
@@ -21,7 +20,7 @@ class ShowLayout implements HasLayout
         return $this;
     }
 
-    final public function addEntityListSection(string $entityListKey, Closure|bool|null $collapsable = null): self
+    final public function addEntityListSection(string $entityListKey, ?bool $collapsable = null): self
     {
         $section = new ShowLayoutSection('');
         $section->addColumn(12, function ($column) use ($entityListKey) {
@@ -29,12 +28,7 @@ class ShowLayout implements HasLayout
         });
 
         if ($collapsable !== null) {
-            if (is_bool($collapsable)) {
-                $section->setCollapsable($collapsable);
-            } else {
-                // This is a Closure, web handle this for legacy purpose
-                $collapsable($section);
-            }
+            $section->setCollapsable($collapsable);
         }
 
         $this->sections[] = $section;

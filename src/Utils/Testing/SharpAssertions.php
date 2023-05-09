@@ -243,20 +243,4 @@ trait SharpAssertions
 
         return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
     }
-
-    /**
-     * @deprecated use callSharpInstanceCommandFromList or callSharpInstanceCommandFromShow
-     */
-    protected function callInstanceCommand(string $entityKey, $instanceId, string $commandKey, array $data = [])
-    {
-        return $this->callSharpInstanceCommandFromList($entityKey, $instanceId, $commandKey, $data);
-    }
-
-    /**
-     * @deprecated use callSharpEntityCommandFromList
-     */
-    public function callEntityCommand(string $entityKey, string $commandKey, array $data = [])
-    {
-        return $this->callSharpInstanceCommandFromList($entityKey, $instanceId, $commandKey, $data);
-    }
 }

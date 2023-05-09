@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Utils\Entities;
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
-use Code16\Sharp\Auth\SharpEntityPolicyLegacyDecorator;
+use Code16\Sharp\Exceptions\SharpException;
 
 abstract class BaseSharpEntity
 {
@@ -28,8 +28,7 @@ abstract class BaseSharpEntity
         if (is_string($policy)) {
             $policy = app($policy);
             if (! $policy instanceof SharpEntityPolicy) {
-                // Legacy (Sharp 6) policy
-                return new SharpEntityPolicyLegacyDecorator($policy, $this->isDashboard);
+                throw new SharpException('Policy class '.$policy.' must implement '.SharpEntityPolicy::class);
             }
         }
 
