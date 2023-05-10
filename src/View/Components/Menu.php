@@ -75,7 +75,7 @@ class Menu extends Component
 
     private function getSharpMenu(): ?SharpMenu
     {
-        if($this->sharpMenu === null) {
+        if ($this->sharpMenu === null) {
             if (($sharpMenu = config('sharp.menu')) === null) {
                 return null;
             }
@@ -83,7 +83,7 @@ class Menu extends Component
             $this->sharpMenu = is_string($sharpMenu)
                 ? app($sharpMenu)
                 : $sharpMenu;
-            
+
             $this->sharpMenu->build();
         }
 

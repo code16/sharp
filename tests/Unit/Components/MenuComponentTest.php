@@ -28,8 +28,9 @@ class MenuComponentTest extends SharpTestCase
     {
         $this->app['config']
             ->set(
-                'sharp.menu', 
-                new class extends SharpMenu {
+                'sharp.menu',
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this
@@ -57,7 +58,8 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this
@@ -82,11 +84,12 @@ class MenuComponentTest extends SharpTestCase
             'sharp.entities.person',
             PersonEntity::class,
         );
-        
+
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this->addSection('Data', function ($section) {
@@ -95,7 +98,7 @@ class MenuComponentTest extends SharpTestCase
                     }
                 }
             );
-        
+
         $menu = app(Menu::class);
 
         $section = $menu->getItems()[0];
@@ -118,11 +121,12 @@ class MenuComponentTest extends SharpTestCase
             'sharp.entities.personal_dashboard',
             PersonalDashboardEntity::class,
         );
-        
+
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this
@@ -153,7 +157,8 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this->addEntityLink('person', 'people', 'fa-user');
@@ -171,7 +176,7 @@ class MenuComponentTest extends SharpTestCase
         $this->assertEquals(route('code16.sharp.single-show', 'person'), $item->getUrl());
         $this->assertEquals(true, $item->isEntity());
     }
-    
+
     /** @test */
     public function we_can_define_a_separator_in_the_menu_via_class()
     {
@@ -183,7 +188,8 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this
@@ -220,7 +226,8 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this
@@ -248,7 +255,8 @@ class MenuComponentTest extends SharpTestCase
         $this->app['config']
             ->set(
                 'sharp.menu',
-                new class extends SharpMenu {
+                new class extends SharpMenu
+                {
                     public function build(): SharpMenu
                     {
                         return $this
