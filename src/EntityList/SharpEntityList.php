@@ -68,17 +68,8 @@ abstract class SharpEntityList
     {
         $this->checkListIsBuilt();
 
-        return $this->fieldsLayout->getColumns()
-            ->keys()
-            ->map(function ($key) {
-                return [
-                    'key' => $key,
-                    'size' => $this->fieldsLayout->getSizeOf($key),
-                    'hideOnXS' => $this->xsFieldsLayout->hasColumns() && $this->xsFieldsLayout->getSizeOf($key) === null,
-                    'sizeXS' => $this->xsFieldsLayout->getSizeOf($key) ?: $this->fieldsLayout->getSizeOf($key),
-                ];
-            })
-            ->values()
+        return $this->fieldsContainer
+            ->getLayout()
             ->toArray();
     }
 
@@ -220,13 +211,7 @@ abstract class SharpEntityList
     {
         if ($this->fieldsContainer === null) {
             $this->fieldsContainer = new EntityListFieldsContainer();
-            $this->buildListFields($this->fieldsContainer);
-
-            $this->fieldsLayout = new EntityListFieldsLayout();
-            $this->buildListLayout($this->fieldsLayout);
-
-            $this->xsFieldsLayout = new EntityListFieldsLayout();
-            $this->buildListLayoutForSmallScreens($this->xsFieldsLayout);
+            $this->buildList($this->fieldsContainer);
         }
     }
 
@@ -275,17 +260,68 @@ abstract class SharpEntityList
     abstract public function getListData(): array|Arrayable;
 
     /**
-     * Build list fields.
+     * Build list fields and layout.
      */
-    abstract protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void;
+    protected function buildList(EntityListFieldsContainer $fields): void
+    {
+        // This default implementation is there to avoid breaking changes;
+        // it will be removed in the next major version of Sharp.
+        $this->fieldsContainer = new EntityListFieldsContainer();
+        $this->buildListFields($this->fieldsContainer);
+
+        $fieldsLayout = new EntityListFieldsLayout();
+        $this->buildListLayout($fieldsLayout);
+        $xsFieldsLayout = new EntityListFieldsLayout();
+        $this->buildListLayoutForSmallScreens($xsFieldsLayout);
+
+        $this->fieldsContainer
+            ->getFields()
+            ->pluck('key')
+            ->each(function ($key) use ($fieldsLayout, $xsFieldsLayout) {
+                if (isset($fieldsLayout->getColumns()[$key])) {
+                    $width = $fieldsLayout->getColumns()[$key];
+                    $widthXs = $xsFieldsLayout->hasColumns()
+                        ? $xsFieldsLayout->getColumns()[$key] ?? null
+                        : $width;
+                    $this->fieldsContainer
+                        ->setWidthOfField(
+                            $key,
+                            match ($width) {
+                                'fill' => null,
+                                default => $width,
+                            },
+                            match ($widthXs) {
+                                'fill' => null,
+                                null => false,
+                                default => $widthXs,
+                            },
+                        );
+                }
+            });
+    }
+
+    /**
+     * Build list fields.
+     *
+     * @deprecated use buildList instead
+     */
+    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    {
+    }
 
     /**
      * Build list layout.
+     *
+     * @deprecated use buildList instead
      */
-    abstract protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void;
+    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+    }
 
     /**
      * Build layout for small screen. Optional, only if needed.
+     *
+     * @deprecated use buildList instead
      */
     protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
     {
@@ -294,5 +330,7 @@ abstract class SharpEntityList
     /**
      * Build list config.
      */
-    abstract public function buildListConfig(): void;
+    public function buildListConfig(): void
+    {
+    }
 }

@@ -7,7 +7,6 @@ use App\Sharp\Authors\Commands\InviteUserCommand;
 use App\Sharp\Authors\Commands\VisitFacebookProfileCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
@@ -20,39 +19,30 @@ class AuthorList extends SharpEntityList
         $fieldsContainer
             ->addField(
                 EntityListField::make('avatar')
+                    ->setWidth(1)
+                    ->setWidthOnSmallScreens(2)
                     ->setLabel(''),
             )
             ->addField(
                 EntityListField::make('name')
+                    ->setWidth(3)
+                    ->setWidthOnSmallScreens(5)
                     ->setLabel('Name')
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('email')
+                    ->setWidth(4)
+                    ->hideOnSmallScreens()
                     ->setLabel('Email')
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('role')
+                    ->setWidth(4)
+                    ->setWidthOnSmallScreens(5)
                     ->setLabel('Role'),
             );
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('avatar', 1)
-            ->addColumn('name', 3)
-            ->addColumn('email', 4)
-            ->addColumn('role', 4);
-    }
-
-    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('avatar', 2)
-            ->addColumn('name', 5)
-            ->addColumn('role', 5);
     }
 
     public function buildListConfig(): void
