@@ -16,7 +16,7 @@ class SimpleEloquentReorderHandler implements ReorderHandler
     public function setIdAttribute(string $idAttribute): self
     {
         $this->idAttribute = $idAttribute;
-        
+
         return $this;
     }
 
