@@ -110,7 +110,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 
 ### Set a section to be non-collapsible
 
-A section is collapsible by default but you may want to always show it to the user
+A section is collapsible by default, but you may want to always show it to the user
 
 ```php
 class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
@@ -129,7 +129,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 
 ### Add links in the user (profile) menu
 
-Next to the user name or email, Sharp displays a dropdown menu with a logout link. You can add your own links in this menu:
+Next to user's name or email, Sharp displays a dropdown menu with a logout link. You can add your own links in this menu:
 
 ```php
 class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
