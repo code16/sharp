@@ -39,30 +39,20 @@ class Menu extends Component
 
     public function getItems(): Collection
     {
-        $sharpMenu = config('sharp.menu', []) ?? null;
-
-        if ($sharpMenu === null) {
-            return collect();
-        }
-
-        $items = $this->getSharpMenu($sharpMenu)->items();
-
-        return $items
+        return $this
+            ->getSharpMenu()
+            ?->items()
             ->filter(fn (SharpMenuItem $item) => $item->isSection()
                 ? count((new MenuSection($item))->getItems()) > 0
                 : $item->isAllowed()
-            );
+            ) ?? collect();
     }
 
     public function getUserMenu(): ?SharpMenuUserMenu
     {
-        $sharpMenu = config('sharp.menu') ?? null;
-
-        if ($sharpMenu === null) {
-            return null;
-        }
-
-        return $this->getSharpMenu($sharpMenu)->userMenu();
+        return $this
+            ->getSharpMenu()
+            ?->userMenu();
     }
 
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
@@ -83,10 +73,18 @@ class Menu extends Component
             ->flatten();
     }
 
-    private function getSharpMenu(string $sharpMenu): SharpMenu
+    private function getSharpMenu(): ?SharpMenu
     {
-        if ($this->sharpMenu === null) {
-            $this->sharpMenu = app($sharpMenu)->build();
+        if($this->sharpMenu === null) {
+            if (($sharpMenu = config('sharp.menu')) === null) {
+                return null;
+            }
+
+            $this->sharpMenu = is_string($sharpMenu)
+                ? app($sharpMenu)
+                : $sharpMenu;
+            
+            $this->sharpMenu->build();
         }
 
         return $this->sharpMenu;
