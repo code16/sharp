@@ -24,8 +24,8 @@ class SharpShowEntityListField extends SharpShowField
     public static function make(string $key, string $entityListKey): SharpShowEntityListField
     {
         return tap(
-            new static($key, static::FIELD_TYPE), 
-            fn ($instance) => $instance->entityListKey = class_exists($entityListKey) 
+            new static($key, static::FIELD_TYPE),
+            fn ($instance) => $instance->entityListKey = class_exists($entityListKey)
                 ? config('sharp.entities')
                 : $entityListKey
         );

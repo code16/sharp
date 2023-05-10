@@ -57,7 +57,7 @@ class PersonEntity extends SharpEntity
     public function setLabel(string $label): self
     {
         $this->label = $label;
-        
+
         return $this;
     }
 

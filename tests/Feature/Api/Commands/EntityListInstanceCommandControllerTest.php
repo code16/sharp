@@ -185,7 +185,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld($singleShow);
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setList(EntityListInstanceCommandPersonSharpEntityList::class);
