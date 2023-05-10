@@ -7,6 +7,7 @@ use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class EntityListEntityWizardCommandControllerTest extends BaseApiTest
@@ -16,10 +17,11 @@ class EntityListEntityWizardCommandControllerTest extends BaseApiTest
         parent::setUp();
 
         $this->login();
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            EntityWizardCommandTestPersonSharpEntityList::class,
-        );
+        
+        $this->buildTheWorld();
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(EntityWizardCommandTestPersonSharpEntityList::class);
     }
 
     /** @test */

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class BreadcrumbTest extends BaseApiTest
 {
@@ -72,25 +73,16 @@ class BreadcrumbTest extends BaseApiTest
     public function if_labels_are_defined_for_entities_in_the_config_they_are_used()
     {
         $this->buildTheWorld();
-
-        $this->app['config']->set(
-            'sharp.entities.person.label',
-            'Worker',
-        );
-
-        $this->app['config']->set(
-            'sharp.entities.friend',
-            [
-                'label' => 'Colleague',
-                'show' => PersonSharpShow::class,
-            ],
-        );
+        
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setLabel('Worker');
 
         $this
             ->withHeaders([
-                'referer' => url('/sharp/s-list/person/s-show/person/2/s-show/friend/1'),
+                'referer' => url('/sharp/s-list/person/s-show/person/2/s-show/person/1'),
             ])
-            ->getJson(route('code16.sharp.api.show.show', ['friend', '1']))
+            ->getJson(route('code16.sharp.api.show.show', ['person', '1']))
             ->assertOk()
             ->assertJson([
                 'breadcrumb' => [
@@ -110,9 +102,9 @@ class BreadcrumbTest extends BaseApiTest
                         ],
                         [
                             'type' => 'show',
-                            'url' => url('/sharp/s-list/person/s-show/person/2/s-show/friend/1'),
-                            'name' => 'Colleague',
-                            'entityKey' => 'friend',
+                            'url' => url('/sharp/s-list/person/s-show/person/2/s-show/person/1'),
+                            'name' => 'Worker',
+                            'entityKey' => 'person',
                         ],
                     ],
                 ],
@@ -123,11 +115,10 @@ class BreadcrumbTest extends BaseApiTest
     public function if_a_custom_label_is_defined_it_is_used_on_leaves()
     {
         $this->buildTheWorld();
-
-        $this->app['config']->set(
-            'sharp.entities.person.show',
-            PersonWithBreadcrumbConfigSharpShow::class,
-        );
+        
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(PersonWithBreadcrumbConfigSharpShow::class);
 
         $this
             ->withHeaders([

@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class EntityListInstanceCommandControllerTest extends BaseApiTest
@@ -24,7 +25,7 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
 
         $this->json('post', '/sharp/api/list/person/command/instance_info/1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 'action' => 'info',
                 'message' => 'ok',
@@ -184,11 +185,10 @@ class EntityListInstanceCommandControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld($singleShow);
-
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            EntityListInstanceCommandPersonSharpEntityList::class,
-        );
+        
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(EntityListInstanceCommandPersonSharpEntityList::class);
     }
 }
 

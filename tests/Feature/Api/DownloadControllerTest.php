@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Utils\Entities\SharpEntity;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,7 +12,9 @@ class DownloadControllerTest extends BaseApiTest
     protected function setUp(): void
     {
         parent::setUp();
+        
         Storage::fake('local');
+        $this->buildTheWorld();
         $this->login();
     }
 
@@ -19,7 +23,7 @@ class DownloadControllerTest extends BaseApiTest
     {
         $this->disableSharpAuthorizationChecks();
         $this->withoutExceptionHandling();
-
+        
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
@@ -94,12 +98,10 @@ class DownloadControllerTest extends BaseApiTest
     /** @test */
     public function we_can_not_download_a_file_without_authorization()
     {
-        $this->app['config']->set(
-            'sharp.entities.download.authorizations', [
-                'view' => false,
-            ],
-        );
-
+        app(SharpEntityManager::class)
+            ->entityFor('download')
+            ->setProhibitedActions(['view']);
+        
         $this
             ->withHeader(
                 'referer',
@@ -114,5 +116,25 @@ class DownloadControllerTest extends BaseApiTest
                 ]),
             )
             ->assertStatus(403);
+    }
+    
+    protected function buildTheWorld($singleShow = false)
+    {
+        parent::buildTheWorld($singleShow);
+
+        $this->app['config']->set(
+            'sharp.entities.download',
+            DownloadTestEntity::class,
+        );
+    }
+}
+
+class DownloadTestEntity extends SharpEntity
+{
+    public function setProhibitedActions(array $prohibitedActions): self
+    {
+        $this->prohibitedActions = $prohibitedActions;
+        
+        return $this;
     }
 }

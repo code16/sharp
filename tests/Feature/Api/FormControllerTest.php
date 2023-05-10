@@ -6,6 +6,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
+use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class FormControllerTest extends BaseApiTest
@@ -150,9 +151,8 @@ class FormControllerTest extends BaseApiTest
         $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
-        // Some fake config to avoid 404
-        $this->app['config']->set('sharp.entities.car.form', PersonSharpForm::class);
-        $this->app['config']->set('sharp.entities.car.show', PersonSharpShow::class);
+        // Define a fake "car" entity to avoid 404
+        $this->app['config']->set('sharp.entities.car', CarTestEntity::class);
 
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-show/car/2/s-form/car/2');
         $this->deleteJson('/sharp/api/form/car/2')
@@ -296,4 +296,10 @@ class FormControllerTest extends BaseApiTest
         $this->deleteJson('/sharp/api/form/person/1')
             ->assertStatus(404);
     }
+}
+
+class CarTestEntity extends SharpEntity
+{
+    protected ?string $form = PersonSharpForm::class;
+    protected ?string $show = PersonSharpShow::class;
 }

@@ -54,6 +54,13 @@ class PersonEntity extends SharpEntity
         return $this;
     }
 
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+        
+        return $this;
+    }
+
     public function getMultiforms(): array
     {
         return $this->multiformForTest;

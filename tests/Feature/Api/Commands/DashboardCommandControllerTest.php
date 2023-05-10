@@ -6,6 +6,7 @@ use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\SharpDashboard;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DashboardCommandControllerTest extends BaseApiTest
@@ -13,6 +14,7 @@ class DashboardCommandControllerTest extends BaseApiTest
     protected function setUp(): void
     {
         parent::setUp();
+        $this->withoutExceptionHandling();
 
         $this->login();
     }
@@ -22,8 +24,8 @@ class DashboardCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('post', '/sharp/api/dashboard/my_dashboard/command/dashboard_info')
-            ->assertStatus(200)
+        $this->json('post', '/sharp/api/dashboard/personal_dashboard/command/dashboard_info')
+            ->assertOk()
             ->assertJson([
                 'action' => 'info',
                 'message' => 'ok',
@@ -35,7 +37,7 @@ class DashboardCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->getJson('/sharp/api/dashboard/my_dashboard/command/dashboard_form/form')
+        $this->getJson('/sharp/api/dashboard/personal_dashboard/command/dashboard_form/form')
             ->assertOk()
             ->assertJson([
                 'data' => [
@@ -58,11 +60,10 @@ class DashboardCommandControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld(false);
-
-        $this->app['config']->set(
-            'sharp.dashboards.my_dashboard.view',
-            EntityCommandTestSharpDashboard::class,
-        );
+        
+        app(SharpEntityManager::class)
+            ->entityFor('personal_dashboard')
+            ->setView(EntityCommandTestSharpDashboard::class);
     }
 }
 

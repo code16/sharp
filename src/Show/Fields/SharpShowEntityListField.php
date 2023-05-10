@@ -23,9 +23,12 @@ class SharpShowEntityListField extends SharpShowField
 
     public static function make(string $key, string $entityListKey): SharpShowEntityListField
     {
-        return tap(new static($key, static::FIELD_TYPE), function ($instance) use ($entityListKey) {
-            $instance->entityListKey = $entityListKey;
-        });
+        return tap(
+            new static($key, static::FIELD_TYPE), 
+            fn ($instance) => $instance->entityListKey = class_exists($entityListKey) 
+                ? config('sharp.entities')
+                : $entityListKey
+        );
     }
 
     public function hideFilterWithValue(string $filterFullClassNameOrKey, $value): self

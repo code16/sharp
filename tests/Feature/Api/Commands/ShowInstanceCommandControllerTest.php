@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class ShowInstanceCommandControllerTest extends BaseApiTest
@@ -106,13 +107,14 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld($singleShow);
-
-        $this->app['config']->set(
-            'sharp.entities.person.show',
-            $singleShow
-                ? ShowInstanceCommandPersonSharpSingleShow::class
-                : ShowInstanceCommandPersonSharpShow::class,
-        );
+        
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(
+                $singleShow
+                    ? ShowInstanceCommandPersonSharpSingleShow::class
+                    : ShowInstanceCommandPersonSharpShow::class
+            );
     }
 }
 
