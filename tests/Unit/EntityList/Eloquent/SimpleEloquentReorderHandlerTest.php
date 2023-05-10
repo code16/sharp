@@ -11,9 +11,9 @@ class SimpleEloquentReorderHandlerTest extends SharpEloquentBaseTest
     /** @test */
     function we_can_use_SimpleEloquentReorderHandler()
     {
-        Person::create(['id' => 10, 'name' => fake()->name, 'order' => 1]);
-        Person::create(['id' => 20, 'name' => fake()->name, 'order' => 2]);
-        Person::create(['id' => 30, 'name' => fake()->name, 'order' => 3]);
+        Person::create(['id' => 10, 'name' => 'Bob', 'order' => 1]);
+        Person::create(['id' => 20, 'name' => 'Bob', 'order' => 2]);
+        Person::create(['id' => 30, 'name' => 'Bob', 'order' => 3]);
 
         (new SimpleEloquentReorderHandler(Person::class))
             ->reorder([30, 10, 20]);
@@ -24,9 +24,9 @@ class SimpleEloquentReorderHandlerTest extends SharpEloquentBaseTest
     /** @test */
     function we_can_use_SimpleEloquentReorderHandler_with_custom_order_attribute()
     {
-        Person::create(['id' => 20, 'name' => fake()->name, 'order' => 3, 'age' => 22]);
-        Person::create(['id' => 30, 'name' => fake()->name, 'order' => 2, 'age' => 32]);
-        Person::create(['id' => 50, 'name' => fake()->name, 'order' => 1, 'age' => 90]);
+        Person::create(['id' => 20, 'name' => 'Bob', 'order' => 3, 'age' => 22]);
+        Person::create(['id' => 30, 'name' => 'Bob', 'order' => 2, 'age' => 32]);
+        Person::create(['id' => 50, 'name' => 'Bob', 'order' => 1, 'age' => 90]);
 
         (new SimpleEloquentReorderHandler(Person::class))
             ->setOrderAttribute('age')
