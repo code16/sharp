@@ -58,6 +58,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
             __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
+            __DIR__.'/../resources/views/partials/plugin-script.blade.php' => resource_path('views/vendor/sharp/partials/plugin-script.blade.php'),
         ], 'views');
 
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
