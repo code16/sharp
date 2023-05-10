@@ -18,7 +18,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_list_data_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 'data' => [
                     'list' => [
@@ -35,7 +35,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_paginated_list_data_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person?paginated=1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonFragment(['data' => [
                 'list' => [
                     'items' => [
@@ -54,7 +54,7 @@ class EntityListControllerTest extends BaseApiTest
     {
         $this->withoutExceptionHandling();
         $this->json('get', '/sharp/api/list/person?search=john')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonFragment([
                 'data' => [
                     'list' => [
@@ -78,7 +78,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_data_containers_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['containers' => [
                 'name' => [
                     'key' => 'name',
@@ -117,7 +117,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_list_config_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['config' => [
                 'instanceIdAttribute' => 'id',
                 'searchable' => true,
@@ -134,7 +134,7 @@ class EntityListControllerTest extends BaseApiTest
             ->setAutoHide(false);
 
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['notifications' => [[
                 'level' => 'success',
                 'title' => 'title',
@@ -143,14 +143,14 @@ class EntityListControllerTest extends BaseApiTest
             ]]]);
 
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonMissing(['alert']);
 
         (new PersonSharpForm())->notify('title1');
         (new PersonSharpForm())->notify('title2');
 
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['notifications' => [[
                 'title' => 'title1',
             ], [
@@ -161,17 +161,20 @@ class EntityListControllerTest extends BaseApiTest
     /** @test */
     public function invalid_entity_key_is_returned_as_404()
     {
-        $this->json('get', '/sharp/api/list/notanvalidentity')
+        $this->getJson('/sharp/api/list/notanvalidentity')
             ->assertStatus(404);
     }
 
+    /** @test */
     public function we_can_reorder_instances()
     {
+        $this->withoutExceptionHandling();
+        
         $this
-            ->json('post', '/sharp/api/list/person/reorder', [
-                3, 2, 1,
+            ->postJson('/sharp/api/list/person/reorder', [
+                'instances' => [3, 2, 1,],
             ])
-            ->assertStatus(200);
+            ->assertOk();
     }
 
     /** @test */

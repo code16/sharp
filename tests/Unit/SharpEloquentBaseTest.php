@@ -1,13 +1,13 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent;
+namespace Code16\Sharp\Tests\Unit;
 
 use Code16\Sharp\Tests\SharpTestCase;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 
-abstract class SharpFormEloquentBaseTest extends SharpTestCase
+abstract class SharpEloquentBaseTest extends SharpTestCase
 {
     use DatabaseTransactions;
 

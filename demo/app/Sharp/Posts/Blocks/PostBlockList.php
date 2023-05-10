@@ -4,44 +4,32 @@ namespace App\Sharp\Posts\Blocks;
 
 use App\Models\Media;
 use App\Models\PostBlock;
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
+use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
 
 class PostBlockList extends SharpEntityList
 {
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    protected function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer
-            ->addField(EntityListField::make('type_label')->setLabel('Type'))
-            ->addField(EntityListField::make('content'));
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout
-            ->addColumn('type_label', 2)
-            ->addColumn('content');
+        $fields
+            ->addField(
+                EntityListField::make('type_label')
+                    ->setWidth(2)
+                    ->setLabel('Type')
+            )
+            ->addField(
+                EntityListField::make('content')
+            );
     }
 
     public function buildListConfig(): void
     {
         $this->configureMultiformAttribute('type')
-            ->configureReorderable(new class implements ReorderHandler
-            {
-                public function reorder(array $ids): void
-                {
-                    PostBlock::whereIn('id', $ids)
-                        ->get()
-                        ->each(function (PostBlock $block) use ($ids) {
-                            $block->update(['order' => array_search($block->id, $ids) + 1]);
-                        });
-                }
-            });
+            ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class));
     }
 
     public function getListData(): array|Arrayable
