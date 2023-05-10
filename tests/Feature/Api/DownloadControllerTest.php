@@ -12,7 +12,7 @@ class DownloadControllerTest extends BaseApiTest
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         Storage::fake('local');
         $this->buildTheWorld();
         $this->login();
@@ -23,7 +23,7 @@ class DownloadControllerTest extends BaseApiTest
     {
         $this->disableSharpAuthorizationChecks();
         $this->withoutExceptionHandling();
-        
+
         $file = UploadedFile::fake()->image('test.jpg', 600, 600);
         $file->storeAs('/files', 'test.jpg', ['disk' => 'local']);
 
@@ -101,7 +101,7 @@ class DownloadControllerTest extends BaseApiTest
         app(SharpEntityManager::class)
             ->entityFor('download')
             ->setProhibitedActions(['view']);
-        
+
         $this
             ->withHeader(
                 'referer',
@@ -117,7 +117,7 @@ class DownloadControllerTest extends BaseApiTest
             )
             ->assertStatus(403);
     }
-    
+
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld($singleShow);
@@ -134,7 +134,7 @@ class DownloadTestEntity extends SharpEntity
     public function setProhibitedActions(array $prohibitedActions): self
     {
         $this->prohibitedActions = $prohibitedActions;
-        
+
         return $this;
     }
 }

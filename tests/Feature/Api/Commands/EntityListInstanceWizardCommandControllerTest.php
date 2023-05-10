@@ -18,7 +18,7 @@ class EntityListInstanceWizardCommandControllerTest extends BaseApiTest
 
         $this->login();
         $this->buildTheWorld();
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setList(InstanceWizardCommandTestPersonSharpEntityList::class);

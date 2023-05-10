@@ -60,7 +60,7 @@ class DashboardCommandControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld(false);
-        
+
         app(SharpEntityManager::class)
             ->entityFor('personal_dashboard')
             ->setView(EntityCommandTestSharpDashboard::class);

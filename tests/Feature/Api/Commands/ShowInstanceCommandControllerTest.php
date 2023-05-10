@@ -107,7 +107,7 @@ class ShowInstanceCommandControllerTest extends BaseApiTest
     protected function buildTheWorld($singleShow = false)
     {
         parent::buildTheWorld($singleShow);
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setShow(

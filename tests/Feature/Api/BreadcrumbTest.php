@@ -73,7 +73,7 @@ class BreadcrumbTest extends BaseApiTest
     public function if_labels_are_defined_for_entities_in_the_config_they_are_used()
     {
         $this->buildTheWorld();
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setLabel('Worker');
@@ -115,7 +115,7 @@ class BreadcrumbTest extends BaseApiTest
     public function if_a_custom_label_is_defined_it_is_used_on_leaves()
     {
         $this->buildTheWorld();
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setShow(PersonWithBreadcrumbConfigSharpShow::class);
