@@ -169,10 +169,10 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_reorder_instances()
     {
         $this->withoutExceptionHandling();
-        
+
         $this
             ->postJson('/sharp/api/list/person/reorder', [
-                'instances' => [3, 2, 1,],
+                'instances' => [3, 2, 1],
             ])
             ->assertOk();
     }
