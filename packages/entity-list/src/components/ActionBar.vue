@@ -1,111 +1,120 @@
 <template>
-    <ActionBar class="SharpActionBarList">
-        <template v-slot:left>
-            <EntityListTitle :count="count" :search="search">
-                <template v-if="currentEntity">
-                    <div class="ui-font-size">
-                        <div class="row align-items-center flex-nowrap gx-2">
+    <div>
+        <ActionBar />
+        <div class="row">
+            <div class="col">
+                <EntityListTitle :count="count" :search="search">
+                    <Breadcrumb :items="breadcrumb" />
+                </EntityListTitle>
+            </div>
+            <div class="col-auto">
+                <div class="row justify-content-end flex-nowrap gx-3">
+                    <template v-if="canReorder">
+                        <template v-if="reorderActive">
                             <div class="col-auto">
-                                <i class="fa" :class="currentEntity.icon"></i>
+                                <Button outline @click="handleReorderButtonClicked">
+                                    {{ l('action_bar.list.reorder_button.cancel') }}
+                                </Button>
                             </div>
-                            <div class="col">
-                                <h1 class="ui-title-font mb-0" style="font-size: inherit">
-                                    {{ currentEntity.label }}
-                                </h1>
+                            <div class="col-auto">
+                                <Button @click="handleReorderSubmitButtonClicked">
+                                    {{ l('action_bar.list.reorder_button.finish') }}
+                                </Button>
                             </div>
-                        </div>
-                    </div>
-                </template>
-            </EntityListTitle>
-        </template>
-        <template v-slot:right>
-            <div class="row justify-content-end flex-nowrap gx-3 gx-md-4">
-                <template v-if="canReorder">
-                    <template v-if="reorderActive">
-                        <div class="col-auto">
-                            <Button variant="light" large outline @click="handleReorderButtonClicked">
-                                {{ l('action_bar.list.reorder_button.cancel') }}
-                            </Button>
-                        </div>
-                        <div class="col-auto">
-                            <Button variant="light" large @click="handleReorderSubmitButtonClicked">
-                                {{ l('action_bar.list.reorder_button.finish') }}
-                            </Button>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div class="col-auto">
-                            <Button variant="light" large outline @click="handleReorderButtonClicked">
-                                {{ l('action_bar.list.reorder_button') }}
-                            </Button>
-                        </div>
-                    </template>
-                </template>
-
-                <template v-if="primaryCommand && !reorderActive">
-                    <div class="col-auto">
-                        <Button variant="light" large @click="handlePrimaryCommandClicked">
-                            {{ primaryCommand.label }}
-                        </Button>
-                    </div>
-                </template>
-
-                <template v-if="canCreate && !reorderActive">
-                    <div class="col-auto">
-                        <template v-if="hasForms">
-                            <MultiformDropdown
-                                :forms="forms"
-                                variant="light"
-                                large
-                                right
-                                @select="handleCreateFormSelected"
-                            />
                         </template>
                         <template v-else>
-                            <Button variant="light" large @click="handleCreateButtonClicked">
-                                {{ l('action_bar.list.create_button') }}
+                            <div class="col-auto">
+                                <Button outline @click="handleReorderButtonClicked">
+                                    {{ l('action_bar.list.reorder_button') }}
+                                </Button>
+                            </div>
+                        </template>
+                    </template>
+
+                    <template v-if="hasCommands && !reorderActive">
+                        <div class="col-auto">
+                            <CommandsDropdown
+                                class="bg-white"
+                                outline
+                                :commands="commands"
+                                :disabled="reorderActive"
+                                @select="handleCommandSelected"
+                            >
+                                <template v-slot:text>
+                                    {{ l('entity_list.commands.entity.label') }}
+                                </template>
+                            </CommandsDropdown>
+                        </div>
+                    </template>
+
+                    <template v-if="primaryCommand && !reorderActive">
+                        <div class="col-auto">
+                            <Button @click="handlePrimaryCommandClicked">
+                                {{ primaryCommand.label }}
                             </Button>
+                        </div>
+                    </template>
+
+                    <template v-if="canCreate && !reorderActive">
+                        <div class="col-auto">
+                            <template v-if="hasForms">
+                                <MultiformDropdown
+                                    :forms="forms"
+                                    right
+                                    @select="handleCreateFormSelected"
+                                />
+                            </template>
+                            <template v-else>
+                                <Button small @click="handleCreateButtonClicked">
+                                    {{ l('action_bar.list.create_button') }}
+                                </Button>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-3 mt-4">
+            <div class="row">
+                <div class="col">
+                    <div class="row gx-2 gy-1">
+                        <template v-for="filter in filters">
+                            <div class="col-auto">
+                                <SharpFilter
+                                    :filter="filter"
+                                    :value="filtersValues[filter.key]"
+                                    :disabled="reorderActive"
+                                    @input="handleFilterChanged(filter, $event)"
+                                    :key="filter.id"
+                                />
+                            </div>
                         </template>
                     </div>
-                </template>
-            </div>
-        </template>
-        <template v-slot:extras>
-            <div class="row gx-2 gy-1">
-                <template v-for="filter in filters">
-                    <div class="col-auto">
-                        <SharpFilter
-                            :filter="filter"
-                            :value="filtersValues[filter.key]"
+                </div>
+                <div class="col-auto">
+                    <div style="max-width: 300px">
+                        <Search
+                            class="h-100"
+                            :value="search"
+                            :placeholder="l('action_bar.list.search.placeholder')"
                             :disabled="reorderActive"
-                            @input="handleFilterChanged(filter, $event)"
-                            :key="filter.id"
+                            @submit="handleSearchSubmitted"
                         />
                     </div>
-                </template>
+                </div>
             </div>
-        </template>
-        <template v-if="canSearch" v-slot:extras-right>
-            <div style="max-width: 300px">
-                <Search
-                    class="h-100"
-                    :value="search"
-                    :placeholder="l('action_bar.list.search.placeholder')"
-                    :disabled="reorderActive"
-                    @submit="handleSearchSubmitted"
-                />
-            </div>
-        </template>
-    </ActionBar>
+        </div>
+    </div>
 </template>
 
 <script>
-    import { ActionBar, Dropdown,  DropdownItem, Search, Button } from 'sharp-ui';
+    import { ActionBar, Dropdown,  DropdownItem, Search, Button, Breadcrumb } from 'sharp-ui';
     import { SharpFilter } from 'sharp-filters';
 
     import { Localization } from 'sharp/mixins';
     import MultiformDropdown from "./MultiformDropdown";
     import EntityListTitle from "./EntityListTitle";
+    import { CommandsDropdown } from "sharp-commands";
 
     export default {
         name: 'SharpActionBarList',
@@ -113,6 +122,7 @@
         mixins: [Localization],
 
         components : {
+            CommandsDropdown,
             EntityListTitle,
             MultiformDropdown,
             ActionBar,
@@ -121,6 +131,7 @@
             SharpFilter,
             Search,
             Button,
+            Breadcrumb,
         },
 
         props: {
@@ -129,15 +140,23 @@
             filters: Array,
             filtersValues: Object,
             forms: Array,
-            primaryCommand: Object,
+            commands: Array,
 
             canCreate: Boolean,
             canReorder: Boolean,
             canSearch: Boolean,
 
-            reorderActive: Boolean
+            reorderActive: Boolean,
+            breadcrumb: Array,
+            showBreadcrumb: Boolean,
         },
         computed: {
+            hasCommands() {
+                return this.commands?.flat().length > 0;
+            },
+            primaryCommand() {
+                return this.commands?.flat().find(command => command.primary);
+            },
             hasForms() {
                 return this.forms && this.forms.length > 0;
             },
@@ -167,6 +186,9 @@
             },
             handleCreateFormSelected(form) {
                 this.$emit('create', form);
+            },
+            handleCommandSelected(command) {
+                this.$emit('command', command);
             },
         }
     }

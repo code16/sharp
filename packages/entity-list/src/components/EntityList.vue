@@ -37,15 +37,7 @@
                     <template v-slot:append-head>
                         <template v-if="hasEntityCommands">
                             <div class="d-flex align-items-center justify-content-end">
-                                <CommandsDropdown
-                                    :commands="dropdownEntityCommands"
-                                    :disabled="reorderActive"
-                                    @select="handleCommandRequested"
-                                >
-                                    <template v-slot:text>
-                                        {{ l('entity_list.commands.entity.label') }}
-                                    </template>
-                                </CommandsDropdown>
+
                             </div>
                         </template>
                     </template>
@@ -197,6 +189,7 @@
                 config: null,
                 authorizations: null,
                 forms: null,
+                breadcrumb: null,
 
                 currentCommandInstanceId: null,
             }
@@ -268,11 +261,13 @@
                     filters: this.filters,
                     filtersValues: this.filtersValues,
                     forms: this.multiforms,
-                    primaryCommand: this.allowedEntityCommands.flat().find(command => command.primary),
+                    commands: this.allowedEntityCommands,
                     reorderActive: this.reorderActive,
                     canCreate: this.canCreate,
                     canReorder: this.canReorder,
                     canSearch: this.canSearch,
+                    breadcrumb: this.breadcrumb?.items,
+                    showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
             actionBarListeners() {
@@ -619,7 +614,7 @@
             /**
              * Data
              */
-            mount({ containers, layout, data, fields, config, authorizations, forms }) {
+            mount({ containers, layout, data, fields, config, authorizations, forms, breadcrumb }) {
                 this.containers = containers;
                 this.layout = layout;
                 this.data = data ?? {};
@@ -631,6 +626,7 @@
                 };
                 this.authorizations = authorizations;
                 this.forms = forms;
+                this.breadcrumb = breadcrumb;
 
                 this.page = this.data.list.page;
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);
