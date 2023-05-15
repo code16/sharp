@@ -55,7 +55,7 @@
         },
         methods: {
             handleUpdate(editor, { error } = {}) {
-                const content = normalizeText(editor.getMarkdown() ?? '');
+                const content = normalizeText(editor.storage.markdown.getMarkdown() ?? '');
                 this.$emit('input', this.localizedValue(content), { error });
             },
             toolbarOptions(editor) {

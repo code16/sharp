@@ -66,7 +66,7 @@
     import { Modal, Button } from "sharp-ui";
     import NodeRenderer from "../../NodeRenderer";
     import { getHTMLFromFragment } from "@tiptap/core";
-    import { Fragment } from "prosemirror-model";
+    import { Fragment } from "@tiptap/pm/model";
 
     export default {
         components: {
