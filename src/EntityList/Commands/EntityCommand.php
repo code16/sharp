@@ -30,5 +30,29 @@ abstract class EntityCommand extends Command
         return [];
     }
 
+    final public function getInstanceSelectionMode(): string
+    {
+        return $this->requiresSelect()
+            ? 'required'
+            : ($this->allowsSelect() ? 'allowed' : 'none');
+    }
+    
+    final public function selectedIds(): array
+    {
+        return $this->getInstanceSelectionMode() === 'none' 
+            ? [] 
+            : $this->queryParams->specificIds();
+    }
+
+    public function requiresSelect(): bool
+    {
+        return false;
+    }
+
+    public function allowsSelect(): bool
+    {
+        return false;
+    }
+    
     abstract public function execute(array $data = []): array;
 }
