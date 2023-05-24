@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 // API routes
 Route::group([
     'prefix' => '/'.sharp_base_url_segment().'/api',
-    'middleware' => ['sharp_web', 'sharp_api_errors', 'sharp_api_validation', 'sharp_locale'],
+    'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
     Route::get('/dashboard/{dashboardKey}', [\Code16\Sharp\Http\Api\DashboardController::class, 'show'])
         ->name('code16.sharp.api.dashboard')
@@ -130,7 +130,7 @@ Route::group([
 // Web routes
 Route::group([
     'prefix' => '/'.sharp_base_url_segment(),
-    'middleware' => ['sharp_web', 'sharp_invalidate_cache'],
+    'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
     Route::get('/login', [LoginController::class, 'create'])
         ->name('code16.sharp.login');

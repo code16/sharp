@@ -21,10 +21,6 @@ use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
-use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
-use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
-use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
-use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\View\Components\Content;
@@ -36,7 +32,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '7.29.0';
+    const VERSION = '8.0.0';
 
     public function boot()
     {
@@ -104,63 +100,16 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerMiddleware(): void
     {
-        $this->app['router']->middlewareGroup('sharp_web', [
-            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-            \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-            \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
-            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ]);
-
         $this->app['router']
-            ->aliasMiddleware(
-                'sharp_api_append_form_authorizations',
-                AppendFormAuthorizations::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_list_authorizations',
-                AppendListAuthorizations::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_multiform_in_list',
-                AppendMultiformInEntityList::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_notifications',
-                AppendNotifications::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_errors',
-                HandleSharpApiErrors::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_validation',
-                BindSharpValidationResolver::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_breadcrumb',
-                AppendBreadcrumb::class,
-            )
-            ->aliasMiddleware(
-                'sharp_locale',
-                SetSharpLocale::class,
-            )
-            ->aliasMiddleware(
-                'sharp_auth',
-                SharpAuthenticate::class,
-            )
-            ->aliasMiddleware(
-                'sharp_guest',
-                SharpRedirectIfAuthenticated::class,
-            )
-            ->aliasMiddleware(
-                'sharp_invalidate_cache',
-                InvalidateCache::class,
-            );
+            ->middlewareGroup('sharp_common', $this->app['config']->get('sharp.middleware.common'))
+            ->middlewareGroup('sharp_web', $this->app['config']->get('sharp.middleware.web'))
+            ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
+            ->aliasMiddleware('sharp_api_append_form_authorizations', AppendFormAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
+            ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)
+            ->aliasMiddleware('sharp_api_append_breadcrumb', AppendBreadcrumb::class)
+            ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
+            ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
     }
 }

@@ -14,12 +14,6 @@ use Illuminate\Validation\ValidationException;
 
 class HandleSharpApiErrors
 {
-    /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
-     * @return mixed
-     */
     public function handle($request, Closure $next, $guard = null)
     {
         $response = $next($request);
