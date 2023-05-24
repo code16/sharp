@@ -34,23 +34,66 @@ class DashboardCommandTest extends SharpTestCase
         };
 
         $dashboard->buildDashboardConfig();
-
-        $this->assertArraySubset(
+        $this->assertEquals(
             [
-                'commands' => [
-                    'dashboard' => [
-                        [
-                            [
-                                'key' => 'dashboardCommand',
-                                'label' => 'My Dashboard Command',
-                                'type' => 'dashboard',
-                                'authorization' => true,
-                            ],
-                        ],
-                    ],
-                ],
+                'key' => 'dashboardCommand',
+                'label' => 'My Dashboard Command',
+                'type' => 'dashboard',
+                'authorization' => true,
+                'description' => null,
+                'confirmation' => null,
+                'modal_title' => null,
+                'modal_confirm_label' => null,
+                'has_form' => false,
             ],
-            $dashboard->dashboardConfig(),
+            $dashboard->dashboardConfig()['commands']['dashboard'][0][0]
+        );
+    }
+
+    /** @test */
+    public function we_can_get_list_section_placed_commands_config_of_a_dashboard()
+    {
+        $dashboard = new class extends FakeSharpDashboard
+        {
+            public function getDashboardCommands(): ?array
+            {
+                return [
+                    'section-1' => [
+                        'dashboardSectionCommand' => new class extends DashboardCommand
+                        {
+                            public function label(): string
+                            {
+                                return 'My Dashboard Command';
+                            }
+    
+                            public function execute(array $data = []): array
+                            {
+                            }
+                        },
+                    ],
+                    'dashboardCommand' => new class extends DashboardCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'Another Dashboard Command';
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                ];
+            }
+        };
+        
+        $dashboard->buildDashboardConfig();
+        $this->assertEquals(
+            'dashboardSectionCommand',
+            $dashboard->dashboardConfig()['commands']['section-1'][0][0]['key']
+        );
+        $this->assertEquals(
+            'dashboardCommand',
+            $dashboard->dashboardConfig()['commands']['dashboard'][0][0]['key']
         );
     }
 
