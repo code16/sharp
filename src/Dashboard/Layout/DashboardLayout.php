@@ -43,7 +43,7 @@ class DashboardLayout implements HasLayout
 
         return $this->sections[0];
     }
-    
+
     private function addSectionLayout(DashboardLayoutSection $section): DashboardLayoutSection
     {
         $this->sections[] = $section;

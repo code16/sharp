@@ -65,7 +65,7 @@ class DashboardCommandTest extends SharpTestCase
                             {
                                 return 'My Dashboard Command';
                             }
-    
+
                             public function execute(array $data = []): array
                             {
                             }
@@ -85,7 +85,7 @@ class DashboardCommandTest extends SharpTestCase
                 ];
             }
         };
-        
+
         $dashboard->buildDashboardConfig();
         $this->assertEquals(
             'dashboardSectionCommand',

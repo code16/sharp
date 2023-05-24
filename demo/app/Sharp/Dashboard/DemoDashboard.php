@@ -97,16 +97,16 @@ class DemoDashboard extends SharpDashboard
     {
         return [
             PeriodRequiredFilter::class,
-//            'stats-section' => [
-//                PeriodRequiredFilter::class,
-//            ]
+            //            'stats-section' => [
+            //                PeriodRequiredFilter::class,
+            //            ]
         ];
     }
 
     public function getDashboardCommands(): ?array
     {
         return [
-//            ExportStatsAsCsvCommand::class,
+            //            ExportStatsAsCsvCommand::class,
             'stats-section' => [
                 ExportStatsAsCsvCommand::class,
             ],

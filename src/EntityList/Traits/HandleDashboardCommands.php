@@ -44,7 +44,7 @@ trait HandleDashboardCommands
                             ->filter(fn ($value, $index) => ! is_array($value)),
                     ]
                 )
-                
+
                 ->map(function ($handlers) {
                     $groupIndex = 0;
 
@@ -57,7 +57,7 @@ trait HandleDashboardCommands
 
                                     return null;
                                 }
-                                if (!class_exists($commandHandlerOrClassName)) {
+                                if (! class_exists($commandHandlerOrClassName)) {
                                     throw new SharpException("Handler for dashboard command [{$commandHandlerOrClassName}] is invalid");
                                 }
                                 $commandHandler = app($commandHandlerOrClassName);
@@ -65,8 +65,8 @@ trait HandleDashboardCommands
                                 $commandHandler = $commandHandlerOrClassName;
                             }
 
-                            if (!$commandHandler instanceof DashboardCommand) {
-                                throw new SharpException("Handler class for dashboard command [{$commandHandlerOrClassName}] is not an subclass of " . DashboardCommand::class);
+                            if (! $commandHandler instanceof DashboardCommand) {
+                                throw new SharpException("Handler class for dashboard command [{$commandHandlerOrClassName}] is not an subclass of ".DashboardCommand::class);
                             }
 
                             $commandHandler->setGroupIndex($groupIndex);

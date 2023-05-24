@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Code16\Sharp\Tests\Fixtures\SharpDashboardWithSections;
-
 class DashboardControllerTest extends BaseApiTest
 {
     protected function setUp(): void
@@ -25,11 +23,11 @@ class DashboardControllerTest extends BaseApiTest
                 'widgets' => [
                     'bars' => [
                         'type' => 'graph',
-                    ], 
+                    ],
                     'panel' => [
                         'type' => 'panel',
                     ],
-                ]
+                ],
             ]);
     }
 
@@ -55,11 +53,11 @@ class DashboardControllerTest extends BaseApiTest
                                 ],
                             ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
-    
+
     /** @test */
     public function we_can_get_dashboard_data()
     {
@@ -95,7 +93,7 @@ class DashboardControllerTest extends BaseApiTest
                             'name' => 'John Wayne',
                         ],
                     ],
-                ]
+                ],
             ]);
     }
 }

@@ -88,8 +88,8 @@ class SharpDashboardTest extends SharpTestCase
                                 ['key' => 'widget3', 'size' => 8],
                             ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ],
             $dashboard->widgetsLayout(),
         );
@@ -146,8 +146,8 @@ class SharpDashboardTest extends SharpTestCase
                                 ['key' => 'widget', 'size' => 12],
                             ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ],
             $dashboard->widgetsLayout(),
         );
