@@ -156,9 +156,95 @@ class SharpEntityListCommandTest extends SharpTestCase
                         [
                             [
                                 'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
                                 'type' => 'entity',
                                 'confirmation' => 'Sure?',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $list->listConfig(),
+        );
+    }
+
+    /** @test */
+    public function we_can_declare_instance_selection_mode_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList
+        {
+            public function getEntityCommands(): ?array
+            {
+                return [
+                    'command_required' => new class extends EntityCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'My Entity Command';
+                        }
+
+                        public function buildCommandConfig(): void
+                        {
+                            $this->configureInstanceSelectionRequired();
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                    'command_allowed' => new class extends EntityCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'My Entity Command';
+                        }
+
+                        public function buildCommandConfig(): void
+                        {
+                            $this->configureInstanceSelectionAllowed();
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                    'command_none' => new class extends EntityCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'My Entity Command';
+                        }
+
+                        public function buildCommandConfig(): void
+                        {
+                            $this->configureInstanceSelectionNone();
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                ];
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertArraySubset(
+            [
+                'commands' => [
+                    'entity' => [
+                        [
+                            [
+                                'key' => 'command_required',
+                                'instance_selection' => 'required',
+                            ],
+                            [
+                                'key' => 'command_allowed',
+                                'instance_selection' => 'allowed',
+                            ],
+                            [
+                                'key' => 'command_none',
+                                'instance_selection' => 'none',
                             ],
                         ],
                     ],

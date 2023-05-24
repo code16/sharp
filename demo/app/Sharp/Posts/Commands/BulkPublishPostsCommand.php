@@ -11,15 +11,11 @@ class BulkPublishPostsCommand extends EntityCommand
     {
         return 'Publish all selected posts';
     }
-
+    
     public function buildCommandConfig(): void
     {
-        $this->configureDescription('Bulk command to publish posts');
-    }
-    
-    public function requiresSelect(): bool
-    {
-        return true;
+        $this->configureDescription('Bulk command to publish posts')
+            ->configureInstanceSelectionRequired();
     }
 
     public function execute(array $data = []): array

@@ -7,10 +7,32 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
+    protected string $instanceSelectionMode = 'none';
 
     public function type(): string
     {
         return 'entity';
+    }
+    
+    final protected function configureInstanceSelectionRequired(?bool $required = true): self
+    {
+        $this->instanceSelectionMode = $required ? 'required' : 'none';
+
+        return $this;
+    }
+
+    final protected function configureInstanceSelectionAllowed(?bool $allowed = true): self
+    {
+        $this->instanceSelectionMode = $allowed ? 'allowed' : 'none';
+
+        return $this;
+    }
+
+    final protected function configureInstanceSelectionNone(): self
+    {
+        $this->instanceSelectionMode = 'none';
+
+        return $this;
     }
 
     final public function initQueryParams(EntityListQueryParams $params): void
@@ -32,26 +54,14 @@ abstract class EntityCommand extends Command
 
     final public function getInstanceSelectionMode(): string
     {
-        return $this->requiresSelect()
-            ? 'required'
-            : ($this->allowsSelect() ? 'allowed' : 'none');
+        return $this->instanceSelectionMode;
     }
     
     final public function selectedIds(): array
     {
-        return $this->getInstanceSelectionMode() === 'none' 
+        return $this->instanceSelectionMode === 'none' 
             ? [] 
             : $this->queryParams->specificIds();
-    }
-
-    public function requiresSelect(): bool
-    {
-        return false;
-    }
-
-    public function allowsSelect(): bool
-    {
-        return false;
     }
     
     abstract public function execute(array $data = []): array;
