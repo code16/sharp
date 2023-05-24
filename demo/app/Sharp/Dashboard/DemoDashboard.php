@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
@@ -74,16 +75,21 @@ class DemoDashboard extends SharpDashboard
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
         $dashboardLayout
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(6, 'authors_bar')
-                    ->addWidget(6, 'categories_pie');
+            ->addSection('Posts', function (DashboardLayoutSection $section) {
+                $section
+                    ->addRow(function (DashboardLayoutRow $row) {
+                        $row->addWidget(6, 'draft_panel')
+                            ->addWidget(6, 'online_panel');
+                    });
             })
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(12, 'visits_line');
-            })
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(6, 'draft_panel')
-                    ->addWidget(6, 'online_panel');
+            ->addSection('Stats', function (DashboardLayoutSection $section) {
+                $section
+                    ->setKey('stats-section')
+                    ->addRow(function (DashboardLayoutRow $row) {
+                        $row->addWidget(6, 'authors_bar')
+                            ->addWidget(6, 'categories_pie');
+                    })
+                    ->addFullWidthWidget('visits_line');
             });
     }
 
@@ -91,6 +97,9 @@ class DemoDashboard extends SharpDashboard
     {
         return [
             PeriodRequiredFilter::class,
+//            'stats-section' => [
+//                PeriodRequiredFilter::class,
+//            ]
         ];
     }
 
@@ -98,6 +107,9 @@ class DemoDashboard extends SharpDashboard
     {
         return [
             ExportStatsAsCsvCommand::class,
+//            'stats-section' => [
+//                ExportStatsAsCsvCommand::class,
+//            ],
         ];
     }
 
