@@ -38,7 +38,7 @@ class DashboardLayout implements HasLayout
     private function getLonelySection(): DashboardLayoutSection
     {
         if (! sizeof($this->sections)) {
-            return $this->addSectionLayout(new DashboardLayoutSection('one'));
+            return $this->addSectionLayout(new DashboardLayoutSection(''));
         }
 
         return $this->sections[0];

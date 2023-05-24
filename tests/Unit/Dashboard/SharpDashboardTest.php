@@ -78,7 +78,7 @@ class SharpDashboardTest extends SharpTestCase
                 'sections' => [
                     [
                         'key' => null,
-                        'label' => 'one',
+                        'label' => '',
                         'rows' => [
                             [
                                 ['key' => 'widget', 'size' => 12],
