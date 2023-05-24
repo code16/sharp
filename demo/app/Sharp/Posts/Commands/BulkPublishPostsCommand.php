@@ -11,7 +11,7 @@ class BulkPublishPostsCommand extends EntityCommand
     {
         return 'Publish all selected posts';
     }
-    
+
     public function buildCommandConfig(): void
     {
         $this->configureDescription('Bulk command to publish posts')
@@ -20,7 +20,7 @@ class BulkPublishPostsCommand extends EntityCommand
 
     public function execute(array $data = []): array
     {
-        Post::whereIn("id", $this->selectedIds())
+        Post::whereIn('id', $this->selectedIds())
             ->get()
             ->each(fn (Post $post) => $post
                 ->update(['state' => 'published'])

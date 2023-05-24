@@ -53,7 +53,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals(
             [
                 'key' => 'entityCommand',
@@ -103,7 +103,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('entityCommand', $list->listConfig()['commands']['entity'][0][0]['key']);
     }
 
@@ -136,7 +136,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('Sure?', $list->listConfig()['commands']['entity'][0][0]['confirmation']);
     }
 
@@ -201,7 +201,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('required', $list->listConfig()['commands']['entity'][0][0]['instance_selection']);
         $this->assertEquals('allowed', $list->listConfig()['commands']['entity'][0][1]['instance_selection']);
         $this->assertEquals('none', $list->listConfig()['commands']['entity'][0][2]['instance_selection']);
@@ -308,7 +308,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertTrue($list->listConfig()['commands']['entity'][0][0]['has_form']);
     }
 
@@ -341,7 +341,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('My title', $list->listConfig()['commands']['entity'][0][0]['modal_title']);
     }
 
@@ -374,7 +374,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertFalse($list->listConfig()['commands']['entity'][0][0]['authorization']);
     }
 
@@ -411,8 +411,8 @@ class SharpEntityListCommandTest extends SharpTestCase
             ['id' => 1], ['id' => 2], ['id' => 3],
             ['id' => 4], ['id' => 5], ['id' => 6],
         ]);
-        
-        $this->assertEquals([1,2], $list->listConfig()['commands']['instance'][0][0]['authorization']);
+
+        $this->assertEquals([1, 2], $list->listConfig()['commands']['instance'][0][0]['authorization']);
     }
 
     /** @test */
@@ -444,7 +444,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('My Entity Command description', $list->listConfig()['commands']['entity'][0][0]['description']);
     }
 
@@ -495,7 +495,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('command-1', $list->listConfig()['commands']['instance'][0][0]['key']);
         $this->assertEquals('command-2', $list->listConfig()['commands']['instance'][0][1]['key']);
         $this->assertEquals('command-3', $list->listConfig()['commands']['instance'][1][0]['key']);
@@ -548,7 +548,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('command-1', $list->listConfig()['commands']['entity'][0][0]['key']);
         $this->assertEquals('command-2', $list->listConfig()['commands']['entity'][1][0]['key']);
         $this->assertEquals('command-3', $list->listConfig()['commands']['entity'][1][1]['key']);
@@ -594,7 +594,7 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals('primary-entity', $list->listConfig()['commands']['entity'][0][1]['key']);
         $this->assertTrue($list->listConfig()['commands']['entity'][0][1]['primary']);
     }

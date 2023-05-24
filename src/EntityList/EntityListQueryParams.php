@@ -43,8 +43,8 @@ class EntityListQueryParams
             $this->sortedBy = $query['sort'];
             $this->sortedDir = $query['dir'];
         }
-        
-        if(isset($query['ids'])) {
+
+        if (isset($query['ids'])) {
             $this->specificIds = explode(',', $query['ids']);
         }
 

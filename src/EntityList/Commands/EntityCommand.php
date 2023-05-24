@@ -14,12 +14,12 @@ abstract class EntityCommand extends Command
     {
         return 'entity';
     }
-    
+
     final protected function configureInstanceSelectionRequired(?string $attribute = null, array|string|bool $values = true): self
     {
         $this->instanceSelectionMode = 'required';
         $this->setInstanceSelectionCriteria($attribute, $values);
-        
+
         return $this;
     }
 
@@ -64,23 +64,24 @@ abstract class EntityCommand extends Command
     {
         return $this->instanceSelectionCriteria;
     }
-    
+
     final public function selectedIds(): array
     {
-        return $this->instanceSelectionMode === 'none' 
-            ? [] 
+        return $this->instanceSelectionMode === 'none'
+            ? []
             : $this->queryParams->specificIds();
     }
-    
+
     abstract public function execute(array $data = []): array;
 
     private function setInstanceSelectionCriteria(?string $attribute, bool|array|string $values): void
     {
-        if($attribute === null) {
+        if ($attribute === null) {
             $this->instanceSelectionCriteria = null;
+
             return;
         }
-        
+
         if (str($attribute)->startsWith('!')) {
             $attribute = substr($attribute, 1);
             $values = false;

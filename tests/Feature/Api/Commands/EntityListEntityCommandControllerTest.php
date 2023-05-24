@@ -525,7 +525,7 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 {
                     return 'label';
                 }
-                
+
                 public function buildCommandConfig(): void
                 {
                     $this->configureInstanceSelectionRequired();
