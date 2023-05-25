@@ -1,4 +1,4 @@
-import { Plugin } from 'prosemirror-state';
+import { Plugin } from '@tiptap/pm/state';
 
 
 function insertFiles(files, { editor, pos }) {
