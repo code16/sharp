@@ -106,7 +106,6 @@ class DemoDashboard extends SharpDashboard
     public function getDashboardCommands(): ?array
     {
         return [
-            //            ExportStatsAsCsvCommand::class,
             'stats-section' => [
                 ExportStatsAsCsvCommand::class,
             ],
