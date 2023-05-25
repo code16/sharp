@@ -96,10 +96,9 @@ class DemoDashboard extends SharpDashboard
     public function getFilters(): ?array
     {
         return [
-            PeriodRequiredFilter::class,
-            //            'stats-section' => [
-            //                PeriodRequiredFilter::class,
-            //            ]
+            'stats-section' => [
+                PeriodRequiredFilter::class,
+            ]
         ];
     }
 

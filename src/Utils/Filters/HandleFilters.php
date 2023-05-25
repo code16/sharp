@@ -12,40 +12,48 @@ trait HandleFilters
     protected function appendFiltersToConfig(array &$config): void
     {
         $this->getFilterHandlers()
-            ->each(function (Filter $filterHandler) use (&$config) {
-                $filterConfigData = [
-                    'key' => $filterHandler->getKey(),
-                    'default' => $this->getFilterDefaultValue($filterHandler),
-                    'label' => $filterHandler->getLabel(),
-                ];
-
-                if ($filterHandler instanceof SelectFilter) {
-                    $multiple = $filterHandler instanceof SelectMultipleFilter;
-
-                    $filterConfigData += [
-                        'type' => 'select',
-                        'multiple' => $multiple,
-                        'required' => ! $multiple && $filterHandler instanceof SelectRequiredFilter,
-                        'values' => $this->formatSelectFilterValues($filterHandler),
-                        'master' => $filterHandler->isMaster(),
-                        'searchable' => $filterHandler->isSearchable(),
-                        'searchKeys' => $filterHandler->getSearchKeys(),
-                        'template' => $filterHandler->getTemplate(),
-                    ];
-                } elseif ($filterHandler instanceof DateRangeFilter) {
-                    $filterConfigData += [
-                        'type' => 'daterange',
-                        'required' => $filterHandler instanceof DateRangeRequiredFilter,
-                        'mondayFirst' => $filterHandler->isMondayFirst(),
-                        'displayFormat' => $filterHandler->getDateFormat(),
-                    ];
-                } elseif ($filterHandler instanceof CheckFilter) {
-                    $filterConfigData += [
-                        'type' => 'check',
-                    ];
+            ->each(function (Collection $filterHandlers, string $positionKey) use (&$config) {
+                if($filterHandlers->count() === 0) {
+                    return;
                 }
+                
+                $config['filters'][$positionKey] = $filterHandlers
+                    ->map(function (Filter $filterHandler) {
+                        $filterConfigData = [
+                            'key' => $filterHandler->getKey(),
+                            'default' => $this->getFilterDefaultValue($filterHandler),
+                            'label' => $filterHandler->getLabel(),
+                        ];
 
-                $config['filters'][] = $filterConfigData;
+                        if ($filterHandler instanceof SelectFilter) {
+                            $multiple = $filterHandler instanceof SelectMultipleFilter;
+
+                            $filterConfigData += [
+                                'type' => 'select',
+                                'multiple' => $multiple,
+                                'required' => !$multiple && $filterHandler instanceof SelectRequiredFilter,
+                                'values' => $this->formatSelectFilterValues($filterHandler),
+                                'master' => $filterHandler->isMaster(),
+                                'searchable' => $filterHandler->isSearchable(),
+                                'searchKeys' => $filterHandler->getSearchKeys(),
+                                'template' => $filterHandler->getTemplate(),
+                            ];
+                        } elseif ($filterHandler instanceof DateRangeFilter) {
+                            $filterConfigData += [
+                                'type' => 'daterange',
+                                'required' => $filterHandler instanceof DateRangeRequiredFilter,
+                                'mondayFirst' => $filterHandler->isMondayFirst(),
+                                'displayFormat' => $filterHandler->getDateFormat(),
+                            ];
+                        } elseif ($filterHandler instanceof CheckFilter) {
+                            $filterConfigData += [
+                                'type' => 'check',
+                            ];
+                        }
+
+                        return $filterConfigData;
+                    })
+                    ->toArray();
             });
     }
 
@@ -53,23 +61,45 @@ trait HandleFilters
     {
         if ($this->filterHandlers === null) {
             $this->filterHandlers = collect($this->getFilters())
-                ->map(function ($filterHandlerOrClassName) {
-                    if (is_string($filterHandlerOrClassName)) {
-                        if (! class_exists($filterHandlerOrClassName)) {
-                            throw new SharpException("Handler for filter [{$filterHandlerOrClassName}] is invalid");
-                        }
-                        $filterHandler = app($filterHandlerOrClassName);
-                    } else {
-                        $filterHandler = $filterHandlerOrClassName;
-                    }
 
-                    if (! $filterHandler instanceof Filter) {
-                        throw new SharpException("Handler class for filter [{$filterHandlerOrClassName}] must implement a sub-interface of ".Filter::class);
-                    }
+                // First get filters which are section-based...
+                ->filter(fn ($value, $index) => is_array($value))
 
-                    $filterHandler->buildFilterConfig();
+                // ... and merge filters set for the whole page
+                ->merge(
+                    [
+                        '_page' => collect($this->getFilters())
+                            ->filter(fn ($value, $index) => ! is_array($value)),
+                    ]
+                )
 
-                    return $filterHandler;
+                ->map(function ($handlers) {
+                    return collect($handlers)
+                        ->map(function ($filterHandlerOrClassName)  {
+                            if (is_string($filterHandlerOrClassName)) {
+                                if (!class_exists($filterHandlerOrClassName)) {
+                                    throw new SharpException(sprintf(
+                                        'Handler for filter [%s] is invalid',
+                                        $filterHandlerOrClassName
+                                    ));
+                                }
+                                $filterHandler = app($filterHandlerOrClassName);
+                            } else {
+                                $filterHandler = $filterHandlerOrClassName;
+                            }
+
+                            if (!$filterHandler instanceof Filter) {
+                                throw new SharpException(sprintf(
+                                    'Handler class for filter [%s] must implement a sub-interface of [%s]',
+                                    $filterHandlerOrClassName,
+                                    Filter::class
+                                ));
+                            }
+
+                            $filterHandler->buildFilterConfig();
+
+                            return $filterHandler;
+                        });
                 });
         }
 
@@ -94,7 +124,8 @@ trait HandleFilters
 
     protected function getFilterDefaultValues(): array
     {
-        return collect($this->getFilterHandlers())
+        return $this->getFilterHandlers()
+            ->flatten()
 
             // Only filters which aren't in the request
             ->filter(function (Filter $handler) {
@@ -132,7 +163,8 @@ trait HandleFilters
      */
     protected function putRetainedFilterValuesInSession(): void
     {
-        collect($this->getFilterHandlers())
+        $this->getFilterHandlers()
+            ->flatten()
             // Only filters sent which are declared "retained"
             ->filter(function (Filter $handler) {
                 return request()->has("filter_{$handler->getKey()}")
