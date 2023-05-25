@@ -4,13 +4,13 @@ namespace Code16\Sharp\Dashboard\Layout;
 
 class DashboardLayoutSection
 {
-    protected string $label;
+    protected string $title;
     protected array $rows = [];
     protected ?string $sectionKey = null;
 
-    public function __construct(string $label)
+    public function __construct(string $title)
     {
-        $this->label = $label;
+        $this->title = $title;
     }
 
     final public function addRow(\Closure $callback): self
@@ -49,7 +49,7 @@ class DashboardLayoutSection
     {
         return [
             'key' => $this->sectionKey,
-            'label' => $this->label,
+            'title' => $this->title,
             'rows' => collect($this->rows)
                 ->map(fn (DashboardLayoutRow $row) => $row->toArray())
                 ->toArray(),

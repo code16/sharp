@@ -43,7 +43,7 @@ class DashboardControllerTest extends BaseApiTest
                     'sections' => [
                         [
                             'key' => null,
-                            'label' => '',
+                            'title' => '',
                             'rows' => [
                                 [
                                     ['key' => 'bars', 'size' => 12],
