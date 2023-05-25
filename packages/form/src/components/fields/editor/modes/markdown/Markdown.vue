@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import { createMarkdownEditor } from 'tiptap-markdown';
+    import { Markdown } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import { lang } from "sharp";
     import SharpEditor from '../../Editor';
@@ -55,7 +55,7 @@
         },
         methods: {
             handleUpdate(editor, { error } = {}) {
-                const content = normalizeText(editor.getMarkdown() ?? '');
+                const content = normalizeText(editor.storage.markdown.getMarkdown() ?? '');
                 this.$emit('input', this.localizedValue(content), { error });
             },
             toolbarOptions(editor) {
@@ -74,16 +74,16 @@
             },
 
             createEditor({ content }) {
-                const MarkdownEditor = createMarkdownEditor(Editor);
-
-                return new MarkdownEditor({
+                return new Editor({
                     ...defaultEditorOptions,
-                    extensions: this.extensions,
+                    extensions: [
+                        ...this.extensions,
+                        Markdown.configure({
+                            breaks: this.nl2br,
+                        }),
+                    ],
                     content,
                     editable: !this.readOnly,
-                    markdown: {
-                        breaks: this.nl2br,
-                    },
                 });
             },
         },
