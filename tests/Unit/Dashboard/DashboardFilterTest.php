@@ -83,7 +83,7 @@ class DashboardFilterTest extends SharpTestCase
                                 return [3 => 'C', 4 => 'D'];
                             }
                         },
-                    ]
+                    ],
                 ];
             }
         };

@@ -79,7 +79,7 @@ class EntityListFilterTest extends SharpTestCase
         $list->buildListConfig();
 
         $this->assertEquals(
-            class_basename(SharpEntityListTestFilter::class), 
+            class_basename(SharpEntityListTestFilter::class),
             $list->listConfig()['filters']['_page'][0]['key']
         );
     }
@@ -107,7 +107,7 @@ class EntityListFilterTest extends SharpTestCase
                                 return [3 => 'C', 4 => 'D'];
                             }
                         },
-                    ]
+                    ],
                 ];
             }
         };
@@ -300,7 +300,7 @@ class EntityListFilterTest extends SharpTestCase
             [
                 ['id' => 1, 'letter' => 'a', 'maj' => 'A'],
                 ['id' => 2, 'letter' => 'b', 'maj' => 'B'],
-            ], 
+            ],
             $list->listConfig()['filters']['_page'][0]['values']
         );
     }
@@ -328,7 +328,7 @@ class EntityListFilterTest extends SharpTestCase
         // Artificially put retained value in session
         session()->put('_sharp_retained_filter_test_20', 2);
         $list->buildListConfig();
-        
+
         $this->assertEquals(2, $list->listConfig()['filters']['_page'][0]['default']);
     }
 
@@ -360,7 +360,7 @@ class EntityListFilterTest extends SharpTestCase
         // Artificially put retained value in session
         session()->put('_sharp_retained_filter_test_21', 2);
         $list->buildListConfig();
-        
+
         $this->assertEquals(2, $list->listConfig()['filters']['_page'][0]['default']);
     }
 
@@ -387,7 +387,7 @@ class EntityListFilterTest extends SharpTestCase
         // Artificially put retained value in session
         session()->put('_sharp_retained_filter_test_22', '20190922..20190925');
         $list->buildListConfig();
-        
+
         $this->assertEquals(
             [
                 'start' => '2019-09-22',
@@ -409,7 +409,7 @@ class EntityListFilterTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals(
             class_basename(SharpEntityListDateRangeTestFilter::class),
             $list->listConfig()['filters']['_page'][0]['key']
@@ -432,7 +432,7 @@ class EntityListFilterTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertTrue($list->listConfig()['filters']['_page'][0]['required']);
         $this->assertEquals(
             [
@@ -463,7 +463,7 @@ class EntityListFilterTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertEquals(
             'YYYY-MM-DD',
             $list->listConfig()['filters']['_page'][0]['displayFormat']
@@ -490,7 +490,7 @@ class EntityListFilterTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        
+
         $this->assertFalse($list->listConfig()['filters']['_page'][0]['mondayFirst']);
     }
 

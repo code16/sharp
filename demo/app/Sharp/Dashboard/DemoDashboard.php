@@ -98,7 +98,7 @@ class DemoDashboard extends SharpDashboard
         return [
             'stats-section' => [
                 PeriodRequiredFilter::class,
-            ]
+            ],
         ];
     }
 
