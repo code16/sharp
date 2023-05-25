@@ -45,6 +45,26 @@ return [
     // or external URLs, grouped in categories.
     'menu' => null, //\App\Sharp\SharpMenu::class
 
+    // These middleware will be assigned to Sharp routes
+    'middleware' => [
+        'common' => [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+        'web' => [
+            \Code16\Sharp\Http\Middleware\InvalidateCache::class,
+        ],
+        'api' => [
+            Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
+            Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
+            Code16\Sharp\Http\Middleware\Api\SetSharpLocale::class,
+        ],
+    ],
+
     // Optional. Your file upload configuration.
     'uploads' => [
         // Tmp directory used for file upload.
