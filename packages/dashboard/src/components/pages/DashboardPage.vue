@@ -13,13 +13,15 @@
                         :fields="fields"
                     />
                 </template>
-                <Grid :rows="layout.rows" row-class="gx-3" v-slot="{ itemLayout }">
-                    <Widget
-                        :widget-type="widgets[itemLayout.key].type"
-                        :widget-props="widgets[itemLayout.key]"
-                        :value="data[itemLayout.key]"
-                    />
-                </Grid>
+                <template v-for="section in layout.sections">
+                    <Section :section="section" v-slot="{ widgetLayout }">
+                        <Widget
+                            :widget-type="widgets[widgetLayout.key].type"
+                            :widget-props="widgets[widgetLayout.key]"
+                            :value="data[widgetLayout.key]"
+                        />
+                    </Section>
+                </template>
             </div>
         </template>
         <template v-else>
@@ -47,12 +49,14 @@
     import { withLoadingOverlay } from "sharp";
     import Widget from '../Widget';
     import ActionBarDashboard from '../ActionBar';
+    import Section from "../Section.vue";
 
     export default {
         name:'SharpDashboardPage',
         mixins: [withCommands],
 
         components: {
+            Section,
             Grid,
             Widget,
             ActionBar,
