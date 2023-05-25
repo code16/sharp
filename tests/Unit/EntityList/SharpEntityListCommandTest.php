@@ -62,7 +62,6 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'authorization' => true,
                 'description' => null,
                 'instance_selection' => 'none',
-                'instance_selection_criteria' => null,
                 'confirmation' => null,
                 'modal_title' => null,
                 'modal_confirm_label' => null,
@@ -79,7 +78,6 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'authorization' => [],
                 'description' => null,
                 'instance_selection' => null,
-                'instance_selection_criteria' => null,
                 'confirmation' => null,
                 'modal_title' => null,
                 'modal_confirm_label' => null,
@@ -205,73 +203,6 @@ class SharpEntityListCommandTest extends SharpTestCase
         $this->assertEquals('required', $list->listConfig()['commands']['entity'][0][0]['instance_selection']);
         $this->assertEquals('allowed', $list->listConfig()['commands']['entity'][0][1]['instance_selection']);
         $this->assertEquals('none', $list->listConfig()['commands']['entity'][0][2]['instance_selection']);
-    }
-
-    /** @test */
-    public function we_can_specify_instance_selection_criteria_on_a_command()
-    {
-        $list = new class extends SharpEntityDefaultTestList
-        {
-            public function getEntityCommands(): ?array
-            {
-                return [
-                    'command_criteria' => new class extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
-
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureInstanceSelectionRequired('state', 'published');
-                        }
-
-                        public function execute(array $data = []): array
-                        {
-                        }
-                    },
-                    'command_criteria_multiple' => new class extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
-
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureInstanceSelectionRequired('state', ['published', 'draft']);
-                        }
-
-                        public function execute(array $data = []): array
-                        {
-                        }
-                    },
-                    'command_criteria_exclude' => new class extends EntityCommand
-                    {
-                        public function label(): string
-                        {
-                            return 'My Entity Command';
-                        }
-
-                        public function buildCommandConfig(): void
-                        {
-                            $this->configureInstanceSelectionRequired('!state');
-                        }
-
-                        public function execute(array $data = []): array
-                        {
-                        }
-                    },
-                ];
-            }
-        };
-
-        $list->buildListConfig();
-
-        $this->assertEquals(['key' => 'state', 'values' => 'published'], $list->listConfig()['commands']['entity'][0][0]['instance_selection_criteria']);
-        $this->assertEquals(['key' => 'state', 'values' => ['published', 'draft']], $list->listConfig()['commands']['entity'][0][1]['instance_selection_criteria']);
-        $this->assertEquals(['key' => 'state', 'values' => false], $list->listConfig()['commands']['entity'][0][2]['instance_selection_criteria']);
     }
 
     /** @test */

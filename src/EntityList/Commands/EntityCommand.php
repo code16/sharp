@@ -8,25 +8,22 @@ abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
     protected string $instanceSelectionMode = 'none';
-    protected ?array $instanceSelectionCriteria = null;
 
     public function type(): string
     {
         return 'entity';
     }
 
-    final protected function configureInstanceSelectionRequired(?string $attribute = null, array|string|bool $values = true): self
+    final protected function configureInstanceSelectionRequired(): self
     {
         $this->instanceSelectionMode = 'required';
-        $this->setInstanceSelectionCriteria($attribute, $values);
 
         return $this;
     }
 
-    final protected function configureInstanceSelectionAllowed(?string $attribute = null, array|string|bool $values = true): self
+    final protected function configureInstanceSelectionAllowed(): self
     {
         $this->instanceSelectionMode = 'allowed';
-        $this->setInstanceSelectionCriteria($attribute, $values);
 
         return $this;
     }
@@ -60,11 +57,6 @@ abstract class EntityCommand extends Command
         return $this->instanceSelectionMode;
     }
 
-    final public function getInstanceSelectionCriteria(): ?array
-    {
-        return $this->instanceSelectionCriteria;
-    }
-
     final public function selectedIds(): array
     {
         return $this->instanceSelectionMode === 'none'
@@ -73,23 +65,4 @@ abstract class EntityCommand extends Command
     }
 
     abstract public function execute(array $data = []): array;
-
-    private function setInstanceSelectionCriteria(?string $attribute, bool|array|string $values): void
-    {
-        if ($attribute === null) {
-            $this->instanceSelectionCriteria = null;
-
-            return;
-        }
-
-        if (str($attribute)->startsWith('!')) {
-            $attribute = substr($attribute, 1);
-            $values = false;
-        }
-
-        $this->instanceSelectionCriteria = [
-            'key' => $attribute,
-            'values' => $values,
-        ];
-    }
 }
