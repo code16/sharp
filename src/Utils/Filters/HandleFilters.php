@@ -62,7 +62,7 @@ trait HandleFilters
         if ($this->filterHandlers === null) {
             $this->filterHandlers = collect($this->getFilters())
 
-                // First get filters which are section-based...
+                // First get filters which are section-based (dashboard only)...
                 ->filter(fn ($value, $index) => is_array($value))
 
                 // ... and merge filters set for the whole page
