@@ -5,6 +5,7 @@
                 <ActionBarDashboard
                     :commands="commands"
                     @command="handleCommandRequested"
+                    @filter-change="handleFilterChanged"
                 />
                 <template v-if="config.globalMessage">
                     <GlobalMessage
@@ -13,15 +14,23 @@
                         :fields="fields"
                     />
                 </template>
-                <template v-for="section in layout.sections">
-                    <Section :section="section" v-slot="{ widgetLayout }">
-                        <Widget
-                            :widget-type="widgets[widgetLayout.key].type"
-                            :widget-props="widgets[widgetLayout.key]"
-                            :value="data[widgetLayout.key]"
-                        />
-                    </Section>
-                </template>
+                <div class="mb-n4.5">
+                    <template v-for="section in layout.sections">
+                        <Section class="mb-4.5"
+                            :section="section"
+                            :commands="commandsForType(section.key)"
+                            :filters="[]"
+                            @filter-change="handleFilterChanged"
+                            v-slot="{ widgetLayout }"
+                        >
+                            <Widget
+                                :widget-type="widgets[widgetLayout.key].type"
+                                :widget-props="widgets[widgetLayout.key]"
+                                :value="data[widgetLayout.key]"
+                            />
+                        </Section>
+                    </template>
+                </div>
             </div>
         </template>
         <template v-else>
@@ -86,6 +95,7 @@
                 filtersValues: 'filters/values',
                 getFiltersQueryParams: 'filters/getQueryParams',
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
+                filterNextQuery: 'filters/nextQuery',
                 commandsForType: 'commands/forType',
             }),
             dashboardKey() {
@@ -107,6 +117,14 @@
                 this.sendCommand(command, {
                     postCommand: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
                     getForm: commandQuery => this.$store.dispatch('dashboard/getCommandForm', { command, query: { ...query, ...commandQuery } }),
+                });
+            },
+            handleFilterChanged(filter, value) {
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        ...this.filterNextQuery({ filter, value }),
+                    }
                 });
             },
             async init() {

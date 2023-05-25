@@ -7,7 +7,7 @@
                         <SharpFilter
                             :filter="filter"
                             :value="filterValue(filter.key)"
-                            @input="handleFilterChanged(filter, $event)"
+                            @input="$emit('filter-change', filter, $event)"
                             :key="filter.id"
                         />
                     </div>
@@ -15,7 +15,7 @@
             </div>
         </template>
         <template v-if="commands.length" v-slot:extras-right>
-            <CommandsDropdown :commands="commands" @select="handleCommandSelected">
+            <CommandsDropdown :commands="commands" @select="$emit('command', $event)">
                 <template v-slot:text>
                     {{ l('dashboard.commands.dashboard.label') }}
                 </template>
@@ -49,21 +49,5 @@
                 filterNextQuery: 'filters/nextQuery',
             })
         },
-        methods: {
-            filterKey(filter) {
-                return `actionbardashboard_${filter.key}`;
-            },
-            handleFilterChanged(filter, value) {
-                this.$router.push({
-                    query: {
-                        ...this.$route.query,
-                        ...this.filterNextQuery({ filter, value }),
-                    }
-                });
-            },
-            handleCommandSelected(command) {
-                this.$emit('command', command);
-            }
-        }
     }
 </script>
