@@ -1,5 +1,4 @@
-import filters from '../../src/store/filters';
-import { SET_FILTERS, SET_FILTER_VALUE } from "../../src/store/filters";
+import filters, {SET_VALUES, SET_FILTERS} from '../../src/store/filters';
 import * as querystringUtils from "sharp/util/querystring";
 
 describe('store filters', () => {
@@ -9,23 +8,6 @@ describe('store filters', () => {
 
     test('state match snapshot', ()=>{
         expect(filters.state()).toMatchSnapshot();
-    });
-
-    describe('mutations', () => {
-        test('SET_FILTERS', () => {
-            const state = {};
-            const testFilters = [];
-            filters.mutations[SET_FILTERS](state, testFilters);
-
-            expect(state.filters).toBe(testFilters);
-        });
-
-        test('SET_FILTER_VALUE', () => {
-            const state = { values: {} };
-            filters.mutations[SET_FILTER_VALUE](state, { key:'prop', value:'value' });
-
-            expect(state.values.prop).toBe('value');
-        });
     });
 
     describe('getters', () => {
@@ -43,19 +25,6 @@ describe('store filters', () => {
             expect(filters.getters.filters({ filters: [{}] })).toEqual([{}]);
         });
 
-        test('filter', ()=>{
-            expect(filters.getters.filter({ filters: null })('name')).toEqual(undefined);
-            expect(
-                filters.getters.filter({
-                    filters: [{ key:'name' }],
-                })('name')
-            ).toEqual({ key:'name'});
-        });
-
-        test('defaultValue', ()=>{
-            expect(filters.getters.defaultValue()(null)).toBeUndefined();
-            expect(filters.getters.defaultValue()({ default:'default' })).toEqual('default');
-        });
 
         test('filterQueryKey', ()=>{
             expect(filters.getters.filterQueryKey()('key')).toBe('filter_key');
@@ -63,10 +32,15 @@ describe('store filters', () => {
 
         test('getQueryParams', ()=>{
             const state = {
+                filters: {
+                    _page: [
+                        { key:'type' },
+                        { key:'name' },
+                    ]
+                }
             };
             const getters = {
                 filterQueryKey: jest.fn(key => `filter_${key}`),
-                filter: jest.fn(key => ({ key })),
                 serializeValue: jest.fn(({ filter, value }) => value),
             };
             expect(filters.getters.getQueryParams(state, getters)({ })).toEqual({});
@@ -91,14 +65,11 @@ describe('store filters', () => {
 
         test('resolveFilterValue', ()=>{
             const state = {};
-            const getters = {
-                defaultValue: jest.fn(()=>'defaultValue'),
-            };
+            const getters = {};
             const resolveFilterValue = (...args) => filters.getters.resolveFilterValue(state, getters)(...args);
 
-            expect(resolveFilterValue({ filter: { key:'filter' }, value: undefined })).toEqual('defaultValue');
-            expect(getters.defaultValue).toHaveBeenCalledWith({ key:'filter' });
-            expect(resolveFilterValue({ filter: {}, value: null })).toEqual('defaultValue');
+            expect(resolveFilterValue({ filter: { key:'filter', default:'defaultValue' }, value: undefined })).toEqual('defaultValue');
+            expect(resolveFilterValue({ filter: { default:'defaultValue' }, value: null })).toEqual('defaultValue');
 
             expect(resolveFilterValue({
                 filter:{ multiple: true }, value: 3
@@ -178,40 +149,32 @@ describe('store filters', () => {
     });
 
     describe('actions', () => {
-        test('update', async () => {
+        test('update', () => {
+            const state = {};
             const commit = jest.fn();
             const dispatch = jest.fn();
+            const getters = {
+                resolveFilterValue: jest.fn(()=>'resolvedValue')
+            };
             const testFilters = [{ key:'prop1' }, { key:'prop2' }];
             const testValues = { prop1:'aaa', prop2:'bbb' };
 
-            filters.actions.update({ commit, dispatch }, { filters: testFilters, values: testValues });
+            filters.actions.update({ state, commit, dispatch, getters }, { filters: testFilters, values: testValues });
 
             expect(commit).toHaveBeenCalledWith(SET_FILTERS, testFilters);
-            expect(dispatch).toHaveBeenCalledWith('setFilterValue', { filter: { key:'prop1' }, value: 'aaa' });
-            expect(dispatch).toHaveBeenCalledWith('setFilterValue', { filter: { key:'prop2' }, value: 'bbb' });
+            expect(commit).toHaveBeenCalledWith(SET_VALUES, {
+                prop1: 'resolvedValue',
+                prop2: 'resolvedValue'
+            });
 
             dispatch.mockClear();
 
             expect(() => {
-                filters.actions.update({ commit, dispatch }, { filters: null, values: null });
+                filters.actions.update({ state, commit, dispatch, getters }, { filters: null, values: null });
             }).not.toThrow();
 
             expect(commit).toHaveBeenCalledWith(SET_FILTERS, null);
-            expect(dispatch).not.toHaveBeenCalled();
-        });
-
-        test('setFilterValue', ()=>{
-            const commit = jest.fn();
-            const getters = {
-                resolveFilterValue: jest.fn(()=>'resolvedValue')
-            };
-            const filter = { key:'filter' };
-            const value = 'value';
-
-            filters.actions.setFilterValue({ commit, getters }, { filter, value });
-
-            expect(commit).toHaveBeenCalledWith(SET_FILTER_VALUE, { key: 'filter', value: 'resolvedValue' });
-            expect(getters.resolveFilterValue).toHaveBeenCalledWith({ filter, value });
+            expect(commit).toHaveBeenCalledWith(SET_VALUES, {});
         });
     });
 });
