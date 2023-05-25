@@ -13,10 +13,10 @@ trait HandleFilters
     {
         $this->getFilterHandlers()
             ->each(function (Collection $filterHandlers, string $positionKey) use (&$config) {
-                if($filterHandlers->count() === 0) {
+                if ($filterHandlers->count() === 0) {
                     return;
                 }
-                
+
                 $config['filters'][$positionKey] = $filterHandlers
                     ->map(function (Filter $filterHandler) {
                         $filterConfigData = [
@@ -31,7 +31,7 @@ trait HandleFilters
                             $filterConfigData += [
                                 'type' => 'select',
                                 'multiple' => $multiple,
-                                'required' => !$multiple && $filterHandler instanceof SelectRequiredFilter,
+                                'required' => ! $multiple && $filterHandler instanceof SelectRequiredFilter,
                                 'values' => $this->formatSelectFilterValues($filterHandler),
                                 'master' => $filterHandler->isMaster(),
                                 'searchable' => $filterHandler->isSearchable(),
@@ -75,9 +75,9 @@ trait HandleFilters
 
                 ->map(function ($handlers) {
                     return collect($handlers)
-                        ->map(function ($filterHandlerOrClassName)  {
+                        ->map(function ($filterHandlerOrClassName) {
                             if (is_string($filterHandlerOrClassName)) {
-                                if (!class_exists($filterHandlerOrClassName)) {
+                                if (! class_exists($filterHandlerOrClassName)) {
                                     throw new SharpException(sprintf(
                                         'Handler for filter [%s] is invalid',
                                         $filterHandlerOrClassName
@@ -88,7 +88,7 @@ trait HandleFilters
                                 $filterHandler = $filterHandlerOrClassName;
                             }
 
-                            if (!$filterHandler instanceof Filter) {
+                            if (! $filterHandler instanceof Filter) {
                                 throw new SharpException(sprintf(
                                     'Handler class for filter [%s] must implement a sub-interface of [%s]',
                                     $filterHandlerOrClassName,
