@@ -220,7 +220,7 @@
                 }
             },
             filters() {
-                return this.storeGetter('filters/filters');
+                return this.storeGetter('filters/pageFilters');
             },
             filtersValues() {
                 return this.storeGetter('filters/values');

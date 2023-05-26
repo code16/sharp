@@ -4,7 +4,9 @@
             <div class="container">
                 <ActionBarDashboard
                     :commands="commands"
+                    :filters="pageFilters"
                     @command="handleCommandRequested"
+                    @filter-change="handleFilterChanged"
                 />
                 <template v-if="config.globalMessage">
                     <GlobalMessage
@@ -13,13 +15,23 @@
                         :fields="fields"
                     />
                 </template>
-                <Grid :rows="layout.rows" row-class="gx-3" v-slot="{ itemLayout }">
-                    <Widget
-                        :widget-type="widgets[itemLayout.key].type"
-                        :widget-props="widgets[itemLayout.key]"
-                        :value="data[itemLayout.key]"
-                    />
-                </Grid>
+                <div class="mb-n4.5">
+                    <template v-for="section in layout.sections">
+                        <Section class="mb-4.5"
+                            :section="section"
+                            :commands="commandsForType(section.key)"
+                            :filters="config.filters && config.filters[section.key] || []"
+                            @filter-change="handleFilterChanged"
+                            v-slot="{ widgetLayout }"
+                        >
+                            <Widget
+                                :widget-type="widgets[widgetLayout.key].type"
+                                :widget-props="widgets[widgetLayout.key]"
+                                :value="data[widgetLayout.key]"
+                            />
+                        </Section>
+                    </template>
+                </div>
             </div>
         </template>
         <template v-else>
@@ -47,12 +59,14 @@
     import { withLoadingOverlay } from "sharp";
     import Widget from '../Widget';
     import ActionBarDashboard from '../ActionBar';
+    import Section from "../Section.vue";
 
     export default {
         name:'SharpDashboardPage',
         mixins: [withCommands],
 
         components: {
+            Section,
             Grid,
             Widget,
             ActionBar,
@@ -79,9 +93,11 @@
                 fields: state => state.fields,
             }),
             ...mapGetters('dashboard', {
+                pageFilters: 'filters/pageFilters',
                 filtersValues: 'filters/values',
                 getFiltersQueryParams: 'filters/getQueryParams',
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
+                filterNextQuery: 'filters/nextQuery',
                 commandsForType: 'commands/forType',
             }),
             dashboardKey() {
@@ -103,6 +119,14 @@
                 this.sendCommand(command, {
                     postCommand: data => this.$store.dispatch('dashboard/postCommand', { command, query, data }),
                     getForm: commandQuery => this.$store.dispatch('dashboard/getCommandForm', { command, query: { ...query, ...commandQuery } }),
+                });
+            },
+            handleFilterChanged(filter, value) {
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        ...this.filterNextQuery({ filter, value }),
+                    }
                 });
             },
             async init() {
