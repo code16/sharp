@@ -109,7 +109,7 @@ class GlobalFiltersTest extends BaseApiTest
                             'multiple' => false,
                             'required' => true,
                             'default' => 'default',
-                        ]
+                        ],
                     ],
                 ],
             ]);
