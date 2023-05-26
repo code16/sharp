@@ -68,7 +68,7 @@ trait HandleFilters
                 // ... and merge filters set for the whole page
                 ->merge(
                     [
-                        '_page' => collect($this->getFilters())
+                        '_root' => collect($this->getFilters())
                             ->filter(fn ($value, $index) => ! is_array($value)),
                     ]
                 )

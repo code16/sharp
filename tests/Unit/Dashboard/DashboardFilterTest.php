@@ -37,7 +37,7 @@ class DashboardFilterTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                '_page' => [
+                '_root' => [
                     [
                         'key' => 'test',
                         'label' => 'test_label',
@@ -95,7 +95,7 @@ class DashboardFilterTest extends SharpTestCase
                 ['id' => 1, 'label' => 'A'],
                 ['id' => 2, 'label' => 'B'],
             ],
-            $dashboard->dashboardConfig()['filters']['_page'][0]['values'],
+            $dashboard->dashboardConfig()['filters']['_root'][0]['values'],
         );
 
         $this->assertEquals(

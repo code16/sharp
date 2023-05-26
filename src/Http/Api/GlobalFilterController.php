@@ -19,8 +19,6 @@ class GlobalFilterController extends ApiController
         return response()->json(
             tap([], function (&$config) {
                 $this->appendFiltersToConfig($config);
-                // We need to flatten the filters array because global filters don't handle section-based filters
-                $config['filters'] = $config['filters']['_page'];
             }),
         );
     }
