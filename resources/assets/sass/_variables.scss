@@ -38,6 +38,17 @@ $container-max-widths: (
   xl: 1140px,
 );
 
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  "4\\.5": $spacer * 2,
+  5: $spacer * 3,
+);
+
 $font-size-base: 1rem;
 $h1-font-size: $font-size-base * 2.5;
 $h2-font-size: $font-size-base * 2;

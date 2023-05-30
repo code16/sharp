@@ -18,6 +18,7 @@ export { default as Multiselect } from './Multiselect';
 export { default as NavItem } from './nav/NavItem';
 export { default as Pagination } from './Pagination';
 export { default as Search } from './Search';
+export { default as SectionTitle } from './section/SectionTitle';
 export { default as StateIcon } from './StateIcon';
 export { default as Tab } from './Tab';
 export { default as TabbedLayout } from './TabbedLayout';

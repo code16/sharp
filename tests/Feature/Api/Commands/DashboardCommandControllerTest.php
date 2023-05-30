@@ -24,7 +24,7 @@ class DashboardCommandControllerTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->json('post', '/sharp/api/dashboard/personal_dashboard/command/dashboard_info')
+        $this->postJson('/sharp/api/dashboard/personal_dashboard/command/dashboard_info')
             ->assertOk()
             ->assertJson([
                 'action' => 'info',
