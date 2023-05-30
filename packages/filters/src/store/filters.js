@@ -1,9 +1,8 @@
-import Vue from 'vue';
 import { parseRange, serializeRange } from "sharp";
 import { getFiltersQueryParams, getFiltersValuesFromQuery, filterQueryKey } from '../util/query';
 
 export const SET_FILTERS = 'SET_FILTERS';
-export const SET_FILTER_VALUE = 'SET_FILTER_VALUE';
+export const SET_VALUES = 'SET_VALUES';
 
 export default {
     namespaced: true,
@@ -17,8 +16,8 @@ export default {
         [SET_FILTERS](state, filters) {
             state.filters = filters;
         },
-        [SET_FILTER_VALUE](state, { key, value }) {
-            Vue.set(state.values, key, value);
+        [SET_VALUES](state, values) {
+            state.values = values;
         },
     },
 
@@ -26,37 +25,33 @@ export default {
         value(state) {
             return key => state.values[key];
         },
-        filters(state) {
-            return state.filters || []
+        rootFilters(state) {
+            return state.filters?._root ?? [];
         },
         values(state) {
             return state.values;
         },
-        filter(state) {
-            return key => (state.filters || []).find(filter => filter.key === key);
-        },
-
-        defaultValue() {
-            return filter => (filter||{}).default;
-        },
-
         filterQueryKey() {
             return key => filterQueryKey(key);
         },
         getQueryParams(state, getters) {
             return values => {
+                const allFilters = Object.values(state.filters ?? {}).flat();
                 return getFiltersQueryParams(values, (value, key) =>
-                    getters.serializeValue({ filter:getters.filter(key), value })
+                    getters.serializeValue({
+                        filter: allFilters.find(filter => filter.key === key),
+                        value,
+                    })
                 );
             }
         },
         getValuesFromQuery() {
             return query => getFiltersValuesFromQuery(query);
         },
-        resolveFilterValue(state, getters) {
+        resolveFilterValue() {
             return ({ filter, value }) => {
                 if(value == null) {
-                    return getters.defaultValue(filter);
+                    return filter?.default;
                 }
                 if(filter.multiple && !Array.isArray(value)) {
                     return [value];
@@ -103,22 +98,20 @@ export default {
     },
 
     actions: {
-        update({ commit, dispatch }, { filters, values }) {
+        update({ state, commit, dispatch, getters }, { filters, values }) {
             commit(SET_FILTERS, filters);
-
-            return Promise.all(
-                (filters || []).map(filter => {
-                    dispatch('setFilterValue', {
-                        filter,
-                        value: (values || {})[filter.key]
-                    })
-                })
-            );
-        },
-        setFilterValue({ commit, getters }, { filter, value }) {
-            commit(SET_FILTER_VALUE, {
-                key: filter.key,
-                value: getters.resolveFilterValue({ filter, value })
+            commit(SET_VALUES, {
+                ...Object.fromEntries(
+                    Object.values(filters ?? {}).flat().map(filter =>
+                        [
+                            filter.key,
+                            getters.resolveFilterValue({
+                                filter,
+                                value: values?.[filter.key],
+                            }),
+                        ]
+                    )
+                ),
             });
         },
     }

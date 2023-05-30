@@ -1,0 +1,79 @@
+<template>
+    <div class="section">
+        <div class="row align-items-center">
+            <div class="col">
+                <SectionTitle
+                    :section="section"
+                />
+            </div>
+            <template v-if="hasCommands || filters.length">
+                <div class="col-auto align-self-end mb-2" :class="{ 'w-100': filters.length }">
+                    <div class="row justify-content-end">
+                        <template v-if="filters.length">
+                            <div class="col">
+                                <div class="row row-cols-auto gx-2">
+                                    <template v-for="filter in filters">
+                                        <SharpFilter
+                                            :filter="filter"
+                                            :value="filterValue(filter.key)"
+                                            @input="$emit('filter-change', filter, $event)"
+                                            :key="filter.id"
+                                        />
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-if="hasCommands">
+                            <div class="col-auto">
+                                <CommandsDropdown :commands="commands" @select="$emit('command', $event)">
+                                    <template v-slot:text>
+                                        {{ lang('dashboard.commands.dashboard.label') }}
+                                    </template>
+                                </CommandsDropdown>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <Grid :rows="section.rows" row-class="gx-3" v-slot="{ itemLayout }">
+            <slot :widget-layout="itemLayout" />
+        </Grid>
+    </div>
+</template>
+
+<script>
+    import {Grid, SectionTitle} from "sharp-ui";
+    import {SharpFilter} from "sharp-filters";
+    import {mapGetters} from "vuex";
+    import {CommandsDropdown} from "sharp-commands";
+    import {lang} from "sharp";
+    import Widget from "./Widget.vue";
+
+    export default {
+        components: {
+            CommandsDropdown,
+            Widget,
+            Grid,
+            SectionTitle,
+            SharpFilter,
+        },
+        props: {
+            section: Object,
+            commands: Array,
+            filters: Array,
+        },
+        computed: {
+            ...mapGetters('dashboard', {
+                filterValue: 'filters/value',
+            }),
+            hasCommands() {
+                return this.commands?.flat().length;
+            },
+        },
+        methods: {
+            lang,
+        },
+    }
+</script>

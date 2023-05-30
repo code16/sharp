@@ -44,9 +44,11 @@ class SharpAuthenticate extends BaseAuthenticate
                 return response()->json(['message' => 'Unauthenticated user'], 401);
             }
 
-            return redirect()->guest(
-                config('sharp.auth.login_page_url', route('code16.sharp.login')),
-            );
+            if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
+                return redirect()->guest($loginPageUrl);
+            }
+
+            return redirect()->guest(route('code16.sharp.login'));
         }
 
         return $next($request);
