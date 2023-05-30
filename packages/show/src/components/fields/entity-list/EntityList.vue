@@ -116,7 +116,7 @@
                 return this.storeGetter('query');
             },
             filters() {
-                return this.storeGetter('filters/pageFilters');
+                return this.storeGetter('filters/rootFilters');
             },
             getFiltersQueryParams() {
                 return this.storeGetter('filters/getQueryParams');

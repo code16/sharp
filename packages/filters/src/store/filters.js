@@ -25,11 +25,8 @@ export default {
         value(state) {
             return key => state.values[key];
         },
-        filters(state) {
-            return state.filters || [];
-        },
-        pageFilters(state) {
-            return state.filters._page || [];
+        rootFilters(state) {
+            return state.filters?._root ?? [];
         },
         values(state) {
             return state.values;

@@ -4,7 +4,7 @@
             <div class="container">
                 <ActionBarDashboard
                     :commands="commands"
-                    :filters="pageFilters"
+                    :filters="rootFilters"
                     @command="handleCommandRequested"
                     @filter-change="handleFilterChanged"
                 />
@@ -93,7 +93,7 @@
                 fields: state => state.fields,
             }),
             ...mapGetters('dashboard', {
-                pageFilters: 'filters/pageFilters',
+                rootFilters: 'filters/rootFilters',
                 filtersValues: 'filters/values',
                 getFiltersQueryParams: 'filters/getQueryParams',
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
