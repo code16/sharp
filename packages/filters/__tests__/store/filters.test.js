@@ -20,11 +20,10 @@ describe('store filters', () => {
             expect(filters.getters.value(state)('prop')).toBe('value');
         });
 
-        test('filters', ()=>{
-            expect(filters.getters.filters({ filter: null })).toEqual([]);
-            expect(filters.getters.filters({ filters: [{}] })).toEqual([{}]);
+        test('rootFilters', ()=>{
+            expect(filters.getters.rootFilters({ })).toEqual([]);
+            expect(filters.getters.rootFilters({ filters: { _root: [{}] } })).toEqual([{}]);
         });
-
 
         test('filterQueryKey', ()=>{
             expect(filters.getters.filterQueryKey()('key')).toBe('filter_key');
