@@ -7,7 +7,7 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 abstract class EntityCommand extends Command
 {
     protected ?EntityListQueryParams $queryParams = null;
-    protected string $instanceSelectionMode = 'none';
+    protected ?string $instanceSelectionMode = null;
 
     public function type(): string
     {
@@ -30,7 +30,7 @@ abstract class EntityCommand extends Command
 
     final protected function configureInstanceSelectionNone(): self
     {
-        $this->instanceSelectionMode = 'none';
+        $this->instanceSelectionMode = null;
 
         return $this;
     }
@@ -52,7 +52,7 @@ abstract class EntityCommand extends Command
         return [];
     }
 
-    final public function getInstanceSelectionMode(): string
+    final public function getInstanceSelectionMode(): ?string
     {
         return $this->instanceSelectionMode;
     }

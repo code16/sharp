@@ -61,7 +61,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'type' => 'entity',
                 'authorization' => true,
                 'description' => null,
-                'instance_selection' => 'none',
+                'instance_selection' => null,
                 'confirmation' => null,
                 'modal_title' => null,
                 'modal_confirm_label' => null,
@@ -202,7 +202,7 @@ class SharpEntityListCommandTest extends SharpTestCase
 
         $this->assertEquals('required', $list->listConfig()['commands']['entity'][0][0]['instance_selection']);
         $this->assertEquals('allowed', $list->listConfig()['commands']['entity'][0][1]['instance_selection']);
-        $this->assertEquals('none', $list->listConfig()['commands']['entity'][0][2]['instance_selection']);
+        $this->assertNull($list->listConfig()['commands']['entity'][0][2]['instance_selection']);
     }
 
     /** @test */

@@ -15,7 +15,7 @@ class BulkPublishPostsCommand extends EntityCommand
     public function buildCommandConfig(): void
     {
         $this->configureDescription('Bulk command to publish posts')
-            ->configureInstanceSelectionAllowed();
+            ->configureInstanceSelectionRequired();
     }
 
     public function execute(array $data = []): array
