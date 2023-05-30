@@ -54,7 +54,11 @@
                     <Draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
                         <template v-for="item in currentItems">
                             <slot name="item" :item="item">
-                                <DataListRow :columns="columns" :row="item" />
+                                <DataListRow :columns="columns" :row="item">
+                                    <template v-if="selecting" v-slot:append>
+                                        <input type="checkbox" v-model="selectedItems" :value="item.id" />
+                                    </template>
+                                </DataListRow>
                             </slot>
                         </template>
                     </Draggable>
@@ -97,7 +101,8 @@
             pageSize: Number,
             page: Number,
 
-            reorderActive: Boolean,
+            selecting: Boolean,
+            reordering: Boolean,
 
             sort: String,
             dir: String,
@@ -113,8 +118,8 @@
             }
         },
         watch: {
-            reorderActive(active) {
-                this.handleReorderActiveChanged(active);
+            reordering(active) {
+                this.handleReorderingChanged(active);
             }
         },
         computed: {
@@ -123,13 +128,11 @@
             },
             draggableOptions() {
                 return {
-                    disabled: !this.reorderActive
+                    disabled: !this.reordering
                 }
             },
             currentItems() {
-                return this.reorderActive
-                    ? this.reorderedItems
-                    : this.items;
+                return this.reordering ? this.reorderedItems : this.items;
             },
             isEmpty() {
                 return (this.items||[]).length === 0;
@@ -156,7 +159,7 @@
             handlePageChanged(page) {
                 this.$emit('page-change', page);
             },
-            handleReorderActiveChanged(active) {
+            handleReorderingChanged(active) {
                 this.reorderedItems = active ? [...this.items] : null;
             },
             getAppendWidth(el) {

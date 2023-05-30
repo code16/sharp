@@ -10,7 +10,7 @@
             <div class="col-auto">
                 <div class="row justify-content-end flex-nowrap gx-3">
                     <template v-if="canReorder">
-                        <template v-if="reorderActive">
+                        <template v-if="!reordering && !selecting">
                             <div class="col-auto">
                                 <Button outline @click="handleReorderButtonClicked">
                                     {{ l('action_bar.list.reorder_button.cancel') }}
@@ -31,13 +31,21 @@
                         </template>
                     </template>
 
-                    <template v-if="hasCommands && !reorderActive">
+                    <template v-if="canSelect">
+                        <div class="col-auto">
+                            <Button @click="handleSelectButtonClicked">
+                                {{ l('action_bar.list.select_button') }}
+                            </Button>
+                        </div>
+                    </template>
+
+                    <template v-if="hasCommands && !reordering">
                         <div class="col-auto">
                             <CommandsDropdown
                                 class="bg-white"
                                 outline
                                 :commands="commands"
-                                :disabled="reorderActive"
+                                :disabled="reordering"
                                 @select="handleCommandSelected"
                             >
                                 <template v-slot:text>
@@ -47,7 +55,7 @@
                         </div>
                     </template>
 
-                    <template v-if="primaryCommand && !reorderActive">
+                    <template v-if="primaryCommand && !reordering && !selecting">
                         <div class="col-auto">
                             <Button @click="handlePrimaryCommandClicked">
                                 {{ primaryCommand.label }}
@@ -55,7 +63,7 @@
                         </div>
                     </template>
 
-                    <template v-if="canCreate && !reorderActive">
+                    <template v-if="canCreate && !reordering  && !selecting">
                         <div class="col-auto">
                             <template v-if="hasForms">
                                 <MultiformDropdown
@@ -115,8 +123,11 @@
             canCreate: Boolean,
             canReorder: Boolean,
             canSearch: Boolean,
+            canSelect: Boolean,
 
-            reorderActive: Boolean,
+            reordering: Boolean,
+            selecting: Boolean,
+
             breadcrumb: Array,
             showBreadcrumb: Boolean,
         },
@@ -159,6 +170,9 @@
             },
             handleCommandSelected(command) {
                 this.$emit('command', command);
+            },
+            handleSelectButtonClicked() {
+                this.$emit('select');
             },
         }
     }

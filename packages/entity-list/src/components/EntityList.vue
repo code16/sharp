@@ -23,7 +23,7 @@
                     :paginated="paginated"
                     :total-count="totalCount"
                     :page-size="pageSize"
-                    :reorder-active="reorderActive"
+                    :reordering="reordering"
                     :sort="sortedBy"
                     :dir="sortDir"
                     @change="handleReorderedItemsChanged"
@@ -44,7 +44,7 @@
                                                 <SharpFilter
                                                     :filter="filter"
                                                     :value="filtersValues[filter.key]"
-                                                    :disabled="reorderActive"
+                                                    :disabled="reordering"
                                                     @input="handleFilterChanged(filter, $event)"
                                                     :key="filter.id"
                                                 />
@@ -58,7 +58,7 @@
                                             class="h-100"
                                             :value="search"
                                             :placeholder="l('action_bar.list.search.placeholder')"
-                                            :disabled="reorderActive"
+                                            :disabled="reordering"
                                             @submit="handleSearchSubmitted"
                                         />
                                     </div>
@@ -214,8 +214,11 @@
                 sortDir: null,
                 sortDirs: {},
 
-                reorderActive: false,
+                reordering: false,
                 reorderedItems: null,
+
+                selecting: false,
+                selectedItems: null,
 
                 containers: null,
                 layout: null,
@@ -297,10 +300,12 @@
                     filtersValues: this.filtersValues,
                     forms: this.multiforms,
                     commands: this.allowedEntityCommands,
-                    reorderActive: this.reorderActive,
+                    reordering: this.reordering,
+                    selecting: this.selecting,
                     canCreate: this.canCreate,
                     canReorder: this.canReorder,
                     canSearch: this.canSearch,
+                    canSelect: this.canSelect,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
                 }
@@ -312,6 +317,8 @@
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
                     'reorder-submit': this.handleReorderSubmitted,
+                    'select-click': this.handleSelectButtonClicked,
+                    'select-submit': this.handleSelectSubmitted,
                     'create': this.handleCreateButtonClicked,
                 }
             },
@@ -345,6 +352,9 @@
             canSearch() {
                 return this.showSearchField && !!this.config.searchable;
             },
+            canSelect() {
+                this.allowedEntityCommands.flat().some(command => command.instance_selection);
+            },
 
             /**
              * Data list props
@@ -369,7 +379,7 @@
             },
 
             hasActionsColumn() {
-                if(this.reorderActive) {
+                if(this.reordering) {
                     return false;
                 }
                 return this.items.some(instance =>
@@ -411,9 +421,9 @@
                 });
             },
             handleReorderButtonClicked() {
-                this.reorderActive = !this.reorderActive;
-                this.reorderedItems = this.reorderActive ? [...this.items] : null;
-                this.$emit('reordering', this.reorderActive);
+                this.reordering = !this.reordering;
+                this.reorderedItems = this.reordering ? [...this.items] : null;
+                this.$emit('reordering', this.reordering);
             },
             handleReorderSubmitted() {
                 return this.storeDispatch('reorder', {
@@ -421,9 +431,14 @@
                 }).then(() => {
                     this.data.list.items = [...this.reorderedItems];
                     this.reorderedItems = null;
-                    this.reorderActive = false;
+                    this.reordering = false;
                     this.$emit('reordering', false);
                 });
+            },
+            handleSelectButtonClicked() {
+                this.selecting = !this.selecting;
+                this.selectedItems = [];
+                this.$emit('selecting', this.selecting);
             },
             handleCreateButtonClicked(multiform) {
                 const formUrl = multiform
