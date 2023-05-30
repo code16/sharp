@@ -4,9 +4,9 @@ exports[`show entity list field mount 1`] = `
 <fieldlayout-stub class="ShowEntityListField">
 	<entitylist-stub module="show/entity-lists/fieldKey" visible="true" inline="">
 		<actionbar-stub ready="true" filters="" class="ShowEntityListField__action-bar">
-			<div class="ShowSection__header d-grid">
+			<div class="section__header d-grid">
 				<entitylisttitle-stub>
-					<h2 class="ShowEntityListField__label ShowSection__title mb-0">
+					<h2 class="ShowEntityListField__label section__title mb-0">
 						label
 					</h2>
 				</entitylisttitle-stub>
@@ -20,7 +20,7 @@ exports[`show entity list field mount collapsed 1`] = `
 <fieldlayout-stub class="ShowEntityListField ShowEntityListField--collapsed">
 	<entitylist-stub module="show/entity-lists/fieldKey" inline="">
 		<actionbar-stub ready="true" filters="" collapsed="true" class="ShowEntityListField__action-bar">
-			<div class="ShowSection__header ShowSection__header--collapsable position-relative">
+			<div class="section__header section__header--collapsable position-relative">
 				<div class="row align-items-center gx-0 h-100">
 					<div class="col-auto">
 						<details>
@@ -31,7 +31,7 @@ exports[`show entity list field mount collapsed 1`] = `
 					</div>
 					<div class="col">
 						<entitylisttitle-stub>
-							<h2 class="ShowEntityListField__label ShowSection__title mb-0">
+							<h2 class="ShowEntityListField__label section__title mb-0">
 								label
 							</h2>
 						</entitylisttitle-stub>

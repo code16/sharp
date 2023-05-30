@@ -1,4 +1,4 @@
-import { DOMParser } from "prosemirror-model";
+import { DOMParser } from "@tiptap/pm/model";
 
 /**
  * @returns HTMLElement

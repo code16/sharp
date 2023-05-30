@@ -22,9 +22,7 @@ class FormLayout implements HasLayout
     {
         $column = $this
             ->getLonelyTab()
-            ->addColumnLayout(
-                new FormLayoutColumn($size),
-            );
+            ->addColumnLayout(new FormLayoutColumn($size));
 
         if ($callback) {
             $callback($column);
@@ -68,7 +66,7 @@ class FormLayout implements HasLayout
         return [
             'tabbed' => $this->tabbed,
             'tabs' => collect($this->tabs)
-                ->map->toArray()
+                ->map(fn (FormLayoutTab $tab) => $tab->toArray())
                 ->all(),
         ];
     }

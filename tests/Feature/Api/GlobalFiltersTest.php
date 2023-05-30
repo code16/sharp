@@ -103,11 +103,13 @@ class GlobalFiltersTest extends BaseApiTest
             ->assertOk()
             ->assertJson([
                 'filters' => [
-                    [
-                        'key' => $key,
-                        'multiple' => false,
-                        'required' => true,
-                        'default' => 'default',
+                    '_root' => [
+                        [
+                            'key' => $key,
+                            'multiple' => false,
+                            'required' => true,
+                            'default' => 'default',
+                        ],
                     ],
                 ],
             ]);

@@ -25,7 +25,7 @@
                     :sticky="sticky"
                 >
                     <template v-if="hasCollapse">
-                        <div class="ShowSection__header ShowSection__header--collapsable position-relative">
+                        <div class="section__header section__header--collapsable position-relative">
                             <div class="row align-items-center gx-0 h-100">
                                 <div class="col-auto">
                                     <details :open="!collapsed" @toggle="handleDetailsToggle">
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="col">
                                     <EntityListTitle :count="showCount ? props.count : null">
-                                        <h2 class="ShowEntityListField__label ShowSection__title mb-0">
+                                        <h2 class="ShowEntityListField__label section__title mb-0">
                                             {{ label }}
                                         </h2>
                                     </EntityListTitle>
@@ -45,9 +45,9 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div class="ShowSection__header d-grid">
+                        <div class="section__header d-grid">
                             <EntityListTitle :count="showCount ? props.count : null">
-                                <h2 class="ShowEntityListField__label ShowSection__title mb-0">
+                                <h2 class="ShowEntityListField__label section__title mb-0">
                                     {{ label }}
                                 </h2>
                             </EntityListTitle>
@@ -116,7 +116,7 @@
                 return this.storeGetter('query');
             },
             filters() {
-                return this.storeGetter('filters/filters');
+                return this.storeGetter('filters/rootFilters');
             },
             getFiltersQueryParams() {
                 return this.storeGetter('filters/getQueryParams');

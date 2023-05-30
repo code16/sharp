@@ -6,33 +6,56 @@ use Code16\Sharp\Form\Layout\HasLayout;
 
 class DashboardLayout implements HasLayout
 {
-    protected array $rows = [];
+    protected array $sections = [];
 
-    final public function addFullWidthWidget(string $widgetKey): self
+    final public function addSection(string $label, \Closure $callback): self
     {
-        $this->addRow(function (DashboardLayoutRow $row) use ($widgetKey) {
-            $row->addWidget(12, $widgetKey);
-        });
+        $section = new DashboardLayoutSection($label);
+        $callback($section);
+        $this->sections[] = $section;
 
         return $this;
     }
 
     final public function addRow(\Closure $callback): self
     {
-        $row = new DashboardLayoutRow();
+        $row = $this
+            ->getLonelySection()
+            ->addRowLayout(new DashboardLayoutRow());
 
         $callback($row);
 
-        $this->rows[] = $row;
+        return $this;
+    }
+
+    final public function addFullWidthWidget(string $widgetKey): self
+    {
+        $this->getLonelySection()->addFullWidthWidget($widgetKey);
 
         return $this;
+    }
+
+    private function getLonelySection(): DashboardLayoutSection
+    {
+        if (! sizeof($this->sections)) {
+            return $this->addSectionLayout(new DashboardLayoutSection(''));
+        }
+
+        return $this->sections[0];
+    }
+
+    private function addSectionLayout(DashboardLayoutSection $section): DashboardLayoutSection
+    {
+        $this->sections[] = $section;
+
+        return $section;
     }
 
     public function toArray(): array
     {
         return [
-            'rows' => collect($this->rows)
-                ->map->toArray()
+            'sections' => collect($this->sections)
+                ->map(fn (DashboardLayoutSection $section) => $section->toArray())
                 ->toArray(),
         ];
     }
