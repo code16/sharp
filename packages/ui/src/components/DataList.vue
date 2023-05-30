@@ -13,6 +13,7 @@
                 </div>
             </template>
             <div class="SharpDataList__table SharpDataList__table--border">
+                <slot name="prepend"></slot>
                 <template v-if="!hideHeader">
                     <div class="SharpDataList__thead" ref="head">
                         <DataListRow :columns="columns" header>

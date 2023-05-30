@@ -74,36 +74,6 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white p-3 mt-4">
-            <div class="row">
-                <div class="col">
-                    <div class="row gx-2 gy-1">
-                        <template v-for="filter in filters">
-                            <div class="col-auto">
-                                <SharpFilter
-                                    :filter="filter"
-                                    :value="filtersValues[filter.key]"
-                                    :disabled="reorderActive"
-                                    @input="handleFilterChanged(filter, $event)"
-                                    :key="filter.id"
-                                />
-                            </div>
-                        </template>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <div style="max-width: 300px">
-                        <Search
-                            class="h-100"
-                            :value="search"
-                            :placeholder="l('action_bar.list.search.placeholder')"
-                            :disabled="reorderActive"
-                            @submit="handleSearchSubmitted"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 

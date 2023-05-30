@@ -34,6 +34,39 @@
                         {{ l('entity_list.empty_text') }}
                     </template>
 
+                    <template v-slot:prepend>
+                        <div class="p-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row gx-2 gy-1">
+                                        <template v-for="filter in filters">
+                                            <div class="col-auto">
+                                                <SharpFilter
+                                                    :filter="filter"
+                                                    :value="filtersValues[filter.key]"
+                                                    :disabled="reorderActive"
+                                                    @input="handleFilterChanged(filter, $event)"
+                                                    :key="filter.id"
+                                                />
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div style="max-width: 300px">
+                                        <Search
+                                            class="h-100"
+                                            :value="search"
+                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            :disabled="reorderActive"
+                                            @submit="handleSearchSubmitted"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
                     <template v-slot:append-head>
                         <template v-if="hasEntityCommands">
                             <div class="d-flex align-items-center justify-content-end">
@@ -102,7 +135,7 @@
         ModalSelect,
         DropdownItem,
         DropdownSeparator,
-        GlobalMessage,
+        GlobalMessage, Search,
     } from 'sharp-ui';
 
     import {
@@ -112,12 +145,14 @@
     } from 'sharp-commands';
 
     import EntityActions from "./EntityActions";
+    import {SharpFilter} from "sharp-filters";
 
 
     export default {
         name: 'SharpEntityList',
         mixins: [DynamicView, Localization, withCommands],
         components: {
+            Search, SharpFilter,
             EntityActions,
 
             DataList,
