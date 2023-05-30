@@ -4,9 +4,7 @@ exports[`show section can mount 1`] = `
 <div class="ShowSection ShowSection--layout-card">
 	<div class="row">
 		<div class="col">
-			<div class="ShowSection__header">
-				<h2 class="ShowSection__title">Section title</h2>
-			</div>
+			<sectiontitle-stub section="[object Object]"></sectiontitle-stub>
 		</div>
 		<!---->
 	</div>
@@ -22,11 +20,7 @@ exports[`show section can mount: collapsable + contents layout 1`] = `
 <div class="ShowSection ShowSection--layout-contents">
 	<div class="row">
 		<div class="col">
-			<details>
-				<summary class="ShowSection__header ShowSection__header--collapsable">
-					<h2 class="ShowSection__title d-inline-block mb-0">Section title</h2>
-				</summary>
-			</details>
+			<sectiontitle-stub section="[object Object]" collapsed="true" collapsable="true"></sectiontitle-stub>
 		</div>
 		<!---->
 	</div>

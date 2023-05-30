@@ -17,8 +17,8 @@ class GlobalFilterController extends ApiController
     public function index()
     {
         return response()->json(
-            tap([], function (&$filters) {
-                $this->appendFiltersToConfig($filters);
+            tap([], function (&$config) {
+                $this->appendFiltersToConfig($config);
             }),
         );
     }
@@ -26,21 +26,16 @@ class GlobalFilterController extends ApiController
     public function update(string $filterKey)
     {
         $handler = collect($this->getFilters())
-            ->map(function (string $filterClass) {
-                return app($filterClass);
-            })
-            ->filter(function (Filter $filter) use ($filterKey) {
-                return $filter->getKey() == $filterKey;
-            })
+            ->map(fn (string $filterClass) => app($filterClass))
+            ->filter(fn (Filter $filter) => $filter->getKey() == $filterKey)
             ->first();
 
         abort_if(! $handler, 404);
 
         // Ensure value is in the filter value-set
-        $allowedFilterValues = collect($this->formatSelectFilterValues($handler));
-        $value = $allowedFilterValues->where('id', request('value'))->first()
-            ? request('value')
-            : null;
+        $value = collect($this->formatSelectFilterValues($handler))
+            ->where('id', request('value'))
+            ->first() ? request('value') : null;
 
         if ($value) {
             session()->put(

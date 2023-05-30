@@ -34,18 +34,43 @@
                         {{ l('entity_list.empty_text') }}
                     </template>
 
+                    <template v-slot:prepend>
+                        <div class="p-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row gx-2 gy-1">
+                                        <template v-for="filter in filters">
+                                            <div class="col-auto">
+                                                <SharpFilter
+                                                    :filter="filter"
+                                                    :value="filtersValues[filter.key]"
+                                                    :disabled="reorderActive"
+                                                    @input="handleFilterChanged(filter, $event)"
+                                                    :key="filter.id"
+                                                />
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div style="max-width: 300px">
+                                        <Search
+                                            class="h-100"
+                                            :value="search"
+                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            :disabled="reorderActive"
+                                            @submit="handleSearchSubmitted"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
                     <template v-slot:append-head>
                         <template v-if="hasEntityCommands">
                             <div class="d-flex align-items-center justify-content-end">
-                                <CommandsDropdown
-                                    :commands="dropdownEntityCommands"
-                                    :disabled="reorderActive"
-                                    @select="handleCommandRequested"
-                                >
-                                    <template v-slot:text>
-                                        {{ l('entity_list.commands.entity.label') }}
-                                    </template>
-                                </CommandsDropdown>
+
                             </div>
                         </template>
                     </template>
@@ -110,7 +135,7 @@
         ModalSelect,
         DropdownItem,
         DropdownSeparator,
-        GlobalMessage,
+        GlobalMessage, Search,
     } from 'sharp-ui';
 
     import {
@@ -120,12 +145,14 @@
     } from 'sharp-commands';
 
     import EntityActions from "./EntityActions";
+    import {SharpFilter} from "sharp-filters";
 
 
     export default {
         name: 'SharpEntityList',
         mixins: [DynamicView, Localization, withCommands],
         components: {
+            Search, SharpFilter,
             EntityActions,
 
             DataList,
@@ -197,6 +224,7 @@
                 config: null,
                 authorizations: null,
                 forms: null,
+                breadcrumb: null,
 
                 currentCommandInstanceId: null,
             }
@@ -220,7 +248,7 @@
                 }
             },
             filters() {
-                return this.storeGetter('filters/filters');
+                return this.storeGetter('filters/rootFilters');
             },
             filtersValues() {
                 return this.storeGetter('filters/values');
@@ -268,11 +296,13 @@
                     filters: this.filters,
                     filtersValues: this.filtersValues,
                     forms: this.multiforms,
-                    primaryCommand: this.allowedEntityCommands.flat().find(command => command.primary),
+                    commands: this.allowedEntityCommands,
                     reorderActive: this.reorderActive,
                     canCreate: this.canCreate,
                     canReorder: this.canReorder,
                     canSearch: this.canSearch,
+                    breadcrumb: this.breadcrumb?.items,
+                    showBreadcrumb: !!this.breadcrumb?.visible,
                 }
             },
             actionBarListeners() {
@@ -619,7 +649,7 @@
             /**
              * Data
              */
-            mount({ containers, layout, data, fields, config, authorizations, forms }) {
+            mount({ containers, layout, data, fields, config, authorizations, forms, breadcrumb }) {
                 this.containers = containers;
                 this.layout = layout;
                 this.data = data ?? {};
@@ -631,6 +661,7 @@
                 };
                 this.authorizations = authorizations;
                 this.forms = forms;
+                this.breadcrumb = breadcrumb;
 
                 this.page = this.data.list.page;
                 !this.sortDir && (this.sortDir = this.config.defaultSortDir);

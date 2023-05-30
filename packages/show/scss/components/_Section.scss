@@ -1,33 +1,5 @@
 
 .ShowSection {
-  &__header {
-    min-height: 2.75rem;
-
-    &--collapsable {
-      cursor: pointer;
-      user-select: none;
-      line-height: 1.2;
-      transition: background-color .125s ease-in-out;
-      --title-margin-left: .25rem;
-
-      &:hover {
-        background-color: rgba(0,0,0,.075);
-      }
-      &:focus:not(:focus-visible) {
-        outline: 0;
-      }
-    }
-  }
-
-  &__title {
-    @extend .ui-font;
-    font-size: $ui-font-size + .125rem;
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    margin-bottom: 0;
-    margin-left: var(--title-margin-left);
-  }
-
   &__grid {
     margin-bottom: -2rem;
   }

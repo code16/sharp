@@ -29,7 +29,8 @@ class SharpDashboard extends AbstractSharpDashboard
 
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
-        $dashboardLayout->addFullWidthWidget('bars')
+        $dashboardLayout
+            ->addFullWidthWidget('bars')
             ->addRow(function (DashboardLayoutRow $row) {
                 $row->addWidget(4, 'panel')
                     ->addWidget(8, 'bars2');

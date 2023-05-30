@@ -23,8 +23,8 @@ class LoginController extends Controller
 
     public function create()
     {
-        if (config('sharp.auth.login_page_url')) {
-            return redirect()->to(config('sharp.auth.login_page_url'));
+        if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
+            return redirect()->to($loginPageUrl);
         }
 
         return view('sharp::login');
@@ -48,9 +48,11 @@ class LoginController extends Controller
     {
         $this->guard()->logout();
 
-        return redirect()->to(
-            config('sharp.auth.login_page_url', route('code16.sharp.login')),
-        );
+        if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
+            return redirect()->to($loginPageUrl);
+        }
+
+        return redirect()->to(route('code16.sharp.login'));
     }
 
     protected function attemptToLogin(): bool

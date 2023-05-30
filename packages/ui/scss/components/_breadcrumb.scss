@@ -1,0 +1,14 @@
+
+.breadcrumb {
+  font-size: .75rem;
+  margin-bottom: .5rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  align-self: flex-end;
+  a {
+    text-decoration: none;
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+  }
+}
