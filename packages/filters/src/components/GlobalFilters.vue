@@ -4,7 +4,7 @@
             <div class="position-absolute inset-0" style="z-index: 1">
             </div>
         </template>
-        <template v-for="filter in filters">
+        <template v-for="filter in rootFilters">
             <FilterSelect
                 :label="null"
                 :values="filter.values"
@@ -37,7 +37,7 @@
         },
         computed: {
             ...mapGetters('global-filters', {
-                filters: 'filters/filters',
+                rootFilters: 'filters/rootFilters',
                 filterValue: 'filters/value',
             }),
         },

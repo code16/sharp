@@ -4,6 +4,7 @@
             <div class="container">
                 <ActionBarDashboard
                     :commands="commands"
+                    :filters="rootFilters"
                     @command="handleCommandRequested"
                     @filter-change="handleFilterChanged"
                 />
@@ -19,7 +20,7 @@
                         <Section class="mb-4.5"
                             :section="section"
                             :commands="commandsForType(section.key)"
-                            :filters="[]"
+                            :filters="config.filters && config.filters[section.key] || []"
                             @filter-change="handleFilterChanged"
                             v-slot="{ widgetLayout }"
                         >
@@ -92,6 +93,7 @@
                 fields: state => state.fields,
             }),
             ...mapGetters('dashboard', {
+                rootFilters: 'filters/rootFilters',
                 filtersValues: 'filters/values',
                 getFiltersQueryParams: 'filters/getQueryParams',
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',

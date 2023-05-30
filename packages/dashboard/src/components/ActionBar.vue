@@ -41,12 +41,11 @@
         },
         props: {
             commands: Array,
+            filters: Array,
         },
         computed: {
             ...mapGetters('dashboard', {
-                filters: 'filters/filters',
                 filterValue: 'filters/value',
-                filterNextQuery: 'filters/nextQuery',
             })
         },
     }
