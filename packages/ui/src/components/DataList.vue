@@ -1,7 +1,8 @@
 <template>
-    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reorderActive }" :style="styles">
+    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reordering }" :style="styles">
         <template v-if="isEmpty">
             <div class="SharpDataList__empty p-3">
+                <slot name="prepend"></slot>
                 <slot name="empty" />
                 <slot name="append-body" />
             </div>
@@ -53,13 +54,7 @@
                 <div class="SharpDataList__tbody" ref="body">
                     <Draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
                         <template v-for="item in currentItems">
-                            <slot name="item" :item="item">
-                                <DataListRow :columns="columns" :row="item">
-                                    <template v-if="selecting" v-slot:append>
-                                        <input type="checkbox" v-model="selectedItems" :value="item.id" />
-                                    </template>
-                                </DataListRow>
-                            </slot>
+                            <slot name="item" :item="item" />
                         </template>
                     </Draggable>
                     <slot name="append-body" />
@@ -101,7 +96,6 @@
             pageSize: Number,
             page: Number,
 
-            selecting: Boolean,
             reordering: Boolean,
 
             sort: String,

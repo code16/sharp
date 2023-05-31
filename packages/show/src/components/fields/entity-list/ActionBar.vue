@@ -22,7 +22,7 @@
                                                 class="h-100"
                                                 :filter="filter"
                                                 :value="filtersValues[filter.key]"
-                                                :disabled="reorderActive"
+                                                :disabled="reordering"
                                                 @input="handleFilterChanged(filter, $event)"
                                                 :key="filter.id"
                                             />
@@ -36,7 +36,7 @@
                                                 class="h-100"
                                                 :value="search"
                                                 :placeholder="l('action_bar.list.search.placeholder')"
-                                                :disabled="reorderActive"
+                                                :disabled="reordering"
                                                 @submit="handleSearchSubmitted"
                                             />
                                         </div>
@@ -56,7 +56,7 @@
                             <div class="row flex-nowrap justify-content-end g-2 gx-md-3">
                                 <template v-if="canReorder">
                                     <div class="col-auto">
-                                        <template v-if="reorderActive">
+                                        <template v-if="reordering">
                                             <div class="row gx-3">
                                                 <div class="col-auto">
                                                     <Button text @click="handleReorderButtonClicked">
@@ -78,7 +78,7 @@
                                     </div>
                                 </template>
 
-                                <template v-if="primaryCommand && !reorderActive">
+                                <template v-if="primaryCommand && !reordering">
                                     <div class="col-auto">
                                         <Button variant="primary" @click="handlePrimaryCommandClicked">
                                             {{ primaryCommand.label }}
@@ -86,7 +86,7 @@
                                     </div>
                                 </template>
 
-                                <template v-if="canCreate && !reorderActive">
+                                <template v-if="canCreate && !reordering">
                                     <div class="col-auto">
                                         <div class="action-bar__element">
                                             <template v-if="hasForms">
@@ -145,7 +145,8 @@
             canReorder: Boolean,
             canSearch: Boolean,
 
-            reorderActive: Boolean,
+            reordering: Boolean,
+            selecting: Boolean,
 
             // show field props
             collapsed: Boolean,

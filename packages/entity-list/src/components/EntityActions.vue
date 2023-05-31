@@ -31,52 +31,54 @@
                     </ModalSelect>
                 </div>
             </template>
-            <template v-if="hasActionsButton">
-                <div class="col-auto">
-                    <CommandsDropdown
-                        class="SharpEntityList__commands-dropdown"
-                        outline
-                        :commands="commands"
-                        :has-state="hasState"
-                        @select="handleCommandRequested"
-                    >
-                        <template v-slot:text>
-                            {{ l('entity_list.commands.instance.label') }}
-                        </template>
-                        <template v-if="hasState" v-slot:prepend>
-                            <DropdownItem :disabled="stateDisabled" @click="handleStateDropdownClicked">
-                                <div class="row align-items-center gx-2 flex-nowrap">
-                                    <div class="col-auto">
-                                        <StateIcon :color="stateOptions.color" />
-                                    </div>
-                                    <div class="col">
-                                        <div class="row gx-2">
-                                            <template v-if="!stateDisabled">
+            <template v-if="!selecting">
+                <template v-if="hasActionsButton">
+                    <div class="col-auto">
+                        <CommandsDropdown
+                            class="SharpEntityList__commands-dropdown"
+                            outline
+                            :commands="commands"
+                            :has-state="hasState"
+                            @select="handleCommandRequested"
+                        >
+                            <template v-slot:text>
+                                {{ l('entity_list.commands.instance.label') }}
+                            </template>
+                            <template v-if="hasState" v-slot:prepend>
+                                <DropdownItem :disabled="stateDisabled" @click="handleStateDropdownClicked">
+                                    <div class="row align-items-center gx-2 flex-nowrap">
+                                        <div class="col-auto">
+                                            <StateIcon :color="stateOptions.color" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="row gx-2">
+                                                <template v-if="!stateDisabled">
+                                                    <div class="col-auto">
+                                                        {{ l('modals.entity_state.edit.title') }} :
+                                                    </div>
+                                                </template>
                                                 <div class="col-auto">
-                                                    {{ l('modals.entity_state.edit.title') }} :
+                                                    {{ stateOptions.label }}
                                                 </div>
-                                            </template>
-                                            <div class="col-auto">
-                                                {{ stateOptions.label }}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </DropdownItem>
-                            <DropdownSeparator />
-                        </template>
-                    </CommandsDropdown>
-                </div>
-            </template>
-            <template v-else-if="hasState">
-                <div class="col" style="min-width: 0">
-                    <div class="ui-font text-muted text-start text-truncate mw-100 fs-8" ref="stateLabel">
-                        {{ stateOptions.label }}
+                                </DropdownItem>
+                                <DropdownSeparator />
+                            </template>
+                        </CommandsDropdown>
                     </div>
-                    <Tooltip :target="() => $refs.stateLabel" overflow-only>
-                        {{ stateOptions.label }}
-                    </Tooltip>
-                </div>
+                </template>
+                <template v-else-if="hasState">
+                    <div class="col" style="min-width: 0">
+                        <div class="ui-font text-muted text-start text-truncate mw-100 fs-8" ref="stateLabel">
+                            {{ stateOptions.label }}
+                        </div>
+                        <Tooltip :target="() => $refs.stateLabel" overflow-only>
+                            {{ stateOptions.label }}
+                        </Tooltip>
+                    </div>
+                </template>
             </template>
         </div>
     </div>
@@ -105,6 +107,7 @@
             stateOptions: Object,
             hasCommands: Boolean,
             commands: Array,
+            selecting: Boolean,
         },
         data() {
             return {

@@ -67,16 +67,27 @@
                         </div>
                     </template>
 
-                    <template v-slot:append-head>
-                        <template v-if="hasEntityCommands">
-                            <div class="d-flex align-items-center justify-content-end">
-
-                            </div>
-                        </template>
-                    </template>
-
                     <template v-slot:item="{ item }">
-                        <DataListRow :url="instanceUrl(item)" :columns="columns" :highlight="instanceIsFocused(item)" :row="item">
+                        <DataListRow
+                            :url="instanceUrl(item)"
+                            :columns="columns"
+                            :highlight="instanceIsFocused(item) || selecting && selectedItems.includes(instanceId(item))"
+                            :selecting="selecting"
+                            :row="item"
+                        >
+                            <template v-if="selecting" v-slot:prepend>
+                                <input
+                                    :id="`check-${entityKey}-${instanceId(item)}`"
+                                    class="form-check-input d-block mt-0 me-4"
+                                    type="checkbox"
+                                    v-model="selectedItems"
+                                    :name="entityKey"
+                                    :value="instanceId(item)"
+                                />
+                                <label class="d-block stretched-link" :for="`check-${entityKey}-${instanceId(item)}`">
+                                    <span class="visually-hidden">Select</span>
+                                </label>
+                            </template>
                             <template v-if="hasActionsColumn" v-slot:append="props">
                                 <EntityActions
                                     :config="config"
@@ -84,7 +95,7 @@
                                     :state="instanceState(item)"
                                     :state-options="instanceStateOptions(item)"
                                     :state-disabled="!instanceHasStateAuthorization(item)"
-                                    :has-commands="instanceHasCommands(item)"
+                                    :has-commands="instanceHasCommands(item) && !selecting"
                                     :commands="instanceCommands(item)"
                                     @command="handleInstanceCommandRequested(item, $event)"
                                     @state-change="handleInstanceStateChanged(item, $event)"
@@ -312,13 +323,12 @@
             },
             actionBarListeners() {
                 return {
-                    'command': this.handleCommandRequested,
+                    'command': this.handleEntityCommandRequested,
                     'search-submit': this.handleSearchSubmitted,
                     'filter-change': this.handleFilterChanged,
                     'reorder-click': this.handleReorderButtonClicked,
                     'reorder-submit': this.handleReorderSubmitted,
                     'select-click': this.handleSelectButtonClicked,
-                    'select-submit': this.handleSelectSubmitted,
                     'create': this.handleCreateButtonClicked,
                 }
             },
@@ -353,7 +363,7 @@
                 return this.showSearchField && !!this.config.searchable;
             },
             canSelect() {
-                this.allowedEntityCommands.flat().some(command => command.instance_selection);
+                return this.allowedEntityCommands.flat().some(command => command.instance_selection);
             },
 
             /**
@@ -558,10 +568,6 @@
             handleInstanceStateChanged(instance, state) {
                 this.setState(instance, state);
             },
-            handleInstanceCommandRequested(instance, command) {
-                const instanceId = this.instanceId(instance);
-                this.handleCommandRequested(command, { instanceId });
-            },
             handleSortChanged({ prop, dir }) {
                 this.storeDispatch('setQuery', {
                     ...this.query,
@@ -628,13 +634,21 @@
                     'refresh': this.handleRefreshCommand
                 });
             },
-            handleCommandRequested(command, { instanceId } = {}) {
+            handleInstanceCommandRequested(instance, command) {
+                const instanceId = this.instanceId(instance);
+                this.handleCommandRequested(command, { instanceId });
+            },
+            handleEntityCommandRequested(command) {
+                const selectedInstanceIds = this.selecting ? this.selectedItems : null;
+                this.handleCommandRequested(command, { selectedInstanceIds });
+            },
+            handleCommandRequested(command, { instanceId, selectedInstanceIds } = {}) {
                 const query = this.commandsQuery;
                 const endpoint = this.commandEndpoint(command.key, instanceId);
 
                 this.currentCommandInstanceId = instanceId;
                 this.sendCommand(command, {
-                    postCommand: data => api.post(endpoint, { query, ...data }, { responseType:'blob' }),
+                    postCommand: data => api.post(endpoint, { query, ids: selectedInstanceIds, ...data }, { responseType:'blob' }),
                     getForm: commandQuery => api.get(`${endpoint}/form`, { params: { ...query, ...commandQuery } })
                         .then(response => response.data),
                 });

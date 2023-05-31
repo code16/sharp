@@ -1,6 +1,11 @@
 <template>
-    <div class="SharpDataList__row px-3" :class="classes">
+    <div class="SharpDataList__row position-relative px-3" :class="classes">
         <div class="row gx-0">
+            <template v-if="$scopedSlots.prepend">
+                <div class="col-auto align-self-center">
+                    <slot name="prepend"></slot>
+                </div>
+            </template>
             <div class="col d-flex flex-column justify-content-center position-relative">
                 <div class="SharpDataList__cols py-3">
                     <div class="row align-items-center gx-n2 gx-md-n3">
@@ -21,7 +26,7 @@
                         </template>
                     </div>
                 </div>
-                <template v-if="hasLink">
+                <template v-if="hasLink && !selecting">
                     <a class="SharpDataList__row-link position-absolute inset-0" :href="url"></a>
                 </template>
             </div>
@@ -50,6 +55,7 @@
             url: String,
             header: Boolean,
             highlight: Boolean,
+            selecting: Boolean,
         },
         data() {
             return {
