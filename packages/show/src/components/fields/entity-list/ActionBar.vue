@@ -59,19 +59,19 @@
                                         <template v-if="reordering">
                                             <div class="row gx-3">
                                                 <div class="col-auto">
-                                                    <Button text @click="handleReorderButtonClicked">
+                                                    <Button text small @click="handleReorderButtonClicked">
                                                         {{ l('action_bar.list.reorder_button.cancel') }}
                                                     </Button>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <Button variant="primary" @click="handleReorderSubmitButtonClicked">
+                                                    <Button variant="primary" small @click="handleReorderSubmitButtonClicked">
                                                         {{ l('action_bar.list.reorder_button.finish') }}
                                                     </Button>
                                                 </div>
                                             </div>
                                         </template>
                                         <template v-else>
-                                            <Button text @click="handleReorderButtonClicked">
+                                            <Button text small @click="handleReorderButtonClicked">
                                                 {{ l('action_bar.list.reorder_button') }}
                                             </Button>
                                         </template>
@@ -80,7 +80,7 @@
 
                                 <template v-if="primaryCommand && !reordering">
                                     <div class="col-auto">
-                                        <Button variant="primary" @click="handlePrimaryCommandClicked">
+                                        <Button variant="primary" small @click="handlePrimaryCommandClicked">
                                             {{ primaryCommand.label }}
                                         </Button>
                                     </div>
@@ -94,11 +94,12 @@
                                                     :forms="forms"
                                                     variant="primary"
                                                     right
+                                                    small
                                                     @select="handleCreateFormSelected"
                                                 />
                                             </template>
                                             <template v-else>
-                                                <Button variant="primary" @click="handleCreateButtonClicked">
+                                                <Button variant="primary" small @click="handleCreateButtonClicked">
                                                     {{ l('action_bar.list.create_button') }}
                                                 </Button>
                                             </template>

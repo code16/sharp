@@ -84,7 +84,7 @@
                                     :name="entityKey"
                                     :value="instanceId(item)"
                                 />
-                                <label class="d-block stretched-link" :for="`check-${entityKey}-${instanceId(item)}`">
+                                <label class="d-block position-absolute top-0 left-0 w-100 h-100" style="z-index: 3" :for="`check-${entityKey}-${instanceId(item)}`">
                                     <span class="visually-hidden">Select</span>
                                 </label>
                             </template>
@@ -229,7 +229,7 @@
                 reorderedItems: null,
 
                 selecting: false,
-                selectedItems: null,
+                selectedItems: [],
 
                 containers: null,
                 layout: null,
@@ -310,7 +310,7 @@
                     filters: this.filters,
                     filtersValues: this.filtersValues,
                     forms: this.multiforms,
-                    commands: this.allowedEntityCommands,
+                    commands: this.currentEntityCommands,
                     reordering: this.reordering,
                     selecting: this.selecting,
                     canCreate: this.canCreate,
@@ -319,6 +319,7 @@
                     canSelect: this.canSelect,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
+                    selectedCount: this.selectedItems.length,
                 }
             },
             actionBarListeners() {
@@ -329,6 +330,7 @@
                     'reorder-click': this.handleReorderButtonClicked,
                     'reorder-submit': this.handleReorderSubmitted,
                     'select-click': this.handleSelectButtonClicked,
+                    'select-cancel': this.handleSelectCancelled,
                     'create': this.handleCreateButtonClicked,
                 }
             },
@@ -340,12 +342,12 @@
                 return (this.config.commands.entity || [])
                     .map(group => group.filter(command => this.isEntityCommandAllowed(command)))
             },
-            dropdownEntityCommands() {
-                return this.allowedEntityCommands
-                    .map(group => group.filter(command => !command.primary))
-            },
-            hasEntityCommands() {
-                return this.dropdownEntityCommands.flat().length > 0;
+            currentEntityCommands() {
+                if(this.selecting) {
+                    return this.allowedEntityCommands
+                        .map(group => group.filter(command => command.instance_selection))
+                }
+                return this.allowedEntityCommands;
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;
@@ -445,17 +447,22 @@
                     this.$emit('reordering', false);
                 });
             },
-            handleSelectButtonClicked() {
-                this.selecting = !this.selecting;
-                this.selectedItems = [];
-                this.$emit('selecting', this.selecting);
-            },
             handleCreateButtonClicked(multiform) {
                 const formUrl = multiform
                     ? this.formUrl({ formKey:multiform.key })
                     : this.formUrl();
 
                 location.href = formUrl;
+            },
+            handleSelectButtonClicked() {
+                this.selecting = true
+            },
+            handleSelectCancelled() {
+               this.stopSelecting();
+            },
+            stopSelecting() {
+                this.selecting = false;
+                this.selectedItems = [];
             },
 
             /**
@@ -642,16 +649,17 @@
                 const selectedInstanceIds = this.selecting ? this.selectedItems : null;
                 this.handleCommandRequested(command, { selectedInstanceIds });
             },
-            handleCommandRequested(command, { instanceId, selectedInstanceIds } = {}) {
+            async handleCommandRequested(command, { instanceId, selectedInstanceIds } = {}) {
                 const query = this.commandsQuery;
                 const endpoint = this.commandEndpoint(command.key, instanceId);
 
                 this.currentCommandInstanceId = instanceId;
-                this.sendCommand(command, {
+                await this.sendCommand(command, {
                     postCommand: data => api.post(endpoint, { query, ids: selectedInstanceIds, ...data }, { responseType:'blob' }),
                     getForm: commandQuery => api.get(`${endpoint}/form`, { params: { ...query, ...commandQuery } })
                         .then(response => response.data),
                 });
+                this.stopSelecting();
             },
             handleRefreshCommand(data) {
                 const findInstance = (list, instance) => list.find(item => this.instanceId(instance) === this.instanceId(item));

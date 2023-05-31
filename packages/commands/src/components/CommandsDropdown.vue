@@ -9,10 +9,14 @@
                 <DropdownSeparator />
             </template>
             <template v-for="command in group">
-                <DropdownItem @click="handleCommandClicked(command)" :key="command.key">
+                <DropdownItem
+                    @click="handleCommandClicked(command)"
+                    :disabled="isDisabled(command)"
+                    :key="command.key"
+                >
                     {{ command.label }}
                     <template v-if="command.description">
-                        <div class="SharpCommandsDropdown__description">
+                        <div class="SharpCommandsDropdown__description" :class="{ 'opacity-75': isDisabled(command) }">
                             {{ command.description }}
                         </div>
                     </template>
@@ -44,6 +48,7 @@
                 default: true,
             },
             hasState: Boolean,
+            selecting: Boolean,
         },
 
         computed: {
@@ -58,6 +63,9 @@
         },
 
         methods: {
+            isDisabled(command) {
+                return !this.selecting && command.instance_selection === 'required';
+            },
             handleCommandClicked(command) {
                 this.$emit('select', command);
             }

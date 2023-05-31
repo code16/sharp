@@ -34,7 +34,7 @@
                     <template v-if="canSelect && !reordering">
                         <template v-if="selecting">
                             <div class="col-auto">
-                                <Button key="cancel" outline small @click="handleSelectButtonClicked">
+                                <Button key="cancel" outline small @click="handleSelectCancelled">
                                     {{ l('action_bar.list.reorder_button.cancel') }}
                                 </Button>
                             </div>
@@ -48,17 +48,21 @@
                        </template>
                     </template>
 
-                    <template v-if="hasCommands && !reordering">
+                    <template v-if="hasDropdownCommands && !reordering">
                         <div class="col-auto">
                             <CommandsDropdown
                                 class="bg-white"
                                 :outline="!selecting"
                                 :commands="commands"
                                 :disabled="reordering"
+                                :selecting="selecting"
                                 @select="handleCommandSelected"
                             >
                                 <template v-slot:text>
                                     {{ l('entity_list.commands.entity.label') }}
+                                    <template v-if="selecting">
+                                        ({{ selectedCount }} selected)
+                                    </template>
                                 </template>
                             </CommandsDropdown>
                         </div>
@@ -66,7 +70,7 @@
 
                     <template v-if="primaryCommand && !reordering && !selecting">
                         <div class="col-auto">
-                            <Button @click="handlePrimaryCommandClicked">
+                            <Button small @click="handlePrimaryCommandClicked">
                                 {{ primaryCommand.label }}
                             </Button>
                         </div>
@@ -136,13 +140,14 @@
 
             reordering: Boolean,
             selecting: Boolean,
+            selectedCount: Number,
 
             breadcrumb: Array,
             showBreadcrumb: Boolean,
         },
         computed: {
-            hasCommands() {
-                return this.commands?.flat().length > 0;
+            hasDropdownCommands() {
+                return this.commands?.flat().filter(command => !command.primary).length > 0;
             },
             primaryCommand() {
                 return this.commands?.flat().find(command => command.primary);
@@ -182,6 +187,9 @@
             },
             handleSelectButtonClicked() {
                 this.$emit('select-click');
+            },
+            handleSelectCancelled() {
+                this.$emit('select-cancel');
             },
         }
     }

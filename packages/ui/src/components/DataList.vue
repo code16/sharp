@@ -1,10 +1,12 @@
 <template>
     <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reordering }" :style="styles">
         <template v-if="isEmpty">
-            <div class="SharpDataList__empty p-3">
+            <div class="SharpDataList__empty">
                 <slot name="prepend"></slot>
-                <slot name="empty" />
-                <slot name="append-body" />
+                <div class="p-3">
+                    <slot name="empty" />
+                    <slot name="append-body" />
+                </div>
             </div>
         </template>
         <template v-else>
