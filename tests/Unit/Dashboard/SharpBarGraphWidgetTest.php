@@ -58,7 +58,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setShowLegend(false);
-
+        
         $this->assertArraySubset(
             ['showLegend' => false],
             $widget->toArray(),
