@@ -143,13 +143,13 @@ abstract class SharpDashboard
                         'data' => $data,
                     ])
             )
-            
+
             // Then, list group widgets data
             ->merge(
                 collect($this->orderedListWidgetsData)
                     ->map(function ($items, $key) {
                         $widget = $this->findWidgetByKey($key);
-    
+
                         return [
                             'key' => $key,
                             'data' => collect($items)
@@ -166,7 +166,7 @@ abstract class SharpDashboard
 
             // And then, pageAlert
             ->when(
-                $this->pageAlertData, 
+                $this->pageAlertData,
                 fn (Collection $data, array $pageAlertData) => $data->merge($pageAlertData)
             )
             ->toArray();
@@ -185,14 +185,13 @@ abstract class SharpDashboard
 
         return $this;
     }
-    
+
     final protected function setFigureData(
-        string $figureWidgetKey, 
-        string $figure, 
+        string $figureWidgetKey,
+        string $figure,
         ?string $unit = null,
         ?string $evolution = null,
-    ): self
-    {
+    ): self {
         $this->figureWidgetsData[$figureWidgetKey] = [
             'figure' => $figure,
             'unit' => $unit,

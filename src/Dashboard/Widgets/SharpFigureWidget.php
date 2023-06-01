@@ -16,24 +16,24 @@ class SharpFigureWidget extends SharpWidget
 
     public static function formatEvolution(?string $evolution): ?array
     {
-        if($evolution === null) {
+        if ($evolution === null) {
             return null;
         }
-        
+
         $evolution = str($evolution);
-        
-        if($evolution->startsWith('-')) {
+
+        if ($evolution->startsWith('-')) {
             return [
                 'increase' => false,
-                'value' => $evolution->substr(1)
+                'value' => $evolution->substr(1),
             ];
         }
-        
+
         return [
             'increase' => true,
-            'value' => $evolution->startsWith('+') 
+            'value' => $evolution->startsWith('+')
                 ? $evolution->substr(1)
-                : $evolution
+                : $evolution,
         ];
     }
 }

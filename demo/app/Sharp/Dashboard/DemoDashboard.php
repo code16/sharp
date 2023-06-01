@@ -132,12 +132,12 @@ class DemoDashboard extends SharpDashboard
 
         $this
             ->setFigureData(
-                'draft_panel', 
+                'draft_panel',
                 figure: $posts->where('state', 'draft')->first()->count ?? 0,
                 evolution: '+15%',
             )
             ->setFigureData(
-                'online_panel', 
+                'online_panel',
                 figure: $posts->where('state', 'online')->first()->count ?? 0,
                 unit: 'post(s)',
                 evolution: '-10%',

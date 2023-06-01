@@ -16,8 +16,8 @@ class SharpGraphWidgetDataSet
             ? $values->toArray()
             : $values;
     }
-    
-    public static function make(array|Collection$values): SharpGraphWidgetDataSet
+
+    public static function make(array|Collection $values): SharpGraphWidgetDataSet
     {
         return new static($values);
     }
