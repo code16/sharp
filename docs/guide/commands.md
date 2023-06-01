@@ -2,7 +2,7 @@
 
 Commands in Sharp are a powerful way to integrate functional processes in the content management. They can be used to re-send an order to the customer, to synchronize pictures of a product, or to preview a page, for instance.
 
-Commands can be defined in an EntityList, in a Show Page or in a Dashboard. This documentation will focus on the EntityList, but the API is very similar in all three cases as explained at the end of this page.
+Commands can be defined in an Entity List, in a Show Page or in a Dashboard. This documentation will focus on the Entity List, but the API is very similar in all three cases as explained at the end of this page.
 
 ## Generator for an 'Entity' command
 
@@ -40,9 +40,9 @@ public function execute(array $data=[]): array
 
 ### Command scope: instance or entity
 
-The example above is an "entity" case, which is reserved to EntityLists: Command applies to a subset of instances, or all of them. To get the EntityList context (search, page, filters...), you can check `$this->queryParams`, just like in the EntityList itself.
+The example above is an "entity" case, which is reserved to Entity Lists: Command applies to a subset of instances, or all of them. To get the Entity List context (search, page, filters...), you can check `$this->queryParams`, just like in the Entity List itself.
 
-To create an instance Command (relative to a specific instance, which can be placed on each EntityList row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
+To create an instance Command (relative to a specific instance, which can be placed on each Entity List row, or in a Show Page), the Command class must extend `Code16\Sharp\EntityList\Commands\InstanceCommand`. The execute method signature is a bit different:
 
 ```php
 public function execute($instanceId, array $params = []): array
@@ -123,7 +123,7 @@ protected function initialData($instanceId): array
 }
 ```
 
-Note that in both cases (Entity or Instance Command) you can access to the EntityList querystring via the request.
+Note that in both cases (Entity or Instance Command) you can access to the Entity List querystring via the request.
 
 ### Configure the command (confirmation text, description, form modal title...)
 
@@ -159,7 +159,7 @@ Here is the full list of available methods:
 - `return $this->download('path', 'diskName')`: the browser will download the specified file.
 - `return $this->streamDownload('path', 'name')`: the browser will stream the specified file.
 
-\* `refresh()` is only useful in an EntityList case (in a Dashboard or a Show Page, it will be treated as a `reload()`). In order to make it work properly, you have to slightly adapt the `getListData()` of your EntityList implementation, making use of `$this->queryParams->specificIds()`:
+\* `refresh()` is only useful in an Entity List case (in a Dashboard or a Show Page, it will be treated as a `reload()`). In order to make it work properly, you have to slightly adapt the `getListData()` of your Entity List implementation, making use of `$this->queryParams->specificIds()`:
 
 ```php
 function getListData()
@@ -176,7 +176,7 @@ function getListData()
 
 ## Declare the Command
 
-Once the Command class is written, we must add it to the EntityList or Show Page:
+Once the Command class is written, we must add it to the Entity List or Show Page:
 
 ```php
 function getInstanceCommands(): ?array
@@ -246,7 +246,7 @@ public function authorizeFor($instanceId): bool
 
 ### Define an entity Command as primary
 
-An EntityList can declare one (and only one) of its entity Commands as "primary". In this case, the command will appear at the top, next to the creation button ("New..."). The idea is to provide more visibility to an important Command, but could also be to replace the creation button entirely (you need to remove the "create" authorization to achieve this). 
+An Entity List can declare one (and only one) of its entity Commands as "primary". In this case, the command will appear at the top, next to the creation button ("New..."). The idea is to provide more visibility to an important Command, but could also be to replace the creation button entirely (you need to remove the "create" authorization to achieve this). 
 
 ```php
 function buildListConfig(): void
@@ -261,12 +261,12 @@ A use case could be to provide a Command with a form for the "create" task, leav
 
 Show Pages can only define instance commands (obviously); apart from that, the API is the same.
 
-It's a common pattern to reuse the same instance commands in an EntityList and in a Show Page.
+It's a common pattern to reuse the same instance commands in an Entity List and in a Show Page.
 One small difference is that `reload()` action is treated as a `refresh()`.
 
 ### Attach Commands to sections
 
-One small difference between Commands in EntityList and in Show Page is that in the latter case it's possible to move the Command to a specific section (of the Show Page layout).
+One small difference between Commands in Entity List and in Show Page is that in the latter case it's possible to move the Command to a specific section (of the Show Page layout).
 
 To achieve this, you must choose a unique key and attach it to the layout section, and use this key on instance commands declaration:
 
@@ -307,3 +307,39 @@ Dashboard can use Commands too, with a very similar API, apart for:
 
 - There is no Instance or Entity distinction; a command handler must extend `Code16\Sharp\Dashboard\Commands\DashboardCommand`.
 - A Dashboard Command can not return a `refresh()` action, since there is no Instance.
+
+## Bulk Commands (Entity List only)
+
+As seen before, Entity Commands are executed on multiple instances: all of them, or a filtered list of them. But sometimes you may need to execute a Command on a specific list of instances, a selection.
+
+In order to allow that, you must:
+
+### Configure the Command to allow an instance selection
+
+```php
+public function buildCommandConfig(): void
+{
+    $this->configureInstanceSelectionAllowed();
+}
+```
+
+You may use `configureInstanceSelectionRequired()` instead to declare that the command can not be executed without a selection.
+
+### Apply the Command to the selected instances
+
+You can use the `$this->selectedIds()` method to retrieve the list of selected instances ids, and apply the Command to them:
+
+```php
+public function execute(array $data = []): array
+{
+    Post::whereIn('id', $this->selectedIds())
+        ->get()
+        ->each(fn (Post $post) => $post->update(/* ... */));
+
+    return $this->refresh($this->selectedIds());
+}
+```
+
+## Wizard Commands
+
+A Wizard Command is a special kind of Command that will be executed in a modal, and will be able to display several steps to the user. See [dedicated documentation here](commands-wizard.md).
