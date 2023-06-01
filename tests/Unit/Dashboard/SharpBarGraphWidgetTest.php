@@ -11,7 +11,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     public function returned_array_contains_bar_display()
     {
         $widget = SharpBarGraphWidget::make('name');
-        
+
         $this->assertEquals('bar', $widget->toArray()['display']);
     }
 
@@ -57,7 +57,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setHeight(150);
-        
+
         $this->assertEquals(150, $widget->toArray()['height']);
     }
 
@@ -66,7 +66,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setDisplayHorizontalAxisAsTimeline();
-        
+
         $this->assertTrue($widget->toArray()['dateLabels']);
     }
 
@@ -75,7 +75,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setHorizontal();
-        
+
         $this->assertTrue($widget->toArray()['options']['horizontal']);
     }
 }
