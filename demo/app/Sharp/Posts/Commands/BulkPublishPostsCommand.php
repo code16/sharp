@@ -23,7 +23,7 @@ class BulkPublishPostsCommand extends EntityCommand
         Post::whereIn('id', $this->selectedIds())
             ->get()
             ->each(fn (Post $post) => $post
-                ->update(['state' => 'published'])
+                ->update(['state' => 'online'])
             );
 
         return $this->reload();
