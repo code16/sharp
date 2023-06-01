@@ -4,6 +4,13 @@
             <div class="container">
                 <div class="row align-items-center g-2 gx-md-4">
                     <div class="col SharpActionBar__col--left" style="min-width: 0">
+<!--                        <template v-if="title">-->
+<!--                            <div class="col d-none d-md-block" style="min-width: 0">-->
+<!--                                <div class="h5 mb-0 text-truncate" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">-->
+<!--                                    {{ title }}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </template>-->
                         <slot name="left"></slot>
                     </div>
                     <div class="col-auto SharpActionBar__col--right">
@@ -12,24 +19,24 @@
                 </div>
             </div>
         </div>
-        <template v-if="hasExtras">
-            <div :class="{ 'container':container }">
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="SharpActionBar__extras">
-                            <slot name="extras" />
-                        </div>
-                    </div>
-                    <template v-if="$slots['extras-right']">
-                        <div class="col-sm-auto">
-                            <div class="SharpActionBar__extras">
-                                <slot name="extras-right" />
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-        </template>
+<!--        <template v-if="hasExtras">-->
+<!--            <div :class="{ 'container':container }">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-sm">-->
+<!--                        <div class="SharpActionBar__extras">-->
+<!--                            <slot name="extras" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <template v-if="$slots['extras-right']">-->
+<!--                        <div class="col-sm-auto">-->
+<!--                            <div class="SharpActionBar__extras">-->
+<!--                                <slot name="extras-right" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </template>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </template>-->
     </div>
 </template>
 

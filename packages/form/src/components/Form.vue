@@ -57,6 +57,9 @@
                     </Grid>
                 </template>
             </TabbedLayout>
+            <template v-if="!independant">
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
+            </template>
         </template>
     </div>
 </template>
@@ -70,7 +73,7 @@
         showConfirm,
     } from "sharp";
 
-    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
     import { DynamicView, Localization } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
@@ -78,6 +81,7 @@
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
+    import BottomBar from "./BottomBar.vue";
 
     const isLocal = Symbol('isLocal');
 
@@ -88,6 +92,8 @@
         mixins: [Localization, localize('fields')],
 
         components: {
+            BottomBar,
+            Button,
             TabbedLayout,
             FieldsLayout,
             Grid,

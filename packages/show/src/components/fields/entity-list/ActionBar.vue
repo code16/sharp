@@ -2,7 +2,7 @@
     <div class="action-bar"
         :class="{ 'position-sticky': sticky }"
         v-sticky="sticky"
-        @sticky-change="stuck = $event.detail"
+        @stuck-change="stuck = $event.detail"
     >
         <div class="position-relative">
             <template v-if="hasOuterTitle">
@@ -12,44 +12,9 @@
             </template>
             <template v-if="ready && barVisible">
                 <div class="row align-items-end align-content-end" data-sticky-anchor>
-                    <template v-if="hasLeftControls && !stuck">
-                        <div class="col-sm mb-2">
-                            <div class="row gy-1 gx-2 gx-md-3">
-                                <template v-for="filter in filters">
-                                    <div class="col-auto mb-1">
-                                        <div class="action-bar__element">
-                                            <SharpFilter
-                                                class="h-100"
-                                                :filter="filter"
-                                                :value="filtersValues[filter.key]"
-                                                :disabled="reordering"
-                                                @input="handleFilterChanged(filter, $event)"
-                                                :key="filter.id"
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-if="canSearch">
-                                    <div class="col-auto mb-1">
-                                        <div class="action-bar__element">
-                                            <Search
-                                                class="h-100"
-                                                :value="search"
-                                                :placeholder="l('action_bar.list.search.placeholder')"
-                                                :disabled="reordering"
-                                                @submit="handleSearchSubmitted"
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div class="col-sm align-self-end">
-                            <slot />
-                        </div>
-                    </template>
+                    <div class="col-sm align-self-end">
+                        <slot />
+                    </div>
 
                     <template v-if="hasRightControls && !collapsed">
                         <div class="col-sm-auto mb-2">
@@ -117,8 +82,7 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search,  Button } from 'sharp-ui';
-    import { SharpFilter } from 'sharp-filters';
+    import { Button } from 'sharp-ui';
     import { MultiformDropdown } from "sharp-entity-list";
     import { lang } from "sharp";
     import { sticky } from "sharp/directives";
@@ -126,25 +90,19 @@
     export default {
         mixins: [Localization],
         components: {
-            Search,
-            SharpFilter,
             MultiformDropdown,
             Button,
         },
         props: {
             ready: Boolean,
             count: Number,
-            search: String,
             hasSearchQuery: Boolean,
-            filters: Array,
-            filtersValues: Object,
             primaryCommand: Object,
 
             forms: Array,
 
             canCreate: Boolean,
             canReorder: Boolean,
-            canSearch: Boolean,
 
             reordering: Boolean,
             selecting: Boolean,
@@ -164,7 +122,8 @@
                 return this.forms && this.forms.length > 0;
             },
             hasLeftControls() {
-                return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
+                return false;
+                // return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
             },
             hasRightControls() {
                 return this.canReorder || this.canCreate || !!this.primaryCommand;

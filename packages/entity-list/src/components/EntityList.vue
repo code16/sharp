@@ -34,35 +34,39 @@
                         {{ l('entity_list.empty_text') }}
                     </template>
 
-                    <template v-slot:prepend>
+                    <template v-if="canSearch || resolvedFilters && resolvedFilters.length" v-slot:prepend>
                         <div class="p-3">
                             <div class="row">
-                                <div class="col">
-                                    <div class="row gx-2 gy-1">
-                                        <template v-for="filter in filters">
-                                            <div class="col-auto">
-                                                <SharpFilter
-                                                    :filter="filter"
-                                                    :value="filtersValues[filter.key]"
-                                                    :disabled="reordering"
-                                                    @input="handleFilterChanged(filter, $event)"
-                                                    :key="filter.id"
-                                                />
-                                            </div>
-                                        </template>
+                                <template v-if="canSearch">
+                                    <div class="col-auto">
+                                        <div style="max-width: 300px">
+                                            <Search
+                                                class="h-100"
+                                                :value="search"
+                                                :placeholder="l('action_bar.list.search.placeholder')"
+                                                :disabled="reordering"
+                                                @submit="handleSearchSubmitted"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div style="max-width: 300px">
-                                        <Search
-                                            class="h-100"
-                                            :value="search"
-                                            :placeholder="l('action_bar.list.search.placeholder')"
-                                            :disabled="reordering"
-                                            @submit="handleSearchSubmitted"
-                                        />
+                                </template>
+                                <template v-if="resolvedFilters.length">
+                                    <div class="col">
+                                        <div class="row gx-2 gy-1">
+                                            <template v-for="filter in resolvedFilters">
+                                                <div class="col-auto">
+                                                    <SharpFilter
+                                                        :filter="filter"
+                                                        :value="filtersValues[filter.key]"
+                                                        :disabled="reordering"
+                                                        @input="handleFilterChanged(filter, $event)"
+                                                        :key="filter.id"
+                                                    />
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
-                                </div>
+                                </template>
                             </div>
                         </div>
                     </template>
@@ -210,6 +214,7 @@
                 default: true,
             },
             hiddenCommands: Object,
+            filters: Array,
             visible: {
                 type: Boolean,
                 default: true,
@@ -263,8 +268,11 @@
                     'SharpEntityList--has-state-only': this.hasStateOnly,
                 }
             },
-            filters() {
+            rootFilters() {
                 return this.storeGetter('filters/rootFilters');
+            },
+            resolvedFilters() {
+                return this.filters ?? this.rootFilters;
             },
             filtersValues() {
                 return this.storeGetter('filters/values');
@@ -308,9 +316,6 @@
                 return {
                     ready: true,
                     count: this.totalCount,
-                    search: this.search,
-                    filters: this.filters,
-                    filtersValues: this.filtersValues,
                     forms: this.multiforms,
                     commands: this.currentEntityCommands,
                     reordering: this.reordering,
@@ -539,11 +544,6 @@
             instanceIsFocused(instance) {
                 const instanceId = this.instanceId(instance);
                 return this.focusedItem && this.focusedItem === instanceId;
-            },
-
-
-            filterByKey(key) {
-                return (this.config.filters || []).find(filter => filter.key === key);
             },
 
             /**

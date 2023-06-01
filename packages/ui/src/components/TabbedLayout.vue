@@ -1,7 +1,7 @@
 <template>
     <div class="SharpTabbedLayout">
         <template v-if="showTabs">
-            <Tabs>
+            <Tabs nav-class="bg-white p-3">
                 <template v-slot:nav-prepend>
                     <slot name="nav-prepend" />
                 </template>

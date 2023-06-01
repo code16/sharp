@@ -11,6 +11,9 @@
                 <template v-slot:action-bar="{ props, listeners }">
                     <ActionBarForm v-bind="props" v-on="listeners" />
                 </template>
+                <template v-slot:append="{ props, listeners }">
+                    <ActionBarForm v-bind="props" v-on="listeners" />
+                </template>
             </Form>
         </div>
     </div>
@@ -19,9 +22,11 @@
 <script>
     import Form from '../Form';
     import ActionBarForm from '../ActionBar';
+    import {Button} from "sharp-ui";
 
     export default {
         components: {
+            Button,
             Form,
             ActionBarForm,
         },

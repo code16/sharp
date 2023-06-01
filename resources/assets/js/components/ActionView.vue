@@ -8,6 +8,7 @@
             </div>
         </template>
         <template v-else>
+            <ActionBar />
 
             <router-view @error="handlePageError" />
 
