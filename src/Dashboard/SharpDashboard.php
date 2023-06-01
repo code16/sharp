@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Dashboard;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
+use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
@@ -113,7 +114,8 @@ abstract class SharpDashboard
 
             // First, graph widgets dataSets
             ->map(function (array $dataSets, string $key) {
-                $dataSetsValues = collect($dataSets)->map(fn ($dataSet) => $dataSet->toArray());
+                $dataSetsValues = collect($dataSets)
+                    ->map(fn ($dataSet) => $dataSet->toArray());
 
                 return [
                     'key' => $key,
@@ -184,11 +186,17 @@ abstract class SharpDashboard
         return $this;
     }
     
-    final protected function setFigureData(string $figureWidgetKey, string $figure, ?string $unit = null): self
+    final protected function setFigureData(
+        string $figureWidgetKey, 
+        string $figure, 
+        ?string $unit = null,
+        ?string $evolution = null,
+    ): self
     {
         $this->figureWidgetsData[$figureWidgetKey] = [
             'figure' => $figure,
             'unit' => $unit,
+            'evolution' => SharpFigureWidget::formatEvolution($evolution),
         ];
 
         return $this;

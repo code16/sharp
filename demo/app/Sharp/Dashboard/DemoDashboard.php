@@ -62,15 +62,11 @@ class DemoDashboard extends SharpDashboard
             )
             ->addWidget(
                 SharpFigureWidget::make('draft_panel')
-                    ->setVariantWarning()
-                    ->setSizeMedium()
                     ->setTitle('Draft posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'draft')),
             )
             ->addWidget(
                 SharpFigureWidget::make('online_panel')
-                    ->setVariantPrimary()
-                    ->setSizeMedium()
                     ->setTitle('Online posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
             );
@@ -137,12 +133,14 @@ class DemoDashboard extends SharpDashboard
         $this
             ->setFigureData(
                 'draft_panel', 
-                $posts->where('state', 'draft')->first()->count ?? 0,
+                figure: $posts->where('state', 'draft')->first()->count ?? 0,
+                evolution: '+15%',
             )
             ->setFigureData(
                 'online_panel', 
                 figure: $posts->where('state', 'online')->first()->count ?? 0,
-                unit: 'post(s)'
+                unit: 'post(s)',
+                evolution: '-10%',
             )
             ->setPageAlertData([
                 'period' => sprintf(

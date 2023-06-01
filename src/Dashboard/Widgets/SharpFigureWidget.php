@@ -2,15 +2,8 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
-use Illuminate\Validation\Rule;
-
 class SharpFigureWidget extends SharpWidget
 {
-    protected ?string $figure = null;
-    protected ?string $unit = null;
-    protected string $variant = 'primary';
-    protected string $size = 'M';
-
     public static function make(string $key): self
     {
         return new static($key, 'figure');
@@ -18,68 +11,29 @@ class SharpFigureWidget extends SharpWidget
 
     public function toArray(): array
     {
-        return parent::buildArray([
-            'figure' => $this->figure,
-            'unit' => $this->unit,
-            'variant' => $this->variant,
-            'size' => $this->size,
-        ]);
+        return parent::buildArray([]);
     }
 
-    public function setVariantPrimary(): self
+    public static function formatEvolution(?string $evolution): ?array
     {
-        $this->variant = 'primary';
-
-        return $this;
-    }
-
-    public function setVariantSecondary(): self
-    {
-        $this->variant = 'secondary';
-
-        return $this;
-    }
-
-    public function setVariantWarning(): self
-    {
-        $this->variant = 'warning';
-
-        return $this;
-    }
-
-    public function setVariantDanger(): self
-    {
-        $this->variant = 'danger';
-
-        return $this;
-    }
-
-    public function setSizeMedium(): self
-    {
-        $this->size = 'M';
+        if($evolution === null) {
+            return null;
+        }
         
-        return $this;
-    }
-
-    public function setSizeSmall(): self
-    {
-        $this->size = 'S';
-
-        return $this;
-    }
-
-    public function setSizeLarge(): self
-    {
-        $this->size = 'L';
-
-        return $this;
-    }
-
-    protected function validationRules(): array
-    {
+        $evolution = str($evolution);
+        
+        if($evolution->startsWith('-')) {
+            return [
+                'increase' => false,
+                'value' => $evolution->substr(1)
+            ];
+        }
+        
         return [
-            'variant' => ['required', Rule::in(['primary', 'secondary', 'warning', 'danger'])],
-            'size' => ['required', Rule::in(['S', 'M', 'L'])],
+            'increase' => true,
+            'value' => $evolution->startsWith('+') 
+                ? $evolution->substr(1)
+                : $evolution
         ];
     }
 }

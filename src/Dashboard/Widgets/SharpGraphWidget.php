@@ -12,7 +12,6 @@ abstract class SharpGraphWidget extends SharpWidget
 
     /**
      * @param  string  $ratio  16:9, 1:1, ...
-     * @return self
      */
     public function setRatio(string $ratio): self
     {
@@ -21,10 +20,6 @@ abstract class SharpGraphWidget extends SharpWidget
         return $this;
     }
 
-    /**
-     * @param  int  $height  an arbitrary height (ratio will be ignored)
-     * @return self
-     */
     public function setHeight(int $height): self
     {
         $this->height = $height;
