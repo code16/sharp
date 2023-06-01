@@ -3,7 +3,6 @@
 namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Utils\Menu\SharpMenu;
-use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
 
 trait HasSharpMenu
 {

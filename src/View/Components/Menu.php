@@ -2,10 +2,8 @@
 
 namespace Code16\Sharp\View\Components;
 
-use Code16\Sharp\Utils\Menu\SharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
-use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
 use Code16\Sharp\View\Components\Menu\MenuSection;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
