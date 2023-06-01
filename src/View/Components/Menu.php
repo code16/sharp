@@ -12,17 +12,16 @@ use Illuminate\View\Component;
 
 class Menu extends Component
 {
+    use HasSharpMenu;
+
     public string $title;
-    public ?string $username;
     public ?string $currentEntityKey;
     public ?SharpMenuItemLink $currentEntityItem;
     public bool $hasGlobalFilters;
-    private ?SharpMenu $sharpMenu = null;
 
     public function __construct()
     {
         $this->title = config('sharp.name', 'Sharp');
-        $this->username = sharp_user()->{config('sharp.auth.display_attribute', 'name')};
         $this->currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
         $this->currentEntityItem = $this->currentEntityKey
             ? $this->getEntityMenuItem($this->currentEntityKey)
@@ -48,13 +47,6 @@ class Menu extends Component
             ) ?? collect();
     }
 
-    public function getUserMenu(): ?SharpMenuUserMenu
-    {
-        return $this
-            ->getSharpMenu()
-            ?->userMenu();
-    }
-
     public function getEntityMenuItem(string $entityKey): ?SharpMenuItemLink
     {
         return $this->getFlattenedItems()
@@ -71,22 +63,5 @@ class Menu extends Component
                 : $item
             )
             ->flatten();
-    }
-
-    private function getSharpMenu(): ?SharpMenu
-    {
-        if ($this->sharpMenu === null) {
-            if (($sharpMenu = config('sharp.menu')) === null) {
-                return null;
-            }
-
-            $this->sharpMenu = is_string($sharpMenu)
-                ? app($sharpMenu)
-                : $sharpMenu;
-
-            $this->sharpMenu->build();
-        }
-
-        return $this->sharpMenu;
     }
 }

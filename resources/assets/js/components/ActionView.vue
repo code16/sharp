@@ -8,7 +8,11 @@
             </div>
         </template>
         <template v-else>
-            <ActionBar />
+            <ActionBar>
+                <template v-slot:right>
+                    <slot name="user-dropdown" />
+                </template>
+            </ActionBar>
 
             <router-view @error="handlePageError" />
 
