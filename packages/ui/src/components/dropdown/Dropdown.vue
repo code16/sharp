@@ -51,7 +51,7 @@
              * button variant is defined in classes
              */
             toggleClass() {
-                return this.classes;
+                return [this.classes, this.$attrs['toggle-class']]
             },
             boundary() {
                 return document.querySelector('[data-popover-boundary]') || 'scrollParent';

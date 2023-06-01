@@ -1,9 +1,12 @@
 <template>
-    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reorderActive }" :style="styles">
+    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reordering }" :style="styles">
         <template v-if="isEmpty">
-            <div class="SharpDataList__empty p-3">
-                <slot name="empty" />
-                <slot name="append-body" />
+            <div class="SharpDataList__empty">
+                <slot name="prepend"></slot>
+                <div class="p-3">
+                    <slot name="empty" />
+                    <slot name="append-body" />
+                </div>
             </div>
         </template>
         <template v-else>
@@ -53,9 +56,7 @@
                 <div class="SharpDataList__tbody" ref="body">
                     <Draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
                         <template v-for="item in currentItems">
-                            <slot name="item" :item="item">
-                                <DataListRow :columns="columns" :row="item" />
-                            </slot>
+                            <slot name="item" :item="item" />
                         </template>
                     </Draggable>
                     <slot name="append-body" />
@@ -97,7 +98,7 @@
             pageSize: Number,
             page: Number,
 
-            reorderActive: Boolean,
+            reordering: Boolean,
 
             sort: String,
             dir: String,
@@ -109,12 +110,13 @@
                 reorderedItems: null,
 
                 //layout
+                prependWidth: 0,
                 appendWidth: 0,
             }
         },
         watch: {
-            reorderActive(active) {
-                this.handleReorderActiveChanged(active);
+            reordering(active) {
+                this.handleReorderingChanged(active);
             }
         },
         computed: {
@@ -123,19 +125,18 @@
             },
             draggableOptions() {
                 return {
-                    disabled: !this.reorderActive
+                    disabled: !this.reordering
                 }
             },
             currentItems() {
-                return this.reorderActive
-                    ? this.reorderedItems
-                    : this.items;
+                return this.reordering ? this.reorderedItems : this.items;
             },
             isEmpty() {
                 return (this.items||[]).length === 0;
             },
             styles() {
                 return {
+                    '--prepend-width': this.prependWidth ? `${this.prependWidth}px` : null,
                     '--append-width': this.appendWidth ? `${this.appendWidth}px` : null,
                 }
             },
@@ -156,23 +157,25 @@
             handlePageChanged(page) {
                 this.$emit('page-change', page);
             },
-            handleReorderActiveChanged(active) {
+            handleReorderingChanged(active) {
                 this.reorderedItems = active ? [...this.items] : null;
-            },
-            getAppendWidth(el) {
-                if(!el) {
-                    return 0;
-                }
-                const append = el.querySelector('.SharpDataList__row-append');
-                return append ? append.offsetWidth : 0;
             },
             async updateLayout() {
                 this.appendWidth = 0;
                 await this.$nextTick();
-                const headAppendWidth = this.getAppendWidth(this.$refs.head)
-                const bodyAppendWidth = this.getAppendWidth(this.$refs.body);
+                const headAppendWidth = this.$refs.head?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+                const bodyAppendWidth = this.$refs.body?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+                const bodyPrependWidth = this.$refs.body?.querySelector('.SharpDataList__row-prepend')?.offsetWidth ?? 0;
                 this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
+                this.prependWidth = bodyPrependWidth;
             }
+        },
+        updated() {
+            // const headAppendWidth = this.$refs.head?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+            // const bodyAppendWidth = this.$refs.body?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+            // const bodyPrependWidth = this.$refs.body?.querySelector('.SharpDataList__row-prepend')?.offsetWidth ?? 0;
+            // this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
+            // this.prependWidth = bodyPrependWidth;
         },
         mounted() {
             this.updateLayout();

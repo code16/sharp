@@ -11,7 +11,7 @@
                         :options="config.state.values"
                         size="sm"
                         @change="handleStateChanged"
-                        @update:visible="handleSelecting"
+                        @update:visible="handleModalVisibilityChanged"
                     >
                         <template v-slot="{ on }">
                             <Button
@@ -37,7 +37,9 @@
                         class="SharpEntityList__commands-dropdown"
                         outline
                         :commands="commands"
+                        :disabled="selecting"
                         :has-state="hasState"
+                        :toggle-class="{ 'opacity-50': selecting }"
                         @select="handleCommandRequested"
                     >
                         <template v-slot:text>
@@ -85,10 +87,11 @@
 <script>
     import { lang } from "sharp";
     import { CommandsDropdown } from "sharp-commands";
-    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip } from "sharp-ui";
+    import {DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip, Dropdown} from "sharp-ui";
 
     export default {
         components: {
+            Dropdown,
             DropdownItem,
             DropdownSeparator,
             CommandsDropdown,
@@ -105,6 +108,7 @@
             stateOptions: Object,
             hasCommands: Boolean,
             commands: Array,
+            selecting: Boolean,
         },
         data() {
             return {
@@ -124,11 +128,11 @@
             handleCommandRequested(command) {
                 this.$emit('command', command);
             },
-            handleSelecting(selecting) {
-                this.$emit('selecting', selecting);
+            handleModalVisibilityChanged(visible) {
+                this.$emit('state-choosing', visible);
             },
             handleStateDropdownClicked() {
-                this.$emit('selecting', true);
+                this.$emit('state-choosing', true);
                 this.stateModalVisible = true;
             },
         },

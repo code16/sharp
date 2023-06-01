@@ -10,6 +10,7 @@ return [
     'list.reorder_button' => 'Réarranger',
     'list.reorder_button.finish' => 'Ok',
     'list.reorder_button.cancel' => 'Annuler',
+    'list.select_button' => 'Sélectionner...',
     'locale_selector.label' => 'Choisissez une langue',
     'form.submit_button.create' => 'Créer',
     'form.submit_button.update' => 'Valider',

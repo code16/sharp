@@ -76,6 +76,7 @@
     $active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000))
   );
 
+  --bs-btn-bg: white;
   --bs-btn-color: var(--primary-hsl);
   --bs-btn-border-color: hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375);
   --bs-btn-focus-box-shadow: 0 0 0 #{$btn-focus-width} hsla(var(--primary-h), var(--primary-s), var(--primary-l), .5);

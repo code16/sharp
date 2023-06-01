@@ -24,10 +24,10 @@ describe('DataList', ()=>{
         });
     }
 
-    function setReorderActive(wrapper, reorderActive) {
-        const watcherSpy = jest.spyOn(wrapper.vm, 'handleReorderActiveChanged').mockImplementation();
+    function setReordering(wrapper, reordering) {
+        const watcherSpy = jest.spyOn(wrapper.vm, 'handleReorderingChanged').mockImplementation();
         wrapper.setProps({
-            reorderActive
+            reordering
         });
         watcherSpy.mockRestore();
     }
@@ -111,15 +111,15 @@ describe('DataList', ()=>{
     });
 
     describe('watch', ()=>{
-        test('reorderActive', ()=>{
+        test('reordering', ()=>{
             const wrapper = createWrapper();
             wrapper.setMethods({
-                handleReorderActiveChanged: jest.fn()
+                handleReorderingChanged: jest.fn()
             });
             wrapper.setProps({
-                reorderActive: true,
+                reordering: true,
             });
-            expect(wrapper.vm.handleReorderActiveChanged).toHaveBeenCalledWith(true);
+            expect(wrapper.vm.handleReorderingChanged).toHaveBeenCalledWith(true);
         });
     });
 
@@ -143,7 +143,7 @@ describe('DataList', ()=>{
             expect(wrapper.vm.draggableOptions).toEqual({
                 disabled: true,
             });
-            setReorderActive(wrapper, true);
+            setReordering(wrapper, true);
             expect(wrapper.vm.draggableOptions).toEqual({
                 disabled: false,
             });
@@ -154,7 +154,7 @@ describe('DataList', ()=>{
                 items: [{ label:'item' }],
             });
             expect(wrapper.vm.currentItems).toEqual([{ label:'item' }]);
-            setReorderActive(wrapper, true);
+            setReordering(wrapper, true);
             wrapper.setData({
                 reorderedItems: [{ label: 'reorderedItem' }],
             });
@@ -199,14 +199,14 @@ describe('DataList', ()=>{
             expect(wrapper.emitted('page-change')[0]).toEqual([1]);
         });
 
-        test('handleReorderActiveChanged', ()=>{
+        test('handleReorderingChanged', ()=>{
             const wrapper = createWrapper();
             wrapper.setProps({
                 items: [{ id:1 }]
             });
-            wrapper.vm.handleReorderActiveChanged(true);
+            wrapper.vm.handleReorderingChanged(true);
             expect(wrapper.vm.reorderedItems).toEqual([{ id:1 }]);
-            wrapper.vm.handleReorderActiveChanged(false);
+            wrapper.vm.handleReorderingChanged(false);
             expect(wrapper.vm.reorderedItems).toEqual(null);
         });
     });

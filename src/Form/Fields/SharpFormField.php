@@ -39,14 +39,9 @@ abstract class SharpFormField
         return $this;
     }
 
-    /**
-     * @param  string  $fieldKey
-     * @param  array|string|bool  $values
-     * @return static
-     */
-    public function addConditionalDisplay(string $fieldKey, $values = true): self
+    public function addConditionalDisplay(string $fieldKey, array|string|bool $values = true): self
     {
-        if (substr($fieldKey, 0, 1) === '!') {
+        if (str_starts_with($fieldKey, '!')) {
             $fieldKey = substr($fieldKey, 1);
             $values = false;
         }
