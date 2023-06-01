@@ -21,6 +21,7 @@ abstract class SharpDashboard
     protected bool $dashboardBuilt = false;
     protected array $graphWidgetDataSets = [];
     protected array $panelWidgetsData = [];
+    protected array $figureWidgetsData = [];
     protected array $orderedListWidgetsData = [];
     protected ?array $pageAlertData = null;
     protected ?DashboardQueryParams $queryParams;
@@ -48,7 +49,7 @@ abstract class SharpDashboard
         $this->checkDashboardIsBuilt();
 
         return collect($this->widgetsContainer()->getWidgets())
-            ->map->toArray()
+            ->map(fn ($widgetContainer) => $widgetContainer->toArray())
             ->keyBy('key')
             ->all();
     }
@@ -104,69 +105,68 @@ abstract class SharpDashboard
         });
     }
 
-    /**
-     * Return data, as an array.
-     *
-     * @return array
-     */
     final public function data(): array
     {
         $this->buildWidgetsData();
 
-        // First, graph widgets dataSets
-        $data = collect($this->graphWidgetDataSets)
+        return collect($this->graphWidgetDataSets)
+
+            // First, graph widgets dataSets
             ->map(function (array $dataSets, string $key) {
-                $dataSetsValues = collect($dataSets)->map->toArray();
+                $dataSetsValues = collect($dataSets)->map(fn ($dataSet) => $dataSet->toArray());
 
                 return [
                     'key' => $key,
                     'datasets' => $dataSetsValues
-                        ->map(function ($dataSet) {
-                            return Arr::except($dataSet, 'labels');
-                        })
+                        ->map(fn ($dataSet) => Arr::except($dataSet, 'labels'))
                         ->all(),
                     'labels' => $dataSetsValues->first()['labels'],
                 ];
-            });
+            })
 
-        // Then, panel widgets data
-        $data = $data->merge(
-            collect($this->panelWidgetsData)
-                ->map(function ($value, $key) {
-                    return [
-                        'key' => $key,
-                        'data' => $value,
-                    ];
-                }),
-        );
-
-        // Then, list group widgets data
-        $data = $data->merge(
-            collect($this->orderedListWidgetsData)
-                ->map(function ($items, $key) {
-                    $widget = $this->findWidgetByKey($key);
-
-                    $data = collect($items)
-                        ->map(function ($item) use ($widget) {
-                            return array_merge(
-                                $item,
-                                ['url' => $widget->getItemUrl($item)],
-                            );
-                        })
-                        ->all();
-
-                    return [
+            // Then, panel widgets data
+            ->merge(
+                collect($this->panelWidgetsData)
+                    ->map(fn ($data, $key) => [
                         'key' => $key,
                         'data' => $data,
-                    ];
-                }),
-        );
+                    ])
+            )
 
-        // And then, pageAlert
-        return $data
-            ->when($this->pageAlertData, function (Collection $data, array $pageAlertData) {
-                return $data->merge($pageAlertData);
-            })
+            // Then, figure widgets data
+            ->merge(
+                collect($this->figureWidgetsData)
+                    ->map(fn ($data, $key) => [
+                        'key' => $key,
+                        'data' => $data,
+                    ])
+            )
+            
+            // Then, list group widgets data
+            ->merge(
+                collect($this->orderedListWidgetsData)
+                    ->map(function ($items, $key) {
+                        $widget = $this->findWidgetByKey($key);
+    
+                        return [
+                            'key' => $key,
+                            'data' => collect($items)
+                                ->map(function ($item) use ($widget) {
+                                    return array_merge(
+                                        $item,
+                                        ['url' => $widget->getItemUrl($item)],
+                                    );
+                                })
+                                ->all(),
+                        ];
+                    })
+            )
+
+            // And then, pageAlert
+            ->when(
+                $this->pageAlertData, 
+                fn (Collection $data, array $pageAlertData) => $data->merge($pageAlertData)
+            )
             ->toArray();
     }
 
@@ -180,6 +180,16 @@ abstract class SharpDashboard
     final protected function setPanelData(string $panelWidgetKey, array $data): self
     {
         $this->panelWidgetsData[$panelWidgetKey] = $data;
+
+        return $this;
+    }
+    
+    final protected function setFigureData(string $figureWidgetKey, string $figure, ?string $unit = null): self
+    {
+        $this->figureWidgetsData[$figureWidgetKey] = [
+            'figure' => $figure,
+            'unit' => $unit,
+        ];
 
         return $this;
     }
