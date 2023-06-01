@@ -59,9 +59,9 @@ abstract class EntityCommand extends Command
 
     final public function selectedIds(): array
     {
-        return $this->instanceSelectionMode === 'none'
-            ? []
-            : $this->queryParams->specificIds();
+        return $this->instanceSelectionMode
+            ? $this->queryParams->specificIds()
+            : [];
     }
 
     abstract public function execute(array $data = []): array;

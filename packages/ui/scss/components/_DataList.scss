@@ -64,10 +64,6 @@
     //padding-right: 4em;
   }
 
-  &__row-spacer {
-    width: var(--append-width, auto);
-  }
-
   &__row {
     border-bottom: 1px solid $ui-04;
     transition: box-shadow .25s ease-in-out;

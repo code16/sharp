@@ -45,7 +45,7 @@ class EntityListQueryParams
         }
 
         if (isset($query['ids'])) {
-            $this->specificIds = explode(',', $query['ids']);
+            $this->specificIds = $query['ids'];
         }
 
         $this->fillFilterWithRequest($query);

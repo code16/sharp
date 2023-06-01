@@ -1,5 +1,10 @@
 <template>
-    <Dropdown class="SharpCommandsDropdown" :class="classes" :small="small" right v-bind="$attrs">
+    <Dropdown class="SharpCommandsDropdown"
+        :class="classes"
+        :small="small"
+        right
+        v-bind="$attrs"
+    >
         <template v-slot:text>
             <slot name="text" />
         </template>

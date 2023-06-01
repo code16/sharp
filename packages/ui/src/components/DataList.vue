@@ -110,6 +110,7 @@
                 reorderedItems: null,
 
                 //layout
+                prependWidth: 0,
                 appendWidth: 0,
             }
         },
@@ -135,6 +136,7 @@
             },
             styles() {
                 return {
+                    '--prepend-width': this.prependWidth ? `${this.prependWidth}px` : null,
                     '--append-width': this.appendWidth ? `${this.appendWidth}px` : null,
                 }
             },
@@ -158,20 +160,22 @@
             handleReorderingChanged(active) {
                 this.reorderedItems = active ? [...this.items] : null;
             },
-            getAppendWidth(el) {
-                if(!el) {
-                    return 0;
-                }
-                const append = el.querySelector('.SharpDataList__row-append');
-                return append ? append.offsetWidth : 0;
-            },
             async updateLayout() {
                 this.appendWidth = 0;
                 await this.$nextTick();
-                const headAppendWidth = this.getAppendWidth(this.$refs.head)
-                const bodyAppendWidth = this.getAppendWidth(this.$refs.body);
+                const headAppendWidth = this.$refs.head?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+                const bodyAppendWidth = this.$refs.body?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+                const bodyPrependWidth = this.$refs.body?.querySelector('.SharpDataList__row-prepend')?.offsetWidth ?? 0;
                 this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
+                this.prependWidth = bodyPrependWidth;
             }
+        },
+        updated() {
+            // const headAppendWidth = this.$refs.head?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+            // const bodyAppendWidth = this.$refs.body?.querySelector('.SharpDataList__row-append')?.offsetWidth ?? 0;
+            // const bodyPrependWidth = this.$refs.body?.querySelector('.SharpDataList__row-prepend')?.offsetWidth ?? 0;
+            // this.appendWidth = Math.max(headAppendWidth, bodyAppendWidth);
+            // this.prependWidth = bodyPrependWidth;
         },
         mounted() {
             this.updateLayout();

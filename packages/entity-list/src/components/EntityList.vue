@@ -67,6 +67,7 @@
                         </div>
                     </template>
 
+
                     <template v-slot:item="{ item }">
                         <DataListRow
                             :url="instanceUrl(item)"
@@ -84,7 +85,7 @@
                                     :name="entityKey"
                                     :value="instanceId(item)"
                                 />
-                                <label class="d-block position-absolute top-0 left-0 w-100 h-100" style="z-index: 3" :for="`check-${entityKey}-${instanceId(item)}`">
+                                <label class="d-block position-absolute start-0 top-0 w-100 h-100" style="z-index: 3" :for="`check-${entityKey}-${instanceId(item)}`">
                                     <span class="visually-hidden">Select</span>
                                 </label>
                             </template>
@@ -97,9 +98,10 @@
                                     :state-disabled="!instanceHasStateAuthorization(item)"
                                     :has-commands="instanceHasCommands(item) && !selecting"
                                     :commands="instanceCommands(item)"
+                                    :selecting="selecting"
                                     @command="handleInstanceCommandRequested(item, $event)"
                                     @state-change="handleInstanceStateChanged(item, $event)"
-                                    @selecting="props.toggleHighlight($event)"
+                                    @state-choosing="props.toggleHighlight($event)"
                                 />
                             </template>
                         </DataListRow>
@@ -655,8 +657,15 @@
 
                 this.currentCommandInstanceId = instanceId;
                 await this.sendCommand(command, {
-                    postCommand: data => api.post(endpoint, { query, ids: selectedInstanceIds, ...data }, { responseType:'blob' }),
-                    getForm: commandQuery => api.get(`${endpoint}/form`, { params: { ...query, ...commandQuery } })
+                    postCommand: data => api.post(endpoint, {
+                        query: {
+                            ...query,
+                            ids: selectedInstanceIds,
+                        },
+                        ...data
+                    }, { responseType:'blob' }),
+                    getForm: commandQuery => api.get(`${endpoint}/form`, {
+                        params: { ...query, ...commandQuery, ids: selectedInstanceIds } })
                         .then(response => response.data),
                 });
                 this.stopSelecting();

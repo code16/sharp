@@ -3,7 +3,14 @@
         <div class="row gx-0">
             <template v-if="$scopedSlots.prepend">
                 <div class="col-auto align-self-center">
-                    <slot name="prepend"></slot>
+                    <div class="SharpDataList__row-prepend">
+                        <slot name="prepend"></slot>
+                    </div>
+                </div>
+            </template>
+            <template v-else-if="header && selecting">
+                <div class="col-auto">
+                    <div style="width: var(--prepend-width, auto)"></div>
                 </div>
             </template>
             <div class="col d-flex flex-column justify-content-center position-relative">
@@ -37,7 +44,7 @@
                     </div>
                 </template>
                 <template v-else>
-                    <div class="SharpDataList__row-spacer"></div>
+                    <div style="width: var(--append-width, auto)"></div>
                 </template>
             </div>
         </div>
