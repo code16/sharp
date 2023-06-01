@@ -11,11 +11,8 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     public function returned_array_contains_bar_display()
     {
         $widget = SharpBarGraphWidget::make('name');
-
-        $this->assertArraySubset(
-            ['display' => 'bar'],
-            $widget->toArray(),
-        );
+        
+        $this->assertEquals('bar', $widget->toArray()['display']);
     }
 
     /** @test */
@@ -23,10 +20,8 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name');
 
-        $this->assertArraySubset(
-            ['ratioX' => 16, 'ratioY' => 9],
-            $widget->toArray(),
-        );
+        $this->assertEquals(16, $widget->toArray()['ratioX']);
+        $this->assertEquals(9, $widget->toArray()['ratioY']);
     }
 
     /** @test */
@@ -35,10 +30,8 @@ class SharpBarGraphWidgetTest extends SharpTestCase
         $widget = SharpBarGraphWidget::make('name')
             ->setRatio('2:3');
 
-        $this->assertArraySubset(
-            ['ratioX' => 2, 'ratioY' => 3],
-            $widget->toArray(),
-        );
+        $this->assertEquals(2, $widget->toArray()['ratioX']);
+        $this->assertEquals(3, $widget->toArray()['ratioY']);
     }
 
     /** @test */
@@ -47,10 +40,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
         $widget = SharpBarGraphWidget::make('name')
             ->setMinimal();
 
-        $this->assertArraySubset(
-            ['minimal' => true],
-            $widget->toArray(),
-        );
+        $this->assertTrue($widget->toArray()['minimal']);
     }
 
     /** @test */
@@ -58,11 +48,8 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setShowLegend(false);
-        
-        $this->assertArraySubset(
-            ['showLegend' => false],
-            $widget->toArray(),
-        );
+
+        $this->assertFalse($widget->toArray()['showLegend']);
     }
 
     /** @test */
@@ -70,23 +57,17 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setHeight(150);
-
-        $this->assertArraySubset(
-            ['height' => 150],
-            $widget->toArray(),
-        );
+        
+        $this->assertEquals(150, $widget->toArray()['height']);
     }
 
     /** @test */
     public function we_can_define_displayHorizontalAxisAsTimeline_attribute()
     {
         $widget = SharpBarGraphWidget::make('name')
-            ->setDisplayHorizontalAxisAsTimeline(true);
-
-        $this->assertArraySubset(
-            ['dateLabels' => true],
-            $widget->toArray(),
-        );
+            ->setDisplayHorizontalAxisAsTimeline();
+        
+        $this->assertTrue($widget->toArray()['dateLabels']);
     }
 
     /** @test */
@@ -94,14 +75,7 @@ class SharpBarGraphWidgetTest extends SharpTestCase
     {
         $widget = SharpBarGraphWidget::make('name')
             ->setHorizontal();
-
-        $this->assertArraySubset(
-            [
-                'options' => [
-                    'horizontal' => true,
-                ],
-            ],
-            $widget->toArray(),
-        );
+        
+        $this->assertTrue($widget->toArray()['options']['horizontal']);
     }
 }
