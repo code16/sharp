@@ -31,7 +31,7 @@ class PageReorderHandler implements ReorderHandler
 
 ## Configure reorder for the front-end
 
-Then, in the `SharpEntityList` class, we have to configure our reorder handler:
+Then, in your `SharpEntityList` implementation class you have to configure your reorder handler:
 
 ```php
 public function buildListConfig()
@@ -40,7 +40,7 @@ public function buildListConfig()
 }
 ```
 
-And that's it, the list now presents a "Reorder" button, and your code will be called when needed.
+And that’s it, the list now presents a "Reorder" button, and your code will be called when needed.
 
 ## Handle exceptions
 
@@ -48,7 +48,7 @@ If you need to abort the process, for any reason, you can raise a `Code16\Sharp\
 
 ## Use the default Eloquent implementation
 
-A common pattern, with an Eloquent model, is to simply define an `order` attribute. In this simple case, you can leverage a default implementation built in Sharp:
+A common pattern with an Eloquent model is to simply define an `order` attribute. In this simple case, you can leverage a default implementation built in Sharp:
 
 ```php
 public function buildListConfig()
