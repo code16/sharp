@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Utils\Menu;
 
-
-use Code16\Sharp\View\Components\Menu\MenuSection;
 use Illuminate\Support\Collection;
 
 class SharpMenuManager
@@ -29,9 +27,10 @@ class SharpMenuManager
         return $this->menu()
             ?->items()
             ->filter(function (SharpMenuItem $item) {
-                if($item->isSection()) {
+                if ($item->isSection()) {
                     return count($this->resolveSectionItems($item)) > 0;
                 }
+
                 return $item->isAllowed();
             }) ?? collect();
     }
@@ -40,9 +39,9 @@ class SharpMenuManager
     {
         return $this->getItems()
             ->map(function (SharpMenuItem $item) {
-               return $item->isSection()
-                   ? $this->resolveSectionItems($item)
-                   : $item;
+                return $item->isSection()
+                    ? $this->resolveSectionItems($item)
+                    : $item;
             })
             ->flatten();
     }
@@ -67,6 +66,7 @@ class SharpMenuManager
     {
         if (($sharpMenu = config('sharp.menu')) === null) {
             $this->menu = null;
+
             return;
         }
 
