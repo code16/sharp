@@ -8,7 +8,7 @@ use Illuminate\View\Component;
 class UserDropdown extends Component
 {
     use HasSharpMenu;
-    public string $username;
+    public ?string $username;
 
     public function __construct()
     {
