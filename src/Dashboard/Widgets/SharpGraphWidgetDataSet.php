@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Dashboard\Widgets;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
 class SharpGraphWidgetDataSet
@@ -11,21 +10,14 @@ class SharpGraphWidgetDataSet
     protected ?string $label = null;
     protected ?string $color = null;
 
-    /**
-     * @param  array|Arrayable  $values
-     */
-    protected function __construct($values)
+    protected function __construct(array|Collection $values)
     {
         $this->values = $values instanceof Collection
             ? $values->toArray()
             : $values;
     }
 
-    /**
-     * @param  array|Arrayable  $values
-     * @return static
-     */
-    public static function make($values): SharpGraphWidgetDataSet
+    public static function make(array|Collection $values): SharpGraphWidgetDataSet
     {
         return new static($values);
     }
@@ -46,11 +38,19 @@ class SharpGraphWidgetDataSet
 
     public function toArray(): array
     {
-        return [
-            'data' => array_values($this->values),
-            'labels' => array_keys($this->values),
-        ]
-            + ($this->label ? ['label' => $this->label] : [])
-            + ($this->color ? ['color' => $this->color] : []);
+        return collect()
+            ->merge([
+                'data' => array_values($this->values),
+                'labels' => array_keys($this->values),
+            ])
+            ->when(
+                $this->label, 
+                fn (Collection $collection) => $collection->merge(['label' => $this->label])
+            )
+            ->when(
+                $this->color, 
+                fn (Collection $collection) => $collection->merge(['color' => $this->color])
+            )
+            ->all();
     }
 }

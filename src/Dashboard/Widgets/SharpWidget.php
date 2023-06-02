@@ -63,16 +63,15 @@ abstract class SharpWidget
 
     protected function buildArray(array $childArray): array
     {
-        $array = collect([
-            'key' => $this->key,
-            'type' => $this->type,
-            'title' => $this->title,
-            'link' => $this->link,
-        ])
+        $array = collect()
+            ->merge([
+                'key' => $this->key,
+                'type' => $this->type,
+                'title' => $this->title,
+                'link' => $this->link,
+            ])
             ->merge($childArray)
-            ->filter(function ($value) {
-                return ! is_null($value);
-            })
+            ->filter(fn ($value) => $value !== null)
             ->all();
 
         $this->validate($array);
