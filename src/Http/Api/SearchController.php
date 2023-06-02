@@ -29,7 +29,7 @@ class SearchController extends ApiController
     private function getSearchEngine(): SharpSearchEngine
     {
         $searchEngine = value(config('sharp.search.engine'));
-        
+
         return is_string($searchEngine)
             ? app($searchEngine)
             : $searchEngine;

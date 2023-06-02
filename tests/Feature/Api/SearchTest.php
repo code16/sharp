@@ -18,7 +18,8 @@ class SearchTest extends BaseApiTest
     /** @test */
     public function we_can_search_and_get_results()
     {
-        config()->set('sharp.search.engine', fn() => new class extends SharpSearchEngine {
+        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        {
             public function searchFor(array $terms): void
             {
                 $resultSet = $this->addResultSet('People');
@@ -53,7 +54,8 @@ class SearchTest extends BaseApiTest
     /** @test */
     public function we_can_get_multiple_result_sets()
     {
-        config()->set('sharp.search.engine', fn() => new class extends SharpSearchEngine {
+        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        {
             public function searchFor(array $terms): void
             {
                 $this->addResultSet('People', 'fa-user')
@@ -96,7 +98,8 @@ class SearchTest extends BaseApiTest
     /** @test */
     public function search_terms_are_handled()
     {
-        config()->set('sharp.search.engine', fn() => new class extends SharpSearchEngine {
+        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        {
             public function searchFor(array $terms): void
             {
                 if ($terms[0] == '%john%' && $terms[1] == '%wayne%') {
