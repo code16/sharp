@@ -44,11 +44,11 @@ class SharpGraphWidgetDataSet
                 'labels' => array_keys($this->values),
             ])
             ->when(
-                $this->label, 
+                $this->label,
                 fn (Collection $collection) => $collection->merge(['label' => $this->label])
             )
             ->when(
-                $this->color, 
+                $this->color,
                 fn (Collection $collection) => $collection->merge(['color' => $this->color])
             )
             ->all();
