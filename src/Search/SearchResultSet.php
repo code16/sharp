@@ -12,7 +12,7 @@ class SearchResultSet
     {
     }
 
-    public function addResultLink(SharpLinkTo $link, string $label, ?string $detail = null)
+    public function addResultLink(SharpLinkTo $link, string $label, ?string $detail = null): ResultLink
     {
         return tap(new ResultLink($link, $label, $detail), function (ResultLink $resultLink) {
             $this->resultLinks[] = $resultLink;

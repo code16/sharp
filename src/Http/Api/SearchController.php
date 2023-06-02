@@ -14,20 +14,24 @@ class SearchController extends ApiController
             $this->getSearchEngine(),
             fn (SharpSearchEngine $engine) => $engine->searchFor(
                 app(StringUtil::class)
-                    ->explodeSearchTerms(request()->input('q'))
+                    ->explodeSearchTerms(request()->input('q', ''))
                     ->all()
             )
         );
 
-        return response()->json([
+        return response()->json(
             $searchEngine->resultSets()
                 ->map(fn (SearchResultSet $resultSet) => $resultSet->toArray())
                 ->all(),
-        ]);
+        );
     }
 
     private function getSearchEngine(): SharpSearchEngine
     {
-        return app(value(config('sharp.search.engine')));
+        $searchEngine = value(config('sharp.search.engine'));
+        
+        return is_string($searchEngine)
+            ? app($searchEngine)
+            : $searchEngine;
     }
 }

@@ -22,6 +22,7 @@ class StringUtil
                         ? str_replace('*', '%', $term)
                         : $noStarTermPrefix.$term.$noStarTermSuffix;
                 })
-            );
+            )
+            ->values();
     }
 }
