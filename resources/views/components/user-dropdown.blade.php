@@ -7,6 +7,7 @@
                     <i class="fas fa-user me-1" style="font-size: 1em"></i>
                 </div>
                 <div class="col" style="min-width: 0">
+                    @php($username = sharp_user()->{config('sharp.auth.display_attribute', 'name')})
                     <div class="text-truncate fs-7 fw-normal" style="text-transform: none; letter-spacing: 0; font-family: var(--bs-body-font-family)" title="{{ $username }}">
                         {{ $username }}
                     </div>
@@ -14,7 +15,7 @@
             </div>
         </div>
     </template>
-    @if($userMenu = $self->getUserMenu())
+    @if($userMenu = app(\Code16\Sharp\Utils\Menu\SharpMenuManager::class)->userMenu())
         @foreach($userMenu->getItems() as $item)
             <li>
                 <x-sharp::menu.dropdown-item
