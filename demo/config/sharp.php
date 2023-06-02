@@ -17,6 +17,10 @@ return [
     ],
 
     'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],
+    
+    'search' => [
+        'engine' => \App\Sharp\AppSearchEngine::class,
+    ],
 
     'menu' => \App\Sharp\SharpMenu::class,
 

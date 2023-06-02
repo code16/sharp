@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Search;
 
+use Illuminate\Support\Collection;
+
 abstract class SharpSearchEngine
 {
     protected array $resultSets = [];
@@ -12,4 +14,11 @@ abstract class SharpSearchEngine
             $this->resultSets[] = $resultSet;
         });
     }
+
+    final public function resultSets(): Collection
+    {
+        return collect($this->resultSets);
+    }
+
+    abstract public function searchFor(array $terms): void;
 }

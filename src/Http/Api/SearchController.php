@@ -12,8 +12,10 @@ class SearchController extends ApiController
     {
         $searchEngine = tap(
             $this->getSearchEngine(), 
-            fn ($engine) => $engine->searchFor(
-                app(StringUtil::class)->explodeSearchTerms(request()->input('q'))
+            fn (SharpSearchEngine $engine) => $engine->searchFor(
+                app(StringUtil::class)
+                    ->explodeSearchTerms(request()->input('q'))
+                    ->all()
             )
         );
         
@@ -26,6 +28,6 @@ class SearchController extends ApiController
 
     private function getSearchEngine(): SharpSearchEngine
     {
-        return value(config('sharp.search.engine'));
+        return app(value(config('sharp.search.engine')));
     }
 }
