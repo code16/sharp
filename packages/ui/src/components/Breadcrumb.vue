@@ -1,13 +1,13 @@
 <template>
     <div class="d-flex">
-        <div class="input-group input-group-sm w-auto" style="min-height: 1.75rem">
+        <div class="row align-items-center gx-3">
             <template v-if="icon">
-                <div class="input-group-text">
-                    <i class="fa fa-sm" :class="icon" style="opacity: .75; font-size: .75rem"></i>
+                <div class="col-auto">
+                    <i class="fa fa-sm d-block text-primary" :class="icon" style="font-size: .75rem"></i>
                 </div>
             </template>
 
-            <div class="form-control">
+            <div class="col">
                 <div class="breadcrumb p-0 m-0">
                     <template v-for="(item, i) in items">
                         <div class="breadcrumb-item" :class="{ 'active': isActive(i) }">

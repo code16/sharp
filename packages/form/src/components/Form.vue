@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpForm" data-popover-boundary>
+    <div class="SharpForm">
         <slot
             name="action-bar"
             :props="actionBarProps"
@@ -22,14 +22,7 @@
                 </div>
             </template>
 
-            <TabbedLayout :layout="layout" ref="tabbedLayout">
-                <template v-if="localized" v-slot:nav-prepend>
-                    <LocaleSelect
-                        :locale="currentLocale"
-                        :locales="locales"
-                        @change="handleLocaleChanged"
-                    />
-                </template>
+            <TabbedLayout :layout="layout" ref="tabbedLayout" data-popover-boundary>
                 <template v-slot:default="{ tab }">
                     <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
                         <FieldsLayout
@@ -56,9 +49,27 @@
                         </FieldsLayout>
                     </Grid>
                 </template>
+                <template v-if="localized" v-slot:nav-append>
+<!--                    <LocaleSelect-->
+<!--                        :text="true"-->
+<!--                        :locale="currentLocale"-->
+<!--                        :locales="locales"-->
+<!--                        @change="handleLocaleChanged"-->
+<!--                    />-->
+                </template>
             </TabbedLayout>
             <template v-if="!independant">
-                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners">
+                    <template v-slot:left>
+<!--                        <LocaleSelect-->
+<!--                            outline-->
+<!--                            dropup-->
+<!--                            :locale="currentLocale"-->
+<!--                            :locales="locales"-->
+<!--                            @change="handleLocaleChanged"-->
+<!--                        />-->
+                    </template>
+                </BottomBar>
             </template>
         </template>
     </div>
@@ -225,6 +236,8 @@
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
                     hasDeleteConfirmation: !!this.config.deleteConfirmationText,
+                    locales: this.locales,
+                    currentLocale: this.currentLocale,
                 }
             },
             actionBarListeners() {
@@ -232,6 +245,7 @@
                     'submit': this.handleSubmitClicked,
                     'delete': this.handleDeleteClicked,
                     'cancel': this.handleCancelClicked,
+                    'locale-change': this.handleLocaleChanged,
                 }
             },
             mergedErrorIdentifier() {

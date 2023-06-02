@@ -15,7 +15,7 @@ return [
     'form.submit_button.create' => 'Create',
     'form.submit_button.update' => 'Update',
     'form.cancel_button' => 'Cancel',
-    'form.delete_button' => 'Delete',
+    'form.delete_button' => 'Delete...',
     'form.back_button' => 'Back',
     'show.edit_button' => 'Edit...',
     'show.back_button' => 'Back',

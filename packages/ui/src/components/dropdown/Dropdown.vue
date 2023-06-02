@@ -45,6 +45,11 @@
             title: String,
             disabled: Boolean,
         },
+        data() {
+            return {
+                boundary: 'scrollParent',
+            }
+        },
         computed: {
             ...Button.computed,
             /**
@@ -52,9 +57,6 @@
              */
             toggleClass() {
                 return [this.classes, this.$attrs['toggle-class']]
-            },
-            boundary() {
-                return document.querySelector('[data-popover-boundary]') || 'scrollParent';
             },
             popperOptions() {
                 return {
@@ -75,6 +77,9 @@
         mounted() {
             if(this.title) {
                 this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
+            }
+            if(this.$el.closest('[data-popover-boundary]')) {
+                this.boundary = this.$el.closest('[data-popover-boundary]');
             }
         },
     }

@@ -1,20 +1,11 @@
 <template>
     <b-tabs
         class="SharpTabs"
-        :nav-class="['SharpTabs__nav align-items-center', navClass]"
-        pills
+        :nav-class="['SharpTabs__nav align-items-center nav-tabs', navClass]"
     >
-        <template v-slot:tabs-start>
-            <li class="nav-item me-auto">
-                <slot name="nav-prepend" />
-            </li>
-        </template>
-
         <template v-slot:tabs-end>
-            <li class="nav-item ms-auto invisible">
-                <div class="d-none d-md-block">
-                    <slot name="nav-prepend" />
-                </div>
+            <li class="nav-item ms-auto">
+                <slot name="nav-append" />
             </li>
         </template>
 

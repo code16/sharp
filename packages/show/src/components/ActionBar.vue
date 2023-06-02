@@ -1,44 +1,63 @@
 <template>
     <div class="mb-3">
-        <div class="row gx-3">
+        <div class="row align-items-center gx-3">
             <div class="col">
                 <template v-if="showBreadcrumb">
                     <Breadcrumb :items="breadcrumb" />
                 </template>
             </div>
+            <div class="col-auto">
+                <LocaleSelect
+                    outline
+                    right
+                    :locale="currentLocale"
+                    :locales="locales"
+                    @change="handleLocaleChanged"
+                />
+            </div>
             <template v-if="hasState">
                 <div class="col-auto">
-                    <ModalSelect
-                        :title="l('modals.entity_state.edit.title')"
-                        :ok-title="l('modals.entity_state.edit.ok_button')"
-                        :value="state.value"
-                        :options="stateValues"
-                        size="sm"
-                        @change="handleStateChanged"
-                    >
-                        <template v-slot="{ on }">
-                            <Button
-                                class="btn--opacity-1"
-                                :class="{ 'dropdown-toggle':canChangeState }"
-                                :disabled="!canChangeState"
-                                outline
-                                small
-                                v-on="on"
-                            >
-                                <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
-                                <span class="text-truncate">{{ state.label }}</span>
-                            </Button>
+                    <Dropdown outline right :disabled="!canChangeState">
+                        <template v-slot:text>
+                            <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
+                            <span class="text-truncate">{{ state.label }}</span>
                         </template>
+                        <template v-for="stateValue in stateValues">
+                            <DropdownItem :active="state.value === stateValue.value" :key="stateValue.value" @click="handleStateChanged(stateValue.value)">
+                                <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
+                                <span class="text-truncate">{{ stateValue.label }}</span>
+                            </DropdownItem>
+                        </template>
+                    </Dropdown>
+<!--                    <ModalSelect-->
+<!--                        :title="l('modals.entity_state.edit.title')"-->
+<!--                        :ok-title="l('modals.entity_state.edit.ok_button')"-->
+<!--                        :value="state.value"-->
+<!--                        :options="stateValues"-->
+<!--                        size="sm"-->
+<!--                        @change="handleStateChanged"-->
+<!--                    >-->
+<!--                        <template v-slot="{ on }">-->
+<!--                            <Button-->
+<!--                                class="btn&#45;&#45;opacity-1"-->
+<!--                                :class="{ 'dropdown-toggle':canChangeState }"-->
+<!--                                :disabled="!canChangeState"-->
+<!--                                outline-->
+<!--                                v-on="on"-->
+<!--                            >-->
+<!--                                -->
+<!--                            </Button>-->
+<!--                        </template>-->
 
-                        <template v-slot:item-prepend="{ option }">
-                            <StateIcon :color="option.color" />
-                        </template>
-                    </ModalSelect>
+<!--                        <template v-slot:item-prepend="{ option }">-->
+<!--                            <StateIcon :color="option.color" />-->
+<!--                        </template>-->
+<!--                    </ModalSelect>-->
                 </div>
             </template>
             <template v-if="hasCommands">
                 <div class="col-auto">
-                    <CommandsDropdown outline :commands="commands" @select="handleCommandSelected">
+                    <CommandsDropdown outline  :small="false" :commands="commands" @select="handleCommandSelected">
                         <template v-slot:text>
                             {{ l('entity_list.commands.instance.label') }}
                         </template>
@@ -47,7 +66,7 @@
             </template>
             <template v-if="canEdit">
                 <div class="col-auto">
-                    <Button :href="formUrl" :disabled="editDisabled" small>
+                    <Button :href="formUrl" :disabled="editDisabled">
                         {{ l('action_bar.show.edit_button') }}
                     </Button>
                 </div>
@@ -71,10 +90,12 @@
     } from 'sharp-commands';
 
     import { Localization } from "sharp/mixins";
+    import LocaleSelect from "sharp-form/src/components/ui/LocaleSelect.vue";
 
     export default {
         mixins: [Localization],
         components: {
+            LocaleSelect,
             Breadcrumb,
             CommandsDropdown,
             Dropdown,
@@ -95,6 +116,8 @@
             stateValues: Array,
             breadcrumb: Array,
             showBreadcrumb: Boolean,
+            currentLocale: String,
+            locales: String,
         },
         data() {
             return {
@@ -126,6 +149,9 @@
             },
             handleScroll() {
                 this.showTitle = document.querySelector('.ShowPage__content').getBoundingClientRect().top < 0;
+            },
+            handleLocaleChanged(locale) {
+                this.$emit('locale-change', locale);
             },
         },
         mounted() {

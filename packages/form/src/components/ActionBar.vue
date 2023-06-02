@@ -1,23 +1,30 @@
 <template>
     <div class="mb-3">
-        <div class="row gx-3">
+        <div class="row align-items-center gx-3">
             <div class="col">
                 <template v-if="showBreadcrumb">
                     <Breadcrumb :items="breadcrumb" />
                 </template>
             </div>
+            <div class="col-auto">
+                <LocaleSelect
+                    outline
+                    right
+                    :locale="currentLocale"
+                    :locales="locales"
+                    @change="handleLocaleChanged"
+                />
+            </div>
             <template v-if="showDeleteButton">
                 <div class="col-auto">
-                    <template v-if="deleteFocused">
-                        <Button variant="danger" :disabled="loading" small @click="handleDeleteClicked" @blur="deleteFocused = false">
+                    <Dropdown outline right>
+                        <template v-slot:text>
+                            {{ l('entity_list.commands.instance.label') }}
+                        </template>
+                        <DropdownItem :disabled="loading" @click="handleDeleteClicked">
                             {{ l('action_bar.form.delete_button') }}
-                        </Button>
-                    </template>
-                    <template v-else>
-                        <Button variant="danger" outline :disabled="loading" small @click="handleDeleteClicked">
-                            {{ l('action_bar.form.delete_button') }}
-                        </Button>
-                    </template>
+                        </DropdownItem>
+                    </Dropdown>
                 </div>
             </template>
         </div>
@@ -25,16 +32,18 @@
 </template>
 
 <script>
-    import { lang } from 'sharp';
-    import { Button, Breadcrumb } from 'sharp-ui';
+    import { Breadcrumb, Dropdown, DropdownItem } from 'sharp-ui';
     import { Localization } from "sharp/mixins";
+    import LocaleSelect from "./ui/LocaleSelect.vue";
 
     export default {
         name: 'SharpActionBarForm',
         mixins: [Localization],
         components: {
-            Button,
+            LocaleSelect,
             Breadcrumb,
+            Dropdown,
+            DropdownItem,
         },
         props: {
             showSubmitButton: Boolean,
@@ -46,35 +55,15 @@
             breadcrumb: Array,
             showBreadcrumb: Boolean,
             hasDeleteConfirmation: Boolean,
-        },
-        data() {
-            return {
-                deleteFocused: false,
-            }
-        },
-        computed: {
-            submitLabel() {
-                if(this.uploading) {
-                    return lang('action_bar.form.submit_button.pending.upload')
-                }
-                return this.create
-                    ? lang('action_bar.form.submit_button.create')
-                    : lang('action_bar.form.submit_button.update');
-            },
+            currentLocale: String,
+            locales: Array,
         },
         methods: {
-            handleSubmitClicked() {
-                this.$emit('submit');
-            },
             handleDeleteClicked() {
-                if(this.deleteFocused || this.hasDeleteConfirmation) {
-                    this.$emit('delete');
-                } else {
-                    this.deleteFocused = true;
-                }
+                this.$emit('delete');
             },
-            handleCancelClicked() {
-                this.$emit('cancel');
+            handleLocaleChanged(locale) {
+                this.$emit('locale-change', locale);
             },
         },
     }

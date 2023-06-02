@@ -4,7 +4,7 @@
         @stuck-change="stuck = $event.detail"
     >
         <div class="position-relative">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col">
                     <EntityListTitle :count="count" :search="search">
                         <Breadcrumb :items="breadcrumb" />
@@ -37,14 +37,14 @@
                         <template v-if="canSelect && !reordering">
                             <template v-if="selecting">
                                 <div class="col-auto">
-                                    <Button key="cancel" outline small @click="handleSelectCancelled">
+                                    <Button key="cancel" outline @click="handleSelectCancelled">
                                         {{ l('action_bar.list.reorder_button.cancel') }}
                                     </Button>
                                 </div>
                             </template>
                             <template v-else>
                                 <div class="col-auto">
-                                    <Button key="select" outline small @click="handleSelectButtonClicked">
+                                    <Button key="select" outline @click="handleSelectButtonClicked">
                                         {{ l('action_bar.list.select_button') }}
                                     </Button>
                                 </div>
@@ -55,6 +55,7 @@
                             <div class="col-auto">
                                 <CommandsDropdown
                                     class="bg-white"
+                                    :small="false"
                                     :outline="!selecting"
                                     :commands="commands"
                                     :disabled="reordering"
@@ -73,7 +74,7 @@
 
                         <template v-if="primaryCommand && !reordering && !selecting">
                             <div class="col-auto">
-                                <Button small @click="handlePrimaryCommandClicked">
+                                <Button @click="handlePrimaryCommandClicked">
                                     {{ primaryCommand.label }}
                                 </Button>
                             </div>
@@ -89,7 +90,7 @@
                                     />
                                 </template>
                                 <template v-else>
-                                    <Button :disabled="reordering || selecting" small @click="handleCreateButtonClicked">
+                                    <Button :disabled="reordering || selecting" @click="handleCreateButtonClicked">
                                         {{ l('action_bar.list.create_button') }}
                                     </Button>
                                 </template>

@@ -11,9 +11,6 @@
                 <template v-slot:action-bar="{ props, listeners }">
                     <ActionBarForm v-bind="props" v-on="listeners" />
                 </template>
-                <template v-slot:append="{ props, listeners }">
-                    <ActionBarForm v-bind="props" v-on="listeners" />
-                </template>
             </Form>
         </div>
     </div>
