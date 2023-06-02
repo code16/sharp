@@ -54,7 +54,7 @@ abstract class SharpGraphWidget extends SharpWidget
     {
         return [
             'display' => [
-                'required', 
+                'required',
                 'in:bar,line,pie',
             ],
         ];

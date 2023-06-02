@@ -7,21 +7,20 @@ use Illuminate\Support\Collection;
 class StringUtil
 {
     public function explodeSearchTerms(
-        string $search, 
-        bool $isLike = true, 
-        bool $handleStar = true, 
-        string $noStarTermPrefix = '%', 
+        string $search,
+        bool $isLike = true,
+        bool $handleStar = true,
+        string $noStarTermPrefix = '%',
         string $noStarTermSuffix = '%'
-    ): Collection
-    {
+    ): Collection {
         return collect(explode(' ', $search))
             ->map(fn ($term) => trim($term))
             ->filter()
             ->when($isLike, fn ($terms) => $terms
-                ->map(function($term) use($isLike, $handleStar, $noStarTermPrefix, $noStarTermSuffix) {
+                ->map(function ($term) use ($handleStar, $noStarTermPrefix, $noStarTermSuffix) {
                     return $handleStar && str_contains($term, '*')
-                        ?  str_replace('*', '%', $term)
-                        : $noStarTermPrefix . $term . $noStarTermSuffix;
+                        ? str_replace('*', '%', $term)
+                        : $noStarTermPrefix.$term.$noStarTermSuffix;
                 })
             );
     }

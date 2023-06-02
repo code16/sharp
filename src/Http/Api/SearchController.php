@@ -11,18 +11,18 @@ class SearchController extends ApiController
     public function index()
     {
         $searchEngine = tap(
-            $this->getSearchEngine(), 
+            $this->getSearchEngine(),
             fn (SharpSearchEngine $engine) => $engine->searchFor(
                 app(StringUtil::class)
                     ->explodeSearchTerms(request()->input('q'))
                     ->all()
             )
         );
-        
+
         return response()->json([
             $searchEngine->resultSets()
                 ->map(fn (SearchResultSet $resultSet) => $resultSet->toArray())
-                ->all()
+                ->all(),
         ]);
     }
 

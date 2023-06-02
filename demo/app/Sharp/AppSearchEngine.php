@@ -22,7 +22,7 @@ class AppSearchEngine extends SharpSearchEngine
             label: 'Posts',
             icon: 'fa-file-o',
         );
-        
+
         $builder = Post::query();
 
         foreach ($terms as $term) {

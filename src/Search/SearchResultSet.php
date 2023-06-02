@@ -26,7 +26,7 @@ class SearchResultSet
             'icon' => $this->icon,
             'results' => collect($this->resultLinks)
                 ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
-                ->all()
+                ->all(),
         ];
     }
 }
