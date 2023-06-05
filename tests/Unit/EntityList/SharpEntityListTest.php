@@ -208,7 +208,7 @@ class SharpEntityListTest extends SharpTestCase
                 'defaultSortDir' => null,
                 'delete' => [
                     'allowed' => true,
-                    'confirmationText' => trans('sharp::show.delete_confirmation_text')
+                    'confirmationText' => trans('sharp::show.delete_confirmation_text'),
                 ],
             ],
             $list->listConfig(),
