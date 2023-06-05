@@ -19,7 +19,7 @@
             </template>
             <template v-if="hasState">
                 <div class="col-auto">
-                    <Dropdown outline right :disabled="!canChangeState">
+                    <Dropdown toggle-class="bg-white" :show-caret="canChangeState" outline right :disabled="!canChangeState">
                         <template v-slot:text>
                             <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
                             <span class="text-truncate">{{ state.label }}</span>

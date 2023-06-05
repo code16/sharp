@@ -56,7 +56,6 @@
                         class="SharpEntityList__commands-dropdown"
                         outline
                         :commands="commands"
-                        :disabled="selecting"
                         :has-state="hasState"
                         :toggle-class="['p-1 commands-toggle', { 'opacity-50': selecting }]"
                         :show-caret="false"
