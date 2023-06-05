@@ -194,7 +194,7 @@ class ShowControllerTest extends BaseApiTest
     public function we_can_not_delete_an_instance_in_the_show_without_authorization()
     {
         $this->buildTheWorld();
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setProhibitedActions(['delete']);

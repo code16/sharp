@@ -211,7 +211,7 @@ class EntityListControllerTest extends BaseApiTest
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setList(PersonSharpEntityListWithDeletion::class);
-        
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setShow(PersonSharpShowWithoutDeletion::class);
@@ -228,7 +228,7 @@ class EntityListControllerTest extends BaseApiTest
     {
         $this->withoutExceptionHandling();
         $this->buildTheWorld();
-    
+
         app(SharpEntityManager::class)
             ->entityFor('person')
             ->setList(PersonSharpEntityListWithoutDeletion::class);
@@ -307,7 +307,7 @@ class PersonSharpEntityListWithDeletion extends PersonSharpEntityList
     }
 }
 
-// Just an empty list impl to be sure we don't call delete on it 
+// Just an empty list impl to be sure we don't call delete on it
 class PersonSharpEntityListWithoutDeletion extends SharpEntityList
 {
     public function getListData(): array|Arrayable

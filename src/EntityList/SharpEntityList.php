@@ -276,8 +276,8 @@ abstract class SharpEntityList
     }
 
     /**
-     * Delete the given instance. Do not implement this method if you want to delegate 
-     * the deletion responsibility to the Show Page (then implement it there). 
+     * Delete the given instance. Do not implement this method if you want to delegate
+     * the deletion responsibility to the Show Page (then implement it there).
      */
     public function delete(mixed $id): void
     {
