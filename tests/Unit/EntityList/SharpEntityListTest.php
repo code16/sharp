@@ -206,6 +206,10 @@ class SharpEntityListTest extends SharpTestCase
                 'multiformAttribute' => null,
                 'defaultSort' => null,
                 'defaultSortDir' => null,
+                'delete' => [
+                    'allowed' => true,
+                    'confirmationText' => trans('sharp::show.delete_confirmation_text')
+                ],
             ],
             $list->listConfig(),
         );
@@ -274,5 +278,38 @@ class SharpEntityListTest extends SharpTestCase
             'danger',
             $list->listConfig()['globalMessage']['alertLevel'],
         );
+    }
+
+    /** @test */
+    public function we_can_configure_the_deletion_action_to_disallow_it()
+    {
+        $list = new class extends SharpEntityDefaultTestList
+        {
+            public function buildListConfig(): void
+            {
+                $this->configureDelete(false);
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertFalse($list->listConfig()['delete']['allowed']);
+    }
+
+    /** @test */
+    public function we_can_configure_the_deletion_action_confirmation_text()
+    {
+        $list = new class extends SharpEntityDefaultTestList
+        {
+            public function buildListConfig(): void
+            {
+                $this->configureDelete(message: 'ok?');
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertTrue($list->listConfig()['delete']['allowed']);
+        $this->assertEquals('ok?', $list->listConfig()['delete']['confirmationText']);
     }
 }
