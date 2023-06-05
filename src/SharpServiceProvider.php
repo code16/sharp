@@ -17,7 +17,7 @@ use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
-use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
@@ -104,7 +104,7 @@ class SharpServiceProvider extends ServiceProvider
             ->middlewareGroup('sharp_common', $this->app['config']->get('sharp.middleware.common'))
             ->middlewareGroup('sharp_web', $this->app['config']->get('sharp.middleware.web'))
             ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
-            ->aliasMiddleware('sharp_api_append_form_authorizations', AppendFormAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_instance_authorizations', AppendInstanceAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
             ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)

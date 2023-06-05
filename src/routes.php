@@ -66,7 +66,7 @@ Route::group([
 
     Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
         ->name('code16.sharp.api.show.show')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
@@ -87,14 +87,14 @@ Route::group([
 
     Route::get('/form/{entityKey}', [FormController::class, 'create'])
         ->name('code16.sharp.api.form.create')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
 
     Route::post('/form/{entityKey}', [FormController::class, 'store'])
         ->name('code16.sharp.api.form.store');
 
     Route::get('/form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
         ->name('code16.sharp.api.form.edit')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
 
     Route::post('/form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
         ->name('code16.sharp.api.form.update');
