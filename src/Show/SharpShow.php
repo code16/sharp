@@ -61,7 +61,7 @@ abstract class SharpShow
             ->merge([
                 'delete' => [
                     'confirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
-                ]
+                ],
             ])
             ->when($this->multiformAttribute, fn ($collection) => $collection->merge([
                 'multiformAttribute' => $this->multiformAttribute,
@@ -92,7 +92,7 @@ abstract class SharpShow
 
         return $this;
     }
-    
+
     final protected function configureDeleteConfirmationText(string $text): self
     {
         $this->deleteConfirmationText = $text;
