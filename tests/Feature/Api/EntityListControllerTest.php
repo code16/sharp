@@ -2,8 +2,13 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Exception;
+use Illuminate\Contracts\Support\Arrayable;
 
 class EntityListControllerTest extends BaseApiTest
 {
@@ -195,5 +200,84 @@ class EntityListControllerTest extends BaseApiTest
             ->assertJson(['config' => [
                 'hasShowPage' => false,
             ]]);
+    }
+
+    /** @test */
+    public function we_can_delete_an_instance_in_the_entity_list_if_delete_method_is_implemented()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithDeletion::class);
+        
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(PersonSharpShowWithoutDeletion::class);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function we_delegate_deletion_to_the_show_page_if_exists()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+    
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithoutDeletion::class);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function we_throw_an_exception_if_delete_is_not_implemented_and_there_is_no_show()
+    {
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithoutDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(null);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertStatus(500);
+    }
+}
+
+class PersonSharpEntityListWithDeletion extends PersonSharpEntityList
+{
+    public function delete(mixed $id): void
+    {
+    }
+}
+
+// Just an empty list impl to be sure we don't call delete on it 
+class PersonSharpEntityListWithoutDeletion extends SharpEntityList
+{
+    public function getListData(): array|Arrayable
+    {
+        return [];
+    }
+}
+
+class PersonSharpShowWithoutDeletion extends PersonSharpShow
+{
+    public function delete(mixed $id): void
+    {
+        throw new Exception('Should not be called');
     }
 }

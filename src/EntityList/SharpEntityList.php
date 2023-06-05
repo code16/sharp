@@ -223,6 +223,13 @@ abstract class SharpEntityList
     }
 
     /**
+     * Build list config.
+     */
+    public function buildListConfig(): void
+    {
+    }
+
+    /**
      * Return all entity commands in an array of class names or instances.
      */
     protected function getEntityCommands(): ?array
@@ -252,6 +259,14 @@ abstract class SharpEntityList
     protected function getGlobalMessageData(): ?array
     {
         return null;
+    }
+
+    /**
+     * Delete the given instance. Do not implement this method if you want to delegate 
+     * the deletion responsibility to the Show Page (then implement it there). 
+     */
+    public function delete(mixed $id): void
+    {
     }
 
     /**
@@ -324,13 +339,6 @@ abstract class SharpEntityList
      * @deprecated use buildList instead
      */
     protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
-    }
-
-    /**
-     * Build list config.
-     */
-    public function buildListConfig(): void
     {
     }
 }

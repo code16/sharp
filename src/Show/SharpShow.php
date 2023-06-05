@@ -122,4 +122,9 @@ abstract class SharpShow
      * Build show layout.
      */
     abstract protected function buildShowLayout(ShowLayout $showLayout): void;
+
+    /**
+     * Delete the given instance.
+     */
+    abstract public function delete(mixed $id): void;
 }

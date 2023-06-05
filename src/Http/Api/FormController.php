@@ -96,6 +96,9 @@ class FormController extends ApiController
         ]);
     }
 
+    /** 
+     * @deprecated (endpoint will be remove in v9) 
+     */
     public function delete(string $entityKey, string $instanceId = null)
     {
         sharp_check_ability('delete', $entityKey, $instanceId);

@@ -151,6 +151,11 @@ class PostShow extends SharpShow
             ->transform(Post::with('attachments', 'attachments.document')->findOrFail($id));
     }
 
+    public function delete(mixed $id): void
+    {
+        Post::findOrFail($id)->delete();
+    }
+
     public function getDataLocalizations(): array
     {
         return ['en', 'fr'];

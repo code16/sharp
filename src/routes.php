@@ -46,6 +46,9 @@ Route::group([
     Route::post('/list/{entityKey}/reorder', [EntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
 
+    Route::delete('/list/{entityKey}/{instanceId}', [EntityListController::class, 'delete'])
+        ->name('code16.sharp.api.list.delete');
+
     Route::post('/list/{entityKey}/state/{instanceId}', [EntityListInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
@@ -79,6 +82,9 @@ Route::group([
     Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
 
+    Route::delete('/show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
+        ->name('code16.sharp.api.show.delete');
+
     Route::get('/form/{entityKey}', [FormController::class, 'create'])
         ->name('code16.sharp.api.form.create')
         ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
@@ -93,6 +99,7 @@ Route::group([
     Route::post('/form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
         ->name('code16.sharp.api.form.update');
 
+    /** @deprecated endpoint, will be removed in v9 */
     Route::delete('/form/{entityKey}/{instanceId?}', [FormController::class, 'delete'])
         ->name('code16.sharp.api.form.delete');
 

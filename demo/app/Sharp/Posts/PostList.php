@@ -186,4 +186,9 @@ class PostList extends SharpEntityList
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
             ->transform($posts->paginate(20));
     }
+
+//    public function delete(mixed $instanceId): void
+//    {
+//        $this->delegateToShowPage($instanceId);
+//    }
 }
