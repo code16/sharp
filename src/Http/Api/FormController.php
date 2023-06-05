@@ -96,28 +96,6 @@ class FormController extends ApiController
         ]);
     }
 
-    /** 
-     * @deprecated (endpoint will be remove in v9) 
-     */
-    public function delete(string $entityKey, string $instanceId = null)
-    {
-        sharp_check_ability('delete', $entityKey, $instanceId);
-
-        $form = $this->getFormInstance($entityKey);
-        $this->checkFormImplementation($form, $instanceId);
-
-        $form->delete($instanceId);
-
-        $entityKey = $this->isSubEntity($entityKey) ? explode(':', $entityKey)[0] : $entityKey;
-        if ($previousShowOfAnotherEntity = $this->currentSharpRequest->getPreviousShowFromBreadcrumbItems("!$entityKey")) {
-            $redirectUrl = $this->currentSharpRequest->getUrlForBreadcrumbItem($previousShowOfAnotherEntity);
-        }
-
-        return response()->json([
-            'redirectUrl' => $redirectUrl ?? $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem('s-list'),
-        ]);
-    }
-
     protected function dataLocalizations(SharpForm $form): array
     {
         return $form->hasDataLocalizations()

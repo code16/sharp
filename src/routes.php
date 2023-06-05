@@ -99,10 +99,6 @@ Route::group([
     Route::post('/form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
         ->name('code16.sharp.api.form.update');
 
-    /** @deprecated endpoint, will be removed in v9 */
-    Route::delete('/form/{entityKey}/{instanceId?}', [FormController::class, 'delete'])
-        ->name('code16.sharp.api.form.delete');
-
     Route::get('/filters', [GlobalFilterController::class, 'index'])
         ->name('code16.sharp.api.filter.index');
 

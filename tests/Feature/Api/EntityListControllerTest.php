@@ -241,6 +241,48 @@ class EntityListControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function as_a_legacy_workaround_we_delegate_deletion_to_the_form_page_if_exists()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithoutDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(null);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(PersonSharpFormWithDeletion::class);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function we_can_not_delete_an_instance_in_the_entity_list_without_authorization()
+    {
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setProhibitedActions(['delete']);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertForbidden();
+    }
+
+    /** @test */
     public function we_throw_an_exception_if_delete_is_not_implemented_and_there_is_no_show()
     {
         $this->buildTheWorld();
@@ -279,5 +321,12 @@ class PersonSharpShowWithoutDeletion extends PersonSharpShow
     public function delete(mixed $id): void
     {
         throw new Exception('Should not be called');
+    }
+}
+
+class PersonSharpFormWithDeletion extends PersonSharpForm
+{
+    public function delete(mixed $id): void
+    {
     }
 }

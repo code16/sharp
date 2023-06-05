@@ -202,7 +202,8 @@ abstract class SharpForm
     abstract public function update(mixed $id, array $data);
 
     /**
-     * @deprecated use delete() in Show Page or in Entity List. Will be removed in v9.
+     * @deprecated 
+     * Use delete() in Show Page or in Entity List. Will be removed in v9.
      */
     public function delete(mixed $id): void
     {
