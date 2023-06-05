@@ -89,6 +89,10 @@ abstract class SharpForm
     {
     }
 
+    /** 
+     * @deprecated
+     * Instance deletion was move to Show Page and/or Entity List. Will be removed in v9. 
+     */
     protected function configureDeleteConfirmation(?string $text = null): self
     {
         $this->deleteConfirmationText = $text ?: trans('sharp::form.delete_confirmation_text');

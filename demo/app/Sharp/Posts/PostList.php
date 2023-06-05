@@ -57,6 +57,7 @@ class PostList extends SharpEntityList
             ->configurePaginated()
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
+            ->configureDelete(message: 'Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configureSearchable();
 
         if (! auth()->user()->isAdmin()) {
@@ -186,9 +187,4 @@ class PostList extends SharpEntityList
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
             ->transform($posts->paginate(20));
     }
-
-//    public function delete(mixed $instanceId): void
-//    {
-//        $this->delegateToShowPage($instanceId);
-//    }
 }

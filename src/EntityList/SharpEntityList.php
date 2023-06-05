@@ -35,6 +35,8 @@ abstract class SharpEntityList
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort = null;
     protected ?string $defaultSortDir = null;
+    protected bool $deleteAllowed = true;
+    protected ?string $deleteConfirmationText = null;
 
     final public function initQueryParams(): self
     {
@@ -135,6 +137,10 @@ abstract class SharpEntityList
             'defaultSort' => $this->defaultSort,
             'defaultSortDir' => $this->defaultSortDir,
             'hasShowPage' => $hasShowPage,
+            'delete' => [
+                'allowed' => $this->deleteAllowed,
+                'confirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
+            ]
         ];
 
         return tap($config, function (&$config) {
@@ -157,14 +163,14 @@ abstract class SharpEntityList
         return [];
     }
 
-    public function configureInstanceIdAttribute(string $instanceIdAttribute): self
+    final public function configureInstanceIdAttribute(string $instanceIdAttribute): self
     {
         $this->instanceIdAttribute = $instanceIdAttribute;
 
         return $this;
     }
 
-    public function configureReorderable(ReorderHandler|string $reorderHandler): self
+    final public function configureReorderable(ReorderHandler|string $reorderHandler): self
     {
         $this->reorderHandler = $reorderHandler instanceof ReorderHandler
             ? $reorderHandler
@@ -173,14 +179,22 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function configureSearchable(bool $searchable = true): self
+    final public function configureSearchable(bool $searchable = true): self
     {
         $this->searchable = $searchable;
 
         return $this;
     }
 
-    public function configureDefaultSort(string $sortBy, string $sortDir = 'asc'): self
+    final public function configureDelete(bool $allow = true, string $message = null): self
+    {
+        $this->deleteAllowed = $allow;
+        $this->deleteConfirmationText = $message;
+
+        return $this;
+    }
+
+    final public function configureDefaultSort(string $sortBy, string $sortDir = 'asc'): self
     {
         $this->defaultSort = $sortBy;
         $this->defaultSortDir = $sortDir;
@@ -188,21 +202,21 @@ abstract class SharpEntityList
         return $this;
     }
 
-    public function configurePaginated(bool $paginated = true): self
+    final public function configurePaginated(bool $paginated = true): self
     {
         $this->paginated = $paginated;
 
         return $this;
     }
 
-    protected function configureMultiformAttribute(string $attribute): self
+    final protected function configureMultiformAttribute(string $attribute): self
     {
         $this->multiformAttribute = $attribute;
 
         return $this;
     }
 
-    public function reorderHandler(): ?ReorderHandler
+    final public function reorderHandler(): ?ReorderHandler
     {
         return $this->reorderHandler;
     }

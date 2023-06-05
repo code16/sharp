@@ -14,17 +14,13 @@ php artisan sharp:make:form <class_name> [--model=<model_name>]
 
 ## Write the class
 
-As usual in Sharp, we begin by creating a class dedicated to our Form and make it extend `Code16\Sharp\Form\SharpForm`;
-and we'll have to implement at least 5 functions:
+As usual in Sharp, we begin by creating a class dedicated to our Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 4 functions:
 
-- `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to build and configure
-  the form itself,
+- `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to build and configure the form itself,
 
 - `find($id): array` to get the instance data,
 
-- `update($id, array $data)` to update the instance,
-
-- `delete($id)` to... delete the instance.
+- `update($id, array $data)` to update the instance.
 
 Let's see the specifics:
 
@@ -38,12 +34,12 @@ function buildFormFields(FieldsContainer $formFields)
 {
     $formFields
 		->addField(
-			SharpFormTextField::make("name")
-				->setLabel("Name")
+			SharpFormTextField::make('name')
+				->setLabel('Name')
 		)
 		->addField(
-			SharpFormTextField::make("capacity")
-				->setLabel("Capacity (x1000)")
+			SharpFormTextField::make('capacity')
+				->setLabel('Full capacity (x1000)')
 		);
 }
 ```
@@ -73,11 +69,11 @@ The idea is to hide or show a field depending on some other field value, called 
 - the master `$fieldKey`, which should refer to either a Check, Select, Tags or Autocomplete field,
 
 - the `$values` of the master field for which the "slave" field must be visible. You can put there a boolean for a Check master field, and for other fields (Select, Tags, Autocomplete), either:
-	- a string value, like for instance `"red"`: the slave field is visible only when the master field value is "red"
-	- a string value with a negation mark as the first char, like `"!red`": the slave field is visible only when the master field value is NOT "red"
-	- an array of values: `["red", "blue"]`. The slave field is visible only when the master field value is either "red" or "blue".
+	- a string value, like for instance `'red'`: the slave field is visible only when the master field value is "red"
+	- a string value with a negation mark as the first char, like `'!red'`: the slave field is visible only when the master field value is NOT "red"
+	- an array of values: `['red', 'blue']`. The slave field is visible only when the master field value is either "red" or "blue".
 
-You can add multiple conditional display rules, chaining calls to `addConditionalDisplay(string $fieldKey, $values = true)`. In this case, all conditions will be linked with a `AND` operator by default (meaning all conditions must be verified to display the slave field), but this can be switch to an `OR` easily with `setConditionalDisplayOrOperator()` (and back with `setConditionalDisplayAndOperator()`).
+You can add multiple conditional display rules, chaining calls to `addConditionalDisplay(string $fieldKey, $values = true)`. In this case, all conditions will be linked with a `AND` operator by default (meaning all conditions must be verified to display the slave field), but this can be switched to an `OR` easily with `setConditionalDisplayOrOperator()` (and back with `setConditionalDisplayAndOperator()`).
 
 #### Formatters
 
@@ -106,8 +102,7 @@ For the specifics of each field, here's the full list and documentation:
 
 ### `buildFormLayout(FormLayout $formLayout)`
 
-Now let's build the form layout. A form layout is made of `columns`, which contains `fields`, `lists` of fields
-and `fieldsets`. If needed, we can even define `tabs` above `columns`.
+Now let's build the form layout. A form layout is made of `columns`, which contains `fields`, `lists` of fields and `fieldsets`. If needed, we can even define `tabs` above `columns`.
 
 #### Columns and fields
 
@@ -117,8 +112,8 @@ Here's how we can define the layout for the simple two-fields form we built abov
 function buildFormLayout(FormLayout $formLayout)
 {
     $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-        $column->withSingleField("name")
-            ->withSingleField("capacity");
+        $column->withSingleField('name')
+            ->withSingleField('capacity');
     });
 }
 ```
@@ -132,10 +127,10 @@ function buildFormLayout(FormLayout $formLayout)
 {
     $formLayout
     	->addColumn(7, function(FormLayoutColumn $column) {
-        	$column->withSingleField("name");
+        	$column->withSingleField('name');
     	})
     	->addColumn(5, function(FormLayoutColumn $column) {
-        	$column->withSingleField("capacity");
+        	$column->withSingleField('capacity');
     	});
 }
 ```
@@ -148,7 +143,7 @@ One final way is to put fields side by side on the same column:
 function buildFormLayout(FormLayout $formLayout)
 {
     $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-        $column->withFields("name", "capacity");
+        $column->withFields('name', 'capacity');
     });
 }
 ```
@@ -156,7 +151,7 @@ function buildFormLayout(FormLayout $formLayout)
 This will align the two fields on the row. They'll have the same width (50%), but we can act on this adding a special suffix:
 
 ```php
-$column->withFields("name|8", "capacity|4");
+$column->withFields('name|8', 'capacity|4');
 ```
 
 Once again, it's a 12-based grid, so `name` will take 2/3 of the width, and `capacity` 1/3.
@@ -168,7 +163,7 @@ Columns are only used in medium to large screens (768 pixels and up).
 Same for fields put on the same row: on smaller screens, they'll be placed on different rows, except if another layout is intentionally configured, using this convention:
 
 ```php
-$column->withFields("name|8,6", "capacity|4,6");
+$column->withFields('name|8,6', 'capacity|4,6');
 ```
 
 Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller one.
@@ -180,29 +175,29 @@ Fieldsets are useful to group some fields in a labelled block. Here's how they w
 
 ```php
 $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-    $column->withFieldset("Details", function(FormLayoutFieldset $fieldset) {
-        return $fieldset->withSingleField("name")
-                        ->withSingleField("capacity");
+    $column->withFieldset('Details', function(FormLayoutFieldset $fieldset) {
+        return $fieldset
+            ->withSingleField('name')
+            ->withSingleField('capacity');
     });
 });
 ```
 
 "Details" is here the legend of the fieldset.
 
-
 #### Lists of fields
 
 In a `List` case, which is a form fields container [documented here](form-fields/list.md), we have to describe the list item layout. It goes like this:
 
 ```php
-$column->withSingleField("pictures", function(FormLayoutColumn $listItem) {
-    $listItem->withSingleField("file")
-             ->withSingleField("legend");
+$column->withSingleField('pictures', function(FormLayoutColumn $listItem) {
+    $listItem
+        ->withSingleField('file')
+        ->withSingleField('legend');
 });
 ```
 
 Notice we added a `Closure` on a `withSingleField()` call, meaning we define an "item layout" for this field. The item is made of two fields in this example.
-
 
 #### Tabs
 
@@ -210,9 +205,9 @@ Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
 $formLayout
-	->addTab("tab 1", function(FormLayoutTab $tab) {
+	->addTab('tab 1', function(FormLayoutTab $tab) {
 		$tab->addColumn(6, function(FormLayoutColumn $column) {
-			$column->withSingleField("name");
+			$column->withSingleField('name');
 			[...]
 		});
 	})
@@ -220,7 +215,6 @@ $formLayout
 ```
 
 The tab will here be labelled "tab1".
-
 
 ### `find($id): array`
 
@@ -230,14 +224,13 @@ Next, we have to write the code responsible for the instance data (in an update 
 function find($id): array
 {
     return [
-        "name" => "USS Enterprise",
-        "capacity" => 3000
+        'name' => 'USS Enterprise',
+        'capacity' => 3000
     ];
 }
 ```
 
-As for the Entity List, you'll want to transform your data before sending it. Transformers are explained in the
-detailed [How to transform data](how-to-transform-data.md) documentation.
+As for the Entity List, you'll want to transform your data before sending it. Transformers are explained in the detailed [How to transform data](how-to-transform-data.md) documentation.
 
 
 ### `update($id, array $data)`
@@ -270,10 +263,10 @@ function update($id, array $data)
     $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
     $this
-    	->setCustomTransformer("capacity", function($capacity) {
+    	->setCustomTransformer('capacity', function($capacity) {
             return $capacity * 1000;
         })
-        ->ignore("pilots")
+        ->ignore('pilots')
         ->save($instance, $data);
 }
 ```
@@ -294,7 +287,7 @@ function update($id, array $data)
     [...]
 
     if($sometingIsWrong) {
-        throw new SharpApplicativeException("Something is wrong");
+        throw new SharpApplicativeException('Something is wrong');
     }
     [...]
 }
@@ -317,8 +310,8 @@ function update($id, array $data)
 
     $this->save($instance, $data);
 
-    $this->notify("Spaceship was indeed updated.")
-         ->setDetail("As you asked.")
+    $this->notify('Spaceship was indeed updated.')
+         ->setDetail('As you asked.')
          ->setLevelSuccess()
          ->setAutoHide(false);
 
@@ -342,18 +335,7 @@ This method **is not mandatory**, a default implementation is proposed by Sharp,
 ```php
 function create(): array
 {
-    return $this->transform(new Spaceship(["name" => "new"]));
-}
-```
-
-### `delete($id)`
-
-Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
-
-```php
-function delete($id)
-{
-    Spaceship::findOrFail($id)->delete();
+    return $this->transform(new Spaceship(['name' => 'new']));
 }
 ```
 
@@ -361,34 +343,25 @@ function delete($id)
 
 This method, entirely optional, is the place to configure these:
 
-- `configureDeleteConfirmation(?string $text = null)` to add a custom (or standard if missing) confirm message when the
-  use clicks on the delete button.
+- `configureBreadcrumbCustomLabelAttribute(string $attribute)` to declare the attribute used by the breadcrumb (see [breadcrumb documentation](sharp-breadcrumb.md)).
 
-- `configureBreadcrumbCustomLabelAttribute(string $attribute)` to declare the attribute used by the breadcrumb (
-  see [breadcrumb documentation](sharp-breadcrumb.md)).
+- `configureDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show Page (instead of the EntityList) after the store. No existence check is done here, meaning if there is no Show Page configured it will end up in a 404.
 
-- `configureDisplayShowPageAfterCreation(bool $displayShowPage = true)` to tell Sharp to redirect to the entity Show
-  Page (
-  instead of the EntityList) after the store. No existence check is done here, meaning if there is no Show Page
-  configured it will end up in a 404.
-
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
-  display a dynamic message above the Form; [see detailed doc](page-alerts.md)
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the Form; [see detailed doc](page-alerts.md)
 
 Example
 
 ```php
 function buildFormConfig(): void
 {
-	$this->configureBreadcrumbCustomLabelAttribute("name.en")
+	$this->configureBreadcrumbCustomLabelAttribute('name.en')
 		->setDisplayShowPageAfterCreation();
 }
 ```
 
 ## Input validation
 
-In order to have an input validation on your form, you can create
-a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
+In order to have an input validation on your form, you can create a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
 
 ```php
 class SpaceshipSharpForm extends SharpForm
