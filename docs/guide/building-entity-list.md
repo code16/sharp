@@ -20,7 +20,8 @@ First let's write the applicative class, and make it extend `Code16\Sharp\Entity
 
 - and `getListData()` for the actual data of the list.
 
-There are a third optional method, for the list config. Each one is detailed here:
+There are a two more optional methods, for the list config and instance deletion. 
+Each one is detailed here:
 
 ### `buildListFields(EntityListFieldsContainer $fields)`
 
@@ -31,8 +32,8 @@ function buildListFields(EntityListFieldsContainer $fieldsContainer)
 {
     $fieldsContainer
         ->addField(
-            EntityListField::make("name")
-                ->setLabel("Full name")
+            EntityListField::make('name')
+                ->setLabel('Full name')
                 ->setSortable()
                 ->setWidth(6)
                 ->setWidthOnSmallScreens(8)
@@ -52,9 +53,7 @@ You can also call `->widthOnSmallScreens(int)` or `->widthOnSmallScreensFill)` t
 Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example:
 
 The returned array is meant to be built with 2 rules:
-
 - each item must define the keys declared in the `buildListFields()` function,
-
 - plus one attribute for the identifier, which is `id` by default (more on that later).
 
 So for instance, if we defined 2 columns `name` and `capacity`:
@@ -64,13 +63,13 @@ function getListData()
 {
     return [
         [
-            "id" => 1,
-            "name" => "USS Enterprise",
-            "capacity" => "10k"
+            'id' => 1,
+            'name' => 'USS Enterprise',
+            'capacity' => '10k'
         ], [
-            "id" => 2,
-            "name" => "USS Agamemnon",
-            "capacity" => "20k"
+            'id' => 2,
+            'name' => 'USS Agamemnon',
+            'capacity' => '20k'
         ]
     ];
 }
@@ -88,9 +87,7 @@ In a more realistic project, you'll want to transform your data before sending i
 The EntityList has a valued `$this->queryParams` property. This object will be filled by Sharp with query params:
 
 - sorting: `$this->queryParams->sortedBy()` and `$this->queryParams->sortedDir()`
-
 - search: `$this->queryParams->hasSearch()` and `$this->queryParams->searchWords()`
-
 - filters: `$this->queryParams->filterFor($filter)`
 
 If the Entity List was configured to handle sort, filters or search (see below to learn how), and if the user performed such an action, values will be accessible here.
@@ -117,9 +114,7 @@ public function searchWords(
 ```
 
 - `$isLike`: if true, each term will be surrounded by `%` (by default).
-
 - `$handleStar`: if true, and if a char `*` is found in a term, it will be replaced by `%` (default), and this term won't be surrounded by `%` (to allow "starts with" or "ends with" searches).
-
 - `$noStarTermPrefix` and `$noStarTermSuffix`: the char to use in a `$isLike` case.
 
 Here's a code sample with an Eloquent Model:
@@ -146,6 +141,19 @@ It's very common to return in `getListData()` paginated results:  return a `Illu
 
 With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` on the query.
 
+### `delete($id): void`
+
+Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
+
+```php
+function delete($id): void
+{
+    Spaceship::findOrFail($id)->delete();
+}
+```
+
+Deletion is typically an action you perform [in a Show Page](building-show-page.md), but it is also available in the Entity List for convenience. You can configure thid action to hide it, and of course leverage specific authorizations (more on this below). 
+
 ### `buildListConfig()`
 
 Finally, this last function must describe the list config. Let's see an example:
@@ -153,47 +161,40 @@ Finally, this last function must describe the list config. Let's see an example:
 ```php
 function buildListConfig()
 {
-    $this->configureInstanceIdAttribute("id")
+    $this->configureInstanceIdAttribute('id')
         ->configureSearchable()
-        ->configureDefaultSort("name", "asc")
+        ->configureDefaultSort('name', 'asc')
         ->configurePaginated();
 }
 ```
 
 Here is the full list of available methods:
 
-- `configureInstanceIdAttribute(string $instanceIdAttribute)`: define this if the id attribute of an instance is
-  not `id`
+- `configureInstanceIdAttribute(string $instanceIdAttribute)`: define this if the id attribute of an instance is not `id`
 
-- `configureReorderable(ReorderHandler|string $reorderHandler)`: allow instances to be rearranged;
-  see [detailed documentation](reordering-instances.md)
+- `configureReorderable(ReorderHandler|string $reorderHandler)`: allow instances to be rearranged; see [detailed documentation](reordering-instances.md)
 
-- `configureSearchable()`: Sharp will display a search text input and process its content to
-  fill `EntityListQueryParams $queryParams` (see above)
+- `configureSearchable()`: Sharp will display a search text input and process its content to fill `EntityListQueryParams $queryParams` (see above)
 
-- `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled
-  with this default value (see above)
+- `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
 
 - `configurePaginated(bool $paginated = true)`: this means that `getListData()` must return an instance
   of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed
 
 - `configureMultiformAttribute(string $attribute)`: handle various types of entities; see [detailed doc](multiforms.md)
 
-- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`:
-  display a dynamic message above the list; [see detailed doc](page-alerts.md)
+- `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`: display a dynamic message above the list; [see detailed doc](page-alerts.md)
 
-- `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
-  toggle, [see detailed doc](entity-states.md)
+- `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state toggle, [see detailed doc](entity-states.md)
 
-- `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "
-  primary", by passing its key or full cass name. The command should be declared for this Entity
-  List ([see related doc](commands.md)).
+- `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "primary", by passing its key or full cass name. The command should be declared for this Entity List ([see related doc](commands.md)).
+
+- `configureDelete(bool $allow = true, ?string $message = null)`: the first argument is to show / hide the delete command on each instance (shown by default). Warning, this is only useful to hide the link if you want to only show the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
 ## Configure the entity list
 
 The Entity List must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).
 
-After this we can access the Entity List at the following URL:
-**/sharp/s-list/spaceship** (replace "spaceship" by our entity key).
+After this we can access the Entity List at the following URL: **/sharp/s-list/spaceship** (replace "spaceship" by our entity key).
 
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).

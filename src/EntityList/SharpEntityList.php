@@ -186,7 +186,7 @@ abstract class SharpEntityList
         return $this;
     }
 
-    final public function configureDelete(bool $allow = true, string $message = null): self
+    final public function configureDelete(bool $allow = true, ?string $message = null): self
     {
         $this->deleteAllowed = $allow;
         $this->deleteConfirmationText = $message;
