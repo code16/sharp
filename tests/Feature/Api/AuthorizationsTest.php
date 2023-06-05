@@ -106,6 +106,7 @@ class AuthorizationsTest extends BaseApiTest
                     'update' => false,
                     'create' => true,
                     'view' => [1, 2],
+                    'delete' => false,
                 ],
             ]);
     }
@@ -144,9 +145,10 @@ class AuthorizationsTest extends BaseApiTest
             ->getJson('/sharp/api/list/person')
             ->assertJson([
                 'authorizations' => [
-                    'update' => true,
+                    'update' => [1, 2],
                     'create' => true,
-                    'view' => true,
+                    'view' => [1, 2],
+                    'delete' => [1, 2],
                 ],
             ]);
     }
