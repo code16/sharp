@@ -1,102 +1,100 @@
 <template>
-    <div class="mb-3 position-sticky ShowEntityListField__action-bar"
+    <div class="action-bar my-3 position-sticky ShowEntityListField__action-bar"
         v-sticky
         @stuck-change="stuck = $event.detail"
     >
-        <div class="position-relative">
-            <div class="row align-items-center">
-                <div class="col">
-                    <EntityListTitle :count="count" :search="search">
-                        <Breadcrumb :items="breadcrumb" />
-                    </EntityListTitle>
-                </div>
-                <div class="col-auto">
-                    <div class="row justify-content-end flex-nowrap gx-3">
-                        <template v-if="canReorder && !selecting">
-                            <template v-if="reordering">
-                                <div class="col-auto">
-                                    <Button outline @click="handleReorderButtonClicked">
-                                        {{ l('action_bar.list.reorder_button') }}
-                                    </Button>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div class="col-auto">
-                                    <Button outline @click="handleReorderButtonClicked">
-                                        {{ l('action_bar.list.reorder_button.cancel') }}
-                                    </Button>
-                                </div>
-                                <div class="col-auto">
-                                    <Button @click="handleReorderSubmitButtonClicked">
-                                        {{ l('action_bar.list.reorder_button.finish') }}
-                                    </Button>
-                                </div>
-                            </template>
-                        </template>
-
-                        <template v-if="canSelect && !reordering">
-                            <template v-if="selecting">
-                                <div class="col-auto">
-                                    <Button key="cancel" outline @click="handleSelectCancelled">
-                                        {{ l('action_bar.list.reorder_button.cancel') }}
-                                    </Button>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div class="col-auto">
-                                    <Button key="select" outline @click="handleSelectButtonClicked">
-                                        {{ l('action_bar.list.select_button') }}
-                                    </Button>
-                                </div>
-                            </template>
-                        </template>
-
-                        <template v-if="hasDropdownCommands && !reordering">
+        <div class="row align-items-center">
+            <div class="col position-relative">
+                <EntityListTitle :count="count">
+                    <Breadcrumb :items="breadcrumb" />
+                </EntityListTitle>
+            </div>
+            <div class="col-auto position-relative">
+                <div class="row justify-content-end flex-nowrap gx-3">
+                    <template v-if="canReorder && !selecting">
+                        <template v-if="reordering">
                             <div class="col-auto">
-                                <CommandsDropdown
-                                    class="bg-white"
-                                    :small="false"
-                                    :outline="!selecting"
-                                    :commands="commands"
-                                    :disabled="reordering"
-                                    :selecting="selecting"
-                                    @select="handleCommandSelected"
-                                >
-                                    <template v-slot:text>
-                                        {{ l('entity_list.commands.entity.label') }}
-                                        <template v-if="selecting">
-                                            ({{ selectedCount }} selected)
-                                        </template>
-                                    </template>
-                                </CommandsDropdown>
-                            </div>
-                        </template>
-
-                        <template v-if="primaryCommand && !reordering && !selecting">
-                            <div class="col-auto">
-                                <Button @click="handlePrimaryCommandClicked">
-                                    {{ primaryCommand.label }}
+                                <Button outline @click="handleReorderButtonClicked">
+                                    {{ l('action_bar.list.reorder_button') }}
                                 </Button>
                             </div>
                         </template>
-
-                        <template v-if="canCreate && !reordering && !selecting">
+                        <template v-else>
                             <div class="col-auto">
-                                <template v-if="hasForms">
-                                    <MultiformDropdown
-                                        :forms="forms"
-                                        right
-                                        @select="handleCreateFormSelected"
-                                    />
-                                </template>
-                                <template v-else>
-                                    <Button :disabled="reordering || selecting" @click="handleCreateButtonClicked">
-                                        {{ l('action_bar.list.create_button') }}
-                                    </Button>
-                                </template>
+                                <Button outline @click="handleReorderButtonClicked">
+                                    {{ l('action_bar.list.reorder_button.cancel') }}
+                                </Button>
+                            </div>
+                            <div class="col-auto">
+                                <Button @click="handleReorderSubmitButtonClicked">
+                                    {{ l('action_bar.list.reorder_button.finish') }}
+                                </Button>
                             </div>
                         </template>
-                    </div>
+                    </template>
+
+                    <template v-if="canSelect && !reordering">
+                        <template v-if="selecting">
+                            <div class="col-auto">
+                                <Button key="cancel" outline @click="handleSelectCancelled">
+                                    {{ l('action_bar.list.reorder_button.cancel') }}
+                                </Button>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col-auto">
+                                <Button key="select" outline @click="handleSelectButtonClicked">
+                                    {{ l('action_bar.list.select_button') }}
+                                </Button>
+                            </div>
+                        </template>
+                    </template>
+
+                    <template v-if="hasDropdownCommands && !reordering">
+                        <div class="col-auto">
+                            <CommandsDropdown
+                                class="bg-white"
+                                :small="false"
+                                :outline="!selecting"
+                                :commands="commands"
+                                :disabled="reordering"
+                                :selecting="selecting"
+                                @select="handleCommandSelected"
+                            >
+                                <template v-slot:text>
+                                    {{ l('entity_list.commands.entity.label') }}
+                                    <template v-if="selecting">
+                                        ({{ selectedCount }} selected)
+                                    </template>
+                                </template>
+                            </CommandsDropdown>
+                        </div>
+                    </template>
+
+                    <template v-if="primaryCommand && !reordering && !selecting">
+                        <div class="col-auto">
+                            <Button @click="handlePrimaryCommandClicked">
+                                {{ primaryCommand.label }}
+                            </Button>
+                        </div>
+                    </template>
+
+                    <template v-if="canCreate && !reordering && !selecting">
+                        <div class="col-auto">
+                            <template v-if="hasForms">
+                                <MultiformDropdown
+                                    :forms="forms"
+                                    right
+                                    @select="handleCreateFormSelected"
+                                />
+                            </template>
+                            <template v-else>
+                                <Button :disabled="reordering || selecting" @click="handleCreateButtonClicked">
+                                    {{ l('action_bar.list.create_button') }}
+                                </Button>
+                            </template>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -104,7 +102,7 @@
 </template>
 
 <script>
-    import { ActionBar, Dropdown,  DropdownItem, Search, Button, Breadcrumb } from 'sharp-ui';
+    import { Dropdown,  DropdownItem, Search, Button, Breadcrumb } from 'sharp-ui';
     import { SharpFilter } from 'sharp-filters';
 
     import { Localization } from 'sharp/mixins';
@@ -122,7 +120,6 @@
             CommandsDropdown,
             EntityListTitle,
             MultiformDropdown,
-            ActionBar,
             Dropdown,
             DropdownItem,
             SharpFilter,

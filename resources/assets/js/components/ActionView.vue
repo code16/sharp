@@ -1,19 +1,18 @@
 <template>
     <div class="SharpActionView">
+        <TopBar>
+            <template v-slot:right>
+                <slot name="user-dropdown" />
+            </template>
+        </TopBar>
+
         <template v-if="showErrorPage">
             <div class="container">
-                <ActionBar />
                 <h1>Error {{errorPageData.status}}</h1>
                 <p>{{errorPageData.message}}</p>
             </div>
         </template>
         <template v-else>
-            <ActionBar>
-                <template v-slot:right>
-                    <slot name="user-dropdown" />
-                </template>
-            </ActionBar>
-
             <router-view @error="handlePageError" />
 
             <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>
@@ -53,14 +52,14 @@
 
 <script>
     import { createApi } from "../api";
-    import { Modal, LoadingOverlay, ActionBar } from 'sharp-ui';
+    import { Modal, LoadingOverlay, TopBar } from 'sharp-ui';
 
     export default {
         name:'SharpActionView',
         components: {
             Modal,
             LoadingOverlay,
-            ActionBar
+            TopBar,
         },
 
         provide() {

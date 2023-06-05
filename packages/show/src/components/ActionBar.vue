@@ -1,20 +1,22 @@
 <template>
-    <div class="mb-3">
+    <div class="action-bar my-3">
         <div class="row align-items-center gx-3">
             <div class="col">
                 <template v-if="showBreadcrumb">
                     <Breadcrumb :items="breadcrumb" />
                 </template>
             </div>
-            <div class="col-auto">
-                <LocaleSelect
-                    outline
-                    right
-                    :locale="currentLocale"
-                    :locales="locales"
-                    @change="handleLocaleChanged"
-                />
-            </div>
+            <template v-if="locales && locales.length">
+                <div class="col-auto">
+                    <LocaleSelect
+                        outline
+                        right
+                        :locale="currentLocale"
+                        :locales="locales"
+                        @change="handleLocaleChanged"
+                    />
+                </div>
+            </template>
             <template v-if="hasState">
                 <div class="col-auto">
                     <Dropdown outline right :disabled="!canChangeState">
@@ -23,7 +25,7 @@
                             <span class="text-truncate">{{ state.label }}</span>
                         </template>
                         <template v-for="stateValue in stateValues">
-                            <DropdownItem :active="state.value === stateValue.value" :key="stateValue.value" @click="handleStateChanged(stateValue.value)">
+                            <DropdownItem :active="state.value === stateValue.value" :key="stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
                                 <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
                                 <span class="text-truncate">{{ stateValue.label }}</span>
                             </DropdownItem>
@@ -117,7 +119,7 @@
             breadcrumb: Array,
             showBreadcrumb: Boolean,
             currentLocale: String,
-            locales: String,
+            locales: Array,
         },
         data() {
             return {
@@ -153,9 +155,6 @@
             handleLocaleChanged(locale) {
                 this.$emit('locale-change', locale);
             },
-        },
-        mounted() {
-            window.addEventListener('scroll', this.handleScroll);
         },
     }
 </script>

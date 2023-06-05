@@ -1,25 +1,23 @@
 <template>
     <div class="d-flex">
-        <div class="row align-items-center gx-3">
+        <div class="d-flex align-items-center">
             <template v-if="icon">
-                <div class="col-auto">
-                    <i class="fa fa-sm d-block text-primary" :class="icon" style="font-size: .75rem"></i>
+                <div class="me-2 pe-1">
+                    <i class="fa fa-sm d-block text-primary opacity-75 fs-8" :class="icon"></i>
                 </div>
             </template>
 
-            <div class="col">
-                <div class="breadcrumb p-0 m-0">
-                    <template v-for="(item, i) in items">
-                        <div class="breadcrumb-item" :class="{ 'active': isActive(i) }">
-                            <template v-if="isActive(i)">
-                                <span>{{ item.name }}</span>
-                            </template>
-                            <template v-else>
-                                <a :href="item.url">{{ item.name }}</a>
-                            </template>
-                        </div>
-                    </template>
-                </div>
+            <div class="breadcrumb align-items-center p-0 m-0">
+                <template v-for="(item, i) in items">
+                    <div class="breadcrumb-item" :class="{ 'active': isActive(i) }">
+                        <template v-if="isActive(i)">
+                            <span>{{ item.name }}</span>
+                        </template>
+                        <template v-else>
+                            <a :href="item.url">{{ item.name }}</a>
+                        </template>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

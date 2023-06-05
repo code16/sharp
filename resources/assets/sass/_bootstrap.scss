@@ -101,7 +101,6 @@ $bv-enable-tooltip-variants: false;
 
 .btn,
 .nav-tabs .nav-link,
-.breadcrumb,
 .form-label,
 .input-group-text
 {
@@ -120,7 +119,7 @@ $bv-enable-tooltip-variants: false;
 .btn,
 .nav-tabs .nav-link,
 .input-group-text {
-  letter-spacing: .025em;
+  //letter-spacing: .025em;
 }
 
 .form-label {

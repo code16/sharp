@@ -49,27 +49,9 @@
                         </FieldsLayout>
                     </Grid>
                 </template>
-                <template v-if="localized" v-slot:nav-append>
-<!--                    <LocaleSelect-->
-<!--                        :text="true"-->
-<!--                        :locale="currentLocale"-->
-<!--                        :locales="locales"-->
-<!--                        @change="handleLocaleChanged"-->
-<!--                    />-->
-                </template>
             </TabbedLayout>
             <template v-if="!independant">
-                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners">
-                    <template v-slot:left>
-<!--                        <LocaleSelect-->
-<!--                            outline-->
-<!--                            dropup-->
-<!--                            :locale="currentLocale"-->
-<!--                            :locales="locales"-->
-<!--                            @change="handleLocaleChanged"-->
-<!--                        />-->
-                    </template>
-                </BottomBar>
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
             </template>
         </template>
     </div>

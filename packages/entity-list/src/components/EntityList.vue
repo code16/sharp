@@ -39,7 +39,7 @@
                             <div class="row">
                                 <template v-if="canSearch">
                                     <div class="col-auto">
-                                        <div style="max-width: 300px">
+                                        <div style="max-width: 200px">
                                             <Search
                                                 class="h-100"
                                                 :value="search"
@@ -52,7 +52,7 @@
                                 </template>
                                 <template v-if="resolvedFilters.length">
                                     <div class="col">
-                                        <div class="row gx-2 gy-1">
+                                        <div class="row gx-2 gy-2">
                                             <template v-for="filter in resolvedFilters">
                                                 <div class="col-auto">
                                                     <SharpFilter

@@ -4,6 +4,7 @@
         :small="small"
         right
         v-bind="$attrs"
+        v-on="$listeners"
     >
         <template v-slot:text>
             <slot name="text" />

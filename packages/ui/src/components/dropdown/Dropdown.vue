@@ -70,6 +70,9 @@
             },
         },
         methods: {
+            show() {
+                this.$refs.dropdown.show();
+            },
             hide() {
                 this.$refs.dropdown.hide();
             },

@@ -5,10 +5,14 @@
   padding-top: .5rem;
   padding-bottom: .5rem;
   align-self: flex-end;
+  font-weight: 600;
   a {
     text-decoration: none;
     &:hover, &:focus {
       text-decoration: underline;
     }
+  }
+  .breadcrumb-item.active {
+    color: var(--bs-body-color);
   }
 }

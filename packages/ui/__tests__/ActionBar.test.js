@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import ActionBar from '../src/components/ActionBar.vue';
+import ActionBar from '../src/components/TopBar.vue';
 
 describe('action-bar', ()=>{
     test('can mount ActionBar', ()=>{

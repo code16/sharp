@@ -1,20 +1,23 @@
 <template>
-    <div class="mb-3">
+    <div class="action-bar my-3">
         <div class="row align-items-center gx-3">
             <div class="col">
                 <template v-if="showBreadcrumb">
                     <Breadcrumb :items="breadcrumb" />
                 </template>
             </div>
-            <div class="col-auto">
-                <LocaleSelect
-                    outline
-                    right
-                    :locale="currentLocale"
-                    :locales="locales"
-                    @change="handleLocaleChanged"
-                />
-            </div>
+            <template v-if="locales && locales.length">
+                <div class="col-auto">
+                    <LocaleSelect
+                        outline
+                        right
+                        :locale="currentLocale"
+                        :locales="locales"
+                        @change="handleLocaleChanged"
+                    />
+                </div>
+            </template>
+
             <template v-if="showDeleteButton">
                 <div class="col-auto">
                     <Dropdown outline right>

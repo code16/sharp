@@ -2,6 +2,7 @@
 
 .SharpDropdown {
   .dropdown-menu {
+    left: var(--dropdown-menu-left, 0) !important;
     > li:first-child, > li:last-child {
       .dropdown-divider {
         display: none;
