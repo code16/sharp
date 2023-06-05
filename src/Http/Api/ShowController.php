@@ -43,7 +43,7 @@ class ShowController extends ApiController
         $show->delete($instanceId);
 
         return response()->json([
-            'ok' => true
+            'ok' => true,
         ]);
     }
 
