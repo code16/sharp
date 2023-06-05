@@ -140,7 +140,7 @@ abstract class SharpEntityList
             'delete' => [
                 'allowed' => $this->deleteAllowed,
                 'confirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
-            ]
+            ],
         ];
 
         return tap($config, function (&$config) {
