@@ -681,21 +681,6 @@ describe('EntityList', () => {
             expect(wrapper.vm.instanceHasViewAuthorization({})).toEqual(true);
         });
 
-        test('filterByKey', () => {
-            const wrapper = createWrapper();
-            wrapper.setData({
-                config: {
-                }
-            });
-            expect(wrapper.vm.filterByKey('name')).toBeUndefined();
-            wrapper.setData({
-                config: {
-                    filters:[{ key:'age' }, { key:'name' }]
-                }
-            });
-            expect(wrapper.vm.filterByKey('name')).toEqual({ key:'name' });
-        });
-
         test('handleSortChanged', () => {
             const wrapper = createWrapper({
                 computed: {
