@@ -40,7 +40,7 @@ class ProfileSingleShow extends SharpSingleShow
                     });
             });
     }
-    
+
     public function buildShowConfig(): void
     {
         $this->configurePageTitleAttribute('name');
