@@ -58,7 +58,7 @@ class PostList extends SharpEntityList
             ->configurePaginated()
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
-            ->configureDelete(message: 'Are you sure you want to delete this post (this will permanently delete its data)?')
+            ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configureSearchable();
 
         if (! auth()->user()->isAdmin()) {

@@ -189,7 +189,7 @@ Here is the full list of available methods:
 
 - `configurePrimaryEntityCommand(string $commandKeyOrClassName)`: define an instance command as "primary", by passing its key or full cass name. The command should be declared for this Entity List ([see related doc](commands.md)).
 
-- `configureDelete(bool $allow = true, ?string $message = null)`: the first argument is to show / hide the delete command on each instance (shown by default). Warning, this is only useful to hide the link if you want to only show the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
+- `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
 ## Configure the entity list
 

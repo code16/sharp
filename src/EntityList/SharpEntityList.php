@@ -35,7 +35,7 @@ abstract class SharpEntityList
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort = null;
     protected ?string $defaultSortDir = null;
-    protected bool $deleteAllowed = true;
+    protected bool $deleteHidden = false;
     protected ?string $deleteConfirmationText = null;
 
     final public function initQueryParams(): self
@@ -137,10 +137,8 @@ abstract class SharpEntityList
             'defaultSort' => $this->defaultSort,
             'defaultSortDir' => $this->defaultSortDir,
             'hasShowPage' => $hasShowPage,
-            'delete' => [
-                'allowed' => $this->deleteAllowed,
-                'confirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
-            ],
+            'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
+            'deleteHidden' => $this->deleteHidden,
         ];
 
         return tap($config, function (&$config) {
@@ -186,10 +184,10 @@ abstract class SharpEntityList
         return $this;
     }
 
-    final public function configureDelete(bool $allow = true, ?string $message = null): self
+    final public function configureDelete(bool $hide = false, ?string $confirmationText = null): self
     {
-        $this->deleteAllowed = $allow;
-        $this->deleteConfirmationText = $message;
+        $this->deleteHidden = $hide;
+        $this->deleteConfirmationText = $confirmationText;
 
         return $this;
     }
