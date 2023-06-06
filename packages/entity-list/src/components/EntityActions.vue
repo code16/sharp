@@ -63,6 +63,12 @@
                             </DropdownItem>
                             <DropdownSeparator />
                         </template>
+                        <template v-if="canDelete" v-slot:append>
+                            <DropdownSeparator />
+                            <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
+                                {{ l('action_bar.form.delete_button') }}
+                            </DropdownItem>
+                        </template>
                     </CommandsDropdown>
                 </div>
             </template>
@@ -105,6 +111,7 @@
             hasCommands: Boolean,
             commands: Array,
             selecting: Boolean,
+            canDelete: Boolean,
         },
         data() {
             return {
@@ -113,7 +120,7 @@
         },
         computed: {
             hasActionsButton() {
-                return this.hasCommands || this.hasState;
+                return this.hasCommands || this.hasState || this.canDelete;
             },
         },
         methods: {
@@ -124,17 +131,12 @@
             handleCommandRequested(command) {
                 this.$emit('command', command);
             },
-            handleModalVisibilityChanged(visible) {
-                this.$emit('state-choosing', visible);
+            handleDeleteClicked() {
+                this.$emit('delete');
             },
             async handleStateDropdownClicked() {
-                this.$emit('state-choosing', true);
                 await this.$nextTick();
                 this.$refs.stateDropdown.show();
-                // setTimeout(() => {
-                //     this.stateModalVisible = true;
-                //     this.$el.querySelector('.commands-toggle').click();
-                // }, 0);
             },
         },
     }

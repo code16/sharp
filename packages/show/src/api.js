@@ -5,6 +5,11 @@ export function getShowView({ entityKey, instanceId }) {
         .then(response => response.data);
 }
 
+export function deleteShow({ entityKey, instanceId }) {
+    return api.delete(`show/${entityKey}/${instanceId || ''}`)
+        .then(response => response.data);
+}
+
 export function postShowCommand({ entityKey, instanceId, commandKey, data }) {
     return api.post(`show/${entityKey}/command/${commandKey}/${instanceId || ''}`, {
         ...data,

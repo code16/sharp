@@ -26,6 +26,7 @@ abstract class SharpShow
     protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;
     protected ?SharpShowTextField $pageTitleField = null;
+    protected ?string $deleteConfirmationText = null;
 
     final public function showLayout(): array
     {
@@ -57,6 +58,9 @@ abstract class SharpShow
     public function showConfig(mixed $instanceId, array $config = []): array
     {
         $config = collect($config)
+            ->merge([
+                'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
+            ])
             ->when($this->multiformAttribute, fn ($collection) => $collection->merge([
                 'multiformAttribute' => $this->multiformAttribute,
             ]))
@@ -83,6 +87,13 @@ abstract class SharpShow
     final protected function configurePageTitleAttribute(string $attribute, bool $localized = false): self
     {
         $this->pageTitleField = SharpShowTextField::make($attribute)->setLocalized($localized);
+
+        return $this;
+    }
+
+    final protected function configureDeleteConfirmationText(string $text): self
+    {
+        $this->deleteConfirmationText = $text;
 
         return $this;
     }
@@ -122,4 +133,9 @@ abstract class SharpShow
      * Build show layout.
      */
     abstract protected function buildShowLayout(ShowLayout $showLayout): void;
+
+    /**
+     * Delete the given instance.
+     */
+    abstract public function delete(mixed $id): void;
 }

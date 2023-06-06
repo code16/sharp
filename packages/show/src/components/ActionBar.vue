@@ -33,11 +33,17 @@
                     </Dropdown>
                 </div>
             </template>
-            <template v-if="hasCommands">
+            <template v-if="hasCommands || canDelete">
                 <div class="col-auto">
-                    <CommandsDropdown outline  :small="false" :commands="commands" @select="handleCommandSelected">
+                    <CommandsDropdown outline :small="false" :commands="commands" @select="handleCommandSelected">
                         <template v-slot:text>
                             {{ l('entity_list.commands.instance.label') }}
+                        </template>
+                        <template v-if="canDelete" v-slot:append>
+                            <DropdownSeparator />
+                            <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
+                                {{ l('action_bar.form.delete_button') }}
+                            </DropdownItem>
                         </template>
                     </CommandsDropdown>
                 </div>
@@ -54,14 +60,14 @@
 </template>
 
 <script>
-    import {
-        Dropdown,
-        DropdownItem,
-        StateIcon,
-        Breadcrumb,
-        Button,
-        ModalSelect,
-    } from 'sharp-ui';
+import {
+    Dropdown,
+    DropdownItem,
+    StateIcon,
+    Breadcrumb,
+    Button,
+    ModalSelect, DropdownSeparator,
+} from 'sharp-ui';
 
     import {
         CommandsDropdown
@@ -73,6 +79,7 @@
     export default {
         mixins: [Localization],
         components: {
+            DropdownSeparator,
             LocaleSelect,
             Breadcrumb,
             CommandsDropdown,
@@ -96,6 +103,7 @@
             showBreadcrumb: Boolean,
             currentLocale: String,
             locales: Array,
+            canDelete: Boolean,
         },
         data() {
             return {
@@ -124,6 +132,9 @@
             },
             handleStateChanged(state) {
                 this.$emit('state-change', state);
+            },
+            handleDeleteClicked() {
+                this.$emit('delete');
             },
             handleScroll() {
                 this.showTitle = document.querySelector('.ShowPage__content').getBoundingClientRect().top < 0;

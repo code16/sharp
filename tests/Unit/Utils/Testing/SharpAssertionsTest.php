@@ -111,7 +111,7 @@ class SharpAssertionsTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_test_deleteSharpForm()
+    public function we_can_test_deleteSharpEntityList()
     {
         $fake = new class extends SharpTestCase
         {
@@ -125,10 +125,33 @@ class SharpAssertionsTest extends SharpTestCase
             }
         };
 
-        $response = $fake->deleteSharpForm('leaves', 6);
+        $response = $fake->deleteSharpEntityList('leaves', 6);
 
         $this->assertEquals(
-            route('code16.sharp.api.form.delete', ['leaves', 6]),
+            route('code16.sharp.api.list.delete', ['leaves', 6]),
+            $response->uri,
+        );
+    }
+
+    /** @test */
+    public function we_can_test_deleteSharpShow()
+    {
+        $fake = new class extends SharpTestCase
+        {
+            use SharpAssertions;
+
+            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+            {
+                $this->uri = $uri;
+
+                return $this;
+            }
+        };
+
+        $response = $fake->deleteSharpShow('leaves', 6);
+
+        $this->assertEquals(
+            route('code16.sharp.api.show.delete', ['leaves', 6]),
             $response->uri,
         );
     }

@@ -50,4 +50,9 @@ class CategoryShow extends SharpShow
             })
             ->addEntityListSection('posts', collapsable: true);
     }
+
+    public function delete($id): void
+    {
+        Category::findOrFail($id)->delete();
+    }
 }

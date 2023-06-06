@@ -60,4 +60,9 @@ class PostBlockList extends SharpEntityList
             })
             ->transform($postBlocks);
     }
+
+    public function delete($id): void
+    {
+        PostBlock::findOrFail($id)->delete();
+    }
 }

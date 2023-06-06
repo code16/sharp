@@ -37,7 +37,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->postJson('/sharp/api/form/person', [])->assertOk();
 
         // Delete policy returns false
-        $this->deleteJson('/sharp/api/form/person/50')->assertForbidden();
+        $this->deleteJson('/sharp/api/show/person/50')->assertForbidden();
 
         // Update policy with an id > 1 returns 403
         $this->postJson('/sharp/api/form/person/10', [])->assertForbidden();
@@ -132,7 +132,7 @@ class PolicyAuthorizationsTest extends BaseApiTest
         $this->postJson('/sharp/api/form/person/1', [])->assertForbidden();
         $this->getJson('/sharp/api/list/person')->assertForbidden();
         $this->postJson('/sharp/api/form/person', [])->assertForbidden();
-        $this->deleteJson('/sharp/api/form/person/50')->assertForbidden();
+        $this->deleteJson('/sharp/api/show/person/50')->assertForbidden();
     }
 
     /** @test */
