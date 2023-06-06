@@ -17,10 +17,6 @@ class ProfileSingleShow extends SharpSingleShow
     {
         $showFields
             ->addField(
-                SharpShowTextField::make('name')
-                    ->setLabel('Name'),
-            )
-            ->addField(
                 SharpShowTextField::make('email')
                     ->setLabel('Email address'),
             )
@@ -32,11 +28,10 @@ class ProfileSingleShow extends SharpSingleShow
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('Informations', function (ShowLayoutSection $section) {
+            ->addSection('', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField('name')
                             ->withSingleField('email');
                     })
                     ->addColumn(6, function (ShowLayoutColumn $column) {
@@ -44,6 +39,11 @@ class ProfileSingleShow extends SharpSingleShow
                             ->withSingleField('avatar');
                     });
             });
+    }
+    
+    public function buildShowConfig(): void
+    {
+        $this->configurePageTitleAttribute('name');
     }
 
     public function findSingle(): array
