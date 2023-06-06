@@ -53,7 +53,11 @@ describe('DataList', ()=>{
     });
 
     test('mount items', ()=>{
-        const wrapper = createWrapper(withDefaultMocks());
+        const wrapper = createWrapper(withDefaultMocks({
+            scopedSlots: {
+                item: '<DataListRow :row="props.item" />',
+            }
+        }));
         wrapper.setProps({
             items: [{ id:1 }],
         });
