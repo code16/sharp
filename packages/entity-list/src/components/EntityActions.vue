@@ -10,10 +10,11 @@
                         outline
                         right
                         :disabled="stateDisabled"
+                        :title="stateOptions ? stateOptions.label : state"
                         ref="stateDropdown"
                     >
                         <template v-slot:text>
-                            <StateIcon :color="stateOptions.color" />
+                            <StateIcon :color="stateOptions ? stateOptions.color : '#fff'" />
                         </template>
                         <template v-for="stateValue in config.state.values">
                             <DropdownItem :active="state === stateValue.value" :key="stateValue.value" @click="handleStateChanged(stateValue.value)">
@@ -45,7 +46,7 @@
                             <DropdownItem :disabled="stateDisabled" @click.prevent="handleStateDropdownClicked">
                                 <div class="row align-items-center gx-2 flex-nowrap">
                                     <div class="col-auto">
-                                        <StateIcon :color="stateOptions.color" />
+                                        <StateIcon :color="stateOptions ? stateOptions.color : '#fff'" />
                                     </div>
                                     <div class="col">
                                         <div class="row gx-2">
@@ -55,7 +56,7 @@
                                                 </div>
                                             </template>
                                             <div class="col-auto">
-                                                {{ stateOptions.label }}
+                                                {{ stateOptions ? stateOptions.label : state }}
                                             </div>
                                         </div>
                                     </div>
@@ -66,16 +67,6 @@
                     </CommandsDropdown>
                 </div>
             </template>
-            <template v-else-if="hasState">
-                <div class="col" style="min-width: 0">
-                    <div class="ui-font text-muted text-start text-truncate mw-100 fs-8" ref="stateLabel">
-                        {{ stateOptions.label }}
-                    </div>
-                    <Tooltip :target="() => $refs.stateLabel" overflow-only>
-                        {{ stateOptions.label }}
-                    </Tooltip>
-                </div>
-            </template>
         </div>
     </div>
 </template>
@@ -83,7 +74,7 @@
 <script>
     import { lang } from "sharp";
     import { CommandsDropdown } from "sharp-commands";
-    import {DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip, Dropdown} from "sharp-ui";
+    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip, Dropdown } from "sharp-ui";
 
     export default {
         components: {

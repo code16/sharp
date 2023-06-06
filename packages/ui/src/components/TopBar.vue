@@ -46,7 +46,7 @@
             },
             handleScroll() {
                 console.log('handle scroll');
-                this.title = document.querySelector('h1').innerText;
+                this.title = document.querySelector('h1')?.innerText;
                 this.showTitle = window.scrollY > 150;
             },
         },

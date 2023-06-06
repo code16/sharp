@@ -21,11 +21,11 @@
                 <div class="col-auto">
                     <Dropdown :toggle-class="{ 'bg-white': !canChangeState }" :show-caret="canChangeState" outline right :disabled="!canChangeState">
                         <template v-slot:text>
-                            <StateIcon class="me-1" :color="state.color" style="vertical-align: -.125em" />
-                            <span class="text-truncate">{{ state.label }}</span>
+                            <StateIcon class="me-1" :color="stateOptions ? stateOptions.color : '#fff'" style="vertical-align: -.125em" />
+                            <span class="text-truncate">{{ stateOptions ? stateOptions.label : state }}</span>
                         </template>
                         <template v-for="stateValue in stateValues">
-                            <DropdownItem :active="state.value === stateValue.value" :key="stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
+                            <DropdownItem :active="state === stateValue.value" :key="stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
                                 <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
                                 <span class="text-truncate">{{ stateValue.label }}</span>
                             </DropdownItem>
@@ -90,7 +90,8 @@
             editDisabled: Boolean,
             canChangeState: Boolean,
             showBackButton: Boolean,
-            state: Object,
+            state: [String, Number],
+            stateOptions: Object,
             stateValues: Array,
             breadcrumb: Array,
             showBreadcrumb: Boolean,

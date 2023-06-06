@@ -5,6 +5,7 @@
                 <ActionBarShow
                     :commands="authorizedCommands"
                     :state="instanceState"
+                    :state-options="instanceStateOptions"
                     :state-values="stateValues"
                     :form-url="formUrl"
                     :back-url="backUrl"
@@ -152,6 +153,7 @@
                 'locales',
                 'breadcrumb',
                 'instanceState',
+                'instanceStateOptions',
                 'canEdit',
                 'authorizedCommands',
                 'stateValues',
