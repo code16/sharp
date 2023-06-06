@@ -14,8 +14,11 @@
                     :breadcrumb="breadcrumbItems"
                     :show-breadcrumb="breadcrumb.visible"
                     :edit-disabled="isReordering"
+                    :locales="locales"
+                    :current-locale="locale"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
+                    @locale-change="handleLocaleChanged"
                 />
 
                 <template v-if="config.globalMessage">
@@ -31,13 +34,13 @@
                         <div :class="title ? 'mb-3' : 'mb-4'">
                             <div class="row align-items-center gx-3 gx-md-4">
                                 <template v-if="localized">
-                                    <div class="col-auto">
-                                        <LocaleSelect
-                                            :locales="locales"
-                                            :locale="locale"
-                                            @change="handleLocaleChanged"
-                                        />
-                                    </div>
+<!--                                    <div class="col-auto">-->
+<!--                                        <LocaleSelect-->
+<!--                                            :locales="locales"-->
+<!--                                            :locale="locale"-->
+<!--                                            @change="handleLocaleChanged"-->
+<!--                                        />-->
+<!--                                    </div>-->
                                 </template>
                                 <template v-if="title">
                                     <div class="col" style="min-width: 0">

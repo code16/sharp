@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\BulkPublishPostsCommand;
 use App\Sharp\Posts\Commands\ComposeEmailWithPostsWizardCommand;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
@@ -90,6 +91,7 @@ class PostList extends SharpEntityList
     {
         return [
             ComposeEmailWithPostsWizardCommand::class,
+            BulkPublishPostsCommand::class,
         ];
     }
 

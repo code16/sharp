@@ -4,6 +4,8 @@ A Wizard is a multistep Command. A common example would be a first step with a r
 
 In Sharp, Wizard are similar to Commands in many ways: they can be scoped to an instance or to an entity, and can be attached to an Entity List, a Show Page or a Dashboard.
 
+A Wizard Command can not be configured as bulk (meaning: with instance selection). 
+
 ![](./img/wizard-command.gif)
 
 ## Write the Wizard Command class

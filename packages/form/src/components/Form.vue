@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpForm" data-popover-boundary>
+    <div class="SharpForm">
         <slot
             name="action-bar"
             :props="actionBarProps"
@@ -22,14 +22,7 @@
                 </div>
             </template>
 
-            <TabbedLayout :layout="layout" ref="tabbedLayout">
-                <template v-if="localized" v-slot:nav-prepend>
-                    <LocaleSelect
-                        :locale="currentLocale"
-                        :locales="locales"
-                        @change="handleLocaleChanged"
-                    />
-                </template>
+            <TabbedLayout :layout="layout" ref="tabbedLayout" data-popover-boundary>
                 <template v-slot:default="{ tab }">
                     <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
                         <FieldsLayout
@@ -57,6 +50,9 @@
                     </Grid>
                 </template>
             </TabbedLayout>
+            <template v-if="!independant">
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
+            </template>
         </template>
     </div>
 </template>
@@ -70,7 +66,7 @@
         showConfirm,
     } from "sharp";
 
-    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
     import { DynamicView, Localization } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
@@ -78,6 +74,7 @@
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
+    import BottomBar from "./BottomBar.vue";
 
     const isLocal = Symbol('isLocal');
 
@@ -88,6 +85,8 @@
         mixins: [Localization, localize('fields')],
 
         components: {
+            BottomBar,
+            Button,
             TabbedLayout,
             FieldsLayout,
             Grid,
@@ -219,6 +218,8 @@
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
                     hasDeleteConfirmation: !!this.config.deleteConfirmationText,
+                    locales: this.locales,
+                    currentLocale: this.currentLocale,
                 }
             },
             actionBarListeners() {
@@ -226,6 +227,7 @@
                     'submit': this.handleSubmitClicked,
                     'delete': this.handleDeleteClicked,
                     'cancel': this.handleCancelClicked,
+                    'locale-change': this.handleLocaleChanged,
                 }
             },
             mergedErrorIdentifier() {

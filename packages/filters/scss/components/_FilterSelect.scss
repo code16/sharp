@@ -52,6 +52,12 @@
     }
   }
 
+  &:not(&--empty) {
+    &::after {
+      margin-left: 0;
+    }
+  }
+
   .SharpAutocomplete {
     .multiselect {
       background: none;
@@ -107,14 +113,14 @@
       }
 
       &__tag {
-        background: $ui-01;
+        background: transparent;
         height: auto;
         font-weight: bold;
-        color: $body-color;
         margin-right: .125rem;
         margin-bottom: 0;
+        border-radius: 0;
 
-        padding-right: 23px!important;
+        //padding-right: 23px!important;
         padding-top: 0!important;
         padding-bottom: 0!important;
 
@@ -123,11 +129,12 @@
         }
 
         &-icon {
-          color: var(--filter-close-icon-color);
-          &::after {
-            color: inherit;
-            font-weight: normal;
-            font-size: 1rem;
+          color: var(--clear-button-color, hsla(var(--primary-h), var(--primary-s), 20% , .5));
+          font-weight: 500;
+          font-size: 1rem;
+          height: 20px;
+          &:hover {
+            color: hsla(var(--primary-h), var(--primary-s), 20% , 1);
           }
         }
       }
@@ -138,7 +145,7 @@
 
       &__single {
         font-weight: bold;
-        font-size: .8125rem;
+        font-size: .75rem;
         margin-right: 0.25rem;
         margin-bottom: 0;
       }
@@ -172,6 +179,21 @@
 
     .SharpSelect__clear-button {
       width: 1.5rem;
+      --bs-btn-hover-bg: white;
+      --bs-btn-active-bg: white;
+    }
+  }
+
+  &--underlined {
+    .multiselect__single {
+      color: var(--filter-value-color);
+      text-decoration: underline;
+    }
+    .multiselect__tag {
+      color: var(--filter-value-color);
+      span {
+        text-decoration: underline;
+      }
     }
   }
 }

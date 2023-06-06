@@ -5,6 +5,6 @@ return [
     'login_field' => 'login',
     'password_field' => 'mot de passe',
     'remember' => 'Rester connecté',
-    'button' => 'connexion',
+    'button' => 'Connexion',
 
 ];

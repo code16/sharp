@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
-use Code16\Sharp\View\Components\Menu;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -97,7 +97,7 @@ class CurrentSharpRequest
 
     public function getEntityMenuLabel(string $entityKey): ?string
     {
-        return app(Menu::class)
+        return app(SharpMenuManager::class)
             ->getEntityMenuItem($entityKey)
             ?->getLabel();
     }
