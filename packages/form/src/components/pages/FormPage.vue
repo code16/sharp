@@ -19,9 +19,11 @@
 <script>
     import Form from '../Form';
     import ActionBarForm from '../ActionBar';
+    import {Button} from "sharp-ui";
 
     export default {
         components: {
+            Button,
             Form,
             ActionBarForm,
         },
