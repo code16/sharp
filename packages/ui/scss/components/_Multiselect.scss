@@ -120,10 +120,10 @@
     line-height: 18px;
     transition: all 0.2s ease;
     border-radius: 50%;
+    font-size: 14px;
   }
   .multiselect__tag-icon:after {
     content: "×";
-    font-size: 14px;
   }
   .multiselect__tag-icon:focus,
   .multiselect__tag-icon:hover {

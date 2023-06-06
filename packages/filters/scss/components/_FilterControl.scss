@@ -3,6 +3,8 @@
   font-size: .875rem;
   min-height: 1.9375rem;
   --filter-value-color: hsl(var(--primary-h), var(--primary-s), 35%);
+  --clear-button-color: hsla(var(--primary-h), var(--primary-s), 20% , .625);
+  --clear-button-icon-width: .5rem;
 
   .form-select {
     padding-right: 1.5rem;

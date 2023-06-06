@@ -129,11 +129,12 @@
         }
 
         &-icon {
-          color: var(--filter-close-icon-color);
-          &::after {
-            color: inherit;
-            font-weight: normal;
-            font-size: 1rem;
+          color: var(--clear-button-color, hsla(var(--primary-h), var(--primary-s), 20% , .5));
+          font-weight: 500;
+          font-size: 1rem;
+          height: 20px;
+          &:hover {
+            color: hsla(var(--primary-h), var(--primary-s), 20% , 1);
           }
         }
       }
@@ -178,6 +179,8 @@
 
     .SharpSelect__clear-button {
       width: 1.5rem;
+      --bs-btn-hover-bg: white;
+      --bs-btn-active-bg: white;
     }
   }
 

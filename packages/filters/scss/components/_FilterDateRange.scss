@@ -7,9 +7,18 @@
     }
   }
 
+  input {
+    color: var(--filter-value-color);
+    text-decoration: underline;
+
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
   .form-control {
     font-weight: bold;
-    font-size: .8125rem;
+    font-size: .75rem;
     height: 100%;
     border-left: 0;
 
