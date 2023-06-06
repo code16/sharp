@@ -60,10 +60,8 @@
 <script>
     import {
         getBackUrl,
-        lang,
         logError,
         showAlert,
-        showConfirm,
     } from "sharp";
 
     import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
@@ -210,14 +208,12 @@
                     showSubmitButton: this.isCreation
                         ? !!this.authorizations.create
                         : !!this.authorizations.update,
-                    showDeleteButton: !this.isCreation && !this.isSingle && !!this.authorizations.delete,
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
                     loading: this.loading,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
-                    hasDeleteConfirmation: !!this.config.deleteConfirmationText,
                     locales: this.locales,
                     currentLocale: this.currentLocale,
                 }
@@ -225,7 +221,6 @@
             actionBarListeners() {
                 return {
                     'submit': this.handleSubmitClicked,
-                    'delete': this.handleDeleteClicked,
                     'cancel': this.handleCancelClicked,
                     'locale-change': this.handleLocaleChanged,
                 }
@@ -397,18 +392,6 @@
             handleSubmitClicked() {
                 this.submit().catch(() => {
                 });
-            },
-            async handleDeleteClicked() {
-                if(this.config.deleteConfirmationText) {
-                    await showConfirm(this.config.deleteConfirmationText, {
-                        okTitle: lang('modals.confirm.delete.ok_button'),
-                        okVariant: 'danger',
-                    });
-                }
-                this.axiosInstance.delete(this.apiPath)
-                    .then(response => {
-                        this.redirectForResponse(response, { replace: true });
-                    });
             },
             handleCancelClicked() {
                 this.redirectToParentPage();

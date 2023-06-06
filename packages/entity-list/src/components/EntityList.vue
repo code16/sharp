@@ -100,12 +100,17 @@
                                     :state="instanceState(item)"
                                     :state-options="instanceStateOptions(item)"
                                     :state-disabled="!instanceHasStateAuthorization(item)"
-                                    :has-commands="instanceHasCommands(item) && !selecting"
+                                    :has-commands="instanceHasCommands(item)"
                                     :commands="instanceCommands(item)"
+                                    :can-delete="instanceCanDelete(item)"
                                     :selecting="selecting"
                                     @command="handleInstanceCommandRequested(item, $event)"
                                     @state-change="handleInstanceStateChanged(item, $event)"
-                                    @state-choosing="props.toggleHighlight($event)"
+                                    @delete="
+                                        props.toggleHighlight(true);
+                                        handleInstanceDeleteClicked(item)
+                                            .finally(() => props.toggleHighlight(false))
+                                    "
                                 />
                             </template>
                         </DataListRow>
@@ -139,7 +144,7 @@
 
 <script>
     import isEqual from 'lodash/isEqual';
-    import { formUrl, showUrl, lang, showAlert, api } from 'sharp';
+    import {formUrl, showUrl, lang, showAlert, api, showDeleteConfirm } from 'sharp';
     import { Localization, DynamicView, withCommands } from 'sharp/mixins';
     import {
         DataList,
@@ -163,7 +168,7 @@
 
     import EntityActions from "./EntityActions";
     import {SharpFilter} from "sharp-filters";
-
+    import {deleteEntityListInstance} from "../api";
 
     export default {
         name: 'SharpEntityList',
@@ -545,6 +550,13 @@
                 const instanceId = this.instanceId(instance);
                 return this.focusedItem && this.focusedItem === instanceId;
             },
+            instanceCanDelete(instance) {
+                const instanceId = this.instanceId(instance);
+                const deleteAuthorized = Array.isArray(this.authorizations.delete)
+                    ? this.authorizations.delete?.includes(instanceId)
+                    : !!this.authorizations.delete;
+                return !this.config.deleteHidden && deleteAuthorized;
+            },
 
             /**
              * [Data list] actions
@@ -593,6 +605,12 @@
                     ...this.query,
                     page
                 });
+            },
+            async handleInstanceDeleteClicked(instance) {
+                const instanceId = this.instanceId(instance);
+                await showDeleteConfirm(this.config.deleteConfirmationText)
+                await deleteEntityListInstance({ entityKey: this.entityKey, instanceId });
+                this.init();
             },
 
             /**

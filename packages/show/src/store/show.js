@@ -1,5 +1,5 @@
 import { filtersModule as filters } from 'sharp-filters';
-import { getShowView, postShowCommand, getShowCommandForm, postShowState } from "../api";
+import {getShowView, postShowCommand, getShowCommandForm, postShowState, deleteShow} from "../api";
 
 const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
 const SET_INSTANCE_ID = 'SET_INSTANCE_ID';
@@ -95,6 +95,12 @@ export default {
             });
             commit(SET_SHOW, data);
             return data;
+        },
+        delete({ state }) {
+            return deleteShow({
+                entityKey: state.entityKey,
+                instanceId: state.instanceId,
+            });
         },
         postCommand({ state }, { command, data }) {
             return postShowCommand({

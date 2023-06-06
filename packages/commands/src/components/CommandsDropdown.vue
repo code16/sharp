@@ -29,6 +29,7 @@
                 </DropdownItem>
             </template>
         </template>
+        <slot name="append" />
     </Dropdown>
 </template>
 
