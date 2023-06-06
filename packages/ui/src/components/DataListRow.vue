@@ -63,10 +63,12 @@
             header: Boolean,
             highlight: Boolean,
             selecting: Boolean,
+            deleting: Boolean,
         },
         data() {
             return {
                 isHighlighted: this.highlight,
+
             }
         },
         watch: {
@@ -83,6 +85,7 @@
                     'SharpDataList__row--header': this.header,
                     'SharpDataList__row--disabled': !this.header && !this.hasLink,
                     'SharpDataList__row--highlight': this.isHighlighted,
+                    'SharpDataList__row--deleting': this.deleting,
                 }
             },
         },

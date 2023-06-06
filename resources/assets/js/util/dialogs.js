@@ -1,21 +1,10 @@
 import { store } from "../store/store";
 import { lang } from "./i18n";
-import once from 'lodash/once';
 
 let modalId = 0;
-const preventUnhandledDialogRejection = once(() => {
-    window.addEventListener('unhandledrejection', (event) => {
-        if(event.reason === 'Dialog cancelled') {
-            console.log('Dialog cancelled');
-            event.preventDefault();
-        }
-    });
-});
 
 export function showDialog({ text, okCallback = ()=>{}, okCloseOnly, isError, ...props }) {
     const id = modalId++;
-
-    preventUnhandledDialogRejection();
 
     return new Promise((resolve, reject) => {
         store().dispatch('setDialogs', [
@@ -30,10 +19,10 @@ export function showDialog({ text, okCallback = ()=>{}, okCloseOnly, isError, ..
                     visible: true,
                     isError
                 },
-                okCallback: resolve,
+                okCallback: () => resolve(true),
                 hiddenCallback: () => {
                     store().dispatch('setDialogs', store().state.dialogs.filter(dialog => dialog.id !== id));
-                    reject('Dialog cancelled');
+                    resolve(false);
                 },
                 text,
             }

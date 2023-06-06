@@ -304,9 +304,10 @@
                     });
             },
             async handleDeleteClicked() {
-                await showDeleteConfirm(this.config.deleteConfirmationText);
-                await this.$store.dispatch('show/delete');
-                location.replace(this.backUrl ?? '/');
+                if(await showDeleteConfirm(this.config.deleteConfirmationText)) {
+                    await this.$store.dispatch('show/delete');
+                    location.replace(this.backUrl ?? '/');
+                }
             },
             handleRefreshCommand() {
                 this.init();

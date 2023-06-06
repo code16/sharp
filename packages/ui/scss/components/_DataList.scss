@@ -104,6 +104,10 @@
       }
     }
 
+    &--deleting {
+      outline: 2px solid rgba(var(--bs-danger-rgb), .625);
+    }
+
     .SharpDataList__cols {
       position: relative;
     }

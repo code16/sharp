@@ -98,7 +98,9 @@ export default {
             }
 
             if(command.confirmation) {
-                await showConfirm(command.confirmation);
+                if(! await showConfirm(command.confirmation)) {
+                    return;
+                }
             }
 
             try {

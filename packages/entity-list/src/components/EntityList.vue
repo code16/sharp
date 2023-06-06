@@ -78,6 +78,7 @@
                             :columns="columns"
                             :highlight="instanceIsFocused(item) || selecting && selectedItems.includes(instanceId(item))"
                             :selecting="selecting"
+                            :deleting="deletingItem ? instanceId(item) === instanceId(deletingItem) : false"
                             :row="item"
                         >
                             <template v-if="selecting" v-slot:prepend>
@@ -106,11 +107,7 @@
                                     :selecting="selecting"
                                     @command="handleInstanceCommandRequested(item, $event)"
                                     @state-change="handleInstanceStateChanged(item, $event)"
-                                    @delete="
-                                        props.toggleHighlight(true);
-                                        handleInstanceDeleteClicked(item)
-                                            .finally(() => props.toggleHighlight(false))
-                                    "
+                                    @delete="handleInstanceDeleteClicked(item)"
                                 />
                             </template>
                         </DataListRow>
@@ -242,6 +239,8 @@
 
                 selecting: false,
                 selectedItems: [],
+
+                deletingItem: null,
 
                 containers: null,
                 layout: null,
@@ -608,9 +607,15 @@
             },
             async handleInstanceDeleteClicked(instance) {
                 const instanceId = this.instanceId(instance);
-                await showDeleteConfirm(this.config.deleteConfirmationText)
-                await deleteEntityListInstance({ entityKey: this.entityKey, instanceId });
-                this.init();
+                this.deletingItem = instance;
+                try {
+                    if(await showDeleteConfirm(this.config.deleteConfirmationText)) {
+                        await deleteEntityListInstance({ entityKey: this.entityKey, instanceId });
+                        this.init();
+                    }
+                } finally {
+                     this.deletingItem = null;
+                }
             },
 
             /**
