@@ -31,30 +31,6 @@
                             </DropdownItem>
                         </template>
                     </Dropdown>
-<!--                    <ModalSelect-->
-<!--                        :title="l('modals.entity_state.edit.title')"-->
-<!--                        :ok-title="l('modals.entity_state.edit.ok_button')"-->
-<!--                        :value="state.value"-->
-<!--                        :options="stateValues"-->
-<!--                        size="sm"-->
-<!--                        @change="handleStateChanged"-->
-<!--                    >-->
-<!--                        <template v-slot="{ on }">-->
-<!--                            <Button-->
-<!--                                class="btn&#45;&#45;opacity-1"-->
-<!--                                :class="{ 'dropdown-toggle':canChangeState }"-->
-<!--                                :disabled="!canChangeState"-->
-<!--                                outline-->
-<!--                                v-on="on"-->
-<!--                            >-->
-<!--                                -->
-<!--                            </Button>-->
-<!--                        </template>-->
-
-<!--                        <template v-slot:item-prepend="{ option }">-->
-<!--                            <StateIcon :color="option.color" />-->
-<!--                        </template>-->
-<!--                    </ModalSelect>-->
                 </div>
             </template>
             <template v-if="hasCommands">

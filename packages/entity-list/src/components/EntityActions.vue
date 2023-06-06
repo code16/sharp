@@ -3,7 +3,6 @@
         <div class="row align-items-center justify-content-end flex-nowrap gx-1">
             <template v-if="hasState">
                 <div class="col-auto">
-<!--                    style="--dropdown-menu-left: 36px" -->
                     <Dropdown
                         toggle-class="btn--opacity-1 btn--outline-hover"
                         small
@@ -23,31 +22,6 @@
                             </DropdownItem>
                         </template>
                     </Dropdown>
-<!--                    <ModalSelect-->
-<!--                        :title="l('modals.entity_state.edit.title')"-->
-<!--                        :ok-title="l('modals.entity_state.edit.ok_button')"-->
-<!--                        :value="state"-->
-<!--                        :options="config.state.values"-->
-<!--                        size="sm"-->
-<!--                        @change="handleStateChanged"-->
-<!--                        @update:visible="handleModalVisibilityChanged"-->
-<!--                    >-->
-<!--                        <template v-slot="{ on }">-->
-<!--                            <Button-->
-<!--                                class="btn&#45;&#45;opacity-1 btn&#45;&#45;outline-hover"-->
-<!--                                variant="primary"-->
-<!--                                small-->
-<!--                                :disabled="stateDisabled"-->
-<!--                                v-on="on"-->
-<!--                            >-->
-<!--                                <StateIcon :color="stateOptions.color" />-->
-<!--                            </Button>-->
-<!--                        </template>-->
-
-<!--                        <template v-slot:item-prepend="{ option }">-->
-<!--                            <StateIcon :color="option.color" />-->
-<!--                        </template>-->
-<!--                    </ModalSelect>-->
                 </div>
             </template>
             <template v-if="hasActionsButton">
