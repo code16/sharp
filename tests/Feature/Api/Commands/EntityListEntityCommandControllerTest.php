@@ -192,7 +192,7 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
 
         $this
             ->postJson('/sharp/api/list/person/command/entity_bulk', [
-                'query' => ['ids' => '1,2'],
+                'query' => ['ids' => ['1', '2']],
             ])
             ->assertOk()
             ->assertJson([
