@@ -1,7 +1,8 @@
 
 @import 'util/error';
 
-@import 'components/ActionBar';
+@import 'components/action-bar';
+@import 'components/breadcrumb';
 @import 'components/Button';
 @import 'components/ClearButton';
 @import 'components/DataList';
@@ -21,3 +22,4 @@
 @import 'components/TabbedLayout';
 @import 'components/Tabs';
 @import 'components/Tag';
+@import 'components/TopBar';

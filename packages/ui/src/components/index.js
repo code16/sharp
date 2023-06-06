@@ -1,4 +1,3 @@
-export { default as ActionBar } from './ActionBar';
 export { default as Breadcrumb } from './Breadcrumb';
 export { default as Button } from './Button';
 export { default as ClearButton } from './ClearButton';
@@ -23,4 +22,5 @@ export { default as StateIcon } from './StateIcon';
 export { default as Tab } from './Tab';
 export { default as TabbedLayout } from './TabbedLayout';
 export { default as Tabs } from './Tabs';
+export { default as TopBar } from './TopBar.vue';
 export { default as Tooltip } from './Tooltip';

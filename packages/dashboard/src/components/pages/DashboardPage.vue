@@ -34,9 +34,6 @@
                 </div>
             </div>
         </template>
-        <template v-else>
-            <ActionBar />
-        </template>
 
         <CommandFormModal
             :command="currentCommand"
@@ -53,7 +50,7 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { Grid, ActionBar, GlobalMessage, } from 'sharp-ui';
+    import { Grid, GlobalMessage, } from 'sharp-ui';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { withCommands } from "sharp/mixins";
     import { withLoadingOverlay } from "sharp";
@@ -69,7 +66,6 @@
             Section,
             Grid,
             Widget,
-            ActionBar,
             ActionBarDashboard,
             GlobalMessage,
             CommandFormModal,

@@ -18,6 +18,9 @@ trait CommonCommandUtils
                     'label' => $handler->label(),
                     'description' => $handler->getDescription(),
                     'type' => $handler->type(),
+                    'instance_selection' => $handler->type() === 'entity'
+                        ? $handler->getInstanceSelectionMode()
+                        : null,
                     'confirmation' => $handler->getConfirmationText() ?: null,
                     'modal_title' => $handler->getFormModalTitle() ?: null,
                     'modal_confirm_label' => $handler->getFormModalButtonLabel() ?: null,

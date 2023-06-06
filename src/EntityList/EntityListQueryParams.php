@@ -44,6 +44,10 @@ class EntityListQueryParams
             $this->sortedDir = $query['dir'];
         }
 
+        if (isset($query['ids'])) {
+            $this->specificIds = $query['ids'];
+        }
+
         $this->fillFilterWithRequest($query);
 
         return $this;

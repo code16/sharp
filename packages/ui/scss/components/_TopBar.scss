@@ -1,0 +1,45 @@
+@include media-breakpoint-up($breakpoint-fixed-menu) {
+  .leftNav--collapsed {
+    .SharpTopBar {
+      left: $leftnav-collapsed-width;
+      padding-left: 0;
+    }
+  }
+}
+
+.SharpTopBar {
+  position: fixed!important;
+  z-index: $zindex-sticky;
+  top: var(--navbar-top, 0);
+  right: 0;
+  left: $leftnav-collapsed-width;
+  min-height: $navbar-min-height;
+
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  background: $brand-01;
+
+  transition: $transition-leftnav-collapse;
+  transition-property: left;
+
+  --threshold: var(--l-threshold);
+
+  color: var(--navbar-color);
+
+  background: $primary;
+  background: linear-gradient(
+                  45deg,
+                  hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l)),
+                  hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 70%
+  );
+
+  @include media-breakpoint-up($breakpoint-fixed-menu) {
+    left: $leftnav-width;
+  }
+
+  & > .container {
+    & > .row {
+      min-height: calc(2.5rem + var(--bs-gutter-y));
+    }
+  }
+}
