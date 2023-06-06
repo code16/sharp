@@ -77,7 +77,6 @@ class SharpEntityListCommandTest extends SharpTestCase
                 'type' => 'instance',
                 'authorization' => [],
                 'description' => null,
-                'instance_selection' => null,
                 'confirmation' => null,
                 'modal_title' => null,
                 'modal_confirm_label' => null,

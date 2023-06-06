@@ -21,6 +21,9 @@ First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\S
 - `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields presenting the instance.
 
 - `find($id): array` to retrieve the instance.
+
+- `delete($id): void` to delete the instance.
+
 - `buildShowConfig()` (optional).
 
 In detail:
@@ -34,11 +37,11 @@ function buildShowFields(FieldsContainer $showFields): void
 {
     $showFields
         ->addField(
-            SharpShowTextField::make("name")
-                ->setLabel("Name")
+            SharpShowTextField::make('name')
+                ->setLabel('Name')
         )
         ->addField(
-            SharpShowPictureField::make("picture")
+            SharpShowPictureField::make('picture')
         );
 }
 ```
@@ -65,7 +68,7 @@ Let's see a simple example: we want to display the pilots list dedicated to a sp
 ```php
 function buildShowFields(FieldsContainer $showFields): void
 {
-    SharpShowEntityListField::make("pilots", "pilot");
+    SharpShowEntityListField::make('pilots', 'pilot');
 }
 ```
 
@@ -132,7 +135,7 @@ function buildShowLayout(ShowLayout $showLayout): void
             $section->addColumn(
                 9, 
                 function(ShowLayoutColumn $column) {
-                    $column->withSingleField("description");
+                    $column->withSingleField('description');
                 }
             );
         }
@@ -150,11 +153,11 @@ Like `SharpFormListField` in Forms, a `SharpShowListField` must declare its item
 function(ShowLayoutSection $section) {
     $section->addColumn(9, 
         function(ShowLayoutColumn $column) {
-             $column->withSingleField("pictures", function(ShowLayoutColumn $listItem) {
+             $column->withSingleField('pictures', function(ShowLayoutColumn $listItem) {
                   // Notice that the list item layout is just a ShowLayoutColumn
                   $listItem
-                      ->withSingleField("file")
-                      ->withSingleField("legend");
+                      ->withSingleField('file')
+                      ->withSingleField('legend');
              });
         }
     );
@@ -182,8 +185,8 @@ As for Forms, the method must return a key-value array:
 function find($id): array
 {
     return [
-        "name" => "USS Enterprise",
-        "capacity" => 3000
+        'name' => 'USS Enterprise',
+        'capacity' => 3000
     ];
 }
 ```
@@ -195,19 +198,30 @@ function find($id): array
 {
 	return $this
 		->setCustomTransformer(
-		    "name", 
+		    'name', 
 		    function($value, $spaceship) {
 			    return strtoupper($spaceship->name);
 		    }
 		)
 		->setCustomTransformer(
-		    "picture", 
+		    'picture', 
 		    new SharpUploadModelThumbnailUrlTransformer(600)
 		);
 }
 ```
 
 Transformers are explained in the detailed [How to transform data](how-to-transform-data.md) documentation.
+
+### `delete($id): void`
+
+Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
+
+```php
+function delete($id): void
+{
+    Spaceship::findOrFail($id)->delete();
+}
+```
 
 ### `buildShowConfig(): void`
 
@@ -217,9 +231,9 @@ Very much like EntityLists, a Show can declare a config with `EntityState` handl
 function buildShowConfig()
 {
    $this
-        ->configureBreadcrumbCustomLabelAttribute("name")
-        ->configurePageTitleAttribute("title")
-        ->configureEntityState("state", SpaceshipEntityState::class);
+        ->configureBreadcrumbCustomLabelAttribute('name')
+        ->configurePageTitleAttribute('title')
+        ->configureEntityState('state', SpaceshipEntityState::class);
 }
 ```
 
@@ -230,6 +244,7 @@ Here is the full list of available methods:
 - `configureEntityState(string $stateAttribute, $stateHandlerOrClassName)`: add a state
   toggle, [see detailed doc](entity-states.md)
 - `configurePageTitleAttribute(string $titleAttribute, bool $localized = false)`: define a title to the Show Page, configuring an attribute that should be part of the `find($id)` array
+- `configureDeleteConfirmationText(string $text)` to add a custom confirm message when the use clicks on the delete button.
 
 ## Accessing the navigation breadcrumb
 

@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
+
 class ShowControllerTest extends BaseApiTest
 {
     protected function setUp(): void
@@ -52,7 +54,7 @@ class ShowControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/show/person/1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['fields' => [
                 'name' => [
                     'type' => 'text',
@@ -66,7 +68,7 @@ class ShowControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/show/person/1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['layout' => [
                 'sections' => [[
                     'title' => 'Identity',
@@ -90,7 +92,7 @@ class ShowControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/show/person/1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['config' => [
                 'commands' => [
                     'instance' => [
@@ -121,7 +123,7 @@ class ShowControllerTest extends BaseApiTest
         $this->buildTheWorld(true);
 
         $this->getJson('/sharp/api/show/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 'data' => [
                     'name' => 'John Wayne',
@@ -138,7 +140,7 @@ class ShowControllerTest extends BaseApiTest
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/show/person/11')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['config' => [
                 'commands' => [
                     'instance' => [
@@ -157,7 +159,7 @@ class ShowControllerTest extends BaseApiTest
             ]]);
 
         $this->json('get', '/sharp/api/show/person/1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['config' => [
                 'commands' => [
                     'instance' => [
@@ -174,5 +176,30 @@ class ShowControllerTest extends BaseApiTest
                     'authorization' => true,
                 ],
             ]]);
+    }
+
+    /** @test */
+    public function we_can_delete_an_instance_in_the_show()
+    {
+        $this->buildTheWorld();
+
+        $this->deleteJson('/sharp/api/show/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function we_can_not_delete_an_instance_in_the_show_without_authorization()
+    {
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setProhibitedActions(['delete']);
+
+        $this->deleteJson('/sharp/api/show/person/1')
+            ->assertForbidden();
     }
 }

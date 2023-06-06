@@ -17,19 +17,6 @@
                     />
                 </div>
             </template>
-
-            <template v-if="showDeleteButton">
-                <div class="col-auto">
-                    <Dropdown outline right>
-                        <template v-slot:text>
-                            {{ l('entity_list.commands.instance.label') }}
-                        </template>
-                        <DropdownItem :disabled="loading" @click="handleDeleteClicked">
-                            {{ l('action_bar.form.delete_button') }}
-                        </DropdownItem>
-                    </Dropdown>
-                </div>
-            </template>
         </div>
     </div>
 </template>
@@ -50,21 +37,16 @@
         },
         props: {
             showSubmitButton: Boolean,
-            showDeleteButton: Boolean,
             showBackButton: Boolean,
             create: Boolean,
             uploading: Boolean,
             loading: Boolean,
             breadcrumb: Array,
             showBreadcrumb: Boolean,
-            hasDeleteConfirmation: Boolean,
             currentLocale: String,
             locales: Array,
         },
         methods: {
-            handleDeleteClicked() {
-                this.$emit('delete');
-            },
             handleLocaleChanged(locale) {
                 this.$emit('locale-change', locale);
             },

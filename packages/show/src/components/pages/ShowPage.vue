@@ -17,9 +17,11 @@
                     :edit-disabled="isReordering"
                     :locales="locales"
                     :current-locale="locale"
+                    :can-delete="canDelete"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
                     @locale-change="handleLocaleChanged"
+                    @delete="handleDeleteClicked"
                 />
 
                 <template v-if="config.globalMessage">
@@ -106,7 +108,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid, GlobalMessage } from 'sharp-ui';
     import { LocaleSelect } from "sharp-form";
@@ -152,6 +154,7 @@
                 'config',
                 'locales',
                 'breadcrumb',
+                'authorizations',
                 'instanceState',
                 'instanceStateOptions',
                 'canEdit',
@@ -189,6 +192,12 @@
             },
             localized() {
                 return this.locales?.length > 0;
+            },
+            isSingle() {
+                return !!this.config.isSingle;
+            },
+            canDelete() {
+                return this.authorizations?.delete && !this.isSingle;
             },
             title() {
                 if(!this.ready || !this.config.titleAttribute) {
@@ -293,6 +302,11 @@
                             });
                         }
                     });
+            },
+            async handleDeleteClicked() {
+                await showDeleteConfirm(this.config.deleteConfirmationText);
+                await this.$store.dispatch('show/delete');
+                location.replace(this.backUrl ?? '/');
             },
             handleRefreshCommand() {
                 this.init();
