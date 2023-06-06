@@ -13,7 +13,7 @@ trait CommonCommandUtils
             ->each(function (Command $handler) use (&$config, $instanceId, $positionKey) {
                 $handler->buildCommandConfig();
 
-                $config['commands'][$positionKey][$handler->groupIndex()][] = 
+                $config['commands'][$positionKey][$handler->groupIndex()][] =
                     collect()
                         ->merge([
                             'key' => $handler->getCommandKey(),
@@ -29,9 +29,9 @@ trait CommonCommandUtils
                                 : $handler->getGlobalAuthorization(),
                         ])
                         ->when(
-                            $handler->type() === 'entity', 
+                            $handler->type() === 'entity',
                             fn (Collection $collection) => $collection->merge([
-                                'instance_selection' => $handler->getInstanceSelectionMode()
+                                'instance_selection' => $handler->getInstanceSelectionMode(),
                             ])
                         )
                         ->toArray();
