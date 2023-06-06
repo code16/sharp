@@ -19,6 +19,8 @@
                     @click="handleCommandClicked(command)"
                     :disabled="isDisabled(command)"
                     :key="command.key"
+                    v-b-tooltip.hover.left="{ disabled: !requiresSelection(command) }"
+                    :title="lang('entity_list.commands.needs_selection_message')"
                 >
                     {{ command.label }}
                     <template v-if="command.description">
@@ -34,7 +36,9 @@
 </template>
 
 <script>
+    import { lang } from 'sharp';
     import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp-ui';
+    import { VBTooltip } from 'bootstrap-vue';
 
     export default {
         name: 'SharpCommandsDropdown',
@@ -70,12 +74,19 @@
         },
 
         methods: {
+            lang,
             isDisabled(command) {
+                return this.requiresSelection(command);
+            },
+            requiresSelection(command) {
                 return !this.selecting && command.instance_selection === 'required';
             },
             handleCommandClicked(command) {
                 this.$emit('select', command);
             }
-        }
+        },
+        directives: {
+            'b-tooltip': VBTooltip,
+        },
     }
 </script>
