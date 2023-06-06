@@ -59,9 +59,7 @@ abstract class SharpShow
     {
         $config = collect($config)
             ->merge([
-                'delete' => [
-                    'confirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
-                ],
+                'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
             ])
             ->when($this->multiformAttribute, fn ($collection) => $collection->merge([
                 'multiformAttribute' => $this->multiformAttribute,

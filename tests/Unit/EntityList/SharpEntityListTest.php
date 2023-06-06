@@ -206,10 +206,8 @@ class SharpEntityListTest extends SharpTestCase
                 'multiformAttribute' => null,
                 'defaultSort' => null,
                 'defaultSortDir' => null,
-                'delete' => [
-                    'allowed' => true,
-                    'confirmationText' => trans('sharp::show.delete_confirmation_text'),
-                ],
+                'deleteHidden' => false,
+                'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
             ],
             $list->listConfig(),
         );
@@ -287,13 +285,13 @@ class SharpEntityListTest extends SharpTestCase
         {
             public function buildListConfig(): void
             {
-                $this->configureDelete(false);
+                $this->configureDelete(hide: true);
             }
         };
 
         $list->buildListConfig();
 
-        $this->assertFalse($list->listConfig()['delete']['allowed']);
+        $this->assertTrue($list->listConfig()['deleteHidden']);
     }
 
     /** @test */
@@ -303,13 +301,13 @@ class SharpEntityListTest extends SharpTestCase
         {
             public function buildListConfig(): void
             {
-                $this->configureDelete(message: 'ok?');
+                $this->configureDelete(confirmationText: 'ok?');
             }
         };
 
         $list->buildListConfig();
 
-        $this->assertTrue($list->listConfig()['delete']['allowed']);
-        $this->assertEquals('ok?', $list->listConfig()['delete']['confirmationText']);
+        $this->assertFalse($list->listConfig()['deleteHidden']);
+        $this->assertEquals('ok?', $list->listConfig()['deleteConfirmationText']);
     }
 }
