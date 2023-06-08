@@ -31,13 +31,13 @@ class FormUploadControllerTest extends BaseApiTest
     {
         config(['sharp.uploads.tmp_disk' => 'uploads']);
         Storage::fake('uploads');
-        
+
         $this
             ->postJson('/sharp/api/upload', [
                 'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
             ])
             ->assertOk();
-        
+
         Storage::disk('uploads')->assertExists('/tmp/image.jpg');
     }
 
