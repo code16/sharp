@@ -71,7 +71,7 @@
     "moment": "^2.19.1",
     "qs": "^6.6.0",
     "text-clipper": "^1.3.0",
-    "tiptap-markdown": "^0.7.3",
+    "tiptap-markdown": "^0.7.4",
     "v-calendar": "^2.4.1",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
