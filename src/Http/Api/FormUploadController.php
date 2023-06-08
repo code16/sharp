@@ -15,13 +15,15 @@ class FormUploadController extends Controller
         }
 
         $baseDir = config('sharp.uploads.tmp_dir', 'tmp');
+        $baseDisk = config('sharp.uploads.tmp_disk', 'local');
 
         $filename = $fileUtil->findAvailableName(
             $file->getClientOriginalName(),
             $baseDir,
+            $baseDisk
         );
 
-        $file->storeAs($baseDir, $filename, 'local');
+        $file->storeAs($baseDir, $filename, $baseDisk);
 
         return response()->json([
             'name' => $filename,

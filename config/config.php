@@ -68,6 +68,7 @@ return [
     // Optional. Your file upload configuration.
     'uploads' => [
         // Tmp directory used for file upload.
+        'tmp_disk' => env('SHARP_UPLOADS_TMP_DISK', 'local'),
         'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
 
         // These two configs are used for thumbnail generation inside Sharp.
