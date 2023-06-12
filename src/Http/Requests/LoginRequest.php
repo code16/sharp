@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Requests;
 
+use Code16\Sharp\Auth\TwoFactor\Sharp2faService;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -44,7 +45,7 @@ class LoginRequest extends FormRequest
 
         if (config('sharp.auth.2fa.enabled')) {
             // User is not yet authenticated
-            app(Sharp2faService::class)->generateAndSendTokenFor($this->getGuard()->id());
+            app(Sharp2faService::class)->generateAndSendTokenFor($this->getGuard()->user());
 //            $this->session()->put('sharp:2fa:user_id', $this->getGuard()->id());
 //            $this->session()->put('sharp:2fa:user_id', $this->getGuard()->id());
             throw new SharpAuthenticationNeeds2faException();

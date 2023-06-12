@@ -105,8 +105,8 @@ return [
         
         '2fa' => [
             'enabled' => false,
-            'channel' => 'email', // email, sms, totp
-//            'notification' => \App\Notifications\TwoFactorNotification::class,
+            'channel' => 'notification', // notification, totp
+//            'notification_class' => \App\Notifications\TwoFactorNotification::class,
         ],
 
         // Handle a "remember me" flag (with a checkbox on the login form)

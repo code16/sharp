@@ -37,9 +37,9 @@ return [
             'max_attempts' => 5,
         ],
         '2fa' => [
-            'enabled' => true,
-            'channel' => 'email', // email, sms, totp
-//            'notification' => \App\Notifications\TwoFactorNotification::class,
+            'enabled' => env('SHARP_2FA_ENABLED', false),
+            'channel' => 'notification',
+//            'notification_class' => \App\Sharp\Notifications\TwoFactorNotification::class,
         ],
         'display_attribute' => 'name',
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
