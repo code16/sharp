@@ -35,8 +35,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param $value
-     * @param $instance
+     * @param  $value
+     * @param  $instance
      * @param  string  $attribute
      * @return mixed
      */
