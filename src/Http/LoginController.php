@@ -2,9 +2,12 @@
 
 namespace Code16\Sharp\Http;
 
-use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -21,7 +24,7 @@ class LoginController extends Controller
             ->only('destroy');
     }
 
-    public function create()
+    public function create(): RedirectResponse|\Illuminate\Contracts\View\View
     {
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
@@ -30,49 +33,27 @@ class LoginController extends Controller
         return view('sharp::login');
     }
 
-    public function store()
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $this->validate(request(), [
-            'login' => 'required',
-            'password' => 'required',
-        ]);
+        $request->authenticate();
 
-        if ($this->attemptToLogin()) {
-            return redirect()->intended('/'.sharp_base_url_segment());
-        }
+        $request->session()->regenerate();
 
-        return back()->with('invalid', true)->withInput();
+        return redirect()->intended('/'.sharp_base_url_segment());
     }
 
-    public function destroy()
+    public function destroy(Request $request): RedirectResponse
     {
-        $this->guard()->logout();
+        Auth::guard(config('sharp.auth.guard'))->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
 
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
         }
 
         return redirect()->to(route('code16.sharp.login'));
-    }
-
-    protected function attemptToLogin(): bool
-    {
-        if ($guard = $this->guard()) {
-            $loginAttr = config('sharp.auth.login_attribute', 'email');
-            $passwordAttr = config('sharp.auth.password_attribute', 'password');
-            $shouldRemember = config('sharp.auth.suggest_remember_me', false) && request()->boolean('remember');
-
-            return $guard->attempt(
-                [$loginAttr => request('login'), $passwordAttr => request('password')],
-                $shouldRemember,
-            );
-        }
-
-        throw new SharpInvalidConfigException('No auth guard was configured.');
-    }
-
-    protected function guard(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
-    {
-        return auth()->guard(config('sharp.auth.guard'));
     }
 }

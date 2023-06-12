@@ -22,20 +22,11 @@
                                 {!! file_get_contents($logo) !!}
                             </div>
                         @endif
-
-
+                        
                         @if ($errors->any())
-
                             <div role="alert" class="alert alert-danger">
-                                @lang('sharp::auth.validation_error')
+                                {{ $errors->first() }}
                             </div>
-
-                        @elseif (session()->has('invalid'))
-
-                            <div role="alert" class="alert alert-danger">
-                                @lang('sharp::auth.invalid_credentials')
-                            </div>
-
                         @endif
 
                         <div class="card border-0 mb-3">
