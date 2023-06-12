@@ -12,17 +12,13 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
  */
 class SharpUploadModelThumbnailUrlTransformer implements SharpAttributeTransformer
 {
-    protected ?int $width;
-    protected ?int $height;
-    protected array $filters;
     protected bool $renderAsImageTag = false;
 
-    public function __construct(int $width = null, int $height = null, array $filters = [])
-    {
-        $this->width = $width;
-        $this->height = $height;
-        $this->filters = $filters;
-    }
+    public function __construct(
+        protected ?int $width = null, 
+        protected ?int $height = null, 
+        protected array $filters = []
+    ) {}
 
     public function renderAsImageTag(bool $renderAsImageTag = true): self
     {
