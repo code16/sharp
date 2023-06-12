@@ -114,7 +114,7 @@ class EntityListInstanceStateControllerTest extends BaseApiTest
             ->assertStatus(403);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         parent::buildTheWorld($singleShow);
 
