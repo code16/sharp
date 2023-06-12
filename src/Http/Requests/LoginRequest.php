@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Requests;
 
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -38,21 +39,34 @@ class LoginRequest extends FormRequest
                 'login' => trans('sharp::auth.invalid_credentials'),
             ]);
         }
-
+        
         RateLimiter::clear($this->throttleKey());
+
+        if (config('sharp.auth.2fa.enabled')) {
+            // User is not yet authenticated
+            app(Sharp2faService::class)->generateAndSendTokenFor($this->getGuard()->id());
+//            $this->session()->put('sharp:2fa:user_id', $this->getGuard()->id());
+//            $this->session()->put('sharp:2fa:user_id', $this->getGuard()->id());
+            throw new SharpAuthenticationNeeds2faException();
+        }
     }
 
     private function attemptToLogin(): bool
     {
-        $loginAttr = config('sharp.auth.login_attribute', 'email');
-        $passwordAttr = config('sharp.auth.password_attribute', 'password');
-        $shouldRemember = config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember');
-
-        return Auth::guard(config('sharp.auth.guard'))
-            ->attempt(
-                [$loginAttr => $this->input('login'), $passwordAttr => $this->input('password')],
-                $shouldRemember,
-            );
+        $guard = $this->getGuard();
+        $credentials = [
+            config('sharp.auth.login_attribute', 'email') => $this->input('login'),
+            config('sharp.auth.password_attribute', 'password') => $this->input('password')
+        ];
+        
+        if (config('sharp.auth.2fa.enabled')) {
+            return $guard->once($credentials);
+        }
+        
+        return $guard->attempt(
+            $credentials,
+            config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember'),
+        );
     }
 
     public function ensureIsNotRateLimited(): void
@@ -80,5 +94,10 @@ class LoginRequest extends FormRequest
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->input('login')).'|'.$this->ip());
+    }
+
+    public function getGuard(): \Illuminate\Contracts\Auth\StatefulGuard
+    {
+        return Auth::guard(config('sharp.auth.guard'));
     }
 }

@@ -102,6 +102,12 @@ return [
             'enabled' => true,
             'max_attempts' => 5,
         ],
+        
+        '2fa' => [
+            'enabled' => false,
+            'channel' => 'email', // email, sms, totp
+//            'notification' => \App\Notifications\TwoFactorNotification::class,
+        ],
 
         // Handle a "remember me" flag (with a checkbox on the login form)
         'suggest_remember_me' => false,

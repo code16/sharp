@@ -141,6 +141,9 @@ Route::group([
     Route::post('/login', [LoginController::class, 'store'])
         ->name('code16.sharp.login.post');
 
+    Route::get('/login/2fa', [Login2faController::class, 'create'])
+        ->name('code16.sharp.login.2fa');
+
     Route::get('/', [HomeController::class, 'index'])
         ->name('code16.sharp.home');
 

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Code16\Sharp\Http\Requests\LoginRequest;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +36,12 @@ class LoginController extends Controller
 
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+        } catch (SharpAuthenticationNeeds2faException $ex) {
+            // Credentials are OK, the user is not yet authenticated, redirect to 2FA page
+            return redirect()->route('code16.sharp.login.2fa');
+        }
 
         $request->session()->regenerate();
 
