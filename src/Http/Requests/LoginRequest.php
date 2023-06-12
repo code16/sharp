@@ -41,7 +41,7 @@ class LoginRequest extends FormRequest
 
         RateLimiter::clear($this->throttleKey());
     }
-    
+
     private function attemptToLogin(): bool
     {
         $loginAttr = config('sharp.auth.login_attribute', 'email');
@@ -60,11 +60,11 @@ class LoginRequest extends FormRequest
         if (config('sharp.auth.rate_limiting.enabled', true) === false) {
             return;
         }
-        
+
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), config('sharp.auth.rate_limiting.max_attempts', 5))) {
             return;
         }
-        
+
         event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());

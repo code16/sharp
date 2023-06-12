@@ -37,7 +37,7 @@ class UploadFormatter extends SharpFieldFormatter
 
     /**
      * @param  SharpFormField  $field
-     * @param $value
+     * @param  $value
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)

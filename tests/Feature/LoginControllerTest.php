@@ -96,9 +96,9 @@ class LoginControllerTest extends BaseApiTest
 
         $this->app['config']->set(
             'auth.guards.sharp', [
-            'driver' => 'sharp',
-            'provider' => 'users',
-        ],
+                'driver' => 'sharp',
+                'provider' => 'users',
+            ],
         );
     }
 
@@ -169,10 +169,10 @@ class LoginControllerTest extends BaseApiTest
     public function we_hit_rate_limiter_if_configured()
     {
         config(['sharp.auth.rate_limiting' => ['enabled' => true, 'max_attempts' => 1]]);
-        
+
         $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'bad'])
             ->assertSessionHasErrors('login', trans('sharp::auth.invalid_credentials'));
-        
+
         $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'too-many'])
             ->assertSessionHasErrors('login', 'Too many login attempts. Please try again in 60 seconds.');
 

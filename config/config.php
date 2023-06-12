@@ -93,11 +93,11 @@ return [
     'auth' => [
         // Optional custom login page to replace the default Sharp implementation.
         'login_page_url' => null,
-        
+
         // Name of the login and password attributes of the User Model.
         'login_attribute' => 'email',
         'password_attribute' => 'password',
-        
+
         'rate_limiting' => [
             'enabled' => true,
             'max_attempts' => 5,

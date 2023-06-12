@@ -15,10 +15,11 @@ class SharpUploadModelThumbnailUrlTransformer implements SharpAttributeTransform
     protected bool $renderAsImageTag = false;
 
     public function __construct(
-        protected ?int $width = null, 
-        protected ?int $height = null, 
+        protected ?int $width = null,
+        protected ?int $height = null,
         protected array $filters = []
-    ) {}
+    ) {
+    }
 
     public function renderAsImageTag(bool $renderAsImageTag = true): self
     {
