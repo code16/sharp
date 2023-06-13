@@ -4,7 +4,9 @@ namespace Code16\Sharp\Http\Requests;
 
 use Code16\Sharp\Auth\TwoFactor\Sharp2faService;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -37,6 +39,11 @@ class Login2faRequest extends FormRequest
             ]);
         }
 
+        $this->getGuard()->loginUsingId(
+            $sharp2faService->userId(),
+            $sharp2faService->remember(),
+        );
+
         RateLimiter::clear($this->throttleKey());
         $sharp2faService->forgetCode();
     }
@@ -62,5 +69,10 @@ class Login2faRequest extends FormRequest
     private function throttleKey(): string
     {
         return Str::transliterate($this->ip());
+    }
+
+    private function getGuard(): StatefulGuard
+    {
+        return Auth::guard(config('sharp.auth.guard'));
     }
 }

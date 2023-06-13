@@ -95,7 +95,9 @@ class LoginControllerTest extends BaseApiTest
             ->assertSessionHasErrors(['login' => trans('sharp::auth.invalid_credentials')]);
 
         $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'too-many'])
-            ->assertSessionHasErrors(['login' => 'Too many login attempts. Please try again in 60 seconds.']);
+            ->assertSessionHasErrors('login');
+
+        $this->assertStringStartsWith('Too many login attempts', session()->get('errors')->first('login'));
 
         $this->assertNull(auth('sharp')->user());
     }

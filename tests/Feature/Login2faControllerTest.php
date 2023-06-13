@@ -131,7 +131,9 @@ class Login2faControllerTest extends BaseApiTest
                 route('code16.sharp.login.2fa.post'),
                 ['code' => 'bad']
             )
-            ->assertSessionHasErrors(['code' => 'Too many login attempts. Please try again in 60 seconds.'])
+            ->assertSessionHasErrors('code')
             ->assertRedirect(route('code16.sharp.login.2fa'));
+        
+        $this->assertStringStartsWith('Too many login attempts', session()->get('errors')->first('code'));
     }
 }

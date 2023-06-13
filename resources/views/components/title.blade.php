@@ -3,7 +3,7 @@
     Warning: title is also updated by the front
 --}}
 <title>
-    @if(request()->routeIs('code16.sharp.login'))
+    @if(request()->routeIs('code16.sharp.login') || request()->routeIs('code16.sharp.login.2fa'))
         {{ trans('sharp::login.login_page_title') }}
     @else
         @if($currentEntityLabel = currentSharpRequest()->getCurrentEntityMenuLabel())
