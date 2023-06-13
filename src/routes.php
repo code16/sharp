@@ -19,6 +19,7 @@ use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
 use Code16\Sharp\Http\ListController;
+use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\SingleShowController;
 use Code16\Sharp\Http\WebDispatchController;
@@ -143,6 +144,9 @@ Route::group([
 
     Route::get('/login/2fa', [Login2faController::class, 'create'])
         ->name('code16.sharp.login.2fa');
+
+    Route::post('/login/2fa', [Login2faController::class, 'store'])
+        ->name('code16.sharp.login.2fa.post');
 
     Route::get('/', [HomeController::class, 'index'])
         ->name('code16.sharp.home');

@@ -92,7 +92,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->bind(
             Sharp2faService::class,
             fn () => match(config('sharp.auth.2fa.channel')) {
-                'notification' => new Sharp2faServiceNotification(),
+                'notification' => app(Sharp2faServiceNotification::class),
                 'totp' => null,
                 default => throw new SharpInvalidConfigException('Invalid value for config [sharp.auth.2fa.channel]')
             }

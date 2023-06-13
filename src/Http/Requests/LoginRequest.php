@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Requests;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faService;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -45,9 +46,8 @@ class LoginRequest extends FormRequest
 
         if (config('sharp.auth.2fa.enabled')) {
             // User is not yet authenticated
-            app(Sharp2faService::class)->generateAndSendTokenFor($this->getGuard()->user());
-//            $this->session()->put('sharp:2fa:user_id', $this->getGuard()->id());
-//            $this->session()->put('sharp:2fa:user_id', $this->getGuard()->id());
+            app(Sharp2faService::class)->generateAndSendCodeFor($this->getGuard()->user());
+            
             throw new SharpAuthenticationNeeds2faException();
         }
     }
@@ -70,7 +70,7 @@ class LoginRequest extends FormRequest
         );
     }
 
-    public function ensureIsNotRateLimited(): void
+    private function ensureIsNotRateLimited(): void
     {
         if (config('sharp.auth.rate_limiting.enabled', true) === false) {
             return;
@@ -92,12 +92,12 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    public function throttleKey(): string
+    private function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->input('login')).'|'.$this->ip());
     }
 
-    public function getGuard(): \Illuminate\Contracts\Auth\StatefulGuard
+    private function getGuard(): StatefulGuard
     {
         return Auth::guard(config('sharp.auth.guard'));
     }

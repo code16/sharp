@@ -3,10 +3,7 @@
 namespace Code16\Sharp\Tests\Feature;
 
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
-use Code16\Sharp\Tests\Fixtures\User;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 
 class LoginControllerTest extends BaseApiTest
 {
@@ -14,86 +11,8 @@ class LoginControllerTest extends BaseApiTest
     {
         parent::setUp();
 
-        auth()->extend('sharp', function () {
-            return new class implements Guard, StatefulGuard
-            {
-                private ?User $user = null;
-
-                public function check()
-                {
-                    return $this->user !== null;
-                }
-
-                public function guest()
-                {
-                    return $this->user === null;
-                }
-
-                public function user()
-                {
-                    return $this->user;
-                }
-
-                public function id()
-                {
-                    return $this->hasUser() ? 1 : null;
-                }
-
-                public function validate(array $credentials = [])
-                {
-                }
-
-                public function setUser(Authenticatable $user)
-                {
-                    $this->user = $user;
-                }
-
-                public function hasUser()
-                {
-                    return $this->user !== null;
-                }
-
-                public function attempt(array $credentials = [], $remember = false)
-                {
-                    if ($credentials['email'] === 'test@example.org' && $credentials['password'] === 'password') {
-                        $this->login(new User(array_merge($credentials, ['shouldRemember' => $remember])));
-
-                        return true;
-                    }
-
-                    return false;
-                }
-
-                public function once(array $credentials = [])
-                {
-                }
-
-                public function login(Authenticatable $user, $remember = false)
-                {
-                    $this->setUser($user);
-                }
-
-                public function loginUsingId($id, $remember = false)
-                {
-                }
-
-                public function onceUsingId($id)
-                {
-                }
-
-                public function viaRemember()
-                {
-                }
-
-                public function logout()
-                {
-                    $this->user = null;
-                }
-            };
-        });
-
+        auth()->extend('sharp', fn () => new TestAuthGuard());
         $this->app['config']->set('sharp.auth.guard', 'sharp');
-
         $this->app['config']->set(
             'auth.guards.sharp', [
                 'driver' => 'sharp',
@@ -105,8 +24,10 @@ class LoginControllerTest extends BaseApiTest
     /** @test */
     public function we_can_login()
     {
-        $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'password'])
-            ->assertRedirect('/sharp');
+        $this
+            ->from(route('code16.sharp.login'))
+            ->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password'])
+            ->assertRedirect(route('code16.sharp.home'));
 
         $this->assertEquals('test@example.org', auth('sharp')->user()->email);
     }
@@ -114,8 +35,8 @@ class LoginControllerTest extends BaseApiTest
     /** @test */
     public function we_can_logout()
     {
-        $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'password']);
-        $this->post('/sharp/logout')->assertRedirect('/sharp/login');
+        $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password']);
+        $this->post(route('code16.sharp.logout'))->assertRedirect(route('code16.sharp.login'));
 
         $this->assertNull(auth('sharp')->user());
     }
@@ -123,13 +44,13 @@ class LoginControllerTest extends BaseApiTest
     /** @test */
     public function we_can_not_login_without_valid_payload()
     {
-        $this->post('/sharp/login')
+        $this->post(route('code16.sharp.login.post'))
             ->assertSessionHasErrors(['login', 'password']);
 
-        $this->post('/sharp/login', ['login' => 'bob@example.org'])
+        $this->post(route('code16.sharp.login.post'), ['login' => 'bob@example.org'])
             ->assertSessionHasErrors(['password']);
 
-        $this->post('/sharp/login', ['password' => 'password'])
+        $this->post(route('code16.sharp.login.post'), ['password' => 'password'])
             ->assertSessionHasErrors(['login']);
     }
 
@@ -139,12 +60,12 @@ class LoginControllerTest extends BaseApiTest
         $this->app['config']->set('sharp.auth.suggest_remember_me', true);
 
         $this
-            ->post('/sharp/login', [
+            ->post(route('code16.sharp.login.post'), [
                 'login' => 'test@example.org',
                 'password' => 'password',
                 'remember' => true,
             ])
-            ->assertRedirect('/sharp');
+            ->assertRedirect(route('code16.sharp.home'));
 
         $this->assertTrue(auth('sharp')->user()->shouldRemember);
     }
@@ -155,12 +76,12 @@ class LoginControllerTest extends BaseApiTest
         $this->app['config']->set('sharp.auth.suggest_remember_me', false);
 
         $this
-            ->post('/sharp/login', [
+            ->post(route('code16.sharp.login.post'), [
                 'login' => 'test@example.org',
                 'password' => 'password',
                 'remember' => true,
             ])
-            ->assertRedirect('/sharp');
+            ->assertRedirect(route('code16.sharp.home'));
 
         $this->assertFalse(auth('sharp')->user()->shouldRemember);
     }
@@ -170,11 +91,11 @@ class LoginControllerTest extends BaseApiTest
     {
         config(['sharp.auth.rate_limiting' => ['enabled' => true, 'max_attempts' => 1]]);
 
-        $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'bad'])
-            ->assertSessionHasErrors('login', trans('sharp::auth.invalid_credentials'));
+        $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'bad'])
+            ->assertSessionHasErrors(['login' => trans('sharp::auth.invalid_credentials')]);
 
-        $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'too-many'])
-            ->assertSessionHasErrors('login', 'Too many login attempts. Please try again in 60 seconds.');
+        $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'too-many'])
+            ->assertSessionHasErrors(['login' => 'Too many login attempts. Please try again in 60 seconds.']);
 
         $this->assertNull(auth('sharp')->user());
     }
