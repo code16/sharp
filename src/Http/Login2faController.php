@@ -13,7 +13,11 @@ class Login2faController extends Controller
     public function create(Sharp2faService $sharp2faService): RedirectResponse|View
     {
         if ($sharp2faService->isExpectingLogin()) {
-            return view('sharp::login-2fa');
+            $helpText = method_exists($sharp2faService, 'formHelpText')
+                ? $sharp2faService->formHelpText()
+                : trans('sharp::auth.2fa.form_help_text');
+            
+            return view('sharp::login-2fa', ['helpText' => $helpText]);
         }
         
         return redirect()->route('code16.sharp.login');

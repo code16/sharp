@@ -35,7 +35,12 @@
                                     <h1 class="text-center card-title mb-0 fs-4">{{ config("sharp.name") }}</h1>
                                 </div>
                             @endif
+
                             <div class="card-body p-5 py-4">
+                                <div class="mb-3">
+                                    {!! $helpText !!}
+                                </div>
+                                
                                 <div class="SharpForm__form-item mb-3">
                                     <input type="text" name="code" id="code" class="form-control" value="" placeholder="@lang('sharp::login.code_field')" autocomplete="">
                                 </div>
