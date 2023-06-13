@@ -17,10 +17,10 @@ class Sharp2faServiceNotification implements Sharp2faService
                 'user_id' => $user->id,
                 'code' => Hash::make($code),
                 'remember' => $remember,
-                'expires_at' => now()->addMinutes(15)->format('Y-m-d H:i:s')
+                'expires_at' => now()->addMinutes(15)->format('Y-m-d H:i:s'),
             ]
         );
-        
+
         $notificationClass = config('sharp.auth.2fa.notification_class', Sharp2faDefaultNotification::class);
         $user->notify(new $notificationClass($code));
     }

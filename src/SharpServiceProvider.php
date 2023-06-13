@@ -88,16 +88,16 @@ class SharpServiceProvider extends ServiceProvider
             SharpMenuManager::class,
             SharpMenuManager::class
         );
-        
+
         $this->app->bind(
             Sharp2faService::class,
-            fn () => match(config('sharp.auth.2fa.channel')) {
+            fn () => match (config('sharp.auth.2fa.channel')) {
                 'notification' => app(Sharp2faServiceNotification::class),
                 'totp' => null,
                 default => throw new SharpInvalidConfigException('Invalid value for config [sharp.auth.2fa.channel]')
             }
         );
-        
+
         $this->commands([
             CreateUploadsMigration::class,
             EntityListMakeCommand::class,

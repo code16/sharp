@@ -39,7 +39,7 @@ return [
         '2fa' => [
             'enabled' => env('SHARP_2FA_ENABLED', false),
             'channel' => 'notification',
-//            'notification_class' => \App\Sharp\Notifications\TwoFactorNotification::class,
+            //            'notification_class' => \App\Sharp\Notifications\TwoFactorNotification::class,
         ],
         'display_attribute' => 'name',
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,

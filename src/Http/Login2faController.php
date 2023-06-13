@@ -16,10 +16,10 @@ class Login2faController extends Controller
             $helpText = method_exists($sharp2faService, 'formHelpText')
                 ? $sharp2faService->formHelpText()
                 : trans('sharp::auth.2fa.form_help_text');
-            
+
             return view('sharp::login-2fa', ['helpText' => $helpText]);
         }
-        
+
         return redirect()->route('code16.sharp.login');
     }
 
@@ -27,7 +27,7 @@ class Login2faController extends Controller
     {
         $request->authenticate($sharp2faService);
         $request->session()->regenerate();
-            
+
         return redirect()->intended(route('code16.sharp.home'));
     }
 }
