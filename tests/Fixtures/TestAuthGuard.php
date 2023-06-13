@@ -87,4 +87,4 @@ class TestAuthGuard implements Guard, StatefulGuard
     {
         $this->user = null;
     }
-};
+}

@@ -33,7 +33,7 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-        
+
         $remember = config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember');
 
         if (! $this->attemptToLogin($remember)) {
@@ -43,14 +43,14 @@ class LoginRequest extends FormRequest
                 'login' => trans('sharp::auth.invalid_credentials'),
             ]);
         }
-        
+
         RateLimiter::clear($this->throttleKey());
 
         if (config('sharp.auth.2fa.enabled')) {
             // User is not yet authenticated
             app(Sharp2faService::class)
                 ->generateAndSendCodeFor($this->getGuard()->user(), $remember);
-            
+
             throw new SharpAuthenticationNeeds2faException();
         }
     }
@@ -60,13 +60,13 @@ class LoginRequest extends FormRequest
         $guard = $this->getGuard();
         $credentials = [
             config('sharp.auth.login_attribute', 'email') => $this->input('login'),
-            config('sharp.auth.password_attribute', 'password') => $this->input('password')
+            config('sharp.auth.password_attribute', 'password') => $this->input('password'),
         ];
-        
+
         if (config('sharp.auth.2fa.enabled')) {
             return $guard->once($credentials);
         }
-        
+
         return $guard->attempt($credentials, $remember);
     }
 

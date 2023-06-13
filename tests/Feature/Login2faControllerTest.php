@@ -28,7 +28,7 @@ class Login2faControllerTest extends BaseApiTest
         $this->app['config']->set(
             'sharp.auth.2fa', [
                 'enabled' => true,
-                'channel' => 'notification'
+                'channel' => 'notification',
             ],
         );
     }
@@ -37,7 +37,7 @@ class Login2faControllerTest extends BaseApiTest
     public function we_are_redirected_to_2fa_code_page_after_successful_first_step_login()
     {
         Notification::fake();
-        
+
         $this
             ->from(route('code16.sharp.login'))
             ->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password'])
@@ -62,9 +62,9 @@ class Login2faControllerTest extends BaseApiTest
         $this
             ->from(route('code16.sharp.login'))
             ->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'password']);
-        
+
         Notification::assertSentTo(
-            new User(['email' => 'test@example.org']), 
+            new User(['email' => 'test@example.org']),
             Sharp2faDefaultNotification::class
         );
     }
@@ -74,10 +74,11 @@ class Login2faControllerTest extends BaseApiTest
     {
         $this->withoutExceptionHandling();
         Notification::fake();
-        
+
         $this->app->bind(
-            Sharp2faServiceNotification::class, 
-            fn () => new class extends Sharp2faServiceNotification {
+            Sharp2faServiceNotification::class,
+            fn () => new class extends Sharp2faServiceNotification
+            {
                 protected function generateCode(): int
                 {
                     return 123456;
@@ -87,14 +88,14 @@ class Login2faControllerTest extends BaseApiTest
 
         $this
             ->post(
-                route('code16.sharp.login.post'), 
+                route('code16.sharp.login.post'),
                 ['login' => 'test@example.org', 'password' => 'password']
             )
             ->assertRedirect(route('code16.sharp.login.2fa'));
 
         $this
             ->post(
-                route('code16.sharp.login.2fa.post'), 
+                route('code16.sharp.login.2fa.post'),
                 ['code' => 123456]
             )
             ->assertRedirect(route('code16.sharp.home'));
@@ -114,7 +115,7 @@ class Login2faControllerTest extends BaseApiTest
             )
             ->assertRedirect(route('code16.sharp.login.2fa'));
 
-        for ($k=0; $k<3; $k++) {
+        for ($k = 0; $k < 3; $k++) {
             $this
                 ->from(route('code16.sharp.login.2fa'))
                 ->post(
@@ -133,7 +134,7 @@ class Login2faControllerTest extends BaseApiTest
             )
             ->assertSessionHasErrors('code')
             ->assertRedirect(route('code16.sharp.login.2fa'));
-        
+
         $this->assertStringStartsWith('Too many login attempts', session()->get('errors')->first('code'));
     }
 }
