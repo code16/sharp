@@ -18,9 +18,9 @@ class Demo2faNotificationHandler extends Sharp2faNotificationHandler
 
     public function formHelpText(): string
     {
-        return <<<HTML
-            <div>This user has configured a two-factor authentication.</div>
-            <div class="mt-2">Code was set to <strong>123456</strong></div>
-        HTML;
+        return <<<'HTML'
+                <div>This user has configured a two-factor authentication.</div>
+                <div class="mt-2">Code was set to <strong>123456</strong></div>
+            HTML;
     }
 }

@@ -74,7 +74,7 @@ class Login2faControllerTest extends BaseApiTest
     {
         $this->withoutExceptionHandling();
         Notification::fake();
-        
+
         $this->app['config']->set(
             'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler
             {
