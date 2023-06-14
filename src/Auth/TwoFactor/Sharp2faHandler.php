@@ -4,7 +4,7 @@ namespace Code16\Sharp\Auth\TwoFactor;
 
 interface Sharp2faHandler
 {
-    public function generateAndSendCodeFor($user, bool $remember = false): void;
+    public function generateCodeFor($user, bool $remember = false): void;
 
     public function isExpectingLogin(): bool;
 

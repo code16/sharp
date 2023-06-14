@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Profile;
 
+use Code16\Sharp\Auth\TwoFactor\Commands\Activate2faViaTotpWizardCommand;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -44,6 +45,13 @@ class ProfileSingleShow extends SharpSingleShow
     public function buildShowConfig(): void
     {
         $this->configurePageTitleAttribute('name');
+    }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            Activate2faViaTotpWizardCommand::class
+        ];
     }
 
     public function findSingle(): array
