@@ -24,7 +24,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
 
     public function label(): ?string
     {
-        return trans('sharp::auth.2fa.totp_commands.activate.label');
+        return trans('sharp::auth.2fa.totp_commands.activate.command_label');
     }
 
     protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
@@ -33,7 +33,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
             ->addField(
                 SharpFormTextField::make('password')
                     ->setInputTypePassword()
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password.label'))
+                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password_field_label'))
             );
     }
 
@@ -87,11 +87,13 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
         $formFields
             ->addField(
                 SharpFormHtmlField::make('qr')
-                    ->setInlineTemplate('<div v-html="svg"></div>')
+                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.qrcode_field_label'))
+                    ->setInlineTemplate('<div style="text-align: center; margin: 1em 0;" v-html="svg"></div>')
             )
             ->addField(
                 SharpFormTextField::make('code')
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.code.label'))
+                    ->setMaxLength(6)
+                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.code_field_label'))
             );
     }
 

@@ -11,5 +11,16 @@ return [
             'mail_subject' => 'Votre code de connexion',
             'mail_body' => 'Voici le code à saisir pour vous connecter :',
         ],
+        'totp_commands' => [
+            'activate' => [
+                'command_label' => 'Configurer l’authentification à deux facteurs',
+                'qrcode_field_label' => 'Scannez ce QR code avec votre application d’authentification',
+                'code_field_label' => 'Saisissez le code à 6 chiffres indiqué dans votre application',
+                'password_field_label' => 'Indiquez votre mot de passe',
+            ],
+            'deactivate' => [
+                'command_label' => 'Désactiver l’authentification à deux facteurs',
+            ],
+        ],
     ],
 ];

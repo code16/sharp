@@ -16,7 +16,7 @@ class Deactivate2faViaTotpCommand extends EntityCommand
 
     public function label(): ?string
     {
-        return trans('sharp::auth.2fa.totp_commands.deactivate.label');
+        return trans('sharp::auth.2fa.totp_commands.deactivate.command_label');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -25,7 +25,7 @@ class Deactivate2faViaTotpCommand extends EntityCommand
             ->addField(
                 SharpFormTextField::make('password')
                     ->setInputTypePassword()
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password.label'))
+                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password_field_label'))
             );
     }
 
