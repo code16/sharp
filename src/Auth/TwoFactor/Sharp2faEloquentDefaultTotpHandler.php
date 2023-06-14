@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
 {
+    public function isEnabledFor($user): bool
+    {
+        return $user->two_factor_secret !== null
+            && $user->two_factor_confirmed_at !== null;
+    }
+
     protected function saveUserSecretAndRecoveryCodes($user, string $encryptedSecret, string $encryptedRecoveryCodes): void
     {
         $user
@@ -21,11 +27,22 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
         return $this->findUser($userId)?->two_factor_secret;
     }
 
-    public function confirmUser($user): void
+    public function confirmUser(): void
     {
-        $user
+        $this->user
             ->forceFill([
                 'two_factor_confirmed_at' => now(),
+            ])
+            ->save();
+    }
+
+    public function deactivate2faForUser(): void
+    {
+        $this->user
+            ->forceFill([
+                'two_factor_secret' => null,
+                'two_factor_recovery_codes' => null,
+                'two_factor_confirmed_at' => null,
             ])
             ->save();
     }
@@ -37,12 +54,12 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
         return app($userClass)->find($userId);
     }
 
-    public function getQRCodeUrl($user): string
+    public function getQRCodeUrl(): string
     {
         return $this->engine->getQRCodeUrl(
             config('app.name'), 
-            $user->email, 
-            decrypt($user->two_factor_secret)
+            $this->user->email, 
+            decrypt($this->user->two_factor_secret)
         );
     }
 }

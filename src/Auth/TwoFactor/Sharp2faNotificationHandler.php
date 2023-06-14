@@ -9,27 +9,36 @@ use Illuminate\Support\Facades\Session;
 
 class Sharp2faNotificationHandler implements Sharp2faHandler
 {
-    public function generateCodeFor($user, bool $remember = false): void
+    protected $user = null;
+    
+    public function generateCode(bool $remember = false): void
     {
-        $code = $this->generateCode();
+        $code = $this->generateRandomCode();
         
         Session::put(
             $this->getSessionKey(),
             [
-                'user_id' => $user,
+                'user_id' => $this->user->id,
                 'code' => Hash::make($code),
                 'remember' => $remember,
                 'expires_at' => now()->addMinutes(15)->format('Y-m-d H:i:s'),
             ]
         );
 
-        $user->notify($this->getNotification($code));
+        $this->user->notify($this->getNotification($code));
     }
 
     public function isExpectingLogin(): bool
     {
         return Session::has($this->getSessionKey())
             && (new Carbon(Session::get($this->getSessionKey())['expires_at']))?->isFuture();
+    }
+
+    public function setUser($user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function isEnabledFor($user): bool
@@ -63,7 +72,7 @@ class Sharp2faNotificationHandler implements Sharp2faHandler
         return new Sharp2faDefaultNotification($code);
     }
 
-    protected function generateCode(): int
+    protected function generateRandomCode(): int
     {
         return random_int(100000, 999999);
     }

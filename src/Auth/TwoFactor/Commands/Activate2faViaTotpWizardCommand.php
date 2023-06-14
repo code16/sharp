@@ -8,6 +8,7 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\Fill;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
@@ -38,12 +39,47 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
     protected function executeFirstStep(mixed $instanceId, array $data): array
     {
         if($data['activate'] ?? false) {
-            $this->handler->initialize(auth()->user());
+            $this->handler->setUser(auth()->user())->initialize();
             
-            return $this->toStep('confirm');
+            return $this->toStep('password');
         }
             
         return $this->reload();
+    }
+
+    protected function buildFormFieldsForStepPassword(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make('password')
+                    ->setInputTypePassword()
+                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password.label'))
+            );
+    }
+
+    protected function executeStepPassword(mixed $instanceId, array $data): array
+    {
+        $this->validate($data, [
+            'password' => [
+                'required',
+                'string',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    $loginAttr = config('sharp.auth.login_attribute', 'email');
+                    $passwordAttr = config('sharp.auth.password_attribute', 'password');
+
+                    $credentials = [
+                        $loginAttr => auth()->user()->$loginAttr,
+                        $passwordAttr => $value,
+                    ];
+
+                    if (!auth()->validate($credentials)) {
+                        $fail(trans('sharp::auth.invalid_credentials'));
+                    }
+                },
+            ],
+        ]);
+
+        return $this->toStep('confirm');
     }
     
     protected function initialDataForStepConfirm(mixed $instanceId): array
@@ -55,7 +91,7 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
                     new SvgImageBackEnd
                 )
             ))
-            ->writeString($this->handler->getQRCodeUrl(auth()->user()));
+            ->writeString($this->handler->setUser(auth()->user())->getQRCodeUrl());
 
         return [
             'qr' => [
@@ -80,15 +116,23 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
     protected function executeStepConfirm(mixed $instanceId, array $data): array
     {
         $this->validate($data, [
-            'code' => ['required', 'numeric']
+            'code' => [
+                'required', 
+                'numeric'
+            ],
         ]);
         
-        if($this->handler->checkCode($data['code'])) {
-            $this->handler->confirmUser(auth()->user());
+        if($this->handler->setUser(auth()->user())->checkCode($data['code'])) {
+            $this->handler->confirmUser();
 
             return $this->reload();
         }
 
         throw new SharpApplicativeException(trans('sharp::auth.2fa.invalid'));
+    }
+    
+    public function authorize(): bool
+    {
+        return ! $this->handler->isEnabledFor(auth()->user());
     }
 }

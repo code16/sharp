@@ -9,16 +9,18 @@ use PragmaRX\Google2FA\Google2FA;
 
 abstract class Sharp2faTotpHandler implements Sharp2faHandler
 {
+    protected $user = null;
+
     public function __construct(protected Google2FA $engine)
     {
     }
     
-    public function generateCodeFor($user, bool $remember = false): void
+    public function generateCode(bool $remember = false): void
     {
         Session::put(
             $this->getSessionKey(),
             [
-                'user_id' => $user->id,
+                'user_id' => $this->user->id,
                 'remember' => $remember,
             ]
         );
@@ -27,11 +29,6 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     public function isExpectingLogin(): bool
     {
         return Session::has($this->getSessionKey());
-    }
-
-    public function isEnabledFor($user): bool
-    {
-        return true;
     }
 
     public function checkCode(string $code): bool
@@ -44,7 +41,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
 
     public function userId(): mixed
     {
-        return Session::get($this->getSessionKey())['user_id'] ?? null;
+        return $this->user?->id ?? (Session::get($this->getSessionKey())['user_id'] ?? null);
     }
 
     public function remember(): bool
@@ -57,10 +54,10 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
         Session::forget($this->getSessionKey());
     }
 
-    public function initialize($user): void
+    public function initialize(): void
     {
         $this->saveUserSecretAndRecoveryCodes(
-            $user,
+            $this->user,
             encrypt($this->engine->generateSecretKey()),
             encrypt(
                 json_encode(Collection::times(8, fn () => Str::random(10) . '-' . Str::random(10))->all())
@@ -73,11 +70,20 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
         return 'sharp:2fa:code';
     }
 
-    abstract public function confirmUser($user): void;
+    public function setUser($user): self
+    {
+        $this->user = $user;
+        
+        return $this;
+    }
+
+    abstract public function confirmUser(): void;
+    
+    abstract public function deactivate2faForUser(): void;
 
     abstract protected function saveUserSecretAndRecoveryCodes($user, string $encryptedSecret, string $encryptedRecoveryCodes): void;
 
     abstract protected function getUserEncryptedSecret($userId): string;
     
-    abstract public function getQRCodeUrl($user): string;
+    abstract public function getQRCodeUrl(): string;
 }
