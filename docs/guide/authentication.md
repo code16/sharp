@@ -110,7 +110,7 @@ Sharp provides a two-factor authentication (2fa) system, out of the box. You can
 
 With this configuration, Sharp will display a second screen to the user, after a successful password based login, asking for a 6-digit code. This code will be provided to the user depending on the configured `handler`:
 - `notification`: a notification is sent to the user (email by default, but you can tweak this, see below)
-- `totp`: the user must use a 2fa authenticator app (like Google or Microsoft Authenticator — there are many options) to generate a code
+- `totp`: the user must use a 2fa authenticator app (like Google or Microsoft Authenticator) to generate a code
 - a class name: you can provide your own 2fa handler, see below
 
 ### Handling the 2fa code via a notification
@@ -144,7 +144,72 @@ class My2faNotificationHandler extends Sharp2faNotificationHandler
 
 ### Handling the 2fa code via a TOTP authenticator app
 
-TBD
+::: warning
+This implies a bit more work to implement, but this method is more secure than the notification handler. The out-of-the-box implementation implies that you leverage Eloquent.
+:::
+
+```php
+// in config/sharp.php
+
+'auth' => [
+    '2fa' => [
+        'enabled' => true,
+        'handler' => 'totp',  
+    ],
+]
+```
+
+The first step is to add columns in the users table to store the 2fa secret and the 2fa recovery codes. Here’s a migration example:
+
+```php
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('two_factor_secret')
+                ->after('password')
+                ->nullable();
+
+            $table->text('two_factor_recovery_codes')
+                ->after('two_factor_secret')
+                ->nullable();
+
+            $table->timestamp('two_factor_confirmed_at')
+                ->after('two_factor_recovery_codes')
+                ->nullable();
+        });
+    }
+};
+```
+
+Then, you will need to allow users to register the app in their 2fa authenticator. In order to do this, you should declare two built-in Entity Commands, that are meant to be attached to the User menu:
+
+```php
+class SharpMenu extends BaseSharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
+                $userMenu
+                    ->addEntityCommand(
+                        Code16\Sharp\Auth\TwoFactor\Commands\Activate2faViaTotpWizardCommand::class, 
+                        'fa fa-lock'
+                    )
+                    ->addEntityCommand(
+                        Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2faViaTotpCommand::class, 
+                        'fa fa-lock-open'
+                    );
+            });
+    }
+}
+```
+
+The first command is a wizard which will guide the user through the registration process; the second one is to deactivate the 2fa. Both require to enter a password.
+You can tweak these commands and provide your own implementation if needed.
+
+Finally, if you need more control, you can provide your own handler class, which must extend `Code16\Sharp\Auth\TwoFactor\Sharp2faTotpHandler`, and replace the `totp` handler in the configuration by its full class name.
 
 ### Enabling 2fa for some users only
 

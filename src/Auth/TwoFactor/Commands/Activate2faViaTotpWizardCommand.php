@@ -10,13 +10,13 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
-use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
+use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
+class Activate2faViaTotpWizardCommand extends EntityWizardCommand
 {
     public function __construct(protected Sharp2faHandler $handler)
     {
@@ -37,7 +37,7 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
             );
     }
 
-    protected function executeFirstStep(mixed $instanceId, array $data): array
+    protected function executeFirstStep(array $data): array
     {
         $this->validate($data, [
             'password' => [
@@ -64,7 +64,7 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
         return $this->toStep('confirm');
     }
     
-    protected function initialDataForStepConfirm(mixed $instanceId): array
+    protected function initialDataForStepConfirm(): array
     {
         $svg = (
             new Writer(
@@ -95,7 +95,7 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
             );
     }
 
-    protected function executeStepConfirm(mixed $instanceId, array $data): array
+    protected function executeStepConfirm(array $data): array
     {
         $this->validate($data, [
             'code' => [

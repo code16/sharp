@@ -4,11 +4,11 @@ namespace Code16\Sharp\Auth\TwoFactor\Commands;
 
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class Deactivate2faViaTotpCommand extends InstanceCommand
+class Deactivate2faViaTotpCommand extends EntityCommand
 {
     public function __construct(protected Sharp2faHandler $handler)
     {
@@ -29,7 +29,7 @@ class Deactivate2faViaTotpCommand extends InstanceCommand
             );
     }
 
-    public function execute(mixed $instanceId, array $data = []): array
+    public function execute(array $data = []): array
     {
         $this->validate($data, [
             'password' => [
