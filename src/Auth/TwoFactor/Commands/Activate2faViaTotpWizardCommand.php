@@ -12,7 +12,6 @@ use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -32,32 +31,13 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
     {
         $formFields
             ->addField(
-                SharpFormCheckField::make('activate', trans('sharp::auth.2fa.totp_commands.activate.check.label'))
-            );
-    }
-
-    protected function executeFirstStep(mixed $instanceId, array $data): array
-    {
-        if($data['activate'] ?? false) {
-            $this->handler->setUser(auth()->user())->initialize();
-            
-            return $this->toStep('password');
-        }
-            
-        return $this->reload();
-    }
-
-    protected function buildFormFieldsForStepPassword(FieldsContainer $formFields): void
-    {
-        $formFields
-            ->addField(
                 SharpFormTextField::make('password')
                     ->setInputTypePassword()
                     ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password.label'))
             );
     }
 
-    protected function executeStepPassword(mixed $instanceId, array $data): array
+    protected function executeFirstStep(mixed $instanceId, array $data): array
     {
         $this->validate($data, [
             'password' => [
@@ -78,6 +58,8 @@ class Activate2faViaTotpWizardCommand extends InstanceWizardCommand
                 },
             ],
         ]);
+        
+        $this->handler->setUser(auth()->user())->initialize();
 
         return $this->toStep('confirm');
     }
