@@ -103,18 +103,23 @@ Sharp provides a two-factor authentication (2fa) system, out of the box. You can
 'auth' => [
     '2fa' => [
         'enabled' => true,
-        'channel' => 'notification',  
+        'handler' => 'notification',  
     ],
 ]
 ```
 
-With this configuration, Sharp will display a second screen to the user, after a successful password-based login, asking for a 6-digit code. This code will be provided to the user depending on the configured `channel`:
+With this configuration, Sharp will display a second screen to the user, after a successful password based login, asking for a 6-digit code. This code will be provided to the user depending on the configured `handler`:
 - `notification`: a notification is sent to the user (email by default, but you can tweak this, see below)
 - `totp`: the user must use a 2fa authenticator app (like Google or Microsoft Authenticator — there are many options) to generate a code
+- a class name: you can provide your own 2fa handler, see below
 
 ### Handling the 2fa code via a notification
 
-With this option, Sharp will send a notification to the user, containing the 6-digit code. By default, this notification is sent by email, but you can override this behavior by providing your own notification class:
+::: warning
+To be able to receive notifications, your User model must use the `Illuminate\Notifications\Notifiable` trait.
+:::
+
+With this option, Sharp will send a notification to the user, containing the 6-digit code. By default, this notification is sent by email. You can override this behavior by providing your own handler class which must extend `Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler`:
 
 ```php
 // in config/sharp.php
@@ -122,19 +127,18 @@ With this option, Sharp will send a notification to the user, containing the 6-d
 'auth' => [
     '2fa' => [
         'enabled' => true,
-        'channel' => 'notification',
-        'notification_class' => \App\Notifications\Sharp2faNotification::class,  
+        'handler' => \App\Sharp\My2faNotificationHandler::class,  
     ],
 ]
 ```
 
-The notification must accept the code in the constructor, and display it in any way you want (email, SMS...):
-
 ```php
-class Sharp2faNotification extends Notification
+class My2faNotificationHandler extends Sharp2faNotificationHandler
 {
-    public function __construct(public string $code) {}
-    // ...
+    protected function getNotification(int $code): Notification
+    {
+        return new My2faDefaultNotification($code);
+    }
 }
 ```
 
@@ -142,6 +146,36 @@ class Sharp2faNotification extends Notification
 
 TBD
 
+### Enabling 2fa for some users only
+
+Providing your own handler implementation, you can override the `isEnabledFor` method to enable 2fa for some users only:
+
+```php
+class My2faNotificationHandler extends Sharp2faNotificationHandler // or Sharp2faTotpHandler
+{
+    public function isEnabledFor($user): bool
+    {
+        return $user->hasGroup('sharp');
+    }
+}
+```
+
+### Customize the 2fa form
+
+You can also change the default help text display above the 2fa form in the handler:
+
+```php
+class My2faNotificationHandler extends Sharp2faNotificationHandler // or Sharp2faTotpHandler
+{
+    public function formHelpText(): string
+    {
+        return sprintf(
+            'You code was sent via SMS to your phone number ending in %s',
+            substr(User::find($this->userId())->phone, -4)
+        );
+    }
+}
+```
 
 ## Using a custom authentication workflow
 

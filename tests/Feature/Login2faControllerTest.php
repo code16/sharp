@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Tests\Feature;
 
 use Code16\Sharp\Auth\TwoFactor\Sharp2faDefaultNotification;
-use Code16\Sharp\Auth\TwoFactor\Sharp2faServiceNotification;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
@@ -28,7 +28,7 @@ class Login2faControllerTest extends BaseApiTest
         $this->app['config']->set(
             'sharp.auth.2fa', [
                 'enabled' => true,
-                'channel' => 'notification',
+                'handler' => 'notification',
             ],
         );
     }
@@ -74,10 +74,9 @@ class Login2faControllerTest extends BaseApiTest
     {
         $this->withoutExceptionHandling();
         Notification::fake();
-
-        $this->app->bind(
-            Sharp2faServiceNotification::class,
-            fn () => new class extends Sharp2faServiceNotification
+        
+        $this->app['config']->set(
+            'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler
             {
                 protected function generateCode(): int
                 {

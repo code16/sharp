@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Requests;
 
-use Code16\Sharp\Auth\TwoFactor\Sharp2faService;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -45,14 +45,6 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
-
-        if (config('sharp.auth.2fa.enabled')) {
-            // User is not yet authenticated
-            app(Sharp2faService::class)
-                ->generateAndSendCodeFor($this->getGuard()->user(), $remember);
-
-            throw new SharpAuthenticationNeeds2faException();
-        }
     }
 
     private function attemptToLogin(bool $remember): bool
@@ -64,7 +56,17 @@ class LoginRequest extends FormRequest
         ];
 
         if (config('sharp.auth.2fa.enabled')) {
-            return $guard->once($credentials);
+            // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
+            if($guard->once($credentials)) {
+                $handler = app(Sharp2faHandler::class);
+                if($handler->isEnabledFor($guard->user())) {
+                    $handler->generateAndSendCodeFor($guard->user(), $remember);
+
+                    throw new SharpAuthenticationNeeds2faException();
+                }
+                
+                // 2fa is not enabled for this user, we can proceed with the login
+            }
         }
 
         return $guard->attempt($credentials, $remember);

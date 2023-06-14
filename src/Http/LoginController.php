@@ -36,7 +36,7 @@ class LoginController extends Controller
     {
         try {
             $request->authenticate();
-        } catch (SharpAuthenticationNeeds2faException $ex) {
+        } catch (SharpAuthenticationNeeds2faException) {
             // Credentials are OK, the user is not yet authenticated, redirect to 2FA page
             return redirect()->route('code16.sharp.login.2fa');
         }

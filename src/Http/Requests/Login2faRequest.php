@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Requests;
 
-use Code16\Sharp\Auth\TwoFactor\Sharp2faService;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +27,7 @@ class Login2faRequest extends FormRequest
         ];
     }
 
-    public function authenticate(Sharp2faService $sharp2faService): void
+    public function authenticate(Sharp2faHandler $sharp2faService): void
     {
         $this->ensureIsNotRateLimited();
 

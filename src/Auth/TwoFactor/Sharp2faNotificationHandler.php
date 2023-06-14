@@ -3,10 +3,11 @@
 namespace Code16\Sharp\Auth\TwoFactor;
 
 use Carbon\Carbon;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class Sharp2faServiceNotification implements Sharp2faService
+class Sharp2faNotificationHandler implements Sharp2faHandler
 {
     public function generateAndSendCodeFor($user, bool $remember = false): void
     {
@@ -21,14 +22,18 @@ class Sharp2faServiceNotification implements Sharp2faService
             ]
         );
 
-        $notificationClass = config('sharp.auth.2fa.notification_class', Sharp2faDefaultNotification::class);
-        $user->notify(new $notificationClass($code));
+        $user->notify($this->getNotification($code));
     }
 
     public function isExpectingLogin(): bool
     {
         return Session::has($this->getSessionKeyForCode())
             && (new Carbon(Session::get($this->getSessionKeyForCode())['expires_at']))?->isFuture();
+    }
+
+    public function isEnabledFor($user): bool
+    {
+        return true;
     }
 
     public function checkCode(string $code): bool
@@ -50,6 +55,11 @@ class Sharp2faServiceNotification implements Sharp2faService
     public function forgetCode(): void
     {
         Session::forget($this->getSessionKeyForCode());
+    }
+
+    protected function getNotification(int $code): Notification
+    {
+        return new Sharp2faDefaultNotification($code);
     }
 
     protected function generateCode(): int

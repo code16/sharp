@@ -3,8 +3,8 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
-use Code16\Sharp\Auth\TwoFactor\Sharp2faService;
-use Code16\Sharp\Auth\TwoFactor\Sharp2faServiceNotification;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -16,7 +16,6 @@ use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
-use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
@@ -90,11 +89,12 @@ class SharpServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            Sharp2faService::class,
-            fn () => match (config('sharp.auth.2fa.channel')) {
-                'notification' => app(Sharp2faServiceNotification::class),
-                'totp' => null,
-                default => throw new SharpInvalidConfigException('Invalid value for config [sharp.auth.2fa.channel]')
+            Sharp2faHandler::class,
+            fn () => match(config('sharp.auth.2fa.handler')) {
+                'notification' => app(Sharp2faNotificationHandler::class),
+                default => is_string(config('sharp.auth.2fa.handler')) 
+                    ? app(config('sharp.auth.2fa.handler'))
+                    : value(config('sharp.auth.2fa.handler')),
             }
         );
 
