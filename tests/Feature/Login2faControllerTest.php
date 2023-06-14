@@ -78,7 +78,7 @@ class Login2faControllerTest extends BaseApiTest
         $this->app['config']->set(
             'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler
             {
-                protected function generateCode(): int
+                protected function generateRandomCode(): int
                 {
                     return 123456;
                 }
