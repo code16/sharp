@@ -14,7 +14,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     public function __construct(protected Google2FA $engine)
     {
     }
-    
+
     public function generateCode(bool $remember = false): void
     {
         Session::put(
@@ -60,7 +60,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
             $this->user,
             encrypt($this->engine->generateSecretKey()),
             encrypt(
-                json_encode(Collection::times(8, fn () => Str::random(10) . '-' . Str::random(10))->all())
+                json_encode(Collection::times(8, fn () => Str::random(10).'-'.Str::random(10))->all())
             )
         );
     }
@@ -73,17 +73,17 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     public function setUser($user): self
     {
         $this->user = $user;
-        
+
         return $this;
     }
 
     abstract public function confirmUser(): void;
-    
+
     abstract public function deactivate2faForUser(): void;
 
     abstract protected function saveUserSecretAndRecoveryCodes($user, string $encryptedSecret, string $encryptedRecoveryCodes): void;
 
     abstract protected function getUserEncryptedSecret($userId): string;
-    
+
     abstract public function getQRCodeUrl(): string;
 }

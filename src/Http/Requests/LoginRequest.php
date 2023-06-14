@@ -57,14 +57,14 @@ class LoginRequest extends FormRequest
 
         if (config('sharp.auth.2fa.enabled')) {
             // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
-            if($guard->once($credentials)) {
+            if ($guard->once($credentials)) {
                 $handler = app(Sharp2faHandler::class);
-                if($handler->isEnabledFor($guard->user())) {
+                if ($handler->isEnabledFor($guard->user())) {
                     $handler->setUser($guard->user())->generateCode($remember);
 
                     throw new SharpAuthenticationNeeds2faException();
                 }
-                
+
                 // 2fa is not enabled for this user, we can proceed with the login
             }
         }

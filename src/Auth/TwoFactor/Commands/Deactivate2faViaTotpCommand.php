@@ -44,7 +44,7 @@ class Deactivate2faViaTotpCommand extends EntityCommand
                         $passwordAttr => $value,
                     ];
 
-                    if (!auth()->validate($credentials)) {
+                    if (! auth()->validate($credentials)) {
                         $fail(trans('sharp::auth.invalid_credentials'));
                     }
                 },

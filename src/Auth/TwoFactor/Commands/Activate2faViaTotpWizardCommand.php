@@ -52,18 +52,18 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
                         $passwordAttr => $value,
                     ];
 
-                    if (!auth()->validate($credentials)) {
+                    if (! auth()->validate($credentials)) {
                         $fail(trans('sharp::auth.invalid_credentials'));
                     }
                 },
             ],
         ]);
-        
+
         $this->handler->setUser(auth()->user())->initialize();
 
         return $this->toStep('confirm');
     }
-    
+
     protected function initialDataForStepConfirm(): array
     {
         $svg = (
@@ -77,7 +77,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
 
         return [
             'qr' => [
-                'svg' => trim(substr($svg, strpos($svg, "\n") + 1))
+                'svg' => trim(substr($svg, strpos($svg, "\n") + 1)),
             ],
         ];
     }
@@ -101,12 +101,12 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
     {
         $this->validate($data, [
             'code' => [
-                'required', 
-                'numeric'
+                'required',
+                'numeric',
             ],
         ]);
-        
-        if($this->handler->setUser(auth()->user())->checkCode($data['code'])) {
+
+        if ($this->handler->setUser(auth()->user())->checkCode($data['code'])) {
             $this->handler->confirmUser();
 
             return $this->reload();
@@ -114,7 +114,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
 
         throw new SharpApplicativeException(trans('sharp::auth.2fa.invalid'));
     }
-    
+
     public function authorize(): bool
     {
         return ! $this->handler->isEnabledFor(auth()->user());
