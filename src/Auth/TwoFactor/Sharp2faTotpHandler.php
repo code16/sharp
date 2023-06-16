@@ -86,4 +86,6 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     abstract protected function getUserEncryptedSecret($userId): string;
     
     abstract public function getQRCodeUrl(): string;
+    
+    abstract public function getRecoveryCodes(): array;
 }

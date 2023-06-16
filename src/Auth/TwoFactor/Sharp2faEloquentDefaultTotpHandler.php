@@ -62,4 +62,9 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
             decrypt($this->user->two_factor_secret)
         );
     }
+
+    public function getRecoveryCodes(): array
+    {
+        return json_decode(decrypt($this->user->two_factor_recovery_codes));
+    }
 }

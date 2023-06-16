@@ -17,6 +17,8 @@ return [
                 'qrcode_field_label' => 'Scan this QR code with your authentication application',
                 'code_field_label' => 'Enter the 6-digit code from your application',
                 'password_field_label' => 'Enter your password',
+                'recovery_codes_field_label' => 'Recovery codes',
+                'recovery_codes_field_help' => 'Keep these codes in a safe place. They will allow you to connect if you lose your phone.',
             ],
             'deactivate' => [
                 'command_label' => 'Disable two-factor authentication',

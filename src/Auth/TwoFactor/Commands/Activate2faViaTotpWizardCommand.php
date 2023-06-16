@@ -13,6 +13,7 @@ use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
+use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
@@ -109,14 +110,40 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
         if($this->handler->setUser(auth()->user())->checkCode($data['code'])) {
             $this->handler->confirmUser();
 
-            return $this->reload();
+            return $this->toStep('show_recovery_codes');
         }
 
         throw new SharpApplicativeException(trans('sharp::auth.2fa.invalid'));
     }
+
+    protected function initialDataForStepShowRecoveryCodes(): array
+    {
+        return [
+            'recovery_codes' => collect($this->handler->setUser(auth()->user())->getRecoveryCodes())
+                ->implode("\n"),
+        ];
+    }
+
+    protected function buildFormFieldsForStepShowRecoveryCodes(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextareaField::make('recovery_codes')
+                    ->setRowCount(8)
+                    ->setReadOnly()
+                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.recovery_codes_field_label'))
+                    ->setHelpMessage(trans('sharp::auth.2fa.totp_commands.activate.recovery_codes_field_help'))
+            );
+    }
+
+    protected function executeStepShowRecoveryCodes(array $data): array
+    {
+        return $this->reload();
+    }
     
     public function authorize(): bool
     {
-        return ! $this->handler->isEnabledFor(auth()->user());
+        return $this->isStep('show_recovery_codes') 
+            || !$this->handler->isEnabledFor(auth()->user());
     }
 }

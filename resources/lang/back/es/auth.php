@@ -17,6 +17,8 @@ return [
                 'qrcode_field_label' => 'Escanea este código QR con tu aplicación de autenticación',
                 'code_field_label' => 'Introduce el código de 6 dígitos de tu aplicación',
                 'password_field_label' => 'Introduce tu contraseña',
+                'recovery_codes_field_label' => 'Códigos de recuperación',
+                'recovery_codes_field_help' => 'Guarda estos códigos en un lugar seguro. Te permitirán conectarte si pierdes tu teléfono.',
             ],
             'deactivate' => [
                 'command_label' => 'Desactivar la autenticación de dos factores',

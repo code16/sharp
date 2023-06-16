@@ -52,6 +52,9 @@ class Deactivate2faViaTotpCommand extends EntityCommand
         ]);
 
         $this->handler->setUser(auth()->user())->deactivate2faForUser();
+        
+        $this->notify('Your 2fa protection has been deactivated.')
+            ->setLevelInfo();
 
         return $this->reload();
     }

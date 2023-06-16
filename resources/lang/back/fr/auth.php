@@ -17,6 +17,8 @@ return [
                 'qrcode_field_label' => 'Scannez ce QR code avec votre application d’authentification',
                 'code_field_label' => 'Saisissez le code à 6 chiffres indiqué dans votre application',
                 'password_field_label' => 'Indiquez votre mot de passe',
+                'recovery_codes_field_label' => 'Codes de récupération',
+                'recovery_codes_field_help' => 'Conservez ces codes dans un endroit sûr. Ils vous permettront de vous connecter si vous perdez votre téléphone.',
             ],
             'deactivate' => [
                 'command_label' => 'Désactiver l’authentification à deux facteurs',
