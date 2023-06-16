@@ -73,23 +73,23 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
             ->first(function ($userCode) use ($code) {
                 return hash_equals($userCode, $code);
             });
-        
-        if($userCode) {
+
+        if ($userCode) {
             $this->user
                 ->forceFill([
                     'two_factor_recovery_codes' => encrypt(
                         str_replace(
-                            $userCode, 
-                            '', 
+                            $userCode,
+                            '',
                             decrypt($this->user->two_factor_recovery_codes)
                         )
                     ),
                 ])
                 ->save();
-            
+
             return true;
         }
-        
+
         return false;
     }
 }

@@ -91,8 +91,8 @@ class SharpServiceProvider extends ServiceProvider
             SharpMenuManager::class,
             SharpMenuManager::class
         );
-        
-        if(class_exists(Google2FA::class)) {
+
+        if (class_exists(Google2FA::class)) {
             $this->app->bind(
                 Sharp2faTotpEngine::class,
                 GoogleTotpEngine::class,

@@ -143,7 +143,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
 
     public function authorize(): bool
     {
-        return $this->isStep('show_recovery_codes') 
-            || !$this->handler->isEnabledFor(auth()->user());
+        return $this->isStep('show_recovery_codes')
+            || ! $this->handler->isEnabledFor(auth()->user());
     }
 }

@@ -37,11 +37,11 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
             $code,
             decrypt($this->getUserEncryptedSecret($this->userId())),
         );
-        
-        if (!$isCodeValid) {
+
+        if (! $isCodeValid) {
             return $this->checkUserRecoveryCode($this->userId(), $code);
         }
-        
+
         return true;
     }
 
@@ -97,7 +97,7 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     abstract protected function getUserEncryptedSecret($userId): string;
 
     abstract public function getQRCodeUrl(): string;
-    
+
     abstract public function getRecoveryCodes(): array;
 
     abstract protected function checkUserRecoveryCode(mixed $userId, string $code): bool;
