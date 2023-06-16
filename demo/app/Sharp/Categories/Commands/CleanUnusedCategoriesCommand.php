@@ -26,6 +26,9 @@ class CleanUnusedCategoriesCommand extends EntityCommand
         if ($deletedCount === 0) {
             throw new SharpApplicativeException('No unused category found!');
         }
+        
+        $this->notify($deletedCount . ' categories were deleted!')
+            ->setLevelInfo();
 
         return $this->reload();
     }
