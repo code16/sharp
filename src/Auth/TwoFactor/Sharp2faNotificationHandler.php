@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Session;
 class Sharp2faNotificationHandler implements Sharp2faHandler
 {
     protected $user = null;
-    
+
     public function generateCode(bool $remember = false): void
     {
         $code = $this->generateRandomCode();
-        
+
         Session::put(
             $this->getSessionKey(),
             [

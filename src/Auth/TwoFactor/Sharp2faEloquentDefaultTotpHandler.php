@@ -17,7 +17,7 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
         $user
             ->forceFill([
                 'two_factor_secret' => $encryptedSecret,
-                'two_factor_recovery_codes' => $encryptedRecoveryCodes
+                'two_factor_recovery_codes' => $encryptedRecoveryCodes,
             ])
             ->save();
     }
@@ -50,15 +50,15 @@ class Sharp2faEloquentDefaultTotpHandler extends Sharp2faTotpHandler
     protected function findUser($userId): Model
     {
         $userClass = class_exists("App\Models\User") ? "App\Models\User" : "App\User";
-        
+
         return app($userClass)->find($userId);
     }
 
     public function getQRCodeUrl(): string
     {
         return $this->engine->getQRCodeUrl(
-            config('app.name'), 
-            $this->user->email, 
+            config('app.name'),
+            $this->user->email,
             decrypt($this->user->two_factor_secret)
         );
     }

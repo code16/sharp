@@ -45,7 +45,7 @@ class ProfileSingleShow extends SharpSingleShow
     {
         $this->configurePageTitleAttribute('name');
     }
-    
+
     public function findSingle(): array
     {
         return $this
