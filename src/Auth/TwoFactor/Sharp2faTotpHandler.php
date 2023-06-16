@@ -2,16 +2,16 @@
 
 namespace Code16\Sharp\Auth\TwoFactor;
 
+use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use PragmaRX\Google2FA\Google2FA;
 
 abstract class Sharp2faTotpHandler implements Sharp2faHandler
 {
     protected $user = null;
 
-    public function __construct(protected Google2FA $engine)
+    public function __construct(protected Sharp2faTotpEngine $engine)
     {
     }
 
@@ -33,10 +33,16 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
 
     public function checkCode(string $code): bool
     {
-        return $this->engine->verify(
+        $isCodeValid = $this->engine->verify(
             $code,
             decrypt($this->getUserEncryptedSecret($this->userId())),
         );
+        
+        if (!$isCodeValid) {
+            return $this->checkUserRecoveryCode($this->userId(), $code);
+        }
+        
+        return true;
     }
 
     public function userId(): mixed
@@ -77,7 +83,12 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
         return $this;
     }
 
-    abstract public function confirmUser(): void;
+    public function formHelpText(): string
+    {
+        return trans('sharp::auth.2fa.totp.form_help_text');
+    }
+
+    abstract public function activate2faForUser(): void;
 
     abstract public function deactivate2faForUser(): void;
 
@@ -88,4 +99,6 @@ abstract class Sharp2faTotpHandler implements Sharp2faHandler
     abstract public function getQRCodeUrl(): string;
     
     abstract public function getRecoveryCodes(): array;
+
+    abstract protected function checkUserRecoveryCode(mixed $userId, string $code): bool;
 }

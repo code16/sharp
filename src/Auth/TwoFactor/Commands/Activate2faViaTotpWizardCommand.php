@@ -25,7 +25,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
 
     public function label(): ?string
     {
-        return trans('sharp::auth.2fa.totp_commands.activate.command_label');
+        return trans('sharp::auth.2fa.totp.commands.activate.command_label');
     }
 
     protected function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
@@ -34,7 +34,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
             ->addField(
                 SharpFormTextField::make('password')
                     ->setInputTypePassword()
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.password_field_label'))
+                    ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.password_field_label'))
             );
     }
 
@@ -88,13 +88,13 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
         $formFields
             ->addField(
                 SharpFormHtmlField::make('qr')
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.qrcode_field_label'))
+                    ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.qrcode_field_label'))
                     ->setInlineTemplate('<div style="text-align: center; margin: 1em 0;" v-html="svg"></div>')
             )
             ->addField(
                 SharpFormTextField::make('code')
                     ->setMaxLength(6)
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.code_field_label'))
+                    ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.code_field_label'))
             );
     }
 
@@ -108,7 +108,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
         ]);
 
         if ($this->handler->setUser(auth()->user())->checkCode($data['code'])) {
-            $this->handler->confirmUser();
+            $this->handler->activate2faForUser();
 
             return $this->toStep('show_recovery_codes');
         }
@@ -131,8 +131,8 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
                 SharpFormTextareaField::make('recovery_codes')
                     ->setRowCount(8)
                     ->setReadOnly()
-                    ->setLabel(trans('sharp::auth.2fa.totp_commands.activate.recovery_codes_field_label'))
-                    ->setHelpMessage(trans('sharp::auth.2fa.totp_commands.activate.recovery_codes_field_help'))
+                    ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.recovery_codes_field_label'))
+                    ->setHelpMessage(trans('sharp::auth.2fa.totp.commands.activate.recovery_codes_field_help'))
             );
     }
 

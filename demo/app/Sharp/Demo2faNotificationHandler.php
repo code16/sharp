@@ -11,7 +11,7 @@ class Demo2faNotificationHandler extends Sharp2faNotificationHandler
         return $user->email === 'editor@example.org';
     }
 
-    protected function generateCode(): int
+    protected function generateRandomCode(): int
     {
         return 123456;
     }

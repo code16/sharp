@@ -3,6 +3,8 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
@@ -33,6 +35,7 @@ use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
+use PragmaRX\Google2FA\Google2FA;
 
 class SharpServiceProvider extends ServiceProvider
 {
@@ -88,6 +91,13 @@ class SharpServiceProvider extends ServiceProvider
             SharpMenuManager::class,
             SharpMenuManager::class
         );
+        
+        if(class_exists(Google2FA::class)) {
+            $this->app->bind(
+                Sharp2faTotpEngine::class,
+                GoogleTotpEngine::class,
+            );
+        }
 
         $this->app->bind(
             Sharp2faHandler::class,

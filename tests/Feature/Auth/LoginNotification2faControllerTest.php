@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Feature;
+namespace Code16\Sharp\Tests\Feature\Auth;
 
 use Code16\Sharp\Auth\TwoFactor\Sharp2faDefaultNotification;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Notification;
 
-class Login2faControllerTest extends BaseApiTest
+class LoginNotification2faControllerTest extends BaseApiTest
 {
     protected function setUp(): void
     {

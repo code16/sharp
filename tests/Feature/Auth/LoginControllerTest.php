@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Feature;
+namespace Code16\Sharp\Tests\Feature\Auth;
 
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
