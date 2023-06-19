@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Profile;
 
+use App\Sharp\Profile\Commands\UpdateProfilePasswordCommand;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
@@ -44,6 +45,13 @@ class ProfileSingleShow extends SharpSingleShow
     public function buildShowConfig(): void
     {
         $this->configurePageTitleAttribute('name');
+    }
+    
+    public function getInstanceCommands(): ?array
+    {
+        return [
+            UpdateProfilePasswordCommand::class,
+        ];
     }
 
     public function findSingle(): array
