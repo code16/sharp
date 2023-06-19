@@ -38,7 +38,9 @@ return [
         ],
         '2fa' => [
             'enabled' => true,
-            'handler' => 'totp', //\App\Sharp\Demo2faNotificationHandler::class
+            'handler' => env('DEMO_2FA_TOTP_ENABLED', false)
+                ? 'totp'
+                : \App\Sharp\Demo2faNotificationHandler::class,
         ],
         'display_attribute' => 'name',
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,

@@ -10,18 +10,15 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
-use Code16\Sharp\EntityList\Commands\Wizards\EntityWizardCommand;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class Activate2faViaTotpWizardCommand extends EntityWizardCommand
+trait Activate2faViaTotpWizardCommandTrait
 {
-    public function __construct(protected Sharp2faHandler $handler)
-    {
-    }
+    protected ?Sharp2faHandler $handler = null;
 
     public function label(): ?string
     {
@@ -60,7 +57,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
             ],
         ]);
 
-        $this->handler->setUser(auth()->user())->initialize();
+        $this->get2faHandler()->setUser(auth()->user())->initialize();
 
         return $this->toStep('confirm');
     }
@@ -74,7 +71,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
                     new SvgImageBackEnd
                 )
             ))
-            ->writeString($this->handler->setUser(auth()->user())->getQRCodeUrl());
+            ->writeString($this->get2faHandler()->setUser(auth()->user())->getQRCodeUrl());
 
         return [
             'qr' => [
@@ -107,8 +104,8 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
             ],
         ]);
 
-        if ($this->handler->setUser(auth()->user())->checkCode($data['code'])) {
-            $this->handler->activate2faForUser();
+        if ($this->get2faHandler()->setUser(auth()->user())->checkCode($data['code'])) {
+            $this->get2faHandler()->activate2faForUser();
 
             return $this->toStep('show_recovery_codes');
         }
@@ -119,7 +116,7 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
     protected function initialDataForStepShowRecoveryCodes(): array
     {
         return [
-            'recovery_codes' => collect($this->handler->setUser(auth()->user())->getRecoveryCodes())
+            'recovery_codes' => collect($this->get2faHandler()->setUser(auth()->user())->getRecoveryCodes())
                 ->implode("\n"),
         ];
     }
@@ -144,6 +141,15 @@ class Activate2faViaTotpWizardCommand extends EntityWizardCommand
     public function authorize(): bool
     {
         return $this->isStep('show_recovery_codes')
-            || ! $this->handler->isEnabledFor(auth()->user());
+            || ! $this->get2faHandler()->isEnabledFor(auth()->user());
+    }
+
+    private function get2faHandler(): Sharp2faHandler
+    {
+        if($this->handler === null) {
+            $this->handler = app(Sharp2faHandler::class);
+        }
+        
+        return $this->handler;
     }
 }

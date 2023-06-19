@@ -12,7 +12,7 @@ class GoogleTotpEngine implements Sharp2faTotpEngine
 
     public function verify(string $code, string $secret): bool
     {
-        return $this->google2fa->verify($secret, $code);
+        return $this->google2fa->verify($code, $secret);
     }
 
     public function generateSecretKey(): string

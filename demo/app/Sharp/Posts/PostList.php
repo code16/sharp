@@ -12,8 +12,6 @@ use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\CategoryFilter;
 use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
-use Code16\Sharp\Auth\TwoFactor\Commands\Activate2faViaTotpWizardCommand;
-use Code16\Sharp\Auth\TwoFactor\Commands\Deactivate2faViaTotpCommand;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -93,8 +91,6 @@ class PostList extends SharpEntityList
     {
         return [
             // TMP
-            Activate2faViaTotpWizardCommand::class,
-            Deactivate2faViaTotpCommand::class,
             ComposeEmailWithPostsWizardCommand::class,
             BulkPublishPostsCommand::class,
         ];

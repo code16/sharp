@@ -4,15 +4,12 @@ namespace Code16\Sharp\Auth\TwoFactor\Commands;
 
 use Closure;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
-use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class Deactivate2faViaTotpCommand extends EntityCommand
+trait Deactivate2faViaTotpCommon
 {
-    public function __construct(protected Sharp2faHandler $handler)
-    {
-    }
+    protected ?Sharp2faHandler $handler = null;
 
     public function label(): ?string
     {
@@ -28,8 +25,8 @@ class Deactivate2faViaTotpCommand extends EntityCommand
                     ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.password_field_label'))
             );
     }
-
-    public function execute(array $data = []): array
+    
+    protected function executeSingleOrEntity(array $data = []): array
     {
         $this->validate($data, [
             'password' => [
@@ -51,7 +48,7 @@ class Deactivate2faViaTotpCommand extends EntityCommand
             ],
         ]);
 
-        $this->handler->setUser(auth()->user())->deactivate2faForUser();
+        $this->get2faHandler()->setUser(auth()->user())->deactivate2faForUser();
 
         $this->notify('Your 2fa protection has been deactivated.')
             ->setLevelInfo();
@@ -59,8 +56,18 @@ class Deactivate2faViaTotpCommand extends EntityCommand
         return $this->reload();
     }
 
+
     public function authorize(): bool
     {
-        return $this->handler->isEnabledFor(auth()->user());
+        return $this->get2faHandler()->isEnabledFor(auth()->user());
+    }
+
+    private function get2faHandler(): Sharp2faHandler
+    {
+        if($this->handler === null) {
+            $this->handler = app(Sharp2faHandler::class);
+        }
+
+        return $this->handler;
     }
 }

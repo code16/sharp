@@ -2,6 +2,8 @@
 
 namespace App\Sharp\Profile;
 
+use App\Sharp\Profile\Commands\Activate2faCommand;
+use App\Sharp\Profile\Commands\Deactivate2faCommand;
 use App\Sharp\Profile\Commands\UpdateProfilePasswordCommand;
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -49,9 +51,12 @@ class ProfileSingleShow extends SharpSingleShow
     
     public function getInstanceCommands(): ?array
     {
-        return [
-            UpdateProfilePasswordCommand::class,
-        ];
+        return array_merge(
+            [UpdateProfilePasswordCommand::class],
+            config('sharp.auth.2fa.handler') === 'totp'
+                ? [Activate2faCommand::class, Deactivate2faCommand::class]
+                : []
+        );
     }
 
     public function findSingle(): array
