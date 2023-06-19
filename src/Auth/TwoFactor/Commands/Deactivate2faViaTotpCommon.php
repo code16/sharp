@@ -25,7 +25,7 @@ trait Deactivate2faViaTotpCommon
                     ->setLabel(trans('sharp::auth.2fa.totp.commands.activate.password_field_label'))
             );
     }
-    
+
     protected function executeSingleOrEntity(array $data = []): array
     {
         $this->validate($data, [
@@ -56,7 +56,6 @@ trait Deactivate2faViaTotpCommon
         return $this->reload();
     }
 
-
     public function authorize(): bool
     {
         return $this->get2faHandler()->isEnabledFor(auth()->user());
@@ -64,7 +63,7 @@ trait Deactivate2faViaTotpCommon
 
     private function get2faHandler(): Sharp2faHandler
     {
-        if($this->handler === null) {
+        if ($this->handler === null) {
             $this->handler = app(Sharp2faHandler::class);
         }
 

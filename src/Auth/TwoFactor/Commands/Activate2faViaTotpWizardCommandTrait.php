@@ -146,10 +146,10 @@ trait Activate2faViaTotpWizardCommandTrait
 
     private function get2faHandler(): Sharp2faHandler
     {
-        if($this->handler === null) {
+        if ($this->handler === null) {
             $this->handler = app(Sharp2faHandler::class);
         }
-        
+
         return $this->handler;
     }
 }

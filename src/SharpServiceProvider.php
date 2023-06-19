@@ -100,7 +100,7 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->app->bind(
             Sharp2faHandler::class,
-            fn () => match(config('sharp.auth.2fa.handler')) {
+            fn () => match (config('sharp.auth.2fa.handler')) {
                 'notification' => app(Sharp2faNotificationHandler::class),
                 'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
                 default => is_string(config('sharp.auth.2fa.handler'))

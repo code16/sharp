@@ -9,12 +9,11 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class UpdateProfilePasswordCommand extends SingleInstanceCommand
 {
-
     public function label(): ?string
     {
         return 'Update password...';
     }
-    
+
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -41,18 +40,18 @@ class UpdateProfilePasswordCommand extends SingleInstanceCommand
             'password' => 'required',
             'new_password' => ['required', 'confirmed', 'string', 'min:8'],
         ]);
-        
+
         $granted = auth()->validate([
             'email' => auth()->user()->email,
             'password' => $data['password'],
         ]);
-        
-        if(!$granted) {
+
+        if (! $granted) {
             throw new SharpApplicativeException('Your current password is invalid.');
         }
 
         $this->notify('Password updated!');
-        
+
         return $this->reload();
     }
 }
