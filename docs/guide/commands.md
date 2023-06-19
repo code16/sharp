@@ -174,6 +174,30 @@ function getListData()
 }
 ```
 
+### Display notifications
+
+In the same fashion as for a Form, you can display notifications after a Command has been executed. Here is an example:
+
+```php
+public function execute($instanceId, array $data= []): array
+{
+    // [...]
+
+    $this->notify('This is done.')
+         ->setDetail('As you asked.')
+         ->setLevelSuccess()
+         ->setAutoHide(false);
+
+    return $this->reload();
+}
+```
+
+See [form documentation](building-form.md#display-notifications) to learn more about the `notify()` method.
+
+::: warning
+Ensure to only use `notify()` in a Command that returns `reload()` or `refresh()`, otherwise the notification be delayed to the next browser reload.
+:::
+
 ## Declare the Command
 
 Once the Command class is written, we must add it to the Entity List or Show Page:

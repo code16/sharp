@@ -60,7 +60,7 @@ class LoginRequest extends FormRequest
             if ($guard->once($credentials)) {
                 $handler = app(Sharp2faHandler::class);
                 if ($handler->isEnabledFor($guard->user())) {
-                    $handler->generateAndSendCodeFor($guard->user(), $remember);
+                    $handler->setUser($guard->user())->generateCode($remember);
 
                     throw new SharpAuthenticationNeeds2faException();
                 }
