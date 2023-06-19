@@ -312,7 +312,7 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
             ]);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         parent::buildTheWorld($singleShow);
 

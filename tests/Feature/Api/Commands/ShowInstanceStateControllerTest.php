@@ -62,7 +62,7 @@ class ShowInstanceStateControllerTest extends BaseApiTest
             ->assertStatus(404);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         parent::buildTheWorld($singleShow);
 

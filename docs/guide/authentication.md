@@ -12,9 +12,9 @@ The Sharp login form asks for a login and a password field; to handle the authen
 // in config/sharp.php
 
 "auth" => [
-    "login_attribute" => "login",
-    "password_attribute" => "pwd",
-    "display_attribute" => "name",
+    'login_attribute' => 'login',
+    'password_attribute' => 'pwd',
+    'display_attribute' => 'name',
 ]
 ```
 
@@ -22,25 +22,42 @@ The third attribute, `display_attribute`, is used to display the user's name in 
 
 ## Login form
 
-Sharp provides a login controller and view. You can tweak this default form with a custom logo and an HTML message / section: see [related documentation here](style-visual-theme.md#login-and-menu-logos).
+Sharp provides a login controller and view, which requires a session based guard. If you are in this case, you can use this default implementation and benefit from some classic features.
 
-You can decide to display a "Remember me" checkbox to the user:
+You can display a “Remember me” checkbox to the user:
 
 ```php
 //in config/sharp.php
 
-"auth" => [
-    "suggest_remember_me" => true
+'auth' => [
+    'suggest_remember_me' => true
 ]
 ```
 
-And finally, you can override all of this providing your custom endpoint:
+You can leverage [rate limiting](https://laravel.com/docs/rate-limiting) to prevent brute force attacks:
+
+```php
+// in config/sharp.php
+
+'auth' => [
+    'rate_limiting' => [
+        'enabled' => true,
+        'max_attempts' => 5,
+    ],
+]
+```
+
+You can tweak this default form with a custom logo and an HTML message / section: see [related documentation here](style-visual-theme.md#login-and-menu-logos).
+
+## Custom login form
+
+You can entirely override the login workflow, view and controller, providing your custom endpoint:
 
 ```php
 //in config/sharp.php
 
-"auth" => [
-    "login_page_url" => "/login",
+'auth' => [
+    'login_page_url' => '/my_login',
 ]
 ```
 
@@ -51,12 +68,12 @@ It's very likely that you don't want to authorize all users to access Sharp. You
 ```php
 //in config/sharp.php
 
-"auth" => [
-    "guard" => "sharp",
+'auth' => [
+    'guard' => 'sharp',
 ]
 ```
 
-Of course, this implies that you defined a "sharp" guard in `config/auth.php`, as detailed in the Laravel documentation.
+Of course, this implies that you defined a “sharp” guard in `config/auth.php`, as detailed in the Laravel documentation.
 
 ## Authentication check
 
@@ -85,8 +102,8 @@ Finally, enable this feature by adding a config key:
 ```php
 //in config/sharp.php
 
-"auth" => [
-    "check_handler" => \App\Sharp\Auth\SharpCheckHandler::class,
+'auth' => [
+    'check_handler' => \App\Sharp\Auth\SharpCheckHandler::class,
 ]
 ```
 
