@@ -46,7 +46,7 @@ class ProfileSingleShow extends SharpSingleShow
     {
         $this->configurePageTitleAttribute('name');
     }
-    
+
     public function getInstanceCommands(): ?array
     {
         return [
