@@ -156,7 +156,7 @@ class CurrentSharpRequest
         $handler = app($handlerClass);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
-        
+
         return $handler->currentValue();
     }
 

@@ -31,8 +31,8 @@ class GlobalFilterController extends ApiController
             ->filter(fn (Filter $filter) => $filter->getKey() == $filterKey)
             ->first();
 
-        abort_if(!$handler instanceof GlobalRequiredFilter, 404);
-        
+        abort_if(! $handler instanceof GlobalRequiredFilter, 404);
+
         // Ensure value is in the filter value-set
         $value = request('value')
             ? collect($this->formatSelectFilterValues($handler))

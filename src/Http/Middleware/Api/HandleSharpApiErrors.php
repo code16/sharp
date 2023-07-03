@@ -75,7 +75,7 @@ class HandleSharpApiErrors
     }
 
     /**
-     * @param $response
+     * @param  $response
      * @return JsonResponse
      */
     protected function handleValidationException($response)

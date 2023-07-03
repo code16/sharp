@@ -76,7 +76,7 @@ class GlobalFiltersTest extends BaseApiTest
     /** @test */
     public function we_cant_set_an_invalid_global_filter_value_via_the_endpoint()
     {
-        $this->withoutExceptionHandling();  
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         config()->set('sharp.global_filters.test', GlobalFiltersTestGlobalRequiredFilter::class);
