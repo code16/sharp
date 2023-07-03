@@ -156,11 +156,8 @@ class CurrentSharpRequest
         $handler = app($handlerClass);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
-
-        return session()->get(
-            "_sharp_retained_global_filter_{$handler->getKey()}",
-            $handler->defaultValue(),
-        );
+        
+        return $handler->currentValue();
     }
 
     protected function buildBreadcrumb(): void
