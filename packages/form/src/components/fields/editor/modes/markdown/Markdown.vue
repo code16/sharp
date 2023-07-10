@@ -7,13 +7,13 @@
             :locale="locale"
             :locales="locales"
             :create-editor="createEditor"
-            v-slot="{ editor }"
+            v-slot="{ editor, locale }"
         >
             <SharpEditor
                 :editor="editor"
                 :toolbar-options="toolbarOptions(editor)"
                 v-bind="$props"
-                @update="handleUpdate"
+                @update="handleUpdate({ editor, locale, ...$event })"
             />
         </LocalizedEditors>
     </div>
@@ -54,9 +54,9 @@
             }
         },
         methods: {
-            handleUpdate(editor, { error } = {}) {
+            handleUpdate({ editor, locale, error }) {
                 const content = normalizeText(editor.storage.markdown.getMarkdown() ?? '');
-                this.$emit('input', this.localizedValue(content), { error });
+                this.$emit('input', this.localizedValue(content, locale), { error });
             },
             toolbarOptions(editor) {
                 const options = [];
