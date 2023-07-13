@@ -3,14 +3,14 @@
     Warning: title is also updated by the front
 --}}
 <title>
-    @if(request()->routeIs('code16.sharp.login') || request()->routeIs('code16.sharp.login.2fa'))
-        {{ trans('sharp::login.login_page_title') }}
+    @if(trim($slot))
+        {{ $slot }}
     @else
         @if($currentEntityLabel = currentSharpRequest()->getCurrentEntityMenuLabel())
-            {{ $currentEntityLabel }} |
+            {{ $currentEntityLabel }}
         @endif
-        {{ config("sharp.name", "Sharp") }}
     @endif
+    | {{ config("sharp.name", "Sharp") }}
     @if(config("sharp.display_sharp_version_in_title", true))
         (Sharp {{ sharp_version() }})
     @endif

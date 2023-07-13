@@ -1,6 +1,6 @@
-@extends("sharp::layout")
 
-@section("content")
+
+<x-sharp::layout>
     <x-sharp::page class="dashboard">
     </x-sharp::page>
-@endsection
+</x-sharp::layout>
