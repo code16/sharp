@@ -8,9 +8,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * This middleware appends authorizations for GET form request to the response.
+ * This middleware appends authorizations for GET show / form requests to the response.
  */
-class AppendFormAuthorizations
+class AppendInstanceAuthorizations
 {
     public function __construct(protected SharpAuthorizationManager $sharpAuthorizationManager)
     {

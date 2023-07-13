@@ -99,6 +99,7 @@ class PostShow extends SharpShow
             ->configureEntityState('state', PostStateHandler::class)
             ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
             ->configurePageTitleAttribute('title', localized: true)
+            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configurePageAlert(
                 '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>',
                 static::$pageAlertLevelInfo,
@@ -149,6 +150,11 @@ class PostShow extends SharpShow
                     : null;
             })
             ->transform(Post::with('attachments', 'attachments.document')->findOrFail($id));
+    }
+
+    public function delete(mixed $id): void
+    {
+        Post::findOrFail($id)->delete();
     }
 
     public function getDataLocalizations(): array

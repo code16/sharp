@@ -132,7 +132,7 @@
             },
             handleUpdated() {
                 const error = this.validate();
-                this.$emit('update', this.editor, { error });
+                this.$emit('update', { editor: this.editor, error });
             },
         },
         async mounted() {

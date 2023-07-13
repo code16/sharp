@@ -4,14 +4,7 @@ namespace Code16\Sharp\Utils\Transformers;
 
 class ArrayConverter
 {
-    /**
-     * Convert a class or Model into an array.
-     * If $model is not an array or model, simply return it.
-     *
-     * @param  array|object|mixed  $model
-     * @return array|mixed
-     */
-    public static function modelToArray($model)
+    public static function modelToArray(mixed $model): mixed
     {
         if (is_array($model)) {
             return $model;

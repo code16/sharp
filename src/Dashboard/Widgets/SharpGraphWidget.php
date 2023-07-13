@@ -10,9 +10,6 @@ abstract class SharpGraphWidget extends SharpWidget
     protected bool $showLegend = true;
     protected bool $minimal = false;
 
-    /**
-     * @param  string  $ratio  16:9, 1:1, ...
-     */
     public function setRatio(string $ratio): self
     {
         $this->ratio = explode(':', $ratio);
@@ -56,7 +53,10 @@ abstract class SharpGraphWidget extends SharpWidget
     protected function validationRules(): array
     {
         return [
-            'display' => 'required|in:bar,line,pie',
+            'display' => [
+                'required',
+                'in:bar,line,pie',
+            ],
         ];
     }
 }

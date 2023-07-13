@@ -24,61 +24,20 @@
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>
-        <sharp-nav-item
-            class="SharpLeftNav__item--unstyled position-static"
-            link-class="position-static py-0"
-            disabled
-        >
-            <div class="row align-items-center flex-nowrap gx-2">
-                <div class="col" style="min-width: 0">
-                    <div class="text-truncate" title="{{ $username }}">
-                        {{ $username }}
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <sharp-dropdown class="d-block me-n1" :text="true" small right>
-                        <template v-slot:text>
-                            <i class="fas fa-user me-1" style="font-size: 1em"></i>
-                        </template>
-                        @if($userMenu = $self->getUserMenu())
-                            @foreach($userMenu->getItems() as $item)
-                                <li>
-                                    <x-sharp::menu.dropdown-item
-                                        :item="$item"
-                                    />
-                                </li>
-                            @endforeach
-                            @if(count($userMenu->getItems()))
-                                <li><hr class="dropdown-divider"></li>
-                            @endif
-                        @endif
-                        <li>
-                            <form action="{{ route('code16.sharp.logout') }}" method="post">
-                                @csrf
-                                <button class="dropdown-item" type="submit">
-                                    <span class="row align-items-center flex-nowrap gx-2">
-                                        <span class="col-auto">
-                                            <i class="fas fa-fw fa-sign-out-alt" style="font-size: 1em"></i>
-                                        </span>
-                                        <span class="col">
-                                            {{ __('sharp::menu.logout_label') }}
-                                        </span>
-                                    </span>
-                                </button>
-                            </form>
-                        </li>
-                    </sharp-dropdown>
-                </div>
-            </div>
-            @if($hasGlobalFilters)
-                <div class="mt-2 pt-1 ms-n2 me-n1">
+        @if($hasGlobalFilters)
+            <sharp-nav-item
+                class="SharpLeftNav__item--unstyled position-static"
+                link-class="position-static py-0"
+                disabled
+            >
+                <div class="ms-n2 me-n1">
                     <sharp-global-filters
                         class="d-block"
                         style="min-height: 2rem"
                     />
                 </div>
-            @endif
-        </sharp-nav-item>
+            </sharp-nav-item>
+        @endif
 
         @foreach($self->getItems() as $item)
             @if($item->isSection())

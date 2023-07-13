@@ -38,11 +38,19 @@ class SharpGraphWidgetDataSet
 
     public function toArray(): array
     {
-        return [
-            'data' => array_values($this->values),
-            'labels' => array_keys($this->values),
-        ]
-            + ($this->label ? ['label' => $this->label] : [])
-            + ($this->color ? ['color' => $this->color] : []);
+        return collect()
+            ->merge([
+                'data' => array_values($this->values),
+                'labels' => array_keys($this->values),
+            ])
+            ->when(
+                $this->label,
+                fn (Collection $collection) => $collection->merge(['label' => $this->label])
+            )
+            ->when(
+                $this->color,
+                fn (Collection $collection) => $collection->merge(['color' => $this->color])
+            )
+            ->all();
     }
 }

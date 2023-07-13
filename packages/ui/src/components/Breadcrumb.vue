@@ -1,25 +1,23 @@
 <template>
     <div class="d-flex">
-        <div class="input-group input-group-sm w-auto">
+        <div class="d-flex align-items-center">
             <template v-if="icon">
-                <div class="input-group-text">
-                    <i class="fa fa-sm" :class="icon" style="opacity: .75; font-size: .75rem"></i>
+                <div class="me-2 pe-1">
+                    <i class="fa fa-sm d-block text-primary opacity-75 fs-8" :class="icon"></i>
                 </div>
             </template>
 
-            <div class="form-control">
-                <div class="breadcrumb p-0 m-0">
-                    <template v-for="(item, i) in items">
-                        <div class="breadcrumb-item" :class="{ 'active': isActive(i) }">
-                            <template v-if="isActive(i)">
-                                <span>{{ item.name }}</span>
-                            </template>
-                            <template v-else>
-                                <a :href="item.url">{{ item.name }}</a>
-                            </template>
-                        </div>
-                    </template>
-                </div>
+            <div class="breadcrumb align-items-center p-0 m-0">
+                <template v-for="(item, i) in items">
+                    <div class="breadcrumb-item" :class="{ 'active': isActive(i) }">
+                        <template v-if="isActive(i)">
+                            <span>{{ item.name }}</span>
+                        </template>
+                        <template v-else>
+                            <a :href="item.url">{{ item.name }}</a>
+                        </template>
+                    </div>
+                </template>
             </div>
         </div>
     </div>

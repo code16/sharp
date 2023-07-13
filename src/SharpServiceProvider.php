@@ -17,12 +17,13 @@ use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
-use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
@@ -32,7 +33,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '7.29.1';
+    const VERSION = '7.29.5';
 
     public function boot()
     {
@@ -80,6 +81,11 @@ class SharpServiceProvider extends ServiceProvider
             CurrentSharpRequest::class,
         );
 
+        $this->app->singleton(
+            SharpMenuManager::class,
+            SharpMenuManager::class
+        );
+
         $this->commands([
             CreateUploadsMigration::class,
             EntityListMakeCommand::class,
@@ -104,7 +110,7 @@ class SharpServiceProvider extends ServiceProvider
             ->middlewareGroup('sharp_common', $this->app['config']->get('sharp.middleware.common'))
             ->middlewareGroup('sharp_web', $this->app['config']->get('sharp.middleware.web'))
             ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
-            ->aliasMiddleware('sharp_api_append_form_authorizations', AppendFormAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_instance_authorizations', AppendInstanceAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
             ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)

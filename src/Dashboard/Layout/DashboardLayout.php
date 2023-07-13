@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Dashboard\Layout;
 
+use Closure;
 use Code16\Sharp\Form\Layout\HasLayout;
 
 class DashboardLayout implements HasLayout
@@ -17,7 +18,7 @@ class DashboardLayout implements HasLayout
         return $this;
     }
 
-    final public function addRow(\Closure $callback): self
+    final public function addRow(Closure $callback): self
     {
         $row = $this
             ->getLonelySection()

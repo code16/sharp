@@ -100,22 +100,26 @@ $bv-enable-tooltip-variants: false;
 
 
 .btn,
-.nav-pills .nav-link,
-.breadcrumb,
+.nav-tabs .nav-link,
 .form-label,
 .input-group-text
 {
   @extend .ui-font;
 }
 
-.nav-pills .nav-link, {
-  font-size: .875rem;
+.nav-tabs {
+  --bs-nav-link-font-size: 1.125rem;
 }
 
+//.nav-tabs .nav-link, {
+//  font-size: .75rem;
+//  padding: .25rem .5rem;
+//}
+
 .btn,
-.nav-pills .nav-link,
+.nav-tabs .nav-link,
 .input-group-text {
-  letter-spacing: .025em;
+  //letter-spacing: .025em;
 }
 
 .form-label {

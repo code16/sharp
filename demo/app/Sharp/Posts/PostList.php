@@ -3,6 +3,7 @@
 namespace App\Sharp\Posts;
 
 use App\Models\Post;
+use App\Sharp\Posts\Commands\BulkPublishPostsCommand;
 use App\Sharp\Posts\Commands\ComposeEmailWithPostsWizardCommand;
 use App\Sharp\Posts\Commands\EvaluateDraftPostWizardCommand;
 use App\Sharp\Posts\Commands\PreviewPostCommand;
@@ -57,6 +58,7 @@ class PostList extends SharpEntityList
             ->configurePaginated()
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
+            ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configureSearchable();
 
         if (! auth()->user()->isAdmin()) {
@@ -89,6 +91,7 @@ class PostList extends SharpEntityList
     {
         return [
             ComposeEmailWithPostsWizardCommand::class,
+            BulkPublishPostsCommand::class,
         ];
     }
 

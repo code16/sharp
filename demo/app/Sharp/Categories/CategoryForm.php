@@ -53,9 +53,4 @@ class CategoryForm extends SharpForm
 
         return $category->id;
     }
-
-    public function delete($id): void
-    {
-        Category::findOrFail($id)->delete();
-    }
 }

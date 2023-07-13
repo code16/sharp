@@ -2,18 +2,18 @@
 
 namespace Code16\Sharp\Dashboard\Layout;
 
+use Closure;
+
 class DashboardLayoutSection
 {
-    protected string $title;
     protected array $rows = [];
     protected ?string $sectionKey = null;
 
-    public function __construct(string $title)
+    public function __construct(protected string $title)
     {
-        $this->title = $title;
     }
 
-    final public function addRow(\Closure $callback): self
+    final public function addRow(Closure $callback): self
     {
         $row = new DashboardLayoutRow();
         $callback($row);

@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpForm" data-popover-boundary>
+    <div class="SharpForm">
         <slot
             name="action-bar"
             :props="actionBarProps"
@@ -22,14 +22,7 @@
                 </div>
             </template>
 
-            <TabbedLayout :layout="layout" ref="tabbedLayout">
-                <template v-if="localized" v-slot:nav-prepend>
-                    <LocaleSelect
-                        :locale="currentLocale"
-                        :locales="locales"
-                        @change="handleLocaleChanged"
-                    />
-                </template>
+            <TabbedLayout :layout="layout" ref="tabbedLayout" data-popover-boundary>
                 <template v-slot:default="{ tab }">
                     <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
                         <FieldsLayout
@@ -57,6 +50,9 @@
                     </Grid>
                 </template>
             </TabbedLayout>
+            <template v-if="!independant">
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
+            </template>
         </template>
     </div>
 </template>
@@ -64,13 +60,11 @@
 <script>
     import {
         getBackUrl,
-        lang,
         logError,
         showAlert,
-        showConfirm,
     } from "sharp";
 
-    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
     import { DynamicView, Localization } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout';
@@ -78,6 +72,7 @@
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
+    import BottomBar from "./BottomBar.vue";
 
     const isLocal = Symbol('isLocal');
 
@@ -88,6 +83,8 @@
         mixins: [Localization, localize('fields')],
 
         components: {
+            BottomBar,
+            Button,
             TabbedLayout,
             FieldsLayout,
             Grid,
@@ -211,21 +208,21 @@
                     showSubmitButton: this.isCreation
                         ? !!this.authorizations.create
                         : !!this.authorizations.update,
-                    showDeleteButton: !this.isCreation && !this.isSingle && !!this.authorizations.delete,
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
                     loading: this.loading,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
-                    hasDeleteConfirmation: !!this.config.deleteConfirmationText,
+                    locales: this.locales,
+                    currentLocale: this.currentLocale,
                 }
             },
             actionBarListeners() {
                 return {
                     'submit': this.handleSubmitClicked,
-                    'delete': this.handleDeleteClicked,
                     'cancel': this.handleCancelClicked,
+                    'locale-change': this.handleLocaleChanged,
                 }
             },
             mergedErrorIdentifier() {
@@ -395,18 +392,6 @@
             handleSubmitClicked() {
                 this.submit().catch(() => {
                 });
-            },
-            async handleDeleteClicked() {
-                if(this.config.deleteConfirmationText) {
-                    await showConfirm(this.config.deleteConfirmationText, {
-                        okTitle: lang('modals.confirm.delete.ok_button'),
-                        okVariant: 'danger',
-                    });
-                }
-                this.axiosInstance.delete(this.apiPath)
-                    .then(response => {
-                        this.redirectForResponse(response, { replace: true });
-                    });
             },
             handleCancelClicked() {
                 this.redirectToParentPage();

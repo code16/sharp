@@ -119,48 +119,48 @@ class FormControllerTest extends BaseApiTest
             ]);
     }
 
-    /** @test */
-    public function we_can_delete_an_entity()
-    {
-        $this->buildTheWorld();
-
-        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person/1');
-        $this->deleteJson('/sharp/api/form/person/1')
-            ->assertStatus(200)
-            ->assertJson([
-                'redirectUrl' => url('/sharp/s-list/person'),
-            ]);
-    }
-
-    /** @test */
-    public function when_deleting_an_entity_with_a_show_we_are_redirected_to_the_entity_list()
-    {
-        $this->buildTheWorld();
-
-        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/person/1');
-        $this->deleteJson('/sharp/api/form/person/1')
-            ->assertStatus(200)
-            ->assertJson([
-                'redirectUrl' => url('/sharp/s-list/person'),
-            ]);
-    }
-
-    /** @test */
-    public function when_deleting_an_entity_with_multiple_shows_we_are_redirected_to_the_parent_show()
-    {
-        $this->withoutExceptionHandling();
-        $this->buildTheWorld();
-
-        // Define a fake "car" entity to avoid 404
-        $this->app['config']->set('sharp.entities.car', CarTestEntity::class);
-
-        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-show/car/2/s-form/car/2');
-        $this->deleteJson('/sharp/api/form/car/2')
-            ->assertOk()
-            ->assertJson([
-                'redirectUrl' => url('/sharp/s-list/person/s-show/person/1'),
-            ]);
-    }
+//    /** @test */
+//    public function we_can_delete_an_entity()
+//    {
+//        $this->buildTheWorld();
+//
+//        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-form/person/1');
+//        $this->deleteJson('/sharp/api/form/person/1')
+//            ->assertStatus(200)
+//            ->assertJson([
+//                'redirectUrl' => url('/sharp/s-list/person'),
+//            ]);
+//    }
+//
+//    /** @test */
+//    public function when_deleting_an_entity_with_a_show_we_are_redirected_to_the_entity_list()
+//    {
+//        $this->buildTheWorld();
+//
+//        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/person/1');
+//        $this->deleteJson('/sharp/api/form/person/1')
+//            ->assertStatus(200)
+//            ->assertJson([
+//                'redirectUrl' => url('/sharp/s-list/person'),
+//            ]);
+//    }
+//
+//    /** @test */
+//    public function when_deleting_an_entity_with_multiple_shows_we_are_redirected_to_the_parent_show()
+//    {
+//        $this->withoutExceptionHandling();
+//        $this->buildTheWorld();
+//
+//        // Define a fake "car" entity to avoid 404
+//        $this->app['config']->set('sharp.entities.car', CarTestEntity::class);
+//
+//        $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-show/car/2/s-form/car/2');
+//        $this->deleteJson('/sharp/api/form/car/2')
+//            ->assertOk()
+//            ->assertJson([
+//                'redirectUrl' => url('/sharp/s-list/person/s-show/person/1'),
+//            ]);
+//    }
 
     /** @test */
     public function we_can_validate_an_entity_before_update()
@@ -282,18 +282,6 @@ class FormControllerTest extends BaseApiTest
 
         $this
             ->postJson('/sharp/api/form/person/1', [])
-            ->assertStatus(404);
-    }
-
-    /** @test */
-    public function we_cant_delete_an_entity_on_a_single_form_case()
-    {
-        $this->buildTheWorld(true);
-
-        $this->deleteJson('/sharp/api/form/person')
-            ->assertStatus(500);
-
-        $this->deleteJson('/sharp/api/form/person/1')
             ->assertStatus(404);
     }
 }
