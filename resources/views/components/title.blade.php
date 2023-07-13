@@ -4,13 +4,11 @@
 --}}
 <title>
     @if(trim($slot))
-        {{ $slot }}
-    @else
-        @if($currentEntityLabel = currentSharpRequest()->getCurrentEntityMenuLabel())
-            {{ $currentEntityLabel }}
-        @endif
+        {{ $slot }} |
+    @elseif($currentEntityLabel = currentSharpRequest()->getCurrentEntityMenuLabel())
+        {{ $currentEntityLabel }} |
     @endif
-    | {{ config("sharp.name", "Sharp") }}
+    {{ config("sharp.name", "Sharp") }}
     @if(config("sharp.display_sharp_version_in_title", true))
         (Sharp {{ sharp_version() }})
     @endif
