@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Api;
 
 use Code16\Sharp\Utils\Filters\Filter;
+use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 
 class GlobalFilterController extends ApiController
@@ -30,21 +31,16 @@ class GlobalFilterController extends ApiController
             ->filter(fn (Filter $filter) => $filter->getKey() == $filterKey)
             ->first();
 
-        abort_if(! $handler, 404);
+        abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
         // Ensure value is in the filter value-set
-        $value = collect($this->formatSelectFilterValues($handler))
-            ->where('id', request('value'))
-            ->first() ? request('value') : null;
+        $value = request('value')
+            ? collect($this->formatSelectFilterValues($handler))
+                ->where('id', request('value'))
+                ->first()
+            : null;
 
-        if ($value) {
-            session()->put(
-                "_sharp_retained_global_filter_{$handler->getKey()}",
-                $value,
-            );
-        } else {
-            session()->forget("_sharp_retained_global_filter_{$handler->getKey()}");
-        }
+        $handler->setCurrentValue($value ? $value['id'] : null);
 
         return response()->json(['ok' => true]);
     }
