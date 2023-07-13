@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\View\Components;
 
-use Code16\Sharp\View\Utils\Content\ComponentAttributeBagCollection;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
