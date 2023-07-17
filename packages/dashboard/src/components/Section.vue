@@ -37,7 +37,7 @@
             </template>
         </div>
 
-        <Grid :rows="section.rows" row-class="gx-3" v-slot="{ itemLayout }">
+        <Grid :rows="section.rows" row-class="g-3" v-slot="{ itemLayout }">
             <slot :widget-layout="itemLayout" />
         </Grid>
     </div>

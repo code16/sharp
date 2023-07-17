@@ -1,7 +1,9 @@
 <template>
     <div>
         <template v-if="title">
-            <h2 class="SharpWidget__title mb-2 mt-3 px-3">{{title}}</h2>
+            <h2 class="SharpWidget__title mb-2 mt-3 px-3">
+                {{ title }}
+            </h2>
         </template>
         <component
             :is="chartComp"
