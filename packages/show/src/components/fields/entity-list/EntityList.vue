@@ -8,6 +8,7 @@
             :show-search-field="showSearchField"
             :show-entity-state="showEntityState"
             :hidden-commands="hiddenCommands"
+            :filters="visibleFilters"
             :visible="!collapsed"
             :focused-item="focusedItem"
             inline
@@ -20,7 +21,6 @@
                     v-bind="props"
                     v-on="listeners"
                     :collapsed="collapsed"
-                    :filters="visibleFilters"
                     :has-active-query="hasActiveQuery"
                     :sticky="sticky"
                 >

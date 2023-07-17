@@ -2,14 +2,16 @@
 
 namespace Code16\Sharp\Http;
 
-use Code16\Sharp\Exceptions\SharpInvalidConfigException;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
+use Code16\Sharp\Http\Requests\LoginRequest;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    use ValidatesRequests;
-
     public function __construct()
     {
         $guardSuffix = config('sharp.auth.guard') ? ':'.config('sharp.auth.guard') : '';
@@ -21,7 +23,7 @@ class LoginController extends Controller
             ->only('destroy');
     }
 
-    public function create()
+    public function create(): RedirectResponse|View
     {
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
@@ -30,49 +32,32 @@ class LoginController extends Controller
         return view('sharp::login');
     }
 
-    public function store()
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $this->validate(request(), [
-            'login' => 'required',
-            'password' => 'required',
-        ]);
-
-        if ($this->attemptToLogin()) {
-            return redirect()->intended('/'.sharp_base_url_segment());
+        try {
+            $request->authenticate();
+        } catch (SharpAuthenticationNeeds2faException) {
+            // Credentials are OK, the user is not yet authenticated, redirect to 2FA page
+            return redirect()->route('code16.sharp.login.2fa');
         }
 
-        return back()->with('invalid', true)->withInput();
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('code16.sharp.home'));
     }
 
-    public function destroy()
+    public function destroy(Request $request): RedirectResponse
     {
-        $this->guard()->logout();
+        Auth::guard(config('sharp.auth.guard'))->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
 
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
         }
 
         return redirect()->to(route('code16.sharp.login'));
-    }
-
-    protected function attemptToLogin(): bool
-    {
-        if ($guard = $this->guard()) {
-            $loginAttr = config('sharp.auth.login_attribute', 'email');
-            $passwordAttr = config('sharp.auth.password_attribute', 'password');
-            $shouldRemember = config('sharp.auth.suggest_remember_me', false) && request()->boolean('remember');
-
-            return $guard->attempt(
-                [$loginAttr => request('login'), $passwordAttr => request('password')],
-                $shouldRemember,
-            );
-        }
-
-        throw new SharpInvalidConfigException('No auth guard was configured.');
-    }
-
-    protected function guard(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
-    {
-        return auth()->guard(config('sharp.auth.guard'));
     }
 }

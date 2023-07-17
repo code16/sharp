@@ -1,5 +1,5 @@
 <template>
-    <b-dropdown-item :active="active" :disabled="disabled" @click="handleClick">
+    <b-dropdown-item :active="active" :disabled="disabled" v-bind="$attrs" @click="handleClick">
         <slot />
     </b-dropdown-item>
 </template>

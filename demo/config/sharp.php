@@ -36,6 +36,16 @@ return [
         'login_attribute' => 'email',
         'password_attribute' => 'password',
         'suggest_remember_me' => false,
+        'rate_limiting' => [
+            'enabled' => true,
+            'max_attempts' => 5,
+        ],
+        '2fa' => [
+            'enabled' => true,
+            'handler' => env('DEMO_2FA_TOTP_ENABLED', false)
+                ? 'totp'
+                : \App\Sharp\Demo2faNotificationHandler::class,
+        ],
         'display_attribute' => 'name',
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],

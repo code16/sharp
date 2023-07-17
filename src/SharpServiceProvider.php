@@ -3,6 +3,11 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -17,12 +22,13 @@ use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
-use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
@@ -32,7 +38,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '7.29.1';
+    const VERSION = '7.29.5';
 
     public function boot()
     {
@@ -80,6 +86,29 @@ class SharpServiceProvider extends ServiceProvider
             CurrentSharpRequest::class,
         );
 
+        $this->app->singleton(
+            SharpMenuManager::class,
+            SharpMenuManager::class
+        );
+
+        if (class_exists("\PragmaRX\Google2FA\Google2FA")) {
+            $this->app->bind(
+                Sharp2faTotpEngine::class,
+                GoogleTotpEngine::class,
+            );
+        }
+
+        $this->app->bind(
+            Sharp2faHandler::class,
+            fn () => match (config('sharp.auth.2fa.handler')) {
+                'notification' => app(Sharp2faNotificationHandler::class),
+                'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
+                default => is_string(config('sharp.auth.2fa.handler'))
+                    ? app(config('sharp.auth.2fa.handler'))
+                    : value(config('sharp.auth.2fa.handler')),
+            }
+        );
+
         $this->commands([
             CreateUploadsMigration::class,
             EntityListMakeCommand::class,
@@ -104,7 +133,7 @@ class SharpServiceProvider extends ServiceProvider
             ->middlewareGroup('sharp_common', $this->app['config']->get('sharp.middleware.common'))
             ->middlewareGroup('sharp_web', $this->app['config']->get('sharp.middleware.web'))
             ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
-            ->aliasMiddleware('sharp_api_append_form_authorizations', AppendFormAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_instance_authorizations', AppendInstanceAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
             ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)

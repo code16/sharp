@@ -36,6 +36,6 @@ class MarkdownAttributeTransformer implements SharpAttributeTransformer
 
         $converter = new MarkdownConverter($environment);
 
-        return $converter->convertToHtml($instance->$attribute)->getContent();
+        return $converter->convert($instance->$attribute)->getContent();
     }
 }

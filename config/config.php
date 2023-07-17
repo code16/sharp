@@ -73,6 +73,7 @@ return [
     // Optional. Your file upload configuration.
     'uploads' => [
         // Tmp directory used for file upload.
+        'tmp_disk' => env('SHARP_UPLOADS_TMP_DISK', 'local'),
         'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
 
         // These two configs are used for thumbnail generation inside Sharp.
@@ -95,9 +96,22 @@ return [
 
     // Optional. Auth related configuration.
     'auth' => [
+        // Optional custom login page to replace the default Sharp implementation.
+        'login_page_url' => null,
+
         // Name of the login and password attributes of the User Model.
         'login_attribute' => 'email',
         'password_attribute' => 'password',
+
+        'rate_limiting' => [
+            'enabled' => true,
+            'max_attempts' => 5,
+        ],
+
+        '2fa' => [
+            'enabled' => false,
+            'handler' => 'notification', // "notification", "totp" or a class name in custom implementation case
+        ],
 
         // Handle a "remember me" flag (with a checkbox on the login form)
         'suggest_remember_me' => false,

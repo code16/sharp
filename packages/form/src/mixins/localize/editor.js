@@ -18,13 +18,13 @@ export const LocalizedEditor =  {
     },
 
     methods: {
-        localizedValue(text) {
+        localizedValue(text, locale) {
             return {
                 ...this.value,
                 text: this.isLocalized
                     ? localeObjectOrEmpty({
                         localeObject: this.value?.text,
-                        locale: this.locale,
+                        locale,
                         value: text
                     })
                     : text

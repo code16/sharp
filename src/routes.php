@@ -20,6 +20,7 @@ use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
 use Code16\Sharp\Http\ListController;
+use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\SingleShowController;
 use Code16\Sharp\Http\WebDispatchController;
@@ -47,6 +48,9 @@ Route::group([
     Route::post('/list/{entityKey}/reorder', [EntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
 
+    Route::delete('/list/{entityKey}/{instanceId}', [EntityListController::class, 'delete'])
+        ->name('code16.sharp.api.list.delete');
+
     Route::post('/list/{entityKey}/state/{instanceId}', [EntityListInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
@@ -64,7 +68,7 @@ Route::group([
 
     Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
         ->name('code16.sharp.api.show.show')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
@@ -80,22 +84,22 @@ Route::group([
     Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
 
+    Route::delete('/show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
+        ->name('code16.sharp.api.show.delete');
+
     Route::get('/form/{entityKey}', [FormController::class, 'create'])
         ->name('code16.sharp.api.form.create')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
 
     Route::post('/form/{entityKey}', [FormController::class, 'store'])
         ->name('code16.sharp.api.form.store');
 
     Route::get('/form/{entityKey}/{instanceId?}', [FormController::class, 'edit'])
         ->name('code16.sharp.api.form.edit')
-        ->middleware(['sharp_api_append_form_authorizations', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
 
     Route::post('/form/{entityKey}/{instanceId?}', [FormController::class, 'update'])
         ->name('code16.sharp.api.form.update');
-
-    Route::delete('/form/{entityKey}/{instanceId?}', [FormController::class, 'delete'])
-        ->name('code16.sharp.api.form.delete');
 
     Route::get('/filters', [GlobalFilterController::class, 'index'])
         ->name('code16.sharp.api.filter.index');
@@ -141,6 +145,12 @@ Route::group([
 
     Route::post('/login', [LoginController::class, 'store'])
         ->name('code16.sharp.login.post');
+
+    Route::get('/login/2fa', [Login2faController::class, 'create'])
+        ->name('code16.sharp.login.2fa');
+
+    Route::post('/login/2fa', [Login2faController::class, 'store'])
+        ->name('code16.sharp.login.2fa.post');
 
     Route::get('/', [HomeController::class, 'index'])
         ->name('code16.sharp.home');

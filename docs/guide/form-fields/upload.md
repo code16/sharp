@@ -11,13 +11,13 @@ First, in order to get the upload part working, you have to define a "tmp" path 
 ```php
 // in config/sharp.php
 
-"uploads" => [
-    "tmp_dir" => env("SHARP_UPLOADS_TMP_DIR", "tmp"),
+'uploads' => [
+    'tmp_disk' => env('SHARP_UPLOADS_TMP_DISK', 'local'),
+    'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
 ]
 ```
 
-This `tmp_dir` path is relative to the `local` filesystem defined in the Laravel configuration.
-
+This `tmp_dir` path is relative to the `uploads.tmp_disk` filesystem defined.
 
 ## Field Configuration
 
@@ -32,7 +32,7 @@ The argument `$transformKeepOriginal` overrides the following config which is `t
 ```php
 // config/sharp.php
 
-"uploads" => [
+'uploads' => [
     'transform_keep_original_image' => true,
 ]
 ```
@@ -56,7 +56,7 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 Set the destination base storage path. 
 
-You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the "Delayed creation" section, at the end of this page if you do.**
+You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the “Delayed creation” section, at the end of this page if you do.**
 
 For instance:
 `$field->setStorageBasePath('/users/{id}/avatar')`
@@ -67,7 +67,7 @@ Set the allowed file extensions. You can pass either an array or a comma-separat
 
 ### `setFileFilterImages()`
 
-Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
+Just a `setFileFilter(['.jpg','.jpeg','.gif','.png'])` shorthand.
 
 ### `setCompactThumbnail(bool $compactThumbnail = true)`
 
@@ -101,20 +101,20 @@ The front expects an array with these keys:
 
 ```php
 [
-    "name" => "", // The file name
-    "path" => "", // Relative file path
-    "disk" => "", // Storage disk name
-    "thumbnail" => "", // URL of the thumbnail (if image, obviously)
-    "size" => x, // Size in bytes
-    "filters" => [ // Transformations applied to the (image) file
-        "crop" => [
-            "x" => x,
-            "y" => y,
-            "width" => w,
-            "height" => h,
+    'name' => '', // The file name
+    'path' => '', // Relative file path
+    'disk' => '', // Storage disk name
+    'thumbnail' => '', // URL of the thumbnail (if image, obviously)
+    'size' => x, // Size in bytes
+    'filters' => [ // Transformations applied to the (image) file
+        'crop' => [
+            'x' => x,
+            'y' => y,
+            'width' => w,
+            'height' => h,
         ],
-        "rotate" => [
-            "angle" => a,
+        'rotate' => [
+            'angle' => a,
         ]
     ]
 ]
@@ -126,15 +126,15 @@ The formatter can't handle it automatically, it too project-specific. You'll hav
 function find($id): array
 {
     return $this
-        ->setCustomTransformer("picture",
+        ->setCustomTransformer('picture',
             function($value, $spaceship, $attribute) {
                 return [
-                    "name" => basename($spaceship->picture->name),
-                    "path" => $spaceship->picture->name,
-                    "disk" => "s3",
-                    "thumbnail" => [...],
-                    "size" => $spaceship->picture->size,
-                    "filters" => $spaceship->picture->filters
+                    'name' => basename($spaceship->picture->name),
+                    'path' => $spaceship->picture->name,
+                    'disk' => 's3',
+                    'thumbnail' => [...],
+                    'size' => $spaceship->picture->size,
+                    'filters' => $spaceship->picture->filters
                 ];
             }
         )
@@ -156,19 +156,19 @@ The formatter will store the file on the configured location, and return an arra
 
 ```php
 [
-    "file_name" => "", // Relative file path
-    "size" => x, // File size in bytes
-    "mime_type" => "", // File mime type
-    "disk" => "", // Storage disk name
-    "filters" => [ // Transformations applied to the (image) file
-        "crop" => [
-            "x" => x,
-            "y" => y,
-            "width" => w,
-            "height" => h,
+    'file_name' => '', // Relative file path
+    'size' => x, // File size in bytes
+    'mime_type' => '', // File mime type
+    'disk' => '', // Storage disk name
+    'filters' => [ // Transformations applied to the (image) file
+        'crop' => [
+            'x' => x,
+            'y' => y,
+            'width' => w,
+            'height' => h,
         ],
-        "rotate" => [
-            "angle" => a,
+        'rotate' => [
+            'angle' => a,
         ]
     ]
 ];
@@ -183,9 +183,9 @@ function update($id, array $data)
 {
     $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
 
-    $this->ignore("picture")->save($instance, $data);
+    $this->ignore('picture')->save($instance, $data);
 
-    // Then handle $data["picture"] here
+    // Then handle $data['picture'] here
 }
 ```
 
@@ -195,15 +195,15 @@ In this case, the file was already stored in a previous post, and was then trans
 
 ```php
 [
-    "filters" => [
-        "crop" => [
-            "x" => x,
-            "y" => y,
-            "width" => w,
-            "height" => h,
+    'filters' => [
+        'crop' => [
+            'x' => x,
+            'y' => y,
+            'width' => w,
+            'height' => h,
         ],
-        "rotate" => [
-            "angle" => a,
+        'rotate' => [
+            'angle' => a,
         ]
     ]
 ];
@@ -238,17 +238,17 @@ function update($id, array $data)
 
     $this->save($instance, $data);
 
-    if(($data["capacity"]) >= 1000) {
-        $this->notify("this is a huge spaceship, by the way!");
+    if(($data['capacity']) >= 1000) {
+        $this->notify('this is a huge spaceship, by the way!');
     }
 
     return $instance->id;
 }
 ```
-Here we're using the `notify()` feature to display a message back to the user, and it's working, excepted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data["capacity"]) >= 1000)` row because `$data["capacity"]` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
+Here we're using the `notify()` feature to display a message back to the user, and it's working, excepted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data['capacity']) >= 1000)` row because `$data['capacity']` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
 
 ```php
-if(($data["capacity"] ?? 0) >= 1000) {
+if(($data['capacity'] ?? 0) >= 1000) {
     [...]
 }
 ```

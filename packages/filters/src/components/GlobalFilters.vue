@@ -15,6 +15,7 @@
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
                 :key="filter.key"
+                global
                 @input="handleFilterChanged(filter, $event)"
                 @open="handleOpened(filter)"
                 @close="handleClosed(filter)"

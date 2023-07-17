@@ -27,6 +27,21 @@ class FormUploadControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_upload_a_file_on_a_custom_defined_disk()
+    {
+        config(['sharp.uploads.tmp_disk' => 'uploads']);
+        Storage::fake('uploads');
+
+        $this
+            ->postJson('/sharp/api/upload', [
+                'file' => UploadedFile::fake()->image('image.jpg', 600, 600),
+            ])
+            ->assertOk();
+
+        Storage::disk('uploads')->assertExists('/tmp/image.jpg');
+    }
+
+    /** @test */
     public function when_uploading_an_already_existing_filename_we_change_the_name()
     {
         $this

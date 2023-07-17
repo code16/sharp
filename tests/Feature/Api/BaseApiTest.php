@@ -36,7 +36,7 @@ abstract class BaseApiTest extends SharpTestCase
         $this->actingAs(new User);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         $this->app['config']->set(
             'sharp.entities.person',
