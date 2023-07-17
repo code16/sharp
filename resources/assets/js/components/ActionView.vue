@@ -60,7 +60,7 @@
 <script>
     import { createApi } from "../api";
     import { Modal, LoadingOverlay, TopBar } from 'sharp-ui';
-    import GlobalSearch from "./GlobalSearch.vue";
+    import { GlobalSearch } from 'sharp-search';
 
     export default {
         name:'SharpActionView',

@@ -9,7 +9,7 @@
         :title-class="{ 'text-danger': isError }"
         :header-class="{ 'pb-0':!title }"
         no-enforce-focus
-        no-close-on-backdrop
+        :no-close-on-backdrop="noCloseOnBackdrop"
         v-on="$listeners"
         @change="handleVisiblityChanged"
         ref="modal"
@@ -91,6 +91,10 @@
             },
             static: Boolean,
             modalClass: String,
+            noCloseOnBackdrop: {
+                type: Boolean,
+                default: true,
+            },
 
             // custom props
             isError: Boolean,
