@@ -2,8 +2,9 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Code16\Sharp\Http\Requests\LoginRequest;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    use ValidatesRequests;
-
     public function __construct()
     {
         $guardSuffix = config('sharp.auth.guard') ? ':'.config('sharp.auth.guard') : '';
@@ -24,7 +23,7 @@ class LoginController extends Controller
             ->only('destroy');
     }
 
-    public function create(): RedirectResponse|\Illuminate\Contracts\View\View
+    public function create(): RedirectResponse|View
     {
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
@@ -35,11 +34,16 @@ class LoginController extends Controller
 
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+        } catch (SharpAuthenticationNeeds2faException) {
+            // Credentials are OK, the user is not yet authenticated, redirect to 2FA page
+            return redirect()->route('code16.sharp.login.2fa');
+        }
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/'.sharp_base_url_segment());
+        return redirect()->intended(route('code16.sharp.home'));
     }
 
     public function destroy(Request $request): RedirectResponse
