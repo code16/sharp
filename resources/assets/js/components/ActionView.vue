@@ -2,7 +2,14 @@
     <div class="SharpActionView">
         <TopBar>
             <template v-slot:right>
-                <slot name="user-dropdown" />
+                <div class="row align-items-center gx-4">
+                    <div class="col-auto">
+                        <GlobalSearch />
+                    </div>
+                    <div class="col-auto">
+                        <slot name="user-dropdown" />
+                    </div>
+                </div>
             </template>
         </TopBar>
 
@@ -53,10 +60,12 @@
 <script>
     import { createApi } from "../api";
     import { Modal, LoadingOverlay, TopBar } from 'sharp-ui';
+    import GlobalSearch from "./GlobalSearch.vue";
 
     export default {
         name:'SharpActionView',
         components: {
+            GlobalSearch,
             Modal,
             LoadingOverlay,
             TopBar,
