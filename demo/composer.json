@@ -3,11 +3,13 @@
     "type": "project",
     "require": {
         "php": "^8.2",
+        "bacon/bacon-qr-code": "~2.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.7",
+        "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^6.0"
     },

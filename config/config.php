@@ -103,6 +103,11 @@ return [
             'max_attempts' => 5,
         ],
 
+        '2fa' => [
+            'enabled' => false,
+            'handler' => 'notification', // "notification", "totp" or a class name in custom implementation case
+        ],
+
         // Handle a "remember me" flag (with a checkbox on the login form)
         'suggest_remember_me' => false,
 

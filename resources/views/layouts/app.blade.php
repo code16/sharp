@@ -6,7 +6,9 @@
     <meta name="base-url" content="{{ sharp_base_url_segment() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <x-sharp::title />
+    <x-sharp::title>
+        {{ $title ?? null }}
+    </x-sharp::title>
 
     <link rel="stylesheet" href="{{ mix('vendors.css', '/vendor/sharp') }}">
     <link rel="stylesheet" href="{{ mix('sharp.css', '/vendor/sharp') }}">
@@ -27,10 +29,10 @@
     <script defer src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
     <script defer src="{{ mix('sharp.js', '/vendor/sharp') }}"></script>
 </head>
-<body class="{{ $bodyClass ?? '' }}">
+<body {{ $attributes }}>
     <x-sharp::alert.assets-outdated />
 
-    @yield('content')
+    {{ $slot }}
 
     @stack('script')
 </body>

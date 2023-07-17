@@ -3,6 +3,11 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -84,6 +89,24 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(
             SharpMenuManager::class,
             SharpMenuManager::class
+        );
+
+        if (class_exists("\PragmaRX\Google2FA\Google2FA")) {
+            $this->app->bind(
+                Sharp2faTotpEngine::class,
+                GoogleTotpEngine::class,
+            );
+        }
+
+        $this->app->bind(
+            Sharp2faHandler::class,
+            fn () => match (config('sharp.auth.2fa.handler')) {
+                'notification' => app(Sharp2faNotificationHandler::class),
+                'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
+                default => is_string(config('sharp.auth.2fa.handler'))
+                    ? app(config('sharp.auth.2fa.handler'))
+                    : value(config('sharp.auth.2fa.handler')),
+            }
         );
 
         $this->commands([

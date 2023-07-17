@@ -2,7 +2,10 @@
 
 namespace Code16\Sharp\Http\Requests;
 
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -31,7 +34,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! $this->attemptToLogin()) {
+        $remember = config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember');
+
+        if (! $this->attemptToLogin($remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -42,20 +47,32 @@ class LoginRequest extends FormRequest
         RateLimiter::clear($this->throttleKey());
     }
 
-    private function attemptToLogin(): bool
+    private function attemptToLogin(bool $remember): bool
     {
-        $loginAttr = config('sharp.auth.login_attribute', 'email');
-        $passwordAttr = config('sharp.auth.password_attribute', 'password');
-        $shouldRemember = config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember');
+        $guard = $this->getGuard();
+        $credentials = [
+            config('sharp.auth.login_attribute', 'email') => $this->input('login'),
+            config('sharp.auth.password_attribute', 'password') => $this->input('password'),
+        ];
 
-        return Auth::guard(config('sharp.auth.guard'))
-            ->attempt(
-                [$loginAttr => $this->input('login'), $passwordAttr => $this->input('password')],
-                $shouldRemember,
-            );
+        if (config('sharp.auth.2fa.enabled')) {
+            // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
+            if ($guard->once($credentials)) {
+                $handler = app(Sharp2faHandler::class);
+                if ($handler->isEnabledFor($guard->user())) {
+                    $handler->setUser($guard->user())->generateCode($remember);
+
+                    throw new SharpAuthenticationNeeds2faException();
+                }
+
+                // 2fa is not enabled for this user, we can proceed with the login
+            }
+        }
+
+        return $guard->attempt($credentials, $remember);
     }
 
-    public function ensureIsNotRateLimited(): void
+    private function ensureIsNotRateLimited(): void
     {
         if (config('sharp.auth.rate_limiting.enabled', true) === false) {
             return;
@@ -77,8 +94,13 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    public function throttleKey(): string
+    private function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->input('login')).'|'.$this->ip());
+    }
+
+    private function getGuard(): StatefulGuard
+    {
+        return Auth::guard(config('sharp.auth.guard'));
     }
 }
