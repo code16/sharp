@@ -36,15 +36,21 @@ class SearchResultSet
         return $this;
     }
 
-    final public function validateSearch(array $rules, array $messages = []): self
+    final public function validateSearch(array $rules, array $messages = []): bool
     {
-        $validator = validator(request()->only('q'), ['q' => $rules], $messages);
+        $validator = validator(
+            request()->only('q'), 
+            ['q' => $rules], 
+            $messages
+        );
 
         if ($validator->fails()) {
             $this->validationErrors = $validator->errors()->all();
+            
+            return false;
         }
 
-        return $this;
+        return true;
     }
 
     public function toArray(): array
@@ -55,9 +61,11 @@ class SearchResultSet
             'showWhenEmpty' => ! $this->hideWhenEmpty,
             'emptyStateLabel' => $this->emptyStateLabel,
             'validationErrors' => $this->validationErrors,
-            'results' => collect($this->resultLinks)
-                ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
-                ->all(),
+            'results' => empty($this->validationErrors) 
+                ? collect($this->resultLinks)
+                    ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
+                    ->all()
+                : [],
         ];
     }
 }
