@@ -7,12 +7,12 @@
             </svg>
         </button>
 
-        <Modal :visible.sync="modalVisible" hide-footer @shown="$refs.input.focus()">
+        <Modal :visible.sync="modalVisible" hide-footer body-class="pb-5" @shown="$refs.input.focus()">
             <template v-slot:title>
                 {{ lang('action_bar.list.search.placeholder') }}
             </template>
 
-            <div class="position-relative mb-4">
+            <div class="position-relative">
                 <input type="text" class="form-control pe-4.5" placeholder="Search..." v-model="query" ref="input" @input="handleInput">
                 <template v-if="loading">
                     <Loading class="position-absolute top-50 translate-middle-y" style="right: .5rem" small />
@@ -20,7 +20,7 @@
             </div>
 
             <template v-if="visibleResultSets.length && query">
-                <div class="mt-4.5">
+                <div class="mt-4.5 mb-n4.5">
                     <template v-for="resultSet in visibleResultSets">
                         <section class="mb-4.5">
                             <template v-if="resultSet.label">
@@ -31,26 +31,28 @@
                                     {{ resultSet.label }}
                                 </h6>
                             </template>
-                            <template v-if="resultSet.validationErrors && resultSet.validationErrors.length">
+                            <template v-if="(resultSet.validationErrors || []).length">
                                 <div class="text-danger fs-7">
                                     <template v-for="error in resultSet.validationErrors">
                                         <div>{{ error }}</div>
                                     </template>
                                 </div>
                             </template>
-                            <template v-if="resultSet.results && resultSet.results.length">
+                            <template v-if="(resultSet.results || []).length">
                                 <div class="list-group">
                                     <template v-for="result in resultSet.results">
                                         <a :href="result.link" class="list-group-item fs-7 list-group-item-action">
                                             <div v-html="highlight(result.label)"></div>
-                                            <div class="fs-8 text-muted" v-html="result.detail"></div>
+                                            <template v-if="result.detail">
+                                                <div class="fs-8 text-muted" v-html="highlight(result.detail)"></div>
+                                            </template>
                                         </a>
                                     </template>
                                 </div>
                             </template>
-                            <template v-else>
+                            <template v-else-if="!(resultSet.validationErrors || []).length">
                                 <div class="text-muted fs-7">
-                                    {{ resultSet.emptyStateLabel }}
+                                    {{ resultSet.emptyStateLabel || lang('entity_list.empty_text') }}
                                 </div>
                             </template>
                         </section>
