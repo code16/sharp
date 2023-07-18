@@ -111,7 +111,7 @@ class SearchTest extends BaseApiTest
                         ['string', 'min:3', 'starts_with:a'],
                         ['min' => 'Too short', 'starts_with' => 'Must start with a']
                     );
-                }
+            }
         });
 
         $this->getJson('/sharp/api/search?q=bb')
