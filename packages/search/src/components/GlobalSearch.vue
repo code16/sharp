@@ -19,26 +19,28 @@
                 </template>
             </div>
 
-            <template v-if="error">
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            </template>
-            <template v-else-if="results && results.length && query">
+            <template v-if="visibleResultSets.length && query">
                 <div class="mt-4.5">
-                    <template v-for="group in results">
+                    <template v-for="resultSet in visibleResultSets">
                         <section class="mb-4.5">
-                            <template v-if="group.label">
+                            <template v-if="resultSet.label">
                                 <h6 class="d-flex mb-3">
-                                    <template v-if="group.icon">
-                                        <i class="fa fa-fw me-2" :class="group.icon"></i>
+                                    <template v-if="resultSet.icon">
+                                        <i class="fa fa-fw me-2" :class="resultSet.icon"></i>
                                     </template>
-                                    {{ group.label }}
+                                    {{ resultSet.label }}
                                 </h6>
                             </template>
-                            <template v-if="group.results && group.results.length">
+                            <template v-if="resultSet.validationErrors && resultSet.validationErrors.length">
+                                <div class="text-danger fs-7">
+                                    <template v-for="error in resultSet.validationErrors">
+                                        <div>{{ error }}</div>
+                                    </template>
+                                </div>
+                            </template>
+                            <template v-if="resultSet.results && resultSet.results.length">
                                 <div class="list-group">
-                                    <template v-for="result in group.results">
+                                    <template v-for="result in resultSet.results">
                                         <a :href="result.link" class="list-group-item fs-7 list-group-item-action">
                                             <div v-html="highlight(result.label)"></div>
                                             <div class="fs-8 text-muted" v-html="result.detail"></div>
@@ -48,7 +50,7 @@
                             </template>
                             <template v-else>
                                 <div class="text-muted fs-7">
-                                    {{ lang('entity_list.empty_text') }}
+                                    {{ resultSet.emptyStateLabel }}
                                 </div>
                             </template>
                         </section>
@@ -72,12 +74,21 @@
         },
         data() {
             return {
-                modalVisible: false,
                 query: '',
-                results: null,
-                error: null,
+                resultSets: null,
                 loading: false,
+                modalVisible: false,
             }
+        },
+        computed: {
+            visibleResultSets() {
+                return (this.resultSets ?? [])
+                    .filter(resultSet =>
+                        resultSet.results?.length ||
+                        resultSet.showWhenEmpty ||
+                        resultSet.validationErrors?.length
+                    );
+            },
         },
         methods: {
             lang,
@@ -86,13 +97,7 @@
                     this.loading = true;
                 }, 200);
                 try {
-                    this.results = await getSearchResults({ query });
-                } catch(error) {
-                    if(error.response?.status === 422) {
-                        this.error = error.response.data;
-                    } else {
-                        this.error = lang('modals.error.message');
-                    }
+                    this.resultSets = await getSearchResults({ query });
                 } finally {
                     clearTimeout(loadingTimeout);
                     this.loading = false;
@@ -111,12 +116,13 @@
                 }
                 return text;
             },
-            handleWindowKeyup(e) {
-                if(e.key === '/' && !e.ctrlKey && !e.metaKey) {
-                    if (e.target.isContentEditable || /^(?:input|textarea|select)$/i.test(e.target.tagName)) {
-                        return;
-                    }
-                    e.preventDefault();
+            handleWindowKeydown(event) {
+                const isContentEditable = event.target.isContentEditable || /^(?:input|textarea|select)$/i.test(event.target.tagName);
+
+                if(event.key?.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey) // Cmd+k
+                    || !isContentEditable && event.key === '/'
+                ) {
+                    event.preventDefault();
                     this.modalVisible = true;
                 }
             },
@@ -125,10 +131,10 @@
             this.debouncedGetResults = debounce(this.getResults, 200);
         },
         mounted() {
-            document.addEventListener("keyup", this.handleWindowKeyup);
+            window.addEventListener('keydown', this.handleWindowKeydown);
         },
         destroyed() {
-            document.removeEventListener("keyup", this.handleWindowKeyup);
+            window.removeEventListener('keydown', this.handleWindowKeydown);
         }
     }
 </script>
