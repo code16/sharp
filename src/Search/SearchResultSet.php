@@ -39,14 +39,14 @@ class SearchResultSet
     final public function validateSearch(array $rules, array $messages = []): bool
     {
         $validator = validator(
-            request()->only('q'), 
-            ['q' => $rules], 
+            request()->only('q'),
+            ['q' => $rules],
             $messages
         );
 
         if ($validator->fails()) {
             $this->validationErrors = $validator->errors()->all();
-            
+
             return false;
         }
 
@@ -61,7 +61,7 @@ class SearchResultSet
             'showWhenEmpty' => ! $this->hideWhenEmpty,
             'emptyStateLabel' => $this->emptyStateLabel,
             'validationErrors' => $this->validationErrors,
-            'results' => empty($this->validationErrors) 
+            'results' => empty($this->validationErrors)
                 ? collect($this->resultLinks)
                     ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
                     ->all()

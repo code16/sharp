@@ -24,11 +24,11 @@ class AppSearchEngine extends SharpSearchEngine
                 icon: 'fa-file-o',
             )
             ->setEmptyStateLabel('No post found');
-        
+
         if (! $resultSet->validateSearch(['min:3'], ['min' => 'Enter at least 3 characters'])) {
             return;
         }
-        
+
         $builder = Post::query();
 
         foreach ($terms as $term) {
