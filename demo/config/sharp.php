@@ -19,6 +19,8 @@ return [
     'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],
 
     'search' => [
+        'enabled' => true,
+        'placeholder' => 'Search for posts or authors...',
         'engine' => \App\Sharp\AppSearchEngine::class,
     ],
 

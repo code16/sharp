@@ -54,8 +54,7 @@ class AppSearchEngine extends SharpSearchEngine
             ->addResultSet(
                 label: 'Authors',
                 icon: 'fa-users',
-            )
-            ->hideWhenEmpty();
+            );
 
         $builder = User::query();
 
