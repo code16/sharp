@@ -29,7 +29,8 @@ class AppSearchEngine extends SharpSearchEngine
             return;
         }
 
-        $builder = Post::query();
+        $builder = Post::query()
+            ->with('author');
 
         foreach ($terms as $term) {
             $builder->where('title->en', 'like', $term);
@@ -42,6 +43,7 @@ class AppSearchEngine extends SharpSearchEngine
                 $resultSet->addResultLink(
                     link: LinkToShowPage::make('posts', $post->id),
                     label: $post->title,
+                    detail: $post->author->name,
                 );
             });
     }
@@ -71,6 +73,7 @@ class AppSearchEngine extends SharpSearchEngine
                 $resultSet->addResultLink(
                     link: LinkToEntityList::make('authors')->setSearch($author->email),
                     label: $author->name,
+                    detail: $author->email,
                 );
             });
     }
