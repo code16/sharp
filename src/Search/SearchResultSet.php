@@ -8,6 +8,8 @@ class SearchResultSet
 {
     protected array $resultLinks = [];
     protected ?string $emptyStateLabel = null;
+    protected array $validationErrors = [];
+    protected bool $hideWhenEmpty = false;
 
     public function __construct(protected string $label, protected ?string $icon = null)
     {
@@ -20,9 +22,27 @@ class SearchResultSet
         });
     }
 
+    public final function hideWhenEmpty(bool $hideWhenEmpty = true): self
+    {
+        $this->hideWhenEmpty = $hideWhenEmpty;
+
+        return $this;
+    }
+
     public final function setEmptyStateLabel(string $emptyStateLabel): self
     {
         $this->emptyStateLabel = $emptyStateLabel;
+
+        return $this;
+    }
+
+    public final function validateSearch(array $rules, array $messages = []): self
+    {
+        $validator = validator(request()->only('q'), ['q' => $rules], $messages);
+
+        if ($validator->fails()) {
+            $this->validationErrors = $validator->errors()->all();
+        }
 
         return $this;
     }
@@ -32,7 +52,9 @@ class SearchResultSet
         return [
             'label' => $this->label,
             'icon' => $this->icon,
-            'emptyStateLabel' => $this->emptyStateLabel ?: trans('sharp::entity_list.empty_text'),
+            'showWhenEmpty' => !$this->hideWhenEmpty,
+            'emptyStateLabel' => $this->emptyStateLabel,
+            'validationErrors' => $this->validationErrors,
             'results' => collect($this->resultLinks)
                 ->map(fn (ResultLink $resultLink) => $resultLink->toArray())
                 ->all(),

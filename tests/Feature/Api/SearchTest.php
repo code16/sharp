@@ -76,6 +76,61 @@ class SearchTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_configure_a_hide_when_empty()
+    {
+        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        {
+            public function searchFor(array $terms): void
+            {
+                $this->addResultSet('People')->hideWhenEmpty();
+            }
+        });
+
+        $this->getJson('/sharp/api/search?q=some-search')
+            ->assertJson(
+                [
+                    [
+                        'label' => 'People',
+                        'icon' => null,
+                        'results' => [],
+                        'showWhenEmpty' => false,
+                    ],
+                ]
+            );
+    }
+
+    /** @test */
+    public function we_can_raise_validation_errors()
+    {
+        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        {
+            public function searchFor(array $terms): void
+            {
+                $this->addResultSet('People')
+                    ->validateSearch(
+                        ['string', 'min:3', 'starts_with:a'],
+                        ['min' => 'Too short', 'starts_with' => 'Must start with a']
+                    );
+                }
+        });
+
+        $this->getJson('/sharp/api/search?q=bb')
+            ->assertJson(
+                [
+                    [
+                        'label' => 'People',
+                        'icon' => null,
+                        'results' => [],
+                        'validationErrors' => [
+                            'Too short',
+                            'Must start with a',
+                        ],
+                    ],
+                ]
+            );
+    }
+
+    /** @test */
     public function we_can_get_multiple_result_sets()
     {
         config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine

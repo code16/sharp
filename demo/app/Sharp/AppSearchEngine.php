@@ -24,10 +24,7 @@ class AppSearchEngine extends SharpSearchEngine
                 icon: 'fa-file-o',
             )
             ->setEmptyStateLabel('No post found')
-//            ->validateSearch($terms, [
-//                'min' => 3,
-//            ])
-        ;
+            ->validateSearch(['min' => 3], ['min' => 'Please enter at least 3 characters']);
 
         $builder = Post::query();
 
@@ -48,10 +45,12 @@ class AppSearchEngine extends SharpSearchEngine
 
     private function searchForAuthors(array $terms): void
     {
-        $resultSet = $this->addResultSet(
-            label: 'Authors',
-            icon: 'fa-users',
-        );
+        $resultSet = $this
+            ->addResultSet(
+                label: 'Authors',
+                icon: 'fa-users',
+            )
+            ->hideWhenEmpty();
 
         $builder = User::query();
 
