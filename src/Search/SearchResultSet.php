@@ -15,28 +15,28 @@ class SearchResultSet
     {
     }
 
-    public final function addResultLink(SharpLinkTo $link, string $label, ?string $detail = null): ResultLink
+    final public function addResultLink(SharpLinkTo $link, string $label, ?string $detail = null): ResultLink
     {
         return tap(new ResultLink($link, $label, $detail), function (ResultLink $resultLink) {
             $this->resultLinks[] = $resultLink;
         });
     }
 
-    public final function hideWhenEmpty(bool $hideWhenEmpty = true): self
+    final public function hideWhenEmpty(bool $hideWhenEmpty = true): self
     {
         $this->hideWhenEmpty = $hideWhenEmpty;
 
         return $this;
     }
 
-    public final function setEmptyStateLabel(string $emptyStateLabel): self
+    final public function setEmptyStateLabel(string $emptyStateLabel): self
     {
         $this->emptyStateLabel = $emptyStateLabel;
 
         return $this;
     }
 
-    public final function validateSearch(array $rules, array $messages = []): self
+    final public function validateSearch(array $rules, array $messages = []): self
     {
         $validator = validator(request()->only('q'), ['q' => $rules], $messages);
 
@@ -52,7 +52,7 @@ class SearchResultSet
         return [
             'label' => $this->label,
             'icon' => $this->icon,
-            'showWhenEmpty' => !$this->hideWhenEmpty,
+            'showWhenEmpty' => ! $this->hideWhenEmpty,
             'emptyStateLabel' => $this->emptyStateLabel,
             'validationErrors' => $this->validationErrors,
             'results' => collect($this->resultLinks)
