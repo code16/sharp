@@ -3,9 +3,11 @@
         <TopBar>
             <template v-slot:right>
                 <div class="row align-items-center gx-4">
-                    <div class="col-auto">
-                        <GlobalSearch />
-                    </div>
+                    <template v-if="$slots.search">
+                        <div class="col-auto">
+                            <slot name="search" />
+                        </div>
+                    </template>
                     <div class="col-auto">
                         <slot name="user-dropdown" />
                     </div>
@@ -60,12 +62,10 @@
 <script>
     import { createApi } from "../api";
     import { Modal, LoadingOverlay, TopBar } from 'sharp-ui';
-    import { GlobalSearch } from 'sharp-search';
 
     export default {
         name:'SharpActionView',
         components: {
-            GlobalSearch,
             Modal,
             LoadingOverlay,
             TopBar,

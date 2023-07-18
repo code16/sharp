@@ -13,7 +13,7 @@
             </template>
 
             <div class="position-relative">
-                <input type="text" class="form-control pe-4.5" placeholder="Search..." v-model="query" ref="input" @input="handleInput">
+                <input type="text" class="form-control pe-4.5" :placeholder="placeholder" v-model="query" ref="input" @input="handleInput">
                 <template v-if="loading">
                     <Loading class="position-absolute top-50 translate-middle-y" style="right: .5rem" small />
                 </template>
@@ -73,6 +73,9 @@
         components: {
             Modal,
             Loading,
+        },
+        props: {
+            placeholder: String,
         },
         data() {
             return {
