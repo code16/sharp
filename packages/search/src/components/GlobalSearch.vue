@@ -98,6 +98,9 @@
         methods: {
             lang,
             async getResults(query) {
+                if(!query?.length) {
+                    return;
+                }
                 const loadingTimeout = setTimeout(() => {
                     this.loading = true;
                 }, 200);
@@ -109,9 +112,7 @@
                 }
             },
             handleInput() {
-                if(this.query?.length) {
-                    this.debouncedGetResults(this.query);
-                }
+                this.debouncedGetResults(this.query);
             },
             highlight(text) {
                 if(this.query?.length) {
