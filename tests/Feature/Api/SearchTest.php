@@ -52,6 +52,30 @@ class SearchTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_can_configure_a_custom_empty_state_label()
+    {
+        config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine
+        {
+            public function searchFor(array $terms): void
+            {
+                $this->addResultSet('People')->setEmptyStateLabel('Nobody found');
+            }
+        });
+
+        $this->getJson('/sharp/api/search?q=some-search')
+            ->assertJson(
+                [
+                    [
+                        'label' => 'People',
+                        'icon' => null,
+                        'results' => [],
+                        'emptyStateLabel' => 'Nobody found',
+                    ],
+                ]
+            );
+    }
+
+    /** @test */
     public function we_can_get_multiple_result_sets()
     {
         config()->set('sharp.search.engine', fn () => new class extends SharpSearchEngine

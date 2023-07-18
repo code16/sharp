@@ -18,10 +18,16 @@ class AppSearchEngine extends SharpSearchEngine
 
     private function searchForPosts(array $terms): void
     {
-        $resultSet = $this->addResultSet(
-            label: 'Posts',
-            icon: 'fa-file-o',
-        );
+        $resultSet = $this
+            ->addResultSet(
+                label: 'Posts',
+                icon: 'fa-file-o',
+            )
+            ->setEmptyStateLabel('No post found')
+//            ->validateSearch($terms, [
+//                'min' => 3,
+//            ])
+        ;
 
         $builder = Post::query();
 
