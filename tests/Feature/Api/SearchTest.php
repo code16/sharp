@@ -108,9 +108,9 @@ class SearchTest extends BaseApiTest
             {
                 $resultSet = $this->addResultSet('People');
                 $resultSet->validateSearch(
-                        ['string', 'min:3', 'starts_with:a'],
-                        ['min' => 'Too short', 'starts_with' => 'Must start with a']
-                    );
+                    ['string', 'min:3', 'starts_with:a'],
+                    ['min' => 'Too short', 'starts_with' => 'Must start with a']
+                );
                 $resultSet->addResultLink(LinkToShowPage::make('person', 1), 'John Wayne');
             }
         });
