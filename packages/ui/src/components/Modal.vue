@@ -8,7 +8,7 @@
         :modal-class="[modalClass, 'SharpModal']"
         :title-class="{ 'text-danger': isError }"
         :header-class="{ 'pb-0':!title }"
-        no-enforce-focus
+        :no-enforce-focus="noEnforceFocus"
         :no-close-on-backdrop="noCloseOnBackdrop"
         v-on="$listeners"
         @change="handleVisiblityChanged"
@@ -95,7 +95,10 @@
                 type: Boolean,
                 default: true,
             },
-
+            noEnforceFocus: {
+                type: Boolean,
+                default: true,
+            },
             // custom props
             isError: Boolean,
             loading: Boolean,

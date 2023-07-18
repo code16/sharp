@@ -7,7 +7,14 @@
             </svg>
         </button>
 
-        <Modal :visible.sync="modalVisible" hide-footer body-class="pb-5" @shown="$refs.input.focus()">
+        <Modal
+            :visible.sync="modalVisible"
+            :no-close-on-backdrop="false"
+            :no-enforce-focus="false"
+            hide-footer
+            body-class="pb-5"
+            @shown="$refs.input.focus()"
+        >
             <template v-slot:title>
                 {{ lang('action_bar.list.search.placeholder') }}
             </template>
