@@ -40,7 +40,7 @@ exports[`action-view can mount with multiple modals 1`] = `
 	<modal-stub visible="true" okonly="true" okvariant="primary" nocloseonbackdrop="true" nocloseonesc="true">
 		<div>Modal 1</div>
 	</modal-stub>
-	<modal-stub visible="true" oktitle="modals.confirm.ok_button" okvariant="primary" size="sm" hideheader="true" bodyclass="pt-4">
+	<modal-stub visible="true" oktitle="modals.confirm.ok_button" okvariant="primary" nocloseonbackdrop="true" size="sm" hideheader="true" bodyclass="pt-4">
 		<div>Modal 2</div>
 	</modal-stub>
 	<loadingoverlay-stub fade="true" class="SharpActionView__loading"></loadingoverlay-stub>
@@ -56,7 +56,7 @@ exports[`action-view loading 1`] = `
 	<modal-stub visible="true" okonly="true" okvariant="primary" nocloseonbackdrop="true" nocloseonesc="true">
 		<div>Modal 1</div>
 	</modal-stub>
-	<modal-stub visible="true" oktitle="modals.confirm.ok_button" okvariant="primary" size="sm" hideheader="true" bodyclass="pt-4">
+	<modal-stub visible="true" oktitle="modals.confirm.ok_button" okvariant="primary" nocloseonbackdrop="true" size="sm" hideheader="true" bodyclass="pt-4">
 		<div>Modal 2</div>
 	</modal-stub>
 	<loadingoverlay-stub fade="true" class="SharpActionView__loading" visible="true"></loadingoverlay-stub>
