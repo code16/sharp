@@ -44,7 +44,7 @@ return [
     // Optional. Your global search implementation.
     //    'search' => [
     //        'enabled' => true,
-    //        'placeholder' => "Search for anything...",
+    //        'placeholder' => 'Search for anything...',
     //        'engine' => \App\Sharp\MySearchEngine::class,
     //    ],
 
