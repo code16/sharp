@@ -79,7 +79,7 @@ class CurrentSharpRequest
                 $breadcrumb = $breadcrumb->slice(0, -1);
             }
         }
-        
+
         return $this->getUrlForBreadcrumb($breadcrumb);
     }
 
@@ -162,7 +162,7 @@ class CurrentSharpRequest
         $this->breadcrumb = new Collection();
         $segments = $this->getSegmentsFromRequest();
         $depth = 0;
-        
+
         if (count($segments) !== 0) {
             $this->breadcrumb->add(
                 (new BreadcrumbItem($segments[0], $segments[1]))->setDepth($depth++),
