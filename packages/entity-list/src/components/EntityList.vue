@@ -63,6 +63,13 @@
                                                     />
                                                 </div>
                                             </template>
+                                            <template v-if="isFiltersValuated">
+                                                <div class="col-auto d-flex">
+                                                    <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="handleResetAllClicked">
+                                                        {{ l('filters.reset_all') }}
+                                                    </button>
+                                                </div>
+                                            </template>
                                         </div>
                                     </div>
                                 </template>
@@ -277,11 +284,17 @@
             resolvedFilters() {
                 return this.filters ?? this.rootFilters;
             },
+            isFiltersValuated() {
+                return this.storeGetter('filters/isValuated')(this.resolvedFilters) || this.search;
+            },
             filtersValues() {
                 return this.storeGetter('filters/values');
             },
             filterNextQuery() {
                 return this.storeGetter('filters/nextQuery');
+            },
+            filterDefaultQuery() {
+                return this.storeGetter('filters/defaultQuery')(this.resolvedFilters);
             },
             getFiltersValuesFromQuery() {
                 return this.storeGetter('filters/getValuesFromQuery');
@@ -439,6 +452,14 @@
                 this.storeDispatch('setQuery', {
                     ...this.query,
                     ...this.filterNextQuery({ filter, value }),
+                    page: 1,
+                });
+            },
+            handleResetAllClicked() {
+                this.storeDispatch('setQuery', {
+                    ...this.query,
+                    ...this.filterDefaultQuery,
+                    search: null,
                     page: 1,
                 });
             },

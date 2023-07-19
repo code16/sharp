@@ -5,8 +5,10 @@
                 <ActionBarDashboard
                     :commands="commands"
                     :filters="rootFilters"
+                    :show-reset="filterIsValuated(rootFilters)"
                     @command="handleCommandRequested"
                     @filter-change="handleFilterChanged"
+                    @filters-reset="handleFiltersReset"
                 />
                 <template v-if="config.globalMessage">
                     <GlobalMessage
@@ -20,8 +22,10 @@
                         <Section class="mb-4.5"
                             :section="section"
                             :commands="commandsForType(section.key)"
-                            :filters="config.filters && config.filters[section.key] || []"
+                            :filters="sectionFilters(section)"
+                            :show-reset="filterIsValuated(sectionFilters(section))"
                             @filter-change="handleFilterChanged"
+                            @filters-reset="handleFiltersReset"
                             v-slot="{ widgetLayout }"
                         >
                             <Widget
@@ -94,6 +98,8 @@
                 getFiltersQueryParams: 'filters/getQueryParams',
                 getFiltersValuesFromQuery: 'filters/getValuesFromQuery',
                 filterNextQuery: 'filters/nextQuery',
+                filterDefaultQuery: 'filters/defaultQuery',
+                filterIsValuated: 'filters/isValuated',
                 commandsForType: 'commands/forType',
             }),
             dashboardKey() {
@@ -110,6 +116,9 @@
             },
         },
         methods: {
+            sectionFilters(section) {
+                return this.config.filters?.[section.key] ?? [];
+            },
             handleCommandRequested(command) {
                 const query = this.commandsQuery;
                 this.sendCommand(command, {
@@ -122,6 +131,14 @@
                     query: {
                         ...this.$route.query,
                         ...this.filterNextQuery({ filter, value }),
+                    }
+                });
+            },
+            handleFiltersReset(filters) {
+                this.$router.push({
+                    query: {
+                        ...this.$route.query,
+                        ...this.filterDefaultQuery(filters),
                     }
                 });
             },
