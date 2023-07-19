@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
-        "dms/phpunit-arraysubset-asserts": "^0.2.0|^0.4",
+        "dms/phpunit-arraysubset-asserts": "^0.4",
         "doctrine/dbal": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.8",
         "mockery/mockery": "^1.5.0",
