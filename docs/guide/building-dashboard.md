@@ -47,6 +47,7 @@ And here's the full list and documentation of each widget available, for the spe
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
+- [Figure](dashboard-widgets/figure.md)
 - [OrderedList](dashboard-widgets/ordered-list.md)
 
 ### `buildDashboardLayout(DashboardLayout $dashboardLayout): void`
