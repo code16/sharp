@@ -81,8 +81,8 @@ class MySearchEngine extends SharpSearchEngine
             
       if (! $resultSet->validateSearch(
           ['string', 'min:3'], 
-          ['min' => 'Please type at least 3 characters'])
-      ) {
+          ['min' => 'Please type at least 3 characters']
+      )) {
           // No need to query the DB
           return;
       }
@@ -97,4 +97,4 @@ As you can see in this example, the `validateSearch()` method accepts an array o
 
 ## Use the search field
 
-The search field is available in the top bar of Sharp, and can be called with these pretty standard keyboard shortcuts: `Ctrl+K` (Windows) or `Cmd+K` (Mac) and simply `/`.
+The search field is available in the top bar of Sharp, and can be called with these pretty standard keyboard shortcuts: `Ctrl+K`, `Cmd+K` (Mac) or simply `/`.
