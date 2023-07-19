@@ -1,5 +1,6 @@
 import SharpWidgetPanel from './Panel';
 import SharpWidgetOrderedList from './OrderedList';
+import SharpWidgetFigure from './Figure';
 import SharpWidgetChart from './chart/Chart';
 
 export function widgetByType(type) {
@@ -9,5 +10,7 @@ export function widgetByType(type) {
         return SharpWidgetPanel;
     } else if(type === 'list') {
         return SharpWidgetOrderedList;
+    } else if(type === 'figure') {
+        return SharpWidgetFigure;
     }
 }

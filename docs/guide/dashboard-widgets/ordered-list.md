@@ -4,7 +4,7 @@ This widget intends to display data as an ordered list of items
 
 ```php
 $widgetsContainer->addWidget(
-    SharpOrderedListWidget::make("topTravelledShipTypes")
+    SharpOrderedListWidget::make('topTravelledShipTypes')
 );
 ```
 
@@ -16,20 +16,20 @@ Valuation is handled by a dedicated `$this->setOrderedListData(string $panelWidg
 function buildWidgetsData(): void
 {
     $this->setOrderedListData(
-        "topTravelledShipTypes", [
+        'topTravelledShipTypes', [
             [
-                "label" => "model EF5978",
-                "count" => 89
+                'label' => 'model EF5978',
+                'count' => 89
             ],
             [
-                "label" => "model TT4448",
+                'label' => 'model TT4448',
             ],
             [
-                "label" => "model EF5978",
-                "count" => 17
+                'label' => 'model EF5978',
+                'count' => 17
             ],
             [
-                "label" => "model YY5557"
+                'label' => 'model YY5557'
             ]
         ]
     );
@@ -43,15 +43,15 @@ Here's a more realistic example with data fetched from a Model:
 
 ```php
 $this->setOrderedListData(
-    "topTravelledSpaceshipModels",
-    SpaceshipType::orderBy("travel_count", "desc")
+    'topTravelledSpaceshipModels',
+    SpaceshipType::orderBy('travel_count', 'desc')
         ->take(5)
         ->get()
         ->map(function(SpaceshipType $type) {
             return [
-                "id" => $type->id,
-                "label" => $type->label,
-                "count" => $type->travel_count,
+                'id' => $type->id,
+                'label' => $type->label,
+                'count' => $type->travel_count,
             ];
         })
         ->values()
@@ -65,9 +65,9 @@ You may want to add a link on each row. To do that, use the `buildItemLink()` me
 
 ```php
 $widgetsContainer->addWidget(
-    SharpOrderedListWidget::make("topTravelledShipTypes")
+    SharpOrderedListWidget::make('topTravelledShipTypes')
             ->buildItemLink(function($item) {
-                  return url("some-link");
+                  return url('some-link');
             })
 );
 ```
@@ -76,25 +76,25 @@ In order to make a link to a Sharp EntityList, Show or Form, this method can als
 
 ```php
 $widgetsContainer->addWidget(
-    SharpOrderedListWidget::make("topTravelledShipTypes")
+    SharpOrderedListWidget::make('topTravelledShipTypes')
             ->buildItemLink(function($item) {
-                  return LinkToEntityList::make("spaceship")->addFilter("type", $item['id']); 
+                  return LinkToEntityList::make('spaceship')->addFilter('type', $item['id']); 
             })
 );
 ```
 
 As you can see, the link is built for each row, and is therefore data-dependant. 
-In this example, we intend to link each row toward the "spaceship" entity list, with the filter "type" set to the value of `$item['id']`. So with this data:
+In this example, we intend to link each row toward the "spaceship" Entity List, with the filter "type" set to the value of `$item['id']`. So with this data:
 
 ```php
 function buildWidgetsData(): void
 {
     $this->setOrderedListData(
-        "topTravelledShipTypes", [
+        'topTravelledShipTypes', [
             [
-                "id" => 12,
-                "label" => "model EF5978",
-                "count" => 89,
+                'id' => 12,
+                'label' => 'model EF5978',
+                'count' => 89,
             ]
         ]
     );

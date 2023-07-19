@@ -63,8 +63,8 @@ abstract class SharpWidget
 
     protected function buildArray(array $childArray): array
     {
-        $array = collect()
-            ->merge([
+        return tap(
+            collect([
                 'key' => $this->key,
                 'type' => $this->type,
                 'title' => $this->title,
@@ -72,11 +72,9 @@ abstract class SharpWidget
             ])
             ->merge($childArray)
             ->filter(fn ($value) => $value !== null)
-            ->all();
-
-        $this->validate($array);
-
-        return $array;
+            ->all(),
+            fn ($array) => $this->validate($array)
+        );
     }
 
     protected function validationRules(): array
