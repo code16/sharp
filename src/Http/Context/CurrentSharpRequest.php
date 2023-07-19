@@ -174,7 +174,7 @@ class CurrentSharpRequest
                 $type = $segments->shift();
                 $key = $instance = null;
                 $segments
-                    ->takeWhile(fn (string $segment) => !in_array($segment, ['s-show', 's-form']))
+                    ->takeWhile(fn (string $segment) => ! in_array($segment, ['s-show', 's-form']))
                     ->values()
                     ->each(function (string $segment, $index) use (&$key, &$instance) {
                         if ($index === 0) {

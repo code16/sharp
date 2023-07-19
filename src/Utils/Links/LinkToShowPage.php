@@ -20,7 +20,7 @@ class LinkToShowPage extends SharpLinkTo
     public function withBreadcrumb(Closure $closure): self
     {
         $this->breadcrumbBuilder = $closure(new BreadcrumbBuilder());
-        
+
         return $this;
     }
 
@@ -36,7 +36,7 @@ class LinkToShowPage extends SharpLinkTo
                 )
             );
         }
-        
+
         return route('code16.sharp.list.subpage', [
             'entityKey' => $this->entityKey,
             'uri' => $this->generateUri(),

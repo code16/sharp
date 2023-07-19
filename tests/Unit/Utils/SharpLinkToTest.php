@@ -113,7 +113,7 @@ class SharpLinkToTest extends SharpTestCase
     public function we_can_not_generate_an_url_with_a_specific_breadcrumb_starting_with_a_show()
     {
         $this->expectException(SharpInvalidBreadcrumbItemException::class);
-        
+
         LinkToShowPage::make('my-entity', 4)
             ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
                 return $builder->appendShowPage('base-entity', 3);

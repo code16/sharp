@@ -11,23 +11,23 @@ class BreadcrumbBuilder
 
     public function appendEntityList(string $entityKey): self
     {
-        if (!empty($this->breadcrumbParts)) {
+        if (! empty($this->breadcrumbParts)) {
             throw new SharpInvalidBreadcrumbItemException('Entity list must be the first breadcrumb item');
         }
-        
+
         $this->breadcrumbParts[] = new BreadcrumbItem('s-list', $entityKey);
-        
+
         return $this;
     }
 
     public function appendSingleShowPage(string $entityKey): self
     {
-        if (!empty($this->breadcrumbParts)) {
+        if (! empty($this->breadcrumbParts)) {
             throw new SharpInvalidBreadcrumbItemException('Single show page must be the first breadcrumb item');
         }
-        
+
         $this->breadcrumbParts[] = new BreadcrumbItem('s-show', $entityKey);
-        
+
         return $this;
     }
 
@@ -36,9 +36,9 @@ class BreadcrumbBuilder
         if (empty($this->breadcrumbParts)) {
             throw new SharpInvalidBreadcrumbItemException('Show page can not be the first breadcrumb item');
         }
-        
+
         $this->breadcrumbParts[] = (new BreadcrumbItem('s-show', $entityKey))->setInstance($instanceId);
-        
+
         return $this;
     }
 
