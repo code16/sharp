@@ -2,7 +2,16 @@
     <div class="SharpActionView">
         <TopBar>
             <template v-slot:right>
-                <slot name="user-dropdown" />
+                <div class="row align-items-center gx-4">
+                    <template v-if="$slots.search">
+                        <div class="col-auto">
+                            <slot name="search" />
+                        </div>
+                    </template>
+                    <div class="col-auto">
+                        <slot name="user-dropdown" />
+                    </div>
+                </div>
             </template>
         </TopBar>
 

@@ -63,6 +63,7 @@ export default [
         children: [
             '/guide/building-menu.md',
             '/guide/sharp-breadcrumb.md',
+            '/guide/global-search.md',
             '/guide/how-to-transform-data.md',
             '/guide/link-to.md',
             '/guide/page-alerts',

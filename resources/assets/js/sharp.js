@@ -12,6 +12,7 @@ import SharpFilters from 'sharp-filters';
 import SharpForm from 'sharp-form';
 import SharpShow from 'sharp-show';
 import SharpUI from 'sharp-ui';
+import SharpSearch from 'sharp-search';
 
 import ActionView from './components/ActionView';
 import LeftNav from './components/LeftNav';
@@ -41,6 +42,7 @@ Vue.use(SharpFilters, { store, router });
 Vue.use(SharpForm, { store, router });
 Vue.use(SharpShow, { store, router });
 Vue.use(SharpUI, { store, router });
+Vue.use(SharpSearch, { store, router });
 
 
 Vue.component('sharp-action-view', ActionView);

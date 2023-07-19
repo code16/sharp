@@ -14,6 +14,7 @@ use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\Api\FormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\GlobalFilterController;
+use Code16\Sharp\Http\Api\SearchController;
 use Code16\Sharp\Http\Api\ShowController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\HomeController;
@@ -105,6 +106,9 @@ Route::group([
 
     Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.api.filter.update');
+
+    Route::get('/search', [SearchController::class, 'index'])
+        ->name('code16.sharp.api.search.index');
 
     Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
         ->name('code16.sharp.api.download.show');
