@@ -2,8 +2,10 @@
 
 namespace Code16\Sharp\Tests\Unit\Utils;
 
+use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Filters\SelectFilter;
+use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToForm;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
@@ -44,7 +46,7 @@ class SharpLinkToTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_generate_a_link_to_an_entity_show()
+    public function we_can_generate_a_link_to_a_show_page()
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23" title="">test</a>',
@@ -54,13 +56,82 @@ class SharpLinkToTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_generate_a_link_to_an_entity_single_show()
+    public function we_can_generate_a_link_to_a_single_show_page()
     {
         $this->assertEquals(
             '<a href="http://localhost/sharp/s-show/my-entity" title="">test</a>',
             LinkToSingleShowPage::make('my-entity')
                 ->renderAsText('test'),
         );
+    }
+
+    /** @test */
+    public function we_can_generate_an_url_to_a_show_page_with_a_specific_breadcrumb()
+    {
+        $this->assertEquals(
+            'http://localhost/sharp/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4',
+            LinkToShowPage::make('my-entity', 4)
+                ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                    return $builder
+                        ->appendEntityList('base-entity')
+                        ->appendShowPage('base-entity', 3);
+                })
+                ->renderAsUrl(),
+        );
+    }
+
+    /** @test */
+    public function we_can_generate_an_url_to_a_form_with_a_specific_breadcrumb()
+    {
+        $this->assertEquals(
+            'http://localhost/sharp/s-list/base-entity/s-show/base-entity/3/s-show/my-entity/4/s-form/my-entity/4',
+            LinkToForm::make('my-entity', 4)
+                ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                    return $builder
+                        ->appendEntityList('base-entity')
+                        ->appendShowPage('base-entity', 3);
+                })
+                ->throughShowPage()
+                ->renderAsUrl(),
+        );
+    }
+
+    /** @test */
+    public function we_can_generate_an_url_to_a_show_page_with_a_specific_breadcrumb_starting_with_a_single_show_page()
+    {
+        $this->assertEquals(
+            'http://localhost/sharp/s-show/base-entity/s-show/my-entity/4',
+            LinkToShowPage::make('my-entity', 4)
+                ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                    return $builder->appendSingleShowPage('base-entity');
+                })
+                ->renderAsUrl(),
+        );
+    }
+
+    /** @test */
+    public function we_can_not_generate_an_url_with_a_specific_breadcrumb_starting_with_a_show()
+    {
+        $this->expectException(SharpInvalidBreadcrumbItemException::class);
+        
+        LinkToShowPage::make('my-entity', 4)
+            ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                return $builder->appendShowPage('base-entity', 3);
+            })
+            ->renderAsUrl();
+    }
+
+    /** @test */
+    public function we_can_not_push_a_entity_list_anywhere_else_than_in_the_first_spot()
+    {
+        $this->expectException(SharpInvalidBreadcrumbItemException::class);
+
+        LinkToShowPage::make('my-entity', 4)
+            ->withBreadcrumb(function (BreadcrumbBuilder $builder) {
+                return $builder->appendShowPage('base-entity', 3)
+                    ->appendEntityList('base-entity');
+            })
+            ->renderAsUrl();
     }
 
     /** @test */
