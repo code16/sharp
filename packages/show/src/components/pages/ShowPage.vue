@@ -47,7 +47,7 @@
                                 </template>
                                 <template v-if="title">
                                     <div class="col" style="min-width: 0">
-                                        <h1 class="mb-0 text-truncate h2" v-html="title"></h1>
+                                        <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="title"></h1>
                                     </div>
                                 </template>
                             </div>

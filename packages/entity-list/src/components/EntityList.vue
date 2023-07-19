@@ -36,22 +36,21 @@
 
                     <template v-if="canSearch || resolvedFilters && resolvedFilters.length" v-slot:prepend>
                         <div class="p-3">
-                            <div class="row">
+                            <div class="row gy-3 gx-4">
                                 <template v-if="canSearch">
-                                    <div class="col-auto">
-                                        <div style="max-width: 200px">
-                                            <Search
-                                                class="h-100"
-                                                :value="search"
-                                                :placeholder="l('action_bar.list.search.placeholder')"
-                                                :disabled="reordering"
-                                                @submit="handleSearchSubmitted"
-                                            />
-                                        </div>
+                                    <div class="col-md-auto">
+                                        <Search
+                                            class="h-100 mw-100"
+                                            style="--width: 150px; --focused-width: 250px;"
+                                            :value="search"
+                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            :disabled="reordering"
+                                            @submit="handleSearchSubmitted"
+                                        />
                                     </div>
                                 </template>
                                 <template v-if="resolvedFilters.length">
-                                    <div class="col">
+                                    <div class="col-md">
                                         <div class="row gx-2 gy-2">
                                             <template v-for="filter in resolvedFilters">
                                                 <div class="col-auto">
