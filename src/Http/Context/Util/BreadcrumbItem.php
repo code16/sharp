@@ -81,8 +81,8 @@ class BreadcrumbItem
     {
         return sprintf('%s/%s',
             $this->type,
-            isset($this->instance) 
-                ? $this->key . '/' . $this->instance
+            isset($this->instance)
+                ? $this->key.'/'.$this->instance
                 : $this->key,
         );
     }
