@@ -45,7 +45,7 @@
                 document.documentElement.style.setProperty('--navbar-height', `${rect.height}px`);
             },
             handleScroll() {
-                this.title = document.querySelector('h1')?.innerText;
+                this.title = document.querySelector('h1[data-top-bar-title]')?.innerText;
                 this.showTitle = window.scrollY > 150;
             },
         },
