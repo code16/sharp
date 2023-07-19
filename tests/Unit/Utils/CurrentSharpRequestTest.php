@@ -99,6 +99,9 @@ class CurrentSharpRequestTest extends SharpTestCase
     {
         $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 
-        $this->assertEquals(url('/sharp/s-list/person/s-show/person/42'), currentSharpRequest()->getUrlOfPreviousBreadcrumbItem());
+        $this->assertEquals(
+            url('/sharp/s-list/person/s-show/person/42'), 
+            currentSharpRequest()->getUrlOfPreviousBreadcrumbItem()
+        );
     }
 }
