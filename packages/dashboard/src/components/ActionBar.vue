@@ -1,17 +1,24 @@
 <template>
-    <div class="mb-4">
+    <div class="my-4">
         <div class="row gx-3">
             <div class="col">
                 <template v-if="filters.length > 0">
-                    <div class="row mx-n2">
+                    <div class="row gx-2">
                         <template v-for="filter in filters">
-                            <div class="col-auto px-2">
+                            <div class="col-auto">
                                 <SharpFilter
                                     :filter="filter"
                                     :value="filterValue(filter.key)"
                                     @input="$emit('filter-change', filter, $event)"
                                     :key="filter.id"
                                 />
+                            </div>
+                        </template>
+                        <template v-if="showReset">
+                            <div class="col-auto d-flex">
+                                <button class="btn btn-sm btn-link d-inline-flex align-items-center fs-8" @click="$emit('filters-reset', filters)">
+                                    {{ l('filters.reset_all') }}
+                                </button>
                             </div>
                         </template>
                     </div>
@@ -46,6 +53,7 @@
         props: {
             commands: Array,
             filters: Array,
+            showReset: Boolean,
         },
         computed: {
             ...mapGetters('dashboard', {

@@ -1,5 +1,6 @@
 import { parseRange, serializeRange } from "sharp";
 import { getFiltersQueryParams, getFiltersValuesFromQuery, filterQueryKey } from '../util/query';
+import isEqual from 'lodash/isEqual';
 
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_VALUES = 'SET_VALUES';
@@ -30,6 +31,16 @@ export default {
         },
         values(state) {
             return state.values;
+        },
+        isValuated(state, getters) {
+            return filters => {
+                return !isEqual(
+                    getters.getQueryParams(
+                        Object.fromEntries(filters.map(filter => [filter.key, state.values?.[filter.key]]))
+                    ),
+                    getters.getQueryParams(getters.defaultValues(filters))
+                );
+            }
         },
         filterQueryKey() {
             return key => filterQueryKey(key);
@@ -70,6 +81,9 @@ export default {
                 if(!filter) {
                     return value;
                 }
+                if(filter.multiple && !value?.length) {
+                    return null;
+                }
                 if(filter.type === 'daterange') {
                     return serializeRange(value);
                 }
@@ -94,6 +108,14 @@ export default {
             return ({ filter, value }) => {
                 return getters.getQueryParams(getters.nextValues({ filter, value }));
             }
+        },
+        defaultValues() {
+            return filters => Object.fromEntries(
+                filters.map(filter => [filter.key, filter.default])
+            );
+        },
+        defaultQuery(state, getters) {
+            return filters => getters.getQueryParams(getters.defaultValues(filters));
         },
     },
 

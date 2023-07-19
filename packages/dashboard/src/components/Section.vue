@@ -20,6 +20,13 @@
                                             :key="filter.id"
                                         />
                                     </template>
+                                    <template v-if="showReset">
+                                        <div class="d-flex">
+                                            <button class="btn btn-sm d-inline-flex align-items-center btn-link" @click="$emit('filters-reset', filters)">
+                                                {{ lang('filters.reset_all') }}
+                                            </button>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                         </template>
@@ -63,6 +70,7 @@
             section: Object,
             commands: Array,
             filters: Array,
+            showReset: Boolean,
         },
         computed: {
             ...mapGetters('dashboard', {
