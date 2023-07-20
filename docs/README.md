@@ -54,6 +54,8 @@ The search results and their label and link are entirely customizable.
 
 ### Present synthetic data, graphs and direct links in dashboards
 
+Various widgets are available, and you can take advantage of filters and commands in dashboards too.
+
 ![Dashboard](./img/readme/v8/dashboard.jpg)
 
 ### Built-in authentication system, with out-of-the-box 2fa
