@@ -54,7 +54,7 @@ export default defineUserConfig({
             {
                 text: 'Links',
                 children: [
-                    { text: 'Medium', link:'https://medium.com/code16/tagged/sharp' },
+                    { text: 'Code 16’s blog', link:'https://code16.fr/blog' },
                     { text: 'Discord', link:'https://discord.com/invite/sFBT5c3XZz' },
                 ]
             }
