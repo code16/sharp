@@ -90,7 +90,6 @@ class PostList extends SharpEntityList
     protected function getEntityCommands(): ?array
     {
         return [
-            // TMP
             ComposeEmailWithPostsWizardCommand::class,
             BulkPublishPostsCommand::class,
         ];

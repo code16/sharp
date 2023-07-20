@@ -46,6 +46,12 @@ A Command is an action presented to the user (with permissions handled via polic
 
 ![Bulk Commands](./img/readme/v8/command-bulk.jpg)
 
+### Propose a custom global search to users
+
+The search results and their label and link are entirely customizable.
+
+![Commands](./img/readme/v8/search.jpg)
+
 ### Present synthetic data, graphs and direct links in dashboards
 
 ![Dashboard](./img/readme/v8/dashboard.jpg)
@@ -66,6 +72,7 @@ Choose one color, and the UI will adapt itself.
 
 Everything in Sharp is manageable through a clean and documented PHP API, using Laravel conventions and coding style. And again: no frontend development is required.  
 
+![Code](./img/readme/v8/code.jpg)
 
 ### Try the online demo
 
