@@ -1,7 +1,7 @@
 <template>
-    <div class="SharpTopBar sticky-top" ref="bar">
-        <div class="container">
-            <div class="row align-items-center g-2 gx-md-4">
+    <div class="SharpTopBar d-flex flex-column sticky-top" ref="bar">
+        <div class="container flex-fill d-flex flex-column">
+            <div class="row align-items-center flex-fill g-2 gx-md-4">
                 <div class="col" style="min-width: 0">
                     <template v-if="title">
                         <div class="d-none d-md-block">
@@ -42,7 +42,7 @@
         methods: {
             layout(rect) {
                 /** @see getNavbarHeight **/
-                document.documentElement.style.setProperty('--navbar-height', `${rect.height}px`);
+                // document.documentElement.style.setProperty('--navbar-height', `${rect.height}px`); // it's fixed now
             },
             handleScroll() {
                 this.title = document.querySelector('h1')?.innerText;

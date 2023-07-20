@@ -13,10 +13,8 @@
   top: var(--navbar-top, 0);
   right: 0;
   left: $leftnav-collapsed-width;
-  min-height: $navbar-min-height;
+  height: var(--navbar-height);
 
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
   background: $brand-01;
 
   transition: $transition-leftnav-collapse;
@@ -35,11 +33,5 @@
 
   @include media-breakpoint-up($breakpoint-fixed-menu) {
     left: $leftnav-width;
-  }
-
-  & > .container {
-    & > .row {
-      min-height: calc(2.5rem + var(--bs-gutter-y));
-    }
   }
 }

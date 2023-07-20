@@ -1,5 +1,5 @@
 <template>
-    <div class="action-bar my-3 position-sticky ShowEntityListField__action-bar"
+    <div class="action-bar mt-4 mb-3 position-sticky ShowEntityListField__action-bar"
         v-sticky
         @stuck-change="stuck = $event.detail"
     >
