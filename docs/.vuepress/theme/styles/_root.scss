@@ -2,6 +2,7 @@
 :root {
   --c-text: #233140;
   --code-bg-color: #292D3E; // material-palenight
+  --title-inline-code-color: hsl(211deg, 100%, 20%);
 }
 
 :root, html.dark {
@@ -14,4 +15,5 @@
 
 html.dark {
   --c-text-accent: #99caff;
+  --title-inline-code-color: #99caff;
 }
