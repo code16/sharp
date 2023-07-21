@@ -176,7 +176,7 @@ protected function buildShowFields(FieldsContainer $showFields): void
 
 The embed should be treated like any regular Laravel blade component. Here's an example:
 
-```php
+```blade
 @props([
     'post',
 ])

@@ -40,7 +40,7 @@ You can display a custom content under the form on login page:
 
 You'll need to create a new template file:
 
-```html
+```blade
 <!-- resources/views/sharp/_login-page-message.blade.php -->
 
 <div class="alert alert-info">

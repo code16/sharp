@@ -3,6 +3,7 @@ import * as path from 'path';
 import { defineUserConfig } from 'vuepress';
 import { docsearchPlugin } from '@vuepress/plugin-docsearch';
 import { viteBundler } from '@vuepress/bundler-vite';
+import { shikiPlugin } from '@vuepress/plugin-shiki';
 import * as dotenv from 'dotenv';
 import svgLoader from 'vite-svg-loader';
 import sidebar from './sidebar';
@@ -75,6 +76,9 @@ export default defineUserConfig({
             searchParameters: {
                 facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
             },
+        }),
+        shikiPlugin({
+            theme: 'material-theme-palenight',
         }),
         fathomPlugin({
             siteId: 'EELMENOG',
