@@ -4,10 +4,12 @@ $--font-path: 'fonts';
 
 
 $brand-01: #314255;
+$brand-02: #5596e6;
 $ui-01: #FFFFFF;
 $ui-02: #EBF0F7;
 $ui-03: #DAE3EE;
 $ui-04: #dfe3e6;
+$ui-05: #8c9ba5;
 $field-01: #FFFFFF;
 $text-03: #8c9ba5;
 
@@ -17,6 +19,8 @@ $brand-01-light: #68829E;
 $ui-primary-color: hsl(var(--primary-h), var(--primary-s), 20%);
 $ui-font-size: 1.125rem;
 $ui-title-font-weight: 600;
+
+$bx--standard-easing: cubic-bezier(0.5, 0, 0.1, 1);
 
 /**
   Bootstrap variables

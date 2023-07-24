@@ -12,7 +12,7 @@
   position: fixed;
   top: var(--navbar-top, 0);
   height: 100vh;
-  background-color: $color__white;
+  background-color: white;
   //border-right: 1px solid $color__gray-1;
   max-height: 100vh;
   z-index: 1030;
@@ -71,7 +71,7 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    background-color: $color__white;
+    background-color: white;
     padding-left: 0;
     margin-bottom: 0;
 
@@ -147,7 +147,7 @@
         fill: currentColor;
         width: .5rem;
         height: .5rem;
-        transition: $transition--base;
+        transition: transform .25s linear;
       }
     }
 

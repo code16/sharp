@@ -62,7 +62,6 @@
     "axios": "^0.19.2",
     "bootstrap": "^5.2.0",
     "bootstrap-vue": "^2.21.2",
-    "carbon-components": "^7.26.2",
     "cropperjs": "^1.5.12",
     "filesize": "^6.1.0",
     "font-awesome-filetypes": "^2.1.0",
