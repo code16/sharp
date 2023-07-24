@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import TextField from './Text';
+    import TextField from './Text.vue';
 
     export default {
         components: {

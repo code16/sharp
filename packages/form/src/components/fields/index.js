@@ -9,9 +9,9 @@ import Check from './Check.vue';
 import List from './list/List.vue';
 import Select from './Select.vue';
 import Html from './Html.vue';
-import Geolocation from './geolocation/Geolocation';
-import Editor from './editor/EditorField';
-import DateRange from './date-range/DateRange';
+import Geolocation from './geolocation/Geolocation.vue';
+import Editor from './editor/EditorField.vue';
+import DateRange from './date-range/DateRange.vue';
 
 export default {
     'autocomplete' : Autocomplete,

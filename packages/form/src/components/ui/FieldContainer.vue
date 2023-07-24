@@ -56,8 +56,8 @@
 <script>
   import { lang, logError } from 'sharp';
   import { ConfigNode, Identifier } from 'sharp/mixins';
-  import Field from '../Field';
-  import FieldLocaleSelect from './FieldLocaleSelect';
+  import Field from '../Field.vue';
+  import FieldLocaleSelect from './FieldLocaleSelect.vue';
   import { isLocalizableValueField, resolveTextValue } from '../../util';
   import { sticky } from "sharp/directives";
 

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import { Map, Marker, loadGmapApi } from 'vue2-google-maps';
+    import { Map, Marker } from 'sharp/vendor/vue2-google-maps';
     import { defaultMapOptions, createMapOptions } from "./util";
 
     export default {

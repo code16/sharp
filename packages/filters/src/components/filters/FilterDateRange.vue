@@ -19,7 +19,7 @@
 
 <script>
     import { DateRange } from 'sharp-form';
-    import FilterControl from '../FilterControl';
+    import FilterControl from '../FilterControl.vue';
 
     export default {
         name: 'SharpFilterDateRange',

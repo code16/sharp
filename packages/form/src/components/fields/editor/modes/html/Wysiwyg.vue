@@ -20,11 +20,11 @@
 
 <script>
     import { Editor } from '@tiptap/vue-2';
-    import SharpEditor from '../../Editor';
+    import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";
     import { normalizeHTML, trimHTML } from "./util";
-    import LocalizedEditors from "../../LocalizedEditors";
+    import LocalizedEditors from "../../LocalizedEditors.vue";
     import { normalizeText } from "../../../../../util/text";
 
     export default {

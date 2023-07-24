@@ -16,7 +16,8 @@ const config = {
     moduleNameMapper: {
         "^vue$": "vue/dist/vue.common.js",
         "^sharp((/(.*))|$)": "<rootDir>/resources/assets/js$1",
-        "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/styleMock.js"
+        "\\.(css|less)$": "<rootDir>/packages/test-utils/src/setup/fileMock.js",
+        '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': "<rootDir>/packages/test-utils/src/setup/fileMock.js",
     },
     transformIgnorePatterns: [
         "node_modules/(?!(vue2-google-maps|bootstrap-vue|vue-clip|vue2-timepicker))"

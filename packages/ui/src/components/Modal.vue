@@ -64,8 +64,8 @@
 <script>
     import { Localization } from 'sharp/mixins';
     import { BModal } from 'bootstrap-vue';
-    import Loading from "./loading/Loading";
-    import LoadingOverlay from "./loading/LoadingOverlay";
+    import Loading from "./loading/Loading.vue";
+    import LoadingOverlay from "./loading/LoadingOverlay.vue";
 
     export default {
         name: 'SharpModal',
