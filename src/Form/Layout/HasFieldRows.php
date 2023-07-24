@@ -22,11 +22,31 @@ trait HasFieldRows
         $this
             ->addRowLayout(
                 collect($fieldKeys)
-                    ->map(function ($key) {
-                        return $this->newLayoutField($key);
-                    })
+                    ->map(fn ($key) => $this->newLayoutField($key))
                     ->all(),
             );
+
+        return $this;
+    }
+
+    public function insertSingleFieldAt(int $index, string $fieldKey, \Closure $subLayoutCallback = null): self
+    {
+        $rows = collect($this->rows);
+        $rows->splice($index, 0, [[$this->newLayoutField($fieldKey, $subLayoutCallback)]]);
+        $this->rows = $rows->values()->all();
+
+        return $this;
+    }
+
+    public function insertFieldsAt(int $index, string ...$fieldKeys): self
+    {
+        $rows = collect($this->rows);
+        $rows->splice($index, 0, [
+            collect($fieldKeys)
+                ->map(fn ($key) => $this->newLayoutField($key))
+                ->all(),
+        ]);
+        $this->rows = $rows->values()->all();
 
         return $this;
     }

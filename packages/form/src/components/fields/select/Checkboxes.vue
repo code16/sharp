@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import Check from "../Check";
+    import Check from "../Check.vue";
     import { isSelected } from "../../../util/select";
     import { lang } from "sharp";
 

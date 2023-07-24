@@ -3,6 +3,11 @@
 namespace Code16\Sharp;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -17,18 +22,15 @@ use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
-use Code16\Sharp\Http\Middleware\Api\AppendFormAuthorizations;
+use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
-use Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver;
-use Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors;
-use Code16\Sharp\Http\Middleware\Api\SetSharpLocale;
 use Code16\Sharp\Http\Middleware\ConfigureZiggy;
 use Code16\Sharp\Http\Middleware\HandleInertiaRequests;
-use Code16\Sharp\Http\Middleware\InvalidateCache;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
@@ -38,7 +40,7 @@ use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
-    const VERSION = '7.25.2';
+    const VERSION = '7.29.6';
 
     public function boot()
     {
@@ -60,6 +62,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
             __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
+            __DIR__.'/../resources/views/partials/plugin-script.blade.php' => resource_path('views/vendor/sharp/partials/plugin-script.blade.php'),
         ], 'views');
 
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
@@ -85,6 +88,29 @@ class SharpServiceProvider extends ServiceProvider
             CurrentSharpRequest::class,
         );
 
+        $this->app->singleton(
+            SharpMenuManager::class,
+            SharpMenuManager::class
+        );
+
+        if (class_exists("\PragmaRX\Google2FA\Google2FA")) {
+            $this->app->bind(
+                Sharp2faTotpEngine::class,
+                GoogleTotpEngine::class,
+            );
+        }
+
+        $this->app->bind(
+            Sharp2faHandler::class,
+            fn () => match (config('sharp.auth.2fa.handler')) {
+                'notification' => app(Sharp2faNotificationHandler::class),
+                'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
+                default => is_string(config('sharp.auth.2fa.handler'))
+                    ? app(config('sharp.auth.2fa.handler'))
+                    : value(config('sharp.auth.2fa.handler')),
+            }
+        );
+
         $this->commands([
             CreateUploadsMigration::class,
             EntityListMakeCommand::class,
@@ -105,65 +131,19 @@ class SharpServiceProvider extends ServiceProvider
 
     protected function registerMiddleware(): void
     {
-        $this->app['router']->middlewareGroup('sharp_web', [
-            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-            \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-            \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
-            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            HandleInertiaRequests::class,
-            ConfigureZiggy::class,
-        ]);
-
         $this->app['router']
-            ->aliasMiddleware(
-                'sharp_api_append_form_authorizations',
-                AppendFormAuthorizations::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_list_authorizations',
-                AppendListAuthorizations::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_multiform_in_list',
-                AppendMultiformInEntityList::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_notifications',
-                AppendNotifications::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_errors',
-                HandleSharpApiErrors::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_validation',
-                BindSharpValidationResolver::class,
-            )
-            ->aliasMiddleware(
-                'sharp_api_append_breadcrumb',
-                AppendBreadcrumb::class,
-            )
-            ->aliasMiddleware(
-                'sharp_locale',
-                SetSharpLocale::class,
-            )
-            ->aliasMiddleware(
-                'sharp_auth',
-                SharpAuthenticate::class,
-            )
-            ->aliasMiddleware(
-                'sharp_guest',
-                SharpRedirectIfAuthenticated::class,
-            )
-            ->aliasMiddleware(
-                'sharp_invalidate_cache',
-                InvalidateCache::class,
-            );
+            ->middlewareGroup('sharp_common', $this->app['config']->get('sharp.middleware.common'))
+            ->middlewareGroup('sharp_web', $this->app['config']->get('sharp.middleware.web'))
+            ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
+            ->aliasMiddleware('sharp_api_append_instance_authorizations', AppendInstanceAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
+            ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
+            ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)
+            ->aliasMiddleware('sharp_api_append_breadcrumb', AppendBreadcrumb::class)
+            ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
+            ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
+
+        $this->app['router']->pushMiddlewareToGroup('sharp_web', HandleInertiaRequests::class);
+        $this->app['router']->pushMiddlewareToGroup('sharp_web', ConfigureZiggy::class);
     }
 }

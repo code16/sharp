@@ -7,26 +7,26 @@
             :locale="locale"
             :locales="locales"
             :create-editor="createEditor"
-            v-slot="{ editor }"
+            v-slot="{ editor, locale }"
         >
             <SharpEditor
                 :editor="editor"
                 :toolbar-options="toolbarOptions(editor)"
                 v-bind="$props"
-                @update="handleUpdate"
+                @update="handleUpdate({ editor, locale, ...$event })"
             />
         </LocalizedEditors>
     </div>
 </template>
 
 <script>
-    import { createMarkdownEditor } from 'tiptap-markdown';
+    import { Markdown } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import { lang } from "sharp";
-    import SharpEditor from '../../Editor';
+    import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
-    import LocalizedEditors from "../../LocalizedEditors";
+    import LocalizedEditors from "../../LocalizedEditors.vue";
     import { normalizeText } from "../../../../../util/text";
 
 
@@ -54,9 +54,9 @@
             }
         },
         methods: {
-            handleUpdate(editor) {
-                const content = normalizeText(editor.getMarkdown() ?? '');
-                this.$emit('input', this.localizedValue(content));
+            handleUpdate({ editor, locale, error }) {
+                const content = normalizeText(editor.storage.markdown.getMarkdown() ?? '');
+                this.$emit('input', this.localizedValue(content, locale), { error });
             },
             toolbarOptions(editor) {
                 const options = [];
@@ -74,16 +74,16 @@
             },
 
             createEditor({ content }) {
-                const MarkdownEditor = createMarkdownEditor(Editor);
-
-                return new MarkdownEditor({
+                return new Editor({
                     ...defaultEditorOptions,
-                    extensions: this.extensions,
+                    extensions: [
+                        ...this.extensions,
+                        Markdown.configure({
+                            breaks: this.nl2br,
+                        }),
+                    ],
                     content,
                     editable: !this.readOnly,
-                    markdown: {
-                        breaks: this.nl2br,
-                    },
                 });
             },
         },

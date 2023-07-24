@@ -1,56 +1,11 @@
 
 
 .SharpGlobalFilters {
-  $border-left-width: 6px;
-
-  // prevent nav items flickering
-  min-height: calc(4rem + 1px);
-
-  .form-control {
-    padding: 0;
+  .multiselect__tags {
+    max-width: calc(100% - 1rem);
   }
-
-  .SharpSelect,
-  .SharpFilterSelect,
-  .SharpFilterControl {
-    border-radius: 0;
-    border: 0;
-  }
-
-  .SharpFilterControl {
+  .multiselect__content {
     width: 100%;
-    border-bottom: 1px solid hsla(var(--primary-h), var(--primary-s), 30%, .375);
-    border-left: $border-left-width solid hsla(var(--primary-h), var(--primary-s), 40%, .5);
-    &__text {
-      display: none;
-    }
-  }
-  .multiselect {
-    color: hsl(var(--primary-h), var(--primary-s), 30%);
-    padding: .875rem 1.25rem;
-    padding-right: $form-select-indicator-padding;
-    min-height: 4rem;
-    font-size: 1.125rem;
-
-    &__single {
-      @extend .ui-font;
-      font-size: .875rem;
-      white-space: normal;
-      margin-right: 0;
-    }
-    &__tags {
-      border-radius: 0;
-      cursor: pointer;
-      line-height: 1.3;
-    }
-  }
-  .SharpAutocomplete {
-    .multiselect__content {
-      width: calc(100% - 2px);
-      left: 1px;
-      margin-top: -1px;
-      box-shadow: $box-shadow-lg;
-      padding-bottom: 1rem;
-    }
+    box-shadow: $box-shadow-lg;
   }
 }

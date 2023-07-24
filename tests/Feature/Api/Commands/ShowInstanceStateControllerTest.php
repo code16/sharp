@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Commands\SingleEntityState;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
 class ShowInstanceStateControllerTest extends BaseApiTest
 {
@@ -61,16 +62,17 @@ class ShowInstanceStateControllerTest extends BaseApiTest
             ->assertStatus(404);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         parent::buildTheWorld($singleShow);
 
-        $this->app['config']->set(
-            'sharp.entities.person.show',
-            $singleShow
-                ? ShowInstanceStatePersonSharpSingleShow::class
-                : ShowInstanceStatePersonSharpShow::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(
+                $singleShow
+                    ? ShowInstanceStatePersonSharpSingleShow::class
+                    : ShowInstanceStatePersonSharpShow::class
+            );
     }
 }
 

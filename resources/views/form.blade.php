@@ -1,9 +1,5 @@
-@extends("sharp::layout")
 
-@section("content")
-
+<x-sharp::layout>
     <x-sharp::page class="form">
-        <sharp-action-view></sharp-action-view>
     </x-sharp::page>
-
-@endsection
+</x-sharp::layout>

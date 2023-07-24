@@ -460,7 +460,6 @@ describe('sharp-form', ()=>{
                 authorizations: {
                     create: false,
                     update: false,
-                    delete: false,
                 },
                 breadcrumb: {
                     visible: true,
@@ -471,7 +470,6 @@ describe('sharp-form', ()=>{
 
         expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: false,
-            showDeleteButton: false,
             showBackButton: true,
             create: true,
             breadcrumb: [{ url:'/list' }],
@@ -483,54 +481,20 @@ describe('sharp-form', ()=>{
 
         expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: true,
-            showDeleteButton: false,
             showBackButton: false,
             create: true,
         });
 
-
         wrapper.setProps({
             instanceId: '10',
         });
-        wrapper.vm.authorizations.delete = true;
-
-        expect(wrapper.vm.actionBarProps).toMatchObject({
-            showSubmitButton: false,
-            showDeleteButton: true,
-            showBackButton: true,
-            create: false,
-        });
-
         wrapper.vm.authorizations.update = true;
 
         expect(wrapper.vm.actionBarProps).toMatchObject({
             showSubmitButton: true,
-            showDeleteButton: true,
             showBackButton: false,
             create: false,
         });
-    });
-
-    test('redirect on delete', async () => {
-        const wrapper = createWrapper({
-            propsData: {
-                independant: true,
-                form: createForm(),
-            }
-        });
-
-        jest.spyOn(window.location, 'replace')
-
-        wrapper.vm.handleDeleteClicked();
-
-        await nextRequestFulfilled({
-            status: 200,
-            response: {
-                redirectUrl: '/test'
-            }
-        });
-
-        expect(window.location.replace).toHaveBeenCalledWith('/test');
     });
 
     test('submit', async () => {
@@ -595,10 +559,6 @@ describe('sharp-form', ()=>{
 
         expect(wrapper.vm.handleError).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.handleError).toHaveBeenCalledWith({ response: { status:500 } });
-    });
-
-    test('delete', async ()=>{
-        // refer 'redirect to list' test
     });
 
     test('cancel', async ()=>{

@@ -1,14 +1,11 @@
-@extends('sharp::layout')
+<x-sharp::layout>
+    <x-slot:head>
+        @routes
+        @inertiaHead
+    </x-slot:head>
 
-
-@section('head')
-    @routes
-    @inertiaHead
-@endsection
-
-@section("content")
     <div id="menu">
         <x-sharp::menu />
     </div>
     @inertia
-@endsection
+</x-sharp::layout>

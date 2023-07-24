@@ -2,7 +2,7 @@ import './polyfill';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import { install as VueGoogleMaps } from 'vue2-google-maps';
+import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
 import Notifications from 'vue-notification';
 
 import SharpCommands from 'sharp-commands';
@@ -12,9 +12,10 @@ import SharpFilters from 'sharp-filters';
 import SharpForm from 'sharp-form';
 import SharpShow from 'sharp-show';
 import SharpUI from 'sharp-ui';
+import SharpSearch from 'sharp-search';
 
-import ActionView from './components/ActionView';
-import LeftNav from './components/LeftNav';
+import ActionView from './components/ActionView.vue';
+import LeftNav from './components/LeftNav.vue';
 import {
     NavSection,
     NavItem,
@@ -43,6 +44,7 @@ Vue.use(SharpFilters, { store, router });
 Vue.use(SharpForm, { store, router });
 Vue.use(SharpShow, { store, router });
 Vue.use(SharpUI, { store, router });
+Vue.use(SharpSearch, { store, router });
 
 
 Vue.component('sharp-action-view', ActionView);

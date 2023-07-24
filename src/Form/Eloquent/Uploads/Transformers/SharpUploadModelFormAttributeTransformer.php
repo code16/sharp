@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Uploads\Transformers;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
@@ -10,6 +11,8 @@ use Illuminate\Support\Str;
 
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
+    use UsesSharpUploadModel;
+
     protected bool $withThumbnails;
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;
@@ -32,8 +35,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param $value
-     * @param $instance
+     * @param  $value
+     * @param  $instance
      * @param  string  $attribute
      * @return mixed
      */
@@ -47,7 +50,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             }
 
             $instance = (object) [
-                $attribute => new SharpUploadModel([
+                $attribute => static::getUploadModelClass()::make([
                     'file_name' => $value['file_name'] ?? $value['path'],
                     'filters' => $value['filters'],
                     'disk' => $value['disk'],

@@ -1,6 +1,7 @@
 /public/vendor
 /public/storage
 /public/hot
+/public/build
 /storage/*.key
 /storage/clockwork
 /vendor

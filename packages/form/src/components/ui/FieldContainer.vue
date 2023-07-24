@@ -56,8 +56,8 @@
 <script>
   import { lang, logError } from 'sharp';
   import { ConfigNode, Identifier } from 'sharp/mixins';
-  import Field from '../Field';
-  import FieldLocaleSelect from './FieldLocaleSelect';
+  import Field from '../Field.vue';
+  import FieldLocaleSelect from './FieldLocaleSelect.vue';
   import { isLocalizableValueField, resolveTextValue } from '../../util';
   import { sticky } from "sharp/directives";
 
@@ -189,17 +189,17 @@
             },
             emitClear(identifier) {
                 this.$tab?.$emit('clear', identifier);
-                this.$form.$emit('error-cleared', identifier);
+                this.$form.updateFieldError(identifier, null);
             },
             triggerFocus() {
-                this.$set(this.fieldProps,'focused',true);
+                this.$set(this.fieldProps, 'focused', true);
             },
             handleBlur() {
-                this.$set(this.fieldProps,'focused',false);
+                this.$set(this.fieldProps, 'focused', false);
             },
             handleValueChanged(value, { error } = {}) {
                 if(error) {
-                    this.setError(error);
+                    this.$form.updateFieldError(this.mergedLocalizedErrorIdentifier ?? this.mergedErrorIdentifier, [error]);
                 } else if(this.state === 'error') {
                     this.clear();
                 }

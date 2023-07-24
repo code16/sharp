@@ -11,11 +11,12 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
-use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -60,13 +61,13 @@ class DemoDashboard extends SharpDashboard
                     ->setCurvedLines(),
             )
             ->addWidget(
-                SharpPanelWidget::make('draft_panel')
-                    ->setInlineTemplate('<h1>{{count}}</h1> draft post(s)')
+                SharpFigureWidget::make('draft_panel')
+                    ->setTitle('Draft posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'draft')),
             )
             ->addWidget(
-                SharpPanelWidget::make('online_panel')
-                    ->setInlineTemplate('<h1>{{count}}</h1> online post(s)')
+                SharpFigureWidget::make('online_panel')
+                    ->setTitle('Online posts')
                     ->setLink(LinkToEntityList::make('posts')->addFilter(StateFilter::class, 'online')),
             );
     }
@@ -74,30 +75,39 @@ class DemoDashboard extends SharpDashboard
     protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
     {
         $dashboardLayout
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(6, 'authors_bar')
-                    ->addWidget(6, 'categories_pie');
+            ->addSection('Posts', function (DashboardLayoutSection $section) {
+                $section
+                    ->addRow(function (DashboardLayoutRow $row) {
+                        $row->addWidget(6, 'draft_panel')
+                            ->addWidget(6, 'online_panel');
+                    });
             })
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(12, 'visits_line');
-            })
-            ->addRow(function (DashboardLayoutRow $row) {
-                $row->addWidget(6, 'draft_panel')
-                    ->addWidget(6, 'online_panel');
+            ->addSection('Stats', function (DashboardLayoutSection $section) {
+                $section
+                    ->setKey('stats-section')
+                    ->addRow(function (DashboardLayoutRow $row) {
+                        $row->addWidget(6, 'authors_bar')
+                            ->addWidget(6, 'categories_pie');
+                    })
+                    ->addFullWidthWidget('visits_line');
             });
     }
 
     public function getFilters(): ?array
     {
         return [
-            PeriodRequiredFilter::class,
+            'stats-section' => [
+                PeriodRequiredFilter::class,
+            ],
         ];
     }
 
     public function getDashboardCommands(): ?array
     {
         return [
-            ExportStatsAsCsvCommand::class,
+            'stats-section' => [
+                ExportStatsAsCsvCommand::class,
+            ],
         ];
     }
 
@@ -121,11 +131,16 @@ class DemoDashboard extends SharpDashboard
             ->get();
 
         $this
-            ->setPanelData(
-                'draft_panel', ['count' => $posts->where('state', 'draft')->first()->count ?? 0],
+            ->setFigureData(
+                'draft_panel',
+                figure: $posts->where('state', 'draft')->first()->count ?? 0,
+                evolution: '+15%',
             )
-            ->setPanelData(
-                'online_panel', ['count' => $posts->where('state', 'online')->first()->count ?? 0],
+            ->setFigureData(
+                'online_panel',
+                figure: $posts->where('state', 'online')->first()->count ?? 0,
+                unit: 'post(s)',
+                evolution: '-10%',
             )
             ->setPageAlertData([
                 'period' => sprintf(

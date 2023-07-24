@@ -1,7 +1,7 @@
 import merge from 'lodash/merge';
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import ShowPage from "../src/components/pages/ShowPage";
+import ShowPage from "../src/components/pages/ShowPage.vue";
 import showModule from "../src/store/show";
 import { formUrl } from "sharp";
 import { MockInjections } from "@sharp/test-utils";

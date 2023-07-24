@@ -45,24 +45,27 @@ class EditorFormatter extends SharpFieldFormatter
             $uploadFormatter = app(UploadFormatter::class);
 
             foreach ($files as $file) {
-                $upload = $uploadFormatter
-                    ->setInstanceId($this->instanceId)
-                    ->fromFront($field, $attribute, $file);
+                /** @var DOMElement $domElement */
+                $domElement = collect($dom->getElementsByTagName('x-sharp-file'))
+                    ->merge($dom->getElementsByTagName('x-sharp-image'))
+                    ->first(function (DOMElement $uploadElement) use ($file) {
+                        return $uploadElement->getAttribute('name') === $file['name'];
+                    });
 
-                if (isset($upload['file_name'])) {
-                    // New file was uploaded. We have to update the name of the file in the markdown
+                if ($domElement) {
+                    $upload = $uploadFormatter
+                        ->setInstanceId($this->instanceId)
+                        ->fromFront($field, $attribute, $file);
 
-                    /** @var DOMElement $domElement */
-                    $domElement = collect($dom->getElementsByTagName('x-sharp-file'))
-                        ->merge($dom->getElementsByTagName('x-sharp-image'))
-                        ->first(function (DOMElement $uploadElement) use ($file) {
-                            return $uploadElement->getAttribute('name') === $file['name'];
-                        });
-
-                    if ($domElement) {
+                    if (isset($upload['file_name'])) {
+                        // New file was uploaded, or file was updated. We have to update the name of the file in the markdown
                         $domElement->setAttribute('name', basename($upload['file_name']));
                         $domElement->setAttribute('path', $upload['file_name']);
                         $domElement->setAttribute('disk', $upload['disk']);
+                        if ($field->isTransformOriginal()) {
+                            $domElement->removeAttribute('filter-crop');
+                            $domElement->removeAttribute('filter-rotate');
+                        }
                     }
                 }
             }

@@ -4,7 +4,7 @@
          role="menuitem"
      >
          <template v-if="disabled">
-             <span class="SharpLeftNav__item-link">
+             <span class="SharpLeftNav__item-link" :class="linkClass">
                  <slot></slot>
              </span>
          </template>
@@ -12,7 +12,7 @@
              <component
                  :is="target === '_blank' ? 'a' : Link"
                  class="SharpLeftNav__item-link"
-                 :href="href"
+                 :class="linkClass" :href="href"
                  :target="target"
              >
                  <slot></slot>
@@ -36,6 +36,7 @@
             },
             href: String,
             target: String,
+            linkClass: String,
             entityKey: String,
         },
         data() {

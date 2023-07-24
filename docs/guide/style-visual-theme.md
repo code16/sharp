@@ -40,7 +40,7 @@ You can display a custom content under the form on login page:
 
 You'll need to create a new template file:
 
-```html
+```blade
 <!-- resources/views/sharp/_login-page-message.blade.php -->
 
 <div class="alert alert-info">
@@ -95,4 +95,5 @@ The `strategy` defines how the asset path will be rendered
 
 - `raw` to output the path in the form it appears in your array
 - `asset` to pass the path to the laravel [`asset()`](https://laravel.com/docs/5.6/helpers#method-asset) function
-- `mix` to pass the path to the laravel [`mix()`](https://laravel.com/docs/5.6/helpers#method-mix) function 
+- `mix` to pass the path to the laravel [`mix()`](https://laravel.com/docs/5.6/helpers#method-mix) function
+- `vite` to pass to path to the laravel [`Vite::asset()`](https://laravel.com/docs/10.x/vite#blade-processing-static-assets) function

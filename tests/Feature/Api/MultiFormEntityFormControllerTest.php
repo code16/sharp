@@ -96,11 +96,11 @@ class MultiFormEntityFormControllerTest extends BaseApiTest
     }
 
     /** @test */
-    public function global_authorizations_are_applied_sub_entities()
+    public function prohibited_actions_are_applied_sub_entities()
     {
-        $this->app['config']->set('sharp.entities.person.authorizations', [
-            'view' => false,
-        ]);
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setProhibitedActions(['view']);
 
         $this->getJson('/sharp/api/form/person:small/1')
             ->assertStatus(403);

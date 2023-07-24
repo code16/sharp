@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
-use Code16\Sharp\View\Components\Menu;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -61,16 +61,13 @@ class CurrentSharpRequest
     public function getUrlForBreadcrumb(Collection $breadcrumb): string
     {
         return url(
-            sharp_base_url_segment()
-            .'/'
-            .$breadcrumb
-                ->map(function (BreadcrumbItem $item) {
-                    return sprintf('%s/%s',
-                        $item->type,
-                        isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
-                    );
-                })
-                ->implode('/'),
+            sprintf(
+                '%s/%s',
+                config('sharp.custom_url_segment', 'sharp'),
+                $breadcrumb
+                    ->map(fn (BreadcrumbItem $item) => $item->toUri())
+                    ->implode('/'),
+            )
         );
     }
 
@@ -97,7 +94,7 @@ class CurrentSharpRequest
 
     public function getEntityMenuLabel(string $entityKey): ?string
     {
-        return app(Menu::class)
+        return app(SharpMenuManager::class)
             ->getEntityMenuItem($entityKey)
             ?->getLabel();
     }
@@ -157,13 +154,10 @@ class CurrentSharpRequest
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
-        return session()->get(
-            "_sharp_retained_global_filter_{$handler->getKey()}",
-            $handler->defaultValue(),
-        );
+        return $handler->currentValue();
     }
 
-    protected function buildBreadcrumb(): void
+    private function buildBreadcrumb(): void
     {
         $this->breadcrumb = new Collection();
         $segments = $this->getSegmentsFromRequest();
@@ -180,9 +174,7 @@ class CurrentSharpRequest
                 $type = $segments->shift();
                 $key = $instance = null;
                 $segments
-                    ->takeWhile(function (string $segment) {
-                        return ! in_array($segment, ['s-show', 's-form']);
-                    })
+                    ->takeWhile(fn (string $segment) => ! in_array($segment, ['s-show', 's-form']))
                     ->values()
                     ->each(function (string $segment, $index) use (&$key, &$instance) {
                         if ($index === 0) {

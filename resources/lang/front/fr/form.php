@@ -51,6 +51,7 @@ return [
 
     'text.validation.maxlength' => 'Le texte est trop long (:maxlength caractères max.)',
 
+    'editor.character_count' => ':count caractères',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
 
     'editor.dialogs.link.text_label' => 'Texte',

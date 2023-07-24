@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpForm" data-popover-boundary>
+    <div class="SharpForm">
         <slot
             name="action-bar"
             :props="actionBarProps"
@@ -22,14 +22,7 @@
                 </div>
             </template>
 
-            <TabbedLayout :layout="layout" ref="tabbedLayout">
-                <template v-if="localized" v-slot:nav-prepend>
-                    <LocaleSelect
-                        :locale="currentLocale"
-                        :locales="locales"
-                        @change="handleLocaleChanged"
-                    />
-                </template>
+            <TabbedLayout :layout="layout" ref="tabbedLayout" data-popover-boundary>
                 <template v-slot:default="{ tab }">
                     <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
                         <FieldsLayout
@@ -57,6 +50,9 @@
                     </Grid>
                 </template>
             </TabbedLayout>
+            <template v-if="!independant">
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
+            </template>
         </template>
     </div>
 </template>
@@ -64,20 +60,21 @@
 <script>
     import {
         getBackUrl,
-        lang,
         logError,
         showAlert,
-        showConfirm,
     } from "sharp";
 
-    import { Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout } from 'sharp-ui';
+    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
     import { DynamicView, Localization } from 'sharp/mixins';
 
-    import FieldsLayout from './ui/FieldsLayout';
-    import LocaleSelect from './ui/LocaleSelect';
+    import FieldsLayout from './ui/FieldsLayout.vue';
+    import LocaleSelect from './ui/LocaleSelect.vue';
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";
+    import BottomBar from "./BottomBar.vue";
+
+    const isLocal = Symbol('isLocal');
 
     export default {
         name: 'SharpForm',
@@ -86,6 +83,8 @@
         mixins: [Localization, localize('fields')],
 
         components: {
+            BottomBar,
+            Button,
             TabbedLayout,
             FieldsLayout,
             Grid,
@@ -172,7 +171,7 @@
                 return this.independant;
             },
             hasErrors() {
-                return Object.values(this.errors).some(error => !!error);
+                return Object.values(this.errors).some(error => !!error && !error[isLocal]);
             },
 
             baseEntityKey() {
@@ -209,21 +208,21 @@
                     showSubmitButton: this.isCreation
                         ? !!this.authorizations.create
                         : !!this.authorizations.update,
-                    showDeleteButton: !this.isCreation && !this.isSingle && !!this.authorizations.delete,
                     showBackButton: this.isReadOnly,
                     create: !!this.isCreation,
                     uploading: this.isUploading,
                     loading: this.loading,
                     breadcrumb: this.breadcrumb?.items,
                     showBreadcrumb: !!this.breadcrumb?.visible,
-                    hasDeleteConfirmation: !!this.config.deleteConfirmationText,
+                    locales: this.locales,
+                    currentLocale: this.currentLocale,
                 }
             },
             actionBarListeners() {
                 return {
                     'submit': this.handleSubmitClicked,
-                    'delete': this.handleDeleteClicked,
                     'cancel': this.handleCancelClicked,
+                    'locale-change': this.handleLocaleChanged,
                 }
             },
             mergedErrorIdentifier() {
@@ -248,6 +247,15 @@
             },
             updateLocale(key, locale) {
                 this.$set(this.fieldLocale, key, locale);
+            },
+            updateFieldError(key, error) { // used in FieldContainer
+                if(error) {
+                    error[isLocal] = true;
+                }
+                this.errors = {
+                    ...this.errors,
+                    [key]: error,
+                };
             },
             handleLocaleChanged(locale) {
                 this.fieldLocale = this.defaultFieldLocaleMap({ fields: this.fields, locales: this.locales }, locale);
@@ -385,18 +393,6 @@
                 this.submit().catch(() => {
                 });
             },
-            async handleDeleteClicked() {
-                if(this.config.deleteConfirmationText) {
-                    await showConfirm(this.config.deleteConfirmationText, {
-                        okTitle: lang('modals.confirm.delete.ok_button'),
-                        okVariant: 'danger',
-                    });
-                }
-                this.axiosInstance.delete(this.apiPath)
-                    .then(response => {
-                        this.redirectForResponse(response, { replace: true });
-                    });
-            },
             handleCancelClicked() {
                 this.redirectToParentPage();
             },
@@ -418,12 +414,6 @@
             },
         },
         created() {
-            this.$on('error-cleared', errorId => {
-                this.errors = {
-                    ...this.errors,
-                    [errorId]: null,
-                }
-            });
             this.init();
         },
     }

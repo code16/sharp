@@ -1,21 +1,21 @@
 <template>
     <div class="SharpTabbedLayout">
         <template v-if="showTabs">
-            <Tabs>
-                <template v-slot:nav-prepend>
-                    <slot name="nav-prepend" />
-                </template>
+            <Tabs nav-class="bg-white border-bottom p-3 pb-0">
                 <template v-for="(tab, i) in layout.tabs">
                     <Tab :title="tab.title" :active="isActive(tab)" @active="handleTabActivated(tab)" :key="`tab-${i}`">
                         <slot :tab="tab" />
                     </Tab>
                 </template>
+                <template v-slot:nav-append>
+                    <slot name="nav-append" />
+                </template>
             </Tabs>
         </template>
         <template v-else>
-            <template v-if="$slots['nav-prepend']">
-                <div class="my-4">
-                    <slot name="nav-prepend" />
+            <template v-if="$slots['nav-append']">
+                <div class="d-flex justify-content-end bg-white border-bottom p-3">
+                    <slot name="nav-append" />
                 </div>
             </template>
             <div class="tab-pane">
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-    import Tabs from './Tabs';
-    import Tab from './Tab';
+    import Tabs from './Tabs.vue';
+    import Tab from './Tab.vue';
 
     function slugify(text) {
         return text

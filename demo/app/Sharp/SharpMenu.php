@@ -14,7 +14,7 @@ class SharpMenu extends BaseSharpMenu
             ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
                 $userMenu
                     ->addEntityLink('profile', 'Profile', 'fa fa-user')
-                    ->addExternalLink('https://google.com', 'Open Google', 'fa fa-google');
+                    ->addExternalLink('https://sharp.code16.fr/docs', 'Documentation', 'fa fa-book');
             })
             ->addSection('Blog', function (SharpMenuItemSection $section) {
                 $section

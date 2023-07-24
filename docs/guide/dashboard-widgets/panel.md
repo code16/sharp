@@ -6,9 +6,9 @@ This widget is based on the HTML Form field, and is intended to display any usef
 
 ```php
 $widgetsContainer->addWidget(
-    SharpPanelWidget::make("activeSpaceships")
-        ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-        ->setLink(LinkToEntityList::make("spaceship"));
+    SharpPanelWidget::make('activeSpaceships')
+        ->setInlineTemplate(''<h1>{{count}}</h1> spaceships in activity'')
+        ->setLink(LinkToEntityList::make('spaceship'));
 ```
 
 Note that the `setLink()` method is expecting a [LinkTo... instance](../link-to.md).
@@ -22,7 +22,7 @@ Example:
 
 ```php
 $panel->setInlineTemplate(
-    "<h1>{{count}}</h1> spaceships in activity"
+    ''<h1>{{count}}</h1> spaceships in activity''
 )
 ```
 
@@ -47,7 +47,7 @@ function buildWidgetsData(): void
     $count = [...];
 
     $this->setPanelData(
-        "activeSpaceships", ["count" => $count]
+        'activeSpaceships', ['count' => $count]
     );
 }
 ```

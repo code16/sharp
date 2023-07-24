@@ -22,8 +22,8 @@
 </template>
 
 <script>
-    import VueClip from "../../../upload/VueClip";
-    import NodeRenderer from "../../NodeRenderer";
+    import VueClip from "../../../upload/VueClip.vue";
+    import NodeRenderer from "../../NodeRenderer.vue";
     import { lang, showAlert, getUniqueId } from "sharp";
     import { getUploadOptions } from "../../../../../util/upload";
 

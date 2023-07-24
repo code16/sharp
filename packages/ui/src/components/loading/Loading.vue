@@ -1,14 +1,14 @@
 <template>
     <loading-transition :fade="fade">
         <div class="SharpLoading" :class="classes" v-show="visible">
-            <div class="spinner-border" :class="spinnerClasses"></div>
+            <div class="d-block spinner-border" :class="spinnerClasses"></div>
         </div>
     </loading-transition>
 </template>
 
 
 <script>
-    import LoadingTransition from "./LoadingTransition";
+    import LoadingTransition from "./LoadingTransition.vue";
 
     export default {
         components: {

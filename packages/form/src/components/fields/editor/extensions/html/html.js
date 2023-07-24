@@ -1,36 +1,31 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
-import HtmlNode from "./HtmlNode";
+import HtmlNode from "./HtmlNode.vue";
 import { setupContent, setupContentDOM } from "./util";
-import { createMarkdownExtension } from "tiptap-markdown";
 
 export const Html = Node.create({
     name: 'html-content',
     group: 'block',
     onBeforeCreate() {
-        if(this.editor.options.markdown) {
-            const { extensions } = this.editor.options.markdown;
-            this.editor.setOptions({
-                markdown: {
-                    extensions: [
-                        ...(extensions ?? []),
-                        createMarkdownExtension(this, {
-                            parse: {
-                                updateDOM(dom) {
-                                    setupContentDOM(dom, this.schema);
-                                },
-                            }
-                        })
-                    ],
-                }
-            });
-        } else {
+        if(!this.editor.storage.markdown) {
             this.editor.setOptions({
                 content: setupContent(
                     this.editor.options.content,
                     this.editor.schema
                 )
             });
+        }
+    },
+
+    addStorage() {
+        return {
+            markdown: {
+                parse: {
+                    updateDOM(dom) {
+                        setupContentDOM(dom, this.editor.schema);
+                    },
+                }
+            }
         }
     },
 

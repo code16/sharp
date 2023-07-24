@@ -67,7 +67,6 @@
             :value="value"
             :visible.sync="showEditModal"
             :src="originalImageSrc"
-            :transform-original="transformKeepOriginal"
             :ratio-x="ratioX"
             :ratio-y="ratioY"
             @submit="handleEditSubmitted"
@@ -99,7 +98,7 @@
     import { downloadFileUrl } from "sharp-files";
     import { getFiltersFromCropData } from "./util/filters";
     import { getImageBlobUrl } from "./util/image";
-    import EditModal from "./EditModal";
+    import EditModal from "./EditModal.vue";
 
     export default {
         name: 'SharpVueClip',

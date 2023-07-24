@@ -16,6 +16,14 @@ return [
         'test' => \App\Sharp\Entities\TestEntity::class,
     ],
 
+    'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],
+
+    'search' => [
+        'enabled' => true,
+        'placeholder' => 'Search for posts or authors...',
+        'engine' => \App\Sharp\AppSearchEngine::class,
+    ],
+
     'menu' => \App\Sharp\SharpMenu::class,
 
     'uploads' => [
@@ -23,12 +31,23 @@ return [
         'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
         'transform_keep_original_image' => true,
+        'model_class' => \App\Models\Media::class,
     ],
 
     'auth' => [
         'login_attribute' => 'email',
         'password_attribute' => 'password',
         'suggest_remember_me' => false,
+        'rate_limiting' => [
+            'enabled' => true,
+            'max_attempts' => 5,
+        ],
+        '2fa' => [
+            'enabled' => true,
+            'handler' => env('DEMO_2FA_TOTP_ENABLED', false)
+                ? 'totp'
+                : \App\Sharp\Demo2faNotificationHandler::class,
+        ],
         'display_attribute' => 'name',
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],

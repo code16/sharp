@@ -1,87 +1,43 @@
-@extends("sharp::layout", [
-    'bodyClass' => 'login'
-])
-
-@section("content")
-    <div id="sharp-app" class="login__content">
-        <div class="container">
-            <form method="POST" action="{{ route("code16.sharp.login.post") }}">
-                {{ csrf_field() }}
-                <div class="row justify-content-center">
-                    <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
-                        @if($icon = config('sharp.theme.logo_urls.login'))
-                            <div class="text-center mb-3">
-                                <img src="{{ url($icon) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
-                            </div>
-                        @elseif(file_exists(public_path($icon = 'sharp-assets/login-icon.png')))
-                            <div class="text-center mb-3">
-                                <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
-                            </div>
-                        @elseif(file_exists($logo = public_path('/vendor/sharp/images/logo.svg')))
-                            <div class="text-center logo mb-4">
-                                {!! file_get_contents($logo) !!}
-                            </div>
-                        @endif
 
 
-                        @if ($errors->any())
+<x-sharp::layout class="login">
+    <x-slot:title>
+        {{ trans('sharp::login.login_page_title') }}
+    </x-slot:title>
+    <x-sharp::layout.auth>
+        <form method="POST" action="{{ route("code16.sharp.login.post") }}">
+            @csrf
+            <div class="SharpForm__form-item mb-3">
+                <input type="text" name="login" id="login" class="form-control" value="{{ old('login') }}"
+                    placeholder="{{ __('sharp::login.login_field') }}" autocomplete="username">
+            </div>
 
-                            <div role="alert" class="alert alert-danger">
-                                @lang('sharp::auth.validation_error')
-                            </div>
+            <div class="SharpForm__form-item mb-3">
+                <input type="password" name="password" id="password" class="form-control"
+                    placeholder="{{ __('sharp::login.password_field') }}" autocomplete="current-password">
+            </div>
 
-                        @elseif (session()->has('invalid'))
-
-                            <div role="alert" class="alert alert-danger">
-                                @lang('sharp::auth.invalid_credentials')
-                            </div>
-
-                        @endif
-
-                        <div class="card border-0 mb-3">
-                            @if(config("sharp.name", 'Sharp') !== 'Sharp')
-                                <div class="card-header bg-transparent border-0 pb-0 pt-4">
-                                    <h1 class="text-center card-title mb-0 fs-4">{{ config("sharp.name") }}</h1>
-                                </div>
-                            @endif
-                            <div class="card-body p-5 py-4">
-                                <div class="SharpForm__form-item mb-3">
-                                    <input type="text" name="login" id="login" class="form-control" value="{{ old('login') }}" placeholder="@lang('sharp::login.login_field')" autocomplete="username">
-                                </div>
-
-                                <div class="SharpForm__form-item mb-3">
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="@lang('sharp::login.password_field')" autocomplete="current-password">
-                                </div>
-
-                                @if(config('sharp.auth.suggest_remember_me', false))
-                                    <div class="SharpForm__form-item mb-3">
-                                        <div class="SharpCheck form-check mb-0">
-                                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="remember">
-                                                @lang('sharp::login.remember')
-                                            </label>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <div class="text-center mt-4">
-                                    <button type="submit" id="submit" class="btn btn-primary btn-lg">
-                                        @lang('sharp::login.button')
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        @includeIf(config("sharp.login_page_message_blade_path"))
-
-                        <p class="text-center mt-2 text-white login__powered">
-                            <span>powered by</span>
-                            <a class="text-reset" href="https://sharp.code16.fr/docs/">Sharp {{sharp_version()}}</a>
-                        </p>
+            @if(config('sharp.auth.suggest_remember_me', false))
+                <div class="SharpForm__form-item mb-3">
+                    <div class="SharpCheck form-check mb-0">
+                        <input class="form-check-input" type="checkbox" name="remember"
+                            id="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="remember">
+                            @lang('sharp::login.remember')
+                        </label>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
+            @endif
 
-@endsection
+            <div class="text-center mt-4">
+                <button type="submit" id="submit" class="btn btn-primary btn-lg">
+                    @lang('sharp::login.button')
+                </button>
+            </div>
+        </form>
+
+        <x-slot:append>
+            @includeIf(config("sharp.login_page_message_blade_path"))
+        </x-slot:append>
+    </x-sharp::layout.auth>
+</x-sharp::layout>

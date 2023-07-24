@@ -13,7 +13,7 @@ Each `entity` in Sharp can be displayed:
 
 ## Installation
 
-Sharp 7 needs Laravel 8+ and PHP 8+.
+Sharp 8 needs Laravel 10+ and PHP 8.2+.
 
 - Add the package with composer: `composer require code16/sharp`
 - And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
@@ -60,10 +60,10 @@ class SpaceshipEntity extends SharpEntity
 }
 ```
 
-We choose to define:
+We chose to define:
 
 - a `list` class, responsible for the `Entity List`,
-- a `show` class, responsible for displaying an `instance`,
+- a `show` class, responsible for displaying an `instance` in a `Show Page`,
 - a `form` class, responsible for the create and edit `Form`,
 - and a `policy` class, for authorization.
 
@@ -80,9 +80,11 @@ Instead of directly declaring an array of entities in the config file, you can t
 Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to define the `custom_url_segment` config value, in `config/sharp.php`:
 
 ```php
+// config/sharp.php
+
 return [
-    "name" => "Saturn",
-    "custom_url_segment" => "admin",
-    [...]
+    'name' => 'My Sharp app',
+    'custom_url_segment' => 'admin',
+    // ...
 ]
 ```

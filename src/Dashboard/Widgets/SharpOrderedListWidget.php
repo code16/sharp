@@ -46,10 +46,8 @@ class SharpOrderedListWidget extends SharpWidget
 
     public function toArray(): array
     {
-        return parent::buildArray(
-            [
-                'html' => $this->html,
-            ],
-        );
+        return parent::buildArray([
+            'html' => $this->html,
+        ]);
     }
 }

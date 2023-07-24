@@ -1,10 +1,13 @@
 <template>
-    <div class="SharpSearch" role="search">
+    <div class="SharpSearch"
+        :class="{ 'SharpSearch--focused': focused || search }"
+        role="search"
+    >
         <form class="h-100" @submit.prevent="handleSubmitted">
             <label id="ab-search-label" class="SharpSearch__label visually-hidden" for="ab-search-input">{{ placeholder }}</label>
             <div class="input-group input-group-sm flex-nowrap">
                 <div class="position-relative flex-fill" style="min-width: 0">
-                    <input class="SharpSearch__input form-control form-control-sm"
+                    <input class="SharpSearch__input form-control form-control-sm h-100 fs-8"
                         v-model="search"
                         :placeholder="placeholder"
                         :disabled="disabled"
@@ -29,10 +32,10 @@
                     </button>
                 </div>
 
-                <button class="btn btn-sm btn-outline-primary SharpSearch__button">
-                    <svg class="align-middle" width="1.25em" height="1.25em" viewBox="0 0 16 16" fill-rule="evenodd">
-                        <path d="M6 2c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm0-2C2.7 0 0 2.7 0 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zM16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"></path>
-                        <path d="M16 13.8L13.8 16l-3.6-3.6 2.2-2.2z"></path>
+                <button class="btn btn-sm btn-outline-primary d-inline-flex SharpSearch__button">
+                    <!-- heroicons: solid/20/search -->
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
                     </svg>
                 </button>
             </div>
@@ -50,6 +53,7 @@
         data() {
             return {
                 search: null,
+                focused: false,
             }
         },
         watch: {
@@ -75,9 +79,11 @@
             },
             handleFocused() {
                 this.$emit('focus');
+                this.focused = true;
             },
             handleBlur() {
                 this.$emit('blur');
+                this.focused = false;
             },
             handleFocusout(e) {
                 if(!e.relatedTarget || !this.$el.contains(e.relatedTarget)) {

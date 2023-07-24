@@ -1,6 +1,6 @@
 <script>
     import { ErrorNode } from 'sharp/mixins';
-    import FieldsLayout from '../../ui/FieldsLayout';
+    import FieldsLayout from '../../ui/FieldsLayout.vue';
 
     export default {
         name:'SharpListItem',

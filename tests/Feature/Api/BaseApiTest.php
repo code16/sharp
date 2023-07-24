@@ -17,12 +17,14 @@ abstract class BaseApiTest extends SharpTestCase
         if (! file_exists(public_path('vendor/sharp'))) {
             mkdir(public_path('vendor/sharp'), 0777, true);
         }
-        touch(public_path('vendor/sharp/mix-manifest.json'));
+        touch(public_path('vendor/sharp/manifest.json'));
     }
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->withoutVite();
 
         $this->app['config']->set(
             'app.key', 'base64:'.base64_encode(random_bytes(
@@ -36,7 +38,7 @@ abstract class BaseApiTest extends SharpTestCase
         $this->actingAs(new User);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         $this->app['config']->set(
             'sharp.entities.person',

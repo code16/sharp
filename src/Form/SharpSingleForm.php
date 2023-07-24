@@ -29,6 +29,7 @@ abstract class SharpSingleForm extends SharpForm
         throw new SharpException('Store is not possible in a SingleSharpForm.');
     }
 
+    /** @deprecated will be removed in v9. */
     final public function delete($id): void
     {
         throw new SharpException('Delete is not possible in a SingleSharpForm.');

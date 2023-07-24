@@ -4,7 +4,8 @@
               'SharpFilterSelect--open':opened,
               'SharpFilterSelect--empty':empty,
               'SharpFilterSelect--multiple':multiple,
-              'SharpFilterSelect--searchable':searchable
+              'SharpFilterSelect--searchable':searchable,
+              'SharpFilterSelect--underlined':!global
           }"
     >
         <!-- dropdown & search input -->
@@ -34,8 +35,7 @@
         <FilterControl :label="label" @click="handleClicked">
             <!-- value text & tags -->
             <Select
-                class="SharpFilterSelect__select text-wrap"
-                :class="formSelect ? 'form-select' : 'dropdown-toggle'"
+                class="SharpFilterSelect__select form-select text-wrap"
                 :value="value"
                 :options="values"
                 :multiple="multiple"
@@ -45,7 +45,8 @@
                 placeholder=" "
                 ref="select"
                 @input="handleSelect"
-            />
+            >
+            </Select>
         </FilterControl>
     </div>
 </template>
@@ -53,7 +54,7 @@
 <script>
     import { Autocomplete, Select } from 'sharp-form'
     import { Localization } from 'sharp/mixins';
-    import FilterControl from '../FilterControl';
+    import FilterControl from '../FilterControl.vue';
 
     export default {
         name: 'SharpFilterSelect',
@@ -78,7 +79,7 @@
             searchKeys: Array,
             template: String,
             disabled: Boolean,
-            formSelect: Boolean,
+            global: Boolean,
         },
         data() {
             return {

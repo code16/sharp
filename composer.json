@@ -12,22 +12,22 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "8.2.*",
         "inertiajs/inertia-laravel": "^0.6.9",
-        "intervention/image": "^2.5",
-        "laravel/framework": "^8.64|^9.0|^10.0",
-        "league/commonmark": "^2.0",
-        "spatie/image-optimizer": "^1.2",
-        "tightenco/ziggy": "^1.5"
+        "intervention/image": "^2.7",
+        "laravel/framework": "^10.0",
+        "league/commonmark": "^2.4",
+        "spatie/image-optimizer": "^1.6",
+        "tightenco/ziggy": "^1.6"
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
-        "dms/phpunit-arraysubset-asserts": "^0.2.0|^0.4",
-        "doctrine/dbal": "~2.5|^3.5",
+        "dms/phpunit-arraysubset-asserts": "^0.4",
+        "doctrine/dbal": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.8",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.4|^6.0",
-        "orchestra/testbench": "^6.0|^7.0|^8.0",
+        "mockery/mockery": "^1.5.0",
+        "nunomaduro/collision": "^6.0",
+        "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^9.5",
         "spatie/laravel-ray": "^1.26"
     },

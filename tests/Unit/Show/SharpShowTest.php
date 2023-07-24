@@ -137,30 +137,6 @@ class SharpShowTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_define_a_collapsable_entity_list_section_with_a_legacy_closure()
-    {
-        $sharpShow = new class extends BaseSharpShowDefaultTest
-        {
-            public function buildShowFields(FieldsContainer $showFields): void
-            {
-                $showFields->addField(
-                    SharpShowEntityListField::make('entityList', 'entityKey')
-                        ->setLabel('Test'),
-                );
-            }
-
-            public function buildShowLayout(ShowLayout $showLayout): void
-            {
-                $showLayout->addEntityListSection('entityList', function (ShowLayoutSection $section) {
-                    $section->setCollapsable();
-                });
-            }
-        };
-
-        $this->assertTrue($sharpShow->showLayout()['sections'][0]['collapsable']);
-    }
-
-    /** @test */
     public function we_can_define_a_custom_key_to_a_section()
     {
         $sharpShow = new class extends BaseSharpShowDefaultTest
@@ -330,8 +306,7 @@ class SharpShowTest extends SharpTestCase
     /** @test */
     public function single_shows_have_are_declared_in_config()
     {
-        $sharpShow = new class extends BaseSharpSingleShowDefaultTest
-        {
+        $sharpShow = new class extends BaseSharpSingleShowDefaultTest {
         };
 
         $this->assertArraySubset(

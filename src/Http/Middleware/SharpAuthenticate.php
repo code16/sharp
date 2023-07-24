@@ -9,11 +9,6 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 class SharpAuthenticate extends BaseAuthenticate
 {
-    /**
-     * The authentication factory instance.
-     *
-     * @var \Illuminate\Contracts\Auth\Factory
-     */
     protected $auth;
 
     public function __construct(Auth $auth)
@@ -21,14 +16,6 @@ class SharpAuthenticate extends BaseAuthenticate
         parent::__construct($auth);
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string[]  ...$guards
-     * @return mixed
-     */
     public function handle($request, Closure $next, ...$guards)
     {
         try {
@@ -44,9 +31,11 @@ class SharpAuthenticate extends BaseAuthenticate
                 return response()->json(['message' => 'Unauthenticated user'], 401);
             }
 
-            return redirect()->guest(
-                config('sharp.auth.login_page_url', route('code16.sharp.login')),
-            );
+            if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
+                return redirect()->guest($loginPageUrl);
+            }
+
+            return redirect()->guest(route('code16.sharp.login'));
         }
 
         return $next($request);

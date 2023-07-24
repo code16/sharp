@@ -1,4 +1,4 @@
-import FormPage from './components/pages/FormPage';
+import FormPage from './components/pages/FormPage.vue';
 
 export default [
     /** New spec */

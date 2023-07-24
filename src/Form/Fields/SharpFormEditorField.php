@@ -5,20 +5,21 @@ namespace Code16\Sharp\Form\Fields;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
+use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormEditorField extends SharpFormField
 {
-    use SharpFormFieldWithPlaceholder,
-        SharpFormFieldWithUpload,
-        SharpFormFieldWithDataLocalization,
-        SharpFormFieldWithEmbeds;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithUpload;
+    use SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithEmbeds;
+    use SharpFormFieldWithMaxLength {
+        setMaxLength as protected parentSetMaxLength;
+    }
 
     const FIELD_TYPE = 'editor';
-
-    /** @deprecated use UPLOAD */
-    const DOC = 'upload';
 
     const B = 'bold';
     const I = 'italic';
@@ -56,6 +57,7 @@ class SharpFormEditorField extends SharpFormField
     protected bool $showToolbar = true;
     protected bool $renderAsMarkdown = false;
     protected bool $withoutParagraphs = false;
+    protected bool $showCharacterCount = false;
 
     public static function make(string $key): self
     {
@@ -97,6 +99,20 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
+    public function showCharacterCount(bool $showCharacterCount = true): self
+    {
+        $this->showCharacterCount = $showCharacterCount;
+
+        return $this;
+    }
+
+    public function setMaxLength(int $maxLength): self
+    {
+        $this->showCharacterCount = true;
+
+        return $this->parentSetMaxLength($maxLength);
+    }
+
     public function setWithoutParagraphs(bool $withoutParagraphs = true): self
     {
         $this->withoutParagraphs = $withoutParagraphs;
@@ -125,6 +141,7 @@ class SharpFormEditorField extends SharpFormField
             'transformKeepOriginal' => 'boolean',
             'markdown' => 'boolean',
             'inline' => 'boolean',
+            'showCharacterCount' => 'boolean',
         ];
     }
 
@@ -140,6 +157,8 @@ class SharpFormEditorField extends SharpFormField
                     'localized' => $this->localized,
                     'markdown' => $this->renderAsMarkdown,
                     'inline' => $this->withoutParagraphs,
+                    'showCharacterCount' => $this->showCharacterCount,
+                    'maxLength' => $this->maxLength,
                     'embeds' => array_merge(
                         $this->innerComponentUploadConfiguration(),
                         $this->innerComponentEmbedsConfiguration()

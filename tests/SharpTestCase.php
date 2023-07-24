@@ -13,10 +13,6 @@ abstract class SharpTestCase extends TestCase
 {
     use ArraySubsetAsserts;
 
-    /**
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return array
-     */
     protected function getPackageProviders($app)
     {
         return [SharpServiceProvider::class];

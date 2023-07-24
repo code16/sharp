@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import once from 'lodash/once';
-import { loadGmapApi } from 'vue2-google-maps';
+import { loadGmapApi } from 'sharp/vendor/vue2-google-maps';
 
 export default once(({ apiKey }) => {
     const options = { v: 3 };

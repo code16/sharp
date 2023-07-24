@@ -154,8 +154,7 @@ class SharpFormTest extends SharpTestCase
     /** @test */
     public function single_forms_are_declared_in_config()
     {
-        $sharpForm = new class extends BaseSharpSingleForm
-        {
+        $sharpForm = new class extends BaseSharpSingleForm {
         };
 
         $sharpForm->buildFormConfig();
@@ -187,50 +186,6 @@ class SharpFormTest extends SharpTestCase
             [
                 'hasShowPage' => true,
                 'deleteConfirmationText' => null,
-            ],
-            $sharpForm->formConfig(),
-        );
-    }
-
-    /** @test */
-    public function we_can_declare_configureConfirmTextOnDeletion_with_custom_text_in_config()
-    {
-        $sharpForm = new class extends BaseSharpForm
-        {
-            public function buildFormConfig(): void
-            {
-                $this->configureDeleteConfirmation('Vous êtes sûr ?');
-            }
-        };
-
-        $sharpForm->buildFormConfig();
-
-        $this->assertEquals(
-            [
-                'hasShowPage' => false,
-                'deleteConfirmationText' => 'Vous êtes sûr ?',
-            ],
-            $sharpForm->formConfig(),
-        );
-    }
-
-    /** @test */
-    public function we_can_declare_configureConfirmTextOnDeletion_with_default_text_in_config()
-    {
-        $sharpForm = new class extends BaseSharpForm
-        {
-            public function buildFormConfig(): void
-            {
-                $this->configureDeleteConfirmation();
-            }
-        };
-
-        $sharpForm->buildFormConfig();
-
-        $this->assertEquals(
-            [
-                'hasShowPage' => false,
-                'deleteConfirmationText' => 'Are you sure you want to delete this item?',
             ],
             $sharpForm->formConfig(),
         );

@@ -1,6 +1,10 @@
 <template>
     <div class="SharpGlobalFilters">
-        <template v-for="filter in filters">
+        <template v-if="open">
+            <div class="position-absolute inset-0" style="z-index: 1">
+            </div>
+        </template>
+        <template v-for="filter in rootFilters">
             <FilterSelect
                 :label="null"
                 :values="filter.values"
@@ -11,10 +15,11 @@
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
                 :key="filter.key"
-                form-select
+                global
                 @input="handleFilterChanged(filter, $event)"
                 @open="handleOpened(filter)"
                 @close="handleClosed(filter)"
+                style="z-index: 2"
             />
         </template>
     </div>
@@ -23,17 +28,24 @@
 <script>
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
-    import FilterSelect from './filters/FilterSelect';
+    import FilterSelect from './filters/FilterSelect.vue';
+    import { Dropdown } from "sharp-ui";
 
     export default {
         components: {
-            FilterSelect
+            FilterSelect,
+            Dropdown,
         },
         computed: {
             ...mapGetters('global-filters', {
-                filters: 'filters/filters',
+                rootFilters: 'filters/rootFilters',
                 filterValue: 'filters/value',
             }),
+        },
+        data() {
+            return {
+                open: false,
+            }
         },
         methods: {
             handleFilterChanged(filter, value) {
@@ -44,11 +56,17 @@
                     });
             },
             handleOpened() {
-                this.$emit('open');
+                this.open = true;
             },
             handleClosed() {
-                this.$emit('close');
+                this.open = false;
             },
+            async init() {
+                await this.$store.dispatch('global-filters/get');
+            },
+        },
+        created() {
+            this.init();
         },
     }
 </script>

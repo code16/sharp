@@ -5,6 +5,7 @@
                 <ActionBarShow
                     :commands="authorizedCommands"
                     :state="instanceState"
+                    :state-options="instanceStateOptions"
                     :state-values="stateValues"
                     :form-url="formUrl"
                     :back-url="backUrl"
@@ -14,8 +15,13 @@
                     :breadcrumb="breadcrumbItems"
                     :show-breadcrumb="breadcrumb.visible"
                     :edit-disabled="isReordering"
+                    :locales="locales"
+                    :current-locale="locale"
+                    :can-delete="canDelete"
                     @command="handleCommandRequested"
                     @state-change="handleStateChanged"
+                    @locale-change="handleLocaleChanged"
+                    @delete="handleDeleteClicked"
                 />
 
                 <template v-if="config.globalMessage">
@@ -31,17 +37,17 @@
                         <div :class="title ? 'mb-3' : 'mb-4'">
                             <div class="row align-items-center gx-3 gx-md-4">
                                 <template v-if="localized">
-                                    <div class="col-auto">
-                                        <LocaleSelect
-                                            :locales="locales"
-                                            :locale="locale"
-                                            @change="handleLocaleChanged"
-                                        />
-                                    </div>
+<!--                                    <div class="col-auto">-->
+<!--                                        <LocaleSelect-->
+<!--                                            :locales="locales"-->
+<!--                                            :locale="locale"-->
+<!--                                            @change="handleLocaleChanged"-->
+<!--                                        />-->
+<!--                                    </div>-->
                                 </template>
                                 <template v-if="title">
                                     <div class="col" style="min-width: 0">
-                                        <h1 class="mb-0 text-truncate h2" v-html="title"></h1>
+                                        <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="title"></h1>
                                     </div>
                                 </template>
                             </div>
@@ -102,16 +108,16 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay } from 'sharp';
+    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { Grid, GlobalMessage } from 'sharp-ui';
     import { LocaleSelect } from "sharp-form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
-    import ActionBarShow from "../ActionBar";
+    import ActionBarShow from "../ActionBar.vue";
 
-    import ShowField from '../Field';
-    import Section from "../Section";
+    import ShowField from '../Field.vue';
+    import Section from "../Section.vue";
 
     export default {
         mixins: [withCommands],
@@ -154,7 +160,9 @@
                 'config',
                 'locales',
                 'breadcrumb',
+                'authorizations',
                 'instanceState',
+                'instanceStateOptions',
                 'canEdit',
                 'authorizedCommands',
                 'stateValues',
@@ -190,6 +198,12 @@
             },
             localized() {
                 return this.locales?.length > 0;
+            },
+            isSingle() {
+                return !!this.config.isSingle;
+            },
+            canDelete() {
+                return this.authorizations?.delete && !this.isSingle;
             },
             title() {
                 if(!this.ready || !this.config.titleAttribute) {
@@ -294,6 +308,12 @@
                             });
                         }
                     });
+            },
+            async handleDeleteClicked() {
+                if(await showDeleteConfirm(this.config.deleteConfirmationText)) {
+                    await this.$store.dispatch('show/delete');
+                    location.replace(this.backUrl ?? '/');
+                }
             },
             handleRefreshCommand() {
                 this.init();

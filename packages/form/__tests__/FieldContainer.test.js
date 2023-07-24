@@ -102,16 +102,16 @@ describe('field-container', () => {
         let $fieldContainer = await createVm();
 
         let { field } = $fieldContainer.$refs;
-        let tabClearHandler = jest.fn(), formClearHandler = jest.fn();
+        let tabClearHandler = jest.fn();
 
         $fieldContainer.$tab.$on('clear', tabClearHandler);
-        $fieldContainer.$form.$on('error-cleared', formClearHandler);
+        jest.spyOn($fieldContainer.$form, 'updateFieldError')
         field.$emit('clear');
 
         expect($fieldContainer.state).toBe('default');
         expect($fieldContainer.stateMessage).toBe('');
         expect(tabClearHandler).toHaveBeenCalledWith('error.title');
-        expect(formClearHandler).toHaveBeenCalledWith('error.title');
+        expect($fieldContainer.$form.updateFieldError).toHaveBeenCalledWith('error.title', null);
     });
 
     test('expose proper props', async () => {

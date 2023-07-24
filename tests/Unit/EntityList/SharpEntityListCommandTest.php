@@ -53,34 +53,36 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
+        $this->assertEquals(
             [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                                'authorization' => true,
-                            ],
-                        ],
-                    ],
-                    'instance' => [
-                        [
-                            [
-                                'key' => 'instanceCommand',
-                                'label' => 'My Instance Command',
-                                'type' => 'instance',
-                                'authorization' => [],
-                            ],
-                        ],
-                    ],
-                ],
+                'key' => 'entityCommand',
+                'label' => 'My Entity Command',
+                'type' => 'entity',
+                'authorization' => true,
+                'description' => null,
+                'instance_selection' => null,
+                'confirmation' => null,
+                'modal_title' => null,
+                'modal_confirm_label' => null,
+                'has_form' => false,
             ],
-            $list->listConfig(),
+            $list->listConfig()['commands']['entity'][0][0]
+        );
+
+        $this->assertEquals(
+            [
+                'key' => 'instanceCommand',
+                'label' => 'My Instance Command',
+                'type' => 'instance',
+                'authorization' => [],
+                'description' => null,
+                'confirmation' => null,
+                'modal_title' => null,
+                'modal_confirm_label' => null,
+                'has_form' => false,
+            ],
+            $list->listConfig()['commands']['instance'][0][0]
         );
     }
 
@@ -98,24 +100,8 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('entityCommand', $list->listConfig()['commands']['entity'][0][0]['key']);
     }
 
     /** @test */
@@ -147,25 +133,75 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                                'confirmation' => 'Sure?',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('Sure?', $list->listConfig()['commands']['entity'][0][0]['confirmation']);
+    }
+
+    /** @test */
+    public function we_can_declare_instance_selection_mode_on_a_command()
+    {
+        $list = new class extends SharpEntityDefaultTestList
+        {
+            public function getEntityCommands(): ?array
+            {
+                return [
+                    'command_required' => new class extends EntityCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'My Entity Command';
+                        }
+
+                        public function buildCommandConfig(): void
+                        {
+                            $this->configureInstanceSelectionRequired();
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                    'command_allowed' => new class extends EntityCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'My Entity Command';
+                        }
+
+                        public function buildCommandConfig(): void
+                        {
+                            $this->configureInstanceSelectionAllowed();
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                    'command_none' => new class extends EntityCommand
+                    {
+                        public function label(): string
+                        {
+                            return 'My Entity Command';
+                        }
+
+                        public function buildCommandConfig(): void
+                        {
+                            $this->configureInstanceSelectionNone();
+                        }
+
+                        public function execute(array $data = []): array
+                        {
+                        }
+                    },
+                ];
+            }
+        };
+
+        $list->buildListConfig();
+
+        $this->assertEquals('required', $list->listConfig()['commands']['entity'][0][0]['instance_selection']);
+        $this->assertEquals('allowed', $list->listConfig()['commands']['entity'][0][1]['instance_selection']);
+        $this->assertNull($list->listConfig()['commands']['entity'][0][2]['instance_selection']);
     }
 
     /** @test */
@@ -202,25 +238,8 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                                'has_form' => true,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertTrue($list->listConfig()['commands']['entity'][0][0]['has_form']);
     }
 
     /** @test */
@@ -252,25 +271,8 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                                'modal_title' => 'My title',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('My title', $list->listConfig()['commands']['entity'][0][0]['modal_title']);
     }
 
     /** @test */
@@ -302,25 +304,8 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                                'authorization' => false,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertFalse($list->listConfig()['commands']['entity'][0][0]['authorization']);
     }
 
     /** @test */
@@ -343,7 +328,7 @@ class SharpEntityListCommandTest extends SharpTestCase
                             return $instanceId < 3;
                         }
 
-                        public function execute($instanceId, array $params = []): array
+                        public function execute($instanceId, array $data = []): array
                         {
                         }
                     },
@@ -352,29 +337,12 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
         $list->data([
             ['id' => 1], ['id' => 2], ['id' => 3],
             ['id' => 4], ['id' => 5], ['id' => 6],
         ]);
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'instance' => [
-                        [
-                            [
-                                'key' => 'command',
-                                'label' => 'My Instance Command',
-                                'type' => 'instance',
-                                'authorization' => [1, 2],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals([1, 2], $list->listConfig()['commands']['instance'][0][0]['authorization']);
     }
 
     /** @test */
@@ -406,25 +374,8 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entityCommand',
-                                'label' => 'My Entity Command',
-                                'description' => 'My Entity Command description',
-                                'type' => 'entity',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('My Entity Command description', $list->listConfig()['commands']['entity'][0][0]['description']);
     }
 
     /** @test */
@@ -474,28 +425,10 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'instance' => [
-                        [
-                            [
-                                'key' => 'command-1',
-                            ], [
-                                'key' => 'command-2',
-                            ],
-                        ], [
-                            [
-                                'key' => 'command-3',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('command-1', $list->listConfig()['commands']['instance'][0][0]['key']);
+        $this->assertEquals('command-2', $list->listConfig()['commands']['instance'][0][1]['key']);
+        $this->assertEquals('command-3', $list->listConfig()['commands']['instance'][1][0]['key']);
     }
 
     /** @test */
@@ -545,29 +478,10 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'command-1',
-                            ],
-                        ], [
-                            [
-                                'key' => 'command-2',
-                            ], [
-                                'key' => 'command-3',
-                            ],
-                        ],
-
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('command-1', $list->listConfig()['commands']['entity'][0][0]['key']);
+        $this->assertEquals('command-2', $list->listConfig()['commands']['entity'][1][0]['key']);
+        $this->assertEquals('command-3', $list->listConfig()['commands']['entity'][1][1]['key']);
     }
 
     /** @test */
@@ -610,30 +524,9 @@ class SharpEntityListCommandTest extends SharpTestCase
         };
 
         $list->buildListConfig();
-        $list->initQueryParams();
 
-        $this->assertArraySubset(
-            [
-                'commands' => [
-                    'entity' => [
-                        [
-                            [
-                                'key' => 'entity',
-                                'label' => 'My Entity Command',
-                                'type' => 'entity',
-                            ],
-                            [
-                                'key' => 'primary-entity',
-                                'label' => 'My Primary Entity Command',
-                                'type' => 'entity',
-                                'primary' => true,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            $list->listConfig(),
-        );
+        $this->assertEquals('primary-entity', $list->listConfig()['commands']['entity'][0][1]['key']);
+        $this->assertTrue($list->listConfig()['commands']['entity'][0][1]['primary']);
     }
 }
 

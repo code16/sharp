@@ -63,21 +63,18 @@ abstract class SharpWidget
 
     protected function buildArray(array $childArray): array
     {
-        $array = collect([
-            'key' => $this->key,
-            'type' => $this->type,
-            'title' => $this->title,
-            'link' => $this->link,
-        ])
+        return tap(
+            collect([
+                'key' => $this->key,
+                'type' => $this->type,
+                'title' => $this->title,
+                'link' => $this->link,
+            ])
             ->merge($childArray)
-            ->filter(function ($value) {
-                return ! is_null($value);
-            })
-            ->all();
-
-        $this->validate($array);
-
-        return $array;
+            ->filter(fn ($value) => $value !== null)
+            ->all(),
+            fn ($array) => $this->validate($array)
+        );
     }
 
     protected function validationRules(): array

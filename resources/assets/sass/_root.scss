@@ -16,9 +16,7 @@
   --component-active-bg: var(--primary-hsl);
   --component-active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000));
 
-  --filter-close-icon-color: hsl(var(--primary-h), var(--primary-s), 35%);
-
-  --navbar-height: #{$navbar-min-height};
+  --navbar-height: 4rem;
   --navbar-top: 0;
   --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
 

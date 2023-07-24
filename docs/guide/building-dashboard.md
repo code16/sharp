@@ -10,8 +10,7 @@ php artisan sharp:make:dashboard <class_name>
 
 ## Write the class
 
-The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which leads us to implement
-three functions:
+The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpDashboard` which leads us to implement three functions:
 
 - `buildWidgets(WidgetsContainer $widgetsContainer)`,
 - `buildDashboardLayout(DashboardLayout $dashboardLayout)`,
@@ -19,8 +18,7 @@ three functions:
 
 ### `buildWidgets(WidgetsContainer $widgetsContainer): void`
 
-This method is meant to host the code responsible for the declaration and configuration of each widget. This must be
-done by calling `$widgetsContainer->addWidget()`:
+This method is meant to host the code responsible for the declaration and configuration of each widget. This must be done by calling `$widgetsContainer->addWidget()`:
 
 ```php
 function buildWidgets(WidgetsContainer $widgetsContainer): void
@@ -43,33 +41,38 @@ As we can see in this example, we defined two widgets giving them a mandatory `k
 Every widget has the optional following setters:
 
 - `setTitle(string $title)` for the widget title displayed above it
-- `setLink(SharpLinkTo $sharpLinkTo)` to make the whole widget linked to a specific page (
-  see [dedicated SharpLinkTo documentation](link-to.md))
+- `setLink(SharpLinkTo $sharpLinkTo)` to make the whole widget linked to a specific page (see [dedicated SharpLinkTo documentation](link-to.md))
 
 And here's the full list and documentation of each widget available, for the specifics:
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
+- [Figure](dashboard-widgets/figure.md)
 - [OrderedList](dashboard-widgets/ordered-list.md)
 
 ### `buildDashboardLayout(DashboardLayout $dashboardLayout): void`
 
-The layout API is a bit different from Forms or Show Pages here, because we think in terms of rows and not columns. So
-for instance:
+The layout API is a bit different from Forms or Show Pages here, because we think in terms of rows and not columns.
 
 ```php
 function buildDashboardLayout(DashboardLayout $dashboardLayout): void
 {
     $dashboardLayout
-        ->addFullWidthWidget("capacities")
-        ->addRow(function(DashboardLayoutRow $row) {
-            $row->addWidget(6, "activeSpaceships")
-                ->addWidget(6, "inactiveSpaceships");
+        ->addSection('Posts', function (DashboardLayoutSection $section) {
+            $section->addRow(function (DashboardLayoutRow $row) {
+                $row->addWidget(6, 'draft_panel')
+                    ->addWidget(6, 'online_panel');
+            });
+        })
+        ->addSection('Stats', function (DashboardLayoutSection $section) {
+            $section->addFullWidthWidget('visits_line');
         });
 }
 ```
 
-We can only add rows and "full width widgets" (which are a shortcut for a single widget row). A row groups widgets in a 12-based grid.
+Note that:
+- Sections are optional but useful to group related widgets; you can add rows directly to the layout if you don’t need them.
+- Rows group widgets in a 12-based grid.
 
 ### `buildWidgetsData(): void`
 
@@ -96,31 +99,80 @@ return [
         "company_dashboard" => \App\Sharp\CompanyDashboardEntity::class
     ],
     // ...
-    "menu" => [
-        [
-            "label" => "Company",
-            "entities" => [
-                [
-                    "label" => "Dashboard",
-                    "icon" => "fa-dashboard",
-                    "dashboard" => "company_dashboard"
-                ],
-                [...]
-            ]
-        ]
-    ]
 ];
 ```
 
 In the menu, like an Entity, a Dashboard can be displayed anywhere.
 
-## Dashboard filters
-
-Just like EntityLists, Dashboard can display filters, as [documented on the Filter page](filters.md).
+```php
+class AppSharpMenu extends SharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->addEntityLink('company_dashboard', 'Dashboard', 'fas fa-chart-line')
+            // ...
+    }
+}
+```
 
 ## Dashboard commands
 
-Like again EntityLists, Commands can be attached to a Dashboard with `getDashboardCommands()` : [see the Command documentation](commands.md).
+Like Entity Lists, Commands can be declared in a Dashboard with `getDashboardCommands()` : [see the Command documentation](commands.md).
+
+And like Show Pages, Commands can be visually attached to a specific section:
+
+```php
+protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
+{
+    $dashboardLayout
+        ->addSection('Posts', function (DashboardLayoutSection $section) {
+            // ...
+        })
+        ->addSection('Stats', function (DashboardLayoutSection $section) {
+            $section
+                ->setKey('stats-section') // <- define a key here...
+                ->addRow(function (DashboardLayoutRow $row) {
+                    // ...
+                });
+        });
+}
+
+public function getFilters(): ?array
+{
+    return [
+        'stats-section' => [
+            PeriodRequiredFilter::class,
+        ],
+    ];
+}
+
+public function getDashboardCommands(): ?array
+{
+    return [
+        'stats-section' => [ // <- use the section key here...
+            ExportStatsAsCsvCommand::class,
+        ],
+    ];
+}
+```
+
+## Dashboard filters
+
+Just like Entity Lists, Dashboard can display filters, as [documented on the Filter page](filters.md).
+
+And very much like Commands, Filters can be visually attached to a specific section of the dashboard:
+
+```php
+public function getFilters(): ?array
+{
+    return [
+        'stats-section' => [ // <- must be a section key
+            PeriodRequiredFilter::class,
+        ],
+    ];
+}
+```
 
 ## Dashboard policy
 

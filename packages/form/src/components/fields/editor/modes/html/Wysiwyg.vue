@@ -7,12 +7,12 @@
             :locale="locale"
             :locales="locales"
             :create-editor="createEditor"
-            v-slot="{ editor }"
+            v-slot="{ editor, locale }"
         >
             <SharpEditor
                 :editor="editor"
                 v-bind="$props"
-                @update="handleUpdate"
+                @update="handleUpdate({ editor, locale, ...$event })"
             />
         </LocalizedEditors>
     </div>
@@ -20,11 +20,11 @@
 
 <script>
     import { Editor } from '@tiptap/vue-2';
-    import SharpEditor from '../../Editor';
+    import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";
     import { normalizeHTML, trimHTML } from "./util";
-    import LocalizedEditors from "../../LocalizedEditors";
+    import LocalizedEditors from "../../LocalizedEditors.vue";
     import { normalizeText } from "../../../../../util/text";
 
     export default {
@@ -48,9 +48,9 @@
             }
         },
         methods: {
-            handleUpdate(editor) {
+            handleUpdate({ editor, locale, error }) {
                 const content = normalizeText(trimHTML(editor.getHTML(), { inline: this.inline }));
-                this.$emit('input', this.localizedValue(content));
+                this.$emit('input', this.localizedValue(content, locale), { error });
             },
 
             createEditor({ content }) {

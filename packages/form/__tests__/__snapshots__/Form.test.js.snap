@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`sharp-form can mount "independant" sharp-form 1`] = `
-<div data-popover-boundary="" class="SharpForm">
+<div class="SharpForm">
 	<!---->
 	<!---->
-	<div id="MOCKED_TABBED_LAYOUT">
+	<div id="MOCKED_TABBED_LAYOUT" data-popover-boundary="">
 		<div id="MOCKED_GRID">
 			<div id="MOCKED_FIELDS_LAYOUT">
 				<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" read-only="true" error-identifier="title" config-identifier="title" root="" update-data="function () { [native code] }"
@@ -12,14 +12,15 @@ exports[`sharp-form can mount "independant" sharp-form 1`] = `
 			</div>
 		</div>
 	</div>
+	<!---->
 </div>
 `;
 
 exports[`sharp-form can mount sharp-form 1`] = `
-<div data-popover-boundary="" class="SharpForm">
+<div class="SharpForm">
 	<!---->
 	<!---->
-	<div id="MOCKED_TABBED_LAYOUT">
+	<div id="MOCKED_TABBED_LAYOUT" data-popover-boundary="">
 		<div id="MOCKED_GRID">
 			<div id="MOCKED_FIELDS_LAYOUT">
 				<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" read-only="true" error-identifier="title" config-identifier="title" root="" update-data="function () { [native code] }"
@@ -27,17 +28,18 @@ exports[`sharp-form can mount sharp-form 1`] = `
 			</div>
 		</div>
 	</div>
+	<bottombar-stub showbackbutton="true" create="true"></bottombar-stub>
 </div>
 `;
 
 exports[`sharp-form can mount sharp-form with alert 1`] = `
-<div data-popover-boundary="" class="SharpForm">
+<div class="SharpForm">
 	<!---->
 	<div role="alert" class="alert alert-danger SharpForm__alert">
 		<div class="fw-bold">{{ form.validation_error.title }}</div>
 		<div>{{ form.validation_error.description }}</div>
 	</div>
-	<div id="MOCKED_TABBED_LAYOUT">
+	<div id="MOCKED_TABBED_LAYOUT" data-popover-boundary="">
 		<div id="MOCKED_GRID">
 			<div id="MOCKED_FIELDS_LAYOUT">
 				<fielddisplay-stub field-key="title" context-fields="[object Object]" context-data="[object Object]" field-layout="[object Object]" read-only="true" error-identifier="title" config-identifier="title" root="" update-data="function () { [native code] }"
@@ -45,5 +47,6 @@ exports[`sharp-form can mount sharp-form with alert 1`] = `
 			</div>
 		</div>
 	</div>
+	<!---->
 </div>
 `;

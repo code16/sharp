@@ -39,6 +39,15 @@
     }
   }
 
+  &:has(.card-footer) .card-body {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .card-footer {
+    padding: .5rem .75rem;
+  }
+
   &__content {
     position: relative;
     min-height: var(--min-height);

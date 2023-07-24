@@ -23,7 +23,7 @@
 
 <script>
     import { BDropdown } from 'bootstrap-vue';
-    import Button from "../Button"
+    import Button from "../Button.vue"
 
     export default {
         name: 'SharpDropdown',
@@ -45,16 +45,18 @@
             title: String,
             disabled: Boolean,
         },
+        data() {
+            return {
+                boundary: 'scrollParent',
+            }
+        },
         computed: {
             ...Button.computed,
             /**
              * button variant is defined in classes
              */
             toggleClass() {
-                return this.classes;
-            },
-            boundary() {
-                return document.querySelector('[data-popover-boundary]') || 'scrollParent';
+                return [this.classes, this.$attrs['toggle-class']]
             },
             popperOptions() {
                 return {
@@ -68,6 +70,9 @@
             },
         },
         methods: {
+            show() {
+                this.$refs.dropdown.show();
+            },
             hide() {
                 this.$refs.dropdown.hide();
             },
@@ -75,6 +80,9 @@
         mounted() {
             if(this.title) {
                 this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
+            }
+            if(this.$el.closest('[data-popover-boundary]')) {
+                this.boundary = this.$el.closest('[data-popover-boundary]');
             }
         },
     }

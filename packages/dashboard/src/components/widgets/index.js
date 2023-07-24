@@ -1,6 +1,7 @@
-import SharpWidgetPanel from './Panel';
-import SharpWidgetOrderedList from './OrderedList';
-import SharpWidgetChart from './chart/Chart';
+import SharpWidgetPanel from './Panel.vue';
+import SharpWidgetOrderedList from './OrderedList.vue';
+import SharpWidgetFigure from './Figure.vue';
+import SharpWidgetChart from './chart/Chart.vue';
 
 export function widgetByType(type) {
     if(type === 'graph') {
@@ -9,5 +10,7 @@ export function widgetByType(type) {
         return SharpWidgetPanel;
     } else if(type === 'list') {
         return SharpWidgetOrderedList;
+    } else if(type === 'figure') {
+        return SharpWidgetFigure;
     }
 }

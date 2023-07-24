@@ -23,6 +23,11 @@ class FormLayoutTab implements HasLayout
         return $this;
     }
 
+    public function getColumn(int $index): FormLayoutColumn
+    {
+        return $this->columns[$index];
+    }
+
     public function toArray(): array
     {
         return [
