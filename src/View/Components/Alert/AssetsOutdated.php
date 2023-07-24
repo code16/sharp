@@ -16,7 +16,7 @@ class AssetsOutdated extends Component
         $distManifest = file_get_contents(__DIR__.'/../../../../resources/assets/dist/manifest.json');
         $publicManifest = file_get_contents(public_path('vendor/sharp/manifest.json'));
 
-        return $distManifest !== $publicManifest;
+        return trim($distManifest ?: '') !== trim($publicManifest ?: '');
     }
 
     public function render(): View
