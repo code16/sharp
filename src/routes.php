@@ -15,7 +15,6 @@ use Code16\Sharp\Http\Api\FormController as ApiFormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\GlobalFilterController;
 use Code16\Sharp\Http\Api\SearchController;
-use Code16\Sharp\Http\Api\ShowController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;
@@ -24,6 +23,7 @@ use Code16\Sharp\Http\LangController;
 use Code16\Sharp\Http\ListController;
 use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
+use Code16\Sharp\Http\ShowController;
 use Code16\Sharp\Http\SingleShowController;
 use Code16\Sharp\Http\WebDispatchController;
 use Illuminate\Support\Facades\Route;
@@ -43,9 +43,9 @@ Route::group([
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [DashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
 
-//    Route::get('/list/{entityKey}', [ApiEntityListController::class, 'show'])
-//        ->name('code16.sharp.api.list')
-//        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+    Route::get('/list/{entityKey}', [ApiEntityListController::class, 'show'])
+        ->name('code16.sharp.api.list')
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
 
     Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
