@@ -32,6 +32,7 @@ $body-bg-hsl: hsl(var(--primary-h), 20%, 95%); // we're not using $body-bg becau
 $body-color: #152935;
 
 $enable-negative-margins: true;
+$enable-dark-mode: false;
 
 $container-max-widths: (
   sm: 540px,
@@ -105,8 +106,6 @@ $dropdown-link-color: $ui-primary-color;
 $dropdown-link-hover-color: $ui-primary-color;
 $dropdown-link-disabled-color: hsla(var(--primary-h), var(--primary-s), 20%, .65);
 
-$link-color: hsl(var(--primary-h), var(--primary-s), 30%);
-$link-hover-color: hsl(var(--primary-h), var(--primary-s), 15%);
 $link-decoration: underline;
 
 $input-font-size: .875rem;

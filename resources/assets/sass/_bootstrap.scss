@@ -46,6 +46,7 @@ $bv-enable-tooltip-variants: false;
 @import '../../../node_modules/bootstrap-vue/src/components/tooltip/index';
 
 
+
 .alert-primary {
   background-color: hsl(var(--primary-h), var(--primary-s), 92.5%);
   border-color: hsla(var(--primary-h), var(--primary-s), 20%, 0.1);

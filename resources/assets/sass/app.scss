@@ -29,6 +29,12 @@
 
 @import "utilities";
 
+a {
+  color: hsl(var(--primary-h), var(--primary-s), 30%);
+  &:hover {
+    color: hsl(var(--primary-h), var(--primary-s), 15%);
+  }
+}
 
 body {
   background-color: $body-bg-hsl;
