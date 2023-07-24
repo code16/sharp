@@ -14,15 +14,15 @@ class DashboardController extends SharpProtectedController
     ) {
         parent::__construct();
     }
-    
+
     public function show(string $dashboardKey)
     {
         sharp_check_ability('entity', $dashboardKey);
-    
+
         $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         $dashboard->init();
-        
+
         $data = [
             'widgets' => $dashboard->widgets(),
             'config' => $dashboard->dashboardConfig(),
@@ -30,7 +30,7 @@ class DashboardController extends SharpProtectedController
             'data' => $dashboard->data(),
             'fields' => $dashboard->dashboardMetaFields(),
         ];
-    
+
         return Inertia::render('Dashboard', [
             'dashboard' => $data,
         ]);
