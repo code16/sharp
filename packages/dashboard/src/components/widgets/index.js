@@ -1,7 +1,7 @@
-import SharpWidgetPanel from './Panel';
-import SharpWidgetOrderedList from './OrderedList';
-import SharpWidgetFigure from './Figure';
-import SharpWidgetChart from './chart/Chart';
+import SharpWidgetPanel from './Panel.vue';
+import SharpWidgetOrderedList from './OrderedList.vue';
+import SharpWidgetFigure from './Figure.vue';
+import SharpWidgetChart from './chart/Chart.vue';
 
 export function widgetByType(type) {
     if(type === 'graph') {

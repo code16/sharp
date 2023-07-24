@@ -5,7 +5,7 @@
 @import "bootstrap";
 
 
-//@import '~carbon-components/scss/globals/scss/vars';
+//@import '../../../node_modules/carbon-components/scss/globals/scss/vars';
 
 @import 'mixins/layer';
 @import 'mixins/helper-mixins';
@@ -15,13 +15,13 @@
 @import "root";
 @import "typography";
 
-@import '~sharp-ui/scss/ui';
-@import '~sharp-commands/scss/commands';
-@import '~sharp-form/scss/form';
-@import '~sharp-entity-list/scss/entity-list';
-@import '~sharp-dashboard/scss/dashboard';
-@import '~sharp-show/scss/show';
-@import '~sharp-filters/scss/filters';
+@import '../../../node_modules/sharp-ui/scss/ui';
+@import '../../../node_modules/sharp-commands/scss/commands';
+@import '../../../node_modules/sharp-form/scss/form';
+@import '../../../node_modules/sharp-entity-list/scss/entity-list';
+@import '../../../node_modules/sharp-dashboard/scss/dashboard';
+@import '../../../node_modules/sharp-show/scss/show';
+@import '../../../node_modules/sharp-filters/scss/filters';
 
 @import 'components/ActionView';
 

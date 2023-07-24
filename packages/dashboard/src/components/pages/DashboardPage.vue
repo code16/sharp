@@ -58,8 +58,8 @@
     import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
     import { withCommands } from "sharp/mixins";
     import { withLoadingOverlay } from "sharp";
-    import Widget from '../Widget';
-    import ActionBarDashboard from '../ActionBar';
+    import Widget from '../Widget.vue';
+    import ActionBarDashboard from '../ActionBar.vue';
     import Section from "../Section.vue";
 
     export default {

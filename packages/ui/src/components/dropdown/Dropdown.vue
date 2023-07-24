@@ -23,7 +23,7 @@
 
 <script>
     import { BDropdown } from 'bootstrap-vue';
-    import Button from "../Button"
+    import Button from "../Button.vue"
 
     export default {
         name: 'SharpDropdown',

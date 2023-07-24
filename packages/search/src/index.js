@@ -1,4 +1,4 @@
-import GlobalSearch from './components/GlobalSearch';
+import GlobalSearch from './components/GlobalSearch.vue';
 
 
 export default function (Vue) {

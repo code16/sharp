@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import { Map, Marker } from 'vue2-google-maps';
+    import { Map, Marker } from 'sharp/vendor/vue2-google-maps';
     import { defaultMapOptions, toLatLngBounds, createMapOptions } from "./util";
 
     export default {

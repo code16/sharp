@@ -6,8 +6,8 @@
     import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "sharp-files";
     import { postResolveEmbeds } from "sharp-embeds";
     import { createEmbedComponent } from "./nodes/embed";
-    import File from "./nodes/File";
-    import Html from "./nodes/Html";
+    import File from "./nodes/File.vue";
+    import Html from "./nodes/Html.vue";
 
     export default {
         props: {

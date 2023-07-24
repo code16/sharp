@@ -67,8 +67,8 @@
     import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
     import { DynamicView, Localization } from 'sharp/mixins';
 
-    import FieldsLayout from './ui/FieldsLayout';
-    import LocaleSelect from './ui/LocaleSelect';
+    import FieldsLayout from './ui/FieldsLayout.vue';
+    import LocaleSelect from './ui/LocaleSelect.vue';
     import localize from '../mixins/localize/form';
 
     import { getDependantFieldsResetData, transformFields } from "../util";

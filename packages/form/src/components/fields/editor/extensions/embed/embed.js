@@ -1,7 +1,7 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
 import { serializeAttributeValue, parseAttributeValue } from "sharp-embeds";
-import EmbedNode from "./EmbedNode";
+import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "./util";
 
 export const Embed = Node.create({

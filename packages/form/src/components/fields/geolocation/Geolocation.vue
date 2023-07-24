@@ -75,7 +75,7 @@
     import { getMapByProvider, loadMapProvider } from "./maps";
     import { dd2dms, tilesUrl, providerName, providerOptions, triggerResize } from "./util";
 
-    import GeolocationEdit from './GeolocationEdit';
+    import GeolocationEdit from './GeolocationEdit.vue';
 
 
     export default {

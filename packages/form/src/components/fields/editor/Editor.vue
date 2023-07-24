@@ -42,8 +42,8 @@
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-2';
     import { Upload } from "./extensions/upload/upload";
-    import UploadFileInput from "./extensions/upload/UploadFileInput";
-    import MenuBar from "./toolbar/MenuBar";
+    import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
+    import MenuBar from "./toolbar/MenuBar.vue";
     import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
     import { lang } from "sharp";

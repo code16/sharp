@@ -30,8 +30,8 @@
     import clip from 'text-clipper';
     import { syncVisibility } from "../../../util/fields/visiblity";
     import { truncateToWords, stripTags } from "../../../util/fields/text";
-    import FieldLayout from "../../FieldLayout";
-    import TextRenderer from "./TextRenderer";
+    import FieldLayout from "../../FieldLayout.vue";
+    import TextRenderer from "./TextRenderer.vue";
 
     export default {
         mixins: [Localization],

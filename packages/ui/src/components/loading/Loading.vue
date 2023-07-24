@@ -8,7 +8,7 @@
 
 
 <script>
-    import LoadingTransition from "./LoadingTransition";
+    import LoadingTransition from "./LoadingTransition.vue";
 
     export default {
         components: {

@@ -26,6 +26,7 @@ use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
+use Code16\Sharp\Http\Middleware\ConfigureVite;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
@@ -139,6 +140,7 @@ class SharpServiceProvider extends ServiceProvider
             ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)
             ->aliasMiddleware('sharp_api_append_breadcrumb', AppendBreadcrumb::class)
             ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
-            ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
+            ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class)
+            ->aliasMiddleware('sharp_vite', ConfigureVite::class);
     }
 }

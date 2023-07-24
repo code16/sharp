@@ -17,7 +17,7 @@ abstract class BaseApiTest extends SharpTestCase
         if (! file_exists(public_path('vendor/sharp'))) {
             mkdir(public_path('vendor/sharp'), 0777, true);
         }
-        touch(public_path('vendor/sharp/mix-manifest.json'));
+        $this->withoutVite();
     }
 
     protected function setUp(): void

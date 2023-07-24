@@ -23,10 +23,10 @@
     import { Markdown } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-2';
     import { lang } from "sharp";
-    import SharpEditor from '../../Editor';
+    import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
-    import LocalizedEditors from "../../LocalizedEditors";
+    import LocalizedEditors from "../../LocalizedEditors.vue";
     import { normalizeText } from "../../../../../util/text";
 
 

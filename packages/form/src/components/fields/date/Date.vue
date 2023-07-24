@@ -48,7 +48,7 @@
     import { lang } from 'sharp';
     import { Localization } from 'sharp/mixins';
     import { ClearButton } from "sharp-ui";
-    import DatePicker from './DatePicker';
+    import DatePicker from './DatePicker.vue';
 
     moment.locale(
         moment.locales().includes(document.documentElement.lang)
