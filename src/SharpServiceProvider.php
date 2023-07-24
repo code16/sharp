@@ -140,7 +140,6 @@ class SharpServiceProvider extends ServiceProvider
             ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)
             ->aliasMiddleware('sharp_api_append_breadcrumb', AppendBreadcrumb::class)
             ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
-            ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class)
-            ->aliasMiddleware('sharp_vite', ConfigureVite::class);
+            ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
     }
 }

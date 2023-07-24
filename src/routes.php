@@ -138,7 +138,7 @@ Route::group([
 // Web routes
 Route::group([
     'prefix' => '/'.sharp_base_url_segment(),
-    'middleware' => ['sharp_common', 'sharp_web', 'sharp_vite'],
+    'middleware' => ['sharp_common', 'sharp_web'],
 ], function () {
     Route::get('/login', [LoginController::class, 'create'])
         ->name('code16.sharp.login');
