@@ -163,9 +163,6 @@
             hasForms() {
                 return this.forms && this.forms.length > 0;
             },
-            currentEntity() {
-                return this.$store.state.currentEntity;
-            },
         },
         methods: {
             handleSearchSubmitted(search) {
