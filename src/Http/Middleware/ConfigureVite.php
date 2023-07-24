@@ -11,7 +11,7 @@ class ConfigureVite
     {
         Vite::useBuildDirectory('vendor/sharp');
 
-        if(Vite::hotFile() === public_path('/hot')) {
+        if (Vite::hotFile() === public_path('/hot')) {
             Vite::useHotFile(public_path('vendor/sharp/hot')); // allow running "npm run dev" for symlinked assets
         }
 
