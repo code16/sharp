@@ -7,5 +7,8 @@
     <div id="menu">
         <x-sharp::menu />
     </div>
+    <template id="user-dropdown">
+        <x-sharp::user-dropdown />
+    </template>
     @inertia
 </x-sharp::layout>

@@ -22,6 +22,11 @@ class HandleInertiaRequests extends Middleware
         return array_merge(
             parent::share($request),
             [
+                'config' => [
+                    'search' => [
+                        'placeholder' => config('sharp.search.placeholder'),
+                    ]
+                ],
                 'currentEntity' => $currentEntityItem ? [
                     'key' => $currentEntityItem->getEntityKey(),
                     'label' => $currentEntityItem->getLabel(),
