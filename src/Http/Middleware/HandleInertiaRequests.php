@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
-use Code16\Sharp\View\Components\Menu;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -15,10 +15,10 @@ class HandleInertiaRequests extends Middleware
         if(!auth()->user()) {
             return parent::share($request);
         }
-        
+
         $currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
-        $currentEntityItem = $currentEntityKey ? app(Menu::class)->getEntityMenuItem($currentEntityKey) : null;
-        
+        $currentEntityItem = $currentEntityKey ? app(SharpMenuManager::class)->getEntityMenuItem($currentEntityKey) : null;
+
         return array_merge(
             parent::share($request),
             [

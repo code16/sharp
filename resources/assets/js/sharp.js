@@ -25,6 +25,7 @@ import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
 import { createInertiaApp } from "@inertiajs/vue2";
 import { ZiggyVue } from '../../../vendor/tightenco/ziggy/dist/vue.m';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
 Vue.use(Notifications);
 Vue.use(VueGoogleMaps, {
@@ -55,7 +56,7 @@ Vue.component('sharp-nav-item', NavItem);
 
 if(document.querySelector('[data-page]')) {
     createInertiaApp({
-        resolve: name => require(`./Pages/${name}`),
+        resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
         setup({ el, App, props, plugin }) {
             Vue.use(plugin);
             Vue.use(ZiggyVue, Ziggy);
