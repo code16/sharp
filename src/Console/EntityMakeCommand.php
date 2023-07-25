@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
-class EntityWizardCommand extends Command
+class EntityMakeCommand extends Command
 {
     protected $name = 'sharp:model-wizard';
     protected $description = 'Create a new Entity Wizard';

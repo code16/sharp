@@ -4,7 +4,7 @@ namespace Code16\Sharp\Console;
 
 use Illuminate\Console\GeneratorCommand;
 
-class EntityPolicyCommand extends GeneratorCommand
+class EntityPolicyMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:policy';
     protected $description = 'Create a new Policy class';
