@@ -179,7 +179,7 @@ trait HandleFilters
     protected function getFilterDefaultValue(Filter $handler): int|string|array|null
     {
         if ($this->isGlobalFilter($handler)) {
-            return session("_sharp_retained_global_filter_{$handler->getKey()}") ?: $handler->defaultValue();
+            return $handler->currentValue();
         }
 
         if ($this->isRetainedFilter($handler, true)) {

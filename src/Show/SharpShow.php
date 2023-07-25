@@ -48,6 +48,7 @@ abstract class SharpShow
                 collect($this->getDataKeys())
                     ->when($this->breadcrumbAttribute, fn ($collect) => $collect->push($this->breadcrumbAttribute))
                     ->when($this->entityStateAttribute, fn ($collect) => $collect->push($this->entityStateAttribute))
+                    ->when($this->multiformAttribute, fn ($collect) => $collect->push($this->multiformAttribute))
                     ->toArray()
             )
             ->all();

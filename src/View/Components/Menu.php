@@ -29,7 +29,7 @@ class Menu extends Component
         $this->currentEntityItem = $this->currentEntityKey
             ? $this->getEntityMenuItem($this->currentEntityKey)
             : null;
-        $this->hasGlobalFilters = sizeof(config('sharp.global_filters') ?? []) > 0;
+        $this->hasGlobalFilters = sizeof(value(config('sharp.global_filters')) ?? []) > 0;
     }
 
     public function render()

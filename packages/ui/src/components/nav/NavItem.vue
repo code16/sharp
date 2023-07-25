@@ -4,12 +4,12 @@
          role="menuitem"
      >
          <template v-if="disabled">
-             <span class="SharpLeftNav__item-link">
+             <span class="SharpLeftNav__item-link" :class="linkClass">
                  <slot></slot>
              </span>
          </template>
          <template v-else>
-             <a class="SharpLeftNav__item-link" :href="href" :target="target">
+             <a class="SharpLeftNav__item-link" :class="linkClass" :href="href" :target="target">
                  <slot></slot>
              </a>
          </template>
@@ -30,6 +30,7 @@
             },
             href: String,
             target: String,
+            linkClass: String,
         },
     }
 </script>

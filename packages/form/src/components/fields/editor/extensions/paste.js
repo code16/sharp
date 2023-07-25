@@ -1,6 +1,6 @@
 import { Extension } from "@tiptap/core";
-import { Plugin } from 'prosemirror-state';
-import { DOMParser, Schema } from 'prosemirror-model';
+import { Plugin } from '@tiptap/pm/state';
+import { DOMParser, Schema } from '@tiptap/pm/model';
 
 export const Paste = Extension.create({
     name: 'paste',

@@ -31,8 +31,8 @@ class FileUtil
         return [$fileName, $ext ?? ''];
     }
 
-    private function normalizeName(string $fileName)
+    private function normalizeName(string $fileName): array|string|null
     {
-        return preg_replace('#[^A-Za-z0-9-_\\.]#', '', $fileName);
+        return preg_replace('#[^A-Za-z0-9-_.]#', '', $fileName);
     }
 }

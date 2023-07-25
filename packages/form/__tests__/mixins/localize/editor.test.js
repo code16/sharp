@@ -47,7 +47,7 @@ describe('localize-editor', ()=>{
         wrapper.setData({
             value: { text: { fr:'coucou' }, files:[] }
         });
-        expect(wrapper.vm.localizedValue('aaa')).toEqual({ text: 'localeObjectOrEmpty', files:[] });
+        expect(wrapper.vm.localizedValue('aaa', 'en')).toEqual({ text: 'localeObjectOrEmpty', files:[] });
         expect(localeObjectOrEmpty).toHaveBeenCalledWith({ localeObject: { fr:'coucou' }, locale: 'en', value: 'aaa' });
     });
 

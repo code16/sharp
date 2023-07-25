@@ -58,14 +58,13 @@ class Thumbnail
 
     public function make(?int $width, ?int $height = null, array $filters = []): ?string
     {
-        if (! $this->uploadModel || ! $this->uploadModel->disk || ! $this->uploadModel->file_name) {
+        if (! $this->uploadModel->disk || ! $this->uploadModel->file_name) {
             return null;
         }
 
         $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
 
-        $thumbDirNameAppender =
-            ($this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '')
+        $thumbDirNameAppender = ($this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '')
             .(sizeof($filters) ? '_'.md5(serialize($filters)) : '');
 
         $thumbnailPath = sprintf(

@@ -25,7 +25,7 @@ class GlobalFiltersTest extends BaseApiTest
         $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(
-            'default',
+            app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),
             currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class),
         );
 
@@ -68,7 +68,7 @@ class GlobalFiltersTest extends BaseApiTest
         $this->getJson('/sharp/api/form/person/50');
 
         $this->assertEquals(
-            'default',
+            app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),
             currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class),
         );
     }
@@ -76,6 +76,7 @@ class GlobalFiltersTest extends BaseApiTest
     /** @test */
     public function we_cant_set_an_invalid_global_filter_value_via_the_endpoint()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         config()->set('sharp.global_filters.test', GlobalFiltersTestGlobalRequiredFilter::class);
@@ -87,7 +88,10 @@ class GlobalFiltersTest extends BaseApiTest
 
         $this->getJson('/sharp/api/form/person/50');
 
-        $this->assertEquals('default', currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class));
+        $this->assertEquals(
+            app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),
+            currentSharpRequest()->globalFilterFor(GlobalFiltersTestGlobalRequiredFilter::class)
+        );
     }
 
     /** @test */
@@ -96,7 +100,6 @@ class GlobalFiltersTest extends BaseApiTest
         $this->buildTheWorld();
 
         config()->set('sharp.global_filters', [GlobalFiltersTestGlobalRequiredFilter::class]);
-        $key = (new GlobalFiltersTestGlobalRequiredFilter)->getKey();
 
         $this
             ->getJson('/sharp/api/filters')
@@ -104,10 +107,10 @@ class GlobalFiltersTest extends BaseApiTest
             ->assertJson([
                 'filters' => [
                     [
-                        'key' => $key,
+                        'key' => (new GlobalFiltersTestGlobalRequiredFilter)->getKey(),
                         'multiple' => false,
                         'required' => true,
-                        'default' => 'default',
+                        'default' => app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),
                     ],
                 ],
             ]);
@@ -123,6 +126,6 @@ class GlobalFiltersTestGlobalRequiredFilter extends GlobalRequiredFilter
 
     public function defaultValue(): mixed
     {
-        return 'default';
+        return 8;
     }
 }

@@ -2,12 +2,14 @@
 
 namespace Code16\Sharp\Http\Api;
 
-use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class FilesController extends Controller
 {
+    use UsesSharpUploadModel;
+
     public function show(string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
@@ -36,12 +38,10 @@ class FilesController extends Controller
                         ],
                         function (array &$file) use ($disk, $thumbnailHeight, $thumbnailWidth) {
                             if ($this->isMimetypeAnImage($disk->mimeType($file['path']))) {
-                                $model = app()->make(SharpUploadModel::class, [
-                                    'attributes' => [
-                                        'disk' => $file['disk'],
-                                        'file_name' => $file['path'],
-                                        'filters' => $file['filters'],
-                                    ],
+                                $model = static::getUploadModelClass()::make([
+                                    'disk' => $file['disk'],
+                                    'file_name' => $file['path'],
+                                    'filters' => $file['filters'],
                                 ]);
 
                                 $file['thumbnail'] = $model->thumbnail($thumbnailWidth, $thumbnailHeight);

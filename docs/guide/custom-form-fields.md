@@ -78,7 +78,7 @@ Vue is exposed to the window scope, it's the current Vue version used by sharp (
 It's not recommended to use other Vue plugins in this file because it may change the behavior of the Sharp front-end.
 :::
 
-#### Add to Laravel Mix
+#### With Laravel Mix
 
 *webpack.mix.js*
 
@@ -92,6 +92,18 @@ The file name must be **sharp-plugin.js** in order to ensure Sharp will find it.
 
 You can `.version()` this JS file if you want to.
 
+#### With Vite
+
+Publish views with:
+```bash
+php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+```
+
+Add your `.js` file to `resources/views/vendor/sharp/partials/plugin-scripts.blade.php`:
+
+```blade
+@vite('resources/js/sharp-plugin.js')
+```
 
 ## On the back side
 
