@@ -20,7 +20,6 @@ use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
-use Code16\Sharp\Http\ListController;
 use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\ShowController;

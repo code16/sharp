@@ -12,7 +12,7 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request)
     {
-        if(!auth()->user()) {
+        if (! auth()->user()) {
             return parent::share($request);
         }
 
@@ -25,7 +25,7 @@ class HandleInertiaRequests extends Middleware
                 'config' => [
                     'search' => [
                         'placeholder' => config('sharp.search.placeholder'),
-                    ]
+                    ],
                 ],
                 'currentEntity' => $currentEntityItem ? [
                     'key' => $currentEntityItem->getEntityKey(),
