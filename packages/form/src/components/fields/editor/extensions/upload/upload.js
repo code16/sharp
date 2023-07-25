@@ -1,5 +1,5 @@
 import { Node } from "@tiptap/core";
-import { VueNodeViewRenderer } from "@tiptap/vue-2";
+import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import {
     parseFilterCrop,

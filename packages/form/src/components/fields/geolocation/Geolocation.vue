@@ -44,7 +44,7 @@
         </template>
         <Modal
             :title="modalTitle"
-            :visible.sync="modalVisible"
+            v-model:visible="modalVisible"
             no-close-on-backdrop
             @ok="handleModalSubmitted"
         >

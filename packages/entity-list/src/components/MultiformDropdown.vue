@@ -1,7 +1,7 @@
 <template>
     <Dropdown v-bind="$attrs" :text="l('action_bar.list.forms_dropdown')">
-        <template v-for="form in visibleForms">
-            <DropdownItem @click="handleSelected(form)" :key="form.key">
+        <template v-for="form in visibleForms" :key="form.key">
+            <DropdownItem @click="handleSelected(form)">
                 <div class="row gx-2 flex-nowrap">
                     <template v-if="hasIcon">
                         <div class="col-auto">

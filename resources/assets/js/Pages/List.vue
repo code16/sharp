@@ -20,7 +20,7 @@
     import Layout from "../Layouts/Layout.vue";
     import { EntityList } from "sharp-entity-list";
     import ActionBarList from "sharp-entity-list/src/components/ActionBar.vue";
-    import { router } from "@inertiajs/vue2";
+    import { router } from "@inertiajs/vue3";
     import { mapGetters } from "vuex";
     import { parseQuery, stringifyQuery } from "../util/querystring";
 

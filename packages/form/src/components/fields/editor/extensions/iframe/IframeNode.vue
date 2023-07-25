@@ -24,7 +24,7 @@
         </template>
 
         <Modal
-            :visible.sync="modalVisible"
+            v-model:visible="modalVisible"
             @ok="handleModalOk"
             @close="handleModalCancel"
             @cancel="handleModalCancel"

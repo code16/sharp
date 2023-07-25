@@ -22,17 +22,14 @@
 </template>
 
 <script>
-    import { BDropdown } from 'bootstrap-vue';
+    // import { BDropdown } from 'bootstrap-vue';
     import Button from "../Button.vue"
 
     export default {
         name: 'SharpDropdown',
         components: {
             BDropdown: {
-                extends: BDropdown,
-                computed: {
-                    boundaryClass: () => null,
-                },
+                template: '<div style="display: none!important;"><slot /></div>',  // todo
             },
         },
         props: {

@@ -15,7 +15,7 @@
             </div>
         </div>
         <Modal
-            :visible.sync="editVisible"
+            v-model:visible="editVisible"
             @ok="handleModalOk"
             @hidden="handleModalHidden"
             @shown="handleModalShown"
@@ -38,7 +38,7 @@
 <script>
     import { lang } from "sharp";
     import { Button, Modal } from "sharp-ui";
-    import { NodeViewWrapper } from '@tiptap/vue-2';
+    import { NodeViewWrapper } from '@tiptap/vue-3';
     import { elementFromString } from "./util";
 
     export default {

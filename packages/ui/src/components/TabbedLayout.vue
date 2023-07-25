@@ -2,8 +2,8 @@
     <div class="SharpTabbedLayout">
         <template v-if="showTabs">
             <Tabs nav-class="bg-white border-bottom p-3 pb-0">
-                <template v-for="(tab, i) in layout.tabs">
-                    <Tab :title="tab.title" :active="isActive(tab)" @active="handleTabActivated(tab)" :key="`tab-${i}`">
+                <template v-for="(tab, i) in layout.tabs" :key="`tab-${i}`">
+                    <Tab :title="tab.title" :active="isActive(tab)" @active="handleTabActivated(tab)">
                         <slot :tab="tab" />
                     </Tab>
                 </template>

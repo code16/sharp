@@ -4,7 +4,7 @@
             <div class="position-absolute inset-0" style="z-index: 1">
             </div>
         </template>
-        <template v-for="filter in rootFilters">
+        <template v-for="filter in rootFilters" :key="filter.key">
             <FilterSelect
                 :label="null"
                 :values="filter.values"
@@ -14,7 +14,6 @@
                 :template="filter.template"
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
-                :key="filter.key"
                 global
                 @input="handleFilterChanged(filter, $event)"
                 @open="handleOpened(filter)"

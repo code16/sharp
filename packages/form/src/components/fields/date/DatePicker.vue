@@ -21,12 +21,14 @@
 </template>
 
 <script>
-    import { DatePicker as VDatePicker } from 'v-calendar';
+    // import { DatePicker as VDatePicker } from 'v-calendar';
 
     export default {
         name: 'SharpDatePicker',
         components: {
-            VDatePicker,
+            VDatePicker: {
+                template: '<div><slot :input-value="{}" :input-events="{}" /></div>', // todo use another picker
+            },
         },
         props: {
             value: [Date, Object],

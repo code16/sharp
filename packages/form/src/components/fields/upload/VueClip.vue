@@ -65,7 +65,7 @@
 
         <EditModal
             :value="value"
-            :visible.sync="showEditModal"
+            v-model:visible="showEditModal"
             :src="originalImageSrc"
             :ratio-x="ratioX"
             :ratio-y="ratioY"

@@ -1,7 +1,7 @@
 <template>
     <Modal
         modal-class="form-modal"
-        :visible.sync="visible"
+        v-model:visible="visible"
         :loading="loading"
         :title="title"
         :ok-title="confirmLabel"

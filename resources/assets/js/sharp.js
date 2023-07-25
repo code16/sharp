@@ -1,9 +1,9 @@
 import './polyfill';
-import Vue from 'vue';
+import { createApp, h } from 'vue';
 import Vuex from 'vuex';
-import VueRouter from 'vue-router';
-import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
-import Notifications from 'vue-notification';
+// import VueRouter from 'vue-router';
+// import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
+// import Notifications from 'vue-notification';
 
 import SharpCommands from 'sharp-commands';
 import SharpDashboard from 'sharp-dashboard';
@@ -23,61 +23,53 @@ import {
 
 import { store as getStore } from './store/store';
 import { router as getRouter } from "./router";
-import { createInertiaApp } from "@inertiajs/vue2";
+import { createInertiaApp } from "@inertiajs/vue3";
 import { ZiggyVue } from '../../../vendor/tightenco/ziggy/dist/vue.m';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import {ignoredElements} from "./util/vue";
 
-Vue.use(Notifications);
-Vue.use(VueGoogleMaps, {
-    installComponents: false
-});
 
-Vue.use(VueRouter);
-Vue.use(Vuex);
+// Vue.use(VueGoogleMaps, {
+//     installComponents: false
+// });
 
-const router = getRouter();
+// const router = getRouter();
 const store = getStore();
 
-Vue.use(SharpCommands, { store, router });
-Vue.use(SharpDashboard, { store, router });
-Vue.use(SharpEntityList, { store, router });
-Vue.use(SharpFilters, { store, router });
-Vue.use(SharpForm, { store, router });
-Vue.use(SharpShow, { store, router });
-Vue.use(SharpUI, { store, router });
-Vue.use(SharpSearch, { store, router });
 
-
-Vue.component('sharp-action-view', ActionView);
-Vue.component('sharp-left-nav', LeftNav);
-Vue.component('sharp-nav-section', NavSection);
-Vue.component('sharp-nav-item', NavItem);
-
+// Vue.component('sharp-action-view', ActionView);
+// Vue.component('sharp-left-nav', LeftNav);
+// Vue.component('sharp-nav-section', NavSection);
+// Vue.component('sharp-nav-item', NavItem);
 
 if(document.querySelector('[data-page]')) {
     createInertiaApp({
         resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
         setup({ el, App, props, plugin }) {
-            Vue.use(plugin);
-            Vue.use(ZiggyVue, Ziggy);
+            const app = createApp({ render: () => h(App, props) })
+                .use(plugin)
+                .use(ZiggyVue, Ziggy)
+                .use(store);
 
-            new Vue({
-                render: h => h(App, props),
-                store,
-                router,
-            }).$mount(el);
+            app.config.compilerOptions.isCustomElement = tag => ignoredElements.includes(tag);
 
-            new Vue({
-                store,
-                router,
-            }).$mount('#menu');
+            app.use(SharpCommands, { store });
+            app.use(SharpDashboard, { store });
+            app.use(SharpEntityList, { store });
+            app.use(SharpFilters, { store });
+            app.use(SharpForm, { store });
+            app.use(SharpShow, { store });
+            app.use(SharpUI, { store });
+            app.use(SharpSearch, { store });
+
+            app.mount(el);
         },
     })
 } else {
-    new Vue({
-        store,
-        router,
-    }).$mount('#app');
+    // new Vue({
+    //     store,
+    //     router,
+    // }).$mount('#app');
 }
 
 

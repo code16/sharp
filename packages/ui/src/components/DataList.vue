@@ -54,8 +54,8 @@
                     </div>
                 </template>
                 <div class="SharpDataList__tbody" ref="body">
-                    <Draggable :options="draggableOptions" :value="reorderedItems" @input="handleItemsChanged">
-                        <template v-for="item in currentItems">
+                    <Draggable :options="draggableOptions" :model-value="currentItems" @input="handleItemsChanged">
+                        <template #item="item">
                             <slot name="item" :item="item" />
                         </template>
                     </Draggable>

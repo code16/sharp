@@ -14,8 +14,6 @@
 </template>
 
 <script>
-    import { BTabs } from 'bootstrap-vue';
-
     export default {
         name: 'SharpTabs',
 
@@ -24,7 +22,9 @@
         },
 
         components: {
-            BTabs,
+            BTabs: {
+                template: '<div><slot /></div>',  // todo
+            },
         },
 
         computed: {

@@ -1,8 +1,9 @@
-import Vue from "vue";
 
+
+export const ignoredElements = [];
 
 export function ignoreVueElement(tag) {
-    if(tag && !Vue.config.ignoredElements.includes(tag)) {
-        Vue.config.ignoredElements.push(tag);
+    if(tag && !ignoredElements.includes(tag)) {
+        ignoredElements.push(tag);
     }
 }

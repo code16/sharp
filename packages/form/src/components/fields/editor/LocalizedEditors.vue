@@ -5,8 +5,8 @@
             <input type="hidden" :name="name" :value="value && value.text">
         </template>
         <template v-else>
-            <template v-for="locale in locales">
-                <div v-show="isActive(locale)" :key="locale">
+            <template v-for="locale in locales"  :key="locale">
+                <div v-show="isActive(locale)">
                     <slot :editor="localizedEditors[locale]" :locale="locale" />
                 </div>
             </template>

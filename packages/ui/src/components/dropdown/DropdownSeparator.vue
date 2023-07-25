@@ -3,12 +3,14 @@
 </template>
 
 <script>
-    import { BDropdownDivider } from 'bootstrap-vue';
+    // import { BDropdownDivider } from 'bootstrap-vue';
 
     export default {
         name: 'SharpDropdownSeparator',
         components: {
-            BDropdownDivider,
+            BDropdownDivider:{
+                template: '<div><slot /></div>', // todo
+            },
         }
     }
 </script>

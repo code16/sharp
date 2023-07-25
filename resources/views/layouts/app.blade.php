@@ -22,7 +22,7 @@
 
     @include('sharp::partials.head')
 
-    @vite('resources/assets/js/client-api.js', '/vendor/sharp')
+{{--    @vite('resources/assets/js/client-api.js', '/vendor/sharp')--}}
 
     <x-sharp::extensions.custom-fields-script />
     {{ $head ?? null }}

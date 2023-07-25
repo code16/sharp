@@ -26,7 +26,7 @@
                                 <i :class="getIcon(button)" data-test="table"></i>
                             </TableDropdown>
                         </template>
-                        <template v-else>
+                        <template v-else :key="button">
                             <Button
                                 variant="light"
                                 :active="isActive(button)"
@@ -34,7 +34,6 @@
                                 :title="buttonTitle(button)"
                                 @click="handleClicked(button)"
                                 :data-test="button"
-                                :key="button"
                             >
                                 <i :class="getIcon(button)"></i>
                                 <template v-if="button === 'small'">

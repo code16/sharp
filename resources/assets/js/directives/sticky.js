@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import Vue from "vue";
+import { nextTick } from "vue";
 
 class StickyObserver {
     /**
@@ -32,7 +32,7 @@ class StickyObserver {
         }
         this.scrollContainer.addEventListener('scroll', this.listener);
         window.addEventListener('resize', this.listener);
-        Vue.nextTick(() => this.refresh());
+        nextTick(() => this.refresh());
     }
 
     destroy() {

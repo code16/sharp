@@ -37,11 +37,13 @@
 
 <script>
     import NavItem from './NavItem.vue';
-    import { BCollapse } from 'bootstrap-vue';
+    // import { BCollapse } from 'bootstrap-vue';
 
     export default {
         components: {
-            BCollapse
+            BCollapse: {
+                template: '<div style="display: none"><slot /></div>',  // todo
+            },
         },
         props: {
             label: String,

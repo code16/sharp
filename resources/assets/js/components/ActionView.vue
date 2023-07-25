@@ -30,27 +30,27 @@
                 <router-view @error="handlePageError" />
             </template>
 
-            <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>
-                <template slot="body" slot-scope="{ item, close }">
-                    <div class="toast show mb-3" :class="`border-${item.type}`" role="alert" aria-live="assertive" aria-atomic="true" data-test="notification">
-                        <div class="toast-header">
-                            <strong class="me-auto">{{ item.title }}</strong>
-                            <button type="button" class="btn-close" data-test="close-notification" aria-label="Close" @click="close"></button>
-                        </div>
-                        <template v-if="item.text">
-                            <div class="toast-body" v-html="item.text">
-                            </div>
-                        </template>
-                    </div>
-                </template>
-            </notifications>
+<!--            todo: update to new stack -->
+<!--            <notifications position="top right" animation-name="slideRight" style="top:6rem; right: 1rem" reverse>-->
+<!--                <template slot="body" slot-scope="{ item, close }">-->
+<!--                    <div class="toast show mb-3" :class="`border-${item.type}`" role="alert" aria-live="assertive" aria-atomic="true" data-test="notification">-->
+<!--                        <div class="toast-header">-->
+<!--                            <strong class="me-auto">{{ item.title }}</strong>-->
+<!--                            <button type="button" class="btn-close" data-test="close-notification" aria-label="Close" @click="close"></button>-->
+<!--                        </div>-->
+<!--                        <template v-if="item.text">-->
+<!--                            <div class="toast-body" v-html="item.text">-->
+<!--                            </div>-->
+<!--                        </template>-->
+<!--                    </div>-->
+<!--                </template>-->
+<!--            </notifications>-->
 
-            <template v-for="dialog in dialogs">
+            <template v-for="dialog in dialogs" :key="dialog.id">
                 <Modal
                     v-bind="dialog.props"
                     @ok="dialog.okCallback"
                     @hidden="dialog.hiddenCallback"
-                    :key="dialog.id"
                 >
                     <div v-html="dialog.text"></div>
                 </Modal>

@@ -110,7 +110,7 @@
     import ActionBarShow from "sharp-show/src/components/ActionBar.vue";
     import ShowField from 'sharp-show/src/components/Field.vue';
     import Section from "sharp-show/src/components/Section.vue";
-    import { router } from "@inertiajs/vue2";
+    import { router } from "@inertiajs/vue3";
     import Layout from "../Layouts/Layout.vue";
 
     export default {

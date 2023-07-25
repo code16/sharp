@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { reactive } from "vue";
 import { Embed } from "./embed";
 import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "sharp-embeds";
 import debounce from "lodash/debounce";
@@ -11,7 +11,7 @@ export function getEmbedExtension({
     form,
 }) {
 
-    const state = Vue.observable({
+    const state = reactive({
         embeds: [],
         currentIndex: 0,
         created: false,

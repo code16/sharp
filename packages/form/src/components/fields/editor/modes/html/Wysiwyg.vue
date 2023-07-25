@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import { Editor } from '@tiptap/vue-2';
+    import { Editor } from '@tiptap/vue-3';
     import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";

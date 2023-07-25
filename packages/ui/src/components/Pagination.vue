@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import { BPagination } from 'bootstrap-vue';
+    // import { BPagination } from 'bootstrap-vue';
 
     // for props/events check
     // https://bootstrap-vue.js.org/docs/components/pagination
@@ -33,7 +33,9 @@
         inheritAttrs: false,
 
         components: {
-            BPagination
+            BPagination: {
+                template: '<div><slot /></div>',  // todo
+            },
         },
 
         props: {

@@ -8,7 +8,7 @@
         </button>
 
         <Modal
-            :visible.sync="modalVisible"
+            v-model:visible="modalVisible"
             :no-close-on-backdrop="false"
             :no-enforce-focus="false"
             hide-footer

@@ -2,7 +2,7 @@
     <div class="FormPage">
         <div class="container">
             <Form
-                :form.sync="form"
+                v-model:form="form"
                 :entity-key="entityKey"
                 :instance-id="instanceId"
                 @update:form="handleFormUpdated"

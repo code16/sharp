@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
 import {existsSync} from "fs";
 import {homedir} from "os";
 import * as path from 'path';
@@ -23,7 +23,7 @@ export default defineConfig(({ mode, command }) => {
         },
         resolve: {
             alias: {
-                'vue': 'vue/dist/vue.esm.js',
+                'vue': 'vue/dist/vue.esm-browser.js',
             }
         },
         plugins: [
@@ -31,7 +31,7 @@ export default defineConfig(({ mode, command }) => {
             laravel({
                 input: [
                     'resources/assets/js/sharp.js',
-                    'resources/assets/js/client-api.js',
+                    // 'resources/assets/js/client-api.js',
                     'resources/assets/sass/app.scss',
                     'resources/assets/sass/vendors.scss',
                 ],

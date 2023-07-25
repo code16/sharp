@@ -24,8 +24,8 @@
                             <StateIcon class="me-1" :color="stateOptions ? stateOptions.color : '#fff'" style="vertical-align: -.125em" />
                             <span class="text-truncate">{{ stateOptions ? stateOptions.label : state }}</span>
                         </template>
-                        <template v-for="stateValue in stateValues">
-                            <DropdownItem :active="state === stateValue.value" :key="stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
+                        <template v-for="stateValue in stateValues" :key="stateValue.value">
+                            <DropdownItem :active="state === stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
                                 <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
                                 <span class="text-truncate">{{ stateValue.label }}</span>
                             </DropdownItem>

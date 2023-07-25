@@ -13,12 +13,14 @@
 </template>
 
 <script>
-    import { BTab } from 'bootstrap-vue';
+    // import { BTab } from 'bootstrap-vue';
 
     export default {
         name: 'SharpTab',
         components: {
-            BTab
+            BTab: {
+                template: '<div><slot /></div>',
+            },
         },
         provide() {
             return {

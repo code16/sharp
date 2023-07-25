@@ -9,8 +9,8 @@
             <template v-if="locale"><span class="text-uppercase">{{ locale }}</span></template>
             <template v-else>-</template>
         </template>
-        <template v-for="locale in locales">
-            <DropdownItem class="text-uppercase small" :active="isActive(locale)" @click="handleChanged(locale)" :key="locale">
+        <template v-for="locale in locales" :key="locale">
+            <DropdownItem class="text-uppercase small" :active="isActive(locale)" @click="handleChanged(locale)">
                 {{ locale }}
             </DropdownItem>
         </template>

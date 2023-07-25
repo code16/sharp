@@ -20,8 +20,8 @@
         <template v-if="hasClearButton" v-slot:caret>
             <ClearButton class="SharpSelect__clear-button" @click="remove" />
         </template>
-        <template v-slot:tag="{ option, remove }">
-            <span class="multiselect__tag" :key="option">
+        <template v-slot:tag="{ option, remove }" :key="option">
+            <span class="multiselect__tag">
                 <span>{{ multiselectLabel(option) }}</span>
                 <i aria-hidden="true" tabindex="1" @keypress.enter.prevent="remove(option)" @mousedown.prevent.stop="remove(option)" class="multiselect__tag-icon"></i>
             </span>
@@ -54,7 +54,7 @@
         },
         computed: {
             multiselectOptions() {
-                return this.options.map(o => o.id);
+                return this.options?.map(o => o.id);
             },
             hasClearButton() {
                 return this.clearable && !this.multiple && this.value != null;

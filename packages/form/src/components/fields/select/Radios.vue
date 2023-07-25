@@ -1,8 +1,8 @@
 <template>
     <div :class="{ 'card card-body form-control':root }">
         <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
-            <template v-for="(option, index) in options">
-                <div class="col" :key="option.id">
+            <template v-for="(option, index) in options" :key="option.id">
+                <div class="col">
                     <div class="form-check mb-0">
                         <input type="radio"
                             class="form-check-input"

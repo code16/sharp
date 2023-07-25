@@ -14,7 +14,7 @@
 </template>
 
 <script>
-    import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+    import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet';
     import { toLatLngBounds } from "./util";
     import { triggerResize } from "../../util";
 

@@ -28,7 +28,7 @@
             </div>
         </template>
         <EmbedFormModal
-            :visible.sync="modalVisible"
+            v-model:visible="modalVisible"
             :form="modalForm"
             :post="postForm"
             @cancel="handleCancelClicked"

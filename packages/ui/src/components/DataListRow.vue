@@ -1,7 +1,7 @@
 <template>
     <div class="SharpDataList__row position-relative px-3" :class="classes">
         <div class="row gx-0">
-            <template v-if="$scopedSlots.prepend">
+            <template v-if="$slots.prepend">
                 <div class="col-auto align-self-center">
                     <div class="SharpDataList__row-prepend">
                         <slot name="prepend"></slot>
@@ -38,7 +38,7 @@
                 </template>
             </div>
             <div class="col-sm-auto align-self-center">
-                <template v-if="$scopedSlots.append">
+                <template v-if="$slots.append">
                     <div class="SharpDataList__row-append pb-3 pt-sm-3">
                         <slot name="append" v-bind="this" />
                     </div>

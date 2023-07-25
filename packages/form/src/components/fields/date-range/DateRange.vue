@@ -94,6 +94,7 @@
            },
         },
         methods: {
+            $screens: ()=> {},
             handleChanged(value) {
                 if(value?.start?.toDateString() === this.oldValue?.start?.toDateString()
                     && value?.end?.toDateString() === this.oldValue?.end?.toDateString()

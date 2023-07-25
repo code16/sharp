@@ -1,13 +1,14 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 
 
 export function showNotification({ level, title, message, autoHide }) {
-    Vue.notify({
-        title,
-        type: level,
-        text: message,
-        duration: autoHide ? 4000 : -1
-    });
+    // todo handle notifications
+    // Vue.notify({
+    //     title,
+    //     type: level,
+    //     text: message,
+    //     duration: autoHide ? 4000 : -1
+    // });
 }
 
 export function handleNotifications(notifications) {

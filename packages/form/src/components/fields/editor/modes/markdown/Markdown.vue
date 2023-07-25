@@ -21,7 +21,7 @@
 
 <script>
     import { Markdown } from 'tiptap-markdown';
-    import { Editor } from '@tiptap/vue-2';
+    import { Editor } from '@tiptap/vue-3';
     import { lang } from "sharp";
     import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";

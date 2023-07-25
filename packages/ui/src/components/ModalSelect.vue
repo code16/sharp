@@ -12,7 +12,7 @@
             @change="handleVisibleChanged"
         >
             <div class="list-group" role="menu">
-                <template v-for="option in options">
+                <template v-for="option in options"  :key="option.value">
                     <div class="list-group-item list-group-item-action pe-2"
                         :class="itemClass(option)"
                         style="cursor: pointer; outline-offset: 4px"
@@ -21,11 +21,10 @@
                         :aria-checked="isSelected(option)"
                         @click="handleOptionSelected(option)"
                         @keydown.enter.space="handleOptionSelected(option)"
-                        :key="option.value"
                     >
                         <div class="py-1">
                             <div class="row align-items-center gx-3">
-                                <template v-if="$scopedSlots['item-prepend']">
+                                <template v-if="$slots['item-prepend']">
                                     <div class="col-auto">
                                         <slot name="item-prepend" :option="option" />
                                     </div>

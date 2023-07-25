@@ -52,14 +52,13 @@
                                 <template v-if="resolvedFilters.length">
                                     <div class="col-md">
                                         <div class="row gx-2 gy-2">
-                                            <template v-for="filter in resolvedFilters">
+                                            <template v-for="filter in resolvedFilters" :key="filter.id">
                                                 <div class="col-auto">
                                                     <SharpFilter
                                                         :filter="filter"
                                                         :value="filtersValues[filter.key]"
                                                         :disabled="reordering"
                                                         @input="handleFilterChanged(filter, $event)"
-                                                        :key="filter.id"
                                                     />
                                                 </div>
                                             </template>

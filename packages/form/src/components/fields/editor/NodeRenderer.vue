@@ -13,7 +13,7 @@
 
 <script>
     import { ignoreVueElement } from "sharp";
-    import { NodeViewWrapper } from '@tiptap/vue-2';
+    import { NodeViewWrapper } from '@tiptap/vue-3';
 
     export default {
         extends: NodeViewWrapper,

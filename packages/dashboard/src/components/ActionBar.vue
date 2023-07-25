@@ -4,13 +4,12 @@
             <div class="col">
                 <template v-if="filters.length > 0">
                     <div class="row gx-2">
-                        <template v-for="filter in filters">
+                        <template v-for="filter in filters" :key="filter.id">
                             <div class="col-auto">
                                 <SharpFilter
                                     :filter="filter"
                                     :value="filterValue(filter.key)"
                                     @input="$emit('filter-change', filter, $event)"
-                                    :key="filter.id"
                                 />
                             </div>
                         </template>

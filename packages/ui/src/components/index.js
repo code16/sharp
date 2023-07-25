@@ -23,4 +23,3 @@ export { default as Tab } from './Tab.vue';
 export { default as TabbedLayout } from './TabbedLayout.vue';
 export { default as Tabs } from './Tabs.vue';
 export { default as TopBar } from './TopBar.vue';
-export { default as Tooltip } from './Tooltip.vue';

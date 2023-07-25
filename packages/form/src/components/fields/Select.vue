@@ -4,7 +4,7 @@
         class="SharpSelect"
         :class="classes"
         :labels="optionsLabel"
-        v-bind="[$props, $attrs]"
+        v-bind="{ ...$props, ...$attrs }"
         @input="handleInput"
         ref="component"
     >

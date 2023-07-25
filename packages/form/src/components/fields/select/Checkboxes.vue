@@ -1,7 +1,7 @@
 <template>
     <div :class="{ 'card card-body form-control':root }">
         <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
-            <template v-for="(option, index) in options">
+            <template v-for="(option, index) in options" :key="option.id">
                 <div class="col">
                     <Check
                         class="mb-0"
@@ -10,7 +10,6 @@
                         :text="labels[option.id]"
                         :read-only="readOnly"
                         @input="handleCheckboxChanged($event, option)"
-                        :key="option.id"
                     />
                 </div>
             </template>

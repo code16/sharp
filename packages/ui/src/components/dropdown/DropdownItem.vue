@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import { BDropdownItem } from 'bootstrap-vue';
+    // import { BDropdownItem } from 'bootstrap-vue';
 
     export default {
         name: 'SharpDropdownItem',
@@ -16,7 +16,9 @@
         },
 
         components: {
-            BDropdownItem,
+            BDropdownItem:{
+                template: '<div><slot /></div>',  // todo
+            },
         },
 
         methods: {

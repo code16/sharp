@@ -63,7 +63,7 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { BModal } from 'bootstrap-vue';
+    // import { BModal } from 'bootstrap-vue';
     import Loading from "./loading/Loading.vue";
     import LoadingOverlay from "./loading/LoadingOverlay.vue";
 
@@ -74,7 +74,9 @@
         components: {
             LoadingOverlay,
             Loading,
-            BModal
+            BModal:{
+                template: '<div style="display: none"><slot /></div>',  // todo
+            },
         },
         inheritAttrs: false,
 

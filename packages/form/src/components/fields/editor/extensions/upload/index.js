@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { reactive } from 'vue';
 import debounce from 'lodash/debounce';
 import {
     filesEquals,
@@ -16,7 +16,7 @@ export function getUploadExtension({
     form,
 }) {
 
-    const state = Vue.observable({
+    const state = reactive({
         registeredFiles: [],
         created: false,
         resolved: null,

@@ -29,6 +29,12 @@
 
 @import "utilities";
 
+.tw {
+  @tailwind reset;
+  @tailwind components;
+  @tailwind utilities;
+}
+
 a {
   color: hsl(var(--primary-h), var(--primary-s), 30%);
   &:hover {

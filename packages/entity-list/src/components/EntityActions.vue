@@ -16,8 +16,8 @@
                         <template v-slot:text>
                             <StateIcon :color="stateOptions ? stateOptions.color : '#fff'" />
                         </template>
-                        <template v-for="stateValue in config.state.values">
-                            <DropdownItem :active="state === stateValue.value" :key="stateValue.value" @click="handleStateChanged(stateValue.value)">
+                        <template v-for="stateValue in config.state.values" :key="stateValue.value">
+                            <DropdownItem :active="state === stateValue.value" @click="handleStateChanged(stateValue.value)">
                                 <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
                                 <span class="text-truncate">{{ stateValue.label }}</span>
                             </DropdownItem>
@@ -80,7 +80,7 @@
 <script>
     import { lang } from "sharp";
     import { CommandsDropdown } from "sharp-commands";
-    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Tooltip, Dropdown } from "sharp-ui";
+    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Dropdown } from "sharp-ui";
 
     export default {
         components: {
@@ -91,7 +91,6 @@
             StateIcon,
             ModalSelect,
             Button,
-            Tooltip,
         },
         props: {
             config: Object,

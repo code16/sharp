@@ -4,41 +4,38 @@
         :small="small"
         right
         v-bind="$attrs"
-        v-on="$listeners"
     >
-        <template v-slot:text>
-            <slot name="text" />
-        </template>
-        <slot name="prepend" />
-        <template v-for="(group, i) in commandGroups">
-            <template v-if="i > 0">
-                <DropdownSeparator />
-            </template>
-            <template v-for="command in group">
-                <DropdownItem
-                    @click="handleCommandClicked(command)"
-                    :disabled="isDisabled(command)"
-                    :key="command.key"
-                    v-b-tooltip.hover.left="{ disabled: !requiresSelection(command) }"
-                    :title="lang('entity_list.commands.needs_selection_message')"
-                >
-                    {{ command.label }}
-                    <template v-if="command.description">
-                        <div class="SharpCommandsDropdown__description" :class="{ 'opacity-75': isDisabled(command) }">
-                            {{ command.description }}
-                        </div>
-                    </template>
-                </DropdownItem>
-            </template>
-        </template>
-        <slot name="append" />
+<!--        <template v-slot:text>-->
+<!--            <slot name="text" />-->
+<!--        </template>-->
+<!--        <slot name="prepend" />-->
+<!--        <template v-for="(group, i) in commandGroups">-->
+<!--            <template v-if="i > 0">-->
+<!--                <DropdownSeparator />-->
+<!--            </template>-->
+<!--            <template v-for="command in group" :key="command.key">-->
+<!--                <DropdownItem-->
+<!--                    @click="handleCommandClicked(command)"-->
+<!--                    :disabled="isDisabled(command)"-->
+<!--                    :title="lang('entity_list.commands.needs_selection_message')"-->
+<!--                >-->
+<!--&lt;!&ndash;                    todo tooltip &ndash;&gt;-->
+<!--                    {{ command.label }}-->
+<!--                    <template v-if="command.description">-->
+<!--                        <div class="SharpCommandsDropdown__description" :class="{ 'opacity-75': isDisabled(command) }">-->
+<!--                            {{ command.description }}-->
+<!--                        </div>-->
+<!--                    </template>-->
+<!--                </DropdownItem>-->
+<!--            </template>-->
+<!--        </template>-->
+<!--        <slot name="append" />-->
     </Dropdown>
 </template>
 
 <script>
     import { lang } from 'sharp';
     import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp-ui';
-    import { VBTooltip } from 'bootstrap-vue';
 
     export default {
         name: 'SharpCommandsDropdown',
@@ -86,7 +83,9 @@
             }
         },
         directives: {
-            'b-tooltip': VBTooltip,
+            'b-tooltip': {
+
+            },
         },
     }
 </script>

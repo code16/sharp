@@ -24,10 +24,9 @@
 
         <Draggable :options="dragOptions" :list="list" ref="draggable">
             <transition-group name="expand" tag="div" class="list-group shadow-sm">
-                <template v-for="(listItemData, i) in list">
+                <template v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]">
                     <div class="SharpList__item list-group-item"
                         :class="{'SharpList__item--drag-active': dragActive}"
-                        :key="listItemData[indexSymbol]"
                     >
                         <template v-if="showInsertButton">
                             <div class="SharpList__new-item-zone">
@@ -86,9 +85,9 @@
                 </template>
             </transition-group>
 
-            <template v-if="showAddButton" v-slot:footer>
+            <template v-if="showAddButton" v-slot:footer :key="-1">
                 <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
-                    <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add" :key="-1">
+                    <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add">
                         ＋ {{ addText }}
                     </Button>
                 </div>
