@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
+use Code16\Sharp\Data\MenuData;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -16,22 +17,26 @@ class HandleInertiaRequests extends Middleware
             return parent::share($request);
         }
 
-        $currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
-        $currentEntityItem = $currentEntityKey ? app(SharpMenuManager::class)->getEntityMenuItem($currentEntityKey) : null;
+//        $currentEntityKey = currentSharpRequest()->getCurrentBreadcrumbItem()->key ?? null;
+//        $currentEntityItem = $currentEntityKey ? app(SharpMenuManager::class)->getEntityMenuItem($currentEntityKey) : null;
 
         return array_merge(
             parent::share($request),
             [
                 'config' => [
-                    'search' => [
-                        'placeholder' => config('sharp.search.placeholder'),
+                    'sharp' => [
+                        'name' => config('sharp.name', 'Sharp'),
+                        'search' => [
+                            'placeholder' => config('sharp.search.placeholder'),
+                        ],
                     ],
                 ],
-                'currentEntity' => $currentEntityItem ? [
-                    'key' => $currentEntityItem->getEntityKey(),
-                    'label' => $currentEntityItem->getLabel(),
-                    'icon' => $currentEntityItem->getIcon(),
-                ] : null,
+                'menu' => MenuData::from(app(SharpMenuManager::class)),
+//                'currentEntity' => $currentEntityItem ? [
+//                    'key' => $currentEntityItem->getEntityKey(),
+//                    'label' => $currentEntityItem->getLabel(),
+//                    'icon' => $currentEntityItem->getIcon(),
+//                ] : null,
             ]
         );
     }
