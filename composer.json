@@ -29,7 +29,8 @@
         "nunomaduro/collision": "^6.0",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^9.5",
-        "spatie/laravel-ray": "^1.26"
+        "spatie/laravel-ray": "^1.26",
+        "spatie/typescript-transformer": "^2.2"
     },
     "autoload": {
         "files": [
@@ -45,7 +46,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/testbench package:test --parallel"
+        "test": "vendor/bin/testbench package:test --parallel",
+        "typescript:transform": "Code16\\Sharp\\Console\\Dev\\TypeScriptTransformCommand"
     },
     "extra": {
         "laravel": {
