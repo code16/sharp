@@ -27,8 +27,8 @@
 </template>
 
 <script>
-    import { Modal, LoadingOverlay } from 'sharp-ui';
-    import { Form } from 'sharp-form';
+    import { Modal, LoadingOverlay } from '@sharp/ui';
+    import { Form } from '@sharp/form';
 
     export default {
         components: {

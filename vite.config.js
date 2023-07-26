@@ -16,7 +16,7 @@ export default defineConfig(({ mode, command }) => {
         base: (command === "build" ? '/vendor/sharp' : ""),
         envDir: path.join(process.cwd(), '/demo'),
         build: {
-            outDir: 'resources/assets/dist',
+            outDir: 'dist',
             commonjsOptions: {
                 requireReturnsDefault: 'preferred'
             },
@@ -30,12 +30,12 @@ export default defineConfig(({ mode, command }) => {
             splitVendorChunkPlugin(),
             laravel({
                 input: [
-                    'resources/assets/js/sharp.js',
-                    // 'resources/assets/js/client-api.js',
-                    'resources/assets/sass/app.scss',
-                    'resources/assets/sass/vendors.scss',
+                    'resources/js/sharp.js',
+                    'resources/sass/app.css',
+                    'resources/sass/app.scss',
+                    'resources/sass/vendors.scss',
                 ],
-                publicDirectory: 'resources/assets/dist',
+                publicDirectory: '/dist',
                 refresh: true,
                 valetTls,
             }),

@@ -64,7 +64,7 @@
         showAlert,
     } from "sharp";
 
-    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from 'sharp-ui';
+    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from '@sharp/ui';
     import { DynamicView, Localization } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout.vue';

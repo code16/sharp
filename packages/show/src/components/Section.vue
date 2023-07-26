@@ -38,8 +38,8 @@
 </template>
 
 <script>
-    import { Grid, SectionTitle } from "sharp-ui";
-    import { CommandsDropdown } from 'sharp-commands';
+    import { Grid, SectionTitle } from "@sharp/ui";
+    import { CommandsDropdown } from '@sharp/commands';
     import { lang } from "sharp";
 
     export default {

@@ -31,7 +31,7 @@
 
 <script>
     import { lang } from 'sharp';
-    import { Grid } from 'sharp-ui';
+    import { Grid } from '@sharp/ui';
     import { UnknownField } from 'sharp/components';
     import { syncVisibility } from "../../util/fields/visiblity";
     import FieldLayout from "../FieldLayout.vue";

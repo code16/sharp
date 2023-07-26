@@ -1,5 +1,5 @@
 {
-    "name": "sharp-files",
+    "name": "@sharp/files",
     "private": true,
     "version": "1.0.0",
     "main": "src/index.js"

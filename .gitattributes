@@ -11,6 +11,7 @@
 /docs export-ignore
 /README.md export-ignore
 /ABOUT.md export-ignore
-/resources/assets/js export-ignore
-/resources/assets/sass export-ignore
+/resources/js export-ignore
+/resources/sass export-ignore
 /packages export-ignore
+/src/Console/Dev export ignore

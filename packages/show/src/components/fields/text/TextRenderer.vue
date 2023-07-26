@@ -3,8 +3,8 @@
 </template>
 
 <script>
-    import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "sharp-files";
-    import { postResolveEmbeds } from "sharp-embeds";
+    import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "@sharp/files";
+    import { postResolveEmbeds } from "@sharp/embeds";
     import { createEmbedComponent } from "./nodes/embed";
     import File from "./nodes/File.vue";
     import Html from "./nodes/Html.vue";

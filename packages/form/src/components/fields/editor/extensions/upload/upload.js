@@ -6,7 +6,7 @@ import {
     serializeFilterCrop,
     parseFilterRotate,
     serializeFilterRotate,
-} from "sharp-files";
+} from "@sharp/files";
 import { getEventsPlugin } from "./events-plugin";
 
 export const Upload = Node.create({

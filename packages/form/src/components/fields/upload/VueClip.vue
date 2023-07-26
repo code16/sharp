@@ -94,8 +94,8 @@
 
     import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
     import { Localization } from 'sharp/mixins';
-    import { Button } from 'sharp-ui';
-    import { downloadFileUrl } from "sharp-files";
+    import { Button } from '@sharp/ui';
+    import { downloadFileUrl } from "@sharp/files";
     import { getFiltersFromCropData } from "./util/filters";
     import { getImageBlobUrl } from "./util/image";
     import EditModal from "./EditModal.vue";

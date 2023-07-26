@@ -1,5 +1,5 @@
 {
-    "name": "sharp-ui",
+    "name": "@sharp/ui",
     "private": true,
     "version": "1.0.0",
     "main": "src/index.js"

@@ -109,9 +109,9 @@
 <script>
     import { mapGetters } from 'vuex';
     import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm } from 'sharp';
-    import { CommandFormModal, CommandViewPanel } from 'sharp-commands';
-    import { Grid, GlobalMessage } from 'sharp-ui';
-    import { LocaleSelect } from "sharp-form";
+    import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
+    import { Grid, GlobalMessage } from '@sharp/ui';
+    import { LocaleSelect } from "@sharp/form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
     import ActionBarShow from "../ActionBar.vue";

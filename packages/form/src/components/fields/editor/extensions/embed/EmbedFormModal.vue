@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { Modal } from "sharp-ui";
+    import { Modal } from "@sharp/ui";
     import Form from "../../../../Form.vue";
 
     export default {

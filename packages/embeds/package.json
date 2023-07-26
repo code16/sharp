@@ -1,5 +1,5 @@
 {
-    "name": "sharp-embeds",
+    "name": "@sharp/embeds",
     "private": true,
     "version": "1.0.0",
     "main": "src/index.js"

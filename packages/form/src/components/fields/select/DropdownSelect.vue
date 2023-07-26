@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import { Multiselect, ClearButton } from 'sharp-ui';
+    import { Multiselect, ClearButton } from '@sharp/ui';
     import { onLabelClicked } from "../../../util/accessibility";
 
     export default {

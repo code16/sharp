@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import { DateRange } from 'sharp-form';
+    import { DateRange } from '@sharp/form';
     import FilterControl from '../FilterControl.vue';
 
     export default {

@@ -1,4 +1,4 @@
-import { serializeFilterNumber } from "sharp-files";
+import { serializeFilterNumber } from "@sharp/files";
 
 export function getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
     const rotate = filters?.rotate?.angle ?? 0;

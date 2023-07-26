@@ -5,7 +5,7 @@ import {
     postResolveFiles,
     defaultFileThumbnailHeight,
     defaultFileThumbnailWidth,
-} from "sharp-files";
+} from "@sharp/files";
 import { Upload } from "./upload";
 
 

@@ -19,7 +19,7 @@
 <script>
     import Form from '../Form.vue';
     import ActionBarForm from '../ActionBar.vue';
-    import {Button} from "sharp-ui";
+    import {Button} from "@sharp/ui";
 
     export default {
         components: {

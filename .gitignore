@@ -7,4 +7,4 @@ node_modules
 /composer.lock
 /public
 /saturn
-/resources/assets/dist/hot
+/dist/hot

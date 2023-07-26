@@ -71,7 +71,7 @@
 </template>
 
 <script>
-    import { Modal, Loading } from "sharp-ui";
+    import { Modal, Loading } from "@sharp/ui";
     import { lang } from "sharp";
     import debounce from "lodash/debounce";
     import { getSearchResults } from "../api";

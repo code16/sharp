@@ -1,4 +1,4 @@
-import { filtersModule as filters } from 'sharp-filters';
+import { filtersModule as filters } from '@sharp/filters';
 import {getShowView, postShowCommand, getShowCommandForm, postShowState, deleteShow} from "../api";
 
 const SET_ENTITY_KEY = 'SET_ENTITY_KEY';

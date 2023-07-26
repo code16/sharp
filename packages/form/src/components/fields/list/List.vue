@@ -102,7 +102,7 @@
     import Draggable from 'vuedraggable';
     import { TemplateRenderer } from 'sharp/components';
     import { Localization } from 'sharp/mixins';
-    import { Button } from "sharp-ui";
+    import { Button } from "@sharp/ui";
     import ListItem from './ListItem.vue';
 
     import localize from '../../../mixins/localize/form';

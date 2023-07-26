@@ -82,8 +82,8 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Button } from 'sharp-ui';
-    import { MultiformDropdown } from "sharp-entity-list";
+    import { Button } from '@sharp/ui';
+    import { MultiformDropdown } from "@sharp/entity-list";
     import { lang } from "sharp";
     import { sticky } from "sharp/directives";
 

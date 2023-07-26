@@ -9,7 +9,7 @@
 
 <script>
     import { ignoreVueElement } from "sharp";
-    import { EmbedRenderer } from 'sharp-embeds';
+    import { EmbedRenderer } from '@sharp/embeds';
 
     export default {
         components: {

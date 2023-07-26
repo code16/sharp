@@ -79,8 +79,8 @@
 
 <script>
     import { lang } from "sharp";
-    import { CommandsDropdown } from "sharp-commands";
-    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Dropdown } from "sharp-ui";
+    import { CommandsDropdown } from "@sharp/commands";
+    import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Dropdown } from "@sharp/ui";
 
     export default {
         components: {

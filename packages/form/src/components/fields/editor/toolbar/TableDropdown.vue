@@ -68,7 +68,7 @@
 
 <script>
     import { lang } from 'sharp';
-    import { Button, Dropdown, DropdownItem, DropdownSeparator } from "sharp-ui";
+    import { Button, Dropdown, DropdownItem, DropdownSeparator } from "@sharp/ui";
 
     export default {
         components: {

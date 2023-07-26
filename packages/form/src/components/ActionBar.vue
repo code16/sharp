@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import { Breadcrumb, Dropdown, DropdownItem } from 'sharp-ui';
+    import { Breadcrumb, Dropdown, DropdownItem } from '@sharp/ui';
     import { Localization } from "sharp/mixins";
     import LocaleSelect from "./ui/LocaleSelect.vue";
 

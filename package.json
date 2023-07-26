@@ -2,7 +2,7 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "resources/assets/js"
+    "resources/js"
   ],
   "scripts": {
     "dev": "vite",
@@ -11,14 +11,16 @@
     "docs:build": "cd docs && npm run build",
     "test": "jest",
     "cy:open-ct": "cd tests-e2e && npm run cy:open-ct",
-    "update:tiptap": "npm i @tiptap/core @tiptap/extension-code-block @tiptap/extension-highlight @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-superscript @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/starter-kit @tiptap/vue-2 @tiptap/extension-character-count"
+    "update:tiptap": "npm i @tiptap/core @tiptap/extension-code-block @tiptap/extension-highlight @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-superscript @tiptap/extension-table @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-table-row @tiptap/starter-kit @tiptap/vue-3 @tiptap/extension-character-count"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.4",
     "@sharp/test-utils": "file:packages/test-utils",
+    "@tailwindcss/forms": "^0.5.4",
     "@types/jest": "^26.0.19",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/test-utils": "^1.0.0-beta.29",
+    "autoprefixer": "^10.4.14",
     "babel-runtime": "^6.26.0",
     "core-js": "^3.0.0-beta.8",
     "cross-env": "3.1.3",
@@ -27,17 +29,16 @@
     "laravel-vite-plugin": "^0.7.8",
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
-    "null-loader": "^4.0.1",
-    "resolve-url-loader": "^3.1.0",
     "rollup-plugin-ignore-import": "^1.3.2",
     "sass": "npm:sass-embedded@^1.60.0",
-    "sass-loader": "^13.0.2",
+    "tailwindcss": "^3.3.3",
     "vite": "^4.4.6",
-    "vite-bundle-visualizer": "^0.8.1",
-    "vue-loader": "^15.9.8"
+    "vite-bundle-visualizer": "^0.8.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.0",
+    "@headlessui/vue": "^1.7.14",
+    "@heroicons/vue": "^2.0.18",
     "@inertiajs/vue3": "^1.0.9",
     "@tiptap/core": "^2.0.3",
     "@tiptap/extension-character-count": "^2.0.3",
@@ -83,7 +84,6 @@
   },
   "browserslist": [
     "last 1 version",
-    "> 1%",
-    "IE 10"
+    "> 1%"
   ]
 }

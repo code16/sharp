@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import { Multiselect } from 'sharp-ui';
+    import { Multiselect } from '@sharp/ui';
     import localize from '../../mixins/localize/Tags';
 
     class LabelledItem {

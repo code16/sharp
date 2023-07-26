@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import { filesEquals, parseFilterCrop, parseFilterRotate } from "sharp-files";
+    import { filesEquals, parseFilterCrop, parseFilterRotate } from "@sharp/files";
     import ShowFile from "../../File.vue";
 
     export default {

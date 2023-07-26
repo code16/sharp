@@ -16,6 +16,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Vite::useHotFile(base_path('../resources/assets/dist/hot')); // allow "npm run dev" (in sharp directory)
+        Vite::useHotFile(base_path('../dist/hot')); // allow "npm run dev" (in sharp directory)
     }
 }

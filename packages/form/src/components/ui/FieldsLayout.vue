@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import { Grid } from 'sharp-ui';
+    import { Grid } from '@sharp/ui';
 
     export default {
         name: 'FieldsLayout',

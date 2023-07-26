@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {Button} from "sharp-ui";
+import {Button} from "@sharp/ui";
 import { sticky } from "sharp/directives";
 import { lang } from "sharp";
 

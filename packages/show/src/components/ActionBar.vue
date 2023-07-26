@@ -67,14 +67,14 @@ import {
     Breadcrumb,
     Button,
     ModalSelect, DropdownSeparator,
-} from 'sharp-ui';
+} from '@sharp/ui';
 
     import {
         CommandsDropdown
-    } from 'sharp-commands';
+    } from '@sharp/commands';
 
     import { Localization } from "sharp/mixins";
-    import LocaleSelect from "sharp-form/src/components/ui/LocaleSelect.vue";
+    import LocaleSelect from "@sharp/form/src/components/ui/LocaleSelect.vue";
 
     export default {
         mixins: [Localization],

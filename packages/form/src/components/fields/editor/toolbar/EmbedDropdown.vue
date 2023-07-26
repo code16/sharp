@@ -22,7 +22,7 @@
 
 <script>
     import { lang } from 'sharp';
-    import { Dropdown, DropdownItem } from "sharp-ui";
+    import { Dropdown, DropdownItem } from "@sharp/ui";
 
     export default {
         components: {

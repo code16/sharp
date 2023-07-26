@@ -28,7 +28,7 @@
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
     import FilterSelect from './filters/FilterSelect.vue';
-    import { Dropdown } from "sharp-ui";
+    import { Dropdown } from "@sharp/ui";
 
     export default {
         components: {

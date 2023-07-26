@@ -38,8 +38,8 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { SharpFilter } from 'sharp-filters';
-    import { CommandsDropdown } from 'sharp-commands';
+    import { SharpFilter } from '@sharp/filters';
+    import { CommandsDropdown } from '@sharp/commands';
     import { Localization } from "sharp/mixins";
 
     export default {

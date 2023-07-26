@@ -52,7 +52,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang/front', 'sharp-front');
 
         $this->publishes([
-            __DIR__.'/../resources/assets/dist' => public_path('vendor/sharp'),
+            __DIR__.'/../dist' => public_path('vendor/sharp'),
         ], 'assets');
 
         $this->publishes([

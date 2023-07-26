@@ -49,8 +49,8 @@
 <script>
     import VueCropper from 'vue-cropperjs';
     import { lang } from "sharp";
-    import { Modal, Loading, Button } from 'sharp-ui';
-    import { postResolveFiles } from 'sharp-files';
+    import { Modal, Loading, Button } from '@sharp/ui';
+    import { postResolveFiles } from '@sharp/files';
 
     import { rotate, rotateTo } from "./util/rotate";
     import { getCropDataFromFilters } from "./util/filters";

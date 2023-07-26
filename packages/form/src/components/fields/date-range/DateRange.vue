@@ -49,7 +49,7 @@
 
 <script>
     import { lang } from "sharp";
-    import { ClearButton } from "sharp-ui";
+    import { ClearButton } from "@sharp/ui";
     import DatePicker from "../date/DatePicker.vue";
 
     export default {

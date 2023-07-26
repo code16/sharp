@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import { Dropdown, DropdownItem } from "sharp-ui";
+    import { Dropdown, DropdownItem } from "@sharp/ui";
 
     export default {
         components: {

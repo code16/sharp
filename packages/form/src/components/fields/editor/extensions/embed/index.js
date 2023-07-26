@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { Embed } from "./embed";
-import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "sharp-embeds";
+import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "@sharp/embeds";
 import debounce from "lodash/debounce";
 
 

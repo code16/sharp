@@ -37,7 +37,7 @@
 
 <script>
     import { lang } from "sharp";
-    import { Button, Modal } from "sharp-ui";
+    import { Button, Modal } from "@sharp/ui";
     import { NodeViewWrapper } from '@tiptap/vue-3';
     import { elementFromString } from "./util";
 

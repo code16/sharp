@@ -59,7 +59,7 @@
 </template>
 
 <script>
-    import { Button, Dropdown } from "sharp-ui";
+    import { Button, Dropdown } from "@sharp/ui";
     import { buttons } from './config';
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";

@@ -12,8 +12,9 @@
     </x-sharp::title>
 
     @vite([
-        'resources/assets/sass/vendors.scss',
-        'resources/assets/sass/app.scss'
+        'resources/sass/vendors.scss',
+        'resources/sass/app.scss',
+        'resources/css/app.css',
     ], '/vendor/sharp')
 
     <x-sharp::root-styles />
@@ -28,7 +29,7 @@
     {{ $head ?? null }}
 
     <script defer src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
-    @vite('resources/assets/js/sharp.js', '/vendor/sharp')
+    @vite('resources/js/sharp.js', '/vendor/sharp')
 </head>
 <body {{ $attributes }}>
     <x-sharp::alert.assets-outdated />

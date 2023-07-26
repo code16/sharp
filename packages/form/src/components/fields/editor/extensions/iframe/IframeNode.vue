@@ -63,7 +63,7 @@
 <script>
     import debounce from 'lodash/debounce';
     import { lang } from "sharp";
-    import { Modal, Button } from "sharp-ui";
+    import { Modal, Button } from "@sharp/ui";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { getHTMLFromFragment } from "@tiptap/core";
     import { Fragment } from "@tiptap/pm/model";

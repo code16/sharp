@@ -52,7 +52,7 @@
 </template>
 
 <script>
-    import { Autocomplete, Select } from 'sharp-form'
+    import { Autocomplete, Select } from '@sharp/form'
     import { Localization } from 'sharp/mixins';
     import FilterControl from '../FilterControl.vue';
 

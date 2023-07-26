@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "ESNext",
+    "downlevelIteration": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["./resources/js/*"]
+    }
+  },
+  "exclude": ["node_modules", "public"]
+}

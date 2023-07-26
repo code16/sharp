@@ -35,7 +35,7 @@
 
 <script>
     import { lang } from 'sharp';
-    import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp-ui';
+    import { Dropdown, DropdownItem, DropdownSeparator } from '@sharp/ui';
 
     export default {
         name: 'SharpCommandsDropdown',

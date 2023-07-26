@@ -3,8 +3,8 @@ import {
     postDashboardCommand,
     getDashboardCommandForm,
 } from "../api";
-import { filtersModule as filters } from 'sharp-filters';
-import { commandsModule as commands } from 'sharp-commands';
+import { filtersModule as filters } from '@sharp/filters';
+import { commandsModule as commands } from '@sharp/commands';
 
 export const UPDATE = 'UPDATE';
 

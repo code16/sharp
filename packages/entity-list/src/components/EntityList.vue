@@ -160,16 +160,16 @@
         DropdownItem,
         DropdownSeparator,
         GlobalMessage, Search,
-    } from 'sharp-ui';
+    } from '@sharp/ui';
 
     import {
         CommandsDropdown,
         CommandFormModal,
         CommandViewPanel,
-    } from 'sharp-commands';
+    } from '@sharp/commands';
 
     import EntityActions from "./EntityActions.vue";
-    import {SharpFilter} from "sharp-filters";
+    import {SharpFilter} from "@sharp/filters";
     import {deleteEntityListInstance} from "../api";
 
     export default {

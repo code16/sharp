@@ -82,7 +82,7 @@
     import { CancelToken } from 'axios';
     import { warn, lang, search, logError } from 'sharp';
     import { TemplateRenderer } from 'sharp/components';
-    import { Loading, ClearButton,  multiselectUpdateScroll } from 'sharp-ui';
+    import { Loading, ClearButton,  multiselectUpdateScroll } from '@sharp/ui';
     import { Localization } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";

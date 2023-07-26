@@ -1,5 +1,5 @@
 import FilterSelect from '../src/components/filters/FilterSelect.vue';
-import { Select } from 'sharp-form';
+import { Select } from '@sharp/form';
 import { shallowMount } from '@vue/test-utils';
 import { MockI18n } from "@sharp/test-utils";
 import Vue from 'vue';

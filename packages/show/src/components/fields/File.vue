@@ -53,8 +53,8 @@
     import debounce from 'lodash/debounce';
     import { getClassNameForExtension } from 'font-awesome-filetypes';
     import { lang, filesizeLabel } from 'sharp';
-    import { Button } from "sharp-ui";
-    import { downloadFileUrl } from "sharp-files";
+    import { Button } from "@sharp/ui";
+    import { downloadFileUrl } from "@sharp/files";
     import { syncVisibility } from "../../util/fields/visiblity";
     import FieldLayout from "../FieldLayout.vue";
 

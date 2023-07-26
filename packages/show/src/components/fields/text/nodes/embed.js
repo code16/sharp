@@ -1,5 +1,5 @@
-import { parseAttributeValue } from "sharp-embeds";
-import { EmbedRenderer } from 'sharp-embeds';
+import { parseAttributeValue } from "@sharp/embeds";
+import { EmbedRenderer } from '@sharp/embeds';
 import { ignoreVueElement } from "sharp";
 
 export function createEmbedComponent(embedOptions) {

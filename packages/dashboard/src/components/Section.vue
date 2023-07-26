@@ -50,10 +50,10 @@
 </template>
 
 <script>
-    import {Grid, SectionTitle} from "sharp-ui";
-    import {SharpFilter} from "sharp-filters";
+    import {Grid, SectionTitle} from "@sharp/ui";
+    import {SharpFilter} from "@sharp/filters";
     import {mapGetters} from "vuex";
-    import {CommandsDropdown} from "sharp-commands";
+    import {CommandsDropdown} from "@sharp/commands";
     import {lang} from "sharp";
     import Widget from "./Widget.vue";
 
