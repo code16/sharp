@@ -8,7 +8,7 @@ use Spatie\TypeScriptTransformer\Collectors\Collector;
 use Spatie\TypeScriptTransformer\Structures\TransformedType;
 
 /**
- * Based on https://github.com/spatie/laravel-data/blob/main/src/Support/TypeScriptTransformer/DataTypeScriptCollector.php
+ * Based on https://github.com/spatie/laravel-data/blob/main/src/Support/TypeScriptTransformer/DataTypeScriptCollector.php.
  */
 class DataTypeScriptCollector extends Collector
 {

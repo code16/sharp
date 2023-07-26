@@ -4,7 +4,6 @@ namespace Code16\Sharp\Data;
 
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
-use Illuminate\Support\Collection;
 
 class MenuItemData extends Data
 {
@@ -25,7 +24,7 @@ class MenuItemData extends Data
 
     public static function from(SharpMenuItem $item)
     {
-        if($item->isSection()) {
+        if ($item->isSection()) {
             return new self(
                 label: $item->getLabel(),
                 children: self::collection(
@@ -37,7 +36,7 @@ class MenuItemData extends Data
             );
         }
 
-        if($item->isSeparator()) {
+        if ($item->isSeparator()) {
             return new self(
                 label: $item->getLabel(),
                 isSeparator: true,

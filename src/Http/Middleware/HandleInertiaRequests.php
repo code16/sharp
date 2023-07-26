@@ -32,11 +32,11 @@ class HandleInertiaRequests extends Middleware
                     ],
                 ],
                 'menu' => MenuData::from(app(SharpMenuManager::class)),
-//                'currentEntity' => $currentEntityItem ? [
-//                    'key' => $currentEntityItem->getEntityKey(),
-//                    'label' => $currentEntityItem->getLabel(),
-//                    'icon' => $currentEntityItem->getIcon(),
-//                ] : null,
+                //                'currentEntity' => $currentEntityItem ? [
+                //                    'key' => $currentEntityItem->getEntityKey(),
+                //                    'label' => $currentEntityItem->getLabel(),
+                //                    'icon' => $currentEntityItem->getIcon(),
+                //                ] : null,
             ]
         );
     }

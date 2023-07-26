@@ -2,10 +2,8 @@
 
 namespace Code16\Sharp\Data;
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
-use Illuminate\Foundation\Application;
 
 class MenuData extends Data
 {
