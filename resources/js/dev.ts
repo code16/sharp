@@ -1,6 +1,3 @@
-import { defineCustomElement } from "vue";
-
-defineCustomElement()
 
 function getStyleSheetFromUrl(cssUrl) {
     const styleSheet = new CSSStyleSheet();
