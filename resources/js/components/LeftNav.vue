@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import {usePage} from "@inertiajs/vue3";
-import {config} from "@/util/config";
-import {Disclosure, DisclosureButton, DisclosurePanel} from "@headlessui/vue";
+import { usePage } from "@inertiajs/vue3";
+import { config } from "@/util/config";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
+import { MenuData } from "@/types";
 
-const menu = usePage().props.menu as Code16.Sharp.Data.MenuData;
+const menu = usePage().props.menu as MenuData;
 </script>
 
 <template>

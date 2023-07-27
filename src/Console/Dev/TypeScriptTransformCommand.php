@@ -5,8 +5,13 @@ namespace Code16\Sharp\Console\Dev;
 use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptCollector;
 use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptTransformer;
 use Illuminate\Support\Collection;
+use Spatie\TypeScriptTransformer\Collectors\EnumCollector;
+use Spatie\TypeScriptTransformer\Formatters\PrettierFormatter;
 use Spatie\TypeScriptTransformer\Structures\TransformedType;
+use Spatie\TypeScriptTransformer\Transformers\EnumTransformer;
 use Spatie\TypeScriptTransformer\TypeScriptTransformer;
+use Spatie\TypeScriptTransformer\TypeScriptTransformerConfig;
+use Spatie\TypeScriptTransformer\Writers\ModuleWriter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,16 +26,18 @@ class TypeScriptTransformCommand extends Command
     {
         $basePath = __DIR__ . '/../../..';
 
-        $config = \Spatie\TypeScriptTransformer\TypeScriptTransformerConfig::create()
+        $config = TypeScriptTransformerConfig::create()
             ->autoDiscoverTypes($basePath . '/src/Data')
             ->collectors([
                 DataTypeScriptCollector::class,
-                \Spatie\TypeScriptTransformer\Collectors\EnumCollector::class,
+                EnumCollector::class,
             ])
             ->transformers([
-                \Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,
+                EnumTransformer::class,
             ])
-            ->outputFile($basePath . '/resources/types/generated.d.ts');
+            ->writer(ModuleWriter::class)
+            ->formatter(PrettierFormatter::class)
+            ->outputFile($basePath . '/resources/js/types/generated.d.ts');
 
         $transformer = new TypeScriptTransformer($config);
 
