@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Console\Dev;
 
 use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptCollector;
-use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptTransformer;
 use Illuminate\Support\Collection;
 use Spatie\TypeScriptTransformer\Collectors\EnumCollector;
 use Spatie\TypeScriptTransformer\Formatters\PrettierFormatter;
@@ -18,16 +17,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Based on https://github.com/spatie/laravel-typescript-transformer/blob/main/src/Commands/TypeScriptTransformCommand.php
+ * Based on https://github.com/spatie/laravel-typescript-transformer/blob/main/src/Commands/TypeScriptTransformCommand.php.
  */
 class TypeScriptTransformCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $basePath = __DIR__ . '/../../..';
+        $basePath = __DIR__.'/../../..';
 
         $config = TypeScriptTransformerConfig::create()
-            ->autoDiscoverTypes($basePath . '/src/Data')
+            ->autoDiscoverTypes($basePath.'/src/Data')
             ->collectors([
                 DataTypeScriptCollector::class,
                 EnumCollector::class,
@@ -37,7 +36,7 @@ class TypeScriptTransformCommand extends Command
             ])
             ->writer(ModuleWriter::class)
             ->formatter(PrettierFormatter::class)
-            ->outputFile($basePath . '/resources/js/types/generated.d.ts');
+            ->outputFile($basePath.'/resources/js/types/generated.d.ts');
 
         $transformer = new TypeScriptTransformer($config);
 
