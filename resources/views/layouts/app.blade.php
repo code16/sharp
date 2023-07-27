@@ -13,9 +13,12 @@
 
     @vite([
         'resources/sass/vendors.scss',
-        'resources/sass/app.scss',
+//        'resources/sass/app.scss',
         'resources/css/app.css',
     ], '/vendor/sharp')
+
+    {{-- todo temp dev styles --}}
+    <meta name="tw-style" content="{{ \Illuminate\Support\Facades\Vite::asset('resources/css/app.css') }}">
 
     <x-sharp::root-styles />
 

@@ -34,30 +34,13 @@
                 showTitle: false,
             }
         },
-        computed: {
-            hasExtras() {
-                return this.$slots.extras || this.$slots['extras-right'];
-            },
-        },
         methods: {
-            layout(rect) {
-                /** @see getNavbarHeight **/
-                // document.documentElement.style.setProperty('--navbar-height', `${rect.height}px`); // it's fixed now
-            },
             handleScroll() {
                 this.title = document.querySelector('h1[data-top-bar-title]')?.innerText;
                 this.showTitle = window.scrollY > 150;
             },
         },
         async mounted() {
-            this.layout(this.$refs.bar.getBoundingClientRect());
-
-            if(window.ResizeObserver) {
-                (new ResizeObserver(entries => {
-                    this.layout(entries[0].target.getBoundingClientRect());
-                }))
-                .observe(this.$refs.bar);
-            }
             window.addEventListener('scroll', throttle(this.handleScroll, 100));
         }
     }
