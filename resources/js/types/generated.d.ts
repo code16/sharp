@@ -1,3 +1,99 @@
+export type BreadcrumbData = {
+  items: Array<BreadcrumbItemData>;
+  visible: boolean;
+};
+export type BreadcrumbItemData = {
+  type: string;
+  name: string;
+  documentTitleLabel: string;
+  entityKey: string;
+  url: string;
+};
+export type CheckFilterData = {
+  key: string;
+  label: string;
+  type: FilterType;
+  default: boolean;
+};
+export type DashboardData = {};
+export type DateRangeFilterData = {
+  key: string;
+  label: string;
+  type: FilterType;
+  default: DateRangeFilterValueData;
+  required: boolean;
+  mondayFirst: boolean;
+  displayFormat: string;
+};
+export type DateRangeFilterValueData = {
+  start: string;
+  end: string;
+};
+export type EntityListAuthorizationsData = {
+  view: Array<number | string>;
+  update: Array<number | string>;
+  create: Array<number | string>;
+};
+export type EntityListConfigData = {
+  instanceIdAttribute: string;
+  multiformAttribute: string | null;
+  searchable: boolean;
+  paginated: boolean;
+  reorderable: boolean;
+  defaultSort: string | null;
+  defaultSortDir: string | null;
+  hasShowPage: boolean;
+  deleteConfirmationText: string;
+  deleteHidden: boolean;
+  filters: Array<Array<FilterData>>;
+  state: EntityStateData;
+};
+export type EntityListData = {
+  containers: { [key: string]: EntityListFieldData };
+  layout: Array<EntityListFieldLayoutData>;
+  data: Array<{ [key: string]: any }>;
+  fields: { [key: string]: any };
+  config: EntityListConfigData;
+  forms: Array<EntityListMultiformData>;
+  notifications: Array<NotificationData>;
+  breadcrumb: BreadcrumbData;
+  authorizations: EntityListAuthorizationsData;
+};
+export type EntityListFieldData = {
+  key: string;
+  label: string;
+  sortable: boolean;
+  html: boolean;
+};
+export type EntityListFieldLayoutData = {
+  key: string;
+  size: string;
+  hideOnXs: boolean;
+  sizeXs: string;
+};
+export type EntityListMultiformData = {
+  key: string;
+  label: string;
+  instances: Array<number | string>;
+};
+export type EntityStateData = {
+  attribute: string;
+  values: Array<EntityStateValueData>;
+  authorization: boolean | Array<string | number>;
+};
+export type EntityStateValueData = {
+  value: string | number;
+  label: string;
+  color: string;
+};
+export type FilterData = {
+  key: string;
+  label: string;
+  type: FilterType;
+  default: any;
+};
+export type FilterType = "select" | "daterange" | "check";
+export type FormData = {};
 export type MenuData = {
   items: Array<MenuItemData>;
   userMenu: UserMenuData;
@@ -13,6 +109,27 @@ export type MenuItemData = {
   children: Array<MenuItemData> | null;
   isCollapsible: boolean;
 };
+export type NotificationData = {
+  title: string;
+  level: NotificationLevel;
+  message: string | null;
+  autoHide: boolean;
+};
+export type NotificationLevel = "info" | "success" | "warning" | "danger";
+export type SelectFilterData = {
+  key: string;
+  label: string;
+  type: FilterType;
+  default: number | string | Array<number | string> | null;
+  multiple: boolean;
+  required: boolean;
+  values: Array<any>;
+  master: boolean;
+  searchable: boolean;
+  searchKeys: Array<any>;
+  template: string;
+};
+export type ShowData = {};
 export type ThemeData = {
   menuLogoUrl: string | null;
 };

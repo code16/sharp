@@ -4,7 +4,7 @@ namespace Code16\Sharp\Data;
 
 use Code16\Sharp\Utils\SharpTheme;
 
-class ThemeData extends Data
+final class ThemeData extends Data
 {
     public function __construct(
         public ?string $menuLogoUrl

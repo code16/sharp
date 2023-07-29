@@ -26,7 +26,10 @@ class TypeScriptTransformCommand extends Command
         $basePath = __DIR__.'/../../..';
 
         $config = TypeScriptTransformerConfig::create()
-            ->autoDiscoverTypes($basePath.'/src/Data')
+            ->autoDiscoverTypes(
+                $basePath.'/src/Data',
+                $basePath.'/src/Enums',
+            )
             ->collectors([
                 DataTypeScriptCollector::class,
                 EnumCollector::class,

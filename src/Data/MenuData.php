@@ -5,7 +5,7 @@ namespace Code16\Sharp\Data;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
-class MenuData extends Data
+final class MenuData extends Data
 {
     public function __construct(
         /** @var DataCollection<MenuItemData> */

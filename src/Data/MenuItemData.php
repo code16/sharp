@@ -5,7 +5,7 @@ namespace Code16\Sharp\Data;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
-class MenuItemData extends Data
+final class MenuItemData extends Data
 {
     public function __construct(
         public ?string $icon = null,
