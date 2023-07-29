@@ -48,7 +48,7 @@ class MenuItemData extends Data
             label: $item->getLabel(),
             url: $item->getUrl(),
             isExternalLink: $item->isExternalLink(),
-            entityKey: $item->getEntityKey(),
+            entityKey: $item->isEntity() ? $item->getEntityKey() : null,
             current: $item->isEntity() && $item->isCurrent(),
         );
     }

@@ -1,7 +1,6 @@
 export type MenuData = {
   items: Array<MenuItemData>;
-  logo: string | null;
-  hasGlobalFilters: boolean;
+  userMenu: UserMenuData;
 };
 export type MenuItemData = {
   icon: string | null;
@@ -13,4 +12,10 @@ export type MenuItemData = {
   current: boolean;
   children: Array<MenuItemData> | null;
   isCollapsible: boolean;
+};
+export type ThemeData = {
+  menuLogoUrl: string | null;
+};
+export type UserMenuData = {
+  items: Array<MenuItemData>;
 };

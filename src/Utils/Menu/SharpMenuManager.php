@@ -59,7 +59,8 @@ class SharpMenuManager
     {
         return collect($section->getItems())
             ->filter(fn (SharpMenuItem $item) => $item->isAllowed())
-            ->pipe(fn ($items) => $this->filterSeparators($items));
+            ->pipe(fn ($items) => $this->filterSeparators($items))
+            ->values();
     }
 
     protected function buildMenu(): void

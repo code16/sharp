@@ -7,13 +7,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-sm-9 col-md-6 col-lg-5 col-xl-4">
-                @if($icon = config('sharp.theme.logo_urls.login'))
+                @if($logoUrl = app(\Code16\Sharp\Utils\SharpTheme::class)->loginLogoUrl())
                     <div class="text-center mb-3">
-                        <img src="{{ url($icon) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
-                    </div>
-                @elseif(file_exists(public_path($icon = 'sharp-assets/login-icon.png')))
-                    <div class="text-center mb-3">
-                        <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{config("sharp.name", "Sharp")}}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
+                        <img src="{{ url($logoUrl) }}" alt="{{ config("sharp.name") }}" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
                     </div>
                 @elseif(file_exists($logo = public_path('/vendor/sharp/images/logo.svg')))
                     <div class="text-center logo mb-4">
