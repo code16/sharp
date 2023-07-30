@@ -7,6 +7,7 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EntityStateData;
 use Code16\Sharp\Data\Filters\FilterData;
+use Code16\Sharp\Data\PageAlertConfigData;
 use Code16\Sharp\Enums\CommandType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
@@ -30,13 +31,13 @@ final class EntityListConfigData extends Data
         public array $commands,
         public EntityStateData $state,
         #[Optional]
-        public ?array $globalMessage = null,
+        public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
     
     public static function from(array $config)
     {
-        return new self(...[
+        $config = [
             ...$config,
             'state' => EntityStateData::from($config['state']),
             'commands' => collect($config['commands'])
@@ -47,6 +48,11 @@ final class EntityListConfigData extends Data
             'filters' => collect($config['filters'])
                 ->map(fn (array $filters) => FilterData::collection($filters))
                 ->all(),
-        ]);
+            'globalMessage' => isset($config['globalMessage'])
+                ? PageAlertConfigData::from($config['globalMessage'])
+                : null,
+        ];
+        
+        return new self(...$config);
     }
 }

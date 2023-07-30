@@ -26,12 +26,14 @@ class CommandData extends Data
     
     public static function from(array $command): self
     {
-        return new self(...[
+        $command = [
             ...$command,
             'type' => CommandType::from($command['type']),
-            'instance_selection' => ($command['instance_selection'] ?? null)
+            'instance_selection' => isset($command['instance_selection'])
                 ? InstanceSelectionMode::from($command['instance_selection'])
                 : null,
-        ]);
+        ];
+        
+        return new self(...$command);
     }
 }

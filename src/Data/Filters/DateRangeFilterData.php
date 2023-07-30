@@ -18,13 +18,15 @@ final class DateRangeFilterData extends Data
     ) {
     }
     
-    public static function from(array $filter): static
+    public static function from(array $filter): self
     {
-        return new self(...[
+        $filter = [
             ...$filter,
             'default' => $filter['default']
                 ? new DateRangeFilterValueData(...$filter['default'])
                 : null,
-        ]);
+        ];
+        
+        return new self(...$filter);
     }
 }

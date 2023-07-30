@@ -28,9 +28,11 @@ final class SelectFilterData extends Data
     
     public static function from(array $filter): self
     {
-        return new self(...[
+        $filter = [
             ...$filter,
             'values' => SelectFilterValueData::collection($filter['values']),
-        ]);
+        ];
+        
+        return new self(...$filter);
     }
 }
