@@ -11,4 +11,12 @@ final class BreadcrumbData extends Data
         public bool $visible,
     ) {
     }
+    
+    public static function from(array $breadcrumb): self
+    {
+        return new self(
+            items: BreadcrumbItemData::collection($breadcrumb['items']),
+            visible: $breadcrumb['visible'],
+        );
+    }
 }

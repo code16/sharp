@@ -10,7 +10,16 @@ abstract class Data implements Arrayable
 {
     public static function collection($payload): DataCollection
     {
-        return new DataCollection($payload);
+        return DataCollection::make($payload)
+            ->map(function ($item) {
+                if(is_array($item)) {
+                    if(method_exists(static::class, 'from')) {
+                        return static::from($item);
+                    }
+                    return new static(...$item);
+                }
+                return $item;
+            });
     }
 
     public function toArray()

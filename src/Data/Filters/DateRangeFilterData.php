@@ -11,10 +11,20 @@ final class DateRangeFilterData extends Data
         public string $key,
         public string $label,
         public FilterType $type,
-        public DateRangeFilterValueData $default,
+        public ?DateRangeFilterValueData $default,
         public bool $required,
         public bool $mondayFirst,
         public string $displayFormat
     ) {
+    }
+    
+    public static function from(array $filter): static
+    {
+        return new self(...[
+            ...$filter,
+            'default' => $filter['default']
+                ? new DateRangeFilterValueData(...$filter['default'])
+                : null,
+        ]);
     }
 }

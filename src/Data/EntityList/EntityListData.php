@@ -28,4 +28,19 @@ final class EntityListData extends Data
         public EntityListAuthorizationsData $authorizations,
     ) {
     }
+    
+    public static function from(array $entityList): self
+    {
+        return new self(
+            containers: EntityListFieldData::collection($entityList['containers']),
+            layout: EntityListFieldLayoutData::collection($entityList['layout']),
+            data: $entityList['data'],
+            fields: $entityList['fields'],
+            config: EntityListConfigData::from($entityList['config']),
+            forms: EntityListMultiformData::collection($entityList['forms']),
+            notifications: NotificationData::collection($entityList['notifications']),
+            breadcrumb: BreadcrumbData::from($entityList['breadcrumb']),
+            authorizations: new EntityListAuthorizationsData(...$entityList['authorizations']),
+        );
+    }
 }

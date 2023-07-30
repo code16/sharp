@@ -15,12 +15,25 @@ export type CheckFilterData = {
   type: FilterType;
   default: boolean;
 };
+export type CommandData = {
+  key: string;
+  label: string | null;
+  description: string | null;
+  type: CommandType;
+  confirmation: string | null;
+  modal_title: string | null;
+  modal_confirm_label: string | null;
+  has_form: boolean;
+  authorization: Array<string | number> | boolean;
+  instance_selection?: InstanceSelectionMode | null;
+};
+export type CommandType = "dashboard" | "entity" | "instance";
 export type DashboardData = {};
 export type DateRangeFilterData = {
   key: string;
   label: string;
   type: FilterType;
-  default: DateRangeFilterValueData;
+  default: DateRangeFilterValueData | null;
   required: boolean;
   mondayFirst: boolean;
   displayFormat: string;
@@ -32,7 +45,7 @@ export type DateRangeFilterValueData = {
 export type EntityListAuthorizationsData = {
   view: Array<number | string>;
   update: Array<number | string>;
-  create: Array<number | string>;
+  create: boolean;
 };
 export type EntityListConfigData = {
   instanceIdAttribute: string;
@@ -46,7 +59,9 @@ export type EntityListConfigData = {
   deleteConfirmationText: string;
   deleteHidden: boolean;
   filters: Array<Array<FilterData>>;
+  commands: Record<CommandType, Array<Array<CommandData>>>;
   state: EntityStateData;
+  globalMessage?: Array<any> | null;
 };
 export type EntityListData = {
   containers: { [key: string]: EntityListFieldData };
@@ -68,8 +83,8 @@ export type EntityListFieldData = {
 export type EntityListFieldLayoutData = {
   key: string;
   size: string;
-  hideOnXs: boolean;
-  sizeXs: string;
+  hideOnXS: boolean;
+  sizeXS: string;
 };
 export type EntityListMultiformData = {
   key: string;
@@ -79,7 +94,7 @@ export type EntityListMultiformData = {
 export type EntityStateData = {
   attribute: string;
   values: Array<EntityStateValueData>;
-  authorization: boolean | Array<string | number>;
+  authorization: boolean | Array<string | number> | null;
 };
 export type EntityStateValueData = {
   value: string | number;
@@ -94,6 +109,7 @@ export type FilterData = {
 };
 export type FilterType = "select" | "daterange" | "check";
 export type FormData = {};
+export type InstanceSelectionMode = "required" | "allowed";
 export type MenuData = {
   items: Array<MenuItemData>;
   userMenu: UserMenuData;
@@ -123,11 +139,15 @@ export type SelectFilterData = {
   default: number | string | Array<number | string> | null;
   multiple: boolean;
   required: boolean;
-  values: Array<any>;
+  values: Array<SelectFilterValueData>;
   master: boolean;
   searchable: boolean;
   searchKeys: Array<any>;
   template: string;
+};
+export type SelectFilterValueData = {
+  id: string | number;
+  label: string;
 };
 export type ShowData = {};
 export type ThemeData = {

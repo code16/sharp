@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Data\EntityList\EntityListData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
@@ -49,10 +50,11 @@ class EntityListController extends SharpProtectedController
             $data['config'],
         );
 
+        $data['breadcrumb'] = ['items' => [], 'visible' => false];
         // TODO handle breadcrumb
 
         return Inertia::render('List', [
-            'entityList' => $data,
+            'entityList' => EntityListData::from($data),
         ]);
     }
 

@@ -11,8 +11,7 @@ class EntityListAuthorizationsData extends Data
         public array $view,
         /** @var array<int|string> */
         public array $update,
-        /** @var array<int|string> */
-        public array $create,
+        public bool $create,
     ) {
     }
 }

@@ -10,8 +10,8 @@ final class EntityListFieldLayoutData extends Data
     public function __construct(
         public string $key,
         public string $size,
-        public bool $hideOnXs,
-        public string $sizeXs,
+        public bool $hideOnXS,
+        public string $sizeXS,
     ) {
     }
 }
