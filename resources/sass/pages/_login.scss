@@ -5,12 +5,6 @@
       hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 80%
   );
 
-  &__content {
-    display: flex;
-    height: 100vh;
-    padding: 20vh 0;
-  }
-
   &__powered {
     font-size: .75rem;
 

@@ -1,0 +1,25 @@
+
+
+:root {
+    --primary: #{$primary};
+    --primary-h: #{hue($primary)};
+    --primary-s: #{saturation($primary)};
+    --primary-l: #{lightness($primary)};
+    --primary-hsl: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+
+
+    --accent-bg-amount: 20%;
+    --accent-bg-l: calc(var(--primary-l) + var(--accent-bg-amount));
+    --accent-bg: hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l));
+
+    --l-threshold: 80%;
+
+    --component-active-bg: var(--primary-hsl);
+    --component-active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000));
+
+    --navbar-height: 4rem;
+    --navbar-top: 0;
+    --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
+
+    --field-header-sticky-top: var(--navbar-height);
+}

@@ -14,4 +14,9 @@ final class CheckFilterData extends Data
         public bool $default,
     ) {
     }
+
+    public static function from(array $filter): self
+    {
+        return new self(...$filter);
+    }
 }
