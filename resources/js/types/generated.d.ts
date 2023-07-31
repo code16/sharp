@@ -28,6 +28,9 @@ export type CommandData = {
   instance_selection?: InstanceSelectionMode | null;
 };
 export type CommandType = "dashboard" | "entity" | "instance";
+export type DashboardConfigData = {
+  globalMessage?: PageAlertConfigData | null;
+};
 export type DashboardData = {};
 export type DateRangeFilterData = {
   key: string;
@@ -42,14 +45,20 @@ export type DateRangeFilterValueData = {
   start: string;
   end: string;
 };
-export type EntityListAuthorizationsData = {
+export type EmbedData = {
+  key: string;
+  label: string;
+  tag: string;
+  attributes: Array<string>;
+  template: string;
+};
+export type EntityAuthorizationsData = {
   view: Array<number | string>;
   update: Array<number | string>;
   create: boolean;
 };
 export type EntityListConfigData = {
   instanceIdAttribute: string;
-  multiformAttribute: string | null;
   searchable: boolean;
   paginated: boolean;
   reorderable: boolean;
@@ -60,19 +69,22 @@ export type EntityListConfigData = {
   deleteHidden: boolean;
   filters: Array<Array<FilterData>>;
   commands: Record<CommandType, Array<Array<CommandData>>>;
-  state: EntityStateData;
-  globalMessage?: Array<any> | null;
+  multiformAttribute?: string | null;
+  state?: EntityStateData | null;
+  globalMessage?: PageAlertConfigData | null;
 };
 export type EntityListData = {
   containers: { [key: string]: EntityListFieldData };
   layout: Array<EntityListFieldLayoutData>;
-  data: Array<{ [key: string]: any }>;
+  data: { list: Array<{ [key: string]: any }> } & {
+    [key: string]: ShowHtmlFieldData;
+  };
   fields: { [key: string]: any };
   config: EntityListConfigData;
   forms: Array<EntityListMultiformData>;
   notifications: Array<NotificationData>;
   breadcrumb: BreadcrumbData;
-  authorizations: EntityListAuthorizationsData;
+  authorizations: EntityAuthorizationsData;
 };
 export type EntityListFieldData = {
   key: string;
@@ -108,7 +120,21 @@ export type FilterData = {
   default: any;
 };
 export type FilterType = "select" | "daterange" | "check";
-export type FormData = {};
+export type FormConfigData = {
+  hasShowPage: boolean;
+  deleteConfirmationText: string | null;
+  breadcrumbAttribute?: string | null;
+  globalMessage?: PageAlertConfigData | null;
+};
+export type FormData = {
+  config: FormConfigData;
+};
+export type InstanceAuthorizationsData = {
+  view: boolean;
+  create: boolean;
+  update: boolean;
+  delete: boolean;
+};
 export type InstanceSelectionMode = "required" | "allowed";
 export type MenuData = {
   items: Array<MenuItemData>;
@@ -132,6 +158,16 @@ export type NotificationData = {
   autoHide: boolean;
 };
 export type NotificationLevel = "info" | "success" | "warning" | "danger";
+export type PageAlertConfigData = {
+  fieldKey: string;
+  alertLevel: PageAlertLevel | null;
+};
+export type PageAlertLevel =
+  | "info"
+  | "warning"
+  | "danger"
+  | "primary"
+  | "secondary";
 export type SelectFilterData = {
   key: string;
   label: string;
@@ -149,7 +185,105 @@ export type SelectFilterValueData = {
   id: string | number;
   label: string;
 };
-export type ShowData = {};
+export type ShowConfigData = {
+  deleteConfirmationText: string;
+  commands: Record<CommandType, Array<Array<CommandData>>>;
+  multiformAttribute?: string | null;
+  titleAttribute?: string | null;
+  breadcrumbAttribute?: string | null;
+  state?: EntityStateData | null;
+  globalMessage?: PageAlertConfigData | null;
+};
+export type ShowData = {
+  config: ShowConfigData;
+  fields: { [key: string]: ShowFieldData };
+  layout: ShowLayoutData;
+  data: { [key: string]: any };
+  locales: Array<string> | null;
+  authorizations: InstanceAuthorizationsData;
+  notifications: Array<NotificationData>;
+  breadcrumb: BreadcrumbData;
+};
+export type ShowEntityListFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+  entityListKey: string;
+  hiddenFilters: Array<string>;
+  hiddenCommands: Array<string>;
+  showEntityState: boolean;
+  showReorderButton: boolean;
+  showCreateButton: boolean;
+  showSearchField: boolean;
+  showCount: boolean;
+  label: string | null;
+};
+export type ShowFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+};
+export type ShowFieldType =
+  | "file"
+  | "html"
+  | "list"
+  | "picture"
+  | "text"
+  | "entityList";
+export type ShowFileFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+  label: string | null;
+};
+export type ShowHtmlFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+  template: string;
+  templateData: { [key: string]: any } | null;
+};
+export type ShowLayoutColumnData = {
+  size: number;
+  fields: Array<ShowLayoutFieldData>;
+};
+export type ShowLayoutData = {
+  sections: Array<ShowLayoutSectionData>;
+};
+export type ShowLayoutFieldData = {
+  key: string;
+  size: number;
+  sizeXS: number;
+  item?: { [key: string]: ShowLayoutFieldData } | null;
+};
+export type ShowLayoutSectionData = {
+  key: string | null;
+  title: string;
+  collapsable: boolean;
+  columns: Array<ShowLayoutColumnData>;
+};
+export type ShowListFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+  label: string | null;
+  itemFields: { [key: string]: ShowFieldData };
+};
+export type ShowPictureFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+};
+export type ShowTextFieldData = {
+  key: string;
+  type: ShowFieldType;
+  emptyVisible: boolean;
+  html: boolean;
+  localized: boolean | null;
+  collapseToWordCount: number | null;
+  embeds: { [key: string]: EmbedData } | null;
+  label: string | null;
+};
 export type ThemeData = {
   menuLogoUrl: string | null;
 };

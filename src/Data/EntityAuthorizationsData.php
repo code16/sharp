@@ -1,10 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Data\EntityList;
+namespace Code16\Sharp\Data;
 
-use Code16\Sharp\Data\Data;
-
-class EntityListAuthorizationsData extends Data
+class EntityAuthorizationsData extends Data
 {
     public function __construct(
         /** @var array<int|string> */

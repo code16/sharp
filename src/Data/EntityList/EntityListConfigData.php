@@ -16,7 +16,6 @@ final class EntityListConfigData extends Data
 {
     public function __construct(
         public string $instanceIdAttribute,
-        public ?string $multiformAttribute,
         public bool $searchable,
         public bool $paginated,
         public bool $reorderable,
@@ -29,12 +28,15 @@ final class EntityListConfigData extends Data
         public array $filters,
         #[RecordTypeScriptType(CommandType::class, 'array<DataCollection<'.CommandData::class.'>>')]
         public array $commands,
-        public EntityStateData $state,
+        #[Optional]
+        public ?string $multiformAttribute = null,
+        #[Optional]
+        public ?EntityStateData $state = null,
         #[Optional]
         public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
-    
+
     public static function from(array $config)
     {
         $config = [
@@ -52,7 +54,7 @@ final class EntityListConfigData extends Data
                 ? PageAlertConfigData::from($config['globalMessage'])
                 : null,
         ];
-        
+
         return new self(...$config);
     }
 }

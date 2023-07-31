@@ -15,17 +15,11 @@ final class FilterData extends Data
         public mixed $default,
     ) {
     }
-    
-    public static function collection($payload): DataCollection
-    {
-        return DataCollection::make($payload)
-            ->map(fn (array $filter) => self::from($filter));
-    }
-    
+
     public static function from(array $filter)
     {
         $filter['type'] = FilterType::from($filter['type']);
-        
+
         return match($filter['type']) {
             FilterType::Select => SelectFilterData::from($filter),
             FilterType::DateRange => DateRangeFilterData::from($filter),

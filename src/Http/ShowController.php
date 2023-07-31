@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Data\Show\ShowData;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
@@ -47,13 +48,13 @@ class ShowController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
             'notifications' => $this->getSharpNotifications(),
-            'breadcrumb' => ['items' => []],
+            'breadcrumb' => ['items' => [], 'visible' => false],
         ];
 
         // TODO handle breadcrumb
 
         return Inertia::render('Show', [
-            'show' => $data,
+            'show' => ShowData::from($data),
         ]);
     }
 }
