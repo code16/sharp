@@ -5,6 +5,7 @@
 /storage/*.key
 /storage/clockwork
 /vendor
+/storage/clockwork
 node_modules
 /.idea
 .DS_Store
