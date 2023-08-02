@@ -1,3 +1,4 @@
+
 <template>
     <div class="action-bar mt-4 mb-3">
         <div class="row align-items-center gx-3">
@@ -23,12 +24,10 @@
 
 <script>
     import { Breadcrumb, Dropdown, DropdownItem } from '@sharp/ui';
-    import { Localization } from "sharp/mixins";
     import LocaleSelect from "./ui/LocaleSelect.vue";
 
     export default {
         name: 'SharpActionBarForm',
-        mixins: [Localization],
         components: {
             LocaleSelect,
             Breadcrumb,

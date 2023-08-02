@@ -20,15 +20,15 @@ final class EntityListData extends Data
         #[LiteralTypeScriptType(
             '{ list: Array<{ [key: string]: any }> } & { [key: string]: ShowHtmlFieldData }'
         )]
-        public array                    $data,
+        public array $data,
         /** @var array<string,mixed> */
-        public array                    $fields,
-        public EntityListConfigData     $config,
+        public array $fields,
+        public EntityListConfigData $config,
         /** @var DataCollection<EntityListMultiformData> */
-        public DataCollection           $forms,
+        public DataCollection $forms,
         /** @var DataCollection<NotificationData> */
-        public DataCollection           $notifications,
-        public BreadcrumbData           $breadcrumb,
+        public DataCollection $notifications,
+        public BreadcrumbData $breadcrumb,
         public EntityAuthorizationsData $authorizations,
     ) {
     }

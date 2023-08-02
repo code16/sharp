@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <FieldLayout class="ShowTextField" :class="classes" :label="label">
         <template v-if="html">
@@ -14,10 +18,10 @@
             <div class="mt-2">
                 <a href="#" class="ShowTextField__more" @click.prevent="handleToggleClicked">
                     <template v-if="expanded">
-                        - {{ l('show.text.show_less') }}
+                        - {{ __('sharp::show.text.show_less') }}
                     </template>
                     <template v-else>
-                        + {{ l('show.text.show_more') }}
+                        + {{ __('sharp::show.text.show_more') }}
                     </template>
                 </a>
             </div>
@@ -25,8 +29,7 @@
     </FieldLayout>
 </template>
 
-<script>
-    import { Localization } from 'sharp/mixins';
+<script lang="ts">
     import clip from 'text-clipper';
     import { syncVisibility } from "../../../util/fields/visiblity";
     import { truncateToWords, stripTags } from "../../../util/fields/text";
@@ -34,7 +37,6 @@
     import TextRenderer from "./TextRenderer.vue";
 
     export default {
-        mixins: [Localization],
         components: {
             FieldLayout,
             TextRenderer,

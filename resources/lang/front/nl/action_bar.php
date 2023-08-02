@@ -2,7 +2,7 @@
 
 return [
 
-    'list.items_count' => 'artikel(en)',
+    'list.items_count' => ':count artikel(en)',
     'list.search.placeholder' => 'Zoeken',
     'list.search.title' => 'Resultaten voor “:search”',
     'list.create_button' => 'Nieuw...',

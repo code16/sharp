@@ -1,5 +1,5 @@
 import { store } from "../store/store";
-import { lang } from "./i18n";
+import { __, lang } from "./i18n";
 
 let modalId = 0;
 
@@ -45,7 +45,7 @@ export function showConfirm(message, { title, ...props } = {}) {
         title,
         size: 'sm',
         hideHeader: true,
-        okTitle: lang('modals.confirm.ok_button'),
+        okTitle: __('sharp::modals.confirm.ok_button'),
         bodyClass: 'pt-4',
         ...props
     });
@@ -53,7 +53,7 @@ export function showConfirm(message, { title, ...props } = {}) {
 
 export function showDeleteConfirm(message) {
     return showConfirm(message, {
-        okTitle: lang('modals.confirm.delete.ok_button'),
+        okTitle: __('sharp::modals.confirm.delete.ok_button'),
         okVariant: 'danger',
     });
 }

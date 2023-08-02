@@ -1,3 +1,12 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+
+    defineProps<{
+        count: number,
+        search: string,
+    }>();
+</script>
+
 <template>
     <div class="SharpEntityListTitle">
         <div class="row align-items-center gx-2 h-100">
@@ -16,7 +25,7 @@
                                 </div>
                             </template>
                             <div class="col">
-                                <span class="text-nowrap">{{ count }} {{ lang('action_bar.list.items_count') }}</span>
+                                <span class="text-nowrap">{{ __('sharp::action_bar.list.items_count', { count }) }}</span>
                             </div>
                         </div>
                     </div>
@@ -30,7 +39,9 @@
                                 &bull;
                             </div>
                             <div class="col">
-                                <span class="text-nowrap">{{ searchLabel }}</span>
+                                <span class="text-nowrap">
+                                    {{ __('sharp::action_bar.list.search.title', { search }) }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -39,22 +50,3 @@
         </div>
     </div>
 </template>
-
-<script>
-    import { lang } from "sharp";
-
-    export default {
-        props: {
-            count: Number,
-            search: String,
-        },
-        methods: {
-            lang,
-        },
-        computed: {
-            searchLabel() {
-                return lang('action_bar.list.search.title').replace(':search', this.search);
-            },
-        },
-    }
-</script>

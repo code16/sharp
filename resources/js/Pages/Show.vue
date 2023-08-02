@@ -112,6 +112,7 @@
     import Section from "@sharp/show/src/components/Section.vue";
     import { router } from "@inertiajs/vue3";
     import Layout from "../Layouts/Layout.vue";
+    import { __ } from "@/util/i18n";
 
     export default {
         mixins: [withCommands],
@@ -300,7 +301,7 @@
                         const data = error.response?.data;
                         if(error.response?.status === 422) {
                             showAlert(data.message, {
-                                title: lang('modals.state.422.title'),
+                                title: __('sharp::modals.state.422.title'),
                                 isError: true,
                             });
                         }

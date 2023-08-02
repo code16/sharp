@@ -45,8 +45,7 @@
 <script>
     import moment from 'moment';
     import 'moment/locale/fr';
-    import { lang } from 'sharp';
-    import { Localization } from 'sharp/mixins';
+    import { __ } from '@/util/i18n';
     import { ClearButton } from "@sharp/ui";
     import DatePicker from './DatePicker.vue';
 
@@ -62,8 +61,6 @@
             DatePicker,
             ClearButton,
         },
-
-        mixins: [Localization],
 
         props: {
             id: String,
@@ -158,7 +155,7 @@
                 const m = moment(e.target.value, this.displayFormat, true);
                 this.localInputValue = e.target.value;
                 if(!m.isValid()) {
-                    this.$emit('error', `${lang('form.date.validation_error.format')} (${this.displayFormat})`);
+                    this.$emit('error', `${__('form.date.validation_error.format')} (${this.displayFormat})`);
                 }
                 else {
                     this.rollback();

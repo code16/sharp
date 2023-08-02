@@ -1,11 +1,15 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpGeolocation">
         <template v-if="isLoading">
-            {{ l('form.geolocation.loading') }}
+            {{ __('sharp::form.geolocation.loading') }}
         </template>
         <template v-else-if="isEmpty">
             <Button text block @click="handleShowModalButtonClicked">
-                {{ l('form.geolocation.browse_button') }}
+                {{ __('sharp::form.geolocation.browse_button') }}
             </Button>
         </template>
         <template v-else>
@@ -31,10 +35,10 @@
                             </div>
                             <div>
                                 <Button class="remove-button" variant="danger" small outline :disabled="readOnly" @click="handleRemoveButtonClicked">
-                                    {{ l('form.geolocation.remove_button') }}
+                                    {{ __('sharp::form.geolocation.remove_button') }}
                                 </Button>
                                 <Button small outline :disabled="readOnly" @click="handleEditButtonClicked">
-                                    {{ l('form.geolocation.edit_button') }}
+                                    {{ __('sharp::form.geolocation.edit_button') }}
                                 </Button>
                             </div>
                         </div>
@@ -68,9 +72,8 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { Modal, Button } from "@sharp/ui";
-    import { Localization } from 'sharp/mixins';
 
     import { getMapByProvider, loadMapProvider } from "./maps";
     import { dd2dms, tilesUrl, providerName, providerOptions, triggerResize } from "./util";
@@ -80,8 +83,6 @@
 
     export default {
         name: 'SharpGeolocation',
-        mixins: [Localization],
-
         inject: {
             $tab: {
                 default: null

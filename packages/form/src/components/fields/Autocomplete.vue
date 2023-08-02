@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpAutocomplete" :class="classes">
 <!--        <template v-if="ready">-->
@@ -18,9 +22,9 @@
 <!--                    :id="id"-->
 <!--                    class="SharpAutocomplete__multiselect form-control"-->
 <!--                    :class="{-->
-<!--                    'form-select': !this.isRemote,-->
-<!--                    'SharpAutocomplete__multiselect&#45;&#45;hide-dropdown': hideDropdown,-->
-<!--                }"-->
+<!--                        'form-select': !this.isRemote,-->
+<!--                        'SharpAutocomplete__multiselect&#45;&#45;hide-dropdown': hideDropdown,-->
+<!--                    }"-->
 <!--                    :value="value"-->
 <!--                    :options="suggestions"-->
 <!--                    :track-by="itemIdAttribute"-->
@@ -68,7 +72,7 @@
 <!--                        <Loading :visible="isLoading" small />-->
 <!--                    </template>-->
 <!--                    <template v-slot:noResult>-->
-<!--                        {{ l('form.autocomplete.no_results_text') }}-->
+<!--                        {{ __('sharp::form.autocomplete.no_results_text') }}-->
 <!--                    </template>-->
 <!--                </multiselect>-->
 <!--            </template>-->
@@ -76,14 +80,14 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import debounce from 'lodash/debounce';
     import Multiselect from 'vue-multiselect';
     import { CancelToken } from 'axios';
-    import { warn, lang, search, logError } from 'sharp';
+    import { warn, search, logError } from 'sharp';
+    import { __ } from "@/util/i18n";
     import { TemplateRenderer } from 'sharp/components';
     import { Loading, ClearButton,  multiselectUpdateScroll } from '@sharp/ui';
-    import { Localization } from 'sharp/mixins';
 
     import { getAutocompleteSuggestions } from "../../api";
     import localize from '../../mixins/localize/Autocomplete';
@@ -99,7 +103,7 @@
             ClearButton,
         },
 
-        mixins: [Localization, localize],
+        mixins: [localize],
 
         props: {
             id: String,
@@ -114,7 +118,7 @@
             },
             placeholder: {
                 type: String,
-                default: () => lang('form.multiselect.placeholder')
+                default: () => __('form.multiselect.placeholder')
             },
             remoteEndpoint: String,
             remoteMethod: String,

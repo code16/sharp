@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpList"
         :class="classes"
@@ -14,7 +18,7 @@
                     style="pointer-events: auto"
                     @click="toggleDrag"
                 >
-                    {{ l('form.list.sort_button.inactive') }}
+                    {{ __('sharp::form.list.sort_button.inactive') }}
                     <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
                         <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
                     </svg>
@@ -31,7 +35,7 @@
                         <template v-if="showInsertButton">
                             <div class="SharpList__new-item-zone">
                                 <Button small @click="insertNewItem(i, $event)">
-                                    {{ l('form.list.insert_button') }}
+                                    {{ __('sharp::form.list.insert_button') }}
                                 </Button>
                             </div>
                         </template>
@@ -62,7 +66,7 @@
                                 <button
                                     class="SharpList__remove-button btn-close"
                                     @click="remove(i)"
-                                    :aria-label="l('form.list.remove_button')"
+                                    :aria-label="__('sharp::form.list.remove_button')"
                                 ></button>
                             </template>
                         </template>
@@ -94,28 +98,29 @@
             </template>
         </Draggable>
         <template v-if="readOnly && !list.length">
-            <em class="SharpList__empty-alert">{{l('form.list.empty')}}</em>
+            <em class="SharpList__empty-alert">{{ __('sharp::form.list.empty') }}</em>
         </template>
     </div>
 </template>
-<script>
+
+<script lang="ts">
     import Draggable from 'vuedraggable';
     import { TemplateRenderer } from 'sharp/components';
-    import { Localization } from 'sharp/mixins';
     import { Button } from "@sharp/ui";
     import ListItem from './ListItem.vue';
 
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
     import ListUpload from "./ListUpload.vue";
-    import { lang, showAlert } from "sharp";
+    import { showAlert } from "sharp";
+    import { __ } from "@/util/i18n";
 
     export default {
         name: 'SharpList',
 
         inject: ['$form'],
 
-        mixins: [ Localization,  localize('itemFields') ],
+        mixins: [ localize('itemFields') ],
 
         components: {
             ListUpload,
@@ -315,11 +320,12 @@
                 const files = [...e.target.files].slice(0, this.uploadLimit);
 
                 if(e.target.files.length > this.uploadLimit) {
-                    const message = lang('form.list.bulk_upload.validation.limit')
-                        .replace(':limit', this.uploadLimit);
+                    const message = __('sharp::form.list.bulk_upload.validation.limit', {
+                        limit: this.uploadLimit
+                    });
 
                     showAlert(message, {
-                        title: lang('modals.error.title'),
+                        title: __('sharp::modals.error.title'),
                     });
                 }
 

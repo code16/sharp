@@ -1,5 +1,9 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
-    <Dropdown v-bind="$attrs" :text="l('action_bar.list.forms_dropdown')">
+    <Dropdown v-bind="$attrs" :text="__('sharp::action_bar.list.forms_dropdown')">
         <template v-for="form in visibleForms" :key="form.key">
             <DropdownItem @click="handleSelected(form)">
                 <div class="row gx-2 flex-nowrap">
@@ -19,8 +23,7 @@
     </Dropdown>
 </template>
 
-<script>
-    import { lang } from "sharp";
+<script lang="ts">
     import { Dropdown, DropdownItem } from "@sharp/ui";
 
     export default {
@@ -40,7 +43,7 @@
             },
         },
         methods: {
-            l: lang,
+            __,
             handleSelected(form) {
                 this.$emit('select', form);
             }

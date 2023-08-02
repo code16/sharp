@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="action-bar mt-4 mb-3 position-sticky ShowEntityListField__action-bar"
         v-sticky
@@ -15,19 +19,19 @@
                         <template v-if="reordering">
                             <div class="col-auto">
                                 <Button outline @click="handleReorderButtonClicked">
-                                    {{ l('action_bar.list.reorder_button') }}
+                                    {{ __('sharp::action_bar.list.reorder_button') }}
                                 </Button>
                             </div>
                         </template>
                         <template v-else>
                             <div class="col-auto">
                                 <Button outline @click="handleReorderButtonClicked">
-                                    {{ l('action_bar.list.reorder_button.cancel') }}
+                                    {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                 </Button>
                             </div>
                             <div class="col-auto">
                                 <Button @click="handleReorderSubmitButtonClicked">
-                                    {{ l('action_bar.list.reorder_button.finish') }}
+                                    {{ __('sharp::action_bar.list.reorder_button.finish') }}
                                 </Button>
                             </div>
                         </template>
@@ -37,14 +41,14 @@
                         <template v-if="selecting">
                             <div class="col-auto">
                                 <Button key="cancel" outline @click="handleSelectCancelled">
-                                    {{ l('action_bar.list.reorder_button.cancel') }}
+                                    {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                 </Button>
                             </div>
                         </template>
                         <template v-else>
                             <div class="col-auto">
                                 <Button key="select" outline @click="handleSelectButtonClicked">
-                                    {{ l('action_bar.list.select_button') }}
+                                    {{ __('sharp::action_bar.list.select_button') }}
                                 </Button>
                             </div>
                         </template>
@@ -62,7 +66,7 @@
                                 @select="handleCommandSelected"
                             >
                                 <template v-slot:text>
-                                    {{ l('entity_list.commands.entity.label') }}
+                                    {{ __('sharp::entity_list.commands.entity.label') }}
                                     <template v-if="selecting">
                                         ({{ selectedCount }} selected)
                                     </template>
@@ -90,7 +94,7 @@
                             </template>
                             <template v-else>
                                 <Button :disabled="reordering || selecting" @click="handleCreateButtonClicked">
-                                    {{ l('action_bar.list.create_button') }}
+                                    {{ __('sharp::action_bar.list.create_button') }}
                                 </Button>
                             </template>
                         </div>
@@ -101,11 +105,10 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { Dropdown,  DropdownItem, Search, Button, Breadcrumb } from '@sharp/ui';
     import { SharpFilter } from '@sharp/filters';
 
-    import { Localization } from 'sharp/mixins';
     import MultiformDropdown from "./MultiformDropdown.vue";
     import EntityListTitle from "./EntityListTitle.vue";
     import { CommandsDropdown } from "@sharp/commands";
@@ -113,8 +116,6 @@
 
     export default {
         name: 'SharpActionBarList',
-
-        mixins: [Localization],
 
         components : {
             CommandsDropdown,

@@ -2,7 +2,7 @@
 
 return [
 
-    'list.items_count' => 'элементов',
+    'list.items_count' => ':count элементов',
     'list.search.placeholder' => 'Поиск',
     'list.search.title' => 'Найдено по запросу “:search”',
     'list.create_button' => 'Добавить...',

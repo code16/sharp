@@ -1,3 +1,14 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+
+    // todo migrate to Data
+    defineProps({
+        title: String,
+        link: String,
+        value: Object,
+    });
+</script>
+
 <template>
     <div>
         <template v-if="title">
@@ -37,24 +48,9 @@
         <template v-if="link">
             <div class="text-start mt-2">
                 <a :href="link">
-                    {{ lang('dashboard.widget.link_label') }}
+                    {{ __('sharp::dashboard.widget.link_label') }}
                 </a>
             </div>
         </template>
     </div>
 </template>
-
-<script>
-    import { lang } from "sharp";
-
-    export default {
-        props: {
-            title: String,
-            link: String,
-            value: Object,
-        },
-        methods: {
-            lang,
-        },
-    }
-</script>

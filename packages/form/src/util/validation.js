@@ -1,9 +1,8 @@
-import { lang } from "sharp";
-
+import { __ } from "@/util/i18n";
 
 export function validateTextField(value, { maxlength }) {
     if(maxlength && value?.length > maxlength) {
-        return lang('form.text.validation.maxlength').replace(':maxlength',maxlength);
+        return __('sharp::form.text.validation.maxlength', { maxlength });
     }
     return null;
 }

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <NodeRenderer class="editor__node embed-node" :node="node">
         <template v-if="!node.attrs.isNew">
@@ -13,13 +17,13 @@
                             <template v-if="hasForm">
                                 <div>
                                     <Button outline small @click="handleEditClicked">
-                                        {{ lang('form.upload.edit_button') }}
+                                        {{ __('sharp::form.upload.edit_button') }}
                                     </Button>
                                 </div>
                             </template>
                             <div>
                                 <Button variant="danger" outline small @click="handleRemoveClicked">
-                                    {{ lang('form.upload.remove_button') }}
+                                    {{ __('sharp::form.upload.remove_button') }}
                                 </Button>
                             </div>
                         </div>
@@ -40,8 +44,7 @@
     </NodeRenderer>
 </template>
 
-<script>
-    import { lang } from "sharp";
+<script lang="ts">
     import { Button } from "@sharp/ui";
     import { EmbedRenderer } from '@sharp/embeds';
     import NodeRenderer from "../../NodeRenderer.vue";
@@ -83,7 +86,6 @@
             },
         },
         methods: {
-            lang,
             handleEditClicked() {
                 this.showForm();
             },

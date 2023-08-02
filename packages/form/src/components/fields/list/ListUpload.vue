@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="list-group-item text-muted SharpListUpload" :class="classes">
         <div class="SharpListUpload__content d-flex align-items-center justify-content-center">
@@ -14,8 +18,8 @@
                 </div>
             </div>
         </div>
-        <div class="SharpListUpload__help">
-            {{ helpText }}
+        <div class="SharpListUpload__help">`
+            {{ __('sharp::form.list.bulk_upload.help_text', { limit }) }}
         </div>
         <input
             class="SharpListUpload__input"
@@ -33,8 +37,8 @@
     </div>
 </template>
 
-<script>
-    import { lang } from "sharp";
+<script lang="ts">
+    import { __ } from "@/util/i18n";
 
     export default {
         props: {
@@ -65,14 +69,10 @@
             accept() {
                 return this.field.fileFilter?.join(',');
             },
-            helpText() {
-                return lang('form.list.bulk_upload.help_text')
-                    .replace(':limit', this.limit);
-            },
         },
         methods: {
             getText({ link } = {}) {
-                return lang('form.list.bulk_upload.text')
+                return __('sharp::form.list.bulk_upload.text')
                     .replace(/\[(.+?)]\(.*?\)/, link ?? '$1');
             },
             handleDragEnter() {

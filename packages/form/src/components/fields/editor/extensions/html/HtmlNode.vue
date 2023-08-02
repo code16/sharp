@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <NodeViewWrapper>
         <div class="card editor__node html-node" :class="{ 'shadow border-primary': selected }">
@@ -23,10 +27,10 @@
         >
             <template v-slot:title>
                 <template v-if="node.attrs.new">
-                    {{ lang('form.editor.dialogs.raw_html.insert_title') }}
+                    {{ __('sharp::form.editor.dialogs.raw_html.insert_title') }}
                 </template>
                 <template v-else>
-                    {{ lang('form.editor.dialogs.raw_html.edit_title') }}
+                    {{ __('sharp::form.editor.dialogs.raw_html.edit_title') }}
                 </template>
             </template>
 
@@ -35,8 +39,7 @@
     </NodeViewWrapper>
 </template>
 
-<script>
-    import { lang } from "sharp";
+<script lang="ts">
     import { Button, Modal } from "@sharp/ui";
     import { NodeViewWrapper } from '@tiptap/vue-3';
     import { elementFromString } from "./util";
@@ -61,7 +64,6 @@
             }
         },
         methods: {
-            lang,
             handleEditClicked() {
                 this.editContent = this.node.attrs.content;
                 this.$refs.modal.show();

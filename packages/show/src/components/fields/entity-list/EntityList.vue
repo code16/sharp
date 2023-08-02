@@ -63,17 +63,14 @@
     import { entitiesMatch } from "sharp";
     import { getNavbarHeight } from "@sharp/ui";
     import { getReferrerRoute } from "sharp/router";
-    import { Localization } from "sharp/mixins";
     import { EntityList, EntityListTitle, entityListModule } from '@sharp/entity-list';
     import { CommandsDropdown } from '@sharp/commands';
-    import { sticky } from "sharp/directives";
 
     import ActionBar from "./ActionBar.vue";
     import FieldLayout from "../../FieldLayout.vue";
     import { syncVisibility } from "../../../util/fields/visiblity";
 
     export default {
-        mixins: [Localization],
         components: {
             EntityListTitle,
             EntityList,

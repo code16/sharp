@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <Dropdown
         class="editor__dropdown editor__dropdown--table"
@@ -15,59 +19,58 @@
                 :disabled="editor.isActive('table')"
                 @click="handleInsertClicked"
             >
-                {{ lang('form.editor.dropdown.table.insert_table', 'Insert table') }}
+                {{ __('sharp::form.editor.dropdown.table.insert_table') }}
             </DropdownItem>
             <DropdownSeparator />
             <DropdownItem
                 :disabled="!editor.can().addRowBefore()"
                 @click="command(() => editor.chain().addRowBefore().run())"
             >
-                {{ lang('form.editor.dropdown.table.insert_row_above', 'Insert row above') }}
+                {{ __('sharp::form.editor.dropdown.table.insert_row_above') }}
             </DropdownItem>
             <DropdownItem
                 :disabled="!editor.can().addRowAfter()"
                 @click="command(() => editor.chain().addRowAfter().run())"
             >
-                {{ lang('form.editor.dropdown.table.insert_row_below', 'Insert row below') }}
+                {{ __('sharp::form.editor.dropdown.table.insert_row_below') }}
             </DropdownItem>
             <DropdownItem
                 :disabled="!editor.can().deleteRow()"
                 @click="command(() => editor.chain().deleteRow().run())"
             >
-                {{ lang('form.editor.dropdown.table.remove_row', 'Remove row') }}
+                {{ __('sharp::form.editor.dropdown.table.remove_row') }}
             </DropdownItem>
             <DropdownSeparator />
             <DropdownItem
                 :disabled="!editor.can().addColumnBefore()"
                 @click="command(() => editor.chain().addColumnBefore().run())"
             >
-                {{ lang('form.editor.dropdown.table.insert_col_left', 'Insert column to the left') }}
+                {{ __('sharp::form.editor.dropdown.table.insert_col_left') }}
             </DropdownItem>
             <DropdownItem
                 :disabled="!editor.can().addColumnAfter()"
                 @click="command(() => editor.chain().addColumnAfter().run())"
             >
-                {{ lang('form.editor.dropdown.table.insert_col_right', 'Insert column to the right') }}
+                {{ __('sharp::form.editor.dropdown.table.insert_col_right') }}
             </DropdownItem>
             <DropdownItem
                 :disabled="!editor.can().deleteColumn()"
                 @click="command(() => editor.chain().deleteColumn().run())"
             >
-                {{ lang('form.editor.dropdown.table.remove_col', 'Remove column') }}
+                {{ __('sharp::form.editor.dropdown.table.remove_col') }}
             </DropdownItem>
             <DropdownSeparator />
             <DropdownItem
                 :disabled="!editor.can().deleteTable()"
                 @click="command(() => editor.chain().deleteTable().run())"
             >
-                {{ lang('form.editor.dropdown.table.remove_table', 'Remove table') }}
+                {{ __('sharp::form.editor.dropdown.table.remove_table') }}
             </DropdownItem>
         </template>
     </Dropdown>
 </template>
 
-<script>
-    import { lang } from 'sharp';
+<script lang="ts">
     import { Button, Dropdown, DropdownItem, DropdownSeparator } from "@sharp/ui";
 
     export default {
@@ -87,7 +90,6 @@
             }
         },
         methods: {
-            lang,
             handleInsertClicked() {
                 this.command(() => {
                     this.editor.chain()

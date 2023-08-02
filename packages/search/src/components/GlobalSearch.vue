@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div>
         <button class="btn d-inline-flex btn-sm btn-outline-light border-0" @click="open">
@@ -16,7 +20,7 @@
             @shown="$refs.input.focus()"
         >
             <template v-slot:title>
-                {{ lang('action_bar.list.search.placeholder') }}
+                {{ __('sharp::action_bar.list.search.placeholder') }}
             </template>
 
             <div class="position-relative">
@@ -59,7 +63,7 @@
                             </template>
                             <template v-else-if="!(resultSet.validationErrors || []).length">
                                 <div class="text-muted fs-7">
-                                    {{ resultSet.emptyStateLabel || lang('entity_list.empty_text') }}
+                                    {{ resultSet.emptyStateLabel || __('sharp::entity_list.empty_text') }}
                                 </div>
                             </template>
                         </section>
@@ -70,9 +74,8 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { Modal, Loading } from "@sharp/ui";
-    import { lang } from "sharp";
     import debounce from "lodash/debounce";
     import { getSearchResults } from "../api";
 
@@ -103,7 +106,6 @@
             },
         },
         methods: {
-            lang,
             async getResults(query) {
                 if(!query?.length) {
                     return;

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="editor" :class="classes" :style="style">
         <div class="card">
@@ -26,11 +30,11 @@
                 <div class="card-footer fs-8 text-muted bg-white">
                     <template v-if="maxLength">
                         <span :class="{ 'text-danger': characterCount > maxLength }">
-                            {{ lang('form.editor.character_count').replace(':count', `${characterCount} / ${maxLength}`) }}
+                            {{ __('sharp::form.editor.character_count', { count: `${characterCount} / ${maxLength}` }) }}
                         </span>
                     </template>
                     <template v-else>
-                        {{ lang('form.editor.character_count').replace(':count', characterCount) }}
+                        {{ __('sharp::form.editor.character_count', { count: characterCount }) }}
                     </template>
                 </div>
             </template>
@@ -38,15 +42,15 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
+    import { __ } from "@/util/i18n";
     import { Upload } from "./extensions/upload/upload";
     import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
     import MenuBar from "./toolbar/MenuBar.vue";
     import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
-    import { lang } from "sharp";
 
     export default {
         inheritAttrs: false,
@@ -104,10 +108,9 @@
             },
         },
         methods: {
-            lang,
             validate() {
                 if(this.maxLength && !this.showCharacterCount && this.characterCount > this.maxLength) {
-                    return lang('form.text.validation.maxlength').replace(':maxlength', this.maxLength);
+                    return __('sharp::form.text.validation.maxlength', { maxlength: this.maxLength });
                 }
                 return null;
             },

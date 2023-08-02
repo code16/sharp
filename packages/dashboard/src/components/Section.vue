@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="section">
         <div class="row align-items-center">
@@ -22,7 +26,7 @@
                                     <template v-if="showReset">
                                         <div class="d-flex">
                                             <button class="btn btn-sm d-inline-flex align-items-center btn-link" @click="$emit('filters-reset', filters)">
-                                                {{ lang('filters.reset_all') }}
+                                                {{ __('sharp::filters.reset_all') }}
                                             </button>
                                         </div>
                                     </template>
@@ -33,7 +37,7 @@
                             <div class="col-auto">
                                 <CommandsDropdown :commands="commands" @select="$emit('command', $event)">
                                     <template v-slot:text>
-                                        {{ lang('dashboard.commands.dashboard.label') }}
+                                        {{ __('sharp::dashboard.commands.dashboard.label') }}
                                     </template>
                                 </CommandsDropdown>
                             </div>
@@ -49,12 +53,11 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import {Grid, SectionTitle} from "@sharp/ui";
     import {SharpFilter} from "@sharp/filters";
     import {mapGetters} from "vuex";
     import {CommandsDropdown} from "@sharp/commands";
-    import {lang} from "sharp";
     import Widget from "./Widget.vue";
 
     export default {
@@ -78,9 +81,6 @@
             hasCommands() {
                 return this.commands?.flat().length;
             },
-        },
-        methods: {
-            lang,
         },
     }
 </script>

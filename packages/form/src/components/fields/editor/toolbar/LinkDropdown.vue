@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <Dropdown
         class="editor__dropdown editor__dropdown--link"
@@ -20,14 +24,14 @@
                         type="button"
                         @click="handleCancelClicked"
                     >
-                        <span class="visually-hidden">{{ lang('modals.cancel_button', 'Cancel') }}</span>
+                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>
                     </button>
                 </template>
 
                 <template v-if="hasLabelInput">
                     <div class="mb-3">
                         <label class="form-label" :for="fieldId('label')">
-                            {{ lang('form.editor.dialogs.link.text_label', 'Text') }}
+                            {{ __('sharp::form.editor.dialogs.link.text_label') }}
                         </label>
                         <TextInput :id="fieldId('label')" v-model="label" />
                     </div>
@@ -35,7 +39,7 @@
 
                 <div class="mb-3">
                     <label class="form-label" :for="fieldId('href')">
-                        {{ lang('form.editor.dialogs.link.url_label', 'URL') }}
+                        {{ __('sharp::form.editor.dialogs.link.url_label') }}
                     </label>
                     <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
@@ -45,22 +49,22 @@
                         <div class="col-auto">
                             <Button type="submit" small variant="primary">
                                 <template v-if="isEdit">
-                                    {{ lang('form.editor.dialogs.link.update_button', 'Update') }}
+                                    {{ __('sharp::form.editor.dialogs.link.update_button') }}
                                 </template>
                                 <template v-else>
-                                    {{ lang('form.editor.dialogs.link.insert_button', 'Insert link') }}
+                                    {{ __('sharp::form.editor.dialogs.link.insert_button') }}
                                 </template>
                             </Button>
                         </div>
                         <div class="col-auto">
                             <template v-if="isEdit">
                                 <Button type="button" small variant="danger" outline @click="handleRemoveClicked">
-                                    {{ lang('form.editor.dialogs.link.remove_button', 'Remove link') }}
+                                    {{ __('sharp::form.editor.dialogs.link.remove_button') }}
                                 </Button>
                             </template>
                             <template v-else>
                                 <Button type="button" small variant="light" @click="handleCancelClicked">
-                                    {{ lang('modals.cancel_button', 'Cancel') }}
+                                    {{ __('sharp::modals.cancel_button') }}
                                 </Button>
                             </template>
                         </div>
@@ -71,11 +75,10 @@
     </Dropdown>
 </template>
 
-<script>
+<script lang="ts">
     // import { BFormGroup, BDropdownForm } from 'bootstrap-vue';
     import { Button, Dropdown } from "@sharp/ui";
     import TextInput from '../../Text.vue';
-    import { lang } from "sharp";
 
     export default {
         components: {
@@ -112,7 +115,6 @@
             },
         },
         methods: {
-            lang,
             fieldId(name) {
                 return `${this.id}-${name}`;
             },

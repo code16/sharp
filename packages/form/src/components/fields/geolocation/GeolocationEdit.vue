@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpGeolocationEdit" :class="classes">
         <template v-if="hasGeocoding">
@@ -8,13 +12,13 @@
                             <TextField
                                 class="SharpGeolocationEdit__input"
                                 :value="search"
-                                :placeholder="lSub('geocode_input.placeholder')"
+                                :placeholder="__('sharp::form.geolocation.modal.geocode_input.placeholder')"
                                 @input="handleSearchInput"
                             />
                             <Loading class="SharpGeolocationEdit__loading" :visible="loading" small />
                         </div>
                         <div class="col-auto pl-2">
-                            <Button outline>{{ lSub('search_button') }}</Button>
+                            <Button outline>{{ __('sharp::form.geolocation.modal.search_button') }}</Button>
                         </div>
                     </div>
                 </form>
@@ -40,15 +44,14 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { Loading, Button, Modal } from '@sharp/ui';
-    import { LocalizationBase } from 'sharp/mixins';
     import TextField from '../Text.vue';
     import { getEditableMapByProvider, geocode } from "./maps";
     import { tilesUrl } from "./util";
+    import { __ } from "@/util/i18n";
 
     export default {
-        mixins: [LocalizationBase('form.geolocation.modal')],
         components: {
             Loading,
             Modal,
@@ -136,11 +139,11 @@
                             this.currentBounds = results[0].bounds;
                             this.$emit('change', this.currentLocation);
                         } else {
-                            this.message = this.lSub(`geocode_input.message.no_results`).replace(':query', address || '');
+                            this.message = __('sharp::form.geolocation.modal.geocode_input.message.no_results', { query: address ?? '' });
                         }
                     })
                     .catch(status => {
-                        this.message = `${this.lSub(`geocode_input.message.error`)}${status?` (${status})`:''}`;
+                        this.message = `${__(`sharp::form.geolocation.modal.geocode_input.message.error`)}${status?` (${status})`:''}`;
                     })
                     .finally(() => {
                         this.loading = false;
@@ -148,5 +151,4 @@
             },
         },
     }
-
 </script>

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="action-bar mt-4 mb-3">
         <div class="row align-items-center gx-3">
@@ -37,12 +41,12 @@
                 <div class="col-auto">
                     <CommandsDropdown outline :small="false" :commands="commands" @select="handleCommandSelected">
                         <template v-slot:text>
-                            {{ l('entity_list.commands.instance.label') }}
+                            {{ __('sharp::entity_list.commands.instance.label') }}
                         </template>
                         <template v-if="canDelete" v-slot:append>
                             <DropdownSeparator />
                             <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
-                                {{ l('action_bar.form.delete_button') }}
+                                {{ __('sharp::action_bar.form.delete_button') }}
                             </DropdownItem>
                         </template>
                     </CommandsDropdown>
@@ -51,7 +55,7 @@
             <template v-if="canEdit">
                 <div class="col-auto">
                     <Button :href="formUrl" :disabled="editDisabled">
-                        {{ l('action_bar.show.edit_button') }}
+                        {{ __('sharp::action_bar.show.edit_button') }}
                     </Button>
                 </div>
             </template>
@@ -59,25 +63,22 @@
     </div>
 </template>
 
-<script>
-import {
-    Dropdown,
-    DropdownItem,
-    StateIcon,
-    Breadcrumb,
-    Button,
-    ModalSelect, DropdownSeparator,
-} from '@sharp/ui';
+<script lang="ts">
+    import {
+        Dropdown,
+        DropdownItem,
+        StateIcon,
+        Breadcrumb,
+        Button,
+        ModalSelect, DropdownSeparator,
+    } from '@sharp/ui';
 
     import {
         CommandsDropdown
     } from '@sharp/commands';
-
-    import { Localization } from "sharp/mixins";
     import LocaleSelect from "@sharp/form/src/components/ui/LocaleSelect.vue";
 
     export default {
-        mixins: [Localization],
         components: {
             DropdownSeparator,
             LocaleSelect,

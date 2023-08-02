@@ -11,7 +11,7 @@ final class CheckFilterData extends Data
         public string $key,
         public string $label,
         public FilterType $type,
-        public bool $default,
+        public ?bool $default,
     ) {
     }
 

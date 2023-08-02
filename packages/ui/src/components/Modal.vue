@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <b-modal
         v-bind="$attrs"
@@ -32,7 +36,7 @@
                             <template v-if="!okOnly">
                                 <div class="col-auto">
                                     <button class="btn btn-outline-primary" @click="cancel">
-                                        {{ cancelTitle || l('modals.cancel_button') }}
+                                        {{ cancelTitle || __('sharp::modals.cancel_button') }}
                                     </button>
                                 </div>
                             </template>
@@ -46,7 +50,7 @@
                                     @click="ok"
                                 >
                                     <span :class="{ 'invisible': loading }">
-                                        {{ okTitle || l('modals.ok_button') }}
+                                        {{ okTitle || __('sharp::modals.ok_button') }}
                                     </span>
                                     <template v-if="loading">
                                         <LoadingOverlay class="bg-transparent" absolute small />
@@ -61,15 +65,13 @@
     </b-modal>
 </template>
 
-<script>
-    import { Localization } from 'sharp/mixins';
+<script lang="ts">
     // import { BModal } from 'bootstrap-vue';
     import Loading from "./loading/Loading.vue";
     import LoadingOverlay from "./loading/LoadingOverlay.vue";
 
     export default {
         name: 'SharpModal',
-        mixins: [Localization],
 
         components: {
             LoadingOverlay,

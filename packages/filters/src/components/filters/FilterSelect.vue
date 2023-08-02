@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpFilterSelect"
           :class="{
@@ -15,7 +19,7 @@
             :local-values="values"
             :search-keys="searchKeys"
             :list-item-template="template"
-            :placeholder="l('entity_list.filter.search_placeholder')"
+            :placeholder="__('sharp::entity_list.filter.search_placeholder')"
             :multiple="multiple"
             :hide-selected="multiple"
             :allow-empty="!required"
@@ -51,14 +55,12 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { Autocomplete, Select } from '@sharp/form'
-    import { Localization } from 'sharp/mixins';
     import FilterControl from '../FilterControl.vue';
 
     export default {
         name: 'SharpFilterSelect',
-        mixins: [Localization],
         components: {
             Select,
             Autocomplete,

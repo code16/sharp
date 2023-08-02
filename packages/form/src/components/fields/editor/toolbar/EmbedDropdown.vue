@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <Dropdown
         class="editor__dropdown"
@@ -7,7 +11,7 @@
         ref="dropdown"
     >
         <template v-slot:text>
-            {{ lang('form.editor.dropdown.embeds') }}
+            {{ __('sharp::form.editor.dropdown.embeds') }}
         </template>
 
         <template v-slot:default="{ hide }">
@@ -20,8 +24,7 @@
     </Dropdown>
 </template>
 
-<script>
-    import { lang } from 'sharp';
+<script lang="ts">
     import { Dropdown, DropdownItem } from "@sharp/ui";
 
     export default {
@@ -34,7 +37,6 @@
             editor: Object,
         },
         methods: {
-            lang,
             handleClicked(embed) {
                 this.editor.chain()
                     .focus()

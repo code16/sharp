@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpUpload" :class="classes">
         <div> <!-- keep content div to allow dropzone events (vue-clip) -->
@@ -22,7 +26,7 @@
                                             <div class="col-auto">
                                                 <a class="SharpUpload__download-link" :href="downloadUrl" :download="fileName">
                                                     <i class="fas fa-download"></i>
-                                                    {{ l('form.upload.download_link') }}
+                                                    {{ __('sharp::form.upload.download_link') }}
                                                 </a>
                                             </div>
                                         </template>
@@ -41,11 +45,11 @@
                                 <div>
                                     <template v-if="hasEdit && !hasError">
                                         <Button outline small @click="handleEditButtonClick">
-                                            {{ l('form.upload.edit_button') }}
+                                            {{ __('sharp::form.upload.edit_button') }}
                                         </Button>
                                     </template>
                                     <Button class="SharpUpload__remove-button" variant="danger" outline small @click="handleRemoveClicked">
-                                        {{ l('form.upload.remove_button') }}
+                                        {{ __('sharp::form.upload.remove_button') }}
                                     </Button>
                                 </div>
                             </template>
@@ -55,7 +59,7 @@
             </template>
             <template v-else>
                 <Button class="SharpUpload__browse dz-message" text block :disabled="readOnly" type="button" @click="handleClick">
-                    {{ l('form.upload.browse_button') }}
+                    {{ __('sharp::form.upload.browse_button') }}
                 </Button>
             </template>
             <div ref="clip-preview-template" class="clip-preview-template" style="display: none;">
@@ -88,12 +92,11 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
     import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
-    import { Localization } from 'sharp/mixins';
     import { Button } from '@sharp/ui';
     import { downloadFileUrl } from "@sharp/files";
     import { getFiltersFromCropData } from "./util/filters";
@@ -116,8 +119,6 @@
                 default: null,
             },
         },
-
-        mixins: [ Localization ],
 
         props: {
             ratioX: Number,

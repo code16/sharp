@@ -48,7 +48,7 @@
 </template>
 
 <script>
-    import { lang } from "sharp";
+    import { __ } from "@/util/i18n";
     import { ClearButton } from "@sharp/ui";
     import DatePicker from "../date/DatePicker.vue";
 
@@ -70,11 +70,11 @@
             },
             startPlaceholder: {
                 type: String,
-                default: () => lang('form.daterange.start_placeholder'),
+                default: () => __('sharp::form.daterange.start_placeholder'),
             },
             endPlaceholder: {
                 type: String,
-                default: () => lang('form.daterange.end_placeholder'),
+                default: () => __('sharp::form.daterange.end_placeholder'),
             },
             clearable: {
                 type: Boolean,

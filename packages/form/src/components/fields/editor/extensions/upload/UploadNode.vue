@@ -24,8 +24,9 @@
 <script>
     import VueClip from "../../../upload/VueClip.vue";
     import NodeRenderer from "../../NodeRenderer.vue";
-    import { lang, showAlert, getUniqueId } from "sharp";
+    import { showAlert, getUniqueId } from "sharp";
     import { getUploadOptions } from "../../../../../util/upload";
+    import { __ } from "@/util/i18n";
 
     export default {
         components: {
@@ -61,8 +62,9 @@
             },
             error() {
                 if(this.node.attrs.notFound) {
-                    return lang('form.editor.errors.unknown_file')
-                        .replace(':path', this.node.attrs.path ?? '');
+                    return __('sharp::form.editor.errors.unknown_file', {
+                        path: this.node.attrs.path ?? ''
+                    });
                 }
             },
             fieldProps() {
@@ -95,7 +97,7 @@
                 this.deleteNode();
                 showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
                     isError: true,
-                    title: lang(`modals.error.title`),
+                    title: __(`sharp::modals.error.title`),
                 });
             },
             handleUpdated(value) {

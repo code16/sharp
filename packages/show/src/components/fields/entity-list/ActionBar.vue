@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="action-bar"
         :class="{ 'position-sticky': sticky }"
@@ -25,19 +29,19 @@
                                             <div class="row gx-3">
                                                 <div class="col-auto">
                                                     <Button text small @click="handleReorderButtonClicked">
-                                                        {{ l('action_bar.list.reorder_button.cancel') }}
+                                                        {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                                     </Button>
                                                 </div>
                                                 <div class="col-auto">
                                                     <Button variant="primary" small @click="handleReorderSubmitButtonClicked">
-                                                        {{ l('action_bar.list.reorder_button.finish') }}
+                                                        {{ __('sharp::action_bar.list.reorder_button.finish') }}
                                                     </Button>
                                                 </div>
                                             </div>
                                         </template>
                                         <template v-else>
                                             <Button text small @click="handleReorderButtonClicked">
-                                                {{ l('action_bar.list.reorder_button') }}
+                                                {{ __('sharp::action_bar.list.reorder_button') }}
                                             </Button>
                                         </template>
                                     </div>
@@ -65,7 +69,7 @@
                                             </template>
                                             <template v-else>
                                                 <Button variant="primary" small @click="handleCreateButtonClicked">
-                                                    {{ l('action_bar.list.create_button') }}
+                                                    {{ __('sharp::action_bar.list.create_button') }}
                                                 </Button>
                                             </template>
                                         </div>
@@ -80,15 +84,12 @@
     </div>
 </template>
 
-<script>
-    import { Localization } from 'sharp/mixins';
+<script lang="ts">
     import { Button } from '@sharp/ui';
     import { MultiformDropdown } from "@sharp/entity-list";
-    import { lang } from "sharp";
     import { sticky } from "sharp/directives";
 
     export default {
-        mixins: [Localization],
         components: {
             MultiformDropdown,
             Button,
@@ -96,7 +97,6 @@
         props: {
             ready: Boolean,
             count: Number,
-            hasSearchQuery: Boolean,
             primaryCommand: Object,
 
             forms: Array,
@@ -137,14 +137,8 @@
                 }
                 return true;
             },
-            searchLabel() {
-                return lang('action_bar.list.search.title').replace(':search', this.search);
-            },
         },
         methods: {
-            handleSearchSubmitted(search) {
-                this.$emit('search-submit', search);
-            },
             handleFilterChanged(filter, value) {
                 this.$emit('filter-change', filter, value);
             },

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div :class="{ 'card card-body form-control':root }">
         <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
@@ -19,10 +23,10 @@
             <div class="SharpSelect__links mt-3">
                 <div class="row gx-3">
                     <div class="col-auto">
-                        <a href="#" @click.prevent="handleSelectAllClicked">{{ lang('form.select.select_all') }}</a>
+                        <a href="#" @click.prevent="handleSelectAllClicked">{{ __('sharp::form.select.select_all') }}</a>
                     </div>
                     <div class="col-auto">
-                        <a href="#" @click.prevent="handleUnselectAllClicked">{{ lang('form.select.unselect_all') }}</a>
+                        <a href="#" @click.prevent="handleUnselectAllClicked">{{ __('sharp::form.select.unselect_all') }}</a>
                     </div>
                 </div>
             </div>
@@ -30,10 +34,10 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import Check from "../Check.vue";
     import { isSelected } from "../../../util/select";
-    import { lang } from "sharp";
+    import { __ } from "@/util/i18n";
 
     export default {
         components: {
@@ -51,7 +55,6 @@
             uniqueIdentifier: String,
         },
         methods: {
-            lang,
             isChecked(option) {
                 return this.value?.some(value => isSelected(option, value));
             },
@@ -74,8 +77,7 @@
             },
             validate(value) {
                 if(this.maxSelected && value?.length > this.maxSelected) {
-                    return lang('form.select.validation.max_selected')
-                        .replace(':max_selected', this.maxSelected);
+                    return __('sharp::form.select.validation.max_selected', { max_selected: this.maxSelected });
                 }
                 return null;
             },

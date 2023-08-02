@@ -1,7 +1,7 @@
 <script>
     import Multiselect from 'vue-multiselect';
 
-    import { lang } from 'sharp';
+    import { __ } from "@/util/i18n";
     import { multiselectUpdateScroll } from "../util";
 
     export default {
@@ -10,7 +10,7 @@
         // render(h, { data, children=[],  props }) {
         //
         //     if(!props.placeholder) {
-        //         data.attrs.placeholder = lang('form.multiselect.placeholder');
+        //         data.attrs.placeholder = __('sharp::form.multiselect.placeholder');
         //     }
         //
         //     data.class = ['form-control', data.class]
@@ -38,7 +38,7 @@
         //             this.$el.addEventListener('blur', () => this.deactivate());
         //         }
         //     }, data, [
-        //         h('template', { slot:'maxElements'}, lang('form.multiselect.max_text')),
+        //         h('template', { slot:'maxElements'}, __('sharp::form.multiselect.max_text')),
         //         ...children,
         //     ])
         // }

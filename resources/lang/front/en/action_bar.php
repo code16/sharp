@@ -2,7 +2,7 @@
 
 return [
 
-    'list.items_count' => 'item(s)',
+    'list.items_count' => ':count item(s)',
     'list.search.placeholder' => 'Search',
     'list.search.title' => 'Results for “:search”',
     'list.create_button' => 'New...',

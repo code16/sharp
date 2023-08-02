@@ -41,7 +41,9 @@ final class EntityListConfigData extends Data
     {
         $config = [
             ...$config,
-            'state' => EntityStateData::from($config['state']),
+            'state' => isset($config['state'])
+                ? EntityStateData::from($config['state'])
+                : null,
             'commands' => collect($config['commands'])
                 ->map(fn (array $commands) => collect($commands)
                     ->map(fn (array $commands) => CommandData::collection($commands))

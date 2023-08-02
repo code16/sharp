@@ -1,8 +1,12 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <FieldLayout class="ShowListField" :class="classes" :label="label">
         <div class="ShowListField__content">
             <template v-if="isEmpty">
-                <em class="ShowListField__empty text-muted">{{ lang('show.list.empty') }}</em>
+                <em class="ShowListField__empty text-muted">{{ __('sharp::show.list.empty') }}</em>
             </template>
             <template v-else>
                 <div class="ShowListField__list">
@@ -29,8 +33,7 @@
     </FieldLayout>
 </template>
 
-<script>
-    import { lang } from 'sharp';
+<script lang="ts">
     import { Grid } from '@sharp/ui';
     import { UnknownField } from 'sharp/components';
     import { syncVisibility } from "../../util/fields/visiblity";
@@ -70,7 +73,6 @@
             },
         },
         methods: {
-            lang,
             fieldOptions(layout) {
                 const options = this.itemFields
                     ? { ...this.itemFields[layout.key] }

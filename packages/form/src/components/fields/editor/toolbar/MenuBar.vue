@@ -101,19 +101,19 @@
         },
         methods: {
             getIcon(button) {
-                return buttons[button]?.icon;
+                return buttons()[button]?.icon;
             },
             isActive(button) {
-                return buttons[button]?.isActive?.(this.editor);
+                return buttons()[button]?.isActive?.(this.editor);
             },
             buttonTitle(button) {
-                return buttons[button]?.label;
+                return buttons()[button]?.label;
             },
             handleClicked(button) {
-                buttons[button]?.command(this.editor);
+                buttons()[button]?.command(this.editor);
             },
             handleLinkSubmitted({ href, label }) {
-                buttons.link.command(this.editor, { href, label });
+                buttons().link.command(this.editor, { href, label });
             },
             handleRemoveLinkClicked() {
                 this.editor.chain().focus().unsetLink().run();

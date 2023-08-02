@@ -22,7 +22,7 @@
 <script>
     import { Markdown } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-3';
-    import { lang } from "sharp";
+    import { __ } from "@/util/i18n";
     import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
@@ -66,7 +66,7 @@
                     options.push({
                         command: () => editor.chain().toggleTight().run(),
                         disabled: !editor.can().toggleTight(),
-                        label: lang('form.editor.dropdown.options.toggle_tight_list'),
+                        label: __('sharp::form.editor.dropdown.options.toggle_tight_list'),
                     });
                 }
 

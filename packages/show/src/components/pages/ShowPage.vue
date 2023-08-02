@@ -108,9 +108,10 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm } from 'sharp';
+    import { formUrl, getBackUrl, showAlert, handleNotifications, withLoadingOverlay, showDeleteConfirm } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
     import { Grid, GlobalMessage } from '@sharp/ui';
+    import { __ } from "@/util/i18n";
     import { LocaleSelect } from "@sharp/form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
@@ -303,7 +304,7 @@
                         const data = error.response?.data;
                         if(error.response?.status === 422) {
                             showAlert(data.message, {
-                                title: lang('modals.state.422.title'),
+                                title: __('sharp::modals.state.422.title'),
                                 isError: true,
                             });
                         }

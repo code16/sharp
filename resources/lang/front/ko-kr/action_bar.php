@@ -2,7 +2,7 @@
 
 return [
 
-    'list.items_count' => '건',
+    'list.items_count' => ':count 건',
     'list.search.placeholder' => '검색',
     'list.create_button' => '새...',
     'list.forms_dropdown' => '새로운',

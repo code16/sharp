@@ -1,3 +1,16 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+    import { TemplateRenderer } from 'sharp/components';
+
+    // todo migrate to Data
+    defineProps({
+        value: Object,
+        title: String,
+        template: String,
+        link: String,
+    });
+</script>
+
 <template>
     <div class="SharpWidgetPanel">
         <template v-if="title">
@@ -9,31 +22,9 @@
         <template v-if="link">
             <a class="stretched-link" :href="link">
                 <span class="visually-hidden">
-                    {{ lang('dashboard.widget.link_label') }}
+                    {{ __('sharp::dashboard.widget.link_label') }}
                 </span>
             </a>
         </template>
     </div>
 </template>
-
-<script>
-    import { TemplateRenderer } from 'sharp/components';
-    import { lang } from "sharp";
-
-    export default {
-        name: 'SharpWidgetPanel',
-        inheritAttrs: false,
-        components: {
-            TemplateRenderer
-        },
-        props: {
-            value: Object,
-            title: String,
-            template: String,
-            link: String,
-        },
-        methods: {
-            lang,
-        },
-    }
-</script>

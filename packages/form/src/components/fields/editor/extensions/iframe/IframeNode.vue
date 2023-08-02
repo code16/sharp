@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <NodeRenderer class="editor__node d-inline-flex" :node="node">
         <template v-if="!node.attrs.isNew">
@@ -9,12 +13,12 @@
                         <div class="row row-cols-auto gx-2">
                             <div>
                                 <Button outline small @click="handleEditClicked">
-                                    {{ lang('form.upload.edit_button') }}
+                                    {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </div>
                             <div>
                                 <Button variant="danger" outline small @click="handleRemoveClicked">
-                                    {{ lang('form.upload.remove_button') }}
+                                    {{ __('sharp::form.upload.remove_button') }}
                                 </Button>
                             </div>
                         </div>
@@ -33,10 +37,10 @@
         >
             <template v-slot:title>
                 <template v-if="node.attrs.isNew">
-                    {{ lang('form.editor.dialogs.iframe.insert_title') }}
+                    {{ __('sharp::form.editor.dialogs.iframe.insert_title') }}
                 </template>
                 <template v-else>
-                    {{ lang('form.editor.dialogs.iframe.update_title') }}
+                    {{ __('sharp::form.editor.dialogs.iframe.update_title') }}
                 </template>
             </template>
 
@@ -60,9 +64,8 @@
     </NodeRenderer>
 </template>
 
-<script>
+<script lang="ts">
     import debounce from 'lodash/debounce';
-    import { lang } from "sharp";
     import { Modal, Button } from "@sharp/ui";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { getHTMLFromFragment } from "@tiptap/core";
@@ -92,7 +95,6 @@
            }
         },
         methods: {
-            lang,
             getIframe(html) {
                 const dom = document.createElement('div');
                 dom.innerHTML = html;

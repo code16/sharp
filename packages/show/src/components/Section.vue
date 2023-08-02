@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="ShowSection" :class="classes">
         <div class="row">
@@ -10,7 +14,7 @@
                 <div class="col-auto align-self-end mb-2">
                     <CommandsDropdown :commands="commands" @select="handleCommandSelected">
                         <template v-slot:text>
-                            {{ lang('entity_list.commands.instance.label') }}
+                            {{ __('sharp::entity_list.commands.instance.label') }}
                         </template>
                     </CommandsDropdown>
                 </div>
@@ -37,10 +41,9 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { Grid, SectionTitle } from "@sharp/ui";
     import { CommandsDropdown } from '@sharp/commands';
-    import { lang } from "sharp";
 
     export default {
         components: {
@@ -81,7 +84,6 @@
             },
         },
         methods: {
-            lang,
             handleCommandSelected(command) {
                 this.$emit('command', command);
             },

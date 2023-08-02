@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpEntityList__actions">
         <div class="row align-items-center justify-content-end flex-nowrap gx-1">
@@ -52,7 +56,7 @@
                                         <div class="row gx-2">
                                             <template v-if="!stateDisabled">
                                                 <div class="col-auto">
-                                                    {{ l('modals.entity_state.edit.title') }} :
+                                                    {{ __('sharp::modals.entity_state.edit.title') }} :
                                                 </div>
                                             </template>
                                             <div class="col-auto">
@@ -67,7 +71,7 @@
                         <template v-if="canDelete" v-slot:append>
                             <DropdownSeparator />
                             <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
-                                {{ l('action_bar.form.delete_button') }}
+                                {{ __('sharp::action_bar.form.delete_button') }}
                             </DropdownItem>
                         </template>
                     </CommandsDropdown>
@@ -77,8 +81,7 @@
     </div>
 </template>
 
-<script>
-    import { lang } from "sharp";
+<script lang="ts">
     import { CommandsDropdown } from "@sharp/commands";
     import { DropdownSeparator, DropdownItem, StateIcon, ModalSelect, Button, Dropdown } from "@sharp/ui";
 
@@ -114,7 +117,6 @@
             },
         },
         methods: {
-            l:lang,
             handleStateChanged(state) {
                 this.$emit('state-change', state);
             },

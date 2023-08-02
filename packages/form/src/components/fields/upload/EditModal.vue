@@ -1,7 +1,11 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <Modal
         :visible="visible"
-        :title="l('modals.cropper.title')"
+        :title="__('sharp::modals.cropper.title')"
         no-close-on-backdrop
         v-on="$listeners"
         @ok="handleOkClicked"
@@ -38,7 +42,7 @@
                 </div>
                 <div class="col d-none d-lg-block">
                     <div class="text-muted fs-7 lh-sm">
-                        {{ l('form.upload.edit_modal.description') }}
+                        {{ __('sharp::form.upload.edit_modal.description') }}
                     </div>
                 </div>
             </div>
@@ -46,9 +50,8 @@
     </Modal>
 </template>
 
-<script>
+<script lang="ts">
     import VueCropper from 'vue-cropperjs';
-    import { lang } from "sharp";
     import { Modal, Loading, Button } from '@sharp/ui';
     import { postResolveFiles } from '@sharp/files';
 
@@ -107,7 +110,6 @@
             },
         },
         methods: {
-            l: lang,
             handleRotateClicked(degree) {
                 rotate(this.$refs.cropper.cropper, degree);
             },

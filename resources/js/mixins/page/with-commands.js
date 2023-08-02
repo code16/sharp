@@ -1,6 +1,7 @@
 import { parseBlobJSONContent, getFileName } from "../../util/request";
 import { lang, withLoadingOverlay } from "../../index";
 import { showConfirm, showAlert } from "../../util/dialogs";
+import { __ } from "@/util/i18n";
 
 export default {
     data() {
@@ -132,7 +133,7 @@ export default {
         },
         async handleInfoCommand(data) {
             await showAlert(data.message, {
-                title: lang('modals.command.info.title'),
+                title: __('sharp::modals.command.info.title'),
             });
         },
         handleViewCommand(data) {

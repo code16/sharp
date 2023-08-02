@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <FieldLayout class="ShowFileField" :class="classes" :label="label">
         <div class="row mx-n2">
@@ -37,7 +41,7 @@
                             <div class="text-muted">
                                 <i class="fa fas fa-download"></i>
                                 <a :href="downloadUrl" :download="fileName" style="color:inherit">
-                                    {{ lang('show.file.download') }}
+                                    {{ __('sharp::show.file.download') }}
                                 </a>
                             </div>
                         </div>
@@ -48,11 +52,11 @@
     </FieldLayout>
 </template>
 
-<script>
+<script lang="ts">
     import { mapGetters } from 'vuex';
     import debounce from 'lodash/debounce';
     import { getClassNameForExtension } from 'font-awesome-filetypes';
-    import { lang, filesizeLabel } from 'sharp';
+    import { filesizeLabel } from 'sharp';
     import { Button } from "@sharp/ui";
     import { downloadFileUrl } from "@sharp/files";
     import { syncVisibility } from "../../util/fields/visiblity";
@@ -140,7 +144,6 @@
             },
         },
         methods: {
-            lang,
             async layout() {
                 if(this.$refs.thumbnail) {
                     this.thumbnailWidth = this.$refs.thumbnail.parentElement.offsetWidth;

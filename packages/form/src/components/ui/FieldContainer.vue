@@ -54,12 +54,13 @@
 </template>
 
 <script>
-  import { lang, logError } from 'sharp';
+  import { logError } from 'sharp';
   import { ConfigNode, Identifier } from 'sharp/mixins';
   import Field from '../Field.vue';
   import FieldLocaleSelect from './FieldLocaleSelect.vue';
   import { isLocalizableValueField, resolveTextValue } from '../../util';
   import { sticky } from "sharp/directives";
+  import { __ } from '@/util/i18n';
 
 
   export default {
@@ -158,7 +159,7 @@
                 }
                 else if(this.fieldProps.localized && this.errorsLocales.length > 0) {
                     const locales = this.errorsLocales.join(', ').toUpperCase();
-                    const message = lang('form.validation_error.localized').replace(':locales', locales);
+                    const message = __('form.validation_error.localized', { locales });
                     this.setError(message);
                 }
                 else if(error == null) {

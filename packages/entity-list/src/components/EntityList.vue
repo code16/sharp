@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpEntityList" :class="classes">
         <slot
@@ -31,7 +35,7 @@
                     @page-change="handlePageChanged"
                 >
                     <template v-slot:empty>
-                        {{ l('entity_list.empty_text') }}
+                        {{ __('sharp::entity_list.empty_text') }}
                     </template>
 
                     <template v-if="canSearch || resolvedFilters && resolvedFilters.length" v-slot:prepend>
@@ -43,7 +47,7 @@
                                             class="h-100 mw-100"
                                             style="--width: 150px; --focused-width: 250px;"
                                             :value="search"
-                                            :placeholder="l('action_bar.list.search.placeholder')"
+                                            :placeholder="__('sharp::action_bar.list.search.placeholder')"
                                             :disabled="reordering"
                                             @submit="handleSearchSubmitted"
                                         />
@@ -65,7 +69,7 @@
                                             <template v-if="isFiltersValuated">
                                                 <div class="col-auto d-flex">
                                                     <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="handleResetAllClicked">
-                                                        {{ l('filters.reset_all') }}
+                                                        {{ __('sharp::filters.reset_all') }}
                                                     </button>
                                                 </div>
                                             </template>
@@ -144,10 +148,11 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import isEqual from 'lodash/isEqual';
-    import { formUrl, showUrl, lang, showAlert, api, handleNotifications, showDeleteConfirm } from 'sharp';
-    import { Localization, DynamicView, withCommands } from 'sharp/mixins';
+    import { formUrl, showUrl, showAlert, api, handleNotifications, showDeleteConfirm } from 'sharp';
+    import { __ } from "@/util/i18n";
+    import {  DynamicView, withCommands } from 'sharp/mixins';
     import {
         DataList,
         DataListRow,
@@ -174,7 +179,7 @@
 
     export default {
         name: 'SharpEntityList',
-        mixins: [DynamicView, Localization, withCommands],
+        mixins: [DynamicView, withCommands],
         components: {
             Search, SharpFilter,
             EntityActions,
@@ -600,7 +605,7 @@
                         const data = error.response?.data;
                         if(error.response?.status === 422) {
                             showAlert(data.message, {
-                                title: lang('modals.state.422.title'),
+                                title: __('modals.state.422.title'),
                                 isError: true,
                             });
                         }

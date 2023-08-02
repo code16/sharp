@@ -1,4 +1,4 @@
-import { lang } from "sharp";
+import { __ } from "@/util/i18n";
 
 import localizeSelect from './Select';
 import { localeObject } from "../../util/locale";
@@ -7,7 +7,7 @@ export default {
     extends: localizeSelect,
     methods: {
         localizeLabel(label) { // display
-            return this.isLocalized ? label[this.locale] || lang('form.tags.unknown_label') : label;
+            return this.isLocalized ? label[this.locale] || __('sharp::form.tags.unknown_label') : label;
         },
         localizedTagLabel(text) { // data
             return this.isLocalized ? localeObject({

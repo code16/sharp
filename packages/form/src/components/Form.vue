@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import { __ } from "@/util/i18n";
+</script>
+
 <template>
     <div class="SharpForm">
         <slot
@@ -17,8 +21,8 @@
 
             <template v-if="hasErrors && showAlert">
                 <div class="alert alert-danger SharpForm__alert" role="alert">
-                    <div class="fw-bold">{{ l('form.validation_error.title') }}</div>
-                    <div>{{ l('form.validation_error.description') }}</div>
+                    <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
+                    <div>{{ __('sharp::form.validation_error.description') }}</div>
                 </div>
             </template>
 
@@ -57,7 +61,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import {
         getBackUrl,
         logError,
@@ -65,7 +69,7 @@
     } from "sharp";
 
     import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from '@sharp/ui';
-    import { DynamicView, Localization } from 'sharp/mixins';
+    import { DynamicView } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout.vue';
     import LocaleSelect from './ui/LocaleSelect.vue';
@@ -80,7 +84,7 @@
         name: 'SharpForm',
         extends: DynamicView,
 
-        mixins: [Localization, localize('fields')],
+        mixins: [localize('fields')],
 
         components: {
             BottomBar,
