@@ -4,6 +4,7 @@
 /public/build
 /storage/*.key
 /vendor
+/storage/clockwork
 node_modules
 /.idea
 .DS_Store
