@@ -25,6 +25,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(
             parent::share($request),
             [
+                'sharpVersion' => sharp_version(),
                 'config' => [
                     'sharp' => [
                         'name' => config('sharp.name', 'Sharp'),
