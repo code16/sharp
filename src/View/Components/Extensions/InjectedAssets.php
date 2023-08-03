@@ -4,6 +4,7 @@ namespace Code16\Sharp\View\Components\Extensions;
 
 use Code16\Sharp\Exceptions\View\SharpInvalidAssetRenderStrategy;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
 use Illuminate\View\View;
@@ -115,7 +116,7 @@ class InjectedAssets extends Component
                 return $strategy($assetPath);
                 break;
             case 'vite':
-                return app('Illuminate\Foundation\Vite')->asset($assetPath);
+                return Vite::asset($assetPath);
                 break;
             default:
                 return $assetPath;
