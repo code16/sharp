@@ -103,7 +103,7 @@
     import { mapGetters } from 'vuex';
     import { formUrl, getBackUrl, lang, showAlert, handleNotifications, showDeleteConfirm } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
-    import { Grid, GlobalMessage } from '@sharp/ui';
+    import { Grid, GlobalMessage } from '@sharp/ui/src';
     import { LocaleSelect } from "@sharp/form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';

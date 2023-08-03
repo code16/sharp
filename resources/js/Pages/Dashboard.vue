@@ -56,7 +56,7 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { Grid, GlobalMessage, } from '@sharp/ui';
+    import { Grid, GlobalMessage, } from '@sharp/ui/src';
     import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
     import { withCommands } from "sharp/mixins";
     import Widget from "@sharp/dashboard/src/components/Widget.vue";

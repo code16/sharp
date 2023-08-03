@@ -3,17 +3,18 @@ import { usePage } from "@inertiajs/vue3";
 import { config } from "@/util/config";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-import { MenuData } from "@/types";
+import { MenuData, ThemeData } from "@/types";
 import { Link } from "@inertiajs/vue3";
 
 const menu = usePage().props.menu as MenuData;
+const theme = usePage().props.theme as ThemeData;
 </script>
 
 <template>
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div class="flex grow flex-col  overflow-y-auto bg-white pb-4">
         <div class="flex h-16 shrink-0 items-center bg-indigo-600 px-6">
-            <img class="h-auto w-32" :src="menu.logo" :alt="config('sharp.name')" />
+            <img class="h-auto w-32" :src="theme.menuLogoUrl" :alt="config('sharp.name')" />
         </div>
         <nav class="flex flex-1 flex-col px-6 pt-5 border-r border-gray-200">
             <ul role="list" class="flex flex-1 flex-col gap-y-7">

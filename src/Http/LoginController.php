@@ -9,6 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\In;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class LoginController extends Controller
 {
@@ -23,13 +26,15 @@ class LoginController extends Controller
             ->only('destroy');
     }
 
-    public function create(): RedirectResponse|View
+    public function create(): RedirectResponse|Response
     {
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
         }
 
-        return view('sharp::login');
+        return Inertia::render('Auth/Login')->withViewData([
+            'login' => true,
+        ]);
     }
 
     public function store(LoginRequest $request): RedirectResponse

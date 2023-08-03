@@ -7,7 +7,7 @@
 </template>
 
 
-<script>
+<script lang="ts">
     import LoadingTransition from "./LoadingTransition.vue";
 
     export default {
@@ -35,5 +35,5 @@
                 }
             },
         },
-    }
+    };
 </script>

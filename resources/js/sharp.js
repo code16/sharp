@@ -1,6 +1,6 @@
 import './polyfill';
-import './dev';
-import { createApp, h } from 'vue';
+// import './dev';
+import { createApp, h, nextTick } from 'vue';
 import Vuex from 'vuex';
 // import VueRouter from 'vue-router';
 // import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
@@ -12,7 +12,7 @@ import SharpEntityList from '@sharp/entity-list';
 import SharpFilters from '@sharp/filters';
 import SharpForm from '@sharp/form';
 import SharpShow from '@sharp/show';
-import SharpUI from '@sharp/ui';
+import SharpUI from '@sharp/ui/src';
 import SharpSearch from '@sharp/search';
 
 import ActionView from './components/ActionView.vue';
@@ -20,7 +20,7 @@ import LeftNav from './components/LeftNav.vue';
 import {
     NavSection,
     NavItem,
-} from '@sharp/ui';
+} from '@sharp/ui/src';
 
 import { store as getStore } from './store/store';
 // import { router as getRouter } from "./router";
@@ -64,6 +64,10 @@ if(document.querySelector('[data-page]')) {
             app.use(SharpSearch, { store });
 
             app.mount(el);
+
+            nextTick(() => {
+                window.dispatchEvent(new CustomEvent('sharp:mounted'));
+            });
         },
     })
 } else {

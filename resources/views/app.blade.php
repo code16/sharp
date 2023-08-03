@@ -4,11 +4,11 @@
         @inertiaHead
     </x-slot:head>
 
-{{--    <div id="menu">--}}
-{{--        <x-sharp::menu />--}}
-{{--    </div>--}}
-{{--    <template id="user-dropdown">--}}
-{{--        <x-sharp::user-dropdown />--}}
-{{--    </template>--}}
     @inertia
+
+    @if($login ?? false)
+        <template id="login-append">
+            @includeIf(config("sharp.login_page_message_blade_path"))
+        </template>
+    @endif
 </x-sharp::layout>

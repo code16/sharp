@@ -17,9 +17,6 @@
         'resources/css/app.css',
     ], '/vendor/sharp')
 
-    {{-- todo temp dev styles --}}
-    <meta name="tw-style" content="{{ \Illuminate\Support\Facades\Vite::asset('resources/css/app.css') }}">
-
     <x-sharp::root-styles />
 
     <x-sharp::extensions.injected-assets />
@@ -31,7 +28,7 @@
     <x-sharp::extensions.custom-fields-script />
     {{ $head ?? null }}
 
-    <script defer src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>
+{{--    <script defer src="/vendor/sharp/lang.js?version={{ sharp_version() }}&locale={{ app()->getLocale() }}"></script>--}}
     @vite('resources/js/sharp.js', '/vendor/sharp')
 </head>
 <body {{ $attributes }}>
