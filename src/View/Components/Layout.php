@@ -3,7 +3,6 @@
 namespace Code16\Sharp\View\Components;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\View\Component;
 
 class Layout extends Component
