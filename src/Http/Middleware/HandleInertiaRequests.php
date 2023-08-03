@@ -34,6 +34,7 @@ class HandleInertiaRequests extends Middleware
                     'sharp::show' => __('sharp-front::show'),
                     'sharp::filters' => __('sharp-front::filters'),
                     'sharp::login' => __('sharp::login'),
+                    'sharp::menu' => __('sharp::menu'),
                 ])->flatMap(fn ($values, $group) =>
                     collect($values)->mapWithKeys(fn ($value, $key) => ["$group.$key" => $value])
                 )->toArray()
@@ -48,7 +49,9 @@ class HandleInertiaRequests extends Middleware
             'theme' => ThemeData::from(app(SharpTheme::class)),
             ...auth()->check() ? [
                 'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
-                'user' => fn () => UserData::from(auth()->user()),
+                'auth' => fn () => [
+                    'user' => UserData::from(auth()->user()),
+                ],
             ] : [],
             //                'currentEntity' => $currentEntityItem ? [
             //                    'key' => $currentEntityItem->getEntityKey(),

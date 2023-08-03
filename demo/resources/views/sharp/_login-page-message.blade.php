@@ -23,7 +23,9 @@
     <script>
         function fillForm(email) {
             document.querySelector('#login').value = email;
+            document.querySelector('#login').dispatchEvent(new InputEvent('input'));
             document.querySelector('#password').value = 'password';
+            document.querySelector('#password').dispatchEvent(new InputEvent('input'));
         }
 
         window.addEventListener('sharp:mounted', () => {

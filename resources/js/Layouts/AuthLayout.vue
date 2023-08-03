@@ -20,6 +20,8 @@
                 </div>
             </template>
 
+            <slot name="prepend" />
+
             <div class="bg-white rounded p-4 border-0 mb-3">
                 <template v-if="config('sharp.name') !== 'Sharp'">
                     <div class="card-header bg-transparent border-0 pb-0 pt-4">
