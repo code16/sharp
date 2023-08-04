@@ -15,8 +15,9 @@ final class ShowConfigData extends Data
 {
     public function __construct(
         public string $deleteConfirmationText,
+        #[Optional]
         #[RecordTypeScriptType(CommandType::class, 'array<DataCollection<'.CommandData::class.'>>')]
-        public array $commands,
+        public ?array $commands = null,
         #[Optional]
         public ?string $multiformAttribute = null,
         #[Optional]
@@ -37,11 +38,13 @@ final class ShowConfigData extends Data
             'state' => isset($config['state'])
                 ? EntityStateData::from($config['state'])
                 : null,
-            'commands' => collect($config['commands'])
-                ->map(fn (array $commands) => collect($commands)
-                    ->map(fn (array $commands) => CommandData::collection($commands))
-                )
-                ->all(),
+            'commands' => isset($config['commands'])
+                ? collect($config['commands'])
+                    ->map(fn (array $commands) => collect($commands)
+                        ->map(fn (array $commands) => CommandData::collection($commands))
+                    )
+                    ->all()
+                : null,
             'globalMessage' => isset($config['globalMessage'])
                 ? PageAlertConfigData::from($config['globalMessage'])
                 : null,

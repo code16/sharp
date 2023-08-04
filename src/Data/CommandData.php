@@ -20,10 +20,12 @@ class CommandData extends Data
         /** @var array<string|int>|bool */
         public array|bool $authorization,
         #[Optional]
+        public ?bool $primary = null,
+        #[Optional]
         public ?InstanceSelectionMode $instance_selection = null
     ) {
     }
-    
+
     public static function from(array $command): self
     {
         $command = [
@@ -33,7 +35,7 @@ class CommandData extends Data
                 ? InstanceSelectionMode::from($command['instance_selection'])
                 : null,
         ];
-        
+
         return new self(...$command);
     }
 }

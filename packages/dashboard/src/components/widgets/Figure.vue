@@ -1,12 +1,8 @@
 <script setup lang="ts">
     import { __ } from "@/util/i18n";
+    import { FigureWidgetData } from "@/types";
 
-    // todo migrate to Data
-    defineProps({
-        title: String,
-        link: String,
-        value: Object,
-    });
+    defineProps<FigureWidgetData>();
 </script>
 
 <template>
@@ -17,7 +13,7 @@
             </h2>
         </template>
         <div class="d-flex align-items-center">
-            <p class="display-5 fw-bold mb-0" :style="{ color: value.data.color }">
+            <p class="display-5 fw-bold mb-0">
                 {{ value.data.figure }}
                 <template v-if="value.data.unit">
                     <span class="fs-5 fw-normal">{{ value.data.unit }}</span>

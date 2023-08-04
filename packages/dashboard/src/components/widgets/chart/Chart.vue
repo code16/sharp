@@ -1,3 +1,9 @@
+<script setup lang="ts">
+    import { GraphWidgetData } from "@/types";
+
+    defineProps<GraphWidgetData>();
+</script>
+
 <template>
     <div>
         <template v-if="title">
@@ -20,30 +26,23 @@
     import { getChartByType, transformData } from './index';
 
     export default {
-        name: 'SharpWidgetChart',
-
-        props: {
-            display: String,
-            title: String,
-            value: Object,
-
-            ratioX: Number,
-            ratioY: Number,
-
-            height: Number,
-            minimal: Boolean,
-            showLegend: {
-                type: Boolean,
-                default: true,
-            },
-            dateLabels: Boolean,
-
-            /**
-             * @property {?boolean} curved - [line graphs only]
-             * @property {?boolean} horizontal - [bar graphs only]
-             */
-            options: Object,
-        },
+        // props: {
+        //     display: String,
+        //     title: String,
+        //     value: Object,
+        //
+        //     ratioX: Number,
+        //     ratioY: Number,
+        //
+        //     height: Number,
+        //     minimal: Boolean,
+        //     showLegend: {
+        //         type: Boolean,
+        //         default: true,
+        //     },
+        //     dateLabels: Boolean,
+        //     options: Object,
+        // },
 
         data() {
             return {

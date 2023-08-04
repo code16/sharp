@@ -12,36 +12,23 @@ import SharpEntityList from '@sharp/entity-list';
 import SharpFilters from '@sharp/filters';
 import SharpForm from '@sharp/form';
 import SharpShow from '@sharp/show';
-import SharpUI from '@sharp/ui/src';
+import SharpUI from '@sharp/ui';
 import SharpSearch from '@sharp/search';
 
 import ActionView from './components/ActionView.vue';
 import LeftNav from './components/LeftNav.vue';
-import {
-    NavSection,
-    NavItem,
-} from '@sharp/ui/src';
 
 import { store as getStore } from './store/store';
 // import { router as getRouter } from "./router";
-import { createInertiaApp } from "@inertiajs/vue3";
+import { createInertiaApp, router } from "@inertiajs/vue3";
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ignoredElements } from "./util/vue";
 
 
-// Vue.use(VueGoogleMaps, {
-//     installComponents: false
-// });
-
 // const router = getRouter();
 const store = getStore();
 
-
-// Vue.component('sharp-action-view', ActionView);
-// Vue.component('sharp-left-nav', LeftNav);
-// Vue.component('sharp-nav-section', NavSection);
-// Vue.component('sharp-nav-item', NavItem);
 
 if(document.querySelector('[data-page]')) {
     createInertiaApp({
@@ -69,14 +56,15 @@ if(document.querySelector('[data-page]')) {
                 window.dispatchEvent(new CustomEvent('sharp:mounted'));
             });
         },
-    })
-} else {
-    // new Vue({
-    //     store,
-    //     router,
-    // }).$mount('#app');
-}
+    });
 
+    // force reload on previous navigation to invalidate outdated data / state
+    window.addEventListener('popstate', () => {
+        document.addEventListener('inertia:navigate', () => {
+            router.reload({ replace: true });
+        }, { once: true });
+    });
+}
 
 
 

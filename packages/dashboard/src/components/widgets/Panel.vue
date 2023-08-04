@@ -1,14 +1,9 @@
 <script setup lang="ts">
     import { __ } from "@/util/i18n";
-    import { TemplateRenderer } from 'sharp/components';
+    import { TemplateRenderer } from '@/components';
+    import { PanelWidgetData } from "@/types";
 
-    // todo migrate to Data
-    defineProps({
-        value: Object,
-        title: String,
-        template: String,
-        link: String,
-    });
+    defineProps<PanelWidgetData>();
 </script>
 
 <template>

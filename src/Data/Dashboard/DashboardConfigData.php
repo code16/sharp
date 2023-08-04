@@ -14,16 +14,16 @@ final class DashboardConfigData extends Data
         public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
-    
+
     public static function from(array $config): self
     {
         $config = [
-            ...$config,
+//            ...$config,
             'globalMessage' => isset($config['globalMessage'])
                 ? PageAlertConfigData::from($config['globalMessage'])
                 : null,
         ];
-        
+
         return new self(...$config);
     }
 }

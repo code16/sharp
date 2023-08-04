@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Data\Dashboard\DashboardData;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
 
@@ -32,7 +33,7 @@ class DashboardController extends SharpProtectedController
         ];
 
         return Inertia::render('Dashboard', [
-            'dashboard' => $data,
+            'dashboard' => DashboardData::from($data),
         ]);
     }
 }

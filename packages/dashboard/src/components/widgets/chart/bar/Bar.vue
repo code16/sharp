@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import ApexChart from 'vue-apexcharts';
+    import ApexChart from 'vue3-apexcharts';
     import { defaultChartOptions, hasLegends } from "../../../../util/chart";
     import merge from 'lodash/merge';
 
@@ -22,8 +22,6 @@
             chartData: Object,
             options: Object,
         },
-
-
         computed: {
             hasLegends() {
                 return hasLegends(this.chartOptions);

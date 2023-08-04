@@ -25,9 +25,11 @@ final class EntityListConfigData extends Data
         public string $deleteConfirmationText,
         public bool $deleteHidden,
         /** @var array<DataCollection<FilterData>> */
-        public array $filters,
+        #[Optional]
+        public ?array $filters = null,
+        #[Optional]
         #[RecordTypeScriptType(CommandType::class, 'array<DataCollection<'.CommandData::class.'>>')]
-        public array $commands,
+        public ?array $commands = null,
         #[Optional]
         public ?string $multiformAttribute = null,
         #[Optional]
@@ -44,14 +46,18 @@ final class EntityListConfigData extends Data
             'state' => isset($config['state'])
                 ? EntityStateData::from($config['state'])
                 : null,
-            'commands' => collect($config['commands'])
-                ->map(fn (array $commands) => collect($commands)
-                    ->map(fn (array $commands) => CommandData::collection($commands))
-                )
-                ->all(),
-            'filters' => collect($config['filters'])
-                ->map(fn (array $filters) => FilterData::collection($filters))
-                ->all(),
+            'commands' => isset($config['commands'])
+                ? collect($config['commands'])
+                    ->map(fn (array $commands) => collect($commands)
+                        ->map(fn (array $commands) => CommandData::collection($commands))
+                    )
+                    ->all()
+                : null,
+            'filters' => isset($config['filters'])
+                ? collect($config['filters'])
+                    ->map(fn (array $filters) => FilterData::collection($filters))
+                    ->all()
+                : null,
             'globalMessage' => isset($config['globalMessage'])
                 ? PageAlertConfigData::from($config['globalMessage'])
                 : null,

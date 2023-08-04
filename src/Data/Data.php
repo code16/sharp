@@ -5,9 +5,11 @@ namespace Code16\Sharp\Data;
 use Illuminate\Contracts\Support\Arrayable;
 use ReflectionClass;
 use ReflectionProperty;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 abstract class Data implements Arrayable
 {
+    /** @var ReflectionProperty[][] */
     protected static array $propertyCache = [];
 
     public static function collection($payload): DataCollection
@@ -40,15 +42,17 @@ abstract class Data implements Arrayable
                 ->reject(function (ReflectionProperty $property) {
                     return $property->isStatic();
                 })
-                ->map(function (ReflectionProperty $property) {
-                    return $property->getName();
-                })->all();
+                ->all();
         }
 
         $values = [];
 
         foreach (static::$propertyCache[$class] as $property) {
-            $values[$property] = $this->{$property};
+            $name = $property->getName();
+            if(!empty($property->getAttributes(Optional::class)) && !isset($this->{$name})) {
+                continue;
+            }
+            $values[$name] = $this->{$name};
         }
 
         return $values;

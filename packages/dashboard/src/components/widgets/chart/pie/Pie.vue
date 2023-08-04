@@ -11,7 +11,7 @@
 
 <script>
     import merge from 'lodash/merge';
-    import ApexChart from "vue-apexcharts";
+    import ApexChart from "vue3-apexcharts";
     import { defaultChartOptions } from "../../../../util/chart";
 
     export default {

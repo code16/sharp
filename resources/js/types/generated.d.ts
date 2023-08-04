@@ -13,7 +13,7 @@ export type CheckFilterData = {
   key: string;
   label: string;
   type: FilterType;
-  default: boolean;
+  default: boolean | null;
 };
 export type CommandData = {
   key: string;
@@ -25,13 +25,18 @@ export type CommandData = {
   modal_confirm_label: string | null;
   has_form: boolean;
   authorization: Array<string | number> | boolean;
+  primary?: boolean | null;
   instance_selection?: InstanceSelectionMode | null;
 };
 export type CommandType = "dashboard" | "entity" | "instance";
 export type DashboardConfigData = {
   globalMessage?: PageAlertConfigData | null;
 };
-export type DashboardData = {};
+export type DashboardData = {
+  widgets: Array<WidgetData>;
+  config: DashboardConfigData;
+  data: Array<any>;
+};
 export type DateRangeFilterData = {
   key: string;
   label: string;
@@ -67,8 +72,8 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
-  filters: Array<Array<FilterData>>;
-  commands: Record<CommandType, Array<Array<CommandData>>>;
+  filters?: Array<Array<FilterData>> | null;
+  commands?: Record<CommandType, Array<Array<CommandData>>>;
   multiformAttribute?: string | null;
   state?: EntityStateData | null;
   globalMessage?: PageAlertConfigData | null;
@@ -113,6 +118,20 @@ export type EntityStateValueData = {
   label: string;
   color: string;
 };
+export type FigureWidgetData = {
+  value?: {
+    key: string;
+    data: {
+      figure: string;
+      unit: string;
+      evolution: { increase: boolean; value: string };
+    };
+  };
+  key: string;
+  type: WidgetType;
+  title: string | null;
+  link: string | null;
+};
 export type FilterData = {
   key: string;
   label: string;
@@ -129,6 +148,25 @@ export type FormConfigData = {
 export type FormData = {
   config: FormConfigData;
 };
+export type GraphWidgetData = {
+  value?: {
+    key: string;
+    datasets: Array<{ label: string; data: number[]; color: string }>;
+    labels: string[];
+  };
+  key: string;
+  type: WidgetType;
+  title: string | null;
+  display: GraphWidgetDisplay;
+  showLegend: boolean;
+  minimal: boolean;
+  ratioX: number | null;
+  ratioY: number | null;
+  height: number | null;
+  dateLabels: boolean;
+  options?: { curved: boolean; horizontal: boolean };
+};
+export type GraphWidgetDisplay = "bar" | "line" | "pie";
 export type InstanceAuthorizationsData = {
   view: boolean;
   create: boolean;
@@ -158,6 +196,14 @@ export type NotificationData = {
   autoHide: boolean;
 };
 export type NotificationLevel = "info" | "success" | "warning" | "danger";
+export type OrderedListWidgetData = {
+  value?: { key: string; data: Array<{ label: string; url?: string }> };
+  key: string;
+  type: WidgetType;
+  title: string | null;
+  link: string | null;
+  html: boolean;
+};
 export type PageAlertConfigData = {
   fieldKey: string;
   alertLevel: PageAlertLevel | null;
@@ -168,6 +214,14 @@ export type PageAlertLevel =
   | "danger"
   | "primary"
   | "secondary";
+export type PanelWidgetData = {
+  value?: { key: string; data: { [key: string]: any } };
+  key: string;
+  type: WidgetType;
+  title: string | null;
+  link: string | null;
+  template: string;
+};
 export type SelectFilterData = {
   key: string;
   label: string;
@@ -187,7 +241,7 @@ export type SelectFilterValueData = {
 };
 export type ShowConfigData = {
   deleteConfirmationText: string;
-  commands: Record<CommandType, Array<Array<CommandData>>>;
+  commands?: Record<CommandType, Array<Array<CommandData>>>;
   multiformAttribute?: string | null;
   titleAttribute?: string | null;
   breadcrumbAttribute?: string | null;
@@ -285,8 +339,19 @@ export type ShowTextFieldData = {
   label: string | null;
 };
 export type ThemeData = {
+  loginLogoUrl: string | null;
   menuLogoUrl: string | null;
+};
+export type UserData = {
+  name: string | null;
 };
 export type UserMenuData = {
   items: Array<MenuItemData>;
 };
+export type WidgetData = {
+  key: string;
+  type: WidgetType;
+  title: string | null;
+  link: string | null;
+};
+export type WidgetType = "figure" | "graph" | "list" | "panel";
