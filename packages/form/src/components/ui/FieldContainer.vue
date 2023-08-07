@@ -60,7 +60,7 @@
   import FieldLocaleSelect from './FieldLocaleSelect.vue';
   import { isLocalizableValueField, resolveTextValue } from '../../util';
   import { sticky } from "sharp/directives";
-  import { __ } from '@/util/i18n';
+  import { __ } from '@/utils/i18n';
 
 
   export default {

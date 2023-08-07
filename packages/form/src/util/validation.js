@@ -1,4 +1,4 @@
-import { __ } from "@/util/i18n";
+import { __ } from "@/utils/i18n";
 
 export function validateTextField(value, { maxlength }) {
     if(maxlength && value?.length > maxlength) {

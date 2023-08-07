@@ -1,7 +1,7 @@
 <script>
     import Multiselect from 'vue-multiselect';
 
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
     import { multiselectUpdateScroll } from "../util";
 
     export default {

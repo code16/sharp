@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 </script>
 
 <template>
@@ -84,7 +84,7 @@
     // import Multiselect from 'vue-multiselect';
     import { CancelToken } from 'axios';
     import { warn, search, logError } from 'sharp';
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
     import { TemplateRenderer } from 'sharp/components';
     import { Loading, ClearButton, multiselectUpdateScroll } from '@sharp/ui';
 

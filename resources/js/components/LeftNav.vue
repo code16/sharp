@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePage } from "@inertiajs/vue3";
-import { config } from "@/util/config";
+import { config } from "@/utils/config";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 import { MenuData, ThemeData } from "@/types";

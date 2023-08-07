@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 </script>
 
 <template>
@@ -150,8 +150,8 @@
 
 <script lang="ts">
     import isEqual from 'lodash/isEqual';
-    import {  showAlert, api, handleNotifications, showDeleteConfirm } from 'sharp';
-    import { __ } from "@/util/i18n";
+    import { showAlert, api, showDeleteConfirm } from 'sharp';
+    import { __ } from "@/utils/i18n";
     import {  DynamicView, withCommands } from 'sharp/mixins';
     import {
         DataList,
@@ -653,10 +653,19 @@
              * Helpers
              */
             formUrl({ formKey, instanceId }={}) {
-                return route('code16.sharp.form', {
+                const formEntityKey = formKey ? `${this.entityKey}:${formKey}` : this.entityKey;
+
+                if(instanceId) {
+                    return route('code16.sharp.form.edit', {
+                        uri: route().params.uri ?? this.entityKey,
+                        entityKey: formEntityKey,
+                        instanceId,
+                    });
+                }
+
+                return route('code16.sharp.form.create', {
                     uri: route().params.uri ?? this.entityKey,
-                    entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
-                    instanceId,
+                    entityKey: formEntityKey,
                 });
             },
             showUrl({ instanceId }={}) {
@@ -783,10 +792,8 @@
                 }
                 this.loading = true;
                 await this.storeDispatch('setEntityKey', this.entityKey);
-                // legacy
                 if(this.entityList) {
                     this.mount(this.entityList);
-                    handleNotifications(this.data.notifications);
                 } else {
                     await this.get()
                         .catch(error => {

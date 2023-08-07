@@ -1,6 +1,6 @@
 import moxios from "moxios";
 import { nextRequestFulfilled, MockI18n } from "@sharp/test-utils";
-import { showAlert } from "../util/dialogs";
+import { showAlert } from "@/utils/dialogs";
 import { createApi as baseCreateApi } from "../api";
 
 jest.mock('../util/dialogs');

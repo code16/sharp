@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
+    import { config } from "@/utils/config";
 </script>
 
 <template>
@@ -9,9 +10,11 @@
     >
         <div class="row align-items-center">
             <div class="col position-relative">
-                <EntityListTitle :count="count">
-                    <Breadcrumb :items="breadcrumb" />
-                </EntityListTitle>
+                <template v-if="config('sharp.display_breadcrumb')">
+                    <EntityListTitle :count="count">
+                        <Breadcrumb :items="breadcrumb" />
+                    </EntityListTitle>
+                </template>
             </div>
             <div class="col-auto position-relative">
                 <div class="row justify-content-end flex-nowrap gx-3">
@@ -147,7 +150,6 @@
             selectedCount: Number,
 
             breadcrumb: Array,
-            showBreadcrumb: Boolean,
         },
         data() {
             return {

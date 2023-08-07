@@ -26,9 +26,6 @@ final class EntityListData extends Data
         public EntityListConfigData $config,
         /** @var DataCollection<EntityListMultiformData> */
         public DataCollection $forms,
-        /** @var DataCollection<NotificationData> */
-        public DataCollection $notifications,
-        public BreadcrumbData $breadcrumb,
         public EntityAuthorizationsData $authorizations,
     ) {
     }
@@ -42,8 +39,6 @@ final class EntityListData extends Data
             fields: $entityList['fields'],
             config: EntityListConfigData::from($entityList['config']),
             forms: EntityListMultiformData::collection($entityList['forms']),
-            notifications: NotificationData::collection($entityList['notifications']),
-            breadcrumb: BreadcrumbData::from($entityList['breadcrumb']),
             authorizations: new EntityAuthorizationsData(...$entityList['authorizations']),
         );
     }

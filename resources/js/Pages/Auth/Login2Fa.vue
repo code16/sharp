@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import AuthLayout from "@/Layouts/AuthLayout.vue";
     import { useForm } from "@inertiajs/vue3";
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 
     defineProps<{
         helpText: string

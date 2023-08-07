@@ -1,3 +1,15 @@
+<script setup lang="ts">
+    import Layout from "../Layouts/Layout.vue";
+    import { EntityList } from "@sharp/entity-list";
+    import ActionBarList from "@sharp/entity-list/src/components/ActionBar.vue";
+    import { BreadcrumbData, EntityListData, NotificationData } from "@/types";
+
+    const props = defineProps<{
+        entityList: EntityListData,
+        breadcrumb: BreadcrumbData,
+    }>();
+</script>
+
 <template>
     <Layout>
         <div class="SharpEntityListPage" data-popover-boundary>
@@ -8,7 +20,11 @@
                     module="entity-list"
                 >
                     <template v-slot:action-bar="{ props, listeners }">
-                        <ActionBarList v-bind="props" v-on="listeners" />
+                        <ActionBarList
+                            v-bind="props"
+                            :breadcrumb="breadcrumb.items"
+                            v-on="listeners"
+                        />
                     </template>
                 </EntityList>
             </div>
@@ -16,28 +32,12 @@
     </Layout>
 </template>
 
-<script>
-    import Layout from "../Layouts/Layout.vue";
-    import { EntityList } from "@sharp/entity-list";
-    import ActionBarList from "@sharp/entity-list/src/components/ActionBar.vue";
+<script lang="ts">
     import { router } from "@inertiajs/vue3";
     import { mapGetters } from "vuex";
-    import { parseQuery, stringifyQuery } from "../util/querystring";
+    import { parseQuery, stringifyQuery } from "@/utils/querystring";
 
     export default {
-        components: {
-            Layout,
-            EntityList,
-            ActionBarList,
-        },
-        props: {
-            entityList: Object,
-        },
-        data() {
-            return {
-                ready: false,
-            }
-        },
         watch: {
             'query': 'handleQueryChanged',
         },

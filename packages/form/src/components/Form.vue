@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
+    import FormLayout from "./ui/FormLayout.vue";
 </script>
 
 <template>
@@ -26,7 +27,7 @@
                 </div>
             </template>
 
-            <TabbedLayout :layout="layout" ref="tabbedLayout" data-popover-boundary>
+            <FormLayout :layout="layout" data-popover-boundary>
                 <template v-slot:default="{ tab }">
                     <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
                         <FieldsLayout
@@ -53,7 +54,7 @@
                         </FieldsLayout>
                     </Grid>
                 </template>
-            </TabbedLayout>
+            </FormLayout>
             <template v-if="!independant">
                 <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
             </template>
@@ -68,7 +69,7 @@
         showAlert,
     } from "sharp";
 
-    import {Button, Dropdown, DropdownItem, GlobalMessage, Grid, TabbedLayout} from '@sharp/ui';
+    import { Button, Dropdown, DropdownItem, GlobalMessage, Grid } from '@sharp/ui';
     import { DynamicView } from 'sharp/mixins';
 
     import FieldsLayout from './ui/FieldsLayout.vue';
@@ -82,14 +83,13 @@
 
     export default {
         name: 'SharpForm',
-        extends: DynamicView,
+        // extends: DynamicView,
 
         mixins: [localize('fields')],
 
         components: {
             BottomBar,
             Button,
-            TabbedLayout,
             FieldsLayout,
             Grid,
             Dropdown,
@@ -110,7 +110,8 @@
                 type: Boolean,
                 default: true,
             },
-            form: Object
+            form: Object,
+            formErrors: Object,
         },
 
         provide() {
@@ -144,9 +145,13 @@
                     this.init();
                 }
             },
+            formErrors() {
+                this.errors = { ...this.formErrors };
+            },
         },
         computed: {
             apiPath() {
+
                 let path = `form/${this.entityKey}`;
                 if (this.instanceId) path += `/${this.instanceId}`;
                 return path;
@@ -344,16 +349,9 @@
                         return Promise.reject(error);
                     });
             },
-            async init() {
-                if (this.independant) {
-                    this.mount(this.form);
-                    this.ready = true;
-                } else {
-                    if (this.entityKey) {
-                        await this.get();
-                        this.ready = true;
-                    } else logError('no entity key provided');
-                }
+            init() {
+                this.mount(this.form);
+                this.ready = true;
             },
             redirectForResponse(response, { replace } = {}) {
                 const url = response.data.redirectUrl;
@@ -368,6 +366,11 @@
             },
             async submit({ postFn } = {}) {
                 if (this.isUploading) {
+                    return;
+                }
+
+                if(!postFn) {
+                    this.$emit('submit', this.serialize());
                     return;
                 }
 

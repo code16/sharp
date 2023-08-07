@@ -61,7 +61,7 @@
     import { withCommands } from "sharp/mixins";
     import Widget from "@sharp/dashboard/src/components/Widget.vue";
     import ActionBarDashboard from '@sharp/dashboard/src/components/ActionBar.vue';
-    import { parseQuery } from "../util/querystring";
+    import { parseQuery } from "@/utils/querystring";
     import Layout from "../Layouts/Layout.vue";
     import Section from '@sharp/dashboard/src/components/Section.vue';
 

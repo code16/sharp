@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 </script>
 
 <template>
@@ -113,7 +113,7 @@
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
     import ListUpload from "./ListUpload.vue";
     import { showAlert } from "sharp";
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 
     export default {
         name: 'SharpList',

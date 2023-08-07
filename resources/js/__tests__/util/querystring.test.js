@@ -1,7 +1,7 @@
 import {
     parseRange,
     serializeRange,
-} from "../../util/querystring";
+} from "@/utils/querystring";
 
 describe('querystring utils', () => {
     test('parseRange', () => {

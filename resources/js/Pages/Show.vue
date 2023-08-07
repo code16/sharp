@@ -23,7 +23,6 @@
                         :can-change-state="canChangeState"
                         :show-back-button="showBackButton"
                         :breadcrumb="breadcrumbItems"
-                        :show-breadcrumb="breadcrumb.visible"
                         :edit-disabled="isReordering"
                         :locales="locales"
                         :current-locale="locale"
@@ -121,7 +120,8 @@
     import Section from "@sharp/show/src/components/Section.vue";
     import { router } from "@inertiajs/vue3";
     import Layout from "../Layouts/Layout.vue";
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
+    import { getAppendableUri } from "@/utils/url";
 
     export default {
         mixins: [withCommands],
@@ -142,6 +142,7 @@
         props: {
             show: Object,
             entityLists: Object,
+            breadcrumb: Object,
         },
 
         data() {
@@ -161,7 +162,6 @@
                 'data',
                 'config',
                 'locales',
-                'breadcrumb',
                 'authorizations',
                 'instanceState',
                 'instanceStateOptions',
@@ -188,13 +188,20 @@
                     : null;
                 const entityKey = formKey
                     ? `${this.entityKey}:${formKey}`
-                    : this.entityKey
+                    : this.entityKey;
 
-                return route('code16.sharp.form', {
-                    uri: route().params.uri,
+                if(this.instanceId) {
+                    return route('code16.sharp.form.edit', {
+                        uri: '(uri)',
+                        entityKey,
+                        instanceId: this.instanceId,
+                    }).replace('(uri)', getAppendableUri());
+                }
+
+                return route('code16.sharp.form.create', {
+                    uri: '(uri)',
                     entityKey,
-                    instanceId: this.instanceId,
-                });
+                }).replace('(uri)', getAppendableUri());
             },
             backUrl() {
                 return getBackUrl(this.breadcrumb.items);

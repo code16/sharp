@@ -20,6 +20,5 @@ export { default as Search } from './Search.vue';
 export { default as SectionTitle } from './section/SectionTitle.vue';
 export { default as StateIcon } from './StateIcon.vue';
 export { default as Tab } from './Tab.vue';
-export { default as TabbedLayout } from './TabbedLayout.vue';
 export { default as Tabs } from './Tabs.vue';
 export { default as TopBar } from './TopBar.vue';

@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex">
         <div class="d-flex align-items-center">
-            <template v-if="icon && items && items.length">
+            <template v-if="icon && items?.length">
                 <div class="me-2 pe-1">
                     <i class="fa fa-sm d-block text-primary opacity-75 fs-8" :class="icon"></i>
                 </div>
@@ -26,12 +26,6 @@
 <script>
     export default {
         props: {
-            /**
-             * @typedef BreadcrumbItem
-             * @property {string} name
-             * @property {string} url
-             * @type {Array.<BreadcrumbItem>}
-             */
             items: Array
         },
         computed: {

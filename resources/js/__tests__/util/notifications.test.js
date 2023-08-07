@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { handleNotifications } from "../../util/notifications";
+import { handleNotifications } from "@/utils/notifications";
 
 jest.mock('vue', () => ({
     notify: jest.fn(),

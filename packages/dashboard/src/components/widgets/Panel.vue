@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
     import { TemplateRenderer } from '@/components';
     import { PanelWidgetData } from "@/types";
 

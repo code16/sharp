@@ -3,7 +3,9 @@
 namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
+use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\EntityList\EntityListData;
+use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
@@ -35,7 +37,6 @@ class EntityListController extends SharpProtectedController
             'config' => $list->listConfig(
                 $this->entityManager->entityFor($entityKey)->hasShow(),
             ),
-            'notifications' => $this->getSharpNotifications(),
         ];
 
         $data['authorizations'] = $this->getAuthorizationsForEntityList(
@@ -50,11 +51,10 @@ class EntityListController extends SharpProtectedController
             $data['config'],
         );
 
-        $data['breadcrumb'] = ['items' => [], 'visible' => false];
-        // TODO handle breadcrumb
-
-        return Inertia::render('List', [
+        return Inertia::render('EntityList', [
             'entityList' => EntityListData::from($data),
+            'breadcrumb' => BreadcrumbData::from(['items' => []]), // TODO
+            'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
     }
 
@@ -109,16 +109,5 @@ class EntityListController extends SharpProtectedController
             })
             ->keyBy('key')
             ->all();
-    }
-
-    private function getSharpNotifications(): array
-    {
-        if ($notifications = session('sharp_notifications')) {
-            session()->forget('sharp_notifications');
-
-            return array_values($notifications);
-        }
-
-        return [];
     }
 }

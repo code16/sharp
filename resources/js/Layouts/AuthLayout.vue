@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { config } from "@/util/config";
+    import { config } from "@/utils/config";
 </script>
 
 <template>

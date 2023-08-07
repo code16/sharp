@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import Notifications from 'vue-notification';
 import { shallowMount, createLocalVue, config } from '@vue/test-utils';
 import ActionView from '../components/ActionView.vue';
-import { showAlert, showConfirm } from "../util/dialogs";
+import { showAlert, showConfirm } from "@/utils/dialogs";
 import store from '../store';
 
 config.stubs['transition-group'] = false;

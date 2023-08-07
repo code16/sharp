@@ -1,5 +1,5 @@
 import { getToolbarIcon } from '../util/icons';
-import { __ } from "@/util/i18n";
+import { __ } from "@/utils/i18n";
 
 export const buttons = () => ({
     'bold': {

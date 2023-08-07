@@ -1,4 +1,4 @@
-import { parseBlobJSONContent } from "../util/request";
+import { parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
 
 

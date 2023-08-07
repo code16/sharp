@@ -32,9 +32,8 @@ export default {
 
     inject:['$form'],
 
-
-
     render(h, { props, injections, data }) {
+        console.log(arguments);
         let { fieldKey,
             contextFields,
             contextData,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import AuthLayout from "@/Layouts/AuthLayout.vue";
     import { useForm } from "@inertiajs/vue3";
-    import { config } from "@/util/config";
-    import { __ } from "@/util/i18n";
+    import { config } from "@/utils/config";
+    import { __ } from "@/utils/i18n";
 
     const append = document.querySelector('#login-append')?.innerHTML;
     const form = useForm({

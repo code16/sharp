@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 </script>
 
 <template>
@@ -49,7 +49,7 @@
     import TextField from '../Text.vue';
     import { getEditableMapByProvider, geocode } from "./maps";
     import { tilesUrl } from "./util";
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 
     export default {
         components: {

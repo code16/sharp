@@ -172,8 +172,17 @@ Route::group([
         Route::get('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show');
 
-        Route::get('/s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
-            ->name('code16.sharp.form');
+        Route::get('/s-form/{entityKey}', [FormController::class, 'create'])
+            ->name('code16.sharp.form.create');
+
+        Route::post('/s-form/{entityKey}', [FormController::class, 'store'])
+            ->name('code16.sharp.form.store');
+
+        Route::get('/s-form/{entityKey}/{instanceId}', [FormController::class, 'edit'])
+            ->name('code16.sharp.form.edit');
+
+        Route::post('/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
+            ->name('code16.sharp.form.update');
     });
 
 //    Route::get('/s-list/{uri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])

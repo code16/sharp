@@ -1,16 +1,17 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
+    import { config } from "@/utils/config";
 </script>
 
 <template>
     <div class="action-bar mt-4 mb-3">
         <div class="row align-items-center gx-3">
             <div class="col">
-                <template v-if="showBreadcrumb">
+                <template v-if="config('sharp.display_breadcrumb')">
                     <Breadcrumb :items="breadcrumb" />
                 </template>
             </div>
-            <template v-if="locales && locales.length">
+            <template v-if="locales?.length">
                 <div class="col-auto">
                     <LocaleSelect
                         outline
@@ -102,7 +103,6 @@
             stateOptions: Object,
             stateValues: Array,
             breadcrumb: Array,
-            showBreadcrumb: Boolean,
             currentLocale: String,
             locales: Array,
             canDelete: Boolean,
@@ -120,7 +120,7 @@
                 return !!this.state;
             },
             title() {
-                return this.breadcrumb && this.showBreadcrumb
+                return this.breadcrumb
                     ? this.breadcrumb[this.breadcrumb.length - 1]?.name
                     : null;
             },

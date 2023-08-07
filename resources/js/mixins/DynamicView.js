@@ -1,4 +1,4 @@
-import { handleNotifications } from "../util/notifications";
+import { handleNotifications } from "@/utils/notifications";
 
 export const withAxiosInterceptors = {
     inject: ['axiosInstance'],

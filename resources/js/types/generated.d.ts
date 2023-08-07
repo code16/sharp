@@ -1,6 +1,5 @@
 export type BreadcrumbData = {
   items: Array<BreadcrumbItemData>;
-  visible: boolean;
 };
 export type BreadcrumbItemData = {
   type: string;
@@ -87,7 +86,6 @@ export type EntityListData = {
   fields: { [key: string]: any };
   config: EntityListConfigData;
   forms: Array<EntityListMultiformData>;
-  notifications: Array<NotificationData>;
   breadcrumb: BreadcrumbData;
   authorizations: EntityAuthorizationsData;
 };
@@ -147,6 +145,17 @@ export type FormConfigData = {
 };
 export type FormData = {
   config: FormConfigData;
+};
+export type FormLayoutColumnData = {
+  tabbed: boolean;
+};
+export type FormLayoutData = {
+  tabbed: boolean;
+  tabs: Array<FormLayoutTabData>;
+};
+export type FormLayoutTabData = {
+  title: string;
+  columns: Array<FormLayoutColumnData>;
 };
 export type GraphWidgetData = {
   value?: {
@@ -255,8 +264,6 @@ export type ShowData = {
   data: { [key: string]: any };
   locales: Array<string> | null;
   authorizations: InstanceAuthorizationsData;
-  notifications: Array<NotificationData>;
-  breadcrumb: BreadcrumbData;
 };
 export type ShowEntityListFieldData = {
   key: string;

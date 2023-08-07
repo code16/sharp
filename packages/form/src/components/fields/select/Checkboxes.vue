@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 </script>
 
 <template>
@@ -37,7 +37,7 @@
 <script lang="ts">
     import Check from "../Check.vue";
     import { isSelected } from "../../../util/select";
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 
     export default {
         components: {

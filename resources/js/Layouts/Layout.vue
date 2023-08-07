@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ActionView from "../components/ActionView.vue";
 import { GlobalSearch } from '@sharp/search';
-import { config } from "@/util/config";
+import { config } from "@/utils/config";
 import LeftNav from "../components/LeftNav.vue";
 import { ref } from "vue";
 import {
@@ -21,6 +21,7 @@ import {
     XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import Notifications from "@/components/Notifications.vue";
 
 // const userDropdownTemplate = document.querySelector('#user-dropdown').innerHTML;
 
@@ -115,6 +116,12 @@ const sidebarOpen = ref(false);
                     <!-- Your content -->
                 </div>
             </main>
+
+            <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:p-6">
+                <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+                    <Notifications />
+                </div>
+            </div>
         </div>
     </div>
 <!--    <LeftNav />-->

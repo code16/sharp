@@ -1,5 +1,5 @@
-import { __ } from "@/util/i18n";
-import { showAlert } from "@/util/dialogs";
+import { __ } from "@/utils/i18n";
+import { showAlert } from "@/utils/dialogs";
 
 export function getErrorMessage({ data, status }) {
     return __(`sharp::modals.${status}.message`) === `sharp::modals.${status}.message`

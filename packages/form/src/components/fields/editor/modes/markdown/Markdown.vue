@@ -22,7 +22,7 @@
 <script>
     import { Markdown } from 'tiptap-markdown';
     import { Editor } from '@tiptap/vue-3';
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
     import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../..";
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';

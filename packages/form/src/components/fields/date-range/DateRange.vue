@@ -48,7 +48,7 @@
 </template>
 
 <script>
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
     import { ClearButton } from "@sharp/ui";
     import DatePicker from "../date/DatePicker.vue";
 

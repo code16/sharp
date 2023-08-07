@@ -41,9 +41,10 @@ class HandleInertiaRequests extends Middleware
             ),
             'config' => [
                 'sharp.name' => config('sharp.name', 'Sharp'),
-                'sharp.search.enabled' => config('sharp.search.enabled'),
+                'sharp.search.enabled' => config('sharp.search.enabled', false),
                 'sharp.search.placeholder' => config('sharp.search.placeholder'),
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),
+                'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
             ],
             'hasGlobalFilters' => count(value(config('sharp.global_filters')) ?? []) > 0,
             'theme' => ThemeData::from(app(SharpTheme::class)),

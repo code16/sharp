@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 </script>
 
 <template>
@@ -45,7 +45,7 @@
 <script lang="ts">
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
     import { Upload } from "./extensions/upload/upload";
     import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
     import MenuBar from "./toolbar/MenuBar.vue";

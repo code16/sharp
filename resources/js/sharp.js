@@ -23,7 +23,7 @@ import { store as getStore } from './store/store';
 import { createInertiaApp, router } from "@inertiajs/vue3";
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ignoredElements } from "./util/vue";
+import { ignoredElements } from "@/utils/vue";
 
 
 // const router = getRouter();

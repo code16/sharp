@@ -22,9 +22,6 @@ final class ShowData extends Data
         /** @var string[] */
         public ?array $locales,
         public InstanceAuthorizationsData $authorizations,
-        /** @var DataCollection<NotificationData> */
-        public DataCollection $notifications,
-        public BreadcrumbData $breadcrumb,
     ) {
     }
 
@@ -37,8 +34,6 @@ final class ShowData extends Data
             data: $show['data'],
             locales: $show['locales'],
             authorizations: new InstanceAuthorizationsData(...$show['authorizations']),
-            notifications: NotificationData::collection($show['notifications']),
-            breadcrumb: BreadcrumbData::from($show['breadcrumb']),
         );
     }
 }

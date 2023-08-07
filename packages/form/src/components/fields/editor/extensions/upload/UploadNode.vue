@@ -26,7 +26,7 @@
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert, getUniqueId } from "sharp";
     import { getUploadOptions } from "../../../../../util/upload";
-    import { __ } from "@/util/i18n";
+    import { __ } from "@/utils/i18n";
 
     export default {
         components: {

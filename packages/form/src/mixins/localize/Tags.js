@@ -1,4 +1,4 @@
-import { __ } from "@/util/i18n";
+import { __ } from "@/utils/i18n";
 
 import localizeSelect from './Select';
 import { localeObject } from "../../util/locale";

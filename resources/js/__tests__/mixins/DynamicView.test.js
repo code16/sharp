@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import DynamicView from '../../mixins/DynamicView';
-import { showAlert } from "../../util/dialogs";
-import { handleNotifications } from "../../util/notifications";
+import { showAlert } from "@/utils/dialogs";
+import { handleNotifications } from "@/utils/notifications";
 import {
     MockInjections,
     MockI18n,

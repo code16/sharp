@@ -1,5 +1,5 @@
 import { getXsrfToken, filesizeLabel, UPLOAD_URL } from "sharp";
-import { __ } from "@/util/i18n";
+import { __ } from "@/utils/i18n";
 
 // size in Mo
 export function maxFileSizeMessage(size) {
