@@ -86,7 +86,6 @@ export type EntityListData = {
   fields: { [key: string]: any };
   config: EntityListConfigData;
   forms: Array<EntityListMultiformData>;
-  breadcrumb: BreadcrumbData;
   authorizations: EntityAuthorizationsData;
 };
 export type EntityListFieldData = {
