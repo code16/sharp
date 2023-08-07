@@ -1,4 +1,4 @@
-import { getXsrfToken, lang, filesizeLabel, UPLOAD_URL } from "sharp";
+import { getXsrfToken, filesizeLabel, UPLOAD_URL } from "sharp";
 import { __ } from "@/util/i18n";
 
 // size in Mo

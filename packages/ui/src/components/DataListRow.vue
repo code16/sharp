@@ -1,5 +1,5 @@
 <template>
-    <div class="SharpDataList__row position-relative px-3" :class="classes">
+    <div class="SharpDataList__row relative px-3" :class="classes">
         <div class="row gx-0">
             <template v-if="$slots.prepend">
                 <div class="col-auto align-self-center">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <template v-if="hasLink && !selecting">
-                    <a class="SharpDataList__row-link position-absolute inset-0" :href="url"></a>
+                    <a class="absolute inset-0" :href="url"></a>
                 </template>
             </div>
             <div class="col-sm-auto align-self-center">

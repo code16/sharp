@@ -22,7 +22,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import { getChartByType, transformData } from './index';
 
     export default {

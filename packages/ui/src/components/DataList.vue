@@ -55,8 +55,8 @@
                 </template>
                 <div class="SharpDataList__tbody" ref="body">
                     <Draggable :options="draggableOptions" :model-value="currentItems" @input="handleItemsChanged">
-                        <template #item="item">
-                            <slot name="item" :item="item" />
+                        <template #item="{ element }">
+                            <slot name="item" :item="element" />
                         </template>
                     </Draggable>
                     <slot name="append-body" />

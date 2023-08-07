@@ -1,6 +1,8 @@
 <template>
     <FieldLayout class="ShowEntityListField" :class="classes">
         <EntityList
+            v-if="value"
+            :entity-list="value"
             :entity-key="entityListKey"
             :module="storeModule"
             :show-create-button="showCreateButton"
@@ -62,7 +64,6 @@
 <script>
     import { entitiesMatch } from "sharp";
     import { getNavbarHeight } from "@sharp/ui";
-    import { getReferrerRoute } from "sharp/router";
     import { EntityList, EntityListTitle, entityListModule } from '@sharp/entity-list';
     import { CommandsDropdown } from '@sharp/commands';
 
@@ -79,6 +80,7 @@
             FieldLayout,
         },
         props: {
+            value: Object,
             fieldKey: String,
             entityListKey: String,
             showCreateButton: Boolean,
@@ -165,13 +167,25 @@
                 this.collapsed = !e.target.open;
             },
             getFocusedItem() {
-                const route = getReferrerRoute();
-                if(route?.name
-                    && entitiesMatch(route.params.entityKey, this.entityListKey)
-                    && route.params.instanceId
-                    && route.path.length > this.$route.path.length
+                if(!document.referrer) {
+                    return;
+                }
+                const referrerUrl = new URL(document.referrer);
+                if(referrerUrl.origin !== location.origin) {
+                    return;
+                }
+
+                const { entityKey, instanceId } = route(undefined, undefined, undefined, {
+                    ...Ziggy,
+                    location: referrerUrl,
+                }).params;
+
+                if(entityKey
+                    && entitiesMatch(entityKey, this.entityListKey)
+                    && instanceId
+                    && referrerUrl.pathname.length > location.pathname.length
                 ) {
-                    return Number(route.params.instanceId);
+                    return Number(instanceId);
                 }
             },
             layout() {

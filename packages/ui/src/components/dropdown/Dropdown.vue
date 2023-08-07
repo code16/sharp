@@ -75,12 +75,12 @@
             },
         },
         mounted() {
-            if(this.title) {
-                this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
-            }
-            if(this.$el.closest('[data-popover-boundary]')) {
-                this.boundary = this.$el.closest('[data-popover-boundary]');
-            }
+            // if(this.title) {
+            //     this.$el.querySelector('.dropdown-toggle').setAttribute('title', this.title);
+            // }
+            // if(this.$el.closest('[data-popover-boundary]')) {
+            //     this.boundary = this.$el.closest('[data-popover-boundary]');
+            // }
         },
     }
 </script>

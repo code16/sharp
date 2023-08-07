@@ -1,6 +1,6 @@
-import { parseBlobJSONContent, getFileName } from "../../util/request";
-import { lang, withLoadingOverlay } from "../../index";
-import { showConfirm, showAlert } from "../../util/dialogs";
+import { parseBlobJSONContent, getFileName } from "@/util/request";
+import { withLoadingOverlay } from "@/util/loading";
+import { showConfirm, showAlert } from "@/util/dialogs";
 import { __ } from "@/util/i18n";
 
 export default {

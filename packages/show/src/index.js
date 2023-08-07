@@ -1,5 +1,5 @@
 import show from './store/show';
-import routes from './routes';
+// import routes from './routes';
 import Field from './components/Field.vue';
 
 export default function (Vue, { store }) {

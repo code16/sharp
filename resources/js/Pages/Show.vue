@@ -1,3 +1,12 @@
+<script setup lang="ts">
+    import { onMounted } from "vue";
+    import { router } from "@inertiajs/vue3";
+
+    onMounted(() => {
+        router.reload({ only: ['entityLists'] });
+    });
+</script>
+
 <template>
     <Layout>
         <div class="ShowPage" :class="classes">
@@ -99,9 +108,9 @@
     </Layout>
 </template>
 
-<script>
+<script lang="ts">
     import { mapGetters } from 'vuex';
-    import { formUrl, getBackUrl, lang, showAlert, handleNotifications, showDeleteConfirm } from 'sharp';
+    import { getBackUrl, showAlert, handleNotifications, showDeleteConfirm } from 'sharp';
     import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
     import { Grid, GlobalMessage } from '@sharp/ui';
     import { LocaleSelect } from "@sharp/form";
@@ -132,6 +141,7 @@
 
         props: {
             show: Object,
+            entityLists: Object,
         },
 
         data() {
@@ -180,10 +190,11 @@
                     ? `${this.entityKey}:${formKey}`
                     : this.entityKey
 
-                return formUrl({
+                return route('code16.sharp.form', {
+                    uri: route().params.uri,
                     entityKey,
                     instanceId: this.instanceId,
-                }, { append: true });
+                });
             },
             backUrl() {
                 return getBackUrl(this.breadcrumb.items);
@@ -226,6 +237,9 @@
                 return options;
             },
             fieldValue(layout) {
+                if(this.fields?.[layout.key]?.type === 'entityList') {
+                    return this.entityLists?.[layout.key];
+                }
                 return this.data?.[layout.key];
             },
             isFieldVisible(layout) {

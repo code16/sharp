@@ -150,7 +150,7 @@
 
 <script lang="ts">
     import isEqual from 'lodash/isEqual';
-    import { formUrl, showUrl, showAlert, api, handleNotifications, showDeleteConfirm } from 'sharp';
+    import {  showAlert, api, handleNotifications, showDeleteConfirm } from 'sharp';
     import { __ } from "@/util/i18n";
     import {  DynamicView, withCommands } from 'sharp/mixins';
     import {
@@ -653,16 +653,18 @@
              * Helpers
              */
             formUrl({ formKey, instanceId }={}) {
-                return formUrl({
+                return route('code16.sharp.form', {
+                    uri: route().params.uri ?? this.entityKey,
                     entityKey: formKey ? `${this.entityKey}:${formKey}` : this.entityKey,
                     instanceId,
-                }, { append: true });
+                });
             },
             showUrl({ instanceId }={}) {
-                return showUrl({
+                return route('code16.sharp.show', {
+                    uri: route().params.uri ?? this.entityKey,
                     entityKey: this.entityKey,
                     instanceId,
-                }, { append: true });
+                });
             },
             tryParseNumber(val) {
                 if(Array.isArray(val)) {
