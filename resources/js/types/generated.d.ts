@@ -9,9 +9,10 @@ export type BreadcrumbItemData = {
   url: string;
 };
 export type CheckFilterData = {
+  value?: boolean;
   key: string;
   label: string;
-  type: FilterType;
+  type: "check";
   default: boolean | null;
 };
 export type CommandData = {
@@ -28,18 +29,42 @@ export type CommandData = {
   instance_selection?: InstanceSelectionMode | null;
 };
 export type CommandType = "dashboard" | "entity" | "instance";
+export type ConfigCommandsData = Record<
+  CommandType | string,
+  Array<Array<CommandData>>
+>;
+export type ConfigFiltersData = { _root: Array<FilterData> } & {
+  [key: string]: Array<FilterData>;
+};
 export type DashboardConfigData = {
+  commands?: ConfigCommandsData | null;
+  filters?: ConfigFiltersData | null;
   globalMessage?: PageAlertConfigData | null;
 };
 export type DashboardData = {
   widgets: Array<WidgetData>;
   config: DashboardConfigData;
-  data: Array<any>;
+  layout: DashboardLayoutData;
+  data: { [key: string]: any };
+  fields: { [key: string]: any };
+};
+export type DashboardLayoutData = {
+  sections: Array<DashboardLayoutSectionData>;
+};
+export type DashboardLayoutSectionData = {
+  key: string | null;
+  title: string;
+  rows: Array<Array<DashboardLayoutWidgetData>>;
+};
+export type DashboardLayoutWidgetData = {
+  size: number;
+  key: string;
 };
 export type DateRangeFilterData = {
+  value?: DateRangeFilterValueData | null;
   key: string;
   label: string;
-  type: FilterType;
+  type: "daterange";
   default: DateRangeFilterValueData | null;
   required: boolean;
   mondayFirst: boolean;
@@ -71,8 +96,8 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
-  filters?: Array<Array<FilterData>> | null;
-  commands?: Record<CommandType, Array<Array<CommandData>>>;
+  filters?: ConfigFiltersData | null;
+  commands?: ConfigCommandsData | null;
   multiformAttribute?: string | null;
   state?: EntityStateData | null;
   globalMessage?: PageAlertConfigData | null;
@@ -129,12 +154,10 @@ export type FigureWidgetData = {
   title: string | null;
   link: string | null;
 };
-export type FilterData = {
-  key: string;
-  label: string;
-  type: FilterType;
-  default: any;
-};
+export type FilterData =
+  | CheckFilterData
+  | DateRangeFilterData
+  | SelectFilterData;
 export type FilterType = "select" | "daterange" | "check";
 export type FormConfigData = {
   hasShowPage: boolean;
@@ -231,9 +254,10 @@ export type PanelWidgetData = {
   template: string;
 };
 export type SelectFilterData = {
+  value?: number | string | Array<number | string> | null;
   key: string;
   label: string;
-  type: FilterType;
+  type: "select";
   default: number | string | Array<number | string> | null;
   multiple: boolean;
   required: boolean;

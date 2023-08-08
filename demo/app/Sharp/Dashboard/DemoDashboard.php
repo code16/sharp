@@ -5,6 +5,7 @@ namespace App\Sharp\Dashboard;
 use App\Models\Category;
 use App\Models\User;
 use App\Sharp\Dashboard\Commands\ExportStatsAsCsvCommand;
+use App\Sharp\Utils\Filters\AuthorFilter;
 use App\Sharp\Utils\Filters\PeriodRequiredFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Carbon\Carbon;
@@ -96,6 +97,7 @@ class DemoDashboard extends SharpDashboard
     public function getFilters(): ?array
     {
         return [
+            AuthorFilter::class,
             'stats-section' => [
                 PeriodRequiredFilter::class,
             ],

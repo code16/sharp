@@ -1,10 +1,12 @@
 import qs from 'qs';
 import moment from 'moment';
+import paramsSerializer, { transformParams } from "@/api/paramsSerializer";
 
 const RANGE_DATE_FORMAT = 'YYYYMMDD';
 
 export function stringifyQuery(query) {
-    return qs.stringify(query, { addQueryPrefix: true, skipNulls: true });
+    // return qs.stringify(query, { addQueryPrefix: true, skipNulls: true });
+    return qs.stringify(transformParams(query), { addQueryPrefix: true, strictNullHandling:true });
 }
 
 export function parseQuery(query) {

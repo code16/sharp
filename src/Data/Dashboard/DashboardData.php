@@ -13,16 +13,22 @@ final class DashboardData extends Data
         /** @var DataCollection<WidgetData> */
         public DataCollection $widgets,
         public DashboardConfigData $config,
-        public array $data = [],
+        public DashboardLayoutData $layout,
+        /** @var array<string,mixed> */
+        public array $data,
+        /** @var array<string,mixed> */
+        public array $fields,
     ) {
     }
 
     public static function from(array $dashboard): self
     {
         return new self(
-            WidgetData::collection($dashboard['widgets']),
-            DashboardConfigData::from($dashboard['config']),
-            $dashboard['data'],
+            widgets: WidgetData::collection($dashboard['widgets']),
+            config: DashboardConfigData::from($dashboard['config']),
+            layout: DashboardLayoutData::from($dashboard['layout']),
+            data: $dashboard['data'],
+            fields: $dashboard['fields'],
         );
     }
 }

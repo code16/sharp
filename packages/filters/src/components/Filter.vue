@@ -1,39 +1,22 @@
+<script setup lang="ts">
+    import { FilterData, FilterType } from "@/types";
+    import FilterCheck from "./filters/FilterCheck.vue";
+    import FilterDateRange from "./filters/FilterDateRange.vue";
+    import FilterSelect from "./filters/FilterSelect.vue";
+    import type { Component } from "vue";
+
+    defineProps<{ filter: FilterData }>();
+
+    const components: Record<FilterType, Component> = {
+        'check': FilterCheck,
+        'daterange': FilterDateRange,
+        'select': FilterSelect,
+    };
+</script>
+
 <template>
     <component
-        :is="filterComponent"
-        :filter-key="filter.key"
-        :value="value"
-        :disabled="disabled"
-        v-bind="filter"
-        @input="handleInput"
+        :is="components[filter.type]"
+        :filter="filter"
     />
 </template>
-
-<script>
-    import { filterByType } from "./filters";
-
-    export default {
-        name: 'SharpFilter',
-
-        props: {
-            filter: {
-                type: Object,
-                required: true,
-            },
-            value: [Object, Array, String, Number],
-            disabled: Boolean,
-        },
-
-        computed: {
-            filterComponent() {
-                return filterByType(this.filter.type);
-            },
-        },
-
-        methods: {
-            handleInput(value) {
-                this.$emit('input', value);
-            },
-        }
-    }
-</script>

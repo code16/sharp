@@ -9,7 +9,7 @@ function transformValue(value) {
     return value;
 }
 
-function transformParams(params) {
+export function transformParams(params) {
     return Object.entries(params).reduce((res, [key, value]) => ({
         ...res, [key]: transformValue(value)
     }), params || {});

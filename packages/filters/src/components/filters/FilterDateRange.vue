@@ -22,8 +22,6 @@
     import FilterControl from '../FilterControl.vue';
 
     export default {
-        name: 'SharpFilterDateRange',
-
         components: {
             DateRange,
             FilterControl,

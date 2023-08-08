@@ -56,10 +56,5 @@
             filters: Array,
             showReset: Boolean,
         },
-        computed: {
-            ...mapGetters('dashboard', {
-                filterValue: 'filters/value',
-            })
-        },
     }
 </script>

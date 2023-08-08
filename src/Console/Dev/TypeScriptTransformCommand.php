@@ -4,6 +4,7 @@ namespace Code16\Sharp\Console\Dev;
 
 use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptCollector;
 use Illuminate\Support\Collection;
+use Spatie\TypeScriptTransformer\Collectors\DefaultCollector;
 use Spatie\TypeScriptTransformer\Collectors\EnumCollector;
 use Spatie\TypeScriptTransformer\Formatters\PrettierFormatter;
 use Spatie\TypeScriptTransformer\Structures\TransformedType;
@@ -31,6 +32,7 @@ class TypeScriptTransformCommand extends Command
                 $basePath.'/src/Enums',
             )
             ->collectors([
+                DefaultCollector::class,
                 DataTypeScriptCollector::class,
                 EnumCollector::class,
             ])

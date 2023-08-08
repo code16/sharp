@@ -1,5 +1,18 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import {Grid, SectionTitle} from "@sharp/ui";
+    import {SharpFilter} from "@sharp/filters";
+    import {CommandsDropdown} from "@sharp/commands";
+    import Widget from "./Widget.vue";
+    import { CommandData, DashboardLayoutSectionData, FilterData } from "@/types";
+
+    defineProps<{
+        section: DashboardLayoutSectionData,
+        commands?: CommandData[],
+        filters?: FilterData[],
+        filterValues: Record<string, any>,
+        showReset?: boolean,
+    }>();
 </script>
 
 <template>
@@ -10,7 +23,7 @@
                     :section="section"
                 />
             </div>
-            <template v-if="hasCommands || filters.length">
+            <template v-if="commands?.flat().length || filters?.length">
                 <div class="col-auto align-self-end mb-2" :class="{ 'w-100': filters.length }">
                     <div class="row justify-content-end">
                         <template v-if="filters.length">
@@ -19,7 +32,7 @@
                                     <template v-for="filter in filters" :key="filter.id">
                                         <SharpFilter
                                             :filter="filter"
-                                            :value="filterValue(filter.key)"
+                                            :value="filterValues[filter.key]"
                                             @input="$emit('filter-change', filter, $event)"
                                         />
                                     </template>
@@ -33,7 +46,7 @@
                                 </div>
                             </div>
                         </template>
-                        <template v-if="hasCommands">
+                        <template v-if="commands?.flat().length">
                             <div class="col-auto">
                                 <CommandsDropdown :commands="commands" @select="$emit('command', $event)">
                                     <template v-slot:text>
@@ -52,35 +65,3 @@
         </Grid>
     </div>
 </template>
-
-<script lang="ts">
-    import {Grid, SectionTitle} from "@sharp/ui";
-    import {SharpFilter} from "@sharp/filters";
-    import {mapGetters} from "vuex";
-    import {CommandsDropdown} from "@sharp/commands";
-    import Widget from "./Widget.vue";
-
-    export default {
-        components: {
-            CommandsDropdown,
-            Widget,
-            Grid,
-            SectionTitle,
-            SharpFilter,
-        },
-        props: {
-            section: Object,
-            commands: Array,
-            filters: Array,
-            showReset: Boolean,
-        },
-        computed: {
-            ...mapGetters('dashboard', {
-                filterValue: 'filters/value',
-            }),
-            hasCommands() {
-                return this.commands?.flat().length;
-            },
-        },
-    }
-</script>

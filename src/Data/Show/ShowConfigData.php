@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Data\Show;
 
 
-use Code16\Sharp\Data\CommandData;
+use Code16\Sharp\Data\Commands\CommandData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
 use Code16\Sharp\Data\PageAlertConfigData;
