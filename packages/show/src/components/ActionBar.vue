@@ -94,7 +94,6 @@
         props: {
             commands: Array,
             formUrl: String,
-            backUrl: String,
             canEdit: Boolean,
             editDisabled: Boolean,
             canChangeState: Boolean,

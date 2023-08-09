@@ -32,7 +32,7 @@
               'SharpFilterSelect--underlined': !global
           }"
     >
-        <select v-model="modelValue" :multiple="filter.required">
+        <select v-model="modelValue" :multiple="filter.multiple">
             <template v-for="filterValue in filter.values">
                 <option :value="filterValue.id">{{ filterValue.label }}</option>
             </template>

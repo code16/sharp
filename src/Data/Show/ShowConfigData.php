@@ -15,6 +15,7 @@ final class ShowConfigData extends Data
 {
     public function __construct(
         public string $deleteConfirmationText,
+        public bool $isSingle = false,
         #[Optional]
         #[RecordTypeScriptType(CommandType::class, 'array<DataCollection<'.CommandData::class.'>>')]
         public ?array $commands = null,

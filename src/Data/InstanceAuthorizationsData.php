@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Data;
 
-class InstanceAuthorizationsData extends Data
+final class InstanceAuthorizationsData extends Data
 {
     public function __construct(
         public bool $view,

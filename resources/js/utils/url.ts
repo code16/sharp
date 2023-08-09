@@ -1,4 +1,4 @@
 
 export function getAppendableUri() {
-    return location.pathname.replace(/^.+?s-list/, '');
+    return location.pathname.replace(/^.+?s-list\//, '');
 }

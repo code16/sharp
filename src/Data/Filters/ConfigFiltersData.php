@@ -17,10 +17,10 @@ final class ConfigFiltersData implements Arrayable
     ) {
     }
 
-    public static function from(array $filters): self
+    public static function from(array $configFilters): self
     {
         return new self(
-            collect($filters)
+            collect($configFilters)
                 ->map(fn (array $filters) => FilterData::collection($filters))
                 ->all()
         );

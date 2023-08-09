@@ -1,37 +1,26 @@
+<script setup lang="ts">
+    import { CheckFilterData } from "@/types";
+
+    defineProps<{
+        value: CheckFilterData['value'],
+        filter: Omit<CheckFilterData, 'value'>,
+        disabled?: boolean,
+    }>();
+</script>
+
 <template>
     <div class="SharpFilterCheck form-check mt-1 mx-2">
         <input
-            :id="id"
+            :id="`filter-${filter.key}`"
             class="form-check-input"
             type="checkbox"
-            :name="filterKey"
+            :name="filter.key"
             :checked="value"
             :disabled="disabled"
-            @change="handleChanged"
+            @change="$emit('input', ($event.target as HTMLInputElement).checked)"
         >
-        <label class="ui-font fs-8" :for="id">
-            {{ label }}
+        <label class="ui-font fs-8" :for="`filter-${filter.key}`">
+            {{ filter.label }}
         </label>
     </div>
 </template>
-
-<script>
-    export default {
-        props: {
-            filterKey: String,
-            label: String,
-            value: Boolean,
-            disabled: Boolean,
-        },
-        computed: {
-            id() {
-                return `filter-${this.filterKey}`
-            },
-        },
-        methods: {
-            handleChanged(e) {
-                this.$emit('input', e.target.checked);
-            },
-        },
-    }
-</script>

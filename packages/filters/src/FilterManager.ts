@@ -2,11 +2,9 @@ import { FilterData, ConfigFiltersData } from "@/types";
 import { getFiltersQueryParams, getFiltersValuesFromQuery } from "./util/query";
 import { parseRange, serializeRange } from "@/utils/querystring";
 import isEqual from "lodash/isEqual";
-import { reactive } from "vue";
 
-type ParsedValue = FilterData['default'] | null;
+type ParsedValue = FilterData['value'] | null;
 type SerializedValue = string | string[] | null;
-
 
 
 export class FilterManager {
@@ -26,6 +24,7 @@ export class FilterManager {
 
     constructor(filters?: ConfigFiltersData) {
         this.filters = filters;
+        this.values = this.#defaultValues(this.#allFilters);
     }
 
     get rootFilters(): Array<FilterData> {

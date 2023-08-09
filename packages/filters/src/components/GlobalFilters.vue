@@ -1,71 +1,42 @@
+<script setup lang="ts">
+    import { FilterData, GlobalFiltersData, SelectFilterData } from "@/types";
+    import { router } from "@inertiajs/vue3";
+    import { ref } from "vue";
+    import { useFilters } from "../useFilters";
+    import FilterSelect from './filters/FilterSelect.vue';
+
+    const props = defineProps<{
+        globalFilters: GlobalFiltersData,
+    }>();
+
+    const filters = useFilters(props.globalFilters.filters);
+    const open = ref(false);
+
+    function onChanged(filter: FilterData, value: FilterData['value']) {
+        router.post(
+            route('code16.sharp.filters.update', { filterKey: filter.key }),
+            { value }
+        );
+    }
+</script>
+
 <template>
     <div class="SharpGlobalFilters">
         <template v-if="open">
-            <div class="position-absolute inset-0" style="z-index: 1">
+            <div class="absolute inset-0" style="z-index: 1">
             </div>
         </template>
-        <template v-for="filter in rootFilters" :key="filter.key">
+        <template v-for="filter in filters.rootFilters" :key="filter.key">
             <FilterSelect
-                :label="null"
-                :values="filter.values"
-                :value="filterValue(filter.key)"
-                :multiple="filter.multiple"
-                :required="filter.required"
-                :template="filter.template"
-                :search-keys="filter.searchKeys"
-                :searchable="filter.searchable"
+                v-if="filter.type === 'select'"
+                :filter="filter"
+                :value="filters.values[filter.key] as SelectFilterData['value']"
                 global
-                @input="handleFilterChanged(filter, $event)"
-                @open="handleOpened(filter)"
-                @close="handleClosed(filter)"
+                @input="onChanged(filter, $event)"
+                @open="open = true"
+                @close="open = false"
                 style="z-index: 2"
             />
         </template>
     </div>
 </template>
-
-<script>
-    import { mapGetters } from 'vuex';
-    import { BASE_URL } from "sharp";
-    import FilterSelect from './filters/FilterSelect.vue';
-    import { Dropdown } from "@sharp/ui";
-
-    export default {
-        components: {
-            FilterSelect,
-            Dropdown,
-        },
-        computed: {
-            ...mapGetters('global-filters', {
-                rootFilters: 'filters/rootFilters',
-                filterValue: 'filters/value',
-            }),
-        },
-        data() {
-            return {
-                open: false,
-            }
-        },
-        methods: {
-            handleFilterChanged(filter, value) {
-                this.$store.dispatch('global-filters/post', { filter, value })
-                    .then(() => {
-                        this.$store.dispatch('setLoading', true);
-                        location.href = BASE_URL;
-                    });
-            },
-            handleOpened() {
-                this.open = true;
-            },
-            handleClosed() {
-                this.open = false;
-            },
-            async init() {
-                await this.$store.dispatch('global-filters/get');
-            },
-        },
-        created() {
-            this.init();
-        },
-    }
-</script>

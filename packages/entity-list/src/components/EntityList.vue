@@ -642,7 +642,7 @@
                 try {
                     if(await showDeleteConfirm(this.config.deleteConfirmationText)) {
                         await deleteEntityListInstance({ entityKey: this.entityKey, instanceId });
-                        this.init();
+                        this.init(); // todo handle with inertia
                     }
                 } finally {
                      this.deletingItem = null;

@@ -17,7 +17,7 @@ final class SelectFilterData extends Data
 
     public function __construct(
         public string $key,
-        public string $label,
+        public ?string $label,
         #[LiteralTypeScriptType('"'.FilterType::Select->value.'"')]
         public FilterType $type,
         /** @var int|string|array<int|string> */

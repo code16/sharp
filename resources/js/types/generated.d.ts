@@ -162,6 +162,7 @@ export type FilterType = "select" | "daterange" | "check";
 export type FormConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string | null;
+  isSingle: boolean;
   breadcrumbAttribute?: string | null;
   globalMessage?: PageAlertConfigData | null;
 };
@@ -178,6 +179,9 @@ export type FormLayoutData = {
 export type FormLayoutTabData = {
   title: string;
   columns: Array<FormLayoutColumnData>;
+};
+export type GlobalFiltersData = {
+  filters: ConfigFiltersData;
 };
 export type GraphWidgetData = {
   value?: {
@@ -256,7 +260,7 @@ export type PanelWidgetData = {
 export type SelectFilterData = {
   value?: number | string | Array<number | string> | null;
   key: string;
-  label: string;
+  label: string | null;
   type: "select";
   default: number | string | Array<number | string> | null;
   multiple: boolean;
@@ -273,6 +277,7 @@ export type SelectFilterValueData = {
 };
 export type ShowConfigData = {
   deleteConfirmationText: string;
+  isSingle: boolean;
   commands?: Record<CommandType, Array<Array<CommandData>>>;
   multiformAttribute?: string | null;
   titleAttribute?: string | null;

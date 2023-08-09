@@ -5,7 +5,11 @@
     import FilterSelect from "./filters/FilterSelect.vue";
     import type { Component } from "vue";
 
-    defineProps<{ filter: FilterData }>();
+    defineProps<{
+        filter: FilterData,
+        value: any,
+        disabled?: boolean
+    }>();
 
     const components: Record<FilterType, Component> = {
         'check': FilterCheck,
@@ -18,5 +22,7 @@
     <component
         :is="components[filter.type]"
         :filter="filter"
+        :value="value"
+        :disabled="disabled"
     />
 </template>

@@ -7,7 +7,7 @@ use Code16\Sharp\Enums\CommandType;
 use Code16\Sharp\Enums\InstanceSelectionMode;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
-class CommandData extends Data
+final class CommandData extends Data
 {
     public function __construct(
         public string $key,

@@ -1,33 +1,22 @@
 <?php
 
-namespace Code16\Sharp\Http\Api;
+namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Utils\Filters\Filter;
+use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Filters\HandleFilters;
+use Code16\Sharp\Utils\Menu\SharpMenuItem;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
+use Illuminate\Http\RedirectResponse;
 
-/** TODO legacy replaced by @see \Code16\Sharp\Http\GlobalFilterController */
-class GlobalFilterController extends ApiController
+class GlobalFilterController extends SharpProtectedController
 {
     use HandleFilters;
 
-    public function getFilters(): array
+    public function update(string $filterKey): RedirectResponse
     {
-        return value(config('sharp.global_filters'));
-    }
-
-    public function index()
-    {
-        return response()->json(
-            tap([], function (&$config) {
-                $this->appendFiltersToConfig($config);
-            }),
-        );
-    }
-
-    public function update(string $filterKey)
-    {
-        $handler = collect($this->getFilters())
+        $handler = collect(app(GlobalFilters::class)->getFilters())
             ->map(fn (string $filterClass) => app($filterClass))
             ->filter(fn (Filter $filter) => $filter->getKey() == $filterKey)
             ->first();
@@ -43,6 +32,6 @@ class GlobalFilterController extends ApiController
 
         $handler->setCurrentValue($value ? $value['id'] : null);
 
-        return response()->json(['ok' => true]);
+        return redirect()->route('code16.sharp.home');
     }
 }

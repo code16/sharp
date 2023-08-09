@@ -2,12 +2,14 @@
 import { usePage } from "@inertiajs/vue3";
 import { config } from "@/utils/config";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-import { MenuData, ThemeData } from "@/types";
+import { ChevronRightIcon } from '@heroicons/vue/20/solid';
+import { GlobalFiltersData, MenuData, ThemeData } from "@/types";
 import { Link } from "@inertiajs/vue3";
+import { GlobalFilters } from '@sharp/filters';
 
 const menu = usePage().props.menu as MenuData;
 const theme = usePage().props.theme as ThemeData;
+const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 </script>
 
 <template>
@@ -16,6 +18,9 @@ const theme = usePage().props.theme as ThemeData;
         <div class="flex h-16 shrink-0 items-center bg-indigo-600 px-6">
             <img class="h-auto w-32" :src="theme.menuLogoUrl" :alt="config('sharp.name')" />
         </div>
+        <template v-if="globalFilters">
+            <GlobalFilters :global-filters="globalFilters" />
+        </template>
         <nav class="flex flex-1 flex-col px-6 pt-5 border-r border-gray-200">
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                 <li>

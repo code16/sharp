@@ -1,10 +1,49 @@
 <script setup lang="ts">
-    import { onMounted } from "vue";
-    import { router } from "@inertiajs/vue3";
+    import { onMounted, ref } from "vue";
+    import { BreadcrumbData, ShowData } from "@/types";
+    import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
+    import ActionBarShow from "@sharp/show/src/components/ActionBar.vue";
+    import ShowField from '@sharp/show/src/components/Field.vue';
+    import Section from "@sharp/show/src/components/Section.vue";
+    import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon } from '@sharp/ui';
+    import UnknownField from "@/components/dev/UnknownField.vue";
+    import Layout from "../Layouts/Layout.vue";
+    import { LocaleSelect } from "@sharp/form";
+    import { config } from "@/utils/config";
+    import { __ } from "@/utils/i18n";
+    import { getAppendableUri } from "@/utils/url";
 
-    onMounted(() => {
-        router.reload({ only: ['entityLists'] });
-    });
+    const props = defineProps<{
+        show: ShowData,
+        breadcrumb: BreadcrumbData,
+    }>();
+
+    const authorizedCommands = props.show.config.commands?.instance
+        ?.map(group => group.filter(command => command.authorization));
+
+    const formUrl = (() => {
+        const formKey = props.show.config.multiformAttribute
+            ? props.show.data[props.show.config.multiformAttribute]
+            : null;
+        const entityKey = formKey
+            ? `${route().params.entityKey}:${formKey}`
+            : route().params.entityKey;
+
+        if(route().params.instanceId) {
+            return route('code16.sharp.form.edit', {
+                uri: '(uri)',
+                entityKey,
+                instanceId: route().params.instanceId,
+            }).replace('(uri)', getAppendableUri());
+        }
+
+        return route('code16.sharp.form.create', {
+            uri: '(uri)',
+            entityKey,
+        }).replace('(uri)', getAppendableUri());
+    })();
+
+    const locale = ref(props.show.locales?.[0]);
 </script>
 
 <template>
@@ -12,18 +51,80 @@
         <div class="ShowPage" :class="classes">
             <div class="container">
                 <template v-if="ready">
+                    <div class="action-bar mt-4 mb-3">
+                        <div class="row align-items-center gx-3">
+                            <div class="col">
+                                <template v-if="config('sharp.display_breadcrumb')">
+                                    <Breadcrumb :items="breadcrumb.items" />
+                                </template>
+                            </div>
+                            <template v-if="show.locales?.length">
+                                <div class="col-auto">
+                                    <LocaleSelect
+                                        outline
+                                        right
+                                        :locale="currentLocale"
+                                        :locales="show.locales"
+                                        @change="handleLocaleChanged"
+                                    />
+                                </div>
+                            </template>
+                            <template v-if="show.config.state">
+                                <div class="col-auto">
+                                    <Dropdown
+                                        :show-caret="show.config.state.authorization"
+                                        outline
+                                        right
+                                        :disabled="!show.config.state.authorization"
+                                    >
+                                        <template v-slot:text>
+                                            <StateIcon class="me-1" :color="stateOptions ? stateOptions.color : '#fff'" style="vertical-align: -.125em" />
+                                            <span class="text-truncate">{{ stateOptions ? stateOptions.label : state }}</span>
+                                        </template>
+                                        <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                            <DropdownItem :active="state === stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
+                                                <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
+                                                <span class="text-truncate">{{ stateValue.label }}</span>
+                                            </DropdownItem>
+                                        </template>
+                                    </Dropdown>
+                                </div>
+                            </template>
+                            <template v-if="authorizedCommands?.flat().length || show.authorizations.delete && !show.config.isSingle">
+                                <div class="col-auto">
+                                    <CommandsDropdown outline :small="false" :commands="authorizedCommands" @select="handleCommandRequested">
+                                        <template v-slot:text>
+                                            {{ __('sharp::entity_list.commands.instance.label') }}
+                                        </template>
+                                        <template v-if="show.authorizations.delete && !show.config.isSingle" v-slot:append>
+                                            <DropdownSeparator />
+                                            <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
+                                                {{ __('sharp::action_bar.form.delete_button') }}
+                                            </DropdownItem>
+                                        </template>
+                                    </CommandsDropdown>
+                                </div>
+                            </template>
+                            <template v-if="show.authorizations.update">
+                                <div class="col-auto">
+                                    <Button :href="formUrl" :disabled="editDisabled">
+                                        {{ __('sharp::action_bar.show.edit_button') }}
+                                    </Button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
                     <ActionBarShow
                         :commands="authorizedCommands"
                         :state="instanceState"
                         :state-options="instanceStateOptions"
                         :state-values="stateValues"
                         :form-url="formUrl"
-                        :back-url="backUrl"
                         :can-edit="canEdit"
                         :can-change-state="canChangeState"
                         :show-back-button="showBackButton"
                         :breadcrumb="breadcrumbItems"
-                        :edit-disabled="isReordering"
                         :locales="locales"
                         :current-locale="locale"
                         :can-delete="canDelete"
@@ -109,41 +210,12 @@
 
 <script lang="ts">
     import { mapGetters } from 'vuex';
-    import { getBackUrl, showAlert, handleNotifications, showDeleteConfirm } from 'sharp';
-    import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
-    import { Grid, GlobalMessage } from '@sharp/ui';
-    import { LocaleSelect } from "@sharp/form";
-    import { UnknownField } from 'sharp/components';
+    import { showAlert, handleNotifications, showDeleteConfirm } from 'sharp';
     import { withCommands } from 'sharp/mixins';
-    import ActionBarShow from "@sharp/show/src/components/ActionBar.vue";
-    import ShowField from '@sharp/show/src/components/Field.vue';
-    import Section from "@sharp/show/src/components/Section.vue";
     import { router } from "@inertiajs/vue3";
-    import Layout from "../Layouts/Layout.vue";
-    import { __ } from "@/utils/i18n";
-    import { getAppendableUri } from "@/utils/url";
 
     export default {
         mixins: [withCommands],
-
-        components: {
-            Layout,
-            Section,
-            ActionBarShow,
-            Grid,
-            ShowField,
-            UnknownField,
-            CommandFormModal,
-            CommandViewPanel,
-            GlobalMessage,
-            LocaleSelect,
-        },
-
-        props: {
-            show: Object,
-            entityLists: Object,
-            breadcrumb: Object,
-        },
 
         data() {
             return {
@@ -170,56 +242,8 @@
                 'stateValues',
                 'canChangeState',
             ]),
-            classes() {
-                return {
-                    'ShowPage--localized': this.localized,
-                    'ShowPage--title': this.title,
-                }
-            },
-            entityKey() {
-                return route().params.entityKey;
-            },
-            instanceId() {
-                return route().params.instanceId;
-            },
-            formUrl() {
-                const formKey = this.config.multiformAttribute
-                    ? this.data[this.config.multiformAttribute]
-                    : null;
-                const entityKey = formKey
-                    ? `${this.entityKey}:${formKey}`
-                    : this.entityKey;
-
-                if(this.instanceId) {
-                    return route('code16.sharp.form.edit', {
-                        uri: '(uri)',
-                        entityKey,
-                        instanceId: this.instanceId,
-                    }).replace('(uri)', getAppendableUri());
-                }
-
-                return route('code16.sharp.form.create', {
-                    uri: '(uri)',
-                    entityKey,
-                }).replace('(uri)', getAppendableUri());
-            },
-            backUrl() {
-                return getBackUrl(this.breadcrumb.items);
-            },
-            showBackButton() {
-                return !!this.backUrl;
-            },
-            breadcrumbItems() {
-                return this.breadcrumb.items;
-            },
             localized() {
                 return this.locales?.length > 0;
-            },
-            isSingle() {
-                return !!this.config.isSingle;
-            },
-            canDelete() {
-                return this.authorizations?.delete && !this.isSingle;
             },
             title() {
                 if(!this.ready || !this.config.titleAttribute) {
@@ -355,9 +379,6 @@
 
                 handleNotifications(this.show.notifications);
                 this.updateDocumentTitle(this.show);
-                if(this.localized) {
-                    this.locale = this.locales?.[0];
-                }
 
                 this.ready = true;
                 this.refreshKey++;

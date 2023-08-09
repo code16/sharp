@@ -51,12 +51,11 @@ class ShowController extends SharpProtectedController
             ],
         ];
 
-        // TODO handle breadcrumb
-
         return Inertia::render('Show', [
             'show' => ShowData::from($data),
             'breadcrumb' => BreadcrumbData::from(['items' => []]), // TODO
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
+            'test' => Inertia::lazy(fn () => 'aaa'),
         ]);
     }
 }

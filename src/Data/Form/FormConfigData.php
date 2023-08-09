@@ -12,13 +12,14 @@ final class FormConfigData extends Data
     public function __construct(
         public bool $hasShowPage,
         public ?string $deleteConfirmationText,
+        public bool $isSingle = false,
         #[Optional]
         public ?string $breadcrumbAttribute = null,
         #[Optional]
         public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
-    
+
     public static function from(array $config): self
     {
         $config = [
@@ -27,7 +28,7 @@ final class FormConfigData extends Data
                 ? PageAlertConfigData::from($config['globalMessage'])
                 : null,
         ];
-        
+
         return new self(...$config);
     }
 }

@@ -13,11 +13,12 @@ use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\Api\FormController as ApiFormController;
 use Code16\Sharp\Http\Api\FormUploadController;
-use Code16\Sharp\Http\Api\GlobalFilterController;
+use Code16\Sharp\Http\Api\GlobalFilterController as ApiGlobalFilterController;
 use Code16\Sharp\Http\Api\SearchController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;
+use Code16\Sharp\Http\GlobalFilterController;
 use Code16\Sharp\Http\HomeController;
 use Code16\Sharp\Http\LangController;
 use Code16\Sharp\Http\Login2faController;
@@ -102,11 +103,11 @@ Route::group([
     Route::post('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'update'])
         ->name('code16.sharp.api.form.update');
 
-    Route::get('/filters', [GlobalFilterController::class, 'index'])
-        ->name('code16.sharp.api.filter.index');
-
-    Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
-        ->name('code16.sharp.api.filter.update');
+//    Route::get('/filters', [ApiGlobalFilterController::class, 'index'])
+//        ->name('code16.sharp.api.filter.index');
+//
+//    Route::post('/filters/{filterKey}', [ApiGlobalFilterController::class, 'update'])
+//        ->name('code16.sharp.api.filter.update');
 
     Route::get('/search', [SearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
@@ -199,6 +200,9 @@ Route::group([
 
     Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');
+
+    Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
+        ->name('code16.sharp.filters.update');
 
     Route::post('/api/upload', [FormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
