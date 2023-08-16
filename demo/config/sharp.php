@@ -65,9 +65,9 @@ return [
 
     'extensions' => [
         'assets' => [
-            'strategy' => 'raw',
+            'strategy' => 'vite',
             'head' => [
-                '/css/sharp-extension.css',
+                'resources/css/sharp-extension.css',
             ],
         ],
     ],

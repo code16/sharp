@@ -68,8 +68,8 @@
     import { CommandsDropdown } from 'sharp-commands';
     import { sticky } from "sharp/directives";
 
-    import ActionBar from "./ActionBar";
-    import FieldLayout from "../../FieldLayout";
+    import ActionBar from "./ActionBar.vue";
+    import FieldLayout from "../../FieldLayout.vue";
     import { syncVisibility } from "../../../util/fields/visiblity";
 
     export default {

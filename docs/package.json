@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@vuepress/plugin-docsearch": "^2.0.0-beta.49",
+    "@vuepress/plugin-docsearch": "^2.0.0-beta.66",
+    "@vuepress/plugin-shiki": "^2.0.0-beta.66",
     "dotenv": "^10.0.0",
     "sass": "^1.20.1",
     "sass-loader": "^13.0.2",
     "vite-svg-loader": "^3.1.2",
-    "vuepress": "^2.0.0-beta.51"
+    "vuepress": "^2.0.0-beta.66"
   },
   "dependencies": {
     "bootstrap": "^5.1.3",

@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex">
         <div class="d-flex align-items-center">
-            <template v-if="icon">
+            <template v-if="icon && items && items.length">
                 <div class="me-2 pe-1">
                     <i class="fa fa-sm d-block text-primary opacity-75 fs-8" :class="icon"></i>
                 </div>

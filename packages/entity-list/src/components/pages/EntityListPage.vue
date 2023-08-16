@@ -19,8 +19,8 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import EntityList from '../EntityList';
-    import ActionBarList from '../ActionBar';
+    import EntityList from '../EntityList.vue';
+    import ActionBarList from '../ActionBar.vue';
 
     export default {
         name: 'SharpEntityListPage',

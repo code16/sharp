@@ -12,9 +12,9 @@
 </template>
 
 <script>
-    import DropdownSelect from "./select/DropdownSelect";
-    import Checkboxes from "./select/Checkboxes";
-    import Radios from "./select/Radios";
+    import DropdownSelect from "./select/DropdownSelect.vue";
+    import Checkboxes from "./select/Checkboxes.vue";
+    import Radios from "./select/Radios.vue";
     import localize from '../../mixins/localize/Select';
     import { setDefaultValue } from "../../util";
 

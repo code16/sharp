@@ -1,6 +1,6 @@
 import { logError } from 'sharp';
 import { UnknownField } from "sharp/components";
-import FieldContainer from './ui/FieldContainer';
+import FieldContainer from './ui/FieldContainer.vue';
 import { isLocalizableValueField } from "../util/locale";
 import { computeCondition } from '../util/conditional-display';
 import { isArray } from "axios/lib/utils";

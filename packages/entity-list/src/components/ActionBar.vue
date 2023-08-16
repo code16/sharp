@@ -106,8 +106,8 @@
     import { SharpFilter } from 'sharp-filters';
 
     import { Localization } from 'sharp/mixins';
-    import MultiformDropdown from "./MultiformDropdown";
-    import EntityListTitle from "./EntityListTitle";
+    import MultiformDropdown from "./MultiformDropdown.vue";
+    import EntityListTitle from "./EntityListTitle.vue";
     import { CommandsDropdown } from "sharp-commands";
     import { sticky } from "sharp/directives";
 
@@ -162,9 +162,6 @@
             },
             hasForms() {
                 return this.forms && this.forms.length > 0;
-            },
-            currentEntity() {
-                return this.$store.state.currentEntity;
             },
         },
         methods: {

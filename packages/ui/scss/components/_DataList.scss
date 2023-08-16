@@ -1,4 +1,4 @@
-@import '~sharp/scss/mixins/entity-list';
+@import '../../../../resources/assets/sass/mixins/entity-list';
 
 .SharpDataList {
 
@@ -175,7 +175,7 @@
           z-index: 1;
         }
         &:hover {
-          color: darken($color__blue-51, 25%);
+          color: darken(#3d70b2, 25%);
         }
       }
     }

@@ -169,7 +169,7 @@
         CommandViewPanel,
     } from 'sharp-commands';
 
-    import EntityActions from "./EntityActions";
+    import EntityActions from "./EntityActions.vue";
     import {SharpFilter} from "sharp-filters";
     import {deleteEntityListInstance} from "../api";
 

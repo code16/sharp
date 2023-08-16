@@ -1,3 +1,3 @@
 
-export { default as Bar } from './Bar';
+export { default as Bar } from './Bar.vue';
 export * from './transform-data';

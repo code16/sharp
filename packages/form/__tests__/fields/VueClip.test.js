@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueClip from '../../src/components/fields/upload/VueClip';
+import VueClip from '../../src/components/fields/upload/VueClip.vue';
 
 import { MockInjections, MockI18n } from '@sharp/test-utils';
 

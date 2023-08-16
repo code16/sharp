@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import TemplateRenderer from '../components/TemplateRenderer';
+import TemplateRenderer from '../components/TemplateRenderer.vue';
 
 
 

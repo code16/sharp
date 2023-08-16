@@ -114,10 +114,10 @@
     import { LocaleSelect } from "sharp-form";
     import { UnknownField } from 'sharp/components';
     import { withCommands } from 'sharp/mixins';
-    import ActionBarShow from "../ActionBar";
+    import ActionBarShow from "../ActionBar.vue";
 
-    import ShowField from '../Field';
-    import Section from "../Section";
+    import ShowField from '../Field.vue';
+    import Section from "../Section.vue";
 
     export default {
         mixins: [withCommands],

@@ -97,7 +97,7 @@ Allow the user to crop or rotate a visual, after the upload.
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
 stored directly in the `<x-sharp-image/>` tag. For instance:
 
-```html
+```blade
 <x-sharp-image 
     name="filename.jpg"
     filter-crop="0.1495,0,0.5625,1"
@@ -144,7 +144,7 @@ configuration.
 
 When inserting a file, the following tag is added in field text value:
 
-```html
+```blade
 <x-sharp-file 
     name="filename.pdf"
     path="data/Spaceship/10/markdown/filename.pdf"
@@ -153,7 +153,7 @@ When inserting a file, the following tag is added in field text value:
 ```
 In case of an image the inserted tag is:
 
-```html
+```blade
 <x-sharp-image
     name="filename.jpg"
     path="data/Spaceship/10/markdown/filename.jpg"
@@ -166,7 +166,7 @@ In case of an image the inserted tag is:
 You may need to display those embedded files in the public website. The idea here is to display embedded images as
 thumbnails, and other files as you need. Sharp provides a component for that:
 
-```html
+```blade
 <x-sharp-content>
     {!! $html !!}
 </x-sharp-content>
@@ -174,7 +174,7 @@ thumbnails, and other files as you need. Sharp provides a component for that:
 
 To handle image thumbnails, you can pass the following props:
 
-```html
+```blade
 <x-sharp-content
     :image-thumbnail-width="600"
     :image-thumbnail-height="400"
@@ -196,7 +196,7 @@ To handle image thumbnails, you can pass the following props:
 #### Advanced usages
 
 To add custom attributes to `<x-sharp-image>` component you can use the following syntax:
-```html
+```blade
 <x-sharp-content>
     <x-sharp-content::attributes
         component="sharp-image"

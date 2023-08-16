@@ -62,10 +62,10 @@
 <script>
     import { Button, Dropdown } from "sharp-ui";
     import { buttons } from './config';
-    import LinkDropdown from "./LinkDropdown";
-    import TableDropdown from "./TableDropdown";
-    import OptionsDropdown from "./OptionsDropdown";
-    import EmbedDropdown from "./EmbedDropdown";
+    import LinkDropdown from "./LinkDropdown.vue";
+    import TableDropdown from "./TableDropdown.vue";
+    import OptionsDropdown from "./OptionsDropdown.vue";
+    import EmbedDropdown from "./EmbedDropdown.vue";
 
     export default {
         components: {

@@ -54,7 +54,7 @@
 <script>
     import { Autocomplete, Select } from 'sharp-form'
     import { Localization } from 'sharp/mixins';
-    import FilterControl from '../FilterControl';
+    import FilterControl from '../FilterControl.vue';
 
     export default {
         name: 'SharpFilterSelect',

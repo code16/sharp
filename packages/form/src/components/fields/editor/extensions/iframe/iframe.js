@@ -1,7 +1,7 @@
 import { Node } from '@tiptap/core'
 import { PasteRule } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
-import IframeNode from "./IframeNode";
+import IframeNode from "./IframeNode.vue";
 
 export const Iframe =  Node.create({
     name: 'iframe',
