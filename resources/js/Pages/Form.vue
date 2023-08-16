@@ -4,6 +4,7 @@
     import Layout from "../Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
     import { router } from "@inertiajs/vue3";
+    import { route } from "@/utils/url";
 
     defineProps<{
         form: FormData,
@@ -12,11 +13,11 @@
     }>();
 
     function submit(data) {
-        const { entityKey, instanceId } = route().params;
+        const { uri, entityKey, instanceId } = route().params;
         if(route().current('code16.sharp.form.create')) {
-            router.post(route('code16.sharp.form.store', { entityKey }), data);
+            router.post(route('code16.sharp.form.store', { uri, entityKey }), data);
         } else if(route().current('code16.sharp.form.edit')) {
-            router.post(route('code16.sharp.form.update', { entityKey, instanceId }), data);
+            router.post(route('code16.sharp.form.update', { uri, entityKey, instanceId }), data);
         }
     }
 </script>

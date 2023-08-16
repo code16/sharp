@@ -61,8 +61,8 @@
             },
         },
         created() {
-            this.$on('error', key=>this.setError(key));
-            this.$on('clear', key=>this.clearError(key));
+            // this.$on('error', key=>this.setError(key));
+            // this.$on('clear', key=>this.clearError(key));
         },
     }
 </script>

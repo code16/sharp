@@ -56,7 +56,7 @@
                 </template>
             </FormLayout>
             <template v-if="!independant">
-                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" />
+                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" @submit="submit()" />
             </template>
         </template>
     </div>
@@ -71,6 +71,7 @@
 
     import { Button, Dropdown, DropdownItem, GlobalMessage, Grid } from '@sharp/ui';
     import { DynamicView } from 'sharp/mixins';
+    import FieldDisplay from "./FieldDisplay.vue";
 
     import FieldsLayout from './ui/FieldsLayout.vue';
     import LocaleSelect from './ui/LocaleSelect.vue';
@@ -96,6 +97,7 @@
             DropdownItem,
             LocaleSelect,
             GlobalMessage,
+            FieldDisplay,
         },
 
         props: {
@@ -252,10 +254,10 @@
                 }
             },
             updateVisibility(key, visibility) {
-                this.$set(this.fieldVisible, key, visibility);
+                this.fieldVisible[key] = visibility;
             },
             updateLocale(key, locale) {
-                this.$set(this.fieldLocale, key, locale);
+                this.fieldLocale[key] = locale;
             },
             updateFieldError(key, error) { // used in FieldContainer
                 if(error) {

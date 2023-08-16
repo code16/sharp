@@ -11,7 +11,7 @@
     import { LocaleSelect } from "@sharp/form";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
-    import { getAppendableUri } from "@/utils/url";
+    import { getAppendableUri, route } from "@/utils/url";
 
     const props = defineProps<{
         show: ShowData,
@@ -31,16 +31,16 @@
 
         if(route().params.instanceId) {
             return route('code16.sharp.form.edit', {
-                uri: '(uri)',
+                uri: getAppendableUri(),
                 entityKey,
                 instanceId: route().params.instanceId,
-            }).replace('(uri)', getAppendableUri());
+            });
         }
 
         return route('code16.sharp.form.create', {
-            uri: '(uri)',
+            uri: getAppendableUri(),
             entityKey,
-        }).replace('(uri)', getAppendableUri());
+        });
     })();
 
     const locale = ref(props.show.locales?.[0]);

@@ -54,18 +54,17 @@
 </template>
 
 <script>
-  import { logError } from 'sharp';
-  import { ConfigNode, Identifier } from 'sharp/mixins';
-  import Field from '../Field.vue';
-  import FieldLocaleSelect from './FieldLocaleSelect.vue';
-  import { isLocalizableValueField, resolveTextValue } from '../../util';
-  import { sticky } from "sharp/directives";
-  import { __ } from '@/utils/i18n';
+    import { logError } from 'sharp';
+    import { ConfigNode, Identifier } from 'sharp/mixins';
+    import Field from '../Field.vue';
+    import FieldLocaleSelect from './FieldLocaleSelect.vue';
+    import { isLocalizableValueField, resolveTextValue } from '../../util';
+    import { sticky } from "sharp/directives";
+    import { __ } from '@/utils/i18n';
 
 
-  export default {
+    export default {
         name: 'SharpFieldContainer',
-
         mixins: [ Identifier, ConfigNode ],
 
         components: {
@@ -81,7 +80,18 @@
         },
 
         props : {
-            ...Field.props,
+            // todo extract to common field props (cf Field.vue)
+            fieldKey: String,
+            fieldType: String,
+            fieldProps: Object,
+            fieldLayout: Object,
+            value: [String, Number, Boolean, Object, Array, Date],
+            locale: [Array, String],
+            uniqueIdentifier: String,
+            fieldConfigIdentifier: String,
+            updateData: Function,
+            readOnly: Boolean,
+            root: Boolean,
 
             label: String,
             helpMessage: String,
@@ -119,6 +129,7 @@
                 ];
             },
             extraStyle() {
+                console.log(this);
                 return this.fieldProps.extraStyle;
             },
             hasError() {
@@ -193,10 +204,10 @@
                 this.$form.updateFieldError(identifier, null);
             },
             triggerFocus() {
-                this.$set(this.fieldProps, 'focused', true);
+                // this.$set(this.fieldProps, 'focused', true);
             },
             handleBlur() {
-                this.$set(this.fieldProps, 'focused', false);
+                // this.$set(this.fieldProps, 'focused', false);
             },
             handleValueChanged(value, { error } = {}) {
                 if(error) {

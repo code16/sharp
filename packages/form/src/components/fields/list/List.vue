@@ -26,58 +26,62 @@
             </template>
         </div>
 
-        <Draggable :options="dragOptions" :list="list" ref="draggable">
-            <transition-group name="expand" tag="div" class="list-group shadow-sm">
-                <template v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]">
-                    <div class="SharpList__item list-group-item"
-                        :class="{'SharpList__item--drag-active': dragActive}"
-                    >
-                        <template v-if="showInsertButton">
-                            <div class="SharpList__new-item-zone">
-                                <Button small @click="insertNewItem(i, $event)">
-                                    {{ __('sharp::form.list.insert_button') }}
-                                </Button>
-                            </div>
-                        </template>
+        <Draggable :options="dragOptions" :list="list" tag="transition-group" name="expand" ref="draggable">
+            <template #item="{ element: listItemData, index }">
+                <div class="SharpList__item list-group-item"
+                    :class="{'SharpList__item--drag-active': dragActive}"
+                >
+                    <template v-if="showInsertButton">
+                        <div class="SharpList__new-item-zone">
+                            <Button small @click="insertNewItem(index, $event)">
+                                {{ __('sharp::form.list.insert_button') }}
+                            </Button>
+                        </div>
+                    </template>
 
-                        <template v-if="dragActive && collapsedItemTemplate">
-                            <TemplateRenderer
-                                name="CollapsedItem"
-                                :template="collapsedItemTemplate"
-                                :template-data="collapsedItemData(listItemData)"
+                    <template v-if="dragActive && collapsedItemTemplate">
+                        <TemplateRenderer
+                            name="CollapsedItem"
+                            :template="collapsedItemTemplate"
+                            :template-data="collapsedItemData(listItemData)"
+                        />
+                    </template>
+                    <template v-else>
+                        <ListItem :layout="fieldLayout.item" :error-identifier="index" v-slot="{ fieldLayout }">
+                            <FieldDisplay
+                                :field-key="fieldLayout.key"
+                                :context-fields="transformedFields(index)"
+                                :context-data="listItemData"
+                                :error-identifier="fieldLayout.key"
+                                :config-identifier="fieldLayout.key"
+                                :update-data="update(i)"
+                                :locale="listItemData._fieldsLocale[fieldLayout.key]"
+                                :read-only="isReadOnly"
+                                :list="true"
+                                @locale-change="(key, value)=>updateLocale(index, key, value)"
                             />
+                        </ListItem>
+                        <template v-if="showRemoveButton">
+                            <button
+                                class="SharpList__remove-button btn-close"
+                                @click="remove(index)"
+                                :aria-label="__('sharp::form.list.remove_button')"
+                            ></button>
                         </template>
-                        <template v-else>
-                            <ListItem :layout="fieldLayout.item" :error-identifier="i" v-slot="{ fieldLayout }">
-                                <FieldDisplay
-                                    :field-key="fieldLayout.key"
-                                    :context-fields="transformedFields(i)"
-                                    :context-data="listItemData"
-                                    :error-identifier="fieldLayout.key"
-                                    :config-identifier="fieldLayout.key"
-                                    :update-data="update(i)"
-                                    :locale="listItemData._fieldsLocale[fieldLayout.key]"
-                                    :read-only="isReadOnly"
-                                    :list="true"
-                                    @locale-change="(key, value)=>updateLocale(i, key, value)"
-                                />
-                            </ListItem>
-                            <template v-if="showRemoveButton">
-                                <button
-                                    class="SharpList__remove-button btn-close"
-                                    @click="remove(i)"
-                                    :aria-label="__('sharp::form.list.remove_button')"
-                                ></button>
-                            </template>
-                        </template>
+                    </template>
 
-                        <template v-if="showSortButton">
-                            <div class="SharpList__drag-handle d-flex align-items-center px-1">
-                                <i class="fas fa-grip-vertical opacity-25"></i>
-                            </div>
-                        </template>
-                    </div>
-                </template>
+                    <template v-if="showSortButton">
+                        <div class="SharpList__drag-handle d-flex align-items-center px-1">
+                            <i class="fas fa-grip-vertical opacity-25"></i>
+                        </div>
+                    </template>
+                </div>
+            </template>
+<!--                <template v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]">-->
+
+<!--                </template>-->
+
+            <template #footer>
                 <template v-if="hasUpload">
                     <ListUpload
                         :field="uploadField"
@@ -87,14 +91,13 @@
                         key="upload"
                     />
                 </template>
-            </transition-group>
-
-            <template v-if="showAddButton" v-slot:footer :key="-1">
-                <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
-                    <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add">
-                        ＋ {{ addText }}
-                    </Button>
-                </div>
+                <template  v-if="showAddButton">
+                    <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
+                        <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add">
+                            ＋ {{ addText }}
+                        </Button>
+                    </div>
+                </template>
             </template>
         </Draggable>
         <template v-if="readOnly && !list.length">
@@ -108,6 +111,7 @@
     import { TemplateRenderer } from 'sharp/components';
     import { Button } from "@sharp/ui";
     import ListItem from './ListItem.vue';
+    import FieldDisplay from "../../FieldDisplay.vue";
 
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
@@ -128,6 +132,7 @@
             ListItem,
             Button,
             TemplateRenderer,
+            FieldDisplay,
         },
 
         props: {

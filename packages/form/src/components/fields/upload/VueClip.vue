@@ -422,7 +422,7 @@
                     } else {
                         this.addedFile({ ...this.value, upload: {} });
                     }
-                    this.$set(this.file, 'thumbnail', this.value.thumbnail ?? null);
+                    // this.$set(this.file, 'thumbnail', this.value.thumbnail ?? null);
                 } else {
                     this.files = [];
                 }

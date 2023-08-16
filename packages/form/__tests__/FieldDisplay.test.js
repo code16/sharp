@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import FieldContainer from '../src/components/ui/FieldContainer.vue';
-import FieldDisplay from '../src/components/FieldDisplay';
+import FieldDisplay from '../src/components/FieldDisplay.vue';
 import * as conditions from '../src/util/conditional-display';
 
 import { shallowMount } from '@vue/test-utils';

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="editor" :class="classes" :style="style">
+    <div class="editor">
         <div class="card">
             <template v-if="editor && toolbar">
                 <div class="card-header editor__header" v-sticky ref="header">

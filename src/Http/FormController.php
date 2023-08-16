@@ -101,12 +101,18 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function update(string $entityKey, string $instanceId = null)
+    public function update(string $uri, string $entityKey, string $instanceId = null)
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 
         $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
-        $this->checkFormImplementation($form, $instanceId);
+
+
+        abort_if(
+            (! $instanceId && ! $form instanceof SharpSingleForm)
+            || ($instanceId && $form instanceof SharpSingleForm),
+            404,
+        );
 
         $form->validateRequest($entityKey);
 
@@ -115,7 +121,7 @@ class FormController extends SharpProtectedController
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }
 
-    public function store(string $entityKey)
+    public function store(string $uri, string $entityKey)
     {
         $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 

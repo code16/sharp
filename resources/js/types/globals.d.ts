@@ -1,5 +1,5 @@
 import {Page, router} from "@inertiajs/core";
-
+import { Config, RouteParam, RouteParamsWithQueryOverload, Router } from 'ziggy-js';
 
 // interface SharedProps {
 //     auth: {
@@ -24,15 +24,22 @@ import {Page, router} from "@inertiajs/core";
 //     }
 // }
 
+
+export type ZiggyRouter = Router & { get params(): { [key: string]: string } }
+
 declare global {
-    function route(): {
-        current(): string
-        current(name: string): boolean
-        params: {
-            [key: string]: unknown;
-        }
-    }
-    function route(name?: string, params?): string
+    function route(
+        name?: undefined,
+        params?: RouteParamsWithQueryOverload | RouteParam,
+        absolute?: boolean,
+        config?: Config,
+    ): ZiggyRouter;
+    function route(
+        name: string,
+        params?: RouteParamsWithQueryOverload | RouteParam,
+        absolute?: boolean,
+        config?: Config,
+    ): string;
 }
 
 interface PaginatorMeta {
