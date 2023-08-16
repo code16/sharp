@@ -1,16 +1,14 @@
 # How to transform data
 
-Data transformation is useful when sending data to the front, which happens in the Entity List `getListData()` and in
-the Entity Form `find()` methods.
+Data transformation is useful when sending data to the front, which happens in the Entity List `getListData()`, and in the Form or Show Page `find()` methods.
 
-::: warning Note that transformers need your data models to allow direct access to their attributes, like for
-instance `spaceship->capacity`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent Model
-fulfill those needs.
+::: warning PRE-REQUISITES
+Note that transformers need your data models to allow direct access to their attributes, like for instance `product->price`, and to implement `Illuminate\Contracts\Support\Arrayable` interface. Eloquent models fulfill those needs.
 :::
 
 ## The `transform()` function
 
-In an Entity List or an Entity Form, you can use the `transform()` function which will:
+In an Entity List, a Show Page or a Form, you can use the `transform()` function which will:
 
 - apply all custom transformers on your list (see below),
 - transform the given model(s) into an array, handling pagination if a `LengthAwarePaginator` is provided.
@@ -18,42 +16,59 @@ In an Entity List or an Entity Form, you can use the `transform()` function whic
 Eloquent example in an Entity List:
 
 ```php
-function getListData(): array|Arrayable
+class ProductEntityList extends SharpEntityList
 {
-    return $this->transform(
-        Spaceship::with("picture", "type", "pilots")
-            ->paginate(10)
-    );
+    // [...]
+    
+    public function getListData(): array|Arrayable
+    {
+        return $this->transform(
+            Product::with('pictures')
+                ->paginate(50)
+        );
+    }
 }
 ```
 
-Eloquent example in an Entity Form:
+Eloquent example in a Form (or a Show Page, they share the API):
 
 ```php
-function find($id): array
+class ProductForm extends SharpForm
 {
-    return $this->transform(
-        Spaceship::with("reviews", "pilots")
-            ->findOrFail($id)
-    );
+    // [...]
+    
+    public function find($id): array
+    {
+        return $this->transform(
+            Product::findOrFail($id)
+        );
+    }
 }
 ```
 
 ## Custom transformers
 
-In the process, it's easy to add some custom transformation with `setCustomTransformer()`:
+Wa can handle transformations with `setCustomTransformer()`:
 
 ```php
-function getListData(): array|Arrayable
+class ProductEntityList extends SharpEntityList
 {
-    return $this
-        ->setCustomTransformer(
-            "capacity",
-            function($capacity, $spaceship, $attribute) {
-                return ($capacity/1000) . "k";
-            }
-        )
-        ->transform($spaceships);
+    // [...]
+    
+    function getListData(): array|Arrayable
+    {
+        return $this
+            ->setCustomTransformer(
+                'price',
+                function ($price, $product, $attribute) {
+                    return number_format($price, 2).' €';
+                }
+            )
+            ->transform(
+                Product::with('pictures')
+                    ->paginate(50)
+            );
+    }
 }
 ```
 
@@ -64,74 +79,60 @@ Note that a custom transformer defined on a missing attribute will add the attri
 But if this isn't the wanted behaviour, the solution is to define in the `SharpAttributeTransformer` implementation a public `applyIfAttributeIsMissing()` function, which when returning `false` ensure that Sharp will ignore the attribute if it is missing.
 :::
 
-
 ## Transform attribute of a related model (hasMany relationship)
 
-Sometimes you would like to transform an attribute of a related model in a "has many" relationship. For instance let's
-say you want to display the names of the sons of a father in caps:
+Sometimes you would like to transform an attribute of a related model in a hasMany relationship. For instance let's say you want to display the names of the sons of a father in caps:
 
 ```php
 return $this
     ->setCustomTransformer(
         "sons[name]",
-        function($son) {
-            return strtoupper($son->name);
-        }
+        fn ($son) => strtoupper($son->name)
     )
     ->transform($father);
 ```
 
 The convention in this case is to use an array notation, given that `$father->sons` is a collection of objects with a `name` attribute
 
-
 ## The ":" separator and transformers
 
 Sometimes you'll need to reference a related attribute, like for instance the name of the author of a Post, either in an Entity List:
 
 ```php
-function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+class ProductEntityList extends SharpEntityList
 {
-    $fieldsContainer->addField(
-        EntityListDataContainer::make("author:name")
-            ->setLabel("Author")
-    );
-}
-
-function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-{
-    $fieldsLayout->addColumn("author:name", 6);
+    // [...]
+    
+    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    {
+        $fieldsContainer->addField(
+            EntityListDataContainer::make('author:name')
+                ->setLabel('Author')
+        );
+    }
+    
+    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
+    {
+        $fieldsLayout->addColumn('author:name', 6);
+    }
 }
 ```
 
-or in an Entity Form:
+or in a Form / Show Page:
 
 ```php
-function buildFormFields(FieldsContainer $formFields): void
+class ProductForm extends SharpForm
 {
-    $formFields->addField(
-        SharpFormTextField::make("picture:legend")
-            ->setLabel("Legend")
-    );
+    // [...]
+    
+    function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields->addField(
+            SharpFormTextField::make('picture:legend')
+                ->setLabel('Legend')
+        );
+    }
 }
 ```
 
 The `:` separator used here will be interpreted in `transform()`, and the `$post->author->name` attribute will be used.
-
-
-## The built-in `MarkdownAttributeTransformer`
-
-Transforms a markdown formatted text into HTML. Example:
-
-```php
-function find($id): array
-{
-    return $this
-        ->setCustomTransformer(
-            "description", 
-            new MarkdownAttributeTransformer()
-        )
-        ->transform([...]);
-}
-```
-
-It will handle embedded images (see the [editor form field documentation for details on that](form-fields/editor.html)).

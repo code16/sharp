@@ -15,9 +15,7 @@ php artisan sharp:make:entity-list <class_name> [--model=<model_name>]
 ## Write the class
 
 First let's write the applicative class, and make it extend `Code16\Sharp\EntityList\SharpEntityList`. Therefore, there are two methods to implement:
-
 - `buildList(EntityListFieldsContainer $fields)` for the structure,
-
 - and `getListData()` for the actual data of the list.
 
 There are a two more optional methods, for the list config and instance deletion. 
@@ -56,7 +54,7 @@ The returned array is meant to be built with 2 rules:
 - each item must define the keys declared in the `buildListFields()` function,
 - plus one attribute for the identifier, which is `id` by default (more on that later).
 
-So for instance, if we defined 2 columns `name` and `capacity`:
+So for instance, if we defined 2 columns `name` and `price`:
 
 ```php
 function getListData()
@@ -64,12 +62,12 @@ function getListData()
     return [
         [
             'id' => 1,
-            'name' => 'USS Enterprise',
-            'capacity' => '10k'
+            'name' => 'Carrot',
+            'price' => '0.5'
         ], [
             'id' => 2,
-            'name' => 'USS Agamemnon',
-            'capacity' => '20k'
+            'name' => 'Potato',
+            'price' => '0.95'
         ]
     ];
 }
@@ -124,7 +122,7 @@ if ($this->queryParams->hasSearch()) {
     foreach ($this->queryParams->searchWords() as $word) {
         $spaceships->where(function ($query) use ($word) {
             $query->orWhere('name', 'like', $word)
-                ->orWhere('pilots.name', 'like', $word);
+                ->orWhere('email', 'like', $word);
             });
         }
     }
@@ -133,11 +131,11 @@ if ($this->queryParams->hasSearch()) {
 
 ##### Filters
 
-We haven't seen yet how we can build a `Filter`, but at this stage, a filter is a `key` and a `value`. So we can grab this calling `$filterValue = $this->queryParams->filterFor($filterKey)`, and use the value in our query code.
+A filter is referenced by a `filterKey` and has a `value`. So we can grab this calling `$filterValue = $this->queryParams->filterFor($filterKey)`, and use the value in our query code.
 
 #### Pagination
 
-It's very common to return in `getListData()` paginated results:  return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
+It's very common to return in `getListData()` paginated results: return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
 
 With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` on the query.
 
@@ -148,11 +146,11 @@ Here you might write the code performed on a deletion of the instance. It can be
 ```php
 function delete($id): void
 {
-    Spaceship::findOrFail($id)->delete();
+    Product::findOrFail($id)->delete();
 }
 ```
 
-Deletion is typically an action you perform [in a Show Page](building-show-page.md), but it is also available in the Entity List for convenience. You can configure thid action to hide it, and of course leverage specific authorizations (more on this below). 
+Deletion is typically an action you perform [in a Show Page](building-show-page.md), but it is also available in the Entity List for convenience. You can configure this action to hide it, and of course leverage specific authorizations (more on this below). 
 
 ### `buildListConfig()`
 
@@ -191,10 +189,10 @@ Here is the full list of available methods:
 
 - `configureDelete(bool $hide = false, ?string $onfirmationText = null)`: the first argument is to show / hide the delete command on each instance (shown by default); this is only useful to hide the link if you want to only display the delete action in the Show Page (if you have defined one), this is NOT to be used for authorization purpose (see [dedicated documentation on this topic](entity-authorizations.md)). The second argument is the message to display in the confirmation dialog (a sensible default will be used).
 
-## Configure the entity list
+## Configure the Entity List
 
 The Entity List must be declared in the correct entity class, as documented here: [Write an entity](entity-class.md)).
 
-After this we can access the Entity List at the following URL: **/sharp/s-list/spaceship** (replace "spaceship" by our entity key).
+After this we can access the Entity List at the following URL: **/sharp/s-list/products** (replace "products" by our entity key).
 
 To go ahead and learn how to add a link in the Sharp side menu, [look here](building-menu.md).
