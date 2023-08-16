@@ -2,19 +2,19 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteListField`
 
-This one is seems a little strange. The goal is to build a List with only one field in each item, an Autocomplete.
+This one may seem a little strange. The goal is to build a List with only one field in each item: an Autocomplete.
 
-First let's see a use case: imagine you want to handle a list of `winners` by selecting them in a big list of Players, for which an remote Autocomplete is the best choice (otherwise you could have opted for a Tags Field).
+First let's see a use case: imagine you want to handle a list of `winners` by selecting them in a big list of Players, for which a remote Autocomplete is the best choice (otherwise you could have opted for a Tags Field).
 
 You can in fact define the list as this:
 
 ```php
-SharpFormAutocompleteListField::make("winners")
-        ->setLabel("Winners")
+SharpFormAutocompleteListField::make('winners')
+        ->setLabel('Winners')
         ->setItemField(
-            SharpFormAutocompleteField::make("item", "remote")
-                ->setRemoteEndpoint("/players")
-                [...]
+            SharpFormAutocompleteField::make('item', 'remote')
+                ->setRemoteEndpoint('/players')
+                // [...]
         )
 );
 ```
@@ -37,7 +37,6 @@ You can use this function instead of `addItemField`, since items of Autocomplete
 ### `addItemField(SharpFormField $field)`
 
 This method is an alias for `setItemField()`, meaning that you can only pass an Autocomplete, and it can only be called once.
-
 
 ## Formatter
 

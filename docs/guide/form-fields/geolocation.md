@@ -10,12 +10,12 @@ Class: `Code16\Sharp\Form\Fields\SharpFormGeolocationField`
 <tr>
 <td class="p-0">
 
-![](./geolocation-1.png)
+![](./geolocation-modale.png)
 
 </td>
 <td class="p-0">
 
-![](./geolocation-2.png)
+![](./geolocation-field.png)
 
 </td>
 </tr>
