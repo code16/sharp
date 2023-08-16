@@ -106,8 +106,8 @@ Add your `.js` file to `resources/views/vendor/sharp/partials/plugin-scripts.bla
 ```php
 // config/sharp.php
 
-"extensions" => [
-   "activate_custom_fields" => true
+'extensions' => [
+   'activate_custom_fields' => true
 ],
 
 // ...
@@ -123,7 +123,7 @@ Here's an example:
 ```php
 class SharpCustomShowFieldTitle extends SharpShowField
 {
-    const FIELD_TYPE = "custom-title";
+    const FIELD_TYPE = 'custom-title';
 
     protected int $level = 1;
 
@@ -142,14 +142,14 @@ class SharpCustomShowFieldTitle extends SharpShowField
     protected function validationRules(): array
     {
         return [
-            "level" => "required|integer|min:1|max:5",
+            'level' => 'required|integer|min:1|max:5',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "level" => $this->level,
+            'level' => $this->level,
         ]);
     }
 }
@@ -173,7 +173,7 @@ Next step is using the new show field:
 function buildShowFields(FieldsContainer $showFields): void
 {
     $showFields->addField(
-        SharpCustomShowFieldTitle::make("name")
+        SharpCustomShowFieldTitle::make('name')
             ->setLevel(2)
     );
 }

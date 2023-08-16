@@ -10,15 +10,14 @@ The picture field has no configuration.
 
 You must value this field with an URL of the image.
 
-If you are using [Sharp built-in Upoad solution](../sharp-uploads.md), be sure to use
-the  `SharpUploadModelThumbnailUrlTransformer`:
+If you are using [Sharp built-in Upoad solution](../sharp-uploads.md), be sure to use the  `SharpUploadModelThumbnailUrlTransformer`:
 
 ```php
 function find($id): array
 {
     return $this
         ->setCustomTransformer(
-            "picture", 
+            'picture', 
             new SharpUploadModelThumbnailUrlTransformer(600)
         )
         ->transform([...]);

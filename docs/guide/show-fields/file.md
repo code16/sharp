@@ -27,9 +27,9 @@ Sharp expects an array with 3 keys:
 
 ```php
 [
-    "name" => "", // Relative file path
-    "thumbnail" => "", // 1000px w * 400px h thumbnail full url
-    "size" => x, // Size in bytes
+    'name' => '', // Relative file path
+    'thumbnail' => '', // 1000px w * 400px h thumbnail full url
+    'size' => x, // Size in bytes
 ]
 ```
 
