@@ -55,7 +55,6 @@ class ShowController extends SharpProtectedController
             'show' => ShowData::from($data),
             'breadcrumb' => BreadcrumbData::from(['items' => []]), // TODO
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
-            'test' => Inertia::lazy(fn () => 'aaa'),
         ]);
     }
 }
