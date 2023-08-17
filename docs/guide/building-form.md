@@ -16,10 +16,9 @@ php artisan sharp:make:form <class_name> [--model=<model_name>]
 
 As usual in Sharp, we begin by creating a class dedicated to our Form and make it extend `Code16\Sharp\Form\SharpForm`; and we'll have to implement at least 4 functions:
 
-- `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to build and configure the form itself,
-
+- `buildFormFields(FieldsContainer $formFields)` to declare fields, 
+- `buildFormLayout(FormLayout $formLayout)` to handle fields layout,
 - `find($id): array` to get the instance data,
-
 - `update($id, array $data)` to update the instance.
 
 Let's see the specifics:
@@ -51,11 +50,8 @@ As we can see in this simple example, we defined two text fields giving them a m
 Every field has the optional following setters:
 
 - `setLabel(string $label)` for the field label displayed above it
-
 - `setHelpMessage(string $helpMessage)` to add a help text below the field
-
 - `setReadOnly(bool $readOnly = true)`
-
 - `setExtraStyle(string $style)`: the CSS style will be added in a `style` attribute
 
 In addition, all text fields have one more generic setter:
@@ -64,16 +60,16 @@ In addition, all text fields have one more generic setter:
 
 #### Conditional display
 
-The idea is to hide or show a field depending on some other field value, called "master" in this relation. To do that, use the `addConditionalDisplay(string $fieldKey, $values = true)` setter giving:
+The idea is to hide or show a field (referred as "secondary") depending on some other field (referred as "main") value. To do that, use the `addConditionalDisplay(string $fieldKey, $values = true)` setter giving:
 
-- the master `$fieldKey`, which should refer to either a Check, Select, Tags or Autocomplete field,
+- the main `$fieldKey`, which should refer to either a Check, Select, Tags or Autocomplete field,
 
-- the `$values` of the master field for which the "slave" field must be visible. You can put there a boolean for a Check master field, and for other fields (Select, Tags, Autocomplete), either:
-	- a string value, like for instance `'red'`: the slave field is visible only when the master field value is "red"
-	- a string value with a negation mark as the first char, like `'!red'`: the slave field is visible only when the master field value is NOT "red"
-	- an array of values: `['red', 'blue']`. The slave field is visible only when the master field value is either "red" or "blue".
+- the `$values` of the main field for which the secondary field must be visible. You can put there a boolean for a Check master field, and for other fields (Select, Tags, Autocomplete), either:
+	- a string value, like for instance `'red'`: the slave field is visible only when the main field value is "red"
+	- a string value with a negation mark as the first char, like `'!red'`: the secondary field is visible only when the main field value is NOT "red"
+	- an array of values: `['red', 'blue']`. The secondary field is visible only when the main field value is either "red" or "blue".
 
-You can add multiple conditional display rules, chaining calls to `addConditionalDisplay(string $fieldKey, $values = true)`. In this case, all conditions will be linked with a `AND` operator by default (meaning all conditions must be verified to display the slave field), but this can be switched to an `OR` easily with `setConditionalDisplayOrOperator()` (and back with `setConditionalDisplayAndOperator()`).
+You can add multiple conditional display rules, chaining calls to `addConditionalDisplay(string $fieldKey, $values = true)`. In this case, all conditions will be linked with a `AND` operator by default (meaning all conditions must be verified to display the secondary field), but this can be switched to an `OR` easily with `setConditionalDisplayOrOperator()` (and back with `setConditionalDisplayAndOperator()`).
 
 #### Formatters
 
@@ -126,11 +122,11 @@ Here's another possible layout, with two unequally large columns:
 function buildFormLayout(FormLayout $formLayout)
 {
     $formLayout
-    	->addColumn(7, function(FormLayoutColumn $column) {
-        	$column->withSingleField('name');
+        ->addColumn(7, function(FormLayoutColumn $column) {
+            $column->withSingleField('name');
     	})
     	->addColumn(5, function(FormLayoutColumn $column) {
-        	$column->withSingleField('capacity');
+            $column->withSingleField('capacity');
     	});
 }
 ```
@@ -205,16 +201,16 @@ Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
 $formLayout
-	->addTab('tab 1', function(FormLayoutTab $tab) {
-		$tab->addColumn(6, function(FormLayoutColumn $column) {
-			$column->withSingleField('name');
-			[...]
-		});
-	})
-	->addTab([...])
+    ->addTab('tab 1', function(FormLayoutTab $tab) {
+        $tab->addColumn(6, function(FormLayoutColumn $column) {
+            $column->withSingleField('name');
+            // [...]
+	    });
+    })
+    ->addTab([...])
 ```
 
-The tab will here be labelled "tab1".
+The tab will here be labelled "tab 1".
 
 ### `find($id): array`
 
@@ -258,24 +254,27 @@ Remember: Sharp aims to be as permissive as possible. So just write the code to 
 Sharp also aims to help the applicative code to be as small as possible, and if you're using Eloquent, you can import a dedicated trait: `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`. And then, write this kind of code:
 
 ```php
-function update($id, array $data)
+class ProductForm extends SharpForm
 {
-    $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
-
-    $this
-    	->setCustomTransformer('capacity', function($capacity) {
-            return $capacity * 1000;
-        })
-        ->ignore('pilots')
-        ->save($instance, $data);
+    // [...]
+    
+    function update($id, array $data)
+    {
+        $instance = $id ? Product::findOrFail($id) : new Product;
+    
+        $this
+            ->setCustomTransformer('price', fn ($price) => $price / 100)
+            ->ignore('comment')
+            ->save($instance, $data);
+    }
 }
 ```
 
 We first define a custom transformer (see [detailed documentation](how-to-transform-data.md)).
 
-Then we decide for some reason to bypass the automatic save process for the `pilots` attribute — because why not? This `ignore()` function can be called with an array as well. You'll probably do whatever is necessary for this field after the `save()` call.
+Then we decide for some reason to bypass the automatic save process for the `comment` attribute. This `ignore()` function can be called with an array as well. You'll probably do whatever is necessary for this field after the `save()` call.
 
-Finally, we call `$this->save()` with the instance and the sent data. This method will do all the persisting crap for you, handling if needed related models (for lists, tags, selects, ...), with any relation allowed by Eloquent (hasMany, belongsToMany, morphMany, ...).
+Finally, we call `$this->save()` with the instance and the sent data. This method will do all the persisting code for you, handling if needed related models (for lists, tags, selects, ...), with any relation allowed by Eloquent (hasMany, belongsToMany, morphMany, ...).
 
 #### Handle applicative exceptions
 
@@ -284,12 +283,13 @@ In the `update($id, array $data)` method you may want to throw an exception on a
 ```php
 function update($id, array $data)
 {
-    [...]
+    // [...]
 
     if($sometingIsWrong) {
         throw new SharpApplicativeException('Something is wrong');
     }
-    [...]
+    
+    // [...]
 }
 ```
 
@@ -306,11 +306,11 @@ Sometimes you'll want to display a message to the user, after a creation or an u
 ```php
 function update($id, array $data)
 {
-    $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+    $instance = $id ? Product::findOrFail($id) : new Product;
 
     $this->save($instance, $data);
 
-    $this->notify('Spaceship was indeed updated.')
+    $this->notify('Product was indeed updated.')
          ->setDetail('As you asked.')
          ->setLevelSuccess()
          ->setAutoHide(false);
@@ -335,7 +335,7 @@ This method **is not mandatory**, a default implementation is proposed by Sharp,
 ```php
 function create(): array
 {
-    return $this->transform(new Spaceship(['name' => 'new']));
+    return $this->transform(new Product(['name' => 'new']));
 }
 ```
 
@@ -354,7 +354,7 @@ Example
 ```php
 function buildFormConfig(): void
 {
-	$this->configureBreadcrumbCustomLabelAttribute('name.en')
+	$this->configureBreadcrumbCustomLabelAttribute('name')
 		->setDisplayShowPageAfterCreation();
 }
 ```
@@ -364,9 +364,9 @@ function buildFormConfig(): void
 In order to have an input validation on your form, you can create a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
 
 ```php
-class SpaceshipSharpForm extends SharpForm
+class ProductForm extends SharpForm
 {
-    protected ?string $formValidatorClass = SpaceshipSharpValidator::class;
+    protected ?string $formValidatorClass = ProductValidator::class;
     
     // ...
 }
@@ -402,7 +402,7 @@ public function rules()
 }
 ```
 
-Or even easier, make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
+Or make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ## Declare the form
 

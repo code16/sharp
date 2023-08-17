@@ -6,9 +6,9 @@ This widget is based on the HTML Form field, and is intended to display any usef
 
 ```php
 $widgetsContainer->addWidget(
-    SharpPanelWidget::make('activeSpaceships')
-        ->setInlineTemplate(''<h1>{{count}}</h1> spaceships in activity'')
-        ->setLink(LinkToEntityList::make('spaceship'));
+    SharpPanelWidget::make('messages')
+        ->setInlineTemplate('{{count}} unread messages')
+        ->setLink(LinkToEntityList::make('messages')->addFilter(MessageStateFilter::class, 'unread'))
 ```
 
 Note that the `setLink()` method is expecting a [LinkTo... instance](../link-to.md).
@@ -21,9 +21,7 @@ Just write the template as a string, using placeholders for data like this: `{{v
 Example:
 
 ```php
-$panel->setInlineTemplate(
-    ''<h1>{{count}}</h1> spaceships in activity''
-)
+$panel->setInlineTemplate('<strong>{{count}}</strong> unread messages')
 ```
 
 ### `setTemplatePath(string $templatePath)`
@@ -44,10 +42,10 @@ Valuation is handled by a dedicated `$this->setPanelData(string $panelWidgetKey,
 ```php
 function buildWidgetsData(): void
 {
-    $count = [...];
+    $count = 36; // [...];
 
     $this->setPanelData(
-        'activeSpaceships', ['count' => $count]
+        'messages', ['count' => $count]
     );
 }
 ```

@@ -59,7 +59,7 @@ class PostShow extends SharpShow
                     )
             )
             ->addField(
-                SharpShowEntityListField::make('blocks', 'blocks')
+                SharpShowEntityListField::make('blocks')
                     ->setLabel('Blocks')
                     ->hideFilterWithValue('post', fn ($instanceId) => $instanceId)
             );

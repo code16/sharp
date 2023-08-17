@@ -6,7 +6,6 @@ This field is read-only, and is meant to display some dynamic information in the
 
 ## Configuration
 
-
 ### `setInlineTemplate(string $template)`
 
 Write the template as a string, using placeholders for data like this: `{{var}}` where "var" is some key to data sent to the front
@@ -14,29 +13,26 @@ Write the template as a string, using placeholders for data like this: `{{var}}`
 Example:
 
 ```php
-SharpFormHtmlField::make("panel")
-    ->setInlineTemplate(
-        "<h1>{{count}}</h1> spaceships in activity"
-    )
+SharpFormHtmlField::make('panel')
+    ->setInlineTemplate('This product is offline since <strong>{{date}}</strong>')
 ```
 
-Like other fields, this example would mean that your transformed data has an object named `panel` containing a `count` attribute. Here more than elsewhere you may need to use a custom transformer, like this is this piece of code:
+Like other fields, this example would mean that your transformed data has an object named `panel` containing a `date` attribute. Here more than elsewhere you may need to use a custom transformer, like this is this piece of code:
 
 ```php
 function find($id): array
     {
         return $this
-            ->setCustomTransformer("panel", function($spaceship) {
+            ->setCustomTransformer('panel', function($product) {
                 return [
-                    "count" => $spaceship->activities->count()
+                    'date' => $product->deprecated_at->isoFormat()
                 ];
             })
             ->transform(
-                Spaceship::with("activities")->findOrFail($id)
+                Product::findOrFail($id)
             );
     }
 ```
-
 
 ### `setTemplatePath(string $templatePath)`
 
@@ -48,7 +44,6 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 <div v-if="show">result is {{value}}</div>
 <div v-else>result is unknown</div>
 ```
-
 
 ## Formatter
 

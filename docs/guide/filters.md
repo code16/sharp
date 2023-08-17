@@ -1,8 +1,8 @@
 # Filters
 
-Filters are a simple way for the user to filter list items or dashboard (see below) widgets on some attribute, for instance display only books that cost more than 15 euros.
+Filters provide a way for the user to filter list items or dashboard widgets on some attribute; for instance, display only books that cost more than 15 euros.
 
-This documentation is written for the EntityList case, but the API is the same for Dashboard (as explained at the end of this page).
+This documentation is written for the Entity List case, but the API is the same for Dashboard (as explained at the end of this page).
 
 ## Generator
 
@@ -12,15 +12,15 @@ php artisan sharp:make:entity-list-filter <class_name> [--required,--multiple,--
 
 ## Write the filter class
 
-First, we need to write a class which extends `Code16\Sharp\EntityList\Filters\EntityListSelectFilter`, and therefore declare a `values()` function. This function must return an `["id" => "label"]` array. For instance, with Eloquent:
+First, we need to write a class which extends `Code16\Sharp\EntityList\Filters\EntityListSelectFilter`, and therefore declare a `values()` function. This function must return an `[{id} => {label}]` array. For instance, with Eloquent:
 
 ```php
-class SpaceshipTypeFilter extends EntityListSelectFilter
+class ProductCategoryFilter extends EntityListSelectFilter
 {
     public function values(): array
     {
-        return SpaceshipType::orderBy("label")
-            ->pluck("label", "id")
+        return ProductCategory::orderBy('label')
+            ->pluck('label', 'id')
             ->toArray();
     }
 }
@@ -31,66 +31,64 @@ class SpaceshipTypeFilter extends EntityListSelectFilter
 You can implement the optional `buildFilterConfig()` method to configure the filter:
 
 ```php
-public function buildFilterConfig(): void
+class ProductCategoryFilter extends EntityListSelectFilter
 {
-    $this->configureLabel("Ship type")
-        ->configureKey("s-type")
-        ->configureRetainInSession();
+    // [...]
+    
+    public function buildFilterConfig(): void
+    {
+        $this->configureLabel('Category')
+            ->configureKey('cat')
+            ->configureRetainInSession();
+    }
 }
 ```
 
-- `configureLabel(string $label)`: use this to define the filter label displayed in the UI
-- `configureKey(string $key)`: the default key, meaning identifier, of a filter is its class name; if you need to change this, you can do so with this method
-- `configureRetainInSession()`: to keep the filter value in session, see below.
+- `configureLabel(string $label)`: use this to define the filter label displayed in the UI.
+- `configureKey(string $key)`: the default key, meaning the identifier, of a filter is its class name. If you need to change this (which should be a rare case), you can do so with this method.
+- `configureRetainInSession()`: to keep the filter value in session (see below).
 
 ## Declare the filter
 
-Next, in the EntityList, we must declare the filter:
+Next, in the Entity List, we must declare the filter:
 
 ```php
-function getFilters(): ?array
+class ProductEntityList extends SharpEntityList
 {
-    return [
-        SpaceshipTypeFilter::class,
-    ];
+    // [...]
+    
+    function getFilters(): ?array
+    {
+        return [
+            ProductCategoryFilter::class,
+        ];
+    }
 }
 ```
-
-Sharp will display a dropdown with those values for a "type" filter.
 
 ## Handle filter selection
 
-Once the user clicked on a filter, Sharp will call EntityList's `getListData()`; the filter value will be accessible either with :
-- classname : `$this->queryParams->filterFor(MyFilter::class)`
-- key : `$this->queryParams->filterFor("key")` (this only works if it was set in the filter class with `configureKey()`)
+Once the user clicked on a filter, Sharp will call EntityList's `getListData()`; the filter value will be accessible with:
+- its classname : `$this->queryParams->filterFor(MyFilter::class)`
+- or its custom key, if defined with `configureKey()`: `$this->queryParams->filterFor('key')`
 
-For instance:
-
-```php
-function getListData()
-{
-    $spaceships = Spaceship::query();
-
-    if($type = $this->queryParams->filterFor(SpaceshipTypeFilter::class)) {
-        $spaceships->where("type_id", $type);
-    }
-
-    [...]
-}
-```
-
-Or with a key:
+Example:
 
 ```php
-function getListData()
+class ProductEntityList extends SharpEntityList
 {
-    $spaceships = Spaceship::query();
-
-    if($type = $this->queryParams->filterFor("s-type")) {
-        $spaceships->where("type_id", $type);
+    // [...]
+    
+    function getListData()
+    {
+        $products = Product::query();
+    
+        if($cat = $this->queryParams->filterFor(ProductCategoryFilter::class)) {
+            $products->where('category_id', $cat);
+        }
+    
+        // [...]
     }
-
-    [...]
 }
 ```
 
@@ -101,15 +99,20 @@ First, notice that you can have as many filters as you want for an EntityList. T
 In this case, with Eloquent for instance, your might have to modify your code to ensure that you have an array (Sharp will return either null, and id or an array of id, depending on the user selection):
 
 ```php
-function getListData()
+class ProductEntityList extends SharpEntityList
 {
-    $spaceships = Spaceship::query();
+    // [...]
     
-    if ($pilots = $this->queryParams->filterFor("pilots")) {
-        $spaceships->whereIn("pilots.id", (array)$pilots);
+    function getListData()
+    {
+        $products = Product::query();
+    
+        if($categories = $this->queryParams->filterFor(ProductCategoriesFilter::class)) {
+            $products->whereIn('category_id', $categories);
+        }
+    
+        // [...]
     }
-
-    [...]
 }
 ```
 
@@ -122,21 +125,22 @@ You might find useful to filter list elements on a specific date range. Date ran
 Then you need to adjust the query with selected range (Sharp will return an associative array of two Carbon date objects). In this case, with Eloquent for instance, you might add a condition like:
 
 ```php
-function getListData()
+class ProductEntityList extends SharpEntityList
 {
-    $spaceships = Spaceship::query();
+    // [...]
     
-    if ($range = $this->queryParams->filterFor("createdAt")) {
-        $spaceships->whereBetween(
-            "created_at",
-            [
-                $range['start'],
-                $range['end']
-            ]
-        );
+    function getListData()
+    {
+        $products = Product::query();
+        
+        if ($range = $this->queryParams->filterFor(ProductCreationDateFilter::class)) {
+            $products->whereBetween(
+                'created_at', [$range['start'], $range['end']]
+            );
+        }
+        
+        // [...]
     }
-    
-    [...]
 }
 ```
 
@@ -145,10 +149,15 @@ function getListData()
 You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday) implementing those two optional methods in your filter implementation:
 
 ```php
-public function buildFilterConfig(): void
+class ProductCreationDateFilter extends EntityListDateRangeFilter
 {
-    $this->configureDateFormat("YYYY-MM-DD")
-        ->configureMondayFirst(false);
+    // [...]
+    
+    public function buildFilterConfig(): void
+    {
+        $this->configureDateFormat("YYYY-MM-DD")
+            ->configureMondayFirst(false);
+    }
 }
 ```
 
@@ -159,13 +168,13 @@ It is sometimes useful to have a filter which can't be null: to achieve this you
 Example for a select filter:
 
 ```php
-class SpaceshipTypeFilter extends EntityListSelectRequiredFilter
+class ProductCategoryFilter extends EntityListSelectRequiredFilter
 {
     [...]
     
     public function defaultValue(): mixed
     {
-        return SpaceshipType::orderBy("label")->first()->id;
+        return ProductCategory::orderBy('label')->first()->id;
     }
 }
 ```
@@ -175,13 +184,13 @@ Note that a filter can't be required AND multiple.
 Example for a date range filter:
 
 ```php
-class TravelPeriodFilter extends EntityListDateRangeRequiredFilter
+class ProductCreationDateFilter extends EntityListDateRangeRequiredFilter
 {
     public function defaultValue(): array
     {
         return [
-            "start" => Carbon::yesterday(),
-            "end" => Carbon::today(),
+            'start' => Carbon::yesterday(),
+            'end' => Carbon::today(),
         ];
     }
 }
@@ -205,7 +214,7 @@ Sometimes you need your select filter results to be a little more than a label. 
 ```php
 public function buildFilterConfig(): void
 {
-    $this->configureTemplate("{{label}}<br><small>{{detail}}</small>");
+    $this->configureTemplate('<div>{{label}}</div><div><small>{{detail}}</small></div>');
 }
 ```
 
@@ -213,19 +222,19 @@ You can also, for more control, return a view here.
 
 The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. It's the same as [Autocomplete's templates](form-fields/autocomplete.md).
 
-You'll need also to change your `values()` function, returning more than an `["id"=>"value"]` array. For instance:
+You'll need also to change your `values()` function, returning more than an `[{id}=>{value}]` array. For instance:
 
 ```php
 public function values()
 {
-    return SpaceshipType::orderBy("label")
+    return ProductCategory::orderBy('label')
         ->get()
-        ->map(function($type) {
-          return [
-            "id" => $type->id,
-            "label" => $type=>label,
-            "detail" => $type->detail_text
-          ];
+        ->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'label' => $category->label,
+                'detail' => $category->detail_text
+            ];
         });
 }
 ```
@@ -238,17 +247,17 @@ Finally, if your filter is also searchable, you'll need to configure attributes 
 public function buildFilterConfig(): void
 {
     $this->configureSearchable()
-        ->configureSearchKeys(["label", "detail"]);
+        ->configureSearchKeys(['label', 'detail']);
 }
 ```
 
 ## Check filter
 
-Sometimes a filter is just a matter on true / false. For instance, "only show orphans", or "only show admins". Just make your filter class extend `Code16\Sharp\EntityList\Filters\EntityListCheckFilter`.
+In case of a filter that is just a matter on true / false ("only show admins" for example), just make your filter class extend `Code16\Sharp\EntityList\Filters\EntityListCheckFilter`.
 
 ## Master filter
 
-In some cases (like linked filters, for instance: the second filter values depends on the first one), you want to ensure that selecting a filter value will reset all other filters. It's called: "master".
+In some cases you want to ensure that selecting a filter value will reset all other filters. It's called "master filter".
 
 ```php
 public function buildFilterConfig(): void
@@ -259,7 +268,7 @@ public function buildFilterConfig(): void
 
 ## Retained filters value in session
 
-Sometimes you'll want to make the filter's value persistent across calls. Say for example that you have a "country" filter, which is common to several Entity Lists: the idea is to keep the user choice even when he changes the current displayed list.
+If you want to make the filter's value persistent across calls you can leverage the "retain filter" feature. For example, you may have a "country" filter which is common to several Entity Lists: the idea is to keep the user choice even when he changes the current displayed list.
 
 ```php
 public function buildFilterConfig(): void
@@ -268,9 +277,10 @@ public function buildFilterConfig(): void
 }
 ```
 
-And that's it, Sharp will keep the filter value in session and ensure it is valued on next requests (if not overridden). This feature works for all types of filters (required, multiple).
+And with that Sharp will keep the filter value in session and ensure it is valued on next requests (if not overridden). This feature works for all types of filters (required, multiple).
 
-::: warning In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
+::: warning 
+In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
 ## Filters for Dashboards
@@ -281,20 +291,7 @@ And that's it, Sharp will keep the filter value in session and ensure it is valu
 
 You may want to "scope" the entire data set: an example of this could be a user which can manage several organizations. Instead of adding a filter on almost every Entity List, in this case, you can define a global filter, which will appear like this (on the left menu):
 
-<table>
-<tr>
-<td class="p-0">
-
-![](./img/global-filters-1.png)
-
-</td>
-<td class="p-0">
-
-![](./img/global-filters-2.png)
-
-</td>
-</tr>
-</table>
+![](./img/global-filters.png)
 
 To achieve this, first write the filter class, like any filter, except it must
 extend `\Code16\Sharp\Utils\Filters\GlobalRequiredFilter` — meaning it must be a required filter.
@@ -304,8 +301,8 @@ class OrganizationGlobalFilter extends GlobalRequiredFilter
 {
     public function values(): array
     {
-        return Corporation::orderBy("name")
-            ->pluck("name", "id")
+        return Corporation::orderBy('name')
+            ->pluck('name', 'id')
             ->all();
     }
 
@@ -319,16 +316,14 @@ class OrganizationGlobalFilter extends GlobalRequiredFilter
 And then, we declare it in Sharp's config file:
 
 ```php
-// sharp.php
+// in config/sharp.php
 
 return [
-    [...]
+    // [...]
 
-    "global_filters" => [
+    'global_filters' => [
         OrganizationGlobalFilter::class
     ],
-
-    [...]
 ];
 ```
 
@@ -338,5 +333,4 @@ Finally, to get the actual value of the filter on your Entity List, Show Page or
 currentSharpRequest()->globalFilterFor(OrganizationGlobalFilter::class)
 ```
 
-The usage of SharpContext is [detailed here](context.md).
-
+The usage of Sharp Context is [detailed here](context.md).

@@ -22,19 +22,19 @@
                         <template v-if="reordering">
                             <div class="col-auto">
                                 <Button outline @click="handleReorderButtonClicked">
-                                    {{ __('sharp::action_bar.list.reorder_button') }}
-                                </Button>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="col-auto">
-                                <Button outline @click="handleReorderButtonClicked">
                                     {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                 </Button>
                             </div>
                             <div class="col-auto">
                                 <Button @click="handleReorderSubmitButtonClicked">
                                     {{ __('sharp::action_bar.list.reorder_button.finish') }}
+                                </Button>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col-auto">
+                                <Button outline @click="handleReorderButtonClicked">
+                                    {{ __('sharp::action_bar.list.reorder_button') }}
                                 </Button>
                             </div>
                         </template>

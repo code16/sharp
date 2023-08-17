@@ -19,11 +19,8 @@ php artisan sharp:make:show-page <class_name> [--model=<model_name>]
 First we build a class dedicated to our Show Page extending `Code16\Sharp\Show\SharpShow`; and we'll have to implement:
 
 - `buildShowFields(FieldsContainer $showFields)` and `buildShowLayout(ShowLayout $showLayout)` to declare the fields presenting the instance.
-
 - `find($id): array` to retrieve the instance.
-
 - `delete($id): void` to delete the instance.
-
 - `buildShowConfig()` (optional).
 
 In detail:
@@ -63,28 +60,28 @@ Each available Show field is detailed below; here are the attributes they all sh
 
 A crucial feature in the ability given to add a full Entity List in a Show, to display and interact with some "one to many" related data.
 
-Let's see a simple example: we want to display the pilots list dedicated to a spaceship. In the spaceship Show page, we can add a pilots Entity List as a field:
+Let's review a simple example: we want to display the product list of an order. In the order Show, we can add a products Entity List as a field:
 
 ```php
 function buildShowFields(FieldsContainer $showFields): void
 {
-    SharpShowEntityListField::make('pilots', 'pilot');
+    SharpShowEntityListField::make('products');
 }
 ```
 
-Sharp will consider this as a regular Entity List, meaning it will look for a `sharp.entities.pilot.list` config key containing an EntityList class name, build it and display it the Show as a field (see below for layout), with the full feature set of an Entity List: filters, commands, reorder, entity state, search...
+Sharp will consider this as a regular Entity List configured with the `products` entity key (this name can be overridden as a second argument), and will display it the Show as a field (see below for layout), with the full feature set of an Entity List: filters, commands, reorder, entity state, search...
 
-Clicking a row in the EntityList can lead to whatever you've configured for this entity: a Show Page or a Form. Sharp will maintain a navigation breadcrumb under the hood to, in this case, get back to the spaceship Show after a pilot update.
+Clicking a row in the EntityList can lead to a Form, or another Show Page (depending on the Entity configuration). Sharp will maintain a navigation breadcrumb to keep track of the user path.
 
-Notice that you have three possibilities for the actual code of this EntityList:
+Notice that you have three possibilities for the actual code of this Entity List:
 
-- if you want to have a "pilots" entity in the main menu, you can reuse the same EntityList instance for the Show Page (and configure it to scope the data, as we'll discuss below),
-- or you can build a specific EntityList without declaring it in the main menu,
-- or you can have both, making the spaceship Show version of the  pilots EntityList extend the other.
+- if you want to have a "products" entity in the main menu, you can reuse the same Entity List instance for the Show (and configure it to scope the data, as we'll discuss below),
+- or you can configure a dedicated Entity with a specific Entity List, without declaring it in the main menu,
+- or you can have both, making the orders Show version of the products Entity List extend the main one.
 
 As always with Sharp, implementation is up to you.
 
-But at this stage we still have a major issue: how to scope the data of the EntityList? In our case, we want to display and interact only with pilots linked to our spaceship... For this and more on personalization, refer to the detailed documentation of this field:
+The next thing to do is to scope the data of the embedded Entity List. In our case, we want to display and interact only with the products for this order... For this and more on personalization, refer to the detailed documentation of this field:
 
 - [embedded EntityList](show-fields/embedded-entity-list.md)
 
@@ -199,9 +196,7 @@ function find($id): array
 	return $this
 		->setCustomTransformer(
 		    'name', 
-		    function($value, $spaceship) {
-			    return strtoupper($spaceship->name);
-		    }
+		    fn ($value, $product) => strtoupper($product->name)
 		)
 		->setCustomTransformer(
 		    'picture', 
@@ -219,7 +214,7 @@ Here you might write the code performed on a deletion of the instance. It can be
 ```php
 function delete($id): void
 {
-    Spaceship::findOrFail($id)->delete();
+    Product::findOrFail($id)->delete();
 }
 ```
 
@@ -233,7 +228,7 @@ function buildShowConfig()
    $this
         ->configureBreadcrumbCustomLabelAttribute('name')
         ->configurePageTitleAttribute('title')
-        ->configureEntityState('state', SpaceshipEntityState::class);
+        ->configureEntityState('state', OrderEntityState::class);
 }
 ```
 
@@ -248,28 +243,22 @@ Here is the full list of available methods:
 
 ## Accessing the navigation breadcrumb
 
-A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation from there. Taking back our spaceship / pilots example, we may need to add a pilot to the spaceship. Question is: how can we attach a newly created pilot to a spaceship?
+A common pattern for Shows is to add an embedded EntityList with related entities, and to allow update but also creation from there. Taking back our order / products example, we may need to add a product to the order. Question is: how can we attach a newly created product to an existing order?
 
-Answer is: accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
+The answer is by accessing the navigation breadcrumb, with [Sharp Context](context.md), and more precisely with its `getPreviousPageFromBreadcrumb()` method. Here's a full example:
 
 ```php
-class PilotSharpForm extends SharpForm
+class ProductSharpForm extends SharpForm
 {
-    use WithSharpFormEloquentUpdater, WithSharpContext;
-
-    // ...
-
     function update($id, array $data)
     {
-        $pilot = $id ? Pilot::findOrFail($id) : new Pilot;
-        $pilot = $this->save($pilot, $data);
+        $product = $id ? Product::findOrFail($id) : new Product;
+        $product = $this->save($product, $data);
         
         if(currentSharpRequest()->isCreation()) {
-            if($breadcrumbItem = currentSharpRequest()->getPreviousShowFromBreadcrumbItems("spaceship")) {
-                Spaceship::findOrFail($breadcrumbItem->instanceId())
-                    ->pilots()
-                    ->attach($pilot->id);
-            }
+              Order::findOrFail(currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->instanceId())
+                  ->products()
+                  ->attach($product->id);
         }
     }
 }

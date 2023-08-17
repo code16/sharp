@@ -8,7 +8,6 @@ Class: `Code16\Sharp\Form\Fields\SharpFormAutocompleteField`
 
 `$mode` must be either "local" (dictionary is defined locally with `setLocalValues()`) or "remote" (a endpoint must be provided).
 
-
 ### `setLocalValues($localValues)`
 
 Set the values of the dictionary on mode=local, as an object array with at least an `id` attribute (or the `setItemIdAttribute` value).
@@ -16,7 +15,7 @@ Set the values of the dictionary on mode=local, as an object array with at least
 ### `setLocalSearchKeys(array $searchKeys)`
 
 Set the names of the attributes used in the search (mode=local).
-Default: `["value"]`
+Default: `['value']`
 
 ### `setSearchMinChars(int $searchMinChars)`
 
@@ -32,13 +31,13 @@ If this endpoint is yours (`remote` mode here is useful to avoid loading a lot o
 ```php
 Route::get('/api/sharp/clients')
     ->middleware('sharp_auth')
-    ->uses("MySharpApiClientController@index")
+    ->uses('MySharpApiClientController@index')
 ```
 
 ### `setRemoteSearchAttribute(string $remoteSearchAttribute)`
 
 The attribute name sent to the remote endpoint as search key.
-Default: `"query"`
+Default: `'query'`
 
 ### `setDataWrapper($dataWrapper)`
 
@@ -70,14 +69,13 @@ Example:
 
 ```php
 $panel->setInlineTemplate(
-    "Foreground: <strong>{{color}}</strong>"
+    'Foreground: <strong>{{color}}</strong>'
 )
 ```
 
-The template will be use, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
+The template will be used, depending on the function, to display either the list item (in the result dropdown) or the result item (meaning the valuated form input).
 
 Be aware that you'll need for this to work to pass a valuated object to the Autocomplete, as data.
-
 
 ### `setListItemTemplatePath(string $listItemTemplatePath)`
 ### `setResultItemTemplatePath(string $resultItemTemplate)`
@@ -100,9 +98,9 @@ Be aware that you'll need for this to work to pass a valuated object to the Auto
 Useful to add some static (or at least not instance-dependant) data to the template. For instance:
 
 ```php
-SharpFormAutocompleteField::make("brand", "remote")
+SharpFormAutocompleteField::make('brand', 'remote')
     ->setAdditionalTemplateData([
-        "years" => [2020, 1018, 2017]
+        'years' => [2020, 1018, 2017]
     ]);
 ```
 
@@ -121,36 +119,34 @@ This method is useful to link the dataset of a local autocomplete (aka: the `loc
 In a remote autocomplete case, you can use this method instead of `setRemoteEndpoint` to handle a dynamic URL, based on another form field. Here's how, for example:
 
 ```php
-SharpFormAutocompleteField::make("brand", "remote")
-    ->setDynamicRemoteEndpoint("/brands/{{country}}");
+SharpFormAutocompleteField::make('brand', 'remote')
+    ->setDynamicRemoteEndpoint('/brands/{{country}}');
 ```
 
 In this example, the `{{country}}` placeholder will be replaced by the value of the `country` form field. You can define multiple replacements if necessary.
 
 You may need to provide a default value for the endpoint, used when `country` (in our example) is not valued (without default, the autocomplete field will be displayed as disabled). To do that,
- fill the second argument:
+fill the second argument:
 
 ```php
-SharpFormAutocompleteField::make("model", "remote")
-    ->setDynamicRemoteEndpoint("/models/{{country}}/{{brand}}", [
-        "country" => "france",
-        "brand" => "renault"
+SharpFormAutocompleteField::make('model', 'remote')
+    ->setDynamicRemoteEndpoint(''/models/{{country}}/{{brand}}'', [
+        'country' => 'france',
+        'brand' => 'renault'
     ]);
 ```
 
 The default endpoint would be `/brands/france/renault`.
-
 
 ## Formatter
 
 ### `toFront`
 
 If **mode=local**, you must pass there either:
-- an single id, since the label will be grabbed from the `localValues` array,
-- or an object with an `id` (or whatever was configure through `setItemIdAttribute()`) property.
+- a single id, since the label will be grabbed from the `localValues` array,
+- or an object with an `id` (or whatever was configured through `setItemIdAttribute()`) property.
 
-If **mode=remote**, you must pass an object with at least an `id` (or whatever was configure through `setItemIdAttribute()`) attribute and all attributes needed by the item templates.
-
+If **mode=remote**, you must pass an object with at least an `id` (or whatever was configured through `setItemIdAttribute()`) attribute and all attributes needed by the item templates.
 
 ### `fromFront`
 

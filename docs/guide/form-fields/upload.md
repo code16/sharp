@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
-![Example](./upload.png)
+<img src="./upload-v8.png" width="500">
 
 ## General configuration
 
@@ -36,9 +36,7 @@ The argument `$transformKeepOriginal` overrides the following config which is `t
     'transform_keep_original_image' => true,
 ]
 ```
-With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
-stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the
-Formatter part below.
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
 
 ### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
 
@@ -75,9 +73,7 @@ If true and if the upload has a thumbnail, it is limited to 60px high (to compac
 
 ### `shouldOptimizeImage(bool $shouldOptimizeImage = true)`
 
-If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on
-spatie's [image-optimizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these
-packages on your system:
+If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [image-optimizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these packages on your system:
 - [JpegOptim](http://freecode.com/projects/jpegoptim)
 - [Optipng](http://optipng.sourceforge.net/)
 - [Pngquant 2](https://pngquant.org/)
@@ -89,9 +85,7 @@ Check their documentation for [more instructions](https://github.com/spatie/imag
 
 ## Formatter
 
-First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class,
-as [detailed here](../sharp-uploads.md), which greatly simplify the work (to be clear: it will handle everything from
-storage to image transformations).
+First, let's mention that Sharp provides an Eloquent built-in solution for uploads with the `SharpUploadModel` class, as [detailed here](../sharp-uploads.md), which greatly simplify the work (to be clear: it will handle everything from storage to image transformations).
 
 Here's the documentation for the **not built-in solution**:
 
@@ -120,26 +114,26 @@ The front expects an array with these keys:
 ]
 ```
 
-The formatter can't handle it automatically, it too project-specific. You'll have to provide this in a custom transformer ([see full documentation](../how-to-transform-data.md)) like this:
+The formatter can't handle it automatically, it is too project-specific. You'll have to provide this in a custom transformer ([see full documentation](../how-to-transform-data.md)) like this:
 
 ```php
 function find($id): array
 {
     return $this
         ->setCustomTransformer('picture',
-            function($value, $spaceship, $attribute) {
+            function($value, $product, $attribute) {
                 return [
-                    'name' => basename($spaceship->picture->name),
-                    'path' => $spaceship->picture->name,
+                    'name' => basename($product->picture->name),
+                    'path' => $product->picture->name,
                     'disk' => 's3',
                     'thumbnail' => [...],
-                    'size' => $spaceship->picture->size,
-                    'filters' => $spaceship->picture->filters
+                    'size' => $product->picture->size,
+                    'filters' => $product->picture->filters
                 ];
             }
         )
         ->transform(
-            Spaceship::findOrFail($id)
+            Product::findOrFail($id)
         );
 }
 ```
@@ -181,7 +175,7 @@ Using the `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater`, you will pr
 ```php
 function update($id, array $data)
 {
-    $instance = $id ? Spaceship::findOrFail($id) : new Spaceship;
+    $instance = $id ? Product::findOrFail($id) : new Product;
 
     $this->ignore('picture')->save($instance, $data);
 
@@ -228,27 +222,45 @@ But in order to do this in a creation case, when there is no id yet, Sharp will 
 - one first time without any upload which needs the `{id}`,
 - and one second time only with these fields, using the new id returned by `update()`.
 
-This is usually OK, but in some cases this could lead to unexpected errors. Consider this code taken from Saturn (Sharp's demo project) where we handle Spaceships with a visual configured with an `{id}` placeholder in its path: 
+This is usually OK, but in some cases this could lead to unexpected errors. Consider this code where we handle `Products` with a `picture` configured with an `{id}` placeholder in its path: 
 
 ```php
-// in SpaceshipForm.php
-function update($id, array $data)
+class ProductForm extends SharpForm
 {
-    $instance = $id ? Spaceship::findOrFail($id) : new Spaceship();
-
-    $this->save($instance, $data);
-
-    if(($data['capacity']) >= 1000) {
-        $this->notify('this is a huge spaceship, by the way!');
+    // [...]
+    
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        // [...]
+        
+        $formFields
+            ->addField(
+                SharpFormUploadField::make('picture')
+                    ->setLabel('Picture')
+                    ->setFileFilterImages()
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/products/{id}'),
+            );
     }
-
-    return $instance->id;
+    
+    function update($id, array $data)
+    {
+        $instance = $id ? Product::findOrFail($id) : new Product();
+    
+        $this->save($instance, $data);
+    
+        if(($data['price']) >= 1000) {
+            $this->notify('Yay, this is an expensive product...');
+        }
+    
+        return $instance->id;
+    }
 }
 ```
-Here we're using the `notify()` feature to display a message back to the user, and it's working, excepted in one case: on a Spaceship creation with a visual, Sharp will delay the upload handling and call this method twice. On the second pass (for the upload), PHP will crash on the `if(($data['capacity']) >= 1000)` row because `$data['capacity']` is not set (only the upload field would be set on this second pass). This has to be addressed, and a working solution could be to replace this line with:
+Here we're using the `notify()` feature to display a message back to the user, and it's working, excepted in one case: on a Product creation with a picture, Sharp will delay the upload handling and call this method twice, because the picture field needs the product {id} it the storage base path. On the second pass (for the upload), This code will crash on the `if(($data['price']) ...)` condition, because `$data['price']` is not set (only the `picture` upload field would be set on this second pass). This has to be addressed, and a working solution (among others) could be to replace this line with:
 
 ```php
-if(($data['capacity'] ?? 0) >= 1000) {
+if(($data['price'] ?? 0) >= 1000) {
     [...]
 }
 ```

@@ -427,7 +427,8 @@
                 }
                 return this.items.some(instance =>
                     this.instanceHasState(instance) ||
-                    this.instanceHasCommands(instance)
+                    this.instanceHasCommands(instance) ||
+                    this.instanceCanDelete(instance)
                 );
             },
             hasStateOnly() {

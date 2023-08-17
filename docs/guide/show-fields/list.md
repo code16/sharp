@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Show\Fields\SharpShowListField`
 
-This field is very similar to the [../form-fields/list.md](Form's File field), and its purpose is to display items made of other Show fields.
+This field is very similar to the [Form's File field](../form-fields/list.md), and its purpose is to display items made of other Show fields.
 
 Here's an example, for a list of pictures with a legend:
 
@@ -10,16 +10,16 @@ Here's an example, for a list of pictures with a legend:
 function buildShowFields()
 {
     $this->addField(
-        SharpShowListField::make("pictures")
-            ->setLabel("additional pictures")
+        SharpShowListField::make('pictures')
+            ->setLabel('additional pictures')
             ->addItemField(
-                SharpShowFileField::make("file")
-                    ->setStorageDisk("local")
-                    ->setStorageBasePath("data/Spaceship/{id}/Pictures")
+                SharpShowFileField::make('file')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/Product/{id}/pictures')
             )
             ->addItemField(
-                SharpShowTextField::make("legend")
-                    ->setLabel("Legend")
+                SharpShowTextField::make('legend')
+                    ->setLabel('Legend')
             )
     );
 }
@@ -43,10 +43,10 @@ Example:
 
 ```php
 $this->addColumn(6, function(ShowLayoutColumn $column) {
-     $column->withSingleField("pieces", function(ShowLayoutColumn $listItem) {
-          $listItem->withSingleField("acquisition_date")
-              ->withSingleField("title")
-              ->withSingleField("artist");
+     $column->withSingleField('pieces', function(ShowLayoutColumn $listItem) {
+          $listItem->withSingleField('acquisition_date')
+              ->withSingleField('title')
+              ->withSingleField('artist');
      });
  });
 ```

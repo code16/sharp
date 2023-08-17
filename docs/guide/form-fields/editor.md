@@ -4,7 +4,7 @@ This form field is a rich text editor, with formatting and an optional toolbar.
 
 Class: `Code16\Sharp\Form\Fields\SharpFormEditorField`
 
-<img src="./editor.png" width="500">
+<img src="./editor-v8.png" width="500">
 
 
 ## Configuration
@@ -13,7 +13,6 @@ Class: `Code16\Sharp\Form\Fields\SharpFormEditorField`
 
 Set the textarea height, in pixels.  
 If `$maxHeight` is set, the field will auto-grow until:
-
 - the indicated height in pixels
 - on infinitely if set to `0`
 
@@ -27,26 +26,26 @@ Show or hide the toolbar (shown by default).
 Override the default toolbar, providing an array built with `SharpFormEditorField`'s constants:
 
 ```php
-const B = "bold";
-const I = "italic";
-const HIGHLIGHT = "highlight";
-const UL = "unordered-list";
-const OL = "ordered-list";
-const SEPARATOR = "|";
-const A = "link";
-const H1 = "heading-1";
-const H2 = "heading-2";
-const H3 = "heading-3";
-const UPLOAD_IMAGE = "upload-image";
-const UPLOAD = "upload";
-const TABLE = "table";
-const IFRAME = "iframe";
-const RAW_HTML = "html";
-const UNDO = "undo";
-const REDO = "redo";
-const CODE = "code";
-const QUOTE = "blockquote";
-const HR = "horizontal-rule";
+const B = 'bold';
+const I = 'italic';
+const HIGHLIGHT = 'highlight';
+const UL = 'unordered-list';
+const OL = 'ordered-list';
+const SEPARATOR = ''|'';
+const A = 'link';
+const H1 = 'heading-1';
+const H2 = 'heading-2';
+const H3 = 'heading-3';
+const UPLOAD_IMAGE = 'upload-image';
+const UPLOAD = 'upload';
+const TABLE = 'table';
+const IFRAME = 'iframe';
+const RAW_HTML = 'html';
+const UNDO = 'undo';
+const REDO = 'redo';
+const CODE = 'code';
+const QUOTE = 'blockquote';
+const HR = 'horizontal-rule';
 ```
 
 Example:
@@ -84,8 +83,7 @@ Display a character count in the status bar. Default is false.
 
 ## Embed images and files in content
 
-The Editor field can directly embed images or regular files. This works with `UPLOAD_IMAGE` and `UPLOAD` tools from the
-toolbar. To use this feature, add the tool in the toolbar and configure the environment:
+The Editor field can directly embed images or regular files. This works with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature, add the tool in the toolbar and configure the environment:
 
 ### `setMaxFileSize(float $sizeInMB)`
 
@@ -94,8 +92,7 @@ Max file size allowed.
 ### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
 
 Allow the user to crop or rotate a visual, after the upload.  
-With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be
-stored directly in the `<x-sharp-image/>` tag. For instance:
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored directly in the `<x-sharp-image/>` tag. For instance:
 
 ```blade
 <x-sharp-image 
@@ -114,9 +111,7 @@ Set a ratio constraint to uploaded images, formatted like this: `width:height`. 
 
 When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files
-extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break
-animation.
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break animation.
 
 ### `setStorageDisk(string $storageDisk)`
 
@@ -135,12 +130,11 @@ Set the allowed file extensions. You can pass either an array, or a comma-separa
 
 ### `setFileFilterImages()`
 
-Just a `setFileFilter([".jpg",".jpeg",".gif",".png"])` shorthand.
+Just a `setFileFilter(['.jpg','.jpeg','.gif','.png'])` shorthand.
 
 ### Store images and files
 
-Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the
-configuration.
+Sharp takes care of copying the file at the right place (after image transformation, if wanted), based on the configuration.
 
 When inserting a file, the following tag is added in field text value:
 
@@ -163,8 +157,7 @@ In case of an image the inserted tag is:
 
 ### Display embedded files / images in the public site
 
-You may need to display those embedded files in the public website. The idea here is to display embedded images as
-thumbnails, and other files as you need. Sharp provides a component for that:
+You may need to display those embedded files in the public website. The idea here is to display embedded images as thumbnails, and other files as you need. Sharp provides a component for that:
 
 ```blade
 <x-sharp-content>
@@ -228,10 +221,8 @@ To make `<x-sharp-*>` elements working you must enable HTML in your parser
 
 Example:
 
-- [Blade view file](https://github.com/code16/sharp/blob/e387562698a2908f0f575cc5fd96705b9b78e078/saturn/resources/views/pages/spaceships/spaceship.blade.php)
-  with `<x-markdown>` usage
-- [`Markdown` component](https://github.com/code16/sharp/blob/e387562698a2908f0f575cc5fd96705b9b78e078/saturn/app/View/Components/Markdown.php)
-  using league/commonmark
+- [Blade view file](https://github.com/code16/sharp/blob/e387562698a2908f0f575cc5fd96705b9b78e078/saturn/resources/views/pages/spaceships/spaceship.blade.php) with `<x-markdown>` usage
+- [`Markdown` component](https://github.com/code16/sharp/blob/e387562698a2908f0f575cc5fd96705b9b78e078/saturn/app/View/Components/Markdown.php) using league/commonmark
 
 ::: warning
 [cebe/markdown](https://github.com/cebe/markdown) is not compatible with sharp components

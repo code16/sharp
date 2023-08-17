@@ -74,6 +74,7 @@ Vue.use(Sharp, {
 **Important**: The key must be `'textIcon'` for `FIELD_TYPE = "custom-textIcon"`
 
 Vue is exposed to the window scope, it's the current Vue version used by sharp (cf. package.json).
+
 ::: warning
 It's not recommended to use other Vue plugins in this file because it may change the behavior of the Sharp front-end.
 :::
@@ -112,8 +113,8 @@ Add your `.js` file to `resources/views/vendor/sharp/partials/plugin-scripts.bla
 ```php
 // config/sharp.php
 
-"extensions" => [
-   "activate_custom_fields" => true
+'extensions' => [
+   'activate_custom_fields' => true
 ],
 
 // ...
@@ -129,7 +130,7 @@ Here's an example:
 ```php
 class SharpCustomFormFieldTextIcon extends SharpFormField
 {
-    const FIELD_TYPE = "custom-textIcon";
+    const FIELD_TYPE = 'custom-textIcon';
 
     protected $icon;
 
@@ -148,14 +149,14 @@ class SharpCustomFormFieldTextIcon extends SharpFormField
     protected function validationRules(): array
     {
         return [
-            "icon" => "required",
+            'icon' => 'required',
         ];
     }
 
     public function toArray(): array
     {
         return parent::buildArray([
-            "icon" => $this->icon,
+            'icon' => $this->icon,
         ]);
     }
 }
@@ -182,9 +183,9 @@ Next step is using the new form field:
 function buildFormFields(FieldsContainer $formFields): void
 {
     $formFields->addField(
-        SharpCustomFormFieldTextIcon::make("name")
-            ->setLabel("Name")
-            ->setIcon("fa-user")
+        SharpCustomFormFieldTextIcon::make('name')
+            ->setLabel('Name')
+            ->setIcon('fa-user')
     );
 }
 ```

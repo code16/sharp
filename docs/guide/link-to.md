@@ -1,6 +1,6 @@
 # Create links to an entity
 
-You may need to create a link to an EntityList, a Show or a Form.
+You may need to create a link to an EntityList, a Show Page or a Form.
 
 ## Classes
 Depending on your target, you'll want to use either:
@@ -23,22 +23,21 @@ Each link class has a `renderAsText` method, which will render the link as a `<a
 Let’s see an example, in which we want to list the players of a team in an Entity List column and directly link each one to its form. We leverage a custom transformer to do so:
 
 ```php
-class MyEntityList extends \Code16\Sharp\EntityList\SharpEntityList 
+class TeamsList extends \Code16\Sharp\EntityList\SharpEntityList 
 {
-   // ...
+   // [...]
+   
    function getListData(EntityListQueryParams $params)
    {
-      // ...
-    
       return $this
-          ->setCustomTransformer('players', function($value, $instance) {
-              return $instance->players
+          ->setCustomTransformer('players', function($value, $yeam) {
+              return $yeam->players
                   ->map(fn ($player) => LinkToForm::make('player', $player->id)
                       ->renderAsText($pilot->name); // This will render a full <a...> tag
                   )
                   ->implode('<br>');
           })
-          ->transform($teams->get());
+          ->transform(Team::orderBy('name')->get());
    }
 }
 ```

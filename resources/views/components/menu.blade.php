@@ -12,9 +12,9 @@
 >
     <template v-slot:title>
         @if($icon = config('sharp.theme.logo_urls.menu'))
-            <img src="{{ url($icon) }}" alt="{{ $title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ url($icon) }}" alt="{{ $title }}" width="150" class="w-auto h-auto mh-100 mw-100">
         @elseif(file_exists(public_path($icon = 'sharp-assets/menu-icon.png')))
-            <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $title }}" width="150" class="w-auto h-auto" style="max-height: 50px;">
+            <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $title }}" width="150" class="w-auto h-auto mh-100 mw-100">
         @endif
     </template>
     <ul role="menubar" class="SharpLeftNav__list" aria-hidden="false" v-cloak>

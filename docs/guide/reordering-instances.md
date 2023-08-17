@@ -1,6 +1,6 @@
 # Reordering instances
 
-It's sometimes useful to allow the user to rearrange instances right from the Entity List. Let's say we want to let the user choose some `pages` order:
+It's sometimes useful to allow the user to rearrange instances right from the Entity List.
 
 ## Generator Command
 
@@ -19,9 +19,9 @@ class PageReorderHandler implements ReorderHandler
 {
     function reorder(array $ids)
     {
-        Page::whereIn("id", $ids)
+        Page::whereIn('id', $ids)
             ->get()
-            ->each(function(Page $page) use ($ids) {
+            ->each(function (Page $page) use ($ids) {
                 $page->order = array_search($page->id, $ids) + 1;
                 $page->save();
             });
@@ -31,12 +31,17 @@ class PageReorderHandler implements ReorderHandler
 
 ## Configure reorder for the front-end
 
-Then, in your `SharpEntityList` implementation class you have to configure your reorder handler:
+Then, in your Entity List you have to configure your reorder handler:
 
 ```php
-public function buildListConfig()
+class PageEntityList extends SharpEntityList
 {
-    $this->configureReorderable(new PageReorderHandler());
+    // [...]
+    
+    public function buildListConfig()
+    {
+        $this->configureReorderable(new PageReorderHandler());
+    }
 }
 ```
 
