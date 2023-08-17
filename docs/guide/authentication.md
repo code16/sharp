@@ -9,13 +9,16 @@ Sharp won’t be used as a guest (at least in most cases). It leverages a defaul
 The Sharp login form asks for a login and a password field; to handle the authentication, Sharp has to know what attributes it must test in your User model. Defaults are `email` and `password`, and can be overridden in the Sharp config:
 
 ```php
-// in config/sharp.php
-
-"auth" => [
-    'login_attribute' => 'login',
-    'password_attribute' => 'pwd',
-    'display_attribute' => 'name',
-]
+// config/sharp.php
+return [
+    // [...]
+    
+    'auth' => [
+        'login_attribute' => 'login',
+        'password_attribute' => 'pwd',
+        'display_attribute' => 'name',
+    ],
+}
 ```
 
 The third attribute, `display_attribute`, is used to display the user's name in the Sharp UI. Default is `name`.
@@ -27,22 +30,28 @@ Sharp provides a login controller and view, which requires a session based guard
 You can display a “Remember me” checkbox to the user:
 
 ```php
-//in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    'suggest_remember_me' => true
+    'auth' => [
+        'suggest_remember_me' => true
+    ],
 ]
 ```
 
 You can leverage [rate limiting](https://laravel.com/docs/rate-limiting) to prevent brute force attacks:
 
 ```php
-// in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    'rate_limiting' => [
-        'enabled' => true,
-        'max_attempts' => 5,
+    'auth' => [
+        'rate_limiting' => [
+            'enabled' => true,
+            'max_attempts' => 5,
+        ],
     ],
 ]
 ```
@@ -54,10 +63,13 @@ You can tweak this default form with a custom logo and an HTML message / section
 It's very likely that you don't want to authorize all users to access Sharp. You can hook into the [Laravel custom guards](https://laravel.com/docs/authentication#adding-custom-guards) functionality, with one config key:
 
 ```php
-//in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    'guard' => 'sharp',
+    'auth' => [
+        'guard' => 'sharp',
+    ],
 ]
 ```
 
@@ -84,10 +96,13 @@ Perform in the `check()` method any test you need to make on the authenticated u
 Finally, enable this feature by adding a config key:
 
 ```php
-//in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    'check_handler' => \App\Sharp\Auth\SharpCheckHandler::class,
+    'auth' => [
+        'check_handler' => \App\Sharp\Auth\SharpCheckHandler::class,
+    ],
 ]
 ```
 
@@ -98,12 +113,15 @@ And you are good to go.
 Sharp provides a two-factor authentication (2fa) system, out of the box. You can enable it in the configuration:
 
 ```php
-//in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    '2fa' => [
-        'enabled' => true,
-        'handler' => 'notification',  
+    'auth' => [
+        '2fa' => [
+            'enabled' => true,
+            'handler' => 'notification',  
+        ],
     ],
 ]
 ```
@@ -122,12 +140,15 @@ To be able to receive notifications, your User model must use the `Illuminate\No
 With this option, Sharp will send a notification to the user, containing the 6-digit code. By default, this notification is sent by email. You can override this behavior by providing your own handler class which must extend `Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler`:
 
 ```php
-// in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    '2fa' => [
-        'enabled' => true,
-        'handler' => \App\Sharp\My2faNotificationHandler::class,  
+    'auth' => [
+        '2fa' => [
+            'enabled' => true,
+            'handler' => \App\Sharp\My2faNotificationHandler::class,  
+        ],
     ],
 ]
 ```
@@ -160,12 +181,15 @@ composer require bacon/bacon-qr-code:"~2.0"
 Then, you'll need to configure the totp handler in the Sharp config:
 
 ```php
-// in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    '2fa' => [
-        'enabled' => true,
-        'handler' => 'totp',  
+    'auth' => [
+        '2fa' => [
+            'enabled' => true,
+            'handler' => 'totp',  
+        ],
     ],
 ]
 ```
@@ -252,9 +276,12 @@ class My2faNotificationHandler extends Sharp2faNotificationHandler // or Sharp2f
 You can entirely override the authentication workflow (view and controller) providing your custom endpoint:
 
 ```php
-//in config/sharp.php
+// config/sharp.php
+return [
+    // [...]
 
-'auth' => [
-    'login_page_url' => '/my_login',
+    'auth' => [
+        'login_page_url' => '/my_login',
+    ],
 ]
 ```

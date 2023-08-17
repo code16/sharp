@@ -2,7 +2,6 @@
 
 Sharp provides a few assertions and helpers to help you test your Sharp code.
 
-
 ## The `SharpAssertions` trait
 
 The `Code16\Sharp\Utils\Testing\SharpAssertions` trait is intended to be used in a Feature test. It has to be initialized, like this:
@@ -28,7 +27,7 @@ Logs in the given user as a Sharp user.
 
 #### `getSharpForm(string $entityKey, $instanceId = null)`
 
-Call the Sharp API to display the form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an update form, and otherwise a create one.
+Call the Sharp API to display the form for the Entity `$entityKey`. If `$instanceId` is provided, it will be an edit form, and otherwise a create one.
 
 
 #### `updateSharpForm(string $entityKey, $instanceId, array $data)`
@@ -72,10 +71,10 @@ For instance:
 ```php
     $this
         ->withSharpCurrentBreadcrumb([
-            ["list", "trees"],
-            ["show", "trees", 8],
-            ["show", "leaves", 16],
-            ["form", "leaves", 16],
+            ['list', 'trees'],
+            ['show', 'trees', 8],
+            ['show', 'leaves', 16],
+            ['form', 'leaves', 16],
         ])
         ->getSharpForm(...)
         ->assertOk();
@@ -88,11 +87,11 @@ You can use regular assertions, for instance:
 ```php
 $this
     ->updateSharpForm(
-        "orders",
+        'orders',
         $order->id,
         array_merge($order->toArray(), [
-            "client" => "test",
-            "payment_delay" => 10
+            'client' => 'test',
+            'payment_delay' => 10
         ])
     )
     ->assertStatus(200);
@@ -106,9 +105,9 @@ But sometimes you'll want to test some specific Sharp things. Here's the list of
 Example:
 
 ```php
-$this->getSharpForm("orders", $order->id)
-     ->assertSharpHasAuthorization("update")
-     ->assertSharpHasAuthorization("delete");
+$this->getSharpForm('orders', $order->id)
+     ->assertSharpHasAuthorization('update')
+     ->assertSharpHasAuthorization('delete');
 ```
 
 #### `assertSharpFormHasFields($names)`
@@ -116,9 +115,9 @@ $this->getSharpForm("orders", $order->id)
 Example:
 
 ```php
-$this->getSharpForm("orders")
+$this->getSharpForm('orders')
      ->assertSharpFormHasFields([
-           "number", "client"
+           'number', 'client'
      ]);
 ```
 
@@ -127,9 +126,9 @@ $this->getSharpForm("orders")
 Example:
 
 ```php
-$this->getSharpForm("orders", $order->id)
+$this->getSharpForm('orders', $order->id)
      ->assertSharpFormHasFieldOfType(
-         "number", SharpFormTextField::class
+         'number', SharpFormTextField::class
      );
 ```
 
@@ -138,6 +137,6 @@ $this->getSharpForm("orders", $order->id)
 Example:
 
 ```php
-$this->getSharpForm("orders", $order->id)
-     ->assertSharpFormDataEquals("number", $order->number);
+$this->getSharpForm('orders', $order->id)
+     ->assertSharpFormDataEquals('number', $order->number);
 ```

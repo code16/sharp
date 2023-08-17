@@ -22,9 +22,14 @@ Like any Command, you must extend `label(): string` function, and can extend `bu
 Instead of `execute()`, you must implement `executeFirstStep(array $data): array`, or `executeFirstStep(mixed $instanceId, array $data): array` in an instance case. This method, as expected, must contain the execution code of your first step:
 
 ```php
-public function executeFirstStep(array $data): array
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    // Do something
+    // [...]
+    
+    public function executeFirstStep(array $data): array
+    {
+        // Do something
+    }
 }
 ```
 
@@ -35,26 +40,31 @@ You must also implement `protected function buildFormFieldsForFirstStep(FieldsCo
 Wizard Commands needs forms, one for each step. To build the forms, we use the same API as usual (see [Commands documentation](commands.md)), the only difference is where to put the code. For the first step, you already have the answer, it's in `buildFormFieldsForFirstStep`:
 
 ```php
-public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    $formFields->addField(
-        SharpFormSelectField::make('posts', Post::pluck("name", "id")->toArray())
-            ->setMultiple()
-            ->setLabel('Posts to add to the message')
-    );
+    // [...]
+    
+    public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+    {
+        $formFields->addField(
+            SharpFormSelectField::make('posts', Post::pluck('name', 'id')->toArray())
+                ->setMultiple()
+                ->setLabel('Posts to add to the message')
+        );
+    }
+    
+    protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void
+    {
+        $column->withSingleField('posts');
+    }
 }
 ```
 
-Layout (if needed) can be defined in:
+::: tip
+The layout is optional: if you don't define one, fields will appear in the order of declaration. In the above case, the method can be entirely removed without any impact.
+:::
 
-```php
-protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void
-{
-    // ...
-}
-```
-
-And finally, to set initial data for the form, you might implement:
+And finally, if you need to set initial data for the form, you should implement:
 
 ```php
 protected function initialDataForFirstStep(): array
@@ -71,6 +81,7 @@ To tell Sharp to go to the next step, Wizard commands expose a new `toStep(strin
 public function executeFirstStep(array $data): array
 {
     // Do something
+    
     return $this->toStep('compose-message');
 }
 ```
@@ -81,23 +92,28 @@ This string key must be "sluggable": only chars, carets and underscores.
 
 ### Add a form to each step
 
-There is two options:
+There are two options:
 
 #### First option: one method for all
 
 If your Wizard is small, this could be the right way to proceed. Simply extend the `buildFormFieldsForStep(string $step, FieldsContainer $formFields): void` method, with a test on `$step`: 
 
 ```php
-protected function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    if ($step === 'compose-message') {
-        $formFields->addField(
-              SharpFormTextareaField::make('message')
-                  ->setLabel('Message text')
-                  ->setRowCount(8),
-          );
-    } elseif ($step === 'my-other-step') {
-        // ...
+    // [...]
+    
+    protected function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
+    {
+        if ($step === 'compose-message') {
+            $formFields->addField(
+                  SharpFormTextareaField::make('message')
+                      ->setLabel('Message text')
+                      ->setRowCount(8),
+              );
+        } elseif ($step === 'my-other-step') {
+            // ...
+        }
     }
 }
 ```
@@ -107,14 +123,19 @@ protected function buildFormFieldsForStep(string $step, FieldsContainer $formFie
 This should be a better option in many cases, to clarify things in the Wizard class; you can define a `buildFormFieldsForStepXXX(FieldsContainer $formFields): void`, where `XXX` is the camel cased name of you step. So in our example:
 
 ```php
-public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    $formFields
-        ->addField(
-            SharpFormTextareaField::make('message')
-                ->setLabel('Message text')
-                ->setRowCount(8),
-        );
+    // [...]
+    
+    public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextareaField::make('message')
+                    ->setLabel('Message text')
+                    ->setRowCount(8),
+            );
+    }
 }
 ```
 
@@ -169,12 +190,17 @@ Very much like first step, you must define the execution code of each step. And 
 Entity and Dashboard case:
 
 ```php
-public function executeStep(string $step, array $data = []): array
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    if ($step === 'compose-message') {
-        return $this->toStep('checkout');
-    } else {
-        // ...
+    // [...]
+    
+    public function executeStep(string $step, array $data = []): array
+    {
+        if ($step === 'compose-message') {
+            return $this->toStep('checkout');
+        } else {
+            // ...
+        }
     }
 }
 ```
@@ -238,65 +264,78 @@ For this purpose, you have access to a shared context, maintained between each s
 - retrieve a value: `$this->getWizardContext()->get('name')` (in the `initialData()` method)
 - validate a stored value: `$this->getWizardContext()->validate('name', $rules)` (in the `initialData()` method)
 
-Consider the following example, taken (and simplified) from the Sharp Demo:
-
-First we build and execute the first step; in the process, we save the select post ids in the context:
+Consider the following example; first we build and execute the first step; in the process, we save the select post ids in the context:
 
 ```php
-public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    $formFields->addField(
-        SharpFormSelectField::make('posts', Post::pluck('name', 'id')->toArray())
-            ->setMultiple()
-            ->setLabel('Posts to add to the message')
-    );
-}
-
-public function executeFirstStep(array $data = []): array
-{
-    $this->validate($data, ['posts' => 'required']);
-    $this->getWizardContext()->put('posts', $data['posts']);
-
-    return $this->toStep('compose_message');
+    // [...]
+    
+    public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+    {
+        $formFields->addField(
+            SharpFormSelectField::make('posts', Post::pluck('name', 'id')->toArray())
+                ->setMultiple()
+                ->setLabel('Posts to add to the message')
+        );
+    }
+    
+    public function executeFirstStep(array $data = []): array
+    {
+        $this->validate($data, ['posts' => 'required']);
+        $this->getWizardContext()->put('posts', $data['posts']);
+    
+        return $this->toStep('compose_message');
+    }
 }
 ```
 
 For the `compose_message` step, we initialize data based on what is in the context, after validating that te context has post ids (to ensure we are coming from step 1):
 
 ```php
-protected function initialDataForStepComposeMessage(): array
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    $this->getWizardContext()->validate(['posts' => 'required']);
-
-    return [
-        'message' => collect(
-            ['Here’s a list of posts I think you may like:'])
-            ->merge(
-                Post::whereIn('id', $this->getWizardContext()->get('posts'))
-                    ->get()
-                    ->pluck('title')
-            )
-            ->implode("\n"),
-    ];
+    // [...]
+    
+    protected function initialDataForStepComposeMessage(): array
+    {
+        $this->getWizardContext()->validate(['posts' => 'required']);
+    
+        return [
+            'message' => collect(
+                ['Here’s a list of posts I think you may like:'])
+                ->merge(
+                    Post::whereIn('id', $this->getWizardContext()->get('posts'))
+                        ->get()
+                        ->pluck('title')
+                )
+                ->implode("\n"),
+        ];
+    }
 }
 ```
 
 We build the form, and store a result useful for the next step in the context (and so on, until the end):
 
 ```php
-public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
+class SendEmailWithPostsWizardCommand extends EntityWizardCommand
 {
-    $formFields->addField(
-        SharpFormTextareaField::make('message')->setLabel('Message text')
-    );
-}
-
-public function executeStepComposeMessage(array $data = []): array
-{
-    $this->validate($data, ['message' => 'required']);
-    $this->getWizardContext()->put('message', $data['message']);
-
-    return $this->toStep('choose_recipients');
+    // [...]
+    
+    public function buildFormFieldsForStepComposeMessage(FieldsContainer $formFields): void
+    {
+        $formFields->addField(
+            SharpFormTextareaField::make('message')->setLabel('Message text')
+        );
+    }
+    
+    public function executeStepComposeMessage(array $data = []): array
+    {
+        $this->validate($data, ['message' => 'required']);
+        $this->getWizardContext()->put('message', $data['message']);
+    
+        return $this->toStep('choose_recipients');
+    }
 }
 ```
 

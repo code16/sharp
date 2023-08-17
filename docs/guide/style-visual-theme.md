@@ -2,14 +2,17 @@
 
 ### Custom colors
 
-In Sharp 6, the primary color is customisable. It changes the header + buttons color. Although every hue works well, too light colors aren't supported (e.g. works well with [tailwind colors](https://tailwindcss.com/docs/customizing-colors#color-palette-reference) >= 600).
+The primary color is customisable, and is applied to the header and buttons. Although every hue works well, too light colors aren't supported (e.g. works well with [tailwind colors](https://tailwindcss.com/docs/customizing-colors#color-palette-reference) >= 600).
 
 ```php
 // config/sharp.php
-
-'theme' => [
-    'primary_color' => "#004D40"
-]
+return [
+    // [...]
+    
+    'theme' => [
+        'primary_color' => '#004D40',
+    ],
+];
 ```
 
 ### Login and menu logos
@@ -23,22 +26,22 @@ If you need to configure the image files URLs, you can do it with this config:
 ```php
 // config/sharp.php
 
-"theme" => [
-    "primary_color" => ...,
-    "logo_urls" => [
-        "menu" => "/sharp/subdir/my-custom-menu-icon.png",
-        "login" => "/sharp/subdir/my-custom-login-icon.png",
-    ]
-]
+return [
+    // [...]
+    
+    'theme' => [
+        'primary_color' => ...,
+        'logo_urls' => [
+            'menu' => ''/sharp/subdir/my-custom-menu-icon.png'',
+            'login' => ''/sharp/subdir/my-custom-login-icon.png'',
+        ],
+    ],
+];
 ```
 
 #### Display a custom message on login page
 
-You can display a custom content under the form on login page:
-
-![Example of a custom message on login](./img/message-login.png)
-
-You'll need to create a new template file:
+You can display a custom content under the form on login page; you'll need to create a new template file:
 
 ```blade
 <!-- resources/views/sharp/_login-page-message.blade.php -->
@@ -48,12 +51,16 @@ You'll need to create a new template file:
 </div>
 ```
 
-And then you'll need to define the path to this custom blade in the `config/sharp.php` config file:
+And then define the path to this custom blade in the `config/sharp.php` config file:
 
 ```php
 // config/sharp.php
 
-"login_page_message_blade_path" => "sharp/_login-page-message",
+return [
+    // [...]
+
+    'login_page_message_blade_path' => 'sharp/_login-page-message',
+];
 ```
 
 ### Favicon
@@ -75,16 +82,18 @@ You may globally inject custom CSS files after the Sharp assets by defining thei
 ```php
 // config/sharp.php
 
-"extensions" => [
-   "assets" => [
-      "strategy" => "raw",
-      "head"     => [
-         "/css/inject.css", // Outputs <link rel="stylesheet" href="/css/inject.css"> after sharp assets
-      ],
-   ],
-],
+return [
+    // [...]
 
-// ...
+    'extensions' => [
+       'assets' => [
+          'strategy' => 'raw',
+          'head' => [
+             '/css/inject.css', // Outputs <link rel="stylesheet" href="/css/inject.css"> after sharp assets
+          ],
+       ],
+    ],
+];
 ```
 
 The comment next to the item within the `head` position show how the output would appear in the HTML.

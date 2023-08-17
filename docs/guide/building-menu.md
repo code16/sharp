@@ -1,12 +1,8 @@
 # Building the menu
 
-The Sharp side menu can contain several links, organized as you want.
+Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
 
-<div style="text-align: center">
-
-<img width="250" src="./img/menu.png" alt="Menu">
-
-</div>
+![](./img/menu-v8.png)
 
 All links shares common things:
 
@@ -14,7 +10,7 @@ All links shares common things:
 - a label
 - and a URL
 
-Links can be grouped in categories, like Company, Travels and Admin in this example.
+Links can be grouped in categories, like "Blog" in this screenshot.
 
 ## Create a SharpMenu class
 
@@ -35,13 +31,16 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 And should be declared in the config file:
 
 ```php
-// sharp.php
+// config/sharp.php
 
-[...]
-'menu' => MySharpMenu::class
+return [
+    // [...]
+    
+    'menu' => MySharpMenu::class,
+]
 ```
 
-### Link to an entity list, a dashboard or to a single show
+### Link to an Entity List, a Dashboard or to a single Show Page
 
 ```php
 class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
@@ -49,13 +48,13 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
     public function build(): self
     {
         return $this
-            ->addEntityLink('person', 'People', 'fas fa-user')
-            ->addEntityLink('feature', 'Features', 'fas fa-superpowers');
+            ->addEntityLink('post', 'Posts', 'fas fa-file')
+            ->addEntityLink('category', 'Categories', 'fas fa-folder');
     }
 }
 ```
 
-Given that `feature` and 'person' should be entities defined in the config file. Sharp will create a link either to the Entity List, to the dashboard or to a [single Show Page](single-show.md) (depending on the entity configuration).
+In this example, "post" and "category" should be entities defined in the config file. Sharp will create a link either to the Entity List, to the Dashboard or to a [single Show Page](single-show.md) (depending on the entity configuration).
 
 ### Link to an external URL
 
