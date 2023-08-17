@@ -6,12 +6,12 @@ import Vuex from 'vuex';
 // import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
 // import Notifications from 'vue-notification';
 
-import SharpCommands from '@sharp/commands';
+import SharpCommands from '@sharp/commands/index';
 import SharpDashboard from '@sharp/dashboard';
 import SharpEntityList from '@sharp/entity-list';
 import SharpFilters from '@sharp/filters';
 import SharpForm from '@sharp/form';
-import SharpShow from '@sharp/show';
+import SharpShow from '@sharp/show/src';
 import SharpUI from '@sharp/ui';
 import SharpSearch from '@sharp/search';
 

@@ -4,12 +4,15 @@ namespace Code16\Sharp\Data\Show\Fields;
 
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Enums\FilterType;
 use Code16\Sharp\Enums\ShowFieldType;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class ShowEntityListFieldData extends Data
 {
     public function __construct(
         public string $key,
+        #[LiteralTypeScriptType('"'.ShowFieldType::EntityList->value.'"')]
         public ShowFieldType $type,
         public bool $emptyVisible,
         public string $entityListKey,

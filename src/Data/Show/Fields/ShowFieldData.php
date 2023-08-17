@@ -5,7 +5,16 @@ namespace Code16\Sharp\Data\Show\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\ShowFieldType;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
+#[TypeScriptType(
+    ShowEntityListFieldData::class
+    .'|'.ShowFileFieldData::class
+    .'|'.ShowHtmlFieldData::class
+    .'|'.ShowListFieldData::class
+    .'|'.ShowPictureFieldData::class
+    .'|'.ShowTextFieldData::class
+)]
 final class ShowFieldData extends Data
 {
     public function __construct(
@@ -24,8 +33,8 @@ final class ShowFieldData extends Data
             ShowFieldType::File => ShowFileFieldData::from($field),
             ShowFieldType::Html => ShowHtmlFieldData::from($field),
             ShowFieldType::List => ShowListFieldData::from($field),
-            ShowFieldType::Text => ShowTextFieldData::from($field),
             ShowFieldType::Picture => ShowPictureFieldData::from($field),
+            ShowFieldType::Text => ShowTextFieldData::from($field),
         };
     }
 }

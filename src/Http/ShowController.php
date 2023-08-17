@@ -21,15 +21,14 @@ class ShowController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $uri, string $entityKey, string $instanceId = null)
+    public function show(string $uri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
         $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
 
         abort_if(
-            (! $instanceId && ! $show instanceof SharpSingleShow)
-            || ($instanceId && $show instanceof SharpSingleShow),
+            $show instanceof SharpSingleShow,
             404,
         );
 

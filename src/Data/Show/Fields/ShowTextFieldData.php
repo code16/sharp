@@ -7,11 +7,13 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EmbedData;
 use Code16\Sharp\Enums\ShowFieldType;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class ShowTextFieldData extends Data
 {
    public function __construct(
        public string $key,
+       #[LiteralTypeScriptType('"'.ShowFieldType::Text->value.'"')]
        public ShowFieldType $type,
        public bool $emptyVisible,
        public bool $html,

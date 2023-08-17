@@ -5,7 +5,8 @@
     "downlevelIteration": true,
     "moduleResolution": "node",
     "paths": {
-      "@/*": ["./resources/js/*"]
+      "@/*": ["./resources/js/*"],
+      "@sharp/commands/*":  ["./packages/commands/src/*"]
     }
   },
   "exclude": ["node_modules", "public"]

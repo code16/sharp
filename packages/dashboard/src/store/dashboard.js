@@ -4,7 +4,7 @@ import {
     getDashboardCommandForm,
 } from "../api";
 import { filtersModule as filters } from '@sharp/filters';
-import { commandsModule as commands } from '@sharp/commands';
+import { commandsModule as commands } from '@sharp/commands/index';
 
 export const UPDATE = 'UPDATE';
 

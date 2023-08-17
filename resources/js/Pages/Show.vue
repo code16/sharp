@@ -1,8 +1,7 @@
 <script setup lang="ts">
-    import { onMounted, ref } from "vue";
+    import { computed, ref } from "vue";
     import { BreadcrumbData, ShowData } from "@/types";
     import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
-    import ActionBarShow from "@sharp/show/src/components/ActionBar.vue";
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
     import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon } from '@sharp/ui';
@@ -11,186 +10,142 @@
     import { LocaleSelect } from "@sharp/form";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
-    import { getAppendableUri, route } from "@/utils/url";
+    import { Show } from '@sharp/show/src/Show';
 
     const props = defineProps<{
         show: ShowData,
         breadcrumb: BreadcrumbData,
     }>();
 
-    const authorizedCommands = props.show.config.commands?.instance
-        ?.map(group => group.filter(command => command.authorization));
+    const show = new Show(props.show);
+    const locale = ref(show.locales?.[0]);
 
-    const formUrl = (() => {
-        const formKey = props.show.config.multiformAttribute
-            ? props.show.data[props.show.config.multiformAttribute]
-            : null;
-        const entityKey = formKey
-            ? `${route().params.entityKey}:${formKey}`
-            : route().params.entityKey;
-
-        if(route().params.instanceId) {
-            return route('code16.sharp.form.edit', {
-                uri: getAppendableUri(),
-                entityKey,
-                instanceId: route().params.instanceId,
-            });
-        }
-
-        return route('code16.sharp.form.create', {
-            uri: getAppendableUri(),
-            entityKey,
-        });
-    })();
-
-    const locale = ref(props.show.locales?.[0]);
+    const reorderingEntityLists = ref({});
+    const isReordering = computed(() => Object.values(reorderingEntityLists.value).some(reordering => reordering));
+    function onEntityListReordering(key: string, reordering: boolean) {
+        reorderingEntityLists.value[key] = reordering;
+    }
 </script>
 
 <template>
     <Layout>
-        <div class="ShowPage" :class="classes">
+        <div class="ShowPage">
             <div class="container">
-                <template v-if="ready">
-                    <div class="action-bar mt-4 mb-3">
-                        <div class="row align-items-center gx-3">
-                            <div class="col">
-                                <template v-if="config('sharp.display_breadcrumb')">
-                                    <Breadcrumb :items="breadcrumb.items" />
-                                </template>
-                            </div>
-                            <template v-if="show.locales?.length">
-                                <div class="col-auto">
-                                    <LocaleSelect
-                                        outline
-                                        right
-                                        :locale="currentLocale"
-                                        :locales="show.locales"
-                                        @change="handleLocaleChanged"
-                                    />
-                                </div>
-                            </template>
-                            <template v-if="show.config.state">
-                                <div class="col-auto">
-                                    <Dropdown
-                                        :show-caret="show.config.state.authorization"
-                                        outline
-                                        right
-                                        :disabled="!show.config.state.authorization"
-                                    >
-                                        <template v-slot:text>
-                                            <StateIcon class="me-1" :color="stateOptions ? stateOptions.color : '#fff'" style="vertical-align: -.125em" />
-                                            <span class="text-truncate">{{ stateOptions ? stateOptions.label : state }}</span>
-                                        </template>
-                                        <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                            <DropdownItem :active="state === stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
-                                                <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
-                                                <span class="text-truncate">{{ stateValue.label }}</span>
-                                            </DropdownItem>
-                                        </template>
-                                    </Dropdown>
-                                </div>
-                            </template>
-                            <template v-if="authorizedCommands?.flat().length || show.authorizations.delete && !show.config.isSingle">
-                                <div class="col-auto">
-                                    <CommandsDropdown outline :small="false" :commands="authorizedCommands" @select="handleCommandRequested">
-                                        <template v-slot:text>
-                                            {{ __('sharp::entity_list.commands.instance.label') }}
-                                        </template>
-                                        <template v-if="show.authorizations.delete && !show.config.isSingle" v-slot:append>
-                                            <DropdownSeparator />
-                                            <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
-                                                {{ __('sharp::action_bar.form.delete_button') }}
-                                            </DropdownItem>
-                                        </template>
-                                    </CommandsDropdown>
-                                </div>
-                            </template>
-                            <template v-if="show.authorizations.update">
-                                <div class="col-auto">
-                                    <Button :href="formUrl" :disabled="editDisabled">
-                                        {{ __('sharp::action_bar.show.edit_button') }}
-                                    </Button>
-                                </div>
+                <div class="action-bar mt-4 mb-3">
+                    <div class="row align-items-center gx-3">
+                        <div class="col">
+                            <template v-if="config('sharp.display_breadcrumb')">
+                                <Breadcrumb :items="breadcrumb.items" />
                             </template>
                         </div>
-                    </div>
-
-                    <ActionBarShow
-                        :commands="authorizedCommands"
-                        :state="instanceState"
-                        :state-options="instanceStateOptions"
-                        :state-values="stateValues"
-                        :form-url="formUrl"
-                        :can-edit="canEdit"
-                        :can-change-state="canChangeState"
-                        :show-back-button="showBackButton"
-                        :breadcrumb="breadcrumbItems"
-                        :locales="locales"
-                        :current-locale="locale"
-                        :can-delete="canDelete"
-                        @command="handleCommandRequested"
-                        @state-change="handleStateChanged"
-                        @locale-change="handleLocaleChanged"
-                        @delete="handleDeleteClicked"
-                    />
-
-                    <template v-if="config.globalMessage">
-                        <GlobalMessage
-                            :options="config.globalMessage"
-                            :data="data"
-                            :fields="fields"
-                        />
-                    </template>
-
-                    <div class="ShowPage__content">
-                        <template v-if="title">
-                            <div :class="title ? 'mb-3' : 'mb-4'">
-                                <div class="row align-items-center gx-3 gx-md-4">
-                                    <template v-if="title">
-                                        <div class="col" style="min-width: 0">
-                                            <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="title"></h1>
-                                        </div>
-                                    </template>
-                                </div>
+                        <template v-if="show.locales?.length">
+                            <div class="col-auto">
+                                <LocaleSelect
+                                    outline
+                                    right
+                                    :locale="locale"
+                                    :locales="show.locales"
+                                    @change="locale = $event"
+                                />
                             </div>
                         </template>
-
-                        <template v-for="section in layout.sections">
-                            <Section
-                                class="ShowPage__section"
-                                v-show="isSectionVisible(section)"
-                                :section="section"
-                                :layout="sectionLayout(section)"
-                                :fields-row-class="fieldsRowClass"
-                                :collapsable="isSectionCollapsable(section)"
-                                :commands="sectionCommands(section)"
-                                @command="handleCommandRequested"
-                                v-slot="{ fieldLayout }"
-                            >
-                                <template v-if="fieldOptions(fieldLayout)">
-                                    <ShowField
-                                        :options="fieldOptions(fieldLayout)"
-                                        :value="fieldValue(fieldLayout)"
-                                        :locale="locale"
-                                        :locales="locales"
-                                        :config-identifier="fieldLayout.key"
-                                        :layout="fieldLayout"
-                                        :collapsable="section.collapsable"
-                                        @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                        @reordering="handleReordering(fieldLayout.key, $event)"
-                                        :key="refreshKey"
-                                    />
-                                </template>
-                                <template v-else>
-                                    <UnknownField :name="fieldLayout.key" />
-                                </template>
-                            </Section>
+                        <template v-if="show.config.state">
+                            <div class="col-auto">
+                                <Dropdown
+                                    :show-caret="show.config.state.authorization"
+                                    outline
+                                    right
+                                    :disabled="!show.config.state.authorization"
+                                >
+                                    <template v-slot:text>
+                                        <StateIcon class="me-1" :color="show.instanceStateValue ? show.instanceStateValue.color : '#fff'" style="vertical-align: -.125em" />
+                                        <span class="text-truncate">{{ show.instanceStateValue ? show.instanceStateValue.label : show.instanceState }}</span>
+                                    </template>
+                                    <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                        <DropdownItem :active="show.instanceState === stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
+                                            <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
+                                            <span class="text-truncate">{{ stateValue.label }}</span>
+                                        </DropdownItem>
+                                    </template>
+                                </Dropdown>
+                            </div>
+                        </template>
+                        <template v-if="show.authorizedCommands?.flat().length || show.canDelete">
+                            <div class="col-auto">
+                                <CommandsDropdown outline :small="false" :commands="show.authorizedCommands" @select="handleCommandRequested">
+                                    <template v-slot:text>
+                                        {{ __('sharp::entity_list.commands.instance.label') }}
+                                    </template>
+                                    <template v-if="show.canDelete" v-slot:append>
+                                        <DropdownSeparator />
+                                        <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
+                                            {{ __('sharp::action_bar.form.delete_button') }}
+                                        </DropdownItem>
+                                    </template>
+                                </CommandsDropdown>
+                            </div>
+                        </template>
+                        <template v-if="show.authorizations.update">
+                            <div class="col-auto">
+                                <Button :href="show.formUrl" :disabled="isReordering">
+                                    {{ __('sharp::action_bar.show.edit_button') }}
+                                </Button>
+                            </div>
                         </template>
                     </div>
+                </div>
+
+                <template v-if="show.config.globalMessage">
+                    <GlobalMessage
+                        :options="show.config.globalMessage"
+                        :data="show.data"
+                        :fields="show.fields"
+                    />
                 </template>
-                <template v-else>
-                    <ActionBarShow />
-                </template>
+
+                <div class="ShowPage__content">
+                    <template v-if="show.title(locale)">
+                        <div class="mb-4">
+                            <div class="row align-items-center gx-3 gx-md-4">
+                                <div class="col" style="min-width: 0">
+                                    <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="show.title(locale)"></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template v-for="section in show.layout.sections">
+                        <Section
+                            class="ShowPage__section"
+                            v-show="isSectionVisible(section)"
+                            :section="section"
+                            :layout="sectionLayout(section)"
+                            :fields-row-class="fieldsRowClass"
+                            :collapsable="isSectionCollapsable(section)"
+                            :commands="sectionCommands(section)"
+                            @command="handleCommandRequested"
+                            v-slot="{ fieldLayout }"
+                        >
+                            <template v-if="fieldOptions(fieldLayout)">
+                                <ShowField
+                                    :options="fieldOptions(fieldLayout)"
+                                    :value="fieldValue(fieldLayout)"
+                                    :locale="locale"
+                                    :locales="show.locales"
+                                    :config-identifier="fieldLayout.key"
+                                    :layout="fieldLayout"
+                                    :collapsable="section.collapsable"
+                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                    :key="refreshKey"
+                                />
+                            </template>
+                            <template v-else>
+                                <UnknownField :name="fieldLayout.key" />
+                            </template>
+                        </Section>
+                    </template>
+                </div>
             </div>
 
             <CommandFormModal
@@ -219,44 +174,8 @@
 
         data() {
             return {
-                ready: false,
                 fieldsVisible: null,
-                locale: null,
-                refreshKey: 0,
-                reorderingLists: {},
             }
-        },
-
-        computed: {
-            ...mapGetters('show', [
-                'fields',
-                'layout',
-                'data',
-                'config',
-                'locales',
-                'authorizations',
-                'instanceState',
-                'instanceStateOptions',
-                'canEdit',
-                'authorizedCommands',
-                'stateValues',
-                'canChangeState',
-            ]),
-            localized() {
-                return this.locales?.length > 0;
-            },
-            title() {
-                if(!this.ready || !this.config.titleAttribute) {
-                    return null;
-                }
-                if(this.fields[this.config.titleAttribute]?.localized) {
-                    return this.data[this.config.titleAttribute]?.[this.locale];
-                }
-                return this.data[this.config.titleAttribute];
-            },
-            isReordering() {
-                return Object.values(this.reorderingLists).some(reordering => reordering);
-            },
         },
 
         methods: {
@@ -292,16 +211,6 @@
                 return (this.config.commands[section.key] ?? [])
                     .map(group => group.filter(command => command.authorization));
             },
-            fieldsRowClass(row) {
-                const fieldsTypeClasses = row.map(fieldLayout => {
-                    const field = this.fieldOptions(fieldLayout);
-                    return `ShowPage__fields-row--${field.type}`;
-                });
-                return [
-                    'ShowPage__fields-row',
-                    ...fieldsTypeClasses,
-                ]
-            },
             sectionFields(section) {
                 return section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
             },
@@ -322,14 +231,6 @@
                     ...this.fieldsVisible,
                     [key]: visible,
                 }
-            },
-            handleLocaleChanged(locale) {
-                this.locale = locale;
-            },
-            handleReordering(key, reordering) {
-                this.reorderingLists = {
-                    [key]: reordering,
-                };
             },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
@@ -379,9 +280,6 @@
 
                 handleNotifications(this.show.notifications);
                 this.updateDocumentTitle(this.show);
-
-                this.ready = true;
-                this.refreshKey++;
             }
         },
 

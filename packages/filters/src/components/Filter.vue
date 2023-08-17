@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { FilterData, FilterType } from "@/types";
+    import { FilterData } from "@/types";
     import FilterCheck from "./filters/FilterCheck.vue";
     import FilterDateRange from "./filters/FilterDateRange.vue";
     import FilterSelect from "./filters/FilterSelect.vue";
@@ -11,7 +11,7 @@
         disabled?: boolean
     }>();
 
-    const components: Record<FilterType, Component> = {
+    const components: Record<FilterData['type'], Component> = {
         'check': FilterCheck,
         'daterange': FilterDateRange,
         'select': FilterSelect,

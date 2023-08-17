@@ -64,7 +64,7 @@
 
         computed: {
             commandGroups() {
-                return this.commands.filter(group => group.length > 0);
+                return this.commands?.filter(group => group.length > 0);
             },
             classes() {
                 return {

@@ -65,7 +65,7 @@
     import { entitiesMatch } from "sharp";
     import { getNavbarHeight } from "@sharp/ui";
     import { EntityList, EntityListTitle, entityListModule } from '@sharp/entity-list';
-    import { CommandsDropdown } from '@sharp/commands';
+    import { CommandsDropdown } from '@sharp/commands/index';
 
     import ActionBar from "./ActionBar.vue";
     import FieldLayout from "../../FieldLayout.vue";

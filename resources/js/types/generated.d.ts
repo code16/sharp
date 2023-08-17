@@ -295,7 +295,7 @@ export type ShowData = {
 };
 export type ShowEntityListFieldData = {
   key: string;
-  type: ShowFieldType;
+  type: "entityList";
   emptyVisible: boolean;
   entityListKey: string;
   hiddenFilters: Array<string>;
@@ -307,11 +307,13 @@ export type ShowEntityListFieldData = {
   showCount: boolean;
   label: string | null;
 };
-export type ShowFieldData = {
-  key: string;
-  type: ShowFieldType;
-  emptyVisible: boolean;
-};
+export type ShowFieldData =
+  | ShowEntityListFieldData
+  | ShowFileFieldData
+  | ShowHtmlFieldData
+  | ShowListFieldData
+  | ShowPictureFieldData
+  | ShowTextFieldData;
 export type ShowFieldType =
   | "file"
   | "html"
@@ -321,13 +323,13 @@ export type ShowFieldType =
   | "entityList";
 export type ShowFileFieldData = {
   key: string;
-  type: ShowFieldType;
+  type: "file";
   emptyVisible: boolean;
   label: string | null;
 };
 export type ShowHtmlFieldData = {
   key: string;
-  type: ShowFieldType;
+  type: "html";
   emptyVisible: boolean;
   template: string;
   templateData: { [key: string]: any } | null;
@@ -353,29 +355,25 @@ export type ShowLayoutSectionData = {
 };
 export type ShowListFieldData = {
   key: string;
-  type: ShowFieldType;
+  type: "list";
   emptyVisible: boolean;
   label: string | null;
   itemFields: { [key: string]: ShowFieldData };
 };
 export type ShowPictureFieldData = {
   key: string;
-  type: ShowFieldType;
+  type: "picture";
   emptyVisible: boolean;
 };
 export type ShowTextFieldData = {
   key: string;
-  type: ShowFieldType;
+  type: "text";
   emptyVisible: boolean;
   html: boolean;
   localized: boolean | null;
   collapseToWordCount: number | null;
   embeds: { [key: string]: EmbedData } | null;
   label: string | null;
-};
-export type ThemeData = {
-  loginLogoUrl: string | null;
-  menuLogoUrl: string | null;
 };
 export type UserData = {
   name: string | null;
