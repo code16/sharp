@@ -17,11 +17,7 @@ return [
 
 ### Login and menu logos
 
-By default, the `config('sharp.name')` is displayed on the login page and on top of the menu. You can if you wish display images instead: Sharp will look for PNGs named `login-icon.png` and `menu-icon.png`, in a `/public/sharp-assets/` directory. Note that :
-- `login-icon.png` is limited to 200 pixels in width and 100 pixels in height,
-- and `menu-icon.png` must fit in 150 pixels in width and 50 pixels in height.
-
-If you need to configure the image files URLs, you can do it with this config:
+By default, the `config('sharp.name')` is displayed on the login page and on top of the menu. If you want to show custom logo, you can do it with this config:
 
 ```php
 // config/sharp.php
@@ -38,6 +34,10 @@ return [
     ],
 ];
 ```
+
+Preferred formats:
+- `logo_urls.login` is limited to 200 pixels in width and 100 pixels in height,
+- `logo_urls.menu` must fit in 150 pixels in width and 50 pixels in height.
 
 #### Display a custom message on login page
 
