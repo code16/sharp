@@ -4,6 +4,7 @@ namespace App\Sharp\Categories;
 
 use App\Models\Category;
 use App\Sharp\Categories\Commands\CleanUnusedCategoriesCommand;
+use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -17,19 +18,17 @@ class CategoryList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('name')
-                    ->setLabel('Name')
-                    ->setSortable(),
+                    ->setLabel('Name'),
             )
             ->addField(
                 EntityListField::make('posts_count')
-                    ->setLabel('# posts')
-                    ->setSortable(),
+                    ->setLabel('# posts'),
             );
     }
 
     public function buildListConfig(): void
     {
-        $this->configureDefaultSort('posts_count', 'desc');
+        $this->configureReorderable(new SimpleEloquentReorderHandler(Category::class));
     }
 
     protected function getEntityCommands(): ?array
@@ -56,18 +55,12 @@ class CategoryList extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         $categories = Category::withCount('posts')
+            ->orderBy('order')
             ->when(
                 $this->queryParams->filterFor('orphan'),
                 fn ($q) => $q->having('posts_count', 0)
-            )
-
-            // Handle sorting
-            ->when(
-                $this->queryParams->sortedBy() === 'name',
-                fn ($q) => $q->orderBy('name', $this->queryParams->sortedDir()),
-                fn ($q) => $q->orderBy('posts_count', $this->queryParams->sortedDir())
             );
-
+            
         return $this->transform($categories->get());
     }
 }
