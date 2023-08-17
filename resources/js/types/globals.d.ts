@@ -25,7 +25,7 @@ import { Config, RouteParam, RouteParamsWithQueryOverload, Router } from 'ziggy-
 // }
 
 
-export type ZiggyRouter = Router & { get params(): { [key: string]: string } }
+export type ZiggyRouter = Omit<Router, 'params'> & { get params(): { [key: string]: string } }
 
 declare global {
     function route(
