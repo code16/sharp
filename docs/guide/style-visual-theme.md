@@ -32,8 +32,8 @@ return [
     'theme' => [
         'primary_color' => ...,
         'logo_urls' => [
-            'menu' => ''/sharp/subdir/my-custom-menu-icon.png'',
-            'login' => ''/sharp/subdir/my-custom-login-icon.png'',
+            'menu' => '/sharp/subdir/my-custom-menu-icon.png',
+            'login' => '/sharp/subdir/my-custom-login-icon.png',
         ],
     ],
 ];
@@ -70,8 +70,12 @@ You can define an URL for a favicon that Sharp will use in the config:
 ```php
 // config/sharp.php
 
-"theme" => [
-    "favicon_url" => "/sharp-img/favicon.png",
+return [
+    // [...]
+    
+    'theme' => [
+        'favicon_url' => '/sharp-img/favicon.png',
+    ],
 ]
 ```
 
