@@ -15,19 +15,19 @@
                         <template v-if="reordering">
                             <div class="col-auto">
                                 <Button outline @click="handleReorderButtonClicked">
-                                    {{ l('action_bar.list.reorder_button') }}
-                                </Button>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div class="col-auto">
-                                <Button outline @click="handleReorderButtonClicked">
                                     {{ l('action_bar.list.reorder_button.cancel') }}
                                 </Button>
                             </div>
                             <div class="col-auto">
                                 <Button @click="handleReorderSubmitButtonClicked">
                                     {{ l('action_bar.list.reorder_button.finish') }}
+                                </Button>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col-auto">
+                                <Button outline @click="handleReorderButtonClicked">
+                                    {{ l('action_bar.list.reorder_button') }}
                                 </Button>
                             </div>
                         </template>
