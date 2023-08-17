@@ -10,7 +10,7 @@ There are three graph types, and they mostly share the same API. To choose one o
 
 ```php
 $widgetsContainer->addWidget(
-    SharpLineGraphWidget::make('capacities')
+    SharpLineGraphWidget::make('sales')
 );
 ```
 
@@ -18,7 +18,7 @@ $widgetsContainer->addWidget(
 
 ```php
 $widgetsContainer->addWidget(
-    SharpBarGraphWidget::make('capacities')
+    SharpBarGraphWidget::make('sales')
 );
 ```
 
@@ -26,7 +26,7 @@ $widgetsContainer->addWidget(
 
 ```php
 $widgetsContainer->addWidget(
-    SharpPieGraphWidget::make('capacities')
+    SharpPieGraphWidget::make('sales')
 );
 ```
 
@@ -66,9 +66,9 @@ Valuation is handled by a dedicated method: `$this->addGraphDataSet(string $grap
 
 ```php
 $this->addGraphDataSet(
-    'capacities',
+    'sales',
     SharpGraphWidgetDataSet::make($values)
-        ->setLabel('Capacities')
+        ->setLabel('Sales')
         ->setColor('blue')
 );
 ```

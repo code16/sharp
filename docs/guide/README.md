@@ -11,6 +11,34 @@ Each `entity` in Sharp can be displayed:
 - In a `Show Page`, optionally, to display an `instance` details.
 - And in a `Form`, either to update or create a new `instance`.
 
+## Example
+
+Let's take a simple example: we want to manage some shop, with 3 obvious entities: `Order`, `Customer` and `Product`. 
+
+We want to be able to list all the **customers**, to display a detailed view for each of them, and to create or update a customer. That’s an `Entity List` linking to a `Show Page`, linking to a `Form`:
+
+<div style="text-align:center">
+<img src="./img/schema-customer.png" style="max-width:700px; width:100%">
+</div>
+
+For **products**, we decide that we don't need to build a `Show Page`:
+
+<div style="text-align:center">
+<img src="./img/schema-product.png" style="max-width:450px; width:100%">
+</div>
+
+The product `Entity List` may have filters, sorting columns and search, and an `Entity state` to manage the published state of each product.
+
+Finally, **orders**, must be listed, detailed and updatable, and we also need to manage the **product** list of each order. That's an `Entity List` linking to a `Show Page` which contains another `Entity List`:
+
+<div style="text-align:center">
+<img src="./img/schema-order.png" style="max-width:700px; width:100%">
+</div>
+
+Maybe we can add an `Entity Cmmand` to export orders in a CSV file in the `Entity List`, and an `Instance command` on the order `Show Page` to declare the order as shipped.
+
+This is a simple example to illustrate the main concepts of Sharp: we'll see in this guide how to build such structures but also more complexe ones, and how to manage states, commands, dashboards, authorizations, errors, validation... in the process.
+
 ## Installation
 
 Sharp 8 needs Laravel 10+ and PHP 8.2+.

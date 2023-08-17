@@ -21,18 +21,22 @@ The first step is to create a new class extending `Code16\Sharp\Dashboard\SharpD
 This method is meant to host the code responsible for the declaration and configuration of each widget. This must be done by calling `$widgetsContainer->addWidget()`:
 
 ```php
-function buildWidgets(WidgetsContainer $widgetsContainer): void
+class SalesDashboard extends SharpDashboard
 {
-    $widgetsContainer
-        ->addWidget(
-            SharpLineGraphWidget::make("capacities")
-                ->setTitle("Spaceships by capacity")
-        )
-        ->addWidget(
-            SharpPanelWidget::make("activeSpaceships")
-                ->setInlineTemplate("<h1>{{count}}</h1> spaceships in activity")
-                ->setLink('spaceship')
-        );
+    // [...]
+    function buildWidgets(WidgetsContainer $widgetsContainer): void
+    {
+        $widgetsContainer
+            ->addWidget(
+                SharpLineGraphWidget::make('sales')
+                    ->setTitle('Sales evolution')
+            )
+            ->addWidget(
+                SharpFigureWidget::make('pendingOrders')
+                    ->setTitle('Pending orders')
+                    ->setLink(LinkToEntityList::make('orders')->addFilter(StateFilter::class, 'pending'))
+            );
+    }
 }
 ```
 
@@ -80,6 +84,7 @@ Widget data is set with specific methods depending on their type. The documentat
 
 - [Graph](dashboard-widgets/graph.md)
 - [Panel](dashboard-widgets/panel.md)
+- [Figure](dashboard-widgets/figure.md)
 - [OrderedList](dashboard-widgets/ordered-list.md)
 
 ## Configure the Dashboard
