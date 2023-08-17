@@ -9,9 +9,9 @@
           hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 80%
     )">
         <div class="w-full max-w-sm">
-            <template v-if="$page.props.theme.loginLogoUrl">
+            <template v-if="config('sharp.theme.logo_urls.login')">
                 <div class="flex justify-center mb-4">
-                    <img :src="$page.props.theme.loginLogoUrl" :alt="config('sharp.name')" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
+                    <img :src="config('sharp.theme.logo_urls.login')" :alt="config('sharp.name')" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
                 </div>
             </template>
             <template v-else>

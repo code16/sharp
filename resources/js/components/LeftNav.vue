@@ -15,8 +15,13 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 <template>
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div class="flex grow flex-col  overflow-y-auto bg-white pb-4">
-        <div class="flex h-16 shrink-0 items-center bg-indigo-600 px-6">
-            <img class="h-auto w-32" :src="theme.menuLogoUrl" :alt="config('sharp.name')" />
+        <div class="flex h-16 shrink-0 items-center bg-indigo-600 px-6 py-2.5">
+            <template v-if="config('sharp.theme.logo_urls.menu')">
+                <img class="h-auto w-auto max-w-full max-h-full" :src="config('sharp.theme.logo_urls.menu')" :alt="config('sharp.name')" />
+            </template>
+            <template v-else>
+                {{ config('sharp.name') }}
+            </template>
         </div>
         <template v-if="globalFilters">
             <GlobalFilters :global-filters="globalFilters" />

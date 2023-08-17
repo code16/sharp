@@ -5,11 +5,9 @@ namespace Code16\Sharp\Http\Middleware;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\MenuData;
-use Code16\Sharp\Data\ThemeData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
-use Code16\Sharp\Utils\SharpTheme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
@@ -48,11 +46,12 @@ class HandleInertiaRequests extends Middleware
                 'sharp.search.placeholder' => config('sharp.search.placeholder'),
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
+                'sharp.theme.logo_urls.login' => config('sharp.theme.logo_urls.login'),
+                'sharp.theme.logo_urls.menu' => config('sharp.theme.logo_urls.menu'),
             ],
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class))
                 : null,
-            'theme' => ThemeData::from(app(SharpTheme::class)),
             ...auth()->check() ? [
                 'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
                 'auth' => fn () => [
