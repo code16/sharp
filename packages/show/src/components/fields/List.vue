@@ -1,5 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import ShowField from "../ShowField.vue";
+
 </script>
 
 <template>

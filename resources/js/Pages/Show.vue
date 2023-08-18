@@ -4,7 +4,7 @@
     import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
-    import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon } from '@sharp/ui';
+    import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle } from '@sharp/ui';
     import UnknownField from "@/components/dev/UnknownField.vue";
     import Layout from "../Layouts/Layout.vue";
     import { LocaleSelect } from "@sharp/form";
@@ -104,17 +104,53 @@
                 </template>
 
                 <div class="ShowPage__content">
-                    <template v-if="show.title(locale)">
+                    <template v-if="show.getTitle(locale)">
                         <div class="mb-4">
                             <div class="row align-items-center gx-3 gx-md-4">
                                 <div class="col" style="min-width: 0">
-                                    <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="show.title(locale)"></h1>
+                                    <h1 class="mb-0 text-truncate h2" data-top-bar-title v-html="show.getTitle(locale)"></h1>
                                 </div>
                             </div>
                         </div>
                     </template>
 
                     <template v-for="section in show.layout.sections">
+                        <div class="ShowSection" :class="classes">
+                            <div class="row">
+                                <template v-if="hasCollapse || section.title">
+                                    <div class="col">
+                                        <SectionTitle :section="section" :collapsable="hasCollapse" :collapsed="collapsed" />
+                                    </div>
+                                </template>
+                                <template v-if="hasCommands && !collapsed">
+                                    <div class="col-auto align-self-end mb-2">
+                                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">
+                                            <template v-slot:text>
+                                                {{ __('sharp::entity_list.commands.instance.label') }}
+                                            </template>
+                                        </CommandsDropdown>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <template v-if="!collapsed">
+                                <div class="ShowSection__content">
+                                    <Grid class="ShowSection__grid"
+                                        :rows="[section.columns]"
+                                        :col-class="() => 'ShowSection__col'"
+                                        v-slot="{ itemLayout:column }"
+                                    >
+                                        <Grid class="ShowPage__fields-grid"
+                                            :rows="column.fields"
+                                            :row-class="fieldsRowClass"
+                                            v-slot="{ itemLayout:fieldLayout }"
+                                        >
+                                            <slot :field-layout="fieldLayout" />
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </template>
+                        </div>
                         <Section
                             class="ShowPage__section"
                             v-show="isSectionVisible(section)"

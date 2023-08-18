@@ -62,7 +62,7 @@ export class Show implements ShowData {
         return this.authorizations.delete && !this.config.isSingle;
     }
 
-    title(locale: string): string {
+    getTitle(locale: string): string {
         if(!this.config.titleAttribute) {
             return null;
         }

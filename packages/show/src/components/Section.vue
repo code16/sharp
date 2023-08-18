@@ -79,9 +79,6 @@
             hasCommands() {
                 return this.commands?.flat().length > 0;
             },
-            wrapperElement() {
-                return this.hasCollapse ? 'details' : 'div';
-            },
         },
         methods: {
             handleCommandSelected(command) {
