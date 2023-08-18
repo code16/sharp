@@ -3,7 +3,12 @@
         <div class="row">
             <template v-if="hasCollapse || section.title">
                 <div class="col">
-                    <SectionTitle :section="section" :collapsable="hasCollapse" :collapsed="collapsed" />
+                    <SectionTitle
+                        :section="section"
+                        :collapsable="hasCollapse"
+                        :collapsed="collapsed"
+                        @toggle="collapsed = !$event"
+                    />
                 </div>
             </template>
             <template v-if="hasCommands && !collapsed">
@@ -84,9 +89,6 @@
             lang,
             handleCommandSelected(command) {
                 this.$emit('command', command);
-            },
-            handleDetailsToggle(e) {
-                this.collapsed = !e.target.open;
             },
         },
     }
