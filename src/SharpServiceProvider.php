@@ -48,8 +48,7 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
 
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang/back', 'sharp');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang/front', 'sharp-front');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
         $this->publishes([
             __DIR__.'/../dist' => public_path('vendor/sharp'),

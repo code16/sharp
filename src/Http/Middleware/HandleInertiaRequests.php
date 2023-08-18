@@ -27,13 +27,13 @@ class HandleInertiaRequests extends Middleware
             'locale' => app()->getLocale(),
             'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), fn () =>
                 collect([
-                    'sharp::action_bar' => __('sharp-front::action_bar'),
-                    'sharp::dashboard' => __('sharp-front::dashboard'),
-                    'sharp::entity_list' => __('sharp-front::entity_list'),
-                    'sharp::form' => __('sharp-front::form'),
-                    'sharp::modals' => __('sharp-front::modals'),
-                    'sharp::show' => __('sharp-front::show'),
-                    'sharp::filters' => __('sharp-front::filters'),
+                    'sharp::action_bar' => __('sharp::action_bar'),
+                    'sharp::dashboard' => __('sharp::dashboard'),
+                    'sharp::entity_list' => __('sharp::entity_list'),
+                    'sharp::form' => __('sharp::form'),
+                    'sharp::modals' => __('sharp::modals'),
+                    'sharp::show' => __('sharp::show'),
+                    'sharp::filters' => __('sharp::filters'),
                     'sharp::login' => __('sharp::login'),
                     'sharp::menu' => __('sharp::menu'),
                 ])->flatMap(fn ($values, $group) =>

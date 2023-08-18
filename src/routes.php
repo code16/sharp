@@ -207,7 +207,3 @@ Route::group([
     Route::post('/api/upload', [FormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
 });
-
-// Localization
-Route::get('/vendor/sharp/lang.js', [LangController::class, 'index'])
-    ->name('code16.sharp.assets.lang');
