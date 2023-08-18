@@ -1,11 +1,8 @@
-@extends("sharp::layout")
 
-@section("content")
-
+<x-sharp::layout>
     <div id="sharp-app">
         <div class="container">
             <h3>Unauthorized</h3>
         </div>
     </div>
-
-@endsection
+</x-sharp::layout>

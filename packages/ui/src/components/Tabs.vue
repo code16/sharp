@@ -1,17 +1,12 @@
 <template>
     <b-tabs
         class="SharpTabs"
-        nav-class="SharpTabs__nav mb-4 align-items-center"
-        pills
+        :nav-class="['SharpTabs__nav align-items-center nav-tabs', navClass]"
     >
-        <template v-slot:tabs-start>
-            <li class="nav-item me-sm-auto">
-                <slot name="nav-prepend" />
-            </li>
-        </template>
-
         <template v-slot:tabs-end>
-            <li class="ms-auto"></li>
+            <li class="nav-item ms-auto">
+                <slot name="nav-append" />
+            </li>
         </template>
 
         <slot />
@@ -23,6 +18,10 @@
 
     export default {
         name: 'SharpTabs',
+
+        props: {
+            navClass: String,
+        },
 
         components: {
             BTabs,

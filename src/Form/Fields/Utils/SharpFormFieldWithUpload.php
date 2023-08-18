@@ -24,12 +24,7 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    /**
-     * @param  string  $ratio  16:9, 1:1, ...
-     * @param  array|null  $transformableFileTypes
-     * @return static
-     */
-    public function setCropRatio(string $ratio = null, array $transformableFileTypes = null): self
+    public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
     {
         if ($ratio) {
             $this->cropRatio = explode(':', $ratio);
@@ -64,12 +59,6 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    /** @deprecated use setTransformable() */
-    public function setCroppable(bool $croppable = true): self
-    {
-        return $this->setTransformable($croppable);
-    }
-
     public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
     {
         $this->transformable = $transformable;
@@ -98,22 +87,14 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    /**
-     * @param  string|Closure  $storageBasePath
-     * @return static
-     */
-    public function setStorageBasePath($storageBasePath): self
+    public function setStorageBasePath(string|Closure $storageBasePath): self
     {
         $this->storageBasePath = $storageBasePath;
 
         return $this;
     }
 
-    /**
-     * @param  string|array  $fileFilter
-     * @return static
-     */
-    public function setFileFilter($fileFilter): self
+    public function setFileFilter(string|array $fileFilter): self
     {
         $this->fileFilter = $this->formatFileExtension($fileFilter);
 
@@ -142,11 +123,7 @@ trait SharpFormFieldWithUpload
         return $this->cropRatio;
     }
 
-    /**
-     * @param  string|array  $fileFilter
-     * @return array
-     */
-    private function formatFileExtension($fileFilter): array
+    private function formatFileExtension(string|array $fileFilter): array
     {
         if (! is_array($fileFilter)) {
             $fileFilter = explode(',', $fileFilter);

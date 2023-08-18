@@ -21,9 +21,6 @@ class SharpFormEditorField extends SharpFormField
 
     const FIELD_TYPE = 'editor';
 
-    /** @deprecated use UPLOAD */
-    const DOC = 'upload';
-
     const B = 'bold';
     const I = 'italic';
     const HIGHLIGHT = 'highlight';

@@ -29,7 +29,7 @@ class CategoryShow extends SharpShow
         $showFields
             ->addField(SharpShowTextField::make('name')->setLabel('Name'))
             ->addField(
-                SharpShowEntityListField::make('posts', 'posts')
+                SharpShowEntityListField::make('posts')
                     ->setLabel('Related posts')
                     ->showCreateButton(false)
                     ->showCount()
@@ -49,5 +49,10 @@ class CategoryShow extends SharpShow
                     });
             })
             ->addEntityListSection('posts', collapsable: true);
+    }
+
+    public function delete($id): void
+    {
+        Category::findOrFail($id)->delete();
     }
 }

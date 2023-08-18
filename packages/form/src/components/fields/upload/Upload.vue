@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import VueClip from './VueClip';
+    import VueClip from './VueClip.vue';
     import { getUploadOptions } from "../../../util/upload";
 
     export default {

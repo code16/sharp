@@ -179,9 +179,7 @@ class PostForm extends SharpForm
 
     public function buildFormConfig(): void
     {
-        $this
-            ->configureDisplayShowPageAfterCreation()
-            ->configureDeleteConfirmation('Are you sure you want to delete this post (this will permanently delete its data)?');
+        $this->configureDisplayShowPageAfterCreation();
     }
 
     public function find($id): array

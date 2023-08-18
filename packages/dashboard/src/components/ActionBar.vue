@@ -1,32 +1,44 @@
 <template>
-    <ActionBar>
-        <template v-if="filters.length > 0" v-slot:extras>
-            <div class="row mx-n2">
-                <template v-for="filter in filters">
-                    <div class="col-auto px-2">
-                        <SharpFilter
-                            :filter="filter"
-                            :value="filterValue(filter.key)"
-                            @input="handleFilterChanged(filter, $event)"
-                            :key="filter.id"
-                        />
+    <div class="my-4">
+        <div class="row gx-3">
+            <div class="col">
+                <template v-if="filters.length > 0">
+                    <div class="row gx-2">
+                        <template v-for="filter in filters">
+                            <div class="col-auto">
+                                <SharpFilter
+                                    :filter="filter"
+                                    :value="filterValue(filter.key)"
+                                    @input="$emit('filter-change', filter, $event)"
+                                    :key="filter.id"
+                                />
+                            </div>
+                        </template>
+                        <template v-if="showReset">
+                            <div class="col-auto d-flex">
+                                <button class="btn btn-sm btn-link d-inline-flex align-items-center fs-8" @click="$emit('filters-reset', filters)">
+                                    {{ l('filters.reset_all') }}
+                                </button>
+                            </div>
+                        </template>
                     </div>
                 </template>
             </div>
-        </template>
-        <template v-if="commands.length" v-slot:extras-right>
-            <CommandsDropdown :commands="commands" @select="handleCommandSelected">
-                <template v-slot:text>
-                    {{ l('dashboard.commands.dashboard.label') }}
-                </template>
-            </CommandsDropdown>
-        </template>
-    </ActionBar>
+            <template v-if="commands.length">
+                <div class="col-auto">
+                    <CommandsDropdown :commands="commands" @select="$emit('command', $event)">
+                        <template v-slot:text>
+                            {{ l('dashboard.commands.dashboard.label') }}
+                        </template>
+                    </CommandsDropdown>
+                </div>
+            </template>
+        </div>
+    </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    import { ActionBar } from 'sharp-ui';
     import { SharpFilter } from 'sharp-filters';
     import { CommandsDropdown } from 'sharp-commands';
     import { Localization } from "sharp/mixins";
@@ -35,35 +47,18 @@
         name: 'SharpActionBarDashboard',
         mixins: [Localization],
         components: {
-            ActionBar,
             SharpFilter,
             CommandsDropdown,
         },
         props: {
             commands: Array,
+            filters: Array,
+            showReset: Boolean,
         },
         computed: {
             ...mapGetters('dashboard', {
-                filters: 'filters/filters',
                 filterValue: 'filters/value',
-                filterNextQuery: 'filters/nextQuery',
             })
         },
-        methods: {
-            filterKey(filter) {
-                return `actionbardashboard_${filter.key}`;
-            },
-            handleFilterChanged(filter, value) {
-                this.$router.push({
-                    query: {
-                        ...this.$route.query,
-                        ...this.filterNextQuery({ filter, value }),
-                    }
-                });
-            },
-            handleCommandSelected(command) {
-                this.$emit('command', command);
-            }
-        }
     }
 </script>

@@ -30,6 +30,7 @@ class AppendListAuthorizations
         $authorizations = [
             'view' => [],
             'update' => [],
+            'delete' => [],
             'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
         ];
 
@@ -42,6 +43,9 @@ class AppendListAuthorizations
                 }
                 if ($this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId)) {
                     $authorizations['update'][] = $instanceId;
+                }
+                if ($this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)) {
+                    $authorizations['delete'][] = $instanceId;
                 }
             });
 

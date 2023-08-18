@@ -4,6 +4,9 @@ namespace Code16\Sharp\EntityList\Fields;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @deprecated this class will be removed in next major version
+ */
 class EntityListFieldsLayout
 {
     protected array $columns = [];

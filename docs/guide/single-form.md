@@ -2,27 +2,21 @@
 sidebarDepth: 3
 ---
 
-# Using SingleForm for unique resources
+# Using Single Form for unique resources
 
-Sometimes you will need to configure a "unique" resource that does not fit into a List / Form schema, like for example
-an account, or a configuration item. SingleForms are the natural companions for
-SingleShows, [documented here](single-show.md).
+Sometimes you will need to configure a "unique" resource that does not fit into a List / Form schema, like for example an account, or a configuration item. Single Forms are the natural companions for
+Single Shows, [documented here](single-show.md).
 
 ## Write the class
 
-Instead of extending `SharpForm`, our SingleForm implementation should extend `Code16\Sharp\Form\SharpSingleForm`. We
-still have to implement `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to
-declare the fields presenting the instance, but other methods are a bit different. First, `find()` and `update()` don't
-need any `$instanceId` parameter:
+Instead of extending `SharpForm`, our SingleForm implementation should extend `Code16\Sharp\Form\SharpSingleForm`. We still have to implement `buildFormFields(FieldsContainer $formFields)` and `buildFormLayout(FormLayout $formLayout)` to declare the fields presenting the instance, but other methods are a bit different. First, `find()` and `update()` don't need any `$instanceId` parameter:
 
 - `findSingle(): array`
 - `updateSingle(array $data)`
 
-And then, since SingleForms will not accept `store` and `delete` actions, related methods are unavailable.
-
 ### Full example
 
-Let's write a SingleForm for the current User, where he can update its name and email (using `WithSharpFormEloquentUpdater` here as this example uses Eloquent):
+Let's write a Single Form for the current User, where he can update its name and email (using `WithSharpFormEloquentUpdater` here as this example uses Eloquent):
 
 ```php
 class AccountSharpForm extends SharpSingleForm
@@ -33,12 +27,12 @@ class AccountSharpForm extends SharpSingleForm
     {
         $formFields
             ->addField(
-                SharpFormTextField::make("name")
-                    ->setLabel("Name")
+                SharpFormTextField::make('name')
+                    ->setLabel('Name')
             )
             ->addField(
-                SharpFormTextField::make("email")
-                    ->setLabel("Email address")
+                SharpFormTextField::make('email')
+                    ->setLabel('Email address')
             );
     }
 
@@ -46,8 +40,8 @@ class AccountSharpForm extends SharpSingleForm
     {
         $formLayout->addColumn(6, function($column) {
             return $column
-                ->withSingleField("name")
-                ->withSingleField("email");
+                ->withSingleField('name')
+                ->withSingleField('email');
         });
     }
 
@@ -71,4 +65,4 @@ class AccountSharpForm extends SharpSingleForm
 
 ## How to declare it?
 
-Like said before, SingleForms will only work in pair with a SingleShow; please refer [to this documentation](single-show.md#linking-a-singleshow-to-the-main-menu) to find out how to declare a single show and form in the sharp config file.
+Like said before, Single Forms will only work in pair with a Single Show; please refer [to this documentation](single-show.md#single-show-declaration) to find out how to declare a single show and form.

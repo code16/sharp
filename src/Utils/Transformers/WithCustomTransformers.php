@@ -122,8 +122,7 @@ trait WithCustomTransformers
                 if (! isset($attributes[$attribute])) {
                     if (method_exists($transformer, 'applyIfAttributeIsMissing')
                         && ! $transformer->applyIfAttributeIsMissing()) {
-                        // The attribute is missing, and the transformer code specifically
-                        // decide to be ignored in this case
+                        // The attribute is missing and the transformer code declared to be ignored in this case
                         continue;
                     }
                 }
@@ -158,15 +157,10 @@ trait WithCustomTransformers
     protected function handleAutoRelatedAttributes(array $attributes, $model): array
     {
         collect($this->getDataKeys())
-            ->filter(function ($key) {
-                return strpos($key, ':') !== false;
-            })
-            ->map(function ($key) {
-                return array_merge([$key], explode(':', $key));
-            })
-            ->each(function ($key) use (&$attributes, $model) {
-                // For each one, we create a "relation:attribute" key
-                // in the returned array
+            ->filter(fn (string $key) => str_contains($key, ':'))
+            ->map(fn (string $key) => array_merge([$key], explode(':', $key)))
+            ->each(function (array $key) use (&$attributes, $model) {
+                // For each one, we create a "relation:attribute" key in the returned array
                 $attributes[$key[0]] = $model->{$key[1]}->{$key[2]} ?? null;
             });
 

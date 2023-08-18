@@ -1,7 +1,6 @@
 # Entity States
 
-Entity states are a bit of sugar to easily propose a state management on entities. It could be a simple "draft /
-publish" state for a page, or something more advanced for an order, for instance.
+Entity states are a bit of sugar to easily propose a state management on entities. It could be a simple "draft / publish" state for a page, or something more advanced with many states for an order for instance.
 
 ## Generator
 
@@ -15,57 +14,65 @@ First, you'll have to write a class that extends the `Code16\Sharp\EntityList\Co
 
 You'll have to implement two functions: `buildStates()` and `updateState($instanceId, $stateId)`.
 
-
 ### Build the states
 
 The goal is to declare the available states for the entity, using `$this->addState()`:
 
 ```php
-protected function buildStates()
+class ProductEntityState extends EntityState
 {
-    $this->addState("active", "Active", "green")
-        ->addState("inactive", "Retired", "orange")
-        ->addState("building", "Building process", "#dddddd")
-        ->addState("conception", "Conception phase", "blue");
+    // [...]
+    
+    protected function buildStates()
+    {
+        $this->addState('active', 'Active', 'green')
+            ->addState('inactive', 'Retired', 'orange')
+            ->addState('coming', 'Coming soon', '#ddd');
+    }
 }
 ```
 
 `$this->addState()` takes 3 parameters:
-
-- first, a key identifying the state,
-- then, the state label as shown to the user,
-- and finally a color to display.
+- a key identifying the state,
+- the state label as shown to the user,
+- a color to display.
 
 For the color, you may indicate anything that the browser would understand (an HTML color name or a hexadecimal value).
 
 ### Update a state
 
-When the user clicks on a state to update it, this is the functional code called.
+When the user clicks on a state to update it, the `updateState()` method is called.
 
 ```php
-public function updateState($instanceId, $stateId): array
+class ProductEntityState extends EntityState
 {
-    Spaceship::findOrFail($instanceId)
-        ->update([
-            "state" => $stateId
-        ]);
-
-    return $this->refresh($instanceId);
+    // [...]
+    
+    public function updateState($instanceId, $stateId): array
+    {
+        Product::findOrFail($instanceId)
+            ->update(['state' => $stateId]);
+    
+        return $this->refresh($instanceId);
+    }
 }
 ```
 
-Note the `return $this->refresh($instanceId);`: Entity states can return either a refresh or a reload (as described in
-the previous chapter, [Commands](commands.md)), but if omitted the refresh of the `$instanceId` is the default (meaning
-in the code sample above this line can be deleted).
+About the `return $this->refresh($instanceId);`: Entity states can return either a `refresh` or a `reload` (as described in the [Commands documentation](commands.md)), but if omitted the refresh of the `$instanceId` is the default (meaning in the code sample above this line can be removed).
 
 ## Configure the state
 
-Once the Entity state class is defined, we have to add it in the Entity List config:
+Once the Entity state class is defined, we have to add it in the Entity List or in the Show Page config:
 
 ```php
-function buildListConfig(): void
+class ProductEntityList extends SharpEntityList
 {
-    $this->configureEntityState("state", SpaceshipEntityState::class)
+    // [...]
+    
+    function buildListConfig(): void
+    {
+        $this->configureEntityState('state', SpaceshipEntityState::class)
+    }
 }
 ```
 
@@ -76,9 +83,14 @@ The first parameter is a key which should be the name of the attribute.
 Entity states can declare an authorization check very much like Instance Commands:
 
 ```php
-public function authorizeFor($instanceId): bool 
+class ProductEntityState extends EntityState
 {
-    return Spaceship::findOrFail($instanceId)->owner_id == auth()->id();
+    // [...]
+    
+    public function authorizeFor($instanceId): bool 
+    {
+        return Product::findOrFail($instanceId)->owner_id == auth()->id();
+    }
 }
 ```
 

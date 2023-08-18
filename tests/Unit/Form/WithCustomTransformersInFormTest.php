@@ -7,14 +7,14 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class WithCustomTransformersInFormTest extends SharpFormEloquentBaseTest
+class WithCustomTransformersInTest extends SharpEloquentBaseTest
 {
     /** @test */
     public function we_can_retrieve_an_array_version_of_a_model()

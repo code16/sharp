@@ -18,8 +18,8 @@
 </template>
 
 <script>
-    import HtmlContentEditor from './modes/html/Wysiwyg';
-    import MarkdownContentEditor from './modes/markdown/Markdown';
+    import HtmlContentEditor from './modes/html/Wysiwyg.vue';
+    import MarkdownContentEditor from './modes/markdown/Markdown.vue';
     import { getDefaultExtensions, getUploadExtension } from "./extensions";
     import { getEmbedExtension } from "./extensions/embed";
     import { editorProps } from "./index";

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import NavItem from './NavItem';
+    import NavItem from './NavItem.vue';
     import { BCollapse } from 'bootstrap-vue';
 
     export default {

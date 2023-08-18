@@ -7,6 +7,7 @@ use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -184,6 +185,23 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
     }
 
     /** @test */
+    public function we_get_selected_ids_in_an_entity_command()
+    {
+        $this->buildTheWorld();
+        $this->withoutExceptionHandling();
+
+        $this
+            ->postJson('/sharp/api/list/person/command/entity_bulk', [
+                'query' => ['ids' => ['1', '2']],
+            ])
+            ->assertOk()
+            ->assertJson([
+                'action' => 'info',
+                'message' => '1-2',
+            ]);
+    }
+
+    /** @test */
     public function we_cant_call_an_unauthorized_entity_command()
     {
         $this->buildTheWorld();
@@ -294,14 +312,13 @@ class EntityListEntityCommandControllerTest extends BaseApiTest
             ]);
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         parent::buildTheWorld($singleShow);
 
-        $this->app['config']->set(
-            'sharp.entities.person.list',
-            EntityCommandTestPersonSharpEntityList::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(EntityCommandTestPersonSharpEntityList::class);
     }
 }
 
@@ -500,6 +517,23 @@ class EntityCommandTestPersonSharpEntityList extends PersonSharpEntityList
                 public function execute(array $data = []): array
                 {
                     return $this->info($this->queryParams->sortedBy().$this->queryParams->sortedDir());
+                }
+            },
+            'entity_bulk' => new class() extends EntityCommand
+            {
+                public function label(): string
+                {
+                    return 'label';
+                }
+
+                public function buildCommandConfig(): void
+                {
+                    $this->configureInstanceSelectionRequired();
+                }
+
+                public function execute(array $data = []): array
+                {
+                    return $this->info(implode('-', $this->selectedIds()));
                 }
             },
             'entity_with_init_data' => new class() extends EntityCommand

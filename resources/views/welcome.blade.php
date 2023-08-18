@@ -1,7 +1,6 @@
-@extends("sharp::layout")
 
-@section("content")
 
+<x-sharp::layout>
     <x-sharp::page class="Sharp__dashboard-page">
         <div class="SharpActionBar__bar"></div>
         <div class="SharpActionView vh-100">
@@ -12,4 +11,4 @@
             </div>
         </div>
     </x-sharp::page>
-@endsection
+</x-sharp::layout>

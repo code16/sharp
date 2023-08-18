@@ -1,32 +1,33 @@
 # Add global page alert
 
-This feature makes it possible to add a message (with an alert or not) at the top of an EntityList, a Form (including a
-Command Form), a Show Page or a Dashboard.
+This feature makes it possible to add a message (with an alert or not) at the top of an Entity List, a Form (including a Command Form), a Show Page or a Dashboard.
 
-![Example of a message in a Show Page](./img/page-alert.png)
+![](./img/page-alert-v8.png)
 
-A global page alert can be great to provide feedback to the user, to remind him of a particular state, to warn him of potential
-consequences of a Command...
+A global page alert can be great to provide feedback to the user, to remind him of a particular state, to warn him of potential consequences of a Command...
 
 ## Declaration
 
-Use the `configurePageAlert()` method, in the `buildXXXConfig()` method of your EntityList, Show Page, Command, Form or Dashboard:
+Use the `configurePageAlert()` method, in the `buildXXXConfig()` method of your Entity List, Show Page, Command, Form or Dashboard:
 
 ```php
-function buildShowConfig(): void
+class PostShow extends SharpShow
 {
-    $this
-        ->configurePageAlert(
-            "Warning: this spaceship is still in conception or building phase.",
-        );
+    // [...]
+    
+   function buildShowConfig(): void
+   {
+       $this
+           ->configurePageAlert(
+               'Warning: this post is still in draft.',
+           );
+    }
 }
 ```
 
-This method accepts one to 4
-arguments: `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`
+This method accepts one to 4 arguments: `configurePageAlert(string $template, string $alertLevel = null, string $fieldKey = null, bool $declareTemplateAsPath = false)`
 
-- `$template` is the only one required: you must provide here a Vue.js template, just like for Autocompletes fields or
-  Dashboard panels
+- `$template` is the only one required: you must provide here a Vue.js template, just like for Autocompletes fields or Dashboard panels
 - `$alertLevel` formats the message as an alert, with the following possibilities:
     - `static::$pageAlertLevelNone`
     - `static::$pageAlertLevelInfo`
@@ -41,39 +42,40 @@ arguments: `configurePageAlert(string $template, string $alertLevel = null, stri
 
 Page alerts can be dynamic, using the power of a regular Vue.js template. Here's a full example:
 
-First we add dynamism in the template, and we define a `$fieldKey` to work with:
+First we add dynamism in the template, and we define a `$fieldKey` to work with in the config, and reference it in the data part; here's an example in a Show Page:
 
 ```php
-function buildShowConfig(): void
+class PostShow extends SharpShow
 {
-    $this
-        ->configurePageAlert(
-            "<span v-if='is_draft'>Warning: this spaceship is still in {{state}} phase.</span>",
-            static::$pageAlertLevelWarning,
-            "globalMessage"
+    // [...]
+    
+    function buildShowConfig(): void
+    {
+        $this
+            ->configurePageAlert(
+                '<span v-if='is_draft'>Warning: this post is still in {{state}} state.</span>',
+                static::$pageAlertLevelWarning,
+                'globalMessage'
         );
-}
-```
-
-Then in the data part (here's the `find()` method since it's a Show Page) we provide the wanted values:
-
-```php
-function find($id): array
-{
-    return $this
-        ->setCustomTransformer("globalMessage", function($value, Spaceship $spaceship) {
-            return [
-                "is_draft" => in_array($spaceship->state, ["building", "conception"]),
-                'state' => $spaceship->state
-            ];
-        })
-        ->transform(...);
+    }
+    
+    function find($id): array
+    {
+        return $this
+            ->setCustomTransformer('globalMessage', function($value, Post $post) {
+                return [
+                    'is_draft' => in_array($post->state, ['draft', 'pending']),
+                    'state' => $post->state
+                ];
+            })
+            ->transform(Post::findOrFail($id));
+    }
 }
 ```
 
 Note that we use the dynamic data in two ways, in this example:
 
-- the page alert will appear only if the spaceship state is "building" or "conception"
+- the page alert will appear only if the post state is "draft" or "pending"
 - and the actual state will be injected in the text message.
 
 ## The Dashboard case
@@ -83,16 +85,21 @@ For the Dashboard, the API is slightly different: first the 3rd argument of `con
 Second, and more importantly, here's how you can handle data binding for dynamic messages:
 
 ```php
-public function buildDashboardConfig(): void
+class CompanyDashboard extends SharpDashboard
 {
-    $this->configurePageAlert('Graphs below are delimited by period {{period}}.');
-}
-
-protected function buildWidgetsData(): void
-{
-    $period = $this->getQueryParams()->filterFor(PeriodFilter::class);
-    $this->setPageAlertData([
-        'period' => sprintf('%s - %s', $period['start'], $period['end']),
-    ]);
+    // [...]
+    
+    public function buildDashboardConfig(): void
+    {
+        $this->configurePageAlert('Graphs below are delimited by period {{period}}.');
+    }
+    
+    protected function buildWidgetsData(): void
+    {
+        $period = $this->getQueryParams()->filterFor(PeriodFilter::class);
+        $this->setPageAlertData([
+            'period' => sprintf('%s - %s', $period['start'], $period['end']),
+        ]);
+    }
 }
 ```

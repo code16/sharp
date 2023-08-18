@@ -1,7 +1,9 @@
 .SharpSearch {
+  width: var(--width);
+  transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   &__input {
     font-weight: bold;
-    padding-right: 2.5rem;
+    padding-right: 2rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 
@@ -22,9 +24,7 @@
     color: #999;
   }
 
-  &__button {
-    @include media-breakpoint-up(md) {
-      min-width: 4em;
-    }
+  &--focused {
+    width: var(--focused-width);
   }
 }

@@ -1,3 +1,3 @@
 
-export { default as Pie } from './Pie';
+export { default as Pie } from './Pie.vue';
 export * from './transform-data';

@@ -77,4 +77,8 @@ class PersonSharpShow extends SharpShow
     {
         return ['name' => 'John Wayne', 'job' => 'actor', 'state' => 'active'];
     }
+
+    public function delete($id): void
+    {
+    }
 }

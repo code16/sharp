@@ -7,8 +7,8 @@
 </template>
 
 <script>
-    import Loading from './Loading';
-    import LoadingTransition from "./LoadingTransition";
+    import Loading from './Loading.vue';
+    import LoadingTransition from "./LoadingTransition.vue";
 
     export default {
         components: {

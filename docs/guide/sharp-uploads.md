@@ -2,11 +2,9 @@
 
 Uploads are painful.
 
-Sharp provide a very opinionated and totally optional solution to handle if you are using Eloquent and
-the `WithSharpFormEloquentUpdater` trait (see [related documentation](building-form.md)).
+Sharp provide a very opinionated and totally optional solution to handle if you are using Eloquent and the `WithSharpFormEloquentUpdater` trait (see [related documentation](building-form.md)).
 
-The proposal is to use a special Sharp Model for all your uploads, and to link them to your Models with Eloquent's Morph
-relationships.
+The proposal is to use a special Sharp Model for all your uploads, and to link them to your Models with Eloquent's Morph relationships.
 
 ## Use `SharpUploadModel`
 
@@ -19,7 +17,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 
 class Media extends SharpUploadModel
 {
-    protected $table = "medias";
+    protected $table = 'medias';
 }
 ```
 
@@ -73,14 +71,14 @@ class Book extends Model
 {
 	public function cover()
     {
-        return $this->morphOne(Media::class, "model")
-            ->where("model_key", "cover");
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'cover');
     }
 
     public function pdf()
     {
-        return $this->morphOne(Media::class, "model")
-            ->where("model_key", "pdf");
+        return $this->morphOne(Media::class, 'model')
+            ->where('model_key', 'pdf');
     }
 }
 ```
@@ -99,7 +97,7 @@ By default, you can get the `file_name`, but also `mime_type` and file's `size`.
 You can add whatever property you need through custom properties, by setting it:
 
 ```php
-$book->cover->author = "Tomi Ungerer";
+$book->cover->author = 'Tomi Ungerer';
 ```
 
 Custom properties will be stored in the `custom_properties` column, as JSON.
@@ -123,8 +121,8 @@ You must first define the thumbnail directory, in Sharp's config:
 ```php
 // config/sharp.php
 
-"uploads" => [
-    "thumbnails_dir" => "thumbnails",
+'uploads' => [
+    'thumbnails_dir' => 'thumbnails',
 ],
 ```
 
@@ -137,11 +135,11 @@ Then you can call `$thumb = $book->cover->thumbnail(150)` to have a full URL to 
 The third argument is for Filters. For now, only two are available:
 
 - **greyscale**  
-`->thumbnail(150, null, ["greyscale" => []])`
+`->thumbnail(150, null, ['greyscale' => []])`
 
 
 - **fit**: this one has 2 params, `w` for width and `h` for height, and will center-fit the image in those constraints.  
-`->thumbnail(150, null, ["fit" => ["w"=>150, "h"=>100]])`
+`->thumbnail(150, null, ['fit' => ['w'=>150, 'h'=>100]])`
 
 But of course you can provide here a custom one. You'll need for that to first create a Filter class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailFilter`, implementing:
 
@@ -166,12 +164,12 @@ First declare your upload, like usual:
 function buildFormFields()
 {
     $this->addField(
-        SharpFormUploadField::make("cover")
-            ->setLabel("Cover")
+        SharpFormUploadField::make('cover')
+            ->setLabel('Cover')
             ->setFileFilterImages()
-            ->setCropRatio("1:1")
-            ->setStorageDisk("local")
-            ->setStorageBasePath("data/Books")
+            ->setCropRatio('1:1')
+            ->setStorageDisk('local')
+            ->setStorageBasePath('data/Books')
     );
 }
 ```
@@ -183,11 +181,11 @@ function find($id): array
 {
     return $this
         ->setCustomTransformer(
-            "cover",
+            'cover',
             new SharpUploadModelFormAttributeTransformer()
         )
         ->transform(
-            Book::with("cover")->findOrFail($id)
+            Book::with('cover')->findOrFail($id)
         );
 }
 ```
@@ -199,8 +197,8 @@ And finally, and this is a sad exception to the "don't touch the applicative cod
 ```php
 public function getDefaultAttributesFor($attribute)
 {
-    return in_array($attribute, ["cover"])
-        ? ["model_key" => $attribute]
+    return in_array($attribute, ['cover'])
+        ? ['model_key' => $attribute]
         : [];
 }
 ```
@@ -215,8 +213,8 @@ So we want to add an `author` custom attribute to our cover field: for this we a
 
 ```php
 $this->addField(
-    SharpFormTextField::make("cover:author")
-        ->setLabel("Author")
+    SharpFormTextField::make('cover:author')
+        ->setLabel('Author')
 );
 ```
 
@@ -229,9 +227,9 @@ So let's say we want to add pictures of inner pages, for our Book. It can be eas
 ```php
 public function pictures()
 {
-    return $this->morphMany(Media::class, "model")
-        ->where("model_key", "pictures")
-        ->orderBy("order");
+    return $this->morphMany(Media::class, 'model')
+        ->where('model_key', 'pictures')
+        ->orderBy('order');
 }
 ```
 
@@ -239,17 +237,17 @@ And then add the field in the Sharp Entity Form:
 
 ```php
 $this->addField(
-    SharpFormListField::make("pictures")
-        ->setLabel("Additional pictures")
-        ->setAddable()->setAddText("Add a picture")
+    SharpFormListField::make('pictures')
+        ->setLabel('Additional pictures')
+        ->setAddable()->setAddText('Add a picture')
         ->setRemovable()
         ->setSortable()
-        ->setOrderAttribute("order")
+        ->setOrderAttribute('order')
         ->addItemField(
-            SharpFormUploadField::make("file")
+            SharpFormUploadField::make('file')
                 ->setFileFilterImages()
-                ->setStorageDisk("local")
-                ->setStorageBasePath("data/Books/Pictures")
+                ->setStorageDisk('local')
+                ->setStorageBasePath('data/Books/Pictures')
         )
 );
 ```
@@ -261,8 +259,8 @@ You'll have next to update your Model special `getDefaultAttributesFor()` functi
 ```php
 public function getDefaultAttributesFor($attribute)
 {
-    return in_array($attribute, ["cover","pictures"])
-        ? ["model_key" => $attribute]
+    return in_array($attribute, ['cover','pictures'])
+        ? ['model_key' => $attribute]
         : [];
 }
 ```
@@ -273,13 +271,13 @@ All set.
 
 ```php
 $this->addField(
-    SharpFormListField::make("pictures")
+    SharpFormListField::make('pictures')
         [...]
         ->addItemField(
-            SharpFormUploadField::make("file")
+            SharpFormUploadField::make('file')
         )
         ->addItemField(
-            SharpFormTextField::make("legend")
+            SharpFormTextField::make('legend')
         )
 );
 ```

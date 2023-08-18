@@ -5,7 +5,6 @@ namespace Code16\Sharp\Tests\Fixtures;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
@@ -78,24 +77,17 @@ class PersonSharpEntityList extends SharpEntityList
                 EntityListField::make('name')
                     ->setLabel('Name')
                     ->setHtml()
+                    ->setWidth(6)
+                    ->setWidthOnSmallScreensFill()
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('age')
                     ->setLabel('Age')
+                    ->setWidth(6)
+                    ->hideOnSmallScreens()
                     ->setSortable(),
             );
-    }
-
-    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout->addColumn('name', 6)
-            ->addColumn('age', 6);
-    }
-
-    public function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout->addColumn('name');
     }
 
     public function getFilters(): ?array

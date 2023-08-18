@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Section from "../src/components/Section";
+import Section from "../src/components/Section.vue";
 
 describe('show section', () => {
     function createWrapper(options) {

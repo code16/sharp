@@ -7,13 +7,13 @@ use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\DB;
 
-class WithCustomTransformersInEntityListTest extends SharpFormEloquentBaseTest
+class WithCustomTransformersInEntityListTest extends SharpEloquentBaseTest
 {
     /** @test */
     public function we_can_retrieve_an_array_version_of_a_models_collection()

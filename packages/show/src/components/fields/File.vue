@@ -56,7 +56,7 @@
     import { Button } from "sharp-ui";
     import { downloadFileUrl } from "sharp-files";
     import { syncVisibility } from "../../util/fields/visiblity";
-    import FieldLayout from "../FieldLayout";
+    import FieldLayout from "../FieldLayout.vue";
 
     export default {
         components: {

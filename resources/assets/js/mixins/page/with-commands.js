@@ -47,7 +47,7 @@ export default {
                 return null;
             }
             const data = await parseBlobJSONContent(response.data);
-            this.handleCommandActionRequested(data.action, data);
+            await this.handleCommandActionRequested(data.action, data);
             return data;
         },
         /**
@@ -98,7 +98,9 @@ export default {
             }
 
             if(command.confirmation) {
-                await showConfirm(command.confirmation);
+                if(! await showConfirm(command.confirmation)) {
+                    return;
+                }
             }
 
             try {
@@ -116,20 +118,20 @@ export default {
                 ...handlers,
             };
         },
-        handleCommandActionRequested(action, data) {
+        async handleCommandActionRequested(action, data) {
             const handler = this.commandHandlers[action];
 
             if(handler) {
-                handler(data);
+                await handler(data);
             }
         },
 
         /** Command actions handlers */
-        handleReloadCommand() {
-            this.init();
+        async handleReloadCommand() {
+            await this.init();
         },
-        handleInfoCommand(data) {
-            showAlert(data.message, {
+        async handleInfoCommand(data) {
+            await showAlert(data.message, {
                 title: lang('modals.command.info.title'),
             });
         },

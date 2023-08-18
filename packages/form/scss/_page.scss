@@ -4,16 +4,16 @@
     padding-bottom: 0;
   }
   .SharpForm {
-    min-height: calc(100vh - 5rem);
+    //min-height: calc(100vh - 5rem);
     padding-bottom: 3rem;
 
     .tab-pane {
-      min-height: #{'max(30vh, 200px)'};
+      //min-height: #{'max(30vh, 200px)'};
       background-color: white;
 
       --tab-padding-x: 1.25rem;
-      --tab-padding-top: 1rem;
-      --tab-padding-bottom: 3rem;
+      --tab-padding-top: 1.5rem;
+      --tab-padding-bottom: 2rem;
       --tab-divider-margin-top: 3rem;
       --tab-divider-margin-bottom: 1.5rem;
     }

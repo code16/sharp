@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
-use Code16\Sharp\View\Components\Menu;
+use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
 class HomeController extends SharpProtectedController
 {
@@ -18,7 +18,7 @@ class HomeController extends SharpProtectedController
 
     private function getFirstConfiguredEntityUrl(): ?string
     {
-        return app(Menu::class)
+        return app(SharpMenuManager::class)
             ->getFlattenedItems()
             ->first(fn (SharpMenuItem $menuItem) => $menuItem->isEntity())
             ?->getUrl();

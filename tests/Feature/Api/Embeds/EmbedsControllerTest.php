@@ -124,7 +124,7 @@ class EmbedsControllerTest extends BaseApiTest
         $this->login();
     }
 
-    protected function buildTheWorld($singleShow = false)
+    protected function buildTheWorld(bool $singleShow = false): void
     {
         parent::buildTheWorld($singleShow);
 

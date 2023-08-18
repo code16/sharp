@@ -1,9 +1,9 @@
 import { isCustomField, resolveCustomField } from "sharp";
-import EntityList from "./entity-list/EntityList";
-import Text from './text/Text';
-import Picture from './Picture';
-import File from './File';
-import List from './List';
+import EntityList from "./entity-list/EntityList.vue";
+import Text from './text/Text.vue';
+import Picture from './Picture.vue';
+import File from './File.vue';
+import List from './List.vue';
 
 const map = {
     'entityList': EntityList,

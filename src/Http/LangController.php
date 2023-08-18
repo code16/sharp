@@ -25,6 +25,7 @@ class LangController extends Controller
                 'form',
                 'modals',
                 'show',
+                'filters',
             ];
 
             collect($files)

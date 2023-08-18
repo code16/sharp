@@ -76,4 +76,14 @@ class BreadcrumbItem
     {
         return $this->instance;
     }
+
+    public function toUri(): string
+    {
+        return sprintf('%s/%s',
+            $this->type,
+            isset($this->instance)
+                ? $this->key.'/'.$this->instance
+                : $this->key,
+        );
+    }
 }

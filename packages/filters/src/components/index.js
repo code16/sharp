@@ -1,3 +1,3 @@
 
-export { default as SharpFilter } from './Filter';
-export { default as GlobalFilters } from './GlobalFilters';
+export { default as SharpFilter } from './Filter.vue';
+export { default as GlobalFilters } from './GlobalFilters.vue';

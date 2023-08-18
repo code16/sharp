@@ -1,4 +1,4 @@
-import EntityListPage from './components/pages/EntityListPage';
+import EntityListPage from './components/pages/EntityListPage.vue';
 
 export default [
     /** New spec */

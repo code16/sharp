@@ -9,7 +9,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as multi
 				<div class="multiselect__tags-wrap" style="display: none;"></div>
 				<!---->
 				<div class="SharpLoading" style="display: none;">
-					<div class="spinner-border spinner-border-sm"></div>
+					<div class="d-block spinner-border spinner-border-sm"></div>
 				</div>
 				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 				<!---->
@@ -65,7 +65,7 @@ exports[`autocomplete-field common & local can mount Autocomplete field as resul
 				<div class="multiselect__tags-wrap" style="display: none;"></div>
 				<!---->
 				<div class="SharpLoading" style="display: none;">
-					<div class="spinner-border spinner-border-sm"></div>
+					<div class="d-block spinner-border spinner-border-sm"></div>
 				</div>
 				<input name="" type="text" autocomplete="off" placeholder="nom" tabindex="0" class="multiselect__input" style="width: 0px; position: absolute; padding: 0px;">
 				<span class="multiselect__single">

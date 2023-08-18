@@ -3,6 +3,7 @@
 namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
+use Code16\Sharp\Utils\StringUtil;
 
 class EntityListQueryParams
 {
@@ -44,6 +45,10 @@ class EntityListQueryParams
             $this->sortedDir = $query['dir'];
         }
 
+        if (isset($query['ids'])) {
+            $this->specificIds = $query['ids'];
+        }
+
         $this->fillFilterWithRequest($query);
 
         return $this;
@@ -66,28 +71,9 @@ class EntityListQueryParams
 
     public function searchWords(bool $isLike = true, bool $handleStar = true, string $noStarTermPrefix = '%', string $noStarTermSuffix = '%'): array
     {
-        $terms = [];
-
-        foreach (explode(' ', $this->search) as $term) {
-            $term = trim($term);
-            if (! $term) {
-                continue;
-            }
-
-            if ($isLike) {
-                if ($handleStar && str_contains($term, '*')) {
-                    $terms[] = str_replace('*', '%', $term);
-                    continue;
-                }
-
-                $terms[] = $noStarTermPrefix.$term.$noStarTermSuffix;
-                continue;
-            }
-
-            $terms[] = $term;
-        }
-
-        return $terms;
+        return app(StringUtil::class)
+            ->explodeSearchTerms($this->search, $isLike, $handleStar, $noStarTermPrefix, $noStarTermSuffix)
+            ->all();
     }
 
     final public function setSpecificIds(array $specificIds): self

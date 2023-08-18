@@ -31,7 +31,7 @@
 
 <script>
     import { Modal } from "sharp-ui";
-    import Form from "../../../../Form";
+    import Form from "../../../../Form.vue";
 
     export default {
         components: {

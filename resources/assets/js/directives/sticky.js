@@ -1,4 +1,5 @@
 import throttle from 'lodash/throttle';
+import Vue from "vue";
 
 class StickyObserver {
     /**
@@ -14,17 +15,24 @@ class StickyObserver {
      */
     listener;
 
+    position;
+
     constructor(el) {
         this.el = el;
         this.listener = throttle(() => this.refresh(), 50);
         this.sentinel = document.createElement('div');
         this.scrollContainer = el.closest('.modal') ?? window;
+        this.position = window.getComputedStyle(el).bottom !== 'auto' ? 'bottom' : 'top';
 
         this.sentinel.dataset.stickySentinel = true;
-        this.el.parentElement.insertBefore(this.sentinel, this.el);
-
+        if(this.position === 'bottom') {
+            this.el.parentElement.insertBefore(this.sentinel, this.el.nextSibling);
+        } else {
+            this.el.parentElement.insertBefore(this.sentinel, this.el);
+        }
         this.scrollContainer.addEventListener('scroll', this.listener);
         window.addEventListener('resize', this.listener);
+        Vue.nextTick(() => this.refresh());
     }
 
     destroy() {
@@ -41,7 +49,11 @@ class StickyObserver {
         const rect = this.el.getBoundingClientRect();
         const anchor = this.el.querySelector('[data-sticky-anchor]');
 
-        this.setStuck(rect.top > this.sentinel.getBoundingClientRect().top);
+        if(this.position === 'bottom') {
+            this.setStuck(rect.bottom < this.sentinel.getBoundingClientRect().bottom);
+        } else {
+            this.setStuck(rect.top > this.sentinel.getBoundingClientRect().top);
+        }
 
         if(anchor) {
             this.el.style.setProperty('--sticky-offset', `${rect.top - anchor.getBoundingClientRect().top}px`);
@@ -50,7 +62,7 @@ class StickyObserver {
 
     setStuck(stuck) {
         this.el.classList.toggle('stuck', stuck);
-        this.el.dispatchEvent(new CustomEvent('sticky-change', { detail:stuck }));
+        this.el.dispatchEvent(new CustomEvent('stuck-change', { detail:stuck }));
     }
 }
 

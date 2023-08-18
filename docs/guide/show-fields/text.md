@@ -10,13 +10,11 @@ Set the field label.
 
 ### `collapseToWordCount(int $wordCount)`
 
-Collapse the text if too long, and add a "show more" link. Use it for long texts (even markdown formatted) in sections
-with only one field.
+Collapse the text if too long, and add a "show more" link. Use it for long texts (even markdown formatted) in sections with only one field.
 
 ### `allowEmbeds(array $embeds)`
 
-This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed
-class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
+This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
 
 The [documentation on how to write an Embed class is available here](../form-editor-embeds.md).
 
@@ -29,11 +27,9 @@ function find($id): array
 {
     return $this
         ->setCustomTransformer(
-            "description", 
+            'description', 
             new MarkdownAttributeTransformer()
         )
         ->transform([...]);
 }
 ```
-
-See [related documentation of this transformer here](../how-to-transform-data.md#the-built-in-markdownattributetransformer).

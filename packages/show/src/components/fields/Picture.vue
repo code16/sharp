@@ -8,7 +8,7 @@
 
 <script>
     import { syncVisibility } from "../../util/fields/visiblity";
-    import FieldLayout from "../FieldLayout";
+    import FieldLayout from "../FieldLayout.vue";
 
     export default {
         components: {

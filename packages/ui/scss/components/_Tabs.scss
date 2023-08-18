@@ -3,32 +3,33 @@
     position: relative;
 
     .nav-link {
-      border: 1px solid hsla(var(--primary-h), var(--primary-s), var(--primary-l), .375);
-      &:not(.active) {
-        background: white;
+      color: $text-muted;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      &.active {
+        color: hsla(var(--primary-h), var(--primary-s), var(--primary-l));
+        border-color: hsla(var(--primary-h), var(--primary-s), var(--primary-l));
       }
       &.is-invalid {
         @extend .error-dot;
-      }
-      &.active {
-        position: relative;
-        z-index: 1;
+        margin-left: .25em;
       }
     }
-    .nav-item {
-      &:not(:nth-child(2)) {
-        .nav-link {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-        }
-        margin-left: -1px;
-      }
-      &:not(:nth-last-child(2)) {
-        .nav-link {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-      }
-    }
+
+    //.nav-item {
+    //  &:not(:nth-child(2)) {
+    //    .nav-link {
+    //      border-top-left-radius: 0;
+    //      border-bottom-left-radius: 0;
+    //    }
+    //    margin-left: -1px;
+    //  }
+    //  &:not(:nth-last-child(2)) {
+    //    .nav-link {
+    //      border-top-right-radius: 0;
+    //      border-bottom-right-radius: 0;
+    //    }
+    //  }
+    //}
   }
 }

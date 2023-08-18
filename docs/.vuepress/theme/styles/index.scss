@@ -55,6 +55,7 @@ code.inline {
       color: #6996bf;
       .token.function {
         margin-right: .25em;
+        color: var(--title-inline-code-color);
       }
     }
   }

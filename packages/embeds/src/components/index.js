@@ -1,4 +1,4 @@
-import EmbedRenderer from "./EmbedRenderer";
+import EmbedRenderer from "./EmbedRenderer.vue";
 
 export {
     EmbedRenderer,

@@ -106,11 +106,13 @@ class GlobalFiltersTest extends BaseApiTest
             ->assertOk()
             ->assertJson([
                 'filters' => [
-                    [
-                        'key' => (new GlobalFiltersTestGlobalRequiredFilter)->getKey(),
-                        'multiple' => false,
-                        'required' => true,
-                        'default' => app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),
+                    '_root' => [
+                        [
+                            'key' => (new GlobalFiltersTestGlobalRequiredFilter)->getKey(),
+                            'multiple' => false,
+                            'required' => true,
+                            'default' => app(GlobalFiltersTestGlobalRequiredFilter::class)->defaultValue(),
+                        ],
                     ],
                 ],
             ]);

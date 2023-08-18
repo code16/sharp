@@ -19,52 +19,71 @@ trait HandleDashboardCommands
      */
     protected function appendDashboardCommandsToConfig(array &$config): void
     {
-        $this->appendCommandsToConfig(
-            $this->getDashboardCommandHandlers(),
-            $config,
-            'dashboard',
-        );
+        $this->getDashboardCommandHandlers()
+            ->each(function ($handlers, $positionKey) use (&$config) {
+                $this->appendCommandsToConfig(
+                    $handlers,
+                    $config,
+                    $positionKey,
+                );
+            });
     }
 
     final public function getDashboardCommandHandlers(): Collection
     {
         if ($this->dashboardCommandHandlers === null) {
-            $groupIndex = 0;
             $this->dashboardCommandHandlers = collect($this->getDashboardCommands())
-                ->map(function ($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
-                    if (is_string($commandHandlerOrClassName)) {
-                        if (Str::startsWith($commandHandlerOrClassName, '-')) {
-                            // It's a separator
-                            $groupIndex++;
 
-                            return null;
-                        }
-                        if (! class_exists($commandHandlerOrClassName)) {
-                            throw new SharpException("Handler for dashboard command [{$commandHandlerOrClassName}] is invalid");
-                        }
-                        $commandHandler = app($commandHandlerOrClassName);
-                    } else {
-                        $commandHandler = $commandHandlerOrClassName;
-                    }
+                // First get commands which are section-based...
+                ->filter(fn ($value, $index) => is_array($value))
 
-                    if (! $commandHandler instanceof DashboardCommand) {
-                        throw new SharpException("Handler class for dashboard command [{$commandHandlerOrClassName}] is not an subclass of ".DashboardCommand::class);
-                    }
+                // ... and merge commands set for the whole dashboard
+                ->merge(
+                    [
+                        'dashboard' => collect($this->getDashboardCommands())
+                            ->filter(fn ($value, $index) => ! is_array($value)),
+                    ]
+                )
 
-                    $commandHandler->setGroupIndex($groupIndex);
-                    if (is_string($commandKey)) {
-                        $commandHandler->setCommandKey($commandKey);
-                    }
+                ->map(function ($handlers) {
+                    $groupIndex = 0;
 
-                    if (isset($this->queryParams)) {
-                        // We have to init query params of the command
-                        $commandHandler->initQueryParams($this->queryParams);
-                    }
+                    return collect($handlers)
+                        ->map(function ($commandHandlerOrClassName, $commandKey) use (&$groupIndex) {
+                            if (is_string($commandHandlerOrClassName)) {
+                                if (Str::startsWith($commandHandlerOrClassName, '-')) {
+                                    // It's a separator
+                                    $groupIndex++;
 
-                    return $commandHandler;
-                })
-                ->filter()
-                ->values();
+                                    return null;
+                                }
+                                if (! class_exists($commandHandlerOrClassName)) {
+                                    throw new SharpException("Handler for dashboard command [{$commandHandlerOrClassName}] is invalid");
+                                }
+                                $commandHandler = app($commandHandlerOrClassName);
+                            } else {
+                                $commandHandler = $commandHandlerOrClassName;
+                            }
+
+                            if (! $commandHandler instanceof DashboardCommand) {
+                                throw new SharpException("Handler class for dashboard command [{$commandHandlerOrClassName}] is not an subclass of ".DashboardCommand::class);
+                            }
+
+                            $commandHandler->setGroupIndex($groupIndex);
+                            if (is_string($commandKey)) {
+                                $commandHandler->setCommandKey($commandKey);
+                            }
+
+                            if (isset($this->queryParams)) {
+                                // We have to init query params of the command
+                                $commandHandler->initQueryParams($this->queryParams);
+                            }
+
+                            return $commandHandler;
+                        })
+                        ->filter()
+                        ->values();
+                });
         }
 
         return $this->dashboardCommandHandlers;
@@ -74,9 +93,9 @@ trait HandleDashboardCommands
     {
         return $this
             ->getDashboardCommandHandlers()
-            ->filter(function (DashboardCommand $command) use ($commandKey) {
-                return $command->getCommandKey() === $commandKey;
-            })
+            ->map(fn ($handlers, $positionKey) => $handlers)
+            ->flatten()
+            ->filter(fn (DashboardCommand $command) => $command->getCommandKey() === $commandKey)
             ->first();
     }
 }

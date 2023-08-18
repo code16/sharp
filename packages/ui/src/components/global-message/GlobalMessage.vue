@@ -13,7 +13,7 @@
 
 <script>
     import { TemplateRenderer } from "sharp/components";
-    import GlobalMessageLayout from "./GlobalMessageLayout";
+    import GlobalMessageLayout from "./GlobalMessageLayout.vue";
 
     export default {
         components: {

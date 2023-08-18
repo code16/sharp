@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormSelectField`
 
-![Example](./select-dropdown.png)
+![Example](./select-dropdown-v8.png)
 
 ## Configuration
 
@@ -15,30 +15,34 @@ The `$options` array can be either:
 
 ```php
 [
-    ["id"=>1, "label"=>"Label 1"],
-    ["id"=>2, "label"=>"Label 2"],
+    ['id'=>1, 'label'=>'Label 1'],
+    ['id'=>2, 'label'=>'Label 2'],
 ]
 ```
 
 This allows to write code like this:
 
 ```php
-SharpFormSelectField::make("travel_id",
-    Travel::orderBy("departure_date")->get()->map(function($travel) {
-        return [
-            "id" => $travel->id,
-            "label" => $travel->departure_date->format("Y-m-d")
-                . " — " . $travel->destination
-        ];
-    })->all()
-)
+SharpFormSelectField::make(
+    'travel_id',
+    Travel::orderBy('departure_date')
+        ->get()
+        ->map(function ($travel) {
+            return [
+                'id' => $travel->id,
+                'label' => $travel->departure_date->format('Y-m-d') 
+                    . ' — ' . $travel->destination
+            ];
+        })
+        ->all()
+);
 ```
 
 ### `setMultiple(bool $multiple = true)`
 
 Allow multi-selection (default: false)
 
-![Example](./select-checkboxes.png)
+![Example](./select-checkboxes-v8.png)
 
 
 ### `setClearable(bool $clearable = true)`
@@ -52,13 +56,13 @@ Display as a list (the default value):
 - radio if multiple=false
 - checkboxes if multiple=true
 
-![Example](./select-radios.png)
+![Example](./select-radios-v8.png)
 
 ### `setDisplayAsDropdown()`
 
 Display as a classic dropdown.
 
-![Example](./select-dropdown.png)
+![Example](./select-dropdown-v8.png)
 
 ### `setMaxSelected(int $maxSelected)`
 
@@ -84,17 +88,19 @@ Thanks to this feature, you can link the dataset (meaning: the `options`) of the
 For instance:
 
 ```php
-SharpFormSelectField::make("brand",
+SharpFormSelectField::make(
+    'brand',
     [
-        "France" => [
-            ["id"=>1, "label"=>"Renault"],
-            ["id"=>2, "label"=>"Peugeot"],
-        ], "Germany" => [
-            ["id"=>3, "label"=>"Audi"],
-            ["id"=>4, "label"=>"Mercedes"],
+        'France' => [
+            ['id'=>1, 'label'=>'Renault'],
+            ['id'=>2, 'label'=>'Peugeot'],
+        ], 
+        'Germany' => [
+            ['id'=>3, 'label'=>'Audi'],
+            ['id'=>4, 'label'=>'Mercedes'],
         ]
     ]
-)->setOptionsLinkedTo("country")
+)->setOptionsLinkedTo('country')
 ```
 
 This would work on relation with a `country` form field, which may be valued with "France" or "Germany".
@@ -102,19 +108,20 @@ This would work on relation with a `country` form field, which may be valued wit
 In some cases you may want to depend on more than one field; you must add a nested level in the `options` array:
 
 ```php
-SharpFormSelectField::make("model",
+SharpFormSelectField::make(
+    'model',
     [
-        "France" => [
-            1 => [["id"=>67, "label"=>"Clio"], ...],
+        'France' => [
+            1 => [['id'=>67, 'label'=>'Clio'], ...],
             2 => ...
-        ], "Germany" => [
-            3 => [["id"=>98, "label"=>"A4"], ...],
+        ], 
+        'Germany' => [
+            3 => [['id'=>98, 'label'=>'A4'], ...],
             4 => ...
         ]
     ]
-)->setOptionsLinkedTo("country", "brand")
+)->setOptionsLinkedTo('country', 'brand')
 ```
-
 
 ## Formatter
 
@@ -128,7 +135,7 @@ SharpFormSelectField::make("model",
 
 ```php
 [
-    ["id" => 1],
-    ["id" => 2]
+    ['id' => 1],
+    ['id' => 2]
 ]
 ```

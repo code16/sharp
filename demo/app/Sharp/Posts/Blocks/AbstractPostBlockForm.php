@@ -93,11 +93,6 @@ abstract class AbstractPostBlockForm extends SharpForm
         return $postBlock->id;
     }
 
-    public function delete($id): void
-    {
-        PostBlock::findOrFail($id)->delete();
-    }
-
     protected function getContentField(): ?SharpFormField
     {
         return SharpFormTextareaField::make('content')

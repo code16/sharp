@@ -120,4 +120,8 @@ abstract class ShowLayoutTestShow extends SharpShow
     public function buildShowLayout(ShowLayout $showLayout): void
     {
     }
+
+    public function delete(mixed $id): void
+    {
+    }
 }

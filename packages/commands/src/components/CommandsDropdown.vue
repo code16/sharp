@@ -1,5 +1,11 @@
 <template>
-    <Dropdown class="SharpCommandsDropdown" :class="classes" :small="small" right v-bind="$attrs">
+    <Dropdown class="SharpCommandsDropdown"
+        :class="classes"
+        :small="small"
+        right
+        v-bind="$attrs"
+        v-on="$listeners"
+    >
         <template v-slot:text>
             <slot name="text" />
         </template>
@@ -9,21 +15,30 @@
                 <DropdownSeparator />
             </template>
             <template v-for="command in group">
-                <DropdownItem @click="handleCommandClicked(command)" :key="command.key">
+                <DropdownItem
+                    @click="handleCommandClicked(command)"
+                    :disabled="isDisabled(command)"
+                    :key="command.key"
+                    v-b-tooltip.hover.left="{ disabled: !requiresSelection(command) }"
+                    :title="lang('entity_list.commands.needs_selection_message')"
+                >
                     {{ command.label }}
                     <template v-if="command.description">
-                        <div class="SharpCommandsDropdown__description">
+                        <div class="SharpCommandsDropdown__description" :class="{ 'opacity-75': isDisabled(command) }">
                             {{ command.description }}
                         </div>
                     </template>
                 </DropdownItem>
             </template>
         </template>
+        <slot name="append" />
     </Dropdown>
 </template>
 
 <script>
+    import { lang } from 'sharp';
     import { Dropdown, DropdownItem, DropdownSeparator } from 'sharp-ui';
+    import { VBTooltip } from 'bootstrap-vue';
 
     export default {
         name: 'SharpCommandsDropdown',
@@ -44,6 +59,7 @@
                 default: true,
             },
             hasState: Boolean,
+            selecting: Boolean,
         },
 
         computed: {
@@ -58,9 +74,19 @@
         },
 
         methods: {
+            lang,
+            isDisabled(command) {
+                return this.requiresSelection(command);
+            },
+            requiresSelection(command) {
+                return !this.selecting && command.instance_selection === 'required';
+            },
             handleCommandClicked(command) {
                 this.$emit('select', command);
             }
-        }
+        },
+        directives: {
+            'b-tooltip': VBTooltip,
+        },
     }
 </script>

@@ -18,8 +18,8 @@ class GlobalFilterController extends ApiController
     public function index()
     {
         return response()->json(
-            tap([], function (&$filters) {
-                $this->appendFiltersToConfig($filters);
+            tap([], function (&$config) {
+                $this->appendFiltersToConfig($config);
             }),
         );
     }
