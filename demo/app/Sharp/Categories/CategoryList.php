@@ -60,7 +60,7 @@ class CategoryList extends SharpEntityList
                 $this->queryParams->filterFor('orphan'),
                 fn ($q) => $q->having('posts_count', 0)
             );
-            
+
         return $this->transform($categories->get());
     }
 }
