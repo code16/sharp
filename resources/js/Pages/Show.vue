@@ -161,35 +161,35 @@
 <!--                                </div>-->
 <!--                            </template>-->
 <!--                        </div>-->
-                        <Section
-                            class="ShowPage__section"
-                            v-show="isSectionVisible(section)"
-                            :section="section"
-                            :layout="sectionLayout(section)"
-                            :fields-row-class="fieldsRowClass"
-                            :collapsable="isSectionCollapsable(section)"
-                            :commands="sectionCommands(section)"
-                            @command="handleCommandRequested"
-                            v-slot="{ fieldLayout }"
-                        >
-                            <template v-if="fieldOptions(fieldLayout)">
-                                <ShowField
-                                    :options="fieldOptions(fieldLayout)"
-                                    :value="fieldValue(fieldLayout)"
-                                    :locale="locale"
-                                    :locales="show.locales"
-                                    :config-identifier="fieldLayout.key"
-                                    :layout="fieldLayout"
-                                    :collapsable="section.collapsable"
-                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                    :key="refreshKey"
-                                />
-                            </template>
-                            <template v-else>
-                                <UnknownField :name="fieldLayout.key" />
-                            </template>
-                        </Section>
+<!--                        <Section-->
+<!--                            class="ShowPage__section"-->
+<!--                            v-show="isSectionVisible(section)"-->
+<!--                            :section="section"-->
+<!--                            :layout="sectionLayout(section)"-->
+<!--                            :fields-row-class="fieldsRowClass"-->
+<!--                            :collapsable="isSectionCollapsable(section)"-->
+<!--                            :commands="sectionCommands(section)"-->
+<!--                            @command="handleCommandRequested"-->
+<!--                            v-slot="{ fieldLayout }"-->
+<!--                        >-->
+<!--                            <template v-if="fieldOptions(fieldLayout)">-->
+<!--                                <ShowField-->
+<!--                                    :options="fieldOptions(fieldLayout)"-->
+<!--                                    :value="fieldValue(fieldLayout)"-->
+<!--                                    :locale="locale"-->
+<!--                                    :locales="show.locales"-->
+<!--                                    :config-identifier="fieldLayout.key"-->
+<!--                                    :layout="fieldLayout"-->
+<!--                                    :collapsable="section.collapsable"-->
+<!--                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"-->
+<!--                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"-->
+<!--                                    :key="refreshKey"-->
+<!--                                />-->
+<!--                            </template>-->
+<!--                            <template v-else>-->
+<!--                                <UnknownField :name="fieldLayout.key" />-->
+<!--                            </template>-->
+<!--                        </Section>-->
                     </template>
                 </div>
             </div>
@@ -242,13 +242,13 @@
                 return this.fieldsVisible?.[layout.key] !== false;
             },
             isSectionCollapsable(section) {
-                return section.collapsable && !this.sectionHasField(section, 'entityList');
+                // return section.collapsable && !this.sectionHasField(section, 'entityList');
             },
             sectionLayout(section) {
-                if(this.sectionHasField(section, 'entityList')) {
-                    return 'contents';
-                }
-                return 'card';
+                // if(this.sectionHasField(section, 'entityList')) {
+                //     return 'contents';
+                // }
+                // return 'card';
             },
             sectionCommands(section) {
                 if(!section.key) {
@@ -257,13 +257,13 @@
                 return (this.config.commands[section.key] ?? [])
                     .map(group => group.filter(command => command.authorization));
             },
-            sectionHasField(section, type) {
-                const sectionFields = this.sectionFields(section);
-                return sectionFields.some(fieldLayout => {
-                    const options = this.fieldOptions(fieldLayout);
-                    return options && options.type === type;
-                });
-            },
+            // sectionHasField(section, type) {
+            //     const sectionFields = this.sectionFields(section);
+            //     return sectionFields.some(fieldLayout => {
+            //         const options = this.fieldOptions(fieldLayout);
+            //         return options && options.type === type;
+            //     });
+            // },
             handleFieldVisibilityChanged(key, visible) {
                 this.fieldsVisible = {
                     ...this.fieldsVisible,
