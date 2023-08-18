@@ -26,6 +26,6 @@ class BulkPublishPostsCommand extends EntityCommand
                 ->update(['state' => 'online'])
             );
 
-        return $this->refresh($this->selectedIds());
+        return $this->reload();
     }
 }
