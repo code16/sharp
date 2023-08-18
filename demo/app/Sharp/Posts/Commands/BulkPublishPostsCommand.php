@@ -21,10 +21,13 @@ class BulkPublishPostsCommand extends EntityCommand
     public function execute(array $data = []): array
     {
         Post::whereIn('id', $this->selectedIds())
+            ->where('state', 'draft')
             ->get()
             ->each(fn (Post $post) => $post
                 ->update(['state' => 'online'])
             );
+        
+        $this->notify('All selected posts were published!');
 
         return $this->reload();
     }
