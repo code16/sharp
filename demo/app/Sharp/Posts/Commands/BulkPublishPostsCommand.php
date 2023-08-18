@@ -26,7 +26,7 @@ class BulkPublishPostsCommand extends EntityCommand
             ->each(fn (Post $post) => $post
                 ->update(['state' => 'online'])
             );
-        
+
         $this->notify('All selected posts were published!');
 
         return $this->reload();
