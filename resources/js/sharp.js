@@ -6,7 +6,7 @@ import Vuex from 'vuex';
 // import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
 // import Notifications from 'vue-notification';
 
-import SharpCommands from '@sharp/commands/index';
+import SharpCommands from '@sharp/commands';
 import SharpDashboard from '@sharp/dashboard';
 import SharpEntityList from '@sharp/entity-list';
 import SharpFilters from '@sharp/filters';
