@@ -8,3 +8,4 @@ node_modules
 /public
 /saturn
 /dist/hot
+/resources/assets/dist
