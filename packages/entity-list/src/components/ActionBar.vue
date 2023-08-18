@@ -50,13 +50,13 @@
                         </template>
                     </template>
 
-                    <template v-if="hasDropdownCommands && !reordering">
+                    <template v-if="dropdownCommands && dropdownCommands.flat().length && !reordering">
                         <div class="col-auto">
                             <CommandsDropdown
                                 class="bg-white"
                                 :small="false"
                                 :outline="!selecting"
-                                :commands="commands"
+                                :commands="dropdownCommands"
                                 :disabled="reordering"
                                 :selecting="selecting"
                                 @select="handleCommandSelected"
@@ -73,7 +73,7 @@
 
                     <template v-if="primaryCommand && !reordering && !selecting">
                         <div class="col-auto">
-                            <Button @click="handlePrimaryCommandClicked">
+                            <Button @click="handleCommandSelected(primaryCommand)">
                                 {{ primaryCommand.label }}
                             </Button>
                         </div>
@@ -130,15 +130,14 @@
 
         props: {
             count: Number,
-            search: String,
             filters: Array,
             filtersValues: Object,
             forms: Array,
-            commands: Array,
+            primaryCommand: Object,
+            dropdownCommands: Array,
 
             canCreate: Boolean,
             canReorder: Boolean,
-            canSearch: Boolean,
             canSelect: Boolean,
 
             reordering: Boolean,
@@ -154,25 +153,13 @@
             }
         },
         computed: {
-            hasDropdownCommands() {
-                return this.commands?.flat().filter(command => !command.primary).length > 0;
-            },
-            primaryCommand() {
-                return this.commands?.flat().find(command => command.primary);
-            },
             hasForms() {
                 return this.forms && this.forms.length > 0;
             },
         },
         methods: {
-            handleSearchSubmitted(search) {
-                this.$emit('search-submit', search);
-            },
             handleFilterChanged(filter, value) {
                 this.$emit('filter-change', filter, value);
-            },
-            handlePrimaryCommandClicked() {
-                this.$emit('command', this.primaryCommand);
             },
             handleReorderButtonClicked() {
                 this.$emit('reorder-click');
