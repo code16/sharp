@@ -47,9 +47,47 @@
                                     </div>
                                 </template>
 
+                                <template v-if="canSelect && !reordering">
+                                    <template v-if="selecting">
+                                        <div class="col-auto">
+                                            <Button key="cancel" small outline @click="handleSelectCancelled">
+                                                {{ __('sharp::action_bar.list.reorder_button.cancel') }}
+                                            </Button>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="col-auto">
+                                            <Button key="select" small outline @click="handleSelectButtonClicked">
+                                                {{ __('sharp::action_bar.list.select_button') }}
+                                            </Button>
+                                        </div>
+                                    </template>
+                                </template>
+
+                                <template v-if="hasDropdownCommands && !reordering">
+                                    <div class="col-auto">
+                                        <CommandsDropdown
+                                            class="bg-white"
+                                            small
+                                            :outline="!selecting"
+                                            :commands="dropdownCommands"
+                                            :disabled="reordering"
+                                            :selecting="selecting"
+                                            @select="handleCommandSelected"
+                                        >
+                                            <template v-slot:text>
+                                                {{ __('sharp::entity_list.commands.entity.label') }}
+                                                <template v-if="selecting">
+                                                    ({{ selectedCount }} selected)
+                                                </template>
+                                            </template>
+                                        </CommandsDropdown>
+                                    </div>
+                                </template>
+
                                 <template v-if="primaryCommand && !reordering">
                                     <div class="col-auto">
-                                        <Button variant="primary" small @click="handlePrimaryCommandClicked">
+                                        <Button variant="primary" small @click="handleCommandSelected(primaryCommand)">
                                             {{ primaryCommand.label }}
                                         </Button>
                                     </div>
@@ -88,9 +126,11 @@
     import { Button } from '@sharp/ui';
     import { MultiformDropdown } from "@sharp/entity-list";
     import { sticky } from "sharp/directives";
+    import { CommandsDropdown } from "sharp-commands";
 
     export default {
         components: {
+            CommandsDropdown,
             MultiformDropdown,
             Button,
         },
@@ -98,14 +138,17 @@
             ready: Boolean,
             count: Number,
             primaryCommand: Object,
+            dropdownCommands: Array,
 
             forms: Array,
 
             canCreate: Boolean,
             canReorder: Boolean,
+            canSelect: Boolean,
 
             reordering: Boolean,
             selecting: Boolean,
+            selectedCount: Number,
 
             // show field props
             collapsed: Boolean,
@@ -126,10 +169,13 @@
                 // return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
             },
             hasRightControls() {
-                return this.canReorder || this.canCreate || !!this.primaryCommand;
+                return this.canReorder || this.canCreate || !!this.primaryCommand || this.hasDropdownCommands;
             },
             hasOuterTitle() {
                 return this.$slots.default && (!this.ready || this.hasLeftControls);
+            },
+            hasDropdownCommands() {
+                return this.dropdownCommands?.flat().length > 0;
             },
             barVisible() {
                 if(this.collapsed) {
@@ -149,14 +195,20 @@
             handleReorderSubmitButtonClicked() {
                 this.$emit('reorder-submit');
             },
-            handlePrimaryCommandClicked() {
-                this.$emit('command', this.primaryCommand);
+            handleCommandSelected(command) {
+                this.$emit('command', command);
             },
             handleCreateButtonClicked() {
                 this.$emit('create');
             },
             handleCreateFormSelected(form) {
                 this.$emit('create', form);
+            },
+            handleSelectButtonClicked() {
+                this.$emit('select-click');
+            },
+            handleSelectCancelled() {
+                this.$emit('select-cancel');
             },
         },
         directives: {

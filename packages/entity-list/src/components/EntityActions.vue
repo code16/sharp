@@ -69,7 +69,9 @@
                             <DropdownSeparator />
                         </template>
                         <template v-if="canDelete" v-slot:append>
-                            <DropdownSeparator />
+                            <template v-if="hasCommands">
+                                <DropdownSeparator />
+                            </template>
                             <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
                                 {{ __('sharp::action_bar.form.delete_button') }}
                             </DropdownItem>

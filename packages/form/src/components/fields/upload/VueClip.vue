@@ -44,7 +44,7 @@
                             <template v-if="!readOnly">
                                 <div>
                                     <template v-if="hasEdit && !hasError">
-                                        <Button outline small @click="handleEditButtonClick">
+                                        <Button class="me-2" outline small @click="handleEditButtonClick">
                                             {{ __('sharp::form.upload.edit_button') }}
                                         </Button>
                                     </template>

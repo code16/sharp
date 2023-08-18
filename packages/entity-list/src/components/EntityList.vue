@@ -342,6 +342,8 @@
                     count: this.totalCount,
                     forms: this.multiforms,
                     commands: this.currentEntityCommands,
+                    dropdownCommands: this.dropdownCommands,
+                    primaryCommand: this.primaryCommand,
                     reordering: this.reordering,
                     selecting: this.selecting,
                     canCreate: this.canCreate,
@@ -379,6 +381,14 @@
                         .map(group => group.filter(command => command.instance_selection))
                 }
                 return this.allowedEntityCommands;
+            },
+            dropdownCommands() {
+                return this.currentEntityCommands.map(commandGroup =>
+                    commandGroup.filter(command => !command.primary)
+                );
+            },
+            primaryCommand() {
+                return this.currentEntityCommands.flat().find(command => command.primary);
             },
             multiforms() {
                 return this.forms ? Object.values(this.forms) : null;
