@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
-    import { BreadcrumbData, ShowData } from "@/types";
+    import { BreadcrumbData, ShowData, ShowLayoutSectionData } from "@/types";
     import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
@@ -24,6 +24,12 @@
     const isReordering = computed(() => Object.values(reorderingEntityLists.value).some(reordering => reordering));
     function onEntityListReordering(key: string, reordering: boolean) {
         reorderingEntityLists.value[key] = reordering;
+    }
+
+    const fieldsVisibility = ref<{ [key:string]: boolean }>({});
+    const isFieldVisible = (key: string) => fieldsVisibility.value[key] !== false;
+    const isSectionVisible = (section: ShowLayoutSectionData) => {
+        return show.sectionFields(section).some((field) => isFieldVisible(field.key));
     }
 </script>
 
@@ -115,42 +121,46 @@
                     </template>
 
                     <template v-for="section in show.layout.sections">
-                        <div class="ShowSection" :class="classes">
-                            <div class="row">
-                                <template v-if="hasCollapse || section.title">
-                                    <div class="col">
-                                        <SectionTitle :section="section" :collapsable="hasCollapse" :collapsed="collapsed" />
-                                    </div>
-                                </template>
-                                <template v-if="hasCommands && !collapsed">
-                                    <div class="col-auto align-self-end mb-2">
-                                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">
-                                            <template v-slot:text>
-                                                {{ __('sharp::entity_list.commands.instance.label') }}
-                                            </template>
-                                        </CommandsDropdown>
-                                    </div>
-                                </template>
-                            </div>
+<!--                        <div class="ShowSection" :class="classes">-->
+<!--                            <div class="row">-->
+<!--                                <template v-if="section.collapsable && !show.sectionHasField(section, 'entityList') || section.title">-->
+<!--                                    <div class="col">-->
+<!--                                        <SectionTitle -->
+<!--                                            :section="section" -->
+<!--                                            :collapsable="section.collapsable && !show.sectionHasField(section, 'entityList')" -->
+<!--                                            :collapsed="collapsed" -->
+<!--                                        />-->
+<!--                                    </div>-->
+<!--                                </template>-->
+<!--                                <template v-if="hasCommands && !collapsed">-->
+<!--                                    <div class="col-auto align-self-end mb-2">-->
+<!--                                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">-->
+<!--                                            <template v-slot:text>-->
+<!--                                                {{ __('sharp::entity_list.commands.instance.label') }}-->
+<!--                                            </template>-->
+<!--                                        </CommandsDropdown>-->
+<!--                                    </div>-->
+<!--                                </template>-->
+<!--                            </div>-->
 
-                            <template v-if="!collapsed">
-                                <div class="ShowSection__content">
-                                    <Grid class="ShowSection__grid"
-                                        :rows="[section.columns]"
-                                        :col-class="() => 'ShowSection__col'"
-                                        v-slot="{ itemLayout:column }"
-                                    >
-                                        <Grid class="ShowPage__fields-grid"
-                                            :rows="column.fields"
-                                            :row-class="fieldsRowClass"
-                                            v-slot="{ itemLayout:fieldLayout }"
-                                        >
-                                            <slot :field-layout="fieldLayout" />
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            </template>
-                        </div>
+<!--                            <template v-if="!collapsed">-->
+<!--                                <div class="ShowSection__content">-->
+<!--                                    <Grid class="ShowSection__grid"-->
+<!--                                        :rows="[section.columns]"-->
+<!--                                        :col-class="() => 'ShowSection__col'"-->
+<!--                                        v-slot="{ itemLayout:column }"-->
+<!--                                    >-->
+<!--                                        <Grid class="ShowPage__fields-grid"-->
+<!--                                            :rows="column.fields"-->
+<!--                                            :row-class="fieldsRowClass"-->
+<!--                                            v-slot="{ itemLayout:fieldLayout }"-->
+<!--                                        >-->
+<!--                                            <slot :field-layout="fieldLayout" />-->
+<!--                                        </Grid>-->
+<!--                                    </Grid>-->
+<!--                                </div>-->
+<!--                            </template>-->
+<!--                        </div>-->
                         <Section
                             class="ShowPage__section"
                             v-show="isSectionVisible(section)"
@@ -246,14 +256,6 @@
                 }
                 return (this.config.commands[section.key] ?? [])
                     .map(group => group.filter(command => command.authorization));
-            },
-            sectionFields(section) {
-                return section.columns.reduce((res, column) => [...res, ...column.fields.flat()], []);
-            },
-            isSectionVisible(section) {
-                const sectionFields = this.sectionFields(section);
-                return sectionFields.some(fieldLayout => this.isFieldVisible(fieldLayout))
-                    || this.sectionCommands(section)?.flat().length;
             },
             sectionHasField(section, type) {
                 const sectionFields = this.sectionFields(section);

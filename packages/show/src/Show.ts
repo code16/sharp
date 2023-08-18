@@ -3,8 +3,8 @@ import {
     InstanceAuthorizationsData,
     ShowConfigData,
     ShowData,
-    ShowFieldData,
-    ShowLayoutData, ShowTextFieldData
+    ShowFieldData, ShowFieldType,
+    ShowLayoutData, ShowLayoutSectionData, ShowTextFieldData
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
 
@@ -70,5 +70,15 @@ export class Show implements ShowData {
             return this.data[this.config.titleAttribute]?.[locale];
         }
         return this.data[this.config.titleAttribute];
+    }
+
+    sectionFields(section: ShowLayoutSectionData): Array<ShowFieldData> {
+        return section.columns
+            .map((column) => column.fields.map(field => this.fields[field.key]))
+            .flat();
+    }
+
+    sectionHasField(section: ShowLayoutSectionData, type: ShowFieldType): boolean {
+        return this.sectionFields(section).some(field => field.type === type);
     }
 }
