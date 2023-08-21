@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import ShowField from "../ShowField.vue";
+    import ShowField from "../Field.vue";
 
 </script>
 

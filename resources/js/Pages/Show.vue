@@ -29,7 +29,7 @@
     const fieldsVisibility = ref<{ [key:string]: boolean }>({});
     const isFieldVisible = (key: string) => fieldsVisibility.value[key] !== false;
     const isSectionVisible = (section: ShowLayoutSectionData) => {
-        return show.sectionFields(section).some((field) => isFieldVisible(field.key));
+        return show.sectionFields(section).some((field) => isFieldVisible(field?.key));
     }
 </script>
 
@@ -172,9 +172,9 @@
                             @command="handleCommandRequested"
                             v-slot="{ fieldLayout }"
                         >
-                            <template v-if="fieldOptions(fieldLayout)">
+                            <template v-if="show.fields[fieldLayout.key]">
                                 <ShowField
-                                    :options="fieldOptions(fieldLayout)"
+                                    :options="show.fields[fieldLayout.key]"
                                     :value="fieldValue(fieldLayout)"
                                     :locale="locale"
                                     :locales="show.locales"
@@ -251,18 +251,18 @@
                 return 'card';
             },
             sectionCommands(section) {
-                if(!section.key) {
-                    return null;
-                }
-                return (this.config.commands[section.key] ?? [])
-                    .map(group => group.filter(command => command.authorization));
+                // if(!section.key) {
+                //     return null;
+                // }
+                // return (this.config.commands[section.key] ?? [])
+                //     .map(group => group.filter(command => command.authorization));
             },
             sectionHasField(section, type) {
-                const sectionFields = this.sectionFields(section);
-                return sectionFields.some(fieldLayout => {
-                    const options = this.fieldOptions(fieldLayout);
-                    return options && options.type === type;
-                });
+                // const sectionFields = this.sectionFields(section);
+                // return sectionFields.some(fieldLayout => {
+                //     const options = this.fieldOptions(fieldLayout);
+                //     return options && options.type === type;
+                // });
             },
             handleFieldVisibilityChanged(key, visible) {
                 this.fieldsVisible = {
