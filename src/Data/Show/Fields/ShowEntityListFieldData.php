@@ -7,11 +7,13 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\FilterType;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class ShowEntityListFieldData extends Data
 {
-    public null $value; // always null
+    #[Optional]
+    public null $value;
 
     public function __construct(
         public string $key,

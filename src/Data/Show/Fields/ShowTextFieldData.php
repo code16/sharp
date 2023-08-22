@@ -8,9 +8,11 @@ use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EmbedData;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class ShowTextFieldData extends Data
 {
+    #[Optional]
     /** @var string|array<string,string> */
     public string|array $value;
 

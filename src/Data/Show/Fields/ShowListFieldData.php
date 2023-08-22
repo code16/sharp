@@ -7,9 +7,11 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class ShowListFieldData extends Data
 {
+    #[Optional]
     #[LiteralTypeScriptType('Array<{ [key: string]: ShowFieldData["value"] }>')]
     public array $value;
 

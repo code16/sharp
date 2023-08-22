@@ -4,7 +4,7 @@ import {
     ShowConfigData,
     ShowData,
     ShowFieldData, ShowFieldType,
-    ShowLayoutData, ShowLayoutSectionData, ShowTextFieldData
+    ShowLayoutData, ShowLayoutSectionData, ShowListFieldData, ShowTextFieldData
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
 
@@ -82,7 +82,19 @@ export class Show implements ShowData {
         return this.sectionFields(section).some(field => field.type === type);
     }
 
-    fieldShouldBeVisible(field: ShowFieldData, value: ShowFieldData['value']): boolean {
+    fieldShouldBeVisible(field: ShowFieldData, value: ShowFieldData['value'], locale: string): boolean {
+        if(field.type === 'entityList') {
+            return true;
+        }
+
+        if(field.type === 'text' && field.localized) {
+            return !!(value as ShowTextFieldData['value'])?.[locale];
+        }
+
+        if(field.type === 'list') {
+            return (value as ShowListFieldData['value'])?.length > 0;
+        }
+
         return !!value;
     }
 }
