@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\View\Components;
 
-
 use Illuminate\View\Component;
 
 class Vite extends Component
