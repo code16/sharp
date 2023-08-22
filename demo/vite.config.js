@@ -4,6 +4,7 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
     plugins: [
         laravel([
+            'resources/js/sharp-plugin.js',
             'resources/css/sharp-extension.css',
         ]),
     ],
