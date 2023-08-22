@@ -81,4 +81,8 @@ export class Show implements ShowData {
     sectionHasField(section: ShowLayoutSectionData, type: ShowFieldType): boolean {
         return this.sectionFields(section).some(field => field.type === type);
     }
+
+    fieldShouldBeVisible(field: ShowFieldData, value: ShowFieldData['value']): boolean {
+        return !!value;
+    }
 }

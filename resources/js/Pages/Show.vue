@@ -29,7 +29,7 @@
     const fieldsVisibility = ref<{ [key:string]: boolean }>({});
     const isFieldVisible = (key: string) => fieldsVisibility.value[key] !== false;
     const isSectionVisible = (section: ShowLayoutSectionData) => {
-        return show.sectionFields(section).some((field) => isFieldVisible(field.key));
+        return show.sectionFields(section).some((field) => isFieldVisible(field?.key));
     }
 </script>
 
@@ -161,35 +161,35 @@
 <!--                                </div>-->
 <!--                            </template>-->
 <!--                        </div>-->
-<!--                        <Section-->
-<!--                            class="ShowPage__section"-->
-<!--                            v-show="isSectionVisible(section)"-->
-<!--                            :section="section"-->
-<!--                            :layout="sectionLayout(section)"-->
-<!--                            :fields-row-class="fieldsRowClass"-->
-<!--                            :collapsable="isSectionCollapsable(section)"-->
-<!--                            :commands="sectionCommands(section)"-->
-<!--                            @command="handleCommandRequested"-->
-<!--                            v-slot="{ fieldLayout }"-->
-<!--                        >-->
-<!--                            <template v-if="fieldOptions(fieldLayout)">-->
-<!--                                <ShowField-->
-<!--                                    :options="fieldOptions(fieldLayout)"-->
-<!--                                    :value="fieldValue(fieldLayout)"-->
-<!--                                    :locale="locale"-->
-<!--                                    :locales="show.locales"-->
-<!--                                    :config-identifier="fieldLayout.key"-->
-<!--                                    :layout="fieldLayout"-->
-<!--                                    :collapsable="section.collapsable"-->
-<!--                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"-->
-<!--                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"-->
-<!--                                    :key="refreshKey"-->
-<!--                                />-->
-<!--                            </template>-->
-<!--                            <template v-else>-->
-<!--                                <UnknownField :name="fieldLayout.key" />-->
-<!--                            </template>-->
-<!--                        </Section>-->
+                        <Section
+                            class="ShowPage__section"
+                            v-show="isSectionVisible(section)"
+                            :section="section"
+                            :layout="sectionLayout(section)"
+                            :fields-row-class="fieldsRowClass"
+                            :collapsable="isSectionCollapsable(section)"
+                            :commands="sectionCommands(section)"
+                            @command="handleCommandRequested"
+                            v-slot="{ fieldLayout }"
+                        >
+                            <template v-if="show.fields[fieldLayout.key]">
+                                <ShowField
+                                    :options="show.fields[fieldLayout.key]"
+                                    :value="fieldValue(fieldLayout)"
+                                    :locale="locale"
+                                    :locales="show.locales"
+                                    :config-identifier="fieldLayout.key"
+                                    :layout="fieldLayout"
+                                    :collapsable="section.collapsable"
+                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
+                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                    :key="refreshKey"
+                                />
+                            </template>
+                            <template v-else>
+                                <UnknownField :name="fieldLayout.key" />
+                            </template>
+                        </Section>
                     </template>
                 </div>
             </div>
@@ -251,19 +251,19 @@
                 // return 'card';
             },
             sectionCommands(section) {
-                if(!section.key) {
-                    return null;
-                }
-                return (this.config.commands[section.key] ?? [])
-                    .map(group => group.filter(command => command.authorization));
+                // if(!section.key) {
+                //     return null;
+                // }
+                // return (this.config.commands[section.key] ?? [])
+                //     .map(group => group.filter(command => command.authorization));
             },
-            // sectionHasField(section, type) {
-            //     const sectionFields = this.sectionFields(section);
-            //     return sectionFields.some(fieldLayout => {
-            //         const options = this.fieldOptions(fieldLayout);
-            //         return options && options.type === type;
-            //     });
-            // },
+            sectionHasField(section, type) {
+                // const sectionFields = this.sectionFields(section);
+                // return sectionFields.some(fieldLayout => {
+                //     const options = this.fieldOptions(fieldLayout);
+                //     return options && options.type === type;
+                // });
+            },
             handleFieldVisibilityChanged(key, visible) {
                 this.fieldsVisible = {
                     ...this.fieldsVisible,
