@@ -10,6 +10,9 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class ShowListFieldData extends Data
 {
+    #[LiteralTypeScriptType('Array<{ [key: string]: ShowFieldData["value"] }>')]
+    public array $value;
+
     public function __construct(
         public string $key,
         #[LiteralTypeScriptType('"'.ShowFieldType::List->value.'"')]

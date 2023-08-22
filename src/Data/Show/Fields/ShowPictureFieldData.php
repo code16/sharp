@@ -9,6 +9,8 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class ShowPictureFieldData extends Data
 {
+    public string $value;
+
     public function __construct(
         public string $key,
         #[LiteralTypeScriptType('"'.ShowFieldType::Picture->value.'"')]

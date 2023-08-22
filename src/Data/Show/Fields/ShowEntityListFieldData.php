@@ -7,9 +7,12 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\FilterType;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class ShowEntityListFieldData extends Data
 {
+    public null $value; // always null
+
     public function __construct(
         public string $key,
         #[LiteralTypeScriptType('"'.ShowFieldType::EntityList->value.'"')]

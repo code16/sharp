@@ -11,29 +11,32 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class ShowTextFieldData extends Data
 {
-   public function __construct(
-       public string $key,
-       #[LiteralTypeScriptType('"'.ShowFieldType::Text->value.'"')]
-       public ShowFieldType $type,
-       public bool $emptyVisible,
-       public bool $html,
-       public ?bool $localized = null,
-       public ?int $collapseToWordCount = null,
-       /** @var DataCollection<string, EmbedData> */
-       public ?DataCollection $embeds = null,
-       public ?string $label = null,
-   ) {
-   }
+    /** @var string|array<string,string> */
+    public string|array $value;
 
-   public static function from(array $field): self
-   {
-       $field = [
-           ...$field,
-           'embeds' => isset($field['embeds'])
-               ? EmbedData::collection($field['embeds'])
-               : null,
-       ];
+    public function __construct(
+        public string $key,
+        #[LiteralTypeScriptType('"' . ShowFieldType::Text->value . '"')]
+        public ShowFieldType $type,
+        public bool $emptyVisible,
+        public bool $html,
+        public ?bool $localized = null,
+        public ?int $collapseToWordCount = null,
+        /** @var DataCollection<string, EmbedData> */
+        public ?DataCollection $embeds = null,
+        public ?string $label = null,
+    ) {
+    }
 
-       return new self(...$field);
-   }
+    public static function from(array $field): self
+    {
+        $field = [
+            ...$field,
+            'embeds' => isset($field['embeds'])
+                ? EmbedData::collection($field['embeds'])
+                : null,
+        ];
+
+        return new self(...$field);
+    }
 }

@@ -294,6 +294,7 @@ export type ShowData = {
   authorizations: InstanceAuthorizationsData;
 };
 export type ShowEntityListFieldData = {
+  value: null | null;
   key: string;
   type: "entityList";
   emptyVisible: boolean;
@@ -322,6 +323,7 @@ export type ShowFieldType =
   | "text"
   | "entityList";
 export type ShowFileFieldData = {
+  value?: { disk: string; name: string; path: string; thumbnail: string };
   key: string;
   type: "file";
   emptyVisible: boolean;
@@ -354,6 +356,7 @@ export type ShowLayoutSectionData = {
   columns: Array<ShowLayoutColumnData>;
 };
 export type ShowListFieldData = {
+  value: Array<{ [key: string]: ShowFieldData["value"] }>;
   key: string;
   type: "list";
   emptyVisible: boolean;
@@ -361,11 +364,13 @@ export type ShowListFieldData = {
   itemFields: { [key: string]: ShowFieldData };
 };
 export type ShowPictureFieldData = {
+  value: string;
   key: string;
   type: "picture";
   emptyVisible: boolean;
 };
 export type ShowTextFieldData = {
+  value: string | { [key: string]: string };
   key: string;
   type: "text";
   emptyVisible: boolean;
