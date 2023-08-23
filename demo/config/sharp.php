@@ -70,6 +70,7 @@ return [
                 'resources/css/sharp-extension.css',
             ],
         ],
+        'activate_custom_fields' => true,
     ],
 
     'markdown_editor' => [

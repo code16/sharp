@@ -3,7 +3,7 @@
         <template v-if="collapsable">
             <details :open="!collapsed" @toggle="$emit('toggle', $event.target.open)">
                 <summary class="section__header section__header--collapsable">
-                    <h2 class="ShowSection__title d-inline-block mb-0">{{ section.title || ' ' }}</h2>
+                    <h2 class="section__title d-inline-block mb-0">{{ section.title || ' ' }}</h2>
                 </summary>
             </details>
         </template>
