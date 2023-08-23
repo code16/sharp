@@ -29,18 +29,18 @@ class SingleShowController extends SharpProtectedController
         $show->buildShowConfig();
 
         $data = [
-            'config' => $show->showConfig($instanceId),
+            'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
-            'data' => $show->instance($instanceId),
+            'data' => $show->instance(null),
             'locales' => $show->hasDataLocalizations()
                 ? $show->getDataLocalizations()
                 : null,
             'authorizations' => [
                 'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
-                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
-                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
+                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey),
+                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey),
+                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey),
             ],
         ];
 

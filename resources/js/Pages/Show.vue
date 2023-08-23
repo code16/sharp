@@ -4,13 +4,14 @@
     import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
-    import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle } from '@sharp/ui';
+    import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
     import UnknownField from "@/components/dev/UnknownField.vue";
     import Layout from "../Layouts/Layout.vue";
     import { LocaleSelect } from "@sharp/form";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
     import { Show } from '@sharp/show/src/Show';
+    import { showDeleteConfirm } from "@/utils/dialogs";
 
     const props = defineProps<{
         show: ShowData,
@@ -26,11 +27,18 @@
         reorderingEntityLists.value[key] = reordering;
     }
 
-    const fieldsVisibility = ref<{ [key:string]: boolean }>({});
-    const isFieldVisible = (key: string) => fieldsVisibility.value[key] !== false;
-    const isSectionVisible = (section: ShowLayoutSectionData) => {
-        return show.sectionFields(section).some((field) => isFieldVisible(field?.key));
+    async function onDelete() {
+        if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
+            await this.$store.dispatch('show/delete');
+            location.replace(this.backUrl ?? '/');
+        }
     }
+
+    // const fieldsVisibility = ref<{ [key:string]: boolean }>({});
+    // const isFieldVisible = (key: string) => fieldsVisibility.value[key] !== false;
+    // const isSectionVisible = (section: ShowLayoutSectionData) => {
+    //     return show.sectionFields(section).some((field) => isFieldVisible(field?.key));
+    // }
 </script>
 
 <template>
@@ -76,13 +84,13 @@
                                 </Dropdown>
                             </div>
                         </template>
-                        <template v-if="show.authorizedCommands?.flat().length || show.canDelete">
+                        <template v-if="show.authorizedCommands?.flat().length || show.authorizations.delete">
                             <div class="col-auto">
                                 <CommandsDropdown outline :small="false" :commands="show.authorizedCommands" @select="handleCommandRequested">
                                     <template v-slot:text>
                                         {{ __('sharp::entity_list.commands.instance.label') }}
                                     </template>
-                                    <template v-if="show.canDelete" v-slot:append>
+                                    <template v-if="show.authorizations.delete" v-slot:append>
                                         <DropdownSeparator />
                                         <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
                                             {{ __('sharp::action_bar.form.delete_button') }}
@@ -121,74 +129,62 @@
                     </template>
 
                     <template v-for="section in show.layout.sections">
-<!--                        <div class="ShowSection" :class="classes">-->
-<!--                            <div class="row">-->
-<!--                                <template v-if="section.collapsable && !show.sectionHasField(section, 'entityList') || section.title">-->
-<!--                                    <div class="col">-->
-<!--                                        <SectionTitle -->
-<!--                                            :section="section" -->
-<!--                                            :collapsable="section.collapsable && !show.sectionHasField(section, 'entityList')" -->
-<!--                                            :collapsed="collapsed" -->
-<!--                                        />-->
-<!--                                    </div>-->
-<!--                                </template>-->
-<!--                                <template v-if="hasCommands && !collapsed">-->
-<!--                                    <div class="col-auto align-self-end mb-2">-->
-<!--                                        <CommandsDropdown :commands="commands" @select="handleCommandSelected">-->
-<!--                                            <template v-slot:text>-->
-<!--                                                {{ __('sharp::entity_list.commands.instance.label') }}-->
-<!--                                            </template>-->
-<!--                                        </CommandsDropdown>-->
-<!--                                    </div>-->
-<!--                                </template>-->
-<!--                            </div>-->
+                        <Section v-slot="{ collapsed, onToggle }">
+                            <div class="ShowPage__section" v-show="show.sectionShouldBeVisible(section, locale)">
+                                <div class="row">
+                                    <template v-if="section.collapsable && !show.sectionHasField(section, 'entityList') || section.title">
+                                        <div class="col">
+                                            <SectionTitle
+                                                :section="section"
+                                                :collapsable="section.collapsable && !show.sectionHasField(section, 'entityList')"
+                                                :collapsed="collapsed"
+                                                @toggle="onToggle"
+                                            />
+                                        </div>
+                                    </template>
+                                    <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
+                                        <div class="col-auto align-self-end mb-2">
+                                            <CommandsDropdown :commands="show.sectionCommands(section)" @select="handleCommandRequested">
+                                                <template v-slot:text>
+                                                    {{ __('sharp::entity_list.commands.instance.label') }}
+                                                </template>
+                                            </CommandsDropdown>
+                                        </div>
+                                    </template>
+                                </div>
 
-<!--                            <template v-if="!collapsed">-->
-<!--                                <div class="ShowSection__content">-->
-<!--                                    <Grid class="ShowSection__grid"-->
-<!--                                        :rows="[section.columns]"-->
-<!--                                        :col-class="() => 'ShowSection__col'"-->
-<!--                                        v-slot="{ itemLayout:column }"-->
-<!--                                    >-->
-<!--                                        <Grid class="ShowPage__fields-grid"-->
-<!--                                            :rows="column.fields"-->
-<!--                                            :row-class="fieldsRowClass"-->
-<!--                                            v-slot="{ itemLayout:fieldLayout }"-->
+                                <template v-if="!collapsed">
+                                    <div class="ShowSection__content" :class="!show.sectionHasField(section, 'entityList') ? 'p-4 bg-white' : ''">
+<!--                                        <Grid class="ShowSection__grid"-->
+<!--                                            :rows="[section.columns]"-->
+<!--                                            :col-class="() => 'ShowSection__col'"-->
+<!--                                            v-slot="{ itemLayout:column }"-->
 <!--                                        >-->
-<!--                                            <slot :field-layout="fieldLayout" />-->
+<!--                                            <Grid class="ShowPage__fields-grid"-->
+<!--                                                :rows="column.fields"-->
+<!--                                                :row-class="fieldsRowClass"-->
+<!--                                                v-slot="{ itemLayout:fieldLayout }"-->
+<!--                                            >-->
+<!--                                                <template v-if="show.fields[fieldLayout.key]">-->
+<!--                                                    <ShowField-->
+<!--                                                        :options="show.fields[fieldLayout.key]"-->
+<!--                                                        :value="show.data[fieldLayout.key]"-->
+<!--                                                        :locale="locale"-->
+<!--                                                        :locales="show.locales"-->
+<!--                                                        :config-identifier="fieldLayout.key"-->
+<!--                                                        :layout="fieldLayout"-->
+<!--                                                        :collapsable="section.collapsable"-->
+<!--                                                        @reordering="onEntityListReordering(fieldLayout.key, $event)"-->
+<!--                                                    />-->
+<!--                                                </template>-->
+<!--                                                <template v-else>-->
+<!--                                                    <UnknownField :name="fieldLayout.key" />-->
+<!--                                                </template>-->
+<!--                                            </Grid>-->
 <!--                                        </Grid>-->
-<!--                                    </Grid>-->
-<!--                                </div>-->
-<!--                            </template>-->
-<!--                        </div>-->
-                        <Section
-                            class="ShowPage__section"
-                            v-show="isSectionVisible(section)"
-                            :section="section"
-                            :layout="sectionLayout(section)"
-                            :fields-row-class="fieldsRowClass"
-                            :collapsable="isSectionCollapsable(section)"
-                            :commands="sectionCommands(section)"
-                            @command="handleCommandRequested"
-                            v-slot="{ fieldLayout }"
-                        >
-                            <template v-if="show.fields[fieldLayout.key]">
-                                <ShowField
-                                    :options="show.fields[fieldLayout.key]"
-                                    :value="fieldValue(fieldLayout)"
-                                    :locale="locale"
-                                    :locales="show.locales"
-                                    :config-identifier="fieldLayout.key"
-                                    :layout="fieldLayout"
-                                    :collapsable="section.collapsable"
-                                    @visible-change="handleFieldVisibilityChanged(fieldLayout.key, $event)"
-                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                    :key="refreshKey"
-                                />
-                            </template>
-                            <template v-else>
-                                <UnknownField :name="fieldLayout.key" />
-                            </template>
+                                    </div>
+                                </template>
+                            </div>
                         </Section>
                     </template>
                 </div>
@@ -211,65 +207,14 @@
 
 <script lang="ts">
     import { mapGetters } from 'vuex';
-    import { showAlert, handleNotifications, showDeleteConfirm } from 'sharp';
+    import { showAlert, handleNotifications } from 'sharp';
     import { withCommands } from 'sharp/mixins';
     import { router } from "@inertiajs/vue3";
 
     export default {
         mixins: [withCommands],
 
-        data() {
-            return {
-                fieldsVisible: null,
-            }
-        },
-
         methods: {
-            fieldOptions(layout) {
-                const options = this.fields?.[layout.key];
-                if(!options) {
-                    console.error(`Show page: unknown field "${layout.key}"`);
-                }
-                return options;
-            },
-            fieldValue(layout) {
-                if(this.fields?.[layout.key]?.type === 'entityList') {
-                    return this.entityLists?.[layout.key];
-                }
-                return this.data?.[layout.key];
-            },
-            isFieldVisible(layout) {
-                return this.fieldsVisible?.[layout.key] !== false;
-            },
-            isSectionCollapsable(section) {
-                // return section.collapsable && !this.sectionHasField(section, 'entityList');
-            },
-            sectionLayout(section) {
-                // if(this.sectionHasField(section, 'entityList')) {
-                //     return 'contents';
-                // }
-                // return 'card';
-            },
-            sectionCommands(section) {
-                // if(!section.key) {
-                //     return null;
-                // }
-                // return (this.config.commands[section.key] ?? [])
-                //     .map(group => group.filter(command => command.authorization));
-            },
-            sectionHasField(section, type) {
-                // const sectionFields = this.sectionFields(section);
-                // return sectionFields.some(fieldLayout => {
-                //     const options = this.fieldOptions(fieldLayout);
-                //     return options && options.type === type;
-                // });
-            },
-            handleFieldVisibilityChanged(key, visible) {
-                this.fieldsVisible = {
-                    ...this.fieldsVisible,
-                    [key]: visible,
-                }
-            },
             handleCommandRequested(command) {
                 this.sendCommand(command, {
                     postCommand: data => this.$store.dispatch('show/postCommand', { command, data }),

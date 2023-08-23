@@ -6,7 +6,7 @@ use Code16\Sharp\Utils\Filters\Filter;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 
-/** TODO legacy replaced by @see \Code16\Sharp\Http\GlobalFilterController */
+/** TODO legacy to remove, replaced by @see \Code16\Sharp\Http\GlobalFilterController */
 class GlobalFilterController extends ApiController
 {
     use HandleFilters;

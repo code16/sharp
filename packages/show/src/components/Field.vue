@@ -11,7 +11,6 @@
             :locale="locale"
             :locales="locales"
             v-bind="props"
-            v-on="$listeners"
             @visible-change="handleVisiblityChanged"
         />
     </div>

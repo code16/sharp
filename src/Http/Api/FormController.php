@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Api;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 
+/** TODO legacy to remove, replaced by @see \Code16\Sharp\Http\FormController */
 class FormController extends ApiController
 {
     public function edit(string $entityKey, string $instanceId = null)

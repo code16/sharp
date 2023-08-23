@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import * as path from 'path';
 import ignoreImport from 'rollup-plugin-ignore-import';
 import { splitVendorChunkPlugin } from 'vite';
+import { watch } from 'vite-plugin-watch'
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, path.join(process.cwd(), '/demo'), '');
@@ -43,6 +44,10 @@ export default defineConfig(({ mode, command }) => {
                         includeAbsolute: false,
                     },
                 },
+            }),
+            watch({
+                pattern: "src/{Data,Enums}/**/*.php",
+                command: "composer typescript:transform",
             }),
             ignoreImport({
                 include: [

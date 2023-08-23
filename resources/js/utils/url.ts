@@ -1,8 +1,9 @@
 import { ZiggyRouter } from '@/types/globals';
 import { Config, RouteParam, RouteParamsWithQueryOverload } from 'ziggy-js';
+import { config } from "@/utils/config";
 
 export function getAppendableUri() {
-    return location.pathname.replace(/^.+?s-list\//, '');
+    return location.pathname.replace(new RegExp(`^/${config('sharp.custom_url_segment')}/`), '');
 }
 
 export function route(
@@ -21,8 +22,8 @@ export function route(
 
 export function route(name?: string, params?, absolute?, config?) {
     if(name && params.uri) {
-        return (globalThis.route(name, { ...params, uri: '(uri)' }, absolute, config) as string)
-            .replace('(uri)', params.uri);
+        return (globalThis.route(name, { ...params, uri: 's-list/(uri)' }, absolute, config) as string)
+            .replace(encodeURIComponent('s-list/(uri)'), params.uri);
     }
     return globalThis.route();
 }

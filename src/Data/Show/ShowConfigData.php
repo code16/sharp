@@ -4,6 +4,7 @@ namespace Code16\Sharp\Data\Show;
 
 
 use Code16\Sharp\Data\Commands\CommandData;
+use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
 use Code16\Sharp\Data\PageAlertConfigData;
@@ -17,8 +18,7 @@ final class ShowConfigData extends Data
         public string $deleteConfirmationText,
         public bool $isSingle = false,
         #[Optional]
-        #[RecordTypeScriptType(CommandType::class, 'array<DataCollection<'.CommandData::class.'>>')]
-        public ?array $commands = null,
+        public ?ConfigCommandsData $commands = null,
         #[Optional]
         public ?string $multiformAttribute = null,
         #[Optional]
@@ -40,11 +40,7 @@ final class ShowConfigData extends Data
                 ? EntityStateData::from($config['state'])
                 : null,
             'commands' => isset($config['commands'])
-                ? collect($config['commands'])
-                    ->map(fn (array $commands) => collect($commands)
-                        ->map(fn (array $commands) => CommandData::collection($commands))
-                    )
-                    ->all()
+                ? ConfigCommandsData::from($config['commands'])
                 : null,
             'globalMessage' => isset($config['globalMessage'])
                 ? PageAlertConfigData::from($config['globalMessage'])

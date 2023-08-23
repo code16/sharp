@@ -56,4 +56,15 @@ class ShowController extends SharpProtectedController
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
     }
+
+    public function delete(string $entityKey, string $instanceId)
+    {
+        sharp_check_ability('delete', $entityKey, $instanceId);
+
+        $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
+
+        $show->delete($instanceId);
+
+        return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
+    }
 }

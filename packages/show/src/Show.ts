@@ -58,10 +58,6 @@ export class Show implements ShowData {
             ?.map(group => group.filter(command => command.authorization));
     }
 
-    get canDelete(): boolean {
-        return this.authorizations.delete && !this.config.isSingle;
-    }
-
     getTitle(locale: string): string {
         if(!this.config.titleAttribute) {
             return null;
@@ -75,11 +71,25 @@ export class Show implements ShowData {
     sectionFields(section: ShowLayoutSectionData): Array<ShowFieldData> {
         return section.columns
             .map((column) => column.fields.map(field => this.fields[field.key]))
-            .flat();
+            .flat()
+            .filter(Boolean);
     }
 
     sectionHasField(section: ShowLayoutSectionData, type: ShowFieldType): boolean {
         return this.sectionFields(section).some(field => field.type === type);
+    }
+
+    sectionShouldBeVisible(section: ShowLayoutSectionData, locale: string): boolean {
+        return this.sectionFields(section)
+            .some(field => this.fieldShouldBeVisible(field, this.data[field.key], locale));
+    }
+
+    sectionCommands(section: ShowLayoutSectionData): Array<Array<CommandData>> | null {
+        if(!section.key) {
+            return null;
+        }
+        return (this.config.commands[section.key] ?? [])
+            .map(group => group.filter(command => command.authorization));
     }
 
     fieldShouldBeVisible(field: ShowFieldData, value: ShowFieldData['value'], locale: string): boolean {

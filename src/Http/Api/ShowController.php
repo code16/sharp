@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Api;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 
+/** TODO legacy to remove, replaced by @see \Code16\Sharp\Http\ShowController */
 class ShowController extends ApiController
 {
     public function show(string $entityKey, string $instanceId = null)

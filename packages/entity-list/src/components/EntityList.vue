@@ -176,6 +176,7 @@
     import EntityActions from "./EntityActions.vue";
     import {SharpFilter} from "@sharp/filters";
     import {deleteEntityListInstance} from "../api";
+    import { route, getAppendableUri } from "@/utils/url";
 
     export default {
         name: 'SharpEntityList',
@@ -666,22 +667,24 @@
             formUrl({ formKey, instanceId }={}) {
                 const formEntityKey = formKey ? `${this.entityKey}:${formKey}` : this.entityKey;
 
+                console.log(getAppendableUri());
+
                 if(instanceId) {
                     return route('code16.sharp.form.edit', {
-                        uri: route().params.uri ?? this.entityKey,
+                        uri: getAppendableUri(),
                         entityKey: formEntityKey,
                         instanceId,
                     });
                 }
 
                 return route('code16.sharp.form.create', {
-                    uri: route().params.uri ?? this.entityKey,
+                    uri: getAppendableUri(),
                     entityKey: formEntityKey,
                 });
             },
             showUrl({ instanceId }={}) {
                 return route('code16.sharp.show', {
-                    uri: route().params.uri ?? this.entityKey,
+                    uri: getAppendableUri(),
                     entityKey: this.entityKey,
                     instanceId,
                 });
@@ -833,6 +836,7 @@
             },
         },
         beforeMount() {
+            console.log(this.formUrl({ entityKey: 'aaa' }));
             this.init();
             this.initCommands();
         },

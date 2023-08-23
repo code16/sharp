@@ -3,19 +3,22 @@
     import { TemplateRenderer } from '@/components';
     import { PanelWidgetData } from "@/types";
 
-    defineProps<PanelWidgetData>();
+    defineProps<{
+        widget: Omit<PanelWidgetData, 'value'>,
+        value: PanelWidgetData['value'],
+    }>();
 </script>
 
 <template>
     <div class="SharpWidgetPanel">
-        <template v-if="title">
+        <template v-if="widget.title">
             <h2 class="SharpWidget__title mb-2">
-                {{ title }}
+                {{ widget.title }}
             </h2>
         </template>
-        <TemplateRenderer name="WidgetPanel" :template="template" :template-data="value.data" />
-        <template v-if="link">
-            <a class="stretched-link" :href="link">
+        <TemplateRenderer name="WidgetPanel" :template="widget.template" :template-data="value.data" />
+        <template v-if="widget.link">
+            <a class="stretched-link" :href="widget.link">
                 <span class="visually-hidden">
                     {{ __('sharp::dashboard.widget.link_label') }}
                 </span>

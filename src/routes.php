@@ -25,7 +25,6 @@ use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\ShowController;
 use Code16\Sharp\Http\SingleShowController;
-use Code16\Sharp\Http\WebDispatchController;
 use Illuminate\Support\Facades\Route;
 
 // API routes
@@ -167,8 +166,8 @@ Route::group([
         ->name('code16.sharp.single-show');
 
     Route::group([
-        'prefix' => '/s-list/{uri}',
-        'where' => ['uri' => '.*'],
+        'prefix' => '/{uri}',
+        'where' => ['uri' => '(s-list|s-show)/.*'],
     ], function () {
         Route::get('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show');
@@ -194,9 +193,9 @@ Route::group([
 //        ->where('uri', '.*')
 //        ->name('code16.sharp.form');
 
-    Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
-        ->where('uri', '.*')
-        ->name('code16.sharp.single-show.subpage');
+//    Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
+//        ->where('uri', '.*')
+//        ->name('code16.sharp.single-show.subpage');
 
     Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
         ->name('code16.sharp.dashboard');

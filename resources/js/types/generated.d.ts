@@ -232,7 +232,10 @@ export type NotificationData = {
 };
 export type NotificationLevel = "info" | "success" | "warning" | "danger";
 export type OrderedListWidgetData = {
-  value?: { key: string; data: Array<{ label: string; url?: string }> };
+  value?: {
+    key: string;
+    data: Array<{ label: string; url?: string; count?: number }>;
+  };
   key: string;
   type: WidgetType;
   title: string | null;
@@ -278,7 +281,7 @@ export type SelectFilterValueData = {
 export type ShowConfigData = {
   deleteConfirmationText: string;
   isSingle: boolean;
-  commands?: Record<CommandType, Array<Array<CommandData>>>;
+  commands?: ConfigCommandsData | null;
   multiformAttribute?: string | null;
   titleAttribute?: string | null;
   breadcrumbAttribute?: string | null;
@@ -387,10 +390,9 @@ export type UserData = {
 export type UserMenuData = {
   items: Array<MenuItemData>;
 };
-export type WidgetData = {
-  key: string;
-  type: WidgetType;
-  title: string | null;
-  link: string | null;
-};
+export type WidgetData =
+  | FigureWidgetData
+  | GraphWidgetData
+  | OrderedListWidgetData
+  | PanelWidgetData;
 export type WidgetType = "figure" | "graph" | "list" | "panel";

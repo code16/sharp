@@ -2,14 +2,17 @@
     import { __ } from "@/utils/i18n";
     import { FigureWidgetData } from "@/types";
 
-    defineProps<FigureWidgetData>();
+    defineProps<{
+        widget: Omit<FigureWidgetData, 'value'>,
+        value: FigureWidgetData['value'],
+    }>();
 </script>
 
 <template>
     <div>
-        <template v-if="title">
+        <template v-if="widget.title">
             <h2 class="SharpWidget__title mb-2">
-                {{ title }}
+                {{ widget.title }}
             </h2>
         </template>
         <div class="d-flex align-items-center">
@@ -41,9 +44,9 @@
                 </div>
             </template>
         </div>
-        <template v-if="link">
+        <template v-if="widget.link">
             <div class="text-start mt-2">
-                <a :href="link">
+                <a :href="widget.link">
                     {{ __('sharp::dashboard.widget.link_label') }}
                 </a>
             </div>

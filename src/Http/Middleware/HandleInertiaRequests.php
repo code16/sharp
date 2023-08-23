@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
             ),
             'config' => [
                 'sharp.name' => config('sharp.name', 'Sharp'),
+                'sharp.custom_url_segment' => config('sharp.custom_url_segment'),
                 'sharp.search.enabled' => config('sharp.search.enabled', false),
                 'sharp.search.placeholder' => config('sharp.search.placeholder'),
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),

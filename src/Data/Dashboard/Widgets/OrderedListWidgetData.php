@@ -14,7 +14,7 @@ final class OrderedListWidgetData extends Data
     #[Optional]
     #[LiteralTypeScriptType([
         'key' => 'string',
-        'data' => 'Array<{ label:string, url?:string }>',
+        'data' => 'Array<{ label:string, url?:string, count?:number }>',
     ])]
     public array $value;
 

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api;
 
+/** TODO legacy to remove, replaced by @see \Code16\Sharp\Http\DashboardController */
 class DashboardController extends ApiController
 {
     public function show(string $dashboardKey)
