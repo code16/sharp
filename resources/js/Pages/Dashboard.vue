@@ -105,8 +105,7 @@
                             v-slot="{ widgetLayout }"
                         >
                             <Widget
-                                :widget-type="dashboard.widgets[widgetLayout.key].type"
-                                :widget-props="dashboard.widgets[widgetLayout.key]"
+                                :widget="dashboard.widgets[widgetLayout.key]"
                                 :value="dashboard.data[widgetLayout.key]"
                             />
                         </Section>

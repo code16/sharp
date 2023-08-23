@@ -1,3 +1,13 @@
+<script setup lang="ts">
+    import FieldLayout from "../FieldLayout.vue";
+    import { ShowPictureFieldData } from "@/types";
+
+    defineProps<{
+        value: ShowPictureFieldData['value']
+        field: ShowPictureFieldData,
+    }>();
+</script>
+
 <template>
     <FieldLayout class="ShowPictureField">
         <div class="text-center">
@@ -5,26 +15,3 @@
         </div>
     </FieldLayout>
 </template>
-
-<script>
-    import { syncVisibility } from "../../util/fields/visiblity";
-    import FieldLayout from "../FieldLayout.vue";
-
-    export default {
-        components: {
-            FieldLayout,
-        },
-        props: {
-            value: String,
-            label: String,
-        },
-        computed: {
-            isVisible() {
-                return !!this.value;
-            }
-        },
-        created() {
-            syncVisibility(this, () => this.isVisible);
-        }
-    }
-</script>

@@ -1,8 +1,39 @@
+<script setup lang="ts">
+    import { ShowFieldData, ShowLayoutFieldData } from "@/types";
+    import type { Component } from "vue";
+    import EntityList from "./fields/entity-list/EntityList.vue";
+    import Text from "./fields/text/Text.vue";
+    import Picture from "./fields/Picture.vue";
+    import File from "./fields/File.vue";
+    import List from "./fields/List.vue";
+    import { isCustomField, resolveCustomField } from "@/utils/fields";
+
+    withDefaults(defineProps<{
+        field: ShowFieldData,
+        value: ShowFieldData['value'],
+        layout: ShowLayoutFieldData,
+        locale: string,
+        locales: Array<string>,
+        collapsable: boolean,
+        root: boolean,
+    }>(), {
+        root: true,
+    });
+
+    const components: Record<Exclude<ShowFieldData['type'], 'html'>, Component> ={
+        'entityList': EntityList,
+        'file': File,
+        'list': List,
+        'picture': Picture,
+        'text': Text,
+    }
+</script>
+
 <template>
-    <div class="show-field" :class="classes" v-show="isVisible">
+    <div class="show-field" :class="`show-field--${field.type}`">
         <component
-            :is="component"
-            :field-key="options.key"
+            :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
+            :field="field"
             :field-config-identifier="mergedConfigIdentifier"
             :value="value"
             :layout="layout"
@@ -10,60 +41,15 @@
             :root="root"
             :locale="locale"
             :locales="locales"
-            v-bind="props"
             @visible-change="handleVisiblityChanged"
         />
     </div>
 </template>
 
 <script>
-    import { getFieldByType } from "./fields";
     import { ConfigNode } from "sharp/mixins";
 
     export default {
         mixins: [ConfigNode],
-        props: {
-            value: {},
-            options: Object,
-            layout: Object,
-            locale: String,
-            locales: Array,
-            collapsable: Boolean,
-            root: {
-                type: Boolean,
-                default: true,
-            },
-        },
-        data() {
-            return {
-                visible: true,
-            }
-        },
-        computed: {
-            component() {
-                return this.options
-                    ? getFieldByType(this.options.type)
-                    : null;
-            },
-            props() {
-                return {
-                    ...this.options,
-                }
-            },
-            classes() {
-                return [
-                    `show-field--${this.options.type}`,
-                ];
-            },
-            isVisible() {
-                return !!this.component && this.visible;
-            }
-        },
-        methods: {
-            handleVisiblityChanged(visible) {
-                this.visible = visible;
-                this.$emit('visible-change', visible);
-            },
-        },
     }
 </script>

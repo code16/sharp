@@ -22,7 +22,7 @@ class FormController extends SharpProtectedController
     public function create(string $uri, string $entityKey)
     {
         sharp_check_ability(
-            $this->entityManager->entityFor($entityKey)->hasShow() ? 'update' : 'view',
+            $this->entityManager->entityFor($entityKey)->hasShow() ? 'create' : 'view',
             $entityKey,
         );
 

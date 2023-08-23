@@ -342,7 +342,7 @@ export type ShowHtmlFieldData = {
 };
 export type ShowLayoutColumnData = {
   size: number;
-  fields: Array<ShowLayoutFieldData>;
+  fields: Array<Array<ShowLayoutFieldData>>;
 };
 export type ShowLayoutData = {
   sections: Array<ShowLayoutSectionData>;

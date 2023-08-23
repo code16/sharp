@@ -12,7 +12,7 @@ final class ShowLayoutColumnData extends Data
 {
     public function __construct(
         public int $size,
-        /** @var DataCollection<ShowLayoutFieldData> */
+        /** @var array<DataCollection<ShowLayoutFieldData>> */
         public array $fields,
     ) {
     }

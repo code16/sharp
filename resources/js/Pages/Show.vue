@@ -155,33 +155,38 @@
 
                                 <template v-if="!collapsed">
                                     <div class="ShowSection__content" :class="!show.sectionHasField(section, 'entityList') ? 'p-4 bg-white' : ''">
-<!--                                        <Grid class="ShowSection__grid"-->
-<!--                                            :rows="[section.columns]"-->
-<!--                                            :col-class="() => 'ShowSection__col'"-->
-<!--                                            v-slot="{ itemLayout:column }"-->
-<!--                                        >-->
-<!--                                            <Grid class="ShowPage__fields-grid"-->
-<!--                                                :rows="column.fields"-->
-<!--                                                :row-class="fieldsRowClass"-->
-<!--                                                v-slot="{ itemLayout:fieldLayout }"-->
-<!--                                            >-->
-<!--                                                <template v-if="show.fields[fieldLayout.key]">-->
-<!--                                                    <ShowField-->
-<!--                                                        :options="show.fields[fieldLayout.key]"-->
-<!--                                                        :value="show.data[fieldLayout.key]"-->
-<!--                                                        :locale="locale"-->
-<!--                                                        :locales="show.locales"-->
-<!--                                                        :config-identifier="fieldLayout.key"-->
-<!--                                                        :layout="fieldLayout"-->
-<!--                                                        :collapsable="section.collapsable"-->
-<!--                                                        @reordering="onEntityListReordering(fieldLayout.key, $event)"-->
-<!--                                                    />-->
-<!--                                                </template>-->
-<!--                                                <template v-else>-->
-<!--                                                    <UnknownField :name="fieldLayout.key" />-->
-<!--                                                </template>-->
-<!--                                            </Grid>-->
-<!--                                        </Grid>-->
+                                        <div class="flex -mx-4">
+                                            <template v-for="column in section.columns">
+                                                <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                                    <template v-for="row in column.fields">
+                                                        <div class="flex -mx-4">
+                                                            <template v-for="fieldLayout in row">
+                                                                <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${fieldLayout.size}` }"
+                                                                    x-show="!show.fields[fieldLayout.key] ||
+                                                                        show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                >
+                                                                    <template v-if="show.fields[fieldLayout.key]">
+                                                                        <ShowField
+                                                                            :options="show.fields[fieldLayout.key]"
+                                                                            :value="show.data[fieldLayout.key]"
+                                                                            :locale="locale"
+                                                                            :locales="show.locales"
+                                                                            :config-identifier="fieldLayout.key"
+                                                                            :layout="fieldLayout"
+                                                                            :collapsable="section.collapsable"
+                                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                                        />
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <UnknownField :name="fieldLayout.key" />
+                                                                    </template>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
                                 </template>
                             </div>

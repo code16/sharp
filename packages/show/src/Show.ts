@@ -70,7 +70,7 @@ export class Show implements ShowData {
 
     sectionFields(section: ShowLayoutSectionData): Array<ShowFieldData> {
         return section.columns
-            .map((column) => column.fields.map(field => this.fields[field.key]))
+            .map((column) => column.fields.flat().map(field => this.fields[field.key]))
             .flat()
             .filter(Boolean);
     }
@@ -94,6 +94,10 @@ export class Show implements ShowData {
 
     fieldShouldBeVisible(field: ShowFieldData, value: ShowFieldData['value'], locale: string): boolean {
         if(field.type === 'entityList') {
+            return true;
+        }
+
+        if(field.emptyVisible) {
             return true;
         }
 

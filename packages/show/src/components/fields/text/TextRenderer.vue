@@ -13,6 +13,8 @@
         props: {
             content: String,
             embeds: Object,
+            entityKey: String,
+            instanceId: String,
         },
         provide() {
             return {
@@ -59,8 +61,8 @@
         },
         methods: {
             async init() {
-                const entityKey = this.$store.getters['show/entityKey'];
-                const instanceId = this.$store.getters['show/instanceId'];
+                const entityKey = this.entityKey;
+                const instanceId = this.instanceId;
                 const files = this.state.files;
 
                 if(files.length > 0) {
