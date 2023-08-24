@@ -6,13 +6,11 @@
     import TextRenderer from "./TextRenderer.vue";
     import { stripTags, truncateToWords } from "../../../util/fields/text";
     import clip from "text-clipper";
+    import { FieldProps } from "../../types";
 
-    const props = defineProps<{
+    const props = defineProps<FieldProps & {
+        field: ShowTextFieldData,
         value: ShowTextFieldData['value'],
-        field: Omit<ShowTextFieldData, 'value'>,
-        locale: string,
-        entityKey: string,
-        instanceId: string,
     }>();
 
     const expanded = ref(false);

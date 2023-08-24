@@ -1,115 +1,123 @@
-<template>
-    <FieldLayout class="ShowEntityListField" :class="classes">
-        <EntityList
-            v-if="value"
-            :entity-list="value"
-            :entity-key="entityListKey"
-            :module="storeModule"
-            :show-create-button="showCreateButton"
-            :show-reorder-button="showReorderButton"
-            :show-search-field="showSearchField"
-            :show-entity-state="showEntityState"
-            :hidden-commands="hiddenCommands"
-            :filters="visibleFilters"
-            :visible="!collapsed"
-            :focused-item="focusedItem"
-            inline
-            @change="handleChanged"
-            @reordering="$emit('reordering', $event)"
-        >
-            <template v-slot:action-bar="{ props, listeners }">
-                <ActionBar
-                    class="ShowEntityListField__action-bar"
-                    v-bind="props"
-                    v-on="listeners"
-                    :collapsed="collapsed"
-                    :has-active-query="hasActiveQuery"
-                    :sticky="sticky"
-                >
-                    <template v-if="hasCollapse">
-                        <div class="section__header section__header--collapsable position-relative">
-                            <div class="row align-items-center gx-0 h-100">
-                                <div class="col-auto">
-                                    <details :open="!collapsed" @toggle="handleDetailsToggle">
-                                        <summary class="stretched-link">
-                                            <span class="visually-hidden">{{ label }}</span>
-                                        </summary>
-                                    </details>
-                                </div>
-                                <div class="col">
-                                    <EntityListTitle :count="showCount ? props.count : null">
-                                        <h2 class="ShowEntityListField__label section__title mb-0">
-                                            {{ label }}
-                                        </h2>
-                                    </EntityListTitle>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div class="section__header d-grid">
-                            <EntityListTitle :count="showCount ? props.count : null">
-                                <h2 class="ShowEntityListField__label section__title mb-0">
-                                    {{ label }}
-                                </h2>
-                            </EntityListTitle>
-                        </div>
-                    </template>
-                </ActionBar>
-            </template>
-        </EntityList>
-    </FieldLayout>
-</template>
-
-<script>
-    import { entitiesMatch } from "sharp";
-    import { getNavbarHeight } from "@sharp/ui";
-    import { EntityList, EntityListTitle, entityListModule } from '@sharp/entity-list';
-    import { CommandsDropdown } from '@sharp/commands';
-
+<script setup lang="ts">
     import ActionBar from "./ActionBar.vue";
     import FieldLayout from "../../FieldLayout.vue";
-    import { syncVisibility } from "../../../util/fields/visiblity";
+    import { EntityList, EntityListTitle } from '@sharp/entity-list';
+    import { FieldProps } from "../../types";
+    import { ShowEntityListFieldData } from "@/types";
+    import { nextTick, onMounted, onUnmounted, ref } from "vue";
+    import { getNavbarHeight } from "@sharp/ui";
+    import useFocusedItem from "./useFocusedItem";
 
+    const props = defineProps<FieldProps & {
+        field: ShowEntityListFieldData,
+        value: ShowEntityListFieldData['value'],
+    }>();
+
+    const el = ref();
+    const focusedItem = useFocusedItem(props.field);
+    const collapsed = ref(props.collapsable && !focusedItem);
+    const sticky = ref(false);
+    const layout = () => {
+        sticky.value = el.value.offsetHeight > (window.innerHeight - getNavbarHeight());
+    }
+
+    async function onListChanged() {
+        await nextTick();
+        layout();
+    }
+
+    onMounted(() => {
+        if(focusedItem) {
+            const rect = el.value.getBoundingClientRect();
+            window.scrollBy(0, rect.top - 100);
+        }
+        window.addEventListener('resize', layout);
+    });
+
+    onUnmounted(() => {
+        window.removeEventListener('resize', layout);
+    });
+</script>
+
+<template>
+    <div ref="el">
+       <FieldLayout
+           class="ShowEntityListField"
+           :class="{
+               'ShowEntityListField--collapsed': collapsed,
+           }"
+       >
+           <EntityList
+               v-if="value"
+               :entity-list="value"
+               :entity-key="field.entityListKey"
+               :module="storeModule"
+               :show-create-button="field.showCreateButton"
+               :show-reorder-button="field.showReorderButton"
+               :show-search-field="field.showSearchField"
+               :show-entity-state="field.showEntityState"
+               :hidden-commands="field.hiddenCommands"
+               :filters="visibleFilters"
+               :visible="!collapsed"
+               :focused-item="focusedItem"
+               inline
+               @change="onListChanged"
+               @reordering="$emit('reordering', $event)"
+           >
+<!--               TODO action bar props / listeners-->
+               <template v-slot:action-bar="{ props, listeners }">
+                   <ActionBar
+                       class="ShowEntityListField__action-bar"
+                       v-bind="props"
+                       v-on="listeners"
+                       :collapsed="collapsed"
+                       :has-active-query="hasActiveQuery"
+                       :sticky="sticky"
+                   >
+                       <template v-if="collapsable">
+                           <div class="section__header section__header--collapsable position-relative">
+                               <div class="row align-items-center gx-0 h-100">
+                                   <div class="col-auto">
+                                       <details :open="!collapsed" @toggle="collapsed = !$event.target.open">
+                                           <summary class="stretched-link">
+                                               <span class="visually-hidden">{{ field.label }}</span>
+                                           </summary>
+                                       </details>
+                                   </div>
+                                   <div class="col">
+                                       <EntityListTitle :count="field.showCount ? props.count : null">
+                                           <h2 class="ShowEntityListField__label section__title mb-0">
+                                               {{ field.label }}
+                                           </h2>
+                                       </EntityListTitle>
+                                   </div>
+                               </div>
+                           </div>
+                       </template>
+                       <template v-else>
+                           <div class="section__header d-grid">
+                               <EntityListTitle :count="field.showCount ? props.count : null">
+                                   <h2 class="ShowEntityListField__label section__title mb-0">
+                                       {{ field.label }}
+                                   </h2>
+                               </EntityListTitle>
+                           </div>
+                       </template>
+                   </ActionBar>
+               </template>
+           </EntityList>
+       </FieldLayout>
+   </div>
+</template>
+
+<script lang="ts">
+    import { entityListModule } from '@sharp/entity-list';
+
+    // TODO
     export default {
-        components: {
-            EntityListTitle,
-            EntityList,
-            CommandsDropdown,
-            ActionBar,
-            FieldLayout,
-        },
-        props: {
-            value: Object,
-            fieldKey: String,
-            entityListKey: String,
-            showCreateButton: Boolean,
-            showReorderButton: Boolean,
-            showSearchField: Boolean,
-            showEntityState: Boolean,
-            showCount: Boolean,
-            hiddenFilters: Object,
-            hiddenCommands: Object,
-            label: String,
-            emptyVisible: Boolean,
-            collapsable: Boolean,
-        },
-        data() {
-            return {
-                list: null,
-                collapsed: this.collapsable && !this.getFocusedItem(),
-                focusedItem: this.getFocusedItem(),
-                sticky: false,
-            }
-        },
         computed: {
-            classes() {
-                return {
-                    'ShowEntityListField--collapsed': this.collapsed,
-                }
-            },
             storeModule() {
-                return `show/entity-lists/${this.fieldKey}`;
+                return `show/entity-lists/${this.field.entityListKey}`;
             },
             query() {
                 return this.storeGetter('query');
@@ -123,19 +131,6 @@
             filtersValues() {
                 return this.storeGetter('filters/values');
             },
-            isVisible() {
-                if(this.hasCollapse || this.emptyVisible) {
-                    return true;
-                }
-                if(this.list) {
-                    const { data, authorizations } = this.list;
-                    return !!(
-                        data.list.items?.length > 0 ||
-                        this.showCreateButton && authorizations.create ||
-                        this.hasActiveQuery
-                    );
-                }
-            },
             visibleFilters() {
                 return this.hiddenFilters
                     ? this.filters.filter(filter => !(filter.key in this.hiddenFilters))
@@ -147,49 +142,10 @@
 
                 return !!this.query.search || hasActiveFilters;
             },
-            hasCollapse() {
-                return this.collapsable;
-            },
         },
         methods: {
-            hasCommands(commands) {
-                return commands && commands.some(group => group && group.length > 0);
-            },
             storeGetter(name) {
                 return this.$store.getters[`${this.storeModule}/${name}`];
-            },
-            async handleChanged(list) {
-                this.list = list;
-                await this.$nextTick();
-                this.layout();
-            },
-            handleDetailsToggle(e) {
-                this.collapsed = !e.target.open;
-            },
-            getFocusedItem() {
-                if(!document.referrer) {
-                    return;
-                }
-                const referrerUrl = new URL(document.referrer);
-                if(referrerUrl.origin !== location.origin) {
-                    return;
-                }
-
-                const { entityKey, instanceId } = route(undefined, undefined, undefined, {
-                    ...Ziggy,
-                    location: referrerUrl,
-                }).params;
-
-                if(entityKey
-                    && entitiesMatch(entityKey, this.entityListKey)
-                    && instanceId
-                    && referrerUrl.pathname.length > location.pathname.length
-                ) {
-                    return Number(instanceId);
-                }
-            },
-            layout() {
-                this.sticky = this.$el.offsetHeight > (window.innerHeight - getNavbarHeight());
             },
         },
         created() {
@@ -200,16 +156,6 @@
             if(this.hiddenFilters) {
                 this.$store.dispatch(`${this.storeModule}/setQuery`, this.getFiltersQueryParams(this.hiddenFilters));
             }
-
-            syncVisibility(this, () => this.isVisible, { lazy:true });
-        },
-        mounted() {
-            if(this.focusedItem) {
-                const rect = this.$el.getBoundingClientRect();
-                window.scrollBy(0, rect.top - 100);
-            }
-
-            window.addEventListener('resize', () => this.layout());
         },
     }
 </script>

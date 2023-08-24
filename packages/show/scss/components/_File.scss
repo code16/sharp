@@ -51,13 +51,6 @@
     line-height: 1;
   }
 
-  &--root {
-    --file-font-size: .875em;
-    .show-field__content {
-      padding-bottom: .5rem;
-    }
-  }
-
   &--has-label {
     .ShowFileField__name {
       font-weight: 400;

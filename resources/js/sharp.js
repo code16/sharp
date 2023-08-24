@@ -8,7 +8,7 @@ import Vuex from 'vuex';
 
 import SharpCommands from '@sharp/commands';
 import SharpDashboard from '@sharp/dashboard';
-import SharpEntityList from '@sharp/entity-list';
+import SharpEntityList from '@sharp/entity-list/src';
 import SharpFilters from '@sharp/filters';
 import SharpForm from '@sharp/form';
 import SharpShow from '@sharp/show/src';

@@ -54,7 +54,7 @@ export function createEmbedComponent(embedOptions) {
             this.index = this.state.embeds[embedOptions.key].length;
             this.state.embeds[embedOptions.key].push(this.embedData);
 
-            ignoreVueElement(this.embedOptions.tag);
+            // ignoreVueElement(this.embedOptions.tag);
         },
     }
 }

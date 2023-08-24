@@ -12,6 +12,8 @@
     import { __ } from "@/utils/i18n";
     import { Show } from '@sharp/show/src/Show';
     import { showDeleteConfirm } from "@/utils/dialogs";
+    import { Head } from '@inertiajs/vue3';
+    import Title from "@/components/Title.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -20,6 +22,7 @@
 
     const show = new Show(props.show);
     const locale = ref(show.locales?.[0]);
+    const { entityKey, instanceId } = route().params;
 
     const reorderingEntityLists = ref({});
     const isReordering = computed(() => Object.values(reorderingEntityLists.value).some(reordering => reordering));
@@ -43,6 +46,9 @@
 
 <template>
     <Layout>
+        <Head>
+            <Title :breadcrumb="breadcrumb" />
+        </Head>
         <div class="ShowPage">
             <div class="container">
                 <div class="action-bar mt-4 mb-3">
@@ -167,13 +173,14 @@
                                                                 >
                                                                     <template v-if="show.fields[fieldLayout.key]">
                                                                         <ShowField
-                                                                            :options="show.fields[fieldLayout.key]"
+                                                                            :field="show.fields[fieldLayout.key]"
                                                                             :value="show.data[fieldLayout.key]"
                                                                             :locale="locale"
-                                                                            :locales="show.locales"
                                                                             :config-identifier="fieldLayout.key"
                                                                             :layout="fieldLayout"
                                                                             :collapsable="section.collapsable"
+                                                                            :entity-key="entityKey"
+                                                                            :instance-id="instanceId"
                                                                             @reordering="onEntityListReordering(fieldLayout.key, $event)"
                                                                         />
                                                                     </template>
@@ -262,11 +269,6 @@
                 }
             },
             async init() {
-                this.$store.commit('show/SET_ENTITY_KEY', this.entityKey);
-                this.$store.commit('show/SET_INSTANCE_ID', this.instanceId);
-                this.$store.commit('show/SET_SHOW', this.show);
-
-                handleNotifications(this.show.notifications);
                 this.updateDocumentTitle(this.show);
             }
         },

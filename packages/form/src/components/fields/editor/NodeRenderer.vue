@@ -41,7 +41,7 @@
             },
         },
         created() {
-            ignoreVueElement(this.tag);
+            // ignoreVueElement(this.tag);
         },
     }
 </script>

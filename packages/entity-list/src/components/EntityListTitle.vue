@@ -2,8 +2,8 @@
     import { __ } from "@/utils/i18n";
 
     defineProps<{
-        count: number,
-        search: string,
+        count?: number | null,
+        search?: string | null,
     }>();
 </script>
 

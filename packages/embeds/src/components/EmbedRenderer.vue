@@ -14,7 +14,7 @@
 </template>
 
 <script>
-    import { TemplateRenderer } from "sharp/components";
+    import { TemplateRenderer } from "@/components";
 
     export default {
         components: {

@@ -1,4 +1,4 @@
-import { ZiggyRouter } from '@/types/globals';
+import { ZiggyRouter } from '@/types/ziggy';
 import { Config, RouteParam, RouteParamsWithQueryOverload } from 'ziggy-js';
 import { config } from "@/utils/config";
 

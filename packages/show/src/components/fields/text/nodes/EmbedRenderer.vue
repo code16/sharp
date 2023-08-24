@@ -20,7 +20,7 @@
             embedOptions: Object,
         },
         created() {
-            ignoreVueElement(this.embedOptions.tag);
+            // ignoreVueElement(this.embedOptions.tag);
         },
     }
 </script>

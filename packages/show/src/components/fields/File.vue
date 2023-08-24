@@ -1,20 +1,47 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { ShowFileFieldData } from "@/types";
+    import { FieldProps } from "../types";
+    import { downloadFileUrl } from "@sharp/files";
+    import { computed } from "vue";
+    import { getClassNameForExtension } from 'font-awesome-filetypes';
+    import { filesizeLabel } from 'sharp';
+    import FieldLayout from "../FieldLayout.vue";
+
+    const props = defineProps<FieldProps & {
+        value: ShowFileFieldData['value'],
+        field: ShowFileFieldData,
+    }>();
+
+    const iconClass = computed(() => {
+        const extension = (props.value?.name ?? '').split('.').pop();
+        const iconClass = getClassNameForExtension(extension);
+
+        if(iconClass === 'fa-file-csv') {
+            return `fas ${iconClass}`;
+        }
+        return `far ${iconClass}`;
+    })
 </script>
 
 <template>
-    <FieldLayout class="ShowFileField" :class="classes" :label="label">
+    <FieldLayout
+        class="ShowFileField"
+        :class="{
+            'ShowFileField--has-label': !!field.label,
+            'ShowFileField--has-placeholder': !value?.thumbnail,
+        }"
+        :label="field.label"
+    >
         <div class="row mx-n2">
-            <div class="col-3 px-2 align-self-center ShowFileField__thumbnail-col" :class="thumbnailColClasses">
-                <template v-if="hasThumbnail">
+            <div class="col-3 px-2 align-self-center ShowFileField__thumbnail-col">
+                <template v-if="value?.thumbnail">
                     <div class="ShowFileField__thumbnail-container">
                         <img
-                            class="ShowFileField__thumbnail"
-                            :src="thumbnailUrl"
-                            :style="thumbnailStyle"
-                            alt=""
+                            class="ShowFileField__thumbnail max-w-[100px] max-h-[100px]"
+                            :src="value.thumbnail"
+                            :alt="field.label"
                             ref="thumbnail"
-                            @load="handleThumbnailLoaded"
                         >
                     </div>
                 </template>
@@ -26,21 +53,24 @@
             </div>
             <div class="col px-2" style="min-width: 0">
                 <div class="ShowFileField__name text-truncate mb-2">
-                    {{ fileName }}
+                    {{ value?.name }}
                 </div>
                 <div class="ShowFileField__info">
                     <div class="row mx-n2 h-100">
-                        <template v-if="sizeLabel">
+                        <template v-if="value?.size">
                             <div class="col-auto px-2">
                                 <div class="ShowFileField__size text-muted">
-                                    {{ sizeLabel }}
+                                    {{ filesizeLabel(value.size) }}
                                 </div>
                             </div>
                         </template>
                         <div class="col-auto px-2">
                             <div class="text-muted">
                                 <i class="fa fas fa-download"></i>
-                                <a :href="downloadUrl" :download="fileName" style="color:inherit">
+                                <a :href="downloadFileUrl({ entityKey, instanceId, disk: value?.disk, path: value?.path })"
+                                    :download="value?.name ?? ''"
+                                    style="color:inherit"
+                                >
                                     {{ __('sharp::show.file.download') }}
                                 </a>
                             </div>
@@ -51,118 +81,3 @@
         </div>
     </FieldLayout>
 </template>
-
-<script lang="ts">
-    import { mapGetters } from 'vuex';
-    import debounce from 'lodash/debounce';
-    import { getClassNameForExtension } from 'font-awesome-filetypes';
-    import { filesizeLabel } from 'sharp';
-    import { Button } from "@sharp/ui";
-    import { downloadFileUrl } from "@sharp/files";
-    import { syncVisibility } from "../../util/fields/visiblity";
-    import FieldLayout from "../FieldLayout.vue";
-
-    export default {
-        components: {
-            Button,
-            FieldLayout,
-        },
-        props: {
-            value: Object,
-            label: String,
-            collapsed: {
-                type: Boolean,
-                default: true,
-            },
-            root: {
-                type: Boolean,
-                default: true,
-            },
-        },
-        data() {
-            return {
-                thumbnailWidth: 0,
-            }
-        },
-        computed: {
-            ...mapGetters('show', [
-                'entityKey',
-                'instanceId',
-            ]),
-            classes() {
-                return {
-                    'ShowFileField--has-label': !!this.label,
-                    'ShowFileField--has-placeholder': !this.hasThumbnail,
-                    'ShowFileField--root': this.root,
-                }
-            },
-            thumbnailColClasses() {
-                return {
-                    'ShowFileField__thumbnail-col--collapsed': !this.hasThumbnail && this.collapsed,
-                }
-            },
-            downloadUrl() {
-                return downloadFileUrl({
-                    entityKey: this.entityKey,
-                    instanceId: this.instanceId,
-                    disk: this.value?.disk,
-                    path: this.value?.path,
-                })
-            },
-            fileName() {
-                return this.value?.name ?? '';
-            },
-            hasThumbnail() {
-                return !!this.thumbnailUrl;
-            },
-            thumbnailUrl() {
-                return this.value?.thumbnail;
-            },
-            thumbnailStyle() {
-                return {
-                    'max-height': this.thumbnailWidth
-                        ? `${this.thumbnailWidth}px`
-                        : null,
-                }
-            },
-            sizeLabel() {
-                return this.value?.size
-                    ? filesizeLabel(this.value.size)
-                    : null;
-            },
-            iconClass() {
-                const extension = this.fileName.split('.').pop();
-                const iconClass = getClassNameForExtension(extension);
-
-                if(iconClass === 'fa-file-csv') {
-                    return `fas ${iconClass}`;
-                }
-                return `far ${iconClass}`;
-            },
-            isVisible() {
-                return !!this.value;
-            },
-        },
-        methods: {
-            async layout() {
-                if(this.$refs.thumbnail) {
-                    this.thumbnailWidth = this.$refs.thumbnail.parentElement.offsetWidth;
-                }
-            },
-            handleThumbnailLoaded() {
-                this.layout();
-            }
-        },
-        created() {
-            syncVisibility(this, () => this.isVisible);
-        },
-        mounted() {
-            this.layout();
-            this.handleResize = debounce(this.layout, 150);
-            window.addEventListener('resize', this.handleResize);
-        },
-        beforeDestroy() {
-            window.removeEventListener('resize', this.handleResize);
-        },
-    }
-</script>

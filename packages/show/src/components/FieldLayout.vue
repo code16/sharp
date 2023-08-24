@@ -1,3 +1,9 @@
+<script setup lang="ts">
+    defineProps<{
+        label?: string,
+    }>();
+</script>
+
 <template>
     <div>
         <template v-if="label">
@@ -9,11 +15,3 @@
         </div>
     </div>
 </template>
-
-<script>
-    export default {
-        props: {
-            label: String,
-        },
-    }
-</script>

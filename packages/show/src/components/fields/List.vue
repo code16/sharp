@@ -1,26 +1,32 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import ShowField from "../Field.vue";
+    import { ShowListFieldData } from "@/types";
+    import { Grid } from '@sharp/ui';
+    import { UnknownField } from 'sharp/components';
+    import FieldLayout from "../FieldLayout.vue";
+    import { FieldProps } from "../types";
 
+    defineProps<FieldProps & {
+        field: ShowListFieldData,
+        value: ShowListFieldData['value'],
+    }>()
 </script>
 
 <template>
-    <FieldLayout class="ShowListField" :class="classes" :label="label">
+    <FieldLayout class="ShowListField" :label="field.label">
         <div class="ShowListField__content">
-            <template v-if="isEmpty">
-                <em class="ShowListField__empty text-muted">{{ __('sharp::show.list.empty') }}</em>
-            </template>
-            <template v-else>
+            <template v-if="value?.length > 0">
                 <div class="ShowListField__list">
                     <template v-for="item in value">
                         <div class="ShowListField__item">
                             <Grid class="ShowListField__fields-grid" :rows="layout.item" v-slot="{ itemLayout:fieldLayout }">
-                                <template v-if="fieldOptions(fieldLayout)">
+                                <template v-if="field.itemFields?.[fieldLayout.key]">
                                     <ShowField
-                                        :options="fieldOptions(fieldLayout)"
-                                        :value="fieldValue(item, fieldLayout)"
+                                        v-bind="$props"
+                                        :field="field.itemFields?.[fieldLayout.key]"
+                                        :value="item[fieldLayout.key]"
                                         :config-identifier="fieldLayout.key"
-                                        :root="false"
                                     />
                                 </template>
                                 <template v-else>
@@ -31,79 +37,11 @@
                     </template>
                 </div>
             </template>
+            <template v-else>
+                <em class="ShowListField__empty text-muted">
+                    {{ __('sharp::show.list.empty') }}
+                </em>
+            </template>
         </div>
     </FieldLayout>
 </template>
-
-<script lang="ts">
-    import { Grid } from '@sharp/ui';
-    import { UnknownField } from 'sharp/components';
-    import { syncVisibility } from "../../util/fields/visiblity";
-    import FieldLayout from "../FieldLayout.vue";
-
-    export default {
-        components: {
-            Grid,
-            UnknownField,
-            FieldLayout,
-        },
-        props: {
-            value: Array,
-            itemFields: {
-                type: Object,
-                required: true,
-            },
-            layout: Object,
-            label: String,
-            emptyVisible: Boolean,
-        },
-        computed: {
-            isEmpty() {
-                return !this.value || this.value.length === 0;
-            },
-            isVisible() {
-                return !this.isEmpty || this.emptyVisible;
-            },
-            classes() {
-                return {
-                    'ShowListField--empty': this.isEmpty,
-                }
-            },
-            fileFieldsCollapsed() {
-                const fileValues = this.allValuesOfType('file');
-                return fileValues.every(value => value && !value.thumbnail);
-            },
-        },
-        methods: {
-            fieldOptions(layout) {
-                const options = this.itemFields
-                    ? { ...this.itemFields[layout.key] }
-                    : null;
-                if(!options) {
-                    console.error(`Show list field: unknown field "${layout.key}"`);
-                }
-                if(options.type === 'file') {
-                    options.collapsed = this.fileFieldsCollapsed;
-                }
-                return options;
-            },
-            fieldValue(item, layout) {
-                return item ? item[layout.key] : null;
-            },
-            allValuesOfType(fieldType) {
-                return (this.value || []).reduce((res, item) => [
-                    ...res,
-                    ...Object.entries(item)
-                        .filter(([key]) => {
-                            const options = this.itemFields[key];
-                            return options && options.type === fieldType;
-                        })
-                        .map(([key, value]) => value)
-                ], []);
-            },
-        },
-        created() {
-            syncVisibility(this, () => this.isVisible);
-        }
-    }
-</script>

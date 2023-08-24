@@ -17,6 +17,7 @@ final class ShowFileFieldData extends Data
         'name' => 'string',
         'path' => 'string',
         'thumbnail' => 'string',
+        'size' => 'int',
     ])]
     public array $value;
 

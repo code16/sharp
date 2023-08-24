@@ -326,7 +326,13 @@ export type ShowFieldType =
   | "text"
   | "entityList";
 export type ShowFileFieldData = {
-  value?: { disk: string; name: string; path: string; thumbnail: string };
+  value?: {
+    disk: string;
+    name: string;
+    path: string;
+    thumbnail: string;
+    size: number;
+  };
   key: string;
   type: "file";
   emptyVisible: boolean;
