@@ -32,8 +32,7 @@
 
     async function onDelete() {
         if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
-            await this.$store.dispatch('show/delete');
-            location.replace(this.backUrl ?? '/');
+            router.delete(route('code16.sharp.show.delete', { uri: route().params.uri, entityKey, instanceId }));
         }
     }
 
@@ -82,7 +81,7 @@
                                         <span class="text-truncate">{{ show.instanceStateValue ? show.instanceStateValue.label : show.instanceState }}</span>
                                     </template>
                                     <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                        <DropdownItem :active="show.instanceState === stateValue.value" @mouseup.prevent.native="handleStateChanged(stateValue.value)">
+                                        <DropdownItem :active="show.instanceState === stateValue.value" @click="handleStateChanged(stateValue.value)">
                                             <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
                                             <span class="text-truncate">{{ stateValue.label }}</span>
                                         </DropdownItem>
@@ -98,7 +97,7 @@
                                     </template>
                                     <template v-if="show.authorizations.delete" v-slot:append>
                                         <DropdownSeparator />
-                                        <DropdownItem link-class="text-danger" @click="handleDeleteClicked">
+                                        <DropdownItem link-class="text-danger" @click="onDelete">
                                             {{ __('sharp::action_bar.form.delete_button') }}
                                         </DropdownItem>
                                     </template>
@@ -168,8 +167,7 @@
                                                         <div class="flex -mx-4">
                                                             <template v-for="fieldLayout in row">
                                                                 <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${fieldLayout.size}` }"
-                                                                    x-show="!show.fields[fieldLayout.key] ||
-                                                                        show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                    x-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
                                                                 >
                                                                     <template v-if="show.fields[fieldLayout.key]">
                                                                         <ShowField
@@ -218,9 +216,8 @@
 </template>
 
 <script lang="ts">
-    import { mapGetters } from 'vuex';
-    import { showAlert, handleNotifications } from 'sharp';
-    import { withCommands } from 'sharp/mixins';
+    import { showAlert } from 'sharp';
+    import { withCommands } from '@/mixins';
     import { router } from "@inertiajs/vue3";
 
     export default {
@@ -248,12 +245,6 @@
                         }
                     });
             },
-            async handleDeleteClicked() {
-                if(await showDeleteConfirm(this.config.deleteConfirmationText)) {
-                    await this.$store.dispatch('show/delete');
-                    location.replace(this.backUrl ?? '/');
-                }
-            },
             handleRefreshCommand() {
                 router.reload();
             },
@@ -262,19 +253,9 @@
                     'refresh': this.handleRefreshCommand,
                 });
             },
-            updateDocumentTitle(show) {
-                const label = show.breadcrumb?.items[show.breadcrumb.items.length - 1]?.documentTitleLabel;
-                if(label) {
-                    document.title = `${label}, ${document.title}`;
-                }
-            },
-            async init() {
-                this.updateDocumentTitle(this.show);
-            }
         },
 
         beforeMount() {
-            this.init();
             this.initCommands();
         },
     }

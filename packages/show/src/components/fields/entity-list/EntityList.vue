@@ -6,7 +6,6 @@
     import { ShowEntityListFieldData } from "@/types";
     import { nextTick, onMounted, onUnmounted, ref } from "vue";
     import { getNavbarHeight } from "@sharp/ui";
-    import useFocusedItem from "./useFocusedItem";
 
     const props = defineProps<FieldProps & {
         field: ShowEntityListFieldData,
@@ -14,8 +13,7 @@
     }>();
 
     const el = ref();
-    const focusedItem = useFocusedItem(props.field);
-    const collapsed = ref(props.collapsable && !focusedItem);
+    const collapsed = ref(props.collapsable);
     const sticky = ref(false);
     const layout = () => {
         sticky.value = el.value.offsetHeight > (window.innerHeight - getNavbarHeight());
@@ -27,10 +25,6 @@
     }
 
     onMounted(() => {
-        if(focusedItem) {
-            const rect = el.value.getBoundingClientRect();
-            window.scrollBy(0, rect.top - 100);
-        }
         window.addEventListener('resize', layout);
     });
 
@@ -59,7 +53,6 @@
                :hidden-commands="field.hiddenCommands"
                :filters="visibleFilters"
                :visible="!collapsed"
-               :focused-item="focusedItem"
                inline
                @change="onListChanged"
                @reordering="$emit('reordering', $event)"

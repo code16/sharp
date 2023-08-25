@@ -57,7 +57,7 @@ class ShowController extends SharpProtectedController
         ]);
     }
 
-    public function delete(string $entityKey, string $instanceId)
+    public function delete(string $uri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('delete', $entityKey, $instanceId);
 

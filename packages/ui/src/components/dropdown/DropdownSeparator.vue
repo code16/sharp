@@ -1,16 +1,3 @@
 <template>
-    <b-dropdown-divider />
+    <hr class="border-t-gray-100 my-1">
 </template>
-
-<script>
-    // import { BDropdownDivider } from 'bootstrap-vue';
-
-    export default {
-        name: 'SharpDropdownSeparator',
-        components: {
-            BDropdownDivider:{
-                template: '<div><slot /></div>', // todo
-            },
-        }
-    }
-</script>

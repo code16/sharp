@@ -1,30 +1,26 @@
-<template>
-    <b-dropdown-item :active="active" :disabled="disabled" v-bind="$attrs" @click="handleClick">
-        <slot />
-    </b-dropdown-item>
-</template>
+<script setup lang="ts">
+    import { MenuItem } from "@headlessui/vue";
 
-<script>
-    // import { BDropdownItem } from 'bootstrap-vue';
+    defineProps<{
+        active: boolean,
+        disabled: boolean,
+    }>();
 
-    export default {
-        name: 'SharpDropdownItem',
-
-        props: {
-            active: Boolean,
-            disabled: Boolean,
-        },
-
-        components: {
-            BDropdownItem:{
-                template: '<div><slot /></div>',  // todo
-            },
-        },
-
-        methods: {
-            handleClick(e) {
-                this.$emit('click', e);
-            }
-        }
-    }
+    defineEmits(['click']);
 </script>
+
+<template>
+    <MenuItem v-slot="{ active: itemActive }" :disabled="disabled">
+        <button
+            :class="[
+                disabled ? 'text-gray-400' :
+                active || itemActive ? 'bg-gray-100 text-gray-900' :
+                'text-gray-700',
+                'block w-full text-left px-4 py-2 text-sm'
+            ]"
+            @click="$emit('click', $event)"
+        >
+            <slot />
+        </button>
+    </MenuItem>
+</template>

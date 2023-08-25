@@ -50,7 +50,7 @@
             handleQueryChanged(query) {
                 if(location.search !== stringifyQuery(query)) {
                     this.$store.dispatch('setLoading', true);
-                    router.visit(location.pathname + stringifyQuery(query), {
+                    router.visit(route('code16.sharp.list', route().params) + stringifyQuery(query), {
                         preserveState: true,
                         preserveScroll: true,
                         onFinish: () => {

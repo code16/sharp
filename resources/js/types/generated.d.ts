@@ -15,6 +15,15 @@ export type CheckFilterData = {
   type: "check";
   default: boolean | null;
 };
+export type CommandAction =
+  | "download"
+  | "info"
+  | "link"
+  | "reload"
+  | "refresh"
+  | "step"
+  | "streamDownload"
+  | "view";
 export type CommandData = {
   key: string;
   label: string | null;
@@ -28,6 +37,13 @@ export type CommandData = {
   primary?: boolean | null;
   instance_selection?: InstanceSelectionMode | null;
 };
+export type CommandReturnData =
+  | { action: "link"; link: string }
+  | { action: "info"; message: string }
+  | { action: "refresh"; items?: Array<number | string> }
+  | { action: "reload" }
+  | { action: "step"; step: string }
+  | { action: "view"; html: string };
 export type CommandType = "dashboard" | "entity" | "instance";
 export type ConfigCommandsData = Record<
   CommandType | string,

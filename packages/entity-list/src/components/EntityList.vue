@@ -85,7 +85,7 @@
                         <DataListRow
                             :url="instanceUrl(item)"
                             :columns="columns"
-                            :highlight="instanceIsFocused(item) || selecting && selectedItems.includes(instanceId(item))"
+                            :highlight="selecting && selectedItems.includes(instanceId(item))"
                             :selecting="selecting"
                             :deleting="deletingItem ? instanceId(item) === instanceId(deletingItem) : false"
                             :row="item"
@@ -232,7 +232,6 @@
                 type: Boolean,
                 default: true,
             },
-            focusedItem: Number,
             entityList: Object,
         },
         data() {
@@ -588,10 +587,6 @@
                     ? viewAuthorizations.includes(instanceId)
                     : !!viewAuthorizations;
             },
-            instanceIsFocused(instance) {
-                const instanceId = this.instanceId(instance);
-                return this.focusedItem && this.focusedItem === instanceId;
-            },
             instanceCanDelete(instance) {
                 const instanceId = this.instanceId(instance);
                 const deleteAuthorized = Array.isArray(this.authorizations.delete)
@@ -683,7 +678,7 @@
                 });
             },
             showUrl({ instanceId }={}) {
-                return route('code16.sharp.show', {
+                return route('code16.sharp.show.show', {
                     uri: getAppendableUri(),
                     entityKey: this.entityKey,
                     instanceId,

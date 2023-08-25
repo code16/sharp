@@ -170,7 +170,10 @@ Route::group([
         'where' => ['uri' => '(s-list|s-show)/.*'],
     ], function () {
         Route::get('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
-            ->name('code16.sharp.show');
+            ->name('code16.sharp.show.show');
+
+        Route::delete('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
+            ->name('code16.sharp.show.delete');
 
         Route::get('/s-form/{entityKey}', [FormController::class, 'create'])
             ->name('code16.sharp.form.create');
