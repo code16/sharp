@@ -2,8 +2,8 @@
     import { MenuItem } from "@headlessui/vue";
 
     defineProps<{
-        active: boolean,
-        disabled: boolean,
+        active?: boolean,
+        disabled?: boolean,
     }>();
 
     defineEmits(['click']);

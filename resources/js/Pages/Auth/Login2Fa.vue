@@ -2,6 +2,7 @@
     import AuthLayout from "@/Layouts/AuthLayout.vue";
     import { useForm } from "@inertiajs/vue3";
     import { __ } from "@/utils/i18n";
+    import Title from "@/components/Title.vue";
 
     defineProps<{
         helpText: string
@@ -14,6 +15,9 @@
 
 <template>
     <AuthLayout>
+        <Title>
+            {{ __('sharp::login.login_page_title') }}
+        </Title>
         <template v-if="form.hasErrors" #prepend>
             <div class="rounded-md bg-red-100 p-4 mb-4">
                 <h3 class="text-sm font-medium text-red-800">

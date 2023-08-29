@@ -7,9 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="noindex, nofollow" />
 
-    <x-sharp::title>
-        {{ $title ?? null }}
-    </x-sharp::title>
+{{--    <x-sharp::title />--}}
 
     <x-sharp::vite>
         @vite([

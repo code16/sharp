@@ -2,7 +2,7 @@
     import { DashboardData, FilterData } from "@/types";
     import { useFilters } from "@sharp/filters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
-    import { router } from "@inertiajs/vue3";
+    import { router, Head } from "@inertiajs/vue3";
     import { GlobalMessage, } from '@sharp/ui';
     import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
     import Widget from "@sharp/dashboard/src/components/Widget.vue";
@@ -11,6 +11,8 @@
     import { SharpFilter } from '@sharp/filters';
     import { CommandsDropdown } from '@sharp/commands';
     import { __ } from "@/utils/i18n";
+    import { route } from "@/utils/url";
+    import Title from "@/components/Title.vue";
 
     const props = defineProps<{
         dashboard: DashboardData,
@@ -40,6 +42,8 @@
 
 <template>
     <Layout>
+        <Title :entity-key="route().params.dashboardKey" />
+
         <div class="SharpDashboardPage">
             <div class="container">
                 <div class="my-4">

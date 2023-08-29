@@ -3,8 +3,8 @@ export type BreadcrumbData = {
 };
 export type BreadcrumbItemData = {
   type: string;
-  name: string;
-  documentTitleLabel: string;
+  label: string;
+  documentTitleLabel: string | null;
   entityKey: string;
   url: string;
 };

@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "sharp",
   "workspaces": [
     "packages/*",
     "resources/js"

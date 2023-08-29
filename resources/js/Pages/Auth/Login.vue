@@ -3,6 +3,7 @@
     import { useForm } from "@inertiajs/vue3";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
+    import Title from "@/components/Title.vue";
 
     const append = document.querySelector('#login-append')?.innerHTML;
     const form = useForm({
@@ -15,6 +16,9 @@
 
 <template>
     <AuthLayout>
+        <Title>
+            {{ __('sharp::login.login_page_title') }}
+        </Title>
         <template v-if="form.hasErrors" #prepend>
             <div class="rounded-md bg-red-100 p-4 mb-4">
                 <h3 class="text-sm font-medium text-red-800">

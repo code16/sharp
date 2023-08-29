@@ -15,7 +15,7 @@ export function lang(key, defaultLabel) {
 }
 
 
-export function __(key, replacements) {
+export function __(key, replacements = null): string {
     const translation = usePage()?.props.translations[key] ?? key;
 
     if(replacements) {

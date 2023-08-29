@@ -2,7 +2,8 @@
     import Layout from "../Layouts/Layout.vue";
     import { EntityList } from "@sharp/entity-list";
     import ActionBarList from "@sharp/entity-list/src/components/ActionBar.vue";
-    import { BreadcrumbData, EntityListData, NotificationData } from "@/types";
+    import { BreadcrumbData, EntityListData } from "@/types";
+    import Title from "@/components/Title.vue";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -12,6 +13,8 @@
 
 <template>
     <Layout>
+        <Title :breadcrumb="breadcrumb" />
+
         <div class="SharpEntityListPage" data-popover-boundary>
             <div class="container">
                 <EntityList

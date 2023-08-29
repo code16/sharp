@@ -6,6 +6,7 @@ use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
 
 class FormController extends SharpProtectedController
@@ -54,7 +55,9 @@ class FormController extends SharpProtectedController
 
         return Inertia::render('Form', [
             'form' => $data,
-            'breadcrumb' => BreadcrumbData::from(['items' => []]), // TODO
+            'breadcrumb' => BreadcrumbData::from([
+                'items' => app(SharpBreadcrumb::class)->getItems($data)
+            ]),
         ]);
     }
 
@@ -96,7 +99,9 @@ class FormController extends SharpProtectedController
 
         return Inertia::render('Form', [
             'form' => $data,
-            'breadcrumb' => BreadcrumbData::from(['items' => [], 'visible' => false]), // TODO
+            'breadcrumb' => BreadcrumbData::from([
+                'items' => app(SharpBreadcrumb::class)->getItems($data)
+            ]),
         ]);
     }
 

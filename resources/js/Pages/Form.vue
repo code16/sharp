@@ -3,8 +3,10 @@
     import ActionBarForm from '@sharp/form/src/components/ActionBar.vue';
     import Layout from "../Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
-    import { router } from "@inertiajs/vue3";
+    import { router, Head } from "@inertiajs/vue3";
     import { route } from "@/utils/url";
+    import Title from "@/components/Title.vue";
+    import { __ } from "@/utils/i18n";
 
     defineProps<{
         form: FormData,
@@ -24,6 +26,8 @@
 
 <template>
     <Layout>
+        <Title :breadcrumb="breadcrumb" />
+
         <div class="FormPage">
             <div class="container">
                 <Form

@@ -8,6 +8,8 @@ use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\SharpBreadcrumb;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 
 class ShowController extends SharpProtectedController
@@ -52,7 +54,9 @@ class ShowController extends SharpProtectedController
 
         return Inertia::render('Show', [
             'show' => ShowData::from($data),
-            'breadcrumb' => BreadcrumbData::from(['items' => []]), // TODO
+            'breadcrumb' =>  BreadcrumbData::from([
+                'items' => app(SharpBreadcrumb::class)->getItems($data)
+            ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);
     }

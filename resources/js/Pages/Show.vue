@@ -45,9 +45,8 @@
 
 <template>
     <Layout>
-        <Head>
-            <Title :breadcrumb="breadcrumb" />
-        </Head>
+        <Title :breadcrumb="breadcrumb" />
+
         <div class="ShowPage">
             <div class="container">
                 <div class="action-bar mt-4 mb-3">

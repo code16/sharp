@@ -45,10 +45,10 @@ export default defineConfig(({ mode, command }) => {
                     },
                 },
             }),
-            watch({
-                pattern: "src/{Data,Enums}/**/*.php",
-                command: "composer typescript:transform",
-            }),
+            // watch({
+            //     pattern: "src/{Data,Enums}/**/*.php",
+            //     command: "composer typescript:transform",
+            // }),
             ignoreImport({
                 include: [
                     /moment\/locale\/(?!fr\.js$).*\.js$/,

@@ -5,13 +5,9 @@ return [
     'dashboard' => 'Dashboard',
     'entityList' => 'Lijst',
     'show' => ':entity',
-    'form' => [
-        'edit' => 'Bewerk',
-        'create' => 'Nieuw',
-
-        // for sub entities: forms displayed from an EEL
-        'edit_entity' => 'Bewerk “:entity”',
-        'create_entity' => 'Nieuw “:entity”',
-    ],
-
+    'form.edit' => 'Bewerk',
+    'form.create' => 'Nieuw',
+    // for sub entities: forms displayed from an EEL
+    'form.edit_entity' => 'Bewerk “:entity”',
+    'form.create_entity' => 'Nieuw “:entity”',
 ];
