@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http\Middleware\Api;
 use Closure;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Utils\SharpBreadcrumb;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 /**
+ * TODO legacy replaced by @see SharpBreadcrumb
  * This middleware is responsible for appending the breadcrumb array
  * (containing current navigation path) to the JSON response.
  */

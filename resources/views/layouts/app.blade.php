@@ -7,8 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="noindex, nofollow" />
 
-{{--    <x-sharp::title />--}}
-
     <x-sharp::vite>
         @vite([
             'resources/sass/vendors.scss',
