@@ -2,17 +2,18 @@
 
 namespace Code16\Sharp\View\Components\Alert;
 
+use Code16\Sharp\View\Components\Vite as SharpViteComponent;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Illuminate\View\View;
 
 class AssetsOutdated extends Component
 {
-    public function __construct()
-    {
-    }
-
     public function isAssetsOutdated(): bool
     {
+        if(file_exists(app(SharpViteComponent::class)->hotFile)) {
+            return false;
+        }
+        
         $distManifest = file_get_contents(__DIR__.'/../../../../resources/assets/dist/manifest.json');
         $publicManifest = file_get_contents(public_path('vendor/sharp/manifest.json'));
 
