@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { computed, ref } from "vue";
-    import { BreadcrumbData, ShowData, ShowLayoutSectionData } from "@/types";
+    import { ref } from "vue";
+    import { BreadcrumbData, ShowData } from "@/types";
     import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
@@ -12,8 +12,9 @@
     import { __ } from "@/utils/i18n";
     import { Show } from '@sharp/show/src/Show';
     import { showDeleteConfirm } from "@/utils/dialogs";
-    import { Head } from '@inertiajs/vue3';
     import Title from "@/components/Title.vue";
+    import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
+    import { useCommands } from "@sharp/commands/src/useCommands";
 
     const props = defineProps<{
         show: ShowData,
@@ -23,24 +24,18 @@
     const show = new Show(props.show);
     const locale = ref(show.locales?.[0]);
     const { entityKey, instanceId } = route().params;
-
-    const reorderingEntityLists = ref({});
-    const isReordering = computed(() => Object.values(reorderingEntityLists.value).some(reordering => reordering));
-    function onEntityListReordering(key: string, reordering: boolean) {
-        reorderingEntityLists.value[key] = reordering;
-    }
+    const { isReordering, onEntityListReordering } = useReorderingLists();
+    const commands = useCommands(show.config.commands, {
+        refresh() {
+            router.reload();
+        },
+    });
 
     async function onDelete() {
         if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
             router.delete(route('code16.sharp.show.delete', { uri: route().params.uri, entityKey, instanceId }));
         }
     }
-
-    // const fieldsVisibility = ref<{ [key:string]: boolean }>({});
-    // const isFieldVisible = (key: string) => fieldsVisibility.value[key] !== false;
-    // const isSectionVisible = (section: ShowLayoutSectionData) => {
-    //     return show.sectionFields(section).some((field) => isFieldVisible(field?.key));
-    // }
 </script>
 
 <template>
