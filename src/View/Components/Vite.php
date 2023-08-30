@@ -16,7 +16,7 @@ class Vite extends Component
     {
         return function () {
             \Illuminate\Support\Facades\Vite::useHotFile(public_path('hot')); // reset to default hot file location
-            
+
             return '{{ $slot }}';
         };
     }
