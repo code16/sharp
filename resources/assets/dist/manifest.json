@@ -75,7 +75,7 @@
     "css": [
       "assets/sharp-bff8c9cb.css"
     ],
-    "file": "assets/sharp-288e3d98.js",
+    "file": "assets/sharp-9cab14cb.js",
     "imports": [
       "_vendor-85838a29.js"
     ],
@@ -83,7 +83,7 @@
     "src": "resources/assets/js/sharp.js"
   },
   "resources/assets/sass/app.scss": {
-    "file": "assets/app-ff5f14ac.css",
+    "file": "assets/app-2c71faea.css",
     "isEntry": true,
     "src": "resources/assets/sass/app.scss"
   },
