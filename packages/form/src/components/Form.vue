@@ -5,11 +5,20 @@
 
 <template>
     <div class="SharpForm">
-        <slot
-            name="action-bar"
-            :props="actionBarProps"
-            :listeners="actionBarListeners"
-        />
+        <div class="flex">
+            <div class="flex-1">
+                <slot name="title" />
+            </div>
+            <template v-if="locales?.length">
+                <LocaleSelect
+                    outline
+                    right
+                    :locale="currentLocale"
+                    :locales="locales"
+                    @change="handleLocaleChanged"
+                />
+            </template>
+        </div>
 
         <template v-if="ready">
             <template v-if="config.globalMessage">
@@ -210,31 +219,6 @@
             isUploading() {
                 return Object.values(this.uploadingFields)
                     .some(uploading => !!uploading);
-            },
-            actionBarProps() {
-                if (!this.ready) {
-                    return null;
-                }
-                return {
-                    showSubmitButton: this.isCreation
-                        ? !!this.authorizations.create
-                        : !!this.authorizations.update,
-                    showBackButton: this.isReadOnly,
-                    create: !!this.isCreation,
-                    uploading: this.isUploading,
-                    loading: this.loading,
-                    breadcrumb: this.breadcrumb?.items,
-                    showBreadcrumb: !!this.breadcrumb?.visible,
-                    locales: this.locales,
-                    currentLocale: this.currentLocale,
-                }
-            },
-            actionBarListeners() {
-                return {
-                    'submit': this.handleSubmitClicked,
-                    'cancel': this.handleCancelClicked,
-                    'locale-change': this.handleLocaleChanged,
-                }
             },
             mergedErrorIdentifier() {
                 return null;

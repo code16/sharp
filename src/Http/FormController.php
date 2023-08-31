@@ -53,7 +53,7 @@ class FormController extends SharpProtectedController
 
         // TODO handle breadcrumb
 
-        return Inertia::render('Form', [
+        return Inertia::render('Form/Form', [
             'form' => $data,
             'breadcrumb' => BreadcrumbData::from([
                 'items' => app(SharpBreadcrumb::class)->getItems($data)
@@ -97,7 +97,7 @@ class FormController extends SharpProtectedController
 
         // TODO handle breadcrumb
 
-        return Inertia::render('Form', [
+        return Inertia::render('Form/Form', [
             'form' => $data,
             'breadcrumb' => BreadcrumbData::from([
                 'items' => app(SharpBreadcrumb::class)->getItems($data)

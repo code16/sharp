@@ -1,7 +1,7 @@
 <template>
     <Modal
         modal-class="form-modal"
-        v-model:visible="visible"
+        :visible="!!form"
         :loading="loading"
         :title="title"
         :ok-title="confirmLabel"
@@ -9,7 +9,7 @@
         @hidden="handleClosed"
     >
         <transition>
-            <template v-if="visible">
+            <template v-if="!!form">
                 <Form
                     :entity-key="entityKey"
                     :instance-id="instanceId"
@@ -38,19 +38,10 @@
         },
         props: {
             command: Object,
+            form: Object,
             entityKey: String,
             instanceId: [Number, String],
             loading: Boolean,
-        },
-        data() {
-            return {
-                visible: false,
-            }
-        },
-        watch: {
-            command(command) {
-                this.visible = !!command?.form;
-            }
         },
         computed: {
             title() {

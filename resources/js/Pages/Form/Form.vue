@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { Form } from "@sharp/form";
-    import ActionBarForm from '@sharp/form/src/components/ActionBar.vue';
-    import Layout from "../Layouts/Layout.vue";
+    import Layout from "@/Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
-    import { router, Head } from "@inertiajs/vue3";
+    import { router } from "@inertiajs/vue3";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
-    import { __ } from "@/utils/i18n";
+    import { config } from "@/utils/config";
+    import Breadcrumb from "@/components/Breadcrumb.vue";
 
     defineProps<{
         form: FormData,
@@ -28,24 +28,20 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
-        <div class="FormPage">
-            <div class="container">
-                <Form
-                    :form="form"
-                    :form-errors="errors"
-                    :entity-key="route().params.entityKey"
-                    :instance-id="route().params.instanceId"
-                    @submit="submit"
-                >
-                    <template v-slot:action-bar="{ props, listeners }">
-                        <ActionBarForm
-                            v-bind="props"
-                            v-on="listeners"
-                            :breadcrumb="breadcrumb"
-                        />
+        <div class="container">
+            <Form
+                :form="form"
+                :form-errors="errors"
+                :entity-key="route().params.entityKey"
+                :instance-id="route().params.instanceId"
+                @submit="submit"
+            >
+                <template v-slot:title>
+                    <template v-if="config('sharp.display_breadcrumb')">
+                        <Breadcrumb :breadcrumb="breadcrumb" />
                     </template>
-                </Form>
-            </div>
+                </template>
+            </Form>
         </div>
     </Layout>
 </template>

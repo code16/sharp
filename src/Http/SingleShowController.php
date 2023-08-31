@@ -45,7 +45,7 @@ class SingleShowController extends SharpProtectedController
             ],
         ];
 
-        return Inertia::render('Show', [
+        return Inertia::render('Show/Show', [
             'show' => ShowData::from($data),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => app(SharpBreadcrumb::class)->getItems($data),

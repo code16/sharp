@@ -1,9 +1,6 @@
-import './polyfill';
-// import './dev';
+
 import { createApp, h, nextTick } from 'vue';
-import Vuex from 'vuex';
-// import VueRouter from 'vue-router';
-// import { install as VueGoogleMaps } from './vendor/vue2-google-maps';
+
 // import Notifications from 'vue-notification';
 
 import SharpCommands from '@sharp/commands';

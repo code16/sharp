@@ -52,7 +52,7 @@ class EntityListController extends SharpProtectedController
             $data['config'],
         );
 
-        return Inertia::render('EntityList', [
+        return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => app(SharpBreadcrumb::class)->getItems($data),

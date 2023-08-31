@@ -4,7 +4,7 @@
     import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
-    import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
+    import { GlobalMessage, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
     import UnknownField from "@/components/dev/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { LocaleSelect } from "@sharp/form";
@@ -15,6 +15,7 @@
     import Title from "@/components/Title.vue";
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
     import { useCommands } from "@sharp/commands/src/useCommands";
+    import Breadcrumb from "@/components/Breadcrumb.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -29,6 +30,11 @@
         refresh() {
             router.reload();
         },
+    }, {
+        postCommand: (command) => route('code16.sharp.api.show.command.instance', { entityKey, instanceId, commandKey: command.key }),
+        getForm: (command, query) => instanceId
+            ? route('code16.sharp.api.show.command.instance.form', { entityKey, instanceId, commandKey: command.key, ...query })
+            : route('code16.sharp.api.show.command.singleInstance.form', { entityKey, commandKey: command.key, ...query }),
     });
 
     async function onDelete() {
@@ -48,7 +54,7 @@
                     <div class="row align-items-center gx-3">
                         <div class="col">
                             <template v-if="config('sharp.display_breadcrumb')">
-                                <Breadcrumb :items="breadcrumb.items" />
+                                <Breadcrumb :breadcrumb="breadcrumb" />
                             </template>
                         </div>
                         <template v-if="show.locales?.length">

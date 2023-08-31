@@ -4,16 +4,17 @@ namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
+use Inertia\Inertia;
 
 class HomeController extends SharpProtectedController
 {
     public function index()
     {
-        if ($firstEntityUrl = $this->getFirstConfiguredEntityUrl()) {
-            return redirect()->to($firstEntityUrl);
-        }
+//        if ($firstEntityUrl = $this->getFirstConfiguredEntityUrl()) {
+//            return redirect()->to($firstEntityUrl);
+//        }
 
-        return view('sharp::welcome');
+        return Inertia::render('Welcome');
     }
 
     private function getFirstConfiguredEntityUrl(): ?string

@@ -6,7 +6,7 @@
     import { GlobalMessage, } from '@sharp/ui';
     import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
     import Widget from "@sharp/dashboard/src/components/Widget.vue";
-    import Layout from "../Layouts/Layout.vue";
+    import Layout from "@/Layouts/Layout.vue";
     import Section from '@sharp/dashboard/src/components/Section.vue';
     import { SharpFilter } from '@sharp/filters';
     import { CommandsDropdown } from '@sharp/commands';

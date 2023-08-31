@@ -1,9 +1,10 @@
 <script setup lang="ts">
-    import Layout from "../Layouts/Layout.vue";
-    import { EntityList } from "@sharp/entity-list";
-    import ActionBarList from "@sharp/entity-list/src/components/ActionBar.vue";
+    import Layout from "@/Layouts/Layout.vue";
+    import { EntityList, EntityListTitle } from "@sharp/entity-list";
     import { BreadcrumbData, EntityListData } from "@/types";
     import Title from "@/components/Title.vue";
+    import { config } from "@/utils/config";
+    import Breadcrumb from "@/components/Breadcrumb.vue";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -15,22 +16,20 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
-        <div class="SharpEntityListPage" data-popover-boundary>
-            <div class="container">
-                <EntityList
-                    :entity-key="route().params.entityKey"
-                    :entity-list="entityList"
-                    module="entity-list"
-                >
-                    <template v-slot:action-bar="{ props, listeners }">
-                        <ActionBarList
-                            v-bind="props"
-                            :breadcrumb="breadcrumb.items"
-                            v-on="listeners"
-                        />
-                    </template>
-                </EntityList>
-            </div>
+        <div class="container">
+            <EntityList
+                :entity-key="route().params.entityKey"
+                :entity-list="entityList"
+                module="entity-list"
+            >
+                <template v-slot:title="{ count }">
+                    <EntityListTitle :count="count">
+                        <template v-if="config('sharp.display_breadcrumb')">
+                            <Breadcrumb :breadcrumb="breadcrumb" />
+                        </template>
+                    </EntityListTitle>
+                </template>
+            </EntityList>
         </div>
     </Layout>
 </template>
@@ -52,13 +51,9 @@
         methods: {
             handleQueryChanged(query) {
                 if(location.search !== stringifyQuery(query)) {
-                    this.$store.dispatch('setLoading', true);
                     router.visit(route('code16.sharp.list', route().params) + stringifyQuery(query), {
                         preserveState: true,
                         preserveScroll: true,
-                        onFinish: () => {
-                            this.$store.dispatch('setLoading', false);
-                        }
                     });
                 }
             },

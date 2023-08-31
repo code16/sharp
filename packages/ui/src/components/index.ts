@@ -1,4 +1,3 @@
-export { default as Breadcrumb } from './Breadcrumb.vue';
 export { default as Button } from './Button.vue';
 export { default as ClearButton } from './ClearButton.vue';
 export { default as NavSection } from './nav/NavSection.vue';
