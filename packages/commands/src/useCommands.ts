@@ -10,11 +10,9 @@ import CommandHandler from "./components/CommandHandler.vue";
 export function useCommands(
     commands: ConfigCommandsData,
     endpoints: Endpoints,
-    handlerComponent: Ref<InstanceType<typeof CommandHandler>>,
 ) {
-    const manager = new CommandManager(
+    return new CommandManager(
         commands,
         endpoints,
-        () => handlerComponent.value.handle()
     );
 }

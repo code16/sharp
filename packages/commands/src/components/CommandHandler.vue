@@ -36,10 +36,16 @@
         },
     };
 
-    defineExpose({
-        handle(data: CommandReturnData) {
-            handlers[data.action](data);
-        }
+    props.commands.on('commandReturn', (data: CommandReturnData) => {
+        handlers[data.action]?.(data);
+    });
+
+    const currentCommand = ref();
+    const currentCommandForm = ref();
+
+    props.commands.on('showForm', (command, form) => {
+        currentCommand.value = command;
+        currentCommandForm.value = form;
     });
 </script>
 
@@ -49,8 +55,8 @@
         @close="viewContent = null"
     />
     <CommandFormModal
-        :command="commands.currentCommand"
-        :form="commands.currentCommandForm"
-        @close="commands.currentCommand = null"
+        :command="currentCommand"
+        :form="currentCommandForm"
+        @close="currentCommand = null"
     />
 </template>

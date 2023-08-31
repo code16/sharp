@@ -27,10 +27,6 @@
     const { entityKey, instanceId } = route().params;
     const { isReordering, onEntityListReordering } = useReorderingLists();
     const commands = useCommands(show.config.commands, {
-        refresh() {
-            router.reload();
-        },
-    }, {
         postCommand: (command) => route('code16.sharp.api.show.command.instance', { entityKey, instanceId, commandKey: command.key }),
         getForm: (command, query) => instanceId
             ? route('code16.sharp.api.show.command.instance.form', { entityKey, instanceId, commandKey: command.key, ...query })
