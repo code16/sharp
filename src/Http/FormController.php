@@ -14,20 +14,22 @@ class FormController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
 
     public function __construct(
-        private SharpAuthorizationManager $sharpAuthorizationManager,
-        private SharpEntityManager $entityManager,
+        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
+        private readonly SharpEntityManager $entityManager,
     ) {
         parent::__construct();
     }
 
     public function create(string $uri, string $entityKey)
     {
+        $entity = $this->entityManager->entityFor($entityKey);
+        
         sharp_check_ability(
-            $this->entityManager->entityFor($entityKey)->hasShow() ? 'create' : 'view',
+            $entity->hasShow() ? 'create' : 'view',
             $entityKey,
         );
 
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 
         if($form instanceof SharpSingleForm) {
             return $this->edit($uri, $entityKey);
@@ -51,8 +53,6 @@ class FormController extends SharpProtectedController
             ],
         ];
 
-        // TODO handle breadcrumb
-
         return Inertia::render('Form', [
             'form' => $data,
             'breadcrumb' => BreadcrumbData::from([
@@ -63,13 +63,15 @@ class FormController extends SharpProtectedController
 
     public function edit(string $uri, string $entityKey, string $instanceId = null)
     {
+        $entity = $this->entityManager->entityFor($entityKey);
+        
         sharp_check_ability(
-            $this->entityManager->entityFor($entityKey)->hasShow() ? 'update' : 'view',
+            $entity->hasShow() ? 'update' : 'view',
             $entityKey,
             $instanceId
         );
 
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
@@ -95,8 +97,6 @@ class FormController extends SharpProtectedController
             ],
         ];
 
-        // TODO handle breadcrumb
-
         return Inertia::render('Form', [
             'form' => $data,
             'breadcrumb' => BreadcrumbData::from([
@@ -109,16 +109,17 @@ class FormController extends SharpProtectedController
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 
-        $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
-
-
+        $form = $this->entityManager
+            ->entityFor($entityKey)
+            ->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
+        
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
             || ($instanceId && $form instanceof SharpSingleForm),
             404,
         );
 
-        $form->validateRequest($entityKey);
+        $form->validateRequest();
 
         $form->updateInstance($instanceId, request()->all());
 
@@ -131,13 +132,13 @@ class FormController extends SharpProtectedController
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
-            return $this->update($entityKey);
+            return $this->update($uri, $entityKey);
         }
 
         sharp_check_ability('create', $entityKey);
         $form->buildFormConfig();
 
-        $form->validateRequest($entityKey);
+        $form->validateRequest();
         $instanceId = $form->storeInstance(request()->all());
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();

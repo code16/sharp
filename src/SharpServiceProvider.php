@@ -126,6 +126,7 @@ class SharpServiceProvider extends ServiceProvider
         ]);
 
         $this->app->register(ImageServiceProviderLaravelRecent::class);
+        $this->app->register(\Inertia\ServiceProvider::class);
     }
 
     protected function registerMiddleware(): void

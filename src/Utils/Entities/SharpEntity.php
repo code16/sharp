@@ -48,8 +48,8 @@ abstract class SharpEntity extends BaseSharpEntity
         } elseif (! $form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException("The form for the entity [{$this->entityKey}] was not found.");
         }
-
-        return app($form);
+        
+        return $form instanceof SharpForm ? $form : app($form);
     }
 
     final public function isActionProhibited(string $action): bool
@@ -74,9 +74,9 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->show;
     }
 
-    protected function getForm(): ?string
+    protected function getForm(): ?SharpForm
     {
-        return $this->form;
+        return app($this->form);
     }
 
     public function getMultiforms(): array

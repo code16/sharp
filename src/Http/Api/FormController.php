@@ -64,7 +64,7 @@ class FormController extends ApiController
         $form = $this->getFormInstance($entityKey);
         $this->checkFormImplementation($form, $instanceId);
 
-        $form->validateRequest($entityKey);
+        $form->validateRequest();
 
         $form->updateInstance($instanceId, request()->all());
 
@@ -85,7 +85,7 @@ class FormController extends ApiController
         sharp_check_ability('create', $entityKey);
         $form->buildFormConfig();
 
-        $form->validateRequest($entityKey);
+        $form->validateRequest();
         $instanceId = $form->storeInstance(request()->all());
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();

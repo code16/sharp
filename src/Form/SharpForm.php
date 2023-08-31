@@ -77,9 +77,9 @@ abstract class SharpForm
         return sizeof($data) ? $data : null;
     }
 
-    final public function validateRequest(string $entityKey): void
+    public function validateRequest(): void
     {
-        if ($formRequest = $this->getFormValidator($entityKey)) {
+        if ($formRequest = $this->getFormValidatorClass()) {
             // Validation is automatically called (FormRequest)
             app($formRequest);
         }
@@ -169,19 +169,7 @@ abstract class SharpForm
             }
         });
     }
-
-    /**
-     * Return the full classname of a FormRequest to be executed as validation.
-     */
-    final protected function getFormValidator(string $entityKey): ?string
-    {
-        if ($validator = $this->getFormValidatorClass()) {
-            return $validator;
-        }
-
-        return config("sharp.entities.{$entityKey}.validator");
-    }
-
+    
     /**
      * Display a notification next time entity list is shown.
      */
