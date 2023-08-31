@@ -6,7 +6,7 @@
     import Section from "@sharp/show/src/components/Section.vue";
     import { GlobalMessage, Breadcrumb, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
     import UnknownField from "@/components/dev/UnknownField.vue";
-    import Layout from "../Layouts/Layout.vue";
+    import Layout from "@/Layouts/Layout.vue";
     import { LocaleSelect } from "@sharp/form";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";

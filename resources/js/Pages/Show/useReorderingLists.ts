@@ -1,4 +1,4 @@
-import { computed, ref } from "vue/dist/vue";
+import { computed, ref } from "vue";
 
 
 export function useReorderingLists() {
