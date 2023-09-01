@@ -8,6 +8,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpValidator;
 use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Inertia\Testing\Assert;
 
 class FormControllerTest extends BaseApiTest
 {
@@ -24,14 +25,14 @@ class FormControllerTest extends BaseApiTest
     public function we_can_get_form_data_for_an_entity()
     {
         $this->buildTheWorld();
-
-        $this->getJson('/sharp/api/form/person/1')
-            ->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    'name' => 'John Wayne',
-                ],
-            ]);
+        $this->withoutExceptionHandling();
+        
+        $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Announcements/Index')
+                ->where('name', 'John Wayne')
+            );
     }
 
     /** @test */

@@ -21,17 +21,16 @@ abstract class SharpEntity extends BaseSharpEntity
             throw new SharpInvalidEntityKeyException("The list for the entity [{$this->entityKey}] was not found.");
         }
 
-        return app($list);
+        return $list instanceof SharpEntityList ? $list : app($list);
     }
 
     final public function getShowOrFail(): SharpShow
     {
-        throw_if(
-            ! $this->hasShow(),
-            new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found."),
-        );
+        if(! $show = $this->getShow()) {
+            throw new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found.");
+        }
 
-        return app($this->getShow());
+        return $show instanceof SharpShow ? $show : app($show);
     }
 
     final public function hasShow(): bool
@@ -48,8 +47,8 @@ abstract class SharpEntity extends BaseSharpEntity
         } elseif (! $form = $this->getForm()) {
             throw new SharpInvalidEntityKeyException("The form for the entity [{$this->entityKey}] was not found.");
         }
-
-        return app($form);
+        
+        return $form instanceof SharpForm ? $form : app($form);
     }
 
     final public function isActionProhibited(string $action): bool
@@ -62,21 +61,23 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->isSingle;
     }
 
-    protected function getList(): ?string
+    protected function getList(): ?SharpEntityList
     {
-        return $this->isSingle
-            ? throw new SharpInvalidEntityKeyException("The entity [{$this->entityKey}] is single, and does not have a list.")
-            : $this->list;
+        if($this->isSingle) {
+            throw new SharpInvalidEntityKeyException("The entity [{$this->entityKey}] is single, and does not have a list.");
+        }
+
+        return app($this->list);
     }
 
-    protected function getShow(): ?string
+    protected function getShow(): ?SharpShow
     {
-        return $this->show;
+        return app($this->show);
     }
 
-    protected function getForm(): ?string
+    protected function getForm(): ?SharpForm
     {
-        return $this->form;
+        return app($this->form);
     }
 
     public function getMultiforms(): array

@@ -12,10 +12,7 @@ class SharpBreadcrumb
 {
     protected ?array $data = null;
     
-    public function __construct(
-        protected CurrentSharpRequest $currentSharpRequest
-    ) {
-    }
+    public function __construct(protected CurrentSharpRequest $currentSharpRequest) {}
     
     public function getItems(array $data): array
     {
@@ -48,15 +45,16 @@ class SharpBreadcrumb
     
     private function getFrontTypeNameFor(string $type): string
     {
-        return [
-            's-list' => 'entityList',
+        return match ($type) {
+            's-list' => 'list',
             's-form' => 'form',
             's-show' => 'show',
             's-dashboard' => 'dashboard',
-        ][$type] ?? '';
+            default => '',
+        };
     }
     
-    private function getBreadcrumbLabelFor(object $item, bool $isLeaf)
+    private function getBreadcrumbLabelFor(object $item, bool $isLeaf): string
     {
         switch ($item->type) {
             case 's-list':
@@ -71,7 +69,7 @@ class SharpBreadcrumb
                 // A Form is always a leaf
                 $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth - 1];
                 
-                if ($previousItem->type === 's-show' /*&& isset($previousItem->instance)*/ && ! $this->isSameEntityKeys($previousItem->key, $item->key, true)) {
+                if ($previousItem->type === 's-show' && ! $this->isSameEntityKeys($previousItem->key, $item->key, true)) {
                     // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
                     return isset($item->instance)
                         ? trans('sharp::breadcrumb.form.edit_entity', [
@@ -94,7 +92,7 @@ class SharpBreadcrumb
      * Return first part of document title when needed :
      * {documentTitleLabel}, {entityLabel} | {site}.
      */
-    private function getDocumentTitleLabelFor(object $item, bool $isLeaf)
+    private function getDocumentTitleLabelFor(object $item, bool $isLeaf): ?string
     {
         if (! $isLeaf) {
             return null;

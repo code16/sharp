@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SharpUploadModelAttributeTransformerTest extends SharpEloquentBaseTest
+class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
 {
     use TestWithSharpUploadModel {
         getEnvironmentSetUp as protected traitGetEnvironmentSetUp;

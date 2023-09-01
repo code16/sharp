@@ -13,14 +13,12 @@ use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\Api\FormController as ApiFormController;
 use Code16\Sharp\Http\Api\FormUploadController;
-use Code16\Sharp\Http\Api\GlobalFilterController as ApiGlobalFilterController;
 use Code16\Sharp\Http\Api\SearchController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;
 use Code16\Sharp\Http\GlobalFilterController;
 use Code16\Sharp\Http\HomeController;
-use Code16\Sharp\Http\LangController;
 use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
 use Code16\Sharp\Http\ShowController;
@@ -44,7 +42,7 @@ Route::group([
 
     Route::get('/list/{entityKey}', [ApiEntityListController::class, 'show'])
         ->name('code16.sharp.api.list')
-        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
+        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list']);
 
     Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
@@ -92,15 +90,15 @@ Route::group([
 //        ->name('code16.sharp.api.form.create')
 //        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
 
-    Route::post('/form/{entityKey}', [ApiFormController::class, 'store'])
-        ->name('code16.sharp.api.form.store');
-
-    Route::get('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'edit'])
-        ->name('code16.sharp.api.form.edit')
-        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
-
-    Route::post('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'update'])
-        ->name('code16.sharp.api.form.update');
+//    Route::post('/form/{entityKey}', [ApiFormController::class, 'store'])
+//        ->name('code16.sharp.api.form.store');
+//
+//    Route::get('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'edit'])
+//        ->name('code16.sharp.api.form.edit')
+//        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
+//
+//    Route::post('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'update'])
+//        ->name('code16.sharp.api.form.update');
 
 //    Route::get('/filters', [ApiGlobalFilterController::class, 'index'])
 //        ->name('code16.sharp.api.filter.index');
