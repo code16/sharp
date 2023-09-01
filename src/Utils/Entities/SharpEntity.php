@@ -21,17 +21,14 @@ abstract class SharpEntity extends BaseSharpEntity
             throw new SharpInvalidEntityKeyException("The list for the entity [{$this->entityKey}] was not found.");
         }
 
-        return app($list);
+        return $list instanceof SharpEntityList ? $list : app($list);
     }
 
     final public function getShowOrFail(): SharpShow
     {
-        $show = $this->getShow();
-
-        throw_if(
-            ! $show,
-            new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found."),
-        );
+        if(! $show = $this->getShow()) {
+            throw new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found.");
+        }
 
         return $show instanceof SharpShow ? $show : app($show);
     }
@@ -64,11 +61,13 @@ abstract class SharpEntity extends BaseSharpEntity
         return $this->isSingle;
     }
 
-    protected function getList(): ?string
+    protected function getList(): ?SharpEntityList
     {
-        return $this->isSingle
-            ? throw new SharpInvalidEntityKeyException("The entity [{$this->entityKey}] is single, and does not have a list.")
-            : $this->list;
+        if($this->isSingle) {
+            throw new SharpInvalidEntityKeyException("The entity [{$this->entityKey}] is single, and does not have a list.");
+        }
+
+        return app($this->list);
     }
 
     protected function getShow(): ?SharpShow

@@ -11,11 +11,11 @@ function login()
     return test()->actingAs(new User);
 }
 
-function fakeFormFor(string $entityKey, $fakeImplementation)
+function fakeListFor(string $entityKey, $fakeImplementation)
 {
     app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
         ->entityFor($entityKey)
-        ->setForm($fakeImplementation);
+        ->setList($fakeImplementation);
 
     return test();
 }
@@ -25,6 +25,15 @@ function fakeShowFor(string $entityKey, $fakeImplementation)
     app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
         ->entityFor($entityKey)
         ->setShow($fakeImplementation);
+
+    return test();
+}
+
+function fakeFormFor(string $entityKey, $fakeImplementation)
+{
+    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
+        ->entityFor($entityKey)
+        ->setForm($fakeImplementation);
 
     return test();
 }

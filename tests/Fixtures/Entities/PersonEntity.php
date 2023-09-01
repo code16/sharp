@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Fixtures\Entities;
 
 use Closure;
+use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntity;
@@ -15,14 +16,15 @@ class PersonEntity extends SharpEntity
     protected string $entityKey = 'person';
     protected string $label = 'person';
     protected ?string $list = PersonList::class;
+    protected ?SharpEntityList $fakeList = null;
     protected ?string $form = PersonForm::class;
     protected ?SharpForm $fakeForm = null;
     protected ?string $show = PersonShow::class;
     protected ?SharpShow $fakeShow = null;
 
-    public function setList(string $list): self
+    public function setList(?SharpEntityList $list): self
     {
-        $this->list = $list;
+        $this->fakeList = $list;
 
         return $this;
     }
@@ -49,6 +51,11 @@ class PersonEntity extends SharpEntity
     protected function getShow(): SharpShow
     {
         return $this->fakeShow ?? parent::getShow();
+    }
+
+    protected function getList(): SharpEntityList
+    {
+        return $this->fakeList ?? parent::getList();
     }
 
     public function setValidator(string $validatorClass, ?string $subentity = null): self

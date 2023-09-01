@@ -24,7 +24,7 @@ beforeEach(function () {
     );
 });
 
-it('gets form data for an instance', function () {
+it('gets show data for an instance', function () {
     fakeShowFor('person', new class extends PersonShow {
         public function find($id): array
         {
