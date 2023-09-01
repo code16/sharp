@@ -17,3 +17,21 @@ declare global {
         config?: Config,
     ): string;
 }
+
+declare module '@vue/runtime-core' {
+    function route(
+        name?: undefined,
+        params?: RouteParamsWithQueryOverload | RouteParam,
+        absolute?: boolean,
+        config?: Config,
+    ): ZiggyRouter;
+    function route(
+        name: string,
+        params?: RouteParamsWithQueryOverload | RouteParam,
+        absolute?: boolean,
+        config?: Config,
+    ): string;
+    interface ComponentCustomProperties {
+        route: typeof route;
+    }
+}

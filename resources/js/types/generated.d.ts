@@ -185,6 +185,21 @@ export type FormConfigData = {
 export type FormData = {
   config: FormConfigData;
 };
+export type FormFieldType =
+  | "autocomplete"
+  | "check"
+  | "date"
+  | "daterange"
+  | "editor"
+  | "geolocation"
+  | "html"
+  | "list"
+  | "number"
+  | "select"
+  | "tags"
+  | "text"
+  | "textarea"
+  | "upload";
 export type FormLayoutColumnData = {
   tabbed: boolean;
 };

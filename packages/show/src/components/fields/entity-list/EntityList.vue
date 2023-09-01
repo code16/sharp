@@ -57,47 +57,48 @@
                @change="onListChanged"
                @reordering="$emit('reordering', $event)"
            >
-<!--               TODO action bar props / listeners-->
-               <template v-slot:action-bar="{ props, listeners }">
-                   <ActionBar
-                       class="ShowEntityListField__action-bar"
-                       v-bind="props"
-                       v-on="listeners"
-                       :collapsed="collapsed"
-                       :has-active-query="hasActiveQuery"
-                       :sticky="sticky"
-                   >
-                       <template v-if="collapsable">
-                           <div class="section__header section__header--collapsable position-relative">
-                               <div class="row align-items-center gx-0 h-100">
-                                   <div class="col-auto">
-                                       <details :open="!collapsed" @toggle="collapsed = !$event.target.open">
-                                           <summary class="stretched-link">
-                                               <span class="visually-hidden">{{ field.label }}</span>
-                                           </summary>
-                                       </details>
-                                   </div>
-                                   <div class="col">
-                                       <EntityListTitle :count="field.showCount ? props.count : null">
-                                           <h2 class="ShowEntityListField__label section__title mb-0">
-                                               {{ field.label }}
-                                           </h2>
-                                       </EntityListTitle>
-                                   </div>
+               <template v-slot:title="{ count }">
+                   <template v-if="collapsable">
+                       <div class="section__header section__header--collapsable position-relative">
+                           <div class="row align-items-center gx-0 h-100">
+                               <div class="col-auto">
+                                   <details :open="!collapsed" @toggle="collapsed = !$event.target.open">
+                                       <summary class="stretched-link">
+                                           <span class="visually-hidden">{{ field.label }}</span>
+                                       </summary>
+                                   </details>
+                               </div>
+                               <div class="col">
+                                   <EntityListTitle :count="field.showCount ? count : null">
+                                       <h2 class="ShowEntityListField__label section__title mb-0">
+                                           {{ field.label }}
+                                       </h2>
+                                   </EntityListTitle>
                                </div>
                            </div>
-                       </template>
-                       <template v-else>
-                           <div class="section__header d-grid">
-                               <EntityListTitle :count="field.showCount ? props.count : null">
-                                   <h2 class="ShowEntityListField__label section__title mb-0">
-                                       {{ field.label }}
-                                   </h2>
-                               </EntityListTitle>
-                           </div>
-                       </template>
-                   </ActionBar>
+                       </div>
+                   </template>
+                   <template v-else>
+                       <div class="section__header d-grid">
+                           <EntityListTitle :count="field.showCount ? count : null">
+                               <h2 class="ShowEntityListField__label section__title mb-0">
+                                   {{ field.label }}
+                               </h2>
+                           </EntityListTitle>
+                       </div>
+                   </template>
                </template>
+<!--               <template v-slot:action-bar="{ props, listeners }">-->
+<!--                   <ActionBar-->
+<!--                       class="ShowEntityListField__action-bar"-->
+<!--                       v-bind="props"-->
+<!--                       v-on="listeners"-->
+<!--                       :collapsed="collapsed"-->
+<!--                       :sticky="sticky"-->
+<!--                   >-->
+<!--                      -->
+<!--                   </ActionBar>-->
+<!--               </template>-->
            </EntityList>
        </FieldLayout>
    </div>

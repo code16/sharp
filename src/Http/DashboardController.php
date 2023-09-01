@@ -32,7 +32,7 @@ class DashboardController extends SharpProtectedController
             'fields' => $dashboard->dashboardMetaFields(),
         ];
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Dashboard/Dashboard', [
             'dashboard' => DashboardData::from($data),
         ]);
     }

@@ -2,6 +2,7 @@
     import { BreadcrumbData, MenuData, MenuItemData } from "@/types";
     import { usePage, Head } from "@inertiajs/vue3";
     import { config } from "@/utils/config";
+    import useMenu from "@/composables/useMenu";
 
     const props = defineProps<{
         entityKey?: string,
@@ -9,17 +10,10 @@
         prepend?: string,
     }>();
 
-    const menu = usePage().props.menu as MenuData;
+    const menu = useMenu();
 
     const currentBreadcrumbItem = props.breadcrumb?.items.at(-1);
-    const currentEntityKey = currentBreadcrumbItem?.entityKey ?? props.entityKey;
-    const currentEntityItem = currentEntityKey
-        ? menu.items
-            .map(item => [item, item.children])
-            .flat(2)
-            .filter(Boolean)
-            .find((item: MenuItemData) => item.entityKey === currentEntityKey)
-        : null;
+    const currentEntityItem = menu.getEntityItem(currentBreadcrumbItem?.entityKey ?? props.entityKey);
 </script>
 
 <template>

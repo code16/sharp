@@ -1,5 +1,5 @@
 import { store } from "../store/store";
-import { __, lang } from "./i18n";
+import { __ } from "./i18n";
 
 let modalId = 0;
 

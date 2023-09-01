@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts">
-    import { Dropdown,  DropdownItem, Search, Button, Breadcrumb } from '@sharp/ui';
+    import { Dropdown,  DropdownItem, Search, Button } from '@sharp/ui';
     import { SharpFilter } from '@sharp/filters';
 
     import MultiformDropdown from "./MultiformDropdown.vue";
@@ -129,7 +129,6 @@
             SharpFilter,
             Search,
             Button,
-            Breadcrumb,
         },
 
         props: {
