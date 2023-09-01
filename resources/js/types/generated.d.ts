@@ -184,6 +184,7 @@ export type FormConfigData = {
 };
 export type FormData = {
   config: FormConfigData;
+  data: { [key: string]: any };
 };
 export type FormFieldType =
   | "autocomplete"

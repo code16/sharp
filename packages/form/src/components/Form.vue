@@ -123,6 +123,7 @@
             },
             form: Object,
             formErrors: Object,
+            postFn: Function,
         },
 
         provide() {
@@ -350,12 +351,12 @@
             redirectToParentPage() {
                 location.href = getBackUrl(this.breadcrumb.items);
             },
-            async submit({ postFn } = {}) {
+            async submit() {
                 if (this.isUploading) {
                     return;
                 }
 
-                if(!postFn) {
+                if(!this.postFn) {
                     this.$emit('submit', this.serialize());
                     return;
                 }
@@ -363,8 +364,8 @@
                 this.setLoading(true);
 
                 const data = this.serialize();
-                const post = () => postFn
-                    ? postFn(data)
+                const post = () => this.postFn
+                    ? this.postFn(data)
                     : this.post(this.apiPath, data);
 
                 const response = await post()

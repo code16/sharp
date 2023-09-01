@@ -223,17 +223,17 @@
             <Loading small fade />
         </template>
 
-        <CommandFormModal
-            :command="currentCommand"
-            :entity-key="entityKey"
-            :instance-id="currentCommandInstanceId"
-            v-bind="commandFormProps"
-            v-on="commandFormListeners"
-        />
-        <CommandViewPanel
-            :content="commandViewContent"
-            @close="handleCommandViewPanelClosed"
-        />
+<!--        <CommandFormModal-->
+<!--            :command="currentCommand"-->
+<!--            :entity-key="entityKey"-->
+<!--            :instance-id="currentCommandInstanceId"-->
+<!--            v-bind="commandFormProps"-->
+<!--            v-on="commandFormListeners"-->
+<!--        />-->
+<!--        <CommandViewPanel-->
+<!--            :content="commandViewContent"-->
+<!--            @close="handleCommandViewPanelClosed"-->
+<!--        />-->
     </div>
 </template>
 
@@ -258,8 +258,6 @@
 
     import {
         CommandsDropdown,
-        CommandFormModal,
-        CommandViewPanel,
     } from '@sharp/commands';
 
     import EntityActions from "./EntityActions.vue";
@@ -284,8 +282,6 @@
             Modal,
             ModalSelect,
 
-            CommandFormModal,
-            CommandViewPanel,
             GlobalMessage,
 
             DropdownItem,

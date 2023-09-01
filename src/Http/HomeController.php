@@ -10,9 +10,9 @@ class HomeController extends SharpProtectedController
 {
     public function index()
     {
-//        if ($firstEntityUrl = $this->getFirstConfiguredEntityUrl()) {
-//            return redirect()->to($firstEntityUrl);
-//        }
+        if ($firstEntityUrl = $this->getFirstConfiguredEntityUrl()) {
+            return redirect()->to($firstEntityUrl);
+        }
 
         return Inertia::render('Welcome');
     }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import { BreadcrumbData, ShowData } from "@/types";
-    import { CommandFormModal, CommandViewPanel, CommandsDropdown } from '@sharp/commands';
+    import { BreadcrumbData, CommandData, ShowData } from "@/types";
+    import { WithCommands, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
     import { GlobalMessage, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
@@ -11,11 +11,13 @@
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
     import { Show } from '@sharp/show/src/Show';
-    import { showDeleteConfirm } from "@/utils/dialogs";
+    import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import Title from "@/components/Title.vue";
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
     import { useCommands } from "@sharp/commands/src/useCommands";
     import Breadcrumb from "@/components/Breadcrumb.vue";
+    import { api } from "@/api";
+    import { router } from "@inertiajs/vue3";
 
     const props = defineProps<{
         show: ShowData,
@@ -26,12 +28,32 @@
     const locale = ref(show.locales?.[0]);
     const { entityKey, instanceId } = route().params;
     const { isReordering, onEntityListReordering } = useReorderingLists();
-    const commands = useCommands(show.config.commands, {
-        postCommand: (command) => route('code16.sharp.api.show.command.instance', { entityKey, instanceId, commandKey: command.key }),
-        getForm: (command, query) => instanceId
-            ? route('code16.sharp.api.show.command.instance.form', { entityKey, instanceId, commandKey: command.key, ...query })
-            : route('code16.sharp.api.show.command.singleInstance.form', { entityKey, commandKey: command.key, ...query }),
-    });
+    const commands = useCommands();
+
+    function onCommand(command: CommandData) {
+        commands.send(command, {
+            postCommand: route('code16.sharp.api.show.command.instance', { entityKey, instanceId, commandKey: command.key }),
+            getForm: instanceId
+                ? route('code16.sharp.api.show.command.instance.form', { entityKey, instanceId, commandKey: command.key })
+                : route('code16.sharp.api.show.command.singleInstance.form', { entityKey, commandKey: command.key }),
+        });
+    }
+
+    function onStateChange(value) {
+        api.post(route('code16.sharp.api.show.state', { entityKey, instanceId }), { value })
+            .then(response => {
+                commands.handleCommandReturn(response.data);
+            })
+            .catch(error => {
+                const data = error.response?.data;
+                if(error.response?.status === 422) {
+                    showAlert(data.message, {
+                        title: __('sharp::modals.state.422.title'),
+                        isError: true,
+                    });
+                }
+            });
+    }
 
     async function onDelete() {
         if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
@@ -44,7 +66,7 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
-        <div class="ShowPage">
+        <WithCommands :commands="commands">
             <div class="container">
                 <div class="action-bar mt-4 mb-3">
                     <div class="row align-items-center gx-3">
@@ -67,7 +89,7 @@
                         <template v-if="show.config.state">
                             <div class="col-auto">
                                 <Dropdown
-                                    :show-caret="show.config.state.authorization"
+                                    :show-caret="!!show.config.state.authorization"
                                     outline
                                     right
                                     :disabled="!show.config.state.authorization"
@@ -77,7 +99,7 @@
                                         <span class="text-truncate">{{ show.instanceStateValue ? show.instanceStateValue.label : show.instanceState }}</span>
                                     </template>
                                     <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                        <DropdownItem :active="show.instanceState === stateValue.value" @click="handleStateChanged(stateValue.value)">
+                                        <DropdownItem :active="show.instanceState === stateValue.value" @click="onStateChange(stateValue.value)">
                                             <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
                                             <span class="text-truncate">{{ stateValue.label }}</span>
                                         </DropdownItem>
@@ -87,7 +109,7 @@
                         </template>
                         <template v-if="show.authorizedCommands?.flat().length || show.authorizations.delete">
                             <div class="col-auto">
-                                <CommandsDropdown outline :small="false" :commands="show.authorizedCommands" @select="handleCommandRequested">
+                                <CommandsDropdown outline :small="false" :commands="show.authorizedCommands" @select="onCommand">
                                     <template v-slot:text>
                                         {{ __('sharp::entity_list.commands.instance.label') }}
                                     </template>
@@ -145,7 +167,7 @@
                                     </template>
                                     <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
                                         <div class="col-auto align-self-end mb-2">
-                                            <CommandsDropdown :commands="show.sectionCommands(section)" @select="handleCommandRequested">
+                                            <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
                                                 <template v-slot:text>
                                                     {{ __('sharp::entity_list.commands.instance.label') }}
                                                 </template>
@@ -195,64 +217,6 @@
                     </template>
                 </div>
             </div>
-
-            <CommandFormModal
-                :command="currentCommand"
-                :entity-key="entityKey"
-                :instance-id="instanceId"
-                v-bind="commandFormProps"
-                v-on="commandFormListeners"
-            />
-            <CommandViewPanel
-                :content="commandViewContent"
-                @close="handleCommandViewPanelClosed"
-            />
-        </div>
+        </WithCommands>
     </Layout>
 </template>
-
-<script lang="ts">
-    import { showAlert } from 'sharp';
-    import { withCommands } from '@/mixins';
-    import { router } from "@inertiajs/vue3";
-
-    export default {
-        mixins: [withCommands],
-
-        methods: {
-            handleCommandRequested(command) {
-                this.sendCommand(command, {
-                    postCommand: data => this.$store.dispatch('show/postCommand', { command, data }),
-                    getForm: commandQuery => this.$store.dispatch('show/getCommandForm', { command, query: { ...commandQuery } }),
-                });
-            },
-            handleStateChanged(state) {
-                return this.$store.dispatch('show/postState', state)
-                    .then(data => {
-                        this.handleCommandActionRequested(data.action, data);
-                    })
-                    .catch(error => {
-                        const data = error.response?.data;
-                        if(error.response?.status === 422) {
-                            showAlert(data.message, {
-                                title: __('sharp::modals.state.422.title'),
-                                isError: true,
-                            });
-                        }
-                    });
-            },
-            handleRefreshCommand() {
-                router.reload();
-            },
-            initCommands() {
-                this.addCommandActionHandlers({
-                    'refresh': this.handleRefreshCommand,
-                });
-            },
-        },
-
-        beforeMount() {
-            this.initCommands();
-        },
-    }
-</script>
