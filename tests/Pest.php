@@ -19,3 +19,12 @@ function fakeFormFor(string $entityKey, $fakeImplementation)
 
     return test();
 }
+
+function fakeShowFor(string $entityKey, $fakeImplementation)
+{
+    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
+        ->entityFor($entityKey)
+        ->setShow($fakeImplementation);
+
+    return test();
+}

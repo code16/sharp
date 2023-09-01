@@ -14,7 +14,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
-//    $this->withoutExceptionHandling();
 
     config()->set(
         'sharp.entities.person',
@@ -139,7 +138,7 @@ it('returns configured form layout', function () {
         );
 });
 
-it('returns configuration', function () {
+it('returns form configuration', function () {
     fakeFormFor('person', new class extends PersonForm {
         public function buildFormConfig(): void
         {

@@ -26,12 +26,14 @@ abstract class SharpEntity extends BaseSharpEntity
 
     final public function getShowOrFail(): SharpShow
     {
+        $show = $this->getShow();
+
         throw_if(
-            ! $this->hasShow(),
+            ! $show,
             new SharpInvalidEntityKeyException("The show for the entity [{$this->entityKey}] was not found."),
         );
 
-        return app($this->getShow());
+        return $show instanceof SharpShow ? $show : app($show);
     }
 
     final public function hasShow(): bool
@@ -69,9 +71,9 @@ abstract class SharpEntity extends BaseSharpEntity
             : $this->list;
     }
 
-    protected function getShow(): ?string
+    protected function getShow(): ?SharpShow
     {
-        return $this->show;
+        return app($this->show);
     }
 
     protected function getForm(): ?SharpForm
