@@ -16,8 +16,8 @@ class EntityListController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
 
     public function __construct(
-        private SharpAuthorizationManager $sharpAuthorizationManager,
-        private SharpEntityManager $entityManager,
+        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
+        private readonly SharpEntityManager $entityManager,
     ) {
         parent::__construct();
     }

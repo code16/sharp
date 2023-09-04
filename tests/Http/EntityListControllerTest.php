@@ -1,5 +1,7 @@
 <?php
 
+use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonList;
 use \Illuminate\Contracts\Support\Arrayable;
@@ -100,14 +102,74 @@ it('allows to search for items', function () {
         );
 });
 
-//    /** @test */
-//    public function we_wont_get_entity_attribute_for_a_non_form_data()
-//    {
-//        $result = $this->json('get', '/sharp/api/list/person');
-//
-//        $this->assertArrayNotHasKey('job', $result->json()['data']['list']['items'][0]);
-//    }
-//
+it('filters out data which is not displayed', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function getListData(): array|Arrayable
+        {
+            return $this->transform([
+                ['id' => 1, 'name' => 'Marie Curie', 'job' => 'Physicist'],
+            ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->missing('entityList.data.list.items.0.job')
+        );
+});
+
+it('gets containers and layout', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        {
+            $fieldsContainer
+                ->addField(
+                    EntityListField::make('name')
+                        ->setLabel('Name')
+                        ->setWidth(6)
+                        ->setWidthOnSmallScreensFill()
+                        ->setSortable()
+                )
+                ->addField(
+                    EntityListField::make('job')
+                        ->setLabel('Job')
+                        ->setWidth(6)
+                        ->hideOnSmallScreens()
+                );
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.containers', 2)
+            ->has('entityList.containers.name', fn (Assert $name) => $name
+                ->where('key', 'name')
+                ->where('label', 'Name')
+                ->where('sortable', true)
+                ->etc()
+            )
+            ->has('entityList.containers.job', fn (Assert $job) => $job
+                ->where('key', 'job')
+                ->etc()
+            )
+            ->has('entityList.layout', 2)
+            ->has('entityList.layout.0', fn (Assert $name) => $name
+                ->where('key', 'name')
+                ->where('size', '6')
+                ->where('hideOnXS', false)
+                ->where('sizeXS', 'fill')
+            )
+            ->has('entityList.layout.1', fn (Assert $job) => $job
+                ->where('key', 'job')
+                ->where('size', '6')
+                ->where('hideOnXS', true)
+                ->etc()
+            )
+        );
+});
+
 //    /** @test */
 //    public function we_can_get_data_containers_for_an_entity()
 //    {
