@@ -18,54 +18,54 @@ class PersonShow extends SharpShow
         $showFields->addField(SharpShowTextField::make('name'));
     }
 
-    public function getInstanceCommands(): ?array
-    {
-        return [
-            'test_command' => new class extends InstanceCommand
-            {
-                public function label(): string
-                {
-                    return 'Label';
-                }
-
-                public function execute($instanceId, array $data = []): array
-                {
-                }
-
-                public function authorizeFor($instanceId): bool
-                {
-                    return $instanceId < 10;
-                }
-            },
-
-        ];
-    }
+//    public function getInstanceCommands(): ?array
+//    {
+//        return [
+//            'test_command' => new class extends InstanceCommand
+//            {
+//                public function label(): string
+//                {
+//                    return 'Label';
+//                }
+//
+//                public function execute($instanceId, array $data = []): array
+//                {
+//                }
+//
+//                public function authorizeFor($instanceId): bool
+//                {
+//                    return $instanceId < 10;
+//                }
+//            },
+//
+//        ];
+//    }
 
     public function buildShowConfig(): void
     {
-        $this
-            ->configureEntityState('state', new class extends EntityState
-            {
-                protected function buildStates(): void
-                {
-                    $this->addState('active', 'Label', 'blue');
-                }
-
-                protected function updateState($instanceId, $stateId): array
-                {
-                }
-
-                public function authorizeFor($instanceId): bool
-                {
-                    return $instanceId < 10;
-                }
-            });
+//        $this
+//            ->configureEntityState('state', new class extends EntityState
+//            {
+//                protected function buildStates(): void
+//                {
+//                    $this->addState('active', 'Label', 'blue');
+//                }
+//
+//                protected function updateState($instanceId, $stateId): array
+//                {
+//                }
+//
+//                public function authorizeFor($instanceId): bool
+//                {
+//                    return $instanceId < 10;
+//                }
+//            });
     }
 
     public function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('Identity', function (ShowLayoutSection $section) {
+            ->addSection('', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
                         $column->withSingleField('name');
