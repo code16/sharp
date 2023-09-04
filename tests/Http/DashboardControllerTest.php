@@ -1,108 +1,96 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\EntityState;
-use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
-use Code16\Sharp\Show\Fields\SharpShowTextField;
-use Code16\Sharp\Show\Layout\ShowLayout;
-use Code16\Sharp\Show\Layout\ShowLayoutColumn;
-use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonShow;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonSingleShow;
-use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Dashboard\Layout\DashboardLayout;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
+use Code16\Sharp\Dashboard\SharpDashboard;
+use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
+use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
+use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\TestDashboard;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
 
     config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
+        'sharp.entities.stats',
+        DashboardEntity::class,
     );
 });
 
-it('gets dashboard widgets', function () {
-    fakeShowFor('person', new class extends PersonShow {
-        public function find($id): array
+it('gets dashboard widgets, layout and data', function () {
+    fakeShowFor('stats', new class extends SharpDashboard {
+        protected function buildWidgets(WidgetsContainer $widgetsContainer): void
         {
-            return [
-                'name' => 'James Clerk Maxwell',
-            ];
+            $widgetsContainer
+                ->addWidget(
+                    SharpPanelWidget::make('panel')
+                        ->setInlineTemplate('<b>test</b>')
+                )
+                ->addWidget(
+                    SharpFigureWidget::make('figure')
+                );
+        }
+
+        protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
+        {
+            $dashboardLayout
+                ->addSection('section', function (DashboardLayoutSection $section) {
+                    $section
+                        ->addRow(function (DashboardLayoutRow $row) {
+                            $row
+                                ->addWidget(4, 'panel')
+                                ->addWidget(8, 'figure');
+                        });
+                });
+        }
+
+        protected function buildWidgetsData(): void
+        {
+            $this
+                ->setPanelData('panel', ['name' => 'Albert Einstein'])
+                ->setFigureData('figure', 200, '€', '+3%');
         }
     });
 
-    $this->get('/sharp/s-list/person/s-show/person/1')
+    $this->withoutExceptionHandling();
+
+    $this->get('/sharp/s-dashboard/stats')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('show.data.name', 'James Clerk Maxwell')
+            ->has('dashboard', fn (Assert $dashboard) => $dashboard
+                ->where('layout.sections.0.rows.0.0.key', 'panel')
+                ->where('layout.sections.0.rows.0.0.size', 4)
+                ->where('layout.sections.0.rows.0.1.key', 'figure')
+                ->where('layout.sections.0.rows.0.1.size', 8)
+                ->where('widgets.panel.key', 'panel')
+                ->where('widgets.figure.key', 'figure')
+                ->where('data.panel.data.name', 'Albert Einstein')
+                ->has('data.figure.data', fn (Assert $figure) => $figure
+                    ->where('figure', '200')
+                    ->where('unit', '€')
+                    ->where('evolution.value', '3%')
+                )
+                ->etc()
+            )
         );
 });
 
-///** @test */
-//public function we_can_get_dashboard_layout()
-//{
-//    $this->buildTheWorld();
-//
-//    $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
-//        ->assertOk()
-//        ->assertJson([
-//            'layout' => [
-//                'sections' => [
-//                    [
-//                        'key' => null,
-//                        'title' => '',
-//                        'rows' => [
-//                            [
-//                                ['key' => 'bars', 'size' => 12],
-//                            ], [
-//                                ['key' => 'panel', 'size' => 4],
-//                                ['key' => 'bars2', 'size' => 8],
-//                            ],
-//                        ],
-//                    ],
-//                ],
-//            ],
-//        ]);
-//}
-//
-///** @test */
-//public function we_can_get_dashboard_data()
-//{
-//    $this->buildTheWorld();
-//
-//    $this->getJson(route('code16.sharp.api.dashboard', 'personal_dashboard'))
-//        ->assertOk()
-//        ->assertJson([
-//            'data' => [
-//                'bars1' => [
-//                    'key' => 'bars1',
-//                    'datasets' => [
-//                        [
-//                            'data' => [10, 20, 30],
-//                            'label' => 'Bars 1',
-//                        ],
-//                    ],
-//                    'labels' => ['a', 'b', 'c'],
-//                ],
-//                'bars2' => [
-//                    'key' => 'bars2',
-//                    'datasets' => [
-//                        [
-//                            'data' => [10, 20, 30],
-//                            'label' => 'Bars 2',
-//                        ],
-//                    ],
-//                    'labels' => ['a', 'b', 'c'],
-//                ],
-//                'panel' => [
-//                    'key' => 'panel',
-//                    'data' => [
-//                        'name' => 'John Wayne',
-//                    ],
-//                ],
-//            ],
-//        ]);
-//}
+it('gets dashboard config', function () {
+    fakeShowFor('stats', new class extends TestDashboard {
+        public function buildDashboardConfig(): void
+        {
+            $this->configurePageAlert('alert');
+        }
+    });
+
+    $this->get('/sharp/s-dashboard/stats')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('dashboard.config.globalMessage.fieldKey')
+            ->etc()
+        );
+});
+

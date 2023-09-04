@@ -30,8 +30,8 @@ final class FigureWidgetData extends Data
     public function __construct(
         public string $key,
         public WidgetType $type,
-        public ?string $title,
-        public ?string $link,
+        public ?string $title = null,
+        public ?string $link = null,
     ) {
     }
 
