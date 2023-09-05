@@ -8,6 +8,7 @@ use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonSingleShow;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
@@ -253,5 +254,37 @@ it('returns commands authorization in config', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.config.commands.instance.0.0.authorization', false)
+        );
+});
+
+it('returns the valuated multiform attribute if configured', function () {
+    fakeShowFor('person', new class extends PersonShow {
+        public function buildShowConfig(): void
+        {
+            $this->configureMultiformAttribute('nobel');
+        }
+
+        public function find($id): array
+        {
+            return [
+                'id' => 1,
+                'name' => 'Marie Curie',
+                'nobel' => 'yes',
+            ];
+        }
+    });
+
+    app(SharpEntityManager::class)
+        ->entityFor('person')
+        ->setMultiforms([
+            'yes' => [PersonForm::class, 'With Nobel prize'],
+            'nope' => [PersonForm::class, 'No Nobel prize'],
+        ]);
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.config.multiformAttribute', 'nobel')
+            ->where('show.data.nobel', 'yes')
         );
 });

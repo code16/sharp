@@ -49,7 +49,7 @@ return [
                 : \App\Sharp\Demo2faNotificationHandler::class,
         ],
         'display_attribute' => 'name',
-        // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
+//         "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],
 
     'theme' => [
