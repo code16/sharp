@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -11,6 +12,13 @@ beforeEach(function () {
         PersonEntity::class,
     );
 });
+
+function setTestAuthGuard(): void
+{
+    auth()->extend('sharp', fn () => new TestAuthGuard());
+    config()->set('sharp.auth.guard', 'sharp');
+    config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
+}
 
 it('redirects guests to the login page', function () {
     $this->get('/sharp/s-list/person')
@@ -29,6 +37,79 @@ it('displays the login page', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('Auth/Login')
         );
+});
+
+it('allows guests to login', function () {
+    setTestAuthGuard();
+
+    $this
+        ->post('/sharp/login', [
+            'login' => 'test@example.org',
+            'password' => 'password'
+        ])
+        ->assertRedirect('/sharp');
+
+    expect(auth('sharp')->check())->toBeTrue();
+});
+
+it('does not allow to login with invalid payload', function () {
+    $this->post('/sharp/login')
+        ->assertSessionHasErrors(['login', 'password']);
+
+    $this->post('/sharp/login', ['login' => 'bob@example.org'])
+        ->assertSessionHasErrors(['password']);
+
+    $this->post('/sharp/login', ['password' => 'password'])
+        ->assertSessionHasErrors(['login']);
+});
+
+it('handles remember_me option', function () {
+    setTestAuthGuard();
+
+    config()->set('sharp.auth.suggest_remember_me', true);
+
+    $this
+        ->post('/sharp/login', [
+            'login' => 'test@example.org',
+            'password' => 'password',
+            'remember' => true,
+        ])
+        ->assertRedirect('/sharp');
+
+    expect(auth('sharp')->user()->shouldRemember)->toBeTrue();
+});
+
+it('does not allow remember_me option without proper config', function () {
+    setTestAuthGuard();
+
+    config()->set('sharp.auth.suggest_remember_me', false);
+
+    $this
+        ->post('/sharp/login', [
+            'login' => 'test@example.org',
+            'password' => 'password',
+            'remember' => true,
+        ])
+        ->assertRedirect('/sharp');
+
+    expect(auth('sharp')->user()->shouldRemember)->toBeFalse();
+});
+
+it('hits rate limiter if configured', function () {
+    setTestAuthGuard();
+
+    config()->set('sharp.auth.rate_limiting', ['enabled' => true, 'max_attempts' => 1]);
+
+    $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'bad'])
+        ->assertSessionHasErrors(['login' => trans('sharp::auth.invalid_credentials')]);
+
+    $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'too-many'])
+        ->assertSessionHasErrors('login');
+
+    expect(session()->get('errors')->first('login'))
+        ->toStartWith('Too many login attempts');
+
+    expect(auth('sharp')->user())->toBeNull();
 });
 
 it('allows users to logout', function () {
