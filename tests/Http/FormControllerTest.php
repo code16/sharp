@@ -9,6 +9,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonSingleForm;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -244,7 +245,6 @@ it('gets form data for an instance in a single form case', function () {
 });
 
 it('updates an instance on a single form case', function () {
-    $this->withoutExceptionHandling();
     config()->set(
         'sharp.entities.single-person',
         SinglePersonEntity::class,
@@ -255,4 +255,49 @@ it('updates an instance on a single form case', function () {
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirect('/sharp/s-show/single-person');
+});
+
+it('gets form data for an instance of a sub entity (multiforms case)', function () {
+    app(SharpEntityManager::class)
+        ->entityFor('person')
+        ->setMultiforms([
+            'nobelized' => [
+                new class extends PersonForm {
+                    public function find($id): array
+                    {
+                        return [
+                            'id' => 1,
+                            'name' => 'Marie Curie',
+                            'nobel' => 'nobelized',
+                        ];
+                    }
+                },
+                'With Nobel prize'
+            ],
+            'nope' => [
+                new class extends PersonForm {
+                    public function find($id): array
+                    {
+                        return [
+                            'id' => 2,
+                            'name' => 'Rosalind Franklin',
+                            'nobel' => 'nope',
+                        ];
+                    }
+                },
+                'No Nobel prize'
+            ],
+        ]);
+
+    $this->get('/sharp/s-list/person/s-form/person:nobelized/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.data.name', 'Marie Curie')
+        );
+
+    $this->get('/sharp/s-list/person/s-form/person:nope/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.data.name', 'Rosalind Franklin')
+        );
 });

@@ -269,7 +269,7 @@ it('returns the valuated multiform attribute if configured', function () {
             return [
                 'id' => 1,
                 'name' => 'Marie Curie',
-                'nobel' => 'yes',
+                'nobel' => 'nobelized',
             ];
         }
     });
@@ -277,7 +277,7 @@ it('returns the valuated multiform attribute if configured', function () {
     app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([
-            'yes' => [PersonForm::class, 'With Nobel prize'],
+            'nobelized' => [PersonForm::class, 'With Nobel prize'],
             'nope' => [PersonForm::class, 'No Nobel prize'],
         ]);
 
@@ -285,6 +285,6 @@ it('returns the valuated multiform attribute if configured', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('show.config.multiformAttribute', 'nobel')
-            ->where('show.data.nobel', 'yes')
+            ->where('show.data.nobel', 'nobelized')
         );
 });
