@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -264,4 +265,46 @@ it('allow to declare a localized page title field', function () {
 it('returns isSingle in config for single shows', function () {
     expect((new FakeSharpSingleShow())->showConfig(null))
         ->toHaveKey('isSingle', true);
+});
+
+it('allows to configure show instance command in sections', function () {
+    $show = new class extends FakeSharpShow
+    {
+        public function getInstanceCommands(): ?array
+        {
+            return [
+                'cmd1' => new class extends InstanceCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'test';
+                    }
+
+                    public function execute(mixed $instanceId, array $data = []): array
+                    {
+                        return [];
+                    }
+                },
+                'my-section' => [
+                    'cmd2' => new class extends InstanceCommand
+                    {
+                        public function label(): ?string
+                        {
+                            return 'test-2';
+                        }
+
+                        public function execute(mixed $instanceId, array $data = []): array
+                        {
+                            return [];
+                        }
+                    }
+                ],
+            ];
+        }
+    };
+
+    $show->buildShowConfig();
+
+    expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1');
+    expect($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
 });
