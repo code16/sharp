@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Http\Context;
 
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Code16\Sharp\Utils\Filters\Filter;
+use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
@@ -148,9 +150,11 @@ class CurrentSharpRequest
         return $current?->instanceId();
     }
 
-    final public function globalFilterFor(string $handlerClass): array|string|null
+    final public function globalFilterFor(string $handlerClassOrKey): array|string|null
     {
-        $handler = app($handlerClass);
+        $handler = class_exists($handlerClassOrKey)
+            ? app($handlerClassOrKey)
+            : app(GlobalFilters::class)->findFilter($handlerClassOrKey);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
