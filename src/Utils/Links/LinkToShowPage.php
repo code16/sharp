@@ -26,28 +26,21 @@ class LinkToShowPage extends SharpLinkTo
 
     public function renderAsUrl(): string
     {
-        // TODO refactor this
-        return '';
-
         if (isset($this->breadcrumbBuilder)) {
             return url(
                 sprintf(
                     '%s/%s/%s',
                     config('sharp.custom_url_segment', 'sharp'),
                     $this->breadcrumbBuilder->generateUri(),
-                    $this->generateUri()
+                    sprintf('s-show/%s/%s', $this->entityKey, $this->instanceId)
                 )
             );
         }
 
-        return route('code16.sharp.show', [
+        return route('code16.sharp.show.show', [
+            'uri' => sprintf('s-list/%s', $this->entityKey),
             'entityKey' => $this->entityKey,
-            'uri' => $this->generateUri(),
+            'instanceId' => $this->instanceId,
         ]);
-    }
-
-    protected function generateUri(): string
-    {
-        return sprintf('s-show/%s/%s', $this->entityKey, $this->instanceId);
     }
 }
