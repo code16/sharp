@@ -37,3 +37,12 @@ function fakeFormFor(string $entityKey, $fakeImplementation)
 
     return test();
 }
+
+function fakePolicyFor(string $entityKey, $fakeImplementation)
+{
+    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
+        ->entityFor($entityKey)
+        ->setPolicy($fakeImplementation);
+
+    return test();
+}

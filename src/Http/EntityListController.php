@@ -66,6 +66,7 @@ class EntityListController extends SharpProtectedController
         $authorizations = [
             'view' => [],
             'update' => [],
+            'delete' => [],
             'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
         ];
 
@@ -78,6 +79,9 @@ class EntityListController extends SharpProtectedController
                 }
                 if ($this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId)) {
                     $authorizations['update'][] = $instanceId;
+                }
+                if ($this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)) {
+                    $authorizations['delete'][] = $instanceId;
                 }
             });
 
@@ -92,24 +96,21 @@ class EntityListController extends SharpProtectedController
 
         if (! $forms = $this->entityManager->entityFor($entityKey)->getMultiforms()) {
             throw new SharpInvalidConfigException(
-                'The list for the entity '.$entityKey.' defines a multiform attribute ['
+                'The list for the entity ['.$entityKey.'] defines a multiform attribute ['
                 .$listConfig['multiformAttribute']
-                .' but the entity is not configured as multiform.'
+                .'] but the entity is not configured as multiform.'
             );
         }
 
         return collect($forms)
-            ->map(function ($value, $key) use ($listConfig, $listItems) {
-                $instanceIds = collect($listItems)
+            ->map(fn ($value, $key) => [
+                'key' => $key,
+                'label' => is_array($value) && sizeof($value) > 1 ? $value[1] : $key,
+                'instances' => collect($listItems)
                     ->where($listConfig['multiformAttribute'], $key)
-                    ->pluck($listConfig['instanceIdAttribute']);
-
-                return [
-                    'key' => $key,
-                    'label' => is_array($value) && sizeof($value) > 1 ? $value[1] : $key,
-                    'instances' => $instanceIds,
-                ];
-            })
+                    ->pluck($listConfig['instanceIdAttribute'])
+                    ->toArray(),
+            ])
             ->keyBy('key')
             ->all();
     }

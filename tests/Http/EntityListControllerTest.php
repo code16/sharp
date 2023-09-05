@@ -1,8 +1,11 @@
 <?php
 
+use Code16\Sharp\Auth\SharpEntityPolicy;
+use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonList;
 use \Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -170,57 +173,137 @@ it('gets containers and layout', function () {
         );
 });
 
+it('gets config', function () {
+    $this->withoutExceptionHandling();
+    fakeListFor('person', new class extends PersonList {
+        public function buildListConfig(): void
+        {
+            $this->configureSearchable()
+                ->configureDefaultSort('name')
+                ->configureDelete(hide: true);
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.config', fn (Assert $config) => $config
+                ->where('searchable', true)
+                ->where('defaultSort', 'name')
+                ->where('deleteHidden', true)
+                ->etc()
+            )
+        );
+});
+
+it('allows to reorder instances if configured', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function buildListConfig(): void
+        {
+            $this->configureReorderable(
+                new class implements ReorderHandler {
+                    public function reorder(array $ids): void
+                    {
+                        //
+                    }
+                }
+            );
+        }
+    });
+})->todo();
+
+it('gets authorizations of each instance', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+                ['id' => 3, 'name' => 'Albert Einstein'],
+            ];
+        }
+    });
+
+    fakePolicyFor('person', new class extends SharpEntityPolicy {
+        public function view($user, $instanceId): bool
+        {
+            return $instanceId != 3;
+        }
+        public function update($user, $instanceId): bool
+        {
+            return $instanceId == 1;
+        }
+        public function delete($user, $instanceId): bool
+        {
+            return $instanceId == 2;
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.authorizations', fn (Assert $config) => $config
+                ->where('create', true)
+                ->where('view', [1, 2])
+                ->where('update', [1])
+                ->where('delete', [2])
+            )
+        );
+});
+
+it('gets multiforms if configured', function () {
+    $this->withoutExceptionHandling();
+    fakeListFor('person', new class extends PersonList {
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie', 'nobel' => 'yes'],
+                ['id' => 2, 'name' => 'Rosalind Franklin', 'nobel' => 'nope'],
+            ];
+        }
+
+        public function buildListConfig(): void
+        {
+            $this->configureMultiformAttribute('nobel');
+        }
+    });
+
+    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
+        ->entityFor('person')
+        ->setMultiforms([
+            'yes' => [PersonForm::class, 'With Nobel prize'],
+            'nope' => [PersonForm::class, 'No Nobel prize'],
+        ]);
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.forms', 2)
+            ->has('entityList.forms.yes', fn (Assert $config) => $config
+                ->where('label', 'With Nobel prize')
+                ->where('instances', [1])
+                ->etc()
+            )
+            ->has('entityList.forms.nope', fn (Assert $config) => $config
+                ->where('label', 'No Nobel prize')
+                ->where('instances', [2])
+                ->etc()
+            )
+        );
+});
+
 //    /** @test */
-//    public function we_can_get_data_containers_for_an_entity()
+//    public function we_can_reorder_instances()
 //    {
-//        $this->json('get', '/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['containers' => [
-//                'name' => [
-//                    'key' => 'name',
-//                    'label' => 'Name',
-//                    'sortable' => true,
-//                    'html' => true,
-//                ], 'age' => [
-//                    'key' => 'age',
-//                    'label' => 'Age',
-//                    'sortable' => true,
-//                ],
-//            ]]);
-//    }
+//        $this->withoutExceptionHandling();
 //
-//    /** @test */
-//    public function we_can_get_list_layout_for_an_entity()
-//    {
-//        $this->getJson('/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['layout' => [
-//                [
-//                    'key' => 'name',
-//                    'size' => 6,
-//                    'sizeXS' => 'fill',
-//                    'hideOnXS' => false,
-//                ], [
-//                    'key' => 'age',
-//                    'size' => 6,
-//                    'sizeXS' => 6,
-//                    'hideOnXS' => true,
-//                ],
-//            ]]);
+//        $this
+//            ->postJson('/sharp/api/list/person/reorder', [
+//                'instances' => [3, 2, 1],
+//            ])
+//            ->assertOk();
 //    }
-//
-//    /** @test */
-//    public function we_can_get_list_config_for_an_entity()
-//    {
-//        $this->json('get', '/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['config' => [
-//                'instanceIdAttribute' => 'id',
-//                'searchable' => true,
-//                'paginated' => false,
-//            ]]);
-//    }
-//
+
 //    /** @test */
 //    public function we_can_get_notifications()
 //    {

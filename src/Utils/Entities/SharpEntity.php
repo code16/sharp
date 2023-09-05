@@ -67,17 +67,17 @@ abstract class SharpEntity extends BaseSharpEntity
             throw new SharpInvalidEntityKeyException("The entity [{$this->entityKey}] is single, and does not have a list.");
         }
 
-        return app($this->list);
+        return $this->list ? app($this->list) : null;
     }
 
     protected function getShow(): ?SharpShow
     {
-        return app($this->show);
+        return $this->show ? app($this->show) : null;
     }
 
     protected function getForm(): ?SharpForm
     {
-        return app($this->form);
+        return $this->form ? app($this->form) : null;
     }
 
     public function getMultiforms(): array

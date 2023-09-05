@@ -27,7 +27,7 @@ class EntityListController extends ApiController
     }
 
     /**
-     * Call for reorder instances.
+     * Reorder instances.
      */
     public function update(string $entityKey)
     {
@@ -56,13 +56,7 @@ class EntityListController extends ApiController
                 $impl = $this->getShowInstance($entityKey);
             } catch (SharpInvalidEntityKeyException $ex) {
                 // No Show Page implementation was defined for this entity
-
-                // Compatibility to v7: we avoid BC using the delete() implementation of the Form
-                // if defined. This workaround will be removed in v9.
-                $impl = $this->getFormInstance($entityKey);
-                if (! is_method_implemented_in_concrete_class($impl, 'delete')) {
-                    throw new SharpMethodNotImplementedException('The delete() method is not implemented, neither in the Entity List nor in the Show Page');
-                }
+                throw new SharpMethodNotImplementedException('The delete() method is not implemented, neither in the Entity List nor in the Show Page');
             }
         }
 
