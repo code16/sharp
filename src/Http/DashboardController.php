@@ -2,17 +2,13 @@
 
 namespace Code16\Sharp\Http;
 
-use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\Dashboard\DashboardData;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Inertia;
 
 class DashboardController extends SharpProtectedController
 {
-    public function __construct(
-        private SharpAuthorizationManager $sharpAuthorizationManager,
-        private SharpEntityManager $entityManager,
-    ) {
+    public function __construct(private SharpEntityManager $entityManager) {
         parent::__construct();
     }
 

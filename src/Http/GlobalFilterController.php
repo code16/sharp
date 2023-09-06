@@ -16,10 +16,7 @@ class GlobalFilterController extends SharpProtectedController
 
     public function update(string $filterKey): RedirectResponse
     {
-        $handler = collect(app(GlobalFilters::class)->getFilters())
-            ->map(fn (string $filterClass) => app($filterClass))
-            ->filter(fn (Filter $filter) => $filter->getKey() == $filterKey)
-            ->first();
+        $handler = app(GlobalFilters::class)->findFilter($filterKey);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 

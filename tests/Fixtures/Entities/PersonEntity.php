@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Tests\Fixtures\Entities;
 
 use Closure;
+use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
@@ -12,7 +13,7 @@ class PersonEntity extends SharpEntity
 {
     public ?string $validatorForTest = null;
     public array $multiformValidatorsForTest = [];
-    public array $multiformForTest = [];
+    public ?array $fakeMultiforms = null;
     protected string $entityKey = 'person';
     protected string $label = 'person';
     protected ?string $list = PersonList::class;
@@ -21,6 +22,7 @@ class PersonEntity extends SharpEntity
     protected ?SharpForm $fakeForm = null;
     protected ?string $show = PersonShow::class;
     protected ?SharpShow $fakeShow = null;
+    protected ?SharpEntityPolicy $fakePolicy = null;
 
     public function setList(?SharpEntityList $list): self
     {
@@ -71,7 +73,7 @@ class PersonEntity extends SharpEntity
 
     public function setMultiforms(array $multiform): self
     {
-        $this->multiformForTest = $multiform;
+        $this->fakeMultiforms = $multiform;
 
         return $this;
     }
@@ -85,14 +87,19 @@ class PersonEntity extends SharpEntity
 
     public function getMultiforms(): array
     {
-        return $this->multiformForTest;
+        return $this->fakeMultiforms ?? parent::getMultiforms();
     }
 
-    public function setPolicy(string $policy): self
+    public function setPolicy(SharpEntityPolicy $policy): self
     {
-        $this->policy = $policy;
+        $this->fakePolicy = $policy;
 
         return $this;
+    }
+
+    protected function getPolicy(): ?SharpEntityPolicy
+    {
+        return $this->fakePolicy ?? parent::getPolicy();
     }
 
     public function setProhibitedActions(array $prohibitedActions): self

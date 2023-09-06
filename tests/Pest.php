@@ -6,9 +6,9 @@ use Code16\Sharp\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
 
-function login()
+function login(?User $user = null)
 {
-    return test()->actingAs(new User);
+    return test()->actingAs($user ?: new User, config('sharp.auth.guard', 'web'));
 }
 
 function fakeListFor(string $entityKey, $fakeImplementation)
@@ -34,6 +34,15 @@ function fakeFormFor(string $entityKey, $fakeImplementation)
     app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
         ->entityFor($entityKey)
         ->setForm($fakeImplementation);
+
+    return test();
+}
+
+function fakePolicyFor(string $entityKey, $fakeImplementation)
+{
+    app(\Code16\Sharp\Utils\Entities\SharpEntityManager::class)
+        ->entityFor($entityKey)
+        ->setPolicy($fakeImplementation);
 
     return test();
 }

@@ -24,4 +24,13 @@ final class GlobalFilters implements Arrayable
             $this->appendFiltersToConfig($config);
         });
     }
+
+    public function findFilter(string $key): ?GlobalRequiredFilter
+    {
+        return collect($this->getFilters())
+            ->map(fn ($filter) => instanciate($filter))
+            ->each(fn (Filter $filter) => $filter->buildFilterConfig())
+            ->filter(fn (Filter $filter) => $filter->getKey() == $key)
+            ->first();
+    }
 }

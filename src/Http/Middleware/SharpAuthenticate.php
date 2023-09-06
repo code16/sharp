@@ -9,22 +9,16 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 class SharpAuthenticate extends BaseAuthenticate
 {
-    protected $auth;
-
-    public function __construct(Auth $auth)
-    {
-        parent::__construct($auth);
-    }
-
     public function handle($request, Closure $next, ...$guards)
     {
         try {
             $this->authenticate($request, $guards);
 
             if ($checkHandler = config('sharp.auth.check_handler')) {
-                if (! app($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
-                    throw new AuthenticationException();
-                }
+                throw_if(
+                    ! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user()),
+                    new AuthenticationException()
+                );
             }
         } catch (AuthenticationException $e) {
             if ($request->wantsJson()) {

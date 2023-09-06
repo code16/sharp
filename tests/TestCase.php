@@ -7,12 +7,14 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+//    use LazilyRefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
         
         $this->withoutVite();
-        
+
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
     }
 
@@ -23,8 +25,8 @@ class TestCase extends Orchestra
         ];
     }
 
-//    public function getEnvironmentSetUp($app)
-//    {
+    public function getEnvironmentSetUp($app)
+    {
 //        config()->set('database.default', 'testing');
-//    }
+    }
 }

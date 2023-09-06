@@ -10,9 +10,19 @@ function sharp_version(): string
     return \Code16\Sharp\SharpServiceProvider::VERSION;
 }
 
-/**
- * @return mixed
- */
+function instanciate($class)
+{
+    if (is_string($class)) {
+        return app($class);
+    }
+
+    if($class instanceof Closure) {
+        return $class();
+    }
+
+    return $class;
+}
+
 function sharp_user()
 {
     return auth()->user();

@@ -27,7 +27,8 @@ class SharpRedirectIfAuthenticated
     {
         if (auth()->guard($guard)->check()) {
             if ($checkHandler = config('sharp.auth.check_handler')) {
-                return app($checkHandler)->check(auth()->guard($guard)->user());
+                return instanciate($checkHandler)
+                    ->check(auth()->guard($guard)->user());
             }
 
             return true;
