@@ -127,10 +127,8 @@ trait HandleFilters
         return $this->getFilterHandlers()
             ->flatten()
 
-            // Only filters which aren't in the request
-            ->filter(function (Filter $handler) {
-                return ! request()->has("filter_{$handler->getKey()}");
-            })
+            // Only filters which aren't *valuated* in the request
+            ->filter(fn (Filter $handler) => ! request()->get('filter_' . $handler->getKey()))
 
             // Only required filters or retained filters with value saved in session
             ->filter(function (Filter $handler) {
