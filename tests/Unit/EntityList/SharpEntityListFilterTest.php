@@ -7,7 +7,7 @@ use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\FakeSharpEntityList;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('allows to configure filters with a key', function () {
     $list = new class extends FakeSharpEntityList

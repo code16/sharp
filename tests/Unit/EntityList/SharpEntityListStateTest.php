@@ -2,7 +2,7 @@
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\FakeSharpEntityList;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('gets list entity state config', function () {
     $list = new class extends FakeSharpEntityList

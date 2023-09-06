@@ -4,7 +4,7 @@ namespace Code16\Sharp\Tests\Unit\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\SharpEntityDefaultTestList;
 
 class SharpEntityListReorderTest extends SharpTestCase
 {

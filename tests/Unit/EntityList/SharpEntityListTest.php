@@ -3,7 +3,7 @@
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\FakeSharpEntityList;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Arrayable;
 
