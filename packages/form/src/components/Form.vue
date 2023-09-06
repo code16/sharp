@@ -1,6 +1,18 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import FormLayout from "./ui/FormLayout.vue";
+    import { getBackUrl } from "@/utils/breadcrumb";
+    import { FormData } from "@/types";
+
+    const props = defineProps<{
+        form: FormData,
+        entityKey: string,
+        instanceId: string | number,
+        noTabs: boolean,
+        showAlert: boolean,
+        formErrors: Record<string, string[]>,
+        postFn: Function,
+    }>();
 </script>
 
 <template>
@@ -9,23 +21,23 @@
             <div class="flex-1">
                 <slot name="title" />
             </div>
-            <template v-if="locales?.length">
+            <template v-if="form.locales?.length">
                 <LocaleSelect
                     outline
                     right
                     :locale="currentLocale"
-                    :locales="locales"
+                    :locales="form.locales"
                     @change="handleLocaleChanged"
                 />
             </template>
         </div>
 
         <template v-if="ready">
-            <template v-if="config.globalMessage">
+            <template v-if="form.config.globalMessage">
                 <GlobalMessage
-                    :options="config.globalMessage"
-                    :data="data"
-                    :fields="fields"
+                    :options="form.config.globalMessage"
+                    :data="form.data"
+                    :fields="form.fields"
                 />
             </template>
 
@@ -36,7 +48,7 @@
                 </div>
             </template>
 
-            <FormLayout :layout="layout" data-popover-boundary>
+            <FormLayout :layout="form.layout" data-popover-boundary>
                 <template v-slot:default="{ tab }">
                     <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
                         <FieldsLayout
@@ -48,7 +60,7 @@
                             <FieldDisplay
                                 :field-key="fieldLayout.key"
                                 :context-fields="transformedFields"
-                                :context-data="data"
+                                :context-data="form.data"
                                 :field-layout="fieldLayout"
                                 :locale="fieldLocale[fieldLayout.key]"
                                 :read-only="isReadOnly"
@@ -64,8 +76,45 @@
                     </Grid>
                 </template>
             </FormLayout>
-            <template v-if="!independant">
-                <BottomBar v-bind="actionBarProps" v-on="actionBarListeners" @submit="submit()" />
+
+            <template v-if="!postFn">
+                <div class="position-sticky bottom-0 px-4 py-3 bg-white border-top"
+                    :class="{ 'shadow': stuck }"
+                    v-sticky
+                    @stuck-change="stuck = $event.detail"
+                    style="z-index: 100; transition: box-shadow .25s ease-in-out"
+                >
+                    <div class="row justify-content-end align-items-center gx-3">
+                        <div class="col">
+                            <slot name="left"></slot>
+                        </div>
+                        <div class="col-auto">
+                            <Button :href="getBackUrl(breadcrumb.items)" outline>
+                                <template v-if="isReadOnly">
+                                    {{ __('sharp::action_bar.form.back_button') }}
+                                </template>
+                                <template v-else>
+                                    {{ __('sharp::action_bar.form.cancel_button') }}
+                                </template>
+                            </Button>
+                        </div>
+                        <template v-if="isCreation ? form.authorizations.create : form.authorizations.update">
+                            <div class="col-auto">
+                                <Button style="min-width: 6.5em" :disabled="isUploading || loading" @click="handleSubmitClicked">
+                                    <template v-if="isUploading">
+                                        {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                    </template>
+                                    <template v-else-if="isCreation">
+                                        {{ __('sharp::action_bar.form.submit_button.create') }}
+                                    </template>
+                                    <template v-else>
+                                        {{ __('sharp::action_bar.form.submit_button.update') }}
+                                    </template>
+                                </Button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
             </template>
         </template>
     </div>
@@ -73,13 +122,10 @@
 
 <script lang="ts">
     import {
-        getBackUrl,
-        logError,
         showAlert,
     } from "sharp";
 
     import { Button, Dropdown, DropdownItem, GlobalMessage, Grid } from '@sharp/ui';
-    import { DynamicView } from 'sharp/mixins';
     import FieldDisplay from "./FieldDisplay.vue";
 
     import FieldsLayout from './ui/FieldsLayout.vue';
@@ -109,23 +155,6 @@
             FieldDisplay,
         },
 
-        props: {
-            entityKey: String,
-            instanceId: [Number, String],
-
-            /// Extras props for customization
-            independant: Boolean,
-            ignoreAuthorizations: Boolean,
-            noTabs: Boolean,
-            showAlert: {
-                type: Boolean,
-                default: true,
-            },
-            form: Object,
-            formErrors: Object,
-            postFn: Function,
-        },
-
         provide() {
             return {
                 $form: this
@@ -148,7 +177,6 @@
 
                 fieldVisible: {},
                 uploadingFields: {},
-                curFieldsetId: 0,
             }
         },
         watch: {
@@ -162,12 +190,6 @@
             },
         },
         computed: {
-            apiPath() {
-
-                let path = `form/${this.entityKey}`;
-                if (this.instanceId) path += `/${this.instanceId}`;
-                return path;
-            },
             localized() {
                 return Array.isArray(this.locales) && !!this.locales.length;
             },
@@ -187,20 +209,8 @@
                     ? !this.authorizations.create
                     : !this.authorizations.update;
             },
-            // don't show loading on creation
-            synchronous() {
-                return this.independant;
-            },
             hasErrors() {
                 return Object.values(this.errors).some(error => !!error && !error[isLocal]);
-            },
-
-            baseEntityKey() {
-                return this.entityKey.split(':')[0];
-            },
-
-            downloadLinkBase() {
-                return `/download/${this.entityKey}/${this.instanceId}`;
             },
             transformedFields() {
                 return transformFields(this.fields, this.data);
@@ -298,16 +308,6 @@
                 if (this.noTabs) {
                     layout = { tabs: [{ columns: [{ fields: layout }] }] };
                 }
-                let curFieldsetId = 0;
-                const mapFields = layout => {
-                    if (layout.legend)
-                        layout.id = `${curFieldsetId++}#${layout.legend}`;
-                    else if (layout.fields)
-                        layout.fields.forEach(row => {
-                            row.forEach(mapFields);
-                        });
-                };
-                layout.tabs.forEach(t => t.columns.forEach(mapFields));
                 return layout;
             },
 
@@ -321,35 +321,9 @@
                 this.$emit('loading', loading);
                 this.loading = loading;
             },
-
-            get() {
-                return this.axiosInstance.get(this.apiPath, {
-                    params: this.apiParams
-                })
-                    .then(response => {
-                        this.mount(response.data);
-                        this.$emit('update:form', response.data);
-                        return response;
-                    })
-                    .catch(error => {
-                        this.$emit('error', error);
-                        return Promise.reject(error);
-                    });
-            },
             init() {
                 this.mount(this.form);
                 this.ready = true;
-            },
-            redirectForResponse(response, { replace } = {}) {
-                const url = response.data.redirectUrl;
-                if (replace) {
-                    location.replace(url);
-                } else {
-                    location.href = url;
-                }
-            },
-            redirectToParentPage() {
-                location.href = getBackUrl(this.breadcrumb.items);
             },
             async submit() {
                 if (this.isUploading) {
@@ -364,24 +338,12 @@
                 this.setLoading(true);
 
                 const data = this.serialize();
-                const post = () => this.postFn
-                    ? this.postFn(data)
-                    : this.post(this.apiPath, data);
 
-                const response = await post()
+                this.postFn(data)
                     .catch(this.handleError)
                     .finally(() => {
                         this.setLoading(false);
                     });
-
-                if (this.independant) {
-                    this.$emit('submit', response);
-                    return response;
-                }
-
-                this.setLoading(true);
-                this.$store.dispatch('setLoading', true);
-                this.redirectForResponse(response);
             },
             handleSubmitClicked() {
                 this.submit().catch(() => {

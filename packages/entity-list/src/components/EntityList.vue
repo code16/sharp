@@ -732,16 +732,6 @@
                     instanceId,
                 });
             },
-            tryParseNumber(val) {
-                if(Array.isArray(val)) {
-                    return val.map(this.tryParseNumber);
-                }
-                let n = Number(val);
-                return isNaN(Number(n)) ? val : n;
-            },
-            filterValueOrDefault(val, filter) {
-                return val != null && val !== '' ? this.tryParseNumber(val) : (filter.default || (filter.multiple?[]:null));
-            },
 
             /**
              * Dynamic view overrides
