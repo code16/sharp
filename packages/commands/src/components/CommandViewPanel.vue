@@ -1,6 +1,18 @@
+<script setup lang="ts">
+    import { CommandManager } from "../CommandManager";
+
+    defineProps<{
+        commands: CommandManager,
+    }>();
+</script>
+
 <template>
+<!--    TODO integration -->
     <div>
-        <div class="SharpViewPanel__glasspane" v-show="visible" @click="handleBackdropClicked"></div>
+        <div class="fixed inset-0 z-[900]"
+            v-show="commands.state.currentCommandReturn?.action === 'view'"
+            @click="commands.finish()"
+        ></div>
         <transition
             enter-class="SharpViewPanel--collapsed"
             enter-active-class="SharpViewPanel--expanding"
@@ -9,38 +21,14 @@
             leave-active-class="SharpViewPanel--collapsing"
             leave-to-class="SharpViewPanel--collapsed"
         >
-            <template v-if="visible">
-                <div class="SharpViewPanel">
-                    <iframe src="about:blank" v-srcdoc="content" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"></iframe>
+            <template v-if="commands.state.currentCommandReturn?.action === 'view'">
+                <div class="fixed top-0 left-0 bottom-0 w-5/6 bg-white z-[1000]">
+                    <iframe
+                        :srcdoc="commands.state.currentCommandReturn.html"
+                        sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"
+                    ></iframe>
                 </div>
             </template>
         </transition>
     </div>
 </template>
-
-<script>
-
-    export default {
-        name: 'SharpViewPanel',
-        props: {
-            content: String
-        },
-        computed:{
-            visible() {
-                return !!this.content;
-            },
-        },
-        methods: {
-            handleBackdropClicked() {
-                this.$emit('close');
-            },
-        },
-        directives: {
-            srcdoc: {
-                inserted(el, { value }) {
-                    el.contentWindow.document.write(value);
-                }
-            }
-        },
-    }
-</script>

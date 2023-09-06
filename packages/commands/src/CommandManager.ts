@@ -1,62 +1,144 @@
-import { CommandData, CommandReturnData, ConfigCommandsData, FormData } from "@/types";
+import { CommandData, CommandReturnData, FormData } from "@/types";
 import { api } from "@/api";
-import { showConfirm } from "@/utils/dialogs";
+import { showAlert, showConfirm } from "@/utils/dialogs";
 import { parseBlobJSONContent } from "@/utils/request";
-import { EventEmitter } from "@/utils/EventEmitter";
 import { AxiosResponse } from "axios";
+import { reactive } from "vue";
+import { __ } from "@/utils/i18n";
+import { router } from "@inertiajs/vue3";
+import { CommandReturnHandlers, CommandEndpoints, GetFormQuery } from "./types";
 
-export type Handlers = {
-    [Action in CommandReturnData['action']]: (data: Extract<CommandReturnData, { action: Action }>) => void | Promise<void>
-}
 
-export type Endpoints = {
-    postCommand: (commandKey: CommandData) => string
-    getForm: (command: CommandData, query?) => string
-}
+export class CommandManager {
+    commandReturnHandlers: CommandReturnHandlers;
 
-export class CommandManager extends EventEmitter<any> {
-    commands: ConfigCommandsData;
-    endpoints: Endpoints;
+    state = reactive<{
+        currentCommand?: CommandData,
+        currentCommandForm?: FormData,
+        currentCommandFormLoading?: boolean,
+        currentCommandReturn?: CommandReturnData,
+        currentCommandEndpoints?: CommandEndpoints,
+    }>({});
 
-    constructor(
-        commands: ConfigCommandsData,
-        endpoints: Endpoints,
-    ) {
-        super();
-        this.commands = commands;
-        this.endpoints = endpoints;
+    constructor(commandReturnHandlers?: Partial<CommandReturnHandlers>) {
+        this.commandReturnHandlers = {
+            ...this.defaultCommandReturnHandlers,
+            ...commandReturnHandlers,
+        }
     }
 
-    async send(command: CommandData) {
+    get defaultCommandReturnHandlers(): CommandReturnHandlers {
+        return {
+            info: async ({ message }) => {
+                await showAlert(message, {
+                    title: __('sharp::modals.command.info.title'),
+                });
+                this.finish();
+            },
+            link: ({ link }) => {
+                const url = new URL(link);
+                if(url.origin === location.origin) {
+                    router.visit(url.pathname + url.search);
+                } else {
+                    location.href = link;
+                }
+            },
+            reload: () => {
+                router.reload()
+            },
+            refresh: () => {
+                router.reload()
+            },
+            step: async (data) => {
+                this.state.currentCommandReturn = data;
+                this.state.currentCommandForm = await this.getForm({
+                    command_step: data.step,
+                });
+            },
+            view: (data) => {
+                this.state.currentCommandReturn = data;
+            },
+        };
+    }
+
+    async send(command: CommandData, endpoints: CommandEndpoints) {
+        this.state.currentCommand = command;
+        this.state.currentCommandEndpoints = endpoints;
+
         if(command.has_form) {
-            const form = await api.get(this.endpoints.getForm(command)).then(r => r.data);
-            this.emit('showForm', command, form);
+            this.state.currentCommandForm = await this.getForm();
             return;
         }
 
         if(command.confirmation) {
             if(! await showConfirm(command.confirmation)) {
+                this.finish();
                 return;
             }
         }
 
-        const response = await api.post(this.endpoints.postCommand(command)).then(r => r.data);
+        const response = await api.post(endpoints.postCommand, {
+            query: endpoints.query
+        }, {
+            responseType: 'blob'
+        });
 
         this.handleCommandResponse(response);
     }
 
-    async handleCommandResponse(response: AxiosResponse) {
+    finish() {
+        this.state.currentCommand = null;
+        this.state.currentCommandForm = null;
+        this.state.currentCommandFormLoading = false;
+        this.state.currentCommandReturn = null;
+        this.state.currentCommandEndpoints = null;
+    }
+
+    async handleCommandResponse(response: AxiosResponse): Promise<CommandReturnData | null> {
         if(response.data.type !== 'application/json') {
-            location.replace(URL.createObjectURL(response.data));
+            location.replace(URL.createObjectURL(response.data)); // download the file
             return null;
         }
 
         const data = await parseBlobJSONContent(response.data);
+
         await this.handleCommandReturn(data);
-        return data;
     }
 
     handleCommandReturn(data: CommandReturnData): void | Promise<void> {
-        this.emit('commandReturn', data);
+        return this.commandReturnHandlers[data.action]?.(data as any);
+    }
+
+    getForm(query?: GetFormQuery): Promise<FormData> {
+        this.state.currentCommandFormLoading = true;
+
+        return api.get(this.state.currentCommandEndpoints.getForm, {
+            params: {
+                ...query,
+                ...this.state.currentCommandEndpoints.query
+            }
+        })
+            .then(response => response.data)
+            .then(form => ({
+                ...form,
+                layout: { tabs: [{ columns: [{ fields:form.layout }] }] }
+            }))
+            .finally(() => {
+                this.state.currentCommandFormLoading = false;
+            });
+    }
+
+    async postForm(data: FormData['data']) {
+        const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
+            data,
+            query: this.state.currentCommandEndpoints.query,
+            command_step: this.state.currentCommandReturn?.action === 'step'
+                ? this.state.currentCommandReturn.step
+                : null,
+        }, {
+            responseType: 'blob',
+        });
+
+        this.handleCommandResponse(response);
     }
 }

@@ -1,23 +1,37 @@
+<script setup lang="ts">
+    import { Modal } from '@sharp/ui';
+    import { Form } from '@sharp/form';
+    import { CommandManager } from "../CommandManager";
+    import { ref } from "vue";
+
+    defineProps<{
+        commands: CommandManager,
+    }>();
+
+    const form = ref<InstanceType<typeof Form>>();
+</script>
+
 <template>
     <Modal
         modal-class="form-modal"
-        :visible="!!form"
-        :loading="loading"
-        :title="title"
-        :ok-title="confirmLabel"
-        @ok="handleSubmitButtonClicked"
-        @hidden="handleClosed"
+        :visible="!!commands.state.currentCommandForm || commands.state.currentCommandFormLoading"
+        :loading="commands.state.currentCommandFormLoading"
+        :title="commands.state.currentCommand?.modal_title ?? commands.state.currentCommand?.label"
+        :ok-title="commands.state.currentCommand?.modal_confirm_label"
+        @ok="form.submit()"
+        @hidden="commands.finish()"
     >
         <transition>
-            <template v-if="!!form">
+            <template v-if="!!commands.state.currentCommandForm">
                 <Form
-                    :entity-key="entityKey"
-                    :instance-id="instanceId"
-                    :form="command.form"
+                    :post-fn="commands.postForm"
+                    :entity-key="route().params.entityKey"
+                    :instance-id="route().params.instanceId"
+                    :form="commands.state.currentCommandForm"
                     :show-alert="false"
                     independant
                     ignore-authorizations
-                    @loading="handleLoadingChanged"
+                    @loading="commands.state.currentCommandFormLoading = $event"
                     style="transition-duration: 300ms"
                     ref="form"
                 />
@@ -25,46 +39,3 @@
         </transition>
     </Modal>
 </template>
-
-<script>
-    import { Modal, LoadingOverlay } from '@sharp/ui';
-    import { Form } from '@sharp/form';
-
-    export default {
-        components: {
-            Modal,
-            Form,
-            LoadingOverlay,
-        },
-        props: {
-            command: Object,
-            form: Object,
-            entityKey: String,
-            instanceId: [Number, String],
-            loading: Boolean,
-        },
-        computed: {
-            title() {
-                return this.command?.modal_title ?? this.command?.label;
-            },
-            confirmLabel() {
-                return this.command?.modal_confirm_label;
-            },
-        },
-        methods: {
-            submit(...args) {
-                return this.$refs.form.submit(...args);
-            },
-            handleSubmitButtonClicked(e) {
-                e.preventDefault();
-                this.$emit('submit', this);
-            },
-            handleClosed() {
-                this.$emit('close');
-            },
-            handleLoadingChanged(loading) {
-                this.$emit('update:loading', loading);
-            },
-        },
-    }
-</script>

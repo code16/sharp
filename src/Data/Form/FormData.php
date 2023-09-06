@@ -9,13 +9,16 @@ final class FormData extends Data
 {
     public function __construct(
         public FormConfigData $config,
+        /** @var array<string,mixed> */
+        public array $data,
     ) {
     }
-    
-    public static function from(array $config): self
+
+    public static function from(array $form): self
     {
         return new self(
-            config: FormConfigData::from($config['config']),
+            config: FormConfigData::from($form['config']),
+            data: $form['data'],
         );
     }
 }
