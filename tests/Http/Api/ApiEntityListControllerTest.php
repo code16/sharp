@@ -2,16 +2,9 @@
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
-use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\Enums\NotificationLevel;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonForm;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonList;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonShow;
-use \Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Inertia\Testing\AssertableInertia as Assert;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 
 beforeEach(function () {
     login();

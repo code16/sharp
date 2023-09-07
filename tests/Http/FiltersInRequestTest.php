@@ -4,8 +4,8 @@ use Code16\Sharp\EntityList\Filters\EntityListSelectFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectMultipleFilter;
 use Code16\Sharp\EntityList\Filters\EntityListSelectRequiredFilter;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonList;
-use \Illuminate\Contracts\Support\Arrayable;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Illuminate\Contracts\Support\Arrayable;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {

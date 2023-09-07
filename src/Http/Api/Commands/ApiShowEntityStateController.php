@@ -6,7 +6,7 @@ use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 use Code16\Sharp\Show\SharpSingleShow;
 
-class ShowInstanceStateController extends ApiController
+class ApiShowEntityStateController extends ApiController
 {
     use HandleCommandReturn;
 

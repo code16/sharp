@@ -3,9 +3,9 @@
 use Code16\Sharp\Http\Api\Commands\DashboardCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListEntityCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListInstanceCommandController;
-use Code16\Sharp\Http\Api\Commands\ApiEntityListInstanceStateController;
+use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityStateController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceCommandController;
-use Code16\Sharp\Http\Api\Commands\ShowInstanceStateController;
+use Code16\Sharp\Http\Api\Commands\ApiShowEntityStateController;
 use Code16\Sharp\Http\Api\DownloadController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsFormController;
@@ -45,7 +45,7 @@ Route::group([
     Route::delete('/list/{entityKey}/{instanceId}', [ApiEntityListController::class, 'delete'])
         ->name('code16.sharp.api.list.delete');
 
-    Route::post('/list/{entityKey}/state/{instanceId}', [ApiEntityListInstanceStateController::class, 'update'])
+    Route::post('/list/{entityKey}/state/{instanceId}', [ApiEntityListEntityStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
     Route::post('/list/{entityKey}/command/{commandKey}', [EntityListEntityCommandController::class, 'update'])
@@ -60,10 +60,6 @@ Route::group([
     Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [EntityListInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.instance.form');
 
-//    Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
-//        ->name('code16.sharp.api.show.show')
-//        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
-
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
 
@@ -75,7 +71,7 @@ Route::group([
     Route::get('/show/{entityKey}/command/{commandKey}/form', [ShowInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.show.command.singleInstance.form');
 
-    Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
+    Route::post('/show/{entityKey}/state/{instanceId?}', [ApiShowEntityStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
 
     Route::delete('/show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])

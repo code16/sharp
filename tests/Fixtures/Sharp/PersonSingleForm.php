@@ -1,16 +1,14 @@
 <?php
 
-namespace Code16\Sharp\Tests\Fixtures\Entities;
+namespace Code16\Sharp\Tests\Fixtures\Sharp;
 
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Form\SharpForm;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class PersonForm extends SharpForm
+class PersonSingleForm extends SharpSingleForm
 {
     public function buildFormFields(FieldsContainer $formFields): void
     {
@@ -24,13 +22,12 @@ class PersonForm extends SharpForm
         });
     }
 
-    public function find($id): array
+    protected function findSingle()
     {
-        return ['name' => 'John Wayne', 'job' => 'actor'];
+        return [];
     }
 
-    public function update($id, array $data)
+    protected function updateSingle(array $data)
     {
-        return 1;
     }
 }

@@ -4,8 +4,8 @@
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonList;
-use \Illuminate\Contracts\Support\Arrayable;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Illuminate\Contracts\Support\Arrayable;
 
 beforeEach(function () {
     login();

@@ -8,7 +8,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\TestDashboard;
+use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
