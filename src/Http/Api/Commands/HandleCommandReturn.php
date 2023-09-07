@@ -7,11 +7,16 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Show\SharpShow;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 trait HandleCommandReturn
 {
-    protected function returnCommandResult(SharpEntityList|SharpShow|SharpDashboard $commandContainer, array $returnedValue): \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\JsonResponse
+    protected function returnCommandResult(
+        SharpEntityList|SharpShow|SharpDashboard $commandContainer,
+        array $returnedValue
+    ): StreamedResponse|JsonResponse
     {
         if ($returnedValue['action'] == 'download') {
             return Storage::disk($returnedValue['disk'])
@@ -40,7 +45,11 @@ trait HandleCommandReturn
         return response()->json($returnedValue);
     }
 
-    protected function getInstanceCommandHandler(SharpEntityList|SharpShow $commandContainer, string $commandKey, mixed $instanceId): ?InstanceCommand
+    protected function getInstanceCommandHandler(
+        SharpEntityList|SharpShow $commandContainer,
+        string $commandKey,
+        mixed $instanceId
+    ): ?InstanceCommand
     {
         $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();

@@ -2,11 +2,13 @@
 
 namespace Code16\Sharp\Tests\Fixtures\Entities;
 
-use Closure;
 use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class PersonEntity extends SharpEntity
@@ -17,11 +19,11 @@ class PersonEntity extends SharpEntity
     protected string $entityKey = 'person';
     protected string $label = 'person';
     protected ?string $list = PersonList::class;
-    protected ?SharpEntityList $fakeList = null;
+    protected ?SharpEntityList $fakeList;
     protected ?string $form = PersonForm::class;
-    protected ?SharpForm $fakeForm = null;
+    protected ?SharpForm $fakeForm;
     protected ?string $show = PersonShow::class;
-    protected ?SharpShow $fakeShow = null;
+    protected ?SharpShow $fakeShow;
     protected ?SharpEntityPolicy $fakePolicy = null;
 
     public function setList(?SharpEntityList $list): self
@@ -34,6 +36,10 @@ class PersonEntity extends SharpEntity
     public function setShow(?SharpShow $show): self
     {
         $this->fakeShow = $show;
+        if($show === null) {
+            // Enforce show to be null
+            $this->show = null;
+        }
 
         return $this;
     }
@@ -45,17 +51,17 @@ class PersonEntity extends SharpEntity
         return $this;
     }
 
-    public function getForm(): SharpForm
+    public function getForm(): ?SharpForm
     {
         return $this->fakeForm ?? parent::getForm();
     }
 
-    protected function getShow(): SharpShow
+    protected function getShow(): ?SharpShow
     {
         return $this->fakeShow ?? parent::getShow();
     }
 
-    protected function getList(): SharpEntityList
+    protected function getList(): ?SharpEntityList
     {
         return $this->fakeList ?? parent::getList();
     }

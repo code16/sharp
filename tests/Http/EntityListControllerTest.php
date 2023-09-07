@@ -1,13 +1,14 @@
 <?php
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
-use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\Enums\NotificationLevel;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonForm;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonList;
-use \Illuminate\Contracts\Support\Arrayable;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
+use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -196,22 +197,6 @@ it('gets config', function () {
         );
 });
 
-it('allows to reorder instances if configured', function () {
-    fakeListFor('person', new class extends PersonList {
-        public function buildListConfig(): void
-        {
-            $this->configureReorderable(
-                new class implements ReorderHandler {
-                    public function reorder(array $ids): void
-                    {
-                        //
-                    }
-                }
-            );
-        }
-    });
-})->todo();
-
 it('gets authorizations of each instance', function () {
     fakeListFor('person', new class extends PersonList {
         public function getListData(): array|Arrayable
@@ -292,215 +277,67 @@ it('gets multiforms if configured', function () {
         );
 });
 
-//    /** @test */
-//    public function we_can_reorder_instances()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        $this
-//            ->postJson('/sharp/api/list/person/reorder', [
-//                'instances' => [3, 2, 1],
-//            ])
-//            ->assertOk();
-//    }
+it('handles notifications', function () {
+    (new PersonForm())->notify('my title')
+        ->setLevelSuccess()
+        ->setDetail('body')
+        ->setAutoHide(false);
 
-//    /** @test */
-//    public function we_can_get_notifications()
-//    {
-//        (new PersonSharpForm())->notify('title')
-//            ->setLevelSuccess()
-//            ->setDetail('body')
-//            ->setAutoHide(false);
-//
-//        $this->json('get', '/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['notifications' => [[
-//                'level' => 'success',
-//                'title' => 'title',
-//                'message' => 'body',
-//                'autoHide' => false,
-//            ]]]);
-//
-//        $this->json('get', '/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJsonMissing(['alert']);
-//
-//        (new PersonSharpForm())->notify('title1');
-//        (new PersonSharpForm())->notify('title2');
-//
-//        $this->json('get', '/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['notifications' => [[
-//                'title' => 'title1',
-//            ], [
-//                'title' => 'title2',
-//            ]]]);
-//    }
-//
-//    /** @test */
-//    public function invalid_entity_key_is_returned_as_404()
-//    {
-//        $this->getJson('/sharp/api/list/notanvalidentity')
-//            ->assertStatus(404);
-//    }
-//
-//    /** @test */
-//    public function we_can_reorder_instances()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        $this
-//            ->postJson('/sharp/api/list/person/reorder', [
-//                'instances' => [3, 2, 1],
-//            ])
-//            ->assertOk();
-//    }
-//
-//    /** @test */
-//    public function list_config_contains_hasShowPage_is_relevant()
-//    {
-//        $this->getJson('/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['config' => [
-//                'hasShowPage' => true,
-//            ]]);
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setShow(null);
-//
-//        $this->getJson('/sharp/api/list/person')
-//            ->assertOk()
-//            ->assertJson(['config' => [
-//                'hasShowPage' => false,
-//            ]]);
-//    }
-//
-//    /** @test */
-//    public function we_can_delete_an_instance_in_the_entity_list_if_delete_method_is_implemented()
-//    {
-//        $this->withoutExceptionHandling();
-//        $this->buildTheWorld();
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setList(PersonSharpEntityListWithDeletion::class);
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setShow(PersonSharpShowWithoutDeletion::class);
-//
-//        $this->deleteJson('/sharp/api/list/person/1')
-//            ->assertOk()
-//            ->assertJson([
-//                'ok' => true,
-//            ]);
-//    }
-//
-//    /** @test */
-//    public function we_delegate_deletion_to_the_show_page_if_exists()
-//    {
-//        $this->withoutExceptionHandling();
-//        $this->buildTheWorld();
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setList(PersonSharpEntityListWithoutDeletion::class);
-//
-//        $this->deleteJson('/sharp/api/list/person/1')
-//            ->assertOk()
-//            ->assertJson([
-//                'ok' => true,
-//            ]);
-//    }
-//
-//    /** @test */
-//    public function as_a_legacy_workaround_we_delegate_deletion_to_the_form_page_if_exists()
-//    {
-//        $this->withoutExceptionHandling();
-//        $this->buildTheWorld();
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setList(PersonSharpEntityListWithoutDeletion::class);
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setShow(null);
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setForm(PersonSharpFormWithDeletion::class);
-//
-//        $this->deleteJson('/sharp/api/list/person/1')
-//            ->assertOk()
-//            ->assertJson([
-//                'ok' => true,
-//            ]);
-//    }
-//
-//    /** @test */
-//    public function we_can_not_delete_an_instance_in_the_entity_list_without_authorization()
-//    {
-//        $this->buildTheWorld();
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setList(PersonSharpEntityListWithDeletion::class);
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setProhibitedActions(['delete']);
-//
-//        $this->deleteJson('/sharp/api/list/person/1')
-//            ->assertForbidden();
-//    }
-//
-//    /** @test */
-//    public function we_throw_an_exception_if_delete_is_not_implemented_and_there_is_no_show()
-//    {
-//        $this->buildTheWorld();
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setList(PersonSharpEntityListWithoutDeletion::class);
-//
-//        app(SharpEntityManager::class)
-//            ->entityFor('person')
-//            ->setShow(null);
-//
-//        $this->deleteJson('/sharp/api/list/person/1')
-//            ->assertStatus(500);
-//    }
-//}
-//
-//class PersonSharpEntityListWithDeletion extends PersonSharpEntityList
-//{
-//    public function delete(mixed $id): void
-//    {
-//    }
-//}
-//
-//// Just an empty list impl to be sure we don't call delete on it
-//class PersonSharpEntityListWithoutDeletion extends SharpEntityList
-//{
-//    public function getListData(): array|Arrayable
-//    {
-//        return [];
-//    }
-//}
-//
-//class PersonSharpShowWithoutDeletion extends PersonSharpShow
-//{
-//    public function delete(mixed $id): void
-//    {
-//        throw new Exception('Should not be called');
-//    }
-//}
-//
-//class PersonSharpFormWithDeletion extends PersonSharpForm
-//{
-//    public function delete(mixed $id): void
-//    {
-//    }
-//}
+    $this->withoutExceptionHandling();
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('notifications', 1)
+            ->has('notifications.0', fn (Assert $config) => $config
+                ->where('level', NotificationLevel::Success->value)
+                ->where('title', 'my title')
+                ->where('message', 'body')
+                ->where('autoHide', false)
+            )
+        );
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('notifications', 0)
+        );
+
+    (new PersonForm())->notify('title1');
+    (new PersonForm())->notify('title2');
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('notifications', 2)
+        );
+});
+
+it('returns a 404 with invalid entity key', function () {
+    $this->get('/sharp/s-list/not-a-valid-entity-key')
+        ->assertStatus(404);
+});
+
+it('handles hasShowPage in config', function () {
+    fakeShowFor('person', new PersonShow());
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.config', fn (Assert $config) => $config
+                ->where('hasShowPage', true)
+                ->etc()
+            )
+        );
+
+    fakeShowFor('person', null);
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('entityList.config', fn (Assert $config) => $config
+                ->where('hasShowPage', false)
+                ->etc()
+            )
+        );
+});

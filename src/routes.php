@@ -3,17 +3,16 @@
 use Code16\Sharp\Http\Api\Commands\DashboardCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListEntityCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListInstanceCommandController;
-use Code16\Sharp\Http\Api\Commands\EntityListInstanceStateController;
+use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityStateController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceCommandController;
-use Code16\Sharp\Http\Api\Commands\ShowInstanceStateController;
+use Code16\Sharp\Http\Api\Commands\ApiShowEntityStateController;
 use Code16\Sharp\Http\Api\DownloadController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsFormController;
-use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
+use Code16\Sharp\Http\Api\ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
-use Code16\Sharp\Http\Api\FormController as ApiFormController;
 use Code16\Sharp\Http\Api\FormUploadController;
-use Code16\Sharp\Http\Api\SearchController;
+use Code16\Sharp\Http\Api\ApiSearchController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;
@@ -30,10 +29,6 @@ Route::group([
     'prefix' => '/'.sharp_base_url_segment().'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
-    Route::get('/dashboard/{dashboardKey}', [\Code16\Sharp\Http\Api\DashboardController::class, 'show'])
-        ->name('code16.sharp.api.dashboard')
-        ->middleware(['sharp_api_append_breadcrumb']);
-
     Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [DashboardCommandController::class, 'show'])
         ->name('code16.sharp.api.dashboard.command.form');
 
@@ -47,10 +42,10 @@ Route::group([
     Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
 
-    Route::delete('/list/{entityKey}/{instanceId}', [EntityListController::class, 'delete'])
+    Route::delete('/list/{entityKey}/{instanceId}', [ApiEntityListController::class, 'delete'])
         ->name('code16.sharp.api.list.delete');
 
-    Route::post('/list/{entityKey}/state/{instanceId}', [EntityListInstanceStateController::class, 'update'])
+    Route::post('/list/{entityKey}/state/{instanceId}', [ApiEntityListEntityStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
     Route::post('/list/{entityKey}/command/{commandKey}', [EntityListEntityCommandController::class, 'update'])
@@ -65,10 +60,6 @@ Route::group([
     Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [EntityListInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.instance.form');
 
-//    Route::get('/show/{entityKey}/{instanceId?}', [ShowController::class, 'show'])
-//        ->name('code16.sharp.api.show.show')
-//        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_notifications', 'sharp_api_append_breadcrumb']);
-
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
 
@@ -80,7 +71,7 @@ Route::group([
     Route::get('/show/{entityKey}/command/{commandKey}/form', [ShowInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.show.command.singleInstance.form');
 
-    Route::post('/show/{entityKey}/state/{instanceId?}', [ShowInstanceStateController::class, 'update'])
+    Route::post('/show/{entityKey}/state/{instanceId?}', [ApiShowEntityStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
 
     Route::delete('/show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
@@ -106,7 +97,7 @@ Route::group([
 //    Route::post('/filters/{filterKey}', [ApiGlobalFilterController::class, 'update'])
 //        ->name('code16.sharp.api.filter.update');
 
-    Route::get('/search', [SearchController::class, 'index'])
+    Route::get('/search', [ApiSearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
 
     Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
@@ -157,6 +148,9 @@ Route::group([
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('code16.sharp.logout');
 
+    Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
+        ->name('code16.sharp.dashboard');
+
     Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
 
@@ -185,21 +179,6 @@ Route::group([
         Route::post('/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
-
-//    Route::get('/s-list/{uri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
-//        ->where('uri', '.*')
-//        ->name('code16.sharp.show');
-
-//    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
-//        ->where('uri', '.*')
-//        ->name('code16.sharp.form');
-
-//    Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
-//        ->where('uri', '.*')
-//        ->name('code16.sharp.single-show.subpage');
-
-    Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
-        ->name('code16.sharp.dashboard');
 
     Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');

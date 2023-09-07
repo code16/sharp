@@ -5,26 +5,26 @@ namespace Code16\Sharp\Http\Api;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 
-class EntityListController extends ApiController
+class ApiEntityListController extends ApiController
 {
-    public function show(string $entityKey)
-    {
-        sharp_check_ability('entity', $entityKey);
-
-        $list = $this->getListInstance($entityKey);
-        $list->buildListConfig();
-        $list->initQueryParams();
-
-        return response()->json([
-            'containers' => $list->fields(),
-            'layout' => $list->listLayout(),
-            'data' => $list->data(),
-            'fields' => $list->listMetaFields(),
-            'config' => $list->listConfig(
-                $this->entityManager->entityFor($entityKey)->hasShow(),
-            ),
-        ]);
-    }
+//    public function show(string $entityKey)
+//    {
+//        sharp_check_ability('entity', $entityKey);
+//
+//        $list = $this->getListInstance($entityKey);
+//        $list->buildListConfig();
+//        $list->initQueryParams();
+//
+//        return response()->json([
+//            'containers' => $list->fields(),
+//            'layout' => $list->listLayout(),
+//            'data' => $list->data(),
+//            'fields' => $list->listMetaFields(),
+//            'config' => $list->listConfig(
+//                $this->entityManager->entityFor($entityKey)->hasShow(),
+//            ),
+//        ]);
+//    }
 
     /**
      * Reorder instances.
@@ -37,15 +37,17 @@ class EntityListController extends ApiController
         $list->buildListConfig();
         $list->initQueryParams();
 
-        $list->reorderHandler()
-            ->reorder(request('instances'));
+        $list->reorderHandler()->reorder(request('instances'));
 
         return response()->json([
             'ok' => true,
         ]);
     }
 
-    public function delete(string $entityKey, string $instanceId = null)
+    /**
+     * Delete an instance.
+     */
+    public function delete(string $entityKey, string $instanceId)
     {
         sharp_check_ability('delete', $entityKey, $instanceId);
 

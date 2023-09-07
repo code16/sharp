@@ -6,7 +6,7 @@ use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\SharpEntityDefaultTestList;
 
 class SharpEntityListDeprecatedLayoutTest extends SharpTestCase
 {

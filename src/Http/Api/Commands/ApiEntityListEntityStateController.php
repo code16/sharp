@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Api\Commands;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
-class EntityListInstanceStateController extends ApiController
+class ApiEntityListEntityStateController extends ApiController
 {
     use HandleCommandReturn;
 

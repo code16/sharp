@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Fixtures\Entities;
+namespace Code16\Sharp\Tests\Fixtures\Sharp;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\SharpDashboard;

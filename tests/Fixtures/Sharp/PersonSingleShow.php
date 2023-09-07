@@ -1,8 +1,7 @@
 <?php
 
-namespace Code16\Sharp\Tests\Fixtures\Entities;
+namespace Code16\Sharp\Tests\Fixtures\Sharp;
 
-use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;

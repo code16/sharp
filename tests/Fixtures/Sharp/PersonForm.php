@@ -1,14 +1,14 @@
 <?php
 
-namespace Code16\Sharp\Tests\Fixtures\Entities;
+namespace Code16\Sharp\Tests\Fixtures\Sharp;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
-use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class PersonSingleForm extends SharpSingleForm
+class PersonForm extends SharpForm
 {
     public function buildFormFields(FieldsContainer $formFields): void
     {
@@ -22,12 +22,13 @@ class PersonSingleForm extends SharpSingleForm
         });
     }
 
-    protected function findSingle()
+    public function find($id): array
     {
-        return [];
+        return ['name' => 'John Wayne', 'job' => 'actor'];
     }
 
-    protected function updateSingle(array $data)
+    public function update($id, array $data)
     {
+        return 1;
     }
 }

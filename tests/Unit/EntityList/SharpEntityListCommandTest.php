@@ -3,7 +3,7 @@
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\FakeSharpEntityList;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('returns commands config', function () {
     $list = new class extends FakeSharpEntityList
