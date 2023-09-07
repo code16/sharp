@@ -196,22 +196,6 @@ it('gets config', function () {
         );
 });
 
-it('allows to reorder instances if configured', function () {
-    fakeListFor('person', new class extends PersonList {
-        public function buildListConfig(): void
-        {
-            $this->configureReorderable(
-                new class implements ReorderHandler {
-                    public function reorder(array $ids): void
-                    {
-                        //
-                    }
-                }
-            );
-        }
-    });
-})->todo();
-
 it('gets authorizations of each instance', function () {
     fakeListFor('person', new class extends PersonList {
         public function getListData(): array|Arrayable
@@ -292,17 +276,54 @@ it('gets multiforms if configured', function () {
         );
 });
 
-//    /** @test */
-//    public function we_can_reorder_instances()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        $this
-//            ->postJson('/sharp/api/list/person/reorder', [
-//                'instances' => [3, 2, 1],
-//            ])
-//            ->assertOk();
-//    }
+it('allows to reorder instances', function () {
+    $this->withoutExceptionHandling();
+    fakeListFor('person', new class extends PersonList {
+        public array $data = [
+            ['id' => 1, 'name' => 'Marie Curie', 'order' => 1],
+            ['id' => 2, 'name' => 'Rosalind Franklin', 'order' => 2],
+            ['id' => 3, 'name' => 'Niels Bohr', 'order' => 3]
+        ];
+
+        public function getListData(): array|Arrayable
+        {
+            return collect($this->data)
+                ->sortBy('order')
+                ->values()
+                ->all();
+        }
+
+        public function buildListConfig(): void
+        {
+            $this->configureReorderable(
+                new class($this->data) implements ReorderHandler {
+                    public function __construct(public array &$data)
+                    {
+                    }
+
+                    public function reorder(array $ids): void
+                    {
+                        $this->data = collect($this->data)
+                            ->map(fn ($item) => [
+                                'id' => $item['id'],
+                                'name' => $item['name'],
+                                'order' => array_search($item['id'], $ids) + 1,
+                            ])
+                            ->values()
+                            ->all();
+                    }
+                }
+            );
+        }
+    });
+
+    $this
+        ->post(
+            route('code16.sharp.list.reorder', 'person'),
+            ['instances' => [3, 2, 1]]
+        )
+        ->assertRedirect(route('code16.sharp.list', 'person'));
+});
 
 //    /** @test */
 //    public function we_can_get_notifications()
@@ -342,18 +363,6 @@ it('gets multiforms if configured', function () {
 //    {
 //        $this->getJson('/sharp/api/list/notanvalidentity')
 //            ->assertStatus(404);
-//    }
-//
-//    /** @test */
-//    public function we_can_reorder_instances()
-//    {
-//        $this->withoutExceptionHandling();
-//
-//        $this
-//            ->postJson('/sharp/api/list/person/reorder', [
-//                'instances' => [3, 2, 1],
-//            ])
-//            ->assertOk();
 //    }
 //
 //    /** @test */
@@ -471,36 +480,5 @@ it('gets multiforms if configured', function () {
 //
 //        $this->deleteJson('/sharp/api/list/person/1')
 //            ->assertStatus(500);
-//    }
-//}
-//
-//class PersonSharpEntityListWithDeletion extends PersonSharpEntityList
-//{
-//    public function delete(mixed $id): void
-//    {
-//    }
-//}
-//
-//// Just an empty list impl to be sure we don't call delete on it
-//class PersonSharpEntityListWithoutDeletion extends SharpEntityList
-//{
-//    public function getListData(): array|Arrayable
-//    {
-//        return [];
-//    }
-//}
-//
-//class PersonSharpShowWithoutDeletion extends PersonSharpShow
-//{
-//    public function delete(mixed $id): void
-//    {
-//        throw new Exception('Should not be called');
-//    }
-//}
-//
-//class PersonSharpFormWithDeletion extends PersonSharpForm
-//{
-//    public function delete(mixed $id): void
-//    {
 //    }
 //}

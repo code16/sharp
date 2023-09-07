@@ -11,7 +11,6 @@ use Code16\Sharp\Http\Api\Embeds\EmbedsController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsFormController;
 use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
-use Code16\Sharp\Http\Api\FormController as ApiFormController;
 use Code16\Sharp\Http\Api\FormUploadController;
 use Code16\Sharp\Http\Api\SearchController;
 use Code16\Sharp\Http\DashboardController;
@@ -30,9 +29,9 @@ Route::group([
     'prefix' => '/'.sharp_base_url_segment().'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
-    Route::get('/dashboard/{dashboardKey}', [\Code16\Sharp\Http\Api\DashboardController::class, 'show'])
-        ->name('code16.sharp.api.dashboard')
-        ->middleware(['sharp_api_append_breadcrumb']);
+//    Route::get('/dashboard/{dashboardKey}', [\Code16\Sharp\Http\Api\DashboardController::class, 'show'])
+//        ->name('code16.sharp.api.dashboard')
+//        ->middleware(['sharp_api_append_breadcrumb']);
 
     Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [DashboardCommandController::class, 'show'])
         ->name('code16.sharp.api.dashboard.command.form');
@@ -157,8 +156,14 @@ Route::group([
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('code16.sharp.logout');
 
+    Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
+        ->name('code16.sharp.dashboard');
+
     Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
+
+    Route::post('/list/{entityKey}/reorder', [EntityListController::class, 'update'])
+        ->name('code16.sharp.list.reorder');
 
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
@@ -185,21 +190,6 @@ Route::group([
         Route::post('/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
-
-//    Route::get('/s-list/{uri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
-//        ->where('uri', '.*')
-//        ->name('code16.sharp.show');
-
-//    Route::get('/s-list/{listEntityKey}/{uri}s-form/{entityKey}/{instanceId}', [FormController::class, 'show'])
-//        ->where('uri', '.*')
-//        ->name('code16.sharp.form');
-
-//    Route::get('/s-show/{entityKey}/{uri}', [WebDispatchController::class, 'index'])
-//        ->where('uri', '.*')
-//        ->name('code16.sharp.single-show.subpage');
-
-    Route::get('/s-dashboard/{dashboardKey}', [DashboardController::class, 'show'])
-        ->name('code16.sharp.dashboard');
 
     Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');

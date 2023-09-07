@@ -61,6 +61,22 @@ class EntityListController extends SharpProtectedController
         ]);
     }
 
+    /**
+     * Reorder instances
+     */
+    public function update(string $entityKey)
+    {
+        sharp_check_ability('entity', $entityKey);
+
+        $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
+        $list->buildListConfig();
+        $list->initQueryParams();
+
+        $list->reorderHandler()->reorder(request('instances'));
+
+        return redirect(route('code16.sharp.list', $entityKey));
+    }
+
     private function getAuthorizationsForEntityList(string $entityKey, array $listItems, array $listConfig): array
     {
         $authorizations = [

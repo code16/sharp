@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
@@ -176,14 +177,15 @@ it('allows to configure a global message field without data', function() {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['globalMessage'])->toEqual([
-        'fieldKey' => 'test-key',
-        'alertLevel' => null,
-    ]);
+    expect($list->listConfig()['globalMessage'])
+        ->toEqual([
+            'fieldKey' => 'test-key',
+            'alertLevel' => null,
+        ])
+        ->and($list->listMetaFields()['test-key'])->toEqual(
+            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray()
+        );
 
-    expect($list->listMetaFields()['test-key'])->toEqual(
-        SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray()
-    );
 });
 
 it('allows to configure a global message field with template data', function() {
@@ -221,7 +223,7 @@ it('allows to configure a global message field with alert level', function() {
     expect($list->listConfig()['globalMessage']['alertLevel'])->toEqual('danger');
 });
 
-it('we_can_configure_the_deletion_action_to_disallow_it', function() {
+it('allows to configure the deletion action to disallow it', function() {
     $list = new class extends FakeSharpEntityList
     {
         public function buildListConfig(): void
@@ -246,6 +248,26 @@ it('allows to configure the deletion action confirmation text', function() {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['deleteHidden'])->toBeFalse();
-    expect($list->listConfig()['deleteConfirmationText'])->toEqual('ok?');
+    expect($list->listConfig()['deleteHidden'])->toBeFalse()
+        ->and($list->listConfig()['deleteConfirmationText'])->toEqual('ok?');
+});
+
+it('allows to configure a reorder handler', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureReorderable(new class implements ReorderHandler
+            {
+                public function reorder(array $ids): void
+                {
+                }
+            });
+        }
+    };
+
+    $list->buildListConfig();
+
+    expect($list->listConfig()['reorderable'])->toBeTrue()
+        ->and($list->reorderHandler())->toBeInstanceOf(ReorderHandler::class);
 });
