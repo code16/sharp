@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Console\Dev;
 
 use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptCollector;
-use Code16\Sharp\Console\Dev\TypeScriptTransformer\DataTypeScriptTransformer;
+use Exception;
 use Illuminate\Support\Collection;
 use Spatie\TypeScriptTransformer\Collectors\DefaultCollector;
 use Spatie\TypeScriptTransformer\Collectors\EnumCollector;

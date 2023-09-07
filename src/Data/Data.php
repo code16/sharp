@@ -49,7 +49,7 @@ abstract class Data implements Arrayable
 
         foreach (static::$propertyCache[$class] as $property) {
             $name = $property->getName();
-            if(!empty($property->getAttributes(Optional::class)) && !isset($this->{$name})) {
+            if (!empty($property->getAttributes(Optional::class)) && !isset($this->{$name})) {
                 continue;
             }
             $values[$name] = $this->{$name};
