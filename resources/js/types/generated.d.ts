@@ -100,6 +100,7 @@ export type EmbedData = {
 export type EntityAuthorizationsData = {
   view: Array<number | string>;
   update: Array<number | string>;
+  delete: Array<number | string>;
   create: boolean;
 };
 export type EntityListConfigData = {
@@ -126,7 +127,7 @@ export type EntityListData = {
   };
   fields: { [key: string]: any };
   config: EntityListConfigData;
-  forms: Array<EntityListMultiformData>;
+  forms: { [key: string]: EntityListMultiformData };
   authorizations: EntityAuthorizationsData;
 };
 export type EntityListFieldData = {
@@ -288,9 +289,9 @@ export type PanelWidgetData = {
   value?: { key: string; data: { [key: string]: any } };
   key: string;
   type: WidgetType;
+  template: string;
   title: string | null;
   link: string | null;
-  template: string;
 };
 export type SelectFilterData = {
   value?: number | string | Array<number | string> | null;

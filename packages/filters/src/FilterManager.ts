@@ -62,7 +62,7 @@ export class FilterManager {
         );
     }
 
-    nextQuery(filter, value): Record<string, SerializedValue> {
+    nextQuery(filter: FilterData, value: FilterData['value']): Record<string, SerializedValue> {
         return this.getQueryParams(this.#nextValues(filter, value));
     }
 
