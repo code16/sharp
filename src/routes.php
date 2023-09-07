@@ -4,7 +4,7 @@ use Code16\Sharp\Http\Api\Commands\DashboardCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListEntityCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityStateController;
-use Code16\Sharp\Http\Api\Commands\ShowInstanceCommandController;
+use Code16\Sharp\Http\Api\Commands\ApiShowInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\ApiShowEntityStateController;
 use Code16\Sharp\Http\Api\DownloadController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsController;
@@ -60,15 +60,15 @@ Route::group([
     Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [EntityListInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.instance.form');
 
-    Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ShowInstanceCommandController::class, 'update'])
+    Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ApiShowInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.show.command.instance');
 
-    Route::get('/show/{entityKey}/command/{commandKey}/{instanceId}/form', [ShowInstanceCommandController::class, 'show'])
+    Route::get('/show/{entityKey}/command/{commandKey}/{instanceId}/form', [ApiShowInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.show.command.instance.form');
 
     // Specific route for single shows, because /show/{entityKey}/command/{commandKey}/{instanceId?}/data
     // does not work since instanceId is optional but not the last segment.
-    Route::get('/show/{entityKey}/command/{commandKey}/form', [ShowInstanceCommandController::class, 'show'])
+    Route::get('/show/{entityKey}/command/{commandKey}/form', [ApiShowInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.show.command.singleInstance.form');
 
     Route::post('/show/{entityKey}/state/{instanceId?}', [ApiShowEntityStateController::class, 'update'])

@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Api\Commands;
 use Code16\Sharp\Http\Api\ApiController;
 use Code16\Sharp\Show\SharpSingleShow;
 
-class ShowInstanceCommandController extends ApiController
+class ApiShowInstanceCommandController extends ApiController
 {
     use HandleCommandReturn, HandleCommandForm;
 
