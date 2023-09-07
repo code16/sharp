@@ -6,7 +6,7 @@ use Code16\Sharp\Search\SearchResultSet;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\StringUtil;
 
-class SearchController extends ApiController
+class ApiSearchController extends ApiController
 {
     public function index()
     {

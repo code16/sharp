@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils;
 
+use Code16\Sharp\Enums\NotificationLevel;
+
 class SharpNotification
 {
     protected string $id;
@@ -13,7 +15,7 @@ class SharpNotification
 
         $notifications[$this->id] = [
             'title' => $title,
-            'level' => 'info',
+            'level' => NotificationLevel::Info,
             'message' => null,
             'autoHide' => true,
         ];
@@ -31,28 +33,28 @@ class SharpNotification
     public function setLevelSuccess(): self
     {
         return $this->update([
-            'level' => 'success',
+            'level' => NotificationLevel::Success,
         ]);
     }
 
     public function setLevelInfo(): self
     {
         return $this->update([
-            'level' => 'info',
+            'level' => NotificationLevel::Info,
         ]);
     }
 
     public function setLevelWarning(): self
     {
         return $this->update([
-            'level' => 'warning',
+            'level' => NotificationLevel::Warning,
         ]);
     }
 
     public function setLevelDanger(): self
     {
         return $this->update([
-            'level' => 'danger',
+            'level' => NotificationLevel::Danger,
         ]);
     }
 

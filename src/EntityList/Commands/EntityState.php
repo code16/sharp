@@ -67,5 +67,5 @@ abstract class EntityState extends InstanceCommand
      * @param  string  $stateId
      * @return mixed
      */
-    abstract protected function updateState($instanceId, string $stateId): array;
+    abstract protected function updateState($instanceId, string $stateId): ?array;
 }

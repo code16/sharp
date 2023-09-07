@@ -3,16 +3,16 @@
 use Code16\Sharp\Http\Api\Commands\DashboardCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListEntityCommandController;
 use Code16\Sharp\Http\Api\Commands\EntityListInstanceCommandController;
-use Code16\Sharp\Http\Api\Commands\EntityListInstanceStateController;
+use Code16\Sharp\Http\Api\Commands\ApiEntityListInstanceStateController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\ShowInstanceStateController;
 use Code16\Sharp\Http\Api\DownloadController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsController;
 use Code16\Sharp\Http\Api\Embeds\EmbedsFormController;
-use Code16\Sharp\Http\Api\EntityListController as ApiEntityListController;
+use Code16\Sharp\Http\Api\ApiEntityListController;
 use Code16\Sharp\Http\Api\FilesController;
 use Code16\Sharp\Http\Api\FormUploadController;
-use Code16\Sharp\Http\Api\SearchController;
+use Code16\Sharp\Http\Api\ApiSearchController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;
@@ -29,10 +29,6 @@ Route::group([
     'prefix' => '/'.sharp_base_url_segment().'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
-//    Route::get('/dashboard/{dashboardKey}', [\Code16\Sharp\Http\Api\DashboardController::class, 'show'])
-//        ->name('code16.sharp.api.dashboard')
-//        ->middleware(['sharp_api_append_breadcrumb']);
-
     Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [DashboardCommandController::class, 'show'])
         ->name('code16.sharp.api.dashboard.command.form');
 
@@ -46,10 +42,10 @@ Route::group([
     Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
 
-    Route::delete('/list/{entityKey}/{instanceId}', [EntityListController::class, 'delete'])
+    Route::delete('/list/{entityKey}/{instanceId}', [ApiEntityListController::class, 'delete'])
         ->name('code16.sharp.api.list.delete');
 
-    Route::post('/list/{entityKey}/state/{instanceId}', [EntityListInstanceStateController::class, 'update'])
+    Route::post('/list/{entityKey}/state/{instanceId}', [ApiEntityListInstanceStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
     Route::post('/list/{entityKey}/command/{commandKey}', [EntityListEntityCommandController::class, 'update'])
@@ -105,7 +101,7 @@ Route::group([
 //    Route::post('/filters/{filterKey}', [ApiGlobalFilterController::class, 'update'])
 //        ->name('code16.sharp.api.filter.update');
 
-    Route::get('/search', [SearchController::class, 'index'])
+    Route::get('/search', [ApiSearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
 
     Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
@@ -161,9 +157,6 @@ Route::group([
 
     Route::get('/s-list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.list');
-
-    Route::post('/list/{entityKey}/reorder', [EntityListController::class, 'update'])
-        ->name('code16.sharp.list.reorder');
 
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
