@@ -6,6 +6,8 @@
 
     defineProps<{
         commands: CommandManager,
+        entityKey: string,
+        instanceId: string | number,
     }>();
 
     const form = ref<InstanceType<typeof Form>>();
@@ -25,8 +27,8 @@
             <template v-if="!!commands.state.currentCommandForm">
                 <Form
                     :post-fn="commands.postForm"
-                    :entity-key="route().params.entityKey"
-                    :instance-id="route().params.instanceId"
+                    :entity-key="commands.state.currentCommandEndpoints.entityKey"
+                    :instance-id="commands.state.currentCommandEndpoints.instanceId"
                     :form="commands.state.currentCommandForm"
                     :show-alert="false"
                     independant

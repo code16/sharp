@@ -83,7 +83,7 @@ export class CommandManager {
             responseType: 'blob'
         });
 
-        this.handleCommandResponse(response);
+        await this.handleCommandResponse(response);
     }
 
     finish() {

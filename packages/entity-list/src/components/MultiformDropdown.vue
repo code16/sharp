@@ -43,7 +43,6 @@
             },
         },
         methods: {
-            __,
             handleSelected(form) {
                 this.$emit('select', form);
             }

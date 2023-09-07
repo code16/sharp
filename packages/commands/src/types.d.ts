@@ -12,4 +12,7 @@ export type CommandEndpoints = {
     postCommand: string
     getForm: string
     query?: object
+
+    entityKey: string
+    instanceId?: string | number
 }

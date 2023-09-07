@@ -88,10 +88,10 @@ class EntityListController extends SharpProtectedController
         return $authorizations;
     }
 
-    private function getMultiformDataForEntityList(string $entityKey, array $listItems, array $listConfig): array
+    private function getMultiformDataForEntityList(string $entityKey, array $listItems, array $listConfig): ?array
     {
         if ($listConfig['multiformAttribute'] === null) {
-            return [];
+            return null;
         }
 
         if (! $forms = $this->entityManager->entityFor($entityKey)->getMultiforms()) {

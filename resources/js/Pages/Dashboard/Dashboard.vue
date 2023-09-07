@@ -19,11 +19,10 @@
     }>();
 
     const filters = useFilters(props.dashboard.config.filters);
+
     filters.setValuesFromQuery(parseQuery(location.search));
 
-    console.log(parseQuery(location.search), filters);
-
-    function onFilterChanged(filter: FilterData, value) {
+    function onFilterChanged(filter: FilterData, value: FilterData['value']) {
         router.get(route('code16.sharp.dashboard', {
             dashboardKey: route().params.dashboardKey,
         }) + stringifyQuery({
@@ -55,7 +54,7 @@
                                         <div class="col-auto">
                                             <SharpFilter
                                                 :filter="filter"
-                                                :value="filters.values?.[filter.key]"
+                                                :value="filters.values[filter.key]"
                                                 @input="onFilterChanged(filter, $event)"
                                             />
                                         </div>

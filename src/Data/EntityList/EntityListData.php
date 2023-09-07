@@ -24,7 +24,7 @@ final class EntityListData extends Data
         /** @var array<string,mixed> */
         public array $fields,
         public EntityListConfigData $config,
-        /** @var DataCollection<EntityListMultiformData> */
+        /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
         public EntityAuthorizationsData $authorizations,
     ) {

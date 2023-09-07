@@ -36,6 +36,8 @@
             getForm: instanceId
                 ? route('code16.sharp.api.show.command.instance.form', { entityKey, instanceId, commandKey: command.key })
                 : route('code16.sharp.api.show.command.singleInstance.form', { entityKey, commandKey: command.key }),
+            entityKey,
+            instanceId,
         });
     }
 
