@@ -3,20 +3,18 @@ import {
     ConfigCommandsData,
     EntityAuthorizationsData,
     EntityListConfigData,
-    EntityListData,
+    EntityListData, EntityListDataData,
     EntityListFieldData, EntityListFieldLayoutData, EntityListMultiformData, FilterData,
     ShowHtmlFieldData
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
-import { data } from "autoprefixer";
-
-type Instance = EntityListData['data']['list'][0];
+import { Instance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
     authorizations: EntityAuthorizationsData;
     config: EntityListConfigData;
     containers: { [p: string]: EntityListFieldData };
-    data: { list: Array<Instance> } & { [p: string]: ShowHtmlFieldData };
+    data: EntityListDataData;
     fields: { [p: string]: any };
     forms: { [p: string]: EntityListMultiformData };
     layout: Array<EntityListFieldLayoutData>;
@@ -36,6 +34,10 @@ export class EntityList implements EntityListData {
         this.entityKey = entityKey;
         this.hiddenFilters = hiddenFilters;
         this.hiddenCommands = hiddenCommands;
+    }
+
+    get count() {
+        return this.data.list.totalCount ?? this.data.list.items.length;
     }
 
     get visibleFilters(): Array<FilterData> {
@@ -67,6 +69,20 @@ export class EntityList implements EntityListData {
         return this.allowedEntityCommands.flat().some(command => command.instance_selection);
     }
 
+    get canReorder() {
+        return this.config.reorderable
+            && this.authorizations.update
+            && this.data.list.items.length > 0;
+    }
+
+    withRefreshedItems(refreshedItems: Instance[]): EntityList {
+        this.data.list.items = this.data.list.items.map(item => {
+            return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
+                ?? item;
+        });
+        return new EntityList(this, this.entityKey);
+    }
+
     dropdownEntityCommands(selecting: boolean) {
         return this.allowedEntityCommands.map(commandGroup =>
             commandGroup.filter(command => {
@@ -78,7 +94,7 @@ export class EntityList implements EntityListData {
         );
     }
 
-    instanceId(instance: Instance): string | number {
+    instanceId(instance: Instance): InstanceId {
         return instance[this.config.instanceIdAttribute];
     }
 

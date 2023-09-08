@@ -1,15 +1,42 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
-    import { EntityList, EntityListTitle } from "@sharp/entity-list";
+    import { EntityList as EntityListComponent, EntityListTitle } from "@sharp/entity-list";
     import { BreadcrumbData, EntityListData } from "@/types";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import Breadcrumb from "@/components/Breadcrumb.vue";
+    import { EntityList } from "@sharp/entity-list/src/EntityList";
+    import { useFilters } from "@sharp/filters";
+    import { useCommands } from "@sharp/commands/src/useCommands";
+    import { ref, Ref } from "vue";
+    import { parseQuery, stringifyQuery } from "@/utils/querystring";
+    import { router } from "@inertiajs/vue3";
 
     const props = defineProps<{
         entityList: EntityListData,
         breadcrumb: BreadcrumbData,
     }>();
+
+    const entityKey = route().params.entityKey;
+    const entityList: Ref<EntityList> = ref(new EntityList(props.entityList, entityKey));
+    const filters = useFilters(entityList.value.config.filters);
+    const commands = useCommands({
+        refresh: (data) => {
+            entityList.value = entityList.value.withRefreshedItems(data.items)
+        },
+    });
+    const query = parseQuery(location.search);
+
+    filters.setValuesFromQuery(query);
+
+    function onQueryChange() {
+        if(location.search !== stringifyQuery(query)) {
+            router.visit(route('code16.sharp.list', route().params) + stringifyQuery(query), {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
+    }
 </script>
 
 <template>
@@ -17,51 +44,22 @@
         <Title :breadcrumb="breadcrumb" />
 
         <div class="container">
-            <EntityList
-                :entity-key="route().params.entityKey"
+            <EntityListComponent
+                :entity-key="entityKey"
                 :entity-list="entityList"
-                module="entity-list"
+                :filters="filters"
+                :commands="commands"
+                :query="query"
+                @update:query="onQueryChange"
             >
-                <template v-slot:title="{ count }">
-                    <EntityListTitle :count="count">
+                <template v-slot:title>
+                    <EntityListTitle :count="entityList.count">
                         <template v-if="config('sharp.display_breadcrumb')">
                             <Breadcrumb :breadcrumb="breadcrumb" />
                         </template>
                     </EntityListTitle>
                 </template>
-            </EntityList>
+            </EntityListComponent>
         </div>
     </Layout>
 </template>
-
-<script lang="ts">
-    import { router } from "@inertiajs/vue3";
-    import { mapGetters } from "vuex";
-    import { parseQuery, stringifyQuery } from "@/utils/querystring";
-
-    export default {
-        watch: {
-            'query': 'handleQueryChanged',
-        },
-        computed: {
-            ...mapGetters('entity-list', [
-                'query',
-            ]),
-        },
-        methods: {
-            handleQueryChanged(query) {
-                if(location.search !== stringifyQuery(query)) {
-                    router.visit(route('code16.sharp.list', route().params) + stringifyQuery(query), {
-                        preserveState: true,
-                        preserveScroll: true,
-                    });
-                }
-            },
-        },
-        created() {
-            this.$store.dispatch('entity-list/setQuery', {
-                ...parseQuery(location.search),
-            });
-        },
-    }
-</script>

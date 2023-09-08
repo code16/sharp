@@ -122,14 +122,20 @@ export type EntityListConfigData = {
 export type EntityListData = {
   containers: { [key: string]: EntityListFieldData };
   layout: Array<EntityListFieldLayoutData>;
-  data: { list: Array<{ [key: string]: any }> } & {
-    [key: string]: ShowHtmlFieldData;
-  };
+  data: EntityListDataData;
   fields: { [key: string]: any };
   config: EntityListConfigData;
   forms: { [key: string]: EntityListMultiformData };
   authorizations: EntityAuthorizationsData;
 };
+export type EntityListDataData = {
+  list: {
+    items: Array<{ [key: string]: any }>;
+    page?: number;
+    pageSize?: number;
+    totalCount?: number;
+  };
+} & { [key: string]: ShowHtmlFieldData };
 export type EntityListFieldData = {
   key: string;
   label: string;
@@ -146,6 +152,12 @@ export type EntityListMultiformData = {
   key: string;
   label: string;
   instances: Array<number | string>;
+};
+export type EntityListQueryParamsData = {
+  search?: string | null;
+  page?: number | null;
+  sort?: string | null;
+  dir?: "asc" | "desc";
 };
 export type EntityStateData = {
   attribute: string;
@@ -335,8 +347,8 @@ export type ShowEntityListFieldData = {
   type: "entityList";
   emptyVisible: boolean;
   entityListKey: string;
-  hiddenFilters: Array<string>;
-  hiddenCommands: Array<string>;
+  hiddenFilters: { [key: string]: any };
+  hiddenCommands: { instance: Array<string>; entity: Array<string> };
   showEntityState: boolean;
   showReorderButton: boolean;
   showCreateButton: boolean;

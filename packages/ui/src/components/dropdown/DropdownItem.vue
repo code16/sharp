@@ -6,6 +6,8 @@
         disabled?: boolean,
     }>();
 
+    // TODO handle href
+
     defineEmits(['click']);
 </script>
 
