@@ -63,7 +63,7 @@ trait HandleFields
     /**
      * Check if the form was previously built, and build it if not.
      */
-    private function checkFormIsBuilt(): void
+    protected function checkFormIsBuilt(): void
     {
         if (! $this->formBuilt) {
             $this->buildFormFields($this->fieldsContainer());

@@ -11,6 +11,7 @@ trait IsWizardCommand
 {
     protected ?WizardCommandContext $wizardCommandContext = null;
     private string $key;
+    private array $formsBuilt = [];
 
     protected function getWizardContext(): WizardCommandContext
     {
@@ -103,5 +104,19 @@ trait IsWizardCommand
 
     protected function buildFormLayoutForStep(string $step, FormLayoutColumn &$column): void
     {
+    }
+
+    /**
+     * Override the default checkFormIsBuilt() in Wizard case, to check the form
+     * given the current step
+     */
+    protected function checkFormIsBuilt(): void
+    {
+        $step = $this->extractStepFromRequest() ?: '##first_step##';
+        if (! ($this->formsBuilt[$step] ?? false)) {
+            $this->fieldsContainer = null;
+            $this->buildFormFields($this->fieldsContainer());
+            $this->formsBuilt[$step] = count($this->fieldsContainer()->getFields()) > 0;
+        }
     }
 }
