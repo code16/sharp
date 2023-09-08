@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Show\Utils;
+namespace Code16\Sharp\Tests\Unit\Show\Fakes;
 
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\SharpShow;

@@ -7,8 +7,8 @@ use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Tests\Unit\Show\Utils\FakeSharpShow;
-use Code16\Sharp\Tests\Unit\Show\Utils\FakeSharpSingleShow;
+use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpShow;
+use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpSingleShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 it('allows to add an EEL to the layout', function () {

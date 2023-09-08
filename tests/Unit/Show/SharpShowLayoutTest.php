@@ -3,7 +3,7 @@
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Tests\Unit\Show\Utils\FakeSharpShow;
+use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpShow;
 
 it('handles_sections', function () {
     $show = new class extends FakeSharpShow
