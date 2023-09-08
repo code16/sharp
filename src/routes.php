@@ -1,8 +1,8 @@
 <?php
 
-use Code16\Sharp\Http\Api\Commands\DashboardCommandController;
-use Code16\Sharp\Http\Api\Commands\EntityListEntityCommandController;
-use Code16\Sharp\Http\Api\Commands\EntityListInstanceCommandController;
+use Code16\Sharp\Http\Api\Commands\ApiDashboardCommandController;
+use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityCommandController;
+use Code16\Sharp\Http\Api\Commands\ApiEntityListInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityStateController;
 use Code16\Sharp\Http\Api\Commands\ApiShowInstanceCommandController;
 use Code16\Sharp\Http\Api\Commands\ApiShowEntityStateController;
@@ -29,10 +29,10 @@ Route::group([
     'prefix' => '/'.sharp_base_url_segment().'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
-    Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [DashboardCommandController::class, 'show'])
+    Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [ApiDashboardCommandController::class, 'show'])
         ->name('code16.sharp.api.dashboard.command.form');
 
-    Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [DashboardCommandController::class, 'update'])
+    Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [ApiDashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
 
     Route::get('/list/{entityKey}', [ApiEntityListController::class, 'show'])
@@ -48,16 +48,16 @@ Route::group([
     Route::post('/list/{entityKey}/state/{instanceId}', [ApiEntityListEntityStateController::class, 'update'])
         ->name('code16.sharp.api.list.state');
 
-    Route::post('/list/{entityKey}/command/{commandKey}', [EntityListEntityCommandController::class, 'update'])
+    Route::post('/list/{entityKey}/command/{commandKey}', [ApiEntityListEntityCommandController::class, 'update'])
         ->name('code16.sharp.api.list.command.entity');
 
-    Route::get('/list/{entityKey}/command/{commandKey}/form', [EntityListEntityCommandController::class, 'show'])
+    Route::get('/list/{entityKey}/command/{commandKey}/form', [ApiEntityListEntityCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.entity.form');
 
-    Route::post('/list/{entityKey}/command/{commandKey}/{instanceId}', [EntityListInstanceCommandController::class, 'update'])
+    Route::post('/list/{entityKey}/command/{commandKey}/{instanceId}', [ApiEntityListInstanceCommandController::class, 'update'])
         ->name('code16.sharp.api.list.command.instance');
 
-    Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [EntityListInstanceCommandController::class, 'show'])
+    Route::get('/list/{entityKey}/command/{commandKey}/{instanceId}/form', [ApiEntityListInstanceCommandController::class, 'show'])
         ->name('code16.sharp.api.list.command.instance.form');
 
     Route::post('/show/{entityKey}/command/{commandKey}/{instanceId?}', [ApiShowInstanceCommandController::class, 'update'])

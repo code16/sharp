@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 
-class EntityListEntityCommandController extends ApiController
+class ApiEntityListEntityCommandController extends ApiController
 {
     use HandleCommandReturn, HandleCommandForm;
 

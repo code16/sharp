@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Api\Commands;
 
 use Code16\Sharp\Http\Api\ApiController;
 
-class EntityListInstanceCommandController extends ApiController
+class ApiEntityListInstanceCommandController extends ApiController
 {
     use HandleCommandReturn, HandleCommandForm;
 
