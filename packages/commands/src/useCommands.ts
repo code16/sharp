@@ -1,6 +1,7 @@
 import { CommandManager } from "./CommandManager";
+import { CommandReturnHandlers } from "./types";
 
 
-export function useCommands(...args: ConstructorParameters<typeof CommandManager>) {
-    return new CommandManager(...args);
+export function useCommands(commandReturnHandlers?: Partial<CommandReturnHandlers>) {
+    return new CommandManager(commandReturnHandlers);
 }

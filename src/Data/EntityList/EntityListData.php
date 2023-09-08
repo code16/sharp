@@ -17,10 +17,7 @@ final class EntityListData extends Data
         public DataCollection $containers,
         /** @var DataCollection<EntityListFieldLayoutData> */
         public DataCollection $layout,
-        #[LiteralTypeScriptType(
-            '{ list: Array<{ [key: string]: any }> } & { [key: string]: ShowHtmlFieldData }'
-        )]
-        public array $data,
+        public EntityListDataData $data,
         /** @var array<string,mixed> */
         public array $fields,
         public EntityListConfigData $config,
@@ -35,7 +32,7 @@ final class EntityListData extends Data
         return new self(
             containers: EntityListFieldData::collection($entityList['containers']),
             layout: EntityListFieldLayoutData::collection($entityList['layout']),
-            data: $entityList['data'],
+            data: EntityListDataData::from($entityList['data']),
             fields: $entityList['fields'],
             config: EntityListConfigData::from($entityList['config']),
             forms: EntityListMultiformData::collection($entityList['forms']),

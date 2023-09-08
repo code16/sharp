@@ -21,9 +21,12 @@ final class ShowEntityListFieldData extends Data
         public ShowFieldType $type,
         public bool $emptyVisible,
         public string $entityListKey,
-        /** @var string[] */
+        /** @var array<string, mixed> */
         public array $hiddenFilters,
-        /** @var string[] */
+        #[TypeScriptType([
+            'instance' => 'string[]',
+            'entity' => 'string[]',
+        ])]
         public array $hiddenCommands,
         public bool $showEntityState,
         public bool $showReorderButton,

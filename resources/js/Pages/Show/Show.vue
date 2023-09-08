@@ -109,9 +109,9 @@
                                 </Dropdown>
                             </div>
                         </template>
-                        <template v-if="show.authorizedCommands?.flat().length || show.authorizations.delete">
+                        <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete">
                             <div class="col-auto">
-                                <CommandsDropdown outline :small="false" :commands="show.authorizedCommands" @select="onCommand">
+                                <CommandsDropdown outline :small="false" :commands="show.allowedInstanceCommands" @select="onCommand">
                                     <template v-slot:text>
                                         {{ __('sharp::entity_list.commands.instance.label') }}
                                     </template>

@@ -53,7 +53,7 @@ export class Show implements ShowData {
         return this.config.state?.values.find(item => item.value === this.instanceState);
     }
 
-    get authorizedCommands(): Array<Array<CommandData>> | undefined {
+    get allowedInstanceCommands(): Array<Array<CommandData>> | undefined {
         return this.config.commands?.instance
             ?.map(group => group.filter(command => command.authorization));
     }

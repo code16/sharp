@@ -2,7 +2,7 @@ import { usePage } from "@inertiajs/vue3";
 
 
 
-export function __(key, replacements = null): string {
+export function __(key: string, replacements = null): string {
     const translation = usePage()?.props.translations[key] ?? key;
 
     if(replacements) {

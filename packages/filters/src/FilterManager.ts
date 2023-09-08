@@ -22,7 +22,7 @@ export class FilterManager {
     // get filters() { return this.state.filters; }
     // set filters(filters) { this.state.filters = filters; }
 
-    constructor(filters?: ConfigFiltersData) {
+    constructor(filters: ConfigFiltersData) {
         this.filters = filters;
         this.values = this.#defaultValues(this.#allFilters);
     }

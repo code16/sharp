@@ -3,20 +3,18 @@ import {
     ConfigCommandsData,
     EntityAuthorizationsData,
     EntityListConfigData,
-    EntityListData,
-    EntityListFieldData, EntityListFieldLayoutData, EntityListMultiformData, FilterData,
+    EntityListData, EntityListDataData,
+    EntityListFieldData, EntityListFieldLayoutData, EntityListMultiformData, EntityStateValueData, FilterData,
     ShowHtmlFieldData
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
-import { data } from "autoprefixer";
-
-type Instance = EntityListData['data']['list'][0];
+import { Instance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
     authorizations: EntityAuthorizationsData;
     config: EntityListConfigData;
     containers: { [p: string]: EntityListFieldData };
-    data: { list: Array<Instance> } & { [p: string]: ShowHtmlFieldData };
+    data: EntityListDataData;
     fields: { [p: string]: any };
     forms: { [p: string]: EntityListMultiformData };
     layout: Array<EntityListFieldLayoutData>;
@@ -36,6 +34,10 @@ export class EntityList implements EntityListData {
         this.entityKey = entityKey;
         this.hiddenFilters = hiddenFilters;
         this.hiddenCommands = hiddenCommands;
+    }
+
+    get count() {
+        return this.data.list.totalCount ?? this.data.list.items.length;
     }
 
     get visibleFilters(): Array<FilterData> {
@@ -67,6 +69,20 @@ export class EntityList implements EntityListData {
         return this.allowedEntityCommands.flat().some(command => command.instance_selection);
     }
 
+    get canReorder() {
+        return this.config.reorderable
+            && this.authorizations.update
+            && this.data.list.items.length > 0;
+    }
+
+    withRefreshedItems(refreshedItems: Instance[]): EntityList {
+        this.data.list.items = this.data.list.items.map(item => {
+            return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
+                ?? item;
+        });
+        return new EntityList(this, this.entityKey);
+    }
+
     dropdownEntityCommands(selecting: boolean) {
         return this.allowedEntityCommands.map(commandGroup =>
             commandGroup.filter(command => {
@@ -78,11 +94,11 @@ export class EntityList implements EntityListData {
         );
     }
 
-    instanceId(instance: Instance): string | number {
+    instanceId(instance: Instance): InstanceId {
         return instance[this.config.instanceIdAttribute];
     }
 
-    instanceUrl(instance: Instance) {
+    instanceUrl(instance: Instance): string | null {
         const entityKey = this.entityKey;
         const instanceId = this.instanceId(instance);
 
@@ -115,19 +131,31 @@ export class EntityList implements EntityListData {
         });
     }
 
-    createUrl(multiform?: EntityListMultiformData) {
-        const entityKey = this.entityKey;
+    instanceState(instance: Instance): string | number | null {
+        return this.config.state
+            ? instance[this.config.state.attribute]
+            : null;
+    }
 
-        if(multiform) {
-            return route('code16.sharp.form.create', {
-                uri: getAppendableUri(),
-                entityKey: `${entityKey}:${multiform.key}`,
-            });
+    instanceStateValue(instance: Instance): EntityStateValueData | undefined {
+        return this.config.state?.values.find(item => item.value === this.instanceState(instance));
+    }
+
+    instanceCanUpdateState(instance: Instance): boolean {
+        if(Array.isArray(this.config.state.authorization)) {
+            return this.config.state.authorization.includes(this.instanceId(instance));
         }
+        return !!this.config.state.authorization;
+    }
 
-        return route('code16.sharp.form.create', {
-            uri: getAppendableUri(),
-            entityKey,
-        });
+    instanceCanDelete(instance: Instance): boolean {
+        if(Array.isArray(this.authorizations.delete)) {
+            return this.authorizations.delete?.includes(this.instanceId(instance));
+        }
+        return !!this.authorizations.delete;
+    }
+
+    instanceCommands(instance: Instance) {
+        return []; // todo
     }
 }

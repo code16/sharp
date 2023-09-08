@@ -3,8 +3,8 @@
 </script>
 
 <template>
-    <Dropdown class="SharpCommandsDropdown"
-        :class="classes"
+    <Dropdown
+        class="SharpCommandsDropdown"
         :small="small"
         right
         v-bind="$attrs"
@@ -58,18 +58,12 @@
                 type: Boolean,
                 default: true,
             },
-            hasState: Boolean,
             selecting: Boolean,
         },
 
         computed: {
             commandGroups() {
                 return this.commands?.filter(group => group.length > 0);
-            },
-            classes() {
-                return {
-                    'SharpCommandsDropdown--has-state': this.hasState
-                }
             },
         },
 
