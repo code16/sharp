@@ -25,13 +25,12 @@
         showReorderButton?: boolean,
         showSearchField?: boolean,
         showEntityState?: boolean,
-        visible?: boolean,
+        loading?: boolean,
     }>(), {
         showCreateButton: true,
         showReorderButton: true,
         showSearchField: true,
         showEntityState: true,
-        visible: true,
     });
 
     const emit = defineEmits(['update:query', 'reordering']);
@@ -78,7 +77,7 @@
         });
     }
 
-    function onStateChange(value, instanceId: InstanceId) {
+    function onInstanceStateChange(value, instanceId: InstanceId) {
         const { commands, entityKey } = props;
 
         api.post(route('code16.sharp.api.list.state', { entityKey, instanceId }), { value })
@@ -143,6 +142,7 @@
     const reorderedItems: Ref<InstanceId[] | null> = ref(null);
     const reordering = computed(() => !!reorderedItems.value);
     watch(reordering, reordering => emit('reordering', reordering));
+
     async function onReorderSubmit() {
         const { commands } = props;
 
@@ -264,127 +264,120 @@
                 </template>
             </div>
 
-            <template v-if="ready">
-                <div v-show="visible">
-                    <template v-if="entityList.config.globalMessage">
-                        <GlobalMessage
-                            :options="entityList.config.globalMessage"
-                            :data="entityList.data"
-                            :fields="entityList.fields"
-                        />
+            <div v-show="!loading">
+                <template v-if="entityList.config.globalMessage">
+                    <GlobalMessage
+                        :options="entityList.config.globalMessage"
+                        :data="entityList.data"
+                        :fields="entityList.fields"
+                    />
+                </template>
+
+                <DataList
+                    :items="entityList.data.list.items"
+                    :columns="columns"
+                    :page="entityList.data.list.page"
+                    :paginated="entityList.config.paginated"
+                    :total-count="entityList.count"
+                    :page-size="entityList.data.list.pageSize"
+                    :reordering="reordering"
+                    :sort="query.sort ?? entityList.config.defaultSort"
+                    :dir="query.dir ?? entityList.config.defaultSortDir"
+                    @change="onReorder"
+                    @sort-change="onSortChange"
+                    @page-change="onPageChange"
+                >
+                    <template v-slot:empty>
+                        {{ __('sharp::entity_list.empty_text') }}
                     </template>
 
-                    <DataList
-                        :items="entityList.data.list.items"
-                        :columns="columns"
-                        :page="entityList.data.list.page"
-                        :paginated="entityList.config.paginated"
-                        :total-count="entityList.count"
-                        :page-size="entityList.data.list.pageSize"
-                        :reordering="reordering"
-                        :sort="query.sort"
-                        :dir="query.dir"
-                        @change="onReorder"
-                        @sort-change="onSortChange"
-                        @page-change="onPageChange"
-                    >
-                        <template v-slot:empty>
-                            {{ __('sharp::entity_list.empty_text') }}
-                        </template>
-
-                        <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length" v-slot:prepend>
-                            <div class="p-3">
-                                <div class="row gy-3 gx-4">
-                                    <template v-if="showSearchField && entityList.config.searchable">
-                                        <div class="col-md-auto">
-                                            <Search
-                                                class="h-100 mw-100"
-                                                style="--width: 150px; --focused-width: 250px;"
-                                                :value="query.search"
-                                                :placeholder="__('sharp::action_bar.list.search.placeholder')"
-                                                :disabled="reordering"
-                                                @submit="onSearchSubmit"
-                                            />
+                    <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length" v-slot:prepend>
+                        <div class="p-3">
+                            <div class="row gy-3 gx-4">
+                                <template v-if="showSearchField && entityList.config.searchable">
+                                    <div class="col-md-auto">
+                                        <Search
+                                            class="h-100 mw-100"
+                                            style="--width: 150px; --focused-width: 250px;"
+                                            :value="query.search"
+                                            :placeholder="__('sharp::action_bar.list.search.placeholder')"
+                                            :disabled="reordering"
+                                            @submit="onSearchSubmit"
+                                        />
+                                    </div>
+                                </template>
+                                <template v-if="entityList.visibleFilters?.length">
+                                    <div class="col-md">
+                                        <div class="row gx-2 gy-2">
+                                            <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                                <div class="col-auto">
+                                                    <SharpFilter
+                                                        :filter="filter"
+                                                        :value="filters.values[filter.key]"
+                                                        :disabled="reordering"
+                                                        @input="onFilterChanged(filter, $event)"
+                                                    />
+                                                </div>
+                                            </template>
+                                            <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
+                                                <div class="col-auto d-flex">
+                                                    <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">
+                                                        {{ __('sharp::filters.reset_all') }}
+                                                    </button>
+                                                </div>
+                                            </template>
                                         </div>
-                                    </template>
-                                    <template v-if="entityList.visibleFilters?.length">
-                                        <div class="col-md">
-                                            <div class="row gx-2 gy-2">
-                                                <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                                    <div class="col-auto">
-                                                        <SharpFilter
-                                                            :filter="filter"
-                                                            :value="filters.values[filter.key]"
-                                                            :disabled="reordering"
-                                                            @input="onFilterChanged(filter, $event)"
-                                                        />
-                                                    </div>
-                                                </template>
-                                                <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
-                                                    <div class="col-auto d-flex">
-                                                        <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">
-                                                            {{ __('sharp::filters.reset_all') }}
-                                                        </button>
-                                                    </div>
-                                                </template>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
+                                    </div>
+                                </template>
                             </div>
-                        </template>
+                        </div>
+                    </template>
 
 
-                        <template v-slot:item="{ item }">
-                            <DataListRow
-                                :url="entityList.instanceUrl(item)"
-                                :columns="columns"
-                                :highlight="selectedItems?.includes(entityList.instanceId(item))"
-                                :selecting="selecting"
-                                :deleting="deletingItem ? entityList.instanceId(item) === entityList.instanceId(deletingItem) : false"
-                                :row="item"
-                            >
-                                <template v-if="selecting" v-slot:prepend>
-                                    <input
-                                        :id="`check-${entityKey}-${entityList.instanceId(item)}`"
-                                        class="form-check-input d-block mt-0 me-4"
-                                        type="checkbox"
-                                        v-model="selectedItems"
-                                        :name="entityKey"
-                                        :value="entityList.instanceId(item)"
-                                    />
-                                    <label class="d-block position-absolute start-0 top-0 w-100 h-100" style="z-index: 3" :for="`check-${entityKey}-${entityList.instanceId(item)}`">
-                                        <span class="visually-hidden">Select</span>
-                                    </label>
-                                </template>
-                                <template v-if="hasActionsColumn" v-slot:append="props">
-                                    <EntityActions
-                                        :config="entityList.config"
-                                        :has-state="instanceHasState(item)"
-                                        :state="instanceState(item)"
-                                        :state-options="instanceStateOptions(item)"
-                                        :state-disabled="!instanceHasStateAuthorization(item)"
-                                        :has-commands="instanceHasCommands(item)"
-                                        :commands="instanceCommands(item)"
-                                        :can-delete="instanceCanDelete(item)"
-                                        :selecting="selecting"
-                                        @command="onInstanceCommand($event, entityList.instanceId(item))"
-                                        @state-change="onStateChange($event, entityList.instanceId(item))"
-                                        @delete="onDelete(entityList.instanceId(item))"
-                                    />
-                                </template>
-                            </DataListRow>
-                        </template>
-
-                        <template v-slot:append-body>
-                            <template v-if="inline && loading">
-                                <LoadingOverlay small absolute fade />
+                    <template v-slot:item="{ item }">
+                        <DataListRow
+                            :url="entityList.instanceUrl(item)"
+                            :columns="columns"
+                            :highlight="selectedItems?.includes(entityList.instanceId(item))"
+                            :selecting="selecting"
+                            :deleting="deletingItem ? entityList.instanceId(item) === entityList.instanceId(deletingItem) : false"
+                            :row="item"
+                        >
+                            <template v-if="selecting" v-slot:prepend>
+                                <input
+                                    :id="`check-${entityKey}-${entityList.instanceId(item)}`"
+                                    class="form-check-input d-block mt-0 me-4"
+                                    type="checkbox"
+                                    v-model="selectedItems"
+                                    :name="entityKey"
+                                    :value="entityList.instanceId(item)"
+                                />
+                                <label class="d-block position-absolute start-0 top-0 w-100 h-100" style="z-index: 3" :for="`check-${entityKey}-${entityList.instanceId(item)}`">
+                                    <span class="visually-hidden">Select</span>
+                                </label>
                             </template>
+                            <template v-if="hasActionsColumn" v-slot:append="props">
+                                <EntityActions
+                                    :item="item"
+                                    :entity-list="entityList"
+                                    :show-entity-state="showEntityState"
+                                    :selecting="selecting"
+                                    @command="onInstanceCommand($event, entityList.instanceId(item))"
+                                    @state-change="onInstanceStateChange($event, entityList.instanceId(item))"
+                                    @delete="onDelete(entityList.instanceId(item))"
+                                />
+                            </template>
+                        </DataListRow>
+                    </template>
+
+                    <template v-slot:append-body>
+                        <template v-if="inline && loading">
+                            <LoadingOverlay small absolute fade />
                         </template>
-                    </DataList>
-                </div>
-            </template>
-            <template v-else-if="visible && inline">
+                    </template>
+                </DataList>
+            </div>
+            <template v-if="loading && inline">
                 <Loading small fade />
             </template>
         </div>
@@ -446,15 +439,7 @@
         data() {
             return {
                 ready: false,
-                loading: false,
             }
-        },
-        watch: {
-            visible(visible) {
-                if(visible && !this.ready) {
-                    this.init();
-                }
-            },
         },
         computed: {
             /**
@@ -479,64 +464,10 @@
             },
         },
         methods: {
-            handleCreateButtonClicked(multiform) {
-                const formUrl = multiform
-                    ? this.formUrl({ formKey:multiform.key })
-                    : this.formUrl();
-
-                location.href = formUrl;
-            },
-
-            /**
-             * [Data list] getters
-             */
-            instanceState(instance) {
-                if(!this.instanceHasState(instance)) {
-                    return null;
-                }
-                const stateAttribute = this.config.state.attribute;
-                return stateAttribute ? instance[stateAttribute] : instance.state;
-            },
-            instanceHasState(instance) {
-                return !!this.config.state && this.showEntityState;
-            },
-            instanceHasCommands(instance) {
-                const allCommands = this.instanceCommands(instance).flat();
-                return allCommands.length > 0;
-            },
-            instanceHasStateAuthorization(instance) {
-                if(!this.instanceHasState(instance)) {
-                    return false;
-                }
-                const { authorization } = this.config.state;
-                const instanceId = this.instanceId(instance);
-
-                return Array.isArray(authorization)
-                    ? authorization.includes(instanceId)
-                    : !!authorization;
-            },
             instanceCommands(instance) {
                 return (this.config.commands.instance || []).reduce((res, group) => [
                     ...res, group.filter(command => this.isInstanceCommandAllowed(instance, command))
                 ], []);
-            },
-            instanceStateOptions(instance) {
-                if(!this.config.state) {
-                    return null;
-                }
-                const state = this.instanceState(instance);
-                return this.config.state.values.find(stateValue => stateValue.value === state);
-            },
-            instanceForm(instance) {
-                const instanceId = this.instanceId(instance);
-                return this.multiforms.find(form => form.instances.includes(instanceId));
-            },
-            instanceCanDelete(instance) {
-                const instanceId = this.instanceId(instance);
-                const deleteAuthorized = Array.isArray(this.authorizations.delete)
-                    ? this.authorizations.delete?.includes(instanceId)
-                    : !!this.authorizations.delete;
-                return !this.config.deleteHidden && deleteAuthorized;
             },
 
             isInstanceCommandAllowed(instance, command) {
@@ -548,35 +479,7 @@
                 return hasAuthorization && !(hiddenCommands || []).includes(command.key);
             },
 
-            /**
-             * Data
-             */
-            mount({ containers, layout, data, fields, config, authorizations, forms, breadcrumb }) {
-                this.containers = containers;
-                this.layout = layout;
-                this.data = data ?? {};
-                this.fields = fields ?? {};
-                this.config = {
-                    ...config,
-                    commands: config?.commands ?? {},
-                    filters: config?.filters ?? [],
-                };
-                this.authorizations = authorizations;
-                this.forms = forms;
-                this.breadcrumb = breadcrumb;
 
-                this.page = this.data.list.page;
-                !this.sortDir && (this.sortDir = this.config.defaultSortDir);
-                !this.sortedBy && (this.sortedBy = this.config.defaultSort);
-            },
-            bindParams(params) {
-                let { search, page, sort, dir } = params;
-
-                this.search = search;
-                page && (this.page = Number(page));
-                sort && (this.sortedBy = sort);
-                dir && (this.sortDir = dir);
-            },
             async init() {
                 if(!this.visible) {
                     return;
@@ -613,8 +516,8 @@
             },
         },
         beforeMount() {
-            this.init();
-            this.initCommands();
+            // this.init();
+            // this.initCommands();
         },
     }
 </script>

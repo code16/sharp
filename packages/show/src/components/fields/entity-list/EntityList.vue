@@ -2,8 +2,8 @@
     import FieldLayout from "../../FieldLayout.vue";
     import { EntityList as EntityListComponent, EntityListTitle } from '@sharp/entity-list';
     import { FieldProps } from "../../types";
-    import { EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
-    import { Ref, ref } from "vue";
+    import { EntityListData, EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
+    import { Ref, ref, watch } from "vue";
     import { useStickyLayout } from "./useStickyLayout";
     import { EntityList } from "@sharp/entity-list/src/EntityList";
     import { useFilters } from "@sharp/filters";
@@ -23,7 +23,7 @@
     const entityList: Ref<EntityList | null> = ref(null);
     const filters = useFilters(entityList.value.config.filters);
     const commands = useCommands({
-        reload: () => init(),
+        reload: () => init(query.value),
         refresh: (data) => {
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
@@ -31,13 +31,31 @@
     const query: Ref<EntityListQueryParamsData & { [key: string]: any }> = ref({
         ...filters.getQueryParams(props.field.hiddenFilters)
     });
-
-    async function init() {
+    const loading = ref(false);
+    const init = async (query) => {
+        loading.value = true;
         const data = await api.get(
-            route('code16.sharp.api.list', { entityKey }) + stringifyQuery(query.value)
-        ).then(response => response.data);
+            route('code16.sharp.api.list', { entityKey }) + stringifyQuery(query)
+        ).then(response => response.data) satisfies EntityListData;
 
-        entityList.value = new EntityList(data, entityKey);
+        loading.value = false;
+        entityList.value = new EntityList(
+            data,
+            entityKey,
+            props.field.hiddenFilters,
+            props.field.hiddenCommands
+        );
+    }
+
+    watch(collapsed, (collapsed) => {
+        if(!collapsed && !entityList.value) {
+            init(query.value);
+        }
+    }, { immediate: true })
+
+    async function onQueryChange(newQuery) {
+        await init(newQuery);
+        query.value = newQuery;
     }
 </script>
 
@@ -60,10 +78,10 @@
                :show-reorder-button="field.showReorderButton"
                :show-search-field="field.showSearchField"
                :show-entity-state="field.showEntityState"
-               :hidden-commands="field.hiddenCommands"
-               :visible="!collapsed"
+               :loading="loading"
                inline
                @change="onListChange"
+               @update:query="onQueryChange"
                @reordering="$emit('reordering', $event)"
            >
                <template v-slot:title>

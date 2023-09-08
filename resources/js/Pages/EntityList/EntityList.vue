@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
     import { EntityList as EntityListComponent, EntityListTitle } from "@sharp/entity-list";
-    import { BreadcrumbData, EntityListData } from "@/types";
+    import { BreadcrumbData, EntityListData, EntityListQueryParamsData } from "@/types";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import Breadcrumb from "@/components/Breadcrumb.vue";
@@ -25,7 +25,7 @@
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
     });
-    const query = parseQuery(location.search);
+    const query = parseQuery(location.search) as (EntityListQueryParamsData & { [key: string]: any });
 
     filters.setValuesFromQuery(query);
 
