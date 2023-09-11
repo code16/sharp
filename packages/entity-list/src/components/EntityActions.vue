@@ -62,6 +62,7 @@
                     </Dropdown>
                 </div>
             </template>
+
             <template v-if="
                 entityList.instanceCommands(item)?.flat().length ||
                 entityList.config.state && showEntityState ||

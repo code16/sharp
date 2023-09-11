@@ -464,22 +464,6 @@
             },
         },
         methods: {
-            instanceCommands(instance) {
-                return (this.config.commands.instance || []).reduce((res, group) => [
-                    ...res, group.filter(command => this.isInstanceCommandAllowed(instance, command))
-                ], []);
-            },
-
-            isInstanceCommandAllowed(instance, command) {
-                const instanceId = this.instanceId(instance);
-                const hiddenCommands = this.hiddenCommands ? this.hiddenCommands.instance : null;
-                const hasAuthorization = Array.isArray(command.authorization)
-                    ? command.authorization.includes(instanceId)
-                    : !!command.authorization;
-                return hasAuthorization && !(hiddenCommands || []).includes(command.key);
-            },
-
-
             async init() {
                 if(!this.visible) {
                     return;

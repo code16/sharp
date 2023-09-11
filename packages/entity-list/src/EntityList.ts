@@ -155,7 +155,13 @@ export class EntityList implements EntityListData {
         return !!this.authorizations.delete;
     }
 
-    instanceCommands(instance: Instance) {
-        return []; // todo
+    instanceCommands(instance: Instance): Array<Array<CommandData>> | undefined {
+        return this.visibleCommands?.instance
+            ?.map(group => group.filter(command => {
+                if(Array.isArray(command.authorization)) {
+                    return command.authorization.includes(this.instanceId(instance));
+                }
+                return command.authorization;
+            }));
     }
 }
