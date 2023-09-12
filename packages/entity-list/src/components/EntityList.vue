@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import MultiformDropdown from "./MultiformDropdown.vue";
     import { FilterManager } from "@sharp/filters/src/FilterManager";
     import { EntityList } from "../EntityList";
     import { CommandData, EntityListQueryParamsData, FilterData } from "@/types";
@@ -164,9 +163,9 @@
         <div class="SharpEntityList">
             <div class="flex">
                 <div class="flex-1">
-                    <slot name="title" :count="entityList.count" />
+                    <slot name="title" />
                 </div>
-                <template v-if="ready">
+                <template v-if="entityList">
                     <div class="flex gap-3">
                         <template v-if="showReorderButton && entityList.canReorder && !selecting">
                             <template v-if="reordering">
