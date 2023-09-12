@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Components\stubs;
+namespace Code16\Sharp\Tests\Unit\View\Components\Fakes;
 
 use Illuminate\View\Component;
 

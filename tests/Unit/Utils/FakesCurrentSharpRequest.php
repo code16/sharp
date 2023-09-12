@@ -5,9 +5,9 @@ namespace Code16\Sharp\Tests\Unit\Utils;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Illuminate\Support\Collection;
 
-trait WithCurrentSharpRequestFake
+trait FakesCurrentSharpRequest
 {
-    protected function fakeCurrentSharpRequestWithUrl(string $url)
+    protected function fakeCurrentSharpRequestWithUrl(string $url): void
     {
         app()->bind(
             CurrentSharpRequest::class,

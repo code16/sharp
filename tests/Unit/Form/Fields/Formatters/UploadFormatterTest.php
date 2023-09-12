@@ -5,6 +5,7 @@ use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 beforeEach(function () {
     Storage::fake('local');
@@ -124,25 +125,39 @@ it('optimizes uploaded images if configured', function () {
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
-    \Mockery::mock('alias:\Spatie\ImageOptimizer\OptimizerChainFactory')
-        ->shouldReceive('create')
-        ->once()
-        ->andReturn(new class
+    $optimizer = new class {
+        public bool $wasOptimized = false;
+
+        public function optimize(): bool
         {
-            public function optimize()
-            {
-                return true;
-            }
-        }, );
+            $this->wasOptimized = true;
+            return true;
+        }
+    };
+
+    app()->bind(OptimizerChainFactory::class, fn () => new class($optimizer) {
+        private $optimizer;
+        public function __construct(&$optimizer)
+        {
+            $this->optimizer = $optimizer;
+        }
+        public function create()
+        {
+            return $this->optimizer;
+        }
+    });
 
     $field = SharpFormUploadField::make('upload')
         ->shouldOptimizeImage()
         ->setStorageDisk('local');
 
-    (new UploadFormatter)->fromFront($field, 'attribute', [
-        'name' => 'image.jpg',
-        'uploaded' => true,
-    ]);
+    (new UploadFormatter)->fromFront(
+        $field,
+        'attr',
+        ['name' => 'image.jpg', 'uploaded' => true]
+    );
+
+    expect($optimizer->wasOptimized)->toBeTrue();
 });
 
 it('transforms the newly uploaded file if isTransformOriginal is configured', function () {
