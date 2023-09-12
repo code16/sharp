@@ -3,12 +3,11 @@ import { usePage } from "@inertiajs/vue3";
 import { config } from "@/utils/config";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronRightIcon } from '@heroicons/vue/20/solid';
-import { GlobalFiltersData, MenuData, ThemeData } from "@/types";
+import { GlobalFiltersData, MenuData } from "@/types";
 import { Link } from "@inertiajs/vue3";
 import { GlobalFilters } from '@sharp/filters';
 
 const menu = usePage().props.menu as MenuData;
-const theme = usePage().props.theme as ThemeData;
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 </script>
 

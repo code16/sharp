@@ -29,6 +29,7 @@ final class FigureWidgetData extends Data
 
     public function __construct(
         public string $key,
+        #[LiteralTypeScriptType('"'.WidgetType::Figure->value.'"')]
         public WidgetType $type,
         public ?string $title = null,
         public ?string $link = null,

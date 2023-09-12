@@ -63,40 +63,21 @@
                 </div>
             </div>
         </template>
-        <template v-if="hasPagination">
-            <div class="SharpDataList__pagination-container">
-                <Pagination
-                    :total-rows="totalCount"
-                    :per-page="pageSize"
-                    :min-page-end-buttons="3"
-                    :limit="7"
-                    :value="page"
-                    @change="handlePageChanged"
-                />
-            </div>
-        </template>
     </div>
 </template>
 
 <script>
-    import Pagination from './Pagination.vue';
     import DataListRow from './DataListRow.vue';
     import Draggable from 'vuedraggable';
 
     export default {
         components: {
-            Pagination,
             DataListRow,
             Draggable,
         },
         props: {
             items: Array,
             columns: Array,
-
-            paginated: Boolean,
-            totalCount: Number,
-            pageSize: Number,
-            page: Number,
 
             reordering: Boolean,
 
@@ -120,9 +101,6 @@
             }
         },
         computed: {
-            hasPagination() {
-                return !!this.paginated && this.totalCount/this.pageSize > 1;
-            },
             draggableOptions() {
                 return {
                     disabled: !this.reordering
@@ -153,9 +131,6 @@
                         ? (this.dir === 'asc' ? 'desc' : 'asc')
                         : 'asc'
                 });
-            },
-            handlePageChanged(page) {
-                this.$emit('page-change', page);
             },
             handleReorderingChanged(active) {
                 this.reorderedItems = active ? [...this.items] : null;

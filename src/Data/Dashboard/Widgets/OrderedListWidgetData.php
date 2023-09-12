@@ -20,6 +20,7 @@ final class OrderedListWidgetData extends Data
 
     public function __construct(
         public string $key,
+        #[LiteralTypeScriptType('"'.WidgetType::OrderedList->value.'"')]
         public WidgetType $type,
         public ?string $title,
         public ?string $link,

@@ -3,9 +3,14 @@ import {
     ConfigCommandsData,
     EntityAuthorizationsData,
     EntityListConfigData,
-    EntityListData, EntityListDataData,
-    EntityListFieldData, EntityListFieldLayoutData, EntityListMultiformData, EntityStateValueData, FilterData,
-    ShowHtmlFieldData
+    EntityListData,
+    EntityListDataData,
+    EntityListFieldData,
+    EntityListFieldLayoutData,
+    EntityListMultiformData,
+    EntityStateValueData,
+    FilterData,
+    PaginatorMetaData,
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
 import { Instance, InstanceId } from "./types";
@@ -18,6 +23,7 @@ export class EntityList implements EntityListData {
     fields: { [p: string]: any };
     forms: { [p: string]: EntityListMultiformData };
     layout: Array<EntityListFieldLayoutData>;
+    meta?: PaginatorMetaData | null;
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;

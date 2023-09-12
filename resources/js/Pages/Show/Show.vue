@@ -18,6 +18,7 @@
     import Breadcrumb from "@/components/Breadcrumb.vue";
     import { api } from "@/api";
     import { router } from "@inertiajs/vue3";
+    import { parseQuery } from "@/utils/querystring";
 
     const props = defineProps<{
         show: ShowData,
@@ -38,6 +39,7 @@
                 : route('code16.sharp.api.show.command.singleInstance.form', { entityKey, commandKey: command.key }),
             entityKey,
             instanceId,
+            query: parseQuery(location.search),
         });
     }
 

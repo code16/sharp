@@ -23,6 +23,7 @@ final class GraphWidgetData extends Data
 
     public function __construct(
         public string $key,
+        #[LiteralTypeScriptType('"'.WidgetType::Graph->value.'"')]
         public WidgetType $type,
         public ?string $title,
         public GraphWidgetDisplay $display,

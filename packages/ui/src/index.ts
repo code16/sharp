@@ -1,5 +1,5 @@
 
-export default function(Vue, { store, router }) {
+export default function(Vue) {
 }
 
 export * from './components';

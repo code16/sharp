@@ -7,7 +7,6 @@
     const props = defineProps<{
         entityKey?: string,
         breadcrumb?: BreadcrumbData,
-        prepend?: string,
     }>();
 
     const menu = useMenu();

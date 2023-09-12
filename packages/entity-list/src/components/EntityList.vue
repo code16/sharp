@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import MultiformDropdown from "./MultiformDropdown.vue";
     import { FilterManager } from "@sharp/filters/src/FilterManager";
     import { EntityList } from "../EntityList";
     import { CommandData, EntityListQueryParamsData, FilterData } from "@/types";
@@ -15,6 +14,7 @@
     import EntityActions from "./EntityActions.vue";
     import { SharpFilter } from "@sharp/filters";
     import { api } from "@/api";
+    import Pagination from "@sharp/ui/src/components/Pagination.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -38,6 +38,12 @@
     const emit = defineEmits(['update:query', 'reordering']);
     const selectedItems: Ref<InstanceId[] | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
+
+    // TODO to be replaced by entityList.fields (see https://github.com/code16/sharp-dev/issues/295)
+    const fields = computed(() => props.entityList.layout.map(columnLayout => ({
+        ...columnLayout,
+        ...props.entityList.containers[columnLayout.key]
+    })));
 
     function onFilterChanged(filter: FilterData, value: FilterData['value']) {
         emit('update:query', {
@@ -164,9 +170,9 @@
         <div class="SharpEntityList">
             <div class="flex">
                 <div class="flex-1">
-                    <slot name="title" :count="entityList.count" />
+                    <slot name="title" />
                 </div>
-                <template v-if="ready">
+                <template v-if="entityList">
                     <div class="flex gap-3">
                         <template v-if="showReorderButton && entityList.canReorder && !selecting">
                             <template v-if="reordering">
@@ -277,17 +283,12 @@
 
                 <DataList
                     :items="entityList.data.list.items"
-                    :columns="columns"
-                    :page="entityList.data.list.page"
-                    :paginated="entityList.config.paginated"
-                    :total-count="entityList.count"
-                    :page-size="entityList.data.list.pageSize"
+                    :columns="fields"
                     :reordering="reordering"
                     :sort="query.sort ?? entityList.config.defaultSort"
                     :dir="query.dir ?? entityList.config.defaultSortDir"
                     @change="onReorder"
                     @sort-change="onSortChange"
-                    @page-change="onPageChange"
                 >
                     <template v-slot:empty>
                         {{ __('sharp::entity_list.empty_text') }}
@@ -339,7 +340,7 @@
                     <template v-slot:item="{ item }">
                         <DataListRow
                             :url="entityList.instanceUrl(item)"
-                            :columns="columns"
+                            :columns="fields"
                             :highlight="selectedItems?.includes(entityList.instanceId(item))"
                             :selecting="selecting"
                             :deleting="deletingItem ? entityList.instanceId(item) === entityList.instanceId(deletingItem) : false"
@@ -458,6 +459,22 @@
                         </template>
                     </template>
                 </DataList>
+
+                <template v-if="entityList.meta?.last_page > 1">
+                    <div class="mt-12">
+
+<!--                        TODO refacto with meta.links -->
+
+                        <Pagination
+                            :value="entityList.meta.current_page"
+                            :total-rows="entityList.meta.total"
+                            :per-page="entityList.meta.per_page"
+                            :min-page-end-buttons="3"
+                            :limit="7"
+                            @change="onPageChange"
+                        />
+                    </div>
+                </template>
             </div>
             <template v-if="loading && inline">
                 <Loading small fade />
@@ -465,19 +482,3 @@
         </div>
     </WithCommands>
 </template>
-
-<script lang="ts">
-    export default {
-        computed: {
-            /**
-             * Data list props
-             */
-            columns() {
-                return this.layout.map(columnLayout => ({
-                    ...columnLayout,
-                    ...this.containers[columnLayout.key]
-                }));
-            },
-        },
-    }
-</script>
