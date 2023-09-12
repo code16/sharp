@@ -164,4 +164,12 @@ export class EntityList implements EntityListData {
                 return command.authorization;
             }));
     }
+
+    instanceHasActions(instance: Instance, showEntityState: boolean): boolean {
+        return (
+            this.instanceCommands(instance)?.flat().length > 0 ||
+            this.config.state && showEntityState ||
+            !this.config.deleteHidden && this.instanceCanDelete(instance)
+        );
+    }
 }

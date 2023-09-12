@@ -4,15 +4,17 @@
     import { FilterManager } from "@sharp/filters/src/FilterManager";
     import { EntityList } from "../EntityList";
     import { CommandData, EntityListQueryParamsData, FilterData } from "@/types";
-    import { WithCommands } from "@sharp/commands";
+    import { CommandsDropdown, WithCommands } from "@sharp/commands";
     import { CommandManager } from "@sharp/commands/src/CommandManager";
     import type { Ref } from "vue";
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
-    import { deleteEntityListInstance } from "../api";
     import { Instance, InstanceId } from "../types";
     import { getAppendableUri, route } from "@/utils/url";
-    import { Dropdown, DropdownItem } from '@sharp/ui';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button, Loading, LoadingOverlay, DataList, DataListRow, Search, GlobalMessage } from '@sharp/ui';
+    import EntityActions from "./EntityActions.vue";
+    import { SharpFilter } from "@sharp/filters";
+    import { api } from "@/api";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -356,16 +358,96 @@
                                     <span class="visually-hidden">Select</span>
                                 </label>
                             </template>
-                            <template v-if="hasActionsColumn" v-slot:append="props">
-                                <EntityActions
-                                    :item="item"
-                                    :entity-list="entityList"
-                                    :show-entity-state="showEntityState"
-                                    :selecting="selecting"
-                                    @command="onInstanceCommand($event, entityList.instanceId(item))"
-                                    @state-change="onInstanceStateChange($event, entityList.instanceId(item))"
-                                    @delete="onDelete(entityList.instanceId(item))"
-                                />
+                            <template v-if="entityList.data.list.items?.some(item => entityList.instanceHasActions(item)) && !reordering" v-slot:append="props">
+                                <EntityActions v-slot="{ stateDropdownRef, openStateDropdown }">
+                                    <div class="SharpEntityList__actions">
+                                        <div class="row align-items-center justify-content-end flex-nowrap gx-1">
+                                            <template v-if="entityList.config.state && showEntityState">
+                                                <div class="col-auto">
+                                                    <Dropdown
+                                                        toggle-class="btn--opacity-1 btn--outline-hover"
+                                                        small
+                                                        :show-caret="false"
+                                                        outline
+                                                        right
+                                                        :disabled="!entityList.instanceCanUpdateState(item)"
+                                                        :title="entityList.instanceStateValue(item)?.label ?? String(entityList.instanceState(item))"
+                                                        :ref="stateDropdownRef"
+                                                    >
+                                                        <template v-slot:text>
+                                                            <StateIcon :color="entityList.instanceStateValue(item)?.color ?? '#fff'" />
+                                                        </template>
+                                                        <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
+                                                            <DropdownItem
+                                                                :active="entityList.instanceState(item) === stateValue.value"
+                                                                @click="onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                            >
+                                                                <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
+                                                                <span class="text-truncate">{{ stateValue.label }}</span>
+                                                            </DropdownItem>
+                                                        </template>
+                                                    </Dropdown>
+                                                </div>
+                                            </template>
+
+                                            <template v-if="entityList.instanceHasActions(item, showEntityState)">
+                                                <div class="col-auto">
+                                                    <CommandsDropdown
+                                                        class="SharpEntityList__commands-dropdown"
+                                                        outline
+                                                        :commands="entityList.instanceCommands(item)"
+                                                        :toggle-class="['p-1 commands-toggle', { 'opacity-50': selecting }]"
+                                                        :show-caret="false"
+                                                        @select="onInstanceCommand($event, entityList.instanceId(item))"
+                                                    >
+                                                        <template v-slot:text>
+                                                            <!-- EllipsisVerticalIcon -- @heroicons/vue/20 -->
+                                                            <svg class="d-block" width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
+                                                            </svg>
+                                                        </template>
+
+                                                        <template v-if="entityList.config.state && showEntityState" v-slot:prepend>
+                                                            <DropdownItem
+                                                                :disabled="!entityList.instanceCanUpdateState(item)"
+                                                                @click.prevent="openStateDropdown"
+                                                            >
+                                                                <div class="row align-items-center gx-2 flex-nowrap">
+                                                                    <div class="col-auto">
+                                                                        <StateIcon :color="entityList.instanceStateValue(item)?.color ?? '#fff'" />
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <div class="row gx-2">
+                                                                            <template v-if="!entityList.instanceCanUpdateState(item)">
+                                                                                <div class="col-auto">
+                                                                                    {{ __('sharp::modals.entity_state.edit.title') }} :
+                                                                                </div>
+                                                                            </template>
+                                                                            <div class="col-auto">
+                                                                                {{ entityList.instanceStateValue(item)?.label ?? entityList.instanceState(item) }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </DropdownItem>
+                                                            <DropdownSeparator />
+                                                        </template>
+
+                                                        <template v-if="!entityList.config.deleteHidden && entityList.instanceCanDelete(item)" v-slot:append>
+                                                            <template v-if="entityList.instanceCommands(item)?.flat().length">
+                                                                <DropdownSeparator />
+                                                            </template>
+                                                            <DropdownItem link-class="text-danger" @click="onDelete(entityList.instanceId(item))">
+                                                                {{ __('sharp::action_bar.form.delete_button') }}
+                                                            </DropdownItem>
+                                                        </template>
+
+                                                    </CommandsDropdown>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </EntityActions>
                             </template>
                         </DataListRow>
                     </template>
@@ -385,62 +467,7 @@
 </template>
 
 <script lang="ts">
-    import { showAlert, api, showDeleteConfirm } from 'sharp';
-    import { __ } from "@/utils/i18n";
-    import {  DynamicView, withCommands } from 'sharp/mixins';
-    import {
-        DataList,
-        DataListRow,
-        StateIcon,
-        Button,
-        Loading,
-        LoadingOverlay,
-        Modal,
-        ModalSelect,
-        DropdownItem,
-        DropdownSeparator,
-        GlobalMessage, Search,
-    } from '@sharp/ui';
-
-    import {
-        CommandsDropdown,
-    } from '@sharp/commands';
-
-    import EntityActions from "./EntityActions.vue";
-    import {SharpFilter} from "@sharp/filters";
-    import {deleteEntityListInstance} from "../api";
-    import { route, getAppendableUri } from "@/utils/url";
-
     export default {
-        name: 'SharpEntityList',
-        mixins: [DynamicView, withCommands],
-        components: {
-            Search, SharpFilter,
-            EntityActions,
-
-            DataList,
-            DataListRow,
-
-            StateIcon,
-            CommandsDropdown,
-
-            Button,
-            Modal,
-            ModalSelect,
-
-            GlobalMessage,
-
-            DropdownItem,
-            DropdownSeparator,
-
-            Loading,
-            LoadingOverlay,
-        },
-        data() {
-            return {
-                ready: false,
-            }
-        },
         computed: {
             /**
              * Data list props
@@ -451,57 +478,6 @@
                     ...this.containers[columnLayout.key]
                 }));
             },
-
-            hasActionsColumn() {
-                if(this.reordering) {
-                    return false;
-                }
-                return this.items.some(instance =>
-                    this.instanceHasState(instance) ||
-                    this.instanceHasCommands(instance) ||
-                    this.instanceCanDelete(instance)
-                );
-            },
-        },
-        methods: {
-            async init() {
-                if(!this.visible) {
-                    return;
-                }
-                this.loading = true;
-                await this.storeDispatch('setEntityKey', this.entityKey);
-                if(this.entityList) {
-                    this.mount(this.entityList);
-                } else {
-                    await this.get()
-                        .catch(error => {
-                            this.$emit('error', error);
-                            return Promise.reject(error);
-                        });
-                }
-                this.bindParams(this.query);
-
-                await this.storeDispatch('update', {
-                    config: this.config,
-                    filtersValues: this.getFiltersValuesFromQuery(this.query),
-                });
-
-                this.$emit('change', {
-                    data: this.data,
-                    layout: this.layout,
-                    config: this.config,
-                    containers: this.containers,
-                    authorizations: this.authorizations,
-                    forms: this.forms,
-                });
-
-                this.ready = true;
-                this.loading = false;
-            },
-        },
-        beforeMount() {
-            // this.init();
-            // this.initCommands();
         },
     }
 </script>
