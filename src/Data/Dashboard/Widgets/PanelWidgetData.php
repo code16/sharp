@@ -21,6 +21,7 @@ final class PanelWidgetData extends Data
 
     public function __construct(
         public string $key,
+        #[LiteralTypeScriptType('"'.WidgetType::Panel->value.'"')]
         public WidgetType $type,
         public string $template,
         public ?string $title = null,

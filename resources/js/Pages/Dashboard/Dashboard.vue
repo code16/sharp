@@ -1,41 +1,50 @@
 <script setup lang="ts">
-    import { DashboardData, FilterData } from "@/types";
+    import { CommandData, DashboardData, FilterData } from "@/types";
     import { useFilters } from "@sharp/filters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
-    import { router, Head } from "@inertiajs/vue3";
-    import { GlobalMessage, } from '@sharp/ui';
-    import { CommandFormModal, CommandViewPanel } from '@sharp/commands';
+    import { router } from "@inertiajs/vue3";
+    import { GlobalMessage, Grid, SectionTitle, } from '@sharp/ui';
     import Widget from "@sharp/dashboard/src/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import Section from '@sharp/dashboard/src/components/Section.vue';
     import { SharpFilter } from '@sharp/filters';
     import { CommandsDropdown } from '@sharp/commands';
     import { __ } from "@/utils/i18n";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
+    import { useCommands } from "@sharp/commands/src/useCommands";
+    import { WithCommands } from "@sharp/commands";
 
     const props = defineProps<{
         dashboard: DashboardData,
     }>();
 
+    const { dashboardKey } = route().params;
     const filters = useFilters(props.dashboard.config.filters);
+    const commands = useCommands();
 
     filters.setValuesFromQuery(parseQuery(location.search));
 
-    function onFilterChanged(filter: FilterData, value: FilterData['value']) {
-        router.get(route('code16.sharp.dashboard', {
-            dashboardKey: route().params.dashboardKey,
-        }) + stringifyQuery({
+    function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        router.get(route('code16.sharp.dashboard', { dashboardKey }) + stringifyQuery({
             ...filters.nextQuery(filter, value),
         }));
     }
 
     function onFiltersReset(resettedFilters: FilterData[]) {
-        router.get(route('code16.sharp.dashboard', {
-            dashboardKey: route().params.dashboardKey,
-        }) + stringifyQuery({
+        router.get(route('code16.sharp.dashboard', { dashboardKey }) + stringifyQuery({
             ...filters.defaultQuery(resettedFilters),
         }));
+    }
+
+    function onCommand(command: CommandData) {
+        commands.send(command, {
+            postCommand: route('code16.sharp.api.dashboard.command', { dashboardKey, commandKey: command.key }),
+            getForm: route('code16.sharp.api.dashboard.command.form', { dashboardKey, commandKey: command.key }),
+            query: {
+                ...filters.getQueryParams(filters.values),
+                ...parseQuery(location.search),
+            }
+        });
     }
 </script>
 
@@ -43,7 +52,7 @@
     <Layout>
         <Title :entity-key="route().params.dashboardKey" />
 
-        <div class="SharpDashboardPage">
+        <WithCommands :commands="commands">
             <div class="container">
                 <div class="my-4">
                     <div class="row gx-3">
@@ -55,7 +64,7 @@
                                             <SharpFilter
                                                 :filter="filter"
                                                 :value="filters.values[filter.key]"
-                                                @input="onFilterChanged(filter, $event)"
+                                                @input="onFilterChange(filter, $event)"
                                             />
                                         </div>
                                     </template>
@@ -76,7 +85,7 @@
                             <div class="col-auto">
                                 <CommandsDropdown
                                     :commands="dashboard.config.commands.dashboard"
-                                    @select="handleCommandRequested"
+                                    @select="onCommand"
                                 >
                                     <template v-slot:text>
                                         {{ __('sharp::dashboard.commands.dashboard.label') }}
@@ -97,65 +106,60 @@
 
                 <div class="mb-n4.5">
                     <template v-for="section in dashboard.layout.sections">
-                        <Section class="mb-4.5"
-                            :section="section"
-                            :commands="dashboard.config.commands?.[section.key]"
-                            :filters="filters.filters?.[section.key]"
-                            :filter-values="filters.values"
-                            :show-reset="filters.isValuated(dashboard.config.filters?.[section.key] ?? [])"
-                            @filter-change="onFilterChanged"
-                            @filters-reset="onFiltersReset"
-                            v-slot="{ widgetLayout }"
-                        >
-                            <Widget
-                                :widget="dashboard.widgets[widgetLayout.key]"
-                                :value="dashboard.data[widgetLayout.key]"
-                            />
-                        </Section>
+                        <div class="section">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <SectionTitle
+                                        :section="section"
+                                    />
+                                </div>
+                                <template v-if="dashboard.config.filters?.[section.key]?.length || dashboard.config.commands?.[section.key]?.flat().length">
+                                    <div class="col-auto align-self-end mb-2">
+                                        <div class="row justify-content-end">
+                                            <template v-if="dashboard.config.filters?.[section.key]?.length">
+                                                <div class="col">
+                                                    <div class="row row-cols-auto gx-2">
+                                                        <template v-for="filter in dashboard.config.filters[section.key]" :key="filter.key">
+                                                            <SharpFilter
+                                                                :filter="filter"
+                                                                :value="filters.values[filter.key]"
+                                                                @input="onFilterChange(filter, $event)"
+                                                            />
+                                                        </template>
+                                                        <template v-if="filters.isValuated(dashboard.config.filters[section.key])">
+                                                            <div class="d-flex">
+                                                                <button class="btn btn-sm d-inline-flex align-items-center btn-link" @click="onFiltersReset(dashboard.config.filters[section.key])">
+                                                                    {{ __('sharp::filters.reset_all') }}
+                                                                </button>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template v-if="dashboard.config.commands?.[section.key]?.flat().length">
+                                                <div class="col-auto">
+                                                    <CommandsDropdown :commands="dashboard.config.commands[section.key]" @select="onCommand">
+                                                        <template v-slot:text>
+                                                            {{ __('sharp::dashboard.commands.dashboard.label') }}
+                                                        </template>
+                                                    </CommandsDropdown>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <Grid :rows="section.rows" row-class="g-3" v-slot="{ itemLayout: widgetLayout }">
+                                <Widget
+                                    :widget="dashboard.widgets[widgetLayout.key]"
+                                    :value="dashboard.data[widgetLayout.key]"
+                                />
+                            </Grid>
+                        </div>
                     </template>
                 </div>
             </div>
-
-            <CommandFormModal
-                :command="currentCommand"
-                :entity-key="route().params.dashboardKey"
-                v-bind="commandFormProps"
-                v-on="commandFormListeners"
-            />
-            <CommandViewPanel
-                :content="commandViewContent"
-                @close="handleCommandViewPanelClosed"
-            />
-        </div>
+        </WithCommands>
     </Layout>
 </template>
-
-<script lang="ts">
-    import { withCommands } from "sharp/mixins";
-    import { getDashboardCommandForm, postDashboardCommand } from "@sharp/dashboard/src/api";
-
-    export default {
-        mixins: [withCommands],
-        methods: {
-            handleCommandRequested(command) {
-                const query = {
-                    ...useFilters(this.dashboard.config.filters).getQueryParams(parseQuery(location.search)),
-                    ...parseQuery(location.search),
-                };
-                this.sendCommand(command, {
-                    postCommand: data => postDashboardCommand({
-                        dashboardKey: route().params.dashboardKey,
-                        commandKey: command.key,
-                        query,
-                        data,
-                    }),
-                    getForm: commandQuery => getDashboardCommandForm({
-                        dashboardKey: route().params.dashboardKey,
-                        commandKey: command.key,
-                        query: { ...query, ...commandQuery },
-                    }),
-                });
-            },
-        },
-    }
-</script>

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { api, apiUrl } from "sharp";
 import { validateAutocompleteResponse } from "./util/autocomplete";
 
 export function getAutocompleteSuggestions({

@@ -1,8 +1,5 @@
-import show from './store/show';
 
-export default function (Vue, { store }) {
-    // router.addRoutes(routes);
-    store.registerModule('show', show);
+export default function (Vue) {
 }
 
 export { Show } from './Show';

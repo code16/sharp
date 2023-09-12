@@ -135,7 +135,7 @@ export type EntityListDataData = {
     pageSize?: number;
     totalCount?: number;
   };
-} & { [key: string]: ShowHtmlFieldData };
+} & { [key: string]: ShowHtmlFieldData["value"] };
 export type EntityListFieldData = {
   key: string;
   label: string;
@@ -179,7 +179,7 @@ export type FigureWidgetData = {
     };
   };
   key: string;
-  type: WidgetType;
+  type: "figure";
   title: string | null;
   link: string | null;
 };
@@ -235,7 +235,7 @@ export type GraphWidgetData = {
     labels: string[];
   };
   key: string;
-  type: WidgetType;
+  type: "graph";
   title: string | null;
   display: GraphWidgetDisplay;
   showLegend: boolean;
@@ -282,7 +282,7 @@ export type OrderedListWidgetData = {
     data: Array<{ label: string; url?: string; count?: number }>;
   };
   key: string;
-  type: WidgetType;
+  type: "list";
   title: string | null;
   link: string | null;
   html: boolean;
@@ -300,7 +300,7 @@ export type PageAlertLevel =
 export type PanelWidgetData = {
   value?: { key: string; data: { [key: string]: any } };
   key: string;
-  type: WidgetType;
+  type: "panel";
   template: string;
   title: string | null;
   link: string | null;

@@ -5,7 +5,6 @@ import {
     EntityListConfigData,
     EntityListData, EntityListDataData,
     EntityListFieldData, EntityListFieldLayoutData, EntityListMultiformData, EntityStateValueData, FilterData,
-    ShowHtmlFieldData
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
 import { Instance, InstanceId } from "./types";
