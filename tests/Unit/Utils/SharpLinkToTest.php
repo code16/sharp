@@ -17,7 +17,7 @@ it('allows to generate a link to an entity list', function () {
     );
 });
 
-it('allows to generate a link to an entity form', function () {
+it('allows to generate a link to a form', function () {
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-list/my-entity/s-form/my-entity/23" title="">test</a>',
         LinkToForm::make('my-entity', 23)
@@ -25,7 +25,7 @@ it('allows to generate a link to an entity form', function () {
     );
 });
 
-it('allows to generate a link to an entity form through a show page', function () {
+it('allows to generate a link to a form through a show page', function () {
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-list/my-entity/s-show/my-entity/23/s-form/my-entity/23" title="">test</a>',
         LinkToForm::make('my-entity', 23)
