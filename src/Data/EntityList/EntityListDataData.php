@@ -15,7 +15,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
         pageSize?: number;
         totalCount?: number;
     }
-} & { [key: string]: ShowHtmlFieldData }'
+} & { [key: string]: ShowHtmlFieldData["value"] }'
 )]
 final class EntityListDataData implements Arrayable
 {
@@ -23,12 +23,12 @@ final class EntityListDataData implements Arrayable
         public array $data,
     ) {
     }
-    
+
     public static function from(array $data): self
     {
         return new self($data);
     }
-    
+
     public function toArray(): array
     {
         return $this->data;
