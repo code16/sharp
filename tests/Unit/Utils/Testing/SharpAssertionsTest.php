@@ -22,8 +22,8 @@ it('allows to assert_has_authorization', function () {
     $response->assertSharpHasNotAuthorization('update');
 });
 
-it('allows to test_getSharpForm', function () {
-    $fake = new class extends Orchestra\Testbench\TestCase
+it('allows to test getSharpForm', function () {
+    $fake = new class('a') extends Orchestra\Testbench\TestCase
     {
         use SharpAssertions;
 

@@ -139,7 +139,6 @@ class SharpServiceProvider extends ServiceProvider
             ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
             ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
             ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)
-            ->aliasMiddleware('sharp_api_append_breadcrumb', AppendBreadcrumb::class)
             ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
             ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
 

@@ -105,35 +105,40 @@ class CurrentSharpRequest
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isEntityList() : false;
+        return $current && $current->isEntityList();
     }
 
     public function isShow(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isShow() : false;
+        return $current && $current->isShow();
     }
 
     public function isForm(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isForm() : false;
+        return $current && $current->isForm();
     }
 
     public function isCreation(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current && $current->isForm() && ! $current->isSingleForm() && $current->instanceId() === null;
+        return $current
+            && $current->isForm()
+            && ! $current->isSingleForm()
+            && $current->instanceId() === null;
     }
 
     public function isUpdate(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current && $current->isForm() && ($current->instanceId() !== null || $current->isSingleForm());
+        return $current
+            && $current->isForm()
+            && ($current->instanceId() !== null || $current->isSingleForm());
     }
 
     public function entityKey(): ?string
