@@ -6,11 +6,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 
 class AutocompleteListFormatter extends SharpFieldFormatter
 {
-    /**
-     * @param  SharpFormField  $field
-     * @param  $value
-     * @return mixed
-     */
     public function toFront(SharpFormField $field, $value)
     {
         $autocompleteField = $field->autocompleteField();
@@ -27,13 +22,7 @@ class AutocompleteListFormatter extends SharpFieldFormatter
             ->all();
     }
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  string  $attribute
-     * @param  $value
-     * @return array
-     */
-    public function fromFront(SharpFormField $field, string $attribute, $value)
+    public function fromFront(SharpFormField $field, string $attribute, $value): array
     {
         $autocompleteField = $field->autocompleteField();
 

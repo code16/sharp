@@ -35,11 +35,6 @@ class UploadFormatter extends SharpFieldFormatter
         return $this;
     }
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  $value
-     * @return mixed
-     */
     public function toFront(SharpFormField $field, $value)
     {
         return $value;
@@ -64,12 +59,13 @@ class UploadFormatter extends SharpFieldFormatter
             );
 
             if ($field->isShouldOptimizeImage()) {
-                $optimizerChain = OptimizerChainFactory::create();
                 // We do not need to check for exception nor file format because
                 // the package will not throw any errors and just operate silently.
-                $optimizerChain->optimize(
-                    $this->filesystem->disk('local')->path($uploadedFieldRelativePath),
-                );
+                app(OptimizerChainFactory::class)
+                    ->create()
+                    ->optimize(
+                        $this->filesystem->disk('local')->path($uploadedFieldRelativePath),
+                    );
             }
 
             $storedFilePath = $this->getStoragePath($value['name'], $field);

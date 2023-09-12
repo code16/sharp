@@ -3,7 +3,7 @@
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 
-it('we_can_define_inline_template', function () {
+it('allows to define inline template', function () {
     $defaultFormField = SharpFormHtmlField::make('html')
         ->setInlineTemplate('<b>test</b>');
 
@@ -15,14 +15,14 @@ it('we_can_define_inline_template', function () {
         ]);
 });
 
-it('inline_template_is_mandatory', function () {
+it('ensures that inline template is mandatory', function () {
     $defaultFormField = SharpFormHtmlField::make('html');
 
     $this->expectException(SharpFormFieldValidationException::class);
     $defaultFormField->toArray();
 });
 
-it('we_can_define_templateData', function () {
+it('allows to define templateData', function () {
     $formField = SharpFormHtmlField::make('html')
         ->setInlineTemplate('<b>test</b>')
         ->setAdditionalTemplateData([
