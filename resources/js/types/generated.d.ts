@@ -120,13 +120,14 @@ export type EntityListConfigData = {
   globalMessage?: PageAlertConfigData | null;
 };
 export type EntityListData = {
+  authorizations: EntityAuthorizationsData;
+  config: EntityListConfigData;
   containers: { [key: string]: EntityListFieldData };
-  layout: Array<EntityListFieldLayoutData>;
   data: EntityListDataData;
   fields: { [key: string]: any };
-  config: EntityListConfigData;
   forms: { [key: string]: EntityListMultiformData };
-  authorizations: EntityAuthorizationsData;
+  layout: Array<EntityListFieldLayoutData>;
+  meta?: PaginatorMetaData | null;
 };
 export type EntityListDataData = {
   list: {
@@ -297,6 +298,20 @@ export type PageAlertLevel =
   | "danger"
   | "primary"
   | "secondary";
+export type PaginatorMetaData = {
+  current_page: number;
+  first_page_url: string;
+  from: number;
+  next_page_url: string;
+  path: string;
+  per_page: number;
+  prev_page_url: string;
+  to: number;
+  links?: Array<{ url: string | null; label: string; active: boolean }>;
+  last_page?: number | null;
+  last_page_url?: string | null;
+  total?: number | null;
+};
 export type PanelWidgetData = {
   value?: { key: string; data: { [key: string]: any } };
   key: string;
