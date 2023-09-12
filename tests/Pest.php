@@ -3,8 +3,24 @@
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-uses(TestCase::class)->in(__DIR__);
+uses(TestCase::class)
+    ->in(__DIR__);
+
+uses()
+    ->beforeEach(function () {
+        Schema::create('people', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->unsignedTinyInteger('age')->nullable();
+            $table->unsignedTinyInteger('order')->nullable();
+            $table->timestamps();
+        });
+    })
+    ->group('eloquent')
+    ->in(__DIR__);
 
 function login(?User $user = null)
 {
