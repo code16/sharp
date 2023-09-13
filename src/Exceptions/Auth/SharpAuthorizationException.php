@@ -10,6 +10,6 @@ class SharpAuthorizationException extends SharpException
 {
     public function render(Request $request): Response
     {
-        abort(403);
+        abort(403, $this->message);
     }
 }
