@@ -20,8 +20,7 @@ if(document.querySelector('[data-page]')) {
         setup({ el, App, props, plugin }) {
             const app = createApp({ render: () => h(App, props) })
                 .use(plugin)
-                .use(ZiggyVue, Ziggy)
-                .use(store);
+                .use(ZiggyVue, Ziggy);
 
             app.config.compilerOptions.isCustomElement = tag => ignoredElements.includes(tag);
 

@@ -12,9 +12,9 @@
     import { getAppendableUri, route } from "@/utils/url";
     import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button, Loading, LoadingOverlay, DataList, DataListRow, Search, GlobalMessage } from '@sharp/ui';
     import EntityActions from "./EntityActions.vue";
-    import { SharpFilter } from "@sharp/filters";
     import { api } from "@/api";
     import Pagination from "@sharp/ui/src/components/Pagination.vue";
+    import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -281,184 +281,228 @@
                     />
                 </template>
 
-                <DataList
-                    :items="entityList.data.list.items"
-                    :columns="fields"
-                    :reordering="reordering"
-                    :sort="query.sort ?? entityList.config.defaultSort"
-                    :dir="query.dir ?? entityList.config.defaultSortDir"
-                    @change="onReorder"
-                    @sort-change="onSortChange"
-                >
-                    <template v-slot:empty>
-                        {{ __('sharp::entity_list.empty_text') }}
-                    </template>
-
-                    <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length" v-slot:prepend>
-                        <div class="p-3">
-                            <div class="row gy-3 gx-4">
-                                <template v-if="showSearchField && entityList.config.searchable">
-                                    <div class="col-md-auto">
-                                        <Search
-                                            class="h-100 mw-100"
-                                            style="--width: 150px; --focused-width: 250px;"
-                                            :value="query.search"
-                                            :placeholder="__('sharp::action_bar.list.search.placeholder')"
-                                            :disabled="reordering"
-                                            @submit="onSearchSubmit"
-                                        />
-                                    </div>
-                                </template>
-                                <template v-if="entityList.visibleFilters?.length">
-                                    <div class="col-md">
-                                        <div class="row gx-2 gy-2">
-                                            <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                                <div class="col-auto">
-                                                    <SharpFilter
-                                                        :filter="filter"
-                                                        :value="filters.values[filter.key]"
-                                                        :disabled="reordering"
-                                                        @input="onFilterChanged(filter, $event)"
-                                                    />
-                                                </div>
-                                            </template>
-                                            <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
-                                                <div class="col-auto d-flex">
-                                                    <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">
-                                                        {{ __('sharp::filters.reset_all') }}
-                                                    </button>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-
-
-                    <template v-slot:item="{ item }">
-                        <DataListRow
-                            :url="entityList.instanceUrl(item)"
-                            :columns="fields"
-                            :highlight="selectedItems?.includes(entityList.instanceId(item))"
-                            :selecting="selecting"
-                            :deleting="deletingItem ? entityList.instanceId(item) === entityList.instanceId(deletingItem) : false"
-                            :row="item"
-                        >
-                            <template v-if="selecting" v-slot:prepend>
-                                <input
-                                    :id="`check-${entityKey}-${entityList.instanceId(item)}`"
-                                    class="form-check-input d-block mt-0 me-4"
-                                    type="checkbox"
-                                    v-model="selectedItems"
-                                    :name="entityKey"
-                                    :value="entityList.instanceId(item)"
-                                />
-                                <label class="d-block position-absolute start-0 top-0 w-100 h-100" style="z-index: 3" :for="`check-${entityKey}-${entityList.instanceId(item)}`">
-                                    <span class="visually-hidden">Select</span>
-                                </label>
-                            </template>
-                            <template v-if="entityList.data.list.items?.some(item => entityList.instanceHasActions(item)) && !reordering" v-slot:append="props">
-                                <EntityActions v-slot="{ stateDropdownRef, openStateDropdown }">
-                                    <div class="SharpEntityList__actions">
-                                        <div class="row align-items-center justify-content-end flex-nowrap gx-1">
-                                            <template v-if="entityList.config.state && showEntityState">
-                                                <div class="col-auto">
-                                                    <Dropdown
-                                                        toggle-class="btn--opacity-1 btn--outline-hover"
-                                                        small
-                                                        :show-caret="false"
-                                                        outline
-                                                        right
-                                                        :disabled="!entityList.instanceCanUpdateState(item)"
-                                                        :title="entityList.instanceStateValue(item)?.label ?? String(entityList.instanceState(item))"
-                                                        :ref="stateDropdownRef"
-                                                    >
-                                                        <template v-slot:text>
-                                                            <StateIcon :color="entityList.instanceStateValue(item)?.color ?? '#fff'" />
-                                                        </template>
-                                                        <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
-                                                            <DropdownItem
-                                                                :active="entityList.instanceState(item) === stateValue.value"
-                                                                @click="onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
-                                                            >
-                                                                <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
-                                                                <span class="text-truncate">{{ stateValue.label }}</span>
-                                                            </DropdownItem>
-                                                        </template>
-                                                    </Dropdown>
-                                                </div>
-                                            </template>
-
-                                            <template v-if="entityList.instanceHasActions(item, showEntityState)">
-                                                <div class="col-auto">
-                                                    <CommandsDropdown
-                                                        class="SharpEntityList__commands-dropdown"
-                                                        outline
-                                                        :commands="entityList.instanceCommands(item)"
-                                                        :toggle-class="['p-1 commands-toggle', { 'opacity-50': selecting }]"
-                                                        :show-caret="false"
-                                                        @select="onInstanceCommand($event, entityList.instanceId(item))"
-                                                    >
-                                                        <template v-slot:text>
-                                                            <!-- EllipsisVerticalIcon -- @heroicons/vue/20 -->
-                                                            <svg class="d-block" width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
-                                                            </svg>
-                                                        </template>
-
-                                                        <template v-if="entityList.config.state && showEntityState" v-slot:prepend>
-                                                            <DropdownItem
-                                                                :disabled="!entityList.instanceCanUpdateState(item)"
-                                                                @click.prevent="openStateDropdown"
-                                                            >
-                                                                <div class="row align-items-center gx-2 flex-nowrap">
-                                                                    <div class="col-auto">
-                                                                        <StateIcon :color="entityList.instanceStateValue(item)?.color ?? '#fff'" />
-                                                                    </div>
-                                                                    <div class="col">
-                                                                        <div class="row gx-2">
-                                                                            <template v-if="!entityList.instanceCanUpdateState(item)">
-                                                                                <div class="col-auto">
-                                                                                    {{ __('sharp::modals.entity_state.edit.title') }} :
-                                                                                </div>
-                                                                            </template>
-                                                                            <div class="col-auto">
-                                                                                {{ entityList.instanceStateValue(item)?.label ?? entityList.instanceState(item) }}
+                <template v-if="entityList.data.list.items?.length > 0">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <template v-if="selecting">
+                                        <th>
+                                            <span class="sr-only">Select...</span>
+                                        </th>
+                                    </template>
+                                    <template v-for="(field, i) in fields">
+                                        <th scope="col"
+                                            class="py-3.5 px-3 text-left text-sm w-[calc(var(--size)/12*100%)] font-semibold text-gray-900 first:pl-4 sm:first:pl-6"
+                                            :style="{ '--size':field.size }"
+                                        >
+                                            {{ field.label }}
+                                        </th>
+                                    </template>
+                                    <template v-if="!reordering && entityList.data.list.items.some(item => entityList.instanceHasActions(item))">
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <template v-for="item in entityList.data.list.items" :key="entityList.instanceId(item)">
+                                    <tr class="relative" :class="{ 'hover:bg-gray-50': entityList.instanceUrl(item) }">
+                                        <template v-if="selecting">
+                                            <td class="px-7 sm:w-12 sm:px-6">
+                                                <input
+                                                    :id="`check-${entityKey}-${entityList.instanceId(item)}`"
+                                                    class=""
+                                                    type="checkbox"
+                                                    v-model="selectedItems"
+                                                    :name="entityKey"
+                                                    :value="entityList.instanceId(item)"
+                                                />
+                                                <label class="absolute inset-0 z-20" :for="`check-${entityKey}-${entityList.instanceId(item)}`">
+                                                    <span class="sr-only">Select</span>
+                                                </label>
+                                            </td>
+                                        </template>
+                                        <template v-for="(field, i) in fields">
+                                            <td class="py-4 px-3 text-sm font-medium text-gray-900 first:pl-4 sm:first:pl-6">
+                                                <template v-if="i === 0 && entityList.instanceUrl(item) && !selecting">
+                                                    <a class="absolute inset-0" :href="entityList.instanceUrl(item)"></a>
+                                                </template>
+                                                <template v-if="field.html">
+                                                    <CaptureInternalLinks>
+                                                        <div class="[&_a]:relative [&_a]:z-10 [&_a]:underline [&_a]:text-indigo-600 [&_a:hover]:text-indigo-900"
+                                                            v-html="item[field.key]"
+                                                        ></div>
+                                                    </CaptureInternalLinks>
+                                                </template>
+                                                <template v-else>
+                                                    {{ item[field.key] }}
+                                                </template>
+                                            </td>
+                                        </template>
+                                        <template v-if="!reordering && entityList.instanceHasActions(item, showEntityState)">
+                                            <td class="relative py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                <EntityActions v-slot="{ stateDropdownRef, openStateDropdown }">
+                                                    <div class="SharpEntityList__actions">
+                                                        <div class="flex items-center">
+                                                            <template v-if="entityList.config.state && showEntityState">
+                                                                <Dropdown
+                                                                    small
+                                                                    outline
+                                                                    :show-caret="false"
+                                                                    right
+                                                                    :disabled="!entityList.instanceCanUpdateState(item)"
+                                                                    :title="entityList.instanceStateValue(item)?.label ?? String(entityList.instanceState(item))"
+                                                                    :ref="stateDropdownRef"
+                                                                >
+                                                                    <template v-slot:text>
+                                                                        <StateIcon :state-value="entityList.instanceStateValue(item)" />
+                                                                    </template>
+                                                                    <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
+                                                                        <DropdownItem
+                                                                            :active="entityList.instanceState(item) === stateValue.value"
+                                                                            @click="onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                                        >
+                                                                            <div class="flex items-center">
+                                                                                <StateIcon class="me-1" :state-value="stateValue" />
+                                                                                <span class="text-truncate">{{ stateValue.label }}</span>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </DropdownItem>
-                                                            <DropdownSeparator />
-                                                        </template>
-
-                                                        <template v-if="!entityList.config.deleteHidden && entityList.instanceCanDelete(item)" v-slot:append>
-                                                            <template v-if="entityList.instanceCommands(item)?.flat().length">
-                                                                <DropdownSeparator />
+                                                                        </DropdownItem>
+                                                                    </template>
+                                                                </Dropdown>
                                                             </template>
-                                                            <DropdownItem link-class="text-danger" @click="onDelete(entityList.instanceId(item))">
-                                                                {{ __('sharp::action_bar.form.delete_button') }}
-                                                            </DropdownItem>
-                                                        </template>
 
-                                                    </CommandsDropdown>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </EntityActions>
-                            </template>
-                        </DataListRow>
-                    </template>
+                                                            <template v-if="entityList.instanceHasActions(item, showEntityState)">
+                                                                <CommandsDropdown
+                                                                    class="SharpEntityList__commands-dropdown"
+                                                                    outline
+                                                                    :commands="entityList.instanceCommands(item)"
+                                                                    :toggle-class="{ 'opacity-50': selecting }"
+                                                                    :show-caret="false"
+                                                                    @select="onInstanceCommand($event, entityList.instanceId(item))"
+                                                                >
+                                                                    <template v-slot:text>
+                                                                        <!-- EllipsisVerticalIcon -- @heroicons/vue/20 -->
+                                                                        <svg class="d-block" width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                            <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
+                                                                        </svg>
+                                                                    </template>
 
-                    <template v-slot:append-body>
-                        <template v-if="inline && loading">
-                            <LoadingOverlay small absolute fade />
-                        </template>
-                    </template>
-                </DataList>
+                                                                    <template v-if="entityList.config.state && showEntityState" v-slot:prepend>
+                                                                        <DropdownItem
+                                                                            :disabled="!entityList.instanceCanUpdateState(item)"
+                                                                            @click.prevent="openStateDropdown"
+                                                                        >
+                                                                            <div class="flex items-center">
+                                                                                <StateIcon class="me-1" :state-value="entityList.instanceStateValue(item)" />
+                                                                                <div>
+                                                                                    <template v-if="entityList.instanceCanUpdateState(item)">
+                                                                                        {{ __('sharp::modals.entity_state.edit.title') }} :
+                                                                                    </template>
+                                                                                    {{ entityList.instanceStateValue(item)?.label ?? entityList.instanceState(item) }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </DropdownItem>
+                                                                        <DropdownSeparator />
+                                                                    </template>
+
+                                                                    <template v-if="!entityList.config.deleteHidden && entityList.instanceCanDelete(item)" v-slot:append>
+                                                                        <template v-if="entityList.instanceCommands(item)?.flat().length">
+                                                                            <DropdownSeparator />
+                                                                        </template>
+                                                                        <DropdownItem link-class="text-danger" @click="onDelete(entityList.instanceId(item))">
+                                                                            {{ __('sharp::action_bar.form.delete_button') }}
+                                                                        </DropdownItem>
+                                                                    </template>
+                                                                </CommandsDropdown>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </EntityActions>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+<!--                    <DataList-->
+<!--                        :items="entityList.data.list.items"-->
+<!--                        :columns="fields"-->
+<!--                        :reordering="reordering"-->
+<!--                        :sort="query.sort ?? entityList.config.defaultSort"-->
+<!--                        :dir="query.dir ?? entityList.config.defaultSortDir"-->
+<!--                        @change="onReorder"-->
+<!--                        @sort-change="onSortChange"-->
+<!--                    >-->
+<!--                        <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length" v-slot:prepend>-->
+<!--                            <div class="p-3">-->
+<!--                                <div class="row gy-3 gx-4">-->
+<!--                                    <template v-if="showSearchField && entityList.config.searchable">-->
+<!--                                        <div class="col-md-auto">-->
+<!--                                            <Search-->
+<!--                                                class="h-100 mw-100"-->
+<!--                                                style="&#45;&#45;width: 150px; &#45;&#45;focused-width: 250px;"-->
+<!--                                                :value="query.search"-->
+<!--                                                :placeholder="__('sharp::action_bar.list.search.placeholder')"-->
+<!--                                                :disabled="reordering"-->
+<!--                                                @submit="onSearchSubmit"-->
+<!--                                            />-->
+<!--                                        </div>-->
+<!--                                    </template>-->
+<!--                                    <template v-if="entityList.visibleFilters?.length">-->
+<!--                                        <div class="col-md">-->
+<!--                                            <div class="row gx-2 gy-2">-->
+<!--                                                <template v-for="filter in entityList.visibleFilters" :key="filter.key">-->
+<!--                                                    <div class="col-auto">-->
+<!--                                                        <SharpFilter-->
+<!--                                                            :filter="filter"-->
+<!--                                                            :value="filters.values[filter.key]"-->
+<!--                                                            :disabled="reordering"-->
+<!--                                                            @input="onFilterChanged(filter, $event)"-->
+<!--                                                        />-->
+<!--                                                    </div>-->
+<!--                                                </template>-->
+<!--                                                <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">-->
+<!--                                                    <div class="col-auto d-flex">-->
+<!--                                                        <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">-->
+<!--                                                            {{ __('sharp::filters.reset_all') }}-->
+<!--                                                        </button>-->
+<!--                                                    </div>-->
+<!--                                                </template>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </template>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </template>-->
+
+<!--                        <template v-slot:item="{ item }">-->
+<!--                            <DataListRow-->
+<!--                                :url="entityList.instanceUrl(item)"-->
+<!--                                :columns="fields"-->
+<!--                                :highlight="selectedItems?.includes(entityList.instanceId(item))"-->
+<!--                                :selecting="selecting"-->
+<!--                                :deleting="deletingItem ? entityList.instanceId(item) === entityList.instanceId(deletingItem) : false"-->
+<!--                                :row="item"-->
+<!--                            >-->
+
+<!--                            </DataListRow>-->
+<!--                        </template>-->
+
+<!--                        <template v-slot:append-body>-->
+<!--                            <template v-if="inline && loading">-->
+<!--                                <LoadingOverlay small absolute fade />-->
+<!--                            </template>-->
+<!--                        </template>-->
+<!--                    </DataList>-->
+                </template>
+                <template v-else>
+                    {{ __('sharp::entity_list.empty_text') }}
+                </template>
+
 
                 <template v-if="entityList.meta?.last_page > 1">
                     <div class="mt-12">

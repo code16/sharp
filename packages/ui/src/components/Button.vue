@@ -5,7 +5,6 @@
         :class="classes"
         :href="href"
         :disabled="disabled"
-        v-on="$listeners"
     >
         <slot />
     </component>

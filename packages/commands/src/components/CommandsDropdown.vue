@@ -7,7 +7,6 @@
         class="SharpCommandsDropdown"
         :small="small"
         right
-        v-bind="$attrs"
     >
         <template v-slot:text>
             <slot name="text" />

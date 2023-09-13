@@ -43,7 +43,7 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
-        <div class="container">
+        <div class="container mx-auto">
             <EntityListComponent
                 :entity-key="entityKey"
                 :entity-list="entityList"

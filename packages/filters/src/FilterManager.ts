@@ -1,28 +1,21 @@
 import { FilterData, ConfigFiltersData } from "@/types";
-import { getFiltersQueryParams, getFiltersValuesFromQuery } from "./util/query";
+import { filterQueryKey, getFiltersValuesFromQuery } from "./util/query";
 import { parseRange, serializeRange } from "@/utils/querystring";
 import isEqual from "lodash/isEqual";
+import { reactive } from "vue";
+import { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } from "./types";
 
-type ParsedValue = FilterData['value'] | null;
-type SerializedValue = string | string[] | null;
+
 
 
 export class FilterManager {
-    filters: ConfigFiltersData;
-    values: Record<string, ParsedValue> = {};
+    filters?: ConfigFiltersData;
 
-    // state = reactive({
-    //     values: {} as Record<string, ParsedValue>,
-    //     filters: null as ConfigFiltersData,
-    // })
-    //
-    // get values() { return this.state.values; }
-    // set values(values) { this.state.values = values; }
-    //
-    // get filters() { return this.state.filters; }
-    // set filters(filters) { this.state.filters = filters; }
+    state = reactive({
+        values: {} as FilterValues,
+    })
 
-    constructor(filters: ConfigFiltersData) {
+    constructor(filters?: ConfigFiltersData) {
         this.filters = filters;
         this.values = this.#defaultValues(this.#allFilters);
     }
@@ -31,7 +24,10 @@ export class FilterManager {
         return this.filters?._root ?? [];
     }
 
-    setValuesFromQuery(query: Record<string, SerializedValue>) {
+    get values() { return this.state.values; }
+    set values(values: FilterValues) { this.state.values = values; }
+
+    setValuesFromQuery(query: Partial<FilterQueryParams>) {
         const queryValues = getFiltersValuesFromQuery(query);
         this.values = Object.fromEntries(
             this.#allFilters.map(filter =>
@@ -55,18 +51,19 @@ export class FilterManager {
         );
     }
 
-    getQueryParams(values: Record<string, ParsedValue>): Record<string, SerializedValue> {
-        // @ts-ignore
-        return getFiltersQueryParams(values, (value, key) =>
-            this.#serializeValue(this.#filter(key), value)
-        );
+    getQueryParams(values: FilterValues): FilterQueryParams {
+        return Object.entries(values)
+            .reduce((res, [key, value]) => ({
+                ...res,
+                [filterQueryKey(key)]: this.#serializeValue(this.#filter(key), value),
+            }), {});
     }
 
-    nextQuery(filter: FilterData, value: FilterData['value']): Record<string, SerializedValue> {
+    nextQuery(filter: FilterData, value: FilterData['value']): FilterQueryParams {
         return this.getQueryParams(this.#nextValues(filter, value));
     }
 
-    defaultQuery(filters: FilterData[]): Record<string, SerializedValue> {
+    defaultQuery(filters: FilterData[]): FilterQueryParams {
         return this.getQueryParams(this.#defaultValues(filters));
     }
 
@@ -74,7 +71,7 @@ export class FilterManager {
         return Object.values(this.filters ?? {}).flat();
     }
 
-    #nextValues(filter: FilterData, value: ParsedValue): Record<string, ParsedValue> {
+    #nextValues(filter: FilterData, value: ParsedValue): FilterValues {
         if(filter.type === 'select' && filter.master) {
             return {
                 ...Object.fromEntries(Object.entries(this.values).map(([key, value]) => [key, null])),
@@ -108,7 +105,7 @@ export class FilterManager {
         return value;
     }
 
-    #serializeValue(filter: FilterData, value: ParsedValue): SerializedValue {
+    #serializeValue(filter: FilterData | null, value: ParsedValue): SerializedValue {
         if(!filter) {
             // @ts-ignore
             return value;
