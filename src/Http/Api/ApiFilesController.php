@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 
-class FilesController extends Controller
+class ApiFilesController extends Controller
 {
     use UsesSharpUploadModel;
 

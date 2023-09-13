@@ -44,3 +44,23 @@ it('is compatible with laravel validation exception', function () {
     expect($exception->errors())
         ->toEqual(['name' => ['Test']]);
 });
+
+it('handles localized text suffixed data in the messages bag', function () {
+    $validator = $this->app->validator->make([
+        'name' => 'Marie Curie',
+        'bio' => [
+            'text' => [
+                'en' => '',
+                'fr' => 'Une femme formidable',
+            ],
+        ],
+    ], [
+        'name' => 'required',
+        'bio.text.en' => 'required',
+    ]);
+
+    $validator->passes();
+
+    expect($validator->messages()->toArray())
+        ->toEqual(['bio.en' => ['The bio.en field is required.']]);
+});

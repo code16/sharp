@@ -44,7 +44,7 @@ class FormController extends SharpProtectedController
             'data' => $form->newInstance(),
             'locales' => $form->hasDataLocalizations()
                 ? $form->getDataLocalizations()
-                : null,
+                : [],
             'authorizations' => [
                 'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
                 'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey),

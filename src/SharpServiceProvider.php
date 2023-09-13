@@ -21,7 +21,6 @@ use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
-use Code16\Sharp\Http\Middleware\Api\AppendBreadcrumb;
 use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
@@ -69,6 +68,10 @@ class SharpServiceProvider extends ServiceProvider
         Blade::component(Content::class, 'sharp-content');
         Blade::component(File::class, 'sharp-file');
         Blade::component(Image::class, 'sharp-image');
+
+        if (config('sharp.locale')) {
+            setlocale(LC_ALL, config('sharp.locale'));
+        }
     }
 
     public function register()

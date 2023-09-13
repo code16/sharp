@@ -68,7 +68,6 @@ return [
         'api' => [
             Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
             Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
-            Code16\Sharp\Http\Middleware\Api\SetSharpLocale::class,
         ],
     ],
 

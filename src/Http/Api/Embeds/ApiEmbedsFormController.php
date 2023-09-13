@@ -4,7 +4,7 @@ namespace Code16\Sharp\Http\Api\Embeds;
 
 use Illuminate\Routing\Controller;
 
-class EmbedsFormController extends Controller
+class ApiEmbedsFormController extends Controller
 {
     use HandleEmbed;
 
