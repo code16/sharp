@@ -8,9 +8,9 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FakeSharpForm extends SharpForm
 {
-
     public function find(mixed $id): array
     {
+        return [];
     }
 
     public function update(mixed $id, array $data)
