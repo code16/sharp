@@ -1,58 +1,45 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
-
 use Code16\Sharp\Form\Eloquent\Relationships\MorphOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Fixtures\Picture;
 use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
 
-class MorphOneRelationUpdaterTest extends SharpEloquentBaseTest
-{
-    /** @test */
-    public function we_can_create_a_morphOne_related()
-    {
-        $person = Person::create(['name' => 'John Wayne']);
+it('allows to create a morphOne related', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
 
-        $updater = new MorphOneRelationUpdater();
+    $updater = new MorphOneRelationUpdater();
 
-        $updater->update($person, 'picture:file', 'test.jpg');
+    $updater->update($marie, 'photo:file', 'test.jpg');
 
-        $this->assertDatabaseHas('pictures', [
-            'picturable_type' => Person::class,
-            'picturable_id' => $person->id,
-            'file' => 'test.jpg',
-        ]);
-    }
+    $this->assertDatabaseHas('pictures', [
+        'picturable_type' => Person::class,
+        'picturable_id' => $marie->id,
+        'file' => 'test.jpg',
+    ]);
+})->group('eloquent');
 
-    /** @test */
-    public function we_can_update_a_morphOne_related()
-    {
-        $person = Person::create(['name' => 'John Wayne']);
-        $person->picture()->create([
-            'file' => 'old.jpg',
-        ]);
+it('allows to update a morphOne related', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $marie->photo()->create(['file' => 'old.jpg']);
 
-        $updater = new MorphOneRelationUpdater();
+    $updater = new MorphOneRelationUpdater();
 
-        $updater->update($person, 'picture:file', 'test.jpg');
+    $updater->update($marie, 'photo:file', 'test.jpg');
 
-        $this->assertDatabaseHas('pictures', [
-            'picturable_type' => Person::class,
-            'picturable_id' => $person->id,
-            'file' => 'test.jpg',
-        ]);
-    }
+    $this->assertDatabaseHas('pictures', [
+        'picturable_type' => Person::class,
+        'picturable_id' => $marie->id,
+        'file' => 'test.jpg',
+    ]);
+})->group('eloquent');
 
-    /** @test */
-    public function we_ignore_a_morphOne_related_if_null()
-    {
-        $person = Person::create(['name' => 'John Wayne']);
+it('ignores a morphOne related if null', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
 
-        $updater = new MorphOneRelationUpdater();
+    $updater = new MorphOneRelationUpdater();
 
-        $updater->update($person, 'picture:file', null);
+    $updater->update($marie, 'photo:file', null);
 
-        $this->assertCount(0, Picture::all());
-    }
-}
+    $this->assertCount(0, Picture::all());
+})->group('eloquent');

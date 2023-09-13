@@ -1,117 +1,68 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
-
 use Code16\Sharp\Form\Eloquent\Relationships\MorphToManyRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Code16\Sharp\Tests\Fixtures\Tag;
 
-class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTest
-{
-    protected function getEnvironmentSetUp($app)
-    {
-        parent::getEnvironmentSetUp($app);
+it('allows to update a morphToMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $tag = Tag::create(['name' => 'Physicist']);
 
-        Schema::create('tags', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->timestamps();
-        });
+    $updater = new MorphToManyRelationUpdater();
 
-        Schema::create('taggables', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('tag_id');
-            $table->unsignedInteger('taggable_id');
-            $table->string('taggable_type');
-        });
-    }
+    $updater->update($marie, 'tags', [
+        ['id' => $tag->id],
+    ]);
 
-    /** @test */
-    public function we_can_update_a_morphToMany_relation()
-    {
-        $person = TaggablePerson::create(['name' => 'A']);
-        $tag = Tag::create(['name' => 'A']);
+    $this->assertDatabaseHas('taggables', [
+        'tag_id' => $tag->id,
+        'taggable_id' => $marie->id,
+        'taggable_type' => Person::class,
+    ]);
+});
 
-        $updater = new MorphToManyRelationUpdater();
+it('allows to update_an_existing_morphToMany_relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $oldTag = Tag::create(['name' => 'Chemist']);
+    $newTag = Tag::create(['name' => 'Physicist']);
 
-        $updater->update($person, 'tags', [
-            ['id' => $tag->id],
-        ]);
+    $marie->tags()->attach([$oldTag->id]);
 
-        $this->assertDatabaseHas('taggables', [
-            'tag_id' => $tag->id,
-            'taggable_id' => $person->id,
-            'taggable_type' => TaggablePerson::class,
-        ]);
-    }
+    $updater = new MorphToManyRelationUpdater();
 
-    /** @test */
-    public function we_can_update_an_existing_morphToMany_relation()
-    {
-        $person = TaggablePerson::create(['name' => 'A']);
-        $oldTag = Tag::create(['name' => 'A']);
-        $newTag = Tag::create(['name' => 'B']);
+    $updater->update($marie, 'tags', [
+        ['id' => $newTag->id],
+    ]);
 
-        $person->tags()->sync([
-            ['id' => $oldTag->id],
-        ]);
+    $this->assertDatabaseHas('taggables', [
+        'tag_id' => $newTag->id,
+        'taggable_id' => $marie->id,
+        'taggable_type' => Person::class,
+    ]);
 
-        $updater = new MorphToManyRelationUpdater();
+    $this->assertDatabaseMissing('taggables', [
+        'tag_id' => $oldTag->id,
+        'taggable_id' => $marie->id,
+        'taggable_type' => Person::class,
+    ]);
+});
 
-        $updater->update($person, 'tags', [
-            ['id' => $newTag->id],
-        ]);
+it('allows to create a new related item', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
 
-        $this->assertDatabaseHas('taggables', [
-            'tag_id' => $newTag->id,
-            'taggable_id' => $person->id,
-            'taggable_type' => TaggablePerson::class,
-        ]);
+    $updater = new MorphToManyRelationUpdater();
 
-        $this->assertDatabaseMissing('taggables', [
-            'tag_id' => $oldTag->id,
-            'taggable_id' => $person->id,
-            'taggable_type' => TaggablePerson::class,
-        ]);
-    }
+    $updater->update($marie, 'tags', [
+        ['id' => null, 'name' => 'Physicist'],
+    ]);
 
-    /** @test */
-    public function we_can_can_create_a_new_related_item()
-    {
-        $person = TaggablePerson::create(['name' => 'A']);
+    $this->assertDatabaseHas('tags', [
+        'name' => 'Physicist',
+    ]);
 
-        $updater = new MorphToManyRelationUpdater();
-
-        $updater->update($person, 'tags', [
-            ['id' => null, 'name' => 'Z'],
-        ]);
-
-        $this->assertDatabaseHas('tags', [
-            'name' => 'Z',
-        ]);
-
-        $this->assertDatabaseHas('taggables', [
-            'tag_id' => Tag::first()->id,
-            'taggable_id' => $person->id,
-            'taggable_type' => TaggablePerson::class,
-        ]);
-    }
-}
-
-class Tag extends Model
-{
-    protected $guarded = [];
-}
-
-class TaggablePerson extends Person
-{
-    protected $table = 'people';
-
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
-}
+    $this->assertDatabaseHas('taggables', [
+        'tag_id' => Tag::first()->id,
+        'taggable_id' => $marie->id,
+        'taggable_type' => Person::class,
+    ]);
+});

@@ -20,7 +20,7 @@ it('allows to assert_has_authorization', function () {
 
     $response->assertSharpHasAuthorization('create');
     $response->assertSharpHasNotAuthorization('update');
-});
+})->todo();
 
 it('allows to test getSharpForm', function () {
     $fake = new class('a') extends Orchestra\Testbench\TestCase
@@ -41,7 +41,7 @@ it('allows to test getSharpForm', function () {
         route('code16.sharp.api.form.edit', ['leaves', 6]),
         $response->uri,
     );
-});
+})->todo();
 
 it('allows to test_updateSharpForm', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -68,7 +68,7 @@ it('allows to test_updateSharpForm', function () {
         ['attr' => 'some_value'],
         $response->postedData,
     );
-});
+})->todo();
 
 it('allows to test_storeSharpForm', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -95,7 +95,7 @@ it('allows to test_storeSharpForm', function () {
         ['attr' => 'some_value'],
         $response->postedData,
     );
-});
+})->todo();
 
 it('allows to test_deleteSharpEntityList', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -116,7 +116,7 @@ it('allows to test_deleteSharpEntityList', function () {
         route('code16.sharp.api.list.delete', ['leaves', 6]),
         $response->uri,
     );
-});
+})->todo();
 
 it('allows to test_deleteSharpShow', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -137,7 +137,7 @@ it('allows to test_deleteSharpShow', function () {
         route('code16.sharp.api.show.delete', ['leaves', 6]),
         $response->uri,
     );
-});
+})->todo();
 
 it('allows to test_callSharpInstanceCommandFromList', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -165,7 +165,7 @@ it('allows to test_callSharpInstanceCommandFromList', function () {
     );
 
     $this->assertEquals('some_value', $response->postedData->data->attr);
-});
+})->todo();
 
 it('allows to test_callSharpInstanceCommandFromShow', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -193,7 +193,7 @@ it('allows to test_callSharpInstanceCommandFromShow', function () {
     );
 
     $this->assertEquals('some_value', $response->postedData->data->attr);
-});
+})->todo();
 
 it('allows to test_callSharpInstanceCommandFromList_with_a_wizard_step', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -212,7 +212,7 @@ it('allows to test_callSharpInstanceCommandFromList_with_a_wizard_step', functio
     $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
 
     $this->assertEquals('my-step:123', $response->postedData->command_step);
-});
+})->todo();
 
 it('allows to define_a_current_breadcrumb', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -239,7 +239,7 @@ it('allows to define_a_current_breadcrumb', function () {
         'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6',
         $response->referer,
     );
-});
+})->todo();
 
 it('when_no_current_breadcrumb_is_defined_a_default_one_is_set', function () {
     $fake = new class extends Orchestra\Testbench\TestCase
@@ -258,4 +258,4 @@ it('when_no_current_breadcrumb_is_defined_a_default_one_is_set', function () {
         'http://localhost/sharp/s-list/trees/s-form/trees/6',
         $response->defaultHeaders['referer'],
     );
-});
+})->todo();

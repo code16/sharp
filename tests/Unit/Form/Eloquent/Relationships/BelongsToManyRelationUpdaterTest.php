@@ -1,81 +1,68 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
-
 use Code16\Sharp\Form\Eloquent\Relationships\BelongsToManyRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
 
-class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTest
-{
-    /** @test */
-    public function we_can_update_a_belongsToMany_relation()
-    {
-        $person1 = Person::create(['name' => 'A']);
-        $person2 = Person::create(['name' => 'B']);
+it('allows to update a belongsToMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $colleague = Person::create(['name' => 'Niels Bohr']);
 
-        $updater = new BelongsToManyRelationUpdater();
+    $updater = new BelongsToManyRelationUpdater();
 
-        $updater->update($person1, 'friends', [
-            ['id' => $person2->id],
-        ]);
+    $updater->update($marie, 'colleagues', [
+        ['id' => $colleague->id],
+    ]);
 
-        $this->assertDatabaseHas('friends', [
-            'person1_id' => $person1->id,
-            'person2_id' => $person2->id,
-        ]);
+    $this->assertDatabaseHas('colleagues', [
+        'person1_id' => $marie->id,
+        'person2_id' => $colleague->id,
+    ]);
 
-        $this->assertCount(2, Person::all());
-    }
+    expect($marie->fresh()->colleagues)->toHaveCount(1)
+        ->and(Person::all())->toHaveCount(2);
+})->group('eloquent');
 
-    /** @test */
-    public function we_can_update_an_existing_belongsToMany_relation()
-    {
-        $person1 = Person::create(['name' => 'A']);
-        $person2 = Person::create(['name' => 'B']);
-        $person3 = Person::create(['name' => 'C']);
+it('allows to update an existing belongsToMany relation', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
+    $niels = Person::create(['name' => 'Niels Bohr']);
+    $albert = Person::create(['name' => 'Albert Einstein']);
 
-        $person1->friends()->sync([
-            ['id' => $person2->id],
-        ]);
+    $marie->colleagues()->attach([$niels->id]);
 
-        $updater = new BelongsToManyRelationUpdater();
+    $updater = new BelongsToManyRelationUpdater();
 
-        $updater->update($person1, 'friends', [
-            ['id' => $person3->id],
-        ]);
+    $updater->update($marie, 'colleagues', [
+        ['id' => $albert->id],
+    ]);
 
-        $this->assertDatabaseHas('friends', [
-            'person1_id' => $person1->id,
-            'person2_id' => $person3->id,
-        ]);
+    $this->assertDatabaseHas('colleagues', [
+        'person1_id' => $marie->id,
+        'person2_id' => $albert->id,
+    ]);
 
-        $this->assertDatabaseMissing('friends', [
-            'person1_id' => $person1->id,
-            'person2_id' => $person2->id,
-        ]);
-    }
+    $this->assertDatabaseMissing('colleagues', [
+        'person1_id' => $marie->id,
+        'person2_id' => $niels->id,
+    ]);
+})->group('eloquent');
 
-    /** @test */
-    public function we_can_can_create_a_new_related_item()
-    {
-        $person1 = Person::create(['name' => 'A']);
+it('allows to can_create a new related item', function () {
+    $marie = Person::create(['name' => 'Marie Curie']);
 
-        $updater = new BelongsToManyRelationUpdater();
+    $updater = new BelongsToManyRelationUpdater();
 
-        $updater->update($person1, 'friends', [
-            ['id' => null, 'name' => 'John Wayne'],
-        ]);
+    $updater->update($marie, 'colleagues', [
+        ['id' => null, 'name' => 'Niels Bohr'],
+    ]);
 
-        $this->assertDatabaseHas('people', [
-            'name' => 'John Wayne',
-        ]);
+    $this->assertDatabaseHas('people', [
+        'name' => 'Niels Bohr',
+    ]);
 
-        $person2 = Person::where('name', 'John Wayne')->first();
+    $niels = Person::latest('id')->first();
 
-        $this->assertDatabaseHas('friends', [
-            'person1_id' => $person1->id,
-            'person2_id' => $person2->id,
-        ]);
-    }
-}
+    $this->assertDatabaseHas('colleagues', [
+        'person1_id' => $marie->id,
+        'person2_id' => $niels->id,
+    ]);
+})->group('eloquent');

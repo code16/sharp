@@ -75,7 +75,7 @@ it('returns form layout', function () {
         ]);
 });
 
-it('we_can_get_instance', function () {
+it('gets an instance', function () {
     $form = new class extends FakeSharpForm {
         public function find($id): array
         {
