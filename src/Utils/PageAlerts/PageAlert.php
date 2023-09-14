@@ -63,7 +63,7 @@ class PageAlert
     {
         return $this->isFilled()
             ? [
-                'level' => $this->pageAlertLevel->value,
+                'level' => $this->pageAlertLevel,
                 'text' => $this->text,
             ]
             : null;

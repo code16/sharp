@@ -4,7 +4,6 @@ namespace Code16\Sharp\Data\Form;
 
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\PageAlertConfigData;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormConfigData extends Data

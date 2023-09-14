@@ -7,7 +7,6 @@ use Code16\Sharp\Data\Commands\CommandData;
 use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
-use Code16\Sharp\Data\PageAlertConfigData;
 use Code16\Sharp\Enums\CommandType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
@@ -27,8 +26,6 @@ final class ShowConfigData extends Data
         public ?string $breadcrumbAttribute = null,
         #[Optional]
         public ?EntityStateData $state = null,
-        #[Optional]
-        public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
 
@@ -41,9 +38,6 @@ final class ShowConfigData extends Data
                 : null,
             'commands' => isset($config['commands'])
                 ? ConfigCommandsData::from($config['commands'])
-                : null,
-            'globalMessage' => isset($config['globalMessage'])
-                ? PageAlertConfigData::from($config['globalMessage'])
                 : null,
         ];
 

@@ -15,9 +15,6 @@ final class PageAlertData extends Data
 
     public static function from(array $pageAlert): self
     {
-        return new self(
-            level: PageAlertLevel::from($pageAlert['level']),
-            text: $pageAlert['text'],
-        );
+        return new self(...$pageAlert);
     }
 }

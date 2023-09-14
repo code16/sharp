@@ -6,7 +6,6 @@ namespace Code16\Sharp\Data\Dashboard;
 use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
-use Code16\Sharp\Data\PageAlertConfigData;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class DashboardConfigData extends Data
@@ -30,9 +29,6 @@ final class DashboardConfigData extends Data
                 : null,
             'filters' => isset($config['filters'])
                 ? ConfigFiltersData::from($config['filters'])
-                : null,
-            'globalMessage' => isset($config['globalMessage'])
-                ? PageAlertConfigData::from($config['globalMessage'])
                 : null,
         ];
 

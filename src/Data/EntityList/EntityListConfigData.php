@@ -7,7 +7,6 @@ use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
-use Code16\Sharp\Data\PageAlertConfigData;
 use Code16\Sharp\Enums\CommandType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
@@ -32,8 +31,6 @@ final class EntityListConfigData extends Data
         public ?string $multiformAttribute = null,
         #[Optional]
         public ?EntityStateData $state = null,
-        #[Optional]
-        public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
 
@@ -49,9 +46,6 @@ final class EntityListConfigData extends Data
                 : null,
             'filters' => isset($config['filters'])
                 ? ConfigFiltersData::from($config['filters'])
-                : null,
-            'globalMessage' => isset($config['globalMessage'])
-                ? PageAlertConfigData::from($config['globalMessage'])
                 : null,
         ];
 
