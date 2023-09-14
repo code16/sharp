@@ -7,7 +7,6 @@
         :visible="visible"
         :title="__('sharp::modals.cropper.title')"
         no-close-on-backdrop
-        v-on="$listeners"
         @ok="handleOkClicked"
         @show="handleShow"
         dialog-class="modal-dialog-scrollable"

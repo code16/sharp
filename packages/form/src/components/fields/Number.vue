@@ -6,8 +6,6 @@
         :min="min"
         :max="max"
         input-type="number"
-        v-bind="$attrs"
-        v-on="$listeners"
     />
 </template>
 

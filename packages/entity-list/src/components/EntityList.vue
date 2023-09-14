@@ -15,6 +15,7 @@
     import { api } from "@/api";
     import Pagination from "@sharp/ui/src/components/Pagination.vue";
     import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
+    import { SharpFilter } from "@sharp/filters";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -281,6 +282,38 @@
                     />
                 </template>
 
+                <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
+                    <div class="flex gap-3 mb-4">
+                        <template v-if="showSearchField && entityList.config.searchable">
+                            <Search
+                                class="h-100 mw-100"
+                                style="--width: 150px; --focused-width: 250px;"
+                                :value="query.search"
+                                :placeholder="__('sharp::action_bar.list.search.placeholder')"
+                                :disabled="reordering"
+                                @submit="onSearchSubmit"
+                            />
+                        </template>
+                        <template v-if="entityList.visibleFilters?.length">
+                            <div class="flex gap-3">
+                                <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                    <SharpFilter
+                                        :filter="filter"
+                                        :value="filters.values[filter.key]"
+                                        :disabled="reordering"
+                                        @input="onFilterChanged(filter, $event)"
+                                    />
+                                </template>
+                                <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
+                                    <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">
+                                        {{ __('sharp::filters.reset_all') }}
+                                    </button>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
                 <template v-if="entityList.data.list.items?.length > 0">
                     <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-300">
@@ -437,47 +470,6 @@
 <!--                        @change="onReorder"-->
 <!--                        @sort-change="onSortChange"-->
 <!--                    >-->
-<!--                        <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length" v-slot:prepend>-->
-<!--                            <div class="p-3">-->
-<!--                                <div class="row gy-3 gx-4">-->
-<!--                                    <template v-if="showSearchField && entityList.config.searchable">-->
-<!--                                        <div class="col-md-auto">-->
-<!--                                            <Search-->
-<!--                                                class="h-100 mw-100"-->
-<!--                                                style="&#45;&#45;width: 150px; &#45;&#45;focused-width: 250px;"-->
-<!--                                                :value="query.search"-->
-<!--                                                :placeholder="__('sharp::action_bar.list.search.placeholder')"-->
-<!--                                                :disabled="reordering"-->
-<!--                                                @submit="onSearchSubmit"-->
-<!--                                            />-->
-<!--                                        </div>-->
-<!--                                    </template>-->
-<!--                                    <template v-if="entityList.visibleFilters?.length">-->
-<!--                                        <div class="col-md">-->
-<!--                                            <div class="row gx-2 gy-2">-->
-<!--                                                <template v-for="filter in entityList.visibleFilters" :key="filter.key">-->
-<!--                                                    <div class="col-auto">-->
-<!--                                                        <SharpFilter-->
-<!--                                                            :filter="filter"-->
-<!--                                                            :value="filters.values[filter.key]"-->
-<!--                                                            :disabled="reordering"-->
-<!--                                                            @input="onFilterChanged(filter, $event)"-->
-<!--                                                        />-->
-<!--                                                    </div>-->
-<!--                                                </template>-->
-<!--                                                <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">-->
-<!--                                                    <div class="col-auto d-flex">-->
-<!--                                                        <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">-->
-<!--                                                            {{ __('sharp::filters.reset_all') }}-->
-<!--                                                        </button>-->
-<!--                                                    </div>-->
-<!--                                                </template>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </template>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </template>-->
 
 <!--                        <template v-slot:item="{ item }">-->
 <!--                            <DataListRow-->

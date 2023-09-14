@@ -3,7 +3,6 @@
         modal-class="form-modal"
         :visible="visible"
         :loading="loading"
-        v-on="$listeners"
         @ok="handleSubmitButtonClicked"
         @close="handleCancelClicked"
         @cancel="handleCancelClicked"

@@ -11,6 +11,7 @@
     import { ref, Ref } from "vue";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
+    import { FilterQueryParams } from "@sharp/filters/src/types";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -25,16 +26,13 @@
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
     });
-    const query = parseQuery(location.search) as (EntityListQueryParamsData & { [key: string]: any });
+    const query = parseQuery(location.search) as (EntityListQueryParamsData & FilterQueryParams);
 
     filters.setValuesFromQuery(query);
 
-    function onQueryChange() {
+    function onQueryChange(query) {
         if(location.search !== stringifyQuery(query)) {
-            router.visit(route('code16.sharp.list', route().params) + stringifyQuery(query), {
-                preserveState: true,
-                preserveScroll: true,
-            });
+            router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
         }
     }
 </script>

@@ -11,8 +11,6 @@
         is24hr
         trim-weeks
         @input="handleInput"
-        v-bind="$attrs"
-        v-on="$listeners"
     >
         <template v-slot:default="props">
             <slot v-bind="props" />
