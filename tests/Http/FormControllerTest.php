@@ -11,6 +11,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -299,5 +300,28 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('form.data.name', 'Rosalind Franklin')
+        );
+});
+
+it('allows to configure a page alert', function () {
+    $this->withoutExceptionHandling();
+
+    fakeFormFor('person', new class extends PersonForm {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-form/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('form.pageAlert', [
+                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'text' => 'My page alert',
+            ])
+            ->etc()
         );
 });

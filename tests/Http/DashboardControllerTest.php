@@ -98,4 +98,3 @@ it('allows to configure a page alert', function () {
             ->etc()
         );
 });
-

@@ -8,6 +8,7 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EntityAuthorizationsData;
 use Code16\Sharp\Data\NotificationData;
+use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\PaginatorMetaData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
@@ -20,6 +21,7 @@ final class EntityListData extends Data
         /** @var DataCollection<string,EntityListFieldData> */
         public DataCollection $fields,
         public EntityListDataData $data,
+        public ?PageAlertData $pageAlert,
         /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
         #[Optional]
@@ -34,6 +36,9 @@ final class EntityListData extends Data
             config: EntityListConfigData::from($entityList['config']),
             fields: EntityListFieldData::collection($entityList['fields']),
             data: EntityListDataData::from($entityList['data']),
+            pageAlert: $entityList['pageAlert']
+                ? PageAlertData::from($entityList['pageAlert'])
+                : null,
             forms: EntityListMultiformData::collection($entityList['forms']),
             meta: isset($entityList['meta'])
                 ? PaginatorMetaData::from($entityList['meta'])

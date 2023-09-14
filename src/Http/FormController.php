@@ -42,6 +42,7 @@ class FormController extends SharpProtectedController
             'layout' => $form->formLayout(),
             'config' => $form->formConfig(),
             'data' => $form->newInstance(),
+            'pageAlert' => $form->pageAlert(),
             'locales' => $form->hasDataLocalizations()
                 ? $form->getDataLocalizations()
                 : [],
@@ -86,6 +87,7 @@ class FormController extends SharpProtectedController
             'layout' => $form->formLayout(),
             'config' => $form->formConfig(),
             'data' => $form->instance($instanceId),
+            'pageAlert' => $form->pageAlert(),
             'locales' => $form->hasDataLocalizations()
                 ? $form->getDataLocalizations()
                 : null,

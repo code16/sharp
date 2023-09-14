@@ -8,6 +8,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -332,5 +333,28 @@ it('handles hasShowPage in config', function () {
                 ->where('hasShowPage', false)
                 ->etc()
             )
+        );
+});
+
+it('allows to configure a page alert', function () {
+    $this->withoutExceptionHandling();
+
+    fakeListFor('person', new class extends PersonList {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('entityList.pageAlert', [
+                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'text' => 'My page alert',
+            ])
+            ->etc()
         );
 });
