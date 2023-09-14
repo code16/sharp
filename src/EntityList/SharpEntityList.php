@@ -94,7 +94,7 @@ abstract class SharpEntityList
         return [
             'items' => $items,
             'meta' => $listItems instanceof AbstractPaginator
-                ? Arr::except($listItems->toArray(), ['data', 'links'])
+                ? Arr::except($listItems->toArray(), 'data')
                 : null,
         ];
     }
