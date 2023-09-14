@@ -71,11 +71,9 @@ it('adds the entity state attribute to the entity data', function () {
 
     $list->buildListConfig();
 
-    expect($list->data()['list'])->toEqual([
-        'items' => [
-            ['id' => 1, 'name' => 'Marie Curie', 'state' => true],
-            ['id' => 2, 'name' => 'Albert Einstein', 'state' => false],
-        ],
+    expect($list->data()['items'])->toEqual([
+        ['id' => 1, 'name' => 'Marie Curie', 'state' => true],
+        ['id' => 2, 'name' => 'Albert Einstein', 'state' => false],
     ]);
 });
 
@@ -101,13 +99,18 @@ it('handles authorization in a state', function () {
                 }
             });
         }
+
+        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        {
+            return [
+                ['id' => 1], ['id' => 2], ['id' => 3],
+                ['id' => 4], ['id' => 5], ['id' => 6],
+            ];
+        }
     };
 
     $list->buildListConfig();
-    $list->data([
-        ['id' => 1], ['id' => 2], ['id' => 3],
-        ['id' => 4], ['id' => 5], ['id' => 6],
-    ]);
+    $list->data();
 
     expect($list->listConfig()['state'])
         ->toEqual([

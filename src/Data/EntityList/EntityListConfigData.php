@@ -16,7 +16,6 @@ final class EntityListConfigData extends Data
     public function __construct(
         public string  $instanceIdAttribute,
         public bool $searchable,
-        public bool $paginated,
         public bool $reorderable,
         public ?string $defaultSort,
         public ?string $defaultSortDir,

@@ -39,7 +39,7 @@ trait HandleCommandReturn
             // We have to load and build items from ids
             $returnedValue['items'] = $commandContainer
                 ->updateQueryParamsWithSpecificIds($returnedValue['items'])
-                ->data($commandContainer->getListData())['list']['items'];
+                ->data()['items'];
         }
 
         return response()->json($returnedValue);

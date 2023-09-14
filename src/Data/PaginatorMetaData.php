@@ -16,7 +16,7 @@ final class PaginatorMetaData extends Data
         public string $next_page_url,
         public string $path,
         public int $per_page,
-        public string $prev_page_url,
+        public ?string $prev_page_url,
         public int $to,
         #[Optional]
         #[LiteralTypeScriptType('Array<{ url: string|null, label: string, active: boolean }>')]

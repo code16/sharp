@@ -108,11 +108,9 @@ it('returns list data', function() {
         }
     };
 
-    expect($list->data()['list'])->toEqual([
-        'items' => [
-            ['name' => 'John Wayne', 'age' => 22],
-            ['name' => 'Mary Wayne', 'age' => 26],
-        ]
+    expect($list->data()['items'])->toEqual([
+        ['name' => 'John Wayne', 'age' => 22],
+        ['name' => 'Mary Wayne', 'age' => 26],
     ]);
 });
 
@@ -137,15 +135,20 @@ it('can return paginated data', function() {
         }
     };
 
-    expect($list->data()['list'])->toEqual([
-        'items' => [
+    expect($list->data()['items'])
+        ->toEqual([
             ['name' => 'John Wayne', 'age' => 22],
             ['name' => 'Mary Wayne', 'age' => 26],
-        ],
-        'page' => 1,
-        'pageSize' => 2,
-        'totalCount' => 10,
-    ]);
+        ])
+        ->and($list->data()['meta'])
+        ->toMatchArray([
+            'current_page' => 1,
+            'from' => 1,
+            'to' => 2,
+            'last_page' => 5,
+            'per_page' => 2,
+            'total' => 10
+        ]);
 });
 
 it('returns list config', function() {
@@ -154,7 +157,7 @@ it('returns list config', function() {
         public function buildListConfig(): void
         {
             $this->configureSearchable()
-                ->configurePaginated();
+                ->configureDefaultSort('name');
         }
     };
 
@@ -162,13 +165,12 @@ it('returns list config', function() {
 
     expect($list->listConfig())->toEqual([
         'searchable' => true,
-        'paginated' => true,
         'reorderable' => false,
         'hasShowPage' => false,
         'instanceIdAttribute' => 'id',
         'multiformAttribute' => null,
-        'defaultSort' => null,
-        'defaultSortDir' => null,
+        'defaultSort' => 'name',
+        'defaultSortDir' => 'asc',
         'deleteHidden' => false,
         'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
     ]);

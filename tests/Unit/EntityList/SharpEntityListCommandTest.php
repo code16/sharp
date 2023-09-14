@@ -298,13 +298,18 @@ it('handles authorization in an instance command', function () {
                 },
             ];
         }
+
+        public function getListData(): array|\Illuminate\Contracts\Support\Arrayable
+        {
+            return [
+                ['id' => 1], ['id' => 2], ['id' => 3],
+                ['id' => 4], ['id' => 5], ['id' => 6],
+            ];
+        }
     };
 
-    $list->buildListConfig();
-    $list->data([
-        ['id' => 1], ['id' => 2], ['id' => 3],
-        ['id' => 4], ['id' => 5], ['id' => 6],
-    ]);
+    // We need to call data() to trigger the authorization check
+    $list->data();
 
     expect($list->listConfig()['commands']['instance'][0][0]['authorization'])->toEqual([1, 2]);
 });

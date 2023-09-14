@@ -52,7 +52,7 @@ it('filters instances of an entity list', function () {
         ->get('/sharp/s-list/person?filter_job=physicist')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
@@ -97,7 +97,7 @@ it('uses the default value of a required filter if no value was sent', function 
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
@@ -138,7 +138,7 @@ it('handles multiple filter values', function () {
         ->get('/sharp/s-list/person?filter_job=physicist,physician')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
@@ -193,7 +193,7 @@ it('saves retained filters in the session when set', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
@@ -203,7 +203,7 @@ it('saves retained filters in the session when set', function () {
         ->get('/sharp/s-list/person?filter_job=physician')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
@@ -213,7 +213,7 @@ it('saves retained filters in the session when set', function () {
         ->get('/sharp/s-list/person?filter_job=')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
@@ -296,7 +296,7 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
@@ -306,7 +306,7 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person?filter_job=physician')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
@@ -316,7 +316,7 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 2, 'name' => 'Louis Pasteur'],
             ])
         );
@@ -326,7 +326,7 @@ it('handles retained required filter', function () {
         ->get('/sharp/s-list/person?filter_job=')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
             ])
         );
