@@ -2,10 +2,10 @@
 
 namespace Code16\Sharp\Data\Dashboard;
 
-
 use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
+use Code16\Sharp\Data\PageAlertData;
 
 final class DashboardData extends Data
 {
@@ -16,8 +16,7 @@ final class DashboardData extends Data
         public DashboardLayoutData $layout,
         /** @var array<string,mixed> */
         public array $data,
-        /** @var array<string,mixed> */
-        public array $fields,
+        public ?PageAlertData $pageAlert,
     ) {
     }
 
@@ -28,7 +27,9 @@ final class DashboardData extends Data
             config: DashboardConfigData::from($dashboard['config']),
             layout: DashboardLayoutData::from($dashboard['layout']),
             data: $dashboard['data'],
-            fields: $dashboard['fields'],
+            pageAlert: $dashboard['pageAlert']
+                ? PageAlertData::from($dashboard['pageAlert'])
+                : null,
         );
     }
 }

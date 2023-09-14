@@ -6,6 +6,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
@@ -398,7 +399,6 @@ it('returns the form of the entity command', function () {
         ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'entity_form']))
         ->assertOk()
         ->assertJsonFragment([
-            'config' => null,
             'fields' => [
                 'name' => [
                     'key' => 'name',
@@ -423,9 +423,9 @@ it('allows to configure a page alert on an entity command', function () {
                     {
                         return 'entity';
                     }
-                    public function buildPageAlert(PageAlert $pageAlert): ?PageAlert
+                    public function buildPageAlert(PageAlert $pageAlert): void
                     {
-                        return $pageAlert
+                        $pageAlert
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }

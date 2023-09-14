@@ -19,7 +19,10 @@ class ApiEntityListInstanceCommandController extends ApiController
         return response()->json(
             array_merge(
                 $this->getCommandForm($commandHandler),
-                ['data' => $commandHandler->formData($instanceId) ?: null],
+                [
+                    'data' => $commandHandler->formData($instanceId) ?: null,
+                    'pageAlert' => $commandHandler->pageAlert(),
+                ],
             ),
         );
     }

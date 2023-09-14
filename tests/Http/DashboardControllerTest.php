@@ -9,6 +9,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -79,10 +80,11 @@ it('gets dashboard widgets, layout and data', function () {
 });
 
 it('allows to configure a page alert', function () {
+    $this->withoutExceptionHandling();
     fakeShowFor('stats', new class extends TestDashboard {
-        public function buildPageAlert(PageAlert $pageAlert): ?PageAlert
+        public function buildPageAlert(PageAlert $pageAlert): void
         {
-            return $pageAlert
+            $pageAlert
                 ->setLevelInfo()
                 ->setMessage('My page alert');
         }
@@ -93,7 +95,7 @@ it('allows to configure a page alert', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->where('dashboard.pageAlert', [
                 'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
-                'message' => 'My page alert',
+                'text' => 'My page alert',
             ])
             ->etc()
         );

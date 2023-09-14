@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
@@ -337,7 +338,6 @@ it('returns the form of the instance command', function () {
         ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'instance_form', 1]))
         ->assertOk()
         ->assertJsonFragment([
-            'config' => null,
             'fields' => [
                 'name' => [
                     'key' => 'name',
@@ -362,13 +362,9 @@ it('allows to configure a page alert on an instance command', function () {
                     {
                         return 'my command';
                     }
-//                    public function buildCommandConfig(): void
-//                    {
-//                        $this->configurePageAlert('template', null, 'global_message');
-//                    }
-                    public function buildPageAlert(PageAlert $pageAlert): ?PageAlert
+                    public function buildPageAlert(PageAlert $pageAlert): void
                     {
-                        return $pageAlert
+                        $pageAlert
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }

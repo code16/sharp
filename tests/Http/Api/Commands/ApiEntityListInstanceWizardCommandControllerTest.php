@@ -46,7 +46,6 @@ it('displays first step form on the first call of a wizard instance command', fu
         ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'wizard', 1]))
         ->assertOk()
         ->assertJsonFragment([
-            'config' => null,
             'fields' => [
                 'name' => [
                     'key' => 'name',

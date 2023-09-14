@@ -45,7 +45,6 @@ it('displays first step form on the first call of a wizard entity command', func
         ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'wizard']))
         ->assertOk()
         ->assertJsonFragment([
-            'config' => null,
             'fields' => [
                 'name' => [
                     'key' => 'name',
