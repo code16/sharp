@@ -136,7 +136,7 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('publication', function ($value, Post $instance) {
                 return [
-                    'is_planed' => $instance->isOnline() && $instance->published_at->isFuture(),
+                    'is_planned' => $instance->isOnline() && $instance->published_at->isFuture(),
                     'published_at' => $instance->published_at->isoFormat('LLL'),
                 ];
             })
