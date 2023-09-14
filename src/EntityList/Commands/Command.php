@@ -169,17 +169,6 @@ abstract class Command
     {
     }
 
-    final public function commandFormConfig(): ?array
-    {
-        if ($this->pageAlertHtmlField === null) {
-            return null;
-        }
-
-        return tap([], function (&$config) {
-            $this->appendGlobalMessageToConfig($config);
-        });
-    }
-
     final public function form(): array
     {
         return $this->fields();

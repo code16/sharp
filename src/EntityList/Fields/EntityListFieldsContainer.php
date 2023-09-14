@@ -39,14 +39,6 @@ class EntityListFieldsContainer
     final public function getFields(): Collection
     {
         return collect($this->fields)
-            ->map(fn (EntityListField $field) => $field->getFieldProperties())
-            ->keyBy('key');
-    }
-
-    final public function getLayout(): Collection
-    {
-        return collect($this->fields)
-            ->map(fn (EntityListField $field) => $field->getLayoutProperties())
-            ->values();
+            ->map(fn (EntityListField $field) => $field->getFieldProperties());
     }
 }

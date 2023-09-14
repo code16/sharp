@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
@@ -337,7 +338,6 @@ it('returns the form of the instance command', function () {
         ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'instance_form', 1]))
         ->assertOk()
         ->assertJsonFragment([
-            'config' => null,
             'fields' => [
                 'name' => [
                     'key' => 'name',
@@ -351,20 +351,22 @@ it('returns the form of the instance command', function () {
         ]);
 });
 
-it('allows to configure a global message on an instance command', function () {
+it('allows to configure a page alert on an instance command', function () {
     fakeListFor('person', new class extends PersonList {
         protected function getInstanceCommands(): ?array
         {
             return [
-                'instance_global_message' => new class extends InstanceCommand
+                'cmd' => new class extends InstanceCommand
                 {
                     public function label(): ?string
                     {
                         return 'my command';
                     }
-                    public function buildCommandConfig(): void
+                    public function buildPageAlert(PageAlert $pageAlert): void
                     {
-                        $this->configurePageAlert('template', null, 'global_message');
+                        $pageAlert
+                            ->setLevelInfo()
+                            ->setMessage('My page alert');
                     }
                     public function execute($instanceId, array $data = []): array
                     {
@@ -376,22 +378,12 @@ it('allows to configure a global message on an instance command', function () {
     });
 
     $this
-        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'instance_global_message', 1]))
+        ->getJson(route('code16.sharp.api.list.command.instance.form', ['person', 'cmd', 1]))
         ->assertOk()
         ->assertJsonFragment([
-            'config' => [
-                'globalMessage' => [
-                    'fieldKey' => 'global_message',
-                    'alertLevel' => null,
-                ],
-            ],
-            'fields' => [
-                'global_message' => [
-                    'key' => 'global_message',
-                    'type' => 'html',
-                    'emptyVisible' => false,
-                    'template' => 'template',
-                ],
+            'pageAlert' => [
+                'text' => 'My page alert',
+                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
             ],
         ]);
 });

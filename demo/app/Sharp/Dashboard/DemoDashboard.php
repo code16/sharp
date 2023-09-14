@@ -21,6 +21,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpLineGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPieGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -113,12 +114,17 @@ class DemoDashboard extends SharpDashboard
         ];
     }
 
-    public function buildDashboardConfig(): void
+    protected function buildPageAlert(PageAlert $pageAlert): void
     {
-        $this->configurePageAlert(
-            'Graphs below are delimited by period {{period}} (and yes, visits figures are randomly generated)',
-            static::$pageAlertLevelSecondary,
-        );
+        $pageAlert
+            ->setLevelSecondary()
+            ->setMessage(
+                sprintf(
+                    'Graphs below are delimited by period %s - %s (and yes, visits figures are randomly generated)',
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
+                )
+            );
     }
 
     protected function buildWidgetsData(): void
@@ -143,14 +149,7 @@ class DemoDashboard extends SharpDashboard
                 figure: $posts->where('state', 'online')->first()->count ?? 0,
                 unit: 'post(s)',
                 evolution: '-10%',
-            )
-            ->setPageAlertData([
-                'period' => sprintf(
-                    '%s - %s',
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
-                ),
-            ]);
+            );
     }
 
     protected function setLineGraphDataSet(): void

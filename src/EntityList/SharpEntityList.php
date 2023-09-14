@@ -25,8 +25,6 @@ abstract class SharpEntityList
         WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;
-    private ?EntityListFieldsLayout $fieldsLayout = null;
-    private ?EntityListFieldsLayout $xsFieldsLayout = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
     protected ?string $multiformAttribute = null;
@@ -63,15 +61,6 @@ abstract class SharpEntityList
 
         return $this->fieldsContainer
             ->getFields()
-            ->toArray();
-    }
-
-    final public function listLayout(): array
-    {
-        $this->checkListIsBuilt();
-
-        return $this->fieldsContainer
-            ->getLayout()
             ->toArray();
     }
 
@@ -118,11 +107,6 @@ abstract class SharpEntityList
                     })
                     ->toArray(),
             ])
-            ->when($this->pageAlertHtmlField !== null, function (Collection $collection) {
-                $collection[$this->pageAlertHtmlField->key] = $this->getGlobalMessageData();
-
-                return $collection;
-            })
             ->toArray();
     }
 
@@ -146,19 +130,7 @@ abstract class SharpEntityList
             $this->appendEntityStateToConfig($config);
             $this->appendInstanceCommandsToConfig($config);
             $this->appendEntityCommandsToConfig($config);
-            $this->appendGlobalMessageToConfig($config);
         });
-    }
-
-    final public function listMetaFields(): array
-    {
-        if ($this->pageAlertHtmlField) {
-            return [
-                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray(),
-            ];
-        }
-
-        return [];
     }
 
     final public function configureInstanceIdAttribute(string $instanceIdAttribute): self
@@ -290,67 +262,6 @@ abstract class SharpEntityList
      * Build list fields and layout.
      */
     protected function buildList(EntityListFieldsContainer $fields): void
-    {
-        // This default implementation is there to avoid breaking changes;
-        // it will be removed in the next major version of Sharp.
-        $this->fieldsContainer = new EntityListFieldsContainer();
-        $this->buildListFields($this->fieldsContainer);
-
-        $fieldsLayout = new EntityListFieldsLayout();
-        $this->buildListLayout($fieldsLayout);
-        $xsFieldsLayout = new EntityListFieldsLayout();
-        $this->buildListLayoutForSmallScreens($xsFieldsLayout);
-
-        $this->fieldsContainer
-            ->getFields()
-            ->pluck('key')
-            ->each(function ($key) use ($fieldsLayout, $xsFieldsLayout) {
-                if (isset($fieldsLayout->getColumns()[$key])) {
-                    $width = $fieldsLayout->getColumns()[$key];
-                    $widthXs = $xsFieldsLayout->hasColumns()
-                        ? $xsFieldsLayout->getColumns()[$key] ?? null
-                        : $width;
-                    $this->fieldsContainer
-                        ->setWidthOfField(
-                            $key,
-                            match ($width) {
-                                'fill' => null,
-                                default => $width,
-                            },
-                            match ($widthXs) {
-                                'fill' => null,
-                                null => false,
-                                default => $widthXs,
-                            },
-                        );
-                }
-            });
-    }
-
-    /**
-     * Build list fields.
-     *
-     * @deprecated use buildList instead
-     */
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-    {
-    }
-
-    /**
-     * Build list layout.
-     *
-     * @deprecated use buildList instead
-     */
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-    }
-
-    /**
-     * Build layout for small screen. Optional, only if needed.
-     *
-     * @deprecated use buildList instead
-     */
-    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
     {
     }
 }

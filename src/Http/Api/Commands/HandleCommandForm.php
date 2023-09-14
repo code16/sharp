@@ -18,7 +18,6 @@ trait HandleCommandForm
 
         return array_merge(
             [
-                'config' => $commandHandler->commandFormConfig(),
                 'fields' => $formFields,
                 'layout' => $commandHandler->formLayout(),
             ],

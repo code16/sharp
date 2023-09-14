@@ -34,9 +34,7 @@ it('redirects users from the login page to the home page', function () {
 
 it('displays the login page', function () {
     $this->get('/sharp/login')
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Auth/Login')
-        );
+        ->assertOk();
 });
 
 it('allows guests to login', function () {

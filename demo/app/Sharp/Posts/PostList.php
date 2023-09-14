@@ -15,7 +15,9 @@ use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,12 +62,14 @@ class PostList extends SharpEntityList
             ->configureDefaultSort('published_at', 'desc')
             ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')
             ->configureSearchable();
+    }
 
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
         if (! auth()->user()->isAdmin()) {
-            $this->configurePageAlert(
-                'As an editor, you can only edit your posts; you can see other posts except those which are still in draft.',
-                static::$pageAlertLevelSecondary,
-            );
+            $pageAlert
+                ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
+                ->setLevelSecondary();
         }
     }
 

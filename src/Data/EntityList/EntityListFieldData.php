@@ -12,6 +12,9 @@ final class EntityListFieldData extends Data
         public string $label,
         public bool $sortable,
         public bool $html,
+        public string $size,
+        public bool $hideOnXS,
+        public string $sizeXS,
     ) {
     }
 }

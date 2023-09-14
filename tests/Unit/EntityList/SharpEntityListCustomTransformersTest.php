@@ -56,9 +56,9 @@ it('handles paginated models', function () {
 it('handles the relation separator', function () {
     $list = new class extends FakeSharpEntityList
     {
-        public function buildListFields($fieldsContainer): void
+        public function buildList($fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(EntityListField::make('name'))
                 ->addField(EntityListField::make('partner:name'));
         }

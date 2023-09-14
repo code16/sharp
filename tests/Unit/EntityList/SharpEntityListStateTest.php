@@ -39,9 +39,9 @@ it('gets list entity state config', function () {
 it('adds the entity state attribute to the entity data', function () {
     $list = new class extends FakeSharpEntityList
     {
-        public function buildListFields($fieldsContainer): void
+        public function buildList($fields): void
         {
-            $fieldsContainer->addField(EntityListField::make('name'));
+            $fields->addField(EntityListField::make('name'));
         }
 
         public function buildListConfig(): void

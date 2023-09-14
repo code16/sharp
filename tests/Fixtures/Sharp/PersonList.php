@@ -19,9 +19,9 @@ class PersonList extends SharpEntityList
         return $this->transform($items);
     }
 
-    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    public function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer
+        $fields
             ->addField(
                 EntityListField::make('name')
                     ->setLabel('Name')

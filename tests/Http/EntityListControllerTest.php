@@ -4,10 +4,12 @@ use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\NotificationLevel;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -125,9 +127,9 @@ it('filters out data which is not displayed', function () {
 
 it('gets containers and layout', function () {
     fakeListFor('person', new class extends PersonList {
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(
                     EntityListField::make('name')
                         ->setLabel('Name')
@@ -147,26 +149,19 @@ it('gets containers and layout', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.containers', 2)
-            ->has('entityList.containers.name', fn (Assert $name) => $name
+            ->has('entityList.fields', 2)
+            ->has('entityList.fields.0', fn (Assert $name) => $name
                 ->where('key', 'name')
                 ->where('label', 'Name')
-                ->where('sortable', true)
-                ->etc()
-            )
-            ->has('entityList.containers.job', fn (Assert $job) => $job
-                ->where('key', 'job')
-                ->etc()
-            )
-            ->has('entityList.layout', 2)
-            ->has('entityList.layout.0', fn (Assert $name) => $name
-                ->where('key', 'name')
                 ->where('size', '6')
                 ->where('hideOnXS', false)
                 ->where('sizeXS', 'fill')
+                ->where('sortable', true)
+                ->etc()
             )
-            ->has('entityList.layout.1', fn (Assert $job) => $job
+            ->has('entityList.fields.1', fn (Assert $job) => $job
                 ->where('key', 'job')
+                ->where('label', 'Job')
                 ->where('size', '6')
                 ->where('hideOnXS', true)
                 ->etc()
@@ -339,5 +334,59 @@ it('handles hasShowPage in config', function () {
                 ->where('hasShowPage', false)
                 ->etc()
             )
+        );
+});
+
+it('allows to configure a page alert', function () {
+    $this->withoutExceptionHandling();
+
+    fakeListFor('person', new class extends PersonList {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('entityList.pageAlert', [
+                'level' => PageAlertLevel::Info->value,
+                'text' => 'My page alert',
+            ])
+            ->etc()
+        );
+});
+
+it('allows to configure a page alert with a closure as content', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage(function (array $data) {
+                    return 'There are ' . count($data) . ' items.';
+                });
+        }
+
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ];
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('entityList.pageAlert', [
+                'level' => PageAlertLevel::Info->value,
+                'text' => 'There are 2 items.',
+            ])
+            ->etc()
         );
 });

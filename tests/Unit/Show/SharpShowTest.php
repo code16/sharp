@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -10,6 +11,7 @@ use Code16\Sharp\Show\Layout\ShowLayoutSection;
 use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpShow;
 use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpSingleShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 it('allows to add an EEL to the layout', function () {
     $sharpShow = new class extends FakeSharpShow
@@ -164,49 +166,22 @@ it('allows to declare a multiformAttribute', function () {
         ->toHaveKey('multiformAttribute', 'role');
 });
 
-it('allows to declare a global message field', function () {
+it('allows to declare a page alert', function () {
     $sharpShow = new class extends FakeSharpShow
     {
-        public function buildShowConfig(): void
+        public function buildPageAlert(PageAlert $pageAlert): void
         {
-            $this->configurePageAlert('template', static::$pageAlertLevelWarning, 'test-key');
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
         }
     };
 
-    $sharpShow->buildShowConfig();
-
-    expect($sharpShow->showConfig(1))
-        ->toHaveKey('globalMessage', [
-            'fieldKey' => 'test-key',
-            'alertLevel' => 'warning',
+    expect($sharpShow->pageAlert())
+        ->toEqual([
+            'text' => 'My page alert',
+            'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
         ]);
-
-    expect($sharpShow->fields()['test-key'])
-        ->toEqual(SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray());
-});
-
-it('allows to  associate data to a global message field', function () {
-    $sharpShow = new class extends FakeSharpShow
-    {
-        public function buildShowConfig(): void
-        {
-            $this->configurePageAlert('Hello {{name}}', null, 'test-key');
-        }
-
-        public function find($id): array
-        {
-            return [
-                'test-key' => [
-                    'name' => 'Bob',
-                ],
-            ];
-        }
-    };
-
-    $sharpShow->buildShowConfig();
-
-    expect($sharpShow->instance(1)['test-key'])
-        ->toEqual(['name' => 'Bob']);
 });
 
 it('allow to declare a simple page title field', function () {
@@ -228,13 +203,12 @@ it('allow to declare a simple page title field', function () {
     $sharpShow->buildShowConfig();
 
     expect($sharpShow->showConfig(1))
-        ->toHaveKey('titleAttribute', 'title');
-
-    expect($sharpShow->fields()['title'])
-        ->toEqual(SharpShowTextField::make('title')->toArray());
-
-    expect($sharpShow->instance(1))
+        ->toHaveKey('titleAttribute', 'title')
+        ->and($sharpShow->fields()['title'])
+        ->toEqual(SharpShowTextField::make('title')->toArray())
+        ->and($sharpShow->instance(1))
         ->toHaveKey('title', 'Some title');
+
 });
 
 it('allow to declare a localized page title field', function () {
@@ -256,10 +230,10 @@ it('allow to declare a localized page title field', function () {
     $sharpShow->buildShowConfig();
 
     expect($sharpShow->fields()['title'])
-        ->toEqual(SharpShowTextField::make('title')->setLocalized()->toArray());
-
-    expect($sharpShow->instance(1))
+        ->toEqual(SharpShowTextField::make('title')->setLocalized()->toArray())
+        ->and($sharpShow->instance(1))
         ->toHaveKey('title', ['en' => 'Some title', 'fr' => 'Un titre']);
+
 });
 
 it('returns isSingle in config for single shows', function () {
@@ -305,6 +279,6 @@ it('allows to configure show instance command in sections', function () {
 
     $show->buildShowConfig();
 
-    expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1');
-    expect($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
+    expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1')
+        ->and($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
 });

@@ -36,11 +36,14 @@ class ShowController extends SharpProtectedController
 
         $show->buildShowConfig();
 
+        $showData = $show->instance($instanceId);
+
         $data = [
             'config' => $show->showConfig($instanceId),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
-            'data' => $show->instance($instanceId),
+            'data' => $showData,
+            'pageAlert' => $show->pageAlert($showData),
             'locales' => $show->hasDataLocalizations()
                 ? $show->getDataLocalizations()
                 : null,

@@ -8,6 +8,7 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EntityAuthorizationsData;
 use Code16\Sharp\Data\NotificationData;
+use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\PaginatorMetaData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
@@ -18,14 +19,11 @@ final class EntityListData extends Data
         public EntityAuthorizationsData $authorizations,
         public EntityListConfigData $config,
         /** @var DataCollection<string,EntityListFieldData> */
-        public DataCollection $containers,
+        public DataCollection $fields,
         public EntityListDataData $data,
-        /** @var array<string,mixed> */
-        public array $fields,
+        public ?PageAlertData $pageAlert,
         /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
-        /** @var DataCollection<EntityListFieldLayoutData> */
-        public DataCollection $layout,
         #[Optional]
         public ?PaginatorMetaData $meta = null,
     ) {
@@ -36,11 +34,12 @@ final class EntityListData extends Data
         return new self(
             authorizations: new EntityAuthorizationsData(...$entityList['authorizations']),
             config: EntityListConfigData::from($entityList['config']),
-            containers: EntityListFieldData::collection($entityList['containers']),
+            fields: EntityListFieldData::collection($entityList['fields']),
             data: EntityListDataData::from($entityList['data']),
-            fields: $entityList['fields'],
+            pageAlert: $entityList['pageAlert']
+                ? PageAlertData::from($entityList['pageAlert'])
+                : null,
             forms: EntityListMultiformData::collection($entityList['forms']),
-            layout: EntityListFieldLayoutData::collection($entityList['layout']),
             meta: isset($entityList['meta'])
                 ? PaginatorMetaData::from($entityList['meta'])
                 : null,
