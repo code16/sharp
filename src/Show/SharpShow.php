@@ -47,9 +47,12 @@ abstract class SharpShow
             // Filter model attributes on actual show labels
             ->only(
                 collect($this->getDataKeys())
+                    ->merge(array_keys($this->transformers))
                     ->when($this->breadcrumbAttribute, fn ($collect) => $collect->push($this->breadcrumbAttribute))
                     ->when($this->entityStateAttribute, fn ($collect) => $collect->push($this->entityStateAttribute))
                     ->when($this->multiformAttribute, fn ($collect) => $collect->push($this->multiformAttribute))
+                    ->unique()
+                    ->values()
                     ->toArray()
             )
             ->all();

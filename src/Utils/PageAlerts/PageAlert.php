@@ -8,7 +8,7 @@ use Code16\Sharp\Enums\PageAlertLevel;
 class PageAlert
 {
     protected PageAlertLevel $pageAlertLevel = PageAlertLevel::Info;
-    protected string $text;
+    protected ?string $text;
     protected array $data;
 
     public final function setData(array $data): self

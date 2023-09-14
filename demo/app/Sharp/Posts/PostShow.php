@@ -110,7 +110,7 @@ class PostShow extends SharpShow
             ->setMessage(function (array $data) {
                 return $data['publication']['is_planned']
                     ? sprintf(
-                        '<i class="fa fa-calendar"></i> This post is planed for publication, on %s',
+                        '<i class="fa fa-calendar"></i> This post is planned for publication, on %s',
                         $data['publication']['published_at'],
                     )
                     : null;

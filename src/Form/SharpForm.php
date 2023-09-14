@@ -56,6 +56,7 @@ abstract class SharpForm
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->getDataKeys(),
+                    array_keys($this->transformers),
                 ),
             )
             ->all();

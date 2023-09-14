@@ -85,6 +85,7 @@ abstract class SharpEntityList
                 return collect($row)
                     ->only(
                         array_merge(
+                            array_keys($this->transformers),
                             $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
                             $this->multiformAttribute ? [$this->multiformAttribute] : [],
                             [$this->instanceIdAttribute],
