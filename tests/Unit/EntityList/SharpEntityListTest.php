@@ -3,6 +3,7 @@
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
@@ -187,7 +188,7 @@ it('allows to configure a page alert', function() {
     expect($list->pageAlert())
         ->toEqual([
             'text' => 'My page alert',
-            'level' => \Code16\Sharp\Enums\PageAlertLevel::Danger->value,
+            'level' => PageAlertLevel::Danger,
         ]);
 });
 

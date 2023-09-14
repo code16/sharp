@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
 use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
@@ -276,6 +277,6 @@ it('allows to declare a page alert', function () {
     expect($sharpForm->pageAlert())
         ->toEqual([
             'text' => 'My page alert',
-            'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+            'level' => PageAlertLevel::Info,
         ]);
 });

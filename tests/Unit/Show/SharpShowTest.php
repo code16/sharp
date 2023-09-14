@@ -180,7 +180,7 @@ it('allows to declare a page alert', function () {
     expect($sharpShow->pageAlert())
         ->toEqual([
             'text' => 'My page alert',
-            'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+            'level' => PageAlertLevel::Info,
         ]);
 });
 

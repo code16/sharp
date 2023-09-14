@@ -8,6 +8,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
@@ -384,6 +385,6 @@ it('allows to configure a page alert', function () {
     expect($dashboard->pageAlert())
         ->toEqual([
             'text' => 'My page alert',
-            'level' => \Code16\Sharp\Enums\PageAlertLevel::Warning->value,
+            'level' => PageAlertLevel::Warning,
         ]);
 });
