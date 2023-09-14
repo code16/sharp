@@ -55,14 +55,14 @@ export type ConfigFiltersData = { _root: Array<FilterData> } & {
 export type DashboardConfigData = {
   commands?: ConfigCommandsData | null;
   filters?: ConfigFiltersData | null;
-  globalMessage?: PageAlertConfigData | null;
+  globalMessage?: any | null;
 };
 export type DashboardData = {
   widgets: Array<WidgetData>;
   config: DashboardConfigData;
   layout: DashboardLayoutData;
   data: { [key: string]: any };
-  fields: { [key: string]: any };
+  pageAlert: PageAlertData | null;
 };
 export type DashboardLayoutData = {
   sections: Array<DashboardLayoutSectionData>;
@@ -117,16 +117,14 @@ export type EntityListConfigData = {
   commands?: ConfigCommandsData | null;
   multiformAttribute?: string | null;
   state?: EntityStateData | null;
-  globalMessage?: PageAlertConfigData | null;
 };
 export type EntityListData = {
   authorizations: EntityAuthorizationsData;
   config: EntityListConfigData;
-  containers: { [key: string]: EntityListFieldData };
+  fields: { [key: string]: EntityListFieldData };
   data: EntityListDataData;
-  fields: { [key: string]: any };
+  pageAlert: PageAlertData | null;
   forms: { [key: string]: EntityListMultiformData };
-  layout: Array<EntityListFieldLayoutData>;
   meta?: PaginatorMetaData | null;
 };
 export type EntityListDataData = {
@@ -142,9 +140,6 @@ export type EntityListFieldData = {
   label: string;
   sortable: boolean;
   html: boolean;
-};
-export type EntityListFieldLayoutData = {
-  key: string;
   size: string;
   hideOnXS: boolean;
   sizeXS: string;
@@ -194,11 +189,11 @@ export type FormConfigData = {
   deleteConfirmationText: string | null;
   isSingle: boolean;
   breadcrumbAttribute?: string | null;
-  globalMessage?: PageAlertConfigData | null;
 };
 export type FormData = {
   config: FormConfigData;
   data: { [key: string]: any };
+  pageAlert: PageAlertData | null;
 };
 export type FormFieldType =
   | "autocomplete"
@@ -288,9 +283,9 @@ export type OrderedListWidgetData = {
   link: string | null;
   html: boolean;
 };
-export type PageAlertConfigData = {
-  fieldKey: string;
-  alertLevel: PageAlertLevel | null;
+export type PageAlertData = {
+  level: PageAlertLevel;
+  text: string;
 };
 export type PageAlertLevel =
   | "info"
@@ -346,13 +341,13 @@ export type ShowConfigData = {
   titleAttribute?: string | null;
   breadcrumbAttribute?: string | null;
   state?: EntityStateData | null;
-  globalMessage?: PageAlertConfigData | null;
 };
 export type ShowData = {
   config: ShowConfigData;
   fields: { [key: string]: ShowFieldData };
   layout: ShowLayoutData;
   data: { [key: string]: any };
+  pageAlert: PageAlertData | null;
   locales: Array<string> | null;
   authorizations: InstanceAuthorizationsData;
 };
