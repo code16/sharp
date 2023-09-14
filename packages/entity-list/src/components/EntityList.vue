@@ -40,12 +40,6 @@
     const selectedItems: Ref<InstanceId[] | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
 
-    // TODO to be replaced by entityList.fields (see https://github.com/code16/sharp-dev/issues/295)
-    const fields = computed(() => props.entityList.layout.map(columnLayout => ({
-        ...columnLayout,
-        ...props.entityList.containers[columnLayout.key]
-    })));
-
     function onFilterChanged(filter: FilterData, value: FilterData['value']) {
         emit('update:query', {
             ...props.query,
@@ -324,7 +318,7 @@
                                             <span class="sr-only">Select...</span>
                                         </th>
                                     </template>
-                                    <template v-for="(field, i) in fields">
+                                    <template v-for="field in entityList.fields">
                                         <th scope="col"
                                             class="py-3.5 px-3 text-left text-sm w-[calc(var(--size)/12*100%)] font-semibold text-gray-900 first:pl-4 sm:first:pl-6"
                                             :style="{ '--size':field.size }"
@@ -357,7 +351,7 @@
                                                 </label>
                                             </td>
                                         </template>
-                                        <template v-for="(field, i) in fields">
+                                        <template v-for="(field, i) in entityList.fields">
                                             <td class="py-4 px-3 text-sm font-medium text-gray-900 first:pl-4 sm:first:pl-6">
                                                 <template v-if="i === 0 && entityList.instanceUrl(item) && !selecting">
                                                     <a class="absolute inset-0" :href="entityList.instanceUrl(item)"></a>

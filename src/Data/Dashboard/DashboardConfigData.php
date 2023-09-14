@@ -15,8 +15,6 @@ final class DashboardConfigData extends Data
         public ?ConfigCommandsData $commands = null,
         #[Optional]
         public ?ConfigFiltersData $filters = null,
-        #[Optional]
-        public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
 
