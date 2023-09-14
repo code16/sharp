@@ -83,18 +83,11 @@ class EntityListField
             'label' => $this->label,
             'sortable' => $this->sortable,
             'html' => $this->html,
-        ];
-    }
-
-    public function getLayoutProperties(): array
-    {
-        return [
-            'key' => $this->key,
             'size' => $this->width ?? 'fill',
             'hideOnXS' => $this->hideOnXs,
             'sizeXS' => isset($this->widthXs)
                 ? ($this->widthXs === true ? 'fill' : $this->widthXs)
-                : ($this->width ?? 'fill'),
+                : ($this->width ?? 'fill')
         ];
     }
 }

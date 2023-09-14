@@ -125,9 +125,9 @@ it('filters out data which is not displayed', function () {
 
 it('gets containers and layout', function () {
     fakeListFor('person', new class extends PersonList {
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(
                     EntityListField::make('name')
                         ->setLabel('Name')
@@ -147,26 +147,19 @@ it('gets containers and layout', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('entityList.containers', 2)
-            ->has('entityList.containers.name', fn (Assert $name) => $name
+            ->has('entityList.fields', 2)
+            ->has('entityList.fields.0', fn (Assert $name) => $name
                 ->where('key', 'name')
                 ->where('label', 'Name')
-                ->where('sortable', true)
-                ->etc()
-            )
-            ->has('entityList.containers.job', fn (Assert $job) => $job
-                ->where('key', 'job')
-                ->etc()
-            )
-            ->has('entityList.layout', 2)
-            ->has('entityList.layout.0', fn (Assert $name) => $name
-                ->where('key', 'name')
                 ->where('size', '6')
                 ->where('hideOnXS', false)
                 ->where('sizeXS', 'fill')
+                ->where('sortable', true)
+                ->etc()
             )
-            ->has('entityList.layout.1', fn (Assert $job) => $job
+            ->has('entityList.fields.1', fn (Assert $job) => $job
                 ->where('key', 'job')
+                ->where('label', 'Job')
                 ->where('size', '6')
                 ->where('hideOnXS', true)
                 ->etc()

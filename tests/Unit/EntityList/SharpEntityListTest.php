@@ -8,77 +8,83 @@ use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Arrayable;
 
-it('gets containers', function() {
+it('gets fields with layout', function() {
     $list = new class extends FakeSharpEntityList
     {
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer->addField(
+            $fields->addField(
                 EntityListField::make('name')
-                    ->setLabel('Name'),
+                    ->setLabel('Name')
+                    ->setWidth(6)
             );
         }
     };
 
     expect($list->fields())->toEqual([
-        'name' => [
+        [
             'key' => 'name',
             'label' => 'Name',
             'sortable' => false,
             'html' => true,
+            'size' => 6,
+            'sizeXS' => 6,
+            'hideOnXS' => false
         ],
-    ]);
-});
-
-it('returns layout', function() {
-    $list = new class extends FakeSharpEntityList
-    {
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-        {
-            $fieldsContainer
-                ->addField(EntityListField::make('name')->setWidth(6))
-                ->addField(EntityListField::make('age')->setWidth(6));
-        }
-    };
-
-    expect($list->listLayout())->toEqual([
-        ['key' => 'name', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false],
-        ['key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false]
     ]);
 });
 
 it('allows to define layout for small screens', function() {
     $list = new class extends FakeSharpEntityList
     {
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(EntityListField::make('name')->setWidth(6)->setWidthOnSmallScreens(12))
                 ->addField(EntityListField::make('age')->setWidth(6)->hideOnSmallScreens());
         }
     };
 
-    expect($list->listLayout())->toEqual([
-        ['key' => 'name', 'size' => 6, 'sizeXS' => 12, 'hideOnXS' => false],
-        ['key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => true]
-    ]);
+    expect($list->fields()[0])
+        ->toEqual([
+            'key' => 'name',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'size' => 6,
+            'sizeXS' => 12,
+            'hideOnXS' => false
+        ])
+        ->and($list->fields()[1])->toEqual([
+            'key' => 'age',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'size' => 6,
+            'sizeXS' => 6,
+            'hideOnXS' => true
+        ]);
 });
 
 it('allows to configure a column to fill left space', function() {
     $list = new class extends FakeSharpEntityList
     {
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(EntityListField::make('name')->setWidthOnSmallScreens(4))
                 ->addField(EntityListField::make('age'));
         }
     };
 
-    expect($list->listLayout())->toEqual([
-        ['key' => 'name', 'size' => 'fill', 'sizeXS' => 4, 'hideOnXS' => false],
-        ['key' => 'age', 'size' => 'fill', 'sizeXS' => 'fill', 'hideOnXS' => false]
-    ]);
+    expect($list->fields()[0])
+        ->toHaveKey('size', 'fill')
+        ->toHaveKey('sizeXS', 4)
+        ->toHaveKey('hideOnXS', false)
+        ->and($list->fields()[1])
+        ->toHaveKey('size', 'fill')
+        ->toHaveKey('sizeXS', 'fill')
+        ->toHaveKey('hideOnXS', false);
 });
 
 it('returns list data', function() {
@@ -92,9 +98,9 @@ it('returns list data', function() {
             ];
         }
 
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(EntityListField::make('name'))
                 ->addField(EntityListField::make('age'));
         }
@@ -121,9 +127,9 @@ it('can return paginated data', function() {
             return new LengthAwarePaginator($data, 10, 2, 1);
         }
 
-        public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fieldsContainer
+            $fields
                 ->addField(EntityListField::make('name'))
                 ->addField(EntityListField::make('age'));
         }

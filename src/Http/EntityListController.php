@@ -31,10 +31,9 @@ class EntityListController extends SharpProtectedController
         $list->initQueryParams();
 
         $data = [
-            'containers' => $list->fields(),
-            'layout' => $list->listLayout(),
+            'fields' => $list->fields(),
             'data' => $list->data(),
-            'fields' => $list->listMetaFields(),
+//            'fields' => $list->listMetaFields(),
             'config' => $list->listConfig(
                 $this->entityManager->entityFor($entityKey)->hasShow(),
             ),
