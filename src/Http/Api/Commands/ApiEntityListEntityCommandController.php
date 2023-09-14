@@ -19,13 +19,14 @@ class ApiEntityListEntityCommandController extends ApiController
         $list->initQueryParams();
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
+        $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
             array_merge(
                 $this->getCommandForm($commandHandler),
                 [
-                    'data' => $commandHandler->formData() ?: null,
-                    'pageAlert' => $commandHandler->pageAlert(),
+                    'data' => $formData,
+                    'pageAlert' => $commandHandler->pageAlert($formData),
                 ],
             ),
         );

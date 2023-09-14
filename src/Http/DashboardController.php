@@ -19,13 +19,14 @@ class DashboardController extends SharpProtectedController
         $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         $dashboard->init();
+        $dashboardData = $dashboard->data();
 
         $data = [
             'widgets' => $dashboard->widgets(),
             'config' => $dashboard->dashboardConfig(),
             'layout' => $dashboard->widgetsLayout(),
-            'data' => $dashboard->data(),
-            'pageAlert' => $dashboard->pageAlert(),
+            'data' => $dashboardData,
+            'pageAlert' => $dashboard->pageAlert($dashboardData),
         ];
 
         return Inertia::render('Dashboard/Dashboard', [

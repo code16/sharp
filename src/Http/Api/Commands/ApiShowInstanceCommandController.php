@@ -13,13 +13,14 @@ class ApiShowInstanceCommandController extends ApiController
     {
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
+        $formData = $commandHandler->formData($instanceId) ?: null;
 
         return response()->json(
             array_merge(
                 $this->getCommandForm($commandHandler),
                 [
-                    'data' => $commandHandler->formData($instanceId) ?: null,
-                    'pageAlert' => $commandHandler->pageAlert(),
+                    'data' => $formData,
+                    'pageAlert' => $commandHandler->pageAlert($formData),
                 ],
             ),
         );

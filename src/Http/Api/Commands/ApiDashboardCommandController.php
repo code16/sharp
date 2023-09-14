@@ -17,11 +17,15 @@ class ApiDashboardCommandController extends ApiController
         $dashboard->buildDashboardConfig();
 
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
+        $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
             array_merge(
                 $this->getCommandForm($commandHandler),
-                ['data' => $commandHandler->formData() ?: null],
+                [
+                    'data' => $formData,
+                    'pageAlert' => $commandHandler->pageAlert($formData),
+                ],
             ),
         );
     }

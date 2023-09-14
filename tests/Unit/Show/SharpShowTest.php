@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
@@ -202,13 +203,12 @@ it('allow to declare a simple page title field', function () {
     $sharpShow->buildShowConfig();
 
     expect($sharpShow->showConfig(1))
-        ->toHaveKey('titleAttribute', 'title');
-
-    expect($sharpShow->fields()['title'])
-        ->toEqual(SharpShowTextField::make('title')->toArray());
-
-    expect($sharpShow->instance(1))
+        ->toHaveKey('titleAttribute', 'title')
+        ->and($sharpShow->fields()['title'])
+        ->toEqual(SharpShowTextField::make('title')->toArray())
+        ->and($sharpShow->instance(1))
         ->toHaveKey('title', 'Some title');
+
 });
 
 it('allow to declare a localized page title field', function () {
@@ -230,10 +230,10 @@ it('allow to declare a localized page title field', function () {
     $sharpShow->buildShowConfig();
 
     expect($sharpShow->fields()['title'])
-        ->toEqual(SharpShowTextField::make('title')->setLocalized()->toArray());
-
-    expect($sharpShow->instance(1))
+        ->toEqual(SharpShowTextField::make('title')->setLocalized()->toArray())
+        ->and($sharpShow->instance(1))
         ->toHaveKey('title', ['en' => 'Some title', 'fr' => 'Un titre']);
+
 });
 
 it('returns isSingle in config for single shows', function () {
@@ -279,6 +279,6 @@ it('allows to configure show instance command in sections', function () {
 
     $show->buildShowConfig();
 
-    expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1');
-    expect($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
+    expect($show->showConfig(1)['commands']['instance'][0][0]['key'])->toEqual('cmd1')
+        ->and($show->showConfig(1)['commands']['my-section'][0][0]['key'])->toEqual('cmd2');
 });

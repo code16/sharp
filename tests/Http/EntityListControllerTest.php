@@ -4,6 +4,7 @@ use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\NotificationLevel;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
@@ -352,8 +353,39 @@ it('allows to configure a page alert', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.pageAlert', [
-                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'level' => PageAlertLevel::Info->value,
                 'text' => 'My page alert',
+            ])
+            ->etc()
+        );
+});
+
+it('allows to configure a page alert with a closure as content', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage(function (array $data) {
+                    return 'There are ' . count($data) . ' items.';
+                });
+        }
+
+        public function getListData(): array|Arrayable
+        {
+            return [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ];
+        }
+    });
+
+    $this->get('/sharp/s-list/person')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('entityList.pageAlert', [
+                'level' => PageAlertLevel::Info->value,
+                'text' => 'There are 2 items.',
             ])
             ->etc()
         );

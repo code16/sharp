@@ -28,13 +28,14 @@ class SingleShowController extends SharpProtectedController
         $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
 
         $show->buildShowConfig();
+        $showData = $show->instance(null);
 
         $data = [
             'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
-            'data' => $show->instance(null),
-            'pageAlert' => $show->pageAlert(),
+            'data' => $showData,
+            'pageAlert' => $show->pageAlert($showData),
             'locales' => $show->hasDataLocalizations()
                 ? $show->getDataLocalizations()
                 : null,

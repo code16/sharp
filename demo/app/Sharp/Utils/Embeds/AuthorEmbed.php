@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Support\Arr;
 
 class AuthorEmbed extends SharpFormEditorEmbed
@@ -18,8 +19,14 @@ class AuthorEmbed extends SharpFormEditorEmbed
         $this
             ->configureLabel('Author')
             ->configureTagName('x-author')
-            ->configurePageAlert('Please fill author detail below', static::$pageAlertLevelSecondary)
             ->configureFormTemplatePath('sharp/templates/author_embed.vue');
+    }
+
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setLevelSecondary()
+            ->setMessage('Please fill author detail below');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void

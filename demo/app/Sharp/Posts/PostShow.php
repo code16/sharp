@@ -22,6 +22,7 @@ use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Support\Str;
 
@@ -99,12 +100,21 @@ class PostShow extends SharpShow
             ->configureEntityState('state', PostStateHandler::class)
             ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
             ->configurePageTitleAttribute('title', localized: true)
-            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?')
-            ->configurePageAlert(
-                '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>',
-                static::$pageAlertLevelInfo,
-                'publication',
-            );
+            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?');
+    }
+
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setLevelInfo()
+            ->setMessage(function ($instanceId, array $data) {
+                return $data['publication']['is_planned']
+                    ? sprintf(
+                        '<i class="fa fa-calendar"></i> This post is planed for publication, on %s',
+                        $data['publication']['published_at'],
+                    )
+                    : null;
+            });
     }
 
     public function getInstanceCommands(): ?array

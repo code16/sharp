@@ -292,8 +292,6 @@ it('returns the valuated multiform attribute if configured', function () {
 });
 
 it('allows to configure a page alert', function () {
-    $this->withoutExceptionHandling();
-
     fakeShowFor('person', new class extends PersonShow {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
@@ -309,6 +307,37 @@ it('allows to configure a page alert', function () {
             ->where('show.pageAlert', [
                 'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
                 'text' => 'My page alert',
+            ])
+            ->etc()
+        );
+});
+
+it('allows to configure a page alert with a closure as content', function () {
+    fakeShowFor('person', new class extends PersonShow {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage(function (array $data) {
+                    return 'Hello ' . $data['name'];
+                });
+        }
+
+        public function find($id): array
+        {
+            return [
+                'id' => 1,
+                'name' => 'Marie Curie',
+            ];
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.pageAlert', [
+                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'text' => 'Hello Marie Curie',
             ])
             ->etc()
         );

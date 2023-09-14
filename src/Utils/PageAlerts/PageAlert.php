@@ -2,51 +2,59 @@
 
 namespace Code16\Sharp\Utils\PageAlerts;
 
+use Closure;
 use Code16\Sharp\Enums\PageAlertLevel;
 
 class PageAlert
 {
     protected PageAlertLevel $pageAlertLevel = PageAlertLevel::Info;
     protected string $text;
+    protected array $data;
+
+    public final function setData(array $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    public function setLevel(PageAlertLevel $level): self
+    {
+        $this->pageAlertLevel = $level;
+
+        return $this;
+    }
 
     public function setLevelInfo(): self
     {
-        $this->pageAlertLevel = PageAlertLevel::Info;
-
-        return $this;
+        return $this->setLevel(PageAlertLevel::Info);
     }
 
     public function setLevelWarning(): self
     {
-        $this->pageAlertLevel = PageAlertLevel::Warning;
-
-        return $this;
+        return $this->setLevel(PageAlertLevel::Warning);
     }
 
     public function setLevelDanger(): self
     {
-        $this->pageAlertLevel = PageAlertLevel::Danger;
-
-        return $this;
+        return $this->setLevel(PageAlertLevel::Danger);
     }
 
     public function setLevelPrimary(): self
     {
-        $this->pageAlertLevel = PageAlertLevel::Primary;
-
-        return $this;
+        return $this->setLevel(PageAlertLevel::Primary);
     }
 
     public function setLevelSecondary(): self
     {
-        $this->pageAlertLevel = PageAlertLevel::Secondary;
-
-        return $this;
+        return $this->setLevel(PageAlertLevel::Secondary);
     }
 
-    public function setMessage(string $message): self
+    public function setMessage(Closure|string $message): self
     {
-        $this->text = $message;
+        $this->text = $message instanceof Closure
+            ? $message($this->data)
+            : $message;
 
         return $this;
     }

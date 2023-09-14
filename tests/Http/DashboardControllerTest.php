@@ -7,6 +7,7 @@ use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Dashboard\Widgets\SharpFigureWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpPanelWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
+use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Tests\Fixtures\Entities\DashboardEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
@@ -96,6 +97,37 @@ it('allows to configure a page alert', function () {
             ->where('dashboard.pageAlert', [
                 'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
                 'text' => 'My page alert',
+            ])
+            ->etc()
+        );
+});
+
+it('allows to configure a page alert with a closure as content', function () {
+    fakeShowFor('stats', new class extends TestDashboard {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage(function ($data) {
+                    return 'Data for ' . $data['panel']['data']['month'];
+                });
+        }
+
+        protected function buildWidgetsData(): void
+        {
+            $this->setPanelData(
+                'panel',
+                ['month' => 'March']
+            );
+        }
+    });
+
+    $this->get('/sharp/s-dashboard/stats')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('dashboard.pageAlert', [
+                'level' => PageAlertLevel::Info->value,
+                'text' => 'Data for March',
             ])
             ->etc()
         );

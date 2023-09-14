@@ -15,20 +15,11 @@ final class FormConfigData extends Data
         public bool $isSingle = false,
         #[Optional]
         public ?string $breadcrumbAttribute = null,
-        #[Optional]
-        public ?PageAlertConfigData $globalMessage = null,
     ) {
     }
 
     public static function from(array $config): self
     {
-        $config = [
-            ...$config,
-            'globalMessage' => isset($config['globalMessage'])
-                ? PageAlertConfigData::from($config['globalMessage'])
-                : null,
-        ];
-
         return new self(...$config);
     }
 }
