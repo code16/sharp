@@ -12,24 +12,25 @@ use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
-    use HandleFilters,
-        HandleEntityState,
-        HandleEntityCommands,
-        HandleInstanceCommands,
-        HandlePageAlertMessage,
-        WithCustomTransformers;
+    use HandleFilters;
+    use HandleEntityState;
+    use HandleEntityCommands;
+    use HandleInstanceCommands;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
     protected ?string $multiformAttribute = null;
     protected bool $searchable = false;
-    protected bool $paginated = false;
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort = null;
     protected ?string $defaultSortDir = null;
@@ -64,51 +65,38 @@ abstract class SharpEntityList
             ->toArray();
     }
 
-    final public function data($items = null): array
+    final public function data(): array
     {
-        $items = $items ?: $this->getListData();
-        $page = $totalCount = $pageSize = null;
+        $listItems = $this->getListData();
 
-        if ($items instanceof LengthAwarePaginator) {
-            $page = $items->currentPage();
-            $totalCount = $items->total();
-            $pageSize = $items->perPage();
-            $items = $items->items();
-        }
+        $items = $listItems instanceof AbstractPaginator
+            ? $listItems->items()
+            : $listItems;
 
         $this->addInstanceCommandsAuthorizationsToConfigForItems($items);
 
-        $keys = $this->getDataKeys();
         $items = collect($items)
-            ->map(function ($row) use ($keys) {
-                // Filter model attributes on actual form fields
-                return collect($row)
-                    ->only(
-                        array_merge(
-                            array_keys($this->transformers),
-                            $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                            $this->multiformAttribute ? [$this->multiformAttribute] : [],
-                            [$this->instanceIdAttribute],
-                            $keys,
-                        ),
-                    )
-                    ->toArray();
-            })
+            // Filter model attributes on actual form fields
+            ->map(fn ($row) => collect($row)
+                ->only(
+                    array_merge(
+                        array_keys($this->transformers),
+                        $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                        $this->multiformAttribute ? [$this->multiformAttribute] : [],
+                        [$this->instanceIdAttribute],
+                        $this->getDataKeys(),
+                    ),
+                )
+                ->toArray()
+            )
             ->toArray();
 
-        return collect(
-            [
-                'list' => collect(['items' => $items ?? []])
-                    ->when($page !== null, function (Collection $collection) use ($page, $totalCount, $pageSize) {
-                        $collection['page'] = $page;
-                        $collection['totalCount'] = $totalCount;
-                        $collection['pageSize'] = $pageSize;
-
-                        return $collection;
-                    })
-                    ->toArray(),
-            ])
-            ->toArray();
+        return [
+            'items' => $items,
+            'meta' => $listItems instanceof AbstractPaginator
+                ? Arr::except($listItems->toArray(), ['data', 'links'])
+                : null,
+        ];
     }
 
     final public function listConfig(bool $hasShowPage = false): array
@@ -117,7 +105,6 @@ abstract class SharpEntityList
             'instanceIdAttribute' => $this->instanceIdAttribute,
             'multiformAttribute' => $this->multiformAttribute,
             'searchable' => $this->searchable,
-            'paginated' => $this->paginated,
             'reorderable' => ! is_null($this->reorderHandler),
             'defaultSort' => $this->defaultSort,
             'defaultSortDir' => $this->defaultSortDir,
@@ -169,13 +156,6 @@ abstract class SharpEntityList
     {
         $this->defaultSort = $sortBy;
         $this->defaultSortDir = $sortDir;
-
-        return $this;
-    }
-
-    final public function configurePaginated(bool $paginated = true): self
-    {
-        $this->paginated = $paginated;
 
         return $this;
     }
@@ -234,14 +214,6 @@ abstract class SharpEntityList
      * Return all filters in an array of class names or instances.
      */
     protected function getFilters(): ?array
-    {
-        return null;
-    }
-
-    /**
-     * Return global message data if needed.
-     */
-    protected function getGlobalMessageData(): ?array
     {
         return null;
     }
