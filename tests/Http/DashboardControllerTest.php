@@ -78,18 +78,23 @@ it('gets dashboard widgets, layout and data', function () {
         );
 });
 
-it('gets dashboard config', function () {
+it('allows to configure a page alert', function () {
     fakeShowFor('stats', new class extends TestDashboard {
-        public function buildDashboardConfig(): void
+        public function buildPageAlert(PageAlert $pageAlert): ?PageAlert
         {
-            $this->configurePageAlert('alert');
+            return $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
         }
     });
 
     $this->get('/sharp/s-dashboard/stats')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('dashboard.config.globalMessage.fieldKey')
+            ->where('dashboard.pageAlert', [
+                'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+                'message' => 'My page alert',
+            ])
             ->etc()
         );
 });

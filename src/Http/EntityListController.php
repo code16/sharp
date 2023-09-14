@@ -33,7 +33,7 @@ class EntityListController extends SharpProtectedController
         $data = [
             'fields' => $list->fields(),
             'data' => $list->data(),
-//            'fields' => $list->listMetaFields(),
+            'pageAlert' => $list->pageAlert(),
             'config' => $list->listConfig(
                 $this->entityManager->entityFor($entityKey)->hasShow(),
             ),

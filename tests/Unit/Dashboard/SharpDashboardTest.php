@@ -11,6 +11,7 @@ use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\Unit\Dashboard\Fakes\FakeSharpDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 it('returns widgets', function () {
     $dashboard = new class extends FakeSharpDashboard
@@ -369,54 +370,20 @@ it('handles ordered list widget item url', function () {
         ]);
 });
 
-it('allows to configure a global message field without data', function () {
+it('allows to configure a page alert', function () {
     $dashboard = new class extends FakeSharpDashboard
     {
-        public function buildDashboardConfig(): void
+        public function buildPageAlert(PageAlert $pageAlert): void
         {
-            $this->configurePageAlert('template', null, 'test-key');
+            $pageAlert
+                ->setLevelWarning()
+                ->setMessage('My page alert');
         }
     };
 
-    $dashboard->buildDashboardConfig();
-
-    expect($dashboard->dashboardConfig()['globalMessage']['fieldKey'])->toEqual('test-key')
-        ->and($dashboard->dashboardMetaFields()['test-key'])->toEqual(
-            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray()
-        );
-});
-
-it('allows to configure a global message field with template data', function () {
-    $dashboard = new class extends FakeSharpDashboard
-    {
-        public function buildDashboardConfig(): void
-        {
-            $this->configurePageAlert('Hello {{name}}', null, 'test-key');
-        }
-
-        public function buildWidgetsData(): void
-        {
-            $this->setPageAlertData([
-                'name' => 'Bob',
-            ]);
-        }
-    };
-
-    $dashboard->buildDashboardConfig();
-
-    expect($dashboard->data()['test-key'])->toEqual(['name' => 'Bob']);
-});
-
-it('allows to configure a global message field with alert level', function () {
-    $dashboard = new class extends FakeSharpDashboard
-    {
-        public function buildDashboardConfig(): void
-        {
-            $this->configurePageAlert('alert', static::$pageAlertLevelDanger);
-        }
-    };
-
-    $dashboard->buildDashboardConfig();
-
-    expect($dashboard->dashboardConfig()['globalMessage']['alertLevel'])->toEqual('danger');
+    expect($dashboard->pageAlert())
+        ->toEqual([
+            'text' => 'My page alert',
+            'level' => \Code16\Sharp\Enums\PageAlertLevel::Warning->value,
+        ]);
 });

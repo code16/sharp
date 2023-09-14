@@ -73,7 +73,6 @@ abstract class SharpShow
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
-            $this->appendGlobalMessageToConfig($config);
         });
     }
 

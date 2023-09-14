@@ -44,7 +44,6 @@ abstract class SharpForm
             ],
             function (&$config) {
                 $this->appendBreadcrumbCustomLabelAttribute($config);
-                $this->appendGlobalMessageToConfig($config);
             },
         );
     }
@@ -87,17 +86,6 @@ abstract class SharpForm
 
     public function buildFormConfig(): void
     {
-    }
-
-    /**
-     * @deprecated
-     * Instance deletion was move to Show Page and/or Entity List. Will be removed in v9.
-     */
-    protected function configureDeleteConfirmation(?string $text = null): self
-    {
-        $this->deleteConfirmationText = $text ?: trans('sharp::form.delete_confirmation_text');
-
-        return $this;
     }
 
     protected function configureDisplayShowPageAfterCreation(bool $displayShowPage = true): self
@@ -154,10 +142,8 @@ abstract class SharpForm
         // Build a fake Model class based on attributes
         return $this->transform(new class($attributes) extends \stdClass
         {
-            public function __construct($attributes)
+            public function __construct(private array $attributes)
             {
-                $this->attributes = $attributes;
-
                 foreach ($attributes as $name => $value) {
                     $this->$name = $value;
                 }

@@ -11,6 +11,7 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 
 it('returns form fields', function () {
     $form = new class extends FakeSharpForm
@@ -259,4 +260,22 @@ it('allows to declare setDisplayShowPageAfterCreation in config', function () {
         ],
         $sharpForm->formConfig(),
     );
+});
+
+it('allows to declare a page alert', function () {
+    $sharpForm = new class extends FakeSharpForm
+    {
+        public function buildPageAlert(PageAlert $pageAlert): void
+        {
+            $pageAlert
+                ->setLevelInfo()
+                ->setMessage('My page alert');
+        }
+    };
+
+    expect($sharpForm->pageAlert())
+        ->toEqual([
+            'text' => 'My page alert',
+            'level' => \Code16\Sharp\Enums\PageAlertLevel::Info->value,
+        ]);
 });

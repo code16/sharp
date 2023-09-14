@@ -107,11 +107,6 @@ abstract class SharpEntityList
                     })
                     ->toArray(),
             ])
-            ->when($this->pageAlertHtmlField !== null, function (Collection $collection) {
-                $collection[$this->pageAlertHtmlField->key] = $this->getGlobalMessageData();
-
-                return $collection;
-            })
             ->toArray();
     }
 
@@ -135,19 +130,7 @@ abstract class SharpEntityList
             $this->appendEntityStateToConfig($config);
             $this->appendInstanceCommandsToConfig($config);
             $this->appendEntityCommandsToConfig($config);
-            $this->appendGlobalMessageToConfig($config);
         });
-    }
-
-    final public function listMetaFields(): array
-    {
-        if ($this->pageAlertHtmlField) {
-            return [
-                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray(),
-            ];
-        }
-
-        return [];
     }
 
     final public function configureInstanceIdAttribute(string $instanceIdAttribute): self

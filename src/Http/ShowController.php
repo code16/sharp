@@ -41,6 +41,7 @@ class ShowController extends SharpProtectedController
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
             'data' => $show->instance($instanceId),
+            'pageAlert' => $show->pageAlert(),
             'locales' => $show->hasDataLocalizations()
                 ? $show->getDataLocalizations()
                 : null,

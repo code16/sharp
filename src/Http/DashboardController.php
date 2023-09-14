@@ -25,7 +25,7 @@ class DashboardController extends SharpProtectedController
             'config' => $dashboard->dashboardConfig(),
             'layout' => $dashboard->widgetsLayout(),
             'data' => $dashboard->data(),
-            'fields' => $dashboard->dashboardMetaFields(),
+            'pageAlert' => $dashboard->pageAlert(),
         ];
 
         return Inertia::render('Dashboard/Dashboard', [

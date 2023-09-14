@@ -5,6 +5,7 @@ use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -172,61 +173,22 @@ it('returns list config', function() {
     ]);
 });
 
-it('allows to configure a global message field without data', function() {
+it('allows to configure a page alert', function() {
     $list = new class extends FakeSharpEntityList
     {
-        public function buildListConfig(): void
+        public function buildPageAlert(PageAlert $pageAlert): void
         {
-            $this->configurePageAlert('template', null, 'test-key');
+            $pageAlert
+                ->setLevelDanger()
+                ->setMessage('My page alert');
         }
     };
 
-    $list->buildListConfig();
-
-    expect($list->listConfig()['globalMessage'])
+    expect($list->pageAlert())
         ->toEqual([
-            'fieldKey' => 'test-key',
-            'alertLevel' => null,
-        ])
-        ->and($list->listMetaFields()['test-key'])->toEqual(
-            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray()
-        );
-
-});
-
-it('allows to configure a global message field with template data', function() {
-    $list = new class extends FakeSharpEntityList
-    {
-        public function buildListConfig(): void
-        {
-            $this->configurePageAlert('Hello {{name}}', null, 'test-key');
-        }
-
-        public function getGlobalMessageData(): ?array
-        {
-            return [
-                'name' => 'Bob',
-            ];
-        }
-    };
-
-    $list->buildListConfig();
-
-    expect($list->data()['test-key'])->toEqual(['name' => 'Bob']);
-});
-
-it('allows to configure a global message field with alert level', function() {
-    $list = new class extends FakeSharpEntityList
-    {
-        public function buildListConfig(): void
-        {
-            $this->configurePageAlert('alert', static::$pageAlertLevelDanger);
-        }
-    };
-
-    $list->buildListConfig();
-
-    expect($list->listConfig()['globalMessage']['alertLevel'])->toEqual('danger');
+            'text' => 'My page alert',
+            'level' => \Code16\Sharp\Enums\PageAlertLevel::Danger->value,
+        ]);
 });
 
 it('allows to configure the deletion action to disallow it', function() {
