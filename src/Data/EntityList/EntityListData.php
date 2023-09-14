@@ -20,7 +20,8 @@ final class EntityListData extends Data
         public EntityListConfigData $config,
         /** @var DataCollection<EntityListFieldData> */
         public DataCollection $fields,
-        public EntityListDataData $data,
+        #[LiteralTypeScriptType('Array<{ [key: string]: any }>')]
+        public array $data,
         /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
         #[Optional]
@@ -36,7 +37,7 @@ final class EntityListData extends Data
             authorizations: new EntityAuthorizationsData(...$entityList['authorizations']),
             config: EntityListConfigData::from($entityList['config']),
             fields: EntityListFieldData::collection($entityList['fields']),
-            data: EntityListDataData::from($entityList['data']),
+            data: $entityList['data'],
             forms: EntityListMultiformData::collection($entityList['forms']),
             meta: PaginatorMetaData::optional($entityList['meta'] ?? null),
             pageAlert: PageAlertData::optional($entityList['pageAlert'] ?? null),

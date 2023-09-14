@@ -1,56 +1,72 @@
-<template>
-    <b-pagination
-        class="SharpPagination"
-        :total-rows="totalRows"
-        :per-page="perPage"
-        :hide-goto-end-buttons="hideGotoEndButtons"
-        v-bind="$attrs"
-    >
-        <template v-slot:first-text>
-            <i class="fas fa-angle-double-left" aria-hidden="true"></i>
-        </template>
-        <template v-slot:prev-text>
-            <i class="fas fa-angle-left" aria-hidden="true"></i>
-        </template>
-        <template v-slot:next-text>
-            <i class="fas fa-angle-right" aria-hidden="true"></i>
-        </template>
-        <template v-slot:last-text>
-            <i class="fas fa-angle-double-right" aria-hidden="true"></i>
-        </template>
-    </b-pagination>
-</template>
+<script setup lang="ts">
+    import { Link } from "@inertiajs/vue3";
+    import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/20/solid";
+    import { PaginatorMetaData } from "@/types";
 
-<script>
-    // import { BPagination } from 'bootstrap-vue';
+    const props = defineProps<{
+        paginator: { meta: PaginatorMetaData },
+        inertia?: boolean
+    }>();
 
-    // for props/events check
-    // https://bootstrap-vue.js.org/docs/components/pagination
+    const emit = defineEmits('change');
 
-    export default {
-        name: 'SharpPagination',
-        inheritAttrs: false,
-
-        components: {
-            BPagination: {
-                template: '<div><slot /></div>',  // todo
-            },
-        },
-
-        props: {
-            totalRows: Number,
-            perPage: Number,
-            minPageEndButtons: {
-                type: Number,
-                default: 0,
-            },
-        },
-
-        computed: {
-            hideGotoEndButtons() {
-                const numberOfPages = Math.ceil(this.totalRows / Math.max(this.perPage, 1));
-                return numberOfPages < this.minPageEndButtons;
-            },
-        },
+    function onLinkClick(e) {
+        if(props.inertia && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey))
+            return;
+        emit('change', new URL(e.target.closest('a').href).searchParams.get('page'));
+        e.preventDefault();
     }
 </script>
+
+<template>
+    <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        <template v-if="paginator.meta.prev_page_url">
+            <a :href="paginator.meta.prev_page_url"
+                class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus-visible:z-20"
+                @click="onLinkClick"
+            >
+                <ChevronLeftIcon class="h-5 w-5" />
+                <span class="sr-only">Précédent</span>
+            </a>
+        </template>
+        <template v-else>
+            <span class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500">
+                <ChevronLeftIcon class="h-5 w-5" />
+            </span>
+        </template>
+
+        <template v-for="link in paginator.meta.links?.slice(1, -1)">
+            <template v-if="link.url">
+                <a :href="link.url" :aria-current="link.active ? 'page' : null"
+                    :class="link.active
+                        ? 'relative z-10 inline-flex items-center border border-primary-500 bg-primary-50 px-4 py-2 text-sm font-medium text-primary-600 focus-visible:z-20'
+                        : 'relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus-visible:z-20'
+                    "
+                    @click="onLinkClick"
+                >
+                    {{ link.label }}
+                </a>
+            </template>
+            <template v-else>
+                <span class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700">
+                    {{ link.label }}
+                </span>
+            </template>
+        </template>
+
+        <template v-if="paginator.meta.next_page_url">
+            <a :href="paginator.meta.next_page_url"
+                class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus-visible:z-20"
+                @click.prevent="onLinkClick"
+            >
+                <span class="sr-only">Suivant</span>
+                <ChevronRightIcon class="h-5 w-5" />
+            </a>
+        </template>
+        <template v-else>
+            <span class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500">
+                <ChevronRightIcon class="h-5 w-5" />
+            </span>
+        </template>
+    </nav>
+</template>

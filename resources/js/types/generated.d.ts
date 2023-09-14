@@ -61,7 +61,7 @@ export type DashboardData = {
   config: DashboardConfigData;
   layout: DashboardLayoutData;
   data: { [key: string]: any };
-  pageAlert: PageAlertData | null;
+  pageAlert?: PageAlertData | null;
 };
 export type DashboardLayoutData = {
   sections: Array<DashboardLayoutSectionData>;
@@ -105,7 +105,6 @@ export type EntityAuthorizationsData = {
 export type EntityListConfigData = {
   instanceIdAttribute: string;
   searchable: boolean;
-  paginated: boolean;
   reorderable: boolean;
   defaultSort: string | null;
   defaultSortDir: string | null;
@@ -121,19 +120,11 @@ export type EntityListData = {
   authorizations: EntityAuthorizationsData;
   config: EntityListConfigData;
   fields: Array<EntityListFieldData>;
-  data: EntityListDataData;
+  data: Array<{ [key: string]: any }>;
   forms: { [key: string]: EntityListMultiformData };
   meta?: PaginatorMetaData | null;
   pageAlert?: PageAlertData | null;
 };
-export type EntityListDataData = {
-  list: {
-    items: Array<{ [key: string]: any }>;
-    page?: number;
-    pageSize?: number;
-    totalCount?: number;
-  };
-} & { [key: string]: ShowHtmlFieldData["value"] };
 export type EntityListFieldData = {
   key: string;
   label: string;
@@ -287,19 +278,19 @@ export type PageAlertData = {
   text: string;
 };
 export type PageAlertLevel =
-  | "info"
-  | "warning"
   | "danger"
+  | "info"
   | "primary"
-  | "secondary";
+  | "secondary"
+  | "warning";
 export type PaginatorMetaData = {
   current_page: number;
   first_page_url: string;
   from: number;
-  next_page_url: string;
+  next_page_url: string | null;
   path: string;
   per_page: number;
-  prev_page_url: string;
+  prev_page_url: string | null;
   to: number;
   links?: Array<{ url: string | null; label: string; active: boolean }>;
   last_page?: number | null;
@@ -342,13 +333,13 @@ export type ShowConfigData = {
   state?: EntityStateData | null;
 };
 export type ShowData = {
+  authorizations: InstanceAuthorizationsData;
   config: ShowConfigData;
+  data: { [key: string]: any };
   fields: { [key: string]: ShowFieldData };
   layout: ShowLayoutData;
-  data: { [key: string]: any };
-  pageAlert: PageAlertData | null;
   locales: Array<string> | null;
-  authorizations: InstanceAuthorizationsData;
+  pageAlert?: PageAlertData | null;
 };
 export type ShowEntityListFieldData = {
   value?: null | null;

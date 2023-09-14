@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -94,7 +95,7 @@ abstract class SharpEntityList
         return [
             'items' => $items,
             'meta' => $listItems instanceof AbstractPaginator
-                ? Arr::except($listItems->toArray(), 'data')
+                ? Arr::except($listItems->withQueryString()->toArray(), 'data')
                 : null,
         ];
     }

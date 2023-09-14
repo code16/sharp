@@ -308,7 +308,7 @@
                     </div>
                 </template>
 
-                <template v-if="entityList.data.list.items?.length > 0">
+                <template v-if="entityList.data?.length > 0">
                     <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-300">
                             <thead class="bg-gray-50">
@@ -326,7 +326,7 @@
                                             {{ field.label }}
                                         </th>
                                     </template>
-                                    <template v-if="!reordering && entityList.data.list.items.some(item => entityList.instanceHasActions(item))">
+                                    <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item))">
                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                             <span class="sr-only">Edit</span>
                                         </th>
@@ -334,7 +334,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
-                                <template v-for="item in entityList.data.list.items" :key="entityList.instanceId(item)">
+                                <template v-for="item in entityList.data" :key="entityList.instanceId(item)">
                                     <tr class="relative" :class="{ 'hover:bg-gray-50': entityList.instanceUrl(item) }">
                                         <template v-if="selecting">
                                             <td class="px-7 sm:w-12 sm:px-6">
@@ -492,15 +492,8 @@
 
                 <template v-if="entityList.meta?.last_page > 1">
                     <div class="mt-12">
-
-<!--                        TODO refacto with meta.links -->
-
                         <Pagination
-                            :value="entityList.meta.current_page"
-                            :total-rows="entityList.meta.total"
-                            :per-page="entityList.meta.per_page"
-                            :min-page-end-buttons="3"
-                            :limit="7"
+                            :paginator="entityList"
                             @change="onPageChange"
                         />
                     </div>

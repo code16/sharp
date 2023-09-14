@@ -4,7 +4,6 @@ import {
     EntityAuthorizationsData,
     EntityListConfigData,
     EntityListData,
-    EntityListDataData,
     EntityListFieldData,
     EntityListMultiformData,
     EntityStateValueData,
@@ -17,7 +16,7 @@ import { Instance, InstanceId } from "./types";
 export class EntityList implements EntityListData {
     authorizations: EntityAuthorizationsData;
     config: EntityListConfigData;
-    data: EntityListDataData;
+    data: Array<{ [key: string]: any }>;
     fields: Array<EntityListFieldData>;
     forms: { [p: string]: EntityListMultiformData };
     meta?: PaginatorMetaData | null;
@@ -41,7 +40,7 @@ export class EntityList implements EntityListData {
     }
 
     get count() {
-        return this.data.list.totalCount ?? this.data.list.items.length;
+        return this.meta.total ?? this.data.length;
     }
 
     get visibleFilters(): Array<FilterData> {
@@ -76,11 +75,11 @@ export class EntityList implements EntityListData {
     get canReorder() {
         return this.config.reorderable
             && this.authorizations.update
-            && this.data.list.items.length > 0;
+            && this.data.length > 0;
     }
 
     withRefreshedItems(refreshedItems: Instance[]): EntityList {
-        this.data.list.items = this.data.list.items.map(item => {
+        this.data = this.data.map(item => {
             return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
                 ?? item;
         });

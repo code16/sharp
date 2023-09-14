@@ -21,6 +21,7 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\Paginator;
 
 class PostList extends SharpEntityList
 {
@@ -57,7 +58,6 @@ class PostList extends SharpEntityList
     public function buildListConfig(): void
     {
         $this
-            ->configurePaginated()
             ->configureEntityState('state', PostStateHandler::class)
             ->configureDefaultSort('published_at', 'desc')
             ->configureDelete(confirmationText: 'Are you sure you want to delete this post (this will permanently delete its data)?')
@@ -169,6 +169,8 @@ class PostList extends SharpEntityList
                     $builder->orderBy('published_at', $this->queryParams->sortedDir() ?: 'desc');
                 },
             );
+
+//        dd($posts->paginate(20)->toArray());
 
         return $this
             ->setCustomTransformer('title', function ($value, Post $instance) {
