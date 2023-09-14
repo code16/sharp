@@ -107,7 +107,7 @@ class PostShow extends SharpShow
     {
         $pageAlert
             ->setLevelInfo()
-            ->setMessage(function ($instanceId, array $data) {
+            ->setMessage(function (array $data) {
                 return $data['publication']['is_planned']
                     ? sprintf(
                         '<i class="fa fa-calendar"></i> This post is planed for publication, on %s',
