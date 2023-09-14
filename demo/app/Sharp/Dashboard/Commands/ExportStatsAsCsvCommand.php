@@ -19,7 +19,7 @@ class ExportStatsAsCsvCommand extends DashboardCommand
     {
         $pageAlert
             ->setLevelInfo()
-            ->setMessage(function ($instanceId, array $data) {
+            ->setMessage(function (array $data) {
                 return sprintf(
                     'For the period %s - %s',
                     $data['period']['start'],
