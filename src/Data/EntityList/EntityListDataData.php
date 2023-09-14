@@ -8,15 +8,15 @@ use Illuminate\Contracts\Support\Arrayable;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 
-#[LiteralTypeScriptType('{
-    list: {
-        items: Array<{ [key: string]: any }>;
-        page?: number;
-        pageSize?: number;
-        totalCount?: number;
-    }
-} & { [key: string]: ShowHtmlFieldData["value"] }'
-)]
+//#[LiteralTypeScriptType('{
+//    list: {
+//        items: Array<{ [key: string]: any }>;
+//        page?: number;
+//        pageSize?: number;
+//        totalCount?: number;
+//    }
+//} & { [key: string]: ShowHtmlFieldData["value"] }'
+//)]
 final class EntityListDataData implements Arrayable
 {
     public function __construct(

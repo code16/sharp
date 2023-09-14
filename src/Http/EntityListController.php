@@ -31,27 +31,27 @@ class EntityListController extends SharpProtectedController
         $list->initQueryParams();
 
         $listData = $list->data();
+        $listConfig = $list->listConfig($this->entityManager->entityFor($entityKey)->hasShow());
 
         $data = [
             'fields' => $list->fields(),
-            'data' => $listData,
-            'pageAlert' => $list->pageAlert($listData['list']['items']),
-            'config' => $list->listConfig(
-                $this->entityManager->entityFor($entityKey)->hasShow(),
+            'data' => $listData['items'],
+            'meta' => $listData['meta'],
+            'pageAlert' => $list->pageAlert($listData['items']),
+            'config' => $listConfig,
+            'authorizations' => $this->getAuthorizationsForEntityList(
+                $entityKey,
+                $listData['items'],
+                $listConfig,
+            ),
+            'forms' => $this->getMultiformDataForEntityList(
+                $entityKey,
+                $listData['items'],
+                $listConfig,
             ),
         ];
 
-        $data['authorizations'] = $this->getAuthorizationsForEntityList(
-            $entityKey,
-            $data['data']['list']['items'],
-            $data['config'],
-        );
-
-        $data['forms'] = $this->getMultiformDataForEntityList(
-            $entityKey,
-            $data['data']['list']['items'],
-            $data['config'],
-        );
+//        dd($data);
 
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),

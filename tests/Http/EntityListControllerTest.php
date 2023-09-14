@@ -37,14 +37,14 @@ it('gets list data for an entity', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
                 ['id' => 2, 'name' => 'Niels Bohr'],
             ])
         );
 });
 
-it('gets paginated data is configured', function () {
+it('gets paginated data if wanted', function () {
     fakeListFor('person', new class extends PersonList {
         public function getListData(): array|Arrayable
         {
@@ -60,13 +60,19 @@ it('gets paginated data is configured', function () {
     $this->get('/sharp/s-list/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
                 ['id' => 2, 'name' => 'Niels Bohr'],
             ])
-            ->where('entityList.data.list.page', 1)
-            ->where('entityList.data.list.totalCount', 20)
-            ->where('entityList.data.list.pageSize', 2)
+            ->has('entityList.meta', fn (Assert $name) => $name
+                ->where('current_page', 1)
+                ->where('from', 1)
+                ->where('to', 2)
+                ->where('last_page', 10)
+                ->where('per_page', 2)
+                ->where('total', 20)
+                ->etc()
+            )
         );
 });
 
@@ -101,7 +107,7 @@ it('allows to search for items', function () {
     $this->get('/sharp/s-list/person?search=Curie')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('entityList.data.list.items', [
+            ->where('entityList.data', [
                 ['id' => 1, 'name' => 'Marie Curie'],
                 ['id' => 3, 'name' => 'Pierre Curie'],
             ])
