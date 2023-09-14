@@ -6,10 +6,9 @@ import {
     EntityListData,
     EntityListDataData,
     EntityListFieldData,
-    EntityListFieldLayoutData,
     EntityListMultiformData,
     EntityStateValueData,
-    FilterData,
+    FilterData, PageAlertData,
     PaginatorMetaData,
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
@@ -18,12 +17,11 @@ import { Instance, InstanceId } from "./types";
 export class EntityList implements EntityListData {
     authorizations: EntityAuthorizationsData;
     config: EntityListConfigData;
-    containers: { [p: string]: EntityListFieldData };
     data: EntityListDataData;
-    fields: { [p: string]: any };
+    fields: Array<EntityListFieldData>;
     forms: { [p: string]: EntityListMultiformData };
-    layout: Array<EntityListFieldLayoutData>;
     meta?: PaginatorMetaData | null;
+    pageAlert?: PageAlertData | null;
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;

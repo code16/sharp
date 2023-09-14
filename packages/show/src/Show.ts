@@ -1,6 +1,6 @@
 import {
     CommandData, EntityStateData, EntityStateValueData,
-    InstanceAuthorizationsData,
+    InstanceAuthorizationsData, PageAlertData,
     ShowConfigData,
     ShowData,
     ShowFieldData, ShowFieldType,
@@ -12,10 +12,11 @@ import { getAppendableUri, route } from "@/utils/url";
 export class Show implements ShowData {
     authorizations: InstanceAuthorizationsData;
     config: ShowConfigData;
-    data: { [p: string]: any };
-    fields: { [p: string]: ShowFieldData };
+    data: { [key: string]: any };
+    fields: { [key: string]: ShowFieldData };
     layout: ShowLayoutData;
     locales: Array<string> | null;
+    pageAlert: PageAlertData | null;
 
     constructor(data: ShowData) {
         Object.assign(this, data);

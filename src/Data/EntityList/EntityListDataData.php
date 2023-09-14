@@ -4,7 +4,6 @@ namespace Code16\Sharp\Data\EntityList;
 
 
 use Code16\Sharp\Data\Data;
-use Illuminate\Contracts\Support\Arrayable;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 
@@ -15,9 +14,8 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
         pageSize?: number;
         totalCount?: number;
     }
-} & { [key: string]: ShowHtmlFieldData["value"] }'
-)]
-final class EntityListDataData implements Arrayable
+}')]
+final class EntityListDataData extends Data
 {
     public function __construct(
         public array $data,

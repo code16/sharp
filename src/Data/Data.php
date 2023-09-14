@@ -26,6 +26,15 @@ abstract class Data implements Arrayable
             });
     }
 
+    public static function optional(mixed $payload): ?static
+    {
+        if(is_null($payload)) {
+            return null;
+        }
+
+        return static::from($payload);
+    }
+
     public function toArray(): array
     {
         return $this->extractPublicProperties();

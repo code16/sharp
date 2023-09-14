@@ -15,7 +15,8 @@
     function onChanged(filter: FilterData, value: FilterData['value']) {
         router.post(
             route('code16.sharp.filters.update', { filterKey: filter.key }),
-            { value }
+            { value },
+            { preserveState: false, preserveScroll: false }
         );
     }
 </script>

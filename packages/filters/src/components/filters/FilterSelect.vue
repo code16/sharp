@@ -83,7 +83,10 @@
                         />
                     </ComboboxButton>
                 </div>
-                <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0"
+                    @enter="$emit('open')"
+                    @leave="$emit('close')"
+                >
                     <ComboboxOptions class="absolute z-30 mt-1 max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none min-w-full max-w-xs sm:text-sm">
                         <template v-for="filterValue in filter.values">
                             <ComboboxOption as="template" :value="filterValue?.id" v-slot="{ active, selected }">

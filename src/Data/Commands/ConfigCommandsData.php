@@ -8,11 +8,10 @@ use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Enums\CommandType;
-use Illuminate\Contracts\Support\Arrayable;
 use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
 
 #[RecordTypeScriptType(CommandType::class.'|string', 'array<DataCollection<'.CommandData::class.'>>')]
-final class ConfigCommandsData implements Arrayable
+final class ConfigCommandsData extends Data
 {
     public function __construct(
         protected array $commands,

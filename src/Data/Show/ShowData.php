@@ -15,31 +15,30 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class ShowData extends Data
 {
     public function __construct(
+        public InstanceAuthorizationsData $authorizations,
         public ShowConfigData $config,
+        /** @var array<string,mixed> */
+        public array $data,
         /** @var DataCollection<string,ShowFieldData> */
         public DataCollection $fields,
         public ShowLayoutData $layout,
-        /** @var array<string,mixed> */
-        public array $data,
-        public ?PageAlertData $pageAlert,
         /** @var string[] */
         public ?array $locales,
-        public InstanceAuthorizationsData $authorizations,
+        #[Optional]
+        public ?PageAlertData $pageAlert = null,
     ) {
     }
 
     public static function from(array $show): self
     {
         return new self(
+            authorizations: new InstanceAuthorizationsData(...$show['authorizations']),
             config: ShowConfigData::from($show['config']),
+            data: $show['data'],
             fields: ShowFieldData::collection($show['fields']),
             layout: ShowLayoutData::from($show['layout']),
-            data: $show['data'],
-            pageAlert: $show['pageAlert']
-                ? PageAlertData::from($show['pageAlert'])
-                : null,
             locales: $show['locales'],
-            authorizations: new InstanceAuthorizationsData(...$show['authorizations']),
+            pageAlert: PageAlertData::optional($show['pageAlert']),
         );
     }
 }

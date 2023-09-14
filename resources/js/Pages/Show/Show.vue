@@ -4,7 +4,7 @@
     import { WithCommands, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
     import Section from "@sharp/show/src/components/Section.vue";
-    import { GlobalMessage, Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
     import UnknownField from "@/components/dev/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { LocaleSelect } from "@sharp/form";
@@ -19,6 +19,7 @@
     import { api } from "@/api";
     import { router } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
+    import PageAlert from "@/components/PageAlert.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -136,11 +137,10 @@
                     </div>
                 </div>
 
-                <template v-if="show.config.globalMessage">
-                    <GlobalMessage
-                        :options="show.config.globalMessage"
-                        :data="show.data"
-                        :fields="show.fields"
+                <template v-if="show.pageAlert">
+                    <PageAlert
+                        class="mb-3"
+                        :page-alert="show.pageAlert"
                     />
                 </template>
 
@@ -157,31 +157,28 @@
 
                     <template v-for="section in show.layout.sections">
                         <Section v-slot="{ collapsed, onToggle }">
-                            <div class="ShowPage__section" v-show="show.sectionShouldBeVisible(section, locale)">
-                                <div class="row">
+                            <div v-show="show.sectionShouldBeVisible(section, locale)">
+                                <div class="flex">
                                     <template v-if="section.collapsable && !show.sectionHasField(section, 'entityList') || section.title">
-                                        <div class="col">
-                                            <SectionTitle
-                                                :section="section"
-                                                :collapsable="section.collapsable && !show.sectionHasField(section, 'entityList')"
-                                                :collapsed="collapsed"
-                                                @toggle="onToggle"
-                                            />
-                                        </div>
+                                        <SectionTitle
+                                            class="flex-1"
+                                            :section="section"
+                                            :collapsable="section.collapsable && !show.sectionHasField(section, 'entityList')"
+                                            :collapsed="collapsed"
+                                            @toggle="onToggle"
+                                        />
                                     </template>
                                     <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
-                                        <div class="col-auto align-self-end mb-2">
-                                            <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
-                                                <template v-slot:text>
-                                                    {{ __('sharp::entity_list.commands.instance.label') }}
-                                                </template>
-                                            </CommandsDropdown>
-                                        </div>
+                                        <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
+                                            <template v-slot:text>
+                                                {{ __('sharp::entity_list.commands.instance.label') }}
+                                            </template>
+                                        </CommandsDropdown>
                                     </template>
                                 </div>
 
                                 <template v-if="!collapsed">
-                                    <div class="ShowSection__content" :class="!show.sectionHasField(section, 'entityList') ? 'p-4 bg-white' : ''">
+                                    <div :class="!show.sectionHasField(section, 'entityList') ? 'p-4 bg-white border rounded' : ''">
                                         <div class="flex -mx-4">
                                             <template v-for="column in section.columns">
                                                 <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${column.size}` }">

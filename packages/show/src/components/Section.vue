@@ -3,7 +3,9 @@
 </script>
 
 <template>
-    <slot :collapsed="collapsed" :on-toggle="$event => collapsed = !$event" />
+    <section>
+        <slot :collapsed="collapsed" :on-toggle="$event => collapsed = !$event" />
+    </section>
 <!--    <div class="ShowSection" :class="classes">-->
 <!--        <div class="row">-->
 <!--            <template v-if="hasCollapse || section.title">-->

@@ -10,12 +10,13 @@
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
     import { getAppendableUri, route } from "@/utils/url";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button, Loading, LoadingOverlay, DataList, DataListRow, Search, GlobalMessage } from '@sharp/ui';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button, Loading, LoadingOverlay,  Search } from '@sharp/ui';
     import EntityActions from "./EntityActions.vue";
     import { api } from "@/api";
     import Pagination from "@sharp/ui/src/components/Pagination.vue";
     import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
     import { SharpFilter } from "@sharp/filters";
+    import PageAlert from "@/components/PageAlert.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -268,11 +269,10 @@
             </div>
 
             <div v-show="!loading">
-                <template v-if="entityList.config.globalMessage">
-                    <GlobalMessage
-                        :options="entityList.config.globalMessage"
-                        :data="entityList.data"
-                        :fields="entityList.fields"
+                <template v-if="entityList.pageAlert">
+                    <PageAlert
+                        class="mb-3"
+                        :page-alert="entityList.pageAlert"
                     />
                 </template>
 

@@ -18,14 +18,15 @@ final class EntityListData extends Data
     public function __construct(
         public EntityAuthorizationsData $authorizations,
         public EntityListConfigData $config,
-        /** @var DataCollection<string,EntityListFieldData> */
+        /** @var DataCollection<EntityListFieldData> */
         public DataCollection $fields,
         public EntityListDataData $data,
-        public ?PageAlertData $pageAlert,
         /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
         #[Optional]
         public ?PaginatorMetaData $meta = null,
+        #[Optional]
+        public ?PageAlertData $pageAlert = null,
     ) {
     }
 
@@ -36,13 +37,9 @@ final class EntityListData extends Data
             config: EntityListConfigData::from($entityList['config']),
             fields: EntityListFieldData::collection($entityList['fields']),
             data: EntityListDataData::from($entityList['data']),
-            pageAlert: $entityList['pageAlert']
-                ? PageAlertData::from($entityList['pageAlert'])
-                : null,
             forms: EntityListMultiformData::collection($entityList['forms']),
-            meta: isset($entityList['meta'])
-                ? PaginatorMetaData::from($entityList['meta'])
-                : null,
+            meta: PaginatorMetaData::optional($entityList['meta'] ?? null),
+            pageAlert: PageAlertData::optional($entityList['pageAlert'] ?? null),
         );
     }
 }

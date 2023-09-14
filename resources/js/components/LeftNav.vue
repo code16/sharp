@@ -14,7 +14,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 <template>
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div class="flex grow flex-col  overflow-y-auto bg-white pb-4">
-        <div class="flex h-16 shrink-0 items-center bg-indigo-600 px-6 py-2.5">
+        <div class="flex h-16 shrink-0 items-center bg-primary-600 px-6 py-2.5">
             <template v-if="config('sharp.theme.logo_urls.menu')">
                 <img class="h-auto w-auto max-w-full max-h-full" :src="config('sharp.theme.logo_urls.menu')" :alt="config('sharp.name')" />
             </template>
@@ -44,7 +44,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                                             <template v-else>
                                                 <component :is="childItem.isExternalLink ? 'a' : Link" :href="childItem.url" :class="[childItem.current ? 'bg-gray-50' : 'hover:bg-gray-50', 'flex  items-center gap-x-3 rounded-md py-2 px-2 text-sm leading-6 text-gray-700']">
                                                     <template v-if="childItem.icon">
-                                                        <i class="fa fa-fw" :class="[childItem.icon, childItem.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600']"></i>
+                                                        <i class="fa fa-fw" :class="[childItem.icon, childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']"></i>
                                                     </template>
                                                     {{ childItem.label }}
                                                 </component>
@@ -54,9 +54,9 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                                 </Disclosure>
                             </template>
                             <template v-else>
-                                <component :is="item.isExternalLink ? 'a' : Link" :href="item.url" :class="[item.current ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50', 'group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                                <component :is="item.isExternalLink ? 'a' : Link" :href="item.url" :class="[item.current ? 'bg-gray-50 text-primary-600' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50', 'group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
                                     <template v-if="item.icon">
-                                        <i class="fa fa-fw" :class="[item.icon, item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600']"></i>
+                                        <i class="fa fa-fw" :class="[item.icon, item.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']"></i>
                                     </template>
                                     {{ item.label }}
                                 </component>

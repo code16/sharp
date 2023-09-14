@@ -33,12 +33,8 @@ final class ShowConfigData extends Data
     {
         $config = [
             ...$config,
-            'state' => isset($config['state'])
-                ? EntityStateData::from($config['state'])
-                : null,
-            'commands' => isset($config['commands'])
-                ? ConfigCommandsData::from($config['commands'])
-                : null,
+            'state' => EntityStateData::optional($config['state'] ?? null),
+            'commands' => ConfigCommandsData::optional($config['commands'] ?? null),
         ];
 
         return new self(...$config);

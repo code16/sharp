@@ -5,7 +5,6 @@ namespace Code16\Sharp\Data\Show;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
-use Code16\Sharp\Data\InstanceAuthorizationsData;
 use Code16\Sharp\Data\NotificationData;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 

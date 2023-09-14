@@ -4,9 +4,9 @@ namespace Code16\Sharp\Enums;
 
 enum PageAlertLevel: string
 {
-    case Info = 'info';
-    case Warning = 'warning';
     case Danger = 'danger';
+    case Info = 'info';
     case Primary = 'primary';
     case Secondary = 'secondary';
+    case Warning = 'warning';
 }

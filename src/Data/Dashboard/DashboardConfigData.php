@@ -22,12 +22,8 @@ final class DashboardConfigData extends Data
     {
         $config = [
             ...$config,
-            'commands' => isset($config['commands'])
-                ? ConfigCommandsData::from($config['commands'])
-                : null,
-            'filters' => isset($config['filters'])
-                ? ConfigFiltersData::from($config['filters'])
-                : null,
+            'commands' => ConfigCommandsData::optional($config['commands'] ?? null),
+            'filters' => ConfigFiltersData::optional($config['filters'] ?? null),
         ];
 
         return new self(...$config);

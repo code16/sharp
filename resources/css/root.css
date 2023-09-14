@@ -1,12 +1,7 @@
 
 
 :root {
-    --primary: #{$primary};
-    --primary-h: #{hue($primary)};
-    --primary-s: #{saturation($primary)};
-    --primary-l: #{lightness($primary)};
     --primary-hsl: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
-
 
     --accent-bg-amount: 20%;
     --accent-bg-l: calc(var(--primary-l) + var(--accent-bg-amount));
@@ -22,4 +17,15 @@
     --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
 
     --field-header-sticky-top: var(--navbar-height);
+
+    --color-primary-50: hsl(var(--primary-h), var(--primary-s), 90%);
+    --color-primary-100: hsl(var(--primary-h), var(--primary-s), 80%);
+    --color-primary-200: hsl(var(--primary-h), var(--primary-s), 70%);
+    --color-primary-300: hsl(var(--primary-h), var(--primary-s), 60%);
+    --color-primary-400: hsl(var(--primary-h), var(--primary-s), 50%);
+    --color-primary-500: hsl(var(--primary-h), var(--primary-s), 40%);
+    --color-primary-600: hsl(var(--primary-h), var(--primary-s), 30%);
+    --color-primary-700: hsl(var(--primary-h), var(--primary-s), 20%);
+    --color-primary-800: hsl(var(--primary-h), var(--primary-s), 10%);
+    --color-primary-900: hsl(var(--primary-h), var(--primary-s), 5%);
 }

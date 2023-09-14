@@ -3,7 +3,7 @@
     import { useFilters } from "@sharp/filters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { GlobalMessage, Grid, SectionTitle, } from '@sharp/ui';
+    import { Grid, SectionTitle, } from '@sharp/ui';
     import Widget from "@sharp/dashboard/src/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { SharpFilter } from '@sharp/filters';
@@ -13,6 +13,7 @@
     import Title from "@/components/Title.vue";
     import { useCommands } from "@sharp/commands/src/useCommands";
     import { WithCommands } from "@sharp/commands";
+    import PageAlert from "@/components/PageAlert.vue";
 
     const props = defineProps<{
         dashboard: DashboardData,
@@ -96,11 +97,10 @@
                     </div>
                 </div>
 
-                <template v-if="dashboard.config.globalMessage">
-                    <GlobalMessage
-                        :options="dashboard.config.globalMessage"
-                        :data="dashboard.data"
-                        :fields="dashboard.fields"
+                <template v-if="dashboard.pageAlert">
+                    <PageAlert
+                        class="mb-3"
+                        :page-alert="dashboard.pageAlert"
                     />
                 </template>
 

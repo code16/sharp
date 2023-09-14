@@ -55,7 +55,6 @@ export type ConfigFiltersData = { _root: Array<FilterData> } & {
 export type DashboardConfigData = {
   commands?: ConfigCommandsData | null;
   filters?: ConfigFiltersData | null;
-  globalMessage?: any | null;
 };
 export type DashboardData = {
   widgets: Array<WidgetData>;
@@ -121,11 +120,11 @@ export type EntityListConfigData = {
 export type EntityListData = {
   authorizations: EntityAuthorizationsData;
   config: EntityListConfigData;
-  fields: { [key: string]: EntityListFieldData };
+  fields: Array<EntityListFieldData>;
   data: EntityListDataData;
-  pageAlert: PageAlertData | null;
   forms: { [key: string]: EntityListMultiformData };
   meta?: PaginatorMetaData | null;
+  pageAlert?: PageAlertData | null;
 };
 export type EntityListDataData = {
   list: {

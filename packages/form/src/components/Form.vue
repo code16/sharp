@@ -3,6 +3,7 @@
     import FormLayout from "./ui/FormLayout.vue";
     import { getBackUrl } from "@/utils/breadcrumb";
     import { FormData } from "@/types";
+    import PageAlert from "@/components/PageAlert.vue";
 
     const props = defineProps<{
         form: FormData,
@@ -33,11 +34,10 @@
         </div>
 
         <template v-if="ready">
-            <template v-if="form.config.globalMessage">
-                <GlobalMessage
-                    :options="form.config.globalMessage"
-                    :data="form.data"
-                    :fields="form.fields"
+            <template v-if="form.pageAlert">
+                <PageAlert
+                    class="mb-3"
+                    :page-alert="form.pageAlert"
                 />
             </template>
 
@@ -125,7 +125,7 @@
         showAlert,
     } from "sharp";
 
-    import { Button, Dropdown, DropdownItem, GlobalMessage, Grid } from '@sharp/ui';
+    import { Button, Dropdown, DropdownItem,  Grid } from '@sharp/ui';
     import FieldDisplay from "./FieldDisplay.vue";
 
     import FieldsLayout from './ui/FieldsLayout.vue';
@@ -151,7 +151,6 @@
             Dropdown,
             DropdownItem,
             LocaleSelect,
-            GlobalMessage,
             FieldDisplay,
         },
 
