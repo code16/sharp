@@ -14,7 +14,6 @@
         :header-class="{ 'pb-0':!title }"
         :no-enforce-focus="noEnforceFocus"
         :no-close-on-backdrop="noCloseOnBackdrop"
-        v-on="$listeners"
         @change="handleVisiblityChanged"
         ref="modal"
     >

@@ -6,8 +6,6 @@
 
     defineProps<{
         commands: CommandManager,
-        entityKey: string,
-        instanceId: string | number,
     }>();
 
     const form = ref<InstanceType<typeof Form>>();

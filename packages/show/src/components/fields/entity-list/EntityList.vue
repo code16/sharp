@@ -10,6 +10,8 @@
     import { useCommands } from "@sharp/commands/src/useCommands";
     import { api } from "@/api";
     import { stringifyQuery } from "@/utils/querystring";
+    import { FilterManager } from "@sharp/filters/src/FilterManager";
+    import { FilterQueryParams } from "@sharp/filters/src/types";
 
     const props = defineProps<FieldProps & {
         field: ShowEntityListFieldData,
@@ -17,45 +19,52 @@
     }>();
 
     const el = ref();
+    const loading = ref(false);
     const collapsed = ref(props.collapsable);
     const { sticky, onListChange } = useStickyLayout(el);
     const entityKey = props.field.entityListKey;
     const entityList: Ref<EntityList | null> = ref(null);
-    const filters = useFilters(entityList.value.config.filters);
+    const filters = useFilters();
+    const query: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({
+        ...filters.getQueryParams(props.field.hiddenFilters)
+    });
     const commands = useCommands({
         reload: () => init(query.value),
         refresh: (data) => {
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
     });
-    const query: Ref<EntityListQueryParamsData & { [key: string]: any }> = ref({
-        ...filters.getQueryParams(props.field.hiddenFilters)
-    });
-    const loading = ref(false);
-    const init = async (query) => {
+
+    async function init(query) {
         loading.value = true;
-        const data = await api.get(
-            route('code16.sharp.api.list', { entityKey }) + stringifyQuery(query)
-        ).then(response => response.data) satisfies EntityListData;
+        const data = await api.get(route('code16.sharp.api.list', { entityKey }), { params: query })
+            .then(response => response.data);
 
         loading.value = false;
         entityList.value = new EntityList(
             data,
             entityKey,
             props.field.hiddenFilters,
-            props.field.hiddenCommands
+            props.field.hiddenCommands,
         );
+        filters.filters = entityList.value.config.filters;
+        filters.setValuesFromQuery(query);
     }
 
-    watch(collapsed, (collapsed) => {
-        if(!collapsed && !entityList.value) {
+    function onToggle() {
+        collapsed.value = !collapsed.value;
+        if(!entityList.value) {
             init(query.value);
         }
-    }, { immediate: true })
+    }
 
     async function onQueryChange(newQuery) {
         await init(newQuery);
         query.value = newQuery;
+    }
+
+    if(!props.collapsable) {
+        init();
     }
 </script>
 
@@ -89,7 +98,7 @@
                        <div class="section__header section__header--collapsable position-relative">
                            <div class="row align-items-center gx-0 h-100">
                                <div class="col-auto">
-                                   <details :open="!collapsed" @toggle="collapsed = !$event.target.open">
+                                   <details :open="!collapsed" @toggle="onToggle">
                                        <summary class="stretched-link">
                                            <span class="visually-hidden">{{ field.label }}</span>
                                        </summary>

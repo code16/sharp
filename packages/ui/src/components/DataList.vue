@@ -1,68 +1,52 @@
 <template>
-    <div class="SharpDataList" :class="{ 'SharpDataList--reordering': reordering }" :style="styles">
-        <template v-if="isEmpty">
-            <div class="SharpDataList__empty">
-                <slot name="prepend"></slot>
-                <div class="p-3">
-                    <slot name="empty" />
-                    <slot name="append-body" />
-                </div>
-            </div>
-        </template>
-        <template v-else>
-            <template v-if="$slots['append-head']">
-                <div class="d-flex justify-content-end mb-3 d-sm-none">
-                    <slot name="append-head" />
-                </div>
-            </template>
-            <div class="SharpDataList__table SharpDataList__table--border">
-                <slot name="prepend"></slot>
-                <template v-if="!hideHeader">
-                    <div class="SharpDataList__thead" ref="head">
-                        <DataListRow :columns="columns" header>
-                            <template v-slot:cell="{ column }">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <div class="row align-items-center gx-2">
-                                            <div class="col" style="min-width: 0">
-                                                <div class="overflow-hidden">
-                                                    {{ column.label }}
-                                                </div>
+    <div :class="{ 'SharpDataList--reordering': reordering }" :style="styles">
+        <div class="SharpDataList__table SharpDataList__table--border">
+            <slot name="prepend"></slot>
+            <template v-if="!hideHeader">
+                <div class="SharpDataList__thead" ref="head">
+                    <DataListRow :columns="columns" header>
+                        <template v-slot:cell="{ column }">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="row align-items-center gx-2">
+                                        <div class="col" style="min-width: 0">
+                                            <div class="overflow-hidden">
+                                                {{ column.label }}
                                             </div>
-                                            <template v-if="column.sortable">
-                                                <div class="col-auto">
-                                                    <svg class="SharpDataList__caret"
-                                                        :class="{
-                                                            'SharpDataList__caret--selected': sort === column.key,
-                                                            'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
-                                                        }"
-                                                        width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd"
-                                                    >
-                                                        <path d="M10 0L5 5 0 0z"></path>
-                                                    </svg>
-                                                    <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
-                                                </div>
-                                            </template>
                                         </div>
+                                        <template v-if="column.sortable">
+                                            <div class="col-auto">
+                                                <svg class="SharpDataList__caret"
+                                                    :class="{
+                                                        'SharpDataList__caret--selected': sort === column.key,
+                                                        'SharpDataList__caret--ascending': sort === column.key && dir === 'asc'
+                                                    }"
+                                                    width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd"
+                                                >
+                                                    <path d="M10 0L5 5 0 0z"></path>
+                                                </svg>
+                                                <a class="SharpDataList__sort-link" @click.prevent="handleSortClicked(column.key)" href=""></a>
+                                            </div>
+                                        </template>
                                     </div>
                                 </div>
-                            </template>
-                            <template v-if="$slots['append-head']" v-slot:append>
-                                <slot name="append-head" />
-                            </template>
-                        </DataListRow>
-                    </div>
-                </template>
-                <div class="SharpDataList__tbody" ref="body">
-                    <Draggable :options="draggableOptions" :model-value="currentItems" @input="handleItemsChanged">
-                        <template #item="{ element }">
-                            <slot name="item" :item="element" />
+                            </div>
                         </template>
-                    </Draggable>
-                    <slot name="append-body" />
+                        <template v-if="$slots['append-head']" v-slot:append>
+                            <slot name="append-head" />
+                        </template>
+                    </DataListRow>
                 </div>
+            </template>
+            <div class="SharpDataList__tbody" ref="body">
+                <Draggable :options="draggableOptions" :model-value="currentItems" @input="handleItemsChanged">
+                    <template #item="{ element }">
+                        <slot name="item" :item="element" />
+                    </template>
+                </Draggable>
+                <slot name="append-body" />
             </div>
-        </template>
+        </div>
     </div>
 </template>
 

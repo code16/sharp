@@ -6,6 +6,7 @@ export function getAppendableUri() {
     return location.pathname.replace(new RegExp(`^/${config('sharp.custom_url_segment')}/`), '');
 }
 
+// @ts-ignore
 export function route(
     name?: undefined,
     params?: RouteParamsWithQueryOverload | RouteParam,
@@ -25,7 +26,7 @@ export function route(name?: string, params?, absolute?, config?) {
         return (globalThis.route(name, { ...params, uri: 's-list/(uri)' }, absolute, config) as string)
             .replace(encodeURIComponent('s-list/(uri)'), params.uri);
     }
-    return globalThis.route();
+    return globalThis.route(name, params, absolute, config);
 }
 
 // export route;

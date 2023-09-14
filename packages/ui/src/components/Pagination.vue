@@ -5,7 +5,6 @@
         :per-page="perPage"
         :hide-goto-end-buttons="hideGotoEndButtons"
         v-bind="$attrs"
-        v-on="$listeners"
     >
         <template v-slot:first-text>
             <i class="fas fa-angle-double-left" aria-hidden="true"></i>
