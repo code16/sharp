@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -33,7 +34,7 @@ trait WithCustomTransformers
     /**
      * Transforms a model or a models collection into an array.
      */
-    public function transform($models): array|LengthAwarePaginator
+    public function transform($models): array|AbstractPaginator
     {
         if ($this instanceof SharpForm || $this instanceof Command || $this instanceof SharpFormEditorEmbed) {
             // It's a Form (full entity or from a Command), there's only one model.
@@ -50,12 +51,9 @@ trait WithCustomTransformers
 
         // SharpEntityList case
 
-        if ($models instanceof LengthAwarePaginatorContract) {
-            return new LengthAwarePaginator(
-                $this->transform($models->items()),
-                $models->total(),
-                $models->perPage(),
-                $models->currentPage(),
+        if($models instanceof AbstractPaginator) {
+            return $models->setCollection(
+                collect($this->transform($models->items()))
             );
         }
 
