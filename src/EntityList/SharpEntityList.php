@@ -238,4 +238,12 @@ abstract class SharpEntityList
     protected function buildList(EntityListFieldsContainer $fields): void
     {
     }
+
+    /**
+     * @deprecated not more in use, will be removed in next major version
+     */
+    final public function configurePaginated(bool $paginated = true): self
+    {
+        return $this;
+    }
 }
