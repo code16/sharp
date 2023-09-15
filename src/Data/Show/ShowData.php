@@ -24,7 +24,6 @@ final class ShowData extends Data
         public ShowLayoutData $layout,
         /** @var string[] */
         public ?array $locales,
-        #[Optional]
         public ?PageAlertData $pageAlert = null,
     ) {
     }

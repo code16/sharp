@@ -12,7 +12,6 @@ final class FormConfigData extends Data
         public bool $hasShowPage,
         public ?string $deleteConfirmationText,
         public bool $isSingle = false,
-        #[Optional]
         public ?string $breadcrumbAttribute = null,
     ) {
     }

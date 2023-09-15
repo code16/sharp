@@ -1,19 +1,12 @@
 <template>
-    <loading-transition :fade="fade">
-        <div class="SharpLoading" :class="classes" v-show="visible">
-            <div class="d-block spinner-border" :class="spinnerClasses"></div>
-        </div>
-    </loading-transition>
+    <div class="SharpLoading" :class="classes" v-show="visible">
+        <div class="d-block spinner-border" :class="spinnerClasses"></div>
+    </div>
 </template>
 
 
 <script lang="ts">
-    import LoadingTransition from "./LoadingTransition.vue";
-
     export default {
-        components: {
-            LoadingTransition,
-        },
         props: {
             visible: {
                 type: Boolean,

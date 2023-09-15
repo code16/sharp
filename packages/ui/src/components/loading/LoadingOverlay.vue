@@ -1,18 +1,14 @@
 <template>
-    <loading-transition :fade="fade">
-        <div class="SharpLoading__overlay" :class="classes" v-show="visible">
-            <Loading v-bind="$attrs" />
-        </div>
-    </loading-transition>
+    <div class="SharpLoading__overlay" :class="classes" v-show="visible">
+        <Loading v-bind="$attrs" />
+    </div>
 </template>
 
 <script>
     import Loading from './Loading.vue';
-    import LoadingTransition from "./LoadingTransition.vue";
 
     export default {
         components: {
-            LoadingTransition,
             Loading,
         },
         props: {

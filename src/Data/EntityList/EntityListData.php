@@ -24,9 +24,7 @@ final class EntityListData extends Data
         public array $data,
         /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
-        #[Optional]
         public ?PaginatorMetaData $meta = null,
-        #[Optional]
         public ?PageAlertData $pageAlert = null,
     ) {
     }
