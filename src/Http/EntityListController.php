@@ -51,8 +51,6 @@ class EntityListController extends SharpProtectedController
             ),
         ];
 
-//        dd($data);
-
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([

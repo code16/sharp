@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
+use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\SharpBreadcrumb;
@@ -32,29 +33,12 @@ class FormController extends SharpProtectedController
         $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 
         if($form instanceof SharpSingleForm) {
+            // There is no creation in SingleForms
             return $this->edit($uri, $entityKey);
         }
 
         $form->buildFormConfig();
-
-        $formData = $form->newInstance();
-
-        $data = [
-            'fields' => $form->fields(),
-            'layout' => $form->formLayout(),
-            'config' => $form->formConfig(),
-            'data' => $formData,
-            'pageAlert' => $form->pageAlert($formData),
-            'locales' => $form->hasDataLocalizations()
-                ? $form->getDataLocalizations()
-                : [],
-            'authorizations' => [
-                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
-                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey),
-                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey),
-            ],
-        ];
+        $data = $this->buildFormData($form, $entityKey);
 
         return Inertia::render('Form/Form', [
             'form' => $data,
@@ -83,25 +67,7 @@ class FormController extends SharpProtectedController
         );
 
         $form->buildFormConfig();
-
-        $formData = $form->instance($instanceId);
-
-        $data = [
-            'fields' => $form->fields(),
-            'layout' => $form->formLayout(),
-            'config' => $form->formConfig(),
-            'data' => $formData,
-            'pageAlert' => $form->pageAlert($formData),
-            'locales' => $form->hasDataLocalizations()
-                ? $form->getDataLocalizations()
-                : null,
-            'authorizations' => [
-                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
-                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
-                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
-            ],
-        ];
+        $data = $this->buildFormData($form, $entityKey, $instanceId);
 
         return Inertia::render('Form/Form', [
             'form' => $data,
@@ -126,7 +92,6 @@ class FormController extends SharpProtectedController
         );
 
         $form->validateRequest();
-
         $form->updateInstance($instanceId, request()->all());
 
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
@@ -149,9 +114,34 @@ class FormController extends SharpProtectedController
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
 
-        return redirect()
-            ->to($form->isDisplayShowPageAfterCreation()
+        return redirect()->to(
+            $form->isDisplayShowPageAfterCreation()
                 ? "{$previousUrl}/s-show/{$entityKey}/{$instanceId}"
-                : $previousUrl);
+                : $previousUrl
+        );
+    }
+
+    private function buildFormData(SharpForm $form, string $entityKey, $instanceId = null): array
+    {
+        $formData = $form instanceof SharpSingleForm || $instanceId !== null
+            ? $form->instance($instanceId)
+            : $form->newInstance();
+
+        return [
+            'fields' => $form->fields(),
+            'layout' => $form->formLayout(),
+            'config' => $form->formConfig(),
+            'data' => $formData,
+            'pageAlert' => $form->pageAlert($formData),
+            'locales' => $form->hasDataLocalizations()
+                ? $form->getDataLocalizations()
+                : [],
+            'authorizations' => [
+                'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
+                'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
+                'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
+                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)
+            ],
+        ];
     }
 }
