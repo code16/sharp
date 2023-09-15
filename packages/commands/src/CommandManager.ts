@@ -44,10 +44,22 @@ export class CommandManager {
                 }
             },
             reload: () => {
-                router.reload()
+                return new Promise((resolve) =>
+                    router.visit(location.href, {
+                        preserveState: false,
+                        preserveScroll: false,
+                        onFinish: () => resolve(),
+                    })
+                );
             },
             refresh: () => {
-                router.reload()
+                return new Promise((resolve) =>
+                    router.visit(location.href, {
+                        preserveState: false,
+                        preserveScroll: false,
+                        onFinish: () => resolve(),
+                    })
+                );
             },
             step: async (data) => {
                 this.state.currentCommandReturn = data;

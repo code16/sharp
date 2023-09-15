@@ -10,7 +10,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class CheckFilterData extends Data
 {
     #[Optional]
-    public bool $value;
+    public ?bool $value;
 
     public function __construct(
         public string $key,

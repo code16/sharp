@@ -66,7 +66,7 @@
         methods: {
             handleEditClicked() {
                 this.editContent = this.node.attrs.content;
-                this.$refs.modal.show();
+                this.editVisible = true;
             },
             handleModalOk() {
                 const content = elementFromString(this.editContent).innerHTML;

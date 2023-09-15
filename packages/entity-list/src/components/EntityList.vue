@@ -17,6 +17,7 @@
     import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
     import { SharpFilter } from "@sharp/filters";
     import PageAlert from "@/components/PageAlert.vue";
+    import Draggable from "vuedraggable";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -143,21 +144,18 @@
         }
     }
 
-    const reorderedItems: Ref<InstanceId[] | null> = ref(null);
+    const reorderedItems: Ref<Instance[] | null> = ref(null);
     const reordering = computed(() => !!reorderedItems.value);
     watch(reordering, reordering => emit('reordering', reordering));
 
     async function onReorderSubmit() {
-        const { commands } = props;
+        const { entityKey, commands } = props;
 
-        await api.post(route('code16.sharp.api.list.reorder'), {
-            instances: reorderedItems.value,
+        await api.post(route('code16.sharp.api.list.reorder', { entityKey }), {
+            instances: reorderedItems.value.map(item => props.entityList.instanceId(item)),
         });
-        commands.handleCommandReturn({ action: 'reload' });
+        await commands.handleCommandReturn({ action: 'reload' });
         reorderedItems.value = null;
-    }
-    function onReorder(items: Instance[]) {
-        reorderedItems.value = items.map(item => props.entityList.instanceId(item));
     }
 </script>
 
@@ -185,7 +183,7 @@
                             </template>
                             <template v-else>
                                 <div class="col-auto">
-                                    <Button outline @click="reorderedItems = []">
+                                    <Button outline @click="reorderedItems = [...entityList.data]">
                                         {{ __('sharp::action_bar.list.reorder_button') }}
                                     </Button>
                                 </div>
@@ -321,7 +319,7 @@
                                     <template v-for="field in entityList.fields">
                                         <th scope="col"
                                             class="py-3.5 px-3 text-left text-sm w-[calc(var(--size)/12*100%)] font-semibold text-gray-900 first:pl-4 sm:first:pl-6"
-                                            :style="{ '--size':field.size }"
+                                            :style="{ '--size': field.size === 'fill' ? 12 / entityList.fields.length : field.size }"
                                         >
                                             {{ field.label }}
                                         </th>
@@ -333,8 +331,15 @@
                                     </template>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                                <template v-for="item in entityList.data" :key="entityList.instanceId(item)">
+                            <Draggable
+                                tag="tbody"
+                                class="divide-y divide-gray-200 bg-white"
+                                :options="{ disabled: !reordering }"
+                                :modelValue="reorderedItems ?? entityList.data"
+                                :item-key="entityList.config.instanceIdAttribute"
+                                @update:modelValue="reorderedItems = $event"
+                            >
+                                <template v-slot:item="{ element: item }">
                                     <tr class="relative" :class="{ 'hover:bg-gray-50': entityList.instanceUrl(item) }">
                                         <template v-if="selecting">
                                             <td class="px-7 sm:w-12 sm:px-6">
@@ -353,7 +358,7 @@
                                         </template>
                                         <template v-for="(field, i) in entityList.fields">
                                             <td class="py-4 px-3 text-sm font-medium text-gray-900 first:pl-4 sm:first:pl-6">
-                                                <template v-if="i === 0 && entityList.instanceUrl(item) && !selecting">
+                                                <template v-if="i === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
                                                     <a class="absolute inset-0" :href="entityList.instanceUrl(item)"></a>
                                                 </template>
                                                 <template v-if="field.html">
@@ -438,7 +443,7 @@
                                                                         <template v-if="entityList.instanceCommands(item)?.flat().length">
                                                                             <DropdownSeparator />
                                                                         </template>
-                                                                        <DropdownItem link-class="text-danger" @click="onDelete(entityList.instanceId(item))">
+                                                                        <DropdownItem class="text-red-600" @click="onDelete(entityList.instanceId(item))">
                                                                             {{ __('sharp::action_bar.form.delete_button') }}
                                                                         </DropdownItem>
                                                                     </template>
@@ -451,13 +456,11 @@
                                         </template>
                                     </tr>
                                 </template>
-                            </tbody>
+                            </Draggable>
                         </table>
                     </div>
 
 <!--                    <DataList-->
-<!--                        :items="entityList.data.list.items"-->
-<!--                        :columns="fields"-->
 <!--                        :reordering="reordering"-->
 <!--                        :sort="query.sort ?? entityList.config.defaultSort"-->
 <!--                        :dir="query.dir ?? entityList.config.defaultSortDir"-->
@@ -470,18 +473,10 @@
 <!--                                :url="entityList.instanceUrl(item)"-->
 <!--                                :columns="fields"-->
 <!--                                :highlight="selectedItems?.includes(entityList.instanceId(item))"-->
-<!--                                :selecting="selecting"-->
 <!--                                :deleting="deletingItem ? entityList.instanceId(item) === entityList.instanceId(deletingItem) : false"-->
 <!--                                :row="item"-->
 <!--                            >-->
-
 <!--                            </DataListRow>-->
-<!--                        </template>-->
-
-<!--                        <template v-slot:append-body>-->
-<!--                            <template v-if="inline && loading">-->
-<!--                                <LoadingOverlay small absolute fade />-->
-<!--                            </template>-->
 <!--                        </template>-->
 <!--                    </DataList>-->
                 </template>
@@ -489,19 +484,16 @@
                     {{ __('sharp::entity_list.empty_text') }}
                 </template>
 
-
                 <template v-if="entityList.meta?.last_page > 1">
                     <div class="mt-12">
                         <Pagination
                             :paginator="entityList"
+                            :links-openable="!inline"
                             @change="onPageChange"
                         />
                     </div>
                 </template>
             </div>
-            <template v-if="loading && inline">
-                <Loading small fade />
-            </template>
         </div>
     </WithCommands>
 </template>

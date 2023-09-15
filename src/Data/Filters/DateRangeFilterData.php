@@ -28,9 +28,7 @@ final class DateRangeFilterData extends Data
     {
         $filter = [
             ...$filter,
-            'default' => $filter['default']
-                ? new DateRangeFilterValueData(...$filter['default'])
-                : null,
+            'default' => DateRangeFilterValueData::optional($filter['default']),
         ];
 
         return new self(...$filter);

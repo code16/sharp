@@ -22,7 +22,7 @@ export function route(
 ): string;
 
 export function route(name?: string, params?, absolute?, config?) {
-    if(name && params.uri) {
+    if(name && params?.uri) {
         return (globalThis.route(name, { ...params, uri: 's-list/(uri)' }, absolute, config) as string)
             .replace(encodeURIComponent('s-list/(uri)'), params.uri);
     }

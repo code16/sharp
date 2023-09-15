@@ -12,4 +12,9 @@ final class DateRangeFilterValueData extends Data
         public string $end,
     ) {
     }
+
+    public static function from(array $value): self
+    {
+        return new self(...$value);
+    }
 }
