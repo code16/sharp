@@ -60,15 +60,18 @@ trait HasFieldRows
     {
         return [
             'fields' => collect($this->rows)
-                ->map(function ($row) {
-                    return collect($row)
-                        ->map(function ($field) {
-                            return $field->toArray();
-                        })
-                        ->all();
-                })
+                ->map(fn ($row) => collect($row)
+                    ->map(fn ($field) => $field->toArray())
+                    ->all()
+                )
                 ->all(),
         ];
+    }
+
+    public function hasFields(): bool
+    {
+        return collect($this->rows)
+                ->firstWhere(fn ($row) => sizeof($row) > 0) !== null;
     }
 
     protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null): LayoutField

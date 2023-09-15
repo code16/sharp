@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields\Embeds;
 
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
@@ -88,16 +89,18 @@ abstract class SharpFormEditorEmbed
     final public function formLayout(): ?array
     {
         if ($fields = $this->fieldsContainer()->getFields()) {
-            $column = new FormLayoutColumn(12);
-            $this->buildFormLayout($column);
+            return (new FormLayout())
+                ->setTabbed(false)
+                ->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
+                    $this->buildFormLayout($column);
 
-            if (empty($column->fieldsToArray()['fields'])) {
-                foreach ($fields as $field) {
-                    $column->withSingleField($field->key());
-                }
-            }
-
-            return $column->fieldsToArray()['fields'];
+                    if (!$column->hasFields()) {
+                        foreach ($fields as $field) {
+                            $column->withSingleField($field->key());
+                        }
+                    }
+                })
+                ->toArray();
         }
 
         return null;

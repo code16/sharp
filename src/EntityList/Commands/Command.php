@@ -13,10 +13,10 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class Command
 {
-    use HandleFormFields,
-        HandlePageAlertMessage,
-        WithCustomTransformers,
-        HandleValidation;
+    use HandleFormFields;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
+    use HandleValidation;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -178,20 +178,18 @@ abstract class Command
     final public function formLayout(): ?array
     {
         if ($fields = $this->fieldsContainer()->getFields()) {
-            $formLayout = new FormLayout();
-            $formLayout->setTabbed(false);
+            return (new FormLayout())
+                ->setTabbed(false)
+                ->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
+                    $this->buildFormLayout($column);
 
-            $formLayout->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
-                $this->buildFormLayout($column);
-
-                if (empty($column->fieldsToArray()['fields'])) {
-                    foreach ($fields as $field) {
-                        $column->withSingleField($field->key());
+                    if (!$column->hasFields()) {
+                        foreach ($fields as $field) {
+                            $column->withSingleField($field->key());
+                        }
                     }
-                }
-            });
-
-            return $formLayout->toArray();
+                })
+                ->toArray();
         }
 
         return null;

@@ -41,12 +41,21 @@ it('returns fields and layout of an embed', function () {
                 ],
             ],
             'layout' => [
-                [
+                'tabbed' => false,
+                'tabs' => [
                     [
-                        'key' => 'name',
-                        'size' => 12,
-                        'sizeXS' => 12,
-                    ],
+                        'columns' => [
+                            [
+                                'fields' => [
+                                    [
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
+                                    ]
+                                ],
+                                'size' => 12,
+                            ]
+                        ],
+                        'title' => 'one'
+                    ]
                 ],
             ],
         ]);

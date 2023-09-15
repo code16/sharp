@@ -371,7 +371,7 @@ it('disallows to call an unauthorized entity command', function () {
         ->assertStatus(403);
 });
 
-it('returns the form fields of the entity command with its layout', function () {
+it('returns the form fields of the entity command and build a basic layout if missing', function () {
     fakeListFor('person', new class extends PersonList {
         protected function getEntityCommands(): ?array
         {
