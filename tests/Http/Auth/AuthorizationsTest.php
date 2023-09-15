@@ -152,9 +152,9 @@ it('allow access by default', function () {
             ])
         );
 
-    // List
+    // EL (inertia)
     $this
-        ->getJson('/sharp/s-list/person')
+        ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
             ->where('entityList.authorizations', [
                 'delete' => [1, 2],
@@ -163,6 +163,18 @@ it('allow access by default', function () {
                 'view' => [1, 2],
             ])
         );
+
+    // EEL (json)
+    $this
+        ->getJson('/sharp/s-list/person')
+        ->assertJsonFragment([
+            'authorizations' => [
+                'delete' => [1, 2],
+                'update' => [1, 2],
+                'create' => true,
+                'view' => [1, 2],
+            ]
+        ]);
 });
 
 it('checks the main entity prohibited_actions in case of a sub entity', function () {

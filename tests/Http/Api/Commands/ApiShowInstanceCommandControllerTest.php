@@ -22,7 +22,7 @@ it('allows to call an info instance command from a show', function () {
         public function getInstanceCommands(): ?array
         {
             return [
-                'instance_info' => new class extends InstanceCommand
+                'cmd' => new class extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -37,7 +37,7 @@ it('allows to call an info instance command from a show', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.show.command.instance', ['person', 'instance_info', 1]))
+    $this->postJson(route('code16.sharp.api.show.command.instance', ['person', 'cmd', 1]))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -55,7 +55,7 @@ it('allows to call an info instance command from a single show', function () {
         public function getInstanceCommands(): ?array
         {
             return [
-                'instance_info' => new class extends InstanceCommand
+                'cmd' => new class extends InstanceCommand
                 {
                     public function label(): ?string
                     {
@@ -70,7 +70,7 @@ it('allows to call an info instance command from a single show', function () {
         }
     });
 
-    $this->postJson(route('code16.sharp.api.show.command.instance', ['person', 'instance_info']))
+    $this->postJson(route('code16.sharp.api.show.command.instance', ['person', 'cmd']))
         ->assertOk()
         ->assertJson([
             'action' => 'info',
@@ -88,7 +88,7 @@ it('gets form and initialize form data in an instance command of a show', functi
         public function getInstanceCommands(): ?array
         {
             return [
-                'instance_with_init_data' => new class extends InstanceCommand {
+                'cmd' => new class extends InstanceCommand {
                     public function label(): ?string
                     {
                         return 'instance';
@@ -115,7 +115,7 @@ it('gets form and initialize form data in an instance command of a show', functi
     });
 
     $this
-        ->getJson(route('code16.sharp.api.show.command.instance.form', ['person', 'instance_with_init_data', 1]))
+        ->getJson(route('code16.sharp.api.show.command.instance.form', ['person', 'cmd', 1]))
         ->assertOk()
         ->assertJsonFragment([
             'data' => [
@@ -129,13 +129,28 @@ it('gets form and initialize form data in an instance command of a show', functi
                 ],
             ],
             'layout' => [
-                [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                'tabbed' => false,
+                'tabs' => [
+                    [
+                        'columns' => [
+                            [
+                                'fields' => [
+                                    [
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
+                                    ]
+                                ],
+                                'size' => 12,
+                            ]
+                        ],
+                        'title' => 'one'
+                    ]
+                ],
             ],
         ]);
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.command.instance', ['person', 'instance_with_init_data', 1]),
+            route('code16.sharp.api.show.command.instance', ['person', 'cmd', 1]),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);
@@ -151,7 +166,7 @@ it('gets form and initialize form data in an instance command of a single show',
         public function getInstanceCommands(): ?array
         {
             return [
-                'single_instance_with_init_data' => new class extends InstanceCommand {
+                'single_cmd' => new class extends InstanceCommand {
                     public function label(): ?string
                     {
                         return 'instance';
@@ -184,7 +199,7 @@ it('gets form and initialize form data in an instance command of a single show',
         ->getJson(
             route('code16.sharp.api.show.command.singleInstance.form', [
                 'entityKey' => 'person',
-                'commandKey' => 'single_instance_with_init_data'
+                'commandKey' => 'single_cmd'
             ])
         )
         ->assertOk()
@@ -200,13 +215,28 @@ it('gets form and initialize form data in an instance command of a single show',
                 ],
             ],
             'layout' => [
-                [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                'tabbed' => false,
+                'tabs' => [
+                    [
+                        'columns' => [
+                            [
+                                'fields' => [
+                                    [
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
+                                    ]
+                                ],
+                                'size' => 12,
+                            ]
+                        ],
+                        'title' => 'one'
+                    ]
+                ],
             ],
         ]);
 
     $this
         ->postJson(
-            route('code16.sharp.api.show.command.instance', ['person', 'single_instance_with_init_data']),
+            route('code16.sharp.api.show.command.instance', ['person', 'single_cmd']),
             ['data' => ['name' => '']]
         )
         ->assertJsonValidationErrors(['name']);

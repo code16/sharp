@@ -154,9 +154,7 @@ abstract class SharpFormField
                 'extraStyle' => $this->extraStyle,
             ])
             ->merge($childArray)
-            ->filter(function ($value) {
-                return $value !== null;
-            })
+            ->filter(fn ($value) => $value !== null)
             ->all();
 
         $this->validate($array);

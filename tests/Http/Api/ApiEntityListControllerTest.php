@@ -5,6 +5,8 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 beforeEach(function () {
     login();
@@ -117,4 +119,61 @@ it('throws an exception if delete is not implemented and there is no show', func
 
     $this->deleteJson(route('code16.sharp.api.list.delete', ['person', 1]))
         ->assertStatus(500);
+});
+
+it('gets list data as JSON in an EEL case', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function getListData(): array|Arrayable
+        {
+            return $this->transform([
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ]);
+        }
+    });
+
+    $this->getJson('/sharp/api/list/person')
+        ->assertOk()
+        ->assertJsonFragment([
+            'data' => [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ]
+        ]);
+});
+
+it('gets paginated data if wanted as JSON in an EEL case', function () {
+    fakeListFor('person', new class extends PersonList {
+        public function getListData(): array|Arrayable
+        {
+            $items = [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ];
+
+            return $this->transform(new LengthAwarePaginator($items, 20, 2, 1));
+        }
+    });
+
+    $metaJson = $this->getJson('/sharp/api/list/person')
+        ->assertOk()
+        ->assertJsonFragment([
+            'data' => [
+                ['id' => 1, 'name' => 'Marie Curie'],
+                ['id' => 2, 'name' => 'Niels Bohr'],
+            ]
+        ])
+        ->json('meta');
+
+    expect($metaJson)
+        ->toMatchArray([
+            'current_page' => 1,
+            'first_page_url' => '/?page=1',
+            'last_page_url' => '/?page=10',
+            'from' => 1,
+            'to' => 2,
+            'last_page' => 10,
+            'per_page' => 2,
+            'total' => 20,
+    ]);
 });

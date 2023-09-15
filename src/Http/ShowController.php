@@ -37,7 +37,6 @@ class ShowController extends SharpProtectedController
         $show->buildShowConfig();
 
         $showData = $show->instance($instanceId);
-
         $data = [
             'config' => $show->showConfig($instanceId),
             'fields' => $show->fields(),

@@ -14,11 +14,11 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
 {
-    use WithCustomTransformers,
-        HandleFormFields,
-        HandlePageAlertMessage,
-        HandleCustomBreadcrumb,
-        HandleLocalizedFields;
+    use WithCustomTransformers;
+    use HandleFormFields;
+    use HandlePageAlertMessage;
+    use HandleCustomBreadcrumb;
+    use HandleLocalizedFields;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
