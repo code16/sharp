@@ -44,24 +44,19 @@ class SharpServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');
-
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
-
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
-        $this->publishes([
-            __DIR__.'/../dist' => public_path('vendor/sharp'),
-        ], 'assets');
-
-        $this->publishes([
-            __DIR__.'/../config/config.php' => config_path('sharp.php'),
-        ], 'config');
-
-        $this->publishes([
-            __DIR__.'/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
-            __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
-            __DIR__.'/../resources/views/partials/plugin-script.blade.php' => resource_path('views/vendor/sharp/partials/plugin-script.blade.php'),
-        ], 'views');
+        $this->publishes([__DIR__.'/../dist' => public_path('vendor/sharp')], 'assets');
+        $this->publishes([__DIR__.'/../config/config.php' => config_path('sharp.php')], 'config');
+        $this->publishes(
+            [
+                __DIR__.'/../resources/views/components/file.blade.php' => resource_path('views/vendor/sharp/components/file.blade.php'),
+                __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
+                __DIR__.'/../resources/views/partials/plugin-script.blade.php' => resource_path('views/vendor/sharp/partials/plugin-script.blade.php'),
+            ],
+            'views'
+        );
 
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
         Blade::componentNamespace('Code16\\Sharp\\View\\Components\\Content', 'sharp-content');
@@ -80,22 +75,11 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->registerMiddleware();
 
-        $this->app->singleton(
-            SharpAuthorizationManager::class,
-            SharpAuthorizationManager::class,
-        );
+        $this->app->singleton(SharpAuthorizationManager::class, SharpAuthorizationManager::class);
+        $this->app->singleton(CurrentSharpRequest::class, CurrentSharpRequest::class);
+        $this->app->singleton(SharpMenuManager::class, SharpMenuManager::class);
 
-        $this->app->singleton(
-            CurrentSharpRequest::class,
-            CurrentSharpRequest::class,
-        );
-
-        $this->app->singleton(
-            SharpMenuManager::class,
-            SharpMenuManager::class
-        );
-
-        if (class_exists("\PragmaRX\Google2FA\Google2FA")) {
+        if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
             $this->app->bind(
                 Sharp2faTotpEngine::class,
                 GoogleTotpEngine::class,
@@ -138,10 +122,6 @@ class SharpServiceProvider extends ServiceProvider
             ->middlewareGroup('sharp_common', $this->app['config']->get('sharp.middleware.common'))
             ->middlewareGroup('sharp_web', $this->app['config']->get('sharp.middleware.web'))
             ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
-            ->aliasMiddleware('sharp_api_append_instance_authorizations', AppendInstanceAuthorizations::class)
-            ->aliasMiddleware('sharp_api_append_list_authorizations', AppendListAuthorizations::class)
-            ->aliasMiddleware('sharp_api_append_multiform_in_list', AppendMultiformInEntityList::class)
-            ->aliasMiddleware('sharp_api_append_notifications', AppendNotifications::class)
             ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
             ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
 
