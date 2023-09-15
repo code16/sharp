@@ -16,15 +16,10 @@ final class ShowConfigData extends Data
     public function __construct(
         public string $deleteConfirmationText,
         public bool $isSingle = false,
-        #[Optional]
         public ?ConfigCommandsData $commands = null,
-        #[Optional]
         public ?string $multiformAttribute = null,
-        #[Optional]
         public ?string $titleAttribute = null,
-        #[Optional]
         public ?string $breadcrumbAttribute = null,
-        #[Optional]
         public ?EntityStateData $state = null,
     ) {
     }

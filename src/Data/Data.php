@@ -3,14 +3,18 @@
 namespace Code16\Sharp\Data;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use JsonSerializable;
 use ReflectionClass;
+use ReflectionParameter;
 use ReflectionProperty;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
+use function Pest\Laravel\json;
 
 abstract class Data implements Arrayable
 {
-    /** @var ReflectionProperty[][] */
-    protected static array $propertyCache = [];
+    /** @var ReflectionParameter[][] */
+    protected static array $constructorParameterCache = [];
 
     public static function collection($payload): DataCollection
     {
@@ -37,31 +41,27 @@ abstract class Data implements Arrayable
 
     public function toArray(): array
     {
-        return $this->extractPublicProperties();
+        return $this->extractValuesFromConstructor();
     }
 
-    protected function extractPublicProperties(): array
+    protected function extractValuesFromConstructor(): array
     {
         $class = get_class($this);
 
-        if (! isset(static::$propertyCache[$class])) {
+        if (! isset(static::$constructorParameterCache[$class])) {
             $reflection = new ReflectionClass($this);
 
-            static::$propertyCache[$class] = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
-                ->reject(function (ReflectionProperty $property) {
-                    return $property->isStatic();
-                })
-                ->all();
+            static::$constructorParameterCache[$class] = $reflection->getConstructor()->getParameters();
         }
 
         $values = [];
 
-        foreach (static::$propertyCache[$class] as $property) {
-            $name = $property->getName();
-            if (!empty($property->getAttributes(Optional::class)) && !isset($this->{$name})) {
+        foreach (static::$constructorParameterCache[$class] as $parameter) {
+            $name = $parameter->getName();
+            if ($parameter->isOptional() && $parameter->getDefaultValue() === null && $this->{$parameter->name} === null) {
                 continue;
             }
-            $values[$name] = $this->{$name};
+            $values[$parameter->getName()] = $this->{$parameter->getName()};
         }
 
         return $values;

@@ -44,7 +44,7 @@
         @before-enter="$emit('show')"
         @after-enter="$emit('shown')"
         @after-leave="$emit('hidden')"
-        :show="visible"
+        :show="!!visible"
     >
         <Dialog as="div" class="relative z-50" @close="close">
             <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">

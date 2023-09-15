@@ -11,9 +11,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class DashboardConfigData extends Data
 {
     public function __construct(
-        #[Optional]
         public ?ConfigCommandsData $commands = null,
-        #[Optional]
         public ?ConfigFiltersData $filters = null,
     ) {
     }

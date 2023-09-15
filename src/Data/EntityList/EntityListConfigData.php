@@ -22,13 +22,9 @@ final class EntityListConfigData extends Data
         public bool $hasShowPage,
         public string  $deleteConfirmationText,
         public bool $deleteHidden,
-        #[Optional]
         public ?ConfigFiltersData $filters = null,
-        #[Optional]
         public ?ConfigCommandsData $commands = null,
-        #[Optional]
         public ?string $multiformAttribute = null,
-        #[Optional]
         public ?EntityStateData $state = null,
     ) {
     }

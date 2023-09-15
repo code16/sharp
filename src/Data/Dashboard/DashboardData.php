@@ -17,7 +17,6 @@ final class DashboardData extends Data
         public DashboardLayoutData $layout,
         /** @var array<string,mixed> */
         public array $data,
-        #[Optional]
         public ?PageAlertData $pageAlert = null,
     ) {
     }

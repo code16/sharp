@@ -12,7 +12,6 @@ final class FormData extends Data
         public FormConfigData $config,
         /** @var array<string,mixed> */
         public array $data,
-        #[Optional]
         public ?PageAlertData $pageAlert = null,
     ) {
     }

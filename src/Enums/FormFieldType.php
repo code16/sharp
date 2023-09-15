@@ -7,7 +7,6 @@ enum FormFieldType: string
     case Autocomplete = 'autocomplete';
     case Check = 'check';
     case Date = 'date';
-    case DateRange = 'daterange';
     case Editor = 'editor';
     case Geolocation = 'geolocation';
     case Html = 'html';

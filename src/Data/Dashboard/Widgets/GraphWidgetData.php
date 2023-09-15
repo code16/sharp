@@ -33,7 +33,6 @@ final class GraphWidgetData extends Data
         public ?int $ratioY = null,
         public ?int $height = null,
         public bool $dateLabels = false,
-        #[Optional]
         #[TypeScriptType([
             'curved' => 'boolean',
             'horizontal' => 'boolean',
