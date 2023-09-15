@@ -51,6 +51,11 @@ class EntityListController extends SharpProtectedController
             ),
         ];
 
+        if(request()->expectsJson()) {
+            // EEL case, need to return JSON
+            return response()->json(EntityListData::from($data));
+        }
+
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([

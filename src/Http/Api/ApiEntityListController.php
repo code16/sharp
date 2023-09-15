@@ -7,25 +7,6 @@ use Code16\Sharp\Exceptions\SharpMethodNotImplementedException;
 
 class ApiEntityListController extends ApiController
 {
-//    public function show(string $entityKey)
-//    {
-//        sharp_check_ability('entity', $entityKey);
-//
-//        $list = $this->getListInstance($entityKey);
-//        $list->buildListConfig();
-//        $list->initQueryParams();
-//
-//        return response()->json([
-//            'containers' => $list->fields(),
-//            'layout' => $list->listLayout(),
-//            'data' => $list->data(),
-//            'fields' => $list->listMetaFields(),
-//            'config' => $list->listConfig(
-//                $this->entityManager->entityFor($entityKey)->hasShow(),
-//            ),
-//        ]);
-//    }
-
     /**
      * Reorder instances.
      */

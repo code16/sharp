@@ -35,9 +35,9 @@ Route::group([
     Route::post('/dashboard/{dashboardKey}/command/{commandKey}', [ApiDashboardCommandController::class, 'update'])
         ->name('code16.sharp.api.dashboard.command');
 
-    Route::get('/list/{entityKey}', [ApiEntityListController::class, 'show'])
-        ->name('code16.sharp.api.list')
-        ->middleware(['sharp_api_append_list_authorizations', 'sharp_api_append_multiform_in_list']);
+    // EEL
+    Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
+        ->name('code16.sharp.api.list');
 
     Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');
@@ -73,29 +73,6 @@ Route::group([
 
     Route::post('/show/{entityKey}/state/{instanceId?}', [ApiShowEntityStateController::class, 'update'])
         ->name('code16.sharp.api.show.state');
-
-    Route::delete('/show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
-        ->name('code16.sharp.api.show.delete');
-
-//    Route::get('/form/{entityKey}', [FormController::class, 'create'])
-//        ->name('code16.sharp.api.form.create')
-//        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
-
-//    Route::post('/form/{entityKey}', [ApiFormController::class, 'store'])
-//        ->name('code16.sharp.api.form.store');
-//
-//    Route::get('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'edit'])
-//        ->name('code16.sharp.api.form.edit')
-//        ->middleware(['sharp_api_append_instance_authorizations', 'sharp_api_append_breadcrumb']);
-//
-//    Route::post('/form/{entityKey}/{instanceId?}', [ApiFormController::class, 'update'])
-//        ->name('code16.sharp.api.form.update');
-
-//    Route::get('/filters', [ApiGlobalFilterController::class, 'index'])
-//        ->name('code16.sharp.api.filter.index');
-//
-//    Route::post('/filters/{filterKey}', [ApiGlobalFilterController::class, 'update'])
-//        ->name('code16.sharp.api.filter.update');
 
     Route::get('/search', [ApiSearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
