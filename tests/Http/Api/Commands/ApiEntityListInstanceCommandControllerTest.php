@@ -346,7 +346,22 @@ it('returns the form of the instance command', function () {
                 ],
             ],
             'layout' => [
-                [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                'tabbed' => false,
+                'tabs' => [
+                    [
+                        'columns' => [
+                            [
+                                'fields' => [
+                                    [
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
+                                    ]
+                                ],
+                                'size' => 12,
+                            ]
+                        ],
+                        'title' => 'one'
+                    ]
+                ],
             ],
         ]);
 });
@@ -427,9 +442,6 @@ it('handles localized form of the instance command', function () {
                     'inputType' => 'text',
                     'localized' => true,
                 ],
-            ],
-            'layout' => [
-                [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
             ],
             'locales' => ['fr', 'en', 'it'],
         ]);

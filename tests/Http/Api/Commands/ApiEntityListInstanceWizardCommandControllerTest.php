@@ -54,7 +54,22 @@ it('displays first step form on the first call of a wizard instance command', fu
                 ],
             ],
             'layout' => [
-                [['key' => 'name', 'size' => 12, 'sizeXS' => 12]],
+                'tabbed' => false,
+                'tabs' => [
+                    [
+                        'columns' => [
+                            [
+                                'fields' => [
+                                    [
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
+                                    ]
+                                ],
+                                'size' => 12,
+                            ]
+                        ],
+                        'title' => 'one'
+                    ]
+                ],
             ],
         ]);
 });

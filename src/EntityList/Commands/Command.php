@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
@@ -177,16 +178,20 @@ abstract class Command
     final public function formLayout(): ?array
     {
         if ($fields = $this->fieldsContainer()->getFields()) {
-            $column = new FormLayoutColumn(12);
-            $this->buildFormLayout($column);
+            $formLayout = new FormLayout();
+            $formLayout->setTabbed(false);
 
-            if (empty($column->fieldsToArray()['fields'])) {
-                foreach ($fields as $field) {
-                    $column->withSingleField($field->key());
+            $formLayout->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
+                $this->buildFormLayout($column);
+
+                if (empty($column->fieldsToArray()['fields'])) {
+                    foreach ($fields as $field) {
+                        $column->withSingleField($field->key());
+                    }
                 }
-            }
+            });
 
-            return $column->fieldsToArray()['fields'];
+            return $formLayout->toArray();
         }
 
         return null;
