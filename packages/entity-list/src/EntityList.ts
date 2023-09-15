@@ -40,7 +40,7 @@ export class EntityList implements EntityListData {
     }
 
     get count() {
-        return this.meta.total ?? this.data.length;
+        return this.meta?.total ?? this.data.length;
     }
 
     get visibleFilters(): Array<FilterData> {

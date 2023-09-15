@@ -9,7 +9,7 @@ export type BreadcrumbItemData = {
   url: string;
 };
 export type CheckFilterData = {
-  value?: boolean;
+  value?: boolean | null;
   key: string;
   label: string;
   type: "check";

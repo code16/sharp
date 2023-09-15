@@ -1,3 +1,19 @@
+<script setup lang="ts">
+    withDefaults(defineProps<{
+        variant?: string,
+        text?: boolean,
+        outline?: boolean,
+        small?: boolean,
+        large?: boolean,
+        active?: boolean,
+        block?: boolean,
+        href?: string,
+        disabled?: boolean,
+    }>(), {
+        variant: 'primary'
+    });
+</script>
+
 <template>
     <component
         :is="tag"
@@ -10,22 +26,8 @@
     </component>
 </template>
 
-<script>
+<script lang="ts">
     export default {
-        props: {
-            variant: {
-                type: String,
-                default: 'primary',
-            },
-            text: Boolean,
-            outline: Boolean,
-            small: Boolean,
-            large: Boolean,
-            active: Boolean,
-            block: Boolean,
-            href: String,
-            disabled: Boolean,
-        },
         computed: {
             variantClass() {
                 return !this.hasTextStyle && this.variant

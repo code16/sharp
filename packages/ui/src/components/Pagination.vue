@@ -1,18 +1,18 @@
 <script setup lang="ts">
-    import { Link } from "@inertiajs/vue3";
     import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/20/solid";
     import { PaginatorMetaData } from "@/types";
 
     const props = defineProps<{
         paginator: { meta: PaginatorMetaData },
-        inertia?: boolean
+        linksOpenable?: boolean
     }>();
 
     const emit = defineEmits('change');
 
     function onLinkClick(e) {
-        if(props.inertia && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey))
+        if(props.linksOpenable && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) {
             return;
+        }
         emit('change', new URL(e.target.closest('a').href).searchParams.get('page'));
         e.preventDefault();
     }
