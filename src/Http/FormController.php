@@ -42,7 +42,7 @@ class FormController extends SharpProtectedController
         $data = $this->buildFormData($form, $entityKey);
 
         return Inertia::render('Form/Form', [
-            'form' => $data,
+            'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => app(SharpBreadcrumb::class)->getItems($data)
             ]),

@@ -395,7 +395,7 @@ export type FormHtmlFieldData = {
 };
 export type FormLayoutColumnData = {
   size: number;
-  fields: Array<Array<any>>;
+  fields: Array<Array<LayoutFieldData>>;
 };
 export type FormLayoutData = {
   tabbed: boolean;
@@ -724,7 +724,7 @@ export type ShowHtmlFieldData = {
 };
 export type ShowLayoutColumnData = {
   size: number;
-  fields: Array<Array<any>>;
+  fields: Array<Array<LayoutFieldData>>;
 };
 export type ShowLayoutData = {
   sections: Array<ShowLayoutSectionData>;
