@@ -34,8 +34,15 @@ export type CommandData = {
   modal_confirm_label: string | null;
   has_form: boolean;
   authorization: Array<string | number> | boolean;
-  primary?: boolean | null;
-  instance_selection?: InstanceSelectionMode | null;
+  primary: boolean | null;
+  instance_selection: InstanceSelectionMode | null;
+};
+export type CommandFormData = {
+  data: { [key: string]: FormFieldData["value"] };
+  fields: { [key: string]: FormFieldData } | null;
+  layout: FormLayoutData | null;
+  locales: Array<string> | null;
+  pageAlert: PageAlertData | null;
 };
 export type CommandReturnData =
   | { action: "link"; link: string }
@@ -53,15 +60,15 @@ export type ConfigFiltersData = { _root: Array<FilterData> } & {
   [key: string]: Array<FilterData>;
 };
 export type DashboardConfigData = {
-  commands?: ConfigCommandsData | null;
-  filters?: ConfigFiltersData | null;
+  commands: ConfigCommandsData | null;
+  filters: ConfigFiltersData | null;
 };
 export type DashboardData = {
   widgets: Array<WidgetData>;
   config: DashboardConfigData;
   layout: DashboardLayoutData;
   data: { [key: string]: any };
-  pageAlert?: PageAlertData | null;
+  pageAlert: PageAlertData | null;
 };
 export type DashboardLayoutData = {
   sections: Array<DashboardLayoutSectionData>;
@@ -96,6 +103,11 @@ export type EmbedData = {
   attributes: Array<string>;
   template: string;
 };
+export type EmbedFormData = {
+  data: { [key: string]: FormFieldData["value"] };
+  fields: { [key: string]: FormFieldData };
+  layout: FormLayoutData;
+};
 export type EntityAuthorizationsData = {
   view: Array<number | string>;
   update: Array<number | string>;
@@ -111,10 +123,10 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
-  filters?: ConfigFiltersData | null;
-  commands?: ConfigCommandsData | null;
-  multiformAttribute?: string | null;
-  state?: EntityStateData | null;
+  filters: ConfigFiltersData | null;
+  commands: ConfigCommandsData | null;
+  multiformAttribute: string | null;
+  state: EntityStateData | null;
 };
 export type EntityListData = {
   authorizations: EntityAuthorizationsData;
@@ -122,8 +134,8 @@ export type EntityListData = {
   fields: Array<EntityListFieldData>;
   data: Array<{ [key: string]: any }>;
   forms: { [key: string]: EntityListMultiformData };
-  meta?: PaginatorMetaData | null;
-  pageAlert?: PageAlertData | null;
+  meta: PaginatorMetaData | null;
+  pageAlert: PageAlertData | null;
 };
 export type EntityListFieldData = {
   key: string;
@@ -174,22 +186,171 @@ export type FilterData =
   | DateRangeFilterData
   | SelectFilterData;
 export type FilterType = "select" | "daterange" | "check";
+export type FormAutocompleteFieldData = {
+  value: string | number | null | { [locale: string]: string | number | null };
+  key: string;
+  type: "autocomplete";
+  mode: "local" | "remote";
+  itemIdAttribute: string;
+  listItemTemplate: string;
+  resultItemTemplate: string;
+  searchMinChars: number;
+  localValues: Array<{ [key: string]: any }> | FormDynamicOptionsData;
+  debounceDelay: number;
+  dataWrapper: string;
+  placeholder: string | null;
+  templateData: { [key: string]: any } | null;
+  searchKeys: Array<string> | null;
+  remoteEndpoint: string | null;
+  remoteMethod: "GET" | "POST" | null;
+  remoteSearchAttribute: string | null;
+  localized: boolean | null;
+  dynamicAttributes: FormDynamicAttributeData | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormCheckFieldData = {
+  value?: boolean;
+  key: string;
+  type: "check";
+  text: string;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormConditionalDisplayData = {
+  operator: "and" | "or";
+  fields: Array<{ key: string; values: string | boolean | Array<string> }>;
+};
 export type FormConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string | null;
   isSingle: boolean;
-  breadcrumbAttribute?: string | null;
+  breadcrumbAttribute: string | null;
 };
 export type FormData = {
+  authorizations: InstanceAuthorizationsData;
   config: FormConfigData;
-  data: { [key: string]: any };
+  data: { [key: string]: FormFieldData["value"] };
+  fields: { [key: string]: FormFieldData };
+  layout: FormLayoutData;
+  locales: Array<string>;
   pageAlert: PageAlertData | null;
 };
+export type FormDateFieldData = {
+  value: string | null;
+  key: string;
+  type: "date";
+  hasDate: boolean;
+  hasTime: boolean;
+  minTime: string;
+  maxTime: string;
+  stepTime: number;
+  mondayFirst: boolean;
+  displayFormat: string;
+  language: string;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormDynamicAttributeData = {
+  name: string;
+  type: "map" | "template";
+  path: Array<string> | null;
+  default: string | null;
+};
+export type FormDynamicOptionsData = {
+  [key: string]:
+    | FormDynamicOptionsData
+    | Array<{ id: string | number; label: string }>;
+};
+export type FormEditorFieldData = {
+  value: string | null | { [locale: string]: string | null };
+  key: string;
+  type: "editor";
+  minHeight: number;
+  markdown: boolean;
+  inline: boolean;
+  showCharacterCount: boolean;
+  embeds: { upload: FormEditorFieldUploadData } & {
+    [key: string]: FormEditorFieldEmbedData;
+  };
+  toolbar: Array<FormEditorToolbarButton>;
+  maxHeight: number | null;
+  maxLength: number | null;
+  placeholder: string | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+  localized: boolean | null;
+};
+export type FormEditorFieldEmbedData = {
+  key: string;
+  label: string;
+  tag: string;
+  attributes: Array<string>;
+  template: string;
+};
+export type FormEditorFieldUploadData = {
+  transformable: boolean;
+  transformKeepOriginal: boolean | null;
+  transformableFileTypes: Array<string> | null;
+  ratioX: number | null;
+  ratioY: number | null;
+  maxFileSize: number | null;
+  fileFilter: Array<any> | string | null;
+};
+export type FormEditorToolbarButton =
+  | "bold"
+  | "italic"
+  | "highlight"
+  | "small"
+  | "bullet-list"
+  | "ordered-list"
+  | "link"
+  | "heading-1"
+  | "heading-2"
+  | "heading-3"
+  | "code"
+  | "blockquote"
+  | "upload-image"
+  | "upload"
+  | "horizontal-rule"
+  | "table"
+  | "iframe"
+  | "html"
+  | "code-block"
+  | "superscript"
+  | "undo"
+  | "redo"
+  | "|";
+export type FormFieldData =
+  | FormAutocompleteFieldData
+  | FormCheckFieldData
+  | FormDateFieldData
+  | FormEditorFieldData
+  | FormGeolocationFieldData
+  | FormHtmlFieldData
+  | FormListFieldData
+  | FormNumberFieldData
+  | FormSelectFieldData
+  | FormTagsFieldData
+  | FormTextFieldData
+  | FormTextareaFieldData
+  | FormUploadFieldData;
 export type FormFieldType =
   | "autocomplete"
   | "check"
   | "date"
-  | "daterange"
   | "editor"
   | "geolocation"
   | "html"
@@ -200,16 +361,180 @@ export type FormFieldType =
   | "text"
   | "textarea"
   | "upload";
+export type FormGeolocationFieldData = {
+  value: { lng: number; lat: number };
+  key: string;
+  type: "geolocation";
+  geocoding: boolean;
+  displayUnit: "DD" | "DMS";
+  zoomLevel: number;
+  mapsProvider: { name: "osm" | "gmaps"; options: { apiKey: string } };
+  geocodingProvider: { name: "osm" | "gmaps"; options: { apiKey: string } };
+  initialPosition: { lng: number; lat: number };
+  boundaries: {
+    ne: { lat: number; lng: number };
+    sw: { lat: number; lng: number };
+  };
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormHtmlFieldData = {
+  value: { [key: string]: any } | null;
+  key: string;
+  type: "html";
+  template: string;
+  templateData: { [key: string]: any } | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
 export type FormLayoutColumnData = {
-  tabbed: boolean;
+  size: number;
+  fields: Array<Array<any>>;
 };
 export type FormLayoutData = {
   tabbed: boolean;
   tabs: Array<FormLayoutTabData>;
 };
+export type FormLayoutFieldsetData = {
+  legend: string;
+  fields: Array<Array<any>>;
+};
 export type FormLayoutTabData = {
   title: string;
   columns: Array<FormLayoutColumnData>;
+};
+export type FormListFieldData = {
+  value?: Array<{ [key: string]: any }> | null;
+  key: string;
+  type: "list";
+  addable: boolean;
+  removable: boolean;
+  sortable: boolean;
+  itemIdAttribute: string;
+  itemFields: { [key: string]: FormFieldData };
+  addText: string;
+  collapsedItemTemplate: string | null;
+  maxItemCount: number | null;
+  bulkUploadField: string | null;
+  bulkUploadLimit: number | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormNumberFieldData = {
+  value: number | null;
+  key: string;
+  type: "number";
+  step: number;
+  showControls: boolean;
+  min: number | null;
+  max: number | null;
+  placeholder: string | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormSelectFieldData = {
+  value: string | number | Array<string | number> | null;
+  key: string;
+  type: "select";
+  options:
+    | Array<{ id: string | number; label: string }>
+    | FormDynamicOptionsData;
+  multiple: boolean;
+  showSelectAll: boolean;
+  clearable: boolean;
+  display: "list" | "dropdown";
+  inline: boolean;
+  dynamicAttributes: Array<FormDynamicAttributeData> | null;
+  maxSelected: number | null;
+  localized: boolean | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormTagsFieldData = {
+  value: Array<{ id: string | number; label: string }> | null;
+  key: string;
+  type: "tags";
+  creatable: boolean;
+  createText: string;
+  options: Array<{ id: string | number; label: string }>;
+  maxTagCount: number | null;
+  localized: boolean | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormTextFieldData = {
+  value: string | null | { [locale: string]: string | null };
+  key: string;
+  type: "text";
+  inputType: "text" | "password";
+  placeholder: string | null;
+  maxLength: number | null;
+  localized: boolean | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormTextareaFieldData = {
+  value: string | null | { [locale: string]: string | null };
+  key: string;
+  type: "textarea";
+  rows: number | null;
+  placeholder: string | null;
+  maxLength: number | null;
+  localized: boolean | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
+export type FormUploadFieldData = {
+  value: {
+    name: string;
+    disk: string;
+    path: string;
+    uploaded?: boolean;
+    transformed?: boolean;
+    filters?: {
+      crop: { width: number; height: number; x: number; y: number };
+      rotate: { angle: number };
+    };
+  } | null;
+  key: string;
+  type: "upload";
+  transformable: boolean;
+  compactThumbnail: boolean;
+  transformKeepOriginal: boolean | null;
+  transformableFileTypes: Array<string> | null;
+  ratioX: number | null;
+  ratioY: number | null;
+  maxFileSize: number | null;
+  fileFilter: Array<any> | string | null;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
 };
 export type GlobalFiltersData = {
   filters: ConfigFiltersData;
@@ -230,7 +555,7 @@ export type GraphWidgetData = {
   ratioY: number | null;
   height: number | null;
   dateLabels: boolean;
-  options?: { curved: boolean; horizontal: boolean };
+  options: { curved: boolean; horizontal: boolean };
 };
 export type GraphWidgetDisplay = "bar" | "line" | "pie";
 export type InstanceAuthorizationsData = {
@@ -240,6 +565,12 @@ export type InstanceAuthorizationsData = {
   delete: boolean;
 };
 export type InstanceSelectionMode = "required" | "allowed";
+export type LayoutFieldData = {
+  key: string;
+  size: number;
+  sizeXS: number;
+  item: { [key: string]: any } | null;
+};
 export type MenuData = {
   items: Array<MenuItemData>;
   userMenu: UserMenuData;
@@ -292,10 +623,10 @@ export type PaginatorMetaData = {
   per_page: number;
   prev_page_url: string | null;
   to: number;
-  links?: Array<{ url: string | null; label: string; active: boolean }>;
-  last_page?: number | null;
-  last_page_url?: string | null;
-  total?: number | null;
+  links: Array<{ url: string | null; label: string; active: boolean }>;
+  last_page: number | null;
+  last_page_url: string | null;
+  total: number | null;
 };
 export type PanelWidgetData = {
   value?: { key: string; data: { [key: string]: any } };
@@ -326,20 +657,20 @@ export type SelectFilterValueData = {
 export type ShowConfigData = {
   deleteConfirmationText: string;
   isSingle: boolean;
-  commands?: ConfigCommandsData | null;
-  multiformAttribute?: string | null;
-  titleAttribute?: string | null;
-  breadcrumbAttribute?: string | null;
-  state?: EntityStateData | null;
+  commands: ConfigCommandsData | null;
+  multiformAttribute: string | null;
+  titleAttribute: string | null;
+  breadcrumbAttribute: string | null;
+  state: EntityStateData | null;
 };
 export type ShowData = {
   authorizations: InstanceAuthorizationsData;
   config: ShowConfigData;
-  data: { [key: string]: any };
+  data: { [key: string]: ShowFieldData["value"] };
   fields: { [key: string]: ShowFieldData };
   layout: ShowLayoutData;
   locales: Array<string> | null;
-  pageAlert?: PageAlertData | null;
+  pageAlert: PageAlertData | null;
 };
 export type ShowEntityListFieldData = {
   value?: null | null;
@@ -393,16 +724,10 @@ export type ShowHtmlFieldData = {
 };
 export type ShowLayoutColumnData = {
   size: number;
-  fields: Array<Array<ShowLayoutFieldData>>;
+  fields: Array<Array<any>>;
 };
 export type ShowLayoutData = {
   sections: Array<ShowLayoutSectionData>;
-};
-export type ShowLayoutFieldData = {
-  key: string;
-  size: number;
-  sizeXS: number;
-  item?: { [key: string]: ShowLayoutFieldData } | null;
 };
 export type ShowLayoutSectionData = {
   key: string | null;

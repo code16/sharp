@@ -16,10 +16,7 @@
                     :entity-key="$form.entityKey"
                     :instance-id="$form.instanceId"
                     :form="form"
-                    :show-alert="false"
-                    independant
-                    ignore-authorizations
-                    no-tabs
+                    :post-fn="post"
                     style="transition-duration: 300ms"
                     ref="form"
                 />

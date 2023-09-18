@@ -34,6 +34,7 @@
                 :form-errors="errors"
                 :entity-key="route().params.entityKey"
                 :instance-id="route().params.instanceId"
+                is-page
                 @submit="submit"
             >
                 <template v-slot:title>

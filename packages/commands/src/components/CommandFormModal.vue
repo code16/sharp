@@ -28,9 +28,6 @@
                     :entity-key="commands.state.currentCommandEndpoints.entityKey"
                     :instance-id="commands.state.currentCommandEndpoints.instanceId"
                     :form="commands.state.currentCommandForm"
-                    :show-alert="false"
-                    independant
-                    ignore-authorizations
                     @loading="commands.state.currentCommandFormLoading = $event"
                     style="transition-duration: 300ms"
                     ref="form"

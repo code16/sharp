@@ -9,10 +9,9 @@
         form: FormData,
         entityKey: string,
         instanceId: string | number,
-        noTabs: boolean,
-        showAlert: boolean,
         formErrors: Record<string, string[]>,
         postFn: Function,
+        isPage: boolean,
     }>();
 </script>
 
@@ -33,89 +32,87 @@
             </template>
         </div>
 
-        <template v-if="ready">
-            <template v-if="form.pageAlert">
-                <PageAlert
-                    class="mb-3"
-                    :page-alert="form.pageAlert"
-                />
+        <template v-if="form.pageAlert">
+            <PageAlert
+                class="mb-3"
+                :page-alert="form.pageAlert"
+            />
+        </template>
+
+        <template v-if="hasErrors && isPage">
+            <div class="alert alert-danger SharpForm__alert" role="alert">
+                <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
+                <div>{{ __('sharp::form.validation_error.description') }}</div>
+            </div>
+        </template>
+
+        <FormLayout :layout="form.layout">
+            <template v-slot:default="{ tab }">
+                <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
+                    <FieldsLayout
+                        :layout="column.fields"
+                        :visible="fieldVisible"
+                        ref="fieldLayout"
+                        v-slot="{ fieldLayout }"
+                    >
+                        <FieldDisplay
+                            :field-key="fieldLayout.key"
+                            :context-fields="transformedFields"
+                            :context-data="form.data"
+                            :field-layout="fieldLayout"
+                            :locale="fieldLocale[fieldLayout.key]"
+                            :read-only="isReadOnly"
+                            :error-identifier="fieldLayout.key"
+                            :config-identifier="fieldLayout.key"
+                            root
+                            :update-data="updateData"
+                            :update-visibility="updateVisibility"
+                            @locale-change="updateLocale"
+                            ref="field"
+                        />
+                    </FieldsLayout>
+                </Grid>
             </template>
+        </FormLayout>
 
-            <template v-if="hasErrors && showAlert">
-                <div class="alert alert-danger SharpForm__alert" role="alert">
-                    <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
-                    <div>{{ __('sharp::form.validation_error.description') }}</div>
-                </div>
-            </template>
-
-            <FormLayout :layout="form.layout" data-popover-boundary>
-                <template v-slot:default="{ tab }">
-                    <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
-                        <FieldsLayout
-                            :layout="column.fields"
-                            :visible="fieldVisible"
-                            ref="fieldLayout"
-                            v-slot="{ fieldLayout }"
-                        >
-                            <FieldDisplay
-                                :field-key="fieldLayout.key"
-                                :context-fields="transformedFields"
-                                :context-data="form.data"
-                                :field-layout="fieldLayout"
-                                :locale="fieldLocale[fieldLayout.key]"
-                                :read-only="isReadOnly"
-                                :error-identifier="fieldLayout.key"
-                                :config-identifier="fieldLayout.key"
-                                root
-                                :update-data="updateData"
-                                :update-visibility="updateVisibility"
-                                @locale-change="updateLocale"
-                                ref="field"
-                            />
-                        </FieldsLayout>
-                    </Grid>
-                </template>
-            </FormLayout>
-
-            <template v-if="!postFn">
-                <div class="position-sticky bottom-0 px-4 py-3 bg-white border-top"
-                    :class="{ 'shadow': stuck }"
-                    v-sticky
-                    @stuck-change="stuck = $event.detail"
-                    style="z-index: 100; transition: box-shadow .25s ease-in-out"
-                >
-                    <div class="row justify-content-end align-items-center gx-3">
-                        <div class="col">
-                            <slot name="left"></slot>
-                        </div>
+        <template v-if="isPage">
+            <div class="position-sticky bottom-0 px-4 py-3 bg-white border-top"
+                :class="{ 'shadow': stuck }"
+                v-sticky
+                @stuck-change="stuck = $event.detail"
+                style="z-index: 100; transition: box-shadow .25s ease-in-out"
+            >
+                <div class="row justify-content-end align-items-center gx-3">
+                    <div class="col">
+                        <slot name="left"></slot>
+                    </div>
+                    <div class="col-auto">
+                        <Button :href="$page.props.breadcrumb.items.at(-2)?.url" outline>
+                            <template v-if="isReadOnly">
+                                {{ __('sharp::action_bar.form.back_button') }}
+                            </template>
+                            <template v-else>
+                                {{ __('sharp::action_bar.form.cancel_button') }}
+                            </template>
+                        </Button>
+                    </div>
+                    <template v-if="isCreation ? form.authorizations.create : form.authorizations.update">
                         <div class="col-auto">
-                            <Button :href="getBackUrl(breadcrumb.items)" outline>
-                                <template v-if="isReadOnly">
-                                    {{ __('sharp::action_bar.form.back_button') }}
+                            <Button style="min-width: 6.5em" :disabled="isUploading || loading" @click="handleSubmitClicked">
+                                <template v-if="isUploading">
+                                    {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                </template>
+                                <template v-else-if="isCreation">
+                                    {{ __('sharp::action_bar.form.submit_button.create') }}
                                 </template>
                                 <template v-else>
-                                    {{ __('sharp::action_bar.form.cancel_button') }}
+                                    {{ __('sharp::action_bar.form.submit_button.update') }}
                                 </template>
                             </Button>
                         </div>
-                        <template v-if="isCreation ? form.authorizations.create : form.authorizations.update">
-                            <div class="col-auto">
-                                <Button style="min-width: 6.5em" :disabled="isUploading || loading" @click="handleSubmitClicked">
-                                    <template v-if="isUploading">
-                                        {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
-                                    </template>
-                                    <template v-else-if="isCreation">
-                                        {{ __('sharp::action_bar.form.submit_button.create') }}
-                                    </template>
-                                    <template v-else>
-                                        {{ __('sharp::action_bar.form.submit_button.update') }}
-                                    </template>
-                                </Button>
-                            </div>
-                        </template>
-                    </div>
+                    </template>
                 </div>
-            </template>
+            </div>
         </template>
     </div>
 </template>
@@ -179,11 +176,6 @@
             }
         },
         watch: {
-            form() {
-                if (this.independant) {
-                    this.init();
-                }
-            },
             formErrors() {
                 this.errors = { ...this.formErrors };
             },
@@ -201,7 +193,7 @@
                 return !this.isSingle && !this.instanceId;
             },
             isReadOnly() {
-                if (this.ignoreAuthorizations) {
+                if (!this.authorizations) {
                     return false;
                 }
                 return this.isCreation
@@ -268,7 +260,7 @@
             mount({ fields, layout, data, authorizations, locales, breadcrumb, config }) {
                 this.fields = fields;
                 this.data = data ?? {};
-                this.layout = this.patchLayout(layout);
+                this.layout = layout;
                 this.locales = locales;
                 this.authorizations = authorizations ?? {};
                 this.breadcrumb = breadcrumb;
@@ -298,16 +290,6 @@
                     this.errors = error.response.data.errors || {};
                 }
                 return Promise.reject(error);
-            },
-
-            patchLayout(layout) {
-                if (!layout) {
-                    return null;
-                }
-                if (this.noTabs) {
-                    layout = { tabs: [{ columns: [{ fields: layout }] }] };
-                }
-                return layout;
             },
 
             serialize(data = this.data) {

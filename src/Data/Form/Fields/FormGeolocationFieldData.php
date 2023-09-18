@@ -3,19 +3,40 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormGeolocationFieldData extends Data
 {
+    #[Optional]
+    #[TypeScriptType(['lng' => 'float', 'lat' => 'float'])]
+    public ?array $value;
+
     public function __construct(
         public string $key,
-        #[LiteralTypeScriptType('"'.FormFieldType::Check->value.'"')]
+        #[LiteralTypeScriptType('"'.FormFieldType::Geolocation->value.'"')]
         public FormFieldType $type,
+        public bool $geocoding,
+        #[LiteralTypeScriptType('"DD" | "DMS"')]
+        public string $displayUnit,
+        public int $zoomLevel,
+        #[LiteralTypeScriptType('{ name: "osm"|"gmaps", options: { apiKey: string } }')]
+        public array $mapsProvider,
+        #[LiteralTypeScriptType('{ name: "osm"|"gmaps", options: { apiKey: string } }')]
+        public array $geocodingProvider,
+        #[TypeScriptType(['lng' => 'float', 'lat' => 'float'])]
+        public ?array $initialPosition = null,
+        #[TypeScriptType([
+            'ne' => ['lat' => 'float', 'lng' => 'float'],
+            'sw' => ['lat' => 'float', 'lng' => 'float']
+        ])]
+        public ?array $boundaries = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
-        public ?array $conditionalDisplay = null,
+        public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
     ) {

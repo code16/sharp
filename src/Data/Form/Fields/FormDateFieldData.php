@@ -3,12 +3,16 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class FormDateFieldData extends Data
 {
+    #[Optional]
+    public ?string $value;
+
     public function __construct(
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Date->value.'"')]
@@ -23,7 +27,7 @@ final class FormDateFieldData extends Data
         public string $language,
         public ?string $label = null,
         public ?bool $readOnly = null,
-        public ?array $conditionalDisplay = null,
+        public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
     ) {

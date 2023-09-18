@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Data\Show;
+namespace Code16\Sharp\Data;
 
 
 use Code16\Sharp\Data\Data;
@@ -8,7 +8,7 @@ use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\NotificationData;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
-final class ShowLayoutFieldData extends Data
+final class LayoutFieldData extends Data
 {
     public function __construct(
         public string $key,
@@ -26,7 +26,7 @@ final class ShowLayoutFieldData extends Data
             'item' => isset($field['item'])
                 ? collect($field['item'])->map(fn(array $row) =>
                     collect($row)->map(fn (array $itemField) =>
-                        ShowLayoutFieldData::from($itemField)
+                        LayoutFieldData::from($itemField)
                     )
                 )->toArray()
                 : null,

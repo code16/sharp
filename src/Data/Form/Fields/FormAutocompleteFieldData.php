@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
+use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
@@ -10,18 +12,20 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 final class FormAutocompleteFieldData extends Data
 {
     #[Optional]
-    public int|string|null $value;
+    #[LiteralTypeScriptType('string|number|null | { [locale:string]: string|number|null }')]
+    public int|string|array|null $value;
 
     public function __construct(
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Autocomplete->value.'"')]
         public FormFieldType $type,
-        public FormAutocompleteFieldMode $mode,
+        #[LiteralTypeScriptType('"local" | "remote"')]
+        public string $mode,
         public string $itemIdAttribute,
         public string $listItemTemplate,
         public string $resultItemTemplate,
         public int $searchMinChars,
-        #[LiteralTypeScriptType('Array<{ [key:string]: any }>')]
+        #[LiteralTypeScriptType('Array<{ [key:string]: any }> | FormDynamicOptionsData')]
         public array $localValues,
         public int $debounceDelay,
         public string $dataWrapper,
@@ -34,17 +38,25 @@ final class FormAutocompleteFieldData extends Data
         #[LiteralTypeScriptType('"GET" | "POST" | null')]
         public ?string $remoteMethod = null,
         public ?string $remoteSearchAttribute = null,
+        public ?bool $localized = null,
+        public ?FormDynamicAttributeData $dynamicAttributes = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
-        public ?array $conditionalDisplay = null,
+        public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
-        public ?bool $localized = null,
     ) {
     }
 
     public static function from(array $field): self
     {
+        $field = [
+            ...$field,
+            'dynamicAttributes' => isset($field['dynamicAttributes'])
+                ? FormDynamicAttributeData::collection($field['dynamicAttributes'])
+                : null,
+        ];
+
         return new self(...$field);
     }
 }

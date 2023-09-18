@@ -1,27 +1,27 @@
 <?php
 
-namespace Code16\Sharp\Data\Form;
+namespace Code16\Sharp\Data\Commands;
 
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\FormFieldData;
+use Code16\Sharp\Data\Form\FormConfigData;
+use Code16\Sharp\Data\Form\FormLayoutData;
 use Code16\Sharp\Data\InstanceAuthorizationsData;
 use Code16\Sharp\Data\PageAlertData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
-final class FormData extends Data
+final class CommandFormData extends Data
 {
     public function __construct(
-        public InstanceAuthorizationsData $authorizations,
-        public FormConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
-        public array $data,
+        public ?array $data,
         /** @var DataCollection<string,FormFieldData> */
-        public DataCollection $fields,
-        public FormLayoutData $layout,
+        public ?DataCollection $fields = null,
+        public ?FormLayoutData $layout = null,
         /** @var array<string> */
-        public array $locales,
+        public ?array $locales = null,
         public ?PageAlertData $pageAlert = null,
     ) {
     }
@@ -29,12 +29,12 @@ final class FormData extends Data
     public static function from(array $form): self
     {
         return new self(
-            authorizations: InstanceAuthorizationsData::from($form['authorizations']),
-            config: FormConfigData::from($form['config']),
             data: $form['data'],
-            fields: FormFieldData::collection($form['fields']),
-            layout: FormLayoutData::from($form['layout']),
-            locales: $form['locales'],
+            fields: isset($form['fields'])
+                ? FormFieldData::collection($form['fields'])
+                : null,
+            layout: FormLayoutData::optional($form['layout'] ?? null),
+            locales: $form['locales'] ?? null,
             pageAlert: PageAlertData::optional($form['pageAlert']),
         );
     }

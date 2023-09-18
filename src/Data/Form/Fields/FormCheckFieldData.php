@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
@@ -20,7 +21,7 @@ final class FormCheckFieldData extends Data
         public string $text,
         public ?string $label = null,
         public ?bool $readOnly = null,
-        public ?array $conditionalDisplay = null,
+        public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
     ) {

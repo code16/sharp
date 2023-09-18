@@ -3,19 +3,36 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormListFieldData extends Data
 {
+    #[Optional]
+    #[LiteralTypeScriptType('Array<{ [key:string]: any }> | null')]
+    public ?array $value;
+
     public function __construct(
         public string $key,
-        #[LiteralTypeScriptType('"'.FormFieldType::Check->value.'"')]
+        #[LiteralTypeScriptType('"'.FormFieldType::List->value.'"')]
         public FormFieldType $type,
+        public bool $addable,
+        public bool $removable,
+        public bool $sortable,
+        public string $itemIdAttribute,
+        #[LiteralTypeScriptType('{ [key:string]: FormFieldData }')]
+        public array $itemFields,
+        public string $addText,
+        public ?string $collapsedItemTemplate = null,
+        public ?int $maxItemCount = null,
+        public ?string $bulkUploadField = null,
+        public ?int $bulkUploadLimit = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
-        public ?array $conditionalDisplay = null,
+        public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
     ) {

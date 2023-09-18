@@ -11,4 +11,9 @@ final class InstanceAuthorizationsData extends Data
         public bool $delete,
     ) {
     }
+
+    public static function from(array $authorizations): self
+    {
+        return new self(...$authorizations);
+    }
 }

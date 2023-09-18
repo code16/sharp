@@ -10,6 +10,7 @@ use Code16\Sharp\Data\InstanceAuthorizationsData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\Show\Fields\ShowFieldData;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class ShowData extends Data
@@ -17,7 +18,7 @@ final class ShowData extends Data
     public function __construct(
         public InstanceAuthorizationsData $authorizations,
         public ShowConfigData $config,
-        /** @var array<string,mixed> */
+        #[LiteralTypeScriptType('{ [key:string]: ShowFieldData["value"] }')]
         public array $data,
         /** @var DataCollection<string,ShowFieldData> */
         public DataCollection $fields,
@@ -31,7 +32,7 @@ final class ShowData extends Data
     public static function from(array $show): self
     {
         return new self(
-            authorizations: new InstanceAuthorizationsData(...$show['authorizations']),
+            authorizations: InstanceAuthorizationsData::from($show['authorizations']),
             config: ShowConfigData::from($show['config']),
             data: $show['data'],
             fields: ShowFieldData::collection($show['fields']),

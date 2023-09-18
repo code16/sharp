@@ -26,7 +26,6 @@ class SharpFormUploadField extends SharpFormField
             'transformableFileTypes' => 'array',
             'transformKeepOriginal' => 'boolean',
             'compactThumbnail' => 'boolean',
-            'shouldOptimizeImage' => 'boolean',
         ];
     }
 
@@ -41,7 +40,6 @@ class SharpFormUploadField extends SharpFormField
             'transformableFileTypes' => $this->transformableFileTypes,
             'transformKeepOriginal' => $this->transformKeepOriginal(),
             'compactThumbnail' => (bool) $this->compactThumbnail,
-            'shouldOptimizeImage' => (bool) $this->shouldOptimizeImage,
         ]);
     }
 }

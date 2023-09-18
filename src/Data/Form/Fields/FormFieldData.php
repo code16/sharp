@@ -4,6 +4,8 @@ namespace Code16\Sharp\Data\Form\Fields;
 
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
+use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
 use Code16\Sharp\Data\Show\Fields\ShowEntityListFieldData;
 use Code16\Sharp\Data\Show\Fields\ShowFileFieldData;
 use Code16\Sharp\Data\Show\Fields\ShowHtmlFieldData;
@@ -18,7 +20,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
     FormAutocompleteFieldData::class
     .'|'.FormCheckFieldData::class
     .'|'.FormDateFieldData::class
-    .'|'.FormDateRangeFieldData::class
     .'|'.FormEditorFieldData::class
     .'|'.FormGeolocationFieldData::class
     .'|'.FormHtmlFieldData::class
@@ -38,12 +39,12 @@ final class FormFieldData extends Data
     public static function from(array $field): mixed
     {
         $field['type'] = FormFieldType::from($field['type']);
+        $field['conditionalDisplay'] = FormConditionalDisplayData::optional($field['conditionalDisplay'] ?? null);
 
         return match($field['type']) {
             FormFieldType::Autocomplete => FormAutocompleteFieldData::from($field),
             FormFieldType::Check => FormCheckFieldData::from($field),
             FormFieldType::Date => FormDateFieldData::from($field),
-            FormFieldType::DateRange => FormDateRangeFieldData::from($field),
             FormFieldType::Editor => FormEditorFieldData::from($field),
             FormFieldType::Geolocation => FormGeolocationFieldData::from($field),
             FormFieldType::Html => FormHtmlFieldData::from($field),

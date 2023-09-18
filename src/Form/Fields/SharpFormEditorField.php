@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
@@ -21,29 +22,29 @@ class SharpFormEditorField extends SharpFormField
 
     const FIELD_TYPE = 'editor';
 
-    const B = 'bold';
-    const I = 'italic';
-    const HIGHLIGHT = 'highlight';
-    const SMALL = 'small';
-    const UL = 'bullet-list';
-    const OL = 'ordered-list';
-    const SEPARATOR = '|';
-    const A = 'link';
-    const H1 = 'heading-1';
-    const H2 = 'heading-2';
-    const H3 = 'heading-3';
-    const CODE = 'code';
-    const QUOTE = 'blockquote';
-    const UPLOAD_IMAGE = 'upload-image';
-    const UPLOAD = 'upload';
-    const HR = 'horizontal-rule';
-    const TABLE = 'table';
-    const IFRAME = 'iframe';
-    const RAW_HTML = 'html';
-    const CODE_BLOCK = 'code-block';
-    const SUP = 'superscript';
-    const UNDO = 'undo';
-    const REDO = 'redo';
+    const B = FormEditorToolbarButton::Bold;
+    const I = FormEditorToolbarButton::Italic;
+    const HIGHLIGHT = FormEditorToolbarButton::Highlight;
+    const SMALL = FormEditorToolbarButton::Small;
+    const UL = FormEditorToolbarButton::BulletList;
+    const OL = FormEditorToolbarButton::OrderedList;
+    const SEPARATOR = FormEditorToolbarButton::Separator;
+    const A = FormEditorToolbarButton::Link;
+    const H1 = FormEditorToolbarButton::Heading1;
+    const H2 = FormEditorToolbarButton::Heading2;
+    const H3 = FormEditorToolbarButton::Heading3;
+    const CODE = FormEditorToolbarButton::Code;
+    const QUOTE = FormEditorToolbarButton::Blockquote;
+    const UPLOAD_IMAGE = FormEditorToolbarButton::UploadImage;
+    const UPLOAD = FormEditorToolbarButton::Upload;
+    const HR = FormEditorToolbarButton::HorizontalRule;
+    const TABLE = FormEditorToolbarButton::Table;
+    const IFRAME = FormEditorToolbarButton::Iframe;
+    const RAW_HTML = FormEditorToolbarButton::Html;
+    const CODE_BLOCK = FormEditorToolbarButton::CodeBlock;
+    const SUP = FormEditorToolbarButton::Superscript;
+    const UNDO = FormEditorToolbarButton::Undo;
+    const REDO = FormEditorToolbarButton::Redo;
 
     protected int $minHeight = 200;
     protected ?int $maxHeight = null;

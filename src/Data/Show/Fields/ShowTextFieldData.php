@@ -5,7 +5,7 @@ namespace Code16\Sharp\Data\Show\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
-use Code16\Sharp\Data\EmbedData;
+use Code16\Sharp\Data\Embeds\EmbedData;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;

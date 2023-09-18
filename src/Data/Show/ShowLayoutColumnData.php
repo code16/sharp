@@ -5,6 +5,7 @@ namespace Code16\Sharp\Data\Show;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
+use Code16\Sharp\Data\LayoutFieldData;
 use Code16\Sharp\Data\NotificationData;
 
 final class ShowLayoutColumnData extends Data
@@ -23,7 +24,7 @@ final class ShowLayoutColumnData extends Data
             ...$column,
             'fields' => collect($column['fields'])->map(fn (array $row) =>
                 collect($row)->map(fn (array $field) =>
-                    ShowLayoutFieldData::from($field)
+                    LayoutFieldData::from($field)
                 )
             )->toArray(),
         ];

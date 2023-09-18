@@ -1,4 +1,4 @@
-import { CommandData, CommandReturnData, FormData } from "@/types";
+import { CommandData, CommandFormData, CommandReturnData, FormData } from "@/types";
 import { api } from "@/api";
 import { showAlert, showConfirm } from "@/utils/dialogs";
 import { parseBlobJSONContent } from "@/utils/request";
@@ -14,7 +14,7 @@ export class CommandManager {
 
     state = reactive<{
         currentCommand?: CommandData,
-        currentCommandForm?: FormData,
+        currentCommandForm?: CommandFormData,
         currentCommandFormLoading?: boolean,
         currentCommandReturn?: CommandReturnData,
         currentCommandEndpoints?: CommandEndpoints,
@@ -121,7 +121,7 @@ export class CommandManager {
         return this.commandReturnHandlers[data.action]?.(data as any);
     }
 
-    getForm(query?: GetFormQuery): Promise<FormData> {
+    getForm(query?: GetFormQuery): Promise<CommandFormData> {
         this.state.currentCommandFormLoading = true;
 
         return api.get(this.state.currentCommandEndpoints.getForm, {
@@ -131,16 +131,12 @@ export class CommandManager {
             }
         })
             .then(response => response.data)
-            .then(form => ({
-                ...form,
-                layout: { tabs: [{ columns: [{ fields:form.layout }] }] }
-            }))
             .finally(() => {
                 this.state.currentCommandFormLoading = false;
             });
     }
 
-    async postForm(data: FormData['data']) {
+    async postForm(data: CommandFormData['data']) {
         const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
             data,
             query: this.state.currentCommandEndpoints.query,

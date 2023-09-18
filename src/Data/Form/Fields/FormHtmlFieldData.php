@@ -3,19 +3,27 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
+use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class FormHtmlFieldData extends Data
 {
+    #[Optional]
+    #[LiteralTypeScriptType('{ [key:string]: any } | null')]
+    public ?array $value;
+
     public function __construct(
         public string $key,
-        #[LiteralTypeScriptType('"'.FormFieldType::Check->value.'"')]
+        #[LiteralTypeScriptType('"'.FormFieldType::Html->value.'"')]
         public FormFieldType $type,
+        public string $template,
+        /** @var array<string, mixed> */
+        public ?array $templateData = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
-        public ?array $conditionalDisplay = null,
+        public ?FormConditionalDisplayData $conditionalDisplay = null,
         public ?string $helpMessage = null,
         public ?string $extraStyle = null,
     ) {
