@@ -4,6 +4,7 @@ namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
+use Code16\Sharp\Data\Form\FormData;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
@@ -24,7 +25,7 @@ class FormController extends SharpProtectedController
     public function create(string $uri, string $entityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
-        
+
         sharp_check_ability(
             $entity->hasShow() ? 'create' : 'view',
             $entityKey,
@@ -51,7 +52,7 @@ class FormController extends SharpProtectedController
     public function edit(string $uri, string $entityKey, string $instanceId = null)
     {
         $entity = $this->entityManager->entityFor($entityKey);
-        
+
         sharp_check_ability(
             $entity->hasShow() ? 'update' : 'view',
             $entityKey,
@@ -70,7 +71,7 @@ class FormController extends SharpProtectedController
         $data = $this->buildFormData($form, $entityKey, $instanceId);
 
         return Inertia::render('Form/Form', [
-            'form' => $data,
+            'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
                 'items' => app(SharpBreadcrumb::class)->getItems($data)
             ]),
@@ -84,7 +85,7 @@ class FormController extends SharpProtectedController
         $form = $this->entityManager
             ->entityFor($entityKey)
             ->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
-        
+
         abort_if(
             (! $instanceId && ! $form instanceof SharpSingleForm)
             || ($instanceId && $form instanceof SharpSingleForm),

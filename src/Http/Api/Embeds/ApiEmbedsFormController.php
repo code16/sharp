@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Embeds;
 
+use Code16\Sharp\Data\Embeds\EmbedFormData;
 use Illuminate\Routing\Controller;
 
 class ApiEmbedsFormController extends Controller
@@ -18,11 +19,11 @@ class ApiEmbedsFormController extends Controller
 
         $embed = $this->getEmbedFromKey($embedKey);
 
-        return [
+        return EmbedFormData::from([
             'fields' => $embed->fields(),
             'layout' => $embed->formLayout(),
             'data' => $embed->transformDataForFormFields(request()->all()),
-        ];
+        ]);
     }
 
     public function update(string $embedKey, string $entityKey, ?string $instanceId = null)

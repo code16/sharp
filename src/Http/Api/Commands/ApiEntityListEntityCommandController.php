@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
@@ -22,13 +23,11 @@ class ApiEntityListEntityCommandController extends ApiController
         $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
-            array_merge(
-                $this->getCommandForm($commandHandler),
-                [
-                    'data' => $formData,
-                    'pageAlert' => $commandHandler->pageAlert($formData),
-                ],
-            ),
+            CommandFormData::from([
+                ...$this->getCommandForm($commandHandler),
+                'data' => $formData,
+                'pageAlert' => $commandHandler->pageAlert($formData),
+            ])
         );
     }
 

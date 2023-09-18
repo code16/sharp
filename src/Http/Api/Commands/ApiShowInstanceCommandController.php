@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Api\Commands;
 
+use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Http\Api\ApiController;
 use Code16\Sharp\Show\SharpSingleShow;
 
@@ -16,13 +17,11 @@ class ApiShowInstanceCommandController extends ApiController
         $formData = $commandHandler->formData($instanceId) ?: null;
 
         return response()->json(
-            array_merge(
-                $this->getCommandForm($commandHandler),
-                [
-                    'data' => $formData,
-                    'pageAlert' => $commandHandler->pageAlert($formData),
-                ],
-            ),
+            CommandFormData::from([
+                ...$this->getCommandForm($commandHandler),
+                'data' => $formData,
+                'pageAlert' => $commandHandler->pageAlert($formData),
+            ]),
         );
     }
 
