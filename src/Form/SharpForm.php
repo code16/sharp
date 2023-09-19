@@ -62,19 +62,18 @@ abstract class SharpForm
             ->all();
     }
 
-    final public function newInstance(): ?array
+    final public function newInstance(): array
     {
-        $data = collect($this->create())
+        return collect($this->create())
             // Filter model attributes on actual form fields
             ->only(
                 array_merge(
                     $this->breadcrumbAttribute ? [$this->breadcrumbAttribute] : [],
                     $this->getDataKeys(),
+                    array_keys($this->transformers),
                 ),
             )
             ->all();
-
-        return sizeof($data) ? $data : null;
     }
 
     public function validateRequest(): void
