@@ -228,16 +228,14 @@ abstract class SharpEntityList
     }
 
     /**
+     * Build list fields and layout.
+     */
+    abstract protected function buildList(EntityListFieldsContainer $fields): void;
+
+    /**
      * Retrieve all rows data as an array.
      */
     abstract public function getListData(): array|Arrayable;
-
-    /**
-     * Build list fields and layout.
-     */
-    protected function buildList(EntityListFieldsContainer $fields): void
-    {
-    }
 
     /**
      * @deprecated not more in use, will be removed in next major version
