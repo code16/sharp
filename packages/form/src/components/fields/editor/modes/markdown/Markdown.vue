@@ -28,6 +28,7 @@
     import { LocalizedEditor } from '../../../../../mixins/localize/editor';
     import LocalizedEditors from "../../LocalizedEditors.vue";
     import { normalizeText } from "../../../../../util/text";
+    import { config } from "@/utils/config";
 
 
     export default {
@@ -42,8 +43,6 @@
             ...editorProps,
             extensions: Array,
             toolbar: Array,
-            nl2br: Boolean,
-            tightListsOnly: Boolean,
 
             readOnly: Boolean,
             uniqueIdentifier: String,
@@ -62,7 +61,7 @@
                 const options = [];
                 const hasList = this.toolbar?.some(button => button === 'bullet-list' || button === 'ordered-list');
 
-                if(!this.tightListsOnly && hasList) {
+                if(!config('sharp.markdown_editor.tight_lists_only') && hasList) {
                     options.push({
                         command: () => editor.chain().toggleTight().run(),
                         disabled: !editor.can().toggleTight(),
@@ -79,7 +78,7 @@
                     extensions: [
                         ...this.extensions,
                         Markdown.configure({
-                            breaks: this.nl2br,
+                            breaks: config('sharp.markdown_editor.nl2br'),
                         }),
                     ],
                     content,

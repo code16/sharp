@@ -41,7 +41,7 @@ abstract class Data implements Arrayable
 
     public function toArray(): array
     {
-        return $this->extractValuesFromConstructor();
+        return $this->transformValues($this->extractValuesFromConstructor());
     }
 
     protected function extractValuesFromConstructor(): array
@@ -65,5 +65,17 @@ abstract class Data implements Arrayable
         }
 
         return $values;
+    }
+
+    protected function transformValues(array $values): array
+    {
+        return collect($values)
+            ->map(function ($value) {
+                if($value instanceof \BackedEnum) {
+                    return $value->value;
+                }
+                return $value;
+            })
+            ->toArray();
     }
 }

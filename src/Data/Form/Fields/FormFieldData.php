@@ -36,7 +36,7 @@ final class FormFieldData extends Data
     public function __construct() {
     }
 
-    public static function from(array $field): mixed
+    public static function from(array $field): Data
     {
         $field['type'] = FormFieldType::from($field['type']);
         $field['conditionalDisplay'] = FormConditionalDisplayData::optional($field['conditionalDisplay'] ?? null);

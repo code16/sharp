@@ -18,7 +18,7 @@ final class FilterData extends Data
     public function __construct() {
     }
 
-    public static function from(array $filter)
+    public static function from(array $filter): Data
     {
         $filter['type'] = FilterType::from($filter['type']);
 

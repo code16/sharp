@@ -50,6 +50,8 @@ class HandleInertiaRequests extends Middleware
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
                 'sharp.theme.logo_urls.login' => config('sharp.theme.logo_urls.login'),
                 'sharp.theme.logo_urls.menu' => config('sharp.theme.logo_urls.menu'),
+                'sharp.markdown_editor.tight_lists_only' => config('sharp.markdown_editor.tight_lists_only', true),
+                'sharp.markdown_editor.nl2br' => config('sharp.markdown_editor.nl2br', false)
             ],
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class))

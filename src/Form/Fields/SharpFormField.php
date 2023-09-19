@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Code16\Sharp\Data\Form\Fields\FormFieldData;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Illuminate\Support\Facades\Validator;

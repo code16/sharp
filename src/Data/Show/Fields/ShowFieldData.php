@@ -20,7 +20,7 @@ final class ShowFieldData extends Data
     public function __construct() {
     }
 
-    public static function from(array $field): mixed
+    public static function from(array $field): Data
     {
         $field['type'] = ShowFieldType::from($field['type']);
 
