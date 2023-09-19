@@ -14,7 +14,7 @@ final class CheckFilterData extends Data
 
     public function __construct(
         public string $key,
-        public string $label,
+        public ?string $label,
         #[LiteralTypeScriptType('"'.FilterType::Check->value.'"')]
         public FilterType $type,
         public ?bool $default,

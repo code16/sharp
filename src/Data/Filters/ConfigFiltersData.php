@@ -21,7 +21,7 @@ final class ConfigFiltersData extends Data
         return new self(
             collect($configFilters)
                 ->map(fn (array $filters) => FilterData::collection($filters))
-                ->all()
+                ->toArray()
         );
     }
 

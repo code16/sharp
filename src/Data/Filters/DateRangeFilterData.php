@@ -14,7 +14,7 @@ final class DateRangeFilterData extends Data
 
     public function __construct(
         public string $key,
-        public string $label,
+        public ?string $label,
         #[LiteralTypeScriptType('"'.FilterType::DateRange->value.'"')]
         public FilterType $type,
         public ?DateRangeFilterValueData $default,

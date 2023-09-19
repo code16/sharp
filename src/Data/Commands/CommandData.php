@@ -20,8 +20,8 @@ final class CommandData extends Data
         public bool $has_form,
         /** @var array<string|int>|bool */
         public array|bool $authorization,
+        public ?InstanceSelectionMode $instance_selection = null,
         public ?bool $primary = null,
-        public ?InstanceSelectionMode $instance_selection = null
     ) {
     }
 

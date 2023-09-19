@@ -24,8 +24,8 @@ final class SelectFilterData extends Data
         public mixed $default,
         public bool $multiple,
         public bool $required,
-        /** @var DataCollection<SelectFilterValueData> */
-        public DataCollection $values,
+        #[LiteralTypeScriptType('Array<{ id:string|number } & { [key: string]: any }>')]
+        public array $values,
         public bool $master,
         public bool $searchable,
         /** string[] */
@@ -36,11 +36,6 @@ final class SelectFilterData extends Data
 
     public static function from(array $filter): self
     {
-        $filter = [
-            ...$filter,
-            'values' => SelectFilterValueData::collection($filter['values']),
-        ];
-
         return new self(...$filter);
     }
 }
