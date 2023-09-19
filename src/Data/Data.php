@@ -15,6 +15,7 @@ abstract class Data implements Arrayable
 {
     /** @var ReflectionParameter[][] */
     protected static array $constructorParameterCache = [];
+    protected array $additionalAttributes = [];
 
     public static function collection($payload): DataCollection
     {
@@ -41,7 +42,17 @@ abstract class Data implements Arrayable
 
     public function toArray(): array
     {
-        return $this->transformValues($this->extractValuesFromConstructor());
+        return $this->transformValues([
+            ...$this->extractValuesFromConstructor(),
+            ...$this->additionalAttributes,
+        ]);
+    }
+
+    public function additional(array $attributes): self
+    {
+        $this->additionalAttributes = $attributes;
+
+        return $this;
     }
 
     protected function extractValuesFromConstructor(): array
