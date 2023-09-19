@@ -12,7 +12,6 @@ it('sets only default values', function () {
             'compactThumbnail' => false,
             'transformable' => true,
             'transformKeepOriginal' => true,
-            'shouldOptimizeImage' => false,
         ]);
 });
 
@@ -107,15 +106,9 @@ it('allows to define transformableFileTypes', function () {
 });
 
 it('allows to define shouldOptimizeImage', function () {
-    $formField = SharpFormUploadField::make('file')
-        ->shouldOptimizeImage();
+    $formField = SharpFormUploadField::make('file')->shouldOptimizeImage();
+    expect($formField->isShouldOptimizeImage())->toBeTrue();
 
-    expect($formField->toArray())
-        ->toHaveKey('shouldOptimizeImage', true);
-
-    $formField2 = SharpFormUploadField::make('file')
-        ->shouldOptimizeImage(false);
-
-    expect($formField2->toArray())
-        ->toHaveKey('shouldOptimizeImage', false);
+    $formField2 = SharpFormUploadField::make('file')->shouldOptimizeImage(false);
+    expect($formField2->isShouldOptimizeImage())->toBeFalse();
 });
