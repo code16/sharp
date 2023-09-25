@@ -2,23 +2,22 @@
 
 namespace Code16\Sharp\View\Components;
 
-
 use Illuminate\View\Component;
 
 class Vite extends Component
 {
-    public function __construct(?string $hotFile = null)
-    {
+    public function __construct(
+        public ?string $hotFile = null
+    ) {
         \Illuminate\Support\Facades\Vite::useHotFile($hotFile ?? public_path('vendor/sharp/hot'));
     }
 
-    public function render(): string
+    public function render(): callable
     {
-        return '{{ $slot }}{{ $append() }}';
-    }
+        return function () {
+            \Illuminate\Support\Facades\Vite::useHotFile(public_path('hot')); // reset to default hot file location
 
-    public function append(): void
-    {
-        \Illuminate\Support\Facades\Vite::useHotFile(public_path('hot')); // reset to default hot file location
+            return '{{ $slot }}';
+        };
     }
 }
