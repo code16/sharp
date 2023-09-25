@@ -24,7 +24,7 @@
                                         <template v-if="reordering">
                                             <div class="row gx-3">
                                                 <div class="col-auto">
-                                                    <Button text small @click="handleReorderButtonClicked">
+                                                    <Button outline small @click="handleReorderButtonClicked">
                                                         {{ l('action_bar.list.reorder_button.cancel') }}
                                                     </Button>
                                                 </div>
@@ -36,7 +36,7 @@
                                             </div>
                                         </template>
                                         <template v-else>
-                                            <Button text small @click="handleReorderButtonClicked">
+                                            <Button outline small @click="handleReorderButtonClicked">
                                                 {{ l('action_bar.list.reorder_button') }}
                                             </Button>
                                         </template>

@@ -13,7 +13,7 @@
             </template>
             <template v-if="hasCommands && !collapsed">
                 <div class="col-auto align-self-end mb-2">
-                    <CommandsDropdown :commands="commands" @select="handleCommandSelected">
+                    <CommandsDropdown outline :commands="commands" @select="handleCommandSelected">
                         <template v-slot:text>
                             {{ lang('entity_list.commands.instance.label') }}
                         </template>
