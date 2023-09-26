@@ -126,17 +126,15 @@ trait WithCustomTransformers
                     }
                 }
 
-                // This is a BC, even if this is a bugfix: in case of a sub-attribute,
-                // we should pass the related model to the transformer. Will do that in 9.x
-//                if (($sep = strpos($attribute, ':')) !== false) {
-//                    $attributes[$attribute] = $transformer->apply(
-//                        $attributes[$attribute] ?? null,
-//                        $model[substr($attribute, 0, $sep)] ?? null,
-//                        substr($attribute, $sep + 1),
-//                    );
-//
-//                    continue;
-//                }
+                if (($sep = strpos($attribute, ':')) !== false) {
+                    $attributes[$attribute] = $transformer->apply(
+                        $attributes[$attribute] ?? null,
+                        $model[substr($attribute, 0, $sep)] ?? null,
+                        substr($attribute, $sep + 1),
+                    );
+
+                    continue;
+                }
 
                 $attributes[$attribute] = $transformer->apply(
                     $attributes[$attribute] ?? null,

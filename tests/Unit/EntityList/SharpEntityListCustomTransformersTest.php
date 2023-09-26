@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
@@ -120,4 +121,36 @@ it('allows to define a custom transformer as an instance', function () {
         ['id' => 1, 'name' => 'MARIE CURIE'],
         ['id' => 2, 'name' => 'NIELS BOHR'],
     ]);
+});
+
+it('handles the relation separator with a custom transformer', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addField(EntityListField::make('partner:name'));
+        }
+
+        public function getListData(): array|Arrayable
+        {
+            $marie = new Person(['id' => 1, 'name' => 'Marie Curie']);
+            $pierre = new Person(['id' => 2, 'name' => 'Pierre Curie']);
+            $marie->setRelation('partner', $pierre);
+
+            return $this
+                ->setCustomTransformer('name', fn ($name) => strtoupper($name))
+                ->setCustomTransformer('partner:name', function ($name, $user) {
+                    return $user
+                        ? 'Partner: ' . $name
+                        : '';
+                })
+                ->transform([$marie, $pierre]);
+        }
+    };
+
+    expect($list->getListData()[0])
+        ->toHaveKey('name', 'MARIE CURIE')
+        ->toHaveKey('partner:name', 'Partner: Pierre Curie');
 });
