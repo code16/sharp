@@ -109,7 +109,7 @@ trait WithCustomTransformers
                 }
 
                 $listModel = $model;
-                if(($sep = strpos($listAttribute, ':')) !== false) {
+                if (($sep = strpos($listAttribute, ':')) !== false) {
                     $listModel = $model[substr($listAttribute, 0, $sep)];
                     $listAttribute = substr($listAttribute, $sep + 1);
                 }
