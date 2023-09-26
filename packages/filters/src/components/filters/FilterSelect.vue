@@ -7,6 +7,7 @@
         ComboboxLabel, ComboboxOption, ComboboxOptions,
     } from "@headlessui/vue";
     import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
+    import { TemplateRenderer } from "@/components";
 
     const props = defineProps<{
         value: SelectFilterData['value'],
@@ -66,7 +67,15 @@
                         </template>
                         <template v-else>
                             <span class="block truncate">
-                                {{ filter.values.find(v => modelValue == v.id)?.label ?? modelValue }}
+                                <template v-if="filter.values.find(v => modelValue == v.id)">
+                                    <TemplateRenderer
+                                        :template="filter.template"
+                                        :template-data="filter.values.find(v => modelValue == v.id)"
+                                    />
+                                </template>
+                                <template v-else>
+                                    {{ modelValue }}
+                                </template>
                             </span>
                         </template>
                     </template>

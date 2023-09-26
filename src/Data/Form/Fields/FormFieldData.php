@@ -36,9 +36,9 @@ final class FormFieldData extends Data
     public function __construct() {
     }
 
-    public static function from(array $field): mixed
+    public static function from(array $field): Data
     {
-        $field['type'] = FormFieldType::from($field['type']);
+        $field['type'] = FormFieldType::tryFrom($field['type']) ?? $field['type'];
         $field['conditionalDisplay'] = FormConditionalDisplayData::optional($field['conditionalDisplay'] ?? null);
 
         return match($field['type']) {
@@ -55,6 +55,7 @@ final class FormFieldData extends Data
             FormFieldType::Text => FormTextFieldData::from($field),
             FormFieldType::Textarea => FormTextareaFieldData::from($field),
             FormFieldType::Upload => FormUploadFieldData::from($field),
+            default => FormCustomFieldData::from($field),
         };
     }
 }

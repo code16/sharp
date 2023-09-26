@@ -21,8 +21,6 @@ final class ShowEntityListFieldData extends Data
         public ShowFieldType $type,
         public bool $emptyVisible,
         public string $entityListKey,
-        /** @var array<string, mixed> */
-        public array $hiddenFilters,
         #[TypeScriptType([
             'instance' => 'string[]',
             'entity' => 'string[]',
@@ -33,7 +31,9 @@ final class ShowEntityListFieldData extends Data
         public bool $showCreateButton,
         public bool $showSearchField,
         public bool $showCount,
-        public ?string $label,
+        public ?string $label = null,
+        /** @var array<string, mixed> */
+        public ?array $hiddenFilters = null,
     ) {
     }
 

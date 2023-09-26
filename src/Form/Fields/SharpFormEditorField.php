@@ -149,24 +149,21 @@ class SharpFormEditorField extends SharpFormField
     public function toArray(): array
     {
         return parent::buildArray(
-            array_merge(
-                [
-                    'minHeight' => $this->minHeight,
-                    'maxHeight' => $this->maxHeight,
-                    'toolbar' => $this->showToolbar ? $this->toolbar : null,
-                    'placeholder' => $this->placeholder,
-                    'localized' => $this->localized,
-                    'markdown' => $this->renderAsMarkdown,
-                    'inline' => $this->withoutParagraphs,
-                    'showCharacterCount' => $this->showCharacterCount,
-                    'maxLength' => $this->maxLength,
-                    'embeds' => array_merge(
-                        $this->innerComponentUploadConfiguration(),
-                        $this->innerComponentEmbedsConfiguration()
-                    ),
-                ],
-                $this->editorCustomConfiguration(),
-            ),
+            [
+                'minHeight' => $this->minHeight,
+                'maxHeight' => $this->maxHeight,
+                'toolbar' => $this->showToolbar ? $this->toolbar : null,
+                'placeholder' => $this->placeholder,
+                'localized' => $this->localized,
+                'markdown' => $this->renderAsMarkdown,
+                'inline' => $this->withoutParagraphs,
+                'showCharacterCount' => $this->showCharacterCount,
+                'maxLength' => $this->maxLength,
+                'embeds' => array_merge(
+                    $this->innerComponentUploadConfiguration(),
+                    $this->innerComponentEmbedsConfiguration()
+                ),
+            ],
         );
     }
 
@@ -187,15 +184,5 @@ class SharpFormEditorField extends SharpFormField
         $uploadConfig['fileFilter'] = $this->fileFilter;
 
         return ['upload' => $uploadConfig];
-    }
-
-    protected function editorCustomConfiguration(): array
-    {
-        return $this->renderAsMarkdown
-            ? [
-                'tightListsOnly' => config('sharp.markdown_editor.tight_lists_only', true),
-                'nl2br' => config('sharp.markdown_editor.nl2br', false),
-            ]
-            : [];
     }
 }

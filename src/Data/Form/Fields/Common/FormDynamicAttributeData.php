@@ -20,6 +20,6 @@ final class FormDynamicAttributeData extends Data
 
     public static function from(array $dynamicAttribute): self
     {
-        return new self($dynamicAttribute);
+        return new self(...$dynamicAttribute);
     }
 }

@@ -20,9 +20,9 @@ final class ShowFieldData extends Data
     public function __construct() {
     }
 
-    public static function from(array $field): mixed
+    public static function from(array $field): Data
     {
-        $field['type'] = ShowFieldType::from($field['type']);
+        $field['type'] = ShowFieldType::tryFrom($field['type']) ?? $field['type'];
 
         return match($field['type']) {
             ShowFieldType::EntityList => ShowEntityListFieldData::from($field),
@@ -31,6 +31,7 @@ final class ShowFieldData extends Data
             ShowFieldType::List => ShowListFieldData::from($field),
             ShowFieldType::Picture => ShowPictureFieldData::from($field),
             ShowFieldType::Text => ShowTextFieldData::from($field),
+            default => ShowCustomFieldData::from($field),
         };
     }
 }

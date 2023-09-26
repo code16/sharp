@@ -25,7 +25,7 @@ final class ConfigCommandsData extends Data
                 ->map(fn (array $commands) => collect($commands)
                     ->map(fn (array $commands) => CommandData::collection($commands))
                 )
-                ->all()
+                ->toArray()
         );
     }
 

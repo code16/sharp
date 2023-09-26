@@ -34,8 +34,8 @@ export type CommandData = {
   modal_confirm_label: string | null;
   has_form: boolean;
   authorization: Array<string | number> | boolean;
-  primary: boolean | null;
   instance_selection: InstanceSelectionMode | null;
+  primary: boolean | null;
 };
 export type CommandFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -123,9 +123,9 @@ export type EntityListConfigData = {
   hasShowPage: boolean;
   deleteConfirmationText: string;
   deleteHidden: boolean;
+  multiformAttribute: string | null;
   filters: ConfigFiltersData | null;
   commands: ConfigCommandsData | null;
-  multiformAttribute: string | null;
   state: EntityStateData | null;
 };
 export type EntityListData = {
@@ -205,7 +205,7 @@ export type FormAutocompleteFieldData = {
   remoteMethod: "GET" | "POST" | null;
   remoteSearchAttribute: string | null;
   localized: boolean | null;
-  dynamicAttributes: FormDynamicAttributeData | null;
+  dynamicAttributes: Array<FormDynamicAttributeData> | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -644,15 +644,11 @@ export type SelectFilterData = {
   default: number | string | Array<number | string> | null;
   multiple: boolean;
   required: boolean;
-  values: Array<SelectFilterValueData>;
+  values: Array<{ id: string | number } & { [key: string]: any }>;
   master: boolean;
   searchable: boolean;
   searchKeys: Array<any>;
   template: string;
-};
-export type SelectFilterValueData = {
-  id: string | number;
-  label: string;
 };
 export type ShowConfigData = {
   deleteConfirmationText: string;
@@ -678,7 +674,6 @@ export type ShowEntityListFieldData = {
   type: "entityList";
   emptyVisible: boolean;
   entityListKey: string;
-  hiddenFilters: { [key: string]: any };
   hiddenCommands: { instance: Array<string>; entity: Array<string> };
   showEntityState: boolean;
   showReorderButton: boolean;
@@ -686,6 +681,7 @@ export type ShowEntityListFieldData = {
   showSearchField: boolean;
   showCount: boolean;
   label: string | null;
+  hiddenFilters: { [key: string]: any } | null;
 };
 export type ShowFieldData =
   | ShowEntityListFieldData

@@ -19,7 +19,7 @@ final class WidgetData extends Data
     public function __construct() {
     }
 
-    public static function from(array $widget)
+    public static function from(array $widget): Data
     {
         $widget['type'] = WidgetType::from($widget['type']);
 

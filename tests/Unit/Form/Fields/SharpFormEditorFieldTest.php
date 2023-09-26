@@ -115,20 +115,12 @@ it('allows to hide toolbar', function () {
 });
 
 it('allows to define markdown as content renderer', function () {
-    // These configs are globally set in the config
-    config()->set('sharp.markdown_editor', [
-        'tight_lists_only' => true,
-        'nl2br' => true,
-    ]);
-
     $formField = SharpFormEditorField::make('text')
         ->setHeight(50)
         ->setRenderContentAsMarkdown();
 
     expect($formField->toArray())
-        ->toHaveKey('markdown', true)
-        ->toHaveKey('tightListsOnly', true)
-        ->toHaveKey('nl2br', true);
+        ->toHaveKey('markdown', true);
 });
 
 it('allows to define setWithoutParagraphs', function () {
