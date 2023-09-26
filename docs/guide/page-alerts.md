@@ -40,9 +40,11 @@ This method accepts one to 4 arguments: `configurePageAlert(string $template, st
 
 ## Dynamic messages
 
-Page alerts can be dynamic, using the power of a regular Vue.js template. Here's a full example:
+Page alerts can be dynamic, using the power of a regular Vue.js template.
 
-First we add dynamism in the template, and we define a `$fieldKey` to work with in the config, and reference it in the data part; here's an example in a Show Page:
+### Show Page, Form and Command cases
+
+To this end, we can define a `$fieldKey` to work with in the config, and reference it in the data part; here's an example in a Show Page (it is very similar in Form and Command case):
 
 ```php
 class PostShow extends SharpShow
@@ -78,7 +80,32 @@ Note that we use the dynamic data in two ways, in this example:
 - the page alert will appear only if the post state is "draft" or "pending"
 - and the actual state will be injected in the text message.
 
-## The Dashboard case
+### The Entity List case
+
+In an Entity List, for dynamic messages, you can use the `getGlobalMessageData()` method:
+
+```php
+class PostList extends SharpEntityList
+{
+    // [...]
+    
+    public function buildListConfig(): void
+    {
+        $this
+            ->configurePageAlert('Hey there, please not that {{ text }}.');
+    }
+    
+    public function getGlobalMessageData(): ?array
+    {
+        if($this->getQueryParams()->filterFor('draft')) {
+            return ['text' => 'draft posts are not visible'];
+        }
+        
+        return ['text' => 'everything is OK'];
+    }
+```
+
+### The Dashboard case
 
 For the Dashboard, the API is slightly different: first the 3rd argument of `configurePageAlert()`, `$fieldKey`, is not really used, since there is no field in a Dashboard.
 

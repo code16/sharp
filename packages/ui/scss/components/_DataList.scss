@@ -147,13 +147,11 @@
     line-height: 1.5;
     //@include padding-td;
     position: relative;
+    overflow-wrap: break-word;
     //display: table-cell;
 
     &-html-container {
       max-width: 100%;
-      @include media-breakpoint-down(xs) {
-        overflow-wrap: break-word;
-      }
       * {
         font-size: .875rem !important;
       }

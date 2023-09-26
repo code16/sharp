@@ -20,7 +20,7 @@
                             <div :class="[
                                 header ? 'SharpDataList__th' : 'SharpDataList__td',
                                 colClasses(column)
-                            ]">
+                            ]" style="min-width: 0">
                                 <slot name="cell" :row="row" :column="column">
                                     <template v-if="column.html">
                                         <div v-html="row[column.key]" class="SharpDataList__td-html-container"></div>
