@@ -31,14 +31,9 @@ return [
         // 'my_entity' => \App\Sharp\Entities\MyEntity::class,
     ],
 
-    // Optional. Your dashboards list, as entityKey => \App\Sharp\Entities\SharpDashboardEntity implementation
-    'dashboards' => [
-        // 'my_dashboard' => \App\Sharp\Entities\MyDashboardEntity::class,
-    ],
-
     // Optional. Your global filters list, which will be displayed in the main menu.
     'global_filters' => [
-        // 'my_global_filter' => \App\Sharp\Filters\MyGlobalFilter::class
+        // \App\Sharp\Filters\MyGlobalFilter::class
     ],
 
     // Optional. Your global search implementation.
