@@ -1,24 +1,16 @@
+<script setup lang="ts" >
+    import { TemplateRenderer } from '@/components';
+    import { FormHtmlFieldData } from "@/types";
+
+    defineProps<{
+        field: FormHtmlFieldData,
+        value: FormHtmlFieldData['value'],
+    }>();
+</script>
+
 <template>
-    <TemplateRenderer 
-        name="Html" 
-        :template="template" 
+    <TemplateRenderer
+        :template="field.template"
         :template-data="value"
     />
 </template>
-
-<script>
-    import { TemplateRenderer } from 'sharp/components';
-
-    export default {
-        name: 'SharpHtml',
-
-        components: {
-            TemplateRenderer,
-        },
-
-        props: {
-            value: Object,
-            template: String
-        }
-    }
-</script>

@@ -1,21 +1,12 @@
 import throttle from 'lodash/throttle';
-import { nextTick } from "vue";
+import { Directive, nextTick } from "vue";
 
 class StickyObserver {
-    /**
-     * @type HTMLElement
-     */
-    el;
-    /**
-     * @type HTMLElement
-     */
-    sentinel;
-    /**
-     * @type Function
-     */
-    listener;
-
-    position;
+    el: HTMLElement;
+    sentinel: HTMLElement;
+    scrollContainer: HTMLElement | Window;
+    listener: () => void;
+    position: 'bottom' | 'top';
 
     constructor(el) {
         this.el = el;
@@ -24,7 +15,7 @@ class StickyObserver {
         this.scrollContainer = el.closest('.modal') ?? window;
         this.position = window.getComputedStyle(el).bottom !== 'auto' ? 'bottom' : 'top';
 
-        this.sentinel.dataset.stickySentinel = true;
+        this.sentinel.setAttribute('data-sticky-sentinel', '');
         if(this.position === 'bottom') {
             this.el.parentElement.insertBefore(this.sentinel, this.el.nextSibling);
         } else {
@@ -66,19 +57,19 @@ class StickyObserver {
     }
 }
 
-export default {
-    inserted(el, { value, expression }) {
-        if(value || !expression) {
+export const vSticky = {
+    mounted(el, { value }) {
+        if(typeof value === 'undefined' ? true : value) {
             el._stickyObserver = new StickyObserver(el);
         }
     },
-    update(el, { value }) {
+    updated(el, { value }) {
         if(value && !el._stickyObserver) {
             el._stickyObserver = new StickyObserver(el);
         }
         el._stickyObserver?.refresh();
     },
-    unbind(el) {
+    unmounted(el) {
         el._stickyObserver?.destroy();
     },
-}
+} satisfies Directive;

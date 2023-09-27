@@ -1,31 +1,29 @@
+<script setup lang="ts">
+    import { FormCheckFieldData } from "@/types";
+
+    defineProps<{
+        id: string,
+        field: FormCheckFieldData,
+        value: FormCheckFieldData['value'],
+    }>();
+</script>
+
 <template>
-    <div class="SharpCheck form-check">
-        <input class="form-check-input" type="checkbox" :id="resolvedId" :checked="value" :disabled="readOnly" @change="handleCheck">
-        <label class="form-check-label" :for="resolvedId">
-            {{ text }}
-        </label>
+    <div class="relative flex items-start">
+        <div class="flex h-6 items-center">
+            <input
+                class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-600"
+                type="checkbox"
+                :id="id"
+                :checked="value"
+                :disabled="field.readOnly"
+                @change="$emit('input', ($event.target as HTMLInputElement).checked)"
+            >
+        </div>
+        <div class="ml-3 text-sm leading-6">
+            <label for="comments" class="font-medium text-gray-900">
+                {{ field.text }}
+            </label>
+        </div>
     </div>
 </template>
-
-<script>
-    export default {
-        name: 'SharpCheck',
-        props: {
-            value: Boolean,
-            text: String,
-            readOnly: Boolean,
-            uniqueIdentifier: String,
-            id: String,
-        },
-        computed: {
-            resolvedId() {
-                return this.id ?? this.uniqueIdentifier;
-            }
-        },
-        methods: {
-            handleCheck(e) {
-                this.$emit('input', e.target.checked);
-            }
-        }
-    }
-</script>

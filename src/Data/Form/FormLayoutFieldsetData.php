@@ -11,7 +11,7 @@ final class FormLayoutFieldsetData extends Data
 {
     public function __construct(
         public string $legend,
-        /** @var array<array<ShowLayoutFieldData>> */
+        /** @var array<array<LayoutFieldData>> */
         public array $fields,
     ) {
     }

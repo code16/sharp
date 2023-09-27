@@ -14,7 +14,7 @@
         value: ShowFieldData['value'],
     }>();
 
-    const components: Record<Exclude<ShowFieldData['type'], 'html'>, Component> ={
+    const components: { [type: Exclude<ShowFieldData['type'], 'html'>]: Component } = {
         'entityList': EntityList,
         'file': File,
         'list': List,

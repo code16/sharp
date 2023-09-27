@@ -11,7 +11,7 @@ export type BreadcrumbItemData = {
 export type CheckFilterData = {
   value?: boolean | null;
   key: string;
-  label: string;
+  label: string | null;
   type: "check";
   default: boolean | null;
 };
@@ -85,7 +85,7 @@ export type DashboardLayoutWidgetData = {
 export type DateRangeFilterData = {
   value?: DateRangeFilterValueData | null;
   key: string;
-  label: string;
+  label: string | null;
   type: "daterange";
   default: DateRangeFilterValueData | null;
   required: boolean;
@@ -233,6 +233,16 @@ export type FormConfigData = {
   isSingle: boolean;
   breadcrumbAttribute: string | null;
 };
+export type FormCustomFieldData = {
+  value?: any;
+  key: string;
+  type: string;
+  label: string | null;
+  readOnly: boolean | null;
+  conditionalDisplay: FormConditionalDisplayData | null;
+  helpMessage: string | null;
+  extraStyle: string | null;
+};
 export type FormData = {
   authorizations: InstanceAuthorizationsData;
   config: FormConfigData;
@@ -272,7 +282,7 @@ export type FormDynamicOptionsData = {
     | Array<{ id: string | number; label: string }>;
 };
 export type FormEditorFieldData = {
-  value: string | null | { [locale: string]: string | null };
+  value: { text: string | { [locale: string]: string | null } | null };
   key: string;
   type: "editor";
   minHeight: number;
@@ -395,7 +405,7 @@ export type FormHtmlFieldData = {
 };
 export type FormLayoutColumnData = {
   size: number;
-  fields: Array<Array<LayoutFieldData>>;
+  fields: Array<Array<LayoutFieldData | FormLayoutFieldsetData>>;
 };
 export type FormLayoutData = {
   tabbed: boolean;
@@ -403,7 +413,7 @@ export type FormLayoutData = {
 };
 export type FormLayoutFieldsetData = {
   legend: string;
-  fields: Array<Array<any>>;
+  fields: Array<Array<LayoutFieldData>>;
 };
 export type FormLayoutTabData = {
   title: string;
@@ -658,6 +668,12 @@ export type ShowConfigData = {
   titleAttribute: string | null;
   breadcrumbAttribute: string | null;
   state: EntityStateData | null;
+};
+export type ShowCustomFieldData = {
+  value?: any;
+  key: string;
+  type: string;
+  emptyVisible: boolean;
 };
 export type ShowData = {
   authorizations: InstanceAuthorizationsData;

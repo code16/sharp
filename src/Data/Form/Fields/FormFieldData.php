@@ -19,6 +19,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 #[TypeScriptType(
     FormAutocompleteFieldData::class
     .'|'.FormCheckFieldData::class
+//    .'|'.FormCustomFieldData::class
     .'|'.FormDateFieldData::class
     .'|'.FormEditorFieldData::class
     .'|'.FormGeolocationFieldData::class

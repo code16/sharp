@@ -1,9 +1,12 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import FormLayout from "./ui/FormLayout.vue";
-    import { getBackUrl } from "@/utils/breadcrumb";
-    import { FormData } from "@/types";
+    import { FormData, FormLayoutTabData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
+    import FieldColumn from "@/components/ui/FieldColumn.vue";
+    import { computed, ref } from "vue";
+    import { Form } from "../Form";
+    import FieldContainer from "./ui/FieldContainer.vue";
 
     const props = defineProps<{
         form: FormData,
@@ -13,6 +16,8 @@
         postFn: Function,
         isPage: boolean,
     }>();
+
+    const form = computed(() => new Form(props.form));
 </script>
 
 <template>
@@ -46,33 +51,81 @@
             </div>
         </template>
 
-        <FormLayout :layout="form.layout">
-            <template v-slot:default="{ tab }">
-                <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">
-                    <FieldsLayout
-                        :layout="column.fields"
-                        :visible="fieldVisible"
-                        ref="fieldLayout"
-                        v-slot="{ fieldLayout }"
-                    >
-                        <FieldDisplay
-                            :field-key="fieldLayout.key"
-                            :context-fields="transformedFields"
-                            :context-data="form.data"
-                            :field-layout="fieldLayout"
-                            :locale="fieldLocale[fieldLayout.key]"
-                            :read-only="isReadOnly"
-                            :error-identifier="fieldLayout.key"
-                            :config-identifier="fieldLayout.key"
-                            root
-                            :update-data="updateData"
-                            :update-visibility="updateVisibility"
-                            @locale-change="updateLocale"
-                            ref="field"
-                        />
-                    </FieldsLayout>
-                </Grid>
-            </template>
+        <FormLayout :layout="form.layout" v-slot="{ tab }: { tab: FormLayoutTabData }">
+            <div class="flex -mx-4">
+                <template v-for="column in tab.columns">
+                    <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                        <template v-for="row in column.fields">
+                            <div class="flex -mx-4">
+                                <template v-for="fieldLayout in row">
+                                    <template v-if="'legend' in fieldLayout">
+                                        <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
+                                            <legend>
+                                                {{ fieldLayout.legend }}
+                                            </legend>
+
+                                            <div class="bg-white p-4">
+                                                <template v-for="row in fieldLayout.fields">
+                                                    <div class="flex -mx-4">
+                                                        <template v-for="fieldLayout in row">
+                                                            <FieldColumn class="px-4" :layout="fieldLayout">
+                                                                <FieldContainer
+                                                                    :field="{ readOnly, ...fields[fieldLayout.key] }"
+                                                                    :value="data[fieldLayout.key]"
+                                                                    :locale="fieldLocale[fieldLayout.key]"
+                                                                    :form="form"
+                                                                    :update-data="updateData"
+                                                                    @locale-change="updateLocale"
+                                                                />
+                                                            </FieldColumn>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </fieldset>
+                                    </template>
+                                    <template v-else>
+                                        <FieldColumn class="px-4" :layout="fieldLayout">
+                                            <FieldContainer
+                                                :field="{ readOnly, ...fields[fieldLayout.key] }"
+                                                :value="data[fieldLayout.key]"
+                                                :locale="fieldLocale[fieldLayout.key]"
+                                                :form="form"
+                                                :update-data="updateData"
+                                                @locale-change="updateLocale"
+                                            />
+                                        </FieldColumn>
+                                    </template>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+<!--                <Grid :rows="[tab.columns]" ref="columnsGrid" v-slot="{ itemLayout:column }">-->
+<!--                    <FieldsLayout-->
+<!--                        :layout="column.fields"-->
+<!--                        :visible="fieldVisible"-->
+<!--                        ref="fieldLayout"-->
+<!--                        v-slot="{ fieldLayout }"-->
+<!--                    >-->
+<!--                        <FieldDisplay-->
+<!--                            :field-key="fieldLayout.key"-->
+<!--                            :context-fields="transformedFields"-->
+<!--                            :context-data="form.data"-->
+<!--                            :field-layout="fieldLayout"-->
+<!--                            :locale="fieldLocale[fieldLayout.key]"-->
+<!--                            :read-only="isReadOnly"-->
+<!--                            :error-identifier="fieldLayout.key"-->
+<!--                            :config-identifier="fieldLayout.key"-->
+<!--                            root-->
+<!--                            :update-data="updateData"-->
+<!--                            :update-visibility="updateVisibility"-->
+<!--                            @locale-change="updateLocale"-->
+<!--                            ref="field"-->
+<!--                        />-->
+<!--                    </FieldsLayout>-->
+<!--                </Grid>-->
         </FormLayout>
 
         <template v-if="isPage">

@@ -1,13 +1,11 @@
 <template>
-    <component :is="component" v-bind="templateData" v-on="$listeners">
+    <component :is="component" v-bind="templateData">
         <slot />
     </component>
 </template>
 
 <script>
     export default {
-        name: 'SharpTemplate',
-
         props: {
             name: String,
             templateData: Object,
@@ -18,7 +16,7 @@
         computed: {
             component() {
                 return {
-                    name: `SharpTemplate${this.name}`,
+                    name: 'TemplateRendererContent',
                     template: `<div class="SharpTemplate">${this.template ?? ''}</div>`,
                     props: [
                         ...(this.templateProps || []),

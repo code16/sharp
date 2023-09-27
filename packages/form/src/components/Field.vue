@@ -2,59 +2,77 @@
     import { log, isCustomField, resolveCustomField } from 'sharp';
     import Fields from './fields/index';
     import { computed, provide } from "vue";
+    import { FormCustomFieldData, FormFieldData, LayoutFieldData, ShowFieldData } from "@/types";
+    import Autocomplete from "./fields/Autocomplete.vue";
+    import Text from "./fields/Text.vue";
+    import Textarea from "./fields/Textarea.vue";
+    import Editor from "./fields/editor/EditorField.vue";
+    import NumberInput from "./fields/Number.vue";
+    import Upload from "./fields/upload/Upload.vue";
+    import TagInput from "./fields/Tags.vue";
+    import DateInput from "./fields/date/Date.vue";
+    import Check from "./fields/Check.vue";
+    import List from "./fields/list/List.vue";
+    import Select from "./fields/Select.vue";
+    import Html from "./fields/Html.vue";
+    import Geolocation from "./fields/geolocation/Geolocation.vue";
+    import DateRange from "./fields/date-range/DateRange.vue";
+    import { Component } from "vue/dist/vue";
 
-    const props = defineProps({
-        // todo extract to common field props (cf FieldContainer.vue)
-        fieldKey: String,
-        fieldType: String,
-        fieldProps: Object,
-        fieldLayout: Object,
-        value: [String, Number, Boolean, Object, Array, Date],
-        locale: [Array, String],
+    const props = defineProps<{
+        field: FormFieldData,
+        fieldLayout: LayoutFieldData,
+        value: FormFieldData['value'],
+        locale: string | null,
         uniqueIdentifier: String,
         fieldConfigIdentifier: String,
         updateData: Function,
-        readOnly: Boolean,
-        root: Boolean,
-    });
+        root: boolean
+    }>();
 
     const emit = defineEmits(['input']);
 
-    const component = computed(() => {
-        if(isCustomField(props.fieldType)) {
-            return resolveCustomField(props.fieldType);
-        }
-        return Fields[props.fieldType];
-    });
+    const components: Record<FormFieldData['type'], Component> = {
+        'autocomplete': Autocomplete,
+        'check': Check,
+        'date': DateInput,
+        'editor': Editor,
+        'geolocation': Geolocation,
+        'html': Html,
+        'list': List,
+        'number': NumberInput,
+        'select': Select,
+        'tags': TagInput,
+        'text': Text,
+        'textarea': Textarea,
+        'upload': Upload
+    };
 
-    const onInput = (val, options={}) => {
-        if(props.fieldProps.readOnly && !options.force) {
-            log(`SharpField '${props.fieldKey}', can't update because is readOnly`);
+    function onInput(val, options?: { force?: boolean, error?: string }) {
+        if(props.field.readOnly && !options?.force) {
+            log(`SharpField '${props.field.key}', can't update because is readOnly`);
             return;
         }
 
-        props.updateData(props.fieldKey, val, { forced:options.force });
+        props.updateData(props.field.key, val, { forced:options.force });
+
         emit('input', val, {
             force: options.force,
             error: options.error,
         });
-    };
-    // console.log(structuredClone(props.fieldProps));
-    console.log(props.fieldProps);
+    }
 </script>
-<!--<script lang="ts">export default { inheritAttrs: false }</script>-->
+
 <template>
     <component
-        :is="component"
+        :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
         v-bind="{
-            ...fieldProps,
-            fieldKey,
-            fieldLayout,
+            field,
             value,
             locale,
             uniqueIdentifier,
             fieldConfigIdentifier,
-            root,
+            root
         }"
         @input="onInput"
     />

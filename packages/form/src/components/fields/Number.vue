@@ -1,27 +1,22 @@
-<template>
-    <TextField
-        :class="{ 'hide-controls': !showControls }"
-        :value="value"
-        :step="step"
-        :min="min"
-        :max="max"
-        input-type="number"
-    />
-</template>
-
-<script>
+<script setup lang="ts">
+    import { FormNumberFieldData } from "@/types";
     import TextField from './Text.vue';
 
-    export default {
-        components: {
-            TextField,
-        },
-        props: {
-            value: [String, Number],
-            showControls: Boolean,
-            min: Number,
-            max: Number,
-            step: Number,
-        },
-    }
+    defineProps<{
+        field: FormNumberFieldData,
+        value: FormNumberFieldData['value'],
+    }>();
 </script>
+
+<template>
+    <TextField
+        :class="{
+            '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none': !field.showControls,
+        }"
+        :value="value"
+        :step="field.step"
+        :min="field.min"
+        :max="field.max"
+        type="number"
+    />
+</template>

@@ -9,6 +9,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 #[TypeScriptType(
     ShowEntityListFieldData::class
+//    .'|'.ShowCustomFieldData::class
     .'|'.ShowFileFieldData::class
     .'|'.ShowHtmlFieldData::class
     .'|'.ShowListFieldData::class

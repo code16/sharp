@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "paths": {
       "@/*": ["./resources/js/*"]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "exclude": ["node_modules", "public"]
 }

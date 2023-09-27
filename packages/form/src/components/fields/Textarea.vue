@@ -1,41 +1,32 @@
-<template>
-    <textarea
-        class="SharpTextarea form-control"
-        :value.prop="value"
-        :rows="rows"
-        :placeholder="placeholder"
-        :disabled="readOnly"
-        @input="handleInput"
-    ></textarea>
-</template>
-
-<script>
-    import { validateTextField } from "../../util/validation";
+<script setup lang="ts">
+    import { FormTextareaFieldData } from "@/types";
     import { normalizeText } from "../../util/text";
+    import { validateTextField } from "../../util/validation";
 
-    export default {
-        name:'SharpTextarea',
+    const props = defineProps<{
+        field: FormTextareaFieldData,
+        value: FormTextareaFieldData['value'],
+        locale: string | null,
+    }>();
 
-        props: {
-            value: String,
-            placeholder: String,
-            readOnly: Boolean,
+    const emit = defineEmits(['input']);
 
-            maxLength: Number,
-
-            rows: Number,
-        },
-        methods: {
-            validate(value) {
-                return validateTextField(value, {
-                    maxlength: this.maxLength,
-                });
-            },
-            handleInput(e) {
-                const value = normalizeText(e.target.value);
-                const error = this.validate(value);
-                this.$emit('input', value, { error });
-            },
-        },
+    function onInput(e) {
+        const value = normalizeText(e.target.value);
+        const error = validateTextField(value, {
+            maxlength: props.field.maxLength,
+        });
+        emit('input', value, { error });
     }
 </script>
+
+<template>
+    <textarea
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+        :value="field.localized ? value[locale] : value"
+        :rows="field.rows"
+        :placeholder="field.placeholder"
+        :disabled="field.readOnly"
+        @input="onInput"
+    ></textarea>
+</template>

@@ -13,23 +13,6 @@ import Geolocation from './geolocation/Geolocation.vue';
 import Editor from './editor/EditorField.vue';
 import DateRange from './date-range/DateRange.vue';
 
-export default {
-    'autocomplete' : Autocomplete,
-    'text'         : Text,
-    'textarea'     : Textarea,
-    'editor'       : Editor,
-    'number'       : NumberInput,
-    'upload'       : Upload,
-    'tags'         : TagInput,
-    'date'         : DateInput,
-    'check'        : Check,
-    'list'         : List,
-    'select'       : Select,
-    'html'         : Html,
-    'geolocation'  : Geolocation,
-    'daterange'    : DateRange,
-};
-
 export {
     Autocomplete,
     Text,

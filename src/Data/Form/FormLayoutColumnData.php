@@ -11,7 +11,7 @@ final class FormLayoutColumnData extends Data
 {
     public function __construct(
         public int $size,
-        /** @var array<array<LayoutFieldData>> */
+        /** @var array<array<LayoutFieldData | FormLayoutFieldsetData>> */
         public array $fields,
     ) {
     }

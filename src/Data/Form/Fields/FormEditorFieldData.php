@@ -11,8 +11,8 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 final class FormEditorFieldData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('string|null | { [locale:string]: string|null }')]
-    public string|array|null $value;
+    #[LiteralTypeScriptType('{ text: string | { [locale:string]: string|null } | null }')]
+    public array|null $value;
 
     public function __construct(
         public string $key,
