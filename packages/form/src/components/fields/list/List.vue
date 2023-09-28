@@ -118,6 +118,8 @@
     import ListUpload from "./ListUpload.vue";
     import { showAlert } from "sharp";
     import { __ } from "@/utils/i18n";
+    import { Form } from "../../../Form";
+    import { FieldMeta, FieldsMeta } from "../../../types";
 
     export default {
         name: 'SharpList',
@@ -222,7 +224,8 @@
                 return Symbol('index');
             },
             hasPendingActions() {
-                return this.$form?.hasUploadingFields(this.fieldKey);
+                return ((this.$form as Form).meta[this.fieldKey] as FieldsMeta[])
+                    .some(itemMeta => Object.values(itemMeta).some(fieldMeta => fieldMeta.uploading));
             },
             isReadOnly() {
                 return this.readOnly || this.dragActive;

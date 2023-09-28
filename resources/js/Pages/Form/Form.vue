@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import { Form } from "@sharp/form";
+    import { Form as FormComponent } from "@sharp/form";
+    import { Form } from "@sharp/form/src/Form";
     import Layout from "@/Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
     import { router } from "@inertiajs/vue3";
@@ -7,12 +8,23 @@
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import Breadcrumb from "@/components/Breadcrumb.vue";
+    import { ref, watchEffect } from "vue";
+    import { __ } from "@/utils/i18n";
+    import { Button } from "@sharp/ui";
+    import { vSticky } from "@/directives/sticky";
 
-    defineProps<{
+    const props = defineProps<{
         form: FormData,
         breadcrumb: BreadcrumbData,
-        errors: object,
+        errors: { [key:string]: string },
     }>();
+
+    const form = new Form(props.form, route().params.entityKey, route().params.instanceId);
+    const bottomBarStuck = ref(false);
+
+    watchEffect(() => {
+        form.errors = props.errors;
+    });
 
     function submit(data) {
         const { uri, entityKey, instanceId } = route().params;
@@ -29,20 +41,60 @@
         <Title :breadcrumb="breadcrumb" />
 
         <div class="container">
-            <Form
+            <FormComponent
                 :form="form"
-                :form-errors="errors"
                 :entity-key="route().params.entityKey"
                 :instance-id="route().params.instanceId"
-                is-page
                 @submit="submit"
             >
-                <template v-slot:title>
+                <template #title>
                     <template v-if="config('sharp.display_breadcrumb')">
                         <Breadcrumb :breadcrumb="breadcrumb" />
                     </template>
                 </template>
-            </Form>
+                <template #prepend>
+                    <template v-if="Object.values(errors).length > 0">
+                        <div class="alert alert-danger SharpForm__alert" role="alert">
+                            <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
+                            <div>{{ __('sharp::form.validation_error.description') }}</div>
+                        </div>
+                    </template>
+                </template>
+                <template #append="{ loading }">
+                    <div class="sticky bottom-0 px-4 py-3 bg-white border-t"
+                        :class="{ 'shadow': bottomBarStuck }"
+                        v-sticky
+                        @stuck-change="bottomBarStuck = $event.detail"
+                        style="z-index: 100; transition: box-shadow .25s ease-in-out"
+                    >
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                            </div>
+                            <Button :href="breadcrumb.items.at(-2)?.url" outline>
+                                <template v-if="form.canEdit">
+                                    {{ __('sharp::action_bar.form.cancel_button') }}
+                                </template>
+                                <template v-else>
+                                    {{ __('sharp::action_bar.form.back_button') }}
+                                </template>
+                            </Button>
+                            <template v-if="form.canEdit">
+                                <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
+                                    <template v-if="form.isUploading">
+                                        {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                    </template>
+                                    <template v-else-if="route().params.instanceId || form.config.isSingle">
+                                        {{ __('sharp::action_bar.form.submit_button.update') }}
+                                    </template>
+                                    <template v-else>
+                                        {{ __('sharp::action_bar.form.submit_button.create') }}
+                                    </template>
+                                </Button>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </FormComponent>
         </div>
     </Layout>
 </template>

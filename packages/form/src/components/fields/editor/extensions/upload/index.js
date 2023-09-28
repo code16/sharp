@@ -12,7 +12,6 @@ import { Upload } from "./upload";
 export function getUploadExtension({
     fieldProps,
     uniqueIdentifier,
-    fieldConfigIdentifier,
     form,
 }) {
 
@@ -61,7 +60,6 @@ export function getUploadExtension({
         fieldProps: {
             ...fieldProps,
             uniqueIdentifier,
-            fieldConfigIdentifier,
         },
         state,
         registerFile: async attrs => {

@@ -7,6 +7,7 @@ import { reactive } from "vue";
 import { __ } from "@/utils/i18n";
 import { router } from "@inertiajs/vue3";
 import { CommandReturnHandlers, CommandEndpoints, GetFormQuery } from "./types";
+import { Form } from "@sharp/form/src/Form";
 
 
 export class CommandManager {
@@ -14,7 +15,7 @@ export class CommandManager {
 
     state = reactive<{
         currentCommand?: CommandData,
-        currentCommandForm?: CommandFormData,
+        currentCommandForm?: Form,
         currentCommandFormLoading?: boolean,
         currentCommandReturn?: CommandReturnData,
         currentCommandEndpoints?: CommandEndpoints,
@@ -121,7 +122,7 @@ export class CommandManager {
         return this.commandReturnHandlers[data.action]?.(data as any);
     }
 
-    getForm(query?: GetFormQuery): Promise<CommandFormData> {
+    getForm(query?: GetFormQuery): Promise<Form> {
         this.state.currentCommandFormLoading = true;
 
         return api.get(this.state.currentCommandEndpoints.getForm, {
@@ -130,7 +131,13 @@ export class CommandManager {
                 ...this.state.currentCommandEndpoints.query
             }
         })
-            .then(response => response.data)
+            .then(response =>
+                new Form(
+                    response.data,
+                    this.state.currentCommandEndpoints.entityKey,
+                    this.state.currentCommandEndpoints.instanceId
+                )
+            )
             .finally(() => {
                 this.state.currentCommandFormLoading = false;
             });

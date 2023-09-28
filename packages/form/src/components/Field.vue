@@ -25,7 +25,6 @@
         value: FormFieldData['value'],
         locale: string | null,
         uniqueIdentifier: String,
-        fieldConfigIdentifier: String,
         updateData: Function,
         root: boolean
     }>();
@@ -54,8 +53,6 @@
             return;
         }
 
-        props.updateData(props.field.key, val, { forced:options.force });
-
         emit('input', val, {
             force: options.force,
             error: options.error,
@@ -71,7 +68,6 @@
             value,
             locale,
             uniqueIdentifier,
-            fieldConfigIdentifier,
             root
         }"
         @input="onInput"

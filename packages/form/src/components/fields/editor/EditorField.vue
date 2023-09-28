@@ -52,7 +52,6 @@
                 return getUploadExtension.call(this, {
                     fieldProps: this.embeds.upload,
                     uniqueIdentifier: this.uniqueIdentifier,
-                    fieldConfigIdentifier: this.fieldConfigIdentifier,
                     form: this.$form,
                 });
             },

@@ -8,6 +8,9 @@ import {
 } from "@/types";
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
+import { transformFields } from "./util";
+import { FieldMeta, FieldsMeta } from "./types";
+
 
 export class Form  implements FormData {
     authorizations: FormData['authorizations'];
@@ -17,45 +20,135 @@ export class Form  implements FormData {
     locales: FormData['locales'];
     pageAlert: FormData['pageAlert'];
 
-    state = reactive<{ errors: { [key: string]: string[] }, data: FormData['data'] }>({
-        errors: {},
+    state = reactive<{
+        data: FormData['data'],
+        meta: { [fieldKey: string]: FieldMeta | Array<FieldsMeta> },
+        errors: { [key: string]: string | string[] }
+    }>({
         data: {},
+        meta: {},
+        errors: {},
     });
 
-    constructor(data: FormData) {
-        Object.assign(this, data);
-    }
+    entityKey: string;
+    instanceId: string | number;
 
-    set data(data) {
-        this.state.data = data;
+    constructor(data: FormData, entityKey: string, instanceId: string | number) {
+        Object.assign(this, data);
+        this.entityKey = entityKey;
+        this.instanceId = instanceId;
     }
 
     get data() {
         return this.state.data;
     }
+    set data(data) {
+        this.state.data = data;
+    }
 
     get errors() {
         return this.state.errors;
     }
-
     set errors(errors) {
         this.state.errors = errors;
     }
 
+    get meta() {
+        return this.state.meta;
+    }
+    set meta(meta) {
+        this.state.meta = meta;
+    }
+
+    get allFieldsMeta(): FieldMeta[] {
+        return Object.values(this.meta)
+            .map(fieldMeta => Array.isArray(fieldMeta)
+                ? fieldMeta.map(meta => Object.values(meta))
+                : fieldMeta
+            )
+            .flat(2);
+    }
+
+    get canEdit(): boolean {
+        if(!this.authorizations) {
+            return true;
+        }
+
+        if(this.config.isSingle || this.instanceId) {
+            return this.authorizations.update;
+        }
+
+        return this.authorizations.create;
+    }
+
+    get isReadOnly(): boolean {
+        return !this.canEdit;
+    }
+
+    get currentLocale(): string {
+        const selectedLocales = [...new Set(this.allFieldsMeta.map(fieldMeta => fieldMeta.locale))];
+        if(!selectedLocales.length) {
+            return this.locales[0];
+        }
+        if(selectedLocales.length === 1) {
+            return selectedLocales[0];
+        }
+        return null;
+    }
+
+    get localized(): boolean { // needed ?
+        return this.locales?.length > 0;
+    }
+
+    get isUploading(): boolean {
+        return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
+    }
+
     setError(key: string, error: string) {
-        this.errors[key] = [error];
+        this.errors[key] = error;
+    }
+
+    setMeta(key: string, meta: Partial<FieldMeta>) {
+        this.meta[key] = {
+            ...this.meta[key],
+            ...meta,
+        };
+    }
+
+    clearMeta(property: keyof FieldMeta) {
+        Object.values(this.meta).forEach(fieldMeta => {
+            if(Array.isArray(fieldMeta)) {
+                fieldMeta.forEach(meta => {
+                    Object.values(meta).forEach(fieldMeta => {
+                        delete fieldMeta[property];
+                    });
+                });
+            } else {
+                delete fieldMeta[property];
+            }
+        });
     }
 
     clearError(key: string) {
         delete this.errors[key];
     }
 
+    getField(key: string, fields = this.fields, data = this.data): FormFieldData {
+        const fieldsWithAppliedDynamicAttributes = transformFields(fields, data);
+
+        return {
+            ...fieldsWithAppliedDynamicAttributes[key],
+            readOnly: this.isReadOnly || fieldsWithAppliedDynamicAttributes[key].readOnly,
+        };
+    }
+
     fieldShouldBeVisible(field: FormFieldData, fields = this.fields, data = this.data) {
         if(!field.conditionalDisplay) {
             return true;
         }
+        const fieldsWithAppliedDynamicAttributes = transformFields(fields, data);
 
-        return computeCondition(fields, data, field.conditionalDisplay);
+        return computeCondition(fieldsWithAppliedDynamicAttributes, data, field.conditionalDisplay);
     }
 
     fieldsetShouldBeVisible(fieldset: FormLayoutFieldsetData, fields = this.fields, data = this.data) {
@@ -65,7 +158,9 @@ export class Form  implements FormData {
     }
 
     fieldError(key: string): string | undefined {
-        return this.errors[key]?.[0];
+        return Array.isArray(this.errors[key])
+            ? this.errors[key][0]
+            : this.errors[key] as string;
     }
 
     fieldHasError(field: FormFieldData, key: string, includeChildren = false): boolean {

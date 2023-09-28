@@ -137,7 +137,6 @@
             focused: Boolean,
             invalid: Boolean,
             uniqueIdentifier: String,
-            fieldConfigIdentifier: String,
             persistThumbnails: Boolean,
         },
 
@@ -255,7 +254,7 @@
         },
         methods: {
             setPending(value) {
-                this.$form?.setUploading(this.uniqueIdentifier, value);
+                this.$emit('uploading', value);
             },
             // status callbacks
             onStatusAdded() {

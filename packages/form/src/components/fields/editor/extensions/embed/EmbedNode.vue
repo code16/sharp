@@ -49,6 +49,7 @@
     import { EmbedRenderer } from '@sharp/embeds';
     import NodeRenderer from "../../NodeRenderer.vue";
     import EmbedFormModal from "./EmbedFormModal.vue";
+    import { Form } from "../../../../../Form";
 
     export default {
         components: {
@@ -101,7 +102,8 @@
                 this.deleteNode();
             },
             async showForm() {
-                this.modalForm = await this.extension.options.resolveForm(this.embedData);
+                const form = await this.extension.options.resolveForm(this.embedData);
+                this.modalForm = new Form(form, this.$form.entityKey, this.$form.instanceId);
                 this.modalVisible = true;
             },
             async postForm(data) {

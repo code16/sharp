@@ -10,32 +10,27 @@
         field: FormFieldData,
         value: FormFieldData['value'],
         locale: string | null,
+        fieldErrorKey: string,
     }>();
 
     const form = inject('form') as Form;
-    const mergedErrorIdentifier = inject('mergedErrorIdentifier') ? `${inject('mergedErrorIdentifier')}.${props.field.key}` : props.field.key;
-    const mergedConfigIdentifier = inject('mergedConfigIdentifier') ? `${inject('mergedConfigIdentifier')}.${props.field.key}` : props.field.key;
-
-    provide('mergedErrorIdentifier', mergedConfigIdentifier);
-    provide('mergedConfigIdentifier', mergedConfigIdentifier);
-
-    const fieldId = computed(() => `form-field_${mergedErrorIdentifier}`);
+    const fieldId = computed(() => `form-field_${props.fieldErrorKey}`);
 
     function onError(error) {
-        form.setError(mergedErrorIdentifier, error);
+        form.setError(props.fieldErrorKey, error);
         if('localized' in props.field && props.field.localized) {
-            form.setError(`${mergedErrorIdentifier}.${props.locale}`, error);
+            form.setError(`${props.fieldErrorKey}.${props.locale}`, error);
         }
     }
 
     function onClear() {
-        form.clearError(mergedErrorIdentifier);
+        form.clearError(props.fieldErrorKey);
         if('localized' in props.field && props.field.localized) {
-            form.clearError(`${mergedErrorIdentifier}.${props.locale}`);
+            form.clearError(`${props.fieldErrorKey}.${props.locale}`);
         }
     }
 
-    function onInput(value, { error } = {}) {
+    function onInput(value, { error = null } = {}) {
         if(error) {
             onError(error);
         } else {
@@ -74,7 +69,7 @@
                                             :class="{
                                                 'SharpFieldLocaleSelect__btn--active': btnLocale === locale,
                                                 'SharpFieldLocaleSelect__btn--empty': form.fieldIsEmpty(field, value, btnLocale),
-                                                'SharpFieldLocaleSelect__btn--error': form.fieldLocalesContainingError(mergedErrorIdentifier).includes(btnLocale),
+                                                'SharpFieldLocaleSelect__btn--error': form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale),
                                             }"
                                             @click="$emit('locale-change', field.key, btnLocale)"
                                         >
@@ -93,27 +88,25 @@
             <Field
                 v-bind="{ ...$props, ...$attrs }"
                 :id="fieldId"
-                :unique-identifier="mergedErrorIdentifier"
-                :field-config-identifier="mergedConfigIdentifier"
-                :has-error="form.fieldHasError(field, mergedErrorIdentifier)"
+                :has-error="form.fieldHasError(field, fieldErrorKey)"
                 @error="onError"
                 @clear="onClear"
                 @input="onInput"
-                @locale-change="$emit('locale-change', field.key, $event)"
+                @locale-change="$emit('locale-change', $event)"
             />
         </div>
 
-        <template v-if="form.fieldHasError(field, mergedErrorIdentifier)">
+        <template v-if="form.fieldHasError(field, fieldErrorKey)">
             <div class="text-sm text-red-700">
-                <template v-if="form.fieldError(mergedErrorIdentifier)">
-                    {{ form.fieldError(mergedErrorIdentifier) }}
+                <template v-if="form.fieldError(fieldErrorKey)">
+                    {{ form.fieldError(fieldErrorKey) }}
                 </template>
                 <template v-else-if="'localized' in field && field.localized">
-                    <template v-if="form.fieldError(`${mergedErrorIdentifier}.${locale}`)">
-                        {{ form.fieldError(`${mergedErrorIdentifier}.${locale}`) }}
+                    <template v-if="form.fieldError(`${fieldErrorKey}.${locale}`)">
+                        {{ form.fieldError(`${fieldErrorKey}.${locale}`) }}
                     </template>
                     <template v-else>
-                        {{ __('form.validation_error.localized', { locales: form.fieldLocalesContainingError(mergedErrorIdentifier) }) }}
+                        {{ __('form.validation_error.localized', { locales: form.fieldLocalesContainingError(fieldErrorKey) }) }}
                     </template>
                 </template>
             </div>
