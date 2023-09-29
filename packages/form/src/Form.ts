@@ -10,6 +10,8 @@ import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
 import { transformFields } from "./util";
 import { FieldMeta, FieldsMeta } from "./types";
+import get from 'lodash/get';
+import set from 'lodash/set';
 
 
 export class Form  implements FormData {
@@ -104,29 +106,31 @@ export class Form  implements FormData {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
     }
 
-    setError(key: string, error: string) {
-        this.errors[key] = error;
+    getMeta(fieldKey: string): FieldMeta | undefined {
+        return get(this.meta, fieldKey);
     }
 
-    setMeta(key: string, meta: Partial<FieldMeta>) {
-        this.meta[key] = {
-            ...this.meta[key],
-            ...meta,
-        };
+    setMeta(fieldKey: string, values: Partial<FieldMeta>) {
+        set(this.meta, fieldKey, {
+            ...get(this.meta, fieldKey),
+            ...values,
+        });
     }
 
-    clearMeta(property: keyof FieldMeta) {
-        Object.values(this.meta).forEach(fieldMeta => {
+    setAllMeta(values: Partial<FieldMeta>, meta = this.meta) {
+        Object.values(meta).forEach(fieldMeta => {
             if(Array.isArray(fieldMeta)) {
-                fieldMeta.forEach(meta => {
-                    Object.values(meta).forEach(fieldMeta => {
-                        delete fieldMeta[property];
-                    });
+                fieldMeta.forEach(itemFieldsMeta => {
+                    this.setAllMeta(values, itemFieldsMeta);
                 });
             } else {
-                delete fieldMeta[property];
+                Object.assign(fieldMeta, values);
             }
         });
+    }
+
+    setError(key: string, error: string) {
+        this.errors[key] = error;
     }
 
     clearError(key: string) {

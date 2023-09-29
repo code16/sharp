@@ -19,7 +19,9 @@
         errors: { [key:string]: string },
     }>();
 
-    const form = new Form(props.form, route().params.entityKey, route().params.instanceId);
+    const { entityKey, instanceId } = route().params;
+    const form = new Form(props.form, entityKey, instanceId);
+    const loading = ref(false);
     const bottomBarStuck = ref(false);
 
     watchEffect(() => {
@@ -28,10 +30,12 @@
 
     function submit(data) {
         const { uri, entityKey, instanceId } = route().params;
+        const onStart = () => loading.value = true;
+        const onFinish = () => loading.value = false;
         if(route().current('code16.sharp.form.create')) {
-            router.post(route('code16.sharp.form.store', { uri, entityKey }), data);
+            router.post(route('code16.sharp.form.store', { uri, entityKey }), data, { onStart, onFinish });
         } else if(route().current('code16.sharp.form.edit')) {
-            router.post(route('code16.sharp.form.update', { uri, entityKey, instanceId }), data);
+            router.post(route('code16.sharp.form.update', { uri, entityKey, instanceId }), data, { onStart, onFinish });
         }
     }
 </script>
@@ -43,8 +47,8 @@
         <div class="container">
             <FormComponent
                 :form="form"
-                :entity-key="route().params.entityKey"
-                :instance-id="route().params.instanceId"
+                :entity-key="entityKey"
+                :instance-id="instanceId"
                 @submit="submit"
             >
                 <template #title>
@@ -52,6 +56,7 @@
                         <Breadcrumb :breadcrumb="breadcrumb" />
                     </template>
                 </template>
+
                 <template #prepend>
                     <template v-if="Object.values(errors).length > 0">
                         <div class="alert alert-danger SharpForm__alert" role="alert">
@@ -60,7 +65,8 @@
                         </div>
                     </template>
                 </template>
-                <template #append="{ loading }">
+
+                <template #append>
                     <div class="sticky bottom-0 px-4 py-3 bg-white border-t"
                         :class="{ 'shadow': bottomBarStuck }"
                         v-sticky
@@ -83,7 +89,7 @@
                                     <template v-if="form.isUploading">
                                         {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
                                     </template>
-                                    <template v-else-if="route().params.instanceId || form.config.isSingle">
+                                    <template v-else-if="instanceId || form.config.isSingle">
                                         {{ __('sharp::action_bar.form.submit_button.update') }}
                                     </template>
                                     <template v-else>

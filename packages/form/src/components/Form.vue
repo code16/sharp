@@ -8,7 +8,6 @@
     import FieldContainer from "./ui/FieldContainer.vue";
     import LocaleSelect from "./ui/LocaleSelect.vue";
     import { getDependantFieldsResetData } from "../util";
-    import { showAlert } from "@/utils/dialogs";
 
     const props = defineProps<{
         form: Form,
@@ -20,12 +19,36 @@
     inject('form', props.form);
     inject('$form', props.form);
 
-    const locale = ref(props.form.locales?.[0]);
+    const selectedLocale = ref(props.form.locales?.[0]);
     const loading = ref(false);
 
-    function onLocaleChange(nextLocale: string) {
-        locale.value = nextLocale;
-        props.form.clearMeta('locale');
+    function submit() {
+        const { form, postFn } = props;
+
+        if (form.isUploading) {
+            return;
+        }
+
+        const data = Object.fromEntries(
+            Object.entries(form.data ?? {})
+                .filter(([key]) => form.fields[key]?.type !== 'html')
+        );
+
+        postFn(data)
+            .catch(error => {
+                if (error.response?.status === 422) {
+                    props.form.errors = error.response.data.errors ?? {};
+                }
+                return Promise.reject(error);
+            })
+            .finally(() => {
+                this.setLoading(false);
+            });
+    }
+
+    function onLocaleChange(locale: string) {
+        selectedLocale.value = locale;
+        props.form.setAllMeta({ locale });
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {
@@ -55,7 +78,7 @@
                 <LocaleSelect
                     outline
                     right
-                    :locale="form.currentLocale"
+                    :locale="selectedLocale"
                     :locales="form.locales"
                     @change="onLocaleChange"
                 />
@@ -92,7 +115,7 @@
                                                                 <FieldContainer
                                                                     :field="form.getField(fieldLayout.key)"
                                                                     :value="form.data[fieldLayout.key]"
-                                                                    :locale="form.meta[fieldLayout.key]?.locale ?? locale"
+                                                                    :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
                                                                     :field-error-key="fieldLayout.key"
                                                                     :form="form"
                                                                     @input="onInput(fieldLayout.key, $event)"
@@ -111,7 +134,7 @@
                                             <FieldContainer
                                                 :field="form.getField(fieldLayout.key)"
                                                 :value="form.data[fieldLayout.key]"
-                                                :locale="form.meta[fieldLayout.key]?.locale ?? locale"
+                                                :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
                                                 :field-error-key="fieldLayout.key"
                                                 :form="form"
                                                 @input="onInput(fieldLayout.key, $event)"
@@ -131,43 +154,3 @@
         <slot name="append" :loading="loading" />
     </div>
 </template>
-
-<script lang="ts">
-
-    export default {
-        methods: {
-            serialize(data = this.data) {
-                return Object.fromEntries(
-                    Object.entries(data ?? {})
-                        .filter(([key]) => this.fields[key]?.type !== 'html')
-                );
-            },
-            async submit() {
-                if (this.isUploading) {
-                    return;
-                }
-
-                if(!this.postFn) {
-                    this.$emit('submit', this.serialize());
-                    return;
-                }
-
-                this.setLoading(true);
-
-                const data = this.serialize();
-
-                this.postFn(data)
-                    .catch(error => {
-                        if (error.response?.status === 422) {
-                            this.errors = error.response.data.errors || {};
-                        }
-                        return Promise.reject(error);
-                    })
-                    .finally(() => {
-                        this.setLoading(false);
-                    });
-            },
-
-        },
-    }
-</script>
