@@ -6,7 +6,7 @@
     const props = defineProps<{
         field: FormTextareaFieldData,
         value: FormTextareaFieldData['value'],
-        locale: string | null,
+        locale?: string | null,
     }>();
 
     const emit = defineEmits(['input']);

@@ -2,15 +2,13 @@
     import FieldLayout from "../../FieldLayout.vue";
     import { EntityList as EntityListComponent, EntityListTitle } from '@sharp/entity-list';
     import { FieldProps } from "../../types";
-    import { EntityListData, EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
-    import { Ref, ref, watch } from "vue";
+    import { EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
+    import { Ref, ref } from "vue";
     import { useStickyLayout } from "./useStickyLayout";
     import { EntityList } from "@sharp/entity-list/src/EntityList";
     import { useFilters } from "@sharp/filters";
     import { useCommands } from "@sharp/commands/src/useCommands";
     import { api } from "@/api";
-    import { stringifyQuery } from "@/utils/querystring";
-    import { FilterManager } from "@sharp/filters/src/FilterManager";
     import { FilterQueryParams } from "@sharp/filters/src/types";
 
     const props = defineProps<FieldProps & {
@@ -64,7 +62,7 @@
     }
 
     if(!props.collapsable) {
-        init();
+        init(query.value);
     }
 </script>
 

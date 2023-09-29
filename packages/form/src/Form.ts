@@ -106,6 +106,13 @@ export class Form  implements FormData {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
     }
 
+    serialize(data: FormData['data']) {
+        return Object.fromEntries(
+            Object.entries(data ?? {})
+                .filter(([key]) => this.fields[key]?.type !== 'html')
+        );
+    }
+
     getMeta(fieldKey: string): FieldMeta | undefined {
         return get(this.meta, fieldKey);
     }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-    import FormLayout from "./ui/FormLayout.vue";
+    import Field from "./Field.vue";
+    import FormLayout from "./FormLayout.vue";
     import { FormFieldData, FormLayoutTabData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
     import FieldColumn from "@/components/ui/FieldColumn.vue";
-    import { inject, ref } from "vue";
+    import { provide, ref } from "vue";
     import { Form } from "../Form";
-    import FieldContainer from "./ui/FieldContainer.vue";
     import LocaleSelect from "./ui/LocaleSelect.vue";
     import { getDependantFieldsResetData } from "../util";
 
@@ -13,11 +13,11 @@
         form: Form,
         entityKey: string,
         instanceId: string | number,
-        postFn: Function,
+        postFn?: Function,
     }>();
 
-    inject('form', props.form);
-    inject('$form', props.form);
+    provide('form', props.form);
+    provide('$form', props.form);
 
     const selectedLocale = ref(props.form.locales?.[0]);
     const loading = ref(false);
@@ -29,12 +29,9 @@
             return;
         }
 
-        const data = Object.fromEntries(
-            Object.entries(form.data ?? {})
-                .filter(([key]) => form.fields[key]?.type !== 'html')
-        );
+        loading.value = true;
 
-        postFn(data)
+        postFn(form.serialize(form.data))
             .catch(error => {
                 if (error.response?.status === 422) {
                     props.form.errors = error.response.data.errors ?? {};
@@ -42,7 +39,7 @@
                 return Promise.reject(error);
             })
             .finally(() => {
-                this.setLoading(false);
+                loading.value = false;
             });
     }
 
@@ -66,6 +63,8 @@
             [fieldKey]: value,
         }
     }
+
+    defineExpose({ submit });
 </script>
 
 <template>
@@ -112,12 +111,12 @@
                                                     <div class="flex -mx-4">
                                                         <template v-for="fieldLayout in row">
                                                             <FieldColumn class="px-4" :layout="fieldLayout">
-                                                                <FieldContainer
+                                                                <Field
                                                                     :field="form.getField(fieldLayout.key)"
+                                                                    :field-layout="fieldLayout"
+                                                                    :field-error-key="fieldLayout.key"
                                                                     :value="form.data[fieldLayout.key]"
                                                                     :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                                    :field-error-key="fieldLayout.key"
-                                                                    :form="form"
                                                                     @input="onInput(fieldLayout.key, $event)"
                                                                     @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                                     @uploading="onFieldUploading(fieldLayout.key, $event)"
@@ -131,12 +130,12 @@
                                     </template>
                                     <template v-else>
                                         <FieldColumn class="px-4" :layout="fieldLayout">
-                                            <FieldContainer
+                                            <Field
                                                 :field="form.getField(fieldLayout.key)"
+                                                :field-layout="fieldLayout"
+                                                :field-error-key="fieldLayout.key"
                                                 :value="form.data[fieldLayout.key]"
                                                 :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                :field-error-key="fieldLayout.key"
-                                                :form="form"
                                                 @input="onInput(fieldLayout.key, $event)"
                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                 @uploading="onFieldUploading(fieldLayout.key, $event)"
@@ -151,6 +150,6 @@
             </div>
         </FormLayout>
 
-        <slot name="append" :loading="loading" />
+        <slot name="append" />
     </div>
 </template>

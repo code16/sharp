@@ -132,7 +132,6 @@
             transformKeepOriginal: Boolean,
 
             readOnly: Boolean,
-            root: Boolean,
             compactThumbnail: Boolean,
             focused: Boolean,
             invalid: Boolean,

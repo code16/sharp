@@ -26,7 +26,6 @@
                                         v-bind="$props"
                                         :field="field.itemFields?.[fieldLayout.key]"
                                         :value="item[fieldLayout.key]"
-                                        :config-identifier="fieldLayout.key"
                                     />
                                 </template>
                                 <template v-else>

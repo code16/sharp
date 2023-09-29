@@ -14,7 +14,7 @@
         value: ShowFieldData['value'],
     }>();
 
-    const components: { [type: Exclude<ShowFieldData['type'], 'html'>]: Component } = {
+    const components: Record<Exclude<ShowFieldData['type'], 'html'>, Component> = {
         'entityList': EntityList,
         'file': File,
         'list': List,
@@ -31,11 +31,3 @@
         />
     </div>
 </template>
-
-<script lang="ts">
-    import { ConfigNode } from "@/mixins";
-
-    export default {
-        mixins: [ConfigNode],
-    }
-</script>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { onUnmounted, ref, watchEffect } from "vue";
     import { slugify } from "@/utils";
-    import { Form } from "../../Form";
+    import { Form } from "../Form";
     import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 
     const props = defineProps<{

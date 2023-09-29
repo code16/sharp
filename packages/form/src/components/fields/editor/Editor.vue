@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { vSticky } from "@/directives/sticky";
 </script>
 
 <template>
@@ -49,7 +50,6 @@
     import { Upload } from "./extensions/upload/upload";
     import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
     import MenuBar from "./toolbar/MenuBar.vue";
-    import { sticky } from 'sharp/directives';
     import { onLabelClicked } from "../../../util/accessibility";
 
     export default {
@@ -150,9 +150,6 @@
             this.editor.on('update', debounce(this.handleUpdated, 50));
 
             onLabelClicked(this, this.id, () => this.focus());
-        },
-        directives: {
-            sticky,
         },
     }
 </script>

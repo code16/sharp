@@ -28,14 +28,23 @@
         form.errors = props.errors;
     });
 
-    function submit(data) {
+    function submit() {
         const { uri, entityKey, instanceId } = route().params;
         const onStart = () => loading.value = true;
         const onFinish = () => loading.value = false;
+
         if(route().current('code16.sharp.form.create')) {
-            router.post(route('code16.sharp.form.store', { uri, entityKey }), data, { onStart, onFinish });
+            router.post(
+                route('code16.sharp.form.store', { uri, entityKey }),
+                form.serialize(form.data),
+                { onStart, onFinish }
+            );
         } else if(route().current('code16.sharp.form.edit')) {
-            router.post(route('code16.sharp.form.update', { uri, entityKey, instanceId }), data, { onStart, onFinish });
+            router.post(
+                route('code16.sharp.form.update', { uri, entityKey, instanceId }),
+                form.serialize(form.data),
+                { onStart, onFinish }
+            );
         }
     }
 </script>

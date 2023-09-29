@@ -47,20 +47,20 @@
                         />
                     </template>
                     <template v-else>
-                        <ListItem :layout="fieldLayout.item" :error-identifier="index" v-slot="{ fieldLayout }">
-                            <FieldDisplay
-                                :field-key="fieldLayout.key"
-                                :context-fields="transformedFields(index)"
-                                :context-data="listItemData"
-                                :error-identifier="fieldLayout.key"
-                                :config-identifier="fieldLayout.key"
-                                :update-data="update(i)"
-                                :locale="listItemData._fieldsLocale[fieldLayout.key]"
-                                :read-only="isReadOnly"
-                                :list="true"
-                                @locale-change="(key, value)=>updateLocale(index, key, value)"
-                            />
-                        </ListItem>
+<!--                        <ListItem :layout="fieldLayout.item" :error-identifier="index" v-slot="{ fieldLayout }">-->
+<!--                            <FieldDisplay-->
+<!--                                :field-key="fieldLayout.key"-->
+<!--                                :context-fields="transformedFields(index)"-->
+<!--                                :context-data="listItemData"-->
+<!--                                :error-identifier="fieldLayout.key"-->
+<!--                                :config-identifier="fieldLayout.key"-->
+<!--                                :update-data="update(i)"-->
+<!--                                :locale="listItemData._fieldsLocale[fieldLayout.key]"-->
+<!--                                :read-only="isReadOnly"-->
+<!--                                :list="true"-->
+<!--                                @locale-change="(key, value)=>updateLocale(index, key, value)"-->
+<!--                            />-->
+<!--                        </ListItem>-->
                         <template v-if="showRemoveButton">
                             <button
                                 class="SharpList__remove-button btn-close"
@@ -110,8 +110,8 @@
     import Draggable from 'vuedraggable';
     import { TemplateRenderer } from 'sharp/components';
     import { Button } from "@sharp/ui";
-    import ListItem from './ListItem.vue';
-    import FieldDisplay from "../../FieldDisplay.vue";
+    // import ListItem from './ListItem.vue';
+    // import FieldDisplay from "../../FieldDisplay.vue";
 
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
@@ -131,10 +131,8 @@
         components: {
             ListUpload,
             Draggable,
-            ListItem,
             Button,
             TemplateRenderer,
-            FieldDisplay,
         },
 
         props: {
