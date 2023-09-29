@@ -237,7 +237,6 @@ it('handles single forms', function () {
         [
             'isSingle' => true,
             'hasShowPage' => false,
-            'deleteConfirmationText' => null,
         ],
         $sharpForm->formConfig(),
     );
@@ -257,7 +256,6 @@ it('allows to declare setDisplayShowPageAfterCreation in config', function () {
     $this->assertEquals(
         [
             'hasShowPage' => true,
-            'deleteConfirmationText' => null,
         ],
         $sharpForm->formConfig(),
     );

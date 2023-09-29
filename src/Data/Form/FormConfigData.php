@@ -10,7 +10,6 @@ final class FormConfigData extends Data
 {
     public function __construct(
         public bool $hasShowPage,
-        public ?string $deleteConfirmationText,
         public bool $isSingle = false,
         public ?string $breadcrumbAttribute = null,
     ) {
