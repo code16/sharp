@@ -41,6 +41,7 @@
 <template>
     <div class="relative rounded-md shadow-sm">
         <TextInput
+            :class="{ 'pr-10': hasError }"
             :value="field.localized && typeof value === 'object' ? value?.[locale] : value"
             :placeholder="field.placeholder"
             :disabled="field.readOnly"
