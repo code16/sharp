@@ -56,12 +56,6 @@
                 </Modal>
             </template>
         </template>
-
-        <LoadingOverlay
-            class="SharpActionView__loading"
-            :visible="isLoading"
-            fade
-        />
     </div>
 </template>
 
@@ -92,9 +86,6 @@
         computed: {
             dialogs() {
                 return this.$store.state.dialogs;
-            },
-            isLoading() {
-                return this.$store.getters.isLoading;
             },
         },
         methods: {

@@ -8,8 +8,8 @@ use Illuminate\Http\Response;
 
 class SharpApplicativeException extends SharpException
 {
-    public function render(Request $request): Response
+    public function getStatusCode(): int
     {
-        abort(417, $this->message);
+        return 417;
     }
 }

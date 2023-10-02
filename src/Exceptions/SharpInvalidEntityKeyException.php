@@ -7,8 +7,8 @@ use Illuminate\Http\Response;
 
 class SharpInvalidEntityKeyException extends SharpException
 {
-    public function render(Request $request): Response
+    public function getStatusCode(): int
     {
-        abort(404, $this->message);
+        return 404;
     }
 }
