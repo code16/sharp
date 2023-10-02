@@ -27,6 +27,7 @@
 
         <x-sharp::extensions.custom-fields-script />
 
+        @php(config()->set('ziggy', ['only' => 'code16.sharp.*']))
         @routes
         @inertiaHead
 

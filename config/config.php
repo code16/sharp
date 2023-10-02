@@ -59,10 +59,12 @@ return [
         ],
         'web' => [
             \Code16\Sharp\Http\Middleware\InvalidateCache::class,
+            \Code16\Sharp\Http\Middleware\HandleSharpErrors::class,
+            \Code16\Sharp\Http\Middleware\HandleInertiaRequests::class,
         ],
         'api' => [
-            Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
-            Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
+            \Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
+            \Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
         ],
     ],
 

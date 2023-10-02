@@ -98,6 +98,7 @@ export default [
     {
         text: 'Migrations guide',
         children: [
+            '/guide/upgrading/9.0.md',
             '/guide/upgrading/8.0.md',
             '/guide/upgrading/7.0.md',
             '/guide/upgrading/6.0.md',

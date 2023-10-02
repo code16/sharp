@@ -25,7 +25,6 @@ use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
 use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
 use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
-use Code16\Sharp\Http\Middleware\ConfigureZiggy;
 use Code16\Sharp\Http\Middleware\HandleInertiaRequests;
 use Code16\Sharp\Http\Middleware\HandleSharpErrors;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -125,9 +124,5 @@ class SharpServiceProvider extends ServiceProvider
             ->middlewareGroup('sharp_api', $this->app['config']->get('sharp.middleware.api'))
             ->aliasMiddleware('sharp_auth', SharpAuthenticate::class)
             ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
-
-        $this->app['router']->pushMiddlewareToGroup('sharp_web', HandleSharpErrors::class);
-        $this->app['router']->pushMiddlewareToGroup('sharp_web', HandleInertiaRequests::class);
-        $this->app['router']->pushMiddlewareToGroup('sharp_web', ConfigureZiggy::class);
     }
 }
