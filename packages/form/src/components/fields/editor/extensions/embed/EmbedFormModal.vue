@@ -10,18 +10,16 @@
         <template v-slot:title>
             <slot name="title"></slot>
         </template>
-        <transition>
-            <template v-if="visible">
-                <Form
-                    :entity-key="$form.entityKey"
-                    :instance-id="$form.instanceId"
-                    :form="form"
-                    :post-fn="post"
-                    style="transition-duration: 300ms"
-                    ref="form"
-                />
-            </template>
-        </transition>
+        <template v-if="visible">
+            <Form
+                :entity-key="$form.entityKey"
+                :instance-id="$form.instanceId"
+                :form="form"
+                :post-fn="post"
+                style="transition-duration: 300ms"
+                ref="form"
+            />
+        </template>
     </Modal>
 </template>
 

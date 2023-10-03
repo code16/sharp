@@ -11,7 +11,7 @@
         @show="handleShow"
         dialog-class="modal-dialog-scrollable"
         content-class="h-100"
-        size="xl"
+        max-width="4xl"
         ref="modal"
     >
         <template v-if="ready">

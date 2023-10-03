@@ -1,6 +1,6 @@
 import qs from 'qs';
 import moment from 'moment';
-import paramsSerializer, { transformParams } from "@/api/paramsSerializer";
+import { transformParams } from "@/api/paramsSerializer";
 
 const RANGE_DATE_FORMAT = 'YYYYMMDD';
 

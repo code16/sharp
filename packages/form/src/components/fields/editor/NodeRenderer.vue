@@ -12,7 +12,6 @@
 </template>
 
 <script>
-    import { ignoreVueElement } from "sharp";
     import { NodeViewWrapper } from '@tiptap/vue-3';
 
     export default {

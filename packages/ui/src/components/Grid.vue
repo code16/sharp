@@ -3,7 +3,7 @@
         <template v-for="row in rows">
             <div class="SharpGrid__row row" :class="rowClasses(row)">
                 <template v-for="col in row">
-                    <div class="SharpGrid__col" :class="colClasses(col)" v-empty-class="'SharpGrid__col--empty'">
+                    <div class="SharpGrid__col" :class="colClasses(col)">
                         <slot :item-layout="col" />
                     </div>
                 </template>
@@ -13,8 +13,6 @@
 </template>
 
 <script>
-    import { emptyClass } from 'sharp/directives';
-
     export default {
         name: 'SharpGrid',
 
@@ -49,8 +47,5 @@
                 return this.rowClass;
             }
         },
-        directives: {
-            'empty-class': emptyClass
-        }
     }
 </script>

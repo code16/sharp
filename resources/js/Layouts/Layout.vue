@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import ActionView from "../components/ActionView.vue";
-import { GlobalSearch } from '@sharp/search';
-import { config } from "@/utils/config";
 import LeftNav from "../components/LeftNav.vue";
 import { ref } from "vue";
 import {
@@ -9,23 +6,22 @@ import {
     DialogPanel,
     Menu,
     MenuButton,
-    MenuItem,
-    MenuItems,
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue'
 import {
     Bars3Icon,
     BellIcon,
-    Cog6ToothIcon,
     XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Notifications from "@/components/Notifications.vue";
+import { useDialogs } from "@/utils/dialogs";
+import { Modal } from '@sharp/ui';
 
-// const userDropdownTemplate = document.querySelector('#user-dropdown').innerHTML;
 
 const sidebarOpen = ref(false);
+const { dialogs } = useDialogs();
 </script>
 
 
@@ -124,14 +120,17 @@ const sidebarOpen = ref(false);
             </div>
         </div>
     </div>
-<!--    <LeftNav />-->
-<!--    <ActionView>-->
-<!--        <template v-slot:search>-->
-<!--            <GlobalSearch :placeholder="config('sharp.search.placeholder')" />-->
-<!--        </template>-->
-<!--        <template v-slot:user-dropdown>-->
-<!--            <component :is="{ template: userDropdownTemplate }" />-->
-<!--        </template>-->
-<!--&lt;!&ndash;        <slot />&ndash;&gt;-->
-<!--    </ActionView>-->
+
+    <template v-for="dialog in dialogs" :key="dialog.id">
+        <Modal
+            v-model:visible="dialog.props.visible"
+            v-bind="dialog.props"
+            @ok="dialog.onOk"
+            @hidden="dialog.onHidden"
+        >
+            <p class="text-gray-700">
+                {{ dialog.text }}
+            </p>
+        </Modal>
+    </template>
 </template>
