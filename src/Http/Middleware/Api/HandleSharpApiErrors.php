@@ -7,6 +7,7 @@ use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
+use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -40,28 +41,11 @@ class HandleSharpApiErrors
 
     private function getHttpCodeFor($exception)
     {
-        if ($exception instanceof SharpApplicativeException) {
-            // This is an applicative exception, we return it as a 417
-            return 417;
-        }
-
-        if ($exception instanceof SharpAuthorizationException) {
-            return 403;
-        }
-
-        if ($exception instanceof SharpInvalidEntityKeyException || $exception instanceof ModelNotFoundException) {
+        if ($exception instanceof ModelNotFoundException) {
             return 404;
         }
 
-        if ($exception instanceof SharpInvalidEntityStateException) {
-            return 422;
-        }
-
-        if ($exception instanceof SharpFormFieldValidationException) {
-            return 500;
-        }
-
-        if (method_exists($exception, 'getStatusCode')) {
+        if ($exception instanceof SharpException || method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
 
