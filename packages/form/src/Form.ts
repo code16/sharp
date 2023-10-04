@@ -4,7 +4,7 @@ import {
     FormFieldData,
     FormLayoutFieldsetData,
     FormLayoutTabData,
-    FormListFieldData
+    FormListFieldData, LayoutFieldData
 } from "@/types";
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
@@ -117,11 +117,15 @@ export class Form  implements FormData {
         return get(this.meta, fieldKey);
     }
 
-    setMeta(fieldKey: string, values: Partial<FieldMeta>) {
-        set(this.meta, fieldKey, {
-            ...get(this.meta, fieldKey),
-            ...values,
-        });
+    setMeta(fieldKey: string, values: Partial<FieldMeta> | FieldsMeta[]) {
+        if(Array.isArray(values)) {
+            this.meta[fieldKey] = values;
+        } else {
+            set(this.meta, fieldKey, {
+                ...get(this.meta, fieldKey),
+                ...values,
+            });
+        }
     }
 
     setAllMeta(values: Partial<FieldMeta>, meta = this.meta) {
@@ -145,15 +149,17 @@ export class Form  implements FormData {
     }
 
     getField(key: string, fields = this.fields, data = this.data, readOnly = false): FormFieldData {
-        const fieldsWithAppliedDynamicAttributes = transformFields(fields, data);
+        const fieldsWithDynamicAttributesApplied = transformFields(fields, data);
 
         return {
-            ...fieldsWithAppliedDynamicAttributes[key],
-            readOnly: this.isReadOnly || fieldsWithAppliedDynamicAttributes[key].readOnly || readOnly,
+            ...fieldsWithDynamicAttributesApplied[key],
+            readOnly: this.isReadOnly || fieldsWithDynamicAttributesApplied[key].readOnly || readOnly,
         };
     }
 
-    fieldShouldBeVisible(field: FormFieldData, fields = this.fields, data = this.data) {
+    fieldShouldBeVisible(fieldLayout: LayoutFieldData, fields = this.fields, data = this.data) {
+        const field = fields[fieldLayout.key];
+
         if(!field.conditionalDisplay) {
             return true;
         }
@@ -165,7 +171,7 @@ export class Form  implements FormData {
     fieldsetShouldBeVisible(fieldset: FormLayoutFieldsetData, fields = this.fields, data = this.data) {
         return fieldset.fields
             .flat(2)
-            .some(fieldLayout => this.fieldShouldBeVisible(fields[fieldLayout.key], fields, data));
+            .some(fieldLayout => this.fieldShouldBeVisible(fieldLayout, fields, data));
     }
 
     fieldError(key: string): string | undefined {
@@ -198,10 +204,10 @@ export class Form  implements FormData {
     fieldIsEmpty(field: FormFieldData, value: FormFieldData['value'], locale: string): boolean {
         if('localized' in field && field.localized) {
             if(field.type === 'editor') {
-                return !!(value as FormEditorFieldData['value']).text[locale];
+                return !!(value as FormEditorFieldData['value'])?.text?.[locale];
             }
             if(field.type === 'text' || field.type === 'textarea') {
-                return !!value[locale];
+                return !!value?.[locale];
             }
         }
         return !!value;

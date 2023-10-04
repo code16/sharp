@@ -11,7 +11,7 @@
 
     defineProps<FieldProps & {
         field: ShowFieldData,
-        value: ShowFieldData['value'],
+        value?: ShowFieldData['value'],
     }>();
 
     const components: Record<Exclude<ShowFieldData['type'], 'html'>, Component> = {

@@ -9,7 +9,7 @@
 
     const props = defineProps<{
         field: FormTextFieldData,
-        value: FormTextFieldData['value'],
+        value?: FormTextFieldData['value'],
         locale?: string | null,
         hasError: boolean,
     }>();

@@ -1,26 +1,21 @@
 import {
     CommandData,
     ConfigCommandsData,
-    EntityAuthorizationsData,
-    EntityListConfigData,
     EntityListData,
-    EntityListFieldData,
-    EntityListMultiformData,
     EntityStateValueData,
-    FilterData, PageAlertData,
-    PaginatorMetaData,
+    FilterData,
 } from "@/types";
 import { getAppendableUri, route } from "@/utils/url";
 import { Instance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
-    authorizations: EntityAuthorizationsData;
-    config: EntityListConfigData;
-    data: Array<{ [key: string]: any }>;
-    fields: Array<EntityListFieldData>;
-    forms: { [p: string]: EntityListMultiformData };
-    meta?: PaginatorMetaData | null;
-    pageAlert?: PageAlertData | null;
+    authorizations: EntityListData['authorizations'];
+    config: EntityListData['config'];
+    data: EntityListData['data'];
+    fields: EntityListData['fields'];
+    forms: EntityListData['forms'];
+    meta: EntityListData['meta'];
+    pageAlert: EntityListData['pageAlert'];
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;

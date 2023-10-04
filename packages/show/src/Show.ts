@@ -10,43 +10,45 @@ import { getAppendableUri, route } from "@/utils/url";
 
 
 export class Show implements ShowData {
-    authorizations: InstanceAuthorizationsData;
-    config: ShowConfigData;
-    data: { [key: string]: any };
-    fields: { [key: string]: ShowFieldData };
-    layout: ShowLayoutData;
-    locales: Array<string> | null;
-    pageAlert: PageAlertData | null;
+    authorizations: ShowData['authorizations'];
+    config: ShowData['config'];
+    data: ShowData['data'];
+    fields: ShowData['fields'];
+    layout: ShowData['layout'];
+    locales: ShowData['locales'];
+    pageAlert: ShowData['pageAlert'];
 
-    constructor(data: ShowData) {
+    entityKey: string;
+    instanceId?: string;
+
+    constructor(data: ShowData, entityKey: string, instanceId?: string) {
         Object.assign(this, data);
+        this.entityKey = entityKey;
+        this.instanceId = instanceId;
     }
 
     get formUrl(): string {
-        const formKey = this.config.multiformAttribute
+        const multiformKey = this.config.multiformAttribute
             ? this.data[this.config.multiformAttribute]
             : null;
-        const entityKey = formKey
-            ? `${route().params.entityKey}:${formKey}`
-            : route().params.entityKey;
 
         if(route().params.instanceId) {
             return route('code16.sharp.form.edit', {
                 uri: getAppendableUri(),
-                entityKey,
-                instanceId: route().params.instanceId,
+                entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
+                instanceId: this.instanceId,
             });
         }
 
         return route('code16.sharp.form.create', {
             uri: getAppendableUri(),
-            entityKey,
+            entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
         });
     }
 
     get instanceState(): string | number | null {
         return this.config.state
-            ? this.data[this.config.state.attribute]
+            ? this.data[this.config.state.attribute] as any
             : null;
     }
 
@@ -66,7 +68,7 @@ export class Show implements ShowData {
         if((this.fields[this.config.titleAttribute] as ShowTextFieldData).localized) {
             return this.data[this.config.titleAttribute]?.[locale];
         }
-        return this.data[this.config.titleAttribute];
+        return this.data[this.config.titleAttribute] as string;
     }
 
     sectionFields(section: ShowLayoutSectionData): Array<ShowFieldData> {

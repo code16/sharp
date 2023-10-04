@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
     import { WithCommands, CommandsDropdown } from '@sharp/commands';
     import ShowField from '@sharp/show/src/components/Field.vue';
@@ -20,15 +20,17 @@
     import { router } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
     import PageAlert from "@/components/PageAlert.vue";
+    import FieldColumn from "@/components/ui/FieldColumn.vue";
+    import { getAppendableUri, route } from "@/utils/url";
 
     const props = defineProps<{
         show: ShowData,
         breadcrumb: BreadcrumbData,
     }>();
 
-    const show = new Show(props.show);
-    const locale = ref(show.locales?.[0]);
     const { entityKey, instanceId } = route().params;
+    const show = new Show(props.show, entityKey, instanceId);
+    const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();
     const commands = useCommands();
 
@@ -100,12 +102,12 @@
                                     :disabled="!show.config.state.authorization"
                                 >
                                     <template v-slot:text>
-                                        <StateIcon class="me-1" :color="show.instanceStateValue ? show.instanceStateValue.color : '#fff'" style="vertical-align: -.125em" />
+                                        <StateIcon class="me-1" :state-value="show.instanceStateValue" style="vertical-align: -.125em" />
                                         <span class="text-truncate">{{ show.instanceStateValue ? show.instanceStateValue.label : show.instanceState }}</span>
                                     </template>
                                     <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
                                         <DropdownItem :active="show.instanceState === stateValue.value" @click="onStateChange(stateValue.value)">
-                                            <StateIcon class="me-1" :color="stateValue.color" style="vertical-align: -.125em" />
+                                            <StateIcon class="me-1" :state-value="stateValue" style="vertical-align: -.125em" />
                                             <span class="text-truncate">{{ stateValue.label }}</span>
                                         </DropdownItem>
                                     </template>
@@ -181,19 +183,20 @@
                                     <div :class="!show.sectionHasField(section, 'entityList') ? 'p-4 bg-white border rounded' : ''">
                                         <div class="flex -mx-4">
                                             <template v-for="column in section.columns">
-                                                <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                                <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
                                                     <template v-for="row in column.fields">
-                                                        <div class="flex -mx-4">
+                                                        <div class="flex -mx-4" >
                                                             <template v-for="fieldLayout in row">
-                                                                <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${fieldLayout.size}` }"
-                                                                    x-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                <FieldColumn
+                                                                    class="px-4"
+                                                                    :layout="fieldLayout"
+                                                                    v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
                                                                 >
                                                                     <template v-if="show.fields[fieldLayout.key]">
                                                                         <ShowField
                                                                             :field="show.fields[fieldLayout.key]"
                                                                             :value="show.data[fieldLayout.key]"
                                                                             :locale="locale"
-                                                                            :config-identifier="fieldLayout.key"
                                                                             :layout="fieldLayout"
                                                                             :collapsable="section.collapsable"
                                                                             :entity-key="entityKey"
@@ -204,7 +207,7 @@
                                                                     <template v-else>
                                                                         <UnknownField :name="fieldLayout.key" />
                                                                     </template>
-                                                                </div>
+                                                                </FieldColumn>
                                                             </template>
                                                         </div>
                                                     </template>

@@ -538,7 +538,7 @@ export type FormUploadFieldData = {
   ratioX: number | null;
   ratioY: number | null;
   maxFileSize: number | null;
-  fileFilter: Array<any> | string | null;
+  fileFilter: Array<string> | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;

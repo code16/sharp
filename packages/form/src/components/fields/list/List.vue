@@ -1,62 +1,106 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { useParentForm } from "../../../useParentForm";
+    import { useForm } from "../../../useForm";
     import FieldColumn from "@/components/ui/FieldColumn.vue";
     import Field from "../../Field.vue";
     import { FormFieldData, FormListFieldData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "../../../util";
-    import { computed, ref } from "vue";
+    import { computed, ref, on } from "vue";
     import Draggable from 'vuedraggable';
-    import { TemplateRenderer } from 'sharp/components';
     import { Button } from "@sharp/ui";
-    import ListUpload from "./ListUpload.vue";
+    import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta } from "../../../types";
+    import { SortableOptions } from "sortablejs";
 
     const props = defineProps<{
         field: FormListFieldData,
         fieldLayout: LayoutFieldData,
         value: FormListFieldData['value'],
-        locale: string | null,
+        locale?: string | null,
     }>();
 
     const emit = defineEmits(['input']);
-    const form = useParentForm();
+    const form = useForm();
     const dragging = ref(false);
     const dragActive = ref(false);
-
     const canAddItem = computed(() => {
         const { field, value } = props;
         return field.addable &&
             (!field.maxItemCount || value?.length < field.maxItemCount) &&
             !field.readOnly;
     });
-
     const isUploading = computed(() => {
         return (form.meta[props.field.key] as FieldsMeta[])
             ?.some(itemMeta => Object.values(itemMeta).some(fieldMeta => fieldMeta.uploading));
     });
-
-    const uploadLimit = computed(() => {
-        if(props.field.maxItemCount) {
-            const remaining = props.field.maxItemCount - (props.value?.length ?? 0);
-            return Math.min(remaining, props.field.bulkUploadLimit);
+    const currentBulkUploadLimit = computed(() => {
+        const { field, value } = props;
+        if(field.maxItemCount) {
+            const remaining = field.maxItemCount - (value?.length ?? 0);
+            return Math.min(remaining, field.bulkUploadLimit);
         }
-        return props.field.bulkUploadLimit;
+        return field.bulkUploadLimit;
     });
 
+    let itemKeyIndex = 0;
+    const itemKey = Symbol('itemKey');
+
+    emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })));
+
+    function createItem(data = {}) {
+        return {
+            [props.field.itemIdAttribute]: null,
+            [itemKey]: itemKeyIndex++,
+            ...data,
+        }
+    }
+
     function onAdd() {
-        emit('input', [...(props.value ?? []), { [props.field.itemIdAttribute]: null }]);
+        emit('input', [...(props.value ?? []), createItem()]);
     }
 
     function onInsert(itemIndex: number) {
-        emit('input', [...props.value].splice(itemIndex, 0, { [props.field.itemIdAttribute]: null }));
-        (form.meta[props.field.key] as FieldsMeta[])?.splice(itemIndex, 0, {});
+        emit('input', props.value.toSpliced(itemIndex, 0, createItem()));
+        form.setMeta(
+            props.field.key,
+            (form.meta[props.field.key] as FieldsMeta[])?.toSpliced(itemIndex, 0, {})
+        );
     }
 
     function onRemove(itemIndex: number) {
-        emit('input', [...props.value].splice(itemIndex, 1));
-        (form.meta[props.field.key] as FieldsMeta[])?.splice(itemIndex, 1);
+        emit('input', props.value.toSpliced(itemIndex, 1));
+        form.setMeta(
+            props.field.key,
+            (form.meta[props.field.key] as FieldsMeta[])?.toSpliced(itemIndex, 1)
+        );
+    }
+
+    function onReorder(value: FormListFieldData['value']) {
+        emit('input', value);
+    }
+
+    function onBulkUploadInputChange(e: Event & { target: HTMLInputElement }) {
+        const files = [...e.target.files].slice(0, currentBulkUploadLimit.value);
+
+        if(e.target.files.length > currentBulkUploadLimit.value) {
+            const message = __('sharp::form.list.bulk_upload.validation.limit', {
+                limit: currentBulkUploadLimit.value
+            });
+
+            showAlert(message, {
+                title: __('sharp::modals.error.title'),
+            });
+        }
+
+        emit('input', [
+            ...props.value,
+            ...files.map(file => createItem({
+                [props.field.bulkUploadField]: { file },
+            })),
+        ]);
+
+        e.target.value = '';
     }
 
     function onFieldInput(itemIndex: number, fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
@@ -78,28 +122,6 @@
 
     function onFieldUploading(fieldKey: string, uploading: boolean) {
         form.setMeta(fieldKey, { uploading });
-    }
-
-    function onBulkUpload(e: Event & { target: HTMLInputElement }) {
-        const files = [...e.target.files].slice(0, uploadLimit.value);
-
-        if(e.target.files.length > uploadLimit.value) {
-            const message = __('sharp::form.list.bulk_upload.validation.limit', {
-                limit: uploadLimit.value
-            });
-
-            showAlert(message, {
-                title: __('sharp::modals.error.title'),
-            });
-        }
-
-        emit('input', [
-            ...props.value,
-            ...files.map(file => ({
-                [props.field.itemIdAttribute]: null,
-                [props.field.bulkUploadField]: { file },
-            })),
-        ]);
     }
 </script>
 
@@ -131,14 +153,14 @@
         </div>
 
         <Draggable
-            :options="{
+            v-bind="{
                 handle: dragActive ? '[data-item]' : '[data-drag-handle]',
+                animation: 150,
                 // filter: '.SharpListUpload',
-            }"
-            :list="value"
-            tag="transition-group"
-            name="expand"
-            ref="draggable"
+            } as SortableOptions"
+            :modelValue="value"
+            :item-key="item => item[itemKey]"
+            @update:modelValue="onReorder"
         >
             <template #item="{ element: itemData, index }">
                 <div class="SharpList__item list-group-item"
@@ -153,39 +175,31 @@
                         </div>
                     </template>
 
-                    <template v-if="dragActive && field.collapsedItemTemplate">
-                        <TemplateRenderer
-                            :template="field.collapsedItemTemplate"
-                            :template-data="{ $index: index, ...itemData }"
-                        />
+                    <template v-for="row in fieldLayout.item">
+                        <div class="flex flex-wrap -mx-4">
+                            <template v-for="itemFieldLayout in row">
+                                <FieldColumn class="px-4" :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
+                                    <Field
+                                        :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
+                                        :field-layout="itemFieldLayout"
+                                        :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
+                                        :value="itemData[itemFieldLayout.key]"
+                                        :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                        @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
+                                        @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                        @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                    />
+                                </FieldColumn>
+                            </template>
+                        </div>
                     </template>
-                    <template v-else>
-                        <template v-for="row in fieldLayout.item">
-                            <div class="flex -mx-4">
-                                <template v-for="itemFieldLayout in row">
-                                    <FieldColumn class="px-4" :layout="itemFieldLayout">
-                                        <Field
-                                            :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
-                                            :field-layout="itemFieldLayout"
-                                            :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
-                                            :value="itemData[itemFieldLayout.key]"
-                                            :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
-                                            @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
-                                            @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                            @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                        />
-                                    </FieldColumn>
-                                </template>
-                            </div>
-                        </template>
 
-                        <template v-if="field.removable && !field.readOnly && !dragActive">
-                            <button
-                                class="SharpList__remove-button btn-close"
-                                @click="onRemove(index)"
-                                :aria-label="__('sharp::form.list.remove_button')"
-                            ></button>
-                        </template>
+                    <template v-if="field.removable && !field.readOnly && !dragActive">
+                        <button
+                            class="SharpList__remove-button btn-close"
+                            :aria-label="__('sharp::form.list.remove_button')"
+                            @click="onRemove(index)"
+                        >&times;</button>
                     </template>
 
                     <template v-if="field.sortable && value?.length > 1 && !isUploading">
@@ -197,24 +211,24 @@
             </template>
 
             <template #footer>
-                <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && uploadLimit > 0">
-                    <ListUpload
-                        :field="field.itemFields[field.bulkUploadField]"
-                        :limit="uploadLimit"
+                <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
+                    <ListBulkUpload
+                        :field="field"
+                        :current-bulk-upload-limit="currentBulkUploadLimit"
                         :disabled="dragActive"
-                        @change="onBulkUpload"
+                        @change="onBulkUploadInputChange"
                         key="upload"
                     />
                 </template>
-                <template v-if="canAddItem">
-                    <div class="mt-3">
-                        <Button class="SharpList__add-button" :disabled="field.readOnly || dragActive" text block @click="onAdd">
-                            ＋ {{ field.addText }}
-                        </Button>
-                    </div>
-                </template>
             </template>
         </Draggable>
+        <template v-if="canAddItem">
+            <div class="mt-3">
+                <Button class="SharpList__add-button" :disabled="field.readOnly || dragActive" text block @click="onAdd">
+                    ＋ {{ field.addText }}
+                </Button>
+            </div>
+        </template>
         <template v-if="field.readOnly && !value?.length">
             <em class="SharpList__empty-alert">
                 {{ __('sharp::form.list.empty') }}

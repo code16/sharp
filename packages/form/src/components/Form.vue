@@ -56,7 +56,7 @@
         props.form.setMeta(fieldKey, { uploading });
     }
 
-    function onInput(fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
+    function onFieldInput(fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
         props.form.data = {
             ...props.form.data,
             ...(!force ? getDependantFieldsResetData(props.form.fields, fieldKey) : null),
@@ -77,7 +77,7 @@
                 <LocaleSelect
                     outline
                     right
-                    :locale="selectedLocale"
+                    :locale="form.currentLocale"
                     :locales="form.locales"
                     @change="onLocaleChange"
                 />
@@ -96,9 +96,9 @@
         <FormLayout :form="form" v-slot="{ tab }: { tab: FormLayoutTabData }">
             <div class="flex -mx-4">
                 <template v-for="column in tab.columns">
-                    <div class="w-[calc(12/var(--size)*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                    <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
                         <template v-for="row in column.fields">
-                            <div class="flex -mx-4">
+                            <div class="flex flex-wrap -mx-4">
                                 <template v-for="fieldLayout in row">
                                     <template v-if="'legend' in fieldLayout">
                                         <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
@@ -107,7 +107,7 @@
                                             </legend>
                                             <div class="bg-white p-4">
                                                 <template v-for="row in fieldLayout.fields">
-                                                    <div class="flex -mx-4">
+                                                    <div class="flex flex-wrap -mx-4">
                                                         <template v-for="fieldLayout in row">
                                                             <FieldColumn class="px-4" :layout="fieldLayout">
                                                                 <Field
@@ -116,7 +116,7 @@
                                                                     :field-error-key="fieldLayout.key"
                                                                     :value="form.data[fieldLayout.key]"
                                                                     :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                                    @input="(value, options) => onInput(fieldLayout.key, value, options)"
+                                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                                     @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                                     @uploading="onFieldUploading(fieldLayout.key, $event)"
                                                                 />
@@ -128,14 +128,14 @@
                                         </fieldset>
                                     </template>
                                     <template v-else>
-                                        <FieldColumn class="px-4" :layout="fieldLayout">
+                                        <FieldColumn class="px-4" :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
                                             <Field
                                                 :field="form.getField(fieldLayout.key)"
                                                 :field-layout="fieldLayout"
                                                 :field-error-key="fieldLayout.key"
                                                 :value="form.data[fieldLayout.key]"
                                                 :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                @input="(value, options) => onInput(fieldLayout.key, value, options)"
+                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                 @uploading="onFieldUploading(fieldLayout.key, $event)"
                                             />

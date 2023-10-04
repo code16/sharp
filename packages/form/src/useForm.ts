@@ -2,6 +2,6 @@ import { inject } from "vue";
 import { Form } from "./Form";
 
 
-export function useParentForm() {
+export function useForm() {
     return inject('form') as Form;
 }

@@ -19,19 +19,19 @@
     import Text from "./fields/Text.vue";
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
-    import { useParentForm } from "../useParentForm";
+    import { useForm } from "../useForm";
 
     const props = defineProps<{
         field: FormFieldData,
         fieldLayout: LayoutFieldData,
         fieldErrorKey: string,
-        value: FormFieldData['value'],
+        value?: FormFieldData['value'],
         locale?: string | null,
         root?: boolean
     }>();
 
-    const emit = defineEmits(['input']);
-    const form = useParentForm();
+    const emit = defineEmits(['input', 'locale-change']);
+    const form = useForm();
     const id = computed(() => `form-field_${props.fieldErrorKey}`);
 
     const components: Record<FormFieldData['type'], Component> = {
@@ -68,12 +68,16 @@
         if(props.field.readOnly && !options?.force) {
             return;
         }
-        if(options.error) {
+        if(options?.error) {
             onError(options.error);
         } else {
             onClear();
         }
         emit('input', value, options);
+    }
+
+    if('localized' in props.field && props.field.localized) {
+        emit('locale-change', props.locale);
     }
 </script>
 
@@ -109,9 +113,9 @@
                                                 'SharpFieldLocaleSelect__btn--empty': form.fieldIsEmpty(field, value, btnLocale),
                                                 'SharpFieldLocaleSelect__btn--error': form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale),
                                             }"
-                                            @click="$emit('locale-change', field.key, btnLocale)"
+                                            @click="$emit('locale-change', btnLocale)"
                                         >
-                                            {{ locale }}
+                                            {{ btnLocale }}
                                         </button>
                                     </div>
                                 </template>
