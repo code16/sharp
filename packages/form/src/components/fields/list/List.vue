@@ -1,22 +1,126 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { useParentForm } from "../../../useParentForm";
+    import FieldColumn from "@/components/ui/FieldColumn.vue";
+    import Field from "../../Field.vue";
+    import { FormFieldData, FormListFieldData, LayoutFieldData } from "@/types";
+    import { getDependantFieldsResetData } from "../../../util";
+    import { computed, ref } from "vue";
+    import Draggable from 'vuedraggable';
+    import { TemplateRenderer } from 'sharp/components';
+    import { Button } from "@sharp/ui";
+    import ListUpload from "./ListUpload.vue";
+    import { showAlert } from "@/utils/dialogs";
+    import { FieldsMeta } from "../../../types";
+
+    const props = defineProps<{
+        field: FormListFieldData,
+        fieldLayout: LayoutFieldData,
+        value: FormListFieldData['value'],
+        locale: string | null,
+    }>();
+
+    const emit = defineEmits(['input']);
+    const form = useParentForm();
+    const dragging = ref(false);
+    const dragActive = ref(false);
+
+    const canAddItem = computed(() => {
+        const { field, value } = props;
+        return field.addable &&
+            (!field.maxItemCount || value?.length < field.maxItemCount) &&
+            !field.readOnly;
+    });
+
+    const isUploading = computed(() => {
+        return (form.meta[props.field.key] as FieldsMeta[])
+            ?.some(itemMeta => Object.values(itemMeta).some(fieldMeta => fieldMeta.uploading));
+    });
+
+    const uploadLimit = computed(() => {
+        if(props.field.maxItemCount) {
+            const remaining = props.field.maxItemCount - (props.value?.length ?? 0);
+            return Math.min(remaining, props.field.bulkUploadLimit);
+        }
+        return props.field.bulkUploadLimit;
+    });
+
+    function onAdd() {
+        emit('input', [...(props.value ?? []), { [props.field.itemIdAttribute]: null }]);
+    }
+
+    function onInsert(itemIndex: number) {
+        emit('input', [...props.value].splice(itemIndex, 0, { [props.field.itemIdAttribute]: null }));
+        (form.meta[props.field.key] as FieldsMeta[])?.splice(itemIndex, 0, {});
+    }
+
+    function onRemove(itemIndex: number) {
+        emit('input', [...props.value].splice(itemIndex, 1));
+        (form.meta[props.field.key] as FieldsMeta[])?.splice(itemIndex, 1);
+    }
+
+    function onFieldInput(itemIndex: number, fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
+        emit('input', props.value.map((item, i) => {
+            if(i === itemIndex) {
+                return {
+                    ...item,
+                    ...(!force ? getDependantFieldsResetData(props.field.itemFields, fieldKey) : null),
+                    [fieldKey]: value,
+                }
+            }
+            return item;
+        }));
+    }
+
+    function onFieldLocaleChange(fieldKey: string, locale: string) {
+        form.setMeta(fieldKey, { locale });
+    }
+
+    function onFieldUploading(fieldKey: string, uploading: boolean) {
+        form.setMeta(fieldKey, { uploading });
+    }
+
+    function onBulkUpload(e: Event & { target: HTMLInputElement }) {
+        const files = [...e.target.files].slice(0, uploadLimit.value);
+
+        if(e.target.files.length > uploadLimit.value) {
+            const message = __('sharp::form.list.bulk_upload.validation.limit', {
+                limit: uploadLimit.value
+            });
+
+            showAlert(message, {
+                title: __('sharp::modals.error.title'),
+            });
+        }
+
+        emit('input', [
+            ...props.value,
+            ...files.map(file => ({
+                [props.field.itemIdAttribute]: null,
+                [props.field.bulkUploadField]: { file },
+            })),
+        ]);
+    }
 </script>
 
 <template>
     <div class="SharpList"
-        :class="classes"
+        :class="{
+            'SharpList--dragging': dragging,
+        }"
         @dragstart="dragging = true"
         @dragend="dragging = false"
     >
         <div class="SharpList__sticky-wrapper text-end">
-            <template v-if="showSortButton">
+            <template v-if="field.sortable && value?.length > 1">
                 <Button
                     class="SharpList__sort-button"
                     text
                     small
                     :active="dragActive"
+                    :disabled="isUploading"
                     style="pointer-events: auto"
-                    @click="toggleDrag"
+                    @click="dragActive = !dragActive"
                 >
                     {{ __('sharp::form.list.sort_button.inactive') }}
                     <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
@@ -26,334 +130,95 @@
             </template>
         </div>
 
-        <Draggable :options="dragOptions" :list="list" tag="transition-group" name="expand" ref="draggable">
-            <template #item="{ element: listItemData, index }">
+        <Draggable
+            :options="{
+                handle: dragActive ? '[data-item]' : '[data-drag-handle]',
+                // filter: '.SharpListUpload',
+            }"
+            :list="value"
+            tag="transition-group"
+            name="expand"
+            ref="draggable"
+        >
+            <template #item="{ element: itemData, index }">
                 <div class="SharpList__item list-group-item"
                     :class="{'SharpList__item--drag-active': dragActive}"
+                    data-item
                 >
-                    <template v-if="showInsertButton">
+                    <template v-if="canAddItem && field.sortable && !dragActive">
                         <div class="SharpList__new-item-zone">
-                            <Button small @click="insertNewItem(index, $event)">
+                            <Button small @click="onInsert(index)">
                                 {{ __('sharp::form.list.insert_button') }}
                             </Button>
                         </div>
                     </template>
 
-                    <template v-if="dragActive && collapsedItemTemplate">
+                    <template v-if="dragActive && field.collapsedItemTemplate">
                         <TemplateRenderer
-                            name="CollapsedItem"
-                            :template="collapsedItemTemplate"
-                            :template-data="collapsedItemData(listItemData)"
+                            :template="field.collapsedItemTemplate"
+                            :template-data="{ $index: index, ...itemData }"
                         />
                     </template>
                     <template v-else>
-<!--                        <ListItem :layout="fieldLayout.item" :error-identifier="index" v-slot="{ fieldLayout }">-->
-<!--                            <FieldDisplay-->
-<!--                                :field-key="fieldLayout.key"-->
-<!--                                :context-fields="transformedFields(index)"-->
-<!--                                :context-data="listItemData"-->
-<!--                                :error-identifier="fieldLayout.key"-->
-<!--                                :config-identifier="fieldLayout.key"-->
-<!--                                :update-data="update(i)"-->
-<!--                                :locale="listItemData._fieldsLocale[fieldLayout.key]"-->
-<!--                                :read-only="isReadOnly"-->
-<!--                                :list="true"-->
-<!--                                @locale-change="(key, value)=>updateLocale(index, key, value)"-->
-<!--                            />-->
-<!--                        </ListItem>-->
-                        <template v-if="showRemoveButton">
+                        <template v-for="row in fieldLayout.item">
+                            <div class="flex -mx-4">
+                                <template v-for="itemFieldLayout in row">
+                                    <FieldColumn class="px-4" :layout="itemFieldLayout">
+                                        <Field
+                                            :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
+                                            :field-layout="itemFieldLayout"
+                                            :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
+                                            :value="itemData[itemFieldLayout.key]"
+                                            :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                            @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
+                                            @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                            @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                        />
+                                    </FieldColumn>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template v-if="field.removable && !field.readOnly && !dragActive">
                             <button
                                 class="SharpList__remove-button btn-close"
-                                @click="remove(index)"
+                                @click="onRemove(index)"
                                 :aria-label="__('sharp::form.list.remove_button')"
                             ></button>
                         </template>
                     </template>
 
-                    <template v-if="showSortButton">
-                        <div class="SharpList__drag-handle d-flex align-items-center px-1">
+                    <template v-if="field.sortable && value?.length > 1 && !isUploading">
+                        <div class="d-flex align-items-center px-1" data-drag-handle>
                             <i class="fas fa-grip-vertical opacity-25"></i>
                         </div>
                     </template>
                 </div>
             </template>
-<!--                <template v-for="(listItemData, i) in list" :key="listItemData[indexSymbol]">-->
-
-<!--                </template>-->
 
             <template #footer>
-                <template v-if="hasUpload">
+                <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && uploadLimit > 0">
                     <ListUpload
-                        :field="uploadField"
+                        :field="field.itemFields[field.bulkUploadField]"
                         :limit="uploadLimit"
-                        :disabled="isReadOnly"
-                        @change="handleUploadChanged"
+                        :disabled="dragActive"
+                        @change="onBulkUpload"
                         key="upload"
                     />
                 </template>
-                <template  v-if="showAddButton">
-                    <div :class="{ 'mt-3': list.length > 0 || hasUpload }">
-                        <Button class="SharpList__add-button" :disabled="isReadOnly" text block @click="add">
-                            ＋ {{ addText }}
+                <template v-if="canAddItem">
+                    <div class="mt-3">
+                        <Button class="SharpList__add-button" :disabled="field.readOnly || dragActive" text block @click="onAdd">
+                            ＋ {{ field.addText }}
                         </Button>
                     </div>
                 </template>
             </template>
         </Draggable>
-        <template v-if="readOnly && !list.length">
-            <em class="SharpList__empty-alert">{{ __('sharp::form.list.empty') }}</em>
+        <template v-if="field.readOnly && !value?.length">
+            <em class="SharpList__empty-alert">
+                {{ __('sharp::form.list.empty') }}
+            </em>
         </template>
     </div>
 </template>
-
-<script lang="ts">
-    import Draggable from 'vuedraggable';
-    import { TemplateRenderer } from 'sharp/components';
-    import { Button } from "@sharp/ui";
-    // import ListItem from './ListItem.vue';
-    // import FieldDisplay from "../../FieldDisplay.vue";
-
-    import localize from '../../../mixins/localize/form';
-    import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
-    import ListUpload from "./ListUpload.vue";
-    import { showAlert } from "sharp";
-    import { __ } from "@/utils/i18n";
-    import { Form } from "../../../Form";
-    import { FieldMeta, FieldsMeta } from "../../../types";
-
-    export default {
-        name: 'SharpList',
-
-        inject: ['$form'],
-
-        mixins: [ localize('itemFields') ],
-
-        components: {
-            ListUpload,
-            Draggable,
-            Button,
-            TemplateRenderer,
-        },
-
-        props: {
-            fieldKey: String,
-            fieldLayout: Object,
-            value: Array,
-
-            addable: {
-                type:Boolean,
-                default: true
-            },
-            sortable: {
-                type: Boolean,
-                default: false
-            },
-            removable: {
-                type: Boolean,
-                default: false
-            },
-            addText: {
-                type:String,
-                default:'Ajouter un élément'
-            },
-            itemFields: {
-                type: Object,
-                required: true,
-            },
-            collapsedItemTemplate: String,
-            maxItemCount: Number,
-            bulkUploadField: String,
-            bulkUploadLimit: {
-                type: Number,
-                default: 10,
-            },
-
-            itemIdAttribute: String,
-            readOnly: Boolean,
-            locale: [String, Array],
-        },
-        data() {
-            return {
-                list: [],
-                dragActive: false,
-                dragging: false,
-                lastIndex: 0
-            }
-        },
-        watch: {
-            'list': 'handleListChanged',
-            'locale': 'handleLocaleChanged',
-        },
-        computed: {
-            classes() {
-                return {
-                    'SharpList--can-sort': this.showSortButton,
-                    'SharpList--dragging': this.dragging,
-                }
-            },
-            dragOptions() {
-                return {
-                    // disabled: !this.dragActive,
-                    handle: this.dragActive ? '.SharpList__item' : '.SharpList__drag-handle',
-                    filter: '.SharpListUpload',
-                };
-            },
-            canAddItem() {
-                return this.addable &&
-                    (this.list.length < this.maxItemCount || !this.maxItemCount) &&
-                    !this.readOnly;
-            },
-            showAddButton() {
-                return this.canAddItem;
-            },
-            showInsertButton() {
-                return this.canAddItem && this.sortable && !this.isReadOnly;
-            },
-            showSortButton() {
-                return !this.hasPendingActions && this.sortable && this.list.length > 1;
-            },
-            showRemoveButton() {
-                return this.removable && !this.isReadOnly;
-            },
-            dragIndexSymbol() {
-                return Symbol('dragIndex');
-            },
-            indexSymbol() {
-                return Symbol('index');
-            },
-            hasPendingActions() {
-                return ((this.$form as Form).meta[this.fieldKey] as FieldsMeta[])
-                    .some(itemMeta => Object.values(itemMeta).some(fieldMeta => fieldMeta.uploading));
-            },
-            isReadOnly() {
-                return this.readOnly || this.dragActive;
-            },
-            hasUpload() {
-                return this.uploadField?.type === 'upload'
-                    && this.canAddItem
-                    && this.uploadLimit > 0;
-            },
-            uploadField() {
-                return this.bulkUploadField
-                    ? this.itemFields[this.bulkUploadField]
-                    : null;
-            },
-            uploadLimit() {
-                if(this.maxItemCount) {
-                    const remaining = this.maxItemCount - this.list.length;
-                    return Math.min(remaining, this.bulkUploadLimit);
-                }
-                return this.bulkUploadLimit;
-            },
-        },
-        methods: {
-            handleListChanged() {
-                this.$emit('locale-change', this.list.map(item => item._fieldsLocale));
-            },
-            handleLocaleChanged(locale) {
-                if(typeof locale === 'string') {
-                    this.list.forEach(item => {
-                        Object.assign(item, this.withLocale(null, locale));
-                    });
-                }
-            },
-            itemData(item) {
-                const { _fieldsLocale, ...data } = item;
-                return data;
-            },
-            transformedFields(i) {
-                const item = this.list[i];
-                const data = this.itemData(item);
-                return transformFields(this.itemFields, data);
-            },
-            indexedList() {
-                return (this.value||[]).map((v,i) => this.withLocale({
-                    [this.indexSymbol]:i, ...v
-                }));
-            },
-            createItem() {
-                return Object.entries(this.itemFields).reduce((res, [key, field]) => {
-                    res[key] = fieldEmptyValue(field.type);
-                    return res;
-                }, this.withLocale({
-                    [this.itemIdAttribute]:null,
-                    [this.indexSymbol]:this.lastIndex++
-                }));
-            },
-            insertNewItem(i, $event) {
-                $event.target && $event.target.blur();
-                this.list.splice(i, 0, this.createItem());
-            },
-            add() {
-                this.list.push(this.createItem());
-            },
-            remove(i) {
-                this.list.splice(i,1);
-            },
-            update(i) {
-                return (key, value, { forced } = {}) => {
-                    const item = { ...this.list[i] };
-                    const data = {
-                        ...(!forced ? getDependantFieldsResetData(this.itemFields, key, () =>
-                            this.fieldLocalizedValue(key, null, item, item._fieldsLocale)
-                        ) : null),
-                        [key]: this.fieldLocalizedValue(key, value, item, item._fieldsLocale),
-                    };
-                    Object.assign(this.list[i], data);
-                }
-            },
-            updateLocale(i, key, value) {
-                this.$set(this.list[i]._fieldsLocale, key, value);
-                this.handleListChanged();
-            },
-            collapsedItemData(itemData) {
-                return {$index:itemData[this.dragIndexSymbol], ...itemData};
-            },
-            toggleDrag() {
-                this.dragActive = !this.dragActive;
-                this.list.forEach((item,i) => item[this.dragIndexSymbol] = i);
-            },
-            withLocale(item, locale) {
-                return {
-                    ...item, _fieldsLocale: this.defaultFieldLocaleMap({
-                        fields: this.itemFields,
-                        locales: this.$form?.locales
-                    }, locale)
-                };
-            },
-
-            handleUploadChanged(e) {
-                const files = [...e.target.files].slice(0, this.uploadLimit);
-
-                if(e.target.files.length > this.uploadLimit) {
-                    const message = __('sharp::form.list.bulk_upload.validation.limit', {
-                        limit: this.uploadLimit
-                    });
-
-                    showAlert(message, {
-                        title: __('sharp::modals.error.title'),
-                    });
-                }
-
-                files.forEach(file => {
-                    const item = this.createItem();
-                    item[this.bulkUploadField] = {
-                        file,
-                    }
-                    this.list.push(item);
-                });
-            },
-
-            initList() {
-                this.list = this.indexedList();
-                this.lastIndex = this.list.length;
-                // make value === list, to update changes
-                this.$emit('input', this.list);
-            },
-        },
-        created() {
-            this.localized = this.$form?.localized;
-            this.initList();
-        },
-    }
-</script>

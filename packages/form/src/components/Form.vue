@@ -105,7 +105,6 @@
                                             <legend>
                                                 {{ fieldLayout.legend }}
                                             </legend>
-
                                             <div class="bg-white p-4">
                                                 <template v-for="row in fieldLayout.fields">
                                                     <div class="flex -mx-4">
@@ -117,7 +116,7 @@
                                                                     :field-error-key="fieldLayout.key"
                                                                     :value="form.data[fieldLayout.key]"
                                                                     :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                                    @input="onInput(fieldLayout.key, $event)"
+                                                                    @input="(value, options) => onInput(fieldLayout.key, value, options)"
                                                                     @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                                     @uploading="onFieldUploading(fieldLayout.key, $event)"
                                                                 />
@@ -136,7 +135,7 @@
                                                 :field-error-key="fieldLayout.key"
                                                 :value="form.data[fieldLayout.key]"
                                                 :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                @input="onInput(fieldLayout.key, $event)"
+                                                @input="(value, options) => onInput(fieldLayout.key, value, options)"
                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                 @uploading="onFieldUploading(fieldLayout.key, $event)"
                                             />

@@ -229,7 +229,6 @@ export type FormConditionalDisplayData = {
 };
 export type FormConfigData = {
   hasShowPage: boolean;
-  deleteConfirmationText: string | null;
   isSingle: boolean;
   breadcrumbAttribute: string | null;
 };
@@ -579,7 +578,7 @@ export type LayoutFieldData = {
   key: string;
   size: number;
   sizeXS: number;
-  item: { [key: string]: any } | null;
+  item: Array<Array<LayoutFieldData>> | null;
 };
 export type MenuData = {
   items: Array<MenuItemData>;

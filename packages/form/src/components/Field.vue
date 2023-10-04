@@ -19,6 +19,7 @@
     import Text from "./fields/Text.vue";
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
+    import { useParentForm } from "../useParentForm";
 
     const props = defineProps<{
         field: FormFieldData,
@@ -30,7 +31,7 @@
     }>();
 
     const emit = defineEmits(['input']);
-    const form = inject('form') as Form;
+    const form = useParentForm();
     const id = computed(() => `form-field_${props.fieldErrorKey}`);
 
     const components: Record<FormFieldData['type'], Component> = {

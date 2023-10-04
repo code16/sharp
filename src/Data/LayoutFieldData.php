@@ -14,7 +14,7 @@ final class LayoutFieldData extends Data
         public string $key,
         public int $size,
         public int $sizeXS,
-        /** @var DataCollection<string,ShowLayoutFieldData> */
+        /** @var array<array<LayoutFieldData>> */
         public ?array $item = null,
     ) {
     }

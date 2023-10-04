@@ -144,12 +144,12 @@ export class Form  implements FormData {
         delete this.errors[key];
     }
 
-    getField(key: string, fields = this.fields, data = this.data): FormFieldData {
+    getField(key: string, fields = this.fields, data = this.data, readOnly = false): FormFieldData {
         const fieldsWithAppliedDynamicAttributes = transformFields(fields, data);
 
         return {
             ...fieldsWithAppliedDynamicAttributes[key],
-            readOnly: this.isReadOnly || fieldsWithAppliedDynamicAttributes[key].readOnly,
+            readOnly: this.isReadOnly || fieldsWithAppliedDynamicAttributes[key].readOnly || readOnly,
         };
     }
 
