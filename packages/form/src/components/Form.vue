@@ -8,6 +8,9 @@
     import { Form } from "../Form";
     import LocaleSelect from "./ui/LocaleSelect.vue";
     import { getDependantFieldsResetData } from "../util";
+    import Grid from "@/components/ui/Grid.vue";
+    import GridRow from "@/components/ui/GridRow.vue";
+    import GridColumn from "@/components/ui/GridColumn.vue";
 
     const props = defineProps<{
         form: Form,
@@ -94,56 +97,62 @@
         <slot name="prepend" />
 
         <FormLayout :form="form" v-slot="{ tab }: { tab: FormLayoutTabData }">
-            <div class="flex -mx-4">
+            <div class="grid gap-4 md:grid-cols-12">
                 <template v-for="column in tab.columns">
-                    <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
-                        <template v-for="row in column.fields">
-                            <div class="flex flex-wrap -mx-4">
-                                <template v-for="fieldLayout in row">
-                                    <template v-if="'legend' in fieldLayout">
-                                        <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
-                                            <legend>
-                                                {{ fieldLayout.legend }}
-                                            </legend>
-                                            <div class="bg-white p-4">
-                                                <template v-for="row in fieldLayout.fields">
-                                                    <div class="flex flex-wrap -mx-4">
-                                                        <template v-for="fieldLayout in row">
-                                                            <FieldColumn class="px-4" :layout="fieldLayout">
-                                                                <Field
-                                                                    :field="form.getField(fieldLayout.key)"
-                                                                    :field-layout="fieldLayout"
-                                                                    :field-error-key="fieldLayout.key"
-                                                                    :value="form.data[fieldLayout.key]"
-                                                                    :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                                />
-                                                            </FieldColumn>
-                                                        </template>
+                    <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
+                        <Grid class="gap-y-4 gap-x-4">
+                            <template v-for="row in column.fields">
+                                <GridRow>
+                                    <template v-for="fieldLayout in row">
+                                        <template v-if="'legend' in fieldLayout">
+                                            <GridColumn>
+                                                <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
+                                                    <legend>
+                                                        {{ fieldLayout.legend }}
+                                                    </legend>
+                                                    <div class="bg-white p-4">
+                                                        <Grid class="gap-y-4 gap-x-4">
+                                                            <template v-for="row in fieldLayout.fields">
+                                                                <GridRow>
+                                                                    <template v-for="fieldLayout in row">
+                                                                        <FieldColumn :layout="fieldLayout">
+                                                                            <Field
+                                                                                :field="form.getField(fieldLayout.key)"
+                                                                                :field-layout="fieldLayout"
+                                                                                :field-error-key="fieldLayout.key"
+                                                                                :value="form.data[fieldLayout.key]"
+                                                                                :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
+                                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                                            />
+                                                                        </FieldColumn>
+                                                                    </template>
+                                                                </GridRow>
+                                                            </template>
+                                                        </Grid>
                                                     </div>
-                                                </template>
-                                            </div>
-                                        </fieldset>
+                                                </fieldset>
+                                            </GridColumn>
+                                        </template>
+                                        <template v-else>
+                                            <FieldColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                <Field
+                                                    :field="form.getField(fieldLayout.key)"
+                                                    :field-layout="fieldLayout"
+                                                    :field-error-key="fieldLayout.key"
+                                                    :value="form.data[fieldLayout.key]"
+                                                    :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
+                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                />
+                                            </FieldColumn>
+                                        </template>
                                     </template>
-                                    <template v-else>
-                                        <FieldColumn class="px-4" :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                            <Field
-                                                :field="form.getField(fieldLayout.key)"
-                                                :field-layout="fieldLayout"
-                                                :field-error-key="fieldLayout.key"
-                                                :value="form.data[fieldLayout.key]"
-                                                :locale="form.getMeta(fieldLayout.key)?.locale ?? selectedLocale"
-                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                            />
-                                        </FieldColumn>
-                                    </template>
-                                </template>
-                            </div>
-                        </template>
+                                </GridRow>
+                            </template>
+                        </Grid>
                     </div>
                 </template>
             </div>

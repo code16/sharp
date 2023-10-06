@@ -1,25 +1,26 @@
 <template>
-    <Multiselect
-        class="SharpTags form-select"
-        :id="id"
-        :value="tags"
-        :options="indexedOptions"
-        :placeholder="dynamicPlaceholder"
-        :tag-placeholder="createText"
-        :max="maxTagCount"
-        :taggable="creatable"
-        :close-on-select="false"
-        :disabled="readOnly"
-        track-by="_internalId"
-        label="label"
-        :custom-label="localizedCustomLabel"
-        multiple searchable hide-selected
-        :show-labels="false"
-        @search-change="handleTextInput"
-        @input="handleInput"
-        @tag="handleNewTag"
-        ref="multiselect"
-    />
+    <div>Tags</div>
+<!--    <Multiselect-->
+<!--        class="SharpTags form-select"-->
+<!--        :id="id"-->
+<!--        :value="tags"-->
+<!--        :options="indexedOptions"-->
+<!--        :placeholder="dynamicPlaceholder"-->
+<!--        :tag-placeholder="createText"-->
+<!--        :max="maxTagCount"-->
+<!--        :taggable="creatable"-->
+<!--        :close-on-select="false"-->
+<!--        :disabled="readOnly"-->
+<!--        track-by="_internalId"-->
+<!--        label="label"-->
+<!--        :custom-label="localizedCustomLabel"-->
+<!--        multiple searchable hide-selected-->
+<!--        :show-labels="false"-->
+<!--        @search-change="handleTextInput"-->
+<!--        @input="handleInput"-->
+<!--        @tag="handleNewTag"-->
+<!--        ref="multiselect"-->
+<!--    />-->
 </template>
 
 <script>
@@ -116,8 +117,8 @@
             }
         },
         created() {
-            this.lastIndex += this.options.length;
-            this.tags = (this.value||[]).map(this.patchTag);
+            // this.lastIndex += this.options.length;
+            // this.tags = (this.value||[]).map(this.patchTag);
         }
     }
 </script>

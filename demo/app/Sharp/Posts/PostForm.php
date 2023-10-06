@@ -153,8 +153,8 @@ class PostForm extends SharpForm
                             $column->withSingleField('author_id');
                         }
                         $column
-                            ->withFields('published_at')
-                            ->withSingleField('categories')
+                            ->withFields('published_at', 'categories')
+//                            ->withSingleField('categories')
                             ->withSingleField('cover')
                             ->withSingleField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields('title|8', 'is_link|4')

@@ -127,15 +127,18 @@
         </div>
 
         <div class="SharpForm__field-content">
-            <component
-                :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
-                :id="id"
-                :has-error="form.fieldHasError(field, fieldErrorKey)"
-                v-bind="$props"
-                @error="onError"
-                @clear="onClear"
-                @input="onInput"
-            />
+            <div class="bg-black text-white px-4 py-2">
+                {{ field.type }}
+            </div>
+<!--            <component-->
+<!--                :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"-->
+<!--                :id="id"-->
+<!--                :has-error="form.fieldHasError(field, fieldErrorKey)"-->
+<!--                v-bind="$props"-->
+<!--                @error="onError"-->
+<!--                @clear="onClear"-->
+<!--                @input="onInput"-->
+<!--            />-->
         </div>
 
         <template v-if="form.fieldHasError(field, fieldErrorKey)">

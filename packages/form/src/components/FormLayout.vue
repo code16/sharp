@@ -1,30 +1,26 @@
 <script setup lang="ts">
-    import { onUnmounted, ref, watchEffect } from "vue";
+    import { ref } from "vue";
     import { slugify } from "@/utils";
     import { Form } from "../Form";
     import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
+    import { router } from "@inertiajs/vue3";
 
     const props = defineProps<{
         form: Form,
     }>();
-    const selectedIndex = ref(0);
+
+    const selectedIndex = ref(
+        Math.max(0, props.form.layout.tabs
+            .findIndex(tab => new URLSearchParams(location.search).get('tab') == slugify(tab.title))
+        )
+    );
 
     function onTabChange(index: number) {
         selectedIndex.value = index;
+        const url = location.origin + location.pathname +  `?tab=${slugify(props.form.layout.tabs[selectedIndex.value].title)}`;
+        router.page.url = url;
+        history.replaceState(router.page, null, url);
     }
-
-    function onPopState() {
-        selectedIndex.value = Math.max(0, props.form.layout.tabs
-            .findIndex(tab => new URLSearchParams(location.search).get('tab') == slugify(tab.title))
-        );
-    }
-    window.addEventListener('popstate', onPopState);
-    onUnmounted(() => window.removeEventListener('popstate', onPopState));
-    watchEffect(() => {
-        if(props.form.layout.tabs.length > 1) {
-            history.replaceState(null, null, `?tab=${slugify(props.form.layout.tabs[selectedIndex.value].title)}`);
-        }
-    });
 </script>
 <template>
     <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">

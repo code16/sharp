@@ -46,7 +46,7 @@
     let itemKeyIndex = 0;
     const itemKey = Symbol('itemKey');
 
-    emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })));
+    emit('input', props.value?.map(item => ({ ...item, [itemKey]: itemKeyIndex++ })), { force: true });
 
     function createItem(data = {}) {
         return {

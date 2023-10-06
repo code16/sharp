@@ -1,20 +1,30 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import CheckInput from "../check/CheckInput.vue";
+    import { FormSelectFieldData } from "@/types";
+
+    defineProps<{
+        field: FormSelectFieldData,
+        value: FormSelectFieldData['value'],
+        fieldErrorKey: string,
+        root: boolean,
+    }>()
 </script>
 
 <template>
-    <div :class="{ 'card card-body form-control':root }">
-        <div class="row gy-1 gx-3" :class="inline ? 'row-cols-auto' : 'row-cols-1'">
-            <template v-for="(option, index) in options" :key="option.id">
+    <div :class="{ 'border bg-white rounded':root }">
+        <div class="row gy-1 gx-3" :class="field.inline ? 'row-cols-auto' : 'row-cols-1'">
+            <template v-for="(option, index) in field.options" :key="option.id">
                 <div class="col">
-                    <Check
+                    <CheckInput
                         class="mb-0"
-                        :id="checkboxId(index)"
-                        :value="isChecked(option)"
-                        :text="labels[option.id]"
-                        :read-only="readOnly"
-                        @input="handleCheckboxChanged($event, option)"
-                    />
+                        :id="`${fieldErrorKey}.${index}`"
+                        :checked="isChecked(option)"
+                        :disabled="field.readOnly"
+                        @change="handleCheckboxChanged($event, option)"
+                    >
+                        {{ labels[option.id] }}
+                    </CheckInput>
                 </div>
             </template>
         </div>
@@ -43,23 +53,9 @@
         components: {
             Check,
         },
-        props: {
-            value: Array,
-            options: Array,
-            readOnly: Boolean,
-            labels: Object,
-            showSelectAll: Boolean,
-            maxSelected: Number,
-            inline: Boolean,
-            root: Boolean,
-            uniqueIdentifier: String,
-        },
         methods: {
             isChecked(option) {
                 return this.value?.some(value => isSelected(option, value));
-            },
-            checkboxId(index) {
-                return `${this.uniqueIdentifier}.${index}`;
             },
             handleSelectAllClicked() {
                 this.$emit('input', this.options.map(option => option.id));
