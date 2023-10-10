@@ -10,6 +10,7 @@ abstract class SharpMenu
     use HasSharpMenuItems;
 
     protected ?SharpMenuUserMenu $userMenu = null;
+    private bool $visible = true;
 
     final public function addSection(string $title, Closure $callbackClosure): self
     {
@@ -36,6 +37,18 @@ abstract class SharpMenu
     final public function userMenu(): ?SharpMenuUserMenu
     {
         return $this->userMenu;
+    }
+
+    final public function setVisible(bool $visible = true): self
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    final public function isVisible(): bool
+    {
+        return $this->visible;
     }
 
     abstract public function build(): self;
