@@ -14,6 +14,8 @@ final class FormUploadFieldData extends Data
         name: string;
         disk: string;
         path: string;
+        size: number;
+        thumbnail?: string;
         uploaded?: boolean;
         transformed?: boolean;
         filters?: { crop: { width:number, height:number, x:number, y:number }, rotate: { angle:number } };

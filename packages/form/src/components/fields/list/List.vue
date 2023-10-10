@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { useForm } from "../../../useForm";
-    import FieldColumn from "@/components/ui/FieldColumn.vue";
+    import FieldColumn from "@/components/ui/FieldGridColumn.vue";
     import Field from "../../Field.vue";
     import { FormFieldData, FormListFieldData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "../../../util";

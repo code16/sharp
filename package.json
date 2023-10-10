@@ -60,6 +60,10 @@
     "@tiptap/extension-table-row": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
     "@tiptap/vue-3": "^2.0.4",
+    "@uppy/core": "^3.5.1",
+    "@uppy/drag-drop": "^3.0.3",
+    "@uppy/thumbnail-generator": "^3.0.5",
+    "@uppy/xhr-upload": "^3.4.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "apexcharts": "^3.35.4",
     "axios": "^0.19.2",
@@ -75,7 +79,6 @@
     "text-clipper": "^1.3.0",
     "tiptap-markdown": "^0.7.3",
     "vue": "^3.3.4",
-    "vue-clip": "^1.0.0",
     "vue-cropperjs": "^4.2.0",
     "vue-multiselect": "^2.1.3",
     "vue-notification": "^1.3.20",
@@ -87,9 +90,5 @@
     "vuedraggable": "^4.1.0",
     "vuejs-datepicker": "^0.9.16",
     "vuex": "^4.1.0"
-  },
-  "browserslist": [
-    "last 1 version",
-    "> 1%"
-  ]
+  }
 }

@@ -522,6 +522,8 @@ export type FormUploadFieldData = {
     name: string;
     disk: string;
     path: string;
+    size: number;
+    thumbnail?: string;
     uploaded?: boolean;
     transformed?: boolean;
     filters?: {

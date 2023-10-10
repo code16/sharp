@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts">
-    import VueClip from 'vue-clip/src/components/Clip';
+    // import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
     import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
@@ -106,7 +106,7 @@
     export default {
         name: 'SharpVueClip',
 
-        extends: VueClip,
+        // extends: VueClip,
 
         components: {
             EditModal,
@@ -133,9 +133,7 @@
 
             readOnly: Boolean,
             compactThumbnail: Boolean,
-            focused: Boolean,
             invalid: Boolean,
-            uniqueIdentifier: String,
             persistThumbnails: Boolean,
         },
 

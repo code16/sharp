@@ -20,8 +20,10 @@
     import { router } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
     import PageAlert from "@/components/PageAlert.vue";
-    import FieldColumn from "@/components/ui/FieldColumn.vue";
-    import { getAppendableUri, route } from "@/utils/url";
+    import { route } from "@/utils/url";
+    import FieldGrid from "@/components/ui/FieldGrid.vue";
+    import FieldGridRow from "@/components/ui/FieldGridRow.vue";
+    import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -184,33 +186,34 @@
                                         <div class="flex -mx-4">
                                             <template v-for="column in section.columns">
                                                 <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
-                                                    <template v-for="row in column.fields">
-                                                        <div class="flex -mx-4" >
-                                                            <template v-for="fieldLayout in row">
-                                                                <FieldColumn
-                                                                    class="px-4"
-                                                                    :layout="fieldLayout"
-                                                                    v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
-                                                                >
-                                                                    <template v-if="show.fields[fieldLayout.key]">
-                                                                        <ShowField
-                                                                            :field="show.fields[fieldLayout.key]"
-                                                                            :value="show.data[fieldLayout.key]"
-                                                                            :locale="locale"
-                                                                            :layout="fieldLayout"
-                                                                            :collapsable="section.collapsable"
-                                                                            :entity-key="entityKey"
-                                                                            :instance-id="instanceId"
-                                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                                        />
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <UnknownField :name="fieldLayout.key" />
-                                                                    </template>
-                                                                </FieldColumn>
-                                                            </template>
-                                                        </div>
-                                                    </template>
+                                                    <FieldGrid class="gap-x-4 gap-y-4">
+                                                        <template v-for="row in column.fields">
+                                                            <FieldGridRow>
+                                                                <template v-for="fieldLayout in row">
+                                                                    <FieldGridColumn
+                                                                        :layout="fieldLayout"
+                                                                        v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                    >
+                                                                        <template v-if="show.fields[fieldLayout.key]">
+                                                                            <ShowField
+                                                                                :field="show.fields[fieldLayout.key]"
+                                                                                :value="show.data[fieldLayout.key]"
+                                                                                :locale="locale"
+                                                                                :layout="fieldLayout"
+                                                                                :collapsable="section.collapsable"
+                                                                                :entity-key="entityKey"
+                                                                                :instance-id="instanceId"
+                                                                                @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                                            />
+                                                                        </template>
+                                                                        <template v-else>
+                                                                            <UnknownField :name="fieldLayout.key" />
+                                                                        </template>
+                                                                    </FieldGridColumn>
+                                                                </template>
+                                                            </FieldGridRow>
+                                                        </template>
+                                                    </FieldGrid>
                                                 </div>
                                             </template>
                                         </div>

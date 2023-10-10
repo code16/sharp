@@ -61,7 +61,7 @@
             <div class="bg-white p-4">
                 <TabPanels>
                     <template v-for="tab in form.layout.tabs">
-                        <TabPanel>
+                        <TabPanel :unmount="false">
                             <slot :tab="tab" />
                         </TabPanel>
                     </template>

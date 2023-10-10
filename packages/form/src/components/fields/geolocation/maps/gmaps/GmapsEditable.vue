@@ -13,15 +13,15 @@
 </template>
 
 <script>
-    import { Map, Marker } from 'sharp/vendor/vue2-google-maps';
+    // import { Map, Marker } from 'sharp/vendor/vue2-google-maps';
     import { defaultMapOptions, toLatLngBounds, createMapOptions } from "./util";
 
     export default {
         name: 'SharpGmapsEditable',
 
         components: {
-            GmapMap: Map,
-            GmapMarker: Marker,
+            // GmapMap: Map,
+            // GmapMarker: Marker,
         },
 
         props: {

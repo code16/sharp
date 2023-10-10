@@ -180,12 +180,14 @@ export class Form  implements FormData {
             : this.errors[key] as string;
     }
 
-    fieldHasError(field: FormFieldData, key: string, includeChildren = false): boolean {
+    fieldHasError(field: FormFieldData, key: string, locale = null, includeChildren = false): boolean {
         if(this.fieldError(key)) {
             return true;
         }
         if('localized' in field && field.localized) {
-            return this.fieldLocalesContainingError(key).length > 0;
+            return locale
+                ? this.fieldLocalesContainingError(key).includes(locale)
+                : this.fieldLocalesContainingError(key).length > 0;
         }
         if(includeChildren) {
             if(field.type === 'list') {
@@ -202,15 +204,16 @@ export class Form  implements FormData {
     }
 
     fieldIsEmpty(field: FormFieldData, value: FormFieldData['value'], locale: string): boolean {
+        console.log(field, value, locale);
         if('localized' in field && field.localized) {
             if(field.type === 'editor') {
-                return !!(value as FormEditorFieldData['value'])?.text?.[locale];
+                return !(value as FormEditorFieldData['value'])?.text?.[locale];
             }
             if(field.type === 'text' || field.type === 'textarea') {
-                return !!value?.[locale];
+                return !value?.[locale];
             }
         }
-        return !!value;
+        return !value;
     }
 
     tabHasError(tab: FormLayoutTabData): boolean {
@@ -224,6 +227,6 @@ export class Form  implements FormData {
             .map(fieldLayout => this.fields[fieldLayout.key])
             .filter(Boolean);
 
-        return tabFields.some(field => this.fieldHasError(field, field.key, true));
+        return tabFields.some(field => this.fieldHasError(field, field.key, null, true));
     }
 }

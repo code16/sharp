@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import { Link } from '@inertiajs/vue3';
+
     withDefaults(defineProps<{
         variant?: string,
         text?: boolean,
@@ -16,7 +18,7 @@
 
 <template>
     <component
-        :is="tag"
+        :is="href ? Link : 'button'"
         class="SharpButton btn"
         :class="classes"
         :href="href"
@@ -49,9 +51,6 @@
             },
             hasTextStyle() {
                 return this.text === true;
-            },
-            tag() {
-                return this.href ? 'a' : 'button';
             },
         },
         methods: {

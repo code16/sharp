@@ -1,4 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
@@ -45,5 +47,21 @@ module.exports = {
 
     plugins: [
         require('@tailwindcss/forms'),
+        plugin(function ({ matchUtilities, theme }) {
+            matchUtilities({
+                'gap-x': (value) => {
+                    return {
+                        'column-gap': value,
+                        '--gap-x': value,
+                    };
+                },
+                'gap-y': (value) => {
+                    return {
+                        'row-gap': value,
+                        '--gap-y': value,
+                    };
+                },
+            }, { values: theme('gap') });
+        }),
     ],
 };

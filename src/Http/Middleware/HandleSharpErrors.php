@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class HandleSharpErrors
 {
@@ -15,6 +16,10 @@ class HandleSharpErrors
          * @var \Illuminate\Http\Response $response
          */
         $response = $next($request);
+
+        if($response->exception instanceof ValidationException) {
+            return $response;
+        }
 
         if(isset($response->exception) && !($response->exception instanceof SharpException)) {
             return (

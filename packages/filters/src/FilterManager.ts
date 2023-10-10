@@ -3,7 +3,7 @@ import { filterQueryKey, getFiltersValuesFromQuery } from "./util/query";
 import { parseRange, serializeRange } from "@/utils/querystring";
 import isEqual from "lodash/isEqual";
 import { reactive } from "vue";
-import { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } from "./types";
+import type { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } from "./types";
 
 
 

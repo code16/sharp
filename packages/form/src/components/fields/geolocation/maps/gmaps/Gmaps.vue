@@ -10,15 +10,15 @@
 </template>
 
 <script>
-    import { Map, Marker } from 'sharp/vendor/vue2-google-maps';
+    // import { Map, Marker } from 'sharp/vendor/vue2-google-maps';
     import { defaultMapOptions, createMapOptions } from "./util";
 
     export default {
         name: 'SharpGmaps',
 
         components: {
-            GmapMap: Map,
-            GmapMarker: Marker,
+            // GmapMap: Map,
+            // GmapMarker: Marker,
         },
 
         props: {
