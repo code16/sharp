@@ -35,12 +35,12 @@ class SharpUploadModelTest extends SharpEloquentBaseTest
         $upload = $this->createSharpUploadModel($file);
 
         $this->assertStringStartsWith(
-            '/storage/thumbnails/data/-150/'.basename($file),
+            '/storage/thumbnails/data/-150_q-90/'.basename($file),
             $upload->thumbnail(null, 150),
         );
 
         $this->assertTrue(
-            Storage::disk('public')->exists('thumbnails/data/-150/'.basename($file)),
+            Storage::disk('public')->exists('thumbnails/data/-150_q-90/'.basename($file)),
         );
     }
 
@@ -75,7 +75,7 @@ class SharpUploadModelTest extends SharpEloquentBaseTest
         $upload->filters = $filters;
         $upload->save();
 
-        $folderPath = 'thumbnails/data/-150_'.md5(serialize($filters));
+        $folderPath = 'thumbnails/data/-150_'.md5(serialize($filters)).'_q-90';
 
         $this->assertStringStartsWith(
             "/storage/{$folderPath}/".basename($upload->file_name),
