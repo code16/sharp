@@ -15,18 +15,20 @@
                 </slot>
             </div>
         </div>
-        <div class="flex-grow-1 position-relative" style="min-height: 0">
-            <div class="SharpLeftNav__content d-flex flex-column">
-                <div class="SharpLeftNav__inner flex-grow-1 pb-5" style="min-height: 0">
-                    <slot />
+        <template v-if="!hidden">
+            <div class="flex-grow-1 position-relative" style="min-height: 0">
+                <div class="SharpLeftNav__content d-flex flex-column">
+                    <div class="SharpLeftNav__inner flex-grow-1 pb-5" style="min-height: 0">
+                        <slot />
+                    </div>
+                    <a class="SharpLeftNav__collapse-button btn btn-text" href="#" @click.prevent.stop="collapsed = !collapsed">
+                        <svg class="SharpLeftNav__collapse-arrow" style="fill:currentColor" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
+                            <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
+                        </svg>
+                    </a>
                 </div>
-                <a class="SharpLeftNav__collapse-button btn btn-text" href="#" @click.prevent.stop="collapsed = !collapsed">
-                    <svg class="SharpLeftNav__collapse-arrow" style="fill:currentColor" width="8" height="12" viewBox="0 0 8 12" fill-rule="evenodd">
-                        <path d="M7.5 10.6L2.8 6l4.7-4.6L6.1 0 0 6l6.1 6z"></path>
-                    </svg>
-                </a>
             </div>
-        </div>
+        </template>
     </nav>
 </template>
 
@@ -50,6 +52,7 @@
                 type: Boolean,
                 default: true,
             },
+            hidden: Boolean,
         },
         data() {
             return {
@@ -77,6 +80,7 @@
                     `SharpLeftNav--${this.state}`,
                     {
                         'SharpLeftNav--collapseable': this.collapseable,
+                        'SharpLeftNav--hidden': this.hidden,
                     }
                 ]
             }
@@ -96,9 +100,13 @@
             },
         },
         created() {
-            this.collapsed = this.isViewportSmall;
+            this.collapsed = this.isViewportSmall && !this.hidden;
             this.updateState();
             this.init();
+
+            if(this.hidden) {
+                document.body.classList.add('leftNav--hidden');
+            }
         },
     }
 </script>

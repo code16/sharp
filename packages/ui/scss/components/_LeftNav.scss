@@ -360,4 +360,13 @@
       overflow: hidden;
     }
   }
+
+  &--hidden {
+    pointer-events: none;
+    background: none;
+
+    .SharpLeftNav__title-container {
+      background: none;
+    }
+  }
 }
