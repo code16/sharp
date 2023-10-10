@@ -31,3 +31,9 @@
     }
   }
 }
+
+.leftNav--hidden {
+  .SharpActionView {
+    --content-left: 0!important;
+  }
+}
