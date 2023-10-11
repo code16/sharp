@@ -25,7 +25,7 @@ class AppSearchEngine extends SharpSearchEngine
             )
             ->setEmptyStateLabel('No post found');
 
-        if (! $resultSet->validateSearch(['min:3'], ['min' => 'Enter at least 3 characters'])) {
+        if (! $resultSet->validateSearch(['min:2'], ['min' => 'Enter at least 2 characters'])) {
             return;
         }
 
