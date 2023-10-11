@@ -204,7 +204,6 @@ export class Form  implements FormData {
     }
 
     fieldIsEmpty(field: FormFieldData, value: FormFieldData['value'], locale: string): boolean {
-        console.log(field, value, locale);
         if('localized' in field && field.localized) {
             if(field.type === 'editor') {
                 return !(value as FormEditorFieldData['value'])?.text?.[locale];

@@ -47,7 +47,7 @@
         // 'tags': TagInput,
         'text': Text,
         'textarea': Textarea,
-        // 'upload': Upload
+        'upload': Upload
     };
 
     function onError(error: string) {

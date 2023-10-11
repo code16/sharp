@@ -22,4 +22,5 @@ export type ModalProps = {
     noCloseOnBackdrop?: boolean,
     isError?: boolean,
     loading?: boolean,
+    fullHeight?: boolean,
 }

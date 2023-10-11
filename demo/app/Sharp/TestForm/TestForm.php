@@ -2,6 +2,7 @@
 
 namespace App\Sharp\TestForm;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
@@ -338,7 +339,9 @@ class TestForm extends SharpSingleForm
             ];
         }
 
-        return $this->transform($rawData);
+        return $this
+            ->setCustomTransformer('upload', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
+            ->transform($rawData);
     }
 
     protected function updateSingle(array $data)

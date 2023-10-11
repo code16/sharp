@@ -31,14 +31,8 @@
 </script>
 
 <template>
-    <TransitionRoot
-        as="template"
-        @before-enter="$emit('show')"
-        @after-enter="$emit('shown')"
-        @after-leave="$emit('hidden')"
-        :show="!!visible"
-    >
-        <Dialog as="div" class="relative z-50" @close="close()">
+    <TransitionRoot as="template" :show="!!visible">
+        <Dialog as="div" class="relative z-[100]" @close="close()">
             <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </TransitionChild>
@@ -48,46 +42,51 @@
                     <template v-if="noCloseOnBackdrop">
                         <div class="absolute inset-0" @mousedown="disableNextClose = true" @touchstart="disableNextClose = true"></div>
                     </template>
-                    <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                    <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        @before-enter="$emit('show')"
+                        @afterEnter="$emit('shown')"
+                        @afterLeave="$emit('hidden')"
+                    >
                         <DialogPanel
-                            class="relative transform rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 w-full sm:p-6"
+                            class="relative flex flex-col transform rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 w-full sm:p-6"
                             :class="{
                                 'sm:max-w-sm': maxWidth === 'sm',
                                 'sm:max-w-lg': !maxWidth || maxWidth === 'lg',
                                 'sm:max-w-4xl': maxWidth === '4xl',
+                                'h-[calc(100vh-2rem)] sm:h-[calc(100vh-6rem)]': fullHeight,
                             }"
                         >
-                            <div>
-                                <template v-if="$slots.title || title">
-                                    <DialogTitle
-                                        as="h3"
-                                        class="text-lg font-medium leading-6 mb-6"
-                                        :class="isError ? 'text-red-700' : 'text-gray-900'"
-                                    >
-                                        <slot name="title">
-                                            {{ title }}
-                                        </slot>
-                                    </DialogTitle>
-                                </template>
-                                <template v-else>
-                                    <div class="mt-4"></div>
-                                </template>
-
-                                <transition enter-active-class="duration-300" leave-active-class="duration-200">
-                                    <div>
-                                        <slot :close="() => close()" />
-                                    </div>
-                                </transition>
+                            <template v-if="$slots.title || title">
+                                <DialogTitle
+                                    as="h3"
+                                    class="text-lg font-medium leading-6 mb-6"
+                                    :class="isError ? 'text-red-700' : 'text-gray-900'"
+                                >
+                                    <slot name="title">
+                                        {{ title }}
+                                    </slot>
+                                </DialogTitle>
+                            </template>
+                            <template v-else>
+                                <div class="mt-4"></div>
+                            </template>
+                            <div class="flex-1 min-h-0">
+                                <slot :close="() => close()" />
                             </div>
-                            <div class="mt-5 gap-4 sm:flex sm:flex-row-reverse">
-                                <Button class="min-w-[70px]" :disabled="loading" :variant="okVariant" @click="close('ok')">
-                                    {{ okTitle ?? __('sharp::modals.ok_button') }}
-                                </Button>
-                                <template v-if="!okOnly">
-                                    <Button outline @click="close('cancel')">
-                                        {{ cancelTitle ?? __('sharp::modals.cancel_button') }}
+                            <div class="mt-5 flex items-end">
+                                <div class="flex-1">
+                                    <slot name="footer-prepend" />
+                                </div>
+                                <div class="gap-4 sm:flex sm:flex-row-reverse">
+                                    <Button class="min-w-[70px]" :disabled="loading" :variant="okVariant" @click="close('ok')">
+                                        {{ okTitle ?? __('sharp::modals.ok_button') }}
                                     </Button>
-                                </template>
+                                    <template v-if="!okOnly">
+                                        <Button outline @click="close('cancel')">
+                                            {{ cancelTitle ?? __('sharp::modals.cancel_button') }}
+                                        </Button>
+                                    </template>
+                                </div>
                             </div>
                             <template v-if="!okOnly">
                                 <div class="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">

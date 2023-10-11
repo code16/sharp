@@ -31,7 +31,7 @@ class HandleSharpErrors
                     },
                     $response->exception
                 )
-            )->render($request);
+            )->render($request) ?: $response;
         }
 
         return $response;

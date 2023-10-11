@@ -1,190 +1,157 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { ref, watch } from "vue";
+    import { getCropDataFromFilters } from "./util/filters";
+    import { api } from "@/api";
+    import { FormUploadFieldData } from "@/types";
+    import Cropper from "cropperjs";
+    import { rotate, rotateTo } from "./util/rotate";
+    import { Modal, Loading, Button } from '@sharp/ui';
+    import { useForm } from "../../../useForm";
+    import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
+    import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
+
+
+    const props = defineProps<{
+        field: FormUploadFieldData,
+        value: FormUploadFieldData['value'],
+        thumbnail?: string,
+    }>();
+
+    const emit = defineEmits(['submit']);
+    const ready = ref(false);
+    const originalImg = ref();
+    const cropper = ref<Cropper>();
+    const cropperData = ref<Partial<Cropper.Data>>();
+    const cropperImg = ref();
+    const form = useForm();
+
+    watch(cropperImg, () => {
+        // console.log(cropperImg.value);
+        if(cropperImg.value) {
+            cropper.value = new Cropper(cropperImg.value, {
+                viewMode: 2,
+                dragMode: 'move',
+                aspectRatio: props.field.ratioX / props.field.ratioY,
+                autoCropArea: 1,
+                guides: false,
+                background: true,
+                rotatable: true,
+                restore: false, // reset crop area on resize because it's buggy
+                data: cropperData.value,
+                ready: () => {
+                    if(cropperData.value?.rotate) {
+                        rotateTo(cropper.value, cropperData.value.rotate);
+                        cropper.value.setData(cropperData.value);
+                    }
+                },
+            });
+            // console.log(cropper.value);
+        } else {
+            cropper.value.destroy();
+        }
+    });
+
+    watch(() => props.value, () => {
+        cropperData.value = null;
+        originalImg.value = null;
+    });
+
+    async function loadOriginalImg() {
+        if(originalImg.value) {
+            return;
+        }
+        const files = await api.post(route('code16.sharp.api.files.show', {
+            entityKey: form.entityKey,
+            instanceId: form.instanceId,
+        }), {
+            files: [
+                {
+                    path: props.value.path,
+                    disk: props.value.disk,
+                }
+            ],
+            thumbnailWidth: 1200,
+            thumbnailHeight: 1000,
+        }).then(response => response.data.files);
+
+        originalImg.value = files[0]?.thumbnail;
+
+        if(!originalImg.value) {
+            return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');
+        }
+
+        await new Promise<void>(resolve => {
+            const image = new Image();
+            image.src =  originalImg.value;
+            image.onload = () => {
+                cropperData.value = getCropDataFromFilters({
+                    filters: props.value.filters,
+                    imageWidth: image.naturalWidth,
+                    imageHeight: image.naturalHeight,
+                });
+                resolve();
+            }
+            image.onerror = () => {
+                originalImg.value = null;
+                resolve();
+            }
+        });
+    }
+
+    function onRotate(degree) {
+        rotate(cropper.value, degree);
+    }
+
+    async function onShow() {
+        ready.value = false;
+        console.log('onShow');
+        if(props.value?.path) {
+            await loadOriginalImg();
+        }
+        ready.value = true;
+    }
+
+    function onOk() {
+        cropperData.value = cropper.value.getData(true);
+        emit('submit', cropper.value);
+    }
 </script>
 
 <template>
     <Modal
-        :visible="visible"
         :title="__('sharp::modals.cropper.title')"
         no-close-on-backdrop
-        @ok="handleOkClicked"
-        @show="handleShow"
-        dialog-class="modal-dialog-scrollable"
-        content-class="h-100"
+        full-height
         max-width="4xl"
-        ref="modal"
+        @ok="onOk"
+        @show="onShow"
     >
         <template v-if="ready">
-            <vue-cropper
-                class="SharpUpload__modal-vue-cropper h-100"
-                v-bind="cropperOptions"
-                :src="imageSrc"
-                alt="Source image"
-                ref="cropper"
-            />
+            <div class="h-full">
+                <img :src="originalImg ?? thumbnail" alt="" ref="cropperImg">
+            </div>
         </template>
         <template v-else>
-            <div class="d-flex align-items-center justify-content-center" style="height: 300px">
+            <div class="flex align-items-center justify-content-center" style="height: 300px">
                 <Loading />
             </div>
         </template>
 
         <template v-slot:footer-prepend>
-            <div class="row align-items-center">
-                <div class="col-auto">
-                    <Button text @click="handleRotateClicked(-90)">
-                        <i class="fas fa-undo"></i>
+            <div class="flex gap-4">
+                <div class="flex gap-4">
+                    <Button text @click="onRotate(-90)">
+                        <ArrowUturnLeftIcon class="w-4 h-4" />
                     </Button>
-                    <Button class="me-auto" text @click="handleRotateClicked(90)">
-                        <i class="fas fa-redo"></i>
+                    <Button text @click="onRotate(90)">
+                        <ArrowUturnRightIcon class="w-4 h-4" />
                     </Button>
                 </div>
-                <div class="col d-none d-lg-block">
-                    <div class="text-muted fs-7 lh-sm">
-                        {{ __('sharp::form.upload.edit_modal.description') }}
-                    </div>
+                <div class="text-gray-600 text-sm">
+                    {{ __('sharp::form.upload.edit_modal.description') }}
                 </div>
             </div>
         </template>
     </Modal>
 </template>
-
-<script lang="ts">
-    import VueCropper from 'vue-cropperjs';
-    import { Modal, Loading, Button } from '@sharp/ui';
-    import { postResolveFiles } from '@sharp/files';
-
-    import { rotate, rotateTo } from "./util/rotate";
-    import { getCropDataFromFilters } from "./util/filters";
-
-    export default {
-        components: {
-            Modal,
-            Loading,
-            VueCropper,
-            Button,
-        },
-        inject: {
-            $form: {
-                default: null,
-            },
-        },
-        props: {
-            value: Object,
-            visible: Boolean,
-            src: String,
-            ratioX: Number,
-            ratioY: Number,
-        },
-        data() {
-            return {
-                ready: false,
-                cropData: null,
-                originalImg: null,
-            }
-        },
-        watch: {
-            'value': 'handleValueChanged',
-        },
-        computed: {
-            imageSrc() {
-                return this.originalImg || this.src;
-            },
-            /**
-             * @returns {import('cropperjs/types/index').Cropper.Options}
-             */
-            cropperOptions() {
-                return {
-                    viewMode: 2,
-                    dragMode: 'move',
-                    aspectRatio: this.ratioX / this.ratioY,
-                    autoCropArea: 1,
-                    guides: false,
-                    background: true,
-                    rotatable: true,
-                    restore: false, // reset crop area on resize because it's buggy
-                    data: this.cropData,
-                    ready: this.handleCropperReady,
-                }
-            },
-        },
-        methods: {
-            handleRotateClicked(degree) {
-                rotate(this.$refs.cropper.cropper, degree);
-            },
-            handleValueChanged() {
-                if(!this.value) {
-                    this.cropData = null;
-                    this.originalImg = null;
-                }
-            },
-            handleOkClicked() {
-                const cropper = this.$refs.cropper;
-                const cropData = cropper.getData(true);
-
-                this.cropData = cropData;
-                this.$emit('submit', cropper);
-            },
-            handleShow() {
-                this.init();
-            },
-            async initOriginalThumbnail() {
-                if(this.originalImg) {
-                    return;
-                }
-                const files = await postResolveFiles({
-                    entityKey: this.$form.entityKey,
-                    instanceId: this.$form.instanceId,
-                    files: [
-                        {
-                            path: this.value.path,
-                            disk: this.value.disk,
-                        }
-                    ],
-                    thumbnailWidth: 1200,
-                    thumbnailHeight: 1000,
-                });
-
-                this.originalImg = files[0]?.thumbnail;
-
-                if(!this.originalImg) {
-                    return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');
-                }
-
-                await new Promise(resolve => {
-                    const image = new Image();
-                    image.src = this.originalImg;
-                    image.onload = () => {
-                        this.cropData = getCropDataFromFilters({
-                            filters: this.value.filters,
-                            imageWidth: image.naturalWidth,
-                            imageHeight: image.naturalHeight,
-                        });
-                        resolve();
-                    }
-                    image.onerror = () => {
-                        this.originalImg = null;
-                        resolve();
-                    }
-                });
-            },
-            async init() {
-                this.ready = false;
-                if(this.value?.path) {
-                    await this.initOriginalThumbnail();
-                }
-                this.ready = true;
-            },
-            handleCropperReady() {
-                /**
-                 * @type import('cropperjs/types/index').Cropper
-                 */
-                const cropper = this.$refs.cropper.cropper;
-                if(this.cropData?.rotate) {
-                    rotateTo(cropper, this.cropData.rotate);
-                    cropper.setData(this.cropData);
-                }
-            },
-        },
-    }
-</script>

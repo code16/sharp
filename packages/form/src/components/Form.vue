@@ -15,7 +15,7 @@
     const props = defineProps<{
         form: Form,
         entityKey: string,
-        instanceId: string | number,
+        instanceId?: string | number,
         postFn?: Function,
     }>();
 
