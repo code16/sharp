@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 beforeEach(function () {
     config()->set('sharp.uploads.tmp_dir', 'tmp');
     Storage::fake('local');
+    $this->withoutExceptionHandling();
 });
 
 it('allows to upload a file', function () {
