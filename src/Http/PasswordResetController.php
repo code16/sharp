@@ -15,11 +15,10 @@ class PasswordResetController extends Controller
 {
     public function create(): RedirectResponse|Response
     {
-        return Inertia::render('Auth/ResetPassword')
-            ->withViewData([
-                'token' => request()->route('token'),
-                'email' => request()->email,
-            ]);
+        return Inertia::render('Auth/ResetPassword', [
+            'token' => request()->route('token'),
+            'email' => request()->email,
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -43,11 +42,18 @@ class PasswordResetController extends Controller
             ? app(config('sharp.auth.forgotten_password.password_broker'))
             : Password::broker(config('auth.defaults.passwords'));
 
-        $passwordBroker->reset(
+        $status = $passwordBroker->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             config('sharp.auth.forgotten_password.reset_password_callback') ?: $resetCallback
         );
 
-        return redirect()->route('code16.sharp.login');
+        if ($status == Password::PASSWORD_RESET) {
+            return redirect()->route('code16.sharp.login')
+                ->with('status', __("sharp::$status"));
+        }
+
+        throw ValidationException::withMessages([
+            'email' => [trans("sharp::$status")],
+        ]);
     }
 }

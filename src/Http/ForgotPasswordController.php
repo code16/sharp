@@ -13,7 +13,9 @@ class ForgotPasswordController extends Controller
 {
     public function create(): RedirectResponse|Response
     {
-        return Inertia::render('Auth/ForgotPassword');
+        return Inertia::render('Auth/ForgotPassword', [
+            'status' => session('status'),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -26,10 +28,16 @@ class ForgotPasswordController extends Controller
             ? app(config('sharp.auth.forgotten_password.password_broker'))
             : Password::broker(config('auth.defaults.passwords'));
 
-        $passwordBroker->sendResetLink($request->only('email'));
+        $status = $passwordBroker->sendResetLink($request->only('email'));
 
-        return redirect()
-            ->back()
-            ->with('status', 'password-reset-link-sent');
+        if ($status == Password::RESET_LINK_SENT || $status == Password::INVALID_USER) {
+            return redirect()
+                ->back()
+                ->with('status', __("sharp::passwords.sent"));
+        }
+
+        throw ValidationException::withMessages([
+            'email' => [trans("sharp::$status")],
+        ]);
     }
 }

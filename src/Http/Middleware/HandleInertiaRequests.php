@@ -27,15 +27,18 @@ class HandleInertiaRequests extends Middleware
                 'sharp::entity_list' => __('sharp::entity_list'),
                 'sharp::filters' => __('sharp::filters'),
                 'sharp::form' => __('sharp::form'),
-                'sharp::login' => __('sharp::login'),
                 'sharp::menu' => __('sharp::menu'),
                 'sharp::modals' => __('sharp::modals'),
+                'sharp::pages/auth/forgot-password' => __('sharp::pages/auth/forgot-password'),
+                'sharp::pages/auth/login' => __('sharp::pages/auth/login'),
+                'sharp::pages/auth/reset-password' => __('sharp::pages/auth/reset-password'),
                 'sharp::show' => __('sharp::show'),
             ])->flatMap(fn ($values, $group) => collect($values)->mapWithKeys(fn ($value, $key) => ["$group.$key" => $value])
                 )->toArray()
             ),
             'config' => [
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),
+                'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),
                 'sharp.custom_url_segment' => config('sharp.custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
