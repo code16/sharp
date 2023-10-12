@@ -35,6 +35,14 @@
                     </div>
                 </template>
 
+                <template v-if="$page.props.status">
+                    <div class="rounded-md bg-green-50 p-4 mt-4">
+                        <p class="text-sm font-medium text-green-800">
+                            {{ $page.props.status }}
+                        </p>
+                    </div>
+                </template>
+
                 <div class="card-body p-5 py-4">
                     <slot />
                 </div>

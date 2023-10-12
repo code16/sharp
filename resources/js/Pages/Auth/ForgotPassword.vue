@@ -25,7 +25,7 @@
             {{ __('sharp::pages/auth/forgot-password.description') }}
         </div>
 
-        <form @submit.prevent="form.post(route('code16.sharp.password.reset.post'))">
+        <form @submit.prevent="form.post(route('code16.sharp.password.request.post'))">
             <TextInput
                 id="email"
                 v-model="form.email"
@@ -33,11 +33,9 @@
                 :placeholder="__('sharp::pages/auth/forgot-password.email_field')"
                 autofocus
             />
-            <template v-if="form.errors.email">
-                <p class="mt-2 text-sm text-red-600">
-                    {{ form.errors.email }}
-                </p>
-            </template>
+            <p v-if="form.errors.email" class="mt-2 text-sm text-red-600">
+                {{ form.errors.email }}
+            </p>
 
             <div class="mt-4">
                 <Button class="w-full" type="submit">

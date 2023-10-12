@@ -30,7 +30,9 @@ class LoginController extends Controller
             return redirect()->to($loginPageUrl);
         }
 
-        return Inertia::render('Auth/Login')->withViewData([
+        return Inertia::render('Auth/Login', [
+            'status' => session('status'),
+        ])->withViewData([
             'login' => true,
         ]);
     }
