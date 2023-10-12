@@ -1,0 +1,53 @@
+<?php
+
+namespace Code16\Sharp\Http;
+
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password as RulesPassword;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class PasswordResetController extends Controller
+{
+    public function create(): RedirectResponse|Response
+    {
+        return Inertia::render('Auth/ResetPassword')
+            ->withViewData([
+                'token' => request()->route('token'),
+                'email' => request()->email,
+            ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string', 'confirmed', RulesPassword::defaults()],
+        ]);
+
+        $resetCallback = function ($user, $password) {
+            $user
+                ->forceFill([
+                    config('sharp.auth.password_attribute', 'password') => $password,
+                    config('sharp.auth.forgotten_password.remember_token_attribute', 'remember_token') => Str::random(60),
+                ])
+                ->save();
+        };
+
+        $passwordBroker = config('sharp.auth.forgotten_password.password_broker')
+            ? app(config('sharp.auth.forgotten_password.password_broker'))
+            : Password::broker(config('auth.defaults.passwords'));
+
+        $passwordBroker->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            config('sharp.auth.forgotten_password.reset_password_callback') ?: $resetCallback
+        );
+
+        return redirect()->route('code16.sharp.login');
+    }
+}

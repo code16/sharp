@@ -42,6 +42,10 @@ class SharpServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
         $this->loadRoutesFrom(__DIR__ . '/routes/login.php');
 
+        if(config('sharp.auth.forgotten_password.enabled')) {
+            $this->loadRoutesFrom(__DIR__ . '/routes/forgotten_password.php');
+        }
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
