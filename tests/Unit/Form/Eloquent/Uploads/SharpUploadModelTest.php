@@ -3,7 +3,6 @@
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function() {
@@ -27,7 +26,7 @@ it('fills several attributes at once when setting the magic file attribute', fun
     expect($upload->file_name)->toBe('test/test.png')
         ->and($upload->mime_type)->toBe('test_mime')
         ->and($upload->size)->toBe(1);
-})->group('eloquent');
+});
 
 it('allows to create thumbnails', function () {
     $file = createImage();
@@ -37,7 +36,7 @@ it('allows to create thumbnails', function () {
         ->toStartWith('/storage/thumbnails/data/-150/'.basename($file))
         ->and(Storage::disk('public')->exists('thumbnails/data/-150/'.basename($file)))
         ->toBeTrue();
-})->group('eloquent');
+});
 
 it('returns null on error with a thumbnail creation', function () {
     $file = createImage();
@@ -47,7 +46,7 @@ it('returns null on error with a thumbnail creation', function () {
     $upload->update(['file_name' => null]);
 
     expect($upload->thumbnail())->toBeNull();
-})->group('eloquent');
+});
 
 it('handles transformation filters when creating a thumbnail', function () {
     $filters = [
@@ -72,7 +71,7 @@ it('handles transformation filters when creating a thumbnail', function () {
         ->toStartWith("/storage/{$folderPath}/".basename($upload->file_name))
         ->and(Storage::disk('public')->exists("{$folderPath}/".basename($upload->file_name)))
         ->toBeTrue();
-})->group('eloquent');
+});
 
 it('allows to call a closure after a thumbnail creation', function () {
     $thumbWasCreated = null;
@@ -94,7 +93,7 @@ it('allows to call a closure after a thumbnail creation', function () {
 
     expect($thumbWasCreated)->toBeTrue()
         ->and($thumbWasCreatedTwice)->toBeFalse();
-})->group('eloquent');
+});
 
 function createSharpUploadModel(string $file, ?object $model = null, ?string $modelKey = 'test'): SharpUploadModel
 {

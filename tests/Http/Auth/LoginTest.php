@@ -4,7 +4,6 @@ use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
-use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     config()->set(
