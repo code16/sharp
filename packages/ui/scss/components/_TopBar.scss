@@ -35,3 +35,9 @@
     left: $leftnav-width;
   }
 }
+
+.leftNav--hidden {
+  .SharpTopBar {
+    left: 0;
+  }
+}

@@ -11,6 +11,7 @@ class SharpMenu extends BaseSharpMenu
     public function build(): self
     {
         return $this
+//            ->setVisible(false)
             ->setUserMenu(function (SharpMenuUserMenu $userMenu) {
                 $userMenu
                     ->addEntityLink('profile', 'Profile', 'fa fa-user')

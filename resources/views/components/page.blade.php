@@ -6,7 +6,7 @@
         {{ $slot }}
     @else
         <sharp-action-view>
-            @if(config('sharp.search.enabled'))
+            @if(value(config('sharp.search.enabled', false)))
                 <template v-slot:search>
                     <sharp-global-search
                         placeholder="{{ config('sharp.search.placeholder') }}"
