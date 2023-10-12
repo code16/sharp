@@ -55,7 +55,4 @@ Route::group([
 
     Route::post('/filters/{filterKey}', [GlobalFilterController::class, 'update'])
         ->name('code16.sharp.filters.update');
-
-    Route::post('/api/upload', [ApiFormUploadController::class, 'store'])
-        ->name('code16.sharp.api.form.upload');
 });
