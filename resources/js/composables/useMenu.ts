@@ -4,6 +4,7 @@ import { usePage } from "@inertiajs/vue3";
 class Menu implements MenuData {
     items: Array<MenuItemData>;
     userMenu: UserMenuData;
+    isVisible: boolean;
 
     constructor(menu: MenuData) {
         Object.assign(this, menu);

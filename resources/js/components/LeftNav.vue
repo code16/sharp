@@ -6,6 +6,7 @@ import { ChevronRightIcon } from '@heroicons/vue/20/solid';
 import { GlobalFiltersData, MenuData } from "@/types";
 import { Link } from "@inertiajs/vue3";
 import { GlobalFilters } from '@sharp/filters';
+import Logo from "@/components/Logo.vue";
 
 const menu = usePage().props.menu as MenuData;
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
@@ -13,14 +14,9 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 
 <template>
     <!-- Sidebar component, swap this element with another sidebar if you like -->
-    <div class="flex grow flex-col  overflow-y-auto bg-white pb-4">
+    <div class="flex grow flex-col overflow-y-auto bg-white pb-4">
         <div class="flex h-16 shrink-0 items-center bg-primary-600 px-6 py-2.5">
-            <template v-if="config('sharp.theme.logo_urls.menu')">
-                <img class="h-auto w-auto max-w-full max-h-full" :src="config('sharp.theme.logo_urls.menu')" :alt="config('sharp.name')" />
-            </template>
-            <template v-else>
-                {{ config('sharp.name') }}
-            </template>
+            <Logo />
         </div>
         <template v-if="globalFilters">
             <GlobalFilters :global-filters="globalFilters" />
