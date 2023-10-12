@@ -77,9 +77,6 @@ Route::group([
     Route::get('/search', [ApiSearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
 
-    Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
-        ->name('code16.sharp.api.download.show');
-
     Route::post('/files/{entityKey}/{instanceId?}', [ApiFilesController::class, 'show'])
         ->name('code16.sharp.api.files.show');
 
@@ -133,6 +130,9 @@ Route::group([
 
     Route::get('/s-show/{entityKey}', [SingleShowController::class, 'show'])
         ->name('code16.sharp.single-show');
+
+    Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
+        ->name('code16.sharp.download.show');
 
     Route::group([
         'prefix' => '/{uri}',

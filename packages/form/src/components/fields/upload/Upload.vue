@@ -220,7 +220,7 @@
                         </template>
                         <template v-if="value?.path">
                             <a class="text-sm text-primary-700 underline"
-                                :href="route('code16.sharp.api.download.show', {
+                                :href="route('code16.sharp.download.show', {
                                     entityKey: form.entityKey,
                                     instanceId: form.instanceId,
                                     disk: value.disk,

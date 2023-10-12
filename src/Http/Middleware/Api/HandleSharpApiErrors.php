@@ -3,12 +3,7 @@
 namespace Code16\Sharp\Http\Middleware\Api;
 
 use Closure;
-use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
-use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
-use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
-use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Exceptions\SharpException;
-use Code16\Sharp\Exceptions\SharpInvalidEntityKeyException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
