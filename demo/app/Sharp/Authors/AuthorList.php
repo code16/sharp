@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AuthorList extends SharpEntityList
 {
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    protected function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer
+        $fields
             ->addField(
                 EntityListField::make('avatar')
                     ->setWidth(1)
