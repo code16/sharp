@@ -4,7 +4,7 @@
     import type { UppyFile } from "@uppy/core";
     import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
-    import FileInput from '@uppy/file-input';
+    import FileInput from '@uppy/vue/lib/file-input';
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import { computed, onUnmounted, ref, watch } from "vue";
@@ -16,6 +16,7 @@
     import { filesizeLabel } from "@/utils/file";
     import EditModal from "./EditModal.vue";
     import { useForm } from "../../../useForm";
+    import UploadDropText from "./UploadDropText.vue";
 
     const props = defineProps<{
         field: FormUploadFieldData,
@@ -149,12 +150,8 @@
             uppy.use(DropTarget, {
                 target: dropTarget.value,
             });
-            uppy.use(FileInput, {
-                target: dropTarget.value,
-            });
         } else {
             uppy.removePlugin(uppy.getPlugin('DropTarget'));
-            uppy.removePlugin(uppy.getPlugin('FileInput'));
         }
     });
 
@@ -259,9 +256,28 @@
     </template>
     <template v-else>
         <div class="[&_input]:hidden" ref="dropTarget">
-            <Button block :disabled="field.readOnly" @click="($refs.dropTarget as HTMLElement).querySelector('input').click()">
-                {{ __('sharp::form.upload.browse_button') }}
-            </Button>
+            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                <div class="text-center">
+                    <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                        <UploadDropText v-slot="{ linkText }">
+                            <label class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                <span>{{ linkText }}</span>
+                                <FileInput class="sr-only" />
+                            </label>
+                        </UploadDropText>
+                    </div>
+                    <p class="text-xs leading-5 text-gray-600">
+                        <template v-if="field.fileFilter?.length">
+                            <span class="uppercase">
+                                {{ field.fileFilter.join(', ') }}.
+                            </span>
+                        </template>
+                        <template v-if="field.maxFileSize">
+                            {{ __('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize) }) }}
+                        </template>
+                    </p>
+                </div>
+            </div>
         </div>
     </template>
 
