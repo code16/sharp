@@ -4,13 +4,12 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\PageAlertLevel;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-it('gets fields with layout', function() {
+it('gets fields with layout', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
@@ -31,12 +30,12 @@ it('gets fields with layout', function() {
             'html' => true,
             'size' => 6,
             'sizeXS' => 6,
-            'hideOnXS' => false
+            'hideOnXS' => false,
         ],
     ]);
 });
 
-it('allows to define layout for small screens', function() {
+it('allows to define layout for small screens', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
@@ -55,7 +54,7 @@ it('allows to define layout for small screens', function() {
             'html' => true,
             'size' => 6,
             'sizeXS' => 12,
-            'hideOnXS' => false
+            'hideOnXS' => false,
         ])
         ->and($list->fields()[1])->toEqual([
             'key' => 'age',
@@ -64,11 +63,11 @@ it('allows to define layout for small screens', function() {
             'html' => true,
             'size' => 6,
             'sizeXS' => 6,
-            'hideOnXS' => true
+            'hideOnXS' => true,
         ]);
 });
 
-it('allows to configure a column to fill left space', function() {
+it('allows to configure a column to fill left space', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
@@ -89,7 +88,7 @@ it('allows to configure a column to fill left space', function() {
         ->toHaveKey('hideOnXS', false);
 });
 
-it('returns list data', function() {
+it('returns list data', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function getListData(): array
@@ -114,7 +113,7 @@ it('returns list data', function() {
     ]);
 });
 
-it('can return paginated data', function() {
+it('can return paginated data', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function getListData(): array|Arrayable
@@ -147,11 +146,11 @@ it('can return paginated data', function() {
             'to' => 2,
             'last_page' => 5,
             'per_page' => 2,
-            'total' => 10
+            'total' => 10,
         ]);
 });
 
-it('returns list config', function() {
+it('returns list config', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildListConfig(): void
@@ -176,7 +175,7 @@ it('returns list config', function() {
     ]);
 });
 
-it('allows to configure a page alert', function() {
+it('allows to configure a page alert', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildPageAlert(PageAlert $pageAlert): void
@@ -194,7 +193,7 @@ it('allows to configure a page alert', function() {
         ]);
 });
 
-it('allows to configure the deletion action to disallow it', function() {
+it('allows to configure the deletion action to disallow it', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildListConfig(): void
@@ -208,7 +207,7 @@ it('allows to configure the deletion action to disallow it', function() {
     expect($list->listConfig()['deleteHidden'])->toBeTrue();
 });
 
-it('allows to configure the deletion action confirmation text', function() {
+it('allows to configure the deletion action confirmation text', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildListConfig(): void

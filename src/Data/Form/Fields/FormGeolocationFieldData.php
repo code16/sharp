@@ -4,7 +4,6 @@ namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
-use Code16\Sharp\Enums\FormAutocompleteFieldMode;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
@@ -31,7 +30,7 @@ final class FormGeolocationFieldData extends Data
         public ?array $initialPosition = null,
         #[TypeScriptType([
             'ne' => ['lat' => 'float', 'lng' => 'float'],
-            'sw' => ['lat' => 'float', 'lng' => 'float']
+            'sw' => ['lat' => 'float', 'lng' => 'float'],
         ])]
         public ?array $boundaries = null,
         public ?string $label = null,

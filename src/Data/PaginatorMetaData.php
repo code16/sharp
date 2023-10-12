@@ -2,10 +2,8 @@
 
 namespace Code16\Sharp\Data;
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Arr;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class PaginatorMetaData extends Data
 {

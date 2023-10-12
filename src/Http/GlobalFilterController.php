@@ -6,8 +6,6 @@ use Code16\Sharp\Utils\Filters\Filter;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Filters\HandleFilters;
-use Code16\Sharp\Utils\Menu\SharpMenuItem;
-use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Http\RedirectResponse;
 
 class GlobalFilterController extends SharpProtectedController

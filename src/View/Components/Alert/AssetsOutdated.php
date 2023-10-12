@@ -13,15 +13,15 @@ class AssetsOutdated extends Component
 
     public function isAssetsOutdated(): bool
     {
-        if(app()->environment('testing')) {
+        if (app()->environment('testing')) {
             return false;
         }
 
-        $distPath = __DIR__ . '/../../../../dist';
+        $distPath = __DIR__.'/../../../../dist';
         $distManifest = file_get_contents("$distPath/manifest.json");
         $publicManifest = file_get_contents(public_path('vendor/sharp/manifest.json'));
 
-        if(file_exists("$distPath/hot")) {
+        if (file_exists("$distPath/hot")) {
             return false;
         }
 

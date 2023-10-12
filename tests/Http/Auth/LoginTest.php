@@ -42,7 +42,7 @@ it('allows guests to login', function () {
     $this
         ->post('/sharp/login', [
             'login' => 'test@example.org',
-            'password' => 'password'
+            'password' => 'password',
         ])
         ->assertRedirect('/sharp');
 
@@ -121,7 +121,8 @@ it('allows users to logout', function () {
 it('handles custom auth check', function () {
     $this->app['config']->set(
         'sharp.auth.check_handler',
-        fn () => new class implements SharpAuthenticationCheckHandler {
+        fn () => new class implements SharpAuthenticationCheckHandler
+        {
             public function check($user): bool
             {
                 return $user->name == 'ok';
@@ -142,31 +143,39 @@ it('handles custom auth check', function () {
 
 it('allows custom auth guard', function () {
     auth()->extend('test', function () {
-        return new class implements \Illuminate\Contracts\Auth\Guard {
+        return new class implements \Illuminate\Contracts\Auth\Guard
+        {
             protected $user;
+
             public function check()
             {
                 return $this->user?->name === 'ok';
             }
+
             public function guest()
             {
                 return $this->user === null;
             }
+
             public function user()
             {
                 return $this->user;
             }
+
             public function id()
             {
                 return $this->user->id;
             }
+
             public function validate(array $credentials = [])
             {
             }
+
             public function hasUser()
             {
                 return $this->user !== null;
             }
+
             public function setUser(\Illuminate\Contracts\Auth\Authenticatable $user)
             {
                 $this->user = $user;

@@ -2,16 +2,12 @@
 
 namespace Code16\Sharp\Data\EntityList;
 
-
-use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\EntityAuthorizationsData;
-use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\PaginatorMetaData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class EntityListData extends Data
 {

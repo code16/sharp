@@ -100,7 +100,7 @@ it('handles hideEntityCommands', function () {
     $field->hideEntityCommand('c3');
 
     expect($field->toArray()['hiddenCommands']['entity'])->toEqual(
-         ['c1', 'c2', 'c3']
+        ['c1', 'c2', 'c3']
     );
 });
 

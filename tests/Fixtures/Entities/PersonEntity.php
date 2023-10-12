@@ -36,7 +36,7 @@ class PersonEntity extends SharpEntity
     public function setShow(?SharpShow $show): self
     {
         $this->fakeShow = $show;
-        if($show === null) {
+        if ($show === null) {
             // Enforce show to be null
             $this->show = null;
         }

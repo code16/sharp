@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data\Form;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Form\Fields\FormFieldData;

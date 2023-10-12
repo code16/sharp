@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data;
 
-
 final class EntityStateData extends Data
 {
     public function __construct(
@@ -13,7 +12,7 @@ final class EntityStateData extends Data
         public mixed $authorization,
     ) {
     }
-    
+
     public static function from(array $state): self
     {
         return new self(

@@ -2,11 +2,8 @@
 
 namespace Code16\Sharp\Data\Show;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
-use Code16\Sharp\Data\NotificationData;
-
 
 final class ShowLayoutSectionData extends Data
 {
@@ -23,7 +20,7 @@ final class ShowLayoutSectionData extends Data
     {
         $section = [
             ...$section,
-            'columns' => ShowLayoutColumnData::collection($section['columns'])
+            'columns' => ShowLayoutColumnData::collection($section['columns']),
         ];
 
         return new self(...$section);

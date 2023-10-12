@@ -11,7 +11,7 @@ class PageAlert
     protected ?string $text;
     protected array $data;
 
-    public final function setData(array $data): self
+    final public function setData(array $data): self
     {
         $this->data = $data;
 
@@ -59,7 +59,7 @@ class PageAlert
         return $this;
     }
 
-    public final function toArray(): ?array
+    final public function toArray(): ?array
     {
         return $this->isFilled()
             ? [

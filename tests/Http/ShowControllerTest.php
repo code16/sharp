@@ -12,7 +12,6 @@ use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleShow;
-use Code16\Sharp\Tests\Unit\Show\Fakes\FakeSharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
@@ -28,7 +27,8 @@ beforeEach(function () {
 });
 
 it('gets show data for an instance', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function find($id): array
         {
             return [
@@ -45,7 +45,8 @@ it('gets show data for an instance', function () {
 });
 
 it('filters out data which is not a field', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'));
@@ -69,7 +70,8 @@ it('filters out data which is not a field', function () {
 });
 
 it('gets attribute for entity state if defined', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'));
@@ -77,10 +79,12 @@ it('gets attribute for entity state if defined', function () {
 
         public function buildShowConfig(): void
         {
-            $this->configureEntityState('status', new class extends EntityState {
+            $this->configureEntityState('status', new class extends EntityState
+            {
                 protected function buildStates(): void
                 {
                 }
+
                 protected function updateState($instanceId, string $stateId): array
                 {
                     return [];
@@ -106,7 +110,8 @@ it('gets attribute for entity state if defined', function () {
 });
 
 it('returns configured show fields', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'))
@@ -129,7 +134,8 @@ it('returns configured show fields', function () {
 });
 
 it('returns configured show layout', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(SharpShowTextField::make('name'))
@@ -161,7 +167,8 @@ it('returns configured show layout', function () {
 });
 
 it('returns show configuration', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowConfig(): void
         {
             $this->configureBreadcrumbCustomLabelAttribute('name');
@@ -181,7 +188,8 @@ it('gets show data for an instance in a single show case', function () {
         SinglePersonEntity::class,
     );
 
-    fakeShowFor('single-person', new class extends PersonSingleShow {
+    fakeShowFor('single-person', new class extends PersonSingleShow
+    {
         public function findSingle(): array
         {
             return [
@@ -198,8 +206,10 @@ it('gets show data for an instance in a single show case', function () {
 });
 
 it('allows instance deletion from the show', function () {
-    $personShow = new class extends PersonShow {
+    $personShow = new class extends PersonShow
+    {
         public bool $wasDeleted = false;
+
         public function delete($id): void
         {
             $this->wasDeleted = true;
@@ -224,24 +234,28 @@ it('disallows instance deletion without authorization', function () {
 });
 
 it('returns commands authorization in config', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function getInstanceCommands(): array
         {
             return [
-                new class extends InstanceCommand {
+                new class extends InstanceCommand
+                {
                     public function label(): ?string
                     {
                         return 'command';
                     }
+
                     public function execute(mixed $instanceId, array $data = []): array
                     {
                         return $this->info('ok');
                     }
+
                     public function authorizeFor(mixed $instanceId): bool
                     {
                         return $instanceId < 10;
                     }
-                }
+                },
             ];
         }
     });
@@ -260,7 +274,8 @@ it('returns commands authorization in config', function () {
 });
 
 it('returns the valuated multiform attribute if configured', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowConfig(): void
         {
             $this->configureMultiformAttribute('nobel');
@@ -292,7 +307,8 @@ it('returns the valuated multiform attribute if configured', function () {
 });
 
 it('allows to configure a page alert', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
             $pageAlert
@@ -313,13 +329,14 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
             $pageAlert
                 ->setLevelInfo()
                 ->setMessage(function (array $data) {
-                    return 'Hello ' . $data['name'];
+                    return 'Hello '.$data['name'];
                 });
         }
 

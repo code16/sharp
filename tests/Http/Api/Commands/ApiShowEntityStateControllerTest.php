@@ -16,9 +16,10 @@ it('updates the state of an instance from a show and return a "refresh" action b
         PersonEntity::class,
     );
 
-    $this->withoutExceptionHandling()   ;
+    $this->withoutExceptionHandling();
 
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState
@@ -58,7 +59,8 @@ it('allows to update the state of an instance from a single show', function () {
         SinglePersonEntity::class,
     );
 
-    fakeShowFor('person', new class extends SinglePersonShow {
+    fakeShowFor('person', new class extends SinglePersonShow
+    {
         public function buildShowConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState

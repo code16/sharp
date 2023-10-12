@@ -3,12 +3,7 @@
 namespace Code16\Sharp\Data\Show\Fields;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
-use Code16\Sharp\Enums\FormAutocompleteFieldMode;
-use Code16\Sharp\Enums\FormFieldType;
-use Code16\Sharp\Enums\ShowFieldType;
 use Illuminate\Support\Arr;
-use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class ShowCustomFieldData extends Data
@@ -28,7 +23,7 @@ final class ShowCustomFieldData extends Data
         $commonAttributes = Arr::only($field, [
             'key',
             'type',
-            'emptyVisible'
+            'emptyVisible',
         ]);
 
         return (new self(...$commonAttributes))

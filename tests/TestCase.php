@@ -10,7 +10,7 @@ class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->withoutVite();
 
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));

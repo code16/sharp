@@ -52,7 +52,8 @@ it('logs in the user after successful 2fa code validation', function () {
     Notification::fake();
 
     config()->set(
-        'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler {
+        'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler
+        {
             protected function generateRandomCode(): int
             {
                 return 123456;

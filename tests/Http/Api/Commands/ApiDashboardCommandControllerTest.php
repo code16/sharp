@@ -16,7 +16,8 @@ beforeEach(function () {
 });
 
 it('allows to call an info dashboard command', function () {
-    fakeShowFor('dashboard', new class extends TestDashboard {
+    fakeShowFor('dashboard', new class extends TestDashboard
+    {
         public function getDashboardCommands(): ?array
         {
             return [
@@ -26,11 +27,12 @@ it('allows to call an info dashboard command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->info('ok');
                     }
-                }
+                },
             ];
         }
     });
@@ -44,7 +46,8 @@ it('allows to call an info dashboard command', function () {
 });
 
 it('allows to initialize form data in a dashboard command', function () {
-    fakeShowFor('dashboard', new class extends TestDashboard {
+    fakeShowFor('dashboard', new class extends TestDashboard
+    {
         public function getDashboardCommands(): ?array
         {
             return [
@@ -54,21 +57,24 @@ it('allows to initialize form data in a dashboard command', function () {
                     {
                         return 'entity';
                     }
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
+
                     public function initialData(): array
                     {
                         return [
                             'name' => 'Marie Curie',
                         ];
                     }
-                }
+                },
             ];
         }
     });

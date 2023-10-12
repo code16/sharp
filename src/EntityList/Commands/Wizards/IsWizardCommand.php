@@ -108,7 +108,7 @@ trait IsWizardCommand
 
     /**
      * Override the default checkFormIsBuilt() in Wizard case, to check the form
-     * given the current step
+     * given the current step.
      */
     protected function checkFormIsBuilt(): void
     {

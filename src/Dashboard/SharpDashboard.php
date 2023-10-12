@@ -11,7 +11,6 @@ use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 abstract class SharpDashboard
 {

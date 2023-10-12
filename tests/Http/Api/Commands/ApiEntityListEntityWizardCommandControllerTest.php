@@ -16,7 +16,8 @@ beforeEach(function () {
 });
 
 it('displays first step form on the first call of a wizard entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -36,7 +37,7 @@ it('displays first step form on the first call of a wizard entity command', func
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -60,21 +61,22 @@ it('displays first step form on the first call of a wizard entity command', func
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
-                                    ]
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                    ],
                                 ],
                                 'size' => 12,
-                            ]
+                            ],
                         ],
-                        'title' => 'one'
-                    ]
+                        'title' => 'one',
+                    ],
                 ],
             ],
         ]);
 });
 
 it('allows to post first step of a wizard entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -101,7 +103,7 @@ it('allows to post first step of a wizard entity command', function () {
 
                         return $this->toStep('next-step');
                     }
-                }
+                },
             ];
         }
     });
@@ -123,7 +125,8 @@ it('allows to post first step of a wizard entity command', function () {
 });
 
 it('allows to check if context is valid', function () {
-    fakeListFor('person',  new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -168,7 +171,7 @@ it('allows to check if context is valid', function () {
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -179,7 +182,7 @@ it('allows to check if context is valid', function () {
             route('code16.sharp.api.list.command.entity.form', [
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
-                'command_step' => 'next-step:test-key'
+                'command_step' => 'next-step:test-key',
             ])
         )
         ->assertStatus(500);
@@ -197,7 +200,7 @@ it('allows to check if context is valid', function () {
             route('code16.sharp.api.list.command.entity.form', [
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
-                'command_step' => 'next-step:test-key'
+                'command_step' => 'next-step:test-key',
             ])
         )
         ->assertOk()
@@ -218,7 +221,8 @@ it('allows to check if context is valid', function () {
 });
 
 it('allows to post second step of a wizard entity command', function () {
-    fakeListFor('person',  new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -255,7 +259,7 @@ it('allows to post second step of a wizard entity command', function () {
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -274,7 +278,7 @@ it('allows to post second step of a wizard entity command', function () {
             route('code16.sharp.api.list.command.entity', [
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
-                'command_step' => 'next-step:test-key'
+                'command_step' => 'next-step:test-key',
             ]),
             ['data' => ['age' => '22']],
         )
@@ -285,7 +289,8 @@ it('allows to post second step of a wizard entity command', function () {
 });
 
 it('allows to define a global method for step execution', function () {
-    fakeListFor('person',  new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -313,18 +318,18 @@ it('allows to define a global method for step execution', function () {
 
                     public function buildFormFieldsForStep(string $step, FieldsContainer $formFields): void
                     {
-                        if($step === 'next-step') {
+                        if ($step === 'next-step') {
                             $formFields->addField(SharpFormTextField::make('age'));
                         }
                     }
 
                     public function executeStep(string $step, array $data = []): array
                     {
-                        if($step === 'next-step') {
+                        if ($step === 'next-step') {
                             return $this->reload();
                         }
                     }
-                }
+                },
             ];
         }
     });
@@ -340,7 +345,7 @@ it('allows to define a global method for step execution', function () {
             route('code16.sharp.api.list.command.entity.form', [
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
-                'command_step' => 'next-step:test-key'
+                'command_step' => 'next-step:test-key',
             ])
         )
         ->assertOk()
@@ -360,7 +365,7 @@ it('allows to define a global method for step execution', function () {
             route('code16.sharp.api.list.command.entity', [
                 'entityKey' => 'person',
                 'commandKey' => 'wizard',
-                'command_step' => 'next-step:test-key'
+                'command_step' => 'next-step:test-key',
             ]),
         )
         ->assertOk()

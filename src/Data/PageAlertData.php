@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data;
 
-
 use Code16\Sharp\Enums\PageAlertLevel;
 
 final class PageAlertData extends Data

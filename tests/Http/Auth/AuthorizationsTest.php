@@ -91,7 +91,8 @@ it('returns prohibited actions with a show or form get request', function () {
 });
 
 it('returns prohibited actions with a list get request', function () {
-    fakeListFor('person', new class extends FakeSharpEntityList {
+    fakeListFor('person', new class extends FakeSharpEntityList
+    {
         public function getListData(): array|Arrayable
         {
             return [
@@ -118,7 +119,8 @@ it('returns prohibited actions with a list get request', function () {
 });
 
 it('allow access by default', function () {
-    fakeListFor('person', new class extends FakeSharpEntityList {
+    fakeListFor('person', new class extends FakeSharpEntityList
+    {
         public function getListData(): array|Arrayable
         {
             return [
@@ -173,7 +175,7 @@ it('allow access by default', function () {
                 'update' => [1, 2],
                 'create' => true,
                 'view' => [1, 2],
-            ]
+            ],
         ]);
 });
 

@@ -28,26 +28,26 @@ it('returns result on a valid search', function () {
             }
         });
 
-        $this
-            ->getJson('/sharp/api/search?q=some-search')
-            ->assertJson([
-                [
-                    'label' => 'People',
-                    'icon' => null,
-                    'results' => [
-                        [
-                            'label' => 'John Wayne',
-                            'link' => url('sharp/s-list/person/s-show/person/1'),
-                            'detail' => null,
-                        ],
-                        [
-                            'label' => 'Jane Ford',
-                            'link' => url('sharp/s-list/person/s-show/person/2'),
-                            'detail' => 'Some detail',
-                        ],
+    $this
+        ->getJson('/sharp/api/search?q=some-search')
+        ->assertJson([
+            [
+                'label' => 'People',
+                'icon' => null,
+                'results' => [
+                    [
+                        'label' => 'John Wayne',
+                        'link' => url('sharp/s-list/person/s-show/person/1'),
+                        'detail' => null,
+                    ],
+                    [
+                        'label' => 'Jane Ford',
+                        'link' => url('sharp/s-list/person/s-show/person/2'),
+                        'detail' => 'Some detail',
                     ],
                 ],
-            ]);
+            ],
+        ]);
 });
 
 it('allows to configure a custom empty state label', function () {

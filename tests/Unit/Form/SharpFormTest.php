@@ -78,7 +78,8 @@ it('returns form layout', function () {
 });
 
 it('gets an instance', function () {
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find($id): array
         {
             return [

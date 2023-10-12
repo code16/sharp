@@ -137,7 +137,7 @@ it('allows list filter to be multiple', function () {
                     {
                         return [1 => 'A', 2 => 'B'];
                     }
-                }
+                },
             ];
         }
     };
@@ -165,7 +165,7 @@ it('allows list filter to be required', function () {
                     {
                         return 'B';
                     }
-                }
+                },
             ];
         }
     };
@@ -188,6 +188,7 @@ it('allows to define a label for the filter', function () {
                     {
                         $this->configureLabel('test label');
                     }
+
                     public function values(): array
                     {
                         return [];
@@ -214,6 +215,7 @@ it('allows to declare a filter as master', function () {
                     {
                         $this->configureMaster();
                     }
+
                     public function values(): array
                     {
                         return [];
@@ -240,6 +242,7 @@ it('allows to declare a filter as searchable', function () {
                     {
                         $this->configureSearchable();
                     }
+
                     public function values(): array
                     {
                         return [];
@@ -268,6 +271,7 @@ it('allows to define searchKeys on a filter', function () {
                         $this->configureSearchable()
                             ->configureSearchKeys(['a', 'b']);
                     }
+
                     public function values(): array
                     {
                         return [];
@@ -294,6 +298,7 @@ it('allows to define an inline template for a filter', function () {
                     {
                         $this->configureTemplate('{{letter}} {{maj}}');
                     }
+
                     public function values(): array
                     {
                         return [
@@ -328,6 +333,7 @@ it('allows to declare a filter as retained and to set its default value', functi
                         $this->configureKey('test_20')
                             ->configureRetainInSession();
                     }
+
                     public function values(): array
                     {
                         return [];
@@ -419,7 +425,7 @@ it('allows to declare a date range filter as required', function () {
                     {
                         return ['start' => Carbon::now()->subDay(), 'end' => Carbon::now()];
                     }
-                }
+                },
             ];
         }
     };
@@ -483,7 +489,7 @@ it('allows to define a check filter', function () {
         public function getFilters(): array
         {
             return [
-                new class extends EntityListCheckFilter {}
+                new class extends EntityListCheckFilter {},
             ];
         }
     };

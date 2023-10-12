@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data\Show\Fields;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Embeds\EmbedData;
@@ -18,7 +17,7 @@ final class ShowTextFieldData extends Data
 
     public function __construct(
         public string $key,
-        #[LiteralTypeScriptType('"' . ShowFieldType::Text->value . '"')]
+        #[LiteralTypeScriptType('"'.ShowFieldType::Text->value.'"')]
         public ShowFieldType $type,
         public bool $emptyVisible,
         public bool $html,

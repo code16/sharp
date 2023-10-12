@@ -15,15 +15,15 @@ class HandleSharpErrors
     {
         $response = $next($request);
 
-        if($response->exception instanceof ValidationException) {
+        if ($response->exception instanceof ValidationException) {
             return $response;
         }
 
-        if(isset($response->exception) && !($response->exception instanceof SharpException)) {
+        if (isset($response->exception) && ! ($response->exception instanceof SharpException)) {
             return (
                 new SharpException(
                     $response->exception->getMessage(),
-                    match(true) {
+                    match (true) {
                         $response->exception instanceof HttpException => $response->getStatusCode(),
                         $response->exception instanceof ModelNotFoundException => 404,
                         default => 500

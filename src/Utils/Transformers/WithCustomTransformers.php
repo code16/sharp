@@ -7,9 +7,7 @@ use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Show\SharpShow;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
 use Illuminate\Pagination\AbstractPaginator;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * This trait allows a class to handle a custom transformers array.
@@ -51,7 +49,7 @@ trait WithCustomTransformers
 
         // SharpEntityList case
 
-        if($models instanceof AbstractPaginator) {
+        if ($models instanceof AbstractPaginator) {
             return $models->setCollection(
                 collect($this->transform($models->items()))
             );
@@ -107,7 +105,7 @@ trait WithCustomTransformers
                 }
 
                 $listModel = $model;
-                if(($sep = strpos($listAttribute, ':')) !== false) {
+                if (($sep = strpos($listAttribute, ':')) !== false) {
                     $listModel = $model[substr($listAttribute, 0, $sep)];
                     $listAttribute = substr($listAttribute, $sep + 1);
                 }

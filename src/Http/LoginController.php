@@ -4,12 +4,10 @@ namespace Code16\Sharp\Http;
 
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Code16\Sharp\Http\Requests\LoginRequest;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
 use Inertia\Response;
 

@@ -29,8 +29,8 @@ use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\ImageServiceProviderLaravelRecent;
 use Inertia\ServiceProvider as InertiaServiceProvider;
+use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
 {
@@ -38,12 +38,12 @@ class SharpServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/inertia.php');
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
-        $this->loadRoutesFrom(__DIR__ . '/routes/login.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/inertia.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/login.php');
 
-        if(config('sharp.auth.forgotten_password.enabled')) {
-            $this->loadRoutesFrom(__DIR__ . '/routes/forgotten_password.php');
+        if (config('sharp.auth.forgotten_password.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/routes/forgotten_password.php');
         }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');

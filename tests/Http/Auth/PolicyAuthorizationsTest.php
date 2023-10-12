@@ -6,8 +6,8 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Inertia\Testing\AssertableInertia as Assert;
 use Illuminate\Contracts\Support\Arrayable;
+use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
@@ -19,7 +19,8 @@ beforeEach(function () {
 });
 
 it('allows to configure a policy', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function update($user, $instanceId): bool
         {
             return $instanceId == 1;
@@ -46,7 +47,8 @@ it('allows to configure a policy', function () {
 });
 
 it('returns policies with a show or form get request', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function update($user, $instanceId): bool
         {
             return $instanceId == 1;
@@ -91,7 +93,8 @@ it('returns policies with a show or form get request', function () {
 });
 
 it('allows to access to the form in readonly mode if there is no show', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function update($user, $instanceId): bool
         {
             return $instanceId == 1;
@@ -106,7 +109,8 @@ it('allows to access to the form in readonly mode if there is no show', function
 });
 
 it('returns policies with a list get request', function () {
-    fakeListFor('person', new class extends FakeSharpEntityList {
+    fakeListFor('person', new class extends FakeSharpEntityList
+    {
         public function getListData(): array|Arrayable
         {
             return [
@@ -116,7 +120,8 @@ it('returns policies with a list get request', function () {
         }
     });
 
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function update($user, $instanceId): bool
         {
             return $instanceId == 1;
@@ -140,7 +145,8 @@ it('overrides policies with global authorizations', function () {
         ->entityFor('person')
         ->setProhibitedActions(['update']);
 
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function update($user, $instanceId): bool
         {
             return true;
@@ -155,7 +161,8 @@ it('overrides policies with global authorizations', function () {
 });
 
 it('allows to set the entity authorization in a policy', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function entity($user): bool
         {
             return $user->name != 'unauthorized-user';
@@ -174,7 +181,8 @@ it('allows to set dashboard view policy to handle whole dashboard visibility', f
         DashboardEntity::class,
     );
 
-    fakePolicyFor('dashboard', new class extends SharpEntityPolicy {
+    fakePolicyFor('dashboard', new class extends SharpEntityPolicy
+    {
         public function entity($user): bool
         {
             return $user->name != 'unauthorized-user';

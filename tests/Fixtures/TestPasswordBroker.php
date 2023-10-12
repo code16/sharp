@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerContract;
 
 class TestPasswordBroker implements PasswordBrokerContract
 {
-
     public function sendResetLink(array $credentials, Closure $callback = null)
     {
         return $credentials['email'] === 'test@example.org'

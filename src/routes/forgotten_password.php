@@ -19,5 +19,4 @@ Route::group([
 
     Route::post('reset-password', [PasswordResetController::class, 'store'])
         ->name('code16.sharp.password.reset.post');
-
 });

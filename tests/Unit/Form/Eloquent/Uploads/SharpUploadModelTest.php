@@ -5,7 +5,7 @@ use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Illuminate\Support\Facades\Storage;
 
-beforeEach(function() {
+beforeEach(function () {
     config()->set('sharp.uploads.thumbnails_disk', 'public');
     config()->set('sharp.uploads.thumbnails_dir', 'thumbnails');
 

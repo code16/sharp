@@ -2,15 +2,9 @@
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
-use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads\Transformers\Fakes\FakePicturable;
-use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-beforeEach(function() {
+beforeEach(function () {
     config()->set('sharp.uploads.thumbnails_disk', 'public');
     config()->set('sharp.uploads.thumbnails_dir', 'thumbnails');
 
@@ -217,4 +211,3 @@ it('allows to fake an sharpUpload and transform a single upload', function () {
         $transformer->apply($uploadData, null, 'picture'),
     );
 });
-

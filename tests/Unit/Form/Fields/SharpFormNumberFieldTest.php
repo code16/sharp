@@ -12,7 +12,7 @@ it('sets only default values', function () {
         ]);
 });
 
-    it('allows to define min and max', function () {
+it('allows to define min and max', function () {
     $formField = SharpFormNumberField::make('text')
         ->setMin(5)
         ->setMax(15);
@@ -22,7 +22,7 @@ it('sets only default values', function () {
         ->toHaveKey('max', 15);
 });
 
-    it('allows to define a step', function () {
+it('allows to define a step', function () {
     $formField = SharpFormNumberField::make('text')
         ->setStep(5);
 
@@ -30,7 +30,7 @@ it('sets only default values', function () {
         ->toHaveKey('step', 5);
 });
 
-    it('allows to define showControls', function () {
+it('allows to define showControls', function () {
     $formField = SharpFormNumberField::make('text')
         ->setShowControls();
 

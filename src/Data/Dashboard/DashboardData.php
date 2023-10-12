@@ -6,7 +6,6 @@ use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\PageAlertData;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class DashboardData extends Data
 {

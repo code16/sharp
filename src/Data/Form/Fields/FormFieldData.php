@@ -2,18 +2,9 @@
 
 namespace Code16\Sharp\Data\Form\Fields;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
-use Code16\Sharp\Data\Form\Fields\Common\FormDynamicAttributeData;
-use Code16\Sharp\Data\Show\Fields\ShowEntityListFieldData;
-use Code16\Sharp\Data\Show\Fields\ShowFileFieldData;
-use Code16\Sharp\Data\Show\Fields\ShowHtmlFieldData;
-use Code16\Sharp\Data\Show\Fields\ShowListFieldData;
-use Code16\Sharp\Data\Show\Fields\ShowPictureFieldData;
-use Code16\Sharp\Data\Show\Fields\ShowTextFieldData;
 use Code16\Sharp\Enums\FormFieldType;
-use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 #[TypeScriptType(
@@ -34,7 +25,8 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 )]
 final class FormFieldData extends Data
 {
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     public static function from(array $field): Data
@@ -42,7 +34,7 @@ final class FormFieldData extends Data
         $field['type'] = FormFieldType::tryFrom($field['type']) ?? $field['type'];
         $field['conditionalDisplay'] = FormConditionalDisplayData::optional($field['conditionalDisplay'] ?? null);
 
-        return match($field['type']) {
+        return match ($field['type']) {
             FormFieldType::Autocomplete => FormAutocompleteFieldData::from($field),
             FormFieldType::Check => FormCheckFieldData::from($field),
             FormFieldType::Date => FormDateFieldData::from($field),

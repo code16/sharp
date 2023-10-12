@@ -2,10 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Code16\Sharp\Tests\Fixtures\TestPasswordBroker;
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
     config()->set('sharp.auth.forgotten_password.password_broker', TestPasswordBroker::class);

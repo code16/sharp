@@ -18,7 +18,8 @@ it('allows to call an info instance command from a show', function () {
         PersonEntity::class,
     );
 
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function getInstanceCommands(): ?array
         {
             return [
@@ -28,11 +29,12 @@ it('allows to call an info instance command from a show', function () {
                     {
                         return 'instance';
                     }
+
                     public function execute($instanceId, array $data = []): array
                     {
                         return $this->info('ok');
                     }
-                }
+                },
             ];
         }
     });
@@ -51,7 +53,8 @@ it('allows to call an info instance command from a single show', function () {
         SinglePersonEntity::class,
     );
 
-    fakeShowFor('person', new class extends SinglePersonShow {
+    fakeShowFor('person', new class extends SinglePersonShow
+    {
         public function getInstanceCommands(): ?array
         {
             return [
@@ -61,11 +64,12 @@ it('allows to call an info instance command from a single show', function () {
                     {
                         return 'instance';
                     }
+
                     public function execute($instanceId, array $data = []): array
                     {
                         return $this->info('ok');
                     }
-                }
+                },
             ];
         }
     });
@@ -84,32 +88,37 @@ it('gets form and initialize form data in an instance command of a show', functi
         PersonEntity::class,
     );
 
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function getInstanceCommands(): ?array
         {
             return [
-                'cmd' => new class extends InstanceCommand {
+                'cmd' => new class extends InstanceCommand
+                {
                     public function label(): ?string
                     {
                         return 'instance';
                     }
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
+
                     protected function initialData(mixed $instanceId): array
                     {
                         return [
                             'name' => 'Marie Curie',
                         ];
                     }
+
                     public function execute($instanceId, array $data = []): array
                     {
                         $this->validate($data, ['name' => 'required']);
 
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -136,14 +145,14 @@ it('gets form and initialize form data in an instance command of a show', functi
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
-                                    ]
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                    ],
                                 ],
                                 'size' => 12,
-                            ]
+                            ],
                         ],
-                        'title' => 'one'
-                    ]
+                        'title' => 'one',
+                    ],
                 ],
             ],
         ]);
@@ -162,11 +171,13 @@ it('gets form and initialize form data in an instance command of a single show',
         SinglePersonEntity::class,
     );
 
-    fakeShowFor('person', new class extends SinglePersonShow {
+    fakeShowFor('person', new class extends SinglePersonShow
+    {
         public function getInstanceCommands(): ?array
         {
             return [
-                'single_cmd' => new class extends InstanceCommand {
+                'single_cmd' => new class extends InstanceCommand
+                {
                     public function label(): ?string
                     {
                         return 'instance';
@@ -190,7 +201,7 @@ it('gets form and initialize form data in an instance command of a single show',
 
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -199,7 +210,7 @@ it('gets form and initialize form data in an instance command of a single show',
         ->getJson(
             route('code16.sharp.api.show.command.singleInstance.form', [
                 'entityKey' => 'person',
-                'commandKey' => 'single_cmd'
+                'commandKey' => 'single_cmd',
             ])
         )
         ->assertOk()
@@ -222,14 +233,14 @@ it('gets form and initialize form data in an instance command of a single show',
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
-                                    ]
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                    ],
                                 ],
                                 'size' => 12,
-                            ]
+                            ],
                         ],
-                        'title' => 'one'
-                    ]
+                        'title' => 'one',
+                    ],
                 ],
             ],
         ]);

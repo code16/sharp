@@ -87,7 +87,7 @@ class EntityListField
             'hideOnXS' => $this->hideOnXs,
             'sizeXS' => isset($this->widthXs)
                 ? ($this->widthXs === true ? 'fill' : $this->widthXs)
-                : ($this->width ?? 'fill')
+                : ($this->width ?? 'fill'),
         ];
     }
 }

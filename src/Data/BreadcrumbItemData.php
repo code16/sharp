@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data;
 
-
 final class BreadcrumbItemData extends Data
 {
     public function __construct(

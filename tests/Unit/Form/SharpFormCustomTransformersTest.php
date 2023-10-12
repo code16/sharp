@@ -2,15 +2,10 @@
 
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Layout\FormLayout;
-use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
-use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 it('handles belongsTo', function () {
     $marie = Person::create([
@@ -22,7 +17,8 @@ it('handles belongsTo', function () {
         'partner_id' => $marie->id,
     ]);
 
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find(mixed $id): array
         {
             return $this->transform(Person::with('partner')->find($id));
@@ -45,7 +41,8 @@ it('handles hasOne', function () {
         'chief_id' => $marie->id,
     ]);
 
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find(mixed $id): array
         {
             return $this->transform(Person::with('director')->find($id));
@@ -72,7 +69,8 @@ it('handles hasMany', function () {
         'chief_id' => $marie->id,
     ]);
 
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find(mixed $id): array
         {
             return $this->transform(Person::with('collaborators')->find($id));
@@ -103,7 +101,8 @@ it('handles belongsToMany', function () {
         $colleague2->id,
     ]);
 
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find(mixed $id): array
         {
             return $this->transform(Person::with('colleagues')->find($id));
@@ -120,7 +119,8 @@ it('handles morphOne', function () {
     $marie = Person::create(['name' => 'Marie Curie']);
     $marie->photo()->create(['file' => 'photo.jpg']);
 
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find(mixed $id): array
         {
             return $this->transform(Person::with('photo')->find($id));
@@ -136,7 +136,8 @@ it('handles morphMany', function () {
     $marie->pictures()->create(['file' => 'pic-1.jpg']);
     $marie->pictures()->create(['file' => 'pic-2.jpg']);
 
-    $form = new class extends FakeSharpForm {
+    $form = new class extends FakeSharpForm
+    {
         public function find(mixed $id): array
         {
             return $this->transform(Person::with('pictures')->find($id));
@@ -197,17 +198,20 @@ it('allows to use applyIfAttributeIsMissing in a custom transformer', function (
         public function find(mixed $id): array
         {
             return $this
-                ->setCustomTransformer('slug', new class implements SharpAttributeTransformer {
+                ->setCustomTransformer('slug', new class implements SharpAttributeTransformer
+                {
                     public function apply($value, $instance = null, $attribute = null)
                     {
                         return str($instance->name)->slug();
                     }
+
                     public function applyIfAttributeIsMissing(): bool
                     {
                         return false;
                     }
                 })
-                ->setCustomTransformer('force_slug', new class implements SharpAttributeTransformer {
+                ->setCustomTransformer('force_slug', new class implements SharpAttributeTransformer
+                {
                     public function apply($value, $instance = null, $attribute = null)
                     {
                         return str($instance->name)->slug();

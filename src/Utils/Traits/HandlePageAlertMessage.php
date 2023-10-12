@@ -8,7 +8,7 @@ trait HandlePageAlertMessage
 {
     protected PageAlert $pageAlert;
 
-    public final function pageAlert(?array $data = []): ?array
+    final public function pageAlert(?array $data = []): ?array
     {
         $this->pageAlert = new PageAlert();
         $this->pageAlert->setData($data ?: []);

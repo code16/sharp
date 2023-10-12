@@ -2,12 +2,11 @@
 
 namespace Code16\Sharp\Data\Show\Fields;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\ShowFieldType;
-use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class ShowFileFieldData extends Data
 {

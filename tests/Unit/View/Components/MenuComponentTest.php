@@ -10,7 +10,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuItemSeparator;
 use Code16\Sharp\View\Components\Menu;
 use Code16\Sharp\View\Components\Menu\MenuSection;
 
-beforeEach(function() {
+beforeEach(function () {
     login();
 //    $this->disableSharpAuthorizationChecks();
 });

@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\Data\Form;
 
-
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\LayoutFieldData;
 
 final class FormLayoutFieldsetData extends Data
@@ -20,9 +18,7 @@ final class FormLayoutFieldsetData extends Data
     {
         $fieldset = [
             ...$fieldset,
-            'fields' => collect($fieldset['fields'])->map(fn (array $row) =>
-                collect($row)->map(fn (array $field) =>
-                    LayoutFieldData::from($field)
+            'fields' => collect($fieldset['fields'])->map(fn (array $row) => collect($row)->map(fn (array $field) => LayoutFieldData::from($field)
                 )
             )->toArray(),
         ];

@@ -50,12 +50,12 @@ return [
         ],
         'forgotten_password' => [
             'enabled' => true,
-//            'password_broker' => null,
-//            'remember_token_attribute' => 'remember_token',
-//            'reset_password_callback' => null,
+            //            'password_broker' => null,
+            //            'remember_token_attribute' => 'remember_token',
+            //            'reset_password_callback' => null,
         ],
         'display_attribute' => 'name',
-//         "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
+        //         "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],
 
     'theme' => [

@@ -2,7 +2,6 @@
 
 use Code16\Sharp\Form\Eloquent\Relationships\HasOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
 
 it('allows to update a hasOne relation', function () {
     $marie = Person::create(['name' => 'Marie Curie']);

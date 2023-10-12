@@ -25,7 +25,8 @@ beforeEach(function () {
 });
 
 it('gets form data for an instance', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function find($id): array
         {
             return [
@@ -33,7 +34,7 @@ it('gets form data for an instance', function () {
             ];
         }
     });
-    
+
     $this->get('/sharp/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
@@ -42,7 +43,8 @@ it('gets form data for an instance', function () {
 });
 
 it('gets form initial data for an entity in creation', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function create(): array
         {
             return [
@@ -50,7 +52,7 @@ it('gets form initial data for an entity in creation', function () {
             ];
         }
     });
-    
+
     $this->get('/sharp/s-list/person/s-form/person')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
@@ -59,7 +61,8 @@ it('gets form initial data for an entity in creation', function () {
 });
 
 it('filters out data which is not a field', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(SharpFormTextField::make('name'));
@@ -73,7 +76,7 @@ it('filters out data which is not a field', function () {
             ];
         }
     });
-    
+
     $this->get('/sharp/s-list/person/s-form/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
@@ -83,7 +86,8 @@ it('filters out data which is not a field', function () {
 });
 
 it('returns configured form fields', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(SharpFormTextField::make('name'))
@@ -106,7 +110,8 @@ it('returns configured form fields', function () {
 });
 
 it('returns configured form layout', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(SharpFormTextField::make('name'))
@@ -142,7 +147,8 @@ it('returns configured form layout', function () {
 });
 
 it('returns form configuration', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildFormConfig(): void
         {
             $this->configureBreadcrumbCustomLabelAttribute('name');
@@ -162,7 +168,7 @@ it('stores or updates an instance and redirect to the list', function () {
             'name' => 'Stephen Hawking',
         ])
         ->assertRedirect('/sharp/s-list/person');
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'name' => 'Stephen Hawking',
@@ -172,7 +178,7 @@ it('stores or updates an instance and redirect to the list', function () {
 
 it('redirects to the show after an update', function () {
     $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1');
-    
+
     $this
         ->post('/sharp/s-list/person/s-show/person/1/s-form/person/1', [
             'name' => 'Stephen Hawking',
@@ -181,13 +187,14 @@ it('redirects to the show after an update', function () {
 });
 
 it('creates an instance and redirect to the show if configured', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildFormConfig(): void
         {
             $this->configureDisplayShowPageAfterCreation();
         }
     });
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'name' => 'Stephen Hawking',
@@ -196,7 +203,8 @@ it('creates an instance and redirect to the show if configured', function () {
 });
 
 it('validates an instance before update', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function validateRequest(): void
         {
             Validator::make(request()->all(), ['name' => 'required'])
@@ -212,10 +220,11 @@ it('validates an instance before update', function () {
 });
 
 it('handles application exception as 417', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function find($id): array
         {
-            throw new SharpApplicativeException('this person is a myth'); 
+            throw new SharpApplicativeException('this person is a myth');
         }
     });
 
@@ -229,8 +238,9 @@ it('gets form data for an instance in a single form case', function () {
         'sharp.entities.single-person',
         SinglePersonEntity::class,
     );
-    
-    fakeFormFor('single-person', new class extends PersonSingleForm {
+
+    fakeFormFor('single-person', new class extends PersonSingleForm
+    {
         public function findSingle(): array
         {
             return [
@@ -251,7 +261,7 @@ it('updates an instance on a single form case', function () {
         'sharp.entities.single-person',
         SinglePersonEntity::class,
     );
-    
+
     $this
         ->post('/sharp/s-show/single-person/s-form/single-person', [
             'name' => 'Stephen Hawking',
@@ -264,7 +274,8 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
         ->entityFor('person')
         ->setMultiforms([
             'nobelized' => [
-                new class extends PersonForm {
+                new class extends PersonForm
+                {
                     public function find($id): array
                     {
                         return [
@@ -274,10 +285,11 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
                         ];
                     }
                 },
-                'With Nobel prize'
+                'With Nobel prize',
             ],
             'nope' => [
-                new class extends PersonForm {
+                new class extends PersonForm
+                {
                     public function find($id): array
                     {
                         return [
@@ -287,7 +299,7 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
                         ];
                     }
                 },
-                'No Nobel prize'
+                'No Nobel prize',
             ],
         ]);
 
@@ -307,7 +319,8 @@ it('gets form data for an instance of a sub entity (multiforms case)', function 
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
             $pageAlert
@@ -328,13 +341,14 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeFormFor('person', new class extends PersonForm {
+    fakeFormFor('person', new class extends PersonForm
+    {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
             $pageAlert
                 ->setLevelInfo()
                 ->setMessage(function (array $data) {
-                    return 'Hello ' . $data['name'];
+                    return 'Hello '.$data['name'];
                 });
         }
 

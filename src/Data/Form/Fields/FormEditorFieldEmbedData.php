@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
-use Illuminate\Support\Str;
 
 final class FormEditorFieldEmbedData extends Data
 {

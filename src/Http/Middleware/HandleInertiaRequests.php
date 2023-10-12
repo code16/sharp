@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
-use Code16\Sharp\Data\Filters\ConfigFiltersData;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\MenuData;
 use Code16\Sharp\Data\UserData;
@@ -22,19 +21,17 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'sharpVersion' => sharp_version(),
             'locale' => app()->getLocale(),
-            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), fn () =>
-                collect([
-                    'sharp::action_bar' => __('sharp::action_bar'),
-                    'sharp::dashboard' => __('sharp::dashboard'),
-                    'sharp::entity_list' => __('sharp::entity_list'),
-                    'sharp::filters' => __('sharp::filters'),
-                    'sharp::form' => __('sharp::form'),
-                    'sharp::login' => __('sharp::login'),
-                    'sharp::menu' => __('sharp::menu'),
-                    'sharp::modals' => __('sharp::modals'),
-                    'sharp::show' => __('sharp::show'),
-                ])->flatMap(fn ($values, $group) =>
-                    collect($values)->mapWithKeys(fn ($value, $key) => ["$group.$key" => $value])
+            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), fn () => collect([
+                'sharp::action_bar' => __('sharp::action_bar'),
+                'sharp::dashboard' => __('sharp::dashboard'),
+                'sharp::entity_list' => __('sharp::entity_list'),
+                'sharp::filters' => __('sharp::filters'),
+                'sharp::form' => __('sharp::form'),
+                'sharp::login' => __('sharp::login'),
+                'sharp::menu' => __('sharp::menu'),
+                'sharp::modals' => __('sharp::modals'),
+                'sharp::show' => __('sharp::show'),
+            ])->flatMap(fn ($values, $group) => collect($values)->mapWithKeys(fn ($value, $key) => ["$group.$key" => $value])
                 )->toArray()
             ),
             'config' => [

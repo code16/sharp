@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\TestCase;
 use Illuminate\Database\Schema\Blueprint;

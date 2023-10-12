@@ -19,12 +19,12 @@ class LinkToForm extends LinkToShowPage
             return parent::generateUrl();
         }
 
-        if($this->instanceId) {
+        if ($this->instanceId) {
             return route('code16.sharp.form.edit', [
                 'uri' => sprintf(
                     's-list/%s%s',
                     $this->entityKey,
-                    $this->throughShowPage ? '/' . parent::generateUri() : ''
+                    $this->throughShowPage ? '/'.parent::generateUri() : ''
                 ),
                 'entityKey' => $this->entityKey,
                 'instanceId' => $this->instanceId,

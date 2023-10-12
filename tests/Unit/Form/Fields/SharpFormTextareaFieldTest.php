@@ -36,4 +36,3 @@ it('allows to define maxLength', function () {
     expect($formField->toArray())
         ->toHaveKey('maxLength', 10);
 });
-

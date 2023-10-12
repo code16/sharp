@@ -2,10 +2,8 @@
 
 namespace Code16\Sharp\Data\Show;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
-use Code16\Sharp\Data\NotificationData;
 
 final class ShowLayoutData extends Data
 {
@@ -19,7 +17,7 @@ final class ShowLayoutData extends Data
     {
         $layout = [
             ...$layout,
-            'sections' => ShowLayoutSectionData::collection($layout['sections'])
+            'sections' => ShowLayoutSectionData::collection($layout['sections']),
         ];
 
         return new self(...$layout);

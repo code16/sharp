@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Data\Dashboard;
 
-
-use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 
@@ -22,8 +20,8 @@ final class DashboardLayoutSectionData extends Data
         $section = [
             ...$section,
             'rows' => collect($section['rows'] ?? [])
-                ->map(function(array $row) {
-                    return collect($row)->map(function(array $widget) {
+                ->map(function (array $row) {
+                    return collect($row)->map(function (array $widget) {
                         return DashboardLayoutWidgetData::from($widget);
                     });
                 })

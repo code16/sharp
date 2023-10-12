@@ -1,15 +1,8 @@
 <?php
 
 use Code16\Sharp\Auth\SharpEntityPolicy;
-use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
-use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsControllerTestSimpleEmbed;
 use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsFormControllerTestEmbed;
-use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
 
 beforeEach(function () {
@@ -48,14 +41,14 @@ it('returns fields and layout of an embed', function () {
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
-                                    ]
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                    ],
                                 ],
                                 'size' => 12,
-                            ]
+                            ],
                         ],
-                        'title' => 'one'
-                    ]
+                        'title' => 'one',
+                    ],
                 ],
             ],
         ]);
@@ -86,7 +79,8 @@ it('returns transformed and formatted data of an embed', function () {
 });
 
 it('does not show an embed without entity permission', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function entity($user): bool
         {
             return false;
@@ -107,7 +101,8 @@ it('does not show an embed without entity permission', function () {
 });
 
 it('does not show an embed without view permission', function () {
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function view($user, $instanceId): bool
         {
             return $instanceId == 2;
