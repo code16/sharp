@@ -7,14 +7,12 @@ use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class HandleSharpErrors
 {
     public function handle(Request $request, Closure $next)
     {
-        /**
-         * @var \Illuminate\Http\Response $response
-         */
         $response = $next($request);
 
         if($response->exception instanceof ValidationException) {
@@ -26,6 +24,7 @@ class HandleSharpErrors
                 new SharpException(
                     $response->exception->getMessage(),
                     match(true) {
+                        $response->exception instanceof HttpException => $response->getStatusCode(),
                         $response->exception instanceof ModelNotFoundException => 404,
                         default => 500
                     },
