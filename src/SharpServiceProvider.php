@@ -21,12 +21,6 @@ use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
-use Code16\Sharp\Http\Middleware\Api\AppendInstanceAuthorizations;
-use Code16\Sharp\Http\Middleware\Api\AppendListAuthorizations;
-use Code16\Sharp\Http\Middleware\Api\AppendMultiformInEntityList;
-use Code16\Sharp\Http\Middleware\Api\AppendNotifications;
-use Code16\Sharp\Http\Middleware\HandleInertiaRequests;
-use Code16\Sharp\Http\Middleware\HandleSharpErrors;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
@@ -36,6 +30,7 @@ use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
+use Inertia\ServiceProvider as InertiaServiceProvider;
 
 class SharpServiceProvider extends ServiceProvider
 {
@@ -43,7 +38,10 @@ class SharpServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadRoutesFrom(__DIR__ . '/routes/inertia.php');
+        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+        $this->loadRoutesFrom(__DIR__ . '/routes/login.php');
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
@@ -113,7 +111,7 @@ class SharpServiceProvider extends ServiceProvider
         ]);
 
         $this->app->register(ImageServiceProviderLaravelRecent::class);
-        $this->app->register(\Inertia\ServiceProvider::class);
+        $this->app->register(InertiaServiceProvider::class);
     }
 
     protected function registerMiddleware(): void
