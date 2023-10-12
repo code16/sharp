@@ -2,9 +2,10 @@
     import { FormUploadFieldData } from "@/types";
     import Uppy from '@uppy/core';
     import type { UppyFile } from "@uppy/core";
-    import DragDrop from '@uppy/drag-drop';
     import ThumbnailGenerator from '@uppy/thumbnail-generator';
     import XHRUpload from '@uppy/xhr-upload';
+    import FileInput from '@uppy/file-input';
+    import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import { computed, onUnmounted, ref, watch } from "vue";
     import { getErrorMessage, getXsrfToken, handleErrorAlert } from "@/api";
@@ -38,7 +39,6 @@
             (!field.transformableFileTypes || field.transformableFileTypes?.includes(extension.value));
     });
     const transformedImg = ref();
-    const dropTarget = ref<HTMLElement>();
     const uppyFile = ref<UppyFile>();
     const uppy = new Uppy({
         id: props.fieldErrorKey,
@@ -143,15 +143,18 @@
         emit('input', {});
     }
 
-    // watch(uppyFile, () => console.log({ ...uppyFile.value }));
-
+    const dropTarget = ref<HTMLElement>();
     watch(dropTarget, () => {
         if(dropTarget.value) {
-            uppy.use(DragDrop, {
+            uppy.use(DropTarget, {
+                target: dropTarget.value,
+            });
+            uppy.use(FileInput, {
                 target: dropTarget.value,
             });
         } else {
-            uppy.removePlugin(uppy.getPlugin('DragDrop'));
+            uppy.removePlugin(uppy.getPlugin('DropTarget'));
+            uppy.removePlugin(uppy.getPlugin('FileInput'));
         }
     });
 
@@ -255,10 +258,11 @@
         </div>
     </template>
     <template v-else>
-        <Button block :disabled="field.readOnly" @click="($refs.dropTarget as HTMLElement).querySelector('input').click()">
-            {{ __('sharp::form.upload.browse_button') }}
-        </Button>
-        <div class="hidden" ref="dropTarget"></div>
+        <div class="[&_input]:hidden" ref="dropTarget">
+            <Button block :disabled="field.readOnly" @click="($refs.dropTarget as HTMLElement).querySelector('input').click()">
+                {{ __('sharp::form.upload.browse_button') }}
+            </Button>
+        </div>
     </template>
 
     <EditModal
