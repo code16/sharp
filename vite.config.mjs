@@ -34,7 +34,7 @@ export default defineConfig(({ mode, command }) => {
                     'resources/js/sharp.js',
                     'resources/sass/app.css',
                     // 'resources/sass/app.scss',
-                    // 'resources/sass/vendors.scss',
+                    'resources/sass/vendors.scss',
                 ],
                 publicDirectory: '/dist',
                 refresh: true,
