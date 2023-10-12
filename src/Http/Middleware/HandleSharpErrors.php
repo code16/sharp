@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -13,6 +14,7 @@ class HandleSharpErrors
 {
     public function handle(Request $request, Closure $next)
     {
+        /** @var Response $response */
         $response = $next($request);
 
         if ($response->exception instanceof ValidationException) {

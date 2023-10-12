@@ -13,20 +13,22 @@ class Menu extends Component
     public ?string $currentEntityKey;
     public ?SharpMenuItemLink $currentEntityItem;
     public bool $hasGlobalFilters;
+    public bool $isVisible = true;
 
-    public function __construct()
+    public function __construct(private SharpMenuManager $menuManager)
     {
         $this->title = config('sharp.name', 'Sharp');
         $this->currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
         $this->currentEntityItem = $this->currentEntityKey
-            ? app(SharpMenuManager::class)->getEntityMenuItem($this->currentEntityKey)
+            ? $this->menuManager->getEntityMenuItem($this->currentEntityKey)
             : null;
         $this->hasGlobalFilters = sizeof(value(config('sharp.global_filters')) ?? []) > 0;
+        $this->isVisible = $this->menuManager->menu()?->isVisible() ?? true;
     }
 
     public function getItems(): Collection
     {
-        return app(SharpMenuManager::class)->getItems();
+        return $this->menuManager->getItems();
     }
 
     public function render()

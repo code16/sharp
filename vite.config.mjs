@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import * as path from 'path';
 import ignoreImport from 'rollup-plugin-ignore-import';
 import { splitVendorChunkPlugin } from 'vite';
+import { warmup } from 'vite-plugin-warmup';
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, path.join(process.cwd(), '/demo'), '');
@@ -22,12 +23,17 @@ export default defineConfig(({ mode, command }) => {
             }
         },
         plugins: [
+            warmup({
+                clientFiles: [
+                    './resources/js/Pages/**/*.vue',
+                ],
+            }),
             splitVendorChunkPlugin(),
             laravel({
                 input: [
                     'resources/js/sharp.js',
                     'resources/sass/app.css',
-                    'resources/sass/app.scss',
+                    // 'resources/sass/app.scss',
                     'resources/sass/vendors.scss',
                 ],
                 publicDirectory: '/dist',

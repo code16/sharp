@@ -32,6 +32,7 @@ return [
     'upload.message.file_too_big' => 'The selected file is too big (max. :size)',
     'upload.message.bad_extension' => 'File extension is incorrect',
     'upload.edit_modal.description' => 'Use the mouse wheel to zoom. Drag to move the image or the crop area',
+    'upload.help_text.max_file_size' => 'Up to :size',
 
     'multiselect.placeholder' => 'Select option',
     'multiselect.max_text' => 'Maximum items reached',

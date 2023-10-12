@@ -76,7 +76,7 @@
         <Title :breadcrumb="breadcrumb" />
 
         <WithCommands :commands="commands">
-            <div class="container">
+            <div class="container mx-auto">
                 <div class="action-bar mt-4 mb-3">
                     <div class="row align-items-center gx-3">
                         <div class="col">

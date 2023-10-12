@@ -18,55 +18,65 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
 import { Modal } from '@sharp/ui';
-
+import useMenu from "@/composables/useMenu";
+import { config } from "@/utils/config";
+import Logo from "@/components/Logo.vue";
 
 const sidebarOpen = ref(false);
-const { dialogs } = useDialogs();
+const dialogs = useDialogs();
+const menu = useMenu();
 </script>
 
 
 <template>
     <div>
-        <TransitionRoot as="template" :show="sidebarOpen">
-            <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
-                <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
-                    <div class="fixed inset-0 bg-gray-900/80" />
-                </TransitionChild>
-
-                <div class="fixed inset-0 flex">
-                    <TransitionChild as="template" enter="transition ease-in-out duration-300 transform" enter-from="-translate-x-full" enter-to="translate-x-0" leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0" leave-to="-translate-x-full">
-                        <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
-                            <TransitionChild as="template" enter="ease-in-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in-out duration-300" leave-from="opacity-100" leave-to="opacity-0">
-                                <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
-                                    <button type="button" class="-m-2.5 p-2.5" @click="sidebarOpen = false">
-                                        <span class="sr-only">Close sidebar</span>
-                                        <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
-                                    </button>
-                                </div>
-                            </TransitionChild>
-                            <!-- Sidebar component, swap this element with another sidebar if you like -->
-                            <LeftNav />
-                        </DialogPanel>
+        <template v-if="menu.isVisible">
+            <TransitionRoot as="template" :show="sidebarOpen">
+                <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
+                    <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
+                        <div class="fixed inset-0 bg-gray-900/80" />
                     </TransitionChild>
-                </div>
-            </Dialog>
-        </TransitionRoot>
 
-        <!-- Static sidebar for desktop -->
-        <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-            <!-- Sidebar component, swap this element with another sidebar if you like -->
-            <LeftNav />
-        </div>
+                    <div class="fixed inset-0 flex">
+                        <TransitionChild as="template" enter="transition ease-in-out duration-300 transform" enter-from="-translate-x-full" enter-to="translate-x-0" leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0" leave-to="-translate-x-full">
+                            <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
+                                <TransitionChild as="template" enter="ease-in-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in-out duration-300" leave-from="opacity-100" leave-to="opacity-0">
+                                    <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
+                                        <button type="button" class="-m-2.5 p-2.5" @click="sidebarOpen = false">
+                                            <span class="sr-only">Close sidebar</span>
+                                            <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                                        </button>
+                                    </div>
+                                </TransitionChild>
+                                <!-- Sidebar component, swap this element with another sidebar if you like -->
+                                <LeftNav />
+                            </DialogPanel>
+                        </TransitionChild>
+                    </div>
+                </Dialog>
+            </TransitionRoot>
 
-        <div class="lg:pl-72">
+            <!-- Static sidebar for desktop -->
+            <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+                <!-- Sidebar component, swap this element with another sidebar if you like -->
+                <LeftNav />
+            </div>
+        </template>
+
+        <div :class="{ 'lg:pl-72': menu.isVisible }">
             <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-primary-600 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-                <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
-                    <span class="sr-only">Open sidebar</span>
-                    <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-                </button>
+                <template v-if="menu.isVisible">
+                    <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
+                        <span class="sr-only">Open sidebar</span>
+                        <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+                    </button>
 
-                <!-- Separator -->
-                <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+                    <!-- Separator -->
+                    <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+                </template>
+                <template v-else>
+                    <Logo />
+                </template>
 
                 <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                     <div class="flex-1"></div>
@@ -74,11 +84,6 @@ const { dialogs } = useDialogs();
                         <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                             <span class="sr-only">Search</span>
                             <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
-                        </button>
-
-                        <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                            <span class="sr-only">View notifications</span>
-                            <BellIcon class="h-6 w-6" aria-hidden="true" />
                         </button>
 
                         <!-- Separator -->

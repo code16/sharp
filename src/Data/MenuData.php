@@ -11,6 +11,7 @@ final class MenuData extends Data
         /** @var DataCollection<MenuItemData> */
         public DataCollection $items,
         public UserMenuData $userMenu,
+        public bool $isVisible,
     ) {
     }
 
@@ -28,6 +29,7 @@ final class MenuData extends Data
                         ->map(fn (SharpMenuItem $item) => MenuItemData::from($item))
                 )
             ),
+            isVisible: $menuManager->menu()?->isVisible() ?? true,
         );
     }
 }

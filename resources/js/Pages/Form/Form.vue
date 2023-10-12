@@ -53,7 +53,7 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
-        <div class="container">
+        <div class="container mx-auto">
             <FormComponent
                 :form="form"
                 :entity-key="entityKey"

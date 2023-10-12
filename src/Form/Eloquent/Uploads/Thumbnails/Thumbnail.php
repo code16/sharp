@@ -65,7 +65,8 @@ class Thumbnail
         $thumbnailDisk = $this->storage->disk(config('sharp.uploads.thumbnails_disk', 'public'));
 
         $thumbDirNameAppender = ($this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '')
-            .(sizeof($filters) ? '_'.md5(serialize($filters)) : '');
+            .(sizeof($filters) ? '_'.md5(serialize($filters)) : '')
+            ."_q-$this->quality";
 
         $thumbnailPath = sprintf(
             '%s/%s/%s-%s%s/%s',

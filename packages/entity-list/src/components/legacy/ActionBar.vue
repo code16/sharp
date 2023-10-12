@@ -113,9 +113,9 @@
     import { SharpFilter } from '@sharp/filters';
 
     import MultiformDropdown from "./MultiformDropdown.vue";
-    import EntityListTitle from "./EntityListTitle.vue";
+    // import EntityListTitle from "./EntityListTitle.vue";
     import { CommandsDropdown } from "@sharp/commands";
-    import { sticky } from "sharp/directives";
+    // import { sticky } from "sharp/directives";
 
     export default {
         name: 'SharpActionBarList',

@@ -3,7 +3,7 @@
     import { useFilters } from "@sharp/filters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { Grid, SectionTitle, } from '@sharp/ui';
+    import { SectionTitle, } from '@sharp/ui';
     import Widget from "@sharp/dashboard/src/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { SharpFilter } from '@sharp/filters';
@@ -44,7 +44,8 @@
             query: {
                 ...filters.getQueryParams(filters.values),
                 ...parseQuery(location.search),
-            }
+            },
+            entityKey: dashboardKey,
         });
     }
 </script>
@@ -54,7 +55,7 @@
         <Title :entity-key="route().params.dashboardKey" />
 
         <WithCommands :commands="commands">
-            <div class="container">
+            <div class="container mx-auto">
                 <div class="my-4">
                     <div class="row gx-3">
                         <div class="col">
@@ -150,12 +151,18 @@
                                 </template>
                             </div>
 
-                            <Grid :rows="section.rows" row-class="g-3" v-slot="{ itemLayout: widgetLayout }">
-                                <Widget
-                                    :widget="dashboard.widgets[widgetLayout.key]"
-                                    :value="dashboard.data[widgetLayout.key]"
-                                />
-                            </Grid>
+                            <div class="grid grid-cols-12 gap-4">
+                                <template v-for="row in section.rows">
+                                    <template v-for="widgetLayout in row">
+                                        <div class="col-[span_var(--size)]" :style="{ '--size': widgetLayout.size }">
+                                            <Widget
+                                                :widget="dashboard.widgets[widgetLayout.key]"
+                                                :value="dashboard.data[widgetLayout.key]"
+                                            />
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
                         </div>
                     </template>
                 </div>

@@ -42,7 +42,7 @@ class HandleInertiaRequests extends Middleware
                 'sharp.markdown_editor.tight_lists_only' => config('sharp.markdown_editor.tight_lists_only', true),
                 'sharp.markdown_editor.nl2br' => config('sharp.markdown_editor.nl2br', false),
                 'sharp.name' => config('sharp.name', 'Sharp'),
-                'sharp.search.enabled' => config('sharp.search.enabled', false),
+                'sharp.search.enabled' => value(config('sharp.search.enabled', false)),
                 'sharp.search.placeholder' => config('sharp.search.placeholder'),
                 'sharp.theme.logo_urls.login' => config('sharp.theme.logo_urls.login'),
                 'sharp.theme.logo_urls.menu' => config('sharp.theme.logo_urls.menu'),

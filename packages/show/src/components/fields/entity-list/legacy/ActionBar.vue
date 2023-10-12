@@ -125,7 +125,7 @@
 <script lang="ts">
     import { Button } from '@sharp/ui';
     import { MultiformDropdown } from "@sharp/entity-list";
-    import { sticky } from "sharp/directives";
+    // import { sticky } from "sharp/directives";
     import { CommandsDropdown } from "@sharp/commands";
 
     export default {

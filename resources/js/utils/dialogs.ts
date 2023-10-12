@@ -6,7 +6,7 @@ let modalId = 0;
 let dialogs = ref([]);
 
 export function useDialogs() {
-    return { dialogs }
+    return dialogs;
 }
 
 export function showDialog(text: string, props: ModalProps = {}) {

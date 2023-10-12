@@ -126,6 +126,22 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
+### Hide the menu
+
+If for some reason you want to hide the menu, you can do that with the `setVisible()` method:
+
+```php
+class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
+{
+    public function build(): self
+    {
+        return $this
+            ->setVisible(auth()->user()->isAdmin())
+            ->addSection(...);
+    }
+}
+```
+
 ### Add links in the user (profile) menu
 
 Next to user's name or email, Sharp displays a dropdown menu with a logout link. You can add your own links in this menu:

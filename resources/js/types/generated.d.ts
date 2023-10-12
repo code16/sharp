@@ -585,6 +585,7 @@ export type LayoutFieldData = {
 export type MenuData = {
   items: Array<MenuItemData>;
   userMenu: UserMenuData;
+  isVisible: boolean;
 };
 export type MenuItemData = {
   icon: string | null;
