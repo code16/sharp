@@ -108,8 +108,8 @@ it('returns thumbnails if file is an image', function () {
                     'path' => '/files/images/test.jpg',
                     'disk' => 's3',
                     'thumbnail' => sprintf(
-                        '/storage/thumbnails/files/images/400-400/test.jpg?%s',
-                        Storage::disk('public')->lastModified('/thumbnails/files/images/400-400/test.jpg')
+                        '/storage/thumbnails/files/images/400-400_q-90/test.jpg?%s',
+                        Storage::disk('public')->lastModified('/thumbnails/files/images/400-400_q-90/test.jpg')
                     ),
                     'size' => 6467,
                 ],

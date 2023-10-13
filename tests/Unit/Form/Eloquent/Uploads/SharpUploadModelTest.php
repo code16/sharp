@@ -34,8 +34,8 @@ it('allows to create thumbnails', function () {
     $upload = createSharpUploadModel($file);
 
     expect($upload->thumbnail(null, 150))
-        ->toStartWith('/storage/thumbnails/data/-150/'.basename($file))
-        ->and(Storage::disk('public')->exists('thumbnails/data/-150/'.basename($file)))
+        ->toStartWith('/storage/thumbnails/data/-150_q-90/'.basename($file))
+        ->and(Storage::disk('public')->exists('thumbnails/data/-150_q-90/'.basename($file)))
         ->toBeTrue();
 })->group('eloquent');
 
@@ -66,7 +66,7 @@ it('handles transformation filters when creating a thumbnail', function () {
     $upload->filters = $filters;
     $upload->save();
 
-    $folderPath = 'thumbnails/data/-150_'.md5(serialize($filters));
+    $folderPath = 'thumbnails/data/-150_'.md5(serialize($filters)).'_q-90';
 
     expect($upload->thumbnail(null, 150))
         ->toStartWith("/storage/{$folderPath}/".basename($upload->file_name))
