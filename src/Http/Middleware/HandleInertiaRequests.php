@@ -21,7 +21,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'sharpVersion' => sharp_version(),
             'locale' => app()->getLocale(),
-            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), function() {
+            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), function () {
                 return collect([
                     'sharp::action_bar',
                     'sharp::dashboard',
@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
                 ])
                     ->map(function ($group) {
                         return collect(__($group, [], app()->getFallbackLocale()))
-                            ->mapWithKeys(fn($value, $key) => ["$group.$key" => __("$group.$key")]);
+                            ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")]);
                     })
                     ->collapse()
                     ->toArray();
