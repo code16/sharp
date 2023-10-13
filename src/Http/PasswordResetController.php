@@ -5,6 +5,7 @@ namespace Code16\Sharp\Http;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as RulesPassword;
@@ -33,7 +34,7 @@ class PasswordResetController extends Controller
         $resetCallback = function ($user, $password) {
             $user
                 ->forceFill([
-                    config('sharp.auth.password_attribute', 'password') => $password,
+                    config('sharp.auth.password_attribute', 'password') => Hash::make($password),
                     'remember_token' => Str::random(60),
                 ])
                 ->save();
