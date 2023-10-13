@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
                 'sharp::pages/auth/reset-password' => __('sharp::pages/auth/reset-password'),
                 'sharp::show' => __('sharp::show'),
             ])->flatMap(fn ($values, $group) => collect($values)->mapWithKeys(fn ($value, $key) => ["$group.$key" => $value])
-                )->toArray()
+            )->toArray()
             ),
             'config' => [
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'reset'  => 'Su contraseña ha sido restablecida.',
+    'reset' => 'Su contraseña ha sido restablecida.',
     'sent' => 'Le hemos enviado por correo electrónico el enlace para restablecer su contraseña. (Si un usuario está asociado con esta dirección de correo electrónico)',
     'throttled' => 'Por favor espere antes de intentar de nuevo.',
     'token' => 'El token de restablecimiento de contraseña es inválido.',
