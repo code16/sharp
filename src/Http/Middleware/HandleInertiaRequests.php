@@ -21,21 +21,27 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'sharpVersion' => sharp_version(),
             'locale' => app()->getLocale(),
-            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), fn () => collect([
-                'sharp::action_bar' => __('sharp::action_bar'),
-                'sharp::dashboard' => __('sharp::dashboard'),
-                'sharp::entity_list' => __('sharp::entity_list'),
-                'sharp::filters' => __('sharp::filters'),
-                'sharp::form' => __('sharp::form'),
-                'sharp::menu' => __('sharp::menu'),
-                'sharp::modals' => __('sharp::modals'),
-                'sharp::pages/auth/forgot-password' => __('sharp::pages/auth/forgot-password'),
-                'sharp::pages/auth/login' => __('sharp::pages/auth/login'),
-                'sharp::pages/auth/reset-password' => __('sharp::pages/auth/reset-password'),
-                'sharp::show' => __('sharp::show'),
-            ])->flatMap(fn ($values, $group) => collect($values)->mapWithKeys(fn ($value, $key) => ["$group.$key" => $value])
-            )->toArray()
-            ),
+            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), function() {
+                return collect([
+                    'sharp::action_bar',
+                    'sharp::dashboard',
+                    'sharp::entity_list',
+                    'sharp::filters',
+                    'sharp::form',
+                    'sharp::menu',
+                    'sharp::modals',
+                    'sharp::pages/auth/forgot-password',
+                    'sharp::pages/auth/login',
+                    'sharp::pages/auth/reset-password',
+                    'sharp::show',
+                ])
+                    ->map(function ($group) {
+                        return collect(__($group, [], app()->getFallbackLocale()))
+                            ->mapWithKeys(fn($value, $key) => ["$group.$key" => __("$group.$key")]);
+                    })
+                    ->collapse()
+                    ->toArray();
+            }),
             'config' => [
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),
                 'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),

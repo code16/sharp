@@ -21,7 +21,7 @@
             {{ __('sharp::pages/auth/forgot-password.title') }}
         </Title>
 
-        <div class="text-sm text-gray-700 mb-4">
+        <div class="text-sm text-gray-500 leading-6 mb-4">
             {{ __('sharp::pages/auth/forgot-password.description') }}
         </div>
 
