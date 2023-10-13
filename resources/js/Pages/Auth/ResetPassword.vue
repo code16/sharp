@@ -62,11 +62,11 @@
                     </p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2" for="password">
+                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2" for="password_confirmation">
                         {{ __('sharp::pages/auth/reset-password.password_confirmation_field') }}
                     </label>
                     <TextInput
-                        id="password"
+                        id="password_confirmation"
                         v-model="form.password_confirmation"
                         :has-error="!!form.errors.password_confirmation"
                         type="password"
