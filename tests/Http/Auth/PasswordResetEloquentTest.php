@@ -39,7 +39,7 @@ it('allows to request a reset password link', function () {
 
     $this->post(route('code16.sharp.password.request.post'), ['email' => $user->email])
         ->assertRedirect(route('code16.sharp.password.request'))
-        ->assertSessionHas('status', 'password-reset-link-sent');
+        ->assertSessionHas('status', __('sharp::passwords.sent'));
 
     Notification::assertSentTo($user, ResetPassword::class);
 });
