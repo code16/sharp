@@ -51,7 +51,6 @@ return [
         'forgotten_password' => [
             'enabled' => true,
             //            'password_broker' => null,
-            //            'remember_token_attribute' => 'remember_token',
             //            'reset_password_callback' => null,
         ],
         'display_attribute' => 'name',

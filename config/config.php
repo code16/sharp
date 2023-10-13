@@ -114,7 +114,6 @@ return [
         'forgotten_password' => [
             'enabled' => false,
             'password_broker' => null,
-            'remember_token_attribute' => 'remember_token',
             'reset_password_callback' => null,
         ],
 

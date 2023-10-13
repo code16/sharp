@@ -34,7 +34,7 @@ class PasswordResetController extends Controller
             $user
                 ->forceFill([
                     config('sharp.auth.password_attribute', 'password') => $password,
-                    config('sharp.auth.forgotten_password.remember_token_attribute', 'remember_token') => Str::random(60),
+                    'remember_token' => Str::random(60),
                 ])
                 ->save();
         };

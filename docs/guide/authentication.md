@@ -58,6 +58,60 @@ return [
 
 You can tweak this default form with a custom logo and an HTML message / section: see [related documentation here](style-visual-theme.md#login-and-menu-logos).
 
+### Forgotten password
+
+You can leverage the classic Laravel workflow of forgotten password, by adding a config key:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'forgotten_password' => [
+            'enabled' => true,
+        ],
+    ],
+]
+```
+
+As for Laravel, this feature will imply by default that your User model implements a few interfaces, as detailed here: https://laravel.com/docs/10.x/passwords#model-preparation (and also refer to the [notification customization](https://laravel.com/docs/10.x/passwords#reset-email-customization) part of Laravel's documentation).
+
+But since Sharp was developed to allow various situations, you can tweak this feature depending on your actual implementation.
+You can provide a custom reset password callback to decide how your user should be updated:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'forgotten_password' => [
+            'enabled' => true,
+            'reset_password_callback' => function ($user, $password) {
+                $user->updatePasswordAfterReset($password);
+            },
+        ],
+    ],
+]
+```
+
+Or alternatively, you can provide a full `Illuminate\Contracts\Auth\PasswordBroker` implementation, allowing you full control on how the reset should work:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'forgotten_password' => [
+            'enabled' => true,
+            'password_broker' => MyPasswordBroker::class
+        ],
+    ],
+]
+```
+
 ### Custom guard
 
 It's very likely that you don't want to authorize all users to access Sharp. You can hook into the [Laravel custom guards](https://laravel.com/docs/authentication#adding-custom-guards) functionality, with one config key:
