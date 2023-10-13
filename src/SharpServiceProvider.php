@@ -27,6 +27,7 @@ use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
@@ -44,6 +45,13 @@ class SharpServiceProvider extends ServiceProvider
 
         if (config('sharp.auth.forgotten_password.enabled')) {
             $this->loadRoutesFrom(__DIR__.'/routes/auth/forgotten_password.php');
+
+            ResetPassword::createUrlUsing(function ($user, string $token) {
+                return route('code16.sharp.password.reset', [
+                    'token' => $token,
+                    'email' => ($user->email ?? null),
+                ]);
+            });
         }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
