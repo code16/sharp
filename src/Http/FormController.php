@@ -33,7 +33,7 @@ class FormController extends SharpProtectedController
 
         $form = $entity->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 
-        if($form instanceof SharpSingleForm) {
+        if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
             return $this->edit($uri, $entityKey);
         }
@@ -44,7 +44,7 @@ class FormController extends SharpProtectedController
         return Inertia::render('Form/Form', [
             'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data)
+                'items' => app(SharpBreadcrumb::class)->getItems($data),
             ]),
         ]);
     }
@@ -73,7 +73,7 @@ class FormController extends SharpProtectedController
         return Inertia::render('Form/Form', [
             'form' => FormData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data)
+                'items' => app(SharpBreadcrumb::class)->getItems($data),
             ]),
         ]);
     }
@@ -141,7 +141,7 @@ class FormController extends SharpProtectedController
                 'create' => $this->sharpAuthorizationManager->isAllowed('create', $entityKey),
                 'view' => $this->sharpAuthorizationManager->isAllowed('view', $entityKey, $instanceId),
                 'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
-                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId)
+                'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ];
     }

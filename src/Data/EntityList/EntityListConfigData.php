@@ -2,25 +2,21 @@
 
 namespace Code16\Sharp\Data\EntityList;
 
-use Code16\Sharp\Data\Commands\CommandData;
 use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
-use Code16\Sharp\Enums\CommandType;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
-use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
 
 final class EntityListConfigData extends Data
 {
     public function __construct(
-        public string  $instanceIdAttribute,
+        public string $instanceIdAttribute,
         public bool $searchable,
         public bool $reorderable,
         public ?string $defaultSort,
         public ?string $defaultSortDir,
         public bool $hasShowPage,
-        public string  $deleteConfirmationText,
+        public string $deleteConfirmationText,
         public bool $deleteHidden,
         public ?string $multiformAttribute,
         public ?ConfigFiltersData $filters = null,

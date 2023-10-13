@@ -11,16 +11,18 @@ use Illuminate\Support\Str;
 class SharpBreadcrumb
 {
     protected ?array $data = null;
-    
-    public function __construct(protected CurrentSharpRequest $currentSharpRequest) {}
-    
+
+    public function __construct(protected CurrentSharpRequest $currentSharpRequest)
+    {
+    }
+
     public function getItems(array $data): array
     {
         $url = sharp_base_url_segment();
         $breadcrumb = $this->currentSharpRequest->breadcrumb();
         $displayBreadcrumb = config('sharp.display_breadcrumb', false);
         $this->data = $data;
-        
+
         return $breadcrumb
             ->map(function ($item, $index) use (&$url, $displayBreadcrumb, $breadcrumb) {
                 $url = sprintf('%s/%s/%s',
@@ -29,7 +31,7 @@ class SharpBreadcrumb
                     isset($item->instance) ? "{$item->key}/{$item->instance}" : $item->key,
                 );
                 $isLeaf = $index === sizeof($breadcrumb) - 1;
-                
+
                 return [
                     'type' => $this->getFrontTypeNameFor($item->type),
                     'label' => $displayBreadcrumb
@@ -42,7 +44,7 @@ class SharpBreadcrumb
             })
             ->all();
     }
-    
+
     private function getFrontTypeNameFor(string $type): string
     {
         return match ($type) {
@@ -53,7 +55,7 @@ class SharpBreadcrumb
             default => '',
         };
     }
-    
+
     private function getBreadcrumbLabelFor(object $item, bool $isLeaf): string
     {
         switch ($item->type) {
@@ -68,7 +70,7 @@ class SharpBreadcrumb
             case 's-form':
                 // A Form is always a leaf
                 $previousItem = $this->currentSharpRequest->breadcrumb()[$item->depth - 1];
-                
+
                 if ($previousItem->type === 's-show' && ! $this->isSameEntityKeys($previousItem->key, $item->key, true)) {
                     // The form entityKey is different from the previous entityKey in the breadcrumb: we are in a EEL case.
                     return isset($item->instance)
@@ -79,15 +81,15 @@ class SharpBreadcrumb
                             'entity' => $this->getEntityLabelForInstance($item, true),
                         ]);
                 }
-                
+
                 return isset($item->instance) || ($previousItem->type === 's-show' && ! isset($previousItem->instance))
                     ? trans('sharp::breadcrumb.form.edit')
                     : trans('sharp::breadcrumb.form.create');
         }
-        
+
         return $item->key;
     }
-    
+
     /**
      * Return first part of document title when needed :
      * {documentTitleLabel}, {entityLabel} | {site}.
@@ -97,7 +99,7 @@ class SharpBreadcrumb
         if (! $isLeaf) {
             return null;
         }
-        
+
         return match ($item->type) {
             's-show' => trans('sharp::breadcrumb.show', [
                 'entity' => $this->getEntityLabelForInstance($item, $isLeaf),
@@ -112,45 +114,45 @@ class SharpBreadcrumb
             default => null
         };
     }
-    
+
     /**
      * Only for Shows and Forms.
      */
     private function getEntityLabelForInstance(object $item, bool $isLeaf): string
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
-        
+
         if ($isLeaf && $breadcrumbAttribute = $this->data['config']['breadcrumbAttribute'] ?? null) {
             if ($value = Arr::get(json_decode(json_encode($this->data['data']), true), $breadcrumbAttribute)) {
                 Cache::put($cacheKey, $value, now()->addMinutes(30));
-                
+
                 return $value;
             }
         }
-        
+
         if (! $isLeaf) {
             // The breadcrumb custom label may have been cached on the way up
             if ($value = Cache::get("sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}")) {
                 return $value;
             }
         }
-        
+
         $entity = app(SharpEntityManager::class)->entityFor($item->key);
-        
+
         if (str_contains($item->key, ':')) {
             return $entity->getMultiforms()[Str::after($item->key, ':')][1] ?? $entity->getLabel();
         }
-        
+
         return $entity->getLabel();
     }
-    
+
     private function isSameEntityKeys(string $key1, string $key2, bool $compareBaseEntities): bool
     {
         if ($compareBaseEntities) {
             $key1 = explode(':', $key1)[0];
             $key2 = explode(':', $key2)[0];
         }
-        
+
         return $key1 === $key2;
     }
 }

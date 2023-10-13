@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data\Show\Fields;
 
-
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
@@ -18,14 +17,15 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 )]
 final class ShowFieldData extends Data
 {
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     public static function from(array $field): Data
     {
         $field['type'] = ShowFieldType::tryFrom($field['type']) ?? $field['type'];
 
-        return match($field['type']) {
+        return match ($field['type']) {
             ShowFieldType::EntityList => ShowEntityListFieldData::from($field),
             ShowFieldType::File => ShowFileFieldData::from($field),
             ShowFieldType::Html => ShowHtmlFieldData::from($field),

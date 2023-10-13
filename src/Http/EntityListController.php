@@ -51,7 +51,7 @@ class EntityListController extends SharpProtectedController
             ),
         ];
 
-        if(request()->expectsJson()) {
+        if (request()->expectsJson()) {
             // EEL case, need to return JSON
             return response()->json(EntityListData::from($data));
         }

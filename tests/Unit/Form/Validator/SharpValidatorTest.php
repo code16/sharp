@@ -3,7 +3,7 @@
 use Code16\Sharp\Form\Validator\SharpValidator;
 use Illuminate\Validation\ValidationException;
 
-beforeEach(function() {
+beforeEach(function () {
     // Bind Sharp's Validator
     app()->validator->resolver(function ($translator, $data, $rules, $messages) {
         return new SharpValidator($translator, $data, $rules, $messages);

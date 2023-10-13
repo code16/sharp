@@ -37,7 +37,8 @@ it('allows to define a SharpLinkTo link', function () {
 
 function buildTestWidget(?string $key = '', ?string $type = 'type'): SharpWidget
 {
-    return new class($key, $type) extends SharpWidget {
+    return new class($key, $type) extends SharpWidget
+    {
         public function __construct($key, $type)
         {
             parent::__construct($key, $type);

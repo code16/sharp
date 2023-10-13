@@ -24,7 +24,8 @@ beforeEach(function () {
 });
 
 it('gets list data for an entity', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function getListData(): array|Arrayable
         {
             return $this->transform([
@@ -45,7 +46,8 @@ it('gets list data for an entity', function () {
 });
 
 it('gets paginated data if wanted', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function getListData(): array|Arrayable
         {
             $items = [
@@ -77,7 +79,8 @@ it('gets paginated data if wanted', function () {
 });
 
 it('allows to search for items', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function getListData(): array|Arrayable
         {
             $items = [
@@ -115,7 +118,8 @@ it('allows to search for items', function () {
 });
 
 it('filters out data which is not displayed', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function getListData(): array|Arrayable
         {
             return $this->transform([
@@ -132,7 +136,8 @@ it('filters out data which is not displayed', function () {
 });
 
 it('gets containers and layout', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildList(EntityListFieldsContainer $fields): void
         {
             $fields
@@ -177,7 +182,8 @@ it('gets containers and layout', function () {
 
 it('gets config', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildListConfig(): void
         {
             $this->configureSearchable()
@@ -199,7 +205,8 @@ it('gets config', function () {
 });
 
 it('gets authorizations of each instance', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function getListData(): array|Arrayable
         {
             return [
@@ -210,15 +217,18 @@ it('gets authorizations of each instance', function () {
         }
     });
 
-    fakePolicyFor('person', new class extends SharpEntityPolicy {
+    fakePolicyFor('person', new class extends SharpEntityPolicy
+    {
         public function view($user, $instanceId): bool
         {
             return $instanceId != 3;
         }
+
         public function update($user, $instanceId): bool
         {
             return $instanceId == 1;
         }
+
         public function delete($user, $instanceId): bool
         {
             return $instanceId == 2;
@@ -239,7 +249,8 @@ it('gets authorizations of each instance', function () {
 
 it('gets multiforms if configured', function () {
     $this->withoutExceptionHandling();
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function getListData(): array|Arrayable
         {
             return [
@@ -346,7 +357,8 @@ it('handles hasShowPage in config', function () {
 it('allows to configure a page alert', function () {
     $this->withoutExceptionHandling();
 
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
             $pageAlert
@@ -367,13 +379,14 @@ it('allows to configure a page alert', function () {
 });
 
 it('allows to configure a page alert with a closure as content', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildPageAlert(PageAlert $pageAlert): void
         {
             $pageAlert
                 ->setLevelInfo()
                 ->setMessage(function (array $data) {
-                    return 'There are ' . count($data) . ' items.';
+                    return 'There are '.count($data).' items.';
                 });
         }
 

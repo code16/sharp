@@ -4,11 +4,7 @@ namespace Code16\Sharp\Data\Commands;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\CommandAction;
-use Code16\Sharp\Enums\FilterType;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
-use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
-use Spatie\TypeScriptTransformer\Types\StructType;
 
 // download & streamDownload actions returns the file directly in the response
 #[LiteralTypeScriptType(

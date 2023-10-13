@@ -3,7 +3,7 @@
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 
-it('sets only default values', function() {
+it('sets only default values', function () {
     $formField = SharpFormGeolocationField::make('geo');
 
     expect($formField->toArray())
@@ -16,7 +16,7 @@ it('sets only default values', function() {
         ]);
 });
 
-it('allows to define displayUnit', function() {
+it('allows to define displayUnit', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setDisplayUnitDegreesMinutesSeconds();
 
@@ -30,7 +30,7 @@ it('allows to define displayUnit', function() {
         ->toHaveKey('displayUnit', 'DD');
 });
 
-it('allows to turn on geocoding', function() {
+it('allows to turn on geocoding', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setGeocoding();
 
@@ -38,7 +38,7 @@ it('allows to turn on geocoding', function() {
         ->toHaveKey('geocoding', true);
 });
 
-it('allows to define a global apiKey', function() {
+it('allows to define a global apiKey', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setApiKey('my-key');
 
@@ -51,7 +51,7 @@ it('allows to define a global apiKey', function() {
         ]);
 });
 
-it('allows to define maps or geocoding apiKey', function() {
+it('allows to define maps or geocoding apiKey', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setMapsApiKey('my-key');
 
@@ -75,7 +75,7 @@ it('allows to define maps or geocoding apiKey', function() {
         ]);
 });
 
-it('allows to define zoomLevel', function() {
+it('allows to define zoomLevel', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setZoomLevel(15);
 
@@ -83,7 +83,7 @@ it('allows to define zoomLevel', function() {
         ->toHaveKey('zoomLevel', 15);
 });
 
-it('allows to define initialPosition', function() {
+it('allows to define initialPosition', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setInitialPosition(12.4, -3.461894989013672);
 
@@ -93,7 +93,7 @@ it('allows to define initialPosition', function() {
         ]);
 });
 
-it('allows to clear initialPosition', function() {
+it('allows to clear initialPosition', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setInitialPosition(12.4, 24.5);
 
@@ -103,7 +103,7 @@ it('allows to clear initialPosition', function() {
         ->not->toHaveKey('initialPosition');
 });
 
-it('allows to define boundaries', function() {
+it('allows to define boundaries', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setBoundaries(1, 2, 3, 4);
 
@@ -114,7 +114,7 @@ it('allows to define boundaries', function() {
         ]);
 });
 
-it('allows to define providers', function() {
+it('allows to define providers', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setMapsProvider('osm')
         ->setGeocodingProvider('osm');
@@ -124,7 +124,7 @@ it('allows to define providers', function() {
         ->toHaveKey('geocodingProvider', ['name' => 'osm', 'options' => []]);
 });
 
-it('allows to  set options for providers', function() {
+it('allows to  set options for providers', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setMapsProvider('osm', [
             'tilesUrl' => 'test',
@@ -150,7 +150,7 @@ it('allows to  set options for providers', function() {
         ]);
 });
 
-it('disallows to define an unknown maps provider', function() {
+it('disallows to define an unknown maps provider', function () {
     $this->expectException(SharpFormFieldValidationException::class);
 
     SharpFormGeolocationField::make('geo')
@@ -158,7 +158,7 @@ it('disallows to define an unknown maps provider', function() {
         ->toArray();
 });
 
-it('disallows to define an unknown geocoding provider', function() {
+it('disallows to define an unknown geocoding provider', function () {
     $this->expectException(SharpFormFieldValidationException::class);
 
     SharpFormGeolocationField::make('geo')
@@ -166,7 +166,7 @@ it('disallows to define an unknown geocoding provider', function() {
         ->toArray();
 });
 
-it('allows to clear boundaries', function() {
+it('allows to clear boundaries', function () {
     $formField = SharpFormGeolocationField::make('geo')
         ->setBoundaries(1, 2, 3, 4);
 

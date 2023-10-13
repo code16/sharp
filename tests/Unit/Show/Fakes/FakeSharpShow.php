@@ -6,7 +6,7 @@ use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class FakeSharpShow  extends SharpShow
+class FakeSharpShow extends SharpShow
 {
     public function find($id): array
     {

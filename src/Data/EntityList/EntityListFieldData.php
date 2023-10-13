@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data\EntityList;
 
-
 use Code16\Sharp\Data\Data;
 
 final class EntityListFieldData extends Data

@@ -3,13 +3,8 @@
 namespace Code16\Sharp\Data;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use JsonSerializable;
 use ReflectionClass;
 use ReflectionParameter;
-use ReflectionProperty;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
-use function Pest\Laravel\json;
 
 abstract class Data implements Arrayable
 {
@@ -21,19 +16,21 @@ abstract class Data implements Arrayable
     {
         return DataCollection::make($payload)
             ->map(function ($item) {
-                if(is_array($item)) {
-                    if(method_exists(static::class, 'from')) {
+                if (is_array($item)) {
+                    if (method_exists(static::class, 'from')) {
                         return static::from($item);
                     }
+
                     return new static(...$item);
                 }
+
                 return $item;
             });
     }
 
     public static function optional(mixed $payload): ?static
     {
-        if(is_null($payload)) {
+        if (is_null($payload)) {
             return null;
         }
 
@@ -82,9 +79,10 @@ abstract class Data implements Arrayable
     {
         return collect($values)
             ->map(function ($value) {
-                if($value instanceof \BackedEnum) {
+                if ($value instanceof \BackedEnum) {
                     return $value->value;
                 }
+
                 return $value;
             })
             ->toArray();

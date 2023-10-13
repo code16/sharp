@@ -6,7 +6,6 @@ use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 

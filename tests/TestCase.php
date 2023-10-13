@@ -10,7 +10,7 @@ class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->withoutVite();
 
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
@@ -26,5 +26,6 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('sharp.auth.forgotten_password.enabled', true);
     }
 }

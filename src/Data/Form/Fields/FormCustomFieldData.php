@@ -4,10 +4,7 @@ namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
-use Code16\Sharp\Enums\FormAutocompleteFieldMode;
-use Code16\Sharp\Enums\FormFieldType;
 use Illuminate\Support\Arr;
-use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormCustomFieldData extends Data

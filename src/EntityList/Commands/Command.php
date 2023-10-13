@@ -183,7 +183,7 @@ abstract class Command
                 ->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
                     $this->buildFormLayout($column);
 
-                    if (!$column->hasFields()) {
+                    if (! $column->hasFields()) {
                         foreach ($fields as $field) {
                             $column->withSingleField($field->key());
                         }

@@ -20,11 +20,11 @@ class SharpException extends \Exception
 
     public function render(Request $request): Response|JsonResponse|bool
     {
-        if(app()->environment('local')) {
+        if (app()->environment('local')) {
             return false;
         }
 
-        if($request->expectsJson() && !$request->inertia()) {
+        if ($request->expectsJson() && ! $request->inertia()) {
             return false;
         }
 

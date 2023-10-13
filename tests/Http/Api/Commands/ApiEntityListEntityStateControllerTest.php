@@ -1,6 +1,5 @@
 <?php
 
-
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
@@ -17,7 +16,8 @@ beforeEach(function () {
 });
 
 it('updates the state of an instance from a list and return a "refresh" action by default', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildListConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState
@@ -64,7 +64,8 @@ it('updates the state of an instance from a list and return a "refresh" action b
 });
 
 it('allow to return a "reload" action', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildListConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState
@@ -99,7 +100,8 @@ it('allow to return a "reload" action', function () {
 });
 
 it('disallows to update the state of an entity with a wrong state', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildListConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState
@@ -129,7 +131,8 @@ it('disallows to update the state of an entity with a wrong state', function () 
 });
 
 it('returns a 417 on an applicative exception', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildListConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState
@@ -160,7 +163,8 @@ it('returns a 417 on an applicative exception', function () {
 });
 
 it('disallows to update the state if unauthorized', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         public function buildListConfig(): void
         {
             $this->configureEntityState('state', new class extends EntityState
@@ -168,10 +172,12 @@ it('disallows to update the state if unauthorized', function () {
                 protected function buildStates(): void
                 {
                 }
+
                 protected function updateState($instanceId, string $stateId): ?array
                 {
                     return null;
                 }
+
                 public function authorizeFor(mixed $instanceId): bool
                 {
                     return false;

@@ -412,8 +412,8 @@ it('allows to update a morphMany attribute', function () {
     $form->updateInstance($marie->id, [
         'pictures' => [
             ['id' => null, 'file' => 'picture-1'],
-            ['id' => null, 'file' => 'picture-2']
-        ]
+            ['id' => null, 'file' => 'picture-2'],
+        ],
     ]);
 
     $this->assertDatabaseHas('pictures', [

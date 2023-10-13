@@ -3,10 +3,10 @@
 namespace Code16\Sharp\Tests\Http\Api\Embeds\Fixtures;
 
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
-use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class ApiEmbedsControllerTestSimpleEmbed extends SharpFormEditorEmbed {
+class ApiEmbedsControllerTestSimpleEmbed extends SharpFormEditorEmbed
+{
     public static string $key = 'Code16.Sharp.Tests.Http.Api.Embeds.Fixtures.ApiEmbedsControllerTestSimpleEmbed';
 
     public function buildEmbedConfig(): void

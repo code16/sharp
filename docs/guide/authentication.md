@@ -271,6 +271,62 @@ class My2faNotificationHandler extends Sharp2faNotificationHandler // or Sharp2f
 }
 ```
 
+### Forgotten password
+
+You can activate the classic Laravel Breeze workflow of forgotten password with a simple config key:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'forgotten_password' => [
+            'enabled' => true,
+        ],
+    ],
+]
+```
+
+This feature will imply by default that your User model implements a few interfaces, as detailed here: https://laravel.com/docs/10.x/passwords#model-preparation (and also refer to the [notification customization](https://laravel.com/docs/10.x/passwords#reset-email-customization) part of Laravel's documentation).
+
+And since Sharp was developed to allow various situations, you can tweak this feature depending on your actual implementation.
+You can provide a custom reset password callback to decide how your user should be updated:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'forgotten_password' => [
+            'enabled' => true,
+            'reset_password_callback' => function ($user, $password) {
+                $user->updatePasswordAfterReset($password);
+            },
+        ],
+    ],
+]
+```
+
+Or alternatively, you can provide a full `Illuminate\Contracts\Auth\PasswordBroker` implementation, allowing you full control on how the reset should work:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'forgotten_password' => [
+            'enabled' => true,
+            'password_broker' => MyPasswordBroker::class
+        ],
+    ],
+]
+```
+
+These customizations will not interfere with any default behavior that you may have implemented for your app, outside Sharp.
+
 ## Using a custom authentication workflow
 
 You can entirely override the authentication workflow (view and controller) providing your custom endpoint:

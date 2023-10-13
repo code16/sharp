@@ -125,22 +125,27 @@ it('optimizes uploaded images if configured', function () {
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
-    $optimizer = new class {
+    $optimizer = new class
+    {
         public bool $wasOptimized = false;
 
         public function optimize(): bool
         {
             $this->wasOptimized = true;
+
             return true;
         }
     };
 
-    app()->bind(OptimizerChainFactory::class, fn () => new class($optimizer) {
+    app()->bind(OptimizerChainFactory::class, fn () => new class($optimizer)
+    {
         private $optimizer;
+
         public function __construct(&$optimizer)
         {
             $this->optimizer = $optimizer;
         }
+
         public function create()
         {
             return $this->optimizer;

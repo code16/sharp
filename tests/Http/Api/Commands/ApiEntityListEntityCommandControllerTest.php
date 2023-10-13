@@ -19,7 +19,8 @@ beforeEach(function () {
 });
 
 it('allows to call an info entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -29,11 +30,12 @@ it('allows to call an info entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->info('ok');
                     }
-                }
+                },
             ];
         }
     });
@@ -47,7 +49,8 @@ it('allows to call an info entity command', function () {
 });
 
 it('allows to call a reload entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -57,11 +60,12 @@ it('allows to call a reload entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -74,7 +78,8 @@ it('allows to call a reload entity command', function () {
 });
 
 it('allows to call a view entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -84,11 +89,12 @@ it('allows to call a view entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->view('welcome');
                     }
-                }
+                },
             ];
         }
     });
@@ -101,7 +107,8 @@ it('allows to call a view entity command', function () {
 });
 
 it('allows to call a refresh entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -111,11 +118,12 @@ it('allows to call a refresh entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->refresh([1, 3]);
                     }
-                }
+                },
             ];
         }
 
@@ -143,7 +151,8 @@ it('allows to call a refresh entity command', function () {
 });
 
 it('allows to call a form entity command and it handles 422', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -153,17 +162,19 @@ it('allows to call a form entity command and it handles 422', function () {
                     {
                         return 'entity';
                     }
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
+
                     public function execute(array $data = []): array
                     {
                         $this->validate($data, ['name' => 'required']);
 
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -187,7 +198,8 @@ it('allows to call a form entity command and it handles 422', function () {
 });
 
 it('allows to call a download entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -197,6 +209,7 @@ it('allows to call a download entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         Storage::fake('files');
@@ -206,7 +219,7 @@ it('allows to call a download entity command', function () {
 
                         return $this->download('pdf/account.pdf', 'account.pdf', 'files');
                     }
-                }
+                },
             ];
         }
     });
@@ -220,7 +233,8 @@ it('allows to call a download entity command', function () {
 });
 
 it('allows to call a streamDownload entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -230,11 +244,12 @@ it('allows to call a streamDownload entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->streamDownload('content', 'stream.txt');
                     }
-                }
+                },
             ];
         }
     });
@@ -249,7 +264,8 @@ it('allows to call a streamDownload entity command', function () {
 });
 
 it('returns an applicative exception as a 417 as always', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -259,11 +275,12 @@ it('returns an applicative exception as a 417 as always', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         throw new SharpApplicativeException('error');
                     }
-                }
+                },
             ];
         }
     });
@@ -277,7 +294,8 @@ it('returns an applicative exception as a 417 as always', function () {
 });
 
 it('allows to access to the full query in an entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -287,12 +305,13 @@ it('allows to access to the full query in an entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->info($this->queryParams->sortedBy()
                             .$this->queryParams->sortedDir());
                     }
-                }
+                },
             ];
         }
     });
@@ -309,7 +328,8 @@ it('allows to access to the full query in an entity command', function () {
 });
 
 it('provides selected ids in a bulk command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -319,15 +339,17 @@ it('provides selected ids in a bulk command', function () {
                     {
                         return 'entity';
                     }
+
                     public function buildCommandConfig(): void
                     {
                         $this->configureInstanceSelectionRequired();
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->info(implode('-', $this->selectedIds()));
                     }
-                }
+                },
             ];
         }
     });
@@ -343,7 +365,8 @@ it('provides selected ids in a bulk command', function () {
 });
 
 it('disallows to call an unauthorized entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -353,15 +376,17 @@ it('disallows to call an unauthorized entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function authorize(): bool
                     {
                         return false;
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -372,7 +397,8 @@ it('disallows to call an unauthorized entity command', function () {
 });
 
 it('returns the form fields of the entity command and build a basic layout if missing', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -382,15 +408,17 @@ it('returns the form fields of the entity command and build a basic layout if mi
                     {
                         return 'entity';
                     }
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name'));
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -414,21 +442,22 @@ it('returns the form fields of the entity command and build a basic layout if mi
                             [
                                 'fields' => [
                                     [
-                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12]
-                                    ]
+                                        ['key' => 'name', 'size' => 12, 'sizeXS' => 12],
+                                    ],
                                 ],
                                 'size' => 12,
-                            ]
+                            ],
                         ],
-                        'title' => 'one'
-                    ]
+                        'title' => 'one',
+                    ],
                 ],
             ],
         ]);
 });
 
 it('allows to configure a page alert on an entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -438,17 +467,19 @@ it('allows to configure a page alert on an entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function buildPageAlert(PageAlert $pageAlert): void
                     {
                         $pageAlert
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
-                }
+                },
             ];
         }
     });
@@ -465,7 +496,8 @@ it('allows to configure a page alert on an entity command', function () {
 });
 
 it('handles localized form of the entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -475,19 +507,22 @@ it('handles localized form of the entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
+
                     public function getDataLocalizations(): array
                     {
                         return ['fr', 'en', 'it'];
                     }
-                }
+                },
             ];
         }
     });
@@ -509,7 +544,8 @@ it('handles localized form of the entity command', function () {
 });
 
 it('allows to initialize form data in an entity command', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getEntityCommands(): ?array
         {
             return [
@@ -519,21 +555,24 @@ it('allows to initialize form data in an entity command', function () {
                     {
                         return 'entity';
                     }
+
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
                     }
+
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
                     }
+
                     public function initialData(): array
                     {
                         return [
                             'name' => 'Marie Curie',
                         ];
                     }
-                }
+                },
             ];
         }
     });

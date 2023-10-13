@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
-use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsControllerTestSimpleEmbed;
 use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsControllerTestFormattedEmbed;
+use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsControllerTestSimpleEmbed;
 use Illuminate\Support\Str;
 
 beforeEach(function () {

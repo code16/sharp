@@ -2,14 +2,9 @@
 
 namespace Code16\Sharp\Data\Show;
 
-
-use Code16\Sharp\Data\Commands\CommandData;
 use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\EntityStateData;
-use Code16\Sharp\Enums\CommandType;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
-use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
 
 final class ShowConfigData extends Data
 {

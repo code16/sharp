@@ -3,10 +3,7 @@
 namespace Code16\Sharp\Data\Filters;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
-use Code16\Sharp\Enums\FilterType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
-use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[LiteralTypeScriptType('{ _root: Array<FilterData> } & { [key: string]: Array<FilterData> }')]
 final class ConfigFiltersData extends Data

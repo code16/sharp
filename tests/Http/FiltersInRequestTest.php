@@ -18,15 +18,18 @@ beforeEach(function () {
 });
 
 it('filters instances of an entity list', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectFilter {
+                new class extends EntityListSelectFilter
+                {
                     public function buildFilterConfig(): void
                     {
                         $this->configureKey('job');
                     }
+
                     public function values(): array
                     {
                         return [
@@ -37,6 +40,7 @@ it('filters instances of an entity list', function () {
                 },
             ];
         }
+
         public function getListData(): array|Arrayable
         {
             return collect([
@@ -59,15 +63,18 @@ it('filters instances of an entity list', function () {
 });
 
 it('uses the default value of a required filter if no value was sent', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectRequiredFilter {
+                new class extends EntityListSelectRequiredFilter
+                {
                     public function buildFilterConfig(): void
                     {
                         $this->configureKey('job');
                     }
+
                     public function values(): array
                     {
                         return [
@@ -75,6 +82,7 @@ it('uses the default value of a required filter if no value was sent', function 
                             'physician' => 'Physician',
                         ];
                     }
+
                     public function defaultValue(): mixed
                     {
                         return 'physicist';
@@ -82,6 +90,7 @@ it('uses the default value of a required filter if no value was sent', function 
                 },
             ];
         }
+
         public function getListData(): array|Arrayable
         {
             return collect([
@@ -104,15 +113,18 @@ it('uses the default value of a required filter if no value was sent', function 
 });
 
 it('handles multiple filter values', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectMultipleFilter {
+                new class extends EntityListSelectMultipleFilter
+                {
                     public function buildFilterConfig(): void
                     {
                         $this->configureKey('job');
                     }
+
                     public function values(): array
                     {
                         return [
@@ -123,6 +135,7 @@ it('handles multiple filter values', function () {
                 },
             ];
         }
+
         public function getListData(): array|Arrayable
         {
             return collect([
@@ -146,16 +159,19 @@ it('handles multiple filter values', function () {
 });
 
 it('saves retained filters in the session when set', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectFilter {
+                new class extends EntityListSelectFilter
+                {
                     public function buildFilterConfig(): void
                     {
                         $this->configureKey('job')
                             ->configureRetainInSession();
                     }
+
                     public function values(): array
                     {
                         return [
@@ -166,6 +182,7 @@ it('saves retained filters in the session when set', function () {
                 },
             ];
         }
+
         public function getListData(): array|Arrayable
         {
             return collect([
@@ -221,16 +238,19 @@ it('saves retained filters in the session when set', function () {
 });
 
 it('handles retained multiple filter', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectMultipleFilter {
+                new class extends EntityListSelectMultipleFilter
+                {
                     public function buildFilterConfig(): void
                     {
                         $this->configureKey('job')
                             ->configureRetainInSession();
                     }
+
                     public function values(): array
                     {
                         return [
@@ -254,16 +274,19 @@ it('handles retained multiple filter', function () {
 });
 
 it('handles retained required filter', function () {
-    fakeListFor('person', new class extends PersonList {
+    fakeListFor('person', new class extends PersonList
+    {
         protected function getFilters(): ?array
         {
             return [
-                new class extends EntityListSelectRequiredFilter {
+                new class extends EntityListSelectRequiredFilter
+                {
                     public function buildFilterConfig(): void
                     {
                         $this->configureKey('job')
                             ->configureRetainInSession();
                     }
+
                     public function values(): array
                     {
                         return [
@@ -271,6 +294,7 @@ it('handles retained required filter', function () {
                             'physician' => 'Physician',
                         ];
                     }
+
                     public function defaultValue(): mixed
                     {
                         return 'physicist';
@@ -278,6 +302,7 @@ it('handles retained required filter', function () {
                 },
             ];
         }
+
         public function getListData(): array|Arrayable
         {
             return collect([

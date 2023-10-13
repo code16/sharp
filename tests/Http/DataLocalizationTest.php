@@ -21,7 +21,8 @@ beforeEach(function () {
 it('adds the locales array if configured to the form', function () {
     $this->withoutExceptionHandling();
 
-    fakeFormFor('person', new class extends FakeSharpForm {
+    fakeFormFor('person', new class extends FakeSharpForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(
@@ -43,19 +44,20 @@ it('adds the locales array if configured to the form', function () {
 
     $this->get('/sharp/s-list/person/s-form/person')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
         );
 
     $this->get('/sharp/s-list/person/s-form/person/1')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
         );
 });
 
 it('does not add the locales array if not configured', function () {
-    fakeFormFor('person', new class extends FakeSharpForm {
+    fakeFormFor('person', new class extends FakeSharpForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(
@@ -72,13 +74,14 @@ it('does not add the locales array if not configured', function () {
 
     $this->get('/sharp/s-list/person/s-form/person')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', [])
         );
 });
 
 it('does not add the locales array if configured but there is no localized field', function () {
-    fakeFormFor('person', new class extends FakeSharpForm {
+    fakeFormFor('person', new class extends FakeSharpForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(
@@ -99,13 +102,14 @@ it('does not add the locales array if configured but there is no localized field
 
     $this->get('/sharp/s-list/person/s-form/person')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', [])
         );
 });
 
 it('adds the locales array if configured in a form list field', function () {
-    fakeFormFor('person', new class extends FakeSharpForm {
+    fakeFormFor('person', new class extends FakeSharpForm
+    {
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields->addField(
@@ -129,19 +133,20 @@ it('adds the locales array if configured in a form list field', function () {
 
     $this->get('/sharp/s-list/person/s-form/person')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
         );
 
     $this->get('/sharp/s-list/person/s-form/person/1')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('form.locales', ['fr', 'en'])
         );
 });
 
 it('adds the locales array if configured in the show', function () {
-    fakeShowFor('person', new class extends FakeSharpShow {
+    fakeShowFor('person', new class extends FakeSharpShow
+    {
         public function buildShowFields(FieldsContainer $showFields): void
         {
             $showFields->addField(
@@ -162,7 +167,7 @@ it('adds the locales array if configured in the show', function () {
 
     $this->get('/sharp/s-list/person/s-show/person/1')
         ->assertOk()
-        ->assertInertia(fn(Assert $page) => $page
+        ->assertInertia(fn (Assert $page) => $page
             ->where('show.locales', ['fr', 'en'])
         );
 });

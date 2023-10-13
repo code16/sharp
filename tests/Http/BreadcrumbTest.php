@@ -7,7 +7,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Testing\AssertableInertia as Assert;
 
-beforeEach(function() {
+beforeEach(function () {
     config()->set('sharp.display_breadcrumb', true);
     login();
 
@@ -34,7 +34,7 @@ it('builds the breadcrumb for a show page', function () {
             route('code16.sharp.show.show', [
                 'uri' => 's-list/person/',
                 'person',
-                1
+                1,
             ])
         )
         ->assertOk();
@@ -67,7 +67,7 @@ it('builds the breadcrumb for a form', function () {
             route('code16.sharp.form.edit', [
                 'uri' => 's-list/person/',
                 'person',
-                1
+                1,
             ])
         )
         ->assertOk();
@@ -84,7 +84,7 @@ it('builds the breadcrumb for a form through a show page', function () {
             route('code16.sharp.form.edit', [
                 'uri' => 's-list/person/s-show/person/1',
                 'person',
-                1
+                1,
             ])
         )
         ->assertOk();
@@ -105,7 +105,7 @@ it('uses labels defined for entities in the config', function () {
             route('code16.sharp.show.show', [
                 'uri' => 's-list/person/',
                 'person',
-                1
+                1,
             ])
         )
         ->assertOk()
@@ -116,7 +116,8 @@ it('uses labels defined for entities in the config', function () {
 });
 
 it('uses custom labels on leaves if configured', function () {
-    fakeShowFor('person', new class extends PersonShow {
+    fakeShowFor('person', new class extends PersonShow
+    {
         public function buildShowConfig(): void
         {
             $this->configureBreadcrumbCustomLabelAttribute('name');
@@ -133,7 +134,7 @@ it('uses custom labels on leaves if configured', function () {
             route('code16.sharp.show.show', [
                 'uri' => 's-list/person/',
                 'person',
-                1
+                1,
             ])
         )
         ->assertOk()

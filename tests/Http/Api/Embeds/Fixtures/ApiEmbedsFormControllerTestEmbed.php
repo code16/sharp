@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Tests\Http\Api\Embeds\Fixtures;
 
-use App\Models\User;
-use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;

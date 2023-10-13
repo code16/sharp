@@ -104,7 +104,8 @@ it('allows to define a custom transformer as an instance', function () {
         public function getListData(): array|Arrayable
         {
             return $this
-                ->setCustomTransformer('name', new class implements SharpAttributeTransformer {
+                ->setCustomTransformer('name', new class implements SharpAttributeTransformer
+                {
                     public function apply($value, $instance = null, $attribute = null)
                     {
                         return str($value)->upper();
@@ -143,7 +144,7 @@ it('handles the relation separator with a custom transformer', function () {
                 ->setCustomTransformer('name', fn ($name) => strtoupper($name))
                 ->setCustomTransformer('partner:name', function ($name, $user) {
                     return $user
-                        ? 'Partner: ' . $name
+                        ? 'Partner: '.$name
                         : '';
                 })
                 ->transform([$marie, $pierre]);

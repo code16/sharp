@@ -3,11 +3,9 @@
 namespace Code16\Sharp\Data\Filters;
 
 use Code16\Sharp\Data\Data;
-use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Enums\FilterType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
-use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class SelectFilterData extends Data
 {

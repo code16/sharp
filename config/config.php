@@ -111,6 +111,12 @@ return [
             'handler' => 'notification', // "notification", "totp" or a class name in custom implementation case
         ],
 
+        'forgotten_password' => [
+            'enabled' => false,
+            'password_broker' => null,
+            'reset_password_callback' => null,
+        ],
+
         // Handle a "remember me" flag (with a checkbox on the login form)
         'suggest_remember_me' => false,
 

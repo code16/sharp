@@ -1,7 +1,6 @@
 <?php
 
 use Code16\Sharp\Http\Api\DownloadController;
-use Code16\Sharp\Http\Api\ApiFormUploadController;
 use Code16\Sharp\Http\DashboardController;
 use Code16\Sharp\Http\EntityListController;
 use Code16\Sharp\Http\FormController;

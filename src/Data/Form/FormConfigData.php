@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\Data\Form;
 
-
 use Code16\Sharp\Data\Data;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormConfigData extends Data
 {

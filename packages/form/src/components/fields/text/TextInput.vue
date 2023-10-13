@@ -3,9 +3,12 @@
 
     defineProps<{
         hasError?: boolean,
+        modelValue?: string,
     }>();
 
     const input = ref();
+
+    defineEmits(['update:modelValue']);
 
     defineExpose({
         focus: () => input.value.focus(),
@@ -20,6 +23,8 @@
             'text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-primary-600': !hasError,
         }"
         :aria-invalid="hasError ? 'true' : 'false'"
+        :value="modelValue"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         ref="input"
     >
 </template>

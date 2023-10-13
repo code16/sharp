@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Data;
 
-
 final class EntityStateValueData extends Data
 {
     public function __construct(

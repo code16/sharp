@@ -2,11 +2,9 @@
 
 namespace Code16\Sharp\Data\Dashboard;
 
-
 use Code16\Sharp\Data\Commands\ConfigCommandsData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Filters\ConfigFiltersData;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class DashboardConfigData extends Data
 {

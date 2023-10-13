@@ -9,14 +9,14 @@
     }>();
 
     const form = useForm({
-        code: "",
+        code: '',
     });
 </script>
 
 <template>
-    <AuthLayout>
+    <AuthLayout show-site-name>
         <Title>
-            {{ __('sharp::login.login_page_title') }}
+            {{ __('sharp::pages/auth/login.title') }}
         </Title>
         <template v-if="form.hasErrors" #prepend>
             <div class="rounded-md bg-red-100 p-4 mb-4">
@@ -31,12 +31,12 @@
 
         <form @submit.prevent="form.post(route('code16.sharp.login.2fa.post'))">
             <div class="mb-3">
-                <input type="text" name="code" id="code" class="form-control" v-model="form.code" :placeholder="__('sharp::login.code_field')">
+                <input type="text" name="code" id="code" class="form-control" v-model="form.code" :placeholder="__('sharp::pages/auth/login.code_field')">
             </div>
 
             <div class="text-center mt-4">
                 <button type="submit" id="submit" class="btn btn-primary btn-lg">
-                    {{ __('sharp::login.button') }}
+                    {{ __('sharp::pages/auth/login.button') }}
                 </button>
             </div>
         </form>

@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Data\Dashboard;
 
-
-use Code16\Sharp\Data\Dashboard\Widgets\WidgetData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 

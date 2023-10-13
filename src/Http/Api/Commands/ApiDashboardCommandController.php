@@ -5,7 +5,6 @@ namespace Code16\Sharp\Http\Api\Commands;
 use Code16\Sharp\Dashboard\DashboardQueryParams;
 use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Data\Commands\CommandFormData;
-use Code16\Sharp\Data\Form\FormData;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Api\ApiController;
 

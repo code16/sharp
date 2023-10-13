@@ -5,7 +5,6 @@ namespace Code16\Sharp\Data\Commands;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\CommandType;
 use Code16\Sharp\Enums\InstanceSelectionMode;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class CommandData extends Data
 {

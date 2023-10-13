@@ -32,7 +32,10 @@ it('allows to format local value to front', function () {
         SharpFormAutocompleteField::make('text', 'local'),
         new class($value)
         {
-            public function __construct(private $value) {}
+            public function __construct(private $value)
+            {
+            }
+
             public function toArray()
             {
                 return ['id' => $this->value];

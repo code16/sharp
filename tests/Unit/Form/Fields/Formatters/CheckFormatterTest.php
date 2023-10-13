@@ -30,4 +30,3 @@ it('allows to format value from front', function () {
         ->and($formatter->fromFront($field, $attribute, 0))->toBeFalse()
         ->and($formatter->fromFront($field, $attribute, ''))->toBeFalse();
 });
-

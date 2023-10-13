@@ -7,12 +7,14 @@ use Inertia\Testing\AssertableInertia as Assert;
 beforeEach(function () {
     login();
 
-    config()->set('sharp.global_filters', fn() => [
-        new class extends GlobalRequiredFilter {
+    config()->set('sharp.global_filters', fn () => [
+        new class extends GlobalRequiredFilter
+        {
             public function buildFilterConfig(): void
             {
                 $this->configureKey('test');
             }
+
             public function values(): array
             {
                 return [
@@ -21,11 +23,12 @@ beforeEach(function () {
                     3 => 'Three',
                 ];
             }
+
             public function defaultValue(): mixed
             {
                 return 2;
             }
-        }
+        },
     ]);
 });
 
@@ -63,8 +66,8 @@ it('the current value of the global filter is sent with every inertia request', 
 
     $this
         ->get('/sharp/s-list/person')
-        ->assertInertia(fn(Assert $page) => $page
-            ->has('globalFilters.filters._root.0', fn(Assert $filter) => $filter
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('globalFilters.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
                 ->where('required', true)
                 ->where('default', 2)
@@ -77,8 +80,8 @@ it('the current value of the global filter is sent with every inertia request', 
 
     $this
         ->get('/sharp/s-list/person')
-        ->assertInertia(fn(Assert $page) => $page
-            ->has('globalFilters.filters._root.0', fn(Assert $filter) => $filter
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('globalFilters.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
                 ->where('default', 3)
                 ->etc()

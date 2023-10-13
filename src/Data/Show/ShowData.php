@@ -2,16 +2,12 @@
 
 namespace Code16\Sharp\Data\Show;
 
-
-use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\InstanceAuthorizationsData;
-use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\PageAlertData;
 use Code16\Sharp\Data\Show\Fields\ShowFieldData;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
-use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class ShowData extends Data
 {

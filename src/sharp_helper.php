@@ -16,7 +16,7 @@ function instanciate($class)
         return app($class);
     }
 
-    if($class instanceof Closure) {
+    if ($class instanceof Closure) {
         return $class();
     }
 

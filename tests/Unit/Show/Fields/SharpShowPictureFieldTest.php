@@ -2,7 +2,7 @@
 
 use Code16\Sharp\Show\Fields\SharpShowPictureField;
 
-it('allow to define a picture field', function() {
+it('allow to define a picture field', function () {
     $field = SharpShowPictureField::make('pictureField');
 
     expect($field->toArray())->toEqual([

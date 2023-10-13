@@ -9,8 +9,7 @@ it('allows to set a legend', function () {
         ->toEqual('legend');
 });
 
-it('allows to add a field', function ()
-{
+it('allows to add a field', function () {
     $formTab = new FormLayoutFieldset('legend');
     $formTab->withSingleField('name');
 
@@ -18,8 +17,7 @@ it('allows to add a field', function ()
         ->toHaveCount(1);
 });
 
-it('allows to add multiple fields', function ()
-{
+it('allows to add multiple fields', function () {
     $formTab = new FormLayoutFieldset('legend');
     $formTab->withFields('name', 'age');
 

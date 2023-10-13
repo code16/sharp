@@ -16,8 +16,7 @@ trait HandleCommandReturn
     protected function returnCommandResult(
         SharpEntityList|SharpShow|SharpDashboard $commandContainer,
         array $returnedValue
-    ): StreamedResponse|JsonResponse
-    {
+    ): StreamedResponse|JsonResponse {
         if ($returnedValue['action'] == 'download') {
             return Storage::disk($returnedValue['disk'])
                 ->download(
@@ -49,8 +48,7 @@ trait HandleCommandReturn
         SharpEntityList|SharpShow $commandContainer,
         string $commandKey,
         mixed $instanceId
-    ): ?InstanceCommand
-    {
+    ): ?InstanceCommand {
         $commandHandler = $commandContainer->findInstanceCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();
 
