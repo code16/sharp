@@ -11,6 +11,7 @@
     import { getErrorMessage, getXsrfToken, handleErrorAlert } from "@/api";
     import { getFiltersFromCropData } from "./util/filters";
     import { Button } from "@sharp/ui";
+    import { ArrowDownOnSquareIcon } from "@heroicons/vue/24/outline";
 
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";
@@ -144,11 +145,15 @@
         emit('input', {});
     }
 
+    const isDraggingOver = ref(false);
     const dropTarget = ref<HTMLElement>();
     watch(dropTarget, () => {
         if(dropTarget.value) {
             uppy.use(DropTarget, {
                 target: dropTarget.value,
+                onDragOver: () => isDraggingOver.value = true,
+                onDragLeave: () => isDraggingOver.value = false,
+                onDrop: () => isDraggingOver.value = false,
             });
         } else {
             uppy.removePlugin(uppy.getPlugin('DropTarget'));
@@ -255,29 +260,40 @@
         </div>
     </template>
     <template v-else>
-        <div class="[&_input]:hidden" ref="dropTarget">
-            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div class="text-center">
-                    <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                        <UploadDropText v-slot="{ linkText }">
+        <div class="relative flex justify-center rounded-lg border border-dashed  px-6 py-10"
+            :class="[isDraggingOver ? 'border-primary-600' : 'border-gray-900/25']"
+            ref="dropTarget"
+        >
+            <div class="text-center" :class="{ 'invisible': isDraggingOver }">
+                <div class="text-sm leading-6 text-gray-600">
+                    <UploadDropText>
+                        <template #link="{ text }">
                             <label class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                <span>{{ linkText }}</span>
-                                <FileInput class="sr-only" />
+                                <span>{{ text }}</span>
+                                <FileInput class="sr-only" :uppy="uppy" :props="{ pretty: false }" />
                             </label>
-                        </UploadDropText>
-                    </div>
-                    <p class="text-xs leading-5 text-gray-600">
-                        <template v-if="field.fileFilter?.length">
-                            <span class="uppercase">
-                                {{ field.fileFilter.join(', ') }}.
-                            </span>
                         </template>
-                        <template v-if="field.maxFileSize">
-                            {{ __('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize) }) }}
-                        </template>
-                    </p>
+                    </UploadDropText>
                 </div>
+                <p class="text-xs leading-5 text-gray-600">
+                    <template v-if="field.fileFilter?.length">
+                        <span class="uppercase">
+                            {{ field.fileFilter.map(extension => extension.replace('.', '')).join(', ') }}
+                        </span>
+                    </template>
+                    <template v-if="field.maxFileSize">
+                        {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
+                    </template>
+                </p>
             </div>
+            <template v-if="isDraggingOver">
+                <div class="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
+                    <ArrowDownOnSquareIcon class="w-8 h-8 text-gray-400 mb-1" />
+                    <div class="text-sm leading-6 text-gray-600">
+                        Drop your file here
+                    </div>
+                </div>
+            </template>
         </div>
     </template>
 

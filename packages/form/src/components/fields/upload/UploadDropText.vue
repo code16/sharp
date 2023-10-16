@@ -7,6 +7,6 @@
 
 <template>
     {{ text[1] }}
-    <slot :link-text="text[2]" />
+    <slot name="link" :text="text[2]" />
     {{ text[3] }}
 </template>
