@@ -9,19 +9,23 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class DummyClass extends SharpEntityList
 {
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    protected function buildList(EntityListFieldsContainer $fields): void
     {
-        // $fieldsContainer->addField(EntityListField::make('myCol')->setLabel('Label...'));
-    }
-
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        // $fieldsLayout->addColumn('myCol', 6);
+        // $fields
+        //     ->addField(
+        //         EntityListField::make('myCol')
+        //             ->setLabel('My col')
+        //             ->setWidth(4)
+        //             ->setWidthOnSmallScreens(6),
+        //     );
     }
 
     public function buildListConfig(): void
     {
-        //
+        // $this
+        //     ->configureDefaultSort('created_at', 'desc')
+        //     ->configureSearchable()
+        //     ->configurePaginated();
     }
 
     protected function getInstanceCommands(): ?array
@@ -41,6 +45,10 @@ class DummyClass extends SharpEntityList
 
     public function getListData(): array|Arrayable
     {
-        // return $this->transform(...)
+        // return $this
+        //     ->setCustomTransformer('created_at', function ($value, DummyModelClass $dummyModel) {
+        //         return $dummyModel->created_at->isoFormat('LLLL');
+        //     })
+        //     ->transform(...)
     }
 }

@@ -12,9 +12,12 @@ use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
 use Code16\Sharp\Console\EntityListMakeCommand;
+use Code16\Sharp\Console\EntityMakeCommand;
+use Code16\Sharp\Console\EntityWizardCommand;
 use Code16\Sharp\Console\FormMakeCommand;
 use Code16\Sharp\Console\InstanceCommandMakeCommand;
 use Code16\Sharp\Console\MediaMakeCommand;
+use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
@@ -109,6 +112,8 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->commands([
             CreateUploadsMigration::class,
+            EntityWizardCommand::class,
+            EntityMakeCommand::class,
             EntityListMakeCommand::class,
             FormMakeCommand::class,
             ShowPageMakeCommand::class,
@@ -118,6 +123,7 @@ class SharpServiceProvider extends ServiceProvider
             InstanceCommandMakeCommand::class,
             DashboardMakeCommand::class,
             ValidatorMakeCommand::class,
+            PolicyMakeCommand::class,
             EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
         ]);

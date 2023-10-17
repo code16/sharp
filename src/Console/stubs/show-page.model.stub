@@ -14,21 +14,43 @@ class DummyClass extends SharpShow
 {
     protected function buildShowFields(FieldsContainer $showFields): void
     {
-        // $showFields->addField(SharpShowTextField::make('myField'));
+        // $showFields
+        //     ->addField(
+        //         SharpShowTextField::make('myField')
+        //             ->setLabel('My field')
+        //     );
     }
 
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
-        // $showLayout->addSection('My section', function(ShowLayoutSection $section) { ... });
+        // $showLayout
+        //     ->addSection('My section', function (ShowLayoutSection $section) {
+        //         $section
+        //             ->addColumn(12, function (ShowLayoutColumn $column) {
+        //                 $column->withSingleField('myField');
+        //             });
+        //     });
     }
 
     public function buildShowConfig(): void
     {
-        //
+        // $this
+        //     ->configureBreadcrumbCustomLabelAttribute('name');
     }
 
     public function find($id): array
     {
-        return $this->transform(DummyModelClass::findOrFail($id));
+        return $this
+            // ->setCustomTransformer('created_at', function ($value, DummyModelClass $dummyModel) {
+            //     return $dummyModel->created_at->isoFormat('LLLL');
+            // })
+            ->transform(
+                DummyModelClass::findOrFail($id)
+            );
+    }
+
+    public function delete($id): void
+    {
+        DummyModelClass::findOrFail($id)->delete();
     }
 }

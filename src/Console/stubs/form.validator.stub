@@ -9,10 +9,13 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use DummyFullValidatorClass;
 
 class DummyClass extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
+
+    protected ?string $formValidatorClass = DummyValidatorClass::class;
 
     public function buildFormFields(FieldsContainer $formFields): void
     {
