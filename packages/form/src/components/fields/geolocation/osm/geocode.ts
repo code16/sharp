@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { GeocodeParams, GeocodeResult } from "../types";
 
 //https://wiki.openstreetmap.org/wiki/Nominatim
 
@@ -21,10 +22,10 @@ function getReverseResults(latLng) {
     }).then(response => [response.data]);
 }
 
-async function osmGeocode({ address, latLng }) {
-    const results = !!latLng
-        ? await getReverseResults(latLng)
-        : await getResults(address);
+async function osmGeocode(params: GeocodeParams): Promise<GeocodeResult[]> {
+    const results = params.latLng
+        ? await getReverseResults(params.latLng)
+        : await getResults(params.address);
 
     return results.map(result => ({
         location: {
@@ -36,7 +37,7 @@ async function osmGeocode({ address, latLng }) {
             { lat: Number(result.boundingbox[1]), lng: Number(result.boundingbox[3]) },
         ],
         address: result.display_name,
-    }));
+    }) satisfies GeocodeResult);
 }
 
 export default osmGeocode;

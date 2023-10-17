@@ -1,14 +1,61 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { Modal, Button } from "@sharp/ui";
+
+    import GeolocationEdit from './GeolocationEdit.vue';
+    import { FormGeolocationFieldData } from "@/types";
+    import type { Component } from "vue";
+    import Gmaps from "./gmaps/Gmaps.vue";
+    import Osm from "./osm/Osm.vue";
+    import { onMounted, ref } from "vue";
+    import { dd2dms, triggerResize } from "./utils";
+    import { loadGmaps } from "./gmaps/load";
+
+    const props = defineProps<{
+        field: FormGeolocationFieldData,
+        value: FormGeolocationFieldData['value'],
+    }>();
+
+    const emit = defineEmits(['input']);
+
+    const components: Record<FormGeolocationFieldData['mapsProvider']['name'], Component> = {
+        gmaps: Gmaps,
+        osm: Osm,
+    };
+
+    const ready = ref(false);
+    const modalVisible = ref(false);
+    const modalMarkerPosition = ref(props.value);
+
+    function onModalSubmit() {
+        emit('input', modalMarkerPosition.value);
+    }
+
+    async function init() {
+        if(props.field.mapsProvider.name === 'gmaps') {
+            await loadGmaps(props.field.mapsProvider.options.apiKey);
+        }
+        ready.value = true;
+    }
+
+    init();
+
+    onMounted(() => {
+        new IntersectionObserver(entries => {
+            if(entries[0].isIntersecting) {
+                triggerResize();
+            }
+        });
+    });
 </script>
 
 <template>
     <div class="SharpGeolocation">
-        <template v-if="isLoading">
+        <template v-if="!ready">
             {{ __('sharp::form.geolocation.loading') }}
         </template>
-        <template v-else-if="isEmpty">
-            <Button text block @click="handleShowModalButtonClicked">
+        <template v-else-if="!value">
+            <Button text block @click="modalVisible = true">
                 {{ __('sharp::form.geolocation.browse_button') }}
             </Button>
         </template>
@@ -17,27 +64,28 @@
                 <div class="row">
                     <div class="col-7">
                         <component
-                            :is="mapComponent"
-                            class="SharpGeolocation__map"
-                            :class="mapClasses"
+                            :is="components[field.mapsProvider.name]"
+                            class="max-w-full pb-[80%]"
                             :marker-position="value"
                             :center="value"
-                            :zoom="zoomLevel"
-                            :max-bounds="maxBounds"
-                            :tiles-url="tilesUrl"
+                            :zoom="field.zoomLevel"
+                            :max-bounds="field.boundaries ? [field.boundaries.sw, field.boundaries.ne] : null"
+                            :tiles-url="field.mapsProvider.name === 'osm' ? field.mapsProvider.options.tilesUrl : null"
                         />
                     </div>
                     <div class="col-5 pl-0">
                         <div class="d-flex flex-column justify-content-between h-100">
                             <div>
-                                <div><small>Latitude : {{ latLngString.lat }}</small></div>
-                                <div><small>Longitude : {{ latLngString.lng }}</small></div>
+                                <div><small>Latitude : {{ field.displayUnit === 'DMS' ? dd2dms(value.lat) : value.lat }}</small></div>
+                                <div><small>Longitude : {{ field.displayUnit === 'DMS' ? dd2dms(value.lng, true) : value.lng }}</small></div>
                             </div>
                             <div>
-                                <Button class="remove-button" variant="danger" small outline :disabled="readOnly" @click="handleRemoveButtonClicked">
+                                <Button class="remove-button" variant="danger" small outline :disabled="field.readOnly"
+                                    @click="$emit('input', null)"
+                                >
                                     {{ __('sharp::form.geolocation.remove_button') }}
                                 </Button>
-                                <Button small outline :disabled="readOnly" @click="handleEditButtonClicked">
+                                <Button small outline :disabled="field.readOnly" @click="modalVisible = true">
                                     {{ __('sharp::form.geolocation.edit_button') }}
                                 </Button>
                             </div>
@@ -47,179 +95,23 @@
             </div>
         </template>
         <Modal
-            :title="modalTitle"
             v-model:visible="modalVisible"
             no-close-on-backdrop
-            @ok="handleModalSubmitted"
+            @ok="onModalSubmit"
         >
-            <transition :duration="300">
-                <template v-if="modalVisible">
-                    <GeolocationEdit
-                        :location="value"
-                        :center="value || initialPosition"
-                        :zoom="zoomLevel"
-                        :max-bounds="maxBounds"
-                        :maps-provider="providerName(mapsProvider)"
-                        :maps-options="providerOptions(mapsProvider)"
-                        :geocoding="geocoding"
-                        :geocoding-provider="providerName(geocodingProvider)"
-                        :geocoding-options="providerOptions(geocodingProvider)"
-                        @change="handleLocationChanged"
-                    />
+            <template #title>
+                <template v-if="field.geocoding">
+                    {{  __('sharp::form.geolocation.modal.title') }}
                 </template>
-            </transition>
+                <template v-else>
+                    {{__('sharp::form.geolocation.modal.title-no-geocoding') }}
+                </template>
+            </template>
+            <GeolocationEdit
+                :field="field"
+                :value="value"
+                v-model:marker-position="modalMarkerPosition"
+            />
         </Modal>
     </div>
 </template>
-
-<script lang="ts">
-    import { Modal, Button } from "@sharp/ui";
-
-    import { getMapByProvider, loadMapProvider } from "./maps";
-    import { dd2dms, tilesUrl, providerName, providerOptions, triggerResize } from "./util";
-
-    import GeolocationEdit from './GeolocationEdit.vue';
-
-
-    export default {
-        name: 'SharpGeolocation',
-        inject: {
-            $tab: {
-                default: null
-            }
-        },
-
-        components: {
-            GeolocationEdit,
-            Button,
-            Modal,
-        },
-
-        props: {
-            value: Object,
-            readOnly: Boolean,
-            uniqueIdentifier: String,
-            geocoding: Boolean,
-            apiKey: String,
-            boundaries: Object,
-            zoomLevel: {
-                type: Number,
-                default: 4
-            },
-            initialPosition: {
-                type: Object,
-                default: () => ({
-                    lat: 46.1445458,
-                    lng: -2.4343779
-                })
-            },
-            displayUnit: {
-                type: String,
-                default: 'DD',
-                validator: unit => unit==='DMS' || unit==='DD'
-            },
-            mapsProvider: {
-                type: Object,
-                default: ()=>({
-                    name: 'gmaps',
-                }),
-            },
-            geocodingProvider: {
-                type: Object,
-                default:() => ({
-                    name: 'gmaps',
-                }),
-            },
-        },
-        data() {
-            return {
-                ready: false,
-                modalVisible: false,
-                location: this.value,
-            }
-        },
-        computed: {
-            isLoading() {
-                return !this.ready;
-            },
-            isEmpty() {
-                return !this.value;
-            },
-            latLngString() {
-                if(this.displayUnit === 'DMS') {
-                    return {
-                        lat: dd2dms(this.value.lat),
-                        lng: dd2dms(this.value.lng, true)
-                    }
-                } else if(this.displayUnit === 'DD') {
-                    return this.value;
-                }
-            },
-            mapComponent() {
-                return getMapByProvider(providerName(this.mapsProvider));
-            },
-            mapClasses() {
-                return [
-                    `SharpGeolocation__map--${providerName(this.mapsProvider)}`,
-                ];
-            },
-            tilesUrl() {
-                const mapsOptions = providerOptions(this.mapsProvider);
-                return tilesUrl(mapsOptions);
-            },
-            maxBounds() {
-                return this.boundaries
-                    ? [this.boundaries.sw, this.boundaries.ne]
-                    : null;
-            },
-            modalTitle() {
-                return this.geocoding
-                    ? this.l('form.geolocation.modal.title')
-                    : this.l('form.geolocation.modal.title-no-geocoding');
-            },
-        },
-        methods: {
-            providerName,
-            providerOptions,
-
-            handleModalSubmitted() {
-                this.$emit('input', this.location);
-            },
-            handleRemoveButtonClicked() {
-                this.$emit('input', null);
-            },
-            handleShowModalButtonClicked() {
-                this.modalVisible = true;
-            },
-            handleEditButtonClicked() {
-                this.modalVisible = true;
-            },
-            handleLocationChanged(location) {
-                this.location = location;
-            },
-            loadProvider(providerData) {
-                const name = providerName(providerData);
-                const { apiKey } = providerOptions(providerData);
-                return loadMapProvider(name, {
-                    apiKey,
-                });
-            },
-            async init() {
-                await this.loadProvider(this.mapsProvider);
-                if(this.geocodingProvider) {
-                    await this.loadProvider(this.geocodingProvider);
-                }
-                this.ready = true;
-            }
-        },
-        created() {
-            this.init();
-        },
-        mounted() {
-            this.$tab?.$once('active', () => {
-                // force update maps components on tab active
-                triggerResize();
-            });
-        }
-    }
-</script>

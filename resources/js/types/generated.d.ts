@@ -371,14 +371,18 @@ export type FormFieldType =
   | "textarea"
   | "upload";
 export type FormGeolocationFieldData = {
-  value: { lng: number; lat: number };
+  value?: { lng: number; lat: number };
   key: string;
   type: "geolocation";
   geocoding: boolean;
   displayUnit: "DD" | "DMS";
   zoomLevel: number;
-  mapsProvider: { name: "osm" | "gmaps"; options: { apiKey: string } };
-  geocodingProvider: { name: "osm" | "gmaps"; options: { apiKey: string } };
+  mapsProvider:
+    | { name: "gmaps"; options: { apiKey: string } }
+    | { name: "osm"; options?: { tilesUrl: string } };
+  geocodingProvider:
+    | { name: "gmaps"; options: { apiKey: string } }
+    | { name: "osm" };
   initialPosition: { lng: number; lat: number };
   boundaries: {
     ne: { lat: number; lng: number };

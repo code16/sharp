@@ -1,25 +1,94 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import TextInput from '../text/TextInput.vue';
+    import { FormGeolocationFieldData } from "@/types";
+    import { Component, ref } from "vue";
+    import GmapsEditable from "./gmaps/GmapsEditable.vue";
+    import OsmEditable from "./osm/OsmEditable.vue";
+    import { Loading, Button } from '@sharp/ui';
+    import { EditableMapComponentProps, GeocodeParams, LatLng } from "./types";
+    import gmapsGeocode from "./gmaps/geocode";
+    import osmGeocode from "./osm/geocode";
+
+    const props = defineProps<{
+        field: FormGeolocationFieldData,
+        value: FormGeolocationFieldData['value'],
+        markerPosition: LatLng,
+    }>();
+
+    const emit = defineEmits(['change']);
+
+    const search = ref();
+    const message = ref();
+    const loading = ref(false);
+    const bounds = ref();
+
+    const components: Record<FormGeolocationFieldData['mapsProvider']['name'], Component> = {
+        gmaps: GmapsEditable,
+        osm: OsmEditable,
+    };
+
+    function geocode(params: GeocodeParams) {
+        if(props.field.geocodingProvider.name === 'gmaps') {
+            return gmapsGeocode(params);
+        }
+        return osmGeocode(params);
+    }
+
+    function onSearchSubmit() {
+        const address = search.value;
+        message.value = '';
+        loading.value = true;
+        geocode({ address: search.value })
+            .then(results => {
+                if(results.length > 0) {
+                    bounds.value = results[0].bounds;
+                    emit('change', results[0].location);
+                } else {
+                    message.value = __('sharp::form.geolocation.modal.geocode_input.message.no_results', { query: address ?? '' });
+                }
+            })
+            .catch(status => {
+                message.value = `${__(`sharp::form.geolocation.modal.geocode_input.message.error`)}${status?` (${status})`:''}`;
+            })
+            .finally(() => {
+                loading.value = false;
+            });
+    }
+
+    function onMarkerPositionChange(position: LatLng) {
+        message.value = '';
+        emit('change', position);
+
+        if(props.field.geocoding) {
+            loading.value = true;
+            geocode({ latLng: position })
+                .then(results => {
+                    if(results.length > 0) {
+                        search.value = results[0].address;
+                    }
+                })
+                .finally(() => {
+                    loading.value = false;
+                });
+        }
+    }
 </script>
 
 <template>
-    <div class="SharpGeolocationEdit" :class="classes">
-        <template v-if="hasGeocoding">
+    <div>
+        <template v-if="field.geocoding">
             <div class="mb-2">
-                <form @submit.prevent="handleSearchSubmitted">
-                    <div class="row no-gutters">
-                        <div class="col position-relative">
-                            <TextField
-                                class="SharpGeolocationEdit__input"
-                                :value="search"
+                <form @submit.prevent="onSearchSubmit">
+                    <div class="flex">
+                        <div class="relative">
+                            <TextInput
+                                v-model="search"
                                 :placeholder="__('sharp::form.geolocation.modal.geocode_input.placeholder')"
-                                @input="handleSearchInput"
                             />
-                            <Loading class="SharpGeolocationEdit__loading" :visible="loading" small />
+                            <Loading class="absolute right-0 -translate-y-1/2 top-1/2" :visible="loading" small />
                         </div>
-                        <div class="col-auto pl-2">
-                            <Button outline>{{ __('sharp::form.geolocation.modal.search_button') }}</Button>
-                        </div>
+                        <Button class="ml-2" outline>{{ __('sharp::form.geolocation.modal.search_button') }}</Button>
                     </div>
                 </form>
 
@@ -30,125 +99,17 @@
         </template>
 
         <component
-            :is="editableMapComponent"
-            class="SharpGeolocationEdit__map"
-            :class="mapClasses"
-            :marker-position="currentLocation"
-            :center="center"
-            :bounds="currentBounds"
-            :zoom="zoom"
-            :max-bounds="maxBounds"
-            :tiles-url="tilesUrl"
-            @change="handleMarkerPositionChanged"
+            :is="components[field.mapsProvider.name]"
+            class="max-w-full pb-[80%]"
+            v-bind="{
+                field,
+                markerPosition,
+                bounds,
+                maxBounds: field.boundaries ? [field.boundaries.sw, field.boundaries.ne] : null,
+                center: value ?? field.initialPosition ?? { lat:48.5838961, lng:7.7421826 },
+                zoom: field.zoomLevel,
+            } satisfies EditableMapComponentProps"
+            @change="onMarkerPositionChange"
         />
     </div>
 </template>
-
-<script lang="ts">
-    import { Loading, Button, Modal } from '@sharp/ui';
-    import TextField from '../Text.vue';
-    import { getEditableMapByProvider, geocode } from "./maps";
-    import { tilesUrl } from "./util";
-    import { __ } from "@/utils/i18n";
-
-    export default {
-        components: {
-            Loading,
-            Modal,
-            TextField,
-            Button,
-        },
-        props: {
-            location: Object,
-            center: Object,
-            bounds: Object,
-            zoom: Number,
-            maxBounds: Array,
-            geocoding: Boolean,
-            mapsProvider: {
-                type: String,
-                default: 'gmaps',
-            },
-            mapsOptions: Object,
-            geocodingProvider: {
-                type: String,
-                default: 'gmaps',
-            },
-            geocodingOptions: Object,
-        },
-        data() {
-            return {
-                loading: false,
-                search: null,
-                message: null,
-
-                currentLocation: this.location,
-                currentBounds: this.bounds,
-            }
-        },
-        computed: {
-            editableMapComponent() {
-                return getEditableMapByProvider(this.mapsProvider);
-            },
-            hasGeocoding() {
-                return this.geocoding;
-            },
-            classes() {
-                return {
-                    'SharpGeolocationEdit--loading': this.loading,
-                }
-            },
-            mapClasses() {
-                return [
-                    `SharpGeolocationEdit__map--${this.mapsProvider}`,
-                ]
-            },
-            tilesUrl() {
-                return tilesUrl(this.mapsOptions);
-            },
-        },
-        methods: {
-            handleSearchInput(search) {
-                this.search = search;
-            },
-            handleMarkerPositionChanged(position) {
-                this.currentLocation = position;
-                this.message = '';
-                this.$emit('change', this.currentLocation);
-                if(this.hasGeocoding) {
-                    this.loading = true;
-                    geocode(this.geocodingProvider, { latLng:position }, this.geocodingOptions)
-                        .then(results => {
-                            if(results.length > 0) {
-                                this.search = results[0].address;
-                            }
-                        })
-                        .finally(()=>{
-                            this.loading = false;
-                        });
-                }
-            },
-            handleSearchSubmitted() {
-                const address = this.search;
-                this.message = '';
-                this.loading = true;
-                geocode(this.geocodingProvider, { address }, this.geocodingOptions)
-                    .then(results => {
-                        if(results.length > 0) {
-                            this.currentLocation = results[0].location;
-                            this.currentBounds = results[0].bounds;
-                            this.$emit('change', this.currentLocation);
-                        } else {
-                            this.message = __('sharp::form.geolocation.modal.geocode_input.message.no_results', { query: address ?? '' });
-                        }
-                    })
-                    .catch(status => {
-                        this.message = `${__(`sharp::form.geolocation.modal.geocode_input.message.error`)}${status?` (${status})`:''}`;
-                    })
-                    .finally(() => {
-                        this.loading = false;
-                    });
-            },
-        },
-    }
-</script>
