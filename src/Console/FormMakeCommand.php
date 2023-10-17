@@ -22,13 +22,13 @@ class FormMakeCommand extends GeneratorCommand
             $replace = $this->buildModelReplacements($replace);
 
             if ($this->option('validator')) {
-                $validatorClass = substr($name, 0, -4) . 'Validator';
+                $validatorClass = substr($name, 0, -4).'Validator';
                 $replace = [
                     ...$replace,
                     ...[
                         'DummyFullValidatorClass' => $validatorClass,
                         'DummyValidatorClass' => class_basename($validatorClass),
-                    ]
+                    ],
                 ];
             }
         }
@@ -42,7 +42,7 @@ class FormMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        if (!$this->option('model')) {
+        if (! $this->option('model')) {
             return __DIR__.'/stubs/form.stub';
         }
 
