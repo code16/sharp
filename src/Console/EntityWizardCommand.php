@@ -5,9 +5,10 @@ namespace Code16\Sharp\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use function Laravel\Prompts\text;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class EntityWizardCommand extends Command
 {
@@ -16,7 +17,7 @@ class EntityWizardCommand extends Command
 
     public function handle()
     {
-        $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
+        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
 
         $name = text(
             label: 'What is the name of your entity?',
@@ -38,10 +39,11 @@ class EntityWizardCommand extends Command
             placeholder: 'E.g. User',
             required: true,
         );
-        $model = $modelPath . '\\'. Str::title($model);
+        $model = $modelPath.'\\'.Str::title($model);
 
         if (! class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
+
             return;
         }
 
@@ -64,49 +66,46 @@ class EntityWizardCommand extends Command
         );
 
         Artisan::call('sharp:make:entity-list', [
-            'name' => $name . 's\\' . $name.'EntityList',
+            'name' => $name.'s\\'.$name.'EntityList',
             '--model' => $model,
         ]);
 
-        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace . '\\'. $pluralName .'\\' . $name.'EntityList.php');
+        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'EntityList.php');
 
         if (Str::contains($type, 'form')) {
-
             Artisan::call('sharp:make:validator', [
-                'name' => $name . 's\\' . $name . 'Validator',
+                'name' => $name.'s\\'.$name.'Validator',
             ]);
 
-            $this->components->twoColumnDetail('Validator', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Validator.php');
+            $this->components->twoColumnDetail('Validator', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Validator.php');
 
             Artisan::call('sharp:make:form', [
-                'name' => $name . 's\\' . $name . 'Form',
+                'name' => $name.'s\\'.$name.'Form',
                 '--model' => $model,
                 '--validator' => '',
             ]);
 
-            $this->components->twoColumnDetail('Form', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Form.php');
+            $this->components->twoColumnDetail('Form', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Form.php');
         }
 
         if (Str::contains($type, 'show')) {
-
             Artisan::call('sharp:make:show-page', [
-                'name' => $name . 's\\' . $name . 'Show',
+                'name' => $name.'s\\'.$name.'Show',
             ]);
 
-            $this->components->twoColumnDetail('Show page', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Show.php');
+            $this->components->twoColumnDetail('Show page', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Show.php');
         }
 
         if ($needsPolicy) {
-
             Artisan::call('sharp:make:policy', [
-                'name' => $name . 's\\' . $name . 'Policy',
+                'name' => $name.'s\\'.$name.'Policy',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Policy.php');
+            $this->components->twoColumnDetail('Policy', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Policy.php');
         }
 
         Artisan::call('sharp:make:entity', [
-            'name' => 'Entities\\' . $name.'Entity',
+            'name' => 'Entities\\'.$name.'Entity',
             '--label' => $label,
             ...(Str::contains($type, 'form') ? ['--form' => ''] : []),
             ...(Str::contains($type, 'show') ? ['--show' => ''] : []),
@@ -114,7 +113,7 @@ class EntityWizardCommand extends Command
 
         ]);
 
-        $this->components->twoColumnDetail('Entity', $sharpRootNamespace . '\\Entities\\' . $name.'Entity.php');
+        $this->components->twoColumnDetail('Entity', $sharpRootNamespace.'\\Entities\\'.$name.'Entity.php');
 
         $this->components->info('Your entity and all related files have been created successfully.');
     }
