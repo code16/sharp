@@ -25,6 +25,7 @@ class EntityWizardCommand extends Command
             hint: 'Entity suffix will be added automatically.',
         );
         $name = Str::title($name);
+        $pluralName = Str::plural($name);
 
         $modelPath = text(
             label: 'What is the path of the associated model?',
@@ -67,7 +68,7 @@ class EntityWizardCommand extends Command
             '--model' => $model,
         ]);
 
-        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace . '\\'. $name .'s\\' . $name.'EntityList.php');
+        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace . '\\'. $pluralName .'\\' . $name.'EntityList.php');
 
         if (Str::contains($type, 'form')) {
 
@@ -75,7 +76,7 @@ class EntityWizardCommand extends Command
                 'name' => $name . 's\\' . $name . 'Validator',
             ]);
 
-            $this->components->twoColumnDetail('Validator', $sharpRootNamespace . '\\' . $name . 's\\' . $name . 'Validator.php');
+            $this->components->twoColumnDetail('Validator', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Validator.php');
 
             Artisan::call('sharp:make:form', [
                 'name' => $name . 's\\' . $name . 'Form',
@@ -83,7 +84,7 @@ class EntityWizardCommand extends Command
                 '--validator' => '',
             ]);
 
-            $this->components->twoColumnDetail('Form', $sharpRootNamespace . '\\' . $name . 's\\' . $name . 'Form.php');
+            $this->components->twoColumnDetail('Form', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Form.php');
         }
 
         if (Str::contains($type, 'show')) {
@@ -92,7 +93,7 @@ class EntityWizardCommand extends Command
                 'name' => $name . 's\\' . $name . 'Show',
             ]);
 
-            $this->components->twoColumnDetail('Show page', $sharpRootNamespace . '\\' . $name . 's\\' . $name . 'Show.php');
+            $this->components->twoColumnDetail('Show page', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Show.php');
         }
 
         if ($needsPolicy) {
@@ -101,7 +102,7 @@ class EntityWizardCommand extends Command
                 'name' => $name . 's\\' . $name . 'Policy',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\' . $name . 's\\' . $name . 'Policy.php');
+            $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Policy.php');
         }
 
         Artisan::call('sharp:make:entity', [
