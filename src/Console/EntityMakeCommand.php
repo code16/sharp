@@ -17,7 +17,7 @@ class EntityMakeCommand extends GeneratorCommand
 
     protected function buildClass($name)
     {
-        if (!Str::endsWith($name, 'Entity')) {
+        if (! Str::endsWith($name, 'Entity')) {
             throw new \InvalidArgumentException('The entity name should end with "Entity"');
         }
 
