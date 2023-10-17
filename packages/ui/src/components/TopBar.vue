@@ -4,7 +4,7 @@
             <div class="row align-items-center flex-fill g-2 gx-md-4">
                 <div class="col" style="min-width: 0">
                     <template v-if="title">
-                        <div class="d-none d-md-block">
+                        <div class="SharpTopBar__title d-none d-md-block">
                             <div class="h5 mb-0 text-truncate" :class="{ 'opacity-0': !showTitle }" style="transition: opacity .2s ease-in-out">
                                 {{ title }}
                             </div>
