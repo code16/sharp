@@ -52,9 +52,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             $instance = (object) [
                 $attribute => static::getUploadModelClass()::make([
                     'file_name' => $value['file_name'] ?? $value['path'],
-                    'filters' => $value['filters'],
+                    'filters' => $value['filters'] ?? [],
                     'disk' => $value['disk'],
-                    'size' => $value['size'],
+                    'size' => $value['size'] ?? null,
                 ]),
             ];
         }
