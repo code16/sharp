@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputOption;
 
 class PolicyMakeCommand extends GeneratorCommand
 {
@@ -12,11 +13,20 @@ class PolicyMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__.'/stubs/policy.stub';
+        return $this->option('entity-only') !== false
+            ? __DIR__.'/stubs/policy.entity.stub'
+            : __DIR__.'/stubs/policy.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Sharp';
+    }
+
+    protected function getOptions()
+    {
+        return [
+            ['entity-only', 'eo', InputOption::VALUE_NONE, 'When policy only needs an entity rule'],
+        ];
     }
 }

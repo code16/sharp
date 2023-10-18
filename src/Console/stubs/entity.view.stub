@@ -1,0 +1,11 @@
+<?php
+
+namespace DummyEntitiesNamespace;
+
+use DummyFullDashboardClass;
+use Code16\Sharp\Utils\Entities\SharpEntity;
+
+class DummyClass extends SharpEntity
+{
+    protected ?string $view = DummyDashboardClass::class;
+}

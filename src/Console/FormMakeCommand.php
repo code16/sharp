@@ -21,7 +21,7 @@ class FormMakeCommand extends GeneratorCommand
         if ($this->option('model')) {
             $replace = $this->buildModelReplacements($replace);
 
-            if ($this->option('validator')) {
+            if ($this->option('validator') !== false) {
                 $validatorClass = substr($name, 0, -4).'Validator';
                 $replace = [
                     ...$replace,
@@ -46,7 +46,7 @@ class FormMakeCommand extends GeneratorCommand
             return __DIR__.'/stubs/form.stub';
         }
 
-        if ($this->option('validator')) {
+        if ($this->option('validator') !== false) {
             return __DIR__.'/stubs/form.validator.stub';
         }
 

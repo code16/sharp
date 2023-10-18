@@ -3,9 +3,6 @@
 namespace DummyEntitiesNamespace;
 
 use DummyFullEntityListClass;
-use DummyFullFormClass;
-use DummyFullPolicyClass;
-use DummyFullShowClass;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 
 class DummyClass extends SharpEntity

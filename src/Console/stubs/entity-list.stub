@@ -3,7 +3,7 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -11,21 +11,21 @@ class DummyClass extends SharpEntityList
 {
     protected function buildList(EntityListFieldsContainer $fields): void
     {
-        // $fields
-        //     ->addField(
-        //         EntityListField::make('myCol')
-        //             ->setLabel('My col')
-        //             ->setWidth(4)
-        //             ->setWidthOnSmallScreens(6),
-        //     );
+        $fields
+            ->addField(
+                EntityListField::make('myCol')
+                    ->setLabel('My col')
+                    ->setWidth(4)
+                    ->setWidthOnSmallScreens(6),
+            );
     }
 
     public function buildListConfig(): void
     {
-        // $this
-        //     ->configureDefaultSort('created_at', 'desc')
-        //     ->configureSearchable()
-        //     ->configurePaginated();
+        $this
+            ->configureDefaultSort('created_at', 'desc')
+            ->configureSearchable()
+            ->configurePaginated();
     }
 
     protected function getInstanceCommands(): ?array
@@ -45,10 +45,10 @@ class DummyClass extends SharpEntityList
 
     public function getListData(): array|Arrayable
     {
-        // return $this
-        //     ->setCustomTransformer('created_at', function ($value, DummyModelClass $dummyModel) {
-        //         return $dummyModel->created_at->isoFormat('LLLL');
-        //     })
-        //     ->transform(...)
+        return $this
+            ->setCustomTransformer('created_at', function ($value, DummyModelClass $dummyModel) {
+                return $dummyModel->created_at->isoFormat('LLLL');
+            })
+            ->transform(...)
     }
 }

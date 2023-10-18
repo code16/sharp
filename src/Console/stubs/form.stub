@@ -12,20 +12,20 @@ class DummyClass extends SharpForm
 {
     public function buildFormFields(FieldsContainer $formFields): void
     {
-        // $formFields
-        //     ->addField(
-        //         SharpFormTextField::make('myField')
-        //             ->setLabel('My field')
-        //     );
+        $formFields
+            ->addField(
+                SharpFormTextField::make('myField')
+                    ->setLabel('My field')
+            );
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
     {
-         // $formLayout
-         //     ->addColumn(6, function (FormLayoutColumn $column) {
-         //         $column
-         //             ->withSingleField('myField');
-         //     });
+         $formLayout
+             ->addColumn(6, function (FormLayoutColumn $column) {
+                 $column
+                     ->withSingleField('myField');
+             });
     }
 
     public function find($id): array

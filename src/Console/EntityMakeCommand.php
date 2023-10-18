@@ -22,6 +22,7 @@ class EntityMakeCommand extends GeneratorCommand
         }
 
         $entityName = class_basename(substr($name, 0, -6));
+        $pluralEntityName = Str::plural($entityName);
 
         $sharpRootNamespace = $this->getDefaultNamespace(
             trim($this->rootNamespace(), '\\')
@@ -29,14 +30,18 @@ class EntityMakeCommand extends GeneratorCommand
 
         $replace = [
             'DummyEntitiesNamespace' => $sharpRootNamespace.'\Entities',
+            'DummyDashboardClass' => $entityName,
+            'DummyFullDashboardClass' => $sharpRootNamespace.'\\Dashboards\\'.$entityName,
+            'DummyDashboardPolicyClass' => $entityName.'Policy',
+            'DummyFullDashboardPolicyClass' => $sharpRootNamespace.'\\Dashboards\\'.$entityName.'Policy',
             'DummyEntityListClass' => $entityName.'EntityList',
-            'DummyFullEntityListClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'EntityList',
+            'DummyFullEntityListClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'EntityList',
             'DummyShowClass' => $entityName.'Show',
-            'DummyFullShowClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Show',
+            'DummyFullShowClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Show',
             'DummyFormClass' => $entityName.'Form',
-            'DummyFullFormClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Form',
+            'DummyFullFormClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Form',
             'DummyPolicyClass' => $entityName.'Policy',
-            'DummyFullPolicyClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Policy',
+            'DummyFullPolicyClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Policy',
             ...($this->option('label') ? [
                 'My dummy label' => $this->option('label'),
             ] : []),
@@ -51,19 +56,25 @@ class EntityMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        if ($this->option('form') && $this->option('show')) {
-            return $this->option('policy')
+        if ($this->option('dashboard') !== false) {
+            return $this->option('policy') !== false
+                ? __DIR__.'/stubs/entity.view-policy.stub'
+                : __DIR__.'/stubs/entity.view.stub';
+        }
+
+        if ($this->option('form') !== false && $this->option('show') !== false) {
+            return $this->option('policy') !== false
                 ? __DIR__.'/stubs/entity.list-form-show-policy.stub'
                 : __DIR__.'/stubs/entity.list-form-show.stub';
         }
 
-        if ($this->option('form')) {
-            return $this->option('policy')
+        if ($this->option('form') !== false) {
+            return $this->option('policy') !== false
                 ? __DIR__.'/stubs/entity.list-form-policy.stub'
                 : __DIR__.'/stubs/entity.list-form.stub';
         }
 
-        return $this->option('policy')
+        return $this->option('policy') !== false
             ? __DIR__.'/stubs/entity.list-policy.stub'
             : __DIR__.'/stubs/entity.list.stub';
     }
@@ -77,6 +88,7 @@ class EntityMakeCommand extends GeneratorCommand
     {
         return [
             ['label', 'la', InputOption::VALUE_REQUIRED, 'The label of the entity'],
+            ['dashboard', 'da', InputOption::VALUE_NONE, 'Entity needs a dashboard view'],
             ['form', 'fo', InputOption::VALUE_NONE, 'Entity needs a form'],
             ['show', 'sh', InputOption::VALUE_NONE, 'Entity needs a show page'],
             ['policy', 'po', InputOption::VALUE_NONE, 'Entity needs a policy'],

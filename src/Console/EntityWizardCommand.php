@@ -16,13 +16,75 @@ class EntityWizardCommand extends Command
 
     public function handle()
     {
+        $entityType = select(
+            label: 'What is the type of your entity?',
+            options: ['Classic', 'Single', 'Dashboard'],
+            default: 'Classic',
+        );
+
+        switch ($entityType) {
+            case 'Classic':
+                $this->generateClassicEntity();
+                break;
+            case 'Dashboard':
+                $this->generateDashboardEntity();
+                break;
+        }
+
+        $this->components->info('Your entity and all related files have been created successfully.');
+    }
+
+    protected function generateDashboardEntity()
+    {
+        $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
+
+        $name = text(
+            label: 'What is the name of your dashboard?',
+            placeholder: 'E.g. Activity',
+            required: true,
+            hint: 'A "DashboardEntity" suffix will be added automatically (E.g. ActivityDashboardEntity.php).',
+        );
+        $name = Str::title($name);
+
+        $needsPolicy = confirm(
+            label: 'Do you need a policy?',
+            default: false,
+        );
+
+        Artisan::call('sharp:make:dashboard', [
+            'name' => 'Dashboards\\' . $name.'Dashboard',
+        ]);
+
+        $this->components->twoColumnDetail('Dashboard', $sharpRootNamespace . '\\Dashboards\\' . $name . 'Dashboard.php');
+
+        if ($needsPolicy) {
+
+            Artisan::call('sharp:make:policy', [
+                'name' => 'Dashboards\\' . $name . 'DashboardPolicy',
+                '--entity-only' => '',
+            ]);
+
+            $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\Dashboards\\' . $name . 'DashboardPolicy.php');
+        }
+
+        Artisan::call('sharp:make:entity', [
+            'name' => 'Entities\\' . $name.'DashboardEntity',
+            '--dashboard' => '',
+            ...($needsPolicy ? ['--policy' => ''] : []),
+        ]);
+
+        $this->components->twoColumnDetail('Entity', $sharpRootNamespace . '\\Entities\\' . $name.'DashboardEntity.php');
+    }
+
+    protected function generateClassicEntity()
+    {
         $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
 
         $name = text(
             label: 'What is the name of your entity?',
             placeholder: 'E.g. User',
             required: true,
-            hint: 'Entity suffix will be added automatically.',
+            hint: 'An "Entity" suffix will be added automatically (E.g. UserEntity.php).',
         );
         $name = Str::title($name);
         $pluralName = Str::plural($name);
@@ -64,7 +126,7 @@ class EntityWizardCommand extends Command
         );
 
         Artisan::call('sharp:make:entity-list', [
-            'name' => $name . 's\\' . $name.'EntityList',
+            'name' => $pluralName . '\\' . $name.'EntityList',
             '--model' => $model,
         ]);
 
@@ -73,13 +135,13 @@ class EntityWizardCommand extends Command
         if (Str::contains($type, 'form')) {
 
             Artisan::call('sharp:make:validator', [
-                'name' => $name . 's\\' . $name . 'Validator',
+                'name' => $pluralName . '\\' . $name . 'Validator',
             ]);
 
             $this->components->twoColumnDetail('Validator', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Validator.php');
 
             Artisan::call('sharp:make:form', [
-                'name' => $name . 's\\' . $name . 'Form',
+                'name' => $pluralName . '\\' . $name . 'Form',
                 '--model' => $model,
                 '--validator' => '',
             ]);
@@ -90,7 +152,7 @@ class EntityWizardCommand extends Command
         if (Str::contains($type, 'show')) {
 
             Artisan::call('sharp:make:show-page', [
-                'name' => $name . 's\\' . $name . 'Show',
+                'name' => $pluralName . '\\' . $name . 'Show',
             ]);
 
             $this->components->twoColumnDetail('Show page', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Show.php');
@@ -99,7 +161,7 @@ class EntityWizardCommand extends Command
         if ($needsPolicy) {
 
             Artisan::call('sharp:make:policy', [
-                'name' => $name . 's\\' . $name . 'Policy',
+                'name' => $pluralName . '\\' . $name . 'Policy',
             ]);
 
             $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Policy.php');
@@ -111,11 +173,8 @@ class EntityWizardCommand extends Command
             ...(Str::contains($type, 'form') ? ['--form' => ''] : []),
             ...(Str::contains($type, 'show') ? ['--show' => ''] : []),
             ...($needsPolicy ? ['--policy' => ''] : []),
-
         ]);
 
         $this->components->twoColumnDetail('Entity', $sharpRootNamespace . '\\Entities\\' . $name.'Entity.php');
-
-        $this->components->info('Your entity and all related files have been created successfully.');
     }
 }
