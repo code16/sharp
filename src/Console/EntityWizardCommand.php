@@ -5,9 +5,10 @@ namespace Code16\Sharp\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use function Laravel\Prompts\text;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class EntityWizardCommand extends Command
 {
@@ -36,7 +37,7 @@ class EntityWizardCommand extends Command
 
     protected function generateDashboardEntity()
     {
-        $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
+        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
 
         $name = text(
             label: 'What is the name of your dashboard?',
@@ -52,33 +53,32 @@ class EntityWizardCommand extends Command
         );
 
         Artisan::call('sharp:make:dashboard', [
-            'name' => 'Dashboards\\' . $name.'Dashboard',
+            'name' => 'Dashboards\\'.$name.'Dashboard',
         ]);
 
-        $this->components->twoColumnDetail('Dashboard', $sharpRootNamespace . '\\Dashboards\\' . $name . 'Dashboard.php');
+        $this->components->twoColumnDetail('Dashboard', $sharpRootNamespace.'\\Dashboards\\'.$name.'Dashboard.php');
 
         if ($needsPolicy) {
-
             Artisan::call('sharp:make:policy', [
-                'name' => 'Dashboards\\' . $name . 'DashboardPolicy',
+                'name' => 'Dashboards\\'.$name.'DashboardPolicy',
                 '--entity-only' => '',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\Dashboards\\' . $name . 'DashboardPolicy.php');
+            $this->components->twoColumnDetail('Policy', $sharpRootNamespace.'\\Dashboards\\'.$name.'DashboardPolicy.php');
         }
 
         Artisan::call('sharp:make:entity', [
-            'name' => 'Entities\\' . $name.'DashboardEntity',
+            'name' => 'Entities\\'.$name.'DashboardEntity',
             '--dashboard' => '',
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $sharpRootNamespace . '\\Entities\\' . $name.'DashboardEntity.php');
+        $this->components->twoColumnDetail('Entity', $sharpRootNamespace.'\\Entities\\'.$name.'DashboardEntity.php');
     }
 
     protected function generateClassicEntity()
     {
-        $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
+        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
 
         $name = text(
             label: 'What is the name of your entity?',
@@ -100,10 +100,11 @@ class EntityWizardCommand extends Command
             placeholder: 'E.g. User',
             required: true,
         );
-        $model = $modelPath . '\\'. Str::title($model);
+        $model = $modelPath.'\\'.Str::title($model);
 
         if (! class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
+
             return;
         }
 
@@ -126,55 +127,52 @@ class EntityWizardCommand extends Command
         );
 
         Artisan::call('sharp:make:entity-list', [
-            'name' => $pluralName . '\\' . $name.'EntityList',
+            'name' => $pluralName.'\\'.$name.'EntityList',
             '--model' => $model,
         ]);
 
-        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace . '\\'. $pluralName .'\\' . $name.'EntityList.php');
+        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'EntityList.php');
 
         if (Str::contains($type, 'form')) {
-
             Artisan::call('sharp:make:validator', [
-                'name' => $pluralName . '\\' . $name . 'Validator',
+                'name' => $pluralName.'\\'.$name.'Validator',
             ]);
 
-            $this->components->twoColumnDetail('Validator', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Validator.php');
+            $this->components->twoColumnDetail('Validator', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Validator.php');
 
             Artisan::call('sharp:make:form', [
-                'name' => $pluralName . '\\' . $name . 'Form',
+                'name' => $pluralName.'\\'.$name.'Form',
                 '--model' => $model,
                 '--validator' => '',
             ]);
 
-            $this->components->twoColumnDetail('Form', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Form.php');
+            $this->components->twoColumnDetail('Form', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Form.php');
         }
 
         if (Str::contains($type, 'show')) {
-
             Artisan::call('sharp:make:show-page', [
-                'name' => $pluralName . '\\' . $name . 'Show',
+                'name' => $pluralName.'\\'.$name.'Show',
             ]);
 
-            $this->components->twoColumnDetail('Show page', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Show.php');
+            $this->components->twoColumnDetail('Show page', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Show.php');
         }
 
         if ($needsPolicy) {
-
             Artisan::call('sharp:make:policy', [
-                'name' => $pluralName . '\\' . $name . 'Policy',
+                'name' => $pluralName.'\\'.$name.'Policy',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace . '\\' . $pluralName . '\\' . $name . 'Policy.php');
+            $this->components->twoColumnDetail('Policy', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Policy.php');
         }
 
         Artisan::call('sharp:make:entity', [
-            'name' => 'Entities\\' . $name.'Entity',
+            'name' => 'Entities\\'.$name.'Entity',
             '--label' => $label,
             ...(Str::contains($type, 'form') ? ['--form' => ''] : []),
             ...(Str::contains($type, 'show') ? ['--show' => ''] : []),
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $sharpRootNamespace . '\\Entities\\' . $name.'Entity.php');
+        $this->components->twoColumnDetail('Entity', $sharpRootNamespace.'\\Entities\\'.$name.'Entity.php');
     }
 }
