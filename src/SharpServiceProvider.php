@@ -8,6 +8,7 @@ use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
+use Code16\Sharp\Console\CommandWizardCommand;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -113,6 +114,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->commands([
             CreateUploadsMigration::class,
             EntityWizardCommand::class,
+            CommandWizardCommand::class,
             EntityMakeCommand::class,
             EntityListMakeCommand::class,
             FormMakeCommand::class,

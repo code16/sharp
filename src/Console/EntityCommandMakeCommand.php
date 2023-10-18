@@ -13,7 +13,7 @@ class EntityCommandMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return $this->option('with-form')
+        return $this->option('with-form') !== false
             ? __DIR__.'/stubs/entity-command-with-form.stub'
             : __DIR__.'/stubs/entity-command.stub';
     }

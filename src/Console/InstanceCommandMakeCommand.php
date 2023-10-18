@@ -13,7 +13,7 @@ class InstanceCommandMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return $this->option('with-form')
+        return $this->option('with-form') !== false
             ? __DIR__.'/stubs/instance-command-with-form.stub'
             : __DIR__.'/stubs/instance-command.stub';
     }

@@ -47,7 +47,7 @@ class EntityWizardCommand extends Command
             required: true,
             hint: 'A "DashboardEntity" suffix will be added automatically (E.g. ActivityDashboardEntity.php).',
         );
-        $name = Str::title($name);
+        $name = Str::ucfirst(Str::camel($name));
 
         $needsPolicy = confirm(
             label: 'Do you need a policy?',
@@ -89,7 +89,7 @@ class EntityWizardCommand extends Command
             required: true,
             hint: 'An "Entity" suffix will be added automatically (E.g. UserEntity.php).',
         );
-        $name = Str::title($name);
+        $name = Str::ucfirst(Str::camel($name));
         $pluralName = Str::plural($name);
 
         $modelPath = text(
@@ -103,7 +103,7 @@ class EntityWizardCommand extends Command
             placeholder: 'E.g. User',
             required: true,
         );
-        $model = $modelPath . '\\' . Str::title($model);
+        $model = $modelPath . '\\' . Str::ucfirst(Str::camel($model));
 
         if (!class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
@@ -191,7 +191,7 @@ class EntityWizardCommand extends Command
             required: true,
             hint: 'An "Entity" suffix will be added automatically (E.g. UserEntity.php).',
         );
-        $name = Str::title($name);
+        $name = Str::ucfirst(Str::camel($name));
 
         $label = text(
             label: 'What is the label of your entity?',
