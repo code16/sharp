@@ -20,17 +20,16 @@ class FormMakeCommand extends GeneratorCommand
 
         if ($this->option('model')) {
             $replace = $this->buildModelReplacements($replace);
+        }
 
-            if ($this->option('validator') !== false) {
-                $validatorClass = substr($name, 0, -4).'Validator';
-                $replace = [
-                    ...$replace,
-                    ...[
-                        'DummyFullValidatorClass' => $validatorClass,
-                        'DummyValidatorClass' => class_basename($validatorClass),
-                    ],
-                ];
-            }
+        if ($this->option('validator') !== false) {
+            $validatorClass = substr($name, 0, -4).'Validator';
+            $replace = [
+                ...$replace,
+                ...[
+                    'DummyValidatorClass' => class_basename($validatorClass),
+                ],
+            ];
         }
 
         return str_replace(
@@ -42,6 +41,10 @@ class FormMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
+        if ($this->option('single') !== false) {
+            return __DIR__.'/stubs/form.single.stub';
+        }
+
         if (! $this->option('model')) {
             return __DIR__.'/stubs/form.stub';
         }
@@ -63,6 +66,7 @@ class FormMakeCommand extends GeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the form handles'],
             ['validator', 'va', InputOption::VALUE_NONE, 'If the form should have a validator'],
+            ['single', 'si', InputOption::VALUE_NONE, 'If the form should be a single form'],
         ];
     }
 }

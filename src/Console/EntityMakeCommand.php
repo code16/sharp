@@ -40,8 +40,14 @@ class EntityMakeCommand extends GeneratorCommand
             'DummyFullShowClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Show',
             'DummyFormClass' => $entityName.'Form',
             'DummyFullFormClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Form',
+            'DummySingleShowClass' => $entityName.'SingleShow',
+            'DummyFullSingleShowClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'SingleShow',
+            'DummySingleFormClass' => $entityName.'SingleForm',
+            'DummyFullSingleFormClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'SingleForm',
             'DummyPolicyClass' => $entityName.'Policy',
             'DummyFullPolicyClass' => $sharpRootNamespace.'\\'.$pluralEntityName.'\\'.$entityName.'Policy',
+            'DummySinglePolicyClass' => $entityName.'Policy',
+            'DummyFullSinglePolicyClass' => $sharpRootNamespace.'\\'.$entityName.'\\'.$entityName.'Policy',
             ...($this->option('label') ? [
                 'My dummy label' => $this->option('label'),
             ] : []),
@@ -60,6 +66,12 @@ class EntityMakeCommand extends GeneratorCommand
             return $this->option('policy') !== false
                 ? __DIR__.'/stubs/entity.view-policy.stub'
                 : __DIR__.'/stubs/entity.view.stub';
+        }
+
+        if ($this->option('single') !== false) {
+            return $this->option('policy') !== false
+                ? __DIR__.'/stubs/entity.single-policy.stub'
+                : __DIR__.'/stubs/entity.single.stub';
         }
 
         if ($this->option('form') !== false && $this->option('show') !== false) {
@@ -92,6 +104,7 @@ class EntityMakeCommand extends GeneratorCommand
             ['form', 'fo', InputOption::VALUE_NONE, 'Entity needs a form'],
             ['show', 'sh', InputOption::VALUE_NONE, 'Entity needs a show page'],
             ['policy', 'po', InputOption::VALUE_NONE, 'Entity needs a policy'],
+            ['single', 'si', InputOption::VALUE_NONE, 'Entity is single'],
         ];
     }
 }

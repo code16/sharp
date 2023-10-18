@@ -31,6 +31,10 @@ class ShowPageMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
+        if ($this->option('single') !== false) {
+            return __DIR__.'/stubs/show-page.single.stub';
+        }
+
         return $this->option('model')
             ? __DIR__.'/stubs/show-page.model.stub'
             : __DIR__.'/stubs/show-page.stub';
@@ -45,6 +49,7 @@ class ShowPageMakeCommand extends GeneratorCommand
     {
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'The model that the show displays'],
+            ['single', 's', InputOption::VALUE_NONE, 'Show page is single'],
         ];
     }
 }
