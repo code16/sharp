@@ -2,7 +2,8 @@
     import { __ } from "@/utils/i18n";
     import TextInput from '../text/TextInput.vue';
     import { FormGeolocationFieldData } from "@/types";
-    import { Component, ref } from "vue";
+    import { ref } from "vue";
+    import type { Component } from 'vue';
     import GmapsEditable from "./gmaps/GmapsEditable.vue";
     import OsmEditable from "./osm/OsmEditable.vue";
     import { Loading, Button } from '@sharp/ui';
