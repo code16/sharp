@@ -44,7 +44,7 @@ export type CommandFormData = {
   locales: Array<string> | null;
   pageAlert: PageAlertData | null;
 };
-export type CommandReturnData =
+export type CommandResponseData =
   | { action: "link"; link: string }
   | { action: "info"; message: string }
   | { action: "refresh"; items?: Array<number | string> }

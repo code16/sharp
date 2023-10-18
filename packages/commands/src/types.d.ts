@@ -1,7 +1,7 @@
-import { CommandData, CommandReturnData } from "@/types";
+import { CommandResponseData } from "@/types";
 
-export type CommandReturnHandlers = {
-    [Action in CommandReturnData['action']]: (data: Extract<CommandReturnData, { action: Action }>) => void | Promise<void>
+export type CommandResponseHandlers = {
+    [Action in CommandResponseData['action']]: (data: Extract<CommandResponseData, { action: Action }>) => void | Promise<void>
 }
 
 export type GetFormQuery = {

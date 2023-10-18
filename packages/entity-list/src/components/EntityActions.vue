@@ -1,8 +1,6 @@
 <script setup lang="ts">
     import { nextTick, ref } from "vue";
 
-    defineProps<{}>();
-
     const stateDropdown = ref();
 
     async function openStateDropdown() {

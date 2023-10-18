@@ -73,7 +73,7 @@
     "@uppy/xhr-upload": "^3.4.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "apexcharts": "^3.35.4",
-    "axios": "^0.19.2",
+    "axios": "^1.5.1",
     "bootstrap": "^5.3.0",
     "bootstrap-vue": "^2.21.2",
     "cropperjs": "^1.5.12",

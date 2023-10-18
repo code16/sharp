@@ -15,7 +15,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
     '{ action: "'.CommandAction::Step->value.'", step: string } | '.
     '{ action: "'.CommandAction::View->value.'", html: string }'
 )]
-final class CommandReturnData extends Data
+final class CommandResponseData extends Data
 {
     public function __construct(
         public CommandAction $action,
