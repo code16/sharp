@@ -57,7 +57,7 @@ it('allows to store a new instance', function () {
     ]);
 });
 
-it('undeclared fields are ignored', function () {
+it('ignores undeclared fields', function () {
     $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
 
     $form = new class extends FakeSharpForm
@@ -84,7 +84,7 @@ it('undeclared fields are ignored', function () {
     ]);
 });
 
-it('HTML fields are ignored', function () {
+it('ignores SharpFormHtmlField fields', function () {
     $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
 
     $form = new class extends FakeSharpForm
