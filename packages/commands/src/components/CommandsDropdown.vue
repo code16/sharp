@@ -20,7 +20,7 @@
                     :disabled="isDisabled(command)"
                     :key="command.key"
                     v-b-tooltip.hover.left="{ disabled: !requiresSelection(command) }"
-                    :title="lang('entity_list.commands.needs_selection_message')"
+                    :title="requiresSelection(command) ? lang('entity_list.commands.needs_selection_message') : null"
                 >
                     {{ command.label }}
                     <template v-if="command.description">
