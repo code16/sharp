@@ -19,7 +19,7 @@ final class ShowLayoutColumnData extends Data
         $column = [
             ...$column,
             'fields' => collect($column['fields'])->map(fn (array $row) => collect($row)->map(fn (array $field) => LayoutFieldData::from($field)
-                )
+            )
             )->toArray(),
         ];
 

@@ -43,7 +43,6 @@ it('allows to store a new instance', function () {
             $formFields->addField(SharpFormTextField::make('name'));
         }
 
-
         public function update($id, array $data)
         {
             return $this->save(new Person(), $data);
@@ -110,7 +109,6 @@ it('ignores SharpFormHtmlField fields', function () {
         'age' => 21,
     ]);
 });
-
 
 it('allows to manually ignore a field', function () {
     $person = Person::create(['name' => 'Niels Bohr', 'age' => 21]);
