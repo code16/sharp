@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
@@ -42,6 +43,7 @@ it('allows to store a new instance', function () {
             $formFields->addField(SharpFormTextField::make('name'));
         }
 
+
         public function update($id, array $data)
         {
             return $this->save(new Person(), $data);
@@ -81,6 +83,34 @@ it('undeclared fields are ignored', function () {
         'age' => 21,
     ]);
 });
+
+it('HTML fields are ignored', function () {
+    $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
+
+    $form = new class extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormHtmlField::make('name')->setInlineTemplate('HTML'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->updateInstance($person->id, ['name' => 'HTML']);
+
+    $this->assertDatabaseHas('people', [
+        'id' => $person->id,
+        'name' => 'Marie Curie',
+        'age' => 21,
+    ]);
+});
+
 
 it('allows to manually ignore a field', function () {
     $person = Person::create(['name' => 'Niels Bohr', 'age' => 21]);
