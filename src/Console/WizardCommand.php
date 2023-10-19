@@ -38,7 +38,7 @@ class WizardCommand extends Command
             default: 'Instance',
         );
 
-        $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
+        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
 
         $needsForm = confirm(
             label: 'Do you need a form inside the command?',
@@ -70,19 +70,19 @@ class WizardCommand extends Command
 
         $commandPath = text(
             label: 'What is the path where the file should be created?',
-            default: Str::plural($entityName) . '\\Commands',
+            default: Str::plural($entityName).'\\Commands',
             required: true,
         );
 
         $needsWizard = $needsWizard ?? false;
 
         Artisan::call(sprintf('sharp:make:%s-command', Str::lower($commandType)), [
-            'name' => $commandPath . '\\' . $name . 'Command',
-            ...(!$needsWizard && $needsForm ? ['--form' => ''] : []),
+            'name' => $commandPath.'\\'.$name.'Command',
+            ...(! $needsWizard && $needsForm ? ['--form' => ''] : []),
             ...($needsWizard ? ['--wizard' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $sharpRootNamespace . '\\' . $commandPath . '\\' . $name . 'Command.php');
+        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $sharpRootNamespace.'\\'.$commandPath.'\\'.$name.'Command.php');
 
         $this->components->info('Your command has been created successfully.');
     }
