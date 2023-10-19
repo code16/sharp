@@ -3,7 +3,6 @@
 namespace DummyNamespace;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
-use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 
@@ -17,8 +16,7 @@ class DummyClass extends InstanceCommand
     public function buildCommandConfig(): void
     {
         $this
-            ->configureDescription('My description')
-            ->configureConfirmationText('History will be lost. Are you sure ?');
+            ->configureDescription('My description');
     }
 
     public function buildFormFields(FieldsContainer $formFields): void
@@ -28,12 +26,6 @@ class DummyClass extends InstanceCommand
                 SharpFormTextField::make('myField')
                     ->setLabel('My field')
             );
-    }
-
-    public function buildFormLayout(FormLayoutColumn &$column): void
-    {
-        $column
-            ->withSingleField('myField');
     }
 
     public function execute($instanceId, array $data = []): array

@@ -1,0 +1,65 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\Commands\Wizards\InstanceWizardCommand;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+
+class DummyClass extends InstanceWizardCommand
+{
+    public function label(): string
+    {
+        return 'My instance command';
+    }
+
+    public function buildCommandConfig(): void
+    {
+        $this
+            ->configureDescription('My description');
+    }
+
+    public function buildFormFieldsForFirstStep(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make('myField')
+                    ->setLabel('My field')
+            );
+    }
+
+    public function executeFirstStep(mixed $instanceId, array $data = []): array
+    {
+        $this->validate($data, [
+            'my_field' => [
+                'required',
+            ],
+        ]);
+
+        $this->getWizardContext()->put('my_field', $data['my_field']);
+
+        return $this->toStep('second-step');
+    }
+
+    public function buildFormFieldsForSecondStep(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make('myOtherField')
+                    ->setLabel('My other field')
+            );
+    }
+
+    public function executeSecondStep(mixed $instanceId, array $data = []): array
+    {
+        //
+
+        return $this->reload();
+    }
+
+    public function authorizeFor($instanceId): bool
+    {
+        return true;
+    }
+
+}
