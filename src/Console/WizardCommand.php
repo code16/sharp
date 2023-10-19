@@ -13,21 +13,88 @@ use function Laravel\Prompts\text;
 class WizardCommand extends Command
 {
     protected $name = 'sharp:wizard';
-    protected $description = 'Wizard to create a new Entity class with associated files (list, form, show page, policy)';
+    protected $description = 'Wizard that help you create entities, commands or filters';
 
     public function handle()
     {
         $wizardType = select(
             label: 'What do you need?',
-            options: ['A complete entity (with list, form, etc)', 'A command'],
+            options: ['A complete entity (with list, form, etc)', 'A command', 'A list filter'],
             default: 'A complete entity (with list, form, etc)',
         );
 
-        if (Str::contains($wizardType, 'command')) {
-            $this->commandWizard();
-        } else {
-            $this->entityWizard();
+        switch ($wizardType) {
+            default:
+            case 'A complete entity (with list, form, etc)':
+                $this->entityWizard();
+                break;
+            case 'A command':
+                $this->commandWizard();
+                break;
+            case 'A list filter':
+                $this->filterWizard();
+                break;
         }
+    }
+    public function filterWizard()
+    {
+        $filterType = select(
+            label: 'What is the type of the new filter?',
+            options: ['Select', 'Date range', 'Check'],
+            default: 'Select',
+        );
+
+        $isMultiple = false;
+
+        if ($filterType === 'Select') {
+            $isMultiple = confirm(
+                label: 'Can the filter accept multiple values?',
+                default: false,
+            );
+        }
+
+        $isRequired = false;
+
+        if ($filterType === 'Date range' || ($filterType === 'Select' && !$isMultiple)) {
+            $allowEmptyValues = confirm(
+                label: 'Can the filter accept empty value?',
+            );
+            $isRequired = !$allowEmptyValues;
+        }
+
+        $name = text(
+            label: 'What is the name of your filter?',
+            placeholder: 'E.g. ShippingState',
+            required: true,
+            hint: 'A "Filter" suffix will be added automatically (E.g. ShippingStateFilter.php).',
+        );
+        $name = Str::ucfirst(Str::camel($name));
+
+        $entityName = text(
+            label: 'What is the name of the related sharp entity?',
+            placeholder: 'E.g. User',
+            required: true,
+            hint: 'We\'ll use it to find the right folder',
+        );
+        $entityName = Str::ucfirst(Str::camel($entityName));
+
+        $filterPath = text(
+            label: 'What is the path where the file should be created?',
+            default: Str::plural($entityName) . '\\Filters',
+            required: true,
+        );
+
+        Artisan::call('sharp:make:entity-list-filter', [
+            'name' => $filterPath . '\\' . $name . 'Filter',
+            ...($isRequired ? ['--required' => ''] : []),
+            ...($isMultiple ? ['--multiple' => ''] : []),
+            ...($filterType === 'Check' ? ['--check' => ''] : []),
+            ...($filterType === 'Date range' ? ['--date-range' => ''] : []),
+        ]);
+
+        $this->components->twoColumnDetail(sprintf('%s filter', $filterType), $this->getSharpRootNamespace() . '\\' . $filterPath . '\\' . $name . 'Filter.php');
+
+        $this->components->info('Your filter has been created successfully.');
     }
 
     public function commandWizard()
@@ -37,8 +104,6 @@ class WizardCommand extends Command
             options: ['Instance', 'Entity'],
             default: 'Instance',
         );
-
-        $sharpRootNamespace = $this->laravel->getNamespace() . 'Sharp';
 
         $needsForm = confirm(
             label: 'Do you need a form inside the command?',
@@ -62,9 +127,10 @@ class WizardCommand extends Command
         $name = Str::ucfirst(Str::camel($name));
 
         $entityName = text(
-            label: 'What is the name of your entity?',
+            label: 'What is the name of the related sharp entity?',
             placeholder: 'E.g. User',
             required: true,
+            hint: 'We\'ll use it to find the right folder',
         );
         $entityName = Str::ucfirst(Str::camel($entityName));
 
@@ -82,7 +148,7 @@ class WizardCommand extends Command
             ...($needsWizard ? ['--wizard' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $sharpRootNamespace . '\\' . $commandPath . '\\' . $name . 'Command.php');
+        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $this->getSharpRootNamespace() . '\\' . $commandPath . '\\' . $name . 'Command.php');
 
         $this->components->info('Your command has been created successfully.');
     }
@@ -112,8 +178,6 @@ class WizardCommand extends Command
 
     protected function generateDashboardEntity()
     {
-        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
-
         $name = text(
             label: 'What is the name of your dashboard?',
             placeholder: 'E.g. Activity',
@@ -131,7 +195,7 @@ class WizardCommand extends Command
             'name' => 'Dashboards\\'.$name.'Dashboard',
         ]);
 
-        $this->components->twoColumnDetail('Dashboard', $sharpRootNamespace.'\\Dashboards\\'.$name.'Dashboard.php');
+        $this->components->twoColumnDetail('Dashboard', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'Dashboard.php');
 
         if ($needsPolicy) {
             Artisan::call('sharp:make:policy', [
@@ -139,7 +203,7 @@ class WizardCommand extends Command
                 '--entity-only' => '',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace.'\\Dashboards\\'.$name.'DashboardPolicy.php');
+            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'DashboardPolicy.php');
         }
 
         Artisan::call('sharp:make:entity', [
@@ -148,13 +212,11 @@ class WizardCommand extends Command
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $sharpRootNamespace.'\\Entities\\'.$name.'DashboardEntity.php');
+        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity.php');
     }
 
     protected function generateClassicEntity()
     {
-        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
-
         $name = text(
             label: 'What is the name of your entity?',
             placeholder: 'E.g. User',
@@ -206,14 +268,14 @@ class WizardCommand extends Command
             '--model' => $model,
         ]);
 
-        $this->components->twoColumnDetail('Entity list', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'EntityList.php');
+        $this->components->twoColumnDetail('Entity list', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'EntityList.php');
 
         if (Str::contains($type, 'form')) {
             Artisan::call('sharp:make:validator', [
                 'name' => $pluralName.'\\'.$name.'Validator',
             ]);
 
-            $this->components->twoColumnDetail('Validator', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Validator.php');
+            $this->components->twoColumnDetail('Validator', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Validator.php');
 
             Artisan::call('sharp:make:form', [
                 'name' => $pluralName.'\\'.$name.'Form',
@@ -221,7 +283,7 @@ class WizardCommand extends Command
                 '--validator' => '',
             ]);
 
-            $this->components->twoColumnDetail('Form', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Form.php');
+            $this->components->twoColumnDetail('Form', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Form.php');
         }
 
         if (Str::contains($type, 'show')) {
@@ -229,7 +291,7 @@ class WizardCommand extends Command
                 'name' => $pluralName.'\\'.$name.'Show',
             ]);
 
-            $this->components->twoColumnDetail('Show page', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Show.php');
+            $this->components->twoColumnDetail('Show page', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Show.php');
         }
 
         if ($needsPolicy) {
@@ -237,7 +299,7 @@ class WizardCommand extends Command
                 'name' => $pluralName.'\\'.$name.'Policy',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace.'\\'.$pluralName.'\\'.$name.'Policy.php');
+            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Policy.php');
         }
 
         Artisan::call('sharp:make:entity', [
@@ -248,13 +310,11 @@ class WizardCommand extends Command
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $sharpRootNamespace.'\\Entities\\'.$name.'Entity.php');
+        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity.php');
     }
 
     private function generateSingleEntity()
     {
-        $sharpRootNamespace = $this->laravel->getNamespace().'Sharp';
-
         $name = text(
             label: 'What is the name of your entity?',
             placeholder: 'E.g. User',
@@ -279,7 +339,7 @@ class WizardCommand extends Command
             'name' => $name.'\\'.$name.'SingleValidator',
         ]);
 
-        $this->components->twoColumnDetail('Validator', $sharpRootNamespace.'\\'.$name.'\\'.$name.'SingleValidator.php');
+        $this->components->twoColumnDetail('Validator', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleValidator.php');
 
         Artisan::call('sharp:make:form', [
             'name' => $name.'\\'.$name.'SingleForm',
@@ -287,21 +347,21 @@ class WizardCommand extends Command
             '--validator' => '',
         ]);
 
-        $this->components->twoColumnDetail('Single form', $sharpRootNamespace.'\\'.$name.'\\'.$name.'SingleForm.php');
+        $this->components->twoColumnDetail('Single form', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleForm.php');
 
         Artisan::call('sharp:make:show-page', [
             'name' => $name.'\\'.$name.'SingleShow',
             '--single' => '',
         ]);
 
-        $this->components->twoColumnDetail('Single show page', $sharpRootNamespace.'\\'.$name.'\\'.$name.'SingleShow.php');
+        $this->components->twoColumnDetail('Single show page', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleShow.php');
 
         if ($needsPolicy) {
             Artisan::call('sharp:make:policy', [
                 'name' => $name.'\\'.$name.'Policy',
             ]);
 
-            $this->components->twoColumnDetail('Policy', $sharpRootNamespace.'\\'.$name.'\\'.$name.'Policy.php');
+            $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'Policy.php');
         }
 
         Artisan::call('sharp:make:entity', [
@@ -311,6 +371,11 @@ class WizardCommand extends Command
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail('Entity', $sharpRootNamespace.'\\Entities\\'.$name.'Entity.php');
+        $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity.php');
+    }
+
+    private function getSharpRootNamespace()
+    {
+        return $this->laravel->getNamespace().'Sharp';
     }
 }
