@@ -28,7 +28,7 @@ abstract class Command
     protected function info(string $message): array
     {
         return [
-            'action' => 'info',
+            'action' => CommandReturnAction::Info->value,
             'message' => $message,
         ];
     }
@@ -36,7 +36,7 @@ abstract class Command
     protected function link(string $link): array
     {
         return [
-            'action' => 'link',
+            'action' => CommandReturnAction::Link->value,
             'link' => $link,
         ];
     }
@@ -44,14 +44,14 @@ abstract class Command
     protected function reload(): array
     {
         return [
-            'action' => 'reload',
+            'action' => CommandReturnAction::Reload->value,
         ];
     }
 
     protected function refresh($ids): array
     {
         return [
-            'action' => 'refresh',
+            'action' => CommandReturnAction::Refresh->value,
             'items' => (array) $ids,
         ];
     }
@@ -59,7 +59,7 @@ abstract class Command
     protected function view(string $bladeView, array $params = []): array
     {
         return [
-            'action' => 'view',
+            'action' => CommandReturnAction::View->value,
             'html' => view($bladeView, $params)->render(),
         ];
     }
@@ -67,7 +67,7 @@ abstract class Command
     protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
         return [
-            'action' => 'download',
+            'action' => CommandReturnAction::Download->value,
             'file' => $filePath,
             'disk' => $diskName,
             'name' => $fileName,
@@ -77,7 +77,7 @@ abstract class Command
     protected function streamDownload(string $fileContent, string $fileName): array
     {
         return [
-            'action' => 'streamDownload',
+            'action' => CommandReturnAction::StreamDownload->value,
             'content' => $fileContent,
             'name' => $fileName,
         ];
