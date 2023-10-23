@@ -53,17 +53,17 @@ class GeneratorCommand extends Command
         switch ($wizardType) {
             default:
             case 'A complete entity (with list, form, etc)':
-                $this->entityWizard();
+                $this->entityPrompt();
                 break;
             case 'A command':
-                $this->commandWizard();
+                $this->commandPrompt();
                 break;
             case 'A list filter':
-                $this->filterWizard();
+                $this->filterPrompt();
                 break;
         }
     }
-    public function filterWizard()
+    public function filterPrompt()
     {
         $filterType = select(
             label: 'What is the type of the new filter?',
@@ -118,7 +118,7 @@ class GeneratorCommand extends Command
         $this->components->info('Your filter has been created successfully.');
     }
 
-    public function commandWizard()
+    public function commandPrompt()
     {
         $commandType = select(
             label: 'What is the type of the new command?',
@@ -168,7 +168,7 @@ class GeneratorCommand extends Command
         $this->components->info('Your command has been created successfully.');
     }
 
-    public function entityWizard()
+    public function entityPrompt()
     {
         $entityType = select(
             label: 'What is the type of your entity?',
