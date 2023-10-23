@@ -21,7 +21,7 @@ use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
-use Code16\Sharp\Console\WizardCommand;
+use Code16\Sharp\Console\GeneratorCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -112,7 +112,7 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->commands([
             CreateUploadsMigration::class,
-            WizardCommand::class,
+            GeneratorCommand::class,
             EntityMakeCommand::class,
             EntityListMakeCommand::class,
             FormMakeCommand::class,

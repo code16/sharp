@@ -11,10 +11,10 @@ use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
-class WizardCommand extends Command
+class GeneratorCommand extends Command
 {
-    protected $name = 'sharp:wizard';
-    protected $description = 'Wizard that help you create entities, commands or filters';
+    protected $name = 'sharp:generator';
+    protected $description = 'Prompt that helps you create entities, commands, filters, etc';
 
     private function getModelsList(string $dir, ?string $search = null): array
     {
