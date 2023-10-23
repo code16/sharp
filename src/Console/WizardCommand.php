@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -33,7 +34,7 @@ class WizardCommand extends Command
     {
         return collect(config('sharp.entities'))
             ->map(fn ($class) => str_replace(
-                ['App\Sharp\Entities\\','Entity'],
+                ['App\Sharp\Entities\\', 'Entity'],
                 ['', ''],
                 $class,
             ))
@@ -63,6 +64,7 @@ class WizardCommand extends Command
                 break;
         }
     }
+
     public function filterWizard()
     {
         $filterType = select(
@@ -82,11 +84,11 @@ class WizardCommand extends Command
 
         $isRequired = false;
 
-        if ($filterType === 'Date range' || ($filterType === 'Select' && !$isMultiple)) {
+        if ($filterType === 'Date range' || ($filterType === 'Select' && ! $isMultiple)) {
             $allowEmptyValues = confirm(
                 label: 'Can the filter accept empty value?',
             );
-            $isRequired = !$allowEmptyValues;
+            $isRequired = ! $allowEmptyValues;
         }
 
         $name = text(
@@ -103,17 +105,17 @@ class WizardCommand extends Command
                 ? $this->getSharpEntitiesList($value)
                 : []
         );
-        $filterPath = Str::plural($entityName) . '\\Filters';
+        $filterPath = Str::plural($entityName).'\\Filters';
 
         Artisan::call('sharp:make:entity-list-filter', [
-            'name' => $filterPath . '\\' . $name . 'Filter',
+            'name' => $filterPath.'\\'.$name.'Filter',
             ...($isRequired ? ['--required' => ''] : []),
             ...($isMultiple ? ['--multiple' => ''] : []),
             ...($filterType === 'Check' ? ['--check' => ''] : []),
             ...($filterType === 'Date range' ? ['--date-range' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail(sprintf('%s filter', $filterType), $this->getSharpRootNamespace() . '\\' . $filterPath . '\\' . $name . 'Filter.php');
+        $this->components->twoColumnDetail(sprintf('%s filter', $filterType), $this->getSharpRootNamespace().'\\'.$filterPath.'\\'.$name.'Filter.php');
 
         $this->components->info('Your filter has been created successfully.');
     }
@@ -155,15 +157,15 @@ class WizardCommand extends Command
         );
 
         $needsWizard = $needsWizard ?? false;
-        $commandPath = Str::plural($entityName) . '\\Commands';
+        $commandPath = Str::plural($entityName).'\\Commands';
 
         Artisan::call(sprintf('sharp:make:%s-command', Str::lower($commandType)), [
-            'name' => $commandPath . '\\' . $name . 'Command',
-            ...(!$needsWizard && $needsForm ? ['--form' => ''] : []),
+            'name' => $commandPath.'\\'.$name.'Command',
+            ...(! $needsWizard && $needsForm ? ['--form' => ''] : []),
             ...($needsWizard ? ['--wizard' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $this->getSharpRootNamespace() . '\\' . $commandPath . '\\' . $name . 'Command.php');
+        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $this->getSharpRootNamespace().'\\'.$commandPath.'\\'.$name.'Command.php');
 
         $this->components->info('Your command has been created successfully.');
     }
