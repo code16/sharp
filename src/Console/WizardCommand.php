@@ -4,9 +4,10 @@ namespace Code16\Sharp\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -14,6 +15,32 @@ class WizardCommand extends Command
 {
     protected $name = 'sharp:wizard';
     protected $description = 'Wizard that help you create entities, commands or filters';
+
+    private function getModelsList(string $dir, ?string $search = null): array
+    {
+        return collect(File::allFiles($dir))
+            ->map(fn ($class) => str_replace(
+                [$dir, '/', '.php'],
+                ['', '', ''],
+                $class->getRealPath()
+            ))
+            ->filter(fn ($class) => $search ? Str::contains($class, $search) : true)
+            ->values()
+            ->toArray();
+    }
+
+    private function getSharpEntitiesList(?string $search = null): array
+    {
+        return collect(config('sharp.entities'))
+            ->map(fn ($class) => str_replace(
+                ['App\Sharp\Entities\\','Entity'],
+                ['', ''],
+                $class,
+            ))
+            ->filter(fn ($class) => $search ? Str::contains($class, $search) : true)
+            ->values()
+            ->toArray();
+    }
 
     public function handle()
     {
@@ -70,19 +97,13 @@ class WizardCommand extends Command
         );
         $name = Str::ucfirst(Str::camel($name));
 
-        $entityName = text(
-            label: 'What is the name of the related sharp entity?',
-            placeholder: 'E.g. User',
-            required: true,
-            hint: 'We\'ll use it to find the right folder',
+        $entityName = search(
+            'Search for the related sharp entity',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getSharpEntitiesList($value)
+                : []
         );
-        $entityName = Str::ucfirst(Str::camel($entityName));
-
-        $filterPath = text(
-            label: 'What is the path where the file should be created?',
-            default: Str::plural($entityName) . '\\Filters',
-            required: true,
-        );
+        $filterPath = Str::plural($entityName) . '\\Filters';
 
         Artisan::call('sharp:make:entity-list-filter', [
             'name' => $filterPath . '\\' . $name . 'Filter',
@@ -126,21 +147,15 @@ class WizardCommand extends Command
         );
         $name = Str::ucfirst(Str::camel($name));
 
-        $entityName = text(
-            label: 'What is the name of the related sharp entity?',
-            placeholder: 'E.g. User',
-            required: true,
-            hint: 'We\'ll use it to find the right folder',
-        );
-        $entityName = Str::ucfirst(Str::camel($entityName));
-
-        $commandPath = text(
-            label: 'What is the path where the file should be created?',
-            default: Str::plural($entityName) . '\\Commands',
-            required: true,
+        $entityName = search(
+            'Search for the related sharp entity',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getSharpEntitiesList($value)
+                : []
         );
 
         $needsWizard = $needsWizard ?? false;
+        $commandPath = Str::plural($entityName) . '\\Commands';
 
         Artisan::call(sprintf('sharp:make:%s-command', Str::lower($commandType)), [
             'name' => $commandPath . '\\' . $name . 'Command',
@@ -227,22 +242,23 @@ class WizardCommand extends Command
         $pluralName = Str::plural($name);
 
         $modelPath = text(
-            label: 'What is the path of the associated model?',
-            default: 'App\\Models',
+            label: 'What is the path of your models directory?',
+            default: 'Models',
             required: true,
         );
 
-        $model = text(
-            label: 'What is the name of the associated model?',
-            placeholder: 'E.g. User',
-            required: true,
+        $model = search(
+            'Search for the related model',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getModelsList(app_path($modelPath), $value)
+                : []
         );
-        $model = $modelPath.'\\'.Str::ucfirst(Str::camel($model));
+        $model = 'App\\'.$modelPath.'\\'.$model;
 
         if (! class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
 
-            return;
+            exit(1);
         }
 
         $label = text(
