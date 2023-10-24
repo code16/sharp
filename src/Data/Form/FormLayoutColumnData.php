@@ -21,7 +21,7 @@ final class FormLayoutColumnData extends Data
             'fields' => collect($column['fields'])->map(fn (array $row) => collect($row)->map(fn (array $field) => isset($field['legend'])
                         ? FormLayoutFieldsetData::from($field)
                         : LayoutFieldData::from($field)
-                )
+            )
             )->toArray(),
         ];
 

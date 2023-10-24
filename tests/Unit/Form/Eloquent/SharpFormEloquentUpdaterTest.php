@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
@@ -55,7 +56,7 @@ it('allows to store a new instance', function () {
     ]);
 });
 
-it('undeclared fields are ignored', function () {
+it('ignores undeclared fields', function () {
     $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
 
     $form = new class extends FakeSharpForm
@@ -74,6 +75,33 @@ it('undeclared fields are ignored', function () {
     };
 
     $form->updateInstance($person->id, ['id' => 1200, 'age' => 38]);
+
+    $this->assertDatabaseHas('people', [
+        'id' => $person->id,
+        'name' => 'Marie Curie',
+        'age' => 21,
+    ]);
+});
+
+it('ignores SharpFormHtmlField fields', function () {
+    $person = Person::create(['name' => 'Marie Curie', 'age' => 21]);
+
+    $form = new class extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormHtmlField::make('name')->setInlineTemplate('HTML'));
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(Person::findOrFail($id), $data);
+        }
+    };
+
+    $form->updateInstance($person->id, ['name' => 'HTML']);
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,

@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 
 trait HandleFormFields
 {
@@ -17,6 +18,10 @@ trait HandleFormFields
 
         $formattedData = collect($data)
             ->filter(function ($value, $key) {
+                if ($this->findFieldByKey($key) instanceof SharpFormHtmlField) {
+                    return false;
+                }
+
                 // Filter only configured fields
                 return in_array($key, $this->getDataKeys());
             })

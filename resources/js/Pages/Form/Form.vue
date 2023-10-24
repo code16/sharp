@@ -36,13 +36,13 @@
         if(route().current('code16.sharp.form.create')) {
             router.post(
                 route('code16.sharp.form.store', { uri, entityKey }),
-                form.serialize(form.data),
+                form.data,
                 { onStart, onFinish }
             );
         } else if(route().current('code16.sharp.form.edit')) {
             router.post(
                 route('code16.sharp.form.update', { uri, entityKey, instanceId }),
-                form.serialize(form.data),
+                form.data,
                 { onStart, onFinish }
             );
         }
