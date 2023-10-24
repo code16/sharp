@@ -1,5 +1,4 @@
 import axios from 'axios';
-import cookies from 'axios/lib/helpers/cookies';
 import { API_PATH } from "../consts";
 import paramsSerializer from './paramsSerializer';
 import { installInterceptors } from "./interceptors";
@@ -23,7 +22,7 @@ export function apiUrl(url, { params } = {}) {
 }
 
 export function getXsrfToken() {
-    return cookies.read('XSRF-TOKEN');
+    return document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/)?.[1];
 }
 
 export { handleErrorAlert, getErrorMessage } from './errors';

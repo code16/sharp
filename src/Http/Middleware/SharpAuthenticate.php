@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
+use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 
@@ -26,6 +27,10 @@ class SharpAuthenticate extends BaseAuthenticate
 
             if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
                 return redirect()->guest($loginPageUrl);
+            }
+
+            if (app(SharpImpersonationHandler::class)->enabled()) {
+                return redirect()->guest(route('code16.sharp.impersonate'));
             }
 
             return redirect()->guest(route('code16.sharp.login'));

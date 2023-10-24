@@ -54,6 +54,10 @@ return [
             //            'reset_password_callback' => null,
         ],
         'display_attribute' => 'name',
+        'impersonate' => [
+            'enabled' => env('SHARP_IMPERSONATE', false),
+            'handler' => null,
+        ],
         //         "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],
 

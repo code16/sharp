@@ -28,7 +28,7 @@
 
             <div class="bg-white rounded p-4 border-0 mb-3">
                 <template v-if="showSiteName && config('sharp.name') !== 'Sharp'">
-                    <div class="card-header bg-transparent border-0 pb-0 pt-4">
+                    <div class="card-header bg-transparent border-0 pb-0 pt-4 mb-2">
                         <h1 class="text-center card-title mb-0 fs-4">
                             {{ config("sharp.name") }}
                         </h1>

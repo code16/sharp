@@ -6,12 +6,13 @@ import {
     DialogPanel,
     Menu,
     MenuButton,
+    MenuItems,
+    MenuItem,
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue'
 import {
     Bars3Icon,
-    BellIcon,
     XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
@@ -19,8 +20,9 @@ import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
 import { Modal } from '@sharp/ui';
 import useMenu from "@/composables/useMenu";
-import { config } from "@/utils/config";
 import Logo from "@/components/Logo.vue";
+import { auth } from "sharp/utils/auth";
+import { __ } from "sharp/utils/i18n";
 
 const sidebarOpen = ref(false);
 const dialogs = useDialogs();
@@ -95,17 +97,27 @@ const menu = useMenu();
                                 <span class="sr-only">Open user menu</span>
                                 <img class="h-8 w-8 rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                                 <span class="hidden lg:flex lg:items-center">
-                                    <span class="ml-4 text-sm font-semibold leading-6 text-white" aria-hidden="true">Tom Cook</span>
+                                    <span class="ml-4 text-sm font-semibold leading-6 text-white" aria-hidden="true">
+                                        {{ auth().user.name }}
+                                    </span>
                                     <ChevronDownIcon class="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                                 </span>
                             </MenuButton>
-<!--                            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">-->
-<!--                                <MenuItems class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">-->
+                            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                                <MenuItems class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
 <!--                                    <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">-->
 <!--                                        <a :href="item.href" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">{{ item.name }}</a>-->
 <!--                                    </MenuItem>-->
-<!--                                </MenuItems>-->
-<!--                            </transition>-->
+                                    <MenuItem v-slot="{ active }">
+                                        <form :action="route('code16.sharp.logout')" method="post">
+                                            <input name="_token" :value="$page.props.session.token" type="hidden">
+                                            <button :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']" type="submit">
+                                                {{ __('sharp::menu.logout_label') }}
+                                            </button>
+                                        </form>
+                                    </MenuItem>
+                                </MenuItems>
+                            </transition>
                         </Menu>
                     </div>
                 </div>
