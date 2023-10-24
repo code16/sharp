@@ -1,18 +1,18 @@
 <?php
 
-use Code16\Sharp\Http\Api\ApiEntityListController;
-use Code16\Sharp\Http\Api\ApiFilesController;
-use Code16\Sharp\Http\Api\ApiFormUploadController;
-use Code16\Sharp\Http\Api\ApiSearchController;
-use Code16\Sharp\Http\Api\Commands\ApiDashboardCommandController;
-use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityCommandController;
-use Code16\Sharp\Http\Api\Commands\ApiEntityListEntityStateController;
-use Code16\Sharp\Http\Api\Commands\ApiEntityListInstanceCommandController;
-use Code16\Sharp\Http\Api\Commands\ApiShowEntityStateController;
-use Code16\Sharp\Http\Api\Commands\ApiShowInstanceCommandController;
-use Code16\Sharp\Http\Api\Embeds\ApiEmbedsController;
-use Code16\Sharp\Http\Api\Embeds\ApiEmbedsFormController;
-use Code16\Sharp\Http\EntityListController;
+use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
+use Code16\Sharp\Http\Controllers\Api\ApiFilesController;
+use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
+use Code16\Sharp\Http\Controllers\Api\ApiSearchController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiDashboardCommandController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityCommandController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityStateController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListInstanceCommandController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowEntityStateController;
+use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowInstanceCommandController;
+use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsController;
+use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsFormController;
+use Code16\Sharp\Http\Controllers\EntityListController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([

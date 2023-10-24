@@ -1,6 +1,6 @@
 <?php
 
-use Code16\Sharp\Http\ImpersonateController;
+use Code16\Sharp\Http\Controllers\Auth\ImpersonateController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
