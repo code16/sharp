@@ -2,11 +2,12 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Http\Requests\ImpersonateRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ImpersonateController extends Controller
 {
@@ -17,6 +18,15 @@ class ImpersonateController extends Controller
         $this->middleware('sharp_guest'.$guardSuffix);
     }
 
+    public function create(SharpImpersonationHandler $impersonationHandler): RedirectResponse|Response
+    {
+        return Inertia::render('Auth/Impersonate', [
+            'impersonateUsers' => $impersonationHandler->enabled()
+                ? $impersonationHandler->getUsers()
+                : null,
+        ]);
+    }
+
     public function store(ImpersonateRequest $request): RedirectResponse
     {
         auth(config('sharp.auth.guard'))
@@ -25,20 +35,5 @@ class ImpersonateController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(route('code16.sharp.home'));
-    }
-
-    public function destroy(Request $request): RedirectResponse
-    {
-        Auth::guard(config('sharp.auth.guard'))->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
-            return redirect()->to($loginPageUrl);
-        }
-
-        return redirect()->to(route('code16.sharp.login'));
     }
 }

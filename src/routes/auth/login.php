@@ -24,6 +24,9 @@ Route::group([
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('code16.sharp.logout');
 
-    Route::post('/impersonate', [ImpersonateController::class, 'store'])
+    Route::get('/impersonate', [ImpersonateController::class, 'create'])
         ->name('code16.sharp.impersonate');
+
+    Route::post('/impersonate', [ImpersonateController::class, 'store'])
+        ->name('code16.sharp.impersonate.post');
 });

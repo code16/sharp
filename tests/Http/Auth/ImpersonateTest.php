@@ -15,6 +15,24 @@ function migrateUsersTable()
     });
 }
 
+it('redirects to impersonation page if enabled and guest', function () {
+    config()->set('sharp.auth.impersonate.handler', new class() extends SharpImpersonationHandler
+    {
+        public function enabled(): bool
+        {
+            return true;
+        }
+
+        public function getUsers(): array
+        {
+            return [];
+        }
+    });
+
+    $this->get(route('code16.sharp.home'))
+        ->assertRedirect(route('code16.sharp.impersonate'));
+});
+
 it('displays impersonatable users from a custom handler', function () {
     $users = [
         1 => 'Marie Curie',
@@ -38,9 +56,8 @@ it('displays impersonatable users from a custom handler', function () {
         }
     });
 
-    $this->get(route('code16.sharp.login'))
+    $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
-            ->where('impersonate', true)
             ->where('impersonateUsers', $users)
         );
 });
@@ -61,9 +78,8 @@ it('allow to use default eloquent implementation handler', function () {
     User::create(['id' => 10, 'name' => 'Marie Curie']);
     User::create(['id' => 20, 'name' => 'Albert Einstein']);
 
-    $this->get(route('code16.sharp.login'))
+    $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
-            ->where('impersonate', true)
             ->where('impersonateUsers', [
                 10 => 'Marie Curie',
                 20 => 'Albert Einstein',
@@ -90,17 +106,15 @@ it('does not display impersonatable users if impersonation is not enabled', func
     });
 
     config()->set('sharp.auth.impersonate.enabled', false);
-    $this->get(route('code16.sharp.login'))
+    $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
-            ->where('impersonate', false)
             ->where('impersonateUsers', null)
         );
 
     // Even if the handler is enabled, since the env is not "local", it should not display the impersonation
     config()->set('sharp.auth.impersonate.enabled', true);
-    $this->get(route('code16.sharp.login'))
+    $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
-            ->where('impersonate', false)
             ->where('impersonateUsers', null)
         );
 });
@@ -119,7 +133,7 @@ it('allows to impersonate a registered user', function () {
 
     $this->withoutExceptionHandling();
 
-    $this->post(route('code16.sharp.impersonate'), ['user_id' => 1])
+    $this->post(route('code16.sharp.impersonate.post'), ['user_id' => 1])
         ->assertRedirect(route('code16.sharp.home'));
 
     expect(auth()->user())
@@ -148,11 +162,11 @@ it('does not allow to impersonate an existing user who is not listed in the hand
     });
 
     $this->get(route('code16.sharp.login'));
-    $this->post(route('code16.sharp.impersonate'), ['user_id' => 1])
+    $this->post(route('code16.sharp.impersonate.post'), ['user_id' => 1])
         ->assertRedirect(route('code16.sharp.login'))
         ->assertSessionHasErrors('user_id');
 
-    $this->post(route('code16.sharp.impersonate'), ['user_id' => 2])
+    $this->post(route('code16.sharp.impersonate.post'), ['user_id' => 2])
         ->assertRedirect(route('code16.sharp.home'))
         ->assertSessionHasNoErrors();
 });
