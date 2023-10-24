@@ -63,6 +63,6 @@ class LoginController extends Controller
             return redirect()->to($loginPageUrl);
         }
 
-        return redirect()->to(route('code16.sharp.login'));
+        return redirect()->to(route('code16.sharp.home'));
     }
 }
