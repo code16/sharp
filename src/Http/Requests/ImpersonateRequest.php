@@ -20,7 +20,7 @@ class ImpersonateRequest extends FormRequest
         return [
             'user_id' => [
                 'required',
-                Rule::in(array_keys($this->getHandler()->getUsers()))
+                Rule::in(array_keys($this->getHandler()->getUsers())),
             ],
         ];
     }
