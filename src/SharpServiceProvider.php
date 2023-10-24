@@ -56,6 +56,10 @@ class SharpServiceProvider extends ServiceProvider
             });
         }
 
+        if (config('sharp.auth.impersonate.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
+        }
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
