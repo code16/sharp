@@ -4,9 +4,9 @@ namespace Code16\Sharp\Auth\Impersonate;
 
 abstract class SharpImpersonationHandler
 {
-    public function authorize(): bool
+    public function enabled(): bool
     {
-        return config('sharp.auth.impersonate.enabled') === true
+        return config('sharp.auth.impersonate.enabled') == true
             && app()->isLocal();
     }
 

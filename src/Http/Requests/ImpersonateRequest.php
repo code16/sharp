@@ -12,7 +12,7 @@ class ImpersonateRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->getHandler()->authorize();
+        return $this->getHandler()->enabled();
     }
 
     public function rules(): array

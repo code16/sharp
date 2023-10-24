@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http;
 
+use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Exceptions\Auth\SharpAuthenticationNeeds2faException;
 use Code16\Sharp\Http\Requests\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +25,7 @@ class LoginController extends Controller
             ->only('destroy');
     }
 
-    public function create(): RedirectResponse|Response
+    public function create(SharpImpersonationHandler $impersonationHandler): RedirectResponse|Response
     {
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
@@ -32,6 +33,10 @@ class LoginController extends Controller
 
         return Inertia::render('Auth/Login', [
             'status' => session('status'),
+            'impersonate' => $impersonationHandler->enabled(),
+            'impersonateUsers' => $impersonationHandler->enabled()
+                ? $impersonationHandler->getUsers()
+                : null,
         ])->withViewData([
             'login' => true,
         ]);
