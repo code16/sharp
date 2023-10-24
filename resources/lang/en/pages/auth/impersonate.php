@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'Log as...',
-    'user_id_field' => 'Log as...',
-    'switch_to_password_login' => 'Return to password login',
+    'title' => 'Login as...',
+    'user_id_field' => 'Login as',
+    'switch_to_password_login' => 'Switch to password login',
     'button' => 'Login',
 ];
