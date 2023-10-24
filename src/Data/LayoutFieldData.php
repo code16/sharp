@@ -19,7 +19,7 @@ final class LayoutFieldData extends Data
             ...$field,
             'item' => isset($field['item'])
                 ? collect($field['item'])->map(fn (array $row) => collect($row)->map(fn (array $itemField) => LayoutFieldData::from($itemField)
-                    )
+                )
                 )->toArray()
                 : null,
         ];

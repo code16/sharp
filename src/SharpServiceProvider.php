@@ -110,7 +110,7 @@ class SharpServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(SharpImpersonationHandler::class, function () {
-            if (!$handler = config('sharp.auth.impersonate.handler')) {
+            if (! $handler = config('sharp.auth.impersonate.handler')) {
                 return new SharpDefaultEloquentImpersonationHandler();
             }
 

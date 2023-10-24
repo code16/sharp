@@ -19,7 +19,7 @@ final class FormLayoutFieldsetData extends Data
         $fieldset = [
             ...$fieldset,
             'fields' => collect($fieldset['fields'])->map(fn (array $row) => collect($row)->map(fn (array $field) => LayoutFieldData::from($field)
-                )
+            )
             )->toArray(),
         ];
 
