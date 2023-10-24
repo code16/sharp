@@ -1,5 +1,6 @@
 <?php
 
+use Code16\Sharp\Http\ImpersonateController;
 use Code16\Sharp\Http\Login2faController;
 use Code16\Sharp\Http\LoginController;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,7 @@ Route::group([
 
     Route::post('/logout', [LoginController::class, 'destroy'])
         ->name('code16.sharp.logout');
+
+    Route::post('/impersonate', [ImpersonateController::class, 'store'])
+        ->name('code16.sharp.impersonate');
 });
