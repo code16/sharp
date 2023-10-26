@@ -17,6 +17,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use ReflectionClass;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -71,7 +72,7 @@ class GeneratorCommand extends Command
                 ? $this->getSharpEntitiesList($value)
                 : []
         );
-        $entityStatePath = Str::plural($entityName) . '\\States';
+        $entityStatePath = Str::plural($entityName).'\\States';
 
         $modelPath = text(
             label: 'What is the path of your models directory?',
@@ -94,15 +95,14 @@ class GeneratorCommand extends Command
         }
 
         Artisan::call('sharp:make:entity-state', [
-            'name' => $entityStatePath . '\\' . $name . 'EntityState',
+            'name' => $entityStatePath.'\\'.$name.'EntityState',
             '--model' => $model,
         ]);
 
-        $this->components->twoColumnDetail('Entity state', $this->getSharpRootNamespace() . '\\' . $entityStatePath . '\\' . $name . 'EntityState.php');
+        $this->components->twoColumnDetail('Entity state', $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\'.$name.'EntityState.php');
 
         $this->components->info('Your entity state has been created successfully.');
     }
-
 
     public function filterPrompt()
     {
@@ -123,11 +123,11 @@ class GeneratorCommand extends Command
 
         $isRequired = false;
 
-        if ($filterType === 'Date range' || ($filterType === 'Select' && !$isMultiple)) {
+        if ($filterType === 'Date range' || ($filterType === 'Select' && ! $isMultiple)) {
             $allowEmptyValues = confirm(
                 label: 'Can the filter accept empty value?',
             );
-            $isRequired = !$allowEmptyValues;
+            $isRequired = ! $allowEmptyValues;
         }
 
         $name = text(
@@ -144,17 +144,17 @@ class GeneratorCommand extends Command
                 ? $this->getSharpEntitiesList($value)
                 : []
         );
-        $filterPath = Str::plural($entityName) . '\\Filters';
+        $filterPath = Str::plural($entityName).'\\Filters';
 
         Artisan::call('sharp:make:entity-list-filter', [
-            'name' => $filterPath . '\\' . $name . 'Filter',
+            'name' => $filterPath.'\\'.$name.'Filter',
             ...($isRequired ? ['--required' => ''] : []),
             ...($isMultiple ? ['--multiple' => ''] : []),
             ...($filterType === 'Check' ? ['--check' => ''] : []),
             ...($filterType === 'Date range' ? ['--date-range' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail(sprintf('%s filter', $filterType), $this->getSharpRootNamespace() . '\\' . $filterPath . '\\' . $name . 'Filter.php');
+        $this->components->twoColumnDetail(sprintf('%s filter', $filterType), $this->getSharpRootNamespace().'\\'.$filterPath.'\\'.$name.'Filter.php');
 
         $this->components->info('Your filter has been created successfully.');
     }
@@ -190,50 +190,48 @@ class GeneratorCommand extends Command
 
         $entityName = search(
             'Search for the related sharp entity',
-            fn(string $value) => strlen($value) > 0
+            fn (string $value) => strlen($value) > 0
                 ? $this->getSharpEntitiesList($value)
                 : []
         );
 
         $needsWizard = $needsWizard ?? false;
-        $commandPath = Str::plural($entityName) . '\\Commands';
+        $commandPath = Str::plural($entityName).'\\Commands';
 
         Artisan::call(sprintf('sharp:make:%s-command', Str::lower($commandType)), [
-            'name' => $commandPath . '\\' . $name . 'Command',
-            ...(!$needsWizard && $needsForm ? ['--form' => ''] : []),
+            'name' => $commandPath.'\\'.$name.'Command',
+            ...(! $needsWizard && $needsForm ? ['--form' => ''] : []),
             ...($needsWizard ? ['--wizard' => ''] : []),
         ]);
 
-        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $this->getSharpRootNamespace() . '\\' . $commandPath . '\\' . $name . 'Command.php');
+        $this->components->twoColumnDetail(sprintf('%s command', $commandType), $this->getSharpRootNamespace().'\\'.$commandPath.'\\'.$name.'Command.php');
 
         $this->components->info('Your command has been created successfully.');
 
-        $listClass = $this->getSharpRootNamespace() . '\\' . Str::plural($entityName) . '\\' . $entityName . 'EntityList';
+        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
 
         if (class_exists($listClass)) {
-
             $this->addNewItemToAListOfCommands(
                 $commandType,
-                $name . 'Command',
-                $this->getSharpRootNamespace() . '\\' . $commandPath . '\\',
+                $name.'Command',
+                $this->getSharpRootNamespace().'\\'.$commandPath.'\\',
                 $listClass,
             );
 
-            $this->components->info(sprintf('The command has been successfully added to the related entity list (%s).', $entityName . 'EntityList'));
+            $this->components->info(sprintf('The command has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
         }
 
-        $showClass = $this->getSharpRootNamespace() . '\\' . Str::plural($entityName) . '\\' . $entityName . 'Show';
+        $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
 
         if ($commandType === 'Instance' && class_exists($showClass)) {
-
             $this->addNewItemToAListOfCommands(
                 $commandType,
-                $name . 'Command',
-                $this->getSharpRootNamespace() . '\\' . $commandPath . '\\',
+                $name.'Command',
+                $this->getSharpRootNamespace().'\\'.$commandPath.'\\',
                 $showClass,
             );
 
-            $this->components->info(sprintf('The command has been successfully added to the related show page (%s).', $entityName . 'Show'));
+            $this->components->info(sprintf('The command has been successfully added to the related show page (%s).', $entityName.'Show'));
         }
     }
 
@@ -264,7 +262,7 @@ class GeneratorCommand extends Command
         $this->components->info(
             sprintf(
                 'Your entity has been successfully added to entities list in `sharp/config.php`. You can visit: %s',
-                match($entityType) {
+                match ($entityType) {
                     'Classic' => LinkToEntityList::make($entityKey)->renderAsUrl(),
                     'Single' => LinkToSingleShowPage::make($entityKey)->renderAsUrl(),
 //                    'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
@@ -511,7 +509,7 @@ class GeneratorCommand extends Command
     {
         return collect(config('sharp.entities'))
             ->map(fn ($class) => str_replace(
-                ['App\Sharp\Entities\\','Entity'],
+                ['App\Sharp\Entities\\', 'Entity'],
                 ['', ''],
                 $class,
             ))
@@ -591,7 +589,7 @@ class GeneratorCommand extends Command
             ->array()
             ->first();
 
-        if (!$sectionValue) {
+        if (! $sectionValue) {
             $file->astQuery()
                 ->class()
                 ->where('name->name', $reflector->getShortName())
