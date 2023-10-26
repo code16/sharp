@@ -58,6 +58,15 @@
       z-index: 2;
     }
 
+    // placeholder
+    p.is-editor-empty:first-child::before {
+      content: attr(data-placeholder);
+      float: left;
+      color: $input-placeholder-color;
+      pointer-events: none;
+      height: 0;
+    }
+
     h1, h2, h3, h4, h5, h6 {
       font-weight: bold;
       b, strong {

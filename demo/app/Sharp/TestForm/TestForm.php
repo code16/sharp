@@ -130,6 +130,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormEditorField::make('markdown')
                     ->setRenderContentAsMarkdown()
+                    ->setPlaceholder('Start typing content here...')
                     ->setMaxLength(200)
                     ->setLocalized()
                     ->setLabel('Markdown')
