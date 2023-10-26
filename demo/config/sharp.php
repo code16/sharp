@@ -11,9 +11,12 @@ return [
         'categories' => \App\Sharp\Entities\CategoryEntity::class,
         'authors' => \App\Sharp\Entities\AuthorEntity::class,
         'profile' => \App\Sharp\Entities\ProfileEntity::class,
-        'dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
 
         'test' => \App\Sharp\Entities\TestEntity::class,
+    ],
+
+    'dashboards' => [
+        'demo_dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
     ],
 
     'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],

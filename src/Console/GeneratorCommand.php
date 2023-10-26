@@ -2,10 +2,25 @@
 
 namespace Code16\Sharp\Console;
 
+use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use PhpParser\BuilderFactory;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Name\Relative;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\ArrayItem;
+use Archetype\Facades\LaravelFile;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
+use ReflectionClass;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -16,37 +31,11 @@ class GeneratorCommand extends Command
     protected $name = 'sharp:generator';
     protected $description = 'Prompt that helps you create entities, commands, filters, etc';
 
-    private function getModelsList(string $dir, ?string $search = null): array
-    {
-        return collect(File::allFiles($dir))
-            ->map(fn ($class) => str_replace(
-                [$dir, '/', '.php'],
-                ['', '', ''],
-                $class->getRealPath()
-            ))
-            ->filter(fn ($class) => $search ? Str::contains($class, $search) : true)
-            ->values()
-            ->toArray();
-    }
-
-    private function getSharpEntitiesList(?string $search = null): array
-    {
-        return collect(config('sharp.entities'))
-            ->map(fn ($class) => str_replace(
-                ['App\Sharp\Entities\\','Entity'],
-                ['', ''],
-                $class,
-            ))
-            ->filter(fn ($class) => $search ? Str::contains($class, $search) : true)
-            ->values()
-            ->toArray();
-    }
-
     public function handle()
     {
         $wizardType = select(
             label: 'What do you need?',
-            options: ['A complete entity (with list, form, etc)', 'A command', 'A list filter'],
+            options: ['A complete entity (with list, form, etc)', 'A command', 'A list filter', 'An entity state', 'A reorder handler'],
             default: 'A complete entity (with list, form, etc)',
         );
 
@@ -61,8 +50,64 @@ class GeneratorCommand extends Command
             case 'A list filter':
                 $this->filterPrompt();
                 break;
+            case 'An entity state':
+                $this->entityStatePrompt();
+                break;
+            case 'A reorder handler':
+                $this->reorderHandlerPrompt();
+                break;
         }
     }
+
+    public function entityStatePrompt()
+    {
+        $name = text(
+            label: 'What is the name of your entity state?',
+            placeholder: 'E.g. Shipping',
+            required: true,
+            hint: 'An "EntityState" suffix will be added automatically (E.g. ShippingEntityState.php).',
+        );
+        $name = Str::ucfirst(Str::camel($name));
+
+        $entityName = search(
+            'Search for the related sharp entity',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getSharpEntitiesList($value)
+                : []
+        );
+        $entityStatePath = Str::plural($entityName) . '\\States';
+
+        $modelPath = text(
+            label: 'What is the path of your models directory?',
+            default: 'Models',
+            required: true,
+        );
+
+        $model = search(
+            'Search for the related model',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getModelsList(app_path($modelPath), $value)
+                : []
+        );
+        $model = 'App\\'.$modelPath.'\\'.$model;
+
+        if (! class_exists($model)) {
+            $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
+
+            exit(1);
+        }
+
+        Artisan::call('sharp:make:entity-state', [
+            'name' => $entityStatePath . '\\' . $name . 'EntityState',
+            '--model' => $model,
+        ]);
+
+        $this->components->twoColumnDetail('Entity state', $this->getSharpRootNamespace() . '\\' . $entityStatePath . '\\' . $name . 'EntityState.php');
+
+        $this->components->info('Your entity state has been created successfully.');
+    }
+
+
     public function filterPrompt()
     {
         $filterType = select(
@@ -149,7 +194,7 @@ class GeneratorCommand extends Command
 
         $entityName = search(
             'Search for the related sharp entity',
-            fn (string $value) => strlen($value) > 0
+            fn(string $value) => strlen($value) > 0
                 ? $this->getSharpEntitiesList($value)
                 : []
         );
@@ -166,6 +211,34 @@ class GeneratorCommand extends Command
         $this->components->twoColumnDetail(sprintf('%s command', $commandType), $this->getSharpRootNamespace() . '\\' . $commandPath . '\\' . $name . 'Command.php');
 
         $this->components->info('Your command has been created successfully.');
+
+        $listClass = $this->getSharpRootNamespace() . '\\' . Str::plural($entityName) . '\\' . $entityName . 'EntityList';
+
+        if (class_exists($listClass)) {
+
+            $this->addNewItemToAListOfCommands(
+                $commandType,
+                $name . 'Command',
+                $this->getSharpRootNamespace() . '\\' . $commandPath . '\\',
+                $listClass,
+            );
+
+            $this->components->info(sprintf('The command has been successfully added to the related entity list (%s).', $entityName . 'EntityList'));
+        }
+
+        $showClass = $this->getSharpRootNamespace() . '\\' . Str::plural($entityName) . '\\' . $entityName . 'Show';
+
+        if ($commandType === 'Instance' && class_exists($showClass)) {
+
+            $this->addNewItemToAListOfCommands(
+                $commandType,
+                $name . 'Command',
+                $this->getSharpRootNamespace() . '\\' . $commandPath . '\\',
+                $showClass,
+            );
+
+            $this->components->info(sprintf('The command has been successfully added to the related show page (%s).', $entityName . 'Show'));
+        }
     }
 
     public function entityPrompt()
@@ -178,20 +251,29 @@ class GeneratorCommand extends Command
 
         switch ($entityType) {
             case 'Classic':
-                $this->generateClassicEntity();
+                [$entityPath, $entityKey, $entityType] = $this->generateClassicEntity();
                 break;
             case 'Single':
-                $this->generateSingleEntity();
+                [$entityPath, $entityKey, $entityType] = $this->generateSingleEntity();
                 break;
             case 'Dashboard':
-                $this->generateDashboardEntity();
+                [$entityPath, $entityKey, $entityType] = $this->generateDashboardEntity();
                 break;
         }
 
         $this->components->info('Your entity and all related files have been created successfully.');
+
+        $this->addNewEntityToSharpConfig($entityPath, $entityKey, $entityType);
+
+        $this->components->info(
+            sprintf(
+                'Your entity has been successfully added to entities list in `sharp/config.php`. You can visit: %s',
+                LinkToEntityList::make($entityKey)->renderAsUrl(),
+            )
+        );
     }
 
-    protected function generateDashboardEntity()
+    protected function generateDashboardEntity(): array
     {
         $name = text(
             label: 'What is the name of your dashboard?',
@@ -228,9 +310,15 @@ class GeneratorCommand extends Command
         ]);
 
         $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity.php');
+
+        return [
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity',
+            Str::snake($name),
+            'dashboards',
+        ];
     }
 
-    protected function generateClassicEntity()
+    protected function generateClassicEntity(): array
     {
         $name = text(
             label: 'What is the name of your entity?',
@@ -257,7 +345,6 @@ class GeneratorCommand extends Command
 
         if (! class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
-
             exit(1);
         }
 
@@ -270,7 +357,7 @@ class GeneratorCommand extends Command
 
         $type = select(
             label: 'What do you need with your entity?',
-            options: ['List', 'List & form', 'List, form & show page'],
+            options: ['List', 'List & form', 'List & show', 'List, form & show page'],
             default: 'List, form & show page',
         );
 
@@ -327,9 +414,15 @@ class GeneratorCommand extends Command
         ]);
 
         $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity.php');
+
+        return [
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity',
+            Str::snake($pluralName),
+            'entities',
+        ];
     }
 
-    private function generateSingleEntity()
+    private function generateSingleEntity(): array
     {
         $name = text(
             label: 'What is the name of your entity?',
@@ -388,10 +481,167 @@ class GeneratorCommand extends Command
         ]);
 
         $this->components->twoColumnDetail('Entity', $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity.php');
+
+        return [
+            $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity',
+            Str::snake($name),
+            'entities',
+        ];
     }
 
     private function getSharpRootNamespace()
     {
         return $this->laravel->getNamespace().'Sharp';
+    }
+
+    private function getModelsList(string $dir, ?string $search = null): array
+    {
+        return collect(File::allFiles($dir))
+            ->map(fn ($class) => str_replace(
+                [$dir, '/', '.php'],
+                ['', '', ''],
+                $class->getRealPath()
+            ))
+            ->filter(fn ($class) => $search ? Str::contains($class, $search) : true)
+            ->values()
+            ->toArray();
+    }
+
+    private function getSharpEntitiesList(?string $search = null): array
+    {
+        return collect(config('sharp.entities'))
+            ->map(fn ($class) => str_replace(
+                ['App\Sharp\Entities\\','Entity'],
+                ['', ''],
+                $class,
+            ))
+            ->filter(fn ($class) => $search ? Str::contains($class, $search) : true)
+            ->values()
+            ->toArray();
+    }
+
+    private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityType)
+    {
+        $file = LaravelFile::load(config_path('sharp.php'));
+
+        $sectionValue = $file->astQuery()
+            ->return()
+            ->array()
+            ->arrayItem()
+            ->where('key->value', $entityType)
+            ->value
+            ->first();
+
+        $sectionValue->items = [
+            ...$sectionValue->items,
+            new ArrayItem(
+                new ClassConstFetch(new FullyQualified($entityPath), 'class'),
+                new String_($entityKey),
+            ),
+        ];
+
+        $file->astQuery()
+            ->return()
+            ->array()
+            ->arrayItem()
+            ->where('key->value', $entityType)
+            ->replaceProperty('value', $sectionValue)
+            ->commit()
+            ->end()
+            ->save();
+    }
+
+//    private function addNewEntityToSharpMenu(string $entityKey, string $menuLabel)
+//    {
+//        $reflector = new ReflectionClass(config('sharp.menu'));
+//        $file = LaravelFile::load($reflector->getFileName());
+//
+//        $file->astQuery()
+//            ->classMethod()
+//            ->where('name->name', 'build')
+//            ->insertStmt(
+//                new Expression(
+//                    new MethodCall(
+//                        new Variable('this'),
+//                        'addEntityLink',
+//                        [
+//                            new Arg(new String_($entityKey)),
+//                            new Arg(new String_($menuLabel)),
+//                            new Arg(new String_('fas fa-file'))
+//                        ]
+//                    )
+//                )
+//            )
+//            ->commit()
+//            ->end()
+//            ->save();
+//    }
+
+    private function addNewItemToAListOfCommands(string $commandType, string $commandClass, string $commandPath, string $targetClass)
+    {
+        $classMethodName = sprintf('get%sCommands', $commandType);
+
+        $reflector = new ReflectionClass($targetClass);
+        $file = LaravelFile::load($reflector->getFileName());
+
+        $sectionValue = $file->astQuery()
+            ->classMethod()
+            ->where('name->name', $classMethodName)
+            ->return()
+            ->array()
+            ->first();
+
+        if (!$sectionValue) {
+            $file->astQuery()
+                ->class()
+                ->where('name->name', $reflector->getShortName())
+                ->insertStmt(
+                    (new BuilderFactory)
+                        ->method($classMethodName)
+                        ->makePublic()
+                        ->setReturnType('?array')
+                        ->getNode()
+                )
+                ->commit()
+                ->end()
+                ->save();
+
+            $file->astQuery()
+                ->classMethod()
+                ->where('name->name', $classMethodName)
+                ->insertStmt(
+                    new Return_((new BuilderFactory)->val([]))
+                )
+                ->commit()
+                ->end()
+                ->save();
+
+            $sectionValue = $file->astQuery()
+                ->classMethod()
+                ->where('name->name', $classMethodName)
+                ->return()
+                ->array()
+                ->first();
+        }
+
+        $sectionValue->items = [
+            ...$sectionValue->items,
+            new ArrayItem(
+                new ClassConstFetch(new Name($commandClass), 'class'),
+            ),
+        ];
+
+        $file
+            ->add()->use([$commandPath.$commandClass])
+            ->astQuery()
+            ->classMethod()
+            ->where('name->name', $classMethodName)
+            ->return()
+            ->array()
+            ->value
+            ->replaceProperty('value', $sectionValue)
+            ->commit()
+            ->end()
+            ->save();
     }
 }
