@@ -2,23 +2,19 @@
 
 namespace Code16\Sharp\Console;
 
+use Archetype\Facades\LaravelFile;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
+use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Name\Relative;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Expr\ArrayItem;
-use Archetype\Facades\LaravelFile;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use ReflectionClass;
 use function Laravel\Prompts\confirm;
@@ -268,7 +264,11 @@ class GeneratorCommand extends Command
         $this->components->info(
             sprintf(
                 'Your entity has been successfully added to entities list in `sharp/config.php`. You can visit: %s',
-                LinkToEntityList::make($entityKey)->renderAsUrl(),
+                match($entityType) {
+                    'Classic' => LinkToEntityList::make($entityKey)->renderAsUrl(),
+                    'Single' => LinkToSingleShowPage::make($entityKey)->renderAsUrl(),
+//                    'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
+                },
             )
         );
     }
