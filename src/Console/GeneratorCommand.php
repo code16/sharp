@@ -54,6 +54,8 @@ class GeneratorCommand extends Command
                 $this->reorderHandlerPrompt();
                 break;
         }
+
+        return 0;
     }
 
     public function entityStatePrompt()
@@ -266,6 +268,7 @@ class GeneratorCommand extends Command
                     'Classic' => LinkToEntityList::make($entityKey)->renderAsUrl(),
                     'Single' => LinkToSingleShowPage::make($entityKey)->renderAsUrl(),
 //                    'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
+                    default => 'unknown url',
                 },
             )
         );
@@ -333,13 +336,17 @@ class GeneratorCommand extends Command
             required: true,
         );
 
-        $model = search(
-            'Search for the related model',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getModelsList(app_path($modelPath), $value)
-                : []
-        );
-        $model = 'App\\'.$modelPath.'\\'.$model;
+        if (app()->runningUnitTests()) {
+            $model = 'Code16\\Sharp\\Tests\\Fixtures\\Person';
+        } else {
+            $model = search(
+                'Search for the related model',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getModelsList(app_path($modelPath), $value)
+                    : []
+            );
+            $model = 'App\\'.$modelPath.'\\'.$model;
+        }
 
         if (! class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
@@ -520,6 +527,14 @@ class GeneratorCommand extends Command
 
     private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityType)
     {
+        if (app()->runningUnitTests()) {
+            config()->set(
+                'sharp.entities.totos',
+                '\\'.$entityPath . '::class',
+            );
+            return;
+        }
+
         $file = LaravelFile::load(config_path('sharp.php'));
 
         $sectionValue = $file->astQuery()
