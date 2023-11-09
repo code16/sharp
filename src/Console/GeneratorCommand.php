@@ -17,6 +17,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use ReflectionClass;
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -532,6 +533,7 @@ class GeneratorCommand extends Command
                 'sharp.entities.totos',
                 (new $entityPath())::class,
             );
+
             return;
         }
 
