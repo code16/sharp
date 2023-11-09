@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Console;
 
 use Archetype\Facades\LaravelFile;
+use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
 use Illuminate\Console\Command;
@@ -267,7 +268,7 @@ class GeneratorCommand extends Command
                 match ($entityType) {
                     'Classic' => LinkToEntityList::make($entityKey)->renderAsUrl(),
                     'Single' => LinkToSingleShowPage::make($entityKey)->renderAsUrl(),
-//                    'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
+                    'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
                     default => 'unknown url',
                 },
             )
