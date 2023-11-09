@@ -660,4 +660,45 @@ class GeneratorCommand extends Command
             ->end()
             ->save();
     }
+
+    private function reorderHandlerPrompt()
+    {
+        $name = text(
+            label: 'What is the name of your reorder handler?',
+            placeholder: 'E.g. ProductVisual',
+            required: true,
+            hint: 'A "Reorder" suffix will be added automatically (E.g. ProductVisualReorder.php).',
+        );
+        $name = Str::ucfirst(Str::camel($name));
+
+        $entityName = search(
+            'Search for the related sharp entity',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getSharpEntitiesList($value)
+                : []
+        );
+        $reorderPath = Str::plural($entityName).'\\ReorderHandlers';
+
+        $modelPath = text(
+            label: 'What is the path of your models directory?',
+            default: 'Models',
+            required: true,
+        );
+
+        $model = search(
+            'Search for the related model',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getModelsList(app_path($modelPath), $value)
+                : []
+        );
+        $model = 'App\\'.$modelPath.'\\'.$model;
+
+        Artisan::call('sharp:make:reorder-handler', [
+            'name' => $reorderPath.'\\'.$name.'Reorder',
+            '--model' => $model,
+        ]);
+
+        $this->components->twoColumnDetail('Reorder handler', $this->getSharpRootNamespace().'\\'.$reorderPath.'\\'.$name.'Reorder.php');
+
+        $this->components->info('Your reorder handler has been created successfully.');    }
 }
