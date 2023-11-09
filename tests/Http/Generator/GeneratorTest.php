@@ -80,7 +80,6 @@ it('can generate a new full sharp entity from console and we can create, display
 });
 
 it('can generate a new sharp single entity from console', function () {
-
     $this->artisan('sharp:generator')
         ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
         ->expectsQuestion('What is the type of your entity?', 'Single')
@@ -108,7 +107,6 @@ it('can generate a new sharp single entity from console', function () {
 });
 
 it('can generate a new sharp dashboard from console', function () {
-
     $this->artisan('sharp:generator')
         ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
         ->expectsQuestion('What is the type of your entity?', 'Dashboard')
