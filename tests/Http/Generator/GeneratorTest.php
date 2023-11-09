@@ -7,7 +7,6 @@ beforeEach(function () {
 });
 
 it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
-
     $this->artisan('sharp:generator')
         ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
         ->expectsQuestion('What is the type of your entity?', 'Classic')
@@ -20,7 +19,7 @@ it('can generate a new full sharp entity from console and we can create, display
 
 //    dd($this->get(route('code16.sharp.list', ['closed_periods'])));
 //        ->assertOk();
-// @todo find why we can't display an empty list
+    // @todo find why we can't display an empty list
 
     $this->get(route('code16.sharp.form.create', [
         'uri' => 's-list/closed_periods',
@@ -47,7 +46,7 @@ it('can generate a new full sharp entity from console and we can create, display
     $this->get(route('code16.sharp.show.show', [
         'uri' => 's-list/closed_periods',
         'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id
+        'instanceId' => $closedPeriod->id,
     ]))
         ->assertOk()
         ->assertSee('Arnaud');
@@ -55,14 +54,14 @@ it('can generate a new full sharp entity from console and we can create, display
     $this->get(route('code16.sharp.form.edit', [
         'uri' => 's-list/closed_periods',
         'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id
+        'instanceId' => $closedPeriod->id,
     ]))
         ->assertOk();
 
     $this->post(route('code16.sharp.form.update', [
         'uri' => 's-list/closed_periods',
         'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id
+        'instanceId' => $closedPeriod->id,
     ]), [
         'my_field' => 'Benoit',
     ])
@@ -73,7 +72,7 @@ it('can generate a new full sharp entity from console and we can create, display
     $this->delete(route('code16.sharp.show.delete', [
         'uri' => 's-list/closed_periods',
         'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id
+        'instanceId' => $closedPeriod->id,
     ]))
         ->assertStatus(302);
 
