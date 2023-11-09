@@ -337,7 +337,7 @@ class GeneratorCommand extends Command
         );
 
         if (app()->runningUnitTests()) {
-            $model = 'Code16\\Sharp\\Tests\\Fixtures\\Person';
+            $model = 'Code16\\Sharp\\Tests\\Fixtures\\ClosedPeriod';
         } else {
             $model = search(
                 'Search for the related model',

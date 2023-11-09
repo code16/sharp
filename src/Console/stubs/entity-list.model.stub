@@ -14,8 +14,8 @@ class DummyClass extends SharpEntityList
     {
         $fields
             ->addField(
-                EntityListField::make('myCol')
-                    ->setLabel('My col')
+                EntityListField::make('my_field')
+                    ->setLabel('My field')
                     ->setWidth(4)
                     ->setWidthOnSmallScreens(6),
             );

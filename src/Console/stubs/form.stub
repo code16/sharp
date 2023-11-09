@@ -14,7 +14,7 @@ class DummyClass extends SharpForm
     {
         $formFields
             ->addField(
-                SharpFormTextField::make('myField')
+                SharpFormTextField::make('my_field')
                     ->setLabel('My field')
             );
     }
@@ -24,7 +24,7 @@ class DummyClass extends SharpForm
          $formLayout
              ->addColumn(6, function (FormLayoutColumn $column) {
                  $column
-                     ->withSingleField('myField');
+                     ->withSingleField('my_field');
              });
     }
 

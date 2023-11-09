@@ -61,6 +61,12 @@ uses()
             $table->unsignedInteger('order')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('closed_periods', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('my_field');
+            $table->timestamps();
+        });
     })
     ->in(__DIR__);
 
