@@ -1,10 +1,15 @@
 <?php
 
+use Code16\Sharp\Tests\Fixtures\Person;
+
 beforeEach(function () {
     login();
 });
 
-it('can generate a new entity', function () {
+it('can generate a new entity from console', function () {
+
+    $person = Person::create(['name' => 'Marie Curie']);
+
     $this->artisan('sharp:generator')
         ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
         ->expectsQuestion('What is the type of your entity?', 'Classic')
@@ -15,5 +20,20 @@ it('can generate a new entity', function () {
         ->expectsConfirmation('Do you need a policy?', 'yes')
         ->assertExitCode(0);
 
-    dd($this->get('/sharp/s-list/totos'));
+    $this->get(route('code16.sharp.list', ['totos']))
+        ->assertOk();
+
+    $this->get(route('code16.sharp.show.show', [
+        'uri' => 's-list/totos',
+        'entityKey' => 'totos',
+        'instanceId' => $person->id
+    ]))
+        ->assertOk();
+
+    $this->get(route('code16.sharp.form.edit', [
+        'uri' => 's-list/totos',
+        'entityKey' => 'totos',
+        'instanceId' => $person->id
+    ]))
+        ->assertOk();
 });

@@ -17,7 +17,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use ReflectionClass;
-
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -397,6 +396,7 @@ class GeneratorCommand extends Command
         if (Str::contains($type, 'show')) {
             Artisan::call('sharp:make:show-page', [
                 'name' => $pluralName.'\\'.$name.'Show',
+                '--model' => $model,
             ]);
 
             $this->components->twoColumnDetail('Show page', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Show.php');
@@ -530,7 +530,7 @@ class GeneratorCommand extends Command
         if (app()->runningUnitTests()) {
             config()->set(
                 'sharp.entities.totos',
-                '\\'.$entityPath . '::class',
+                (new $entityPath())::class,
             );
             return;
         }
