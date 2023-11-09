@@ -247,19 +247,19 @@ class GeneratorCommand extends Command
 
         switch ($entityType) {
             case 'Classic':
-                [$entityPath, $entityKey, $entityType] = $this->generateClassicEntity();
+                [$entityPath, $entityKey, $entityConfigKey] = $this->generateClassicEntity();
                 break;
             case 'Single':
-                [$entityPath, $entityKey, $entityType] = $this->generateSingleEntity();
+                [$entityPath, $entityKey, $entityConfigKey] = $this->generateSingleEntity();
                 break;
             case 'Dashboard':
-                [$entityPath, $entityKey, $entityType] = $this->generateDashboardEntity();
+                [$entityPath, $entityKey, $entityConfigKey] = $this->generateDashboardEntity();
                 break;
         }
 
         $this->components->info('Your entity and all related files have been created successfully.');
 
-        $this->addNewEntityToSharpConfig($entityPath, $entityKey, $entityType);
+        $this->addNewEntityToSharpConfig($entityPath, $entityKey, $entityConfigKey);
 
         $this->components->info(
             sprintf(
@@ -526,11 +526,11 @@ class GeneratorCommand extends Command
             ->toArray();
     }
 
-    private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityType)
+    private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityConfigKey)
     {
         if (app()->runningUnitTests()) {
             config()->set(
-                'sharp.'.$entityType.'.'.$entityKey,
+                'sharp.'.$entityConfigKey.'.'.$entityKey,
                 (new $entityPath())::class,
             );
 
@@ -543,7 +543,7 @@ class GeneratorCommand extends Command
             ->return()
             ->array()
             ->arrayItem()
-            ->where('key->value', $entityType)
+            ->where('key->value', $entityConfigKey)
             ->value
             ->first();
 
@@ -559,7 +559,7 @@ class GeneratorCommand extends Command
             ->return()
             ->array()
             ->arrayItem()
-            ->where('key->value', $entityType)
+            ->where('key->value', $entityConfigKey)
             ->replaceProperty('value', $sectionValue)
             ->commit()
             ->end()
