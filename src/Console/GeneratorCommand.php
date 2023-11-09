@@ -529,7 +529,7 @@ class GeneratorCommand extends Command
     {
         if (app()->runningUnitTests()) {
             config()->set(
-                'sharp.entities.totos',
+                'sharp.entities.'.$entityKey,
                 (new $entityPath())::class,
             );
             return;

@@ -13,26 +13,26 @@ it('can generate a new entity from console', function () {
     $this->artisan('sharp:generator')
         ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
         ->expectsQuestion('What is the type of your entity?', 'Classic')
-        ->expectsQuestion('What is the name of your entity?', 'Toto')
+        ->expectsQuestion('What is the name of your entity?', 'User')
         ->expectsQuestion('What is the path of your models directory?', 'Models')
-        ->expectsQuestion('What is the label of your entity?', 'Titis')
+        ->expectsQuestion('What is the label of your entity?', 'Utilisateurs')
         ->expectsQuestion('What do you need with your entity?', 'List, form & show page')
         ->expectsConfirmation('Do you need a policy?', 'yes')
         ->assertExitCode(0);
 
-    $this->get(route('code16.sharp.list', ['totos']))
+    $this->get(route('code16.sharp.list', ['users']))
         ->assertOk();
 
     $this->get(route('code16.sharp.show.show', [
-        'uri' => 's-list/totos',
-        'entityKey' => 'totos',
+        'uri' => 's-list/users',
+        'entityKey' => 'users',
         'instanceId' => $person->id
     ]))
         ->assertOk();
 
     $this->get(route('code16.sharp.form.edit', [
-        'uri' => 's-list/totos',
-        'entityKey' => 'totos',
+        'uri' => 's-list/users',
+        'entityKey' => 'users',
         'instanceId' => $person->id
     ]))
         ->assertOk();
