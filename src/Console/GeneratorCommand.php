@@ -700,5 +700,6 @@ class GeneratorCommand extends Command
 
         $this->components->twoColumnDetail('Reorder handler', $this->getSharpRootNamespace().'\\'.$reorderPath.'\\'.$name.'Reorder.php');
 
-        $this->components->info('Your reorder handler has been created successfully.');    }
+        $this->components->info('Your reorder handler has been created successfully.');
+    }
 }
