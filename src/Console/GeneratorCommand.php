@@ -530,7 +530,7 @@ class GeneratorCommand extends Command
     {
         if (app()->runningUnitTests()) {
             config()->set(
-                'sharp.entities.'.$entityKey,
+                'sharp.'.$entityType.'.'.$entityKey,
                 (new $entityPath())::class,
             );
 

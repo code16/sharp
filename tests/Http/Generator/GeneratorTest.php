@@ -79,3 +79,48 @@ it('can generate a new full sharp entity from console and we can create, display
 
     $this->assertDatabaseMissing('closed_periods', ['id' => $closedPeriod->id]);
 });
+
+it('can generate a new sharp single entity from console', function () {
+
+    $this->artisan('sharp:generator')
+        ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
+        ->expectsQuestion('What is the type of your entity?', 'Single')
+        ->expectsQuestion('What is the name of your entity?', 'Settings')
+        ->expectsQuestion('What is the label of your entity?', 'Configuration')
+        ->expectsConfirmation('Do you need a policy?', 'yes')
+        ->assertExitCode(0);
+
+    $this->get(route('code16.sharp.single-show', [
+        'entityKey' => 'settings',
+    ]))
+        ->assertOk();
+
+    $this->get(route('code16.sharp.form.create', [
+        'uri' => 's-show/settings',
+        'entityKey' => 'settings',
+    ]))
+        ->assertOk();
+
+    $this->post(route('code16.sharp.form.store', [
+        'uri' => 's-show/settings',
+        'entityKey' => 'settings',
+    ]), [])
+        ->assertStatus(302);
+});
+
+it('can generate a new sharp dashboard from console', function () {
+
+    $this->artisan('sharp:generator')
+        ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
+        ->expectsQuestion('What is the type of your entity?', 'Dashboard')
+        ->expectsQuestion('What is the name of your dashboard?', 'Financial')
+        ->expectsConfirmation('Do you need a policy?', 'yes')
+        ->assertExitCode(0);
+
+    $this->get(route('code16.sharp.dashboard', [
+        'dashboardKey' => 'financial',
+    ]))
+        ->assertOk()
+        ->assertSee('My section title')
+        ->assertSee('1234');
+});

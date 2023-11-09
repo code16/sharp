@@ -33,6 +33,6 @@ class DummyClass extends SharpSingleShow
 
     public function findSingle(): array
     {
-        return $this->transform(...);
+        return $this->transform([]);
     }
 }

@@ -64,8 +64,8 @@ class EntityMakeCommand extends GeneratorCommand
     {
         if ($this->option('dashboard') !== false) {
             return $this->option('policy') !== false
-                ? __DIR__.'/stubs/entity.view-policy.stub'
-                : __DIR__.'/stubs/entity.view.stub';
+                ? __DIR__.'/stubs/entity.dashboard-policy.stub'
+                : __DIR__.'/stubs/entity.dashboard.stub';
         }
 
         if ($this->option('single') !== false) {

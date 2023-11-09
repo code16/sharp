@@ -35,7 +35,7 @@ class DummyClass extends SharpSingleForm
 
     public function findSingle(): array
     {
-        // return $this->transform(...);
+        return $this->transform([]);
     }
 
     protected function updateSingle(array $data)
