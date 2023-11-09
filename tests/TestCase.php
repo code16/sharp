@@ -26,6 +26,9 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+
+        // We have to set these two because otherwise corresponding routes won't be loaded at all
         config()->set('sharp.auth.forgotten_password.enabled', true);
+        config()->set('sharp.auth.impersonate.enabled', true);
     }
 }

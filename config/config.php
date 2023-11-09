@@ -123,6 +123,12 @@ return [
         // Name of the attribute used to display the current user in the UI.
         'display_attribute' => 'name',
 
+        // Optionally allow to impersonate users; by default only if enabled AND app.env is "local".
+        'impersonate' => [
+            'enabled' => env('SHARP_IMPERSONATE', false),
+            'handler' => null,
+        ],
+
         // Optional additional auth check.
         // 'check_handler' => \App\Sharp\Auth\MySharpCheckHandler::class,
 

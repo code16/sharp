@@ -2,7 +2,13 @@
     import { __ } from "@/utils/i18n";
     import { FilterManager } from "@sharp/filters/src/FilterManager";
     import { EntityList } from "../EntityList";
-    import { CommandData, EntityListQueryParamsData, FilterData } from "@/types";
+    import {
+        CommandData,
+        EntityListFieldData,
+        EntityListQueryParamsData,
+        EntityStateValueData,
+        FilterData
+    } from "@/types";
     import { CommandsDropdown, WithCommands } from "@sharp/commands";
     import { CommandManager } from "@sharp/commands/src/CommandManager";
     import type { Ref } from "vue";
@@ -10,7 +16,8 @@
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
     import { getAppendableUri, route } from "@/utils/url";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button, Loading, LoadingOverlay,  Search } from '@sharp/ui';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button,  Search } from '@sharp/ui';
+    import { ChevronDownIcon } from "@heroicons/vue/20/solid";
     import EntityActions from "./EntityActions.vue";
     import { api } from "@/api";
     import Pagination from "@sharp/ui/src/components/Pagination.vue";
@@ -50,7 +57,7 @@
         });
     }
 
-    function onSearchSubmit(search) {
+    function onSearchSubmit(search: string) {
         emit('update:query', {
             ...props.query,
             search,
@@ -66,28 +73,30 @@
         });
     }
 
-    function onPageChange(page) {
+    function onPageChange(page: number) {
         emit('update:query', {
             ...props.query,
             page,
         });
     }
 
-    function onSortChange({ prop, dir }) {
+    function onSortClick(fieldKey: string) {
         emit('update:query', {
             ...props.query,
             page: 1,
-            sort: prop,
-            dir,
+            sort: fieldKey,
+            dir: props.query.sort === fieldKey && props.query.dir === 'asc'
+                ? 'desc'
+                : 'asc',
         });
     }
 
-    function onInstanceStateChange(value, instanceId: InstanceId) {
+    function onInstanceStateChange(value: EntityStateValueData['value'], instanceId: InstanceId) {
         const { commands, entityKey } = props;
 
         api.post(route('code16.sharp.api.list.state', { entityKey, instanceId }), { value })
             .then(response => {
-                commands.handleCommandReturn(response.data);
+                commands.handleCommandResponse(response.data);
             })
             .catch(error => {
                 const data = error.response?.data;
@@ -137,7 +146,7 @@
         try {
             if(await showDeleteConfirm(entityList.config.deleteConfirmationText)) {
                 await api.delete(route('code16.sharp.api.list.delete', { entityKey, instanceId }));
-                commands.handleCommandReturn({ action: 'reload' });
+                commands.handleCommandResponse({ action: 'reload' });
             }
         } finally {
             deletingItem.value = null;
@@ -154,7 +163,7 @@
         await api.post(route('code16.sharp.api.list.reorder', { entityKey }), {
             instances: reorderedItems.value.map(item => props.entityList.instanceId(item)),
         });
-        await commands.handleCommandReturn({ action: 'reload' });
+        await commands.handleCommandResponse({ action: 'reload' });
         reorderedItems.value = null;
     }
 </script>
@@ -321,10 +330,22 @@
                                             class="py-3.5 px-3 text-left text-sm w-[calc(var(--size)/12*100%)] font-semibold text-gray-900 first:pl-4 sm:first:pl-6"
                                             :style="{ '--size': field.size === 'fill' ? 12 / entityList.fields.length : field.size }"
                                         >
-                                            {{ field.label }}
+                                            <template v-if="field.sortable">
+                                                <button class="inline-flex group" @click="onSortClick(field.key)">
+                                                    {{ field.label }}
+                                                    <span class="ml-2 flex-none rounded bg-gray-100 text-gray-900 group-hover:bg-gray-200"
+                                                        :class="{ 'invisible': query.sort !== field.key }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" :class="{ 'rotate-180': query.dir === 'asc' }" aria-hidden="true" />
+                                                    </span>
+                                                </button>
+                                            </template>
+                                            <template v-else>
+                                                {{ field.label }}
+                                            </template>
                                         </th>
                                     </template>
-                                    <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item))">
+                                    <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                             <span class="sr-only">Edit</span>
                                         </th>

@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp;
 
+use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
+use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
@@ -57,6 +59,10 @@ class SharpServiceProvider extends ServiceProvider
             });
         }
 
+        if (config('sharp.auth.impersonate.enabled')) {
+            $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
+        }
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
@@ -109,6 +115,14 @@ class SharpServiceProvider extends ServiceProvider
                     : value(config('sharp.auth.2fa.handler')),
             }
         );
+
+        $this->app->bind(SharpImpersonationHandler::class, function () {
+            if (! $handler = config('sharp.auth.impersonate.handler')) {
+                return new SharpDefaultEloquentImpersonationHandler();
+            }
+
+            return is_string($handler) ? app($handler) : value($handler);
+        });
 
         $this->commands([
             CreateUploadsMigration::class,

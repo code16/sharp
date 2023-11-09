@@ -1,7 +1,7 @@
 <?php
 
-use Code16\Sharp\Http\Login2faController;
-use Code16\Sharp\Http\LoginController;
+use Code16\Sharp\Http\Controllers\Auth\Login2faController;
+use Code16\Sharp\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([

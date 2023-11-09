@@ -3,7 +3,7 @@
 namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Exceptions\EntityList\SharpInvalidEntityStateException;
-use Exception;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 
 /**
  * Base class for applicative Entity States.
@@ -28,19 +28,30 @@ abstract class EntityState extends InstanceCommand
 
     protected function view(string $bladeView, array $params = []): array
     {
-        throw new Exception('View return type is not supported for a state.');
+        throw new SharpInvalidConfigException('View return type is not supported for a state.');
     }
 
     protected function info(string $message): array
     {
-        throw new Exception('Info return type is not supported for a state.');
+        throw new SharpInvalidConfigException('Info return type is not supported for a state.');
+    }
+
+    protected function download(string $filePath, string $fileName = null, string $diskName = null): array
+    {
+        throw new SharpInvalidConfigException('Download return type is not supported for a state.');
+    }
+
+    protected function streamDownload(string $fileContent, string $fileName): array
+    {
+        throw new SharpInvalidConfigException('StreamDownload return type is not supported for a state.');
+    }
+
+    protected function link(string $link): array
+    {
+        throw new SharpInvalidConfigException('Link return type is not supported for a state.');
     }
 
     /**
-     * @param  mixed  $instanceId
-     * @param  array  $data
-     * @return array
-     *
      * @throws SharpInvalidEntityStateException
      */
     public function execute($instanceId, array $data = []): array
@@ -62,10 +73,5 @@ abstract class EntityState extends InstanceCommand
 
     abstract protected function buildStates(): void;
 
-    /**
-     * @param  mixed  $instanceId
-     * @param  string  $stateId
-     * @return mixed
-     */
     abstract protected function updateState($instanceId, string $stateId): ?array;
 }

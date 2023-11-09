@@ -1,8 +1,8 @@
-import filesize from 'filesize';
+import { filesize } from 'filesize';
 
 
 function getLocale() {
-    return (navigator.language || '').slice(0, 2) || 'en';
+    return document.documentElement.lang.slice(0, 2) || 'en';
 }
 
 function getSymbols(locale) {
@@ -15,7 +15,7 @@ function getSymbols(locale) {
 }
 
 // https://github.com/avoidwork/filesize.js
-export function filesizeLabel(bytes) {
+export function filesizeLabel(bytes: number) {
     const locale = getLocale();
     const exponent = Math.max(filesize(bytes, { output: 'exponent' }), 1);
     const resolvedBytes = Math.max(bytes, 128);

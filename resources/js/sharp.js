@@ -8,7 +8,6 @@ import { createInertiaApp, router } from "@inertiajs/vue3";
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
-
 if(document.querySelector('[data-page]')) {
     createInertiaApp({
         resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),

@@ -1,13 +1,13 @@
 <?php
 
-use Code16\Sharp\Http\Api\DownloadController;
-use Code16\Sharp\Http\DashboardController;
-use Code16\Sharp\Http\EntityListController;
-use Code16\Sharp\Http\FormController;
-use Code16\Sharp\Http\GlobalFilterController;
-use Code16\Sharp\Http\HomeController;
-use Code16\Sharp\Http\ShowController;
-use Code16\Sharp\Http\SingleShowController;
+use Code16\Sharp\Http\Controllers\Api\DownloadController;
+use Code16\Sharp\Http\Controllers\DashboardController;
+use Code16\Sharp\Http\Controllers\EntityListController;
+use Code16\Sharp\Http\Controllers\FormController;
+use Code16\Sharp\Http\Controllers\GlobalFilterController;
+use Code16\Sharp\Http\Controllers\HomeController;
+use Code16\Sharp\Http\Controllers\ShowController;
+use Code16\Sharp\Http\Controllers\SingleShowController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([

@@ -21,18 +21,18 @@ function setTestAuthGuard(): void
 
 it('redirects guests to the login page', function () {
     $this->get('/sharp/s-list/person')
-        ->assertRedirect('/sharp/login');
+        ->assertRedirect(route('code16.sharp.login'));
 });
 
 it('redirects users from the login page to the home page', function () {
     login();
 
-    $this->get('/sharp/login')
-        ->assertRedirect('/sharp');
+    $this->get(route('code16.sharp.login'))
+        ->assertRedirect(route('code16.sharp.home'));
 });
 
 it('displays the login page', function () {
-    $this->get('/sharp/login')
+    $this->get(route('code16.sharp.login'))
         ->assertOk();
 });
 
@@ -40,23 +40,23 @@ it('allows guests to login', function () {
     setTestAuthGuard();
 
     $this
-        ->post('/sharp/login', [
+        ->post(route('code16.sharp.login.post'), [
             'login' => 'test@example.org',
             'password' => 'password',
         ])
-        ->assertRedirect('/sharp');
+        ->assertRedirect(route('code16.sharp.home'));
 
     expect(auth('sharp')->check())->toBeTrue();
 });
 
 it('does not allow to login with invalid payload', function () {
-    $this->post('/sharp/login')
+    $this->post(route('code16.sharp.login.post'))
         ->assertSessionHasErrors(['login', 'password']);
 
-    $this->post('/sharp/login', ['login' => 'bob@example.org'])
+    $this->post(route('code16.sharp.login.post'), ['login' => 'bob@example.org'])
         ->assertSessionHasErrors(['password']);
 
-    $this->post('/sharp/login', ['password' => 'password'])
+    $this->post(route('code16.sharp.login.post'), ['password' => 'password'])
         ->assertSessionHasErrors(['login']);
 });
 
@@ -66,14 +66,14 @@ it('handles remember_me option', function () {
     config()->set('sharp.auth.suggest_remember_me', true);
 
     $this
-        ->post('/sharp/login', [
+        ->post(route('code16.sharp.login.post'), [
             'login' => 'test@example.org',
             'password' => 'password',
             'remember' => true,
         ])
-        ->assertRedirect('/sharp');
+        ->assertRedirect(route('code16.sharp.home'));
 
-    expect(auth('sharp')->user()->shouldRemember)->toBeTrue();
+    expect(auth('sharp')->user())->shouldRemember->toBeTrue();
 });
 
 it('does not allow remember_me option without proper config', function () {
@@ -82,14 +82,14 @@ it('does not allow remember_me option without proper config', function () {
     config()->set('sharp.auth.suggest_remember_me', false);
 
     $this
-        ->post('/sharp/login', [
+        ->post(route('code16.sharp.login.post'), [
             'login' => 'test@example.org',
             'password' => 'password',
             'remember' => true,
         ])
-        ->assertRedirect('/sharp');
+        ->assertRedirect(route('code16.sharp.home'));
 
-    expect(auth('sharp')->user()->shouldRemember)->toBeFalse();
+    expect(auth('sharp')->user())->shouldRemember->toBeFalse();
 });
 
 it('hits rate limiter if configured', function () {
@@ -97,23 +97,22 @@ it('hits rate limiter if configured', function () {
 
     config()->set('sharp.auth.rate_limiting', ['enabled' => true, 'max_attempts' => 1]);
 
-    $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'bad'])
+    $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'bad'])
         ->assertSessionHasErrors(['login' => trans('sharp::auth.invalid_credentials')]);
 
-    $this->post('/sharp/login', ['login' => 'test@example.org', 'password' => 'too-many'])
+    $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'too-many'])
         ->assertSessionHasErrors('login');
 
     expect(session()->get('errors')->first('login'))
-        ->toStartWith('Too many login attempts');
-
-    expect(auth('sharp')->user())->toBeNull();
+        ->toStartWith('Too many login attempts')
+        ->and(auth('sharp')->user())->toBeNull();
 });
 
 it('allows users to logout', function () {
     login();
 
-    $this->post('/sharp/logout')
-        ->assertRedirect('/sharp/login');
+    $this->post(route('code16.sharp.logout'))
+        ->assertRedirect();
 
     expect(auth()->check())->toBeFalse();
 });
@@ -138,7 +137,7 @@ it('handles custom auth check', function () {
     login(new User(['name' => 'ko']));
 
     $this->get('/sharp/s-list/person')
-        ->assertRedirect('/sharp/login');
+        ->assertRedirect(route('code16.sharp.login'));
 });
 
 it('allows custom auth guard', function () {
@@ -200,5 +199,5 @@ it('allows custom auth guard', function () {
     login(new User(['name' => 'ko']));
 
     $this->get('/sharp/s-list/person')
-        ->assertRedirect('/sharp/login');
+        ->assertRedirect(route('code16.sharp.login'));
 });

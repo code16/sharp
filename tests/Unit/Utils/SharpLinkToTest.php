@@ -3,6 +3,7 @@
 use Code16\Sharp\Exceptions\SharpInvalidBreadcrumbItemException;
 use Code16\Sharp\Utils\Filters\SelectFilter;
 use Code16\Sharp\Utils\Links\BreadcrumbBuilder;
+use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToForm;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
@@ -46,6 +47,14 @@ it('allows to generate a link to a single show page', function () {
     $this->assertEquals(
         '<a href="http://localhost/sharp/s-show/my-entity" title="">test</a>',
         LinkToSingleShowPage::make('my-entity')
+            ->renderAsText('test'),
+    );
+});
+
+it('allows to generate a link to a dashboard page', function () {
+    $this->assertEquals(
+        '<a href="http://localhost/sharp/s-dashboard/my-entity" title="">test</a>',
+        LinkToDashboard::make('my-entity')
             ->renderAsText('test'),
     );
 });

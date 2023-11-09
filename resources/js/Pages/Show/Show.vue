@@ -51,7 +51,7 @@
     function onStateChange(value) {
         api.post(route('code16.sharp.api.show.state', { entityKey, instanceId }), { value })
             .then(response => {
-                commands.handleCommandReturn(response.data);
+                commands.handleCommandResponse(response.data);
             })
             .catch(error => {
                 const data = error.response?.data;

@@ -1,7 +1,7 @@
 <?php
 
-use Code16\Sharp\Http\ForgotPasswordController;
-use Code16\Sharp\Http\PasswordResetController;
+use Code16\Sharp\Http\Controllers\Auth\ForgotPasswordController;
+use Code16\Sharp\Http\Controllers\Auth\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([

@@ -2,9 +2,7 @@
 
 Sharp won’t be used as a guest (at least in most cases). It leverages a default authentication system base on Laravel standards that you can configure to fit your needs. You can also entirely override the authentication workflow, as explained at the end of this page.
 
-## Using the default authentication system
-
-### Configure user attributes
+## Configure user attributes
 
 The Sharp login form asks for a login and a password field; to handle the authentication, Sharp has to know what attributes it must test in your User model. Defaults are `email` and `password`, and can be overridden in the Sharp config:
 
@@ -23,7 +21,7 @@ return [
 
 The third attribute, `display_attribute`, is used to display the user's name in the Sharp UI. Default is `name`.
 
-### Login form
+## Login form
 
 Sharp provides a login controller and view, which requires a session based guard. If you are in this case, you can use this default implementation and benefit from some classic features.
 
@@ -58,7 +56,7 @@ return [
 
 You can tweak this default form with a custom logo and an HTML message / section: see [related documentation here](style-visual-theme.md#login-and-menu-logos).
 
-### Custom guard
+## Custom guard
 
 It's very likely that you don't want to authorize all users to access Sharp. You can hook into the [Laravel custom guards](https://laravel.com/docs/authentication#adding-custom-guards) functionality, with one config key:
 
@@ -75,7 +73,7 @@ return [
 
 Of course, this implies that you defined a “sharp” guard in `config/auth.php`, as detailed in the Laravel documentation.
 
-### Authentication check
+## Authentication check
 
 If you want a simple way to authorize some users to access Sharp in a project where you have other users, you can define an auth check rather than using custom guard.
 
@@ -108,7 +106,7 @@ return [
 
 And you are good to go.
 
-### Two-factor authentication
+## Two-factor authentication
 
 Sharp provides a two-factor authentication (2fa) system, out of the box. You can enable it in the configuration:
 
@@ -271,7 +269,7 @@ class My2faNotificationHandler extends Sharp2faNotificationHandler // or Sharp2f
 }
 ```
 
-### Forgotten password
+## Forgotten password
 
 You can activate the classic Laravel Breeze workflow of forgotten password with a simple config key:
 
@@ -327,7 +325,59 @@ return [
 
 These customizations will not interfere with any default behavior that you may have implemented for your app, outside Sharp.
 
-## Using a custom authentication workflow
+## User impersonation (dev only)
+
+At the development stage, it can be useful to replace the login form by a user impersonation. Sharp allows to do that quite easily:
+
+First enable the feature in the config:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'impersonate' => [
+            'enabled' => true, // Of course, you should use an env key here
+            'handler' => null,
+        ],
+    ],
+]
+```
+
+::: warning
+By default, Sharp will also check the `APP_ENV` value to be `local` to enable this feature, since we should avoid to put this in production by mistake.
+You can override this behavior by providing a custom handler class, see below. 
+:::
+
+Configured like this, Sharp wil display a dropdown list of all users in the login form, allowing you to select one and be logged in as this user. 
+But if you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide your own handler class, which must extend `Code16\Sharp\Auth\Impersonation\SharpImpersonationHandler`:
+
+```php
+// config/sharp.php
+return [
+    // [...]
+
+    'auth' => [
+        'impersonate' => [
+            'enabled' => true,
+            // You can provide a full class name here instead of an inline implementation
+            'handler' => new class extends Code16\Sharp\Auth\Impersonation\SharpImpersonationHandler {
+                public function getUsers(): array
+                {
+                    return User::where('is_admin', true)
+                        ->get()
+                        ->filter(fn ($user) => $user->canImpersonate())
+                        ->mapWithKeys(fn ($user) => [$user->id => $user->email])
+                        ->all();
+                }
+            },
+        ],
+    ],
+]
+```
+
+## Use a custom authentication workflow
 
 You can entirely override the authentication workflow (view and controller) providing your custom endpoint:
 

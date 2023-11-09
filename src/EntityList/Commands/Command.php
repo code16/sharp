@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -28,7 +29,7 @@ abstract class Command
     protected function info(string $message): array
     {
         return [
-            'action' => 'info',
+            'action' => CommandAction::Info->value,
             'message' => $message,
         ];
     }
@@ -36,7 +37,7 @@ abstract class Command
     protected function link(string $link): array
     {
         return [
-            'action' => 'link',
+            'action' => CommandAction::Link->value,
             'link' => $link,
         ];
     }
@@ -44,14 +45,14 @@ abstract class Command
     protected function reload(): array
     {
         return [
-            'action' => 'reload',
+            'action' => CommandAction::Reload->value,
         ];
     }
 
     protected function refresh($ids): array
     {
         return [
-            'action' => 'refresh',
+            'action' => CommandAction::Refresh->value,
             'items' => (array) $ids,
         ];
     }
@@ -59,7 +60,7 @@ abstract class Command
     protected function view(string $bladeView, array $params = []): array
     {
         return [
-            'action' => 'view',
+            'action' => CommandAction::View->value,
             'html' => view($bladeView, $params)->render(),
         ];
     }
@@ -67,7 +68,7 @@ abstract class Command
     protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
         return [
-            'action' => 'download',
+            'action' => CommandAction::Download->value,
             'file' => $filePath,
             'disk' => $diskName,
             'name' => $fileName,
@@ -77,7 +78,7 @@ abstract class Command
     protected function streamDownload(string $fileContent, string $fileName): array
     {
         return [
-            'action' => 'streamDownload',
+            'action' => CommandAction::StreamDownload->value,
             'content' => $fileContent,
             'name' => $fileName,
         ];

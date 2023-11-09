@@ -10,10 +10,11 @@ Depending on your target, you'll want to use either:
 - `Code16\Sharp\Utils\Links\LinkToShowPage`
 - `Code16\Sharp\Utils\Links\LinkToSingleShowPage`
 - `Code16\Sharp\Utils\Links\LinkToSingleForm`
+- `Code16\Sharp\Utils\Links\LinkToDashboard`
 
 To create an instance, use the static `make` method, which may take one or two arguments:
 
-- For `LinkToEntityList`, `LinkToSingleShowPage` and `LinkToSingleForm`: `::make($entityKey)`
+- For `LinkToEntityList`, `LinkToSingleShowPage`, `LinkToSingleForm` and `LinkToDashboard`: `::make($entityKey)`
 - For `LinkToForm` and `LinkToShowPage`: `::make($entityKey, $instanceId)`
 
 ## Link use case

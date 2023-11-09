@@ -168,8 +168,6 @@ class PostList extends SharpEntityList
                 },
             );
 
-//        dd($posts->paginate(20)->toArray());
-
         return $this
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(

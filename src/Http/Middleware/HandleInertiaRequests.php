@@ -21,6 +21,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'sharpVersion' => sharp_version(),
             'locale' => app()->getLocale(),
+            'session' => [
+                'token' => session()->token(),
+            ],
             'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), function () {
                 return collect([
                     'sharp::action_bar',
@@ -32,6 +35,7 @@ class HandleInertiaRequests extends Middleware
                     'sharp::modals',
                     'sharp::pages/auth/forgot-password',
                     'sharp::pages/auth/login',
+                    'sharp::pages/auth/impersonate',
                     'sharp::pages/auth/reset-password',
                     'sharp::show',
                 ])

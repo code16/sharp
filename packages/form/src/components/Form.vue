@@ -33,7 +33,7 @@
 
         loading.value = true;
 
-        postFn(form.serialize(form.data))
+        postFn(form.data)
             .catch(error => {
                 if (error.response?.status === 422) {
                     props.form.errors = error.response.data.errors ?? {};

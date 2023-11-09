@@ -6,6 +6,7 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormGeolocationFieldData extends Data
@@ -22,9 +23,9 @@ final class FormGeolocationFieldData extends Data
         #[LiteralTypeScriptType('"DD" | "DMS"')]
         public string $displayUnit,
         public int $zoomLevel,
-        #[LiteralTypeScriptType('{ name: "osm"|"gmaps", options: { apiKey: string } }')]
+        #[LiteralTypeScriptType('{ name: "gmaps", options: { apiKey: string } } | { name: "osm", options?: { tilesUrl: string } }')]
         public array $mapsProvider,
-        #[LiteralTypeScriptType('{ name: "osm"|"gmaps", options: { apiKey: string } }')]
+        #[LiteralTypeScriptType('{ name: "gmaps", options: { apiKey: string } } | { name: "osm" }')]
         public array $geocodingProvider,
         #[TypeScriptType(['lng' => 'float', 'lat' => 'float'])]
         public ?array $initialPosition = null,
