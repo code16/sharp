@@ -18,7 +18,8 @@ class HandleTransformedFileJob implements ShouldQueue
         public string $disk,
         public string $filePath,
         public array $transformFilters,
-    ) {}
+    ) {
+    }
 
     public function handle(ImageManager $imageManager): void
     {

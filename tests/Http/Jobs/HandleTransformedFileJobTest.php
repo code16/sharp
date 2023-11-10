@@ -2,7 +2,6 @@
 
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Illuminate\Http\UploadedFile;
-use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 beforeEach(function () {
     Storage::fake('local');

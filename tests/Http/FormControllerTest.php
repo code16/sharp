@@ -290,7 +290,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                 'transformed' => true,
                 'filters' => [
                     'rotate' => ['angle' => 90],
-                ]
+                ],
             ],
         ])
         ->assertSessionHasNoErrors()
@@ -345,7 +345,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
                 'transformed' => true,
                 'filters' => [
                     'rotate' => ['angle' => 90],
-                ]
+                ],
             ],
         ])
         ->assertSessionHasNoErrors()

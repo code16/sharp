@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form;
 
-use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;

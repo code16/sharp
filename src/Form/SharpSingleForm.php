@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Form;
 
-use Code16\Sharp\Exceptions\SharpException;
-
 abstract class SharpSingleForm extends SharpForm
 {
     final public function formConfig(): array

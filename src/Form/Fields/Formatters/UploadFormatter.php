@@ -24,7 +24,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param IsUploadField $field
+     * @param  IsUploadField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {

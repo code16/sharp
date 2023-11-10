@@ -2,13 +2,11 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
-use Arr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class HandleUploadedFileJob implements ShouldQueue
@@ -20,7 +18,8 @@ class HandleUploadedFileJob implements ShouldQueue
         public array $fileData,
         public bool $shouldOptimizeImage,
         public ?array $transformFilters = null,
-    ) {}
+    ) {
+    }
 
     public function handle(): void
     {
@@ -39,7 +38,7 @@ class HandleUploadedFileJob implements ShouldQueue
                 ->optimize(Storage::disk($tmpDisk)->path($tmpFilePath));
         }
 
-        if($this->transformFilters) {
+        if ($this->transformFilters) {
             // There are transformation and field was configured to handle transformation on the source image
             HandleTransformedFileJob::dispatchSync(
                 $tmpDisk,
