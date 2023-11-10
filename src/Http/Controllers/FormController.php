@@ -99,7 +99,7 @@ class FormController extends SharpProtectedController
         $formattedData = $form->formatRequestData(request()->all(), $instanceId);
 //        $form->validateRequest($formattedData);
         $form->update($instanceId, $formattedData);
-        $this->handlePostedFiles($form, request()->all(), $formattedData);
+        $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
 
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }
@@ -119,7 +119,7 @@ class FormController extends SharpProtectedController
         $formattedData = $form->formatRequestData(request()->all());
 //        $form->validateRequest($formattedData);
         $instanceId = $form->update(null, $formattedData);
-        $this->handlePostedFiles($form, request()->all(), $formattedData);
+        $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
 
@@ -154,18 +154,22 @@ class FormController extends SharpProtectedController
         ];
     }
 
-    private function handlePostedFiles(SharpForm $form, array $request, array $formattedData): void
+    private function handlePostedFiles(SharpForm $form, array $request, array $formattedData, $instanceId): void
     {
         collect($form->fieldsContainer()->getFields())
             ->filter(fn ($field) => $field instanceof IsUploadField)
-            ->each(function (IsUploadField $field) use ($request, $formattedData) {
-                $wasUploaded = ($request[$field->key]['uploaded'] ?? false) && ($formattedData[$field->key]['file_name'] ?? false);
-                $wasTransformed = $field->isTransformOriginal() && ($request[$field->key]['transformed'] ?? false);
+            ->each(function (IsUploadField $field) use ($instanceId, $request, $formattedData) {
+                $wasUploaded = ($request[$field->key]['uploaded'] ?? false)
+                    && ($formattedData[$field->key]['file_name'] ?? false);
+                $wasTransformed = $field->isTransformOriginal()
+                    && ($request[$field->key]['transformed'] ?? false);
 
                 if($wasUploaded) {
                     HandleUploadedFileJob::dispatch(
                         uploadedFileName: $request[$field->key]['name'],
-                        fileData: $formattedData[$field->key],
+                        disk: $field->storageDisk(),
+                        filePath: $formattedData[$field->key]['file_name'],
+                        instanceId: $instanceId,
                         shouldOptimizeImage: $field->isShouldOptimizeImage(),
                         transformFilters: $wasTransformed
                             ? $request[$field->key]['filters']

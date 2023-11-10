@@ -2,13 +2,11 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
-use Arr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class HandleUploadedFileJob implements ShouldQueue
@@ -17,8 +15,10 @@ class HandleUploadedFileJob implements ShouldQueue
 
     public function __construct(
         public string $uploadedFileName,
-        public array $fileData,
-        public bool $shouldOptimizeImage,
+        public string $disk,
+        public string $filePath,
+        public ?string $instanceId = null,
+        public bool $shouldOptimizeImage = true,
         public ?array $transformFilters = null,
     ) {}
 
@@ -48,7 +48,14 @@ class HandleUploadedFileJob implements ShouldQueue
             );
         }
 
-        Storage::disk($this->fileData['disk'])
-            ->put($this->fileData['file_name'], Storage::disk($tmpDisk)->get($tmpFilePath));
+        Storage::disk($this->disk)
+            ->put($this->determineFilePath(), Storage::disk($tmpDisk)->get($tmpFilePath));
+    }
+
+    private function determineFilePath(): string
+    {
+        return str($this->filePath)
+            ->replace('{id}', $this->instanceId)
+            ->toString();
     }
 }

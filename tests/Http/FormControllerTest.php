@@ -212,7 +212,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ->assertRedirect();
 
     Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
-        return $job->fileData['file_name'] == 'data/test/image.jpg'
+        return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == '/image.jpg';
     });
 
@@ -231,7 +231,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ->assertRedirect();
 
     Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
-        return $job->fileData['file_name'] == 'data/test/image-2.jpg'
+        return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == '/image-2.jpg';
     });
 });
@@ -276,6 +276,11 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                         ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
                 );
         }
+
+        public function update($id, array $data)
+        {
+            return $id;
+        }
     });
 
     UploadedFile::fake()
@@ -283,7 +288,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
 
     $this
-        ->post('/sharp/s-list/person/s-form/person/1', [
+        ->post('/sharp/s-list/person/s-form/person/12', [
             'file' => [
                 'name' => '/image.jpg',
                 'uploaded' => true,
@@ -297,7 +302,9 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
         ->assertRedirect();
 
     Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) use ($transformKeepOriginal) {
-        return $job->fileData['file_name'] == 'data/test/image.jpg'
+        return $job->filePath == 'data/test/image.jpg'
+            && $job->disk == 'local'
+            && $job->instanceId == 12
             && $job->uploadedFileName == '/image.jpg'
             && $job->transformFilters == $transformKeepOriginal
                 ? null

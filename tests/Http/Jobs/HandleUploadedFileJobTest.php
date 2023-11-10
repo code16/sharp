@@ -15,11 +15,28 @@ it('moves a newly uploaded file in the correct folder', function () {
 
     HandleUploadedFileJob::dispatch(
         uploadedFileName: 'image.jpg',
-        fileData: ['file_name' => 'data/image.jpg', 'disk' => 'local'],
+        disk: 'local',
+        filePath: 'data/image.jpg',
         shouldOptimizeImage: false,
     );
 
     Storage::disk('local')->assertExists('data/image.jpg');
+});
+
+it('handles the {id} segment of the file path', function () {
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    HandleUploadedFileJob::dispatch(
+        uploadedFileName: 'image.jpg',
+        filePath: 'data/things/{id}/image.jpg',
+        disk: 'local',
+        instanceId: 50,
+        shouldOptimizeImage: false,
+    );
+
+    Storage::disk('local')->assertExists('data/things/50/image.jpg');
 });
 
 it('optimizes uploaded images if configured', function () {
@@ -56,7 +73,8 @@ it('optimizes uploaded images if configured', function () {
 
     HandleUploadedFileJob::dispatch(
         uploadedFileName: 'image.jpg',
-        fileData: ['file_name' => 'data/image.jpg', 'disk' => 'local'],
+        disk: 'local',
+        filePath: 'data/image.jpg',
         shouldOptimizeImage: true,
     );
 
@@ -71,7 +89,8 @@ it('handles image transformations on a newly uploaded file if isTransformOrigina
 
     HandleUploadedFileJob::dispatch(
         uploadedFileName: 'image.jpg',
-        fileData: ['file_name' => 'data/image.jpg', 'disk' => 'local'],
+        disk: 'local',
+        filePath: 'data/image.jpg',
         shouldOptimizeImage: false,
         transformFilters: [
             'rotate' => ['angle' => 90],
