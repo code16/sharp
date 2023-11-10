@@ -74,6 +74,11 @@ abstract class SharpForm
             ->all();
     }
 
+    final public function store(array $data): mixed
+    {
+        return $this->update(null, $data);
+    }
+
     public function validateRequest(): void
     {
         if ($formRequest = $this->getFormValidatorClass()) {
@@ -96,33 +101,6 @@ abstract class SharpForm
     public function isDisplayShowPageAfterCreation(): bool
     {
         return $this->displayShowPageAfterCreation;
-    }
-
-    final public function updateInstance($id, $data)
-    {
-        [$formattedData, $delayedData] = $this->formatRequestData($data, $id, true);
-
-        $id = $this->update($id, $formattedData);
-
-        if ($delayedData) {
-            // Some formatters asked to delay their handling after a first pass.
-            // Typically, this is used if the formatter needs the id of the
-            // instance: in a creation case, we must store it first.
-            if (! $id) {
-                throw new SharpFormUpdateException(
-                    sprintf('The update method of [%s] must return the instance id', basename(get_class($this))),
-                );
-            }
-
-            $this->update($id, $this->formatRequestData($delayedData, $id, false));
-        }
-
-        return $id;
-    }
-
-    public function storeInstance($data)
-    {
-        return $this->updateInstance(null, $data);
     }
 
     /**

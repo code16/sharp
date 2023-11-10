@@ -6,9 +6,11 @@ use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Http\UploadedFile;
 
 it('allows to update a simple attribute', function () {
     $person = Person::create(['name' => 'Marie Curry']);
@@ -28,7 +30,7 @@ it('allows to update a simple attribute', function () {
         }
     };
 
-    $form->updateInstance($person->id, ['name' => 'Marie Curie']);
+    $form->update($person->id, $form->formatRequestData(['name' => 'Marie Curie']));
 
     expect($person->fresh()->name)->toBe('Marie Curie');
 })->group('eloquent');
@@ -49,7 +51,7 @@ it('allows to store a new instance', function () {
         }
     };
 
-    $form->storeInstance(['name' => 'Niehls Bohr']);
+    $form->store($form->formatRequestData(['name' => 'Niehls Bohr']));
 
     $this->assertDatabaseHas('people', [
         'name' => 'Niehls Bohr',
@@ -74,7 +76,7 @@ it('ignores undeclared fields', function () {
         }
     };
 
-    $form->updateInstance($person->id, ['id' => 1200, 'age' => 38]);
+    $form->update($person->id, $form->formatRequestData(['id' => 1200, 'age' => 38]));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -101,7 +103,7 @@ it('ignores SharpFormHtmlField fields', function () {
         }
     };
 
-    $form->updateInstance($person->id, ['name' => 'HTML']);
+    $form->update($person->id, $form->formatRequestData(['name' => 'HTML']));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -131,7 +133,7 @@ it('allows to manually ignore a field', function () {
         }
     };
 
-    $form->updateInstance($person->id, ['name' => 'Marie Curie', 'age' => 40]);
+    $form->update($person->id, $form->formatRequestData(['name' => 'Marie Curie', 'age' => 40]));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -161,7 +163,7 @@ it('allows to manually ignore multiple field', function () {
         }
     };
 
-    $form->updateInstance($person->id, ['name' => 'Marie Curie', 'age' => 40]);
+    $form->update($person->id, $form->formatRequestData(['name' => 'Marie Curie', 'age' => 40]));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -192,7 +194,7 @@ it('allows to update a belongsTo attribute', function () {
         }
     };
 
-    $form->updateInstance($marie->id, ['partner' => $pierre->id]);
+    $form->update($marie->id, $form->formatRequestData(['partner' => $pierre->id]));
 
     $this->assertDatabaseHas('people', [
         'id' => $marie->id,
@@ -222,7 +224,7 @@ it('allows to update an hasOne attribute', function () {
         }
     };
 
-    $form->updateInstance($marie->id, ['director' => $director->id]);
+    $form->update($marie->id, $form->formatRequestData(['director' => $director->id]));
 
     $this->assertDatabaseHas('people', [
         'id' => $director->id,
@@ -253,12 +255,15 @@ it('allows to update an hasMany attribute, creating new instances if needed', fu
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'collaborators' => [
-            ['id' => $collaborator->id, 'name' => 'Paul'],
-            ['id' => null, 'name' => 'Jeanne'],
-        ],
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'collaborators' => [
+                ['id' => $collaborator->id, 'name' => 'Paul'],
+                ['id' => null, 'name' => 'Jeanne'],
+            ]
+        ])
+    );
 
     $this->assertDatabaseHas('people', [
         'id' => $collaborator->id,
@@ -294,11 +299,14 @@ it('allows to update a belongsToMany attribute', function () {
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'colleagues' => [
-            ['id' => $colleague->id],
-        ],
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'colleagues' => [
+                ['id' => $colleague->id],
+            ],
+        ])
+    );
 
     $this->assertDatabaseHas('colleagues', [
         'person1_id' => $marie->id,
@@ -329,11 +337,14 @@ it('allows to create a new related in a belongsToMany attribute', function () {
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'colleagues' => [
-            ['id' => null, 'label' => 'Niels Bohr'],
-        ],
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'colleagues' => [
+                ['id' => null, 'label' => 'Niels Bohr'],
+            ],
+        ])
+    );
 
     $niels = Person::where('name', 'Niels Bohr')->first();
 
@@ -368,12 +379,15 @@ it('handles the order attribute in a hasMany relation in both update and creatio
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'collaborators' => [
-            ['id' => null, 'name' => 'Jeanne'],
-            ['id' => $collaborator->id, 'name' => 'Paul'],
-        ],
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'collaborators' => [
+                ['id' => null, 'name' => 'Jeanne'],
+                ['id' => $collaborator->id, 'name' => 'Paul'],
+            ],
+        ])
+    );
 
     $this->assertDatabaseHas('people', [
         'id' => $collaborator->id,
@@ -407,7 +421,7 @@ it('allows to update a morphOne attribute', function () {
         }
     };
 
-    $form->updateInstance($marie->id, ['photo:file' => 'picture']);
+    $form->update($marie->id, $form->formatRequestData(['photo:file' => 'picture']));
 
     $this->assertDatabaseHas('pictures', [
         'picturable_type' => Person::class,
@@ -437,12 +451,15 @@ it('allows to update a morphMany attribute', function () {
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'pictures' => [
-            ['id' => null, 'file' => 'picture-1'],
-            ['id' => null, 'file' => 'picture-2'],
-        ],
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'pictures' => [
+                ['id' => null, 'file' => 'picture-1'],
+                ['id' => null, 'file' => 'picture-2'],
+            ],
+        ])
+    );
 
     $this->assertDatabaseHas('pictures', [
         'picturable_type' => Person::class,
@@ -454,6 +471,75 @@ it('allows to update a morphMany attribute', function () {
         'picturable_type' => Person::class,
         'picturable_id' => $marie->id,
         'file' => 'picture-2',
+    ]);
+});
+
+it('handles the {id} placeholder of uploads in both update and creation cases', function () {
+    Storage::fake('local');
+    $marie = Person::create(['name' => 'Marie Curie']);
+
+    $form = new class extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormTextField::make('name')
+                )
+                ->addField(
+                    SharpFormUploadField::make('upload')
+                        ->setStorageBasePath('test/{id}')
+                        ->setStorageDisk('local')
+                );
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save($id ? Person::findOrFail($id) : new Person(), $data);
+        }
+    };
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'upload' => [
+                'name' => '/image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+    );
+
+    $this->assertDatabaseHas('sharp_upload_models', [
+        'model_id' => $marie->id,
+        'file_name' => 'test/' . $marie->id . '/image.jpg',
+    ]);
+
+    UploadedFile::fake()
+        ->image('image-2.jpg')
+        ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
+
+    $form->update(
+        null,
+        $form->formatRequestData([
+            'name' => 'Pierre Curie',
+            'upload' => [
+                'name' => '/image-2.jpg',
+                'uploaded' => true,
+            ],
+        ])
+    );
+
+    $pierre = Person::where('name', 'Pierre Curie')->first();
+
+    $this->assertDatabaseHas('sharp_upload_models', [
+        'model_id' => $pierre->id,
+        'file_name' => 'test/' . $pierre->id . '/image-2.jpg',
     ]);
 });
 
@@ -478,10 +564,13 @@ it('handles the relation separator in a belongsTo case', function () {
         }
     };
 
-    $form->updateInstance($pierre->id, [
-        'partner:name' => 'Marie Curie',
-        'partner:age' => 42,
-    ]);
+    $form->update(
+        $pierre->id,
+        $form->formatRequestData([
+            'partner:name' => 'Marie Curie',
+            'partner:age' => 42,
+        ])
+    );
 
     $this->assertDatabaseHas('people', [
         'id' => $marie->id,
@@ -511,10 +600,13 @@ it('handles the relation separator in a hasOne case', function () {
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'director:name' => 'Jean',
-        'director:age' => 26,
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'director:name' => 'Jean',
+            'director:age' => 26,
+        ])
+    );
 
     $this->assertDatabaseHas('people', [
         'id' => $director->id,
@@ -543,10 +635,13 @@ it('handles the relation separator in a hasOne creation case', function () {
         }
     };
 
-    $form->updateInstance($marie->id, [
-        'director:name' => 'Jean',
-        'director:age' => 26,
-    ]);
+    $form->update(
+        $marie->id,
+        $form->formatRequestData([
+            'director:name' => 'Jean',
+            'director:age' => 26,
+        ])
+    );
 
     $director = Person::latest('id')->first();
 

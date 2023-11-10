@@ -24,17 +24,6 @@ abstract class SharpSingleForm extends SharpForm
         return $this->updateSingle($data);
     }
 
-    final public function storeInstance($data)
-    {
-        throw new SharpException('Store is not possible in a SingleSharpForm.');
-    }
-
-    /** @deprecated will be removed in v9. */
-    final public function delete($id): void
-    {
-        throw new SharpException('Delete is not possible in a SingleSharpForm.');
-    }
-
     abstract protected function findSingle();
 
     abstract protected function updateSingle(array $data);

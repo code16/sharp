@@ -3,9 +3,10 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
-class SharpFormUploadField extends SharpFormField
+class SharpFormUploadField extends SharpFormField implements IsUploadField
 {
     use SharpFormFieldWithUpload;
 
@@ -13,7 +14,7 @@ class SharpFormUploadField extends SharpFormField
 
     public static function make(string $key): self
     {
-        return new static($key, static::FIELD_TYPE, new UploadFormatter);
+        return new static($key, static::FIELD_TYPE, app(UploadFormatter::class));
     }
 
     protected function validationRules(): array

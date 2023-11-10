@@ -5,8 +5,12 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Form\FormData;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
+use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
@@ -92,8 +96,10 @@ class FormController extends SharpProtectedController
             404,
         );
 
-        $form->validateRequest();
-        $form->updateInstance($instanceId, request()->all());
+        $formattedData = $form->formatRequestData(request()->all(), $instanceId);
+//        $form->validateRequest($formattedData);
+        $form->update($instanceId, $formattedData);
+        $this->handlePostedFiles($form, request()->all(), $formattedData);
 
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }
@@ -110,8 +116,10 @@ class FormController extends SharpProtectedController
         sharp_check_ability('create', $entityKey);
         $form->buildFormConfig();
 
-        $form->validateRequest();
-        $instanceId = $form->storeInstance(request()->all());
+        $formattedData = $form->formatRequestData(request()->all());
+//        $form->validateRequest($formattedData);
+        $instanceId = $form->update(null, $formattedData);
+        $this->handlePostedFiles($form, request()->all(), $formattedData);
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
 
@@ -144,5 +152,32 @@ class FormController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ];
+    }
+
+    private function handlePostedFiles(SharpForm $form, array $request, array $formattedData): void
+    {
+        collect($form->fieldsContainer()->getFields())
+            ->filter(fn ($field) => $field instanceof IsUploadField)
+            ->each(function (IsUploadField $field) use ($request, $formattedData) {
+                $wasUploaded = ($request[$field->key]['uploaded'] ?? false) && ($formattedData[$field->key]['file_name'] ?? false);
+                $wasTransformed = $field->isTransformOriginal() && ($request[$field->key]['transformed'] ?? false);
+
+                if($wasUploaded) {
+                    HandleUploadedFileJob::dispatch(
+                        uploadedFileName: $request[$field->key]['name'],
+                        fileData: $formattedData[$field->key],
+                        shouldOptimizeImage: $field->isShouldOptimizeImage(),
+                        transformFilters: $wasTransformed
+                            ? $request[$field->key]['filters']
+                            : null,
+                    );
+                } elseif ($wasTransformed) {
+                    HandleTransformedFileJob::dispatch(
+                        disk: $field->storageDisk(),
+                        fileData: $formattedData[$field->key]['file_name'],
+                        transformFilters: $request[$field->key]['filters'],
+                    );
+                }
+            });
     }
 }

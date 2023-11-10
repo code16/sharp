@@ -30,13 +30,22 @@ class ApiShowInstanceCommandController extends ApiController
         $showPage = $this->getShowPage($entityKey, $instanceId);
         $commandHandler = $this->getInstanceCommandHandler($showPage, $commandKey, $instanceId);
 
-        return $this->returnCommandResult(
+        $formattedData = $commandHandler->formatRequestData(request()->all());
+        $commandHandler->validateRequest($formattedData);
+
+        $result = $this->returnCommandResult(
             $showPage,
             $commandHandler->execute(
                 $instanceId,
                 $commandHandler->formatRequestData((array) request('data'), $instanceId),
             ),
         );
+
+//        if ($filesData = $this->extractUploadedOrUpdatedFiles($formattedData)) {
+//            HandlePostedFilesJob::dispatch($filesData, $instanceId);
+//        }
+
+        return $result;
     }
 
     private function getShowPage(string $entityKey, mixed $instanceId = null)
