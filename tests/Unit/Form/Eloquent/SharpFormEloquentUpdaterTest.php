@@ -261,7 +261,7 @@ it('allows to update an hasMany attribute, creating new instances if needed', fu
             'collaborators' => [
                 ['id' => $collaborator->id, 'name' => 'Paul'],
                 ['id' => null, 'name' => 'Jeanne'],
-            ]
+            ],
         ])
     );
 
@@ -517,7 +517,7 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
 
     $this->assertDatabaseHas('sharp_upload_models', [
         'model_id' => $marie->id,
-        'file_name' => 'test/' . $marie->id . '/image.jpg',
+        'file_name' => 'test/'.$marie->id.'/image.jpg',
     ]);
 
     UploadedFile::fake()
@@ -539,7 +539,7 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
 
     $this->assertDatabaseHas('sharp_upload_models', [
         'model_id' => $pierre->id,
-        'file_name' => 'test/' . $pierre->id . '/image-2.jpg',
+        'file_name' => 'test/'.$pierre->id.'/image-2.jpg',
     ]);
 });
 

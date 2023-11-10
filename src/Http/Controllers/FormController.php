@@ -5,7 +5,6 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\Form\FormData;
-use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
@@ -164,7 +163,7 @@ class FormController extends SharpProtectedController
                 $wasTransformed = $field->isTransformOriginal()
                     && ($request[$field->key]['transformed'] ?? false);
 
-                if($wasUploaded) {
+                if ($wasUploaded) {
                     HandleUploadedFileJob::dispatch(
                         uploadedFileName: $request[$field->key]['name'],
                         disk: $field->storageDisk(),

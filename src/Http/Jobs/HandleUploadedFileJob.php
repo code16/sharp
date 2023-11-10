@@ -20,7 +20,8 @@ class HandleUploadedFileJob implements ShouldQueue
         public ?string $instanceId = null,
         public bool $shouldOptimizeImage = true,
         public ?array $transformFilters = null,
-    ) {}
+    ) {
+    }
 
     public function handle(): void
     {
@@ -39,7 +40,7 @@ class HandleUploadedFileJob implements ShouldQueue
                 ->optimize(Storage::disk($tmpDisk)->path($tmpFilePath));
         }
 
-        if($this->transformFilters) {
+        if ($this->transformFilters) {
             // There are transformation and field was configured to handle transformation on the source image
             HandleTransformedFileJob::dispatchSync(
                 $tmpDisk,
