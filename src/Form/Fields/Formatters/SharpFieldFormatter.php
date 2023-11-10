@@ -23,18 +23,7 @@ abstract class SharpFieldFormatter
         return $this;
     }
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  $value
-     * @return mixed
-     */
     abstract public function toFront(SharpFormField $field, $value);
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  string  $attribute
-     * @param  $value
-     * @return mixed
-     */
     abstract public function fromFront(SharpFormField $field, string $attribute, $value);
 }
