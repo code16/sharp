@@ -34,6 +34,19 @@ class ShowController extends ApiController
         );
     }
 
+    public function delete(string $entityKey, string $instanceId)
+    {
+        sharp_check_ability('delete', $entityKey, $instanceId);
+
+        $show = $this->getShowInstance($entityKey);
+
+        $show->delete($instanceId);
+
+        return response()->json([
+            'ok' => true,
+        ]);
+    }
+
     protected function dataLocalizations(SharpShow $show): array
     {
         return $show->hasDataLocalizations()

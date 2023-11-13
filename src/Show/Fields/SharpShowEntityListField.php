@@ -21,11 +21,12 @@ class SharpShowEntityListField extends SharpShowField
     protected bool $showCount = false;
     protected ?string $label = null;
 
-    public static function make(string $key, string $entityListKey): SharpShowEntityListField
+    public static function make(string $key, ?string $entityListKey = null): SharpShowEntityListField
     {
-        return tap(new static($key, static::FIELD_TYPE), function ($instance) use ($entityListKey) {
-            $instance->entityListKey = $entityListKey;
-        });
+        return tap(
+            new static($key, static::FIELD_TYPE),
+            fn ($instance) => $instance->entityListKey = $entityListKey ?: $key
+        );
     }
 
     public function hideFilterWithValue(string $filterFullClassNameOrKey, $value): self

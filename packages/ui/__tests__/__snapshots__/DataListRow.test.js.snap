@@ -1,8 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DataListRow mount 1`] = `
-<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+<div class="SharpDataList__row position-relative px-3 SharpDataList__row--disabled">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3"></div>
@@ -10,15 +11,16 @@ exports[`DataListRow mount 1`] = `
 			<!---->
 		</div>
 		<div class="col-sm-auto align-self-center">
-			<div class="SharpDataList__row-spacer"></div>
+			<div></div>
 		</div>
 	</div>
 </div>
 `;
 
 exports[`DataListRow mount append 1`] = `
-<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+<div class="SharpDataList__row position-relative px-3 SharpDataList__row--disabled">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3"></div>
@@ -33,8 +35,9 @@ exports[`DataListRow mount append 1`] = `
 `;
 
 exports[`DataListRow mount cell slot 1`] = `
-<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+<div class="SharpDataList__row position-relative px-3 SharpDataList__row--disabled">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3">
@@ -46,15 +49,16 @@ exports[`DataListRow mount cell slot 1`] = `
 			<!---->
 		</div>
 		<div class="col-sm-auto align-self-center">
-			<div class="SharpDataList__row-spacer"></div>
+			<div></div>
 		</div>
 	</div>
 </div>
 `;
 
 exports[`DataListRow mount columns 1`] = `
-<div class="SharpDataList__row px-3 SharpDataList__row--disabled">
+<div class="SharpDataList__row position-relative px-3 SharpDataList__row--disabled">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3">
@@ -71,15 +75,16 @@ exports[`DataListRow mount columns 1`] = `
 			<!---->
 		</div>
 		<div class="col-sm-auto align-self-center">
-			<div class="SharpDataList__row-spacer"></div>
+			<div></div>
 		</div>
 	</div>
 </div>
 `;
 
 exports[`DataListRow mount header 1`] = `
-<div class="SharpDataList__row px-3 SharpDataList__row--header">
+<div class="SharpDataList__row position-relative px-3 SharpDataList__row--header">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3"></div>
@@ -87,15 +92,16 @@ exports[`DataListRow mount header 1`] = `
 			<!---->
 		</div>
 		<div class="col-sm-auto align-self-center">
-			<div class="SharpDataList__row-spacer"></div>
+			<div></div>
 		</div>
 	</div>
 </div>
 `;
 
 exports[`DataListRow mount header: columns 1`] = `
-<div class="SharpDataList__row px-3 SharpDataList__row--header">
+<div class="SharpDataList__row position-relative px-3 SharpDataList__row--header">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3">
@@ -107,15 +113,16 @@ exports[`DataListRow mount header: columns 1`] = `
 			<!---->
 		</div>
 		<div class="col-sm-auto align-self-center">
-			<div class="SharpDataList__row-spacer"></div>
+			<div></div>
 		</div>
 	</div>
 </div>
 `;
 
 exports[`DataListRow mount with url 1`] = `
-<div class="SharpDataList__row px-3">
+<div class="SharpDataList__row position-relative px-3">
 	<div class="row gx-0">
+		<!---->
 		<div class="col d-flex flex-column justify-content-center position-relative">
 			<div class="SharpDataList__cols py-3">
 				<div class="row align-items-center gx-n2 gx-md-n3"></div>
@@ -123,7 +130,7 @@ exports[`DataListRow mount with url 1`] = `
 			<a class="SharpDataList__row-link position-absolute inset-0" href="http://example.org"></a>
 		</div>
 		<div class="col-sm-auto align-self-center">
-			<div class="SharpDataList__row-spacer"></div>
+			<div></div>
 		</div>
 	</div>
 </div>

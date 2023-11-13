@@ -21,15 +21,15 @@ Here's a quick example:
 ```php
 class MyForm extends SharpForm
 {
+    // [...]
+    
     function buildFormFields()
     {
         $this->addField(
             SharpFormTextField::make("name")
                 ->setReadOnly(currentSharpRequest()->isUpdate())
         );
-        [...]
     }
-    [...]
 }
 ```
 
@@ -54,7 +54,7 @@ In Form case, check the current status.
 
 ### `instanceId(): string`
 
-In Form and Show cases, grab the instance id.
+In Form and Show Page cases, grab the instance id.
 
 ### `breadcrumb(): Collection`
 

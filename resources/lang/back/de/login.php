@@ -3,8 +3,8 @@
 return [
     'login_page_title' => 'Login',
     'login_field' => 'login',
-    'remember' => 'Angemeldet bleiben',
     'password_field' => 'password',
+    'code_field' => 'code',
+    'remember' => 'Angemeldet bleiben',
     'button' => 'login',
-
 ];

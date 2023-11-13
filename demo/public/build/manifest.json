@@ -1,0 +1,12 @@
+{
+  "resources/css/sharp-extension.css": {
+    "file": "assets/sharp-extension-e295d086.css",
+    "isEntry": true,
+    "src": "resources/css/sharp-extension.css"
+  },
+  "resources/js/sharp-plugin.js": {
+    "file": "assets/sharp-plugin-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/js/sharp-plugin.js"
+  }
+}

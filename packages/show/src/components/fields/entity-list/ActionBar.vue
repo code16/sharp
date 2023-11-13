@@ -2,7 +2,7 @@
     <div class="action-bar"
         :class="{ 'position-sticky': sticky }"
         v-sticky="sticky"
-        @sticky-change="stuck = $event.detail"
+        @stuck-change="stuck = $event.detail"
     >
         <div class="position-relative">
             <template v-if="hasOuterTitle">
@@ -12,81 +12,84 @@
             </template>
             <template v-if="ready && barVisible">
                 <div class="row align-items-end align-content-end" data-sticky-anchor>
-                    <template v-if="hasLeftControls && !stuck">
-                        <div class="col-sm mb-2">
-                            <div class="row gy-1 gx-2 gx-md-3">
-                                <template v-for="filter in filters">
-                                    <div class="col-auto mb-1">
-                                        <div class="action-bar__element">
-                                            <SharpFilter
-                                                class="h-100"
-                                                :filter="filter"
-                                                :value="filtersValues[filter.key]"
-                                                :disabled="reorderActive"
-                                                @input="handleFilterChanged(filter, $event)"
-                                                :key="filter.id"
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-if="canSearch">
-                                    <div class="col-auto mb-1">
-                                        <div class="action-bar__element">
-                                            <Search
-                                                class="h-100"
-                                                :value="search"
-                                                :placeholder="l('action_bar.list.search.placeholder')"
-                                                :disabled="reorderActive"
-                                                @submit="handleSearchSubmitted"
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div class="col-sm align-self-end">
-                            <slot />
-                        </div>
-                    </template>
+                    <div class="col-sm align-self-end">
+                        <slot />
+                    </div>
 
                     <template v-if="hasRightControls && !collapsed">
                         <div class="col-sm-auto mb-2">
                             <div class="row flex-nowrap justify-content-end g-2 gx-md-3">
                                 <template v-if="canReorder">
                                     <div class="col-auto">
-                                        <template v-if="reorderActive">
+                                        <template v-if="reordering">
                                             <div class="row gx-3">
                                                 <div class="col-auto">
-                                                    <Button text @click="handleReorderButtonClicked">
+                                                    <Button outline small @click="handleReorderButtonClicked">
                                                         {{ l('action_bar.list.reorder_button.cancel') }}
                                                     </Button>
                                                 </div>
                                                 <div class="col-auto">
-                                                    <Button variant="primary" @click="handleReorderSubmitButtonClicked">
+                                                    <Button variant="primary" small @click="handleReorderSubmitButtonClicked">
                                                         {{ l('action_bar.list.reorder_button.finish') }}
                                                     </Button>
                                                 </div>
                                             </div>
                                         </template>
                                         <template v-else>
-                                            <Button text @click="handleReorderButtonClicked">
+                                            <Button outline small @click="handleReorderButtonClicked">
                                                 {{ l('action_bar.list.reorder_button') }}
                                             </Button>
                                         </template>
                                     </div>
                                 </template>
 
-                                <template v-if="primaryCommand && !reorderActive">
+                                <template v-if="canSelect && !reordering">
+                                    <template v-if="selecting">
+                                        <div class="col-auto">
+                                            <Button key="cancel" small outline @click="handleSelectCancelled">
+                                                {{ l('action_bar.list.reorder_button.cancel') }}
+                                            </Button>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="col-auto">
+                                            <Button key="select" small outline @click="handleSelectButtonClicked">
+                                                {{ l('action_bar.list.select_button') }}
+                                            </Button>
+                                        </div>
+                                    </template>
+                                </template>
+
+                                <template v-if="hasDropdownCommands && !reordering">
                                     <div class="col-auto">
-                                        <Button variant="primary" @click="handlePrimaryCommandClicked">
+                                        <CommandsDropdown
+                                            class="bg-white"
+                                            small
+                                            :outline="!selecting"
+                                            :commands="dropdownCommands"
+                                            :disabled="reordering"
+                                            :selecting="selecting"
+                                            @select="handleCommandSelected"
+                                        >
+                                            <template v-slot:text>
+                                                {{ l('entity_list.commands.entity.label') }}
+                                                <template v-if="selecting">
+                                                    ({{ selectedCount }} selected)
+                                                </template>
+                                            </template>
+                                        </CommandsDropdown>
+                                    </div>
+                                </template>
+
+                                <template v-if="primaryCommand && !reordering">
+                                    <div class="col-auto">
+                                        <Button variant="primary" small @click="handleCommandSelected(primaryCommand)">
                                             {{ primaryCommand.label }}
                                         </Button>
                                     </div>
                                 </template>
 
-                                <template v-if="canCreate && !reorderActive">
+                                <template v-if="canCreate && !reordering">
                                     <div class="col-auto">
                                         <div class="action-bar__element">
                                             <template v-if="hasForms">
@@ -94,11 +97,12 @@
                                                     :forms="forms"
                                                     variant="primary"
                                                     right
+                                                    small
                                                     @select="handleCreateFormSelected"
                                                 />
                                             </template>
                                             <template v-else>
-                                                <Button variant="primary" @click="handleCreateButtonClicked">
+                                                <Button variant="primary" small @click="handleCreateButtonClicked">
                                                     {{ l('action_bar.list.create_button') }}
                                                 </Button>
                                             </template>
@@ -116,36 +120,35 @@
 
 <script>
     import { Localization } from 'sharp/mixins';
-    import { Search,  Button } from 'sharp-ui';
-    import { SharpFilter } from 'sharp-filters';
+    import { Button } from 'sharp-ui';
     import { MultiformDropdown } from "sharp-entity-list";
     import { lang } from "sharp";
     import { sticky } from "sharp/directives";
+    import { CommandsDropdown } from "sharp-commands";
 
     export default {
         mixins: [Localization],
         components: {
-            Search,
-            SharpFilter,
+            CommandsDropdown,
             MultiformDropdown,
             Button,
         },
         props: {
             ready: Boolean,
             count: Number,
-            search: String,
             hasSearchQuery: Boolean,
-            filters: Array,
-            filtersValues: Object,
             primaryCommand: Object,
+            dropdownCommands: Array,
 
             forms: Array,
 
             canCreate: Boolean,
             canReorder: Boolean,
-            canSearch: Boolean,
+            canSelect: Boolean,
 
-            reorderActive: Boolean,
+            reordering: Boolean,
+            selecting: Boolean,
+            selectedCount: Number,
 
             // show field props
             collapsed: Boolean,
@@ -162,13 +165,17 @@
                 return this.forms && this.forms.length > 0;
             },
             hasLeftControls() {
-                return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
+                return false;
+                // return this.hasActiveQuery || this.count > 0 && (this.filters?.length > 0 || this.canSearch);
             },
             hasRightControls() {
-                return this.canReorder || this.canCreate || !!this.primaryCommand;
+                return this.canReorder || this.canCreate || !!this.primaryCommand || this.hasDropdownCommands;
             },
             hasOuterTitle() {
                 return this.$slots.default && (!this.ready || this.hasLeftControls);
+            },
+            hasDropdownCommands() {
+                return this.dropdownCommands?.flat().length > 0;
             },
             barVisible() {
                 if(this.collapsed) {
@@ -176,14 +183,8 @@
                 }
                 return true;
             },
-            searchLabel() {
-                return lang('action_bar.list.search.title').replace(':search', this.search);
-            },
         },
         methods: {
-            handleSearchSubmitted(search) {
-                this.$emit('search-submit', search);
-            },
             handleFilterChanged(filter, value) {
                 this.$emit('filter-change', filter, value);
             },
@@ -194,14 +195,20 @@
             handleReorderSubmitButtonClicked() {
                 this.$emit('reorder-submit');
             },
-            handlePrimaryCommandClicked() {
-                this.$emit('command', this.primaryCommand);
+            handleCommandSelected(command) {
+                this.$emit('command', command);
             },
             handleCreateButtonClicked() {
                 this.$emit('create');
             },
             handleCreateFormSelected(form) {
                 this.$emit('create', form);
+            },
+            handleSelectButtonClicked() {
+                this.$emit('select-click');
+            },
+            handleSelectCancelled() {
+                this.$emit('select-cancel');
             },
         },
         directives: {

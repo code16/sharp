@@ -60,9 +60,7 @@ trait WithCustomTransformers
         }
 
         return collect($models)
-            ->map(function ($model) {
-                return $this->applyTransformers($model);
-            })
+            ->map(fn ($model) => $this->applyTransformers($model))
             ->all();
     }
 
@@ -70,11 +68,8 @@ trait WithCustomTransformers
     {
         return new class($closure) implements SharpAttributeTransformer
         {
-            private $closure;
-
-            public function __construct($closure)
+            public function __construct(private Closure $closure)
             {
-                $this->closure = $closure;
             }
 
             public function apply($value, $instance = null, $attribute = null)
@@ -113,7 +108,13 @@ trait WithCustomTransformers
                     continue;
                 }
 
-                foreach ($model[$listAttribute] as $k => $itemModel) {
+                $listModel = $model;
+                if (($sep = strpos($listAttribute, ':')) !== false) {
+                    $listModel = $model[substr($listAttribute, 0, $sep)];
+                    $listAttribute = substr($listAttribute, $sep + 1);
+                }
+
+                foreach ($listModel[$listAttribute] as $k => $itemModel) {
                     $attributes[$listAttribute][$k][$itemAttribute] = $transformer->apply(
                         $attributes[$listAttribute][$k][$itemAttribute] ?? null, $itemModel, $itemAttribute,
                     );
@@ -122,14 +123,27 @@ trait WithCustomTransformers
                 if (! isset($attributes[$attribute])) {
                     if (method_exists($transformer, 'applyIfAttributeIsMissing')
                         && ! $transformer->applyIfAttributeIsMissing()) {
-                        // The attribute is missing, and the transformer code specifically
-                        // decide to be ignored in this case
+                        // The attribute is missing and the transformer code declared to be ignored in this case
                         continue;
                     }
                 }
 
+                // This is a BC, even if this is a bugfix: in case of a sub-attribute,
+                // we should pass the related model to the transformer. Will do that in 9.x
+//                if (($sep = strpos($attribute, ':')) !== false) {
+//                    $attributes[$attribute] = $transformer->apply(
+//                        $attributes[$attribute] ?? null,
+//                        $model[substr($attribute, 0, $sep)] ?? null,
+//                        substr($attribute, $sep + 1),
+//                    );
+//
+//                    continue;
+//                }
+
                 $attributes[$attribute] = $transformer->apply(
-                    $attributes[$attribute] ?? null, $model, $attribute,
+                    $attributes[$attribute] ?? null,
+                    $model,
+                    $attribute,
                 );
             }
         }
@@ -158,15 +172,10 @@ trait WithCustomTransformers
     protected function handleAutoRelatedAttributes(array $attributes, $model): array
     {
         collect($this->getDataKeys())
-            ->filter(function ($key) {
-                return strpos($key, ':') !== false;
-            })
-            ->map(function ($key) {
-                return array_merge([$key], explode(':', $key));
-            })
-            ->each(function ($key) use (&$attributes, $model) {
-                // For each one, we create a "relation:attribute" key
-                // in the returned array
+            ->filter(fn (string $key) => str_contains($key, ':'))
+            ->map(fn (string $key) => array_merge([$key], explode(':', $key)))
+            ->each(function (array $key) use (&$attributes, $model) {
+                // For each one, we create a "relation:attribute" key in the returned array
                 $attributes[$key[0]] = $model->{$key[1]}->{$key[2]} ?? null;
             });
 

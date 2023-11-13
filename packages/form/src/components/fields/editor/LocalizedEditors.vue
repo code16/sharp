@@ -7,7 +7,7 @@
         <template v-else>
             <template v-for="locale in locales">
                 <div v-show="isActive(locale)" :key="locale">
-                    <slot :editor="localizedEditors[locale]" />
+                    <slot :editor="localizedEditors[locale]" :locale="locale" />
                 </div>
             </template>
         </template>
@@ -15,12 +15,7 @@
 </template>
 
 <script>
-    import SharpEditor from "./Editor";
-
     export default {
-        components: {
-            SharpEditor,
-        },
         props: {
             editor: Object,
             name: String,

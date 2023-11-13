@@ -19,6 +19,7 @@
 
         props: {
             value: [String, Number],
+            type: String,
 
             placeholder: String,
             readOnly: Boolean,

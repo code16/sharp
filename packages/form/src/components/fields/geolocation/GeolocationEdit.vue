@@ -43,7 +43,7 @@
 <script>
     import { Loading, Button, Modal } from 'sharp-ui';
     import { LocalizationBase } from 'sharp/mixins';
-    import TextField from '../Text';
+    import TextField from '../Text.vue';
     import { getEditableMapByProvider, geocode } from "./maps";
     import { tilesUrl } from "./util";
 

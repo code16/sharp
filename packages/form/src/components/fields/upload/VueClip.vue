@@ -40,7 +40,7 @@
                             <template v-if="!readOnly">
                                 <div>
                                     <template v-if="hasEdit && !hasError">
-                                        <Button outline small @click="handleEditButtonClick">
+                                        <Button class="me-2" outline small @click="handleEditButtonClick">
                                             {{ l('form.upload.edit_button') }}
                                         </Button>
                                     </template>
@@ -98,7 +98,7 @@
     import { downloadFileUrl } from "sharp-files";
     import { getFiltersFromCropData } from "./util/filters";
     import { getImageBlobUrl } from "./util/image";
-    import EditModal from "./EditModal";
+    import EditModal from "./EditModal.vue";
 
     export default {
         name: 'SharpVueClip',

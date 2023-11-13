@@ -1,8 +1,11 @@
 
 .dashboard {
   .SharpDashboardPage {
-    .row+.row {
-      margin-top: 1rem;
+    .SharpGrid > * {
+      margin-bottom: 1rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }

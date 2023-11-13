@@ -44,10 +44,6 @@ class PersonSharpForm extends SharpForm
         return true;
     }
 
-    public function delete($id): void
-    {
-    }
-
     public function create(): array
     {
         return [

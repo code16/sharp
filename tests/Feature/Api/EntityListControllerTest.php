@@ -2,8 +2,13 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
+use Code16\Sharp\EntityList\SharpEntityList;
+use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
+use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Exception;
+use Illuminate\Contracts\Support\Arrayable;
 
 class EntityListControllerTest extends BaseApiTest
 {
@@ -18,7 +23,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_list_data_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 'data' => [
                     'list' => [
@@ -35,7 +40,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_paginated_list_data_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person?paginated=1')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonFragment(['data' => [
                 'list' => [
                     'items' => [
@@ -54,7 +59,7 @@ class EntityListControllerTest extends BaseApiTest
     {
         $this->withoutExceptionHandling();
         $this->json('get', '/sharp/api/list/person?search=john')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonFragment([
                 'data' => [
                     'list' => [
@@ -78,7 +83,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_data_containers_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['containers' => [
                 'name' => [
                     'key' => 'name',
@@ -96,8 +101,8 @@ class EntityListControllerTest extends BaseApiTest
     /** @test */
     public function we_can_get_list_layout_for_an_entity()
     {
-        $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+        $this->getJson('/sharp/api/list/person')
+            ->assertOk()
             ->assertJson(['layout' => [
                 [
                     'key' => 'name',
@@ -117,7 +122,7 @@ class EntityListControllerTest extends BaseApiTest
     public function we_can_get_list_config_for_an_entity()
     {
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['config' => [
                 'instanceIdAttribute' => 'id',
                 'searchable' => true,
@@ -134,7 +139,7 @@ class EntityListControllerTest extends BaseApiTest
             ->setAutoHide(false);
 
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['notifications' => [[
                 'level' => 'success',
                 'title' => 'title',
@@ -143,14 +148,14 @@ class EntityListControllerTest extends BaseApiTest
             ]]]);
 
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonMissing(['alert']);
 
         (new PersonSharpForm())->notify('title1');
         (new PersonSharpForm())->notify('title2');
 
         $this->json('get', '/sharp/api/list/person')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson(['notifications' => [[
                 'title' => 'title1',
             ], [
@@ -161,17 +166,20 @@ class EntityListControllerTest extends BaseApiTest
     /** @test */
     public function invalid_entity_key_is_returned_as_404()
     {
-        $this->json('get', '/sharp/api/list/notanvalidentity')
+        $this->getJson('/sharp/api/list/notanvalidentity')
             ->assertStatus(404);
     }
 
+    /** @test */
     public function we_can_reorder_instances()
     {
+        $this->withoutExceptionHandling();
+
         $this
-            ->json('post', '/sharp/api/list/person/reorder', [
-                3, 2, 1,
+            ->postJson('/sharp/api/list/person/reorder', [
+                'instances' => [3, 2, 1],
             ])
-            ->assertStatus(200);
+            ->assertOk();
     }
 
     /** @test */
@@ -192,5 +200,133 @@ class EntityListControllerTest extends BaseApiTest
             ->assertJson(['config' => [
                 'hasShowPage' => false,
             ]]);
+    }
+
+    /** @test */
+    public function we_can_delete_an_instance_in_the_entity_list_if_delete_method_is_implemented()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(PersonSharpShowWithoutDeletion::class);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function we_delegate_deletion_to_the_show_page_if_exists()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithoutDeletion::class);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function as_a_legacy_workaround_we_delegate_deletion_to_the_form_page_if_exists()
+    {
+        $this->withoutExceptionHandling();
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithoutDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(null);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(PersonSharpFormWithDeletion::class);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertOk()
+            ->assertJson([
+                'ok' => true,
+            ]);
+    }
+
+    /** @test */
+    public function we_can_not_delete_an_instance_in_the_entity_list_without_authorization()
+    {
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setProhibitedActions(['delete']);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function we_throw_an_exception_if_delete_is_not_implemented_and_there_is_no_show()
+    {
+        $this->buildTheWorld();
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setList(PersonSharpEntityListWithoutDeletion::class);
+
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(null);
+
+        $this->deleteJson('/sharp/api/list/person/1')
+            ->assertStatus(500);
+    }
+}
+
+class PersonSharpEntityListWithDeletion extends PersonSharpEntityList
+{
+    public function delete(mixed $id): void
+    {
+    }
+}
+
+// Just an empty list impl to be sure we don't call delete on it
+class PersonSharpEntityListWithoutDeletion extends SharpEntityList
+{
+    public function getListData(): array|Arrayable
+    {
+        return [];
+    }
+}
+
+class PersonSharpShowWithoutDeletion extends PersonSharpShow
+{
+    public function delete(mixed $id): void
+    {
+        throw new Exception('Should not be called');
+    }
+}
+
+class PersonSharpFormWithDeletion extends PersonSharpForm
+{
+    public function delete(mixed $id): void
+    {
     }
 }

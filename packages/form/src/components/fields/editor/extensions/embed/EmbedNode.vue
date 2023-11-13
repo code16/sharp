@@ -44,8 +44,8 @@
     import { lang } from "sharp";
     import { Button } from "sharp-ui";
     import { EmbedRenderer } from 'sharp-embeds';
-    import NodeRenderer from "../../NodeRenderer";
-    import EmbedFormModal from "./EmbedFormModal";
+    import NodeRenderer from "../../NodeRenderer.vue";
+    import EmbedFormModal from "./EmbedFormModal.vue";
 
     export default {
         components: {

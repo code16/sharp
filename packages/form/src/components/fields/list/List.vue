@@ -104,11 +104,11 @@
     import { TemplateRenderer } from 'sharp/components';
     import { Localization } from 'sharp/mixins';
     import { Button } from "sharp-ui";
-    import ListItem from './ListItem';
+    import ListItem from './ListItem.vue';
 
     import localize from '../../../mixins/localize/form';
     import { transformFields, getDependantFieldsResetData, fieldEmptyValue } from "../../../util";
-    import ListUpload from "./ListUpload";
+    import ListUpload from "./ListUpload.vue";
     import { lang, showAlert } from "sharp";
 
     export default {

@@ -35,8 +35,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     /**
      * Transform a model attribute to array (json-able).
      *
-     * @param $value
-     * @param $instance
+     * @param  $value
+     * @param  $instance
      * @param  string  $attribute
      * @return mixed
      */
@@ -52,9 +52,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             $instance = (object) [
                 $attribute => static::getUploadModelClass()::make([
                     'file_name' => $value['file_name'] ?? $value['path'],
-                    'filters' => $value['filters'],
+                    'filters' => $value['filters'] ?? null,
                     'disk' => $value['disk'],
-                    'size' => $value['size'],
+                    'size' => $value['size'] ?? null,
                 ]),
             ];
         }

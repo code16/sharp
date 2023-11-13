@@ -30,6 +30,28 @@ class SharpShowEntityListFieldTest extends SharpTestCase
     }
 
     /** @test */
+    public function we_can_define_entity_list_field_with_default_key()
+    {
+        $field = SharpShowEntityListField::make('instances');
+
+        $this->assertEquals(
+            [
+                'key' => 'instances',
+                'type' => 'entityList',
+                'entityListKey' => 'instances',
+                'showEntityState' => true,
+                'showCreateButton' => true,
+                'showReorderButton' => true,
+                'showSearchField' => true,
+                'emptyVisible' => false,
+                'showCount' => false,
+                'hiddenCommands' => ['entity' => [], 'instance' => []],
+            ],
+            $field->toArray(),
+        );
+    }
+
+    /** @test */
     public function we_can_define_hideFilterWithValue()
     {
         $field = SharpShowEntityListField::make('entityListField', 'entityKey')

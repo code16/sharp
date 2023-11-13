@@ -4,7 +4,7 @@
             <div class="position-absolute inset-0" style="z-index: 1">
             </div>
         </template>
-        <template v-for="filter in filters">
+        <template v-for="filter in rootFilters">
             <FilterSelect
                 :label="null"
                 :values="filter.values"
@@ -15,6 +15,7 @@
                 :search-keys="filter.searchKeys"
                 :searchable="filter.searchable"
                 :key="filter.key"
+                global
                 @input="handleFilterChanged(filter, $event)"
                 @open="handleOpened(filter)"
                 @close="handleClosed(filter)"
@@ -27,7 +28,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import { BASE_URL } from "sharp";
-    import FilterSelect from './filters/FilterSelect';
+    import FilterSelect from './filters/FilterSelect.vue';
     import { Dropdown } from "sharp-ui";
 
     export default {
@@ -37,7 +38,7 @@
         },
         computed: {
             ...mapGetters('global-filters', {
-                filters: 'filters/filters',
+                rootFilters: 'filters/rootFilters',
                 filterValue: 'filters/value',
             }),
         },

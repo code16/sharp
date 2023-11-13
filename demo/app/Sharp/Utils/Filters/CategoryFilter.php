@@ -9,7 +9,8 @@ class CategoryFilter extends EntityListSelectMultipleFilter
 {
     public function buildFilterConfig(): void
     {
-        $this->configureLabel('Categories');
+        $this->configureLabel('Categories')
+            ->configureSearchable();
     }
 
     public function values(): array

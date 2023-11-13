@@ -2,7 +2,7 @@
 
 Class: `Code16\Sharp\Form\Fields\SharpFormDateField`
 
-![Example](./date.png)
+<img src="./date-v8.png" width="500">
 
 ## Configuration
 

@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
 
         $categories = Category::factory()
             ->count(16)
+            ->sequence(fn (Sequence $sequence) => ['order' => $sequence->index + 1])
             ->create();
 
         $coverImages = glob(database_path('seeders/files/posts/*.*'));

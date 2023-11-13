@@ -24,8 +24,8 @@
 @push('script')
     <script>
         function fillForm(email) {
-            document.querySelector('#login').value = email;
-            document.querySelector('#password').value = 'password';
+            document.querySelector('#login').setAttribute('value', email);
+            document.querySelector('#password').setAttribute('value', 'password');
         }
 
         fillForm('admin@example.org');

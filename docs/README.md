@@ -18,46 +18,63 @@ Sharp is a content management framework built for Laravel, a toolset which provi
 
 ### Build complex lists with total control on how the data is presented
 
-![Entity list](./img/readme/list.png)
+![Entity list](./img/readme/v8/list.jpg)
 
 ### Organize forms withs various fields, a customizable layout system and data validation
 
 You will find a powerful HTML / Markdown editor, autocompletes with templates, lists (repeaters) with custom items, files with bulk upload and image transformation...
 
-![Entity list](./img/readme/form.png)
+![Entity list](./img/readme/v8/form.jpg)
 
 ### Optionally create show pages for your resources
 
 You can use show page to present an instance and directly embed in it lists for linked data. The breadcrumb will help your users to find their way up.
 
-![Show page](./img/readme/show.png)
+![Show page](./img/readme/v8/show.jpg)
 
 ### Add filters, sortable columns and global search to your lists
 
 Filters could be defined required or not, allowing multiple values or not, or presented as a date range. 
 
-![Filters](./img/readme/filters.png)
+![Filters](./img/readme/v8/filters.jpg)
 
 ### Code individual or bulk commands, with dedicated forms, user confirmation...
 
 A Command is an action presented to the user (with permissions handled via policies, like everywhere in Sharp) which can lead to refreshing data after update, previewing a public page, downloading a file...
 
-![Commands](./img/readme/command-form.png)
+![Commands](./img/readme/v8/command-form.jpg)
+
+![Bulk Commands](./img/readme/v8/command-bulk.jpg)
+
+### Propose a custom global search to users
+
+The search results and their label and link are entirely customizable.
+
+![Commands](./img/readme/v8/search.jpg)
 
 ### Present synthetic data, graphs and direct links in dashboards
 
-![Dashboard](./img/readme/dashboard.png)
+Various widgets are available, and you can take advantage of filters and commands in dashboards too.
+
+![Dashboard](./img/readme/v8/dashboard.jpg)
+
+### Built-in authentication system, with out-of-the-box 2fa
+
+The optional authentication system provides standard features like remember me token and rate limiting, and you can leverage double authentication with a verification based on a notification or on TOTP.
+
+![Dashboard](./img/readme/v8/2fa.jpg)
 
 ### Choose your theme color!
 
 Choose one color, and the UI will adapt itself.
 
-![Colors](./img/readme/colors.png)
+![Colors](./img/readme/v8/colors.jpg)
 
 ### Driven by code, with DX in mind
 
 Everything in Sharp is manageable through a clean and documented PHP API, using Laravel conventions and coding style. And again: no frontend development is required.  
 
+![Code](./img/readme/v8/code.jpg)
 
 ### Try the online demo
 

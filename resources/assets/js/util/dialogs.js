@@ -6,11 +6,7 @@ let modalId = 0;
 export function showDialog({ text, okCallback = ()=>{}, okCloseOnly, isError, ...props }) {
     const id = modalId++;
 
-    function hiddenCallback() {
-        store().dispatch('setDialogs', store().state.dialogs.filter(dialog => dialog.id !== id));
-    }
-
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         store().dispatch('setDialogs', [
             ...store().state.dialogs,
             {
@@ -23,8 +19,11 @@ export function showDialog({ text, okCallback = ()=>{}, okCloseOnly, isError, ..
                     visible: true,
                     isError
                 },
-                okCallback: resolve,
-                hiddenCallback,
+                okCallback: () => resolve(true),
+                hiddenCallback: () => {
+                    store().dispatch('setDialogs', store().state.dialogs.filter(dialog => dialog.id !== id));
+                    resolve(false);
+                },
                 text,
             }
         ]);
@@ -49,5 +48,12 @@ export function showConfirm(message, { title, ...props } = {}) {
         okTitle: lang('modals.confirm.ok_button'),
         bodyClass: 'pt-4',
         ...props
+    });
+}
+
+export function showDeleteConfirm(message) {
+    return showConfirm(message, {
+        okTitle: lang('modals.confirm.delete.ok_button'),
+        okVariant: 'danger',
     });
 }

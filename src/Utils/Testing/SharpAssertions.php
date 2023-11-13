@@ -90,6 +90,35 @@ trait SharpAssertions
         return $this;
     }
 
+    public function deleteSharpShow(string $entityKey, $instanceId)
+    {
+        return $this
+            ->withHeader(
+                'referer',
+                $this->buildRefererUrl([
+                    ['list', $entityKey],
+                    ['show', $entityKey, $instanceId],
+                ]),
+            )
+            ->deleteJson(
+                route('code16.sharp.api.show.delete', [$entityKey, $instanceId]),
+            );
+    }
+
+    public function deleteSharpEntityList(string $entityKey, $instanceId)
+    {
+        return $this
+            ->withHeader(
+                'referer',
+                $this->buildRefererUrl([
+                    ['list', $entityKey],
+                ]),
+            )
+            ->deleteJson(
+                route('code16.sharp.api.list.delete', [$entityKey, $instanceId]),
+            );
+    }
+
     public function getSharpForm(string $entityKey, $instanceId = null)
     {
         return $this
@@ -104,21 +133,6 @@ trait SharpAssertions
                 $instanceId
                     ? route('code16.sharp.api.form.edit', [$entityKey, $instanceId])
                     : route('code16.sharp.api.form.create', $entityKey),
-            );
-    }
-
-    public function deleteSharpForm(string $entityKey, $instanceId)
-    {
-        return $this
-            ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['form', $entityKey, $instanceId],
-                ]),
-            )
-            ->deleteJson(
-                route('code16.sharp.api.form.delete', [$entityKey, $instanceId]),
             );
     }
 
@@ -242,21 +256,5 @@ trait SharpAssertions
             ->implode('/');
 
         return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
-    }
-
-    /**
-     * @deprecated use callSharpInstanceCommandFromList or callSharpInstanceCommandFromShow
-     */
-    protected function callInstanceCommand(string $entityKey, $instanceId, string $commandKey, array $data = [])
-    {
-        return $this->callSharpInstanceCommandFromList($entityKey, $instanceId, $commandKey, $data);
-    }
-
-    /**
-     * @deprecated use callSharpEntityCommandFromList
-     */
-    public function callEntityCommand(string $entityKey, string $commandKey, array $data = [])
-    {
-        return $this->callSharpInstanceCommandFromList($entityKey, $instanceId, $commandKey, $data);
     }
 }

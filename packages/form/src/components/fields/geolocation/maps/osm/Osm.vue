@@ -12,6 +12,17 @@
 <script>
     import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
     import { toLatLngBounds } from './util';
+    import iconUrl from 'leaflet/dist/images/marker-icon.png';
+    import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+    import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
+    import { Icon } from 'leaflet';
+
+    Icon.Default.mergeOptions({
+        iconUrl,
+        iconRetinaUrl,
+        shadowUrl,
+    });
 
     export default {
         name: 'SharpOsm',

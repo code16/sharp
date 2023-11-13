@@ -12,7 +12,7 @@
     >
         <div class="input-group" :class="{ 'input-group-sm': small }">
             <template v-if="small && !value">
-                <div class="form-control dropdown-toggle" tabindex="0" v-on="inputEvents.start">
+                <div class="form-select form-control" tabindex="0" v-on="inputEvents.start">
                     <span></span>
                 </div>
             </template>
@@ -50,7 +50,7 @@
 <script>
     import { lang } from "sharp";
     import { ClearButton } from "sharp-ui";
-    import DatePicker from "../date/DatePicker";
+    import DatePicker from "../date/DatePicker.vue";
 
     export default {
         components: {

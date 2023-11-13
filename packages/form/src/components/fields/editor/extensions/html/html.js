@@ -1,6 +1,6 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-2";
-import HtmlNode from "./HtmlNode";
+import HtmlNode from "./HtmlNode.vue";
 import { setupContent, setupContentDOM } from "./util";
 
 export const Html = Node.create({

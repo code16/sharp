@@ -4,12 +4,12 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\Relationships\MorphToManyRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\Form\Eloquent\SharpFormEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MorphToManyRelationUpdaterTest extends SharpFormEloquentBaseTest
+class MorphToManyRelationUpdaterTest extends SharpEloquentBaseTest
 {
     protected function getEnvironmentSetUp($app)
     {

@@ -9,11 +9,6 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 class SharpAuthenticate extends BaseAuthenticate
 {
-    /**
-     * The authentication factory instance.
-     *
-     * @var \Illuminate\Contracts\Auth\Factory
-     */
     protected $auth;
 
     public function __construct(Auth $auth)
@@ -21,14 +16,6 @@ class SharpAuthenticate extends BaseAuthenticate
         parent::__construct($auth);
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string[]  ...$guards
-     * @return mixed
-     */
     public function handle($request, Closure $next, ...$guards)
     {
         try {

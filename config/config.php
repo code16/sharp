@@ -31,23 +31,46 @@ return [
         // 'my_entity' => \App\Sharp\Entities\MyEntity::class,
     ],
 
-    // Optional. Your dashboards list, as entityKey => \App\Sharp\Entities\SharpDashboardEntity implementation
-    'dashboards' => [
-        // 'my_dashboard' => \App\Sharp\Entities\MyDashboardEntity::class,
-    ],
-
     // Optional. Your global filters list, which will be displayed in the main menu.
     'global_filters' => [
-        // 'my_global_filter' => \App\Sharp\Filters\MyGlobalFilter::class
+        // \App\Sharp\Filters\MyGlobalFilter::class
     ],
+
+    // Optional. Your global search implementation.
+    //    'search' => [
+    //        'enabled' => true,
+    //        'placeholder' => 'Search for anything...',
+    //        'engine' => \App\Sharp\MySearchEngine::class,
+    //    ],
 
     // Required. The main menu (left bar), which may contain links to entities, dashboards
     // or external URLs, grouped in categories.
     'menu' => null, //\App\Sharp\SharpMenu::class
 
+    // These middleware will be assigned to Sharp routes
+    'middleware' => [
+        'common' => [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+        'web' => [
+            \Code16\Sharp\Http\Middleware\InvalidateCache::class,
+        ],
+        'api' => [
+            Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
+            Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
+            Code16\Sharp\Http\Middleware\Api\SetSharpLocale::class,
+        ],
+    ],
+
     // Optional. Your file upload configuration.
     'uploads' => [
         // Tmp directory used for file upload.
+        'tmp_disk' => env('SHARP_UPLOADS_TMP_DISK', 'local'),
         'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
 
         // These two configs are used for thumbnail generation inside Sharp.
@@ -70,9 +93,22 @@ return [
 
     // Optional. Auth related configuration.
     'auth' => [
+        // Optional custom login page to replace the default Sharp implementation.
+        'login_page_url' => null,
+
         // Name of the login and password attributes of the User Model.
         'login_attribute' => 'email',
         'password_attribute' => 'password',
+
+        'rate_limiting' => [
+            'enabled' => true,
+            'max_attempts' => 5,
+        ],
+
+        '2fa' => [
+            'enabled' => false,
+            'handler' => 'notification', // "notification", "totp" or a class name in custom implementation case
+        ],
 
         // Handle a "remember me" flag (with a checkbox on the login form)
         'suggest_remember_me' => false,

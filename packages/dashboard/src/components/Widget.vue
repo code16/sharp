@@ -1,9 +1,13 @@
 <template>
-    <component :is="tag" class="SharpWidget card" :class="classes" :href="widgetProps.link">
+    <div class="SharpWidget card" :class="classes" :href="widgetProps.link">
         <div class="card-body">
-            <component :is="widgetComp" v-bind="exposedProps"></component>
+            <component
+                :is="widgetComp"
+                :value="value"
+                v-bind="widgetProps"
+            />
         </div>
-    </component>
+    </div>
 </template>
 <script>
     import { widgetByType } from './widgets/index';
@@ -21,21 +25,13 @@
             classes() {
                 return {
                     'SharpWidget--chart': this.widgetType === 'graph',
+                    'SharpWidget--panel': this.widgetType === 'panel',
                     'SharpWidget--link': this.widgetProps.link,
                 }
-            },
-            tag() {
-                return this.widgetProps.link ? 'a' : 'div';
             },
             widgetComp() {
                 return widgetByType(this.widgetType, this.widgetProps.display);
             },
-            exposedProps() {
-                return { ...this.widgetProps, value:this.value }
-            },
-            hasLink() {
-                return !!this.widgetProps.link;
-            }
         },
     }
 </script>

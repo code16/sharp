@@ -65,6 +65,7 @@ return [
     'editor.dialogs.iframe.update_title' => 'Update Iframe (embed)',
 
     'editor.dropdown.table.insert_table' => 'Insert table',
+    'editor.dropdown.table.toggle_header_cell' => 'Toggle header cell',
     'editor.dropdown.table.insert_row_above' => 'Insert row above',
     'editor.dropdown.table.insert_row_below' => 'Insert row below',
     'editor.dropdown.table.remove_row' => 'Remove row',

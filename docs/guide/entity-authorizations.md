@@ -6,12 +6,11 @@ You can check documentation of authorizations for [Commands](commands.md) or [En
 
 Entities have five permission keys:
 
-- `entity`: to see the entity in the side-menu, and to display its list or single show page. Without this, the entity is hidden to the user.
+- `entity`: to see the entity in the side-menu, and to display its Entity List or single Show Page. Without this, the entity is hidden to the user.
 - `view`: without this, the user can access the Entity list, but not the Show Page nor the Form.
 - `update`: without this, the user can't access the Form.
-- `create`: without this, the user can't display the create form.
+- `create`: without this, the user can't display the create Form.
 - `delete`: without this, the user can't delete an instance.
-
 
 ## Globally prohibited actions
 
@@ -22,11 +21,13 @@ For this add the permission keys in the `$prohibitedActions` attribute og the En
 ```php
 class UserEntity extends SharpEntity
 {
+    // [...]
+    
     protected ?string $list = UserSharpList::class;
     protected array $prohibitedActions = [
-        "delete", "create"
+        'delete', 
+        'create'
     ];
-    // ...
 }
 ```
 
@@ -55,17 +56,17 @@ class SpaceshipPolicy extends SharpEntityPolicy
 
     public function update($user, $instanceId): bool
     {
-        // ...
+        // [...]
     }
 
     public function delete($user, $instanceId): bool
     {
-        // ...
+        // [...]
     }
 
     public function create($user): bool
     {
-        // ...
+        // [...]
     }
 }
 ```
@@ -79,8 +80,8 @@ The policy must be declared in the [Entity class](entity-class.md):
 ```php
 class SpaceshipEntity extends SharpEntity
 {
+    // [...]
     protected ?string $policy = SpaceshipSharpPolicy::class;
-    // ...
 }
 ```
 

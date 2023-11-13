@@ -1,5 +1,5 @@
 import { filtersModule as filters } from 'sharp-filters';
-import { getShowView, postShowCommand, getShowCommandForm, postShowState } from "../api";
+import {getShowView, postShowCommand, getShowCommandForm, postShowState, deleteShow} from "../api";
 
 const SET_ENTITY_KEY = 'SET_ENTITY_KEY';
 const SET_INSTANCE_ID = 'SET_INSTANCE_ID';
@@ -73,17 +73,16 @@ export default {
                 .map(group => group.filter(command => command.authorization));
         },
         instanceState(state, getters) {
-            const stateOptions = getters.config.state;
-            if(stateOptions) {
-                const stateValue = getters.data[stateOptions.attribute];
-                return stateOptions.values.find(item => item.value === stateValue);
+            if(getters.config.state) {
+                return getters.data[getters.config.state.attribute];
             }
             return null;
         },
+        instanceStateOptions(state, getters) {
+            return getters.config.state?.values.find(item => item.value === getters.instanceState);
+        },
         stateValues(state, getters) {
-            return getters.config.state
-                ? getters.config.state.values
-                : null;
+            return getters.config.state?.values;
         },
     },
 
@@ -95,6 +94,12 @@ export default {
             });
             commit(SET_SHOW, data);
             return data;
+        },
+        delete({ state }) {
+            return deleteShow({
+                entityKey: state.entityKey,
+                instanceId: state.instanceId,
+            });
         },
         postCommand({ state }, { command, data }) {
             return postShowCommand({

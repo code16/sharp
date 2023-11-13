@@ -4,6 +4,7 @@ namespace Code16\Sharp\Tests\Unit\Dashboard;
 
 use Code16\Sharp\Dashboard\Layout\DashboardLayout;
 use Code16\Sharp\Dashboard\Layout\DashboardLayoutRow;
+use Code16\Sharp\Dashboard\Layout\DashboardLayoutSection;
 use Code16\Sharp\Dashboard\Widgets\SharpBarGraphWidget;
 use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpOrderedListWidget;
@@ -50,7 +51,7 @@ class SharpDashboardTest extends SharpTestCase
     }
 
     /** @test */
-    public function we_can_get_widgets_layout()
+    public function we_can_get_widgets_layout_without_section()
     {
         $dashboard = new class extends FakeSharpDashboard
         {
@@ -63,7 +64,8 @@ class SharpDashboardTest extends SharpTestCase
 
             protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
             {
-                $dashboardLayout->addFullWidthWidget('widget')
+                $dashboardLayout
+                    ->addFullWidthWidget('widget')
                     ->addRow(function (DashboardLayoutRow $row) {
                         $row->addWidget(4, 'widget2')
                             ->addWidget(8, 'widget3');
@@ -73,13 +75,77 @@ class SharpDashboardTest extends SharpTestCase
 
         $this->assertEquals(
             [
-                'rows' => [
+                'sections' => [
                     [
-                        ['key' => 'widget', 'size' => 12],
+                        'key' => null,
+                        'title' => '',
+                        'rows' => [
+                            [
+                                ['key' => 'widget', 'size' => 12],
+                            ],
+                            [
+                                ['key' => 'widget2', 'size' => 4],
+                                ['key' => 'widget3', 'size' => 8],
+                            ],
+                        ],
                     ],
+                ],
+            ],
+            $dashboard->widgetsLayout(),
+        );
+    }
+
+    /** @test */
+    public function we_can_get_widgets_layout_with_sections()
+    {
+        $dashboard = new class extends FakeSharpDashboard
+        {
+            protected function buildWidgets(WidgetsContainer $widgetsContainer): void
+            {
+                $widgetsContainer->addWidget(SharpBarGraphWidget::make('widget'))
+                    ->addWidget(SharpBarGraphWidget::make('widget2'))
+                    ->addWidget(SharpBarGraphWidget::make('widget3'));
+            }
+
+            protected function buildDashboardLayout(DashboardLayout $dashboardLayout): void
+            {
+                $dashboardLayout
+                    ->addSection('section1', function (DashboardLayoutSection $section) {
+                        $section
+                            ->setKey('section1-key')
+                            ->addRow(function (DashboardLayoutRow $row) {
+                                $row->addWidget(4, 'widget2')
+                                    ->addWidget(8, 'widget3');
+                            });
+                    })
+                    ->addSection('section2', function (DashboardLayoutSection $section) {
+                        $section
+                            ->setKey('section2-key')
+                            ->addFullWidthWidget('widget');
+                    });
+            }
+        };
+
+        $this->assertEquals(
+            [
+                'sections' => [
                     [
-                        ['key' => 'widget2', 'size' => 4],
-                        ['key' => 'widget3', 'size' => 8],
+                        'key' => 'section1-key',
+                        'title' => 'section1',
+                        'rows' => [
+                            [
+                                ['key' => 'widget2', 'size' => 4],
+                                ['key' => 'widget3', 'size' => 8],
+                            ],
+                        ],
+                    ], [
+                        'key' => 'section2-key',
+                        'title' => 'section2',
+                        'rows' => [
+                            [
+                                ['key' => 'widget', 'size' => 12],
+                            ],
+                        ],
                     ],
                 ],
             ],

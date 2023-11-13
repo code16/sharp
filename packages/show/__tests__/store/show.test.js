@@ -61,13 +61,13 @@ describe('store show', () => {
             data: {
                 state: 'currentState',
             }
-        })).toEqual({ value:'currentState' });
+        })).toEqual('currentState');
     });
 
     test('stateValues', () => {
         expect(show.getters.stateValues(null, {
             config: {},
-        })).toEqual(null);
+        })).toBeUndefined();
         expect(show.getters.stateValues(null, {
             config: {
                 state: {

@@ -24,7 +24,7 @@ class AuthorizationsTest extends BaseApiTest
 
         $this->postJson('/sharp/api/form/person/50', [])->assertForbidden();
         $this->postJson('/sharp/api/form/person', [])->assertForbidden();
-        $this->deleteJson('/sharp/api/form/person/50')->assertForbidden();
+        $this->deleteJson('/sharp/api/show/person/50')->assertForbidden();
         $this->getJson('/sharp/api/form/person')->assertForbidden();
 
         $this->getJson('/sharp/api/show/person/50')->assertForbidden();
@@ -59,7 +59,7 @@ class AuthorizationsTest extends BaseApiTest
         $this->getJson('/sharp/api/form/person/50')->assertForbidden();
         $this->postJson('/sharp/api/form/person', [])->assertOk();
         $this->postJson('/sharp/api/form/person/50', [])->assertForbidden();
-        $this->deleteJson('/sharp/api/form/person/50')->assertForbidden();
+        $this->deleteJson('/sharp/api/show/person/50')->assertForbidden();
     }
 
     /** @test */
@@ -106,6 +106,7 @@ class AuthorizationsTest extends BaseApiTest
                     'update' => false,
                     'create' => true,
                     'view' => [1, 2],
+                    'delete' => false,
                 ],
             ]);
     }
@@ -144,9 +145,10 @@ class AuthorizationsTest extends BaseApiTest
             ->getJson('/sharp/api/list/person')
             ->assertJson([
                 'authorizations' => [
-                    'update' => true,
+                    'update' => [1, 2],
                     'create' => true,
-                    'view' => true,
+                    'view' => [1, 2],
+                    'delete' => [1, 2],
                 ],
             ]);
     }
@@ -163,7 +165,7 @@ class AuthorizationsTest extends BaseApiTest
 
         $this->postJson('/sharp/api/form/person:big/50', [])->assertOk();
         $this->postJson('/sharp/api/form/person:big', [])->assertOk();
-        $this->json('delete', '/sharp/api/form/person:big/50')->assertForbidden();
+        $this->deleteJson('/sharp/api/show/person:big/50')->assertForbidden();
         $this->getJson('/sharp/api/form/person:big')->assertOk();
         $this->getJson('/sharp/api/form/person:big/50')->assertOk();
         $this->getJson('/sharp/api/list/person')->assertOk();

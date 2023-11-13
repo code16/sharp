@@ -42,4 +42,9 @@ abstract class SharpSingleShow extends SharpShow
      * Retrieve a Model for the form and pack all its data as JSON.
      */
     abstract public function findSingle(): array;
+
+    final public function delete(mixed $id): void
+    {
+        throw new SharpException('Deletion is not possible in a SingleShow.');
+    }
 }

@@ -17,11 +17,13 @@
 </template>
 
 <script>
-    import Form from '../Form';
-    import ActionBarForm from '../ActionBar';
+    import Form from '../Form.vue';
+    import ActionBarForm from '../ActionBar.vue';
+    import {Button} from "sharp-ui";
 
     export default {
         components: {
+            Button,
             Form,
             ActionBarForm,
         },

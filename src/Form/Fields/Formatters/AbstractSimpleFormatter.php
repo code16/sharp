@@ -8,7 +8,7 @@ abstract class AbstractSimpleFormatter extends SharpFieldFormatter
 {
     /**
      * @param  SharpFormField  $field
-     * @param $value
+     * @param  $value
      * @return mixed
      */
     public function toFront(SharpFormField $field, $value)
@@ -19,7 +19,7 @@ abstract class AbstractSimpleFormatter extends SharpFieldFormatter
     /**
      * @param  SharpFormField  $field
      * @param  string  $attribute
-     * @param $value
+     * @param  $value
      * @return mixed
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)

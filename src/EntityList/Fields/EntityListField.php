@@ -4,12 +4,15 @@ namespace Code16\Sharp\EntityList\Fields;
 
 class EntityListField
 {
-    protected string $key;
+    public string $key;
     protected string $label = '';
     protected bool $sortable = false;
     protected bool $html = true;
+    protected ?int $width;
+    protected int|bool|null $widthXs;
+    protected bool $hideOnXs = false;
 
-    public static function make(string $key)
+    public static function make(string $key): self
     {
         $instance = new static();
         $instance->key = $key;
@@ -38,13 +41,60 @@ class EntityListField
         return $this;
     }
 
-    public function toArray(): array
+    public function setWidth(int $width): self
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    public function setWidthFill(): self
+    {
+        $this->width = null;
+
+        return $this;
+    }
+
+    public function setWidthOnSmallScreens(int $widthOnSmallScreens): self
+    {
+        $this->widthXs = $widthOnSmallScreens;
+
+        return $this;
+    }
+
+    public function setWidthOnSmallScreensFill(): self
+    {
+        $this->widthXs = true;
+
+        return $this;
+    }
+
+    public function hideOnSmallScreens(bool $hideOnSmallScreens = true): self
+    {
+        $this->hideOnXs = $hideOnSmallScreens;
+
+        return $this;
+    }
+
+    public function getFieldProperties(): array
     {
         return [
             'key' => $this->key,
             'label' => $this->label,
             'sortable' => $this->sortable,
             'html' => $this->html,
+        ];
+    }
+
+    public function getLayoutProperties(): array
+    {
+        return [
+            'key' => $this->key,
+            'size' => $this->width ?? 'fill',
+            'hideOnXS' => $this->hideOnXs,
+            'sizeXS' => isset($this->widthXs)
+                ? ($this->widthXs === true ? 'fill' : $this->widthXs)
+                : ($this->width ?? 'fill'),
         ];
     }
 }

@@ -1,6 +1,6 @@
-import FilterDateRange from './FilterDateRange';
-import FilterSelect from './FilterSelect';
-import FilterCheck from './FilterCheck';
+import FilterDateRange from './FilterDateRange.vue';
+import FilterSelect from './FilterSelect.vue';
+import FilterCheck from './FilterCheck.vue';
 
 export function filterByType(type) {
     if(type === 'select') {

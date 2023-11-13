@@ -7,6 +7,7 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class DataLocalizationTest extends BaseApiTest
@@ -16,15 +17,15 @@ class DataLocalizationTest extends BaseApiTest
         parent::setUp();
 
         $this->login();
+        $this->buildTheWorld();
     }
 
     /** @test */
     public function we_add_the_locales_array_if_configured_to_the_form()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.form',
-            DataLocalizationTestForm::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(DataLocalizationTestForm::class);
 
         $this->getJson('/sharp/api/form/person')
             ->assertJson(['locales' => ['fr', 'en']]);
@@ -36,10 +37,9 @@ class DataLocalizationTest extends BaseApiTest
     /** @test */
     public function we_wont_add_the_locales_array_if_not_configured()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.form',
-            PersonSharpForm::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(PersonSharpForm::class);
 
         $this->getJson('/sharp/api/form/person')
             ->assertJsonMissing(['locales']);
@@ -51,10 +51,9 @@ class DataLocalizationTest extends BaseApiTest
     /** @test */
     public function we_wont_add_the_locales_array_if_configured_but_there_is_no_localized_field()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.form',
-            DataLocalizationWithoutLocalizedFieldTestForm::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(DataLocalizationWithoutLocalizedFieldTestForm::class);
 
         $this->getJson('/sharp/api/form/person')
             ->assertJsonMissing(['locales']);
@@ -66,10 +65,9 @@ class DataLocalizationTest extends BaseApiTest
     /** @test */
     public function we_add_the_locales_array_if_configured_in_a_form_list_field()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.form',
-            DataLocalizationWithLocalizedFormListTestForm::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setForm(DataLocalizationWithLocalizedFormListTestForm::class);
 
         $this->getJson('/sharp/api/form/person')
             ->assertJson(['locales' => ['fr', 'en']]);
@@ -81,10 +79,9 @@ class DataLocalizationTest extends BaseApiTest
     /** @test */
     public function we_add_the_locales_array_if_configured_to_the_show()
     {
-        $this->app['config']->set(
-            'sharp.entities.person.show',
-            DataLocalizationTestShow::class,
-        );
+        app(SharpEntityManager::class)
+            ->entityFor('person')
+            ->setShow(DataLocalizationTestShow::class);
 
         $this->getJson('/sharp/api/show/person/50')
             ->assertJson(['locales' => ['fr', 'en']]);

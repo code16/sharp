@@ -7,6 +7,7 @@ return [
     '419.message' => 'Diese Aktion ist ungültig, Höchstwahrscheinlich ist zu viel Zeit vergangen. Die Seite lädt neu.',
 
     'confirm.ok_button' => 'Bestätigen',
+    'confirm.delete.ok_button' => 'Löschen',
 
     'command.info.title' => 'Info',
     'state.422.title' => 'Status kann nicht geändert werden',

@@ -117,9 +117,7 @@ trait HandleInstanceCommands
             ->getInstanceCommandsHandlers()
             ->map(fn ($handlers, $positionKey) => $handlers)
             ->flatten()
-            ->filter(function (InstanceCommand $command) use ($commandKey) {
-                return $command->getCommandKey() === $commandKey;
-            })
+            ->filter(fn (InstanceCommand $command) => $command->getCommandKey() === $commandKey)
             ->first();
     }
 }

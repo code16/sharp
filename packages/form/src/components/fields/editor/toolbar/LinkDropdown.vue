@@ -74,7 +74,7 @@
 <script>
     import { BFormGroup, BDropdownForm } from 'bootstrap-vue';
     import { Button, Dropdown } from "sharp-ui";
-    import TextInput from '../../Text';
+    import TextInput from '../../Text.vue';
     import { lang } from "sharp";
 
     export default {

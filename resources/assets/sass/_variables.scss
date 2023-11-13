@@ -1,13 +1,13 @@
-$fa-font-path: 'fonts';
-$--font-path: 'fonts';
 
 
 
 $brand-01: #314255;
+$brand-02: #5596e6;
 $ui-01: #FFFFFF;
 $ui-02: #EBF0F7;
 $ui-03: #DAE3EE;
 $ui-04: #dfe3e6;
+$ui-05: #8c9ba5;
 $field-01: #FFFFFF;
 $text-03: #8c9ba5;
 
@@ -15,8 +15,10 @@ $brand-01-light: #68829E;
 
 
 $ui-primary-color: hsl(var(--primary-h), var(--primary-s), 20%);
-$ui-font-size: .9375rem;
+$ui-font-size: 1.125rem;
 $ui-title-font-weight: 600;
+
+$bx--standard-easing: cubic-bezier(0.5, 0, 0.1, 1);
 
 /**
   Bootstrap variables
@@ -30,12 +32,25 @@ $body-bg-hsl: hsl(var(--primary-h), 20%, 95%); // we're not using $body-bg becau
 $body-color: #152935;
 
 $enable-negative-margins: true;
+$enable-dark-mode: false;
 
 $container-max-widths: (
   sm: 540px,
   md: 720px,
   lg: 960px,
   xl: 1140px,
+  xxl: 1320px,
+);
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  "4\\.5": $spacer * 2,
+  5: $spacer * 3,
 );
 
 $font-size-base: 1rem;
@@ -67,9 +82,9 @@ $alert-padding-y: .75rem;
 $btn-border-radius: $border-radius;
 $btn-border-width: 1px;
 $btn-font-weight: 500;
-$btn-font-size-sm: .75rem;
-$btn-font-size: .875rem;
-$btn-font-size-lg: .9375rem;
+$btn-font-size-sm: .875rem;
+$btn-font-size: .9375rem;
+$btn-font-size-lg: 1rem;
 $btn-line-height: 1.45;
 
 
@@ -91,8 +106,6 @@ $dropdown-link-color: $ui-primary-color;
 $dropdown-link-hover-color: $ui-primary-color;
 $dropdown-link-disabled-color: hsla(var(--primary-h), var(--primary-s), 20%, .65);
 
-$link-color: hsl(var(--primary-h), var(--primary-s), 30%);
-$link-hover-color: hsl(var(--primary-h), var(--primary-s), 15%);
 $link-decoration: underline;
 
 $input-font-size: .875rem;
@@ -100,6 +113,7 @@ $input-padding-y: .5rem;
 $input-border-radius: $border-radius;
 
 $modal-content-border-width: 0;
+$modal-backdrop-opacity: .25;
 
 $label-line-height: 1.4;
 $form-label-color: $ui-primary-color;
@@ -133,8 +147,6 @@ $spinner-width-sm: 1.25rem;
 /**
   Custom variables
 **/
-
-$navbar-min-height: 5rem;
 
 $leftnav-width: 15rem;
 $leftnav-collapsed-width: 3.25rem;

@@ -5,6 +5,7 @@ namespace Code16\Sharp\EntityList\Commands;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
+use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -18,7 +19,6 @@ abstract class Command
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
-
     private ?string $formModalTitle = null;
     private ?string $formModalButtonLabel = null;
     private ?string $confirmationText = null;
@@ -80,6 +80,11 @@ abstract class Command
             'content' => $fileContent,
             'name' => $fileName,
         ];
+    }
+
+    public function notify(string $title): SharpNotification
+    {
+        return new SharpNotification($title);
     }
 
     final protected function configureFormModalTitle(string $formModalTitle): self

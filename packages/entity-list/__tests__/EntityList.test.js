@@ -396,11 +396,11 @@ describe('EntityList', () => {
                 }
             });
             wrapper.vm.handleReorderButtonClicked();
-            expect(wrapper.vm.reorderActive).toBe(true);
+            expect(wrapper.vm.reordering).toBe(true);
             expect(wrapper.vm.reorderedItems).toEqual([{ id:1 }]);
 
             wrapper.vm.handleReorderButtonClicked();
-            expect(wrapper.vm.reorderActive).toBe(false);
+            expect(wrapper.vm.reordering).toBe(false);
             expect(wrapper.vm.reorderedItems).toEqual(null);
         });
 
@@ -418,7 +418,7 @@ describe('EntityList', () => {
             expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('entity-list/reorder', { instances:['id'] });
             expect(wrapper.vm.data.list.items).toEqual([{ id:1 }]);
             expect(wrapper.vm.reorderedItems).toEqual(null);
-            expect(wrapper.vm.reorderActive).toEqual(false);
+            expect(wrapper.vm.reordering).toEqual(false);
         });
 
         test('handleCreateButtonClicked', () => {
@@ -679,21 +679,6 @@ describe('EntityList', () => {
                 }
             });
             expect(wrapper.vm.instanceHasViewAuthorization({})).toEqual(true);
-        });
-
-        test('filterByKey', () => {
-            const wrapper = createWrapper();
-            wrapper.setData({
-                config: {
-                }
-            });
-            expect(wrapper.vm.filterByKey('name')).toBeUndefined();
-            wrapper.setData({
-                config: {
-                    filters:[{ key:'age' }, { key:'name' }]
-                }
-            });
-            expect(wrapper.vm.filterByKey('name')).toEqual({ key:'name' });
         });
 
         test('handleSortChanged', () => {
