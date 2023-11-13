@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
