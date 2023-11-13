@@ -40,4 +40,9 @@
   .SharpTopBar {
     left: 0;
   }
+  @include media-breakpoint-up($breakpoint-fixed-menu) {
+    .SharpTopBar__title {
+      display: none!important;
+    }
+  }
 }
