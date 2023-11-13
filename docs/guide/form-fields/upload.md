@@ -146,14 +146,14 @@ There are four cases:
 
 #### newly uploaded file
 
-The formatter will store the file on the configured location, and return an array like this:
+The formatter must return an array like this:
 
 ```php
 [
-    'file_name' => '', // Relative file path
+    'file_name' => '', // Target file path (relative)
     'size' => x, // File size in bytes
     'mime_type' => '', // File mime type
-    'disk' => '', // Storage disk name
+    'disk' => '', // Target storage disk name
     'filters' => [ // Transformations applied to the (image) file
         'crop' => [
             'x' => x,
@@ -183,9 +183,9 @@ function update($id, array $data)
 }
 ```
 
-#### existing transformed file
+#### existing transformed image
 
-In this case, the file was already stored in a previous post, and was then transformed (cropped, or rotated). The formatter will simply return and array with one `filters` key:
+In this case, the image was already handled in a previous post, and was then transformed (cropped, or rotated). The formatter will simply return and array with one `filters` key:
 
 ```php
 [
