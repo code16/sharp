@@ -615,3 +615,22 @@ it('allows to configure a page alert with a closure as content', function () {
             ->etc()
         );
 });
+
+it('allows to use the legacy validation', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        protected string $formValidatorClass = \Code16\Sharp\Tests\Fixtures\Sharp\PersonLegacyValidator::class;
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+});
