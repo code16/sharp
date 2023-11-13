@@ -3,6 +3,7 @@
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
@@ -437,6 +438,27 @@ it('validates an instance before store and update with a validate() call', funct
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
+it('formats data before validation', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormEditorField::make('name'));
+        }
+
+        public function update($id, array $data)
+        {
+            $this->validate($data, ['name' => 'nullable|string|min:3']);
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => ['text' => 'ba'],
         ])
         ->assertSessionHasErrors('name');
 });
