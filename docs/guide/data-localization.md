@@ -130,7 +130,7 @@ class BookForm extends SharpForm
 Validation allows differentiating rules between locales:
 
 ```php
-class BookValidator extends FormRequest
+class BookForm extends SharpForm
 {
     // [...]
     

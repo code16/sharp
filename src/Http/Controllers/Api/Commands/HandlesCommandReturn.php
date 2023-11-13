@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-trait HandleCommandReturn
+trait HandlesCommandReturn
 {
     protected function returnCommandResult(
         SharpEntityList|SharpShow|SharpDashboard $commandContainer,

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Sharp\Categories;
+namespace Code16\Sharp\Tests\Fixtures\Sharp;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryValidator extends FormRequest
+class PersonLegacyValidator extends FormRequest
 {
     public function rules(): array
     {

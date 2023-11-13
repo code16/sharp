@@ -25,8 +25,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestForm extends SharpSingleForm
 {
-    protected ?string $formValidatorClass = TestValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -344,6 +342,13 @@ class TestForm extends SharpSingleForm
         return $this
             ->setCustomTransformer('upload', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->transform($rawData);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'date' => 'required|before_or_equal:'.date('Y-m-d'),
+        ];
     }
 
     protected function updateSingle(array $data)
