@@ -103,17 +103,12 @@ class ProductEntityList extends SharpEntityList
 {
     // [...]
     
-    function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer->addField(
+        $fields->addField(
             EntityListDataContainer::make('author:name')
                 ->setLabel('Author')
         );
-    }
-    
-    function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout->addColumn('author:name', 6);
     }
 }
 ```
