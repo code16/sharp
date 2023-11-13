@@ -18,7 +18,7 @@ Here's how it can be edited, in Sharp:
 
 And here's how it could be stored, as a reference:
 
-```php
+```html
 <x-related-post post=\"25\"></x-related-post><p>She was aware that things could go wrong. [...]</p>
 ```
 

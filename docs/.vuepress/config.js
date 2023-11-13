@@ -9,7 +9,7 @@ import svgLoader from 'vite-svg-loader';
 import sidebar from './sidebar';
 import theme from './theme';
 import fathomPlugin from './plugins/fathom';
-import markdownPlugin from './plugins/markdown';
+import { markdownPlugin } from './plugins/markdown';
 
 
 const demoEnvPath = path.resolve(__dirname, '../../demo/.env');

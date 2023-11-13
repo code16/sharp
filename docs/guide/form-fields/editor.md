@@ -63,13 +63,13 @@ SharpFormEditorField::make("description")
 
 ### `setRenderContentAsMarkdown(bool $renderAsMarkdown = true)`
 
-If true te front will send the content as markdown to the back, for storage. Default is false.
+If true the front will send the content as markdown to the back, for storage. Default is false.
 
 ### `setWithoutParagraphs(bool $withoutParagraphs = true)`
 
 If true the editor won’t create `<p>`, but `<br>`. This is useful on some specific cases (everytime inline HTML is needed, maybe for a title or a legend). Default is false.
 
-### `setMaxLength(int maxLength)`
+### `setMaxLength(int $maxLength)`
 
 Set an informative max character count. Will enforce `showCharacterCount(true)`.
 

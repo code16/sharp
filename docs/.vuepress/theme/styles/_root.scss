@@ -1,8 +1,9 @@
 
 :root {
   --c-text: #233140;
-  --code-bg-color: #292D3E; // material-palenight
+  --code-bg-color: #1e293b; // material-palenight
   --title-inline-code-color: hsl(211deg, 100%, 20%);
+  --font-family-code: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
 }
 
 :root, html.dark {
