@@ -55,16 +55,12 @@ class PersonWithMultiformSharpEntityList extends SharpEntityList
             ]);
     }
 
-    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    public function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer->addField(
-            EntityListField::make('name'),
-        );
-    }
-
-    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout->addColumn('name', 12);
+        $fields
+            ->addField(
+                EntityListField::make('name'),
+            );
     }
 
     public function buildListConfig(): void

@@ -21,14 +21,14 @@ First let's write the applicative class, and make it extend `Code16\Sharp\Entity
 There are a two more optional methods, for the list config and instance deletion. 
 Each one is detailed here:
 
-### `buildListFields(EntityListFieldsContainer $fields)`
+### `buildList(EntityListFieldsContainer $fields)`
 
 A field is a column in the `Entity List`. This first function is responsible to describe each column:
 
 ```php
-function buildListFields(EntityListFieldsContainer $fieldsContainer)
+function buildList(EntityListFieldsContainer $fields)
 {
-    $fieldsContainer
+    $fields
         ->addField(
             EntityListField::make('name')
                 ->setLabel('Full name')
@@ -51,7 +51,7 @@ You can also call `->widthOnSmallScreens(int)` or `->widthOnSmallScreensFill)` t
 Now the real work: grab and return the actual list data. This method must return an array of `instances` of our `entity`. You can do this however you want, so let's see a generic example:
 
 The returned array is meant to be built with 2 rules:
-- each item must define the keys declared in the `buildListFields()` function,
+- each item must define the keys declared in the `buildList()` function,
 - plus one attribute for the identifier, which is `id` by default (more on that later).
 
 So for instance, if we defined 2 columns `name` and `price`:
@@ -96,7 +96,7 @@ You can use the `queryParams` everywhere except in the `buildListConfig()` funct
 
 `$this->queryParams->sortedBy()` contains the name of the attribute, and `$this->queryParams->sortedDir()` the direction: `asc` or `desc`.
 
-Note that the ability of sorting a column is defined in `buildListFields()`.
+Note that the ability of sorting a column is defined in `buildList()`.
 
 ##### Search
 
