@@ -4,7 +4,6 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
@@ -55,16 +54,12 @@ class PersonWithMultiformSharpEntityList extends SharpEntityList
             ]);
     }
 
-    public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    public function buildList(EntityListFieldsContainer $fields): void
     {
-        $fieldsContainer->addField(
-            EntityListField::make('name'),
-        );
-    }
-
-    public function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        $fieldsLayout->addColumn('name', 12);
+        $fields
+            ->addField(
+                EntityListField::make('name'),
+            );
     }
 
     public function buildListConfig(): void
