@@ -99,7 +99,7 @@ jobs:
   slack:
     needs:
       - laravel-tests
-      - e2e-tests
+#      - e2e-tests
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
