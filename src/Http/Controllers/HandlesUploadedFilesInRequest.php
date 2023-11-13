@@ -15,8 +15,7 @@ trait HandlesUploadedFilesInRequest
         array $request,
         array $formattedData,
         $instanceId = null
-    ): void
-    {
+    ): void {
         collect($form->fieldsContainer()->getFields())
             ->filter(fn ($field) => $field instanceof IsUploadField)
             ->each(function (IsUploadField $field) use ($instanceId, $request, $formattedData) {

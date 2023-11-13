@@ -43,7 +43,7 @@ trait HandleFormFields
             })
             ->all();
 
-        if (!$legacyValidation) {
+        if (! $legacyValidation) {
             if (method_exists($this, 'rules')) {
                 $this->validate(
                     $formattedData,
