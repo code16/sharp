@@ -9,11 +9,18 @@ trait HandleFormFields
     use HandleFields;
 
     /**
-     * Applies Field Formatters on $data.
+     * Applies Field Formatters and validate $data.
      */
-    final public function formatRequestData(array $data, ?string $instanceId = null): array
+    final public function formatAndValidateRequestData(array $data, ?string $instanceId = null): array
     {
-        return collect($data)
+        $legacyValidation = property_exists($this, 'formValidatorClass');
+
+        if ($legacyValidation) {
+            // Legacy support (v8 and below): first validate, then format
+            app($this->formValidatorClass);
+        }
+
+        $formattedData = collect($data)
             ->filter(function ($value, $key) {
                 // Ignore HTML fields
                 if ($this->findFieldByKey($key) instanceof SharpFormHtmlField) {
@@ -35,5 +42,17 @@ trait HandleFormFields
                     ->fromFront($field, $key, $value);
             })
             ->all();
+
+        if (!$legacyValidation) {
+            if (method_exists($this, 'rules')) {
+                $this->validate(
+                    $formattedData,
+                    $this->rules(),
+                    method_exists($this, 'messages') ? $this->messages() : []
+                );
+            }
+        }
+
+        return $formattedData;
     }
 }

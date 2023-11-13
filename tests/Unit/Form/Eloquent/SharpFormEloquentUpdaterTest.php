@@ -30,7 +30,7 @@ it('allows to update a simple attribute', function () {
         }
     };
 
-    $form->update($person->id, $form->formatRequestData(['name' => 'Marie Curie']));
+    $form->update($person->id, $form->formatAndValidateRequestData(['name' => 'Marie Curie']));
 
     expect($person->fresh()->name)->toBe('Marie Curie');
 })->group('eloquent');
@@ -51,7 +51,7 @@ it('allows to store a new instance', function () {
         }
     };
 
-    $form->store($form->formatRequestData(['name' => 'Niehls Bohr']));
+    $form->store($form->formatAndValidateRequestData(['name' => 'Niehls Bohr']));
 
     $this->assertDatabaseHas('people', [
         'name' => 'Niehls Bohr',
@@ -76,7 +76,7 @@ it('ignores undeclared fields', function () {
         }
     };
 
-    $form->update($person->id, $form->formatRequestData(['id' => 1200, 'age' => 38]));
+    $form->update($person->id, $form->formatAndValidateRequestData(['id' => 1200, 'age' => 38]));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -103,7 +103,7 @@ it('ignores SharpFormHtmlField fields', function () {
         }
     };
 
-    $form->update($person->id, $form->formatRequestData(['name' => 'HTML']));
+    $form->update($person->id, $form->formatAndValidateRequestData(['name' => 'HTML']));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -133,7 +133,7 @@ it('allows to manually ignore a field', function () {
         }
     };
 
-    $form->update($person->id, $form->formatRequestData(['name' => 'Marie Curie', 'age' => 40]));
+    $form->update($person->id, $form->formatAndValidateRequestData(['name' => 'Marie Curie', 'age' => 40]));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -163,7 +163,7 @@ it('allows to manually ignore multiple field', function () {
         }
     };
 
-    $form->update($person->id, $form->formatRequestData(['name' => 'Marie Curie', 'age' => 40]));
+    $form->update($person->id, $form->formatAndValidateRequestData(['name' => 'Marie Curie', 'age' => 40]));
 
     $this->assertDatabaseHas('people', [
         'id' => $person->id,
@@ -194,7 +194,7 @@ it('allows to update a belongsTo attribute', function () {
         }
     };
 
-    $form->update($marie->id, $form->formatRequestData(['partner' => $pierre->id]));
+    $form->update($marie->id, $form->formatAndValidateRequestData(['partner' => $pierre->id]));
 
     $this->assertDatabaseHas('people', [
         'id' => $marie->id,
@@ -224,7 +224,7 @@ it('allows to update an hasOne attribute', function () {
         }
     };
 
-    $form->update($marie->id, $form->formatRequestData(['director' => $director->id]));
+    $form->update($marie->id, $form->formatAndValidateRequestData(['director' => $director->id]));
 
     $this->assertDatabaseHas('people', [
         'id' => $director->id,
@@ -257,7 +257,7 @@ it('allows to update an hasMany attribute, creating new instances if needed', fu
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'collaborators' => [
                 ['id' => $collaborator->id, 'name' => 'Paul'],
                 ['id' => null, 'name' => 'Jeanne'],
@@ -301,7 +301,7 @@ it('allows to update a belongsToMany attribute', function () {
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'colleagues' => [
                 ['id' => $colleague->id],
             ],
@@ -339,7 +339,7 @@ it('allows to create a new related in a belongsToMany attribute', function () {
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'colleagues' => [
                 ['id' => null, 'label' => 'Niels Bohr'],
             ],
@@ -381,7 +381,7 @@ it('handles the order attribute in a hasMany relation in both update and creatio
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'collaborators' => [
                 ['id' => null, 'name' => 'Jeanne'],
                 ['id' => $collaborator->id, 'name' => 'Paul'],
@@ -421,7 +421,7 @@ it('allows to update a morphOne attribute', function () {
         }
     };
 
-    $form->update($marie->id, $form->formatRequestData(['photo:file' => 'picture']));
+    $form->update($marie->id, $form->formatAndValidateRequestData(['photo:file' => 'picture']));
 
     $this->assertDatabaseHas('pictures', [
         'picturable_type' => Person::class,
@@ -453,7 +453,7 @@ it('allows to update a morphMany attribute', function () {
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'pictures' => [
                 ['id' => null, 'file' => 'picture-1'],
                 ['id' => null, 'file' => 'picture-2'],
@@ -507,7 +507,7 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'upload' => [
                 'name' => '/image.jpg',
                 'uploaded' => true,
@@ -526,7 +526,7 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
 
     $form->update(
         null,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'name' => 'Pierre Curie',
             'upload' => [
                 'name' => '/image-2.jpg',
@@ -566,7 +566,7 @@ it('handles the relation separator in a belongsTo case', function () {
 
     $form->update(
         $pierre->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'partner:name' => 'Marie Curie',
             'partner:age' => 42,
         ])
@@ -602,7 +602,7 @@ it('handles the relation separator in a hasOne case', function () {
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'director:name' => 'Jean',
             'director:age' => 26,
         ])
@@ -637,7 +637,7 @@ it('handles the relation separator in a hasOne creation case', function () {
 
     $form->update(
         $marie->id,
-        $form->formatRequestData([
+        $form->formatAndValidateRequestData([
             'director:name' => 'Jean',
             'director:age' => 26,
         ])

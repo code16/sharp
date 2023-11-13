@@ -9,6 +9,7 @@ use Code16\Sharp\Utils\SharpNotification;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
 use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
+use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpForm
@@ -18,10 +19,10 @@ abstract class SharpForm
     use HandlePageAlertMessage;
     use HandleCustomBreadcrumb;
     use HandleLocalizedFields;
+    use HandleValidation;
 
     protected ?FormLayout $formLayout = null;
     protected bool $displayShowPageAfterCreation = false;
-    protected ?string $formValidatorClass = null;
 
     final public function formLayout(): array
     {
@@ -78,14 +79,6 @@ abstract class SharpForm
         return $this->update(null, $data);
     }
 
-    public function validateRequest(): void
-    {
-        if ($formRequest = $this->getFormValidatorClass()) {
-            // Validation is automatically called (FormRequest)
-            app($formRequest);
-        }
-    }
-
     public function buildFormConfig(): void
     {
     }
@@ -139,9 +132,12 @@ abstract class SharpForm
         return new SharpNotification($title);
     }
 
+    /** @deprecated use ->validate() or rules() methods instead; will be removed in 10.x */
     protected function getFormValidatorClass(): ?string
     {
-        return $this->formValidatorClass;
+        return property_exists($this, 'formValidatorClass')
+            ? $this->formValidatorClass
+            : null;
     }
 
     /**

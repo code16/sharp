@@ -397,18 +397,45 @@ it('creates an instance and redirect to the show if configured', function () {
         ->assertRedirect('/sharp/s-list/person/s-show/person/1');
 });
 
-it('validates an instance before update', function () {
+it('validates an instance before store and update with the rules() method', function () {
     fakeFormFor('person', new class extends PersonForm
     {
-        public function validateRequest(): void
+        public function rules(): array
         {
-            Validator::make(request()->all(), ['name' => 'required'])
-                ->validate();
+            return ['name' => 'required'];
         }
     });
 
     $this
         ->post('/sharp/s-list/person/s-form/person', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
+it('validates an instance before store and update with a validate() call', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function update($id, array $data)
+        {
+            $this->validate($data, ['name' => 'required']);
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
             'name' => '',
         ])
         ->assertSessionHasErrors('name');

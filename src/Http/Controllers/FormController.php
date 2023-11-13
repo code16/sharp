@@ -17,6 +17,7 @@ use Inertia\Inertia;
 class FormController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
+    use HandlesUploadedFilesInRequest;
 
     public function __construct(
         private readonly SharpAuthorizationManager $sharpAuthorizationManager,
@@ -95,8 +96,7 @@ class FormController extends SharpProtectedController
             404,
         );
 
-        $formattedData = $form->formatRequestData(request()->all(), $instanceId);
-//        $form->validateRequest($formattedData);
+        $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
         $form->update($instanceId, $formattedData);
         $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
 
@@ -115,8 +115,7 @@ class FormController extends SharpProtectedController
         sharp_check_ability('create', $entityKey);
         $form->buildFormConfig();
 
-        $formattedData = $form->formatRequestData(request()->all());
-//        $form->validateRequest($formattedData);
+        $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
         $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
 
@@ -151,36 +150,5 @@ class FormController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ];
-    }
-
-    private function handlePostedFiles(SharpForm $form, array $request, array $formattedData, $instanceId): void
-    {
-        collect($form->fieldsContainer()->getFields())
-            ->filter(fn ($field) => $field instanceof IsUploadField)
-            ->each(function (IsUploadField $field) use ($instanceId, $request, $formattedData) {
-                $wasUploaded = ($request[$field->key]['uploaded'] ?? false)
-                    && ($formattedData[$field->key]['file_name'] ?? false);
-                $wasTransformed = $field->isTransformOriginal()
-                    && ($request[$field->key]['transformed'] ?? false);
-
-                if ($wasUploaded) {
-                    HandleUploadedFileJob::dispatch(
-                        uploadedFileName: $request[$field->key]['name'],
-                        disk: $field->storageDisk(),
-                        filePath: $formattedData[$field->key]['file_name'],
-                        instanceId: $instanceId,
-                        shouldOptimizeImage: $field->isShouldOptimizeImage(),
-                        transformFilters: $wasTransformed
-                            ? $request[$field->key]['filters']
-                            : null,
-                    );
-                } elseif ($wasTransformed) {
-                    HandleTransformedFileJob::dispatch(
-                        disk: $field->storageDisk(),
-                        fileData: $formattedData[$field->key]['file_name'],
-                        transformFilters: $request[$field->key]['filters'],
-                    );
-                }
-            });
     }
 }
