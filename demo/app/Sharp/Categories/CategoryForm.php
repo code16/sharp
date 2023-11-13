@@ -16,8 +16,6 @@ class CategoryForm extends SharpForm
 {
     use WithSharpFormEloquentUpdater;
 
-    protected ?string $formValidatorClass = CategoryValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -72,6 +70,11 @@ class CategoryForm extends SharpForm
 
     public function update($id, array $data)
     {
+        $this->validate(
+            $data,
+            ['name' => ['required', 'string', 'max:150']]
+        );
+
         $category = $id
             ? Category::findOrFail($id)
             : new Category();
