@@ -20,7 +20,7 @@
                 <DropdownItem
                     @click="handleCommandClicked(command)"
                     :disabled="isDisabled(command)"
-                    :title="__('sharp::entity_list.commands.needs_selection_message')"
+                    :title="requiresSelection(command) ? __('sharp::entity_list.commands.needs_selection_message') : null"
                 >
 <!--                    todo tooltip (from title attribute) -->
                     {{ command.label }}
