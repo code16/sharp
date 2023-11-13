@@ -68,6 +68,7 @@ return [
     'editor.dialogs.iframe.update_title' => 'Modifier l’Iframe (video, audio...)',
 
     'editor.dropdown.table.insert_table' => 'Insérer un tableau',
+    'editor.dropdown.table.toggle_header_cell' => 'Activer/désactiver la cellule comme en-tête',
     'editor.dropdown.table.insert_row_above' => 'Insérer une ligne au-dessus',
     'editor.dropdown.table.insert_row_below' => 'Insérer une ligne au-dessous',
     'editor.dropdown.table.remove_row' => 'Supprimer la ligne',

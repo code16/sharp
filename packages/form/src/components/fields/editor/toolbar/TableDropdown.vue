@@ -23,6 +23,13 @@
             </DropdownItem>
             <DropdownSeparator />
             <DropdownItem
+                :disabled="!editor.can().toggleHeaderCell()"
+                @click="command(() => editor.chain().toggleHeaderCell().run())"
+            >
+                {{ lang('form.editor.dropdown.table.toggle_header_cell') }}
+            </DropdownItem>
+            <DropdownSeparator />
+            <DropdownItem
                 :disabled="!editor.can().addRowBefore()"
                 @click="command(() => editor.chain().addRowBefore().run())"
             >

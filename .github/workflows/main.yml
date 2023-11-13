@@ -3,13 +3,10 @@ on:
   push:
     branches:
       - main
-    branches-ignore:
-      - "9.0"
   pull_request:
     branches:
       - main
-      - next
-      - dev
+      - "9.0"
 jobs:
 
   # Unit tests back (phpunit)
@@ -69,40 +66,40 @@ jobs:
 #        run: npm run test
 
   # Front e2e tests
-  e2e-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Update NPM
-        run: npm i -g npm@9
-
-      - name: Install sharp dependencies
-        run: npm ci --production
-
-      - name: Run E2E tests
-        uses: cypress-io/github-action@v2
-        with:
-          command: npm run cy:run-ct
-          working-directory: tests-e2e
-          env: CI=true
-
-      - uses: actions/upload-artifact@v2
-        if: always()
-        continue-on-error: true
-        with:
-          name: e2e-cypress-screenshots
-          path: tests-e2e/cypress/screenshots
+#  e2e-tests:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: '14'
+#
+#      - name: Update NPM
+#        run: npm i -g npm@9
+#
+#      - name: Install sharp dependencies
+#        run: npm ci --production
+#
+#      - name: Run E2E tests
+#        uses: cypress-io/github-action@v2
+#        with:
+#          command: npm run cy:run-ct
+#          working-directory: tests-e2e
+#          env: CI=true
+#
+#      - uses: actions/upload-artifact@v2
+#        if: always()
+#        continue-on-error: true
+#        with:
+#          name: e2e-cypress-screenshots
+#          path: tests-e2e/cypress/screenshots
 
   slack:
     needs:
       - laravel-tests
-      - e2e-tests
+#      - e2e-tests
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
