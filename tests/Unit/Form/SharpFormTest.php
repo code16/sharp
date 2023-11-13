@@ -1,12 +1,8 @@
 <?php
 
 use Code16\Sharp\Enums\PageAlertLevel;
-use Code16\Sharp\Exceptions\Form\SharpFormFieldFormattingMustBeDelayedException;
-use Code16\Sharp\Exceptions\Form\SharpFormUpdateException;
-use Code16\Sharp\Form\Fields\Formatters\SharpFieldFormatter;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
