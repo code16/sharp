@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Fixtures;
 
+use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -48,5 +49,10 @@ class Person extends Model
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    public function upload(): MorphOne
+    {
+        return $this->morphOne(SharpUploadModel::class, 'model');
     }
 }

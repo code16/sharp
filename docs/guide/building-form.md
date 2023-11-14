@@ -361,48 +361,41 @@ function buildFormConfig(): void
 
 ## Input validation
 
-In order to have an input validation on your form, you can create a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
+In order to have an input validation on your form, you can either declare a `rules()` methode (and an optional `messages()` one):
 
 ```php
 class ProductForm extends SharpForm
 {
-    protected ?string $formValidatorClass = ProductValidator::class;
+	// ...
     
-    // ...
+    public function rules(): array
+    {
+    	return [
+    		'name' => 'required',
+			'price' => ['required', 'numeric'],
+		];
+    }
 }
 ```
 
-You can, as an alternative, override the `protected function getFormValidatorClass(): ?string` method, which should return the classname of the validator, in case you need more control.
+Or you can manually call `->validate()` in the `update()` method:
+
+```php
+class ProductForm extends SharpForm
+{
+	// ...
+    
+    public function update($id, array $data)
+    {
+    	$this->validate($data, [
+    		'name' => 'required',
+			'price' => ['required', 'numeric'],
+		]);
+    }
+}
+```
 
 Sharp will handle the error display in the form.
-
-### Validate rich text fields (editor fields)
-
-Rich text are structured in a certain way by Sharp. This means that a rule like this will not work out of the box:
-
-```php
-public function rules()
-{
-    return [
-        'bio' => 'required'
-    ];
-}
-```
-
-To make it work, you have two options:
-
-Either add a ".text" suffix to your field key in the rules:
-
-```php
-public function rules()
-{
-    return [
-        'bio.text' => 'required'
-    ];
-}
-```
-
-Or make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ## Declare the form
 

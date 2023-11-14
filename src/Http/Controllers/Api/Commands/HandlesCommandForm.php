@@ -6,7 +6,7 @@ use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\EntityList\Commands\EntityCommand;
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
-trait HandleCommandForm
+trait HandlesCommandForm
 {
     protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler): array
     {

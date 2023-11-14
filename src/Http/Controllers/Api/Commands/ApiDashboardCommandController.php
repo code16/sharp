@@ -7,10 +7,13 @@ use Code16\Sharp\Dashboard\SharpDashboard;
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\HandlesUploadedFilesInRequest;
 
 class ApiDashboardCommandController extends ApiController
 {
-    use HandleCommandReturn, HandleCommandForm;
+    use HandlesCommandReturn;
+    use HandlesCommandForm;
+    use HandlesUploadedFilesInRequest;
 
     public function show(string $entityKey, string $commandKey)
     {
@@ -36,12 +39,11 @@ class ApiDashboardCommandController extends ApiController
 
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
 
-        return $this->returnCommandResult(
-            $dashboard,
-            $commandHandler->execute(
-                $commandHandler->formatRequestData((array) request('data')),
-            ),
-        );
+        $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'));
+        $result = $this->returnCommandResult($dashboard, $commandHandler->execute($formattedData));
+        $this->handlePostedFiles($commandHandler, request()->all(), $formattedData);
+
+        return $result;
     }
 
     protected function getCommandHandler(SharpDashboard $dashboard, string $commandKey)

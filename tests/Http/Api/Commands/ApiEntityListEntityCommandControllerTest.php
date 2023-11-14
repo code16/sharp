@@ -197,6 +197,56 @@ it('allows to call a form entity command and it handles 422', function () {
         ->assertJsonValidationErrors(['name']);
 });
 
+it('allows to validate posted data with the rules() method', function () {
+    fakeListFor('person', new class extends PersonList
+    {
+        protected function getEntityCommands(): ?array
+        {
+            return [
+                'cmd' => new class extends EntityCommand
+                {
+                    public function label(): ?string
+                    {
+                        return 'entity';
+                    }
+
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+
+                    public function rules(): array
+                    {
+                        return ['name' => 'required'];
+                    }
+
+                    public function execute(array $data = []): array
+                    {
+                        return $this->reload();
+                    }
+                },
+            ];
+        }
+    });
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+            ['data' => ['name' => 'Pierre']]
+        )
+        ->assertOk()
+        ->assertJson([
+            'action' => 'reload',
+        ]);
+
+    $this
+        ->postJson(
+            route('code16.sharp.api.list.command.entity', ['person', 'cmd']),
+            ['data' => ['name' => '']]
+        )
+        ->assertJsonValidationErrors(['name']);
+});
+
 it('allows to call a download entity command', function () {
     fakeListFor('person', new class extends PersonList
     {

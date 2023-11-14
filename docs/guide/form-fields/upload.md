@@ -146,14 +146,14 @@ There are four cases:
 
 #### newly uploaded file
 
-The formatter will store the file on the configured location, and return an array like this:
+The formatter must return an array like this:
 
 ```php
 [
-    'file_name' => '', // Relative file path
+    'file_name' => '', // Target file path (relative)
     'size' => x, // File size in bytes
     'mime_type' => '', // File mime type
-    'disk' => '', // Storage disk name
+    'disk' => '', // Target storage disk name
     'filters' => [ // Transformations applied to the (image) file
         'crop' => [
             'x' => x,
@@ -183,9 +183,9 @@ function update($id, array $data)
 }
 ```
 
-#### existing transformed file
+#### existing transformed image
 
-In this case, the file was already stored in a previous post, and was then transformed (cropped, or rotated). The formatter will simply return and array with one `filters` key:
+In this case, the image was already handled in a previous post, and was then transformed (cropped, or rotated). The formatter will simply return and array with one `filters` key:
 
 ```php
 [
@@ -212,55 +212,3 @@ The formatter will return `null` (note that the file **will not** be deleted fro
 #### existing and unchanged file
 
 The formatter will return **an empty array**.
-
-## Delayed creation
-
-As described in the `setStorageBasePath()` section of this document, you can configure the file storage path with an `{id}` placeholder, meaning that `/users/{id}/avatar` will be converted (by the field formatter) in `/users/1/avatar` for instance. 
-
-But in order to do this in a creation case, when there is no id yet, Sharp will need your instance to be stored first. To do so, the `update()` method of your Form will be called twice:
-
-- one first time without any upload which needs the `{id}`,
-- and one second time only with these fields, using the new id returned by `update()`.
-
-This is usually OK, but in some cases this could lead to unexpected errors. Consider this code where we handle `Products` with a `picture` configured with an `{id}` placeholder in its path: 
-
-```php
-class ProductForm extends SharpForm
-{
-    // [...]
-    
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-        // [...]
-        
-        $formFields
-            ->addField(
-                SharpFormUploadField::make('picture')
-                    ->setLabel('Picture')
-                    ->setFileFilterImages()
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data/products/{id}'),
-            );
-    }
-    
-    function update($id, array $data)
-    {
-        $instance = $id ? Product::findOrFail($id) : new Product();
-    
-        $this->save($instance, $data);
-    
-        if(($data['price']) >= 1000) {
-            $this->notify('Yay, this is an expensive product...');
-        }
-    
-        return $instance->id;
-    }
-}
-```
-Here we're using the `notify()` feature to display a message back to the user, and it's working, excepted in one case: on a Product creation with a picture, Sharp will delay the upload handling and call this method twice, because the picture field needs the product {id} it the storage base path. On the second pass (for the upload), This code will crash on the `if(($data['price']) ...)` condition, because `$data['price']` is not set (only the `picture` upload field would be set on this second pass). This has to be addressed, and a working solution (among others) could be to replace this line with:
-
-```php
-if(($data['price'] ?? 0) >= 1000) {
-    [...]
-}
-```

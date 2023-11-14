@@ -8,7 +8,7 @@ use Code16\Sharp\Show\SharpSingleShow;
 
 class ApiShowEntityStateController extends ApiController
 {
-    use HandleCommandReturn;
+    use HandlesCommandReturn;
 
     public function update(string $entityKey, mixed $instanceId = null)
     {

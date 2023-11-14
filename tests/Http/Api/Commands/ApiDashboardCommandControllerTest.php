@@ -37,6 +37,8 @@ it('allows to call an info dashboard command', function () {
         }
     });
 
+    $this->withoutExceptionHandling();
+
     $this->postJson(route('code16.sharp.api.dashboard.command', ['dashboard', 'info']))
         ->assertOk()
         ->assertJson([

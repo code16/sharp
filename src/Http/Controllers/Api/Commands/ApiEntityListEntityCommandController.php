@@ -8,10 +8,13 @@ use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Exceptions\Auth\SharpAuthorizationException;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
+use Code16\Sharp\Http\Controllers\HandlesUploadedFilesInRequest;
 
 class ApiEntityListEntityCommandController extends ApiController
 {
-    use HandleCommandReturn, HandleCommandForm;
+    use HandlesCommandReturn;
+    use HandlesCommandForm;
+    use HandlesUploadedFilesInRequest;
 
     public function show(string $entityKey, string $commandKey)
     {
@@ -39,12 +42,11 @@ class ApiEntityListEntityCommandController extends ApiController
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
-        return $this->returnCommandResult(
-            $list,
-            $commandHandler->execute(
-                $commandHandler->formatRequestData((array) request('data')),
-            ),
-        );
+        $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'));
+        $result = $this->returnCommandResult($list, $commandHandler->execute($formattedData));
+        $this->handlePostedFiles($commandHandler, request()->all(), $formattedData);
+
+        return $result;
     }
 
     protected function getCommandHandler(SharpEntityList $list, string $commandKey): ?EntityCommand
