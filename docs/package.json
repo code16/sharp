@@ -10,9 +10,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsdom": "^21.1.5",
+    "@types/prismjs": "^1.26.3",
     "@vuepress/plugin-docsearch": "^2.0.0-beta.66",
     "@vuepress/plugin-shiki": "^2.0.0-beta.66",
     "dotenv": "^10.0.0",
+    "jsdom": "^22.1.0",
     "sass": "^1.20.1",
     "sass-loader": "^13.0.2",
     "vite-svg-loader": "^3.1.2",

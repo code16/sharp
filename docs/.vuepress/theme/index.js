@@ -20,6 +20,5 @@ export default (options) => ({
     },
     alias: {
         '@theme/NavbarBrand.vue': path.resolve(__dirname, './components/NavbarBrand.vue'),
-        '@theme/Page.vue': path.resolve(__dirname, './components/Page.vue'),
     },
 });
