@@ -9,7 +9,7 @@ import svgLoader from 'vite-svg-loader';
 import sidebar from './sidebar';
 import theme from './theme';
 import fathomPlugin from './plugins/fathom';
-import markdownPlugin from './plugins/markdown';
+import { transformHtml } from "./transform-html";
 
 
 const demoEnvPath = path.resolve(__dirname, '../../demo/.env');
@@ -69,6 +69,16 @@ export default defineUserConfig({
         },
     },
     plugins: [
+        {
+            name: 'transformHtml',
+            extendsMarkdown: (md) => {
+                const render = md.renderer.render;
+                md.renderer.render = (...args) => {
+                    const html = render.call(md.renderer, ...args);
+                    return transformHtml(html);
+                }
+            }
+        },
         docsearchPlugin({
             appId: '1A1N8XRQFM',
             apiKey: 'c5c8c8034f3c0586d562fdbb0a4d26cb',
@@ -84,7 +94,6 @@ export default defineUserConfig({
             siteId: 'EELMENOG',
             domains: 'sharp.code16.fr',
         }),
-        markdownPlugin,
     ],
     bundler: viteBundler({
         viteOptions: {

@@ -6,10 +6,6 @@ html {
   scroll-behavior: smooth;
 }
 
-code {
-  -webkit-font-smoothing: subpixel-antialiased;
-}
-
 code.inline {
   @import "inline-code";
 }
@@ -27,41 +23,38 @@ code.inline {
   }
 
   h2, h3, h4 {
-    code {
-      line-height: 1.75;
-      font-size: .8em;
-    }
-    code:not(.full) {
-      * {
-        color: #476582!important;
-      }
-      .type-declaration {
-        color: #597fa6!important;
-      }
-      .punctuation {
-        color: #597fa6!important;
-      }
-    }
     code.full {
       display: block;
-      width: calc(100% + 1rem);
-      padding: 1rem;
+      border-radius: 6px;
+      //width: calc(100% + 1rem);
+      padding: .75rem 1rem;
       font-size: 1rem;
+      line-height: 1.5;
       box-sizing: border-box;
-      border-bottom: 1px solid rgba(27,31,35,0.25);
       margin-bottom: -.5rem;
-      margin-left: -1rem;
+      //border-bottom: 1px solid rgba(27,31,35,0.25);
       background: var(--c-bg-light);
-      color: #6996bf;
+      //color: #6996bf;
+      font-weight: 600;
       .token.function {
         margin-right: .25em;
         color: var(--title-inline-code-color);
       }
     }
   }
+  .code-description {
+    margin-left: 1rem;
+  }
   .custom-block {
     code.inline {
       background-color: rgba(27,31,35,0.05);
+    }
+  }
+
+  pre {
+    padding:  .875rem 1.25rem;
+    code {
+      -webkit-font-smoothing: inherit;
     }
   }
 
@@ -71,21 +64,9 @@ code.inline {
   h5, h6 {
     font-weight: 700;
   }
-  ul, p {
-    code * {
-      color: inherit!important;
-    }
-  }
 }
 
 .dark {
-  h2, h3, h4 {
-    code:not(.full) {
-      * {
-        color: #7b9ab7!important;
-      }
-    }
-  }
   .custom-container.warning {
     code {
       color: inherit;
@@ -110,22 +91,8 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-div[class~="language-php"]:before {
-  content: 'php';
-}
-
-a.sidebar-link {
-  &.active {
-    font-weight: 700;
-  }
-}
-
-.sidebar-sub-headers {
-  a.sidebar-link {
-    &.active {
-      font-weight: 600;
-    }
-  }
+div[class^="language"]:before {
+  visibility: hidden;
 }
 
 .page-nav {
