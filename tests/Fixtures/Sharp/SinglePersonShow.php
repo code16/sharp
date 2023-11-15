@@ -26,7 +26,7 @@ class SinglePersonShow extends SharpSingleShow
             ->addSection('', function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('name');
+                        $column->withField('name');
                     });
             });
     }

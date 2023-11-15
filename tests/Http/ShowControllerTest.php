@@ -147,8 +147,8 @@ it('returns configured show layout', function () {
             $showLayout
                 ->addSection('test', function (ShowLayoutSection $section) {
                     return $section->addColumn(6, function (ShowLayoutColumn $column) {
-                        return $column->withSingleField('name')
-                            ->withSingleField('bio');
+                        return $column->withField('name')
+                            ->withField('bio');
                     });
                 });
         }

@@ -11,7 +11,7 @@ it('allows to set a size', function () {
 
 it('allows to add a field', function () {
     $formTab = new FormLayoutColumn(2);
-    $formTab->withSingleField('name');
+    $formTab->withField('name');
 
     expect($formTab->toArray()['fields'])
         ->toHaveCount(1);
@@ -27,7 +27,7 @@ it('allows to add multiple fields', function () {
 
 it('allows to insert a field', function () {
     $formTab = new FormLayoutColumn(2);
-    $formTab->withSingleField('name');
+    $formTab->withField('name');
     $formTab->insertSingleFieldAt(0, 'age');
 
     expect($formTab->toArray()['fields'][0][0]['key'])
@@ -38,7 +38,7 @@ it('allows to insert a field', function () {
 
 it('allows to insert multiple fields', function () {
     $formTab = new FormLayoutColumn(2);
-    $formTab->withSingleField('name');
+    $formTab->withField('name');
     $formTab->insertFieldsAt(0, 'age', 'size');
 
     expect($formTab->toArray()['fields'][0][0]['key'])
@@ -52,7 +52,7 @@ it('allows to insert multiple fields', function () {
 it('allows to add a fieldset', function () {
     $formTab = new FormLayoutColumn(2);
     $formTab->withFieldset('label', function ($layout) {
-        $layout->withSingleField('name');
+        $layout->withField('name');
     });
 
     expect($formTab->toArray()['fields'][0])
