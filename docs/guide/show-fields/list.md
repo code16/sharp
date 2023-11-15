@@ -41,7 +41,7 @@ Add a SharpShowField in the item.
 
 ## Layout
 
-The List item layout must be defined like the show itself, in the `buildShowLayout()` function. The item layout is managed as a column, with a `ShowLayoutColumn` object. To link the column and the item, use the classic `withSingleField()` function with a second argument, a Closure accepting a `ShowLayoutColumn`.
+The List item layout must be defined like the show itself, in the `buildShowLayout()` function. The item layout is managed as a column, with a `ShowLayoutColumn` object. To link the column and the item, use the classic `withField()` function with a second argument, a Closure accepting a `ShowLayoutColumn`.
 
 Example:
 

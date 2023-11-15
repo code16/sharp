@@ -110,7 +110,7 @@ Default: 10
 
 ## Layout
 
-The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withSingleField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
+The List item layout must be defined like the form itself, in the `buildFormLayout()` function. The item layout is managed as a Form column, with a `FormLayoutColumn` object. To link the column and the item, use the classic `withField()` function with a second argument, a Closure accepting a `FormLayoutColumn`.
 
 Here's an example for the Museum List defined above:
 

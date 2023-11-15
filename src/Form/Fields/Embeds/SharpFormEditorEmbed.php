@@ -95,9 +95,8 @@ abstract class SharpFormEditorEmbed
                     $this->buildFormLayout($column);
 
                     if (! $column->hasFields()) {
-                        foreach ($fields as $field) {
-                            $column->withSingleField($field->key());
-                        }
+                        collect($fields)
+                            ->each(fn ($field) => $column->withField($field->key()));
                     }
                 })
                 ->toArray();

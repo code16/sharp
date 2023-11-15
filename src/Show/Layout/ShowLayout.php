@@ -25,16 +25,9 @@ class ShowLayout implements HasLayout
 
     final public function addEntityListSection(string $entityListKey, ?bool $collapsable = null): self
     {
-        $section = new ShowLayoutSection('');
-        $section->addColumn(12, function ($column) use ($entityListKey) {
-            $column->withSingleField($entityListKey);
-        });
-
-        if ($collapsable !== null) {
-            $section->setCollapsable($collapsable);
-        }
-
-        $this->sections[] = $section;
+        $this->sections[] = (new ShowLayoutSection(''))
+            ->addColumn(12, fn ($column) => $column->withField($entityListKey))
+            ->when($collapsable !== null, fn ($section) => $section->setCollapsable($collapsable));
 
         return $this;
     }
