@@ -125,10 +125,8 @@ class PostForm extends SharpForm
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
                     ),
-            );
-
-        if (currentSharpRequest()->isUpdate()) {
-            $formFields->addField(
+            )
+            ->when(currentSharpRequest()->isUpdate(), fn ($formFields) => $formFields->addField(
                 SharpFormAutocompleteField::make('author_id', 'remote')
                     ->setReadOnly(! auth()->user()->isAdmin())
                     ->setLabel('Author')
@@ -136,8 +134,7 @@ class PostForm extends SharpForm
                     ->setListItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
                     ->setResultItemInlineTemplate('<div>{{name}}</div><div><small>{{email}}</small></div>')
                     ->setHelpMessage('This field is only editable by admins.'),
-            );
-        }
+            ));
     }
 
     public function buildFormLayout(FormLayout $formLayout): void
@@ -146,30 +143,30 @@ class PostForm extends SharpForm
             ->addTab('Content', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('title');
-                        if (currentSharpRequest()->isUpdate()) {
-                            $column->withSingleField('author_id');
-                        }
                         $column
+                            ->withField('title')
+                            ->when(
+                                currentSharpRequest()->isUpdate(),
+                                fn ($column) => $column->withField('author_id')
+                            )
                             ->withFields('published_at', 'categories')
-//                            ->withSingleField('categories')
-                            ->withSingleField('cover')
-                            ->withSingleField('attachments', function (FormLayoutColumn $item) {
+                            ->withField('cover')
+                            ->withListField('attachments', function (FormLayoutColumn $item) {
                                 $item->withFields('title|8', 'is_link|4')
-                                    ->withSingleField('link_url')
-                                    ->withSingleField('document');
+                                    ->withField('link_url')
+                                    ->withField('document');
                             });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('content');
+                        $column->withField('content');
                     });
             })
             ->addTab('Metadata', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
                         $column->withFieldset('Meta fields', function (FormLayoutFieldset $fieldset) {
-                            $fieldset->withSingleField('meta_title')
-                                ->withSingleField('meta_description');
+                            $fieldset->withField('meta_title')
+                                ->withField('meta_description');
                         });
                     });
             });
@@ -183,9 +180,7 @@ class PostForm extends SharpForm
     public function find($id): array
     {
         return $this
-            ->setCustomTransformer('author_id', function ($value, Post $instance) {
-                return $instance->author;
-            })
+            ->setCustomTransformer('author_id', fn ($value, Post $instance) => $instance->author)
             ->setCustomTransformer('cover', new SharpUploadModelFormAttributeTransformer())
             ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer())
             ->transform(Post::with('cover', 'attachments', 'categories')->findOrFail($id));
@@ -222,11 +217,6 @@ class PostForm extends SharpForm
         }
 
         return $post->id;
-    }
-
-    public function delete($id): void
-    {
-        Post::findOrFail($id)->delete();
     }
 
     public function getDataLocalizations(): array

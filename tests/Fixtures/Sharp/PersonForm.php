@@ -18,7 +18,7 @@ class PersonForm extends SharpForm
     public function buildFormLayout(FormLayout $formLayout): void
     {
         $formLayout->addColumn(6, function (FormLayoutColumn $column) {
-            return $column->withSingleField('name');
+            return $column->withField('name');
         });
     }
 

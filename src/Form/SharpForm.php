@@ -132,7 +132,9 @@ abstract class SharpForm
         return new SharpNotification($title);
     }
 
-    /** @deprecated use ->validate() or rules() methods instead; will be removed in 10.x */
+    /**
+     * @deprecated use ->validate() or rules() methods instead; will be removed in 10.x
+     */
     protected function getFormValidatorClass(): ?string
     {
         return property_exists($this, 'formValidatorClass')
@@ -149,14 +151,6 @@ abstract class SharpForm
      * Update the Model of id $id with $data.
      */
     abstract public function update(mixed $id, array $data);
-
-    /**
-     * @deprecated
-     * Use delete() in Show Page or in Entity List. Will be removed in v9.
-     */
-    public function delete(mixed $id): void
-    {
-    }
 
     /**
      * Build form fields.

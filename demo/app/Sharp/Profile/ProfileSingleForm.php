@@ -47,12 +47,12 @@ class ProfileSingleForm extends SharpSingleForm
         $formLayout
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withFields('name')
-                    ->withFields('email');
+                    ->withField('name')
+                    ->withField('email');
             })
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withSingleField('avatar');
+                    ->withField('avatar');
             });
     }
 

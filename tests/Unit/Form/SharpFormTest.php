@@ -40,8 +40,8 @@ it('returns form layout', function () {
 
         public function buildFormLayout(FormLayout $formLayout): void
         {
-            $formLayout->addColumn(6, fn ($column) => $column->withSingleField('name'))
-                ->addColumn(6, fn ($column) => $column->withSingleField('age'));
+            $formLayout->addColumn(6, fn ($column) => $column->withField('name'))
+                ->addColumn(6, fn ($column) => $column->withField('age'));
         }
     };
 
