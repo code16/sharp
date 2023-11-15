@@ -7,21 +7,25 @@ This field is very similar to the [Form's File field](../form-fields/list.md), a
 Here's an example, for a list of pictures with a legend:
 
 ```php
-function buildShowFields()
+class MyShow extend SharpShow
 {
-    $this->addField(
-        SharpShowListField::make('pictures')
-            ->setLabel('additional pictures')
-            ->addItemField(
-                SharpShowFileField::make('file')
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data/Product/{id}/pictures')
-            )
-            ->addItemField(
-                SharpShowTextField::make('legend')
-                    ->setLabel('Legend')
-            )
-    );
+    // [...]
+    function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addField(
+            SharpShowListField::make('pictures')
+                ->setLabel('additional pictures')
+                ->addItemField(
+                    SharpShowFileField::make('file')
+                        ->setStorageDisk('local')
+                        ->setStorageBasePath('data/Product/{id}/pictures')
+                )
+                ->addItemField(
+                    SharpShowTextField::make('legend')
+                        ->setLabel('Legend')
+                )
+        );
+    }
 }
 ```
 
@@ -42,13 +46,20 @@ The List item layout must be defined like the show itself, in the `buildShowLayo
 Example:
 
 ```php
-$this->addColumn(6, function(ShowLayoutColumn $column) {
-     $column->withSingleField('pieces', function(ShowLayoutColumn $listItem) {
-          $listItem->withSingleField('acquisition_date')
-              ->withSingleField('title')
-              ->withSingleField('artist');
-     });
- });
+class MyShow extend SharpShow
+{
+    // [...]
+    function buildShowLayout(ShowLayout $showLayout): void
+    {
+        $showLayout->addColumn(6, function (ShowLayoutColumn $column) {
+             $column->withListField('pieces', function (ShowLayoutColumn $listItem) {
+                  $listItem->withField('acquisition_date')
+                      ->withField('title')
+                      ->withField('artist');
+             });
+         });
+    }
+}
 ```
 
 ## Formatter

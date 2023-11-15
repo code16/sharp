@@ -75,7 +75,7 @@ class PostShow extends SharpShow
                         $column
                             ->withField('categories')
                             ->withField('author')
-                            ->withField('attachments', function (ShowLayoutColumn $item) {
+                            ->withListField('attachments', function (ShowLayoutColumn $item) {
                                 $item->withField('link_url')
                                     ->withField('document');
                             });

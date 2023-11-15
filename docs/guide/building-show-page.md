@@ -30,16 +30,20 @@ In detail:
 Very much like Form's `buildFormFields()`, this method is meant to host the code responsible for the declaration and configuration of each show field. This must be done by calling `$showFields->addField`:
 
 ```php
-function buildShowFields(FieldsContainer $showFields): void
+class MyShow extend SharpShow
 {
-    $showFields
-        ->addField(
-            SharpShowTextField::make('name')
-                ->setLabel('Name')
-        )
-        ->addField(
-            SharpShowPictureField::make('picture')
-        );
+    // [...]
+    function buildShowFields(FieldsContainer $showFields): void
+    {
+        $showFields
+            ->addField(
+                SharpShowTextField::make('name')
+                    ->setLabel('Name')
+            )
+            ->addField(
+                SharpShowPictureField::make('picture')
+            );
+    }
 }
 ```
 
@@ -98,7 +102,7 @@ function buildShowLayout(ShowLayout $showLayout): void
 {
     $showLayout->addSection(
         'Description', 
-        function(ShowLayoutSection $section) {
+        function (ShowLayoutSection $section) {
             ...
         }
     );
@@ -112,7 +116,7 @@ function buildShowLayout(ShowLayout $showLayout): void
 {
     $showLayout->addSection(
         'Description', 
-        function(ShowLayoutSection $section) {
+        function (ShowLayoutSection $section) {
             $section->setCollapsable();
         }
     );
@@ -128,13 +132,10 @@ function buildShowLayout(ShowLayout $showLayout): void
 {
     $showLayout->addSection(
         'Description', 
-        function(ShowLayoutSection $section) {
-            $section->addColumn(
-                9, 
-                function(ShowLayoutColumn $column) {
-                    $column->withSingleField('description');
-                }
-            );
+        function (ShowLayoutSection $section) {
+            $section->addColumn(9, function (ShowLayoutColumn $column) {
+                $column->withField('description');
+            });
         }
     );
 }
@@ -147,16 +148,19 @@ A `ShowLayoutColumn`, very much like a `FormLayoutColumn`, can declare single fi
 Like `SharpFormListField` in Forms, a `SharpShowListField` must declare its item layout, in order to describe how fields are displayed, like in this example:
 
 ```php
-function(ShowLayoutSection $section) {
-    $section->addColumn(9, 
-        function(ShowLayoutColumn $column) {
-             $column->withSingleField('pictures', function(ShowLayoutColumn $listItem) {
-                  // Notice that the list item layout is just a ShowLayoutColumn
-                  $listItem
-                      ->withSingleField('file')
-                      ->withSingleField('legend');
-             });
-        }
+function buildShowLayout(ShowLayout $showLayout): void
+{
+    $showLayout->addSection(
+        'Pictures', 
+        function (ShowLayoutSection $section) {
+            $section->addColumn(9, function (ShowLayoutColumn $column) {
+                 $column->withListField('pictures', function (ShowLayoutColumn $listItem) {
+                      // Notice that the list item layout is just a ShowLayoutColumn
+                      $listItem
+                          ->withField('file')
+                          ->withField('legend');
+                 });
+            });
     );
 }
 ```
