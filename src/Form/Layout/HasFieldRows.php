@@ -15,7 +15,7 @@ trait HasFieldRows
     /** @deprecated use withField() or withListField() instead */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
     {
-        if($subLayoutCallback) {
+        if ($subLayoutCallback) {
             return $this->withListField($fieldKey, $subLayoutCallback);
         }
 

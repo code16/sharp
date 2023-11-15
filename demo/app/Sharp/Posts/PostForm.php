@@ -147,7 +147,7 @@ class PostForm extends SharpForm
                             ->withField('title')
                             ->when(
                                 currentSharpRequest()->isUpdate(),
-                                fn($column) => $column->withField('author_id')
+                                fn ($column) => $column->withField('author_id')
                             )
                             ->withFields('published_at', 'categories')
                             ->withField('cover')
