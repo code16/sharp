@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Closure;
 use Code16\Sharp\Utils\Layout\LayoutField;
 use Illuminate\Support\Traits\Conditionable;
 
@@ -30,7 +31,7 @@ trait HasFieldRows
         return $this;
     }
 
-    public function withListField(string $fieldKey, \Closure $subLayoutCallback): self
+    public function withListField(string $fieldKey, Closure $subLayoutCallback): self
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback),
