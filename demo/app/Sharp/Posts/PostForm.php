@@ -224,11 +224,6 @@ class PostForm extends SharpForm
         return $post->id;
     }
 
-    public function delete($id): void
-    {
-        Post::findOrFail($id)->delete();
-    }
-
     public function getDataLocalizations(): array
     {
         return ['en', 'fr'];
