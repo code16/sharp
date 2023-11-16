@@ -74,6 +74,9 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
 
     public function authorizeFor(mixed $instanceId): bool
     {
-        return auth()->user()->isAdmin() && ! Post::find($instanceId)->isOnline();
+        return auth()->user()->isAdmin()
+            && currentSharpRequest()
+                ->findCachedInstance($instanceId, fn($instanceId) => Post::find($instanceId))
+                ->isDraft();
     }
 }
