@@ -100,7 +100,7 @@ class PostList extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         $posts = Post::select('posts.*')
-            ->with('author', 'categories')
+            ->with('author', 'categories', 'cover')
 
             // Handle specific IDs (in case of refresh, called by a state handler or a command)
             ->when(
