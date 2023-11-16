@@ -76,7 +76,7 @@ class EvaluateDraftPostWizardCommand extends InstanceWizardCommand
     {
         return auth()->user()->isAdmin()
             && currentSharpRequest()
-                ->findCachedInstance($instanceId, fn($instanceId) => Post::find($instanceId))
+                ->findCachedInstance($instanceId, fn ($instanceId) => Post::find($instanceId))
                 ->isDraft();
     }
 }

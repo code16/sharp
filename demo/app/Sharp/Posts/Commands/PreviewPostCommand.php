@@ -26,8 +26,8 @@ class PreviewPostCommand extends InstanceCommand
         }
 
         $post = currentSharpRequest()
-            ->findCachedInstance($instanceId, fn($instanceId) => Post::find($instanceId));
+            ->findCachedInstance($instanceId, fn ($instanceId) => Post::find($instanceId));
 
-        return $post && (($post->isOnline() || $post->author_id === auth()->id()));
+        return $post && ($post->isOnline() || $post->author_id === auth()->id());
     }
 }

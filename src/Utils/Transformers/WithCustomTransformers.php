@@ -201,7 +201,7 @@ trait WithCustomTransformers
                 collect($instances)
                     ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
                     ->mapWithKeys(fn ($instance) => [
-                        ((object)$instance)->$idAttr => $instance
+                        ((object) $instance)->$idAttr => $instance,
                     ])
             );
     }
