@@ -6,7 +6,9 @@ use Closure;
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Show\SharpShow;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
 
 /**
@@ -34,20 +36,34 @@ trait WithCustomTransformers
      */
     public function transform($models): array|AbstractPaginator
     {
-        if ($this instanceof SharpForm || $this instanceof Command || $this instanceof SharpFormEditorEmbed) {
-            // It's a Form (full entity or from a Command), there's only one model.
-            // We must add Form Field Formatters in the process
+        if (
+            $this instanceof SharpForm
+            || $this instanceof Command
+            || $this instanceof SharpFormEditorEmbed
+        ) {
+            // Form case: there's only one model and we must apply Formatters in the process
             return $this->applyFormatters(
                 $this->applyTransformers($models),
             );
         }
 
         if ($this instanceof SharpShow) {
-            // It's a Show, there's only one model.
-            return $this->applyTransformers($models, false);
+            // Show case: there's only one model
+            return $this->applyTransformers(
+                model: $models,
+                forceFullObject: false
+            );
         }
 
-        // SharpEntityList case
+        // SharpEntityList case: collection of models (potentially paginated)
+
+        $this->cacheEntityListInstances(
+            match (true) {
+                $models instanceof AbstractPaginator => $models->items(),
+                $models instanceof Arrayable => $models->toArray(),
+                default => $models,
+            }
+        );
 
         if ($models instanceof AbstractPaginator) {
             return $models->setCollection(
@@ -174,5 +190,21 @@ trait WithCustomTransformers
             });
 
         return $attributes;
+    }
+
+    private function cacheEntityListInstances(array $instances): void
+    {
+        app(CurrentSharpRequest::class)
+            ->cacheInstances(
+                collect($instances)
+                    ->mapWithKeys(function ($instance) {
+                        $id = is_array($instance)
+                            ? ($instance[$this->instanceIdAttribute] ?? null)
+                            : ($instance->{$this->instanceIdAttribute} ?? null);
+
+                        return $id ? [$id => $instance] : null;
+                    })
+                    ->filter()
+            );
     }
 }
