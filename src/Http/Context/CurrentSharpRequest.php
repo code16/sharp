@@ -167,9 +167,9 @@ class CurrentSharpRequest
         return $handler->currentValue();
     }
     
-    final public function cacheInstances(Collection $instances): self
+    final public function cacheInstances(?Collection $instances): self
     {
-        $this->cachedInstances = $instances;
+        $this->cachedInstances = $instances ?: collect();
         
         return $this;
     }

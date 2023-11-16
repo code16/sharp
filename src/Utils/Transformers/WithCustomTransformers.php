@@ -194,17 +194,15 @@ trait WithCustomTransformers
 
     private function cacheEntityListInstances(array $instances): void
     {
+        $idAttr = $this->instanceIdAttribute;
+
         app(CurrentSharpRequest::class)
             ->cacheInstances(
                 collect($instances)
-                    ->mapWithKeys(function ($instance) {
-                        $id = is_array($instance)
-                            ? ($instance[$this->instanceIdAttribute] ?? null)
-                            : ($instance->{$this->instanceIdAttribute} ?? null);
-
-                        return $id ? [$id => $instance] : null;
-                    })
-                    ->filter()
+                    ->filter(fn ($instance) => (((object) $instance)->$idAttr ?? null) !== null)
+                    ->mapWithKeys(fn ($instance) => [
+                        ((object)$instance)->$idAttr => $instance
+                    ])
             );
     }
 }
