@@ -166,17 +166,17 @@ class CurrentSharpRequest
 
         return $handler->currentValue();
     }
-    
+
     final public function cacheInstances(?Collection $instances): self
     {
         $this->cachedInstances = $instances ?: collect();
-        
+
         return $this;
     }
 
     final public function findCachedInstance($instanceId, Closure $notFoundCallback): mixed
     {
-        if(isset($this->cachedInstances)) {
+        if (isset($this->cachedInstances)) {
             $instance = $this->cachedInstances[$instanceId] ?? null;
         }
 
