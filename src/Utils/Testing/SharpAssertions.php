@@ -121,18 +121,17 @@ trait SharpAssertions
 
     public function getSharpForm(string $entityKey, $instanceId = null)
     {
+        $uri = $this->buildCurrentUri([
+            ['list', $entityKey],
+            ['form', $entityKey, $instanceId],
+        ]);
+
         return $this
-            ->withHeader(
-                'referer',
-                $this->buildRefererUrl([
-                    ['list', $entityKey],
-                    ['form', $entityKey, $instanceId],
-                ]),
-            )
-            ->getJson(
+            ->withHeader('referer', url(sprintf('/%s/%s', sharp_base_url_segment(), $uri)))
+            ->get(
                 $instanceId
-                    ? route('code16.sharp.api.form.edit', [$entityKey, $instanceId])
-                    : route('code16.sharp.api.form.create', $entityKey),
+                    ? route('code16.sharp.form.edit', [$uri, $entityKey, $instanceId])
+                    : route('code16.sharp.form.create', [$uri, $entityKey]),
             );
     }
 
@@ -237,12 +236,29 @@ trait SharpAssertions
         return $this->actingAs($user, config('sharp.auth.guard', config('auth.defaults.guard')));
     }
 
-    protected function buildRefererUrl(array $segments): string
-    {
-        $segments = $this->currentBreadcrumb ?: $segments;
-        $this->currentBreadcrumb = null;
+//    protected function buildRefererUrl(): string
+//    {
+//        $uri = collect($this->currentBreadcrumb)
+//            ->map(function (array $segment) {
+//                if (count($segment) === 2) {
+//                    return sprintf('s-%s/%s', $segment[0], $segment[1]);
+//                } elseif (count($segment) === 3) {
+//                    return sprintf('s-%s/%s/%s', $segment[0], $segment[1], $segment[2]);
+//                }
+//
+//                return null;
+//            })
+//            ->filter()
+//            ->implode('/');
+//
+//        return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
+//    }
 
-        $uri = collect($segments)
+    private function buildCurrentUri(?array $segments = null): string
+    {
+        $segments = $segments ?: $this->currentBreadcrumb;
+
+        return collect($segments)
             ->map(function (array $segment) {
                 if (count($segment) === 2) {
                     return sprintf('s-%s/%s', $segment[0], $segment[1]);
@@ -254,7 +270,5 @@ trait SharpAssertions
             })
             ->filter()
             ->implode('/');
-
-        return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
     }
 }
