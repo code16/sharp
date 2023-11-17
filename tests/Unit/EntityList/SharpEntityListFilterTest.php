@@ -116,9 +116,8 @@ it('allows section based filters config', function () {
         ->toEqual([
             ['id' => 1, 'label' => 'A'],
             ['id' => 2, 'label' => 'B'],
-        ]);
-
-    expect($list->listConfig()['filters']['section-1'][0]['values'])
+        ])
+        ->and($list->listConfig()['filters']['section-1'][0]['values'])
         ->toEqual([
             ['id' => 3, 'label' => 'C'],
             ['id' => 4, 'label' => 'D'],

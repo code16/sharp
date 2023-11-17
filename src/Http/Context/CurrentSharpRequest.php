@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Context;
 
+use Closure;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 class CurrentSharpRequest
 {
     protected ?Collection $breadcrumb = null;
+    private Collection $cachedInstances;
 
     public function breadcrumb(): Collection
     {
@@ -163,6 +165,22 @@ class CurrentSharpRequest
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
         return $handler->currentValue();
+    }
+
+    final public function cacheInstances(?Collection $instances): self
+    {
+        $this->cachedInstances = $instances ?: collect();
+
+        return $this;
+    }
+
+    final public function findCachedInstance($instanceId, Closure $notFoundCallback): mixed
+    {
+        if (isset($this->cachedInstances)) {
+            $instance = $this->cachedInstances[$instanceId] ?? null;
+        }
+
+        return $instance ?? $notFoundCallback($instanceId);
     }
 
     private function buildBreadcrumb(): void

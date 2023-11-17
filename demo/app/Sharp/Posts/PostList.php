@@ -181,10 +181,10 @@ class PostList extends SharpEntityList
                 );
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {
-                return $instance->author_id
+                return $value
                     ? LinkToEntityList::make('posts')
-                        ->addFilter(AuthorFilter::class, $instance->author_id)
-                        ->renderAsText($instance->author->name)
+                        ->addFilter(AuthorFilter::class, $instance->id)
+                        ->renderAsText($value)
                     : null;
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
