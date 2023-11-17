@@ -2,6 +2,7 @@
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
 it('gets list entity state config', function () {
@@ -9,16 +10,12 @@ it('gets list entity state config', function () {
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('_state', new class extends EntityState
+            $this->configureEntityState('_state', new class extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
                     $this->addState('test1', 'Test 1', 'blue');
                     $this->addState('test2', 'Test 2', 'red');
-                }
-
-                protected function updateState($instanceId, $stateId): array
-                {
                 }
             });
         }
@@ -46,16 +43,12 @@ it('adds the entity state attribute to the entity data', function () {
 
         public function buildListConfig(): void
         {
-            $this->configureEntityState('state', new class extends EntityState
+            $this->configureEntityState('state', new class extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
                     $this->addState(true, 'Test 1', 'blue');
                     $this->addState(false, 'Test 2', 'red');
-                }
-
-                protected function updateState($instanceId, $stateId): array
-                {
                 }
             });
         }
@@ -82,7 +75,7 @@ it('handles authorization in a state', function () {
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('_state', new class extends EntityState
+            $this->configureEntityState('_state', new class extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
@@ -92,10 +85,6 @@ it('handles authorization in a state', function () {
                 public function authorizeFor($instanceId): bool
                 {
                     return $instanceId < 3;
-                }
-
-                protected function updateState($instanceId, $stateId): array
-                {
                 }
             });
         }
