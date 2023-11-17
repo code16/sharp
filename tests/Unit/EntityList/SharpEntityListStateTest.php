@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;

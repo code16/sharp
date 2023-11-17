@@ -1,12 +1,8 @@
 <?php
 
-use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
-use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
 beforeEach(function () {
@@ -31,7 +27,8 @@ it('caches array of entities at transform stage', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function() {}))
+    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function () {
+    }))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -51,7 +48,8 @@ it('caches collection of entities at transform stage', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function() {}))
+    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function () {
+    }))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -71,7 +69,8 @@ it('caches paginated entities at transform stage', function () {
 
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function() {}))
+    expect(currentSharpRequest()->findCachedInstance($this->people[0]->id, function () {
+    }))
         ->name
         ->toEqual($this->people[0]->name);
 });
@@ -84,7 +83,7 @@ it('uses configured instance id to check id', function () {
         public function __construct(array $people)
         {
             $this->people = collect($people)
-                ->map(function($person) {
+                ->map(function ($person) {
                     $person->key = $person->id;
                     unset($person->id);
 
@@ -107,7 +106,8 @@ it('uses configured instance id to check id', function () {
     $list->buildListConfig();
     $list->data();
 
-    expect(currentSharpRequest()->findCachedInstance($this->people[0]->key, function() {}))
+    expect(currentSharpRequest()->findCachedInstance($this->people[0]->key, function () {
+    }))
         ->name
         ->toEqual($this->people[0]->name);
 });
