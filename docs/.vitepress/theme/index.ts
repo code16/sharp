@@ -1,9 +1,11 @@
 import DefaultTheme from 'vitepress/theme'
-import './style.css';
 import type {Theme} from "vitepress";
 import { onMounted, watch, nextTick } from 'vue';
 import { useRoute } from 'vitepress';
 import mediumZoom from 'medium-zoom';
+
+import './style.css';
+import './home.css';
 
 export default {
     extends: DefaultTheme,

@@ -14,6 +14,7 @@
     "@vuepress/plugin-shiki": "^2.0.0-beta.66",
     "dotenv": "^10.0.0",
     "jsdom": "^22.1.0",
+    "postcss-nesting": "^12.0.1",
     "sass": "^1.20.1",
     "sass-loader": "^13.0.2",
     "typescript": "^5.2.2",

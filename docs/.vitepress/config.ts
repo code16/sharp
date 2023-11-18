@@ -16,7 +16,7 @@ const {
 } = env;
 
 const isLastVersion = DOCS_MAIN_URL === APP_URL;
-const DOCS_HOME_URL = isLastVersion ? '/' : DOCS_MAIN_URL;
+const DOCS_HOME_URL = isLastVersion ? '/docs/' : DOCS_MAIN_URL;
 
 export default defineConfig({
     lang: 'en-US',
@@ -67,7 +67,7 @@ export default defineConfig({
         editLink: isLastVersion ? {
             pattern: 'https://github.com/code16/sharp/edit/main/docs/:path',
             text: 'Edit this page on GitHub'
-        } : null,
+        } : undefined,
 
         socialLinks: [
             { icon: 'github', link: 'https://github.com/code16/sharp' },
@@ -96,21 +96,24 @@ export default defineConfig({
 
 function nav(): DefaultTheme.NavItem[] {
     return [
+        { text: 'Documentation', link: '/guide/' },
         ...DOCS_ENABLE_VERSIONING === 'true' ? [
             {
                 text: DOCS_VERSION,
                 items: JSON.parse(DOCS_VERSION_ITEMS || '[]')
-                    .map(item => ({ ...item, target: '_self' })),
+                    .map(item => ({
+                        text: item.text,
+                        link: item.link,
+                        target: '_self',
+                    })),
             }
         ] : [],
-        // { text: 'Home', link: DOCS_HOME_URL, target: '_self' },
-        { text: 'Documentation', link: '/guide/' },
         {
             text: 'More',
             items: [
                 { text: 'Demo', link: `${DOCS_MAIN_URL}/sharp/` },
                 { text: 'Code 16’s blog', link:'https://code16.fr/blog' },
             ]
-        }
+        },
     ];
 }

@@ -12,7 +12,7 @@ export function transformContent(html: string) {
     }
 
     // apply syntax highlight to h3 with sole code element
-    [...content.querySelectorAll('h3 > code')]
+    [...content.querySelectorAll(':is(h3, h4) > code')]
         .filter(code =>
             ![...code.parentElement.childNodes].some(node => node.nodeName === '#text' && node.textContent.trim())
         )
@@ -28,14 +28,14 @@ export function transformContent(html: string) {
         });
 
     // add margin-left to all following elements
-    let isCodeDescription = false;
-    [...content.children].forEach(element => {
-        if(isCodeDescription && (isCodeDescription = element.matches(':not(h2, h3)'))) {
-            element.classList.add('code-description');
-        } else {
-            isCodeDescription = element.matches('h3') && !!element.querySelector('code.full');
-        }
-    });
+    // let isCodeDescription = false;
+    // [...content.children].forEach(element => {
+    //     if(isCodeDescription && (isCodeDescription = element.matches(':not(h2, h3)'))) {
+    //         element.classList.add('code-description');
+    //     } else {
+    //         isCodeDescription = element.matches('h3') && !!element.querySelector('code.full');
+    //     }
+    // });
 
     return content.innerHTML;
 }

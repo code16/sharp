@@ -1,0 +1,118 @@
+
+.VPHome {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, var(--vp-c-brand-1) 30%, var(--vp-c-brand-3));
+
+  --vp-home-hero-image-background-image: linear-gradient(-100deg, hsla(211deg, 100%, 30%, 1), hsla(211deg, 100%, 50%, 1)) url(https://grainy-gradients.vercel.app/noise.svg);
+  /*--vp-home-hero-image-filter: blur(40px);*/
+
+  /*@media (min-width: 640px) {*/
+  /*    --vp-home-hero-image-filter: blur(56px);*/
+  /*}*/
+
+  /*@media (min-width: 960px) {*/
+  /*    --vp-home-hero-image-filter: blur(68px);*/
+  /*}*/
+
+  .content {
+    padding: 0 24px;
+    @media (min-width: 640px) {
+      padding: 0 48px;
+    }
+
+    @media (min-width: 960px) {
+      padding: 0 64px;
+    }
+  }
+
+  .main, .main .text {
+    @media (min-width: 960px) {
+      max-width: 700px!important;
+    }
+  }
+
+  .content-container {
+    margin: 0 auto;
+    max-width: 1152px;
+  }
+
+  .vp-doc {
+    display: grid;
+    grid-template-columns: 688px 1fr;
+    max-width: 962px;
+
+    & > * {
+      grid-column: 1;
+    }
+
+    & > p:has(img) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .image-container {
+    transform: none;
+
+    &:hover {
+      .image-bg {
+        animation: bg-turn 5s infinite cubic-bezier(0.7, 0, 0.3, 1);
+      }
+      .image-src {
+        animation: fg-turn 5s infinite cubic-bezier(0.7, 0, 0.3, 1);
+      }
+    }
+  }
+
+  .image-bg {
+    background: hsla(211deg, 100%, 40%, 1);
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    width: 260px;
+    height: 260px;
+    /*animation: turn2 5s infinite cubic-bezier(0.7, 0, 0.3, 1);*/
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      mix-blend-mode: multiply;
+      opacity: .75;
+      filter: contrast(180%) brightness(1000%);
+      background:
+              radial-gradient(circle at 40% 60%, rgba(0, 0, 0, 0), #000),
+                /*linear-gradient(220deg, #000 -30%, rgba(0,0,0,0) 130%),*/
+              url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+  }
+
+  .image-src {
+    mix-blend-mode: color-dodge;
+    opacity: .5;
+    transform-origin: 50% 58%;
+    transform: translate(-50%, -58%);
+  }
+}
+
+@keyframes bg-turn {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  30% {
+    transform: translate(-50%, -50%) rotate(-720deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-720deg);
+  }
+}
+
+@keyframes fg-turn {
+  0% {
+    transform: translate(-50%, -58%);
+  }
+  30% {
+    transform: translate(-50%, -58%) rotate(720deg);
+  }
+  100% {
+    transform: translate(-50%, -58%) rotate(720deg);
+  }
+}
