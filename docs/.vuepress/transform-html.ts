@@ -5,7 +5,7 @@ import loadLanguages from 'prismjs/components/index.js';
 loadLanguages(['php']);
 
 export function transformHtml(html) {
-    const content = new JSDOM(html).window.document.body;
+    const content = new JSDOM(withKebabCaseComponents(html)).window.document.body;
 
     // apply syntax highlight to h3 with sole code element
     [...content.querySelectorAll('h3 > code')]
@@ -28,4 +28,8 @@ export function transformHtml(html) {
     });
 
     return content.innerHTML;
+}
+
+function withKebabCaseComponents(html: string): string {
+    return html.replace(/(<\/?)([A-Z][a-z]*)+/g, tag => tag.replace(/\B([A-Z])/g, '-$1').toLowerCase());
 }
