@@ -48,7 +48,7 @@ export default defineConfig({
     },
 
     themeConfig: {
-        logo: { src: '/logo.svg', width: 120, height: 24, alt: DOCS_TITLE },
+        logo: { src: '/logo.svg', width: 100, height: 24, alt: DOCS_TITLE },
 
         logoLink: DOCS_HOME_URL,
 

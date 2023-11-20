@@ -4,15 +4,6 @@
   --vp-home-hero-name-background: -webkit-linear-gradient(120deg, var(--vp-c-brand-1) 30%, var(--vp-c-brand-3));
 
   --vp-home-hero-image-background-image: linear-gradient(-100deg, hsla(211deg, 100%, 30%, 1), hsla(211deg, 100%, 50%, 1)) url(https://grainy-gradients.vercel.app/noise.svg);
-  /*--vp-home-hero-image-filter: blur(40px);*/
-
-  /*@media (min-width: 640px) {*/
-  /*    --vp-home-hero-image-filter: blur(56px);*/
-  /*}*/
-
-  /*@media (min-width: 960px) {*/
-  /*    --vp-home-hero-image-filter: blur(68px);*/
-  /*}*/
 
   .content {
     max-width: var(--vp-layout-max-width);
@@ -27,13 +18,13 @@
     }
 
     @media (min-width: 1440px) {
-      padding: 0 196px;
+      padding: 0 172px;
     }
   }
 
   .VPHero {
     @media (min-width: 1440px) {
-      padding-left: 192px;
+      padding-left: 172px;
       padding-right: 92px;
       max-width: var(--vp-layout-max-width);
       margin: 0 auto;
@@ -46,9 +37,13 @@
     }
   }
 
+  .VPHero .container {
+    max-width: 1172px;
+  }
+
   .content-container {
     margin: 0 auto;
-    max-width: 1152px;
+    max-width: 1172px;
   }
 
   .vp-doc {
