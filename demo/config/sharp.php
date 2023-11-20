@@ -16,7 +16,7 @@ return [
     ],
 
     'dashboards' => [
-        'demo_dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
+        'dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
     ],
 
     'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],
