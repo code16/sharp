@@ -1,5 +1,5 @@
 import {type DefaultTheme, defineConfig, loadEnv} from 'vitepress'
-import path from "path";
+import * as path from "path";
 import { sidebar } from "./sidebar";
 import { transformContent } from "./transform-content";
 
@@ -28,8 +28,8 @@ export default defineConfig({
     cleanUrls: true,
 
     head: [
-        ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
-        ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+        ['link', { rel: 'icon', type: 'image/svg+xml', href: '/docs/favicon.svg' }],
+        ['link', { rel: 'icon', type: 'image/png', href: '/docs/favicon.png' }],
         ['meta', { name: 'theme-color', content: '#007bff' }],
         ['meta', { name: 'og:type', content: 'website' }],
         ['meta', { name: 'og:locale', content: 'en' }],

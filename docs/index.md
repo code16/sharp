@@ -1,5 +1,6 @@
 ---
 layout: home
+title: Sharp - The Laravel Content Management Framework
 hero:
   name: Sharp
   text: The Laravel Content Management Framework.
@@ -10,7 +11,7 @@ hero:
       text: Get Started
       link: /guide
     - theme: alt
-      text: View the demo
+      text: Try the demo
       link: /sharp
 ---
 
