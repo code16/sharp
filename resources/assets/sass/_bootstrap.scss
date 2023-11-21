@@ -156,3 +156,11 @@ $bv-enable-tooltip-variants: false;
 .modal-open {
   overflow: hidden;
 }
+
+.pagination {
+  --bs-pagination-color: var(--primary);
+  --bs-pagination-active-border-color: var(--primary);
+  --bs-pagination-focus-color: var(--primary);
+  --bs-pagination-hover-color: hsl(var(--primary-h), var(--primary-h), var(--primary-l) + 10%);
+  --bs-pagination-focus-box-shadow: 0 0 0 #{$btn-focus-width} hsla(var(--primary-h), var(--primary-s), var(--primary-l), .5)
+}
