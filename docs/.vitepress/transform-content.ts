@@ -11,6 +11,13 @@ export function transformContent(html: string) {
         return html;
     }
 
+    // prevent breaking on first dash
+    [...content.querySelectorAll(':not(pre) > code')]
+        .forEach(code => {
+            code.innerHTML = code.innerHTML.replace(/-&gt;/g, '-&NoBreak;&gt;');
+            console.log(code.innerHTML);
+        });
+
     // apply syntax highlight to h3 with sole code element
     [...content.querySelectorAll(':is(h3, h4) > code')]
         .filter(code =>
