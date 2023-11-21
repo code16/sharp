@@ -84,10 +84,10 @@ export default defineConfig({
             options: {
                 appId: '1A1N8XRQFM',
                 apiKey: 'c5c8c8034f3c0586d562fdbb0a4d26cb',
-                indexName: 'ode16_sharp',
+                indexName: 'code16_sharp',
                 searchParameters: {
                     facetFilters: [`tags:${DOCS_ALGOLIA_TAG}`],
-                }
+                },
             }
         },
     },
