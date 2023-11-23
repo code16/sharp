@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "8.2.*",
+        "php": "8.2.*|8.3.*",
         "laravel/framework": "^10.0",
         "intervention/image": "^2.7",
         "spatie/image-optimizer": "^1.6",
