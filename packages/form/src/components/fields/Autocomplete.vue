@@ -91,6 +91,7 @@
     import { getAutocompleteSuggestions } from "../../api";
     import localize from '../../mixins/localize/Autocomplete';
     import { setDefaultValue } from "../../util";
+    import Fuse from "fuse.js";
 
 
     export default {
@@ -226,6 +227,26 @@
             },
 
             updateLocalSuggestions(query) {
+                if(query.length >= this.searchMinChars) {
+                    this.suggestions = new Fuse(this.localValues, {
+                        caseSensitive: false,
+                        include: [],
+                        minMatchCharLength: 1,
+                        shouldSort: true,
+                        tokenize: true,
+                        matchAllTokens: false,
+                        findAllMatches: false,
+                        id: null,
+                        keys: ['value'],
+                        location: 0,
+                        threshold: 0.0,
+                        distance: 0,
+                        maxPatternLength: 64,
+                        keys: searchKeys,
+                    })
+                } else {
+                    this.suggestions = this.localValues;
+                }
                 this.suggestions = query.length >= this.searchMinChars
                     ? search(this.localValues, query, { searchKeys: this.searchKeys })
                     : this.localValues;

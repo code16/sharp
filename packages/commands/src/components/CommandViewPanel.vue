@@ -14,10 +14,10 @@
             @click="commands.finish()"
         ></div>
         <transition
-            enter-class="SharpViewPanel--collapsed"
+            enter-from-class="SharpViewPanel--collapsed"
             enter-active-class="SharpViewPanel--expanding"
             enter-to-class="SharpViewPanel--expanded"
-            leave-class="SharpViewPanel--expanded"
+            leave-from-class="SharpViewPanel--expanded"
             leave-active-class="SharpViewPanel--collapsing"
             leave-to-class="SharpViewPanel--collapsed"
         >
