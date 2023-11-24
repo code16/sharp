@@ -19,7 +19,7 @@
         errors: { [key:string]: string },
     }>();
 
-    const { entityKey, instanceId } = route().params;
+    const { entityKey, instanceId } = route().params as { entityKey: string, instanceId?: string };
     const form = new Form(props.form, entityKey, instanceId);
     const loading = ref(false);
     const bottomBarStuck = ref(false);

@@ -30,7 +30,7 @@
         breadcrumb: BreadcrumbData,
     }>();
 
-    const { entityKey, instanceId } = route().params;
+    const { entityKey, instanceId } = route().params as { entityKey: string, instanceId?: string };
     const show = new Show(props.show, entityKey, instanceId);
     const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();

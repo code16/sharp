@@ -3,6 +3,7 @@
     import { useForm } from "@inertiajs/vue3";
     import { __ } from "@/utils/i18n";
     import Title from "@/components/Title.vue";
+    import { route } from "@/utils/url";
 
     defineProps<{
         helpText: string

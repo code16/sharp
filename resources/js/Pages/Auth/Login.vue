@@ -4,6 +4,7 @@
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
     import Title from "@/components/Title.vue";
+    import { route } from "@/utils/url";
 
     const append = document.querySelector('#login-append')?.innerHTML;
     const form = useForm({

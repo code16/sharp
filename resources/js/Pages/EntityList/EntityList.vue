@@ -18,7 +18,7 @@
         breadcrumb: BreadcrumbData,
     }>();
 
-    const entityKey = route().params.entityKey;
+    const entityKey = route().params.entityKey as string;
     const entityList: Ref<EntityList> = ref(new EntityList(props.entityList, entityKey));
     const filters = useFilters(entityList.value.config.filters);
     const commands = useCommands({

@@ -5,7 +5,7 @@
     import Field from "../../Field.vue";
     import { FormFieldData, FormListFieldData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "../../../util";
-    import { computed, ref, on } from "vue";
+    import { computed, ref } from "vue";
     import Draggable from 'vuedraggable';
     import { Button } from "@sharp/ui";
     import ListBulkUpload from "./ListBulkUpload.vue";

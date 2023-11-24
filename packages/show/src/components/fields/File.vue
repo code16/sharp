@@ -6,6 +6,7 @@
     import { getClassNameForExtension } from 'font-awesome-filetypes';
     import { filesizeLabel } from '@/utils/file';
     import FieldLayout from "../FieldLayout.vue";
+    import { route } from "@/utils/url";
 
     const props = defineProps<FieldProps & {
         value: ShowFileFieldData['value'],

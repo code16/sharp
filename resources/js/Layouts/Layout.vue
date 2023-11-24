@@ -23,6 +23,7 @@ import useMenu from "@/composables/useMenu";
 import Logo from "@/components/Logo.vue";
 import { auth } from "@/utils/auth";
 import { __ } from "@/utils/i18n";
+import { route } from "@/utils/url";
 
 const sidebarOpen = ref(false);
 const dialogs = useDialogs();

@@ -19,7 +19,7 @@
         dashboard: DashboardData,
     }>();
 
-    const { dashboardKey } = route().params;
+    const dashboardKey = route().params.dashboardKey as string;
     const filters = useFilters(props.dashboard.config.filters);
     const commands = useCommands();
 
@@ -52,7 +52,7 @@
 
 <template>
     <Layout>
-        <Title :entity-key="route().params.dashboardKey" />
+        <Title :entity-key="dashboardKey" />
 
         <WithCommands :commands="commands">
             <div class="container mx-auto">

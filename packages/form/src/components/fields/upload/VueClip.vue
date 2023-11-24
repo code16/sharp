@@ -100,7 +100,6 @@
     import { logError } from "@/utils/log";
     import { getErrorMessage, handleErrorAlert } from "@/api";
     import { Button } from '@sharp/ui';
-    import { downloadFileUrl } from "@sharp/files";
     import { getFiltersFromCropData } from "./util/filters";
     import { getImageBlobUrl } from "./util/image";
     import EditModal from "./EditModal.vue";
@@ -219,12 +218,12 @@
                 return extension ? `.${extension}` : null;
             },
             downloadUrl() {
-                return downloadFileUrl({
-                    entityKey: this.$form?.entityKey,
-                    instanceId: this.$form?.instanceId,
-                    disk: this.value.disk,
-                    path: this.value.path,
-                });
+                // return downloadFileUrl({
+                //     entityKey: this.$form?.entityKey,
+                //     instanceId: this.$form?.instanceId,
+                //     disk: this.value.disk,
+                //     path: this.value.path,
+                // });
             },
             showThumbnail() {
                 return !!this.imageSrc;

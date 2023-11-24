@@ -12,6 +12,7 @@
     import { getFiltersFromCropData } from "./util/filters";
     import { Button } from "@sharp/ui";
     import { ArrowDownOnSquareIcon } from "@heroicons/vue/24/outline";
+    import { route } from "@/utils/url";
 
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";

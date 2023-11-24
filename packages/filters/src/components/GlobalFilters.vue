@@ -4,6 +4,7 @@
     import { ref } from "vue";
     import { useFilters } from "../useFilters";
     import FilterSelect from './filters/FilterSelect.vue';
+    import { route } from "@/utils/url";
 
     const props = defineProps<{
         globalFilters: GlobalFiltersData,

@@ -10,7 +10,7 @@
     import { useForm } from "../../../useForm";
     import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
     import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
-
+    import { route } from "@/utils/url";
 
     const props = defineProps<{
         field: FormUploadFieldData,
