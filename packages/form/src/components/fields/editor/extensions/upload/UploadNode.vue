@@ -24,7 +24,7 @@
 <script>
     import VueClip from "../../../upload/VueClip.vue";
     import NodeRenderer from "../../NodeRenderer.vue";
-    import { showAlert, getUniqueId } from "sharp";
+    import { showAlert } from "@/utils/dialogs";
     import { getUploadOptions } from "../../../../../util/upload";
     import { __ } from "@/utils/i18n";
 
@@ -68,11 +68,7 @@
                 }
             },
             fieldProps() {
-                const props = this.extension.options.fieldProps;
-                return {
-                    ...props,
-                    uniqueIdentifier: `${props.uniqueIdentifier}.upload.${getUniqueId(this)}`,
-                }
+                return this.extension.options.fieldProps;
             },
             options() {
                 return getUploadOptions({
