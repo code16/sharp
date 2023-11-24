@@ -1,4 +1,4 @@
-import { api } from 'sharp';
+import { api } from '@/api';
 
 
 export function postResolveEmbeds({ entityKey, instanceId, embedKey, embeds, form=false }) {

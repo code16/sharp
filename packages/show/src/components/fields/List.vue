@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import ShowField from "../Field.vue";
     import { LayoutFieldData, ShowListFieldData } from "@/types";
-    import { UnknownField } from 'sharp/components';
+    import { UnknownField } from '@/components';
     import FieldLayout from "../FieldLayout.vue";
     import { FieldProps } from "../types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";

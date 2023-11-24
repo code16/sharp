@@ -1,4 +1,4 @@
-import {logError} from "sharp";
+import {logError} from "@/utils/log";
 
 export function validateAutocompleteResponse({ results, dataWrapper, fieldKey, url }) {
     if(results) {

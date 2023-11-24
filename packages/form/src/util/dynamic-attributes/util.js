@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import buildTemplate from 'lodash/template';
-import { logError } from "sharp";
+import { logError } from "@/utils/log";
 
 const interpolateRE = /{{([\s\S]+?)}}/g;
 

@@ -1,4 +1,4 @@
-import { logError } from 'sharp';
+import { logError } from '@/utils/log';
 
 const helpers = {
     computeSelectCondition({ condValues, fieldValue, isSingleSelect }) {

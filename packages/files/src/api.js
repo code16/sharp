@@ -1,4 +1,4 @@
-import { api, apiUrl } from 'sharp';
+import { api, apiUrl } from '@/api';
 
 
 export function postResolveFiles({ entityKey, instanceId, files, thumbnailWidth, thumbnailHeight }) {

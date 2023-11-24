@@ -83,9 +83,10 @@
     import debounce from 'lodash/debounce';
     // import Multiselect from 'vue-multiselect';
     import { CancelToken } from 'axios';
-    import { warn, search, logError } from 'sharp';
+    import { warn, logError } from '@/utils/log';
+    import { search } from '@/utils/search';
     import { __ } from "@/utils/i18n";
-    import { TemplateRenderer } from 'sharp/components';
+    import { TemplateRenderer } from '@/components';
     import { Loading, ClearButton, multiselectUpdateScroll } from '@sharp/ui';
 
     import { getAutocompleteSuggestions } from "../../api";

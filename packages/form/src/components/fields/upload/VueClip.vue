@@ -96,7 +96,9 @@
     // import VueClip from 'vue-clip/src/components/Clip';
     import VueCropper from 'vue-cropperjs';
 
-    import { filesizeLabel, getErrorMessage, handleErrorAlert, logError } from 'sharp';
+    import { filesizeLabel } from "@/utils/file";
+    import { logError } from "@/utils/log";
+    import { getErrorMessage, handleErrorAlert } from "@/api";
     import { Button } from '@sharp/ui';
     import { downloadFileUrl } from "@sharp/files";
     import { getFiltersFromCropData } from "./util/filters";

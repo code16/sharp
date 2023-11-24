@@ -2,7 +2,7 @@
 
     import { useForm } from "@inertiajs/vue3";
     import AuthLayout from "@/Layouts/AuthLayout.vue";
-    import { __ } from "sharp/utils/i18n";
+    import { __ } from "@/utils/i18n";
     import { Button } from "@sharp/ui";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";

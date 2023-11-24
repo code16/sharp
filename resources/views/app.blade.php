@@ -32,7 +32,7 @@
         @inertiaHead
 
         <x-sharp::vite>
-            @vite('resources/js/sharp.js', '/vendor/sharp')
+            @vite('resources/js/sharp.ts', '/vendor/sharp')
         </x-sharp::vite>
     </head>
     <body>

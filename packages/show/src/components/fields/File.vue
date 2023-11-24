@@ -5,7 +5,7 @@
     import { downloadFileUrl } from "@sharp/files";
     import { computed } from "vue";
     import { getClassNameForExtension } from 'font-awesome-filetypes';
-    import { filesizeLabel } from 'sharp';
+    import { filesizeLabel } from '@/utils/file';
     import FieldLayout from "../FieldLayout.vue";
 
     const props = defineProps<FieldProps & {

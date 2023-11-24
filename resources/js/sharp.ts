@@ -1,16 +1,13 @@
 
-import { createApp, h, nextTick } from 'vue';
-
-// import Notifications from 'vue-notification';
-
+import {createApp, DefineComponent, h, nextTick} from 'vue';
 
 import { createInertiaApp, router } from "@inertiajs/vue3";
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+
+import { ZiggyVue } from 'ziggy-js/dist/vue.es';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
-
 createInertiaApp({
-    resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
             .use(plugin)

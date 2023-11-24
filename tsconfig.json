@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "target": "esnext",
+    "module": "esnext",
     "downlevelIteration": true,
     "moduleResolution": "node",
     "paths": {
