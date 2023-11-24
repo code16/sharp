@@ -234,7 +234,7 @@ abstract class SharpEntityList
     abstract public function getListData(): array|Arrayable;
 
     /**
-     * @deprecated not more in use, will be removed in next major version
+     * @deprecated no more in use, will be removed in v10.x
      */
     final public function configurePaginated(bool $paginated = true): self
     {

@@ -20,7 +20,7 @@ class PersonSingleShow extends SharpSingleShow
     {
         $showLayout->addSection('Section', function (ShowLayoutSection $section) {
             $section->addColumn(6, function (ShowLayoutColumn $column) {
-                $column->withSingleField('name');
+                $column->withField('name');
             });
         });
     }

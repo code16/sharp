@@ -2,13 +2,36 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Closure;
 use Code16\Sharp\Utils\Layout\LayoutField;
+use Illuminate\Support\Traits\Conditionable;
 
 trait HasFieldRows
 {
+    use Conditionable;
+
     protected array $rows = [];
 
+    /** @deprecated use withField() or withListField() instead */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
+    {
+        if ($subLayoutCallback) {
+            return $this->withListField($fieldKey, $subLayoutCallback);
+        }
+
+        return $this->withField($fieldKey);
+    }
+
+    public function withField(string $fieldKey): self
+    {
+        $this->addRowLayout([
+            $this->newLayoutField($fieldKey),
+        ]);
+
+        return $this;
+    }
+
+    public function withListField(string $fieldKey, Closure $subLayoutCallback): self
     {
         $this->addRowLayout([
             $this->newLayoutField($fieldKey, $subLayoutCallback),

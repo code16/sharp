@@ -127,10 +127,10 @@ it('returns configured form layout', function () {
         {
             $formLayout
                 ->addColumn(6, function (FormLayoutColumn $column) {
-                    return $column->withSingleField('name');
+                    return $column->withField('name');
                 })
                 ->addColumn(6, function (FormLayoutColumn $column) {
-                    return $column->withSingleField('job');
+                    return $column->withField('job');
                 });
         }
     });

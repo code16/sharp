@@ -11,7 +11,7 @@ it('allows to set a legend', function () {
 
 it('allows to add a field', function () {
     $formTab = new FormLayoutFieldset('legend');
-    $formTab->withSingleField('name');
+    $formTab->withField('name');
 
     expect($formTab->toArray()['fields'][0])
         ->toHaveCount(1);

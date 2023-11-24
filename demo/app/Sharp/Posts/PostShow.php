@@ -73,22 +73,22 @@ class PostShow extends SharpShow
                 $section
                     ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField('categories')
-                            ->withSingleField('author')
-                            ->withSingleField('attachments', function (ShowLayoutColumn $item) {
-                                $item->withSingleField('link_url')
-                                    ->withSingleField('document');
+                            ->withField('categories')
+                            ->withField('author')
+                            ->withListField('attachments', function (ShowLayoutColumn $item) {
+                                $item->withField('link_url')
+                                    ->withField('document');
                             });
                     })
                     ->addColumn(5, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('cover');
+                        $column->withField('cover');
                     });
             })
             ->addSection('Content', function (ShowLayoutSection $section) {
                 $section
                     ->setKey('content-section')
                     ->addColumn(8, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('content');
+                        $column->withField('content');
                     });
             })
             ->addEntityListSection('blocks');

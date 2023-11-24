@@ -73,7 +73,7 @@ it('allows to declare a collapsable section', function () {
             $showLayout->addSection('test', function (ShowLayoutSection $section) {
                 $section->setCollapsable()
                     ->addColumn(12, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('test');
+                        $column->withField('test');
                     });
             });
         }
@@ -141,7 +141,7 @@ it('allows to define a custom key to a section', function () {
                 $section
                     ->setKey('my-section')
                     ->addColumn(12, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('test');
+                        $column->withField('test');
                     });
             });
         }

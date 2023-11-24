@@ -196,7 +196,7 @@ it('allows to define a form to a command', function () {
 
                     public function buildFormLayout(&$column): void
                     {
-                        $column->withSingleField('message');
+                        $column->withField('message');
                     }
 
                     public function execute(array $data = []): array
