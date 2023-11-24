@@ -12,7 +12,7 @@ hero:
       link: /guide
     - theme: alt
       text: Try the demo
-      link: /sharp
+      link: https://sharp.code16.fr/sharp
 ---
 
 <div class="content">
