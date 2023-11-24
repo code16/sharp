@@ -16,7 +16,8 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Building an Entity List', link: '/guide/building-entity-list.md' },
                 { text: 'Filters', link: '/guide/filters.md' },
                 { text: 'Entity States', link: '/guide/entity-states.md' },
-                { text: 'Reordering instances', link: '/guide/reordering-instances.md' }
+                { text: 'Reordering instances', link: '/guide/reordering-instances.md' },
+                { text: 'Avoid n+1 queries in Entity Lists', link: '/guide/avoid-n1-queries-in-entity-lists.md' }
             ]
         },
         {

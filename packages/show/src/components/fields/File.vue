@@ -2,7 +2,6 @@
     import { __ } from "@/utils/i18n";
     import { ShowFileFieldData } from "@/types";
     import { FieldProps } from "../types";
-    import { downloadFileUrl } from "@sharp/files";
     import { computed } from "vue";
     import { getClassNameForExtension } from 'font-awesome-filetypes';
     import { filesizeLabel } from '@/utils/file';
@@ -67,7 +66,12 @@
                         <div class="col-auto px-2">
                             <div class="text-muted">
                                 <i class="fa fas fa-download"></i>
-                                <a :href="downloadFileUrl({ entityKey, instanceId, disk: value?.disk, path: value?.path })"
+                                <a :href="route('code16.sharp.download.show', {
+                                        entityKey,
+                                        instanceId,
+                                        disk: value?.disk,
+                                        path: value?.path,
+                                    })"
                                     :download="value?.name ?? ''"
                                     style="color:inherit"
                                 >

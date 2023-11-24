@@ -1,4 +1,3 @@
-import { UPLOAD_URL } from '@/consts';
 import { getXsrfToken } from "@/api";
 import { filesizeLabel } from "@/utils/file";
 import { __ } from "@/utils/i18n";
@@ -14,7 +13,7 @@ export function maxFileSizeMessage(size) {
 
 export function getUploadOptions({ fileFilter, maxFileSize }) {
     return {
-        url: UPLOAD_URL,
+        // url: UPLOAD_URL,
         uploadMultiple: false,
         headers: {
             'X-XSRF-TOKEN': getXsrfToken(),

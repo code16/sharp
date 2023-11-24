@@ -1,4 +1,4 @@
-import { api, apiUrl } from '@/api';
+import { api } from '@/api';
 
 
 export function postResolveFiles({ entityKey, instanceId, files, thumbnailWidth, thumbnailHeight }) {
@@ -8,13 +8,4 @@ export function postResolveFiles({ entityKey, instanceId, files, thumbnailWidth,
         thumbnail_height: thumbnailHeight,
     })
     .then(response => response.data.files);
-}
-
-export function downloadFileUrl({ entityKey, instanceId, disk, path }) {
-    return apiUrl(`/download/${entityKey}/${instanceId ?? ''}`, {
-        params: {
-            disk,
-            path,
-        },
-    })
 }
