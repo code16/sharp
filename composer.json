@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "8.2.*",
+        "php": "8.2.*|8.3.*",
         "inertiajs/inertia-laravel": "^0.6.9",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",
