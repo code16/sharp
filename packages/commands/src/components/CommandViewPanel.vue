@@ -11,7 +11,7 @@
         >
             <template v-if="visible">
                 <div class="SharpViewPanel">
-                    <iframe src="about:blank" v-srcdoc="content" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"></iframe>
+                    <iframe :srcdoc="content" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals allow-downloads"></iframe>
                 </div>
             </template>
         </transition>
@@ -34,13 +34,6 @@
             handleBackdropClicked() {
                 this.$emit('close');
             },
-        },
-        directives: {
-            srcdoc: {
-                inserted(el, { value }) {
-                    el.contentWindow.document.write(value);
-                }
-            }
         },
     }
 </script>
