@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import { getNavbarHeight } from "../util";
     import throttle from "lodash/throttle";
 
     export default {

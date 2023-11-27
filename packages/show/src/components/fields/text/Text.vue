@@ -4,7 +4,6 @@
     import { computed, ref } from "vue";
     import FieldLayout from "../../FieldLayout.vue";
     import TextRenderer from "./TextRenderer.vue";
-    import { stripTags, truncateToWords } from "../../../util/fields/text";
     import clip from "text-clipper";
     import { FieldProps } from "../../types";
 
@@ -19,6 +18,19 @@
         const { field, locale, value } = props;
         return field.localized ? value?.[locale] : value;
     });
+
+    function stripTags(html) {
+        const el = document.createElement('div');
+        el.innerHTML = html;
+        return el.textContent;
+    }
+
+    function truncateToWords(text, count) {
+        const matches = [...text.matchAll(/\S+\s*/g)];
+        return matches.length > count
+            ? matches.slice(0, count).map(match => match[0]).join('')
+            : text;
+    }
 
     const collapsedContent = computed(() => {
         const { field } = props;
