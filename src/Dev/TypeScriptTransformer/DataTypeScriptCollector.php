@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Console\Dev\TypeScriptTransformer;
+namespace Code16\Sharp\Dev\TypeScriptTransformer;
 
 use Code16\Sharp\Data\Data;
 use ReflectionClass;
