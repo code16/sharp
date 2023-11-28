@@ -1,17 +1,17 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
-    import { EntityList as EntityListComponent, EntityListTitle } from "@sharp/entity-list";
+    import { EntityList as EntityListComponent, EntityListTitle } from "@/entity-list";
     import { BreadcrumbData, EntityListData, EntityListQueryParamsData } from "@/types";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import Breadcrumb from "@/components/Breadcrumb.vue";
-    import { EntityList } from "@sharp/entity-list/src/EntityList";
-    import { useFilters } from "@sharp/filters";
-    import { useCommands } from "@sharp/commands/src/useCommands";
+    import { EntityList } from "@/entity-list/EntityList";
+    import { useFilters } from "@/filters";
+    import { useCommands } from "@/commands/useCommands";
     import { ref, Ref } from "vue";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { FilterQueryParams } from "@sharp/filters/src/types";
+    import { FilterQueryParams } from "@/filters/types";
 
     const props = defineProps<{
         entityList: EntityListData,

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import Pagination from '../src/components/Pagination.vue';
+import Pagination from '@/components/ui/Pagination.vue';
 
 describe('pagination', ()=>{
     function createWrapper() {

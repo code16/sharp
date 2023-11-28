@@ -18,7 +18,7 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
-import { Modal } from '@sharp/ui';
+import { Modal } from '@/components/ui';
 import useMenu from "@/composables/useMenu";
 import Logo from "@/components/Logo.vue";
 import { auth } from "@/utils/auth";

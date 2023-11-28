@@ -1,5 +1,5 @@
 import moxios from "moxios";
-import { nextRequestFulfilled, MockI18n } from "@sharp/test-utils";
+import { nextRequestFulfilled, MockI18n } from "@/test-utils";
 import { showAlert } from "@/utils/dialogs";
 import { createApi as baseCreateApi } from "../api";
 

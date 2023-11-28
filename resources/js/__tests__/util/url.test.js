@@ -8,9 +8,8 @@ import {
     getBackUrl,
 } from 'sharp';
 import { routeUrl } from 'sharp/router';
-import listRoutes from '@sharp/entity-list/src/routes';
-import formRoutes from '@sharp/form/src/routes';
-import showRoutes from '@sharp/show/src/routes';
+import listRoutes from '@/entity-list/src/routes';
+import formRoutes from '@/form/src/routes';
 
 jest.mock('sharp/util/i18n');
 jest.mock('../../consts',()=>({

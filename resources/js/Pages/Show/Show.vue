@@ -1,20 +1,20 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
-    import { WithCommands, CommandsDropdown } from '@sharp/commands';
-    import ShowField from '@sharp/show/src/components/Field.vue';
-    import Section from "@sharp/show/src/components/Section.vue";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@sharp/ui';
+    import { WithCommands, CommandsDropdown } from '@/commands';
+    import ShowField from '@/show/components/Field.vue';
+    import Section from "@/show/components/Section.vue";
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@/components/ui';
     import UnknownField from "@/components/dev/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import { LocaleSelect } from "@sharp/form";
+    import LocaleSelect from "@/form/components/ui/LocaleSelect.vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
-    import { Show } from '@sharp/show/src/Show';
+    import { Show } from '@/show/Show';
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import Title from "@/components/Title.vue";
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
-    import { useCommands } from "@sharp/commands/src/useCommands";
+    import { useCommands } from "@/commands/useCommands";
     import Breadcrumb from "@/components/Breadcrumb.vue";
     import { api } from "@/api";
     import { router } from "@inertiajs/vue3";

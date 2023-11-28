@@ -6,7 +6,7 @@ import {
     MockInjections,
     MockI18n,
     nextRequestFulfilled
-} from "@sharp/test-utils";
+} from "@/test-utils";
 
 import moxios from 'moxios';
 

@@ -1,8 +1,8 @@
 import Vuex from "vuex";
 import merge from 'lodash/merge';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import EntityList from '../src/components/fields/entity-list/EntityList.vue';
-import showModule from "../src/store/show";
+import EntityList from '@/src/components/fields/entity-list/EntityList.vue';
+import showModule from "@/src/store/show";
 import { createStub } from "@sharp/test-utils";
 
 jest.mock('sharp');

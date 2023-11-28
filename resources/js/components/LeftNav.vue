@@ -5,7 +5,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronRightIcon } from '@heroicons/vue/20/solid';
 import { GlobalFiltersData, MenuData } from "@/types";
 import { Link } from "@inertiajs/vue3";
-import { GlobalFilters } from '@sharp/filters';
+import { GlobalFilters } from '@/filters';
 import Logo from "@/components/Logo.vue";
 
 const menu = usePage().props.menu as MenuData;

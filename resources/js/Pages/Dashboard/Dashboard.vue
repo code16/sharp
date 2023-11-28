@@ -1,18 +1,18 @@
 <script setup lang="ts">
     import { CommandData, DashboardData, FilterData } from "@/types";
-    import { useFilters } from "@sharp/filters";
+    import { useFilters } from "@/filters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { SectionTitle, } from '@sharp/ui';
-    import Widget from "@sharp/dashboard/src/components/Widget.vue";
+    import { SectionTitle, } from '@/components/ui';
+    import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import { SharpFilter } from '@sharp/filters';
-    import { CommandsDropdown } from '@sharp/commands';
+    import { SharpFilter } from '@/filters';
+    import { CommandsDropdown } from '@/commands';
     import { __ } from "@/utils/i18n";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
-    import { useCommands } from "@sharp/commands/src/useCommands";
-    import { WithCommands } from "@sharp/commands";
+    import { useCommands } from "@/commands/useCommands";
+    import { WithCommands } from "@/commands";
     import PageAlert from "@/components/PageAlert.vue";
 
     const props = defineProps<{

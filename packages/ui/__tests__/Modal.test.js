@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import SharpModal from '../src/components/Modal.vue';
+import SharpModal from '@/components/ui/Modal.vue';
 
 jest.mock('sharp/mixins/Localization');
 

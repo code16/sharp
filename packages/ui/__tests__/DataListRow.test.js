@@ -1,6 +1,6 @@
 import merge from 'lodash/merge';
 
-import SharpDataListRow from '../src/components/DataListRow.vue';
+import SharpDataListRow from '@/components/ui/DataListRow.vue';
 import { shallowMount } from '@vue/test-utils';
 
 

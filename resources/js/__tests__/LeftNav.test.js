@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
-import globalFiltersModule from '@sharp/filters/src/store/global-filters';
+import globalFiltersModule from '@/filters/src/store/global-filters';
 import LeftNav from '../components/LeftNav.vue';
 
 jest.mock('sharp');

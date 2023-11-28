@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
-import * as api from '../../src/api';
-import show from '../../src/store/show';
+import * as api from '@/src/api';
+import show from '@/src/store/show';
 import { createLocalVue } from '@vue/test-utils';
 
 jest.mock('sharp');
