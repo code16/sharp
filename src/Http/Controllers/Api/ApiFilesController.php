@@ -14,8 +14,8 @@ class ApiFilesController extends Controller
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
-        $thumbnailWidth = request()->get('thumbnail_width', 400);
-        $thumbnailHeight = request()->get('thumbnail_height', 400);
+        $thumbnailWidth = request()->get('thumbnail_width', 200);
+        $thumbnailHeight = request()->get('thumbnail_height', 200);
 
         return response()->json([
             'files' => collect(request()->get('files'))

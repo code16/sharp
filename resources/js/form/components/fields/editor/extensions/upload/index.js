@@ -1,12 +1,8 @@
 import { reactive } from 'vue';
 import debounce from 'lodash/debounce';
-import {
-    filesEquals,
-    postResolveFiles,
-    defaultFileThumbnailHeight,
-    defaultFileThumbnailWidth,
-} from "@/files";
+import { filesEquals } from "@/utils/upload";
 import { Upload } from "./upload";
+import { api } from "@/api";
 
 
 export function getUploadExtension({
@@ -32,13 +28,14 @@ export function getUploadExtension({
     }
 
     const resolveFiles = files => {
-        return postResolveFiles({
-            entityKey: form.entityKey,
-            instanceId: form.instanceId,
-            files,
-            thumbnailWidth: defaultFileThumbnailWidth,
-            thumbnailHeight: defaultFileThumbnailHeight,
-        });
+        return api.post(
+            route('code16.sharp.api.files.show', {
+                entityKey: form.entityKey,
+                instanceId: form.instanceId,
+            }),
+            { files }
+        )
+            .then(response => response.data.files);
     }
 
     const config = {

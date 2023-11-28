@@ -71,9 +71,10 @@
                     disk: props.value.disk,
                 }
             ],
-            thumbnailWidth: 1200,
-            thumbnailHeight: 1000,
-        }).then(response => response.data.files);
+            thumbnail_width: 1200,
+            thumbnail_height: 1000,
+        })
+            .then(response => response.data.files);
 
         originalImg.value = files[0]?.thumbnail;
 

@@ -3,11 +3,11 @@
 </template>
 
 <script>
-    import { postResolveFiles, defaultFileThumbnailHeight, defaultFileThumbnailWidth } from "@/files";
     import { postResolveEmbeds } from "@/embeds";
     import { createEmbedComponent } from "./nodes/embed";
     import File from "./nodes/File.vue";
     import Html from "./nodes/Html.vue";
+    import { api } from "@/api";
 
     export default {
         props: {
@@ -66,13 +66,11 @@
                 const files = this.state.files;
 
                 if(files.length > 0) {
-                    this.state.files = await postResolveFiles({
-                        entityKey,
-                        instanceId,
-                        files,
-                        thumbnailWidth: defaultFileThumbnailWidth,
-                        thumbnailHeight: defaultFileThumbnailHeight,
-                    });
+                    this.state.files = await api.post(
+                        route('code16.sharp.api.files.show', { entityKey, instanceId }),
+                        { files }
+                    )
+                        .then(response => response.data.files);
                 }
 
                 Object.entries(this.state.embeds)

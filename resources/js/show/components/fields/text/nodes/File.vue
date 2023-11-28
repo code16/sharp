@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import { filesEquals, parseFilterCrop, parseFilterRotate } from "@/files";
+    import { filesEquals, parseFilterCrop, parseFilterRotate } from "@/utils/upload";
     import ShowFile from "../../File.vue";
 
     export default {

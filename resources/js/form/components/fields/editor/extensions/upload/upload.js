@@ -6,7 +6,7 @@ import {
     serializeFilterCrop,
     parseFilterRotate,
     serializeFilterRotate,
-} from "@/files";
+} from "@/utils/upload";
 import { getEventsPlugin } from "./events-plugin";
 
 export const Upload = Node.create({

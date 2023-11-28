@@ -1,4 +1,4 @@
-import { serializeFilterNumber } from "@/files";
+import { serializeFilterNumber } from "@/utils/upload";
 
 export function getCropDataFromFilters({ filters, imageWidth, imageHeight }) {
     const rotate = filters?.rotate?.angle ?? 0;

@@ -2,6 +2,7 @@ import { reactive } from "vue";
 import { Embed } from "./embed";
 import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "@/embeds";
 import debounce from "lodash/debounce";
+import { api } from "@/api";
 
 
 
@@ -82,6 +83,14 @@ export function getEmbedExtension({
             });
         },
         postForm(data) {
+            if(form.instanceId) {
+                return api.post(route('code16.sharp.api.embed.instance.form.update', { embedKey, entityKey: form.entityKey }))
+            }
+
+            api.post(`/embeds/${embedKey}/${form.entityKey}${instanceId ? `/${instanceId}` : ''}/form`, {
+                ...data,
+            })
+                .then(response => response.data)
             return postEmbedForm({
                 entityKey: form.entityKey,
                 instanceId: form.instanceId,

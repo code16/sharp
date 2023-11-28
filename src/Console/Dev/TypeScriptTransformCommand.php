@@ -17,6 +17,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tightenco\Ziggy\Output\Types;
+use Tightenco\Ziggy\Ziggy;
 
 /**
  * Based on https://github.com/spatie/laravel-typescript-transformer/blob/main/src/Commands/TypeScriptTransformCommand.php.
@@ -53,6 +55,8 @@ class TypeScriptTransformCommand extends Command
 
             return 1;
         }
+        
+        file_put_contents($basePath.'/resources/js/types/ziggy.d.ts', new Types(new Ziggy()));
 
         $table = new Table($output);
 
