@@ -50,7 +50,7 @@
     },
     "scripts": {
         "test": "vendor/bin/testbench package:test --parallel",
-        "typescript:transform": "php demo/artisan ziggy:generate --types-only; php demo/artisan typescript:transform"
+        "typescript:generate": "php demo/artisan ziggy:generate --types-only; php demo/artisan typescript:transform"
     },
     "extra": {
         "laravel": {
