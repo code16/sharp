@@ -1,11 +1,9 @@
 import { FilterData, ConfigFiltersData } from "@/types";
-import { filterQueryKey, getFiltersValuesFromQuery } from "./util/query";
+import { filterQueryKey, getFiltersValuesFromQuery } from "./utils/query";
 import { parseRange, serializeRange } from "@/utils/querystring";
 import isEqual from "lodash/isEqual";
 import { reactive } from "vue";
 import type { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } from "./types";
-
-
 
 
 export class FilterManager {

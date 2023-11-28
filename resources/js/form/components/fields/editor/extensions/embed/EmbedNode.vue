@@ -46,7 +46,7 @@
 
 <script lang="ts">
     import { Button } from "@/components/ui";
-    import { EmbedRenderer } from '@/embeds';
+    import EmbedRenderer from '@/embeds/components/EmbedRenderer.vue';
     import NodeRenderer from "../../NodeRenderer.vue";
     import EmbedFormModal from "./EmbedFormModal.vue";
     import { Form } from "../../../../../Form";

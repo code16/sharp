@@ -1,9 +1,8 @@
 <template>
-    <component :is="component" />
+    <component :is="component"/>
 </template>
 
 <script>
-    import { postResolveEmbeds } from "@/embeds";
     import { createEmbedComponent } from "./nodes/embed";
     import File from "./nodes/File.vue";
     import Html from "./nodes/Html.vue";
@@ -35,7 +34,8 @@
         computed: {
             component() {
                 return {
-                    template: `<div>${this.formattedContent}</div>`,
+                    template: `
+                        <div>${this.formattedContent}</div>`,
                     components: {
                         'x-sharp-file': File,
                         'x-sharp-image': File,
@@ -65,7 +65,7 @@
                 const instanceId = this.instanceId;
                 const files = this.state.files;
 
-                if(files.length > 0) {
+                if (files.length > 0) {
                     this.state.files = await api.post(
                         route('code16.sharp.api.files.show', { entityKey, instanceId }),
                         { files }
@@ -76,12 +76,15 @@
                 Object.entries(this.state.embeds)
                     .filter(([embedKey, embeds]) => embeds.length > 0)
                     .forEach(async ([embedKey, embeds]) => {
-                        const resolved = await postResolveEmbeds({
-                            entityKey,
-                            instanceId,
-                            embedKey,
-                            embeds,
-                        });
+                        const resolved = await api
+                            .post(
+                                instanceId
+                                    ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
+                                    : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
+                                { embeds }
+                            )
+                            .then(response => response.data.embeds);
+
                         this.state.embeds = {
                             ...this.state.embeds,
                             [embedKey]: resolved,

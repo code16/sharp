@@ -52,7 +52,8 @@
                 return getUploadExtension.call(this, {
                     fieldProps: this.embeds.upload,
                     uniqueIdentifier: this.uniqueIdentifier,
-                    form: this.$form,
+                    entityKey: this.$form.entityKey,
+                    instanceId: this.$form.instanceId,
                 });
             },
             embedExtensions() {
@@ -62,7 +63,8 @@
                         getEmbedExtension({
                             embedKey,
                             embedOptions,
-                            form: this.$form,
+                            entityKey: this.$form.entityKey,
+                            instanceId: this.$form.instanceId,
                         })
                     );
             },

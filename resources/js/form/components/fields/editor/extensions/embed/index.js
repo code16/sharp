@@ -1,17 +1,16 @@
 import { reactive } from "vue";
 import { Embed } from "./embed";
-import { postEmbedForm, postResolveEmbedForm, postResolveEmbeds } from "@/embeds";
 import debounce from "lodash/debounce";
 import { api } from "@/api";
-
+import { route } from "@/utils/url";
 
 
 export function getEmbedExtension({
     embedKey,
     embedOptions,
-    form,
+    entityKey,
+    instanceId,
 }) {
-
     const state = reactive({
         embeds: [],
         currentIndex: 0,
@@ -23,13 +22,14 @@ export function getEmbedExtension({
     state.resolved = new Promise(resolve => state.onResolve = resolve);
 
     const resolveEmbeds = embeds => {
-        return postResolveEmbeds({
-            entityKey: form.entityKey,
-            instanceId: form.instanceId,
-            embedKey,
-            embeds,
-            form: true,
-        })
+        return api
+            .post(
+                instanceId
+                    ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
+                    : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
+                { embeds, form: true }
+            )
+            .then(response => response.data.embeds);
     }
 
     const config = {
@@ -75,28 +75,24 @@ export function getEmbedExtension({
             state.embeds = embed;
         },
         resolveForm(attributes) {
-            return postResolveEmbedForm({
-                entityKey: form.entityKey,
-                instanceId: form.instanceId,
-                embedKey,
-                attributes,
-            });
+            return api
+                .post(
+                    instanceId
+                        ? route('code16.sharp.api.embed.instance.form.show', { embedKey, entityKey, instanceId })
+                        : route('code16.sharp.api.embed.form.show', { embedKey, entityKey }),
+                    { ...attributes }
+                )
+                .then(response => response.data);
         },
         postForm(data) {
-            if(form.instanceId) {
-                return api.post(route('code16.sharp.api.embed.instance.form.update', { embedKey, entityKey: form.entityKey }))
-            }
-
-            api.post(`/embeds/${embedKey}/${form.entityKey}${instanceId ? `/${instanceId}` : ''}/form`, {
-                ...data,
-            })
-                .then(response => response.data)
-            return postEmbedForm({
-                entityKey: form.entityKey,
-                instanceId: form.instanceId,
-                embedKey,
-                data,
-            });
+            return api
+                .post(
+                    instanceId
+                        ? route('code16.sharp.api.embed.instance.form.update', { embedKey, entityKey, instanceId })
+                        : route('code16.sharp.api.embed.form.update', { embedKey, entityKey }),
+                    { ...data }
+                )
+                .then(response => response.data);
         },
     }
 

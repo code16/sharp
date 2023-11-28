@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref } from "vue";
+    import { ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
     import { WithCommands, CommandsDropdown } from '@/commands';
     import ShowField from '@/show/components/Field.vue';

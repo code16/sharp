@@ -8,7 +8,8 @@ import { api } from "@/api";
 export function getUploadExtension({
     fieldProps,
     uniqueIdentifier,
-    form,
+    entityKey,
+    instanceId,
 }) {
 
     const state = reactive({
@@ -28,13 +29,7 @@ export function getUploadExtension({
     }
 
     const resolveFiles = files => {
-        return api.post(
-            route('code16.sharp.api.files.show', {
-                entityKey: form.entityKey,
-                instanceId: form.instanceId,
-            }),
-            { files }
-        )
+        return api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), { files })
             .then(response => response.data.files);
     }
 

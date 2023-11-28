@@ -110,7 +110,7 @@
 
 <script lang="ts">
     import { Dropdown,  DropdownItem, Search, Button } from '@/components/ui';
-    import { SharpFilter } from '@/filters';
+    import SharpFilter from '@/filters/components/Filter.vue';
 
     import MultiformDropdown from "./MultiformDropdown.vue";
     // import EntityListTitle from "./EntityListTitle.vue";

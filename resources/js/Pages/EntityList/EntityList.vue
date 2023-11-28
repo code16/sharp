@@ -1,17 +1,19 @@
 <script setup lang="ts">
     import Layout from "@/Layouts/Layout.vue";
-    import { EntityList as EntityListComponent, EntityListTitle } from "@/entity-list";
+    import EntityListComponent from "@/entity-list/components/EntityList.vue";
+    import EntityListTitle from "@/entity-list/components/EntityListTitle.vue";
     import { BreadcrumbData, EntityListData, EntityListQueryParamsData } from "@/types";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import Breadcrumb from "@/components/Breadcrumb.vue";
     import { EntityList } from "@/entity-list/EntityList";
-    import { useFilters } from "@/filters";
+    import { useFilters } from "@/filters/useFilters";
     import { useCommands } from "@/commands/useCommands";
     import { ref, Ref } from "vue";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
     import { FilterQueryParams } from "@/filters/types";
+    import { route } from "@/utils/url";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -30,7 +32,7 @@
 
     filters.setValuesFromQuery(query);
 
-    function onQueryChange(query) {
+    function onQueryChange(query: FilterQueryParams) {
         if(location.search !== stringifyQuery(query)) {
             router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
         }

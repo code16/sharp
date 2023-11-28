@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { usePage } from "@inertiajs/vue3";
-import { config } from "@/utils/config";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronRightIcon } from '@heroicons/vue/20/solid';
 import { GlobalFiltersData, MenuData } from "@/types";
 import { Link } from "@inertiajs/vue3";
-import { GlobalFilters } from '@/filters';
+import GlobalFilters from '@/filters/components/GlobalFilters.vue';
 import Logo from "@/components/Logo.vue";
 
 const menu = usePage().props.menu as MenuData;

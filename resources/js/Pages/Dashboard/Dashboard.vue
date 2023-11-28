@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { CommandData, DashboardData, FilterData } from "@/types";
-    import { useFilters } from "@/filters";
+    import { useFilters } from "@/filters/useFilters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { SectionTitle, } from '@/components/ui';
+    import { SectionTitle } from '@/components/ui';
     import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import { SharpFilter } from '@/filters';
+    import SharpFilter from '@/filters/components/Filter.vue';
     import { CommandsDropdown } from '@/commands';
     import { __ } from "@/utils/i18n";
     import { route } from "@/utils/url";

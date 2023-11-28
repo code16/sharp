@@ -4,7 +4,6 @@
     import { EntityList } from "../EntityList";
     import {
         CommandData,
-        EntityListFieldData,
         EntityListQueryParamsData,
         EntityStateValueData,
         FilterData
@@ -15,14 +14,14 @@
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
-    import { getAppendableUri, route } from "@/utils/url";
+    import { route } from "@/utils/url";
     import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button,  Search } from '@/components/ui';
     import { ChevronDownIcon } from "@heroicons/vue/20/solid";
     import EntityActions from "./EntityActions.vue";
     import { api } from "@/api";
     import Pagination from "@/components/ui/Pagination.vue";
     import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
-    import { SharpFilter } from "@/filters";
+    import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
     import Draggable from "vuedraggable";
 

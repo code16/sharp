@@ -1,5 +1,5 @@
-import { parseAttributeValue } from "@/embeds";
-import { EmbedRenderer } from '@/embeds';
+import { parseAttributeValue } from "@/embeds/utils/attributes";
+import EmbedRenderer from '@/embeds/components/EmbedRenderer.vue';
 import { EmbedData } from "@/types";
 
 export function createEmbedComponent(embedOptions: EmbedData) {

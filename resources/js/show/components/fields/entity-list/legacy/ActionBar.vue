@@ -124,14 +124,14 @@
 
 <script lang="ts">
     import { Button } from '@/components/ui';
-    import { MultiformDropdown } from "@/entity-list";
+    // import MultiformDropdown from "@/entity-list/components/";
     // import { sticky } from "sharp/directives";
     import { CommandsDropdown } from "@/commands";
 
     export default {
         components: {
             CommandsDropdown,
-            MultiformDropdown,
+            // MultiformDropdown,
             Button,
         },
         props: {
