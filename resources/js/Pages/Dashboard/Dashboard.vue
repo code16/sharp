@@ -7,12 +7,12 @@
     import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
     import SharpFilter from '@/filters/components/Filter.vue';
-    import { CommandsDropdown } from '@/commands';
+    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
+    import WithCommands from "@/commands/components/WithCommands.vue";
     import { __ } from "@/utils/i18n";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
     import { useCommands } from "@/commands/useCommands";
-    import { WithCommands } from "@/commands";
     import PageAlert from "@/components/PageAlert.vue";
 
     const props = defineProps<{

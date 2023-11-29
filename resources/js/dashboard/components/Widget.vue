@@ -4,7 +4,7 @@
     import Figure from "./widgets/Figure.vue";
     import OrderedList from "./widgets/OrderedList.vue";
     import Panel from "./widgets/Panel.vue";
-    import Graph from "./widgets/graph/Graph.vue";
+    import Graph from "./widgets/Graph.vue";
 
     defineProps<{
         widget: WidgetData,

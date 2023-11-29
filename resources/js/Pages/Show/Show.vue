@@ -1,13 +1,14 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
-    import { WithCommands, CommandsDropdown } from '@/commands';
+    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
+    import WithCommands from "@/commands/components/WithCommands.vue";
     import ShowField from '@/show/components/Field.vue';
     import Section from "@/show/components/Section.vue";
     import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@/components/ui';
-    import UnknownField from "@/components/dev/UnknownField.vue";
+    import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import LocaleSelect from "@/form/components/ui/LocaleSelect.vue";
+    import LocaleSelect from "@/form/components/LocaleSelect.vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
     import { Show } from '@/show/Show';
@@ -66,7 +67,13 @@
 
     async function onDelete() {
         if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
-            router.delete(route('code16.sharp.show.delete', { uri: route().params.uri, entityKey, instanceId }));
+            router.delete(
+                route('code16.sharp.show.delete', {
+                    uri: route().params.uri as string,
+                    entityKey,
+                    instanceId
+                })
+            );
         }
     }
 </script>

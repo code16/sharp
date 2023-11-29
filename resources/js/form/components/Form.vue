@@ -6,7 +6,7 @@
 
     import { provide, ref } from "vue";
     import { Form } from "../Form";
-    import LocaleSelect from "./ui/LocaleSelect.vue";
+    import LocaleSelect from "./LocaleSelect.vue";
     import { getDependantFieldsResetData } from "../util";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";

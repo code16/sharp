@@ -5,6 +5,7 @@
     "module": "esnext",
     "downlevelIteration": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["./resources/js/*"]
     },

@@ -1,7 +1,7 @@
-import { ShowLayoutFieldData } from "@/types";
+import { LayoutFieldData } from "@/types";
 
 export type FieldProps = {
-    layout?: ShowLayoutFieldData,
+    layout?: LayoutFieldData,
     locale: string,
     entityKey: string,
     instanceId: string,

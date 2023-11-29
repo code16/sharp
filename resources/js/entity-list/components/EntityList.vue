@@ -8,13 +8,14 @@
         EntityStateValueData,
         FilterData
     } from "@/types";
-    import { CommandsDropdown, WithCommands } from "@/commands";
+    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
+    import WithCommands from "@/commands/components/WithCommands.vue";
     import { CommandManager } from "@/commands/CommandManager";
     import type { Ref } from "vue";
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
-    import { route } from "@/utils/url";
+    import {getAppendableUri, route} from "@/utils/url";
     import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button,  Search } from '@/components/ui';
     import { ChevronDownIcon } from "@heroicons/vue/20/solid";
     import EntityActions from "./EntityActions.vue";
