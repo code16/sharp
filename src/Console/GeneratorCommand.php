@@ -33,8 +33,8 @@ class GeneratorCommand extends Command
     {
         $wizardType = select(
             label: 'What do you need?',
-            options: ['A complete entity (with list, form, etc)', 'A command', 'A list filter', 'An entity state', 'A reorder handler'],
-            default: 'A complete entity (with list, form, etc)',
+            options: ['A complete entity (with list, form, dashboard, etc)', 'A command', 'A list filter', 'An entity state', 'A reorder handler'],
+            default: 'A complete entity (with list, form, dashboard, etc)',
         );
 
         switch ($wizardType) {
@@ -77,19 +77,19 @@ class GeneratorCommand extends Command
         );
         $entityStatePath = Str::plural($entityName).'\\States';
 
-        $modelPath = text(
-            label: 'What is the path of your models directory?',
-            default: 'Models',
+        $modelNamespace = text(
+            label: 'What is the namespace of your models?',
+            default: 'App\\Models',
             required: true,
         );
 
         $model = search(
             'Search for the related model',
             fn (string $value) => strlen($value) > 0
-                ? $this->getModelsList(app_path($modelPath), $value)
+                ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
                 : []
         );
-        $model = 'App\\'.$modelPath.'\\'.$model;
+        $model = $modelNamespace.'\\'.$model;
 
         if (! class_exists($model)) {
             $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
@@ -214,7 +214,7 @@ class GeneratorCommand extends Command
         $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
 
         if (class_exists($listClass)) {
-            $this->addNewItemToAListOfCommands(
+            $this->addNewItemToAListOfCommandsWithArchetypeLaravelFile(
                 $commandType,
                 $name.'Command',
                 $this->getSharpRootNamespace().'\\'.$commandPath.'\\',
@@ -227,7 +227,7 @@ class GeneratorCommand extends Command
         $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
 
         if ($commandType === 'Instance' && class_exists($showClass)) {
-            $this->addNewItemToAListOfCommands(
+            $this->addNewItemToAListOfCommandsWithArchetypeLaravelFile(
                 $commandType,
                 $name.'Command',
                 $this->getSharpRootNamespace().'\\'.$commandPath.'\\',
@@ -331,9 +331,9 @@ class GeneratorCommand extends Command
         $name = Str::ucfirst(Str::camel($name));
         $pluralName = Str::plural($name);
 
-        $modelPath = text(
-            label: 'What is the path of your models directory?',
-            default: 'Models',
+        $modelNamespace = text(
+            label: 'What is the namespace of your models?',
+            default: 'App\\Models',
             required: true,
         );
 
@@ -343,10 +343,10 @@ class GeneratorCommand extends Command
             $model = search(
                 'Search for the related model',
                 fn (string $value) => strlen($value) > 0
-                    ? $this->getModelsList(app_path($modelPath), $value)
+                    ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
                     : []
             );
-            $model = 'App\\'.$modelPath.'\\'.$model;
+            $model = $modelNamespace.'\\'.$model;
         }
 
         if (! class_exists($model)) {
@@ -515,6 +515,17 @@ class GeneratorCommand extends Command
 
     private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityConfigKey)
     {
+        $sharpConfig = file_get_contents(config_path('sharp.php'));
+
+        file_put_contents(config_path('sharp.php'), str_replace(
+            "'$entityConfigKey' => [".PHP_EOL,
+            "'$entityConfigKey' => [".PHP_EOL."        '$entityKey' => \\$entityPath::class,".PHP_EOL,
+            $sharpConfig
+        ));
+    }
+
+    private function addNewEntityToSharpConfigWithArchetypeLaravelFile(string $entityPath, string $entityKey, string $entityConfigKey)
+    {
         if (app()->runningUnitTests()) {
             config()->set(
                 'sharp.'.$entityConfigKey.'.'.$entityKey,
@@ -553,7 +564,7 @@ class GeneratorCommand extends Command
             ->save();
     }
 
-    private function addNewItemToAListOfCommands(string $commandType, string $commandClass, string $commandPath, string $targetClass)
+    private function addNewItemToAListOfCommandsWithArchetypeLaravelFile(string $commandType, string $commandClass, string $commandPath, string $targetClass)
     {
         $classMethodName = sprintf('get%sCommands', $commandType);
 
@@ -621,6 +632,10 @@ class GeneratorCommand extends Command
             ->save();
     }
 
+    private function namespaceToPath($namespace) {
+        return Str::lcfirst(str_replace('\\', '/', $namespace));
+    }
+
     private function reorderHandlerPrompt()
     {
         $name = text(
@@ -639,19 +654,19 @@ class GeneratorCommand extends Command
         );
         $reorderPath = Str::plural($entityName).'\\ReorderHandlers';
 
-        $modelPath = text(
-            label: 'What is the path of your models directory?',
-            default: 'Models',
+        $modelNamespace = text(
+            label: 'What is the namespace of your models?',
+            default: 'App\\Models',
             required: true,
         );
 
         $model = search(
             'Search for the related model',
             fn (string $value) => strlen($value) > 0
-                ? $this->getModelsList(app_path($modelPath), $value)
+                ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
                 : []
         );
-        $model = 'App\\'.$modelPath.'\\'.$model;
+        $model = $modelNamespace.'\\'.$model;
 
         Artisan::call('sharp:make:reorder-handler', [
             'name' => $reorderPath.'\\'.$name.'Reorder',

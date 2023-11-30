@@ -18,14 +18,14 @@
         "laravel/framework": "^10.0",
         "league/commonmark": "^2.4",
         "spatie/image-optimizer": "^1.6",
-        "tightenco/ziggy": "^1.6"
+        "tightenco/ziggy": "^1.6",
+        "laravel/prompts": "^0.1.12",
+        "ajthinking/archetype": "^1.1"
     },
     "require-dev": {
-        "ajthinking/archetype": "^1.1",
         "brianium/paratest": "^7.0",
         "doctrine/dbal": "^3.5",
         "friendsofphp/php-cs-fixer": "^3.8",
-        "laravel/prompts": "^0.1.12",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/collision": "^7.8",
         "orchestra/testbench": "^8.0",

@@ -23,7 +23,6 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
-use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -136,7 +135,6 @@ class SharpServiceProvider extends ServiceProvider
             EntityCommandMakeCommand::class,
             InstanceCommandMakeCommand::class,
             DashboardMakeCommand::class,
-            ValidatorMakeCommand::class,
             PolicyMakeCommand::class,
             EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
