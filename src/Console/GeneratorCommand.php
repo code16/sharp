@@ -550,7 +550,8 @@ class GeneratorCommand extends Command
         ));
     }
 
-    private function namespaceToPath($namespace) {
+    private function namespaceToPath($namespace)
+    {
         return Str::lcfirst(str_replace('\\', '/', $namespace));
     }
 
