@@ -1,4 +1,4 @@
-import { getToolbarIcon } from '../util/icons';
+import { getToolbarIcon } from '@/form/components/fields/editor/utils/icons';
 import { __ } from "@/utils/i18n";
 
 export const buttons = () => ({

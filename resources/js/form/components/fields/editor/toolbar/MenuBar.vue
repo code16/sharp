@@ -1,3 +1,44 @@
+<script setup lang="ts">
+    import { FormEditorFieldData } from "@/types";
+    import { FormFieldProps } from "@/form/components/types";
+    import { Editor } from "@tiptap/vue-3";
+    import { computed } from "vue";
+    import { config } from "@/utils/config";
+    import { __ } from "@/utils/i18n";
+
+    const props = defineProps<FormFieldProps<FormEditorFieldData> & {
+        editor: Editor,
+    }>();
+
+    const options = computed(() => {
+        const hasList = props.field.toolbar?.some(button => button === 'bullet-list' || button === 'ordered-list');
+        if(props.field.markdown && !config('sharp.markdown_editor.tight_lists_only') && hasList) {
+            return [
+                {
+                    command: () => props.editor.chain().toggleTight().run(),
+                    disabled: !props.editor.can().toggleTight(),
+                    label: __('sharp::form.editor.dropdown.options.toggle_tight_list'),
+                }
+            ];
+        }
+    });
+
+    const toolbarGroups = computed(() =>
+        props.field.toolbar.reduce((res, btn) => {
+            if(btn === '|') {
+                return [...res, []];
+            }
+            res[res.length - 1].push(btn);
+            return res;
+        }, [[]])
+    );
+
+    const customEmbeds = computed(() => {
+        const { upload, ...customEmbeds } = props.field.embeds ?? {};
+        return Object.values(customEmbeds);
+    });
+</script>
+
 <template>
     <div class="editor__toolbar">
         <div class="row row-cols-auto g-2">
@@ -6,11 +47,11 @@
                     <template v-for="button in group">
                         <template v-if="button === 'link'">
                             <LinkDropdown
-                                :id="id"
+                                :id="fieldErrorKey"
                                 :active="isActive(button)"
                                 :title="buttonTitle(button)"
                                 :editor="editor"
-                                :disabled="disabled"
+                                :disabled="field.readOnly"
                                 @submit="handleLinkSubmitted"
                                 @remove="handleRemoveLinkClicked"
                             >
@@ -20,7 +61,7 @@
                         <template v-else-if="button === 'table'">
                             <TableDropdown
                                 :active="isActive(button)"
-                                :disabled="disabled"
+                                :disabled="field.readOnly"
                                 :editor="editor"
                             >
                                 <i :class="getIcon(button)" data-test="table"></i>
@@ -30,7 +71,7 @@
                             <Button
                                 variant="light"
                                 :active="isActive(button)"
-                                :disabled="disabled"
+                                :disabled="field.readOnly"
                                 :title="buttonTitle(button)"
                                 @click="handleClicked(button)"
                                 :data-test="button"
@@ -49,7 +90,7 @@
                     <OptionsDropdown :options="options" :editor="editor" />
                 </div>
             </template>
-            <template v-if="customEmbeds && customEmbeds.length > 0">
+            <template v-if="field.embeds && customEmbeds.length > 0">
                 <div class="btn-group">
                     <EmbedDropdown :embeds="customEmbeds" :editor="editor" />
                 </div>
@@ -75,30 +116,14 @@
             Button,
             Dropdown,
         },
-        props: {
-            id: String,
-            editor: Object,
-            toolbar: Array,
-            disabled: Boolean,
-            options: Array,
-            embeds: Object,
-        },
-        computed: {
-            toolbarGroups() {
-                return this.toolbar
-                    .reduce((res, btn) => {
-                        if(btn === '|') {
-                            return [...res, []];
-                        }
-                        res[res.length - 1].push(btn);
-                        return res;
-                    }, [[]]);
-            },
-            customEmbeds() {
-                const { upload, ...customEmbeds } = this.embeds ?? {};
-                return Object.values(customEmbeds);
-            },
-        },
+        // props: {
+        //     id: String,
+        //     editor: Object,
+        //     toolbar: Array,
+        //     disabled: Boolean,
+        //     options: Array,
+        //     embeds: Object,
+        // },
         methods: {
             getIcon(button) {
                 return buttons()[button]?.icon;

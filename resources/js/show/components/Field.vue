@@ -6,10 +6,10 @@
     import File from "./fields/File.vue";
     import List from "./fields/List.vue";
     import { isCustomField, resolveCustomField } from "@/utils/fields";
-    import { FieldProps } from "./types";
+    import { ShowFieldProps } from "./types";
     import { ShowFieldData } from "@/types";
 
-    defineProps<FieldProps & {
+    defineProps<ShowFieldProps & {
         field: ShowFieldData,
         value?: ShowFieldData['value'],
     }>();

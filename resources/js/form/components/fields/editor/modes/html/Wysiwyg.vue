@@ -23,7 +23,7 @@
     import SharpEditor from '../../Editor.vue';
     import { defaultEditorOptions, editorProps } from "../../index";
     import { LocalizedEditor } from "../../../../../mixins/localize/editor";
-    import { normalizeHTML, trimHTML } from "./util";
+    import { normalizeHTML, trimHTML } from "@/form/components/fields/editor/utils/util";
     import LocalizedEditors from "../../LocalizedEditors.vue";
     import { normalizeText } from "../../../../../util/text";
 

@@ -1,6 +1,6 @@
 import { LayoutFieldData } from "@/types";
 
-export type FieldProps = {
+export type ShowFieldProps = {
     layout?: LayoutFieldData,
     locale: string,
     entityKey: string,

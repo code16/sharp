@@ -6,11 +6,15 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
 
 final class FormEditorFieldData extends Data
 {
     #[Optional]
-    #[LiteralTypeScriptType('{ text: string | { [locale:string]: string|null } | null }')]
+    #[LiteralTypeScriptType('{
+        text: string | { [locale:string]: string|null } | null,
+        files: Array<FormUploadFieldValueData> | null
+    }')]
     public array|null $value;
 
     public function __construct(
