@@ -213,8 +213,12 @@ class GeneratorCommand extends Command
 
         $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
 
+        if (!class_exists($listClass)) {
+            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
+        }
+
         if (class_exists($listClass)) {
-            $this->addNewItemToAListOfCommandsWithArchetypeLaravelFile(
+            $this->addNewItemToAListOfCommands(
                 $commandType,
                 $name.'Command',
                 $this->getSharpRootNamespace().'\\'.$commandPath.'\\',
@@ -227,7 +231,7 @@ class GeneratorCommand extends Command
         $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
 
         if ($commandType === 'Instance' && class_exists($showClass)) {
-            $this->addNewItemToAListOfCommandsWithArchetypeLaravelFile(
+            $this->addNewItemToAListOfCommands(
                 $commandType,
                 $name.'Command',
                 $this->getSharpRootNamespace().'\\'.$commandPath.'\\',
@@ -524,112 +528,26 @@ class GeneratorCommand extends Command
         ));
     }
 
-    private function addNewEntityToSharpConfigWithArchetypeLaravelFile(string $entityPath, string $entityKey, string $entityConfigKey)
-    {
-        if (app()->runningUnitTests()) {
-            config()->set(
-                'sharp.'.$entityConfigKey.'.'.$entityKey,
-                (new $entityPath())::class,
-            );
-
-            return;
-        }
-
-        $file = LaravelFile::load(config_path('sharp.php'));
-
-        $sectionValue = $file->astQuery()
-            ->return()
-            ->array()
-            ->arrayItem()
-            ->where('key->value', $entityConfigKey)
-            ->value
-            ->first();
-
-        $sectionValue->items = [
-            ...$sectionValue->items,
-            new ArrayItem(
-                new ClassConstFetch(new FullyQualified($entityPath), 'class'),
-                new String_($entityKey),
-            ),
-        ];
-
-        $file->astQuery()
-            ->return()
-            ->array()
-            ->arrayItem()
-            ->where('key->value', $entityConfigKey)
-            ->replaceProperty('value', $sectionValue)
-            ->commit()
-            ->end()
-            ->save();
-    }
-
-    private function addNewItemToAListOfCommandsWithArchetypeLaravelFile(string $commandType, string $commandClass, string $commandPath, string $targetClass)
+    private function addNewItemToAListOfCommands(string $commandType, string $commandClass, string $commandPath, string $targetClass)
     {
         $classMethodName = sprintf('get%sCommands', $commandType);
 
         $reflector = new ReflectionClass($targetClass);
-        $file = LaravelFile::load($reflector->getFileName());
+        $targetContent = file_get_contents($reflector->getFileName());
 
-        $sectionValue = $file->astQuery()
-            ->classMethod()
-            ->where('name->name', $classMethodName)
-            ->return()
-            ->array()
-            ->first();
+        file_put_contents($reflector->getFileName(), str_replace(
+            PHP_EOL."class ",
+            "use ".$commandPath.$commandClass.";".PHP_EOL.PHP_EOL."class ",
+            $targetContent
+        ));
 
-        if (! $sectionValue) {
-            $file->astQuery()
-                ->class()
-                ->where('name->name', $reflector->getShortName())
-                ->insertStmt(
-                    (new BuilderFactory)
-                        ->method($classMethodName)
-                        ->makePublic()
-                        ->setReturnType('?array')
-                        ->getNode()
-                )
-                ->commit()
-                ->end()
-                ->save();
+        $targetContent = file_get_contents($reflector->getFileName());
 
-            $file->astQuery()
-                ->classMethod()
-                ->where('name->name', $classMethodName)
-                ->insertStmt(
-                    new Return_((new BuilderFactory)->val([]))
-                )
-                ->commit()
-                ->end()
-                ->save();
-
-            $sectionValue = $file->astQuery()
-                ->classMethod()
-                ->where('name->name', $classMethodName)
-                ->return()
-                ->array()
-                ->first();
-        }
-
-        $sectionValue->items = [
-            ...$sectionValue->items,
-            new ArrayItem(
-                new ClassConstFetch(new Name($commandClass), 'class'),
-            ),
-        ];
-
-        $file
-            ->add()->use([$commandPath.$commandClass])
-            ->astQuery()
-            ->classMethod()
-            ->where('name->name', $classMethodName)
-            ->return()
-            ->array()
-            ->value
-            ->replaceProperty('value', $sectionValue)
-            ->commit()
-            ->end()
-            ->save();
+        file_put_contents($reflector->getFileName(), str_replace(
+            "$classMethodName(): ?array".PHP_EOL."    {".PHP_EOL."        return [".PHP_EOL,
+            "$classMethodName(): ?array".PHP_EOL."    {".PHP_EOL."        return [".PHP_EOL."            ".$commandClass."::class,".PHP_EOL,
+            $targetContent
+        ));
     }
 
     private function namespaceToPath($namespace) {
