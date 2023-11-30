@@ -46,4 +46,11 @@ class DummyClass extends SharpForm
 
         return $DummyModelVariable->id;
     }
+
+    public function rules(): array
+    {
+    	return [
+    		'my_field' => 'required',
+    	];
+    }
 }

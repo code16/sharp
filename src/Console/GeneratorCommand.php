@@ -380,16 +380,9 @@ class GeneratorCommand extends Command
         $this->components->twoColumnDetail('Entity list', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'EntityList.php');
 
         if (Str::contains($type, 'form')) {
-            Artisan::call('sharp:make:validator', [
-                'name' => $pluralName.'\\'.$name.'Validator',
-            ]);
-
-            $this->components->twoColumnDetail('Validator', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Validator.php');
-
             Artisan::call('sharp:make:form', [
                 'name' => $pluralName.'\\'.$name.'Form',
                 '--model' => $model,
-                '--validator' => '',
             ]);
 
             $this->components->twoColumnDetail('Form', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Form.php');
@@ -451,16 +444,9 @@ class GeneratorCommand extends Command
             default: false,
         );
 
-        Artisan::call('sharp:make:validator', [
-            'name' => $name.'\\'.$name.'SingleValidator',
-        ]);
-
-        $this->components->twoColumnDetail('Validator', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleValidator.php');
-
         Artisan::call('sharp:make:form', [
             'name' => $name.'\\'.$name.'SingleForm',
             '--single' => '',
-            '--validator' => '',
         ]);
 
         $this->components->twoColumnDetail('Single form', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleForm.php');
@@ -566,32 +552,6 @@ class GeneratorCommand extends Command
             ->end()
             ->save();
     }
-
-//    private function addNewEntityToSharpMenu(string $entityKey, string $menuLabel)
-//    {
-//        $reflector = new ReflectionClass(config('sharp.menu'));
-//        $file = LaravelFile::load($reflector->getFileName());
-//
-//        $file->astQuery()
-//            ->classMethod()
-//            ->where('name->name', 'build')
-//            ->insertStmt(
-//                new Expression(
-//                    new MethodCall(
-//                        new Variable('this'),
-//                        'addEntityLink',
-//                        [
-//                            new Arg(new String_($entityKey)),
-//                            new Arg(new String_($menuLabel)),
-//                            new Arg(new String_('fas fa-file'))
-//                        ]
-//                    )
-//                )
-//            )
-//            ->commit()
-//            ->end()
-//            ->save();
-//    }
 
     private function addNewItemToAListOfCommands(string $commandType, string $commandClass, string $commandPath, string $targetClass)
     {

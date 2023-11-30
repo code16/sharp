@@ -37,4 +37,11 @@ class DummyClass extends SharpForm
     {
         //
     }
+
+    public function rules(): array
+    {
+    	return [
+    		'my_field' => 'required',
+    	];
+    }
 }
