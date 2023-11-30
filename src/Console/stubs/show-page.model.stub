@@ -41,9 +41,9 @@ class DummyClass extends SharpShow
     public function find($id): array
     {
         return $this
-            // ->setCustomTransformer('created_at', function ($value, DummyModelClass $dummyModel) {
-            //     return $dummyModel->created_at->isoFormat('LLLL');
-            // })
+            ->setCustomTransformer('my_field', function ($value, DummyModelClass $dummyModel) {
+                return $value;
+            })
             ->transform(
                 DummyModelClass::findOrFail($id)
             );

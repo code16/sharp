@@ -52,8 +52,6 @@ class DummyClass extends InstanceWizardCommand
 
     public function executeSecondStep(mixed $instanceId, array $data = []): array
     {
-        //
-
         return $this->reload();
     }
 

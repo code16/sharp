@@ -52,8 +52,6 @@ class DummyClass extends EntityWizardCommand
 
     public function executeSecondStep(array $data = []): array
     {
-        //
-
         return $this->reload();
     }
 
