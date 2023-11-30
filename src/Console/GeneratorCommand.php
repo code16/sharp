@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Console;
 
-use Archetype\Facades\LaravelFile;
 use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
@@ -10,13 +9,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Return_;
 use ReflectionClass;
 
 use function Laravel\Prompts\confirm;
@@ -213,7 +205,7 @@ class GeneratorCommand extends Command
 
         $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
 
-        if (!class_exists($listClass)) {
+        if (! class_exists($listClass)) {
             $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
         }
 
@@ -536,16 +528,16 @@ class GeneratorCommand extends Command
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            PHP_EOL."class ",
-            "use ".$commandPath.$commandClass.";".PHP_EOL.PHP_EOL."class ",
+            PHP_EOL.'class ',
+            'use '.$commandPath.$commandClass.';'.PHP_EOL.PHP_EOL.'class ',
             $targetContent
         ));
 
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            "$classMethodName(): ?array".PHP_EOL."    {".PHP_EOL."        return [".PHP_EOL,
-            "$classMethodName(): ?array".PHP_EOL."    {".PHP_EOL."        return [".PHP_EOL."            ".$commandClass."::class,".PHP_EOL,
+            "$classMethodName(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
+            "$classMethodName(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$commandClass.'::class,'.PHP_EOL,
             $targetContent
         ));
     }
