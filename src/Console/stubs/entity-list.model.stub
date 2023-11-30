@@ -24,9 +24,7 @@ class DummyClass extends SharpEntityList
     public function buildListConfig(): void
     {
         $this
-            ->configureDefaultSort('created_at', 'desc')
-            ->configureSearchable()
-            ->configurePaginated();
+            ->configureDefaultSort('created_at', 'desc');
     }
 
     protected function getInstanceCommands(): ?array
