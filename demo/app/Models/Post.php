@@ -72,7 +72,7 @@ class Post extends Model
 
     public function isOnline(): bool
     {
-        return $this->state === 'online';
+        return $this->state->value === 'online';
     }
 
     public function getDefaultAttributesFor($attribute)
