@@ -104,7 +104,7 @@ class GeneratorCommand extends Command
 
         $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
 
-        if (!class_exists($listClass)) {
+        if (! class_exists($listClass)) {
             $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
         }
 
@@ -625,16 +625,16 @@ class GeneratorCommand extends Command
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            PHP_EOL."class ",
-            "use ".$entityStatePath.$entityStateClass.";".PHP_EOL.PHP_EOL."class ",
+            PHP_EOL.'class ',
+            'use '.$entityStatePath.$entityStateClass.';'.PHP_EOL.PHP_EOL.'class ',
             $targetContent
         ));
 
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            "$classMethodName(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
-            "$classMethodName(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureEntityState('state',".$entityStateClass."::class)".PHP_EOL,
+            "$classMethodName(): void".PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
+            "$classMethodName(): void".PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL."            ->configureEntityState('state',".$entityStateClass.'::class)'.PHP_EOL,
             $targetContent
         ));
     }
