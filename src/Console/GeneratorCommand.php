@@ -608,8 +608,8 @@ class GeneratorCommand extends Command
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            "getFilters(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
-            "getFilters(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$filterClass.'::class,'.PHP_EOL,
+            'getFilters(): ?array'.PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
+            'getFilters(): ?array'.PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$filterClass.'::class,'.PHP_EOL,
             $targetContent
         ));
     }
@@ -645,16 +645,16 @@ class GeneratorCommand extends Command
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            PHP_EOL."class ",
-            "use ".$reorderHandlerPath.$reorderHandlerClass.";".PHP_EOL.PHP_EOL."class ",
+            PHP_EOL.'class ',
+            'use '.$reorderHandlerPath.$reorderHandlerClass.';'.PHP_EOL.PHP_EOL.'class ',
             $targetContent
         ));
 
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
-            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureReorderable(".$reorderHandlerClass."::class)".PHP_EOL,
+            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
+            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.$reorderHandlerClass.'::class)'.PHP_EOL,
             $targetContent
         ));
     }
