@@ -10,7 +10,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 #[LiteralTypeScriptType(
     '{ action: "'.CommandAction::Link->value.'", link: string } | '.
     '{ action: "'.CommandAction::Info->value.'", message: string } | '.
-    '{ action: "'.CommandAction::Refresh->value.'", items?: Array<number | string> } | '.
+    '{ action: "'.CommandAction::Refresh->value.'", items?: Array<{ [key: string]: any }> } | '.
     '{ action: "'.CommandAction::Reload->value.'" } | '.
     '{ action: "'.CommandAction::Step->value.'", step: string } | '.
     '{ action: "'.CommandAction::View->value.'", html: string }'

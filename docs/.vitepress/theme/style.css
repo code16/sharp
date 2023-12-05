@@ -1,0 +1,45 @@
+
+:root {
+  --vp-c-brand-1: hsl(211 100% 30%);
+  --vp-c-brand-2: hsl(211 100% 40%);
+  --vp-c-brand-3: hsl(211 100% 50%);
+}
+
+.dark {
+  --vp-c-brand-1: hsl(211 100% 60%);
+  --vp-c-brand-2: hsl(211 100% 60%);
+  --vp-c-brand-3: hsl(211 100% 50%);
+  --vp-code-color: hsl(211 100% 85%);
+
+  .logo {
+    filter: invert(.86);
+  }
+}
+
+.vp-doc {
+  :is(h3, h4) code {
+    font-size: .875em;
+    .token[data-content] {
+      opacity: .5;
+      &::before {
+        content: attr(data-content);
+      }
+    }
+    .token.punctuation {
+      opacity: 1;
+    }
+  }
+  h3 + h3 {
+    margin-top: .25rem;
+  }
+  span.lang {
+    display: none;
+  }
+}
+
+.medium-zoom-overlay {
+  z-index: 100;
+}
+.medium-zoom-overlay ~ img {
+  z-index: 101;
+}

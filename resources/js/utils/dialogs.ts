@@ -1,5 +1,5 @@
 import { __ } from "./i18n";
-import { ModalProps } from "@sharp/ui/src/components/types";
+import { ModalProps } from "@/components/ui/types";
 import { ref } from "vue";
 
 let modalId = 0;

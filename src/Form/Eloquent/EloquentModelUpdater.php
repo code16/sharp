@@ -73,6 +73,12 @@ class EloquentModelUpdater
                 .(new ReflectionClass($type))->getShortName()
                 .'RelationUpdater');
 
+            // Special code to handle file_name attribute in file upload case, when there is an {id} parameter
+            if (is_array($value) && isset($value['file_name']) && str($value['file_name'])->contains('{id}')) {
+                $value['file_name'] = str($value['file_name'])
+                    ->replace('{id}', $instance->id);
+            }
+
             $relationshipUpdater->update(
                 $instance, $attribute, $value, $this->relationshipsConfiguration[$attribute] ?? null,
             );

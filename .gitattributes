@@ -14,4 +14,4 @@
 /resources/js export-ignore
 /resources/sass export-ignore
 /packages export-ignore
-/src/Console/Dev export ignore
+/src/Dev export-ignore

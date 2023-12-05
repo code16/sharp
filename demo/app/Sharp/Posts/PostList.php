@@ -100,7 +100,7 @@ class PostList extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         $posts = Post::select('posts.*')
-            ->with('author', 'categories')
+            ->with('author', 'categories', 'cover')
 
             // Handle specific IDs (in case of refresh, called by a state handler or a command)
             ->when(
@@ -181,10 +181,10 @@ class PostList extends SharpEntityList
                 );
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {
-                return $instance->author_id
+                return $value
                     ? LinkToEntityList::make('posts')
-                        ->addFilter(AuthorFilter::class, $instance->author_id)
-                        ->renderAsText($instance->author->name)
+                        ->addFilter(AuthorFilter::class, $instance->id)
+                        ->renderAsText($value)
                     : null;
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())

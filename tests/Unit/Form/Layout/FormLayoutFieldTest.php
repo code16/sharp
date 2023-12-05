@@ -29,8 +29,8 @@ it('allows to set a xs size', function () {
 
 it('allows to define a sublayout for a field', function () {
     $formTab = new FormLayoutField('name', function ($item) {
-        $item->withSingleField('age')
-            ->withSingleField('size');
+        $item->withField('age')
+            ->withField('size');
     });
 
     expect($formTab->toArray())

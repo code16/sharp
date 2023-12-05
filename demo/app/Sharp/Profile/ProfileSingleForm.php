@@ -15,8 +15,6 @@ class ProfileSingleForm extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
 
-    protected ?string $formValidatorClass = MyProfileValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -49,12 +47,12 @@ class ProfileSingleForm extends SharpSingleForm
         $formLayout
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withFields('name')
-                    ->withFields('email');
+                    ->withField('name')
+                    ->withField('email');
             })
             ->addColumn(6, function (FormLayoutColumn $column) {
                 $column
-                    ->withSingleField('avatar');
+                    ->withField('avatar');
             });
     }
 
@@ -67,6 +65,11 @@ class ProfileSingleForm extends SharpSingleForm
 
     protected function updateSingle(array $data)
     {
+        $this->validate(
+            $data,
+            ['name' => ['required', 'string', 'max:300']]
+        );
+
         $user = auth()->user();
 
         $this->save($user, $data);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PostState;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ class Post extends Model
     protected $guarded = [];
     protected $casts = [
         'published_at' => 'datetime',
+        'state' => PostState::class,
     ];
 
     public static function scopeOnline(Builder $builder): void
@@ -70,7 +72,12 @@ class Post extends Model
 
     public function isOnline(): bool
     {
-        return $this->state === 'online';
+        return $this->state === PostState::ONLINE;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->state === PostState::DRAFT;
     }
 
     public function getDefaultAttributesFor($attribute)

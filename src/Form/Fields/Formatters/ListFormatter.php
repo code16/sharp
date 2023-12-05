@@ -6,11 +6,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 
 class ListFormatter extends SharpFieldFormatter
 {
-    /**
-     * @param  SharpFormField  $field
-     * @param  $value
-     * @return mixed
-     */
     public function toFront(SharpFormField $field, $value)
     {
         return collect($value)
@@ -24,7 +19,7 @@ class ListFormatter extends SharpFieldFormatter
                     ->each(function ($itemField) use ($item, &$itemArray) {
                         $key = $itemField->key();
 
-                        if (strpos($key, ':') !== false) {
+                        if (str_contains($key, ':')) {
                             // It's a sub attribute (like mother:name)
                             [$attribute, $subAttribute] = explode(':', $key);
                             $itemArray[$key] = isset($item[$attribute][$subAttribute])
@@ -42,12 +37,6 @@ class ListFormatter extends SharpFieldFormatter
             ->all();
     }
 
-    /**
-     * @param  SharpFormField  $field
-     * @param  string  $attribute
-     * @param  $value
-     * @return array
-     */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
         return collect($value)

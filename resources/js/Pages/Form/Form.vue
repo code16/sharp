@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { Form as FormComponent } from "@sharp/form";
-    import { Form } from "@sharp/form/src/Form";
+    import FormComponent from "@/form/components/Form.vue";
+    import { Form } from "@/form/Form";
     import Layout from "@/Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
     import { router } from "@inertiajs/vue3";
@@ -10,7 +10,7 @@
     import Breadcrumb from "@/components/Breadcrumb.vue";
     import { ref, watchEffect } from "vue";
     import { __ } from "@/utils/i18n";
-    import { Button } from "@sharp/ui";
+    import { Button } from "@/components/ui";
     import { vSticky } from "@/directives/sticky";
 
     const props = defineProps<{
@@ -19,7 +19,7 @@
         errors: { [key:string]: string },
     }>();
 
-    const { entityKey, instanceId } = route().params;
+    const { entityKey, instanceId } = route().params as { entityKey: string, instanceId?: string };
     const form = new Form(props.form, entityKey, instanceId);
     const loading = ref(false);
     const bottomBarStuck = ref(false);

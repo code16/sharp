@@ -47,7 +47,7 @@ export type CommandFormData = {
 export type CommandResponseData =
   | { action: "link"; link: string }
   | { action: "info"; message: string }
-  | { action: "refresh"; items?: Array<number | string> }
+  | { action: "refresh"; items?: Array<{ [key: string]: any }> }
   | { action: "reload" }
   | { action: "step"; step: string }
   | { action: "view"; html: string };
@@ -93,8 +93,8 @@ export type DateRangeFilterData = {
   displayFormat: string;
 };
 export type DateRangeFilterValueData = {
-  start: string;
-  end: string;
+  start: Date | string;
+  end: Date | string;
 };
 export type EmbedData = {
   key: string;

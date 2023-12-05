@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="base-url" content="{{ sharp_base_url_segment() }}">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow" />
 
@@ -32,7 +31,7 @@
         @inertiaHead
 
         <x-sharp::vite>
-            @vite('resources/js/sharp.js', '/vendor/sharp')
+            @vite('resources/js/sharp.ts', '/vendor/sharp')
         </x-sharp::vite>
     </head>
     <body>

@@ -1,25 +1,25 @@
 <script setup lang="ts">
     import { CommandData, DashboardData, FilterData } from "@/types";
-    import { useFilters } from "@sharp/filters";
+    import { useFilters } from "@/filters/useFilters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { SectionTitle, } from '@sharp/ui';
-    import Widget from "@sharp/dashboard/src/components/Widget.vue";
+    import { SectionTitle } from '@/components/ui';
+    import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import { SharpFilter } from '@sharp/filters';
-    import { CommandsDropdown } from '@sharp/commands';
+    import SharpFilter from '@/filters/components/Filter.vue';
+    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
+    import WithCommands from "@/commands/components/WithCommands.vue";
     import { __ } from "@/utils/i18n";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
-    import { useCommands } from "@sharp/commands/src/useCommands";
-    import { WithCommands } from "@sharp/commands";
+    import { useCommands } from "@/commands/useCommands";
     import PageAlert from "@/components/PageAlert.vue";
 
     const props = defineProps<{
         dashboard: DashboardData,
     }>();
 
-    const { dashboardKey } = route().params;
+    const dashboardKey = route().params.dashboardKey as string;
     const filters = useFilters(props.dashboard.config.filters);
     const commands = useCommands();
 
@@ -52,7 +52,7 @@
 
 <template>
     <Layout>
-        <Title :entity-key="route().params.dashboardKey" />
+        <Title :entity-key="dashboardKey" />
 
         <WithCommands :commands="commands">
             <div class="container mx-auto">

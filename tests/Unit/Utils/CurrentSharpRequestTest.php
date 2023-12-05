@@ -29,7 +29,7 @@ it('allows to get form creation state from request', function () {
         ->and(currentSharpRequest()->isEntityList())->toBeFalse();
 });
 
-it('allows to get_show_state_from_request', function () {
+it('allows to get show state from request', function () {
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1');
 
     expect(currentSharpRequest()->isForm())->toBeFalse()
@@ -39,7 +39,7 @@ it('allows to get_show_state_from_request', function () {
         ->and(currentSharpRequest()->isEntityList())->toBeFalse();
 });
 
-it('allows to get_entity_list_state_from_request', function () {
+it('allows to get entity list state from request', function () {
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person');
 
     expect(currentSharpRequest()->isForm())->toBeFalse()
@@ -49,7 +49,7 @@ it('allows to get_entity_list_state_from_request', function () {
         ->and(currentSharpRequest()->isEntityList())->toBeTrue();
 });
 
-it('allows to get_current_breadcrumb_item_from_request', function () {
+it('allows to get current breadcrumb item from request', function () {
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/1/s-form/child/2');
 
     expect(currentSharpRequest()->getCurrentBreadcrumbItem()->isForm())->toBeTrue()
@@ -58,14 +58,14 @@ it('allows to get_current_breadcrumb_item_from_request', function () {
         ->and(currentSharpRequest()->getCurrentBreadcrumbItem()->instanceId())->toEqual(2);
 });
 
-it('allows to get_previous_show_from_request', function () {
+it('allows to get previous show from request', function () {
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 
     expect(currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->entityKey())->toBe('person')
         ->and(currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->instanceId())->toEqual(42);
 });
 
-it('allows to get_previous_show_of_a_given_key_from_request', function () {
+it('allows to get previous show of a given key from request', function () {
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/31/s-show/person/42/s-show/child/84/s-form/child/84');
 
     expect(currentSharpRequest()->getPreviousShowFromBreadcrumbItems()->entityKey())->toBe('child')
@@ -74,7 +74,7 @@ it('allows to get_previous_show_of_a_given_key_from_request', function () {
         ->and(currentSharpRequest()->getPreviousShowFromBreadcrumbItems('person')->instanceId())->toEqual(42);
 });
 
-it('allows to get_previous_url_from_request', function () {
+it('allows to get previous url from request', function () {
     $this->fakeCurrentSharpRequestWithUrl('/sharp/s-list/person/s-show/person/42/s-form/child/2');
 
     expect(currentSharpRequest()->getUrlOfPreviousBreadcrumbItem())

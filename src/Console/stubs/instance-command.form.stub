@@ -28,6 +28,12 @@ class DummyClass extends InstanceCommand
             );
     }
 
+    public function buildFormLayout(FormLayoutColumn &$column): void
+    {
+        $column->withField('myField')
+
+    }
+
     public function execute($instanceId, array $data = []): array
     {
         return $this->refresh($instanceId);

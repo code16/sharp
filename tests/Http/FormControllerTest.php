@@ -3,9 +3,13 @@
 use Code16\Sharp\Enums\PageAlertLevel;
 use Code16\Sharp\Exceptions\Form\SharpApplicativeException;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
+use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Entities\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
@@ -13,6 +17,7 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Illuminate\Http\UploadedFile;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -122,10 +127,10 @@ it('returns configured form layout', function () {
         {
             $formLayout
                 ->addColumn(6, function (FormLayoutColumn $column) {
-                    return $column->withSingleField('name');
+                    return $column->withField('name');
                 })
                 ->addColumn(6, function (FormLayoutColumn $column) {
-                    return $column->withSingleField('job');
+                    return $column->withField('job');
                 });
         }
     });
@@ -176,6 +181,197 @@ it('stores or updates an instance and redirect to the list', function () {
         ->assertRedirect('/sharp/s-list/person');
 });
 
+it('dispatches HandlePostedFilesJob on update and on create if needed', function () {
+    Storage::fake('local');
+    Bus::fake();
+    $this->withoutExceptionHandling();
+
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormUploadField::make('file')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/test')
+            );
+        }
+    });
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'file' => [
+                'name' => '/image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+        return $job->filePath == 'data/test/image.jpg'
+            && $job->uploadedFileName == '/image.jpg';
+    });
+
+    UploadedFile::fake()
+        ->image('image-2.jpg')
+        ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'file' => [
+                'name' => '/image-2.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+        return $job->filePath == 'data/test/image-2.jpg'
+            && $job->uploadedFileName == '/image-2.jpg';
+    });
+});
+
+it('does not dispatch HandlePostedFilesJob if not needed', function () {
+    Bus::fake();
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'name' => 'Stephen Hawking',
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => 'Marie Curie',
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Bus::assertNotDispatched(HandleUploadedFileJob::class);
+});
+
+it('handles isTransformOriginal to transform the image on a newly uploaded file', function ($transformKeepOriginal) {
+    Storage::fake('local');
+    Bus::fake();
+
+    fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
+    {
+        public function __construct(private bool $transformKeepOriginal)
+        {
+        }
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormUploadField::make('file')
+                        ->setStorageDisk('local')
+                        ->setStorageBasePath('data/test')
+                        ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
+                );
+        }
+
+        public function update($id, array $data)
+        {
+            return $id;
+        }
+    });
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/12', [
+            'file' => [
+                'name' => '/image.jpg',
+                'uploaded' => true,
+                'transformed' => true,
+                'filters' => [
+                    'rotate' => ['angle' => 90],
+                ],
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) use ($transformKeepOriginal) {
+        return $job->filePath == 'data/test/image.jpg'
+            && $job->disk == 'local'
+            && $job->instanceId == 12
+            && $job->uploadedFileName == '/image.jpg'
+            && $job->transformFilters == $transformKeepOriginal
+                ? null
+                : ['rotate' => ['angle' => 90]];
+    });
+})->with([
+    'transformKeepOriginal' => [true, false],
+]);
+
+it('handles isTransformOriginal to transform the image on an existing file', function ($transformKeepOriginal) {
+    Storage::fake('local');
+    Bus::fake();
+
+    fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
+    {
+        public function __construct(private bool $transformKeepOriginal)
+        {
+        }
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormUploadField::make('file')
+                        ->setStorageDisk('local')
+                        ->setStorageBasePath('data/test')
+                        ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
+                );
+        }
+    });
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/data/test', 'image.jpg', ['disk' => 'local']);
+
+    $this->withoutExceptionHandling();
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'file' => [
+                'path' => '/data/test/image.jpg',
+                'size' => 12,
+                'disk' => 'local',
+                'uploaded' => false,
+                'transformed' => true,
+                'filters' => [
+                    'rotate' => ['angle' => 90],
+                ],
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Bus::assertNotDispatched(HandleUploadedFileJob::class);
+
+    Bus::assertNotDispatched(HandleTransformedFileJob::class, function ($job) use ($transformKeepOriginal) {
+        return $job->filePath == 'data/test/image.jpg'
+            && $job->disk == 'local'
+            && $job->transformFilters == $transformKeepOriginal
+                ? null
+                : ['rotate' => ['angle' => 90]];
+    });
+})->with([
+    'transformKeepOriginal' => [true, false],
+]);
+
 it('redirects to the show after an update', function () {
     $this->get('/sharp/s-list/person/s-show/person/1/s-form/person/1');
 
@@ -202,19 +398,67 @@ it('creates an instance and redirect to the show if configured', function () {
         ->assertRedirect('/sharp/s-list/person/s-show/person/1');
 });
 
-it('validates an instance before update', function () {
+it('validates an instance before store and update with the rules() method', function () {
     fakeFormFor('person', new class extends PersonForm
     {
-        public function validateRequest(): void
+        public function rules(): array
         {
-            Validator::make(request()->all(), ['name' => 'required'])
-                ->validate();
+            return ['name' => 'required'];
         }
     });
 
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
+it('validates an instance before store and update with a validate() call', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function update($id, array $data)
+        {
+            $this->validate($data, ['name' => 'required']);
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
+it('formats data before validation', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(SharpFormEditorField::make('name'));
+        }
+
+        public function update($id, array $data)
+        {
+            $this->validate($data, ['name' => 'nullable|string|min:3']);
+        }
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => ['text' => 'ba'],
         ])
         ->assertSessionHasErrors('name');
 });
@@ -370,4 +614,23 @@ it('allows to configure a page alert with a closure as content', function () {
             ])
             ->etc()
         );
+});
+
+it('allows to use the legacy validation', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        protected string $formValidatorClass = \Code16\Sharp\Tests\Fixtures\Sharp\PersonLegacyValidator::class;
+    });
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/1', [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
 });

@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import AuthLayout from "@/Layouts/AuthLayout.vue";
     import Title from "@/components/Title.vue";
-    import { __ } from "sharp/utils/i18n";
+    import { __ } from "@/utils/i18n";
     import { useForm } from "@inertiajs/vue3";
-    import TextInput from "@sharp/form/src/components/fields/text/TextInput.vue";
-    import { Button } from "@sharp/ui";
+    import TextInput from "@/form/components/fields/text/TextInput.vue";
+    import { Button } from "@/components/ui";
+    import { route } from "@/utils/url";
 
     const props = defineProps<{
         status: string,

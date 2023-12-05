@@ -31,7 +31,7 @@ export default defineConfig(({ mode, command }) => {
             splitVendorChunkPlugin(),
             laravel({
                 input: [
-                    'resources/js/sharp.js',
+                    'resources/js/sharp.ts',
                     'resources/sass/app.css',
                     // 'resources/sass/app.scss',
                     'resources/sass/vendors.scss',

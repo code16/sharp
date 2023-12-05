@@ -18,11 +18,12 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
-import { Modal } from '@sharp/ui';
+import { Modal } from '@/components/ui';
 import useMenu from "@/composables/useMenu";
 import Logo from "@/components/Logo.vue";
-import { auth } from "sharp/utils/auth";
-import { __ } from "sharp/utils/i18n";
+import { auth } from "@/utils/auth";
+import { __ } from "@/utils/i18n";
+import { route } from "@/utils/url";
 
 const sidebarOpen = ref(false);
 const dialogs = useDialogs();
