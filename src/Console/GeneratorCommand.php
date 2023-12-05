@@ -715,7 +715,7 @@ class GeneratorCommand extends Command
         }
 
         $isSimple = confirm(
-            label: 'Should use the default Eloquent implementation based on an order attribute?',
+            label: 'Should use the simple Eloquent implementation based on a reorder attribute?',
         );
 
         if($isSimple) {
