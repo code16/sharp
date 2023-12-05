@@ -30,7 +30,11 @@ class DummyClass extends SharpForm
 
     public function find($id): array
     {
-        // return $this->transform(...);
+        return $this->transform(
+            [
+                "my_field" => "My value"
+            ]
+        );
     }
 
     public function update($id, array $data)

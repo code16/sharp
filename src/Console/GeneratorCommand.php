@@ -109,7 +109,7 @@ class GeneratorCommand extends Command
         }
 
         if (class_exists($listClass)) {
-            $this->addAnEntityStateToAListOrShowPage(
+            $this->addNewEntityStateToListOrShowPage(
                 'List',
                 $name.'EntityState',
                 $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\',
@@ -122,7 +122,7 @@ class GeneratorCommand extends Command
         $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
 
         if (class_exists($showClass)) {
-            $this->addAnEntityStateToAListOrShowPage(
+            $this->addNewEntityStateToListOrShowPage(
                 'Show',
                 $name.'EntityState',
                 $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\',
@@ -188,6 +188,22 @@ class GeneratorCommand extends Command
         $this->components->twoColumnDetail(sprintf('%s filter', $filterType), $this->getSharpRootNamespace().'\\'.$filterPath.'\\'.$name.'Filter.php');
 
         $this->components->info('Your filter has been created successfully.');
+
+        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
+
+        if (! class_exists($listClass)) {
+            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
+        }
+
+        if (class_exists($listClass)) {
+            $this->addNewItemToAListOfFilters(
+                $name.'Filter',
+                $this->getSharpRootNamespace().'\\'.$filterPath.'\\',
+                $listClass,
+            );
+
+            $this->components->info(sprintf('The filter has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
+        }
     }
 
     public function commandPrompt()
@@ -578,7 +594,27 @@ class GeneratorCommand extends Command
         ));
     }
 
-    private function addAnEntityStateToAListOrShowPage(string $targetType, string $entityStateClass, string $entityStatePath, string $targetClass)
+    private function addNewItemToAListOfFilters(string $filterClass, string $filterPath, string $targetClass)
+    {
+        $reflector = new ReflectionClass($targetClass);
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            PHP_EOL.'class ',
+            'use '.$filterPath.$filterClass.';'.PHP_EOL.PHP_EOL.'class ',
+            $targetContent
+        ));
+
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            "getFilters(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
+            "getFilters(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$filterClass.'::class,'.PHP_EOL,
+            $targetContent
+        ));
+    }
+
+    private function addNewEntityStateToListOrShowPage(string $targetType, string $entityStateClass, string $entityStatePath, string $targetClass)
     {
         $classMethodName = sprintf(
             'build%sConfig',
@@ -599,6 +635,26 @@ class GeneratorCommand extends Command
         file_put_contents($reflector->getFileName(), str_replace(
             "$classMethodName(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
             "$classMethodName(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureEntityState('state',".$entityStateClass."::class)".PHP_EOL,
+            $targetContent
+        ));
+    }
+
+    private function addNewReorderHandlerToList(string $reorderHandlerClass, string $reorderHandlerPath, string $targetClass)
+    {
+        $reflector = new ReflectionClass($targetClass);
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            PHP_EOL."class ",
+            "use ".$reorderHandlerPath.$reorderHandlerClass.";".PHP_EOL.PHP_EOL."class ",
+            $targetContent
+        ));
+
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
+            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureReorderable(".$reorderHandlerClass."::class)".PHP_EOL,
             $targetContent
         ));
     }
@@ -648,5 +704,21 @@ class GeneratorCommand extends Command
         $this->components->twoColumnDetail('Reorder handler', $this->getSharpRootNamespace().'\\'.$reorderPath.'\\'.$name.'Reorder.php');
 
         $this->components->info('Your reorder handler has been created successfully.');
+
+        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
+
+        if (! class_exists($listClass)) {
+            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
+        }
+
+        if (class_exists($listClass)) {
+            $this->addNewReorderHandlerToList(
+                $name.'Reorder',
+                $this->getSharpRootNamespace().'\\'.$reorderPath.'\\',
+                $listClass,
+            );
+
+            $this->components->info(sprintf('The reorder handler has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
+        }
     }
 }
