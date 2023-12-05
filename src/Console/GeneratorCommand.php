@@ -659,6 +659,26 @@ class GeneratorCommand extends Command
         ));
     }
 
+    private function addNewSimpleEloquentReorderHandlerToList(string $reorderAttribute, string $modelClass, string $modelPath, string $targetClass)
+    {
+        $reflector = new ReflectionClass($targetClass);
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            PHP_EOL."class ",
+            "use ".$modelPath.$modelClass.";".PHP_EOL."use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;".PHP_EOL.PHP_EOL."class ",
+            $targetContent
+        ));
+
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
+            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureReorderable(".PHP_EOL."                new SimpleEloquentReorderHandler(".$modelClass."::class)".PHP_EOL."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL."            )".PHP_EOL,
+            $targetContent
+        ));
+    }
+
     private function namespaceToPath($namespace)
     {
         return Str::lcfirst(str_replace('\\', '/', $namespace));
@@ -666,14 +686,6 @@ class GeneratorCommand extends Command
 
     private function reorderHandlerPrompt()
     {
-        $name = text(
-            label: 'What is the name of your reorder handler?',
-            placeholder: 'E.g. ProductVisual',
-            required: true,
-            hint: 'A "Reorder" suffix will be added automatically (E.g. ProductVisualReorder.php).',
-        );
-        $name = Str::ucfirst(Str::camel($name));
-
         $entityName = search(
             'Search for the related sharp entity',
             fn (string $value) => strlen($value) > 0
@@ -688,13 +700,51 @@ class GeneratorCommand extends Command
             required: true,
         );
 
-        $model = search(
+        $modelName = search(
             'Search for the related model',
             fn (string $value) => strlen($value) > 0
                 ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
                 : []
         );
-        $model = $modelNamespace.'\\'.$model;
+        $model = $modelNamespace.'\\'.$modelName;
+
+        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
+
+        if (! class_exists($listClass)) {
+            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
+        }
+
+        $isSimple = confirm(
+            label: 'Should use the default Eloquent implementation based on an order attribute?',
+        );
+
+        if($isSimple) {
+            $reorderAttribute = text(
+                label: 'What is the name of your reorder attribute?',
+                default: 'order',
+                required: true,
+            );
+
+            if (class_exists($listClass)) {
+                $this->addNewSimpleEloquentReorderHandlerToList(
+                    $reorderAttribute,
+                    $modelName,
+                    $modelNamespace.'\\',
+                    $listClass,
+                );
+
+                $this->components->info(sprintf('The simple eloquent reorder handler has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
+            }
+            return;
+        }
+
+        $name = text(
+            label: 'What is the name of your reorder handler?',
+            placeholder: 'E.g. ProductVisual',
+            required: true,
+            hint: 'A "Reorder" suffix will be added automatically (E.g. ProductVisualReorder.php).',
+        );
+        $name = Str::ucfirst(Str::camel($name));
 
         Artisan::call('sharp:make:reorder-handler', [
             'name' => $reorderPath.'\\'.$name.'Reorder',
@@ -704,12 +754,6 @@ class GeneratorCommand extends Command
         $this->components->twoColumnDetail('Reorder handler', $this->getSharpRootNamespace().'\\'.$reorderPath.'\\'.$name.'Reorder.php');
 
         $this->components->info('Your reorder handler has been created successfully.');
-
-        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
-
-        if (! class_exists($listClass)) {
-            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
-        }
 
         if (class_exists($listClass)) {
             $this->addNewReorderHandlerToList(
