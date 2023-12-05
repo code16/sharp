@@ -665,16 +665,16 @@ class GeneratorCommand extends Command
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            PHP_EOL."class ",
-            "use ".$modelPath.$modelClass.";".PHP_EOL."use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;".PHP_EOL.PHP_EOL."class ",
+            PHP_EOL.'class ',
+            'use '.$modelPath.$modelClass.';'.PHP_EOL."use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;".PHP_EOL.PHP_EOL.'class ',
             $targetContent
         ));
 
         $targetContent = file_get_contents($reflector->getFileName());
 
         file_put_contents($reflector->getFileName(), str_replace(
-            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
-            "buildListConfig(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureReorderable(".PHP_EOL."                new SimpleEloquentReorderHandler(".$modelClass."::class)".PHP_EOL."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL."            )".PHP_EOL,
+            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
+            'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.PHP_EOL.'                new SimpleEloquentReorderHandler('.$modelClass.'::class)'.PHP_EOL."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL.'            )'.PHP_EOL,
             $targetContent
         ));
     }
@@ -718,7 +718,7 @@ class GeneratorCommand extends Command
             label: 'Should use the default Eloquent implementation based on an order attribute?',
         );
 
-        if($isSimple) {
+        if ($isSimple) {
             $reorderAttribute = text(
                 label: 'What is the name of your reorder attribute?',
                 default: 'order',
@@ -735,6 +735,7 @@ class GeneratorCommand extends Command
 
                 $this->components->info(sprintf('The simple eloquent reorder handler has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
             }
+
             return;
         }
 
