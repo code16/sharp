@@ -77,32 +77,68 @@ class GeneratorCommand extends Command
         );
         $entityStatePath = Str::plural($entityName).'\\States';
 
-        $modelNamespace = text(
-            label: 'What is the namespace of your models?',
-            default: 'App\\Models',
-            required: true,
+        $hasModel = confirm(
+            label: 'Should the entity state update an instance of a model?',
         );
 
-        $model = search(
-            'Search for the related model',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
-                : []
-        );
-        $model = $modelNamespace.'\\'.$model;
+        if ($hasModel) {
+            $modelNamespace = text(
+                label: 'What is the namespace of your models?',
+                default: 'App\\Models',
+                required: true,
+            );
 
-        if (! class_exists($model)) {
-            $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
+            $model = search(
+                'Search for the related model',
+                fn (string $value) => strlen($value) > 0
+                    ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
+                    : []
+            );
+            $model = $modelNamespace.'\\'.$model;
 
-            exit(1);
+            if (! class_exists($model)) {
+                $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
+
+                exit(1);
+            }
         }
 
         Artisan::call('sharp:make:entity-state', [
             'name' => $entityStatePath.'\\'.$name.'EntityState',
-            '--model' => $model,
+            ...($hasModel ? ['--model' => $model] : []),
         ]);
 
         $this->components->twoColumnDetail('Entity state', $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\'.$name.'EntityState.php');
+
+        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
+
+        if (!class_exists($listClass)) {
+            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
+        }
+
+        if (class_exists($listClass)) {
+            $this->addAnEntityStateToAListOrShowPage(
+                'List',
+                $name.'EntityState',
+                $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\',
+                $listClass,
+            );
+
+            $this->components->info(sprintf('The entity state has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
+        }
+
+        $showClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'Show';
+
+        if (class_exists($showClass)) {
+            $this->addAnEntityStateToAListOrShowPage(
+                'Show',
+                $name.'EntityState',
+                $this->getSharpRootNamespace().'\\'.$entityStatePath.'\\',
+                $showClass,
+            );
+
+            $this->components->info(sprintf('The entity state has been successfully added to the related show page (%s).', $entityName.'Show'));
+        }
 
         $this->components->info('Your entity state has been created successfully.');
     }
@@ -546,6 +582,31 @@ class GeneratorCommand extends Command
         file_put_contents($reflector->getFileName(), str_replace(
             "$classMethodName(): ?array".PHP_EOL."    {".PHP_EOL."        return [".PHP_EOL,
             "$classMethodName(): ?array".PHP_EOL."    {".PHP_EOL."        return [".PHP_EOL."            ".$commandClass."::class,".PHP_EOL,
+            $targetContent
+        ));
+    }
+
+    private function addAnEntityStateToAListOrShowPage(string $targetType, string $entityStateClass, string $entityStatePath, string $targetClass)
+    {
+        $classMethodName = sprintf(
+            'build%sConfig',
+            $targetType
+        );
+
+        $reflector = new ReflectionClass($targetClass);
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            PHP_EOL."class ",
+            "use ".$entityStatePath.$entityStateClass.";".PHP_EOL.PHP_EOL."class ",
+            $targetContent
+        ));
+
+        $targetContent = file_get_contents($reflector->getFileName());
+
+        file_put_contents($reflector->getFileName(), str_replace(
+            "$classMethodName(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL,
+            "$classMethodName(): void".PHP_EOL."    {".PHP_EOL."        \$this".PHP_EOL."            ->configureEntityState('state',".$entityStateClass."::class)".PHP_EOL,
             $targetContent
         ));
     }
