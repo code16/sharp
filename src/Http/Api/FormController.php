@@ -91,7 +91,12 @@ class FormController extends ApiController
 
         return response()->json([
             'redirectUrl' => $form->isDisplayShowPageAfterCreation()
-                ? "{$previousUrl}/s-show/{$entityKey}/{$instanceId}"
+                ? sprintf(
+                    '%s/s-show/%s/%s',
+                    $previousUrl,
+                    sharp_normalize_entity_key($entityKey)[0],
+                    $instanceId
+                )
                 : $previousUrl,
         ]);
     }
