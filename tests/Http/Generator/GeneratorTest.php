@@ -1,8 +1,20 @@
 <?php
 
 use Code16\Sharp\Tests\Fixtures\ClosedPeriod;
+use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
+    Artisan::call('vendor:publish', [
+        '--provider' => 'Code16\Sharp\SharpServiceProvider',
+        '--tag' => 'config',
+        '--force' => true,
+    ]);
+
+    Artisan::call('vendor:publish', [
+        '--provider' => 'Code16\Sharp\SharpServiceProvider',
+        '--tag' => 'assets',
+    ]);
+
     login();
 });
 
@@ -11,11 +23,13 @@ it('can generate a new full sharp entity from console and we can create, display
         ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
         ->expectsQuestion('What is the type of your entity?', 'Classic')
         ->expectsQuestion('What is the name of your entity?', 'ClosedPeriod')
-        ->expectsQuestion('What is the path of your models directory?', 'Models')
+        ->expectsQuestion('What is the namespace of your models?', 'App/Models')
         ->expectsQuestion('What is the label of your entity?', 'Fermetures')
         ->expectsQuestion('What do you need with your entity?', 'List, form & show page')
         ->expectsConfirmation('Do you need a policy?', 'yes')
         ->assertExitCode(0);
+
+    //@todo refresh used config/sharp.php to take into account the new entity
 
 //    dd($this->get(route('code16.sharp.list', ['closed_periods'])));
 //        ->assertOk();
@@ -89,6 +103,7 @@ it('can generate a new sharp single entity from console', function () {
         ->assertExitCode(0);
 
     $this->get(route('code16.sharp.single-show', [
+        'uri' => 's-show/settings',
         'entityKey' => 'settings',
     ]))
         ->assertOk();
@@ -102,7 +117,9 @@ it('can generate a new sharp single entity from console', function () {
     $this->post(route('code16.sharp.form.store', [
         'uri' => 's-show/settings',
         'entityKey' => 'settings',
-    ]), [])
+    ]), [
+        'my_field' => 'Arnaud',
+    ])
         ->assertStatus(302);
 });
 
@@ -115,6 +132,7 @@ it('can generate a new sharp dashboard from console', function () {
         ->assertExitCode(0);
 
     $this->get(route('code16.sharp.dashboard', [
+        'uri' => 's-dashboard/financial',
         'dashboardKey' => 'financial',
     ]))
         ->assertOk()

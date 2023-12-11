@@ -13,8 +13,6 @@ class DummyClass extends SharpSingleForm
 {
     use WithSharpFormEloquentUpdater;
 
-    protected ?string $formValidatorClass = DummyValidatorClass::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
