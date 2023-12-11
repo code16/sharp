@@ -17,8 +17,10 @@ use Code16\Sharp\Console\EntityListMakeCommand;
 use Code16\Sharp\Console\EntityMakeCommand;
 use Code16\Sharp\Console\FormMakeCommand;
 use Code16\Sharp\Console\GeneratorCommand;
+use Code16\Sharp\Console\InstallCommand;
 use Code16\Sharp\Console\InstanceCommandMakeCommand;
 use Code16\Sharp\Console\MediaMakeCommand;
+use Code16\Sharp\Console\MenuMakeCommand;
 use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
@@ -125,6 +127,7 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->commands([
             CreateUploadsMigration::class,
+            InstallCommand::class,
             GeneratorCommand::class,
             EntityMakeCommand::class,
             EntityListMakeCommand::class,
@@ -138,6 +141,7 @@ class SharpServiceProvider extends ServiceProvider
             PolicyMakeCommand::class,
             EntityListFilterMakeCommand::class,
             ReorderHandlerMakeCommand::class,
+            MenuMakeCommand::class,
         ]);
 
         $this->app->register(ImageServiceProviderLaravelRecent::class);
