@@ -563,13 +563,11 @@ class GeneratorCommand extends Command
 
     private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityConfigKey)
     {
-        $sharpConfig = file_get_contents(config_path('sharp.php'));
-
-        file_put_contents(config_path('sharp.php'), str_replace(
+        $this->replaceFileContent(
+            config_path('sharp.php'),
             "'$entityConfigKey' => [".PHP_EOL,
             "'$entityConfigKey' => [".PHP_EOL."        '$entityKey' => \\$entityPath::class,".PHP_EOL,
-            $sharpConfig
-        ));
+        );
     }
 
     private function addNewItemToAListOfCommands(string $commandType, string $commandClass, string $commandPath, string $targetClass)
@@ -577,19 +575,27 @@ class GeneratorCommand extends Command
         $classMethodName = sprintf('get%sCommands', $commandType);
 
         $reflector = new ReflectionClass($targetClass);
-        $targetContent = file_get_contents($reflector->getFileName());
 
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             PHP_EOL.'class ',
             'use '.$commandPath.$commandClass.';'.PHP_EOL.PHP_EOL.'class ',
-            $targetContent
-        ));
+        );
 
-        $targetContent = file_get_contents($reflector->getFileName());
-
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             "$classMethodName(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
             "$classMethodName(): ?array".PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$commandClass.'::class,'.PHP_EOL,
+        );
+    }
+
+    private function replaceFileContent($targetFilePath, $search, $replace)
+    {
+        $targetContent = file_get_contents($targetFilePath);
+
+        file_put_contents($targetFilePath, str_replace(
+            $search,
+            $replace,
             $targetContent
         ));
     }
@@ -597,21 +603,18 @@ class GeneratorCommand extends Command
     private function addNewItemToAListOfFilters(string $filterClass, string $filterPath, string $targetClass)
     {
         $reflector = new ReflectionClass($targetClass);
-        $targetContent = file_get_contents($reflector->getFileName());
 
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             PHP_EOL.'class ',
             'use '.$filterPath.$filterClass.';'.PHP_EOL.PHP_EOL.'class ',
-            $targetContent
-        ));
+        );
 
-        $targetContent = file_get_contents($reflector->getFileName());
-
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             'getFilters(): ?array'.PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL,
             'getFilters(): ?array'.PHP_EOL.'    {'.PHP_EOL.'        return ['.PHP_EOL.'            '.$filterClass.'::class,'.PHP_EOL,
-            $targetContent
-        ));
+        );
     }
 
     private function addNewEntityStateToListOrShowPage(string $targetType, string $entityStateClass, string $entityStatePath, string $targetClass)
@@ -622,61 +625,52 @@ class GeneratorCommand extends Command
         );
 
         $reflector = new ReflectionClass($targetClass);
-        $targetContent = file_get_contents($reflector->getFileName());
 
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             PHP_EOL.'class ',
             'use '.$entityStatePath.$entityStateClass.';'.PHP_EOL.PHP_EOL.'class ',
-            $targetContent
-        ));
+        );
 
-        $targetContent = file_get_contents($reflector->getFileName());
-
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             "$classMethodName(): void".PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
             "$classMethodName(): void".PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL."            ->configureEntityState('state',".$entityStateClass.'::class)'.PHP_EOL,
-            $targetContent
-        ));
+        );
     }
 
     private function addNewReorderHandlerToList(string $reorderHandlerClass, string $reorderHandlerPath, string $targetClass)
     {
         $reflector = new ReflectionClass($targetClass);
-        $targetContent = file_get_contents($reflector->getFileName());
 
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             PHP_EOL.'class ',
             'use '.$reorderHandlerPath.$reorderHandlerClass.';'.PHP_EOL.PHP_EOL.'class ',
-            $targetContent
-        ));
+        );
 
-        $targetContent = file_get_contents($reflector->getFileName());
-
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
             'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.$reorderHandlerClass.'::class)'.PHP_EOL,
-            $targetContent
-        ));
+        );
     }
 
     private function addNewSimpleEloquentReorderHandlerToList(string $reorderAttribute, string $modelClass, string $modelPath, string $targetClass)
     {
         $reflector = new ReflectionClass($targetClass);
-        $targetContent = file_get_contents($reflector->getFileName());
 
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             PHP_EOL.'class ',
             'use '.$modelPath.$modelClass.';'.PHP_EOL."use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;".PHP_EOL.PHP_EOL.'class ',
-            $targetContent
-        ));
+        );
 
-        $targetContent = file_get_contents($reflector->getFileName());
-
-        file_put_contents($reflector->getFileName(), str_replace(
+        $this->replaceFileContent(
+            $reflector->getFileName(),
             'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
             'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.PHP_EOL.'                new SimpleEloquentReorderHandler('.$modelClass.'::class)'.PHP_EOL."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL.'            )'.PHP_EOL,
-            $targetContent
-        ));
+        );
     }
 
     private function namespaceToPath($namespace)
