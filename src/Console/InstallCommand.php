@@ -2,19 +2,8 @@
 
 namespace Code16\Sharp\Console;
 
-use Code16\Sharp\Utils\Links\LinkToDashboard;
-use Code16\Sharp\Utils\Links\LinkToEntityList;
-use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use ReflectionClass;
-
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\search;
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\text;
 
 class InstallCommand extends Command
 {
@@ -34,7 +23,7 @@ class InstallCommand extends Command
     {
         Artisan::call('vendor:publish', [
             '--provider' => 'Code16\Sharp\SharpServiceProvider',
-            '--tag' => 'config'
+            '--tag' => 'config',
         ]);
 
         $this->components->info('Sharp config has been published successfully to [config/sharp.php].');
@@ -44,7 +33,7 @@ class InstallCommand extends Command
     {
         Artisan::call('vendor:publish', [
             '--provider' => '"Code16\Sharp\SharpServiceProvider"',
-            '--tag' => 'assets'
+            '--tag' => 'assets',
         ]);
 
         $this->components->info('Sharp assets have been published successfully to [public/vendor/sharp].');
