@@ -15,11 +15,10 @@ class Demo2faNotificationHandler extends Sharp2faNotificationHandler
     {
         return <<<'HTML'
                 <div class="alert alert-info">
-                    <div>Two-factor authentication based on email notifications has been enabled for all users.</div>
-                    <div class="mt-2">Expected code is <strong>123456</strong>.</div>
-                    <div class="mt-2">It is also possible to set an authentification based on a TOTP authenticator app (like Google or Microsoft Authenticator). Check the <a href="https://sharp.code16.fr/docs/guide/authentication.html#two-factor-authentication" target="_blank">documentation</a>.</div>
+                    <div><a href="https://sharp.code16.fr/docs/guide/authentication.html#two-factor-authentication" target="_blank">Two-factor authentication</a> comes with two flavours: notification (mail, sms, etc) or TOTP authenticator app (like Google Authenticator).</div>
+                    <div class="mt-2">This is a demo, expected code is <strong>123456</strong>.</div>
                 </div>
-                An email has been sent to your address. Please enter the 6-digit code.
+                Please enter the 6-digit code
             HTML;
     }
 }
