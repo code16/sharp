@@ -4,6 +4,7 @@ namespace Code16\Sharp\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use function Laravel\Prompts\confirm;
 
 class InstallCommand extends Command
 {
@@ -12,9 +13,16 @@ class InstallCommand extends Command
 
     public function handle()
     {
+        $shouldCreateCheckHandler = confirm(
+            label: 'Should create a check handler to restrict Sharp access only to some users (admins, etc) ?',
+        );
+
         $this->publishConfig();
         $this->publishAssets();
         $this->initSharpMenu();
+        if ($shouldCreateCheckHandler) {
+            $this->createCheckHandler();
+        }
 
         return 0;
     }
@@ -75,6 +83,26 @@ class InstallCommand extends Command
             config_path('sharp.php'),
             "'menu' => null, //\\App\\Sharp\\SharpMenu::class",
             "'menu' => \\App\\Sharp\\SharpMenu::class,",
+        );
+    }
+
+    private function createCheckHandler()
+    {
+        Artisan::call('sharp:make:check-handler', [
+            'name' => 'SharpCheckHandler',
+        ]);
+
+        $this->addCheckHandlerToSharpConfig();
+
+        $this->components->info('A default check handler has been added successfully');
+    }
+
+    private function addCheckHandlerToSharpConfig()
+    {
+        $this->replaceFileContent(
+            config_path('sharp.php'),
+            "'auth' => [".PHP_EOL,
+            "'auth' => [".PHP_EOL."        'check_handler' => \\App\\Sharp\\SharpCheckHandler::class,".PHP_EOL,
         );
     }
 }
