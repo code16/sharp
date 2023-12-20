@@ -1,9 +1,10 @@
 import { Iframe } from "./extensions/iframe/iframe";
+import { Link } from "@tiptap/extension-link";
 
 export const defaultEditorOptions = {
     injectCSS: false,
     enableInputRules: false,
-    enablePasteRules: [Iframe],
+    enablePasteRules: [Iframe, Link],
 }
 
 export const editorProps = {
