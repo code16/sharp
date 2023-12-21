@@ -42,11 +42,6 @@ it('can generate a new full sharp entity from console and we can create, display
     $this->withoutVite();
     login();
 
-    // @todo find why we can't display an empty list
-    ClosedPeriod::create([
-        'my_field' => 'Antoine',
-    ]);
-
     $this->get(route('code16.sharp.list', ['closed_periods']))
         ->assertOk();
 
@@ -70,7 +65,7 @@ it('can generate a new full sharp entity from console and we can create, display
         ->assertOk()
         ->assertSee('Arnaud');
 
-    $closedPeriod = ClosedPeriod::where('my_field', '!=', 'Antoine')->first();
+    $closedPeriod = ClosedPeriod::first();
 
     $this->get(route('code16.sharp.show.show', [
         'uri' => 's-list/closed_periods',
