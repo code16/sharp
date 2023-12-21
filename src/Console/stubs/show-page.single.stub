@@ -2,15 +2,14 @@
 
 namespace DummyNamespace;
 
-use DummyFullModelClass;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
 use Code16\Sharp\Show\Layout\ShowLayoutColumn;
 use Code16\Sharp\Show\Layout\ShowLayoutSection;
-use Code16\Sharp\Show\SharpShow;
+use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class DummyClass extends SharpShow
+class DummyClass extends SharpSingleShow
 {
     protected function buildShowFields(FieldsContainer $showFields): void
     {
@@ -32,25 +31,8 @@ class DummyClass extends SharpShow
             });
     }
 
-    public function buildShowConfig(): void
+    public function findSingle(): array
     {
-        $this
-            ->configureBreadcrumbCustomLabelAttribute('my_field');
-    }
-
-    public function find($id): array
-    {
-        return $this
-            ->setCustomTransformer('my_field', function ($value, DummyModelClass $dummyModel) {
-                return $value;
-            })
-            ->transform(
-                DummyModelClass::findOrFail($id)
-            );
-    }
-
-    public function delete($id): void
-    {
-        DummyModelClass::findOrFail($id)->delete();
+        return $this->transform([]);
     }
 }

@@ -10,12 +10,12 @@ final class PaginatorMetaData extends Data
     public function __construct(
         public int $current_page,
         public string $first_page_url,
-        public int $from,
+        public ?int $from,
         public ?string $next_page_url,
         public string $path,
         public int $per_page,
         public ?string $prev_page_url,
-        public int $to,
+        public ?int $to,
         #[LiteralTypeScriptType('Array<{ url: string|null, label: string, active: boolean }>')]
         public ?array $links = null,
         public ?int $last_page = null,
