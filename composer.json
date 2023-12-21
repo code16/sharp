@@ -46,7 +46,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Code16\\Sharp\\Tests\\": "tests/",
+            "Code16\\Sharp\\Tests\\": "tests/"
         }
     },
     "scripts": {
