@@ -38,7 +38,7 @@ it('can generate a new full sharp entity from console and we can create, display
         $table->string('my_field');
         $table->timestamps();
     });
-    config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
     $this->withoutVite();
     login();
 
@@ -119,7 +119,7 @@ it('can generate a new sharp single entity from console', function () {
 
     // hot reload config/sharp.php that we just modified
     $this->resolveApplicationConfiguration(app());
-    config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
 
     $this->get(route('code16.sharp.single-show', [
         'uri' => 's-show/settings',
@@ -152,7 +152,7 @@ it('can generate a new sharp dashboard from console', function () {
 
     // hot reload config/sharp.php that we just modified
     $this->resolveApplicationConfiguration(app());
-    config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
 
     $this->get(route('code16.sharp.dashboard', [
         'uri' => 's-dashboard/financial',
