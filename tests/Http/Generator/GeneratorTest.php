@@ -1,7 +1,9 @@
 <?php
 
 use Code16\Sharp\Tests\Fixtures\ClosedPeriod;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
     Artisan::call('vendor:publish', [
@@ -29,11 +31,24 @@ it('can generate a new full sharp entity from console and we can create, display
         ->expectsConfirmation('Do you need a policy?', 'yes')
         ->assertExitCode(0);
 
-    //@todo refresh used config/sharp.php to take into account the new entity
+    // hot reload config/sharp.php that we just modified
+    $this->refreshApplication();
+    Schema::create('closed_periods', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('my_field');
+        $table->timestamps();
+    });
+    config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+    $this->withoutVite();
+    login();
 
-//    dd($this->get(route('code16.sharp.list', ['closed_periods'])));
-//        ->assertOk();
     // @todo find why we can't display an empty list
+    ClosedPeriod::create([
+        'my_field' => 'Antoine',
+    ]);
+
+    $this->get(route('code16.sharp.list', ['closed_periods']))
+        ->assertOk();
 
     $this->get(route('code16.sharp.form.create', [
         'uri' => 's-list/closed_periods',
@@ -55,7 +70,7 @@ it('can generate a new full sharp entity from console and we can create, display
         ->assertOk()
         ->assertSee('Arnaud');
 
-    $closedPeriod = ClosedPeriod::first();
+    $closedPeriod = ClosedPeriod::where('my_field', '!=', 'Antoine')->first();
 
     $this->get(route('code16.sharp.show.show', [
         'uri' => 's-list/closed_periods',
@@ -102,6 +117,10 @@ it('can generate a new sharp single entity from console', function () {
         ->expectsConfirmation('Do you need a policy?', 'yes')
         ->assertExitCode(0);
 
+    // hot reload config/sharp.php that we just modified
+    $this->resolveApplicationConfiguration(app());
+    config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+
     $this->get(route('code16.sharp.single-show', [
         'uri' => 's-show/settings',
         'entityKey' => 'settings',
@@ -130,6 +149,10 @@ it('can generate a new sharp dashboard from console', function () {
         ->expectsQuestion('What is the name of your dashboard?', 'Financial')
         ->expectsConfirmation('Do you need a policy?', 'yes')
         ->assertExitCode(0);
+
+    // hot reload config/sharp.php that we just modified
+    $this->resolveApplicationConfiguration(app());
+    config()->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
 
     $this->get(route('code16.sharp.dashboard', [
         'uri' => 's-dashboard/financial',
