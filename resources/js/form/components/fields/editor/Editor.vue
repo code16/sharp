@@ -22,12 +22,13 @@
     import { useForm } from "@/form/useForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
 
-    const emit = defineEmits();
+    const emit = defineEmits(['input']);
     const props = defineProps<FormFieldProps<FormEditorFieldData>>();
     const form = useForm();
+    const header = ref<HTMLElement>();
     const editor = useLocalizedEditor(
         props,
-        () => {
+        (content) => {
             const { field } = props;
             const extensions = [
                 ...getDefaultExtensions({
@@ -58,10 +59,6 @@
                     ),
             ].filter(Boolean);
 
-            const content = field.localized && typeof props.value?.text === 'object'
-                ? props.value?.text[props.locale]
-                : props.value?.text;
-
             const editor = new Editor({
                 content,
                 editable: !field.readOnly,
@@ -69,6 +66,11 @@
                 enablePasteRules: [Iframe],
                 extensions,
                 injectCSS: false,
+                editorProps: {
+                    attributes: {
+                        class: 'card-body editor__content form-control',
+                    },
+                }
             });
 
             watch(() => props.field.readOnly, readOnly => editor.setEditable(readOnly));
@@ -105,7 +107,6 @@
             return editor;
         }
     );
-    const header = ref<HTMLElement>();
 
     function validate() {
         if(this.maxLength
@@ -116,7 +117,6 @@
         }
         return null;
     }
-
 
     onMounted(async () => {
         await nextTick();
@@ -143,13 +143,8 @@
             <template v-if="editor && field.toolbar">
                 <div class="card-header editor__header" v-sticky ref="header">
                     <MenuBar
-                        :id="fieldErrorKey"
                         :editor="editor"
-                        :toolbar="field.toolbar"
-                        :disabled="field.readOnly"
-                        :options="toolbarOptions"
-                        :embeds="field.embeds"
-                        :field="field"
+                        v-bind="$props"
                     />
                 </div>
             </template>

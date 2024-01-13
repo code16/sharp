@@ -9,7 +9,7 @@ export function useLocalizedEditor(
     props: FormFieldProps<FormEditorFieldData>,
     createEditor: (content: string | null) => Editor
 ): ComputedRef<Editor> {
-    if(props.field.localized) {
+    if(props.field.localized && typeof props.value.text === 'object') {
         const form = useForm();
         const localizedEditors = Object.fromEntries(
             form.locales.map(locale => [
