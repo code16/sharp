@@ -1,7 +1,13 @@
 <script setup lang="ts">
-    import { FormEditorFieldData } from "@/types";
+    import {FormEditorFieldData, FormEditorToolbarButton} from "@/types";
     import { FormFieldProps } from "@/form/components/types";
     import { Editor } from "@tiptap/vue-3";
+    import LinkDropdown from "./LinkDropdown.vue";
+    import TableDropdown from "./TableDropdown.vue";
+    import OptionsDropdown from "./OptionsDropdown.vue";
+    import EmbedDropdown from "./EmbedDropdown.vue";
+    import { Button, Dropdown } from "@/components/ui";
+    import { buttons } from './config';
     import { computed } from "vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
@@ -23,7 +29,7 @@
         }
     });
 
-    const toolbarGroups = computed(() =>
+    const toolbarGroups = computed<FormEditorToolbarButton[][]>(() =>
         props.field.toolbar.reduce((res, btn) => {
             if(btn === '|') {
                 return [...res, []];
@@ -48,35 +54,35 @@
                         <template v-if="button === 'link'">
                             <LinkDropdown
                                 :id="fieldErrorKey"
-                                :active="isActive(button)"
-                                :title="buttonTitle(button)"
+                                :active="buttons[button].isActive(editor)"
+                                :title="buttons[button].label()"
                                 :editor="editor"
                                 :disabled="field.readOnly"
-                                @submit="handleLinkSubmitted"
-                                @remove="handleRemoveLinkClicked"
+                                @submit="buttons[button].command(editor)"
+                                @remove="editor.chain().focus().unsetLink().run()"
                             >
-                                <i :class="getIcon(button)" data-test="link"></i>
+                                <i :class="buttons[button].icon" data-test="link"></i>
                             </LinkDropdown>
                         </template>
                         <template v-else-if="button === 'table'">
                             <TableDropdown
-                                :active="isActive(button)"
+                                :active="buttons[button].isActive(editor)"
                                 :disabled="field.readOnly"
                                 :editor="editor"
                             >
-                                <i :class="getIcon(button)" data-test="table"></i>
+                                <i :class="buttons[button].icon" data-test="table"></i>
                             </TableDropdown>
                         </template>
                         <template v-else :key="button">
                             <Button
                                 variant="light"
-                                :active="isActive(button)"
+                                :active="buttons[button].isActive(editor)"
                                 :disabled="field.readOnly"
-                                :title="buttonTitle(button)"
-                                @click="handleClicked(button)"
+                                :title="buttons[button].label()"
+                                @click="buttons[button].command(editor)"
                                 :data-test="button"
                             >
-                                <i :class="getIcon(button)"></i>
+                                <i :class="buttons[button].icon"></i>
                                 <template v-if="button === 'small'">
                                     <i class="fas fa-font fa-xs" style="margin-top: .25em"></i>
                                 </template>
@@ -98,51 +104,3 @@
         </div>
     </div>
 </template>
-
-<script>
-    import { Button, Dropdown } from "@/components/ui";
-    import { buttons } from './config';
-    import LinkDropdown from "./LinkDropdown.vue";
-    import TableDropdown from "./TableDropdown.vue";
-    import OptionsDropdown from "./OptionsDropdown.vue";
-    import EmbedDropdown from "./EmbedDropdown.vue";
-
-    export default {
-        components: {
-            EmbedDropdown,
-            TableDropdown,
-            LinkDropdown,
-            OptionsDropdown,
-            Button,
-            Dropdown,
-        },
-        // props: {
-        //     id: String,
-        //     editor: Object,
-        //     toolbar: Array,
-        //     disabled: Boolean,
-        //     options: Array,
-        //     embeds: Object,
-        // },
-        methods: {
-            getIcon(button) {
-                return buttons()[button]?.icon;
-            },
-            isActive(button) {
-                return buttons()[button]?.isActive?.(this.editor);
-            },
-            buttonTitle(button) {
-                return buttons()[button]?.label;
-            },
-            handleClicked(button) {
-                buttons()[button]?.command(this.editor);
-            },
-            handleLinkSubmitted({ href, label }) {
-                buttons().link.command(this.editor, { href, label });
-            },
-            handleRemoveLinkClicked() {
-                this.editor.chain().focus().unsetLink().run();
-            },
-        },
-    }
-</script>
