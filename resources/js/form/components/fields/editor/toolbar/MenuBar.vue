@@ -6,7 +6,7 @@
     import TableDropdown from "./TableDropdown.vue";
     import OptionsDropdown from "./OptionsDropdown.vue";
     import EmbedDropdown from "./EmbedDropdown.vue";
-    import { Button, Dropdown } from "@/components/ui";
+    import { Button } from "@/components/ui";
     import { buttons } from './config';
     import { computed } from "vue";
     import { config } from "@/utils/config";
@@ -21,7 +21,7 @@
         if(props.field.markdown && !config('sharp.markdown_editor.tight_lists_only') && hasList) {
             return [
                 {
-                    command: () => props.editor.chain().toggleTight().run(),
+                    command: () => props.editor.chain().focus().toggleTight().run(),
                     disabled: !props.editor.can().toggleTight(),
                     label: __('sharp::form.editor.dropdown.options.toggle_tight_list'),
                 }
