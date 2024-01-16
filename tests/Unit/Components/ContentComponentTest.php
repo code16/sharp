@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Components;
 
+use Code16\LaravelContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Components\stubs\Image;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
@@ -10,7 +11,15 @@ use Illuminate\Support\Facades\Blade;
 class ContentComponentTest extends SharpTestCase
 {
     use InteractsWithViews;
-
+    
+    protected function getPackageProviders($app)
+    {
+        return [
+            ...parent::getPackageProviders($app),
+            ContentRendererServiceProvider::class,
+        ];
+    }
+    
     /** @test */
     public function we_can_render_content()
     {
