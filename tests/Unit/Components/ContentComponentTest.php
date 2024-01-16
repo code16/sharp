@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Blade;
 class ContentComponentTest extends SharpTestCase
 {
     use InteractsWithViews;
-    
+
     protected function getPackageProviders($app)
     {
         return [
@@ -19,7 +19,7 @@ class ContentComponentTest extends SharpTestCase
             ContentRendererServiceProvider::class,
         ];
     }
-    
+
     /** @test */
     public function we_can_render_content()
     {
