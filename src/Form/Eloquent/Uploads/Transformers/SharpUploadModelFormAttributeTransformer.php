@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Eloquent\Uploads\Transformers;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -63,7 +64,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             return null;
         }
 
-        if (method_exists($instance, $attribute) && $instance->$attribute() instanceof MorphMany) {
+        if ($instance instanceof Model
+            && $instance->isRelation($attribute)
+            && $instance->$attribute() instanceof MorphMany) {
             // We are handling a list of uploads
             return $instance->$attribute
                 ->map(function ($upload) {
