@@ -4,7 +4,6 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use ReflectionClass;
 
 class EloquentModelUpdater
