@@ -4,7 +4,6 @@ namespace Code16\Sharp\Form\Eloquent;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use ReflectionClass;
 
 class EloquentModelUpdater
@@ -50,7 +49,7 @@ class EloquentModelUpdater
 
     protected function isRelationship(Model $instance, string $attribute): bool
     {
-        return str_contains($attribute, ':') || $instance->isRelation($attribute);
+        return str($attribute)->contains(':') || $instance->isRelation($attribute);
     }
 
     protected function saveRelationships(Model $instance, array $relationships): void

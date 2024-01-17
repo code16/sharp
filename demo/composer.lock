@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd45e77ac49175da8ac91b087302db04",
+    "content-hash": "a2f9b9f48df176c2e2e7da1227f68293",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -114,6 +114,70 @@
                 }
             ],
             "time": "2023-01-15T23:15:59+00:00"
+        },
+        {
+            "name": "code16/laravel-content-renderer",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/code16/laravel-content-renderer.git",
+                "reference": "2ee6935b5e5c9afc97565cb4781190122d6235f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/code16/laravel-content-renderer/zipball/2ee6935b5e5c9afc97565cb4781190122d6235f2",
+                "reference": "2ee6935b5e5c9afc97565cb4781190122d6235f2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.8",
+                "orchestra/testbench": "^8.8",
+                "pestphp/pest": "^2.20",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Code16\\ContentRenderer\\ContentRendererServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Code16\\ContentRenderer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "code16",
+                    "email": "antoine@code16.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Render blade components inside HTML content",
+            "homepage": "https://github.com/code16/laravel-content-renderer",
+            "keywords": [
+                "code16",
+                "laravel",
+                "laravel-content-renderer"
+            ],
+            "support": {
+                "issues": "https://github.com/code16/laravel-content-renderer/issues",
+                "source": "https://github.com/code16/laravel-content-renderer/tree/v1.1.0"
+            },
+            "time": "2024-01-17T14:04:10+00:00"
         },
         {
             "name": "dasprid/enum",

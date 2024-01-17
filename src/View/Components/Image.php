@@ -4,12 +4,12 @@ namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
-use Code16\Sharp\View\Utils\ContentComponent;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\Component;
 use Illuminate\View\View;
 
-class Image extends ContentComponent
+class Image extends Component
 {
     use UsesSharpUploadModel;
 

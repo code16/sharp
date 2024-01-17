@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Tests;
 
+use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -20,6 +21,7 @@ class TestCase extends Orchestra
     {
         return [
             SharpServiceProvider::class,
+            ContentRendererServiceProvider::class
         ];
     }
 
