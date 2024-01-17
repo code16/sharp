@@ -2,28 +2,8 @@
 
 namespace Code16\Sharp\View\Components\Content;
 
-use Code16\Sharp\View\Components\Content;
-use Illuminate\View\Component;
-use Illuminate\View\ComponentAttributeBag;
-use Illuminate\View\View;
+use Code16\ContentRenderer\View\Components\Attributes as AttributesComponent;
 
-class Attributes extends Component
+class Attributes extends AttributesComponent
 {
-    public function __construct(
-        public string $component,
-    ) {
-    }
-
-    public function addAttributes(Content $content, ComponentAttributeBag $attributes)
-    {
-        $content->contentComponentAttributes->put(
-            $this->component,
-            $attributes,
-        );
-    }
-
-    public function render(): View
-    {
-        return view('sharp::components.content.attributes');
-    }
 }

@@ -4,6 +4,7 @@ namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
+use Code16\Sharp\View\Utils\AllowPropsDirective;
 use Code16\Sharp\View\Utils\ContentComponent;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,7 @@ use Illuminate\View\View;
 class File extends ContentComponent
 {
     use UsesSharpUploadModel;
+//    use AllowPropsDirective;
 
     public ?SharpUploadModel $fileModel = null;
     public ?FilesystemAdapter $disk = null;
