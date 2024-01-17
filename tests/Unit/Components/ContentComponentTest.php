@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Unit\Components;
 
-use Code16\LaravelContentRenderer\ContentRendererServiceProvider;
+use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Tests\Unit\Components\stubs\Image;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
