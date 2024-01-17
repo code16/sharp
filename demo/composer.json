@@ -4,7 +4,7 @@
     "require": {
         "php": "^8.2",
         "bacon/bacon-qr-code": "~2.0",
-        "code16/laravel-content-renderer": "^0.1.0",
+        "code16/laravel-content-renderer": "^1.1.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",

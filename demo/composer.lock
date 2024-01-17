@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "553342df808dfd6325f3159af2a8df72",
+    "content-hash": "2df58dfa00e9f09bb010267f6516accd",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -117,22 +117,21 @@
         },
         {
             "name": "code16/laravel-content-renderer",
-            "version": "v0.1.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/code16/laravel-content-renderer.git",
-                "reference": "2d52d0035bd2a1d48e32e30f372f5689ddd51360"
+                "reference": "2ee6935b5e5c9afc97565cb4781190122d6235f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/code16/laravel-content-renderer/zipball/2d52d0035bd2a1d48e32e30f372f5689ddd51360",
-                "reference": "2d52d0035bd2a1d48e32e30f372f5689ddd51360",
+                "url": "https://api.github.com/repos/code16/laravel-content-renderer/zipball/2ee6935b5e5c9afc97565cb4781190122d6235f2",
+                "reference": "2ee6935b5e5c9afc97565cb4781190122d6235f2",
                 "shasum": ""
             },
             "require": {
                 "illuminate/contracts": "^10.0",
-                "php": "^8.1",
-                "spatie/laravel-package-tools": "^1.14.0"
+                "php": "^8.1"
             },
             "require-dev": {
                 "laravel/pint": "^1.0",
@@ -147,16 +146,13 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Code16\\LaravelContentRenderer\\ContentRendererServiceProvider"
-                    ],
-                    "aliases": {
-                        "LaravelContentRenderer": "Code16\\LaravelContentRenderer\\Facades\\LaravelContentRenderer"
-                    }
+                        "Code16\\ContentRenderer\\ContentRendererServiceProvider"
+                    ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Code16\\LaravelContentRenderer\\": "src/"
+                    "Code16\\ContentRenderer\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -179,9 +175,9 @@
             ],
             "support": {
                 "issues": "https://github.com/code16/laravel-content-renderer/issues",
-                "source": "https://github.com/code16/laravel-content-renderer/tree/v0.1.0"
+                "source": "https://github.com/code16/laravel-content-renderer/tree/v1.1.0"
             },
-            "time": "2024-01-16T18:15:40+00:00"
+            "time": "2024-01-17T14:04:10+00:00"
         },
         {
             "name": "dasprid/enum",

@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "8.2.*|8.3.*",
-        "code16/laravel-content-renderer": "^0.1.0",
+        "code16/laravel-content-renderer": "^1.0.0",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",
         "league/commonmark": "^2.4",

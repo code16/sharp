@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\View\Components\Content;
 
-use Code16\LaravelContentRenderer\View\Components\Attributes as AttributesComponent;
+use Code16\ContentRenderer\View\Components\Attributes as AttributesComponent;
 
 class Attributes extends AttributesComponent
 {
