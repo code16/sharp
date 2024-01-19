@@ -3,8 +3,8 @@
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
     import { FormFieldProps } from "@/form/components/types";
-    import { computed, nextTick, onMounted, ref, toRef, toRefs, watch } from "vue";
-    import { Editor, EditorOptions } from "@tiptap/vue-3";
+    import { nextTick, onMounted, ref, watch } from "vue";
+    import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
     import UploadFileInput from "./extensions/upload/UploadFileInput.vue";

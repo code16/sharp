@@ -1,12 +1,11 @@
 <script setup lang="ts">
-    import {FormEditorFieldData, FormEditorToolbarButton} from "@/types";
+    import { FormEditorFieldData, FormEditorFieldEmbedData, FormEditorToolbarButton } from "@/types";
     import { FormFieldProps } from "@/form/components/types";
     import { Editor } from "@tiptap/vue-3";
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";
     import OptionsDropdown from "./OptionsDropdown.vue";
-    import EmbedDropdown from "./EmbedDropdown.vue";
-    import { Button } from "@/components/ui";
+    import { Button, Dropdown, DropdownItem } from "@/components/ui";
     import { buttons } from './config';
     import { computed } from "vue";
     import { config } from "@/utils/config";
@@ -15,19 +14,6 @@
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
     }>();
-
-    const options = computed(() => {
-        const hasList = props.field.toolbar?.some(button => button === 'bullet-list' || button === 'ordered-list');
-        if(props.field.markdown && !config('sharp.markdown_editor.tight_lists_only') && hasList) {
-            return [
-                {
-                    command: () => props.editor.chain().focus().toggleTight().run(),
-                    disabled: !props.editor.can().toggleTight(),
-                    label: __('sharp::form.editor.dropdown.options.toggle_tight_list'),
-                }
-            ];
-        }
-    });
 
     const toolbarGroups = computed<FormEditorToolbarButton[][]>(() =>
         props.field.toolbar.reduce((res, btn) => {
@@ -39,8 +25,8 @@
         }, [[]])
     );
 
-    const customEmbeds = computed(() => {
-        const { upload, ...customEmbeds } = props.field.embeds ?? {};
+    const customEmbeds = computed<FormEditorFieldEmbedData[]>(() => {
+        const { upload, ...customEmbeds } = props.field.embeds;
         return Object.values(customEmbeds);
     });
 </script>
@@ -91,14 +77,27 @@
                     </template>
                 </div>
             </template>
-            <template v-if="options && options.length > 0">
-                <div class="btn-group">
-                    <OptionsDropdown :options="options" :editor="editor" />
-                </div>
-            </template>
             <template v-if="field.embeds && customEmbeds.length > 0">
                 <div class="btn-group">
-                    <EmbedDropdown :embeds="customEmbeds" :editor="editor" />
+                    <Dropdown
+                        class="editor__dropdown"
+                        variant="light"
+                        small
+                        v-bind="$attrs"
+                        ref="dropdown"
+                    >
+                        <template v-slot:text>
+                            {{ __('sharp::form.editor.dropdown.embeds') }}
+                        </template>
+
+                        <template v-slot:default>
+                            <template v-for="embed in customEmbeds">
+                                <DropdownItem @click="editor.chain().focus().insertEmbed({ embedKey: embed.key }).run()">
+                                    {{ embed.label }}
+                                </DropdownItem>
+                            </template>
+                        </template>
+                    </Dropdown>
                 </div>
             </template>
         </div>
