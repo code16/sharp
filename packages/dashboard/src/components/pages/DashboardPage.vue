@@ -24,6 +24,7 @@
                             :commands="commandsForType(section.key)"
                             :filters="sectionFilters(section)"
                             :show-reset="filterIsValuated(sectionFilters(section))"
+                            @command="handleCommandRequested"
                             @filter-change="handleFilterChanged"
                             @filters-reset="handleFiltersReset"
                             v-slot="{ widgetLayout }"
