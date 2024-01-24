@@ -6,6 +6,7 @@ return [
     'display_sharp_version_in_title' => true,
     'display_breadcrumb' => true,
     'entities' => [
+        'z_z_zaaaas' => \App\Sharp\Entities\ZZZaaaaEntity::class,
         'posts' => \App\Sharp\Entities\PostEntity::class,
         'blocks' => \App\Sharp\Entities\PostBlockEntity::class,
         'categories' => \App\Sharp\Entities\CategoryEntity::class,

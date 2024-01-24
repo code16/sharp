@@ -41,7 +41,7 @@ class DummyClass extends SharpShow
     public function find($id): array
     {
         return $this
-            ->setCustomTransformer('my_field', function ($value, DummyModelClass $dummyModel) {
+            ->setCustomTransformer('my_field', function ($value, DummyModelClass $DummyModelVariable) {
                 return $value;
             })
             ->transform(

@@ -86,6 +86,12 @@ class EntityMakeCommand extends GeneratorCommand
                 : __DIR__.'/stubs/entity.list-form.stub';
         }
 
+        if ($this->option('show') !== false) {
+            return $this->option('policy') !== false
+                ? __DIR__.'/stubs/entity.list-show-policy.stub'
+                : __DIR__.'/stubs/entity.list-show.stub';
+        }
+
         return $this->option('policy') !== false
             ? __DIR__.'/stubs/entity.list-policy.stub'
             : __DIR__.'/stubs/entity.list.stub';
