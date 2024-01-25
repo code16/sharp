@@ -35,6 +35,7 @@ class DateFormatter extends SharpFieldFormatter
 
         return $value
             ? Carbon::parse($value)
+                ->setSecond(0)
                 ->setTimezone(config('app.timezone'))
                 ->format($format)
             : null;
