@@ -23,7 +23,10 @@
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
 
     const emit = defineEmits(['input']);
-    const props = defineProps<FormFieldProps<FormEditorFieldData>>();
+    const props = defineProps<
+        FormFieldProps<FormEditorFieldData>
+    >();
+
     const form = useForm();
     const header = ref<HTMLElement>();
     const editor = useLocalizedEditor(
@@ -75,6 +78,17 @@
 
             watch(() => props.field.readOnly, readOnly => editor.setEditable(readOnly));
 
+            // todo replace with laravel precognition ?
+            function validate() {
+                if(props.field.maxLength
+                    && !props.field.showCharacterCount
+                    && editor.storage.characterCount.characters() > props.field.maxLength
+                ) {
+                    return __('sharp::form.text.validation.maxlength', { maxlength: props.field.maxLength });
+                }
+                return null;
+            }
+
             editor.on('update', debounce(() => {
                 const error = validate();
                 const content = props.field.markdown
@@ -107,25 +121,6 @@
             return editor;
         }
     );
-
-    function validate() {
-        if(this.maxLength
-            && !this.showCharacterCount
-            && editor.storage.characterCount.characters() > this.maxLength
-        ) {
-            return __('sharp::form.text.validation.maxlength', { maxlength: this.maxLength });
-        }
-        return null;
-    }
-
-    onMounted(async () => {
-        await nextTick();
-        editor.view.dom.classList.add(
-            'card-body',
-            'form-control',
-            'editor__content',
-        );
-    });
 </script>
 
 <template>
