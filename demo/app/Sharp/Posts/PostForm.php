@@ -212,7 +212,7 @@ class PostForm extends SharpForm
             ->ignore(auth()->user()->isAdmin() ? [] : ['author_id'])
             ->save($post, $data);
 
-        if (currentSharpRequest()->isCreation() && ! $id) {
+        if (currentSharpRequest()->isCreation()) {
             $this->notify('Your post was created, but not published yet.');
         }
 

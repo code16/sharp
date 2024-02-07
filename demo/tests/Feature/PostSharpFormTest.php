@@ -84,7 +84,7 @@ class PostSharpFormTest extends TestCase
     }
 
     /** @test */
-    public function as_an_editor_we_are_not_authorize_to_update_a_spaceship_of_another_editor()
+    public function as_an_editor_we_are_not_authorize_to_update_a_post_of_another_editor()
     {
         $this->loginAsSharpUser(User::factory()->create(['role' => 'editor']));
 
