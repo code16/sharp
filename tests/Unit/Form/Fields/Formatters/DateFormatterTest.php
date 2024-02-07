@@ -79,7 +79,7 @@ it('handles timezone from front', function () {
     config(['app.timezone' => 'Europe/Paris']); //GMT+2
     expect($formatter->fromFront($field, 'attr', '2017-05-31T13:00:00.000000Z'))
         ->toEqual('2017-05-31 15:00:00');
-    
+
     config(['app.timezone' => 'America/Montreal']); //GMT-4
     expect($formatter->fromFront($field, 'attr', '2017-05-31T13:00:00.000000Z'))
         ->toEqual('2017-05-31 09:00:00');
@@ -90,7 +90,7 @@ it('set seconds to zero', function () {
     $field = SharpFormDateField::make('date');
     $field->setHasDate();
     $field->setHasTime();
-    
+
     expect($formatter->fromFront($field, 'attr', '2017-05-31 10:30:17'))
         ->toEqual('2017-05-31 10:30:00');
 });
