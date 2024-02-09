@@ -1,18 +1,30 @@
+<script setup lang="ts">
+    import { Upload as UploadExtension } from "./upload"
+    defineProps<{
+        extension: typeof UploadExtension,
+    }>();
+</script>
+
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <VueClip
+<!--        <VueClip-->
+<!--            :value="value"-->
+<!--            :root="false"-->
+<!--            :options="options"-->
+<!--            :invalid="!!error"-->
+<!--            persist-thumbnails-->
+<!--            v-bind="fieldProps"-->
+<!--            @thumbnail="handleThumbnailChanged"-->
+<!--            @updated="handleUpdated"-->
+<!--            @removed="handleRemoveClicked"-->
+<!--            @success="handleSuccess"-->
+<!--            @error="handleError"-->
+<!--        />-->
+        <Upload
+            :field="extension.options.fieldProps"
+            :field-error-key="extension.options.fieldErrorKey"
             :value="value"
-            :root="false"
-            :options="options"
-            :invalid="!!error"
-            persist-thumbnails
-            v-bind="fieldProps"
-            @thumbnail="handleThumbnailChanged"
-            @updated="handleUpdated"
-            @removed="handleRemoveClicked"
-            @success="handleSuccess"
-            @error="handleError"
-        />
+        ></Upload>
         <template v-if="error">
             <div class="invalid-feedback d-block" style="font-size: .75rem">
                 {{ error }}
@@ -27,9 +39,11 @@
     import { showAlert } from "@/utils/dialogs";
     import { getUploadOptions } from "../../../../../util/upload";
     import { __ } from "@/utils/i18n";
+    import { Upload } from "@/form/components/fields";
 
     export default {
         components: {
+            Upload,
             NodeRenderer,
             VueClip,
         },
