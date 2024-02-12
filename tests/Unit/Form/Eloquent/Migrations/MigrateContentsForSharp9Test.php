@@ -17,18 +17,19 @@ it('Migrate sharp 9 contents', function () {
     DB::table('posts')->insert([
         'content' => '<x-sharp-image name="name" disk="local" path="path" filter-crop="0.5,0.5,0.4,0.4" filter-rotate="90"></x-sharp-image>',
     ]);
-    
-    $migration = new class extends Migration {
+
+    $migration = new class extends Migration
+    {
         use MigrateContentsForSharp9;
-        
+
         public function up(): void
         {
             $this->updateContentOf(DB::table('posts')->select(['content']));
         }
     };
-    
+
     $migration->up();
-    
+
     $this->assertDatabaseHas('posts', [
         'content' => sprintf(
             '<x-sharp-image file="%s"></x-sharp-image>',
@@ -38,8 +39,8 @@ it('Migrate sharp 9 contents', function () {
                 'path' => 'path',
                 'filters' => [
                     'crop' => ['x' => '0.5', 'y' => '0.5', 'width' => '0.4', 'height' => '0.4'],
-                    'rotate' => ['angle' => '90']
-                ]
+                    'rotate' => ['angle' => '90'],
+                ],
             ])),
         ),
     ]);

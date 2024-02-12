@@ -21,7 +21,7 @@ class TestCase extends Orchestra
     {
         return [
             SharpServiceProvider::class,
-            ContentRendererServiceProvider::class
+            ContentRendererServiceProvider::class,
         ];
     }
 

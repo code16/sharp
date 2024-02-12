@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(SharpServiceProvider::class);
 //        $this->app->bind(SharpUploadModel::class, Media::class)
 
-        if(class_exists(SharpDevServiceProvider::class)) {
+        if (class_exists(SharpDevServiceProvider::class)) {
             $this->app->register(SharpDevServiceProvider::class);
         }
 
