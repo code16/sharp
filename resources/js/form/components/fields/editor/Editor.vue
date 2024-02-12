@@ -11,16 +11,13 @@
     import MenuBar from "./toolbar/MenuBar.vue";
     import { normalizeText } from "@/form/util/text";
     import { useLocalizedEditor } from "@/form/components/fields/editor/useLocalizedEditor";
-    import {
-        getDefaultExtensions,
-        getUploadExtension
-    } from "@/form/components/fields/editor/index";
     import { Markdown } from "tiptap-markdown";
     import { config } from "@/utils/config";
     import { Iframe } from "@/form/components/fields/editor/extensions/iframe/iframe";
     import { getEmbedExtension } from "@/form/components/fields/editor/extensions/embed";
     import { useForm } from "@/form/useForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
+    import { getDefaultExtensions, getUploadExtension } from "@/form/components/fields/editor/extensions";
 
     const emit = defineEmits(['input']);
     const props = defineProps<

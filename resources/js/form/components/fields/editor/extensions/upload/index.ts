@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import debounce from 'lodash/debounce';
 import { filesEquals } from "@/utils/upload";
-import { Upload } from "./upload";
+import { Upload, UploadOptions } from "./upload";
 import { api } from "@/api";
 import { FormFieldProps } from "@/form/components/types";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
@@ -44,8 +44,8 @@ export function getUploadExtension(
         }),
     }
 
-    const options = {
-        field: props.field,
+    const options: UploadOptions = {
+        fieldProps: props.field.embeds.upload,
         fieldErrorKey: props.fieldErrorKey,
         state,
         async registerFile(attrs) {

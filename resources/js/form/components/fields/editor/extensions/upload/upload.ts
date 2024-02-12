@@ -8,8 +8,20 @@ import {
     serializeFilterRotate,
 } from "@/utils/upload";
 import { getEventsPlugin } from "./events-plugin";
+import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
+import { FormFieldProps } from "@/form/components/types";
 
-export const Upload = Node.create({
+export type UploadOptions = {
+    fieldProps: FormFieldProps<FormEditorFieldData>,
+    isReady: () => boolean,
+    getFile: () => void,
+    registerFile: () => Promise<FormUploadFieldValueData>,
+    onInput: () => void,
+    onRemove: () => void,
+    onUpdate: () => void,
+}
+
+export const Upload = Node.create<UploadOptions>({
     name: 'upload',
 
     group: 'block',
@@ -19,16 +31,6 @@ export const Upload = Node.create({
     isolating: true,
 
     priority: 150,
-
-    addOptions: () => ({
-        fieldProps: {},
-        isReady: () => true,
-        getFile: () => {},
-        registerFile: () => {},
-        onInput: () => {},
-        onRemove: () => {},
-        onUpdate: () => {},
-    }),
 
     addAttributes() {
         return {
