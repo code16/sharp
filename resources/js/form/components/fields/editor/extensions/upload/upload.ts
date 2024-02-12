@@ -21,6 +21,22 @@ export type UploadOptions = {
     onUpdate: () => void,
 }
 
+export type UploadAttributes = {
+    disk: string,
+    path: string,
+    name: string,
+    size: number,
+    thumbnail: string,
+    filters: {
+        crop: string,
+        rotate: number,
+    },
+    file: File,
+    isImage: boolean,
+    uploaded: boolean,
+    notFound: boolean,
+}
+
 export const Upload = Node.create<UploadOptions>({
     name: 'upload',
 
