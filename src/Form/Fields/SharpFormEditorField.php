@@ -130,7 +130,7 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
 
         return $this;
     }
-    
+
     public function setUploadEmbed(string $uploadEmbed): self
     {
         $this->uploadEmbed = $uploadEmbed;
@@ -192,9 +192,9 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
             $this->setFileFilterImages();
         }
         $uploadConfig['fileFilter'] = $this->fileFilter;
-        
+
         $embed = app($this->uploadEmbed, ['payload' => $uploadConfig]);
-        
+
         return ['upload' => $embed->toConfigArray(true)];
     }
 }

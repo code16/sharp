@@ -22,13 +22,12 @@ abstract class SharpFormEditorEmbed
     protected ?string $label = null;
     protected ?string $tagName = null;
     protected array $templates = [];
-   
-    
+
     public function __construct(
         protected ?array $payload = null,
     ) {
     }
-    
+
     public function toConfigArray(bool $isForm): array
     {
         if (! $template = $this->templates[$isForm ? 'form' : 'show'] ?? ($this->templates['form'] ?? null)) {
