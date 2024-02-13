@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Enums\FormEditorToolbarButton;
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorUploadEmbed;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
@@ -60,6 +61,7 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
     protected bool $renderAsMarkdown = false;
     protected bool $withoutParagraphs = false;
     protected bool $showCharacterCount = false;
+    protected string $uploadEmbed = SharpFormEditorUploadEmbed::class;
 
     public static function make(string $key): self
     {
@@ -128,6 +130,13 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
 
         return $this;
     }
+    
+    public function setUploadEmbed(string $uploadEmbed): self
+    {
+        $this->uploadEmbed = $uploadEmbed;
+
+        return $this;
+    }
 
     protected function validationRules(): array
     {
@@ -183,7 +192,9 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
             $this->setFileFilterImages();
         }
         $uploadConfig['fileFilter'] = $this->fileFilter;
-
-        return ['upload' => $uploadConfig];
+        
+        $embed = app($this->uploadEmbed, ['payload' => $uploadConfig]);
+        
+        return ['upload' => $embed->toConfigArray(true)];
     }
 }

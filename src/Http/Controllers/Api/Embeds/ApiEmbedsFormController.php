@@ -17,7 +17,7 @@ class ApiEmbedsFormController extends Controller
             sharp_check_ability('entity', $entityKey);
         }
 
-        $embed = $this->getEmbedFromKey($embedKey);
+        $embed = $this->getEmbedFromKey($embedKey, request()->get('embed_payload'));
 
         return EmbedFormData::from([
             'fields' => $embed->fields(),

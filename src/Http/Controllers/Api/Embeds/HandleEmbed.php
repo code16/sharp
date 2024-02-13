@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 
 trait HandleEmbed
 {
-    protected function getEmbedFromKey(string $embedKey): SharpFormEditorEmbed
+    protected function getEmbedFromKey(string $embedKey, ?array $payload = null): SharpFormEditorEmbed
     {
-        $embed = app(Str::replace('.', '\\', $embedKey));
+        $embed = app(Str::replace('.', '\\', $embedKey), ['payload' => $payload]);
         $embed->buildEmbedConfig();
 
         return $embed;
