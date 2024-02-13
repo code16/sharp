@@ -11,27 +11,26 @@ trait MigrateContentsForSharp9
     protected function updateContentOf(Builder $query, string $primaryKey = 'id'): self
     {
         $columns = $query->getColumns();
-        
-        if(!in_array($primaryKey, $columns)) {
+
+        if (! in_array($primaryKey, $columns)) {
             throw new \Exception("You must select the primary key column ($primaryKey) to update.");
         }
-        
+
         $contentColumns = collect($columns)->diff([$primaryKey])->toArray();
-        
-        if(empty($contentColumns)) {
+
+        if (empty($contentColumns)) {
             throw new \Exception('You must select at least one column to update.');
         }
-        
+
         $rows = $query
             ->tap(function (Builder $query) use ($contentColumns) {
-                collect($contentColumns)->each(fn ($column) =>
-                    $query
+                collect($contentColumns)->each(fn ($column) => $query
                         ->orWhere($column, 'like', '%<x-sharp-image%')
                         ->orWhere($column, 'like', '%<x-sharp-file%')
-                    );
+                );
             })
             ->get();
-        
+
         foreach ($rows as $row) {
             DB::table($query->from)
                 ->where($primaryKey, $row->{$primaryKey})
@@ -43,16 +42,16 @@ trait MigrateContentsForSharp9
                     })
                 );
         }
-        
+
         return $this;
     }
-    
+
     protected function updateContent(?string $content): ?string
     {
-        if(is_null($content)) {
+        if (is_null($content)) {
             return null;
         }
-        
+
         $result = preg_replace_callback(
             '/<(x-sharp-file|x-sharp-image) ([^>]+)>/m',
             function ($matches) {
@@ -61,9 +60,9 @@ trait MigrateContentsForSharp9
                 $name = preg_match('/name="([^"]+)"/', $attributes, $matchesName) ? $matchesName[1] : '';
                 $disk = preg_match('/disk="([^"]+)"/', $attributes, $matchesDisk) ? $matchesDisk[1] : '';
                 $path = preg_match('/path="([^"]+)"/', $attributes, $matchesPath) ? $matchesPath[1] : '';
-                
+
                 $filters = [];
-                if(preg_match('/filter-crop="([^"]+)"/', $attributes, $matchesCrop)) {
+                if (preg_match('/filter-crop="([^"]+)"/', $attributes, $matchesCrop)) {
                     $cropValues = explode(',', $matchesCrop[1]);
                     $filters['crop'] = [
                         'x' => $cropValues[0],
@@ -72,13 +71,13 @@ trait MigrateContentsForSharp9
                         'height' => $cropValues[3],
                     ];
                 }
-                
+
                 if (preg_match('/filter-rotate="([^"]+)"/', $attributes, $matchesRotate)) {
                     $filters['rotate'] = [
                         'angle' => $matchesRotate[1],
                     ];
                 }
-                
+
                 return sprintf(
                     '<%s file="%s">',
                     $tag,
@@ -92,7 +91,7 @@ trait MigrateContentsForSharp9
             },
             $content
         );
-        
+
         return is_null($result) ? $content : $result;
     }
 }

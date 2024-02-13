@@ -50,18 +50,19 @@ it('Migrate <x-sharp-file> for sharp 9', function () {
     DB::table('posts')->insert([
         'content' => '<x-sharp-file name="name.pdf" disk="local" path="data/Posts/1/name.pdf"></x-sharp-file>',
     ]);
-    
-    $migration = new class extends Migration {
+
+    $migration = new class extends Migration
+    {
         use MigrateContentsForSharp9;
-        
+
         public function up(): void
         {
             $this->updateContentOf(DB::table('posts')->select(['id', 'content']));
         }
     };
-    
+
     $migration->up();
-    
+
     $this->assertDatabaseHas('posts', [
         'content' => sprintf(
             '<x-sharp-file file="%s"></x-sharp-file>',
