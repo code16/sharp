@@ -54,7 +54,7 @@ trait MigrateContentsForSharp9
         }
         
         $result = preg_replace_callback(
-            '/<(x-sharp-file) ([^>]+)>/m',
+            '/<(x-sharp-file|x-sharp-image) ([^>]+)>/m',
             function ($matches) {
                 $tag = $matches[1];
                 $attributes = $matches[2];
