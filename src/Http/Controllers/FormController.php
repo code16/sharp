@@ -117,7 +117,7 @@ class FormController extends SharpProtectedController
         $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
-        
+
         return redirect()->to(
             $form->isDisplayShowPageAfterCreation()
                 ? sprintf(

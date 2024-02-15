@@ -17,13 +17,13 @@ class EloquentModelUpdater
 
         // End of "normal" attributes.
         $instance->save();
-        
+
         if ($closure = $this->fillAfterUpdateWith) {
             $data = $closure($instance->getKey());
-            
+
             $relationships = $this->fillInstance($instance, $data);
-            
-            if($instance->isDirty()) {
+
+            if ($instance->isDirty()) {
                 $instance->save();
             }
         }
@@ -33,18 +33,18 @@ class EloquentModelUpdater
 
         return $instance;
     }
-    
+
     public function fillAfterUpdateWith(\Closure $closure): self
     {
         $this->fillAfterUpdateWith = $closure;
 
         return $this;
     }
-    
+
     protected function fillInstance(Model $instance, array $data): array
     {
         $relationships = [];
-        
+
         foreach ($data as $attribute => $value) {
             if ($this->isRelationship($instance, $attribute)) {
                 $relationships[$attribute] = $value;
@@ -53,7 +53,7 @@ class EloquentModelUpdater
 
             $this->valuateAttribute($instance, $attribute, $value);
         }
-        
+
         return $relationships;
     }
 

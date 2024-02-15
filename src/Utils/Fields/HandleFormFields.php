@@ -55,7 +55,7 @@ trait HandleFormFields
 
         return $formattedData;
     }
-    
+
     final public function formatDataAfterUpdate(array $data, string $instanceId): array
     {
         return collect($data)
@@ -64,7 +64,7 @@ trait HandleFormFields
                     return $value;
                 }
 
-                if(method_exists($field->formatter(), 'afterUpdate')) {
+                if (method_exists($field->formatter(), 'afterUpdate')) {
                     return $field
                         ->formatter()
                         ->setInstanceId($instanceId)

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
-use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\SharpForm;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +37,7 @@ trait WithSharpFormEloquentUpdater
                 ->filter(fn ($value, $attribute) => ! in_array($attribute, $this->ignoredAttributes))
                 ->all();
         }
-        
+
         // Finally call updater
         return app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())

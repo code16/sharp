@@ -37,7 +37,7 @@ class EditorFormatter extends SharpFieldFormatter
 
         return preg_replace('/\R/u', "\n", $this->handleUploadedFiles($content, $files, $field, $attribute));
     }
-    
+
     public function afterUpdate(SharpFormField $field, $attribute, $value): ?string
     {
         return $value

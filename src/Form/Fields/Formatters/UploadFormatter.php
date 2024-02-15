@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class UploadFormatter extends SharpFieldFormatter
 {
     private bool $alwaysReturnFullObject = false;
-    
+
     const ID_PLACEHOLDER = '__id_placeholder__';
 
     public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
@@ -73,15 +73,15 @@ class UploadFormatter extends SharpFieldFormatter
             ? $value
             : ($value === null ? null : []);
     }
-    
+
     public function afterUpdate(SharpFormField $field, string $attribute, $value)
     {
-        if($value['file_name'] ?? null) {
+        if ($value['file_name'] ?? null) {
             $value['file_name'] = str($value['file_name'])
                 ->replace(self::ID_PLACEHOLDER, $this->instanceId)
                 ->value();
         }
-        
+
         return $value;
     }
 }
