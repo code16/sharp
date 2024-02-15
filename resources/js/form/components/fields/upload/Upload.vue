@@ -8,7 +8,7 @@
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import { computed, onUnmounted, ref, watch } from "vue";
-    import { getErrorMessage, getXsrfToken, handleErrorAlert } from "@/api";
+    import { getErrorMessage, handleErrorAlert } from "@/api";
     import { getFiltersFromCropData } from "./util/filters";
     import { Button } from "@/components/ui";
     import { ArrowDownOnSquareIcon } from "@heroicons/vue/24/outline";
@@ -19,6 +19,7 @@
     import EditModal from "./EditModal.vue";
     import { useForm } from "../../../useForm";
     import UploadDropText from "./UploadDropText.vue";
+    import { getCsrfToken } from "@/utils/request";
 
     const props = defineProps<{
         field: FormUploadFieldData,
@@ -46,7 +47,7 @@
     const uppy = new Uppy({
         id: props.fieldErrorKey,
         restrictions: {
-            maxFileSize: props.field.maxFileSize,
+            maxFileSize: (props.field.maxFileSize ?? 0) * 1024 * 1024,
             maxNumberOfFiles: 1,
             allowedFileTypes: props.field.fileFilter
         },
@@ -66,7 +67,7 @@
             fieldName: 'file',
             headers: {
                 'accept': 'application/json',
-                'X-XSRF-TOKEN': getXsrfToken(),
+                'X-CSRF-TOKEN': getCsrfToken(),
             },
         })
         .on('file-added', (file) => {

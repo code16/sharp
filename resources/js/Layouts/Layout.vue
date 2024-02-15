@@ -24,6 +24,7 @@ import Logo from "@/components/Logo.vue";
 import { auth } from "@/utils/auth";
 import { __ } from "@/utils/i18n";
 import { route } from "@/utils/url";
+import { getCsrfToken } from "@/utils/request";
 
 const sidebarOpen = ref(false);
 const dialogs = useDialogs();
@@ -111,7 +112,7 @@ const menu = useMenu();
 <!--                                    </MenuItem>-->
                                     <MenuItem v-slot="{ active }">
                                         <form :action="route('code16.sharp.logout')" method="post">
-                                            <input name="_token" :value="$page.props.session.token" type="hidden">
+                                            <input name="_token" :value="getCsrfToken()" type="hidden">
                                             <button :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']" type="submit">
                                                 {{ __('sharp::menu.logout_label') }}
                                             </button>

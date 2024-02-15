@@ -14,8 +14,4 @@ export function createApi() {
     return api;
 }
 
-export function getXsrfToken() {
-    return document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/)?.[1];
-}
-
 export { handleErrorAlert, getErrorMessage } from './errors';
