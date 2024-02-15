@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class UploadFormatter extends SharpFieldFormatter
 {
     private bool $alwaysReturnFullObject = false;
+    
+    const ID_PLACEHOLDER = '__id_placeholder__';
 
     public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
     {
@@ -38,7 +40,7 @@ class UploadFormatter extends SharpFieldFormatter
             return [
                 'file_name' => sprintf(
                     '%s/%s',
-                    $field->storageBasePath(),
+                    str($field->storageBasePath())->replace('{id}', self::ID_PLACEHOLDER),
                     app(FileUtil::class)->findAvailableName(
                         $value['name'], $field->storageBasePath(), $field->storageDisk(),
                     )
@@ -70,5 +72,16 @@ class UploadFormatter extends SharpFieldFormatter
         return $this->alwaysReturnFullObject
             ? $value
             : ($value === null ? null : []);
+    }
+    
+    public function afterUpdate(SharpFormField $field, string $attribute, $value)
+    {
+        if($value['file_name'] ?? null) {
+            $value['file_name'] = str($value['file_name'])
+                ->replace(self::ID_PLACEHOLDER, $this->instanceId)
+                ->value();
+        }
+        
+        return $value;
     }
 }

@@ -2,10 +2,15 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
+use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
+use Code16\Sharp\Form\SharpForm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * @mixin SharpForm
+ */
 trait WithSharpFormEloquentUpdater
 {
     protected array $ignoredAttributes = [];
@@ -33,10 +38,13 @@ trait WithSharpFormEloquentUpdater
                 ->filter(fn ($value, $attribute) => ! in_array($attribute, $this->ignoredAttributes))
                 ->all();
         }
-
+        
         // Finally call updater
         return app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
+            ->fillAfterUpdateWith(function ($instanceId) use ($data) {
+                return $this->formatDataAfterUpdate($data, $instanceId);
+            })
             ->update($instance, $data);
     }
 

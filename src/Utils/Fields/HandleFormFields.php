@@ -55,4 +55,24 @@ trait HandleFormFields
 
         return $formattedData;
     }
+    
+    final public function formatDataAfterUpdate(array $data, string $instanceId): array
+    {
+        return collect($data)
+            ->map(function ($value, $key) use ($instanceId) {
+                if (! $field = $this->findFieldByKey($key)) {
+                    return $value;
+                }
+
+                if(method_exists($field->formatter(), 'afterUpdate')) {
+                    return $field
+                        ->formatter()
+                        ->setInstanceId($instanceId)
+                        ->afterUpdate($field, $key, $value);
+                }
+
+                return $value;
+            })
+            ->all();
+    }
 }
