@@ -8,9 +8,9 @@ use Code16\Sharp\Utils\Layout\LayoutField;
 trait HasFieldRows
 {
     protected array $rows = [];
-    
+
     /**
-     * @param (\Closure(LayoutColumn): mixed)|null $subLayoutCallback
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
      */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
     {
@@ -32,9 +32,9 @@ trait HasFieldRows
 
         return $this;
     }
-    
+
     /**
-     * @param (\Closure(LayoutColumn): mixed)|null $subLayoutCallback
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
      */
     public function insertSingleFieldAt(int $index, string $fieldKey, \Closure $subLayoutCallback = null): self
     {

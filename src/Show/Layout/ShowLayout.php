@@ -7,9 +7,9 @@ use Code16\Sharp\Form\Layout\HasLayout;
 class ShowLayout implements HasLayout
 {
     protected array $sections = [];
-    
+
     /**
-     * @param (\Closure(ShowLayoutSection): mixed)|null $callback
+     * @param  (\Closure(ShowLayoutSection): mixed)|null  $callback
      */
     final public function addSection(string $label, \Closure $callback = null): self
     {

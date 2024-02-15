@@ -8,9 +8,9 @@ abstract class LayoutField
     protected int $size = 12;
     protected int $sizeXS = 12;
     protected array $itemLayout = [];
-    
+
     /**
-     * @param (\Closure(LayoutColumn): mixed)|null $subLayoutCallback
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
      */
     public function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
     {

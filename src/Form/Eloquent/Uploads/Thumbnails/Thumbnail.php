@@ -20,7 +20,7 @@ class Thumbnail
     protected bool $appendTimestamp = false;
     protected ?array $transformationFilters = null;
     /**
-     * @var (Closure(bool $wasCreated, string $thumbnailPath, string $thumbnailDisk):void)|null
+     * @var (Closure(bool, string, string):void)|null
      */
     protected ?Closure $afterClosure = null;
 
@@ -37,9 +37,9 @@ class Thumbnail
 
         return $this;
     }
-    
+
     /**
-     * @param (Closure(bool $wasCreated, string $thumbnailPath, string $thumbnailDisk):void) $closure
+     * @param  (Closure(bool $wasCreated, string $thumbnailPath, string $thumbnailDisk):void)  $closure
      */
     public function setAfterClosure(Closure $closure): self
     {

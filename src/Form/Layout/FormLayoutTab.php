@@ -11,9 +11,9 @@ class FormLayoutTab implements HasLayout
     {
         $this->title = $title;
     }
-    
+
     /**
-     * @param (\Closure(FormLayoutColumn): mixed)|null $callback
+     * @param  (\Closure(FormLayoutColumn): mixed)|null  $callback
      */
     public function addColumn(int $size, \Closure $callback = null): self
     {
