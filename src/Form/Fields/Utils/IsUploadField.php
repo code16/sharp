@@ -32,5 +32,5 @@ interface IsUploadField
 
     public function storageBasePath(): string;
 
-    public function cropRatio(): array;
+    public function cropRatio(): ?array;
 }

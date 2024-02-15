@@ -11,10 +11,9 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
-class SharpFormEditorField extends SharpFormField implements IsUploadField
+class SharpFormEditorField extends SharpFormField
 {
     use SharpFormFieldWithPlaceholder;
-    use SharpFormFieldWithUpload;
     use SharpFormFieldWithDataLocalization;
     use SharpFormFieldWithEmbeds;
     use SharpFormFieldWithMaxLength {
@@ -36,8 +35,6 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
     const H3 = FormEditorToolbarButton::Heading3;
     const CODE = FormEditorToolbarButton::Code;
     const QUOTE = FormEditorToolbarButton::Blockquote;
-    const UPLOAD_IMAGE = FormEditorToolbarButton::UploadImage;
-    const UPLOAD = FormEditorToolbarButton::Upload;
     const HR = FormEditorToolbarButton::HorizontalRule;
     const TABLE = FormEditorToolbarButton::Table;
     const IFRAME = FormEditorToolbarButton::Iframe;
@@ -170,19 +167,24 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
 
     protected function innerComponentUploadConfiguration(): array
     {
+        if (!$this->uploadEmbed) {
+           return ['upload' => []];
+        }
+
         $uploadConfig = [
-            'maxFileSize' => $this->maxFileSize ?: 2,
-            'transformable' => $this->transformable,
-            'transformKeepOriginal' => $this->transformKeepOriginal(),
-            'transformableFileTypes' => $this->transformableFileTypes,
-            'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
-            'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
+            'maxFileSize' => $this->uploadEmbed->maxFileSize() ?: 2,
+            'transformable' => $this->uploadEmbed->isTransformable(),
+            'transformKeepOriginal' => $this->uploadEmbed->isTransformKeepOriginal(),
+            'transformableFileTypes' => $this->uploadEmbed->transformableFileTypes(),
+            'ratioX' => $this->uploadEmbed->cropRatio() ? (int) $this->uploadEmbed->cropRatio()[0] : null,
+            'ratioY' => $this->uploadEmbed->cropRatio() ? (int) $this->uploadEmbed->cropRatio()[1] : null,
+            'legend' => $this->uploadEmbed->hasLegend(),
         ];
 
-        if (! $this->fileFilter) {
-            $this->setFileFilterImages();
+        if (! $this->uploadEmbed->fileFilter()) {
+            $this->uploadEmbed->setFileFilterImages();
         }
-        $uploadConfig['fileFilter'] = $this->fileFilter;
+        $uploadConfig['fileFilter'] = $this->uploadEmbed->fileFilter();
 
         return ['upload' => $uploadConfig];
     }

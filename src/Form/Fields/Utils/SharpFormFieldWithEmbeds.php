@@ -2,15 +2,26 @@
 
 namespace Code16\Sharp\Form\Fields\Utils;
 
+use Closure;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbedUpload;
 
 trait SharpFormFieldWithEmbeds
 {
     protected array $embeds = [];
+    protected ?SharpFormEditorEmbedUpload $uploadEmbed = null;
 
     public function allowEmbeds(array $embeds): self
     {
         $this->embeds = $embeds;
+
+        return $this;
+    }
+
+    public function allowUploads(Closure $callback): self
+    {
+        $this->uploadEmbed = SharpFormEditorEmbedUpload::make();
+        $callback($this->uploadEmbed);
 
         return $this;
     }

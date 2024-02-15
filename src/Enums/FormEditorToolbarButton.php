@@ -16,8 +16,6 @@ enum FormEditorToolbarButton: string
     case Heading3 = 'heading-3';
     case Code = 'code';
     case Blockquote = 'blockquote';
-    case UploadImage = 'upload-image';
-    case Upload = 'upload';
     case HorizontalRule = 'horizontal-rule';
     case Table = 'table';
     case Iframe = 'iframe';

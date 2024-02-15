@@ -1,8 +1,9 @@
 <?php
 
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbedUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 
-it('only_default_values_are_set', function () {
+it('sets only default values', function () {
     $formField = SharpFormEditorField::make('text');
 
     expect($formField->toArray())
@@ -12,20 +13,22 @@ it('only_default_values_are_set', function () {
             'minHeight' => 200,
             'showCharacterCount' => false,
             'toolbar' => [
-                SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
+                SharpFormEditorField::B,
+                SharpFormEditorField::I,
+                SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::UL,
                 SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::A,
             ],
             'embeds' => [
                 'upload' => [
-                    'maxFileSize' => 2,
-                    'transformable' => true,
-                    'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
-                    'transformKeepOriginal' => true,
-                    'transformableFileTypes' => null,
-                    'ratioX' => null,
-                    'ratioY' => null,
+//                    'maxFileSize' => 2,
+//                    'transformable' => true,
+//                    'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
+//                    'transformKeepOriginal' => true,
+//                    'transformableFileTypes' => null,
+//                    'ratioX' => null,
+//                    'ratioY' => null,
                 ],
             ],
             'markdown' => false,
@@ -54,52 +57,45 @@ it('allows to define height with maxHeight', function () {
         ->not->toHaveKey('maxHeight');
 });
 
-it('allows to define upload configuration', function () {
+it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
-        ->setMaxFileSize(50);
-
-    expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', true);
-
-    $formField->setCropRatio('16:9');
-
-    expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', true)
-        ->toHaveKey('embeds.upload.ratioX', 16)
-        ->toHaveKey('embeds.upload.ratioY', 9);
-
-    $formField->setFileFilter(['jpg', 'pdf']);
+        ->allowUploads(function(SharpFormEditorEmbedUpload $upload) {
+            $upload->setFileFilterImages()
+                ->setMaxFileSize(50)
+                ->setCropRatio('16:9')
+                ->setFileFilter(['jpg', 'pdf'])
+                ->setHasLegend();
+        });
 
     expect($formField->toArray())
         ->toHaveKey('embeds.upload.maxFileSize', 50)
         ->toHaveKey('embeds.upload.transformable', true)
         ->toHaveKey('embeds.upload.ratioX', 16)
         ->toHaveKey('embeds.upload.ratioY', 9)
-        ->toHaveKey('embeds.upload.fileFilter', ['.jpg', '.pdf']);
+        ->toHaveKey('embeds.upload.fileFilter', ['.jpg', '.pdf'])
+        ->toHaveKey('embeds.upload.legend', true);
 
-    $formField->setTransformable(false);
+    $formField = SharpFormEditorField::make('text')
+        ->allowUploads(function(SharpFormEditorEmbedUpload $upload) {
+            $upload->setFileFilterImages()
+                ->setTransformable(false);
+        });
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', false)
-        ->toHaveKey('embeds.upload.ratioX', 16)
-        ->toHaveKey('embeds.upload.ratioY', 9)
-        ->toHaveKey('embeds.upload.fileFilter', ['.jpg', '.pdf']);
+        ->toHaveKey('embeds.upload.transformable', false);
 });
 
 it('allows to define toolbar', function () {
     $formField = SharpFormEditorField::make('text')
         ->setToolbar([
-            SharpFormEditorField::UPLOAD,
+            SharpFormEditorField::TABLE,
             SharpFormEditorField::SEPARATOR,
             SharpFormEditorField::UL,
         ]);
 
     expect($formField->toArray())
         ->toHaveKey('toolbar', [
-            SharpFormEditorField::UPLOAD,
+            SharpFormEditorField::TABLE,
             SharpFormEditorField::SEPARATOR,
             SharpFormEditorField::UL,
         ]);

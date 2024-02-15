@@ -24,6 +24,11 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
+    public function maxFileSize(): ?float
+    {
+        return $this->maxFileSize;
+    }
+
     public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
     {
         if ($ratio) {
@@ -70,14 +75,24 @@ trait SharpFormFieldWithUpload
         return $this;
     }
 
-    public function isTransformOriginal(): bool
+    public function isTransformable(): bool
     {
-        return $this->transformable && ! $this->transformKeepOriginal();
+        return $this->transformable;
     }
 
-    protected function transformKeepOriginal(): bool
+    public function isTransformOriginal(): bool
+    {
+        return $this->transformable && ! $this->isTransformKeepOriginal();
+    }
+
+    public function isTransformKeepOriginal(): bool
     {
         return $this->transformKeepOriginal ?? config('sharp.uploads.transform_keep_original_image', true);
+    }
+
+    public function transformableFileTypes(): ?array
+    {
+        return $this->transformableFileTypes;
     }
 
     public function setStorageDisk(string $storageDisk): self
@@ -118,9 +133,14 @@ trait SharpFormFieldWithUpload
         return value($this->storageBasePath);
     }
 
-    public function cropRatio(): array
+    public function cropRatio(): ?array
     {
         return $this->cropRatio;
+    }
+
+    public function fileFilter(): array
+    {
+        return $this->fileFilter;
     }
 
     private function formatFileExtension(string|array $fileFilter): array
