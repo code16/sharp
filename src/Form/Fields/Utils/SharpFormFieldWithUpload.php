@@ -86,7 +86,10 @@ trait SharpFormFieldWithUpload
 
         return $this;
     }
-
+    
+    /**
+     * @param string|(Closure(): string) $storageBasePath
+     */
     public function setStorageBasePath(string|Closure $storageBasePath): self
     {
         $this->storageBasePath = $storageBasePath;

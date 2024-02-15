@@ -6,7 +6,10 @@ class FormLayout implements HasLayout
 {
     protected array $tabs = [];
     protected bool $tabbed = true;
-
+    
+    /**
+     * @param (\Closure(FormLayoutTab): mixed)|null $callback
+     */
     final public function addTab(string $label, \Closure $callback = null): self
     {
         $tab = $this->addTabLayout(new FormLayoutTab($label));
@@ -17,7 +20,10 @@ class FormLayout implements HasLayout
 
         return $this;
     }
-
+    
+    /**
+     * @param (\Closure(FormLayoutColumn): mixed)|null $callback
+     */
     final public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this

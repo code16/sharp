@@ -12,7 +12,10 @@ class DashboardLayoutSection
     public function __construct(protected string $title)
     {
     }
-
+    
+    /**
+     * @param (\Closure(DashboardLayoutRow): mixed) $callback
+     */
     final public function addRow(Closure $callback): self
     {
         $row = new DashboardLayoutRow();

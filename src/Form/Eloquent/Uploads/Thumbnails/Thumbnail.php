@@ -18,8 +18,11 @@ class Thumbnail
     protected SharpUploadModel $uploadModel;
     protected int $quality = 90;
     protected bool $appendTimestamp = false;
-    protected ?Closure $afterClosure = null;
     protected ?array $transformationFilters = null;
+    /**
+     * @var (Closure(bool $wasCreated, string $thumbnailPath, string $thumbnailDisk):void)|null
+     */
+    protected ?Closure $afterClosure = null;
 
     public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
     {
@@ -34,7 +37,10 @@ class Thumbnail
 
         return $this;
     }
-
+    
+    /**
+     * @param (Closure(bool $wasCreated, string $thumbnailPath, string $thumbnailDisk):void) $closure
+     */
     public function setAfterClosure(Closure $closure): self
     {
         $this->afterClosure = $closure;

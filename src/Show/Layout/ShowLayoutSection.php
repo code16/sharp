@@ -15,7 +15,10 @@ class ShowLayoutSection implements HasLayout
     {
         $this->title = $title;
     }
-
+    
+    /**
+     * @param (\Closure(ShowLayoutColumn): mixed)|null $callback
+     */
     public function addColumn(int $size, \Closure $callback = null): self
     {
         $column = $this->addColumnLayout(new ShowLayoutColumn($size));

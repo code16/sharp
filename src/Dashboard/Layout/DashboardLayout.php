@@ -8,7 +8,10 @@ use Code16\Sharp\Form\Layout\HasLayout;
 class DashboardLayout implements HasLayout
 {
     protected array $sections = [];
-
+    
+    /**
+     * @param (\Closure(DashboardLayoutSection): mixed) $callback
+     */
     final public function addSection(string $label, \Closure $callback): self
     {
         $section = new DashboardLayoutSection($label);
@@ -17,7 +20,10 @@ class DashboardLayout implements HasLayout
 
         return $this;
     }
-
+    
+    /**
+     * @param (\Closure(DashboardLayoutRow): mixed) $callback
+     */
     final public function addRow(Closure $callback): self
     {
         $row = $this
