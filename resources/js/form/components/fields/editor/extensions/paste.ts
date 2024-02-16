@@ -4,10 +4,12 @@ import { DOMParser, Schema } from '@tiptap/pm/model';
 
 export const Paste = Extension.create({
     name: 'paste',
-    addOptions: () => ({
-        schema: null,
-        inline: false,
-    }),
+    addOptions() {
+        return {
+            schema: null,
+            inline: false,
+        }
+    },
     addProseMirrorPlugins() {
         const schema = getNormalizedSchema(
             this.options.schema,

@@ -10,7 +10,7 @@ import List from './list/List.vue';
 import Select from './Select.vue';
 import Html from './Html.vue';
 import Geolocation from './geolocation/Geolocation.vue';
-import Editor from './editor/EditorField.vue';
+import Editor from './editor/Editor.vue';
 import DateRange from './date-range/DateRange.vue';
 
 export {

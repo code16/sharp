@@ -9,7 +9,6 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class FormTextFieldData extends Data
 {
-    #[Optional]
     #[LiteralTypeScriptType('string | null | { [locale:string]: string|null }')]
     public string|array|null $value;
 

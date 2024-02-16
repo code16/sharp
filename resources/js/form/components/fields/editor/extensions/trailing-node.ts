@@ -2,19 +2,25 @@ import { Extension } from '@tiptap/core'
 import { PluginKey, Plugin } from '@tiptap/pm/state'
 
 
+// @ts-ignore
 function nodeEqualsType({ types, node }) {
     return (Array.isArray(types) && types.includes(node.type)) || node.type === types
 }
 
-export const TrailingNode = Extension.create({
+export interface TrailingNodeOptions {
+    node: string
+    notAfter: string[]
+}
+
+export const TrailingNode = Extension.create<TrailingNodeOptions>({
     name: 'trailingNode',
 
-    addOptions: () => ({
-        node: 'paragraph',
-        notAfter: [
-            'paragraph',
-        ],
-    }),
+    addOptions() {
+        return {
+            node: 'paragraph',
+            notAfter: ['paragraph'],
+        }
+    },
 
     addProseMirrorPlugins() {
         const plugin = new PluginKey(this.name)

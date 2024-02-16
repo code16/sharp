@@ -4,12 +4,12 @@
     import { LayoutFieldData, ShowListFieldData } from "@/types";
     import { UnknownField } from '@/components';
     import FieldLayout from "../FieldLayout.vue";
-    import { FieldProps } from "../types";
+    import { ShowFieldProps } from "../types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
 
-    defineProps<FieldProps & {
+    defineProps<ShowFieldProps & {
         field: ShowListFieldData,
         value: ShowListFieldData['value'],
         layout: LayoutFieldData,

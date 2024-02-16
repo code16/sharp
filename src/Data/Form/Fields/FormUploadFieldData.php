@@ -9,17 +9,7 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class FormUploadFieldData extends Data
 {
-    #[LiteralTypeScriptType('{ 
-        name: string;
-        disk: string;
-        path: string;
-        size: number;
-        thumbnail?: string;
-        uploaded?: boolean;
-        transformed?: boolean;
-        filters?: { crop: { width:number, height:number, x:number, y:number }, rotate: { angle:number } };
-    } | null')]
-    public ?array $value;
+    public ?FormUploadFieldValueData $value;
 
     public function __construct(
         public string $key,
