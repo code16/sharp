@@ -36,8 +36,6 @@ const A = 'link';
 const H1 = 'heading-1';
 const H2 = 'heading-2';
 const H3 = 'heading-3';
-const UPLOAD_IMAGE = 'upload-image';
-const UPLOAD = 'upload';
 const TABLE = 'table';
 const IFRAME = 'iframe';
 const RAW_HTML = 'html';
@@ -53,9 +51,8 @@ Example:
 ```php
 SharpFormEditorField::make("description")
     ->setToolbar([
-        SharpFormEditorField::B, SharpFormEditorField::I,
-        SharpFormEditorField::SEPARATOR,
-        SharpFormEditorField::UPLOAD_IMAGE,
+        SharpFormEditorField::B, 
+        SharpFormEditorField::I,
         SharpFormEditorField::SEPARATOR,
         SharpFormEditorField::A,
      ]);
@@ -83,7 +80,23 @@ Display a character count in the status bar. Default is false.
 
 ## Embed images and files in content
 
-The Editor field can directly embed images or regular files. This works with `UPLOAD_IMAGE` and `UPLOAD` tools from the toolbar. To use this feature, add the tool in the toolbar and configure the environment:
+The Editor field can embed images or regular files. To use this feature, you must first allow the field to handle uploads:
+
+### `allowUploads(Closure(SharpFormEditorEmbedUpload $upload) $callback)`
+
+This method allows the user to upload files and images in the editor:
+
+```php
+$formFields->addField(
+    SharpFormEditorField::make('bio')
+        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
+            $upload->setStorageBasePath('posts/embeds')
+                ->setStorageDisk('local');
+        })
+);
+```
+
+Here is the list of available methods on the `$upload` object:
 
 ### `setMaxFileSize(float $sizeInMB)`
 
@@ -115,14 +128,15 @@ The second argument, `$croppableFileTypes`, provide a way to limit the crop conf
 
 ### `setStorageDisk(string $storageDisk)`
 
-Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
+Set the destination storage disk (as configured in Laravel’s  `config/filesystem.php` config file).
 
 ### `setStorageBasePath(string $storageBasePath)`
 
-Set the destination base storage path. You can use the `{id}` special placeholder to add the instance id in the path.
+Set the destination base storage path. 
 
-For instance:
-`$field->setStorageBasePath('/users/{id}/markdown')`
+If you want to use the `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/markdown')`), you must be in one of this two cases:
+ - your entity is an Eloquent model, and you are leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
+ - or you are on your own, and you must implement `SharpForm::handleDeferredStoreOperations($instanceId, array $data)` method to handle creation case, when the instance id is not known yet (see TODO)
 
 ### `setFileFilter($fileFilter)`
 
@@ -230,19 +244,15 @@ Example:
 
 ## Custom embeds
 
-This feature allows to embed any structured data in the content. A common use case is to embed a reference to another
-instance, like for example: in a blog post, you want to insert a reference to another post, that would be rendered as
-a "read also" block / link in the public section.
+This feature allows to embed any structured data in the content. A common use case is to embed a reference to another instance, like for example: in a blog post, you want to insert a reference to another post, that would be rendered as a “read also” block / link in the public section.
 
 <img src="./editor-embeds.png">
 
-In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML
-attributes), and how it is edited in the UI, via a full-featured form.
+In practice, the Editor field can allow custom embeds, which defines how the data is stored in the field (as HTML attributes), and how it is edited in the UI, via a full-featured form.
 
 ### `allowEmbeds(array $embeds)`
 
-This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed
-class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
+This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.
 
 The [documentation on how to write an Embed class is available here](../form-editor-embeds.md).
 
