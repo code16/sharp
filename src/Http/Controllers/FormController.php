@@ -114,6 +114,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
+        $form->handleDeferredStoreOperations($instanceId, $formattedData);
         $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();

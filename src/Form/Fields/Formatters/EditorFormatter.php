@@ -55,14 +55,14 @@ class EditorFormatter extends SharpFieldFormatter
                 if ($domElement) {
                     $upload = $uploadFormatter
                         ->setInstanceId($this->instanceId)
-                        ->fromFront($field, $attribute, $file);
+                        ->fromFront($field->embedUploadsConfig(), $attribute, $file);
 
                     if (isset($upload['file_name'])) {
                         // New file was uploaded, or file was updated. We have to update the name of the file in the markdown
                         $domElement->setAttribute('name', basename($upload['file_name']));
                         $domElement->setAttribute('path', $upload['file_name']);
                         $domElement->setAttribute('disk', $upload['disk']);
-                        if ($field->isTransformOriginal()) {
+                        if ($field->embedUploadsConfig()->isTransformOriginal()) {
                             $domElement->removeAttribute('filter-crop');
                             $domElement->removeAttribute('filter-rotate');
                         }

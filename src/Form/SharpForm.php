@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form;
 
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
@@ -11,6 +12,7 @@ use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
+use Illuminate\Support\Collection;
 
 abstract class SharpForm
 {
@@ -130,6 +132,23 @@ abstract class SharpForm
     public function notify(string $title): SharpNotification
     {
         return new SharpNotification($title);
+    }
+
+    final function getEditorFieldsWithEmbeddedUploads(): Collection
+    {
+        return collect($this->fieldsContainer()->getFields())
+            ->filter(fn ($field) => $field instanceof SharpFormEditorField
+                && $field->embedUploadsConfig() !== null
+            );
+    }
+
+    /**
+     * This method is called after a store operation, in case you need to perform
+     * additional operations which needs the $instanceId.
+     * You MUST handle there any Editor embedded upload with a path containing an {id} part.
+     */
+    public function handleDeferredStoreOperations($instanceId, array $data): void
+    {
     }
 
     /**

@@ -9,7 +9,7 @@ use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbedUpload;
 trait SharpFormFieldWithEmbeds
 {
     protected array $embeds = [];
-    protected ?SharpFormEditorEmbedUpload $uploadEmbed = null;
+    protected ?SharpFormEditorEmbedUpload $embedUploadsConfig = null;
 
     public function allowEmbeds(array $embeds): self
     {
@@ -20,10 +20,15 @@ trait SharpFormFieldWithEmbeds
 
     public function allowUploads(Closure $callback): self
     {
-        $this->uploadEmbed = SharpFormEditorEmbedUpload::make();
-        $callback($this->uploadEmbed);
+        $this->embedUploadsConfig = SharpFormEditorEmbedUpload::make();
+        $callback($this->embedUploadsConfig);
 
         return $this;
+    }
+
+    public function embedUploadsConfig(): ?SharpFormEditorEmbedUpload
+    {
+        return $this->embedUploadsConfig;
     }
 
     protected function innerComponentEmbedsConfiguration(bool $isForm = true): array

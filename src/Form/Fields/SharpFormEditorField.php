@@ -167,24 +167,24 @@ class SharpFormEditorField extends SharpFormField
 
     protected function innerComponentUploadConfiguration(): array
     {
-        if (!$this->uploadEmbed) {
+        if (!$embedUploadsConfig = $this->embedUploadsConfig()) {
            return ['upload' => []];
         }
 
         $uploadConfig = [
-            'maxFileSize' => $this->uploadEmbed->maxFileSize() ?: 2,
-            'transformable' => $this->uploadEmbed->isTransformable(),
-            'transformKeepOriginal' => $this->uploadEmbed->isTransformKeepOriginal(),
-            'transformableFileTypes' => $this->uploadEmbed->transformableFileTypes(),
-            'ratioX' => $this->uploadEmbed->cropRatio() ? (int) $this->uploadEmbed->cropRatio()[0] : null,
-            'ratioY' => $this->uploadEmbed->cropRatio() ? (int) $this->uploadEmbed->cropRatio()[1] : null,
-            'legend' => $this->uploadEmbed->hasLegend(),
+            'maxFileSize' => $embedUploadsConfig->maxFileSize() ?: 2,
+            'transformable' => $embedUploadsConfig->isTransformable(),
+            'transformKeepOriginal' => $embedUploadsConfig->isTransformKeepOriginal(),
+            'transformableFileTypes' => $embedUploadsConfig->transformableFileTypes(),
+            'ratioX' => $embedUploadsConfig->cropRatio() ? (int) $embedUploadsConfig->cropRatio()[0] : null,
+            'ratioY' => $embedUploadsConfig->cropRatio() ? (int) $embedUploadsConfig->cropRatio()[1] : null,
+            'legend' => $embedUploadsConfig->hasLegend(),
         ];
 
-        if (! $this->uploadEmbed->fileFilter()) {
-            $this->uploadEmbed->setFileFilterImages();
+        if (! $embedUploadsConfig->fileFilter()) {
+            $embedUploadsConfig->setFileFilterImages();
         }
-        $uploadConfig['fileFilter'] = $this->uploadEmbed->fileFilter();
+        $uploadConfig['fileFilter'] = $embedUploadsConfig->fileFilter();
 
         return ['upload' => $uploadConfig];
     }

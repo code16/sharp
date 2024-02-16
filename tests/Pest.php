@@ -15,6 +15,7 @@ uses()
         Schema::create('people', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
+            $table->text('bio')->nullable();
             $table->unsignedTinyInteger('age')->nullable();
             $table->unsignedTinyInteger('order')->nullable();
             $table->unsignedInteger('partner_id')->nullable();

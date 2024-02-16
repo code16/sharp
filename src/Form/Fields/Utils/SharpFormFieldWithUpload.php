@@ -138,7 +138,7 @@ trait SharpFormFieldWithUpload
         return $this->cropRatio;
     }
 
-    public function fileFilter(): array
+    public function fileFilter(): ?array
     {
         return $this->fileFilter;
     }

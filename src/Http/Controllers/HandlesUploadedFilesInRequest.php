@@ -18,6 +18,7 @@ trait HandlesUploadedFilesInRequest
     ): void {
         collect($form->fieldsContainer()->getFields())
             ->filter(fn ($field) => $field instanceof IsUploadField)
+            // TODO WARNING: Editor is no longer an IsUploadField !!!!!!!!!!!!!!!!!!!!!!!!!
             ->each(function (IsUploadField $field) use ($instanceId, $request, $formattedData) {
                 $wasUploaded = ($request[$field->key]['uploaded'] ?? false)
                     && ($formattedData[$field->key]['file_name'] ?? false);

@@ -26,18 +26,37 @@ trait WithSharpFormEloquentUpdater
     public function save(Model $instance, array $data): Model
     {
         $data = $this->applyTransformers($data, forceFullObject: false);
+        $isCreation = !$instance->exists;
 
-        // Then handle manually ignored attributes...
+        // Handle manually ignored attributes
         if (count($this->ignoredAttributes)) {
             $data = collect($data)
                 ->filter(fn ($value, $attribute) => ! in_array($attribute, $this->ignoredAttributes))
                 ->all();
         }
 
-        // Finally call updater
-        return app(EloquentModelUpdater::class)
+        // Call updater
+        $instance = app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
             ->update($instance, $data);
+
+        // Handle embedded uploads paths in creation, in case they require {id} replacement
+        if ($isCreation) {
+            $dataWithEmbeddedUploads = collect($data)
+                ->filter(fn ($value, $attribute) => $this
+                    ->getEditorFieldsWithEmbeddedUploads()
+                    ->pluck('key')
+                    ->contains($attribute)
+                )
+                // TODO better regex
+                ->map(fn ($value) => str_replace('{id}', $instance->getKey(), $value))
+                ->all();
+
+            $instance->fill($dataWithEmbeddedUploads);
+            $instance->save();
+        }
+
+        return $instance;
     }
 
     /**
