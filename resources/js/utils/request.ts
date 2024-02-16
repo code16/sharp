@@ -1,3 +1,4 @@
+import { usePage } from "@inertiajs/vue3";
 
 export function parseBlobJSONContent(blob) {
     return new Promise(resolve => {
@@ -7,4 +8,8 @@ export function parseBlobJSONContent(blob) {
         });
         reader.readAsText(blob);
     });
+}
+
+export function getCsrfToken() {
+    return usePage().props.session.token;
 }

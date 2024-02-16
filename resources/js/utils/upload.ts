@@ -1,5 +1,6 @@
+import { FormUploadFieldValueData } from "@/types";
 
-export function filesEquals(file1, file2) {
+export function filesEquals(file1: FormUploadFieldValueData, file2: FormUploadFieldValueData) {
     if(!file1.path || !file2.path) {
         return file1.name === file2.name;
     }

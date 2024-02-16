@@ -5,9 +5,9 @@
     import FieldLayout from "../../FieldLayout.vue";
     import TextRenderer from "./TextRenderer.vue";
     import clip from "text-clipper";
-    import { FieldProps } from "../../types";
+    import { ShowFieldProps } from "../../types";
 
-    const props = defineProps<FieldProps & {
+    const props = defineProps<ShowFieldProps & {
         field: ShowTextFieldData,
         value: ShowTextFieldData['value'],
     }>();

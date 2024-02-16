@@ -1,17 +1,20 @@
 import { reactive } from 'vue';
 import debounce from 'lodash/debounce';
 import { filesEquals } from "@/utils/upload";
-import { Upload } from "./upload";
+import { Upload, UploadOptions } from "./upload";
 import { api } from "@/api";
+import { FormFieldProps } from "@/form/components/types";
+import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
+import { route } from "@/utils/url";
 
-
-export function getUploadExtension({
-    fieldProps,
-    uniqueIdentifier,
-    entityKey,
-    instanceId,
-}) {
-
+export function getUploadExtension(
+    props: FormFieldProps<FormEditorFieldData>,
+    { onUpdate, entityKey, instanceId }: {
+        onUpdate: (files: FormUploadFieldValueData[]) => void,
+        entityKey: string,
+        instanceId: string|number,
+    }
+) {
     const state = reactive({
         registeredFiles: [],
         created: false,
@@ -21,13 +24,6 @@ export function getUploadExtension({
 
     state.resolved = new Promise(resolve => state.onResolve = resolve);
 
-    const updateFiles = files => {
-        this.$emit('input', {
-            ...this.value,
-            files,
-        });
-    }
-
     const resolveFiles = files => {
         return api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), { files })
             .then(response => response.data.files);
@@ -35,12 +31,12 @@ export function getUploadExtension({
 
     const config = {
         onBeforeCreate: () => {
-            updateFiles([])
+            onUpdate([])
         },
         onCreate: debounce(async () => {
             if(state.registeredFiles.length > 0) {
                 const files = await resolveFiles(state.registeredFiles);
-                updateFiles(files);
+                onUpdate(files);
                 state.onResolve();
             }
             state.created = true;
@@ -48,16 +44,14 @@ export function getUploadExtension({
         }),
     }
 
-    const options = {
-        fieldProps: {
-            ...fieldProps,
-            uniqueIdentifier,
-        },
+    const options: UploadOptions = {
+        fieldProps: props.field.embeds.upload,
+        fieldErrorKey: props.fieldErrorKey,
         state,
-        registerFile: async attrs => {
+        async registerFile(attrs) {
             if(state.created) {
-                updateFiles([
-                    ...this.value.files,
+                onUpdate([
+                    ...props.value.files,
                     attrs,
                 ]);
                 return attrs;
@@ -65,23 +59,23 @@ export function getUploadExtension({
 
             state.registeredFiles.push(attrs);
             await state.resolved;
-            return this.value.files.find(file => filesEquals(attrs, file));
+            return props.value.files.find(file => filesEquals(attrs, file));
         },
-        onSuccess: uploadedFile => {
-            updateFiles([
-                ...this.value.files,
+        onSuccess(uploadedFile: FormUploadFieldValueData) {
+            onUpdate([
+                ...props.value.files,
                 uploadedFile,
             ]);
         },
-        onRemove: removedFile => {
-            updateFiles(
-                this.value.files
+        onRemove(removedFile: FormUploadFieldValueData) {
+            onUpdate(
+                props.value.files
                     .filter(file => !filesEquals(file, removedFile)),
             );
         },
-        onUpdate: updatedFile => {
-            updateFiles(
-                this.value.files
+        onUpdate(updatedFile: FormUploadFieldValueData) {
+            onUpdate(
+                props.value.files
                     .map(file => filesEquals(file, updatedFile) ? updatedFile : file),
             );
         }
