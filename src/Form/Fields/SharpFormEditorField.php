@@ -4,12 +4,10 @@ namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
-use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 
 class SharpFormEditorField extends SharpFormField
 {
@@ -167,8 +165,8 @@ class SharpFormEditorField extends SharpFormField
 
     protected function innerComponentUploadConfiguration(): array
     {
-        if (!$embedUploadsConfig = $this->embedUploadsConfig()) {
-           return ['upload' => []];
+        if (! $embedUploadsConfig = $this->embedUploadsConfig()) {
+            return ['upload' => []];
         }
 
         $uploadConfig = [
