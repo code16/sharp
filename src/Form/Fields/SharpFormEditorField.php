@@ -126,42 +126,42 @@ class SharpFormEditorField extends SharpFormField
 
         return $this;
     }
-    
+
     /**
-     * @param Closure(SharpFormEditorUpload):mixed $callback
+     * @param  Closure(SharpFormEditorUpload):mixed  $callback
      */
     public function allowUploads(Closure $callback): self
     {
         $this->uploadsConfig = SharpFormEditorUpload::make('file');
         $this->uploadsConfig->setMaxFileSize(2);
-        
+
         if (! $this->uploadsConfig->fileFilter()) {
             $this->uploadsConfig->setFileFilterImages();
         }
-        
+
         $callback($this->uploadsConfig);
-        
+
         return $this;
     }
-    
+
     public function uploadsConfig(): SharpFormEditorUpload
     {
         return $this->uploadsConfig;
     }
-    
+
     protected function innerComponentUploadConfiguration(): array
     {
         if (! $this->uploadsConfig) {
             return ['upload' => []];
         }
-        
+
         $form = new SharpFormEditorUploadForm($this->uploadsConfig);
-        
+
         return [
             'upload' => [
                 'fields' => $form->fields(),
                 'layout' => $form->formLayout(),
-            ]
+            ],
         ];
     }
 

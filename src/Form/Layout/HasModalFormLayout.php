@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form\Layout;
 
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Utils\Fields\HandleFields;
 
 /**
@@ -11,7 +10,7 @@ use Code16\Sharp\Utils\Fields\HandleFields;
 trait HasModalFormLayout
 {
     /**
-     * @param (\Closure(FormLayoutColumn):void) $buildFormLayout
+     * @param  (\Closure(FormLayoutColumn):void)  $buildFormLayout
      * @return array|null
      */
     protected function modalFormLayout(\Closure $buildFormLayout): ?array
@@ -21,7 +20,7 @@ trait HasModalFormLayout
                 ->setTabbed(false)
                 ->addColumn(12, function (FormLayoutColumn $column) use ($fields, $buildFormLayout) {
                     $buildFormLayout($column);
-                    
+
                     if (! $column->hasFields()) {
                         collect($fields)
                             ->each(fn ($field) => $column->withField($field->key()));
@@ -29,7 +28,7 @@ trait HasModalFormLayout
                 })
                 ->toArray();
         }
-        
+
         return null;
     }
 }

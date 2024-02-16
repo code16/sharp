@@ -88,7 +88,7 @@ Route::group([
 
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form', [ApiEmbedsFormController::class, 'update'])
         ->name('code16.sharp.api.embed.instance.form.update');
-    
+
     Route::post('/form/editors/upload/form', [ApiFormEditorUploadFormController::class, 'update'])
         ->name('code16.sharp.api.form.editor.upload.form.update');
 

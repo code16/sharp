@@ -13,14 +13,14 @@ class ApiFormEditorUploadFormController extends Controller
     public function update()
     {
         $uploadFieldData = FormUploadFieldData::from(request()->input('fields.file'));
-        
+
         $form = new SharpFormEditorUploadForm(
             SharpFormEditorUpload::make('file')
                 ->setStorageBasePath($uploadFieldData->storageBasePath)
                 ->setStorageDisk($uploadFieldData->storageDisk)
                 ->setHasLegend(request()->has('fields.legend'))
         );
-        
+
         $formattedData = $form->formatAndValidateRequestData(request()->get('data'));
         $transformedData = $form
             ->setCustomTransformer(

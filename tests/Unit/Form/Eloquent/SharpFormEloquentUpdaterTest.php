@@ -618,10 +618,10 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
                     ],
                 ],
                 'text' => '<p>my editor</p><x-sharp-file file="'.e(json_encode([
-                        'name' => 'my-file.pdf',
-                        'path' => 'test/'.UploadFormatter::ID_PLACEHOLDER.'/my-file.pdf',
-                        'disk' => 'local',
-                    ])).'"></x-sharp-file>',
+                    'name' => 'my-file.pdf',
+                    'path' => 'test/'.UploadFormatter::ID_PLACEHOLDER.'/my-file.pdf',
+                    'disk' => 'local',
+                ])).'"></x-sharp-file>',
             ],
         ])
     );
@@ -630,10 +630,10 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
 
     expect($pierre->bio)
         ->toBe('<p>my editor</p><x-sharp-file file="'.e(json_encode([
-                'name' => 'my-file.pdf',
-                'path' => 'test/1/my-file.pdf',
-                'disk' => 'local',
-            ])).'"></x-sharp-file>');
+            'name' => 'my-file.pdf',
+            'path' => 'test/1/my-file.pdf',
+            'disk' => 'local',
+        ])).'"></x-sharp-file>');
 });
 
 it('handles the relation separator in a belongsTo case', function () {

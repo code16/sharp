@@ -21,7 +21,7 @@ trait HandlesUploadedFilesInRequest
     ): void {
         collect($form->fieldsContainer()->getFields())
             ->each(function (SharpFormField $field) use ($instanceId, $request, $formattedData) {
-                if($field instanceof SharpFormUploadField) {
+                if ($field instanceof SharpFormUploadField) {
                     $this->handleFieldPostedFile(
                         uploadField: $field,
                         filePath: $formattedData[$field->key]['file_name'] ?? null,
@@ -30,7 +30,7 @@ trait HandlesUploadedFilesInRequest
                     );
                 } elseif ($field instanceof SharpFormEditorField) {
                     collect($request[$field->key]['files'] ?? [])
-                        ->each(function (array $file) use ($field, $instanceId, $request) {
+                        ->each(function (array $file) use ($field, $instanceId) {
                             $this->handleFieldPostedFile(
                                 uploadField: $field->uploadsConfig(),
                                 filePath: $file['path'] ?? null, // <x-sharp-file> case
@@ -41,7 +41,7 @@ trait HandlesUploadedFilesInRequest
                 }
             });
     }
-    
+
     protected function handleFieldPostedFile(
         IsUploadField $uploadField,
         ?string $filePath,
@@ -51,7 +51,7 @@ trait HandlesUploadedFilesInRequest
         $wasUploaded = ($requestFile['uploaded'] ?? false) && $filePath;
         $wasTransformed = $uploadField->isTransformOriginal()
             && ($requestFile['transformed'] ?? false);
-        
+
         if ($wasUploaded) {
             HandleUploadedFileJob::dispatch(
                 uploadedFileName: $requestFile['name'],

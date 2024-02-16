@@ -9,18 +9,17 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
-
 class SharpFormEditorUploadForm
 {
     use HandleFormFields;
     use HasModalFormLayout;
     use WithCustomTransformers;
-    
+
     public function __construct(
         protected SharpFormEditorUpload $editorUpload
     ) {
     }
-    
+
     protected function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -31,7 +30,7 @@ class SharpFormEditorUploadForm
                 );
             });
     }
-    
+
     protected function buildFormLayout(FormLayoutColumn $column): void
     {
         $column
@@ -40,14 +39,14 @@ class SharpFormEditorUploadForm
                 $column->withField('legend');
             });
     }
-    
+
     public function formLayout(): ?array
     {
         return $this->modalFormLayout(function (FormLayoutColumn $column) {
             $this->buildFormLayout($column);
         });
     }
-    
+
     public function getDataLocalizations(): array
     {
         return [];

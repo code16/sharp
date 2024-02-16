@@ -3,9 +3,6 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
-use DOMDocument;
-use DOMElement;
-use Illuminate\Support\Str;
 
 class EditorFormatter extends SharpFieldFormatter
 {
@@ -23,7 +20,7 @@ class EditorFormatter extends SharpFieldFormatter
         if ($value !== null && $field->isLocalized()) {
             return collect(is_array($content) ? $content : [app()->getLocale() => $content])
                 ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]))
-                ->map(function (?string $localizedContent) use ($field, $attribute) {
+                ->map(function (?string $localizedContent) {
                     return $localizedContent
                         ? preg_replace(
                             '/\R/', "\n",
