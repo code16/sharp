@@ -21,15 +21,7 @@ it('sets only default values', function () {
                 SharpFormEditorField::A,
             ],
             'embeds' => [
-                'upload' => [
-                    //                    'maxFileSize' => 2,
-                    //                    'transformable' => true,
-                    //                    'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
-                    //                    'transformKeepOriginal' => true,
-                    //                    'transformableFileTypes' => null,
-                    //                    'ratioX' => null,
-                    //                    'ratioY' => null,
-                ],
+                'upload' => [],
             ],
             'markdown' => false,
             'inline' => false,

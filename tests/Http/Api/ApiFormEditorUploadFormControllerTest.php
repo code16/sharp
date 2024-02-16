@@ -13,7 +13,6 @@ beforeEach(function () {
 it('can post a file and legend', function () {
     UploadedFile::fake()
         ->image('image.jpg', 600, 600)
-        ->size(1024)
         ->storeAs('tmp', 'image.jpg', ['disk' => 'local']);
     
     $this
