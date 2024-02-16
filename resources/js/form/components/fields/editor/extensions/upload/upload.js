@@ -1,12 +1,6 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
-import {
-    parseFilterCrop,
-    serializeFilterCrop,
-    parseFilterRotate,
-    serializeFilterRotate,
-} from "@/utils/upload";
 import { getEventsPlugin } from "./events-plugin";
 
 export const Upload = Node.create({
@@ -32,56 +26,23 @@ export const Upload = Node.create({
 
     addAttributes() {
         return {
-            disk: {
+            file: {
                 default: null,
-            },
-            path: {
-                default: null,
-            },
-            name: {
-                default: null,
-            },
-            size: {
-                default: null,
-                renderHTML: () => null
-            },
-            thumbnail: {
-                default: null,
-                renderHTML: () => null
-            },
-            filters: {
                 parseHTML: element => ({
-                    crop: parseFilterCrop(element.getAttribute('filter-crop')),
-                    rotate: parseFilterRotate(element.getAttribute('filter-rotate')),
+                    file: JSON.parse(element.getAttribute('file') ?? 'null'),
                 }),
-                renderHTML: () => null,
-            },
-            'filter-crop': {
-                default: null,
-                renderHTML: attributes => ({
-                    'filter-crop': serializeFilterCrop(attributes.filters?.crop),
-                }),
-            },
-            'filter-rotate': {
-                default: null,
-                renderHTML: attributes => ({
-                    'filter-rotate': serializeFilterRotate(attributes.filters?.rotate),
-                }),
+                renderHTML: (attributes) => JSON.stringify(attributes.file),
             },
             /**
              * @type File
              */
-            file: {
+            nativeFile: {
                 default: null,
                 renderHTML: () => null,
             },
             isImage: {
                 default: false,
                 parseHTML: element => element.matches('x-sharp-image'),
-                renderHTML: () => null,
-            },
-            uploaded: {
-                default: false,
                 renderHTML: () => null,
             },
             notFound: {
