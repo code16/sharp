@@ -22,13 +22,13 @@ it('sets only default values', function () {
             ],
             'embeds' => [
                 'upload' => [
-//                    'maxFileSize' => 2,
-//                    'transformable' => true,
-//                    'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
-//                    'transformKeepOriginal' => true,
-//                    'transformableFileTypes' => null,
-//                    'ratioX' => null,
-//                    'ratioY' => null,
+                    //                    'maxFileSize' => 2,
+                    //                    'transformable' => true,
+                    //                    'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
+                    //                    'transformKeepOriginal' => true,
+                    //                    'transformableFileTypes' => null,
+                    //                    'ratioX' => null,
+                    //                    'ratioY' => null,
                 ],
             ],
             'markdown' => false,
@@ -59,7 +59,7 @@ it('allows to define height with maxHeight', function () {
 
 it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
-        ->allowUploads(function(SharpFormEditorEmbedUpload $upload) {
+        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
             $upload->setFileFilterImages()
                 ->setMaxFileSize(50)
                 ->setCropRatio('16:9')
@@ -76,7 +76,7 @@ it('allows to allow uploads with configuration', function () {
         ->toHaveKey('embeds.upload.legend', true);
 
     $formField = SharpFormEditorField::make('text')
-        ->allowUploads(function(SharpFormEditorEmbedUpload $upload) {
+        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
             $upload->setFileFilterImages()
                 ->setTransformable(false);
         });
