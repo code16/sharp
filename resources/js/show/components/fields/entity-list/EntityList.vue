@@ -3,7 +3,7 @@
     import { EntityList } from '@/entity-list/EntityList';
     import EntityListComponent from '@/entity-list/components/EntityList.vue'
     import EntityListTitle from '@/entity-list/components/EntityListTitle.vue'
-    import { FieldProps } from "../../types";
+    import { ShowFieldProps } from "../../types";
     import { EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
     import { Ref, ref } from "vue";
     import { useStickyLayout } from "./useStickyLayout";
@@ -13,7 +13,7 @@
     import { FilterQueryParams } from "@/filters/types";
     import { route } from "@/utils/url";
 
-    const props = defineProps<FieldProps & {
+    const props = defineProps<ShowFieldProps & {
         field: ShowEntityListFieldData,
         value: ShowEntityListFieldData['value'],
     }>();

@@ -1,14 +1,14 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { ShowFileFieldData } from "@/types";
-    import { FieldProps } from "../types";
+    import { ShowFieldProps } from "../types";
     import { computed } from "vue";
     import { getClassNameForExtension } from 'font-awesome-filetypes';
     import { filesizeLabel } from '@/utils/file';
     import FieldLayout from "../FieldLayout.vue";
     import { route } from "@/utils/url";
 
-    const props = defineProps<FieldProps & {
+    const props = defineProps<ShowFieldProps & {
         value: ShowFileFieldData['value'],
         field: ShowFileFieldData,
     }>();

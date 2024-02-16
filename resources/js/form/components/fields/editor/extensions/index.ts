@@ -20,7 +20,7 @@ import { Iframe } from "./iframe/iframe";
 import { Paste } from "./paste";
 import { Small } from "./small";
 import CharacterCount from '@tiptap/extension-character-count';
-import { getAllowedHeadingLevels, toolbarHasButton } from "../util";
+import { getAllowedHeadingLevels, toolbarHasButton } from "../utils";
 
 
 function getHeadingExtension(toolbar) {

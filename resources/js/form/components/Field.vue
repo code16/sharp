@@ -20,14 +20,11 @@
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
     import { useForm } from "../useForm";
+    import { FormFieldProps } from "@/form/components/types";
 
-    const props = defineProps<{
+    const props = defineProps<FormFieldProps & {
         field: FormFieldData,
-        fieldLayout: LayoutFieldData,
-        fieldErrorKey: string,
         value?: FormFieldData['value'],
-        locale?: string | null,
-        root?: boolean
     }>();
 
     const emit = defineEmits(['input', 'locale-change']);

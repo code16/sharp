@@ -24,7 +24,7 @@
     const props = defineProps<{
         field: FormUploadFieldData,
         fieldErrorKey: string,
-        value: FormUploadFieldData['value'] & { file?: File },
+        value: FormUploadFieldData['value'] & { file?: File } | null,
         root: boolean,
         hasError: boolean,
     }>();
@@ -33,7 +33,16 @@
         inheritAttrs: false,
     });
 
-    const emit = defineEmits(['input', 'error', 'success', 'clear', 'thumbnail', 'uploading', 'remove', 'update']);
+    const emit = defineEmits<{
+        input: [value: typeof props['value']],
+        error: [message: string, file: Blob | File],
+        success: [file: FormUploadFieldData['value']],
+        clear: [],
+        thumbnail: [preview: string],
+        uploading: [uploading: boolean],
+        remove: [],
+        update: [value: FormUploadFieldData['value']],
+    }>();
     const form = useForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
     const showEditModal = ref(false);
@@ -76,7 +85,7 @@
             console.log('file-added', JSON.parse(JSON.stringify(uppyFile.value)));
         })
         .on('restriction-failed', (file, error) => {
-            emit('error', error.message, file);
+            emit('error', error.message, file.data);
         })
         .on('thumbnail:generated', async (file, preview) => {
             const { field } = props;
@@ -124,14 +133,14 @@
         .on('upload-error', (file, error, response) => {
             if(response) {
                 if(response.status === 422) {
-                    emit('error', response.body.errors.file?.join(', '), file);
+                    emit('error', response.body.errors.file?.join(', '), file.data);
                 } else {
                     const message = getErrorMessage({ data: response.body, status: response.status });
                     handleErrorAlert({ data: response.body, status: response.status, method: 'post' });
-                    emit('error', message, file);
+                    emit('error', message, file.data);
                 }
             } else {
-                emit('error', error.message, file);
+                emit('error', error.message, file.data);
             }
         })
         .on('complete', () => {

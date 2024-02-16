@@ -281,7 +281,10 @@ export type FormDynamicOptionsData = {
     | Array<{ id: string | number; label: string }>;
 };
 export type FormEditorFieldData = {
-  value: { text: string | { [locale: string]: string | null } | null };
+  value?: {
+    text: string | { [locale: string]: string | null } | null;
+    files: Array<FormUploadFieldData["value"]> | null;
+  };
   key: string;
   type: "editor";
   minHeight: number;
@@ -522,19 +525,7 @@ export type FormTextareaFieldData = {
   extraStyle: string | null;
 };
 export type FormUploadFieldData = {
-  value: {
-    name: string;
-    disk: string;
-    path: string;
-    size: number;
-    thumbnail?: string;
-    uploaded?: boolean;
-    transformed?: boolean;
-    filters?: {
-      crop: { width: number; height: number; x: number; y: number };
-      rotate: { angle: number };
-    };
-  } | null;
+  value: FormUploadFieldValueData | null;
   key: string;
   type: "upload";
   transformable: boolean;
@@ -550,6 +541,19 @@ export type FormUploadFieldData = {
   conditionalDisplay: FormConditionalDisplayData | null;
   helpMessage: string | null;
   extraStyle: string | null;
+};
+export type FormUploadFieldValueData = {
+  name: string;
+  disk: string;
+  path: string;
+  size: string;
+  thumbnail: string | null;
+  uploaded: boolean | null;
+  transformed: boolean | null;
+  filters: {
+    crop: { width: number; height: number; x: number; y: number };
+    rotate: { angle: number };
+  } | null;
 };
 export type GlobalFiltersData = {
   filters: ConfigFiltersData;
