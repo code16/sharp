@@ -613,7 +613,6 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
                 'files' => [
                     [
                         'name' => 'my-file.pdf',
-                        'size' => 19000,
                         'uploaded' => true,
                     ],
                 ],

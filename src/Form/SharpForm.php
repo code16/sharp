@@ -143,15 +143,6 @@ abstract class SharpForm
     }
 
     /**
-     * This method is called after a store operation, in case you need to perform
-     * additional operations which needs the $instanceId.
-     * You MUST handle there any Editor embedded upload with a path containing an {id} part.
-     */
-    public function handleDeferredStoreOperations($instanceId, array $data): void
-    {
-    }
-
-    /**
      * @deprecated use ->validate() or rules() methods instead; will be removed in 10.x
      */
     protected function getFormValidatorClass(): ?string

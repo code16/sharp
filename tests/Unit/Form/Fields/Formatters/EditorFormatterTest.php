@@ -86,8 +86,10 @@ it('stores newly uploaded files from front', function () {
     $result = (new EditorFormatter)
         ->fromFront(
             SharpFormEditorField::make('md')
-                ->setStorageDisk('local')
-                ->setStorageBasePath('data'),
+                ->allowUploads(fn ($upload) => $upload
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data')
+                ),
             'attribute',
             [
                 'text' => $value,
@@ -160,8 +162,10 @@ it('stores newly uploaded files in a localized field from front', function () {
         ->fromFront(
             SharpFormEditorField::make('md')
                 ->setLocalized()
-                ->setStorageDisk('local')
-                ->setStorageBasePath('data'),
+                ->allowUploads(fn ($upload) => $upload
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data')
+                ),
             'attribute',
             [
                 'text' => [
