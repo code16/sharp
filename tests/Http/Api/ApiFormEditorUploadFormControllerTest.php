@@ -14,7 +14,7 @@ it('can post a file and legend', function () {
     UploadedFile::fake()
         ->image('image.jpg', 600, 600)
         ->storeAs('tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [

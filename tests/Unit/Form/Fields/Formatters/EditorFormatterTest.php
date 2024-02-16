@@ -1,9 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
-use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 

@@ -33,11 +33,11 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 
         return $this;
     }
-    
+
     public function with(array $data): self
     {
         $this->additionalData = $data;
-        
+
         return $this;
     }
 

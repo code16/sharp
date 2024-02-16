@@ -21,7 +21,7 @@ class SharpShowFileField extends SharpShowField
 
         return $this;
     }
-    
+
     /**
      * @deprecated Not needed, we deduce the disk from the value ("disk" attribute)
      */
@@ -31,7 +31,7 @@ class SharpShowFileField extends SharpShowField
 
         return $this;
     }
-    
+
     /**
      * @deprecated Not needed, we deduce the base path the value ("path" attribute)
      */

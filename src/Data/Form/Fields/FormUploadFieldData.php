@@ -37,10 +37,10 @@ final class FormUploadFieldData extends Data
 
     public static function from(array $field): self
     {
-        if(is_string($field['type'])) {
+        if (is_string($field['type'])) {
             $field['type'] = FormFieldType::from($field['type']);
         }
-        
+
         return new self(...$field);
     }
 }

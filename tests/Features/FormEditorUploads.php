@@ -21,11 +21,10 @@ beforeEach(function () {
 });
 
 it('can post a newly uploaded file in editor', function () {
-    
     fakeFormFor('person', $form = new class extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
-        
+
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields
@@ -37,19 +36,19 @@ it('can post a newly uploaded file in editor', function () {
                         })
                 );
         }
-        
+
         public function update($id, array $data)
         {
             return $this->save(new Person(), $data)->id;
         }
     });
-    
+
     $uploadedFile = UploadedFile::fake()->create('file.pdf');
-    
+
     $uploadedFileData = $this
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => $uploadedFile])
         ->json();
-    
+
     $xSharpFileData = $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [
@@ -58,7 +57,7 @@ it('can post a newly uploaded file in editor', function () {
             'fields' => $form->fields()['bio']['embeds']['upload']['fields'],
         ])
         ->json();
-    
+
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
             'text' => '<x-sharp-file file="'.e(json_encode($xSharpFileData['file'])).'"></x-sharp-file>',
@@ -67,13 +66,13 @@ it('can post a newly uploaded file in editor', function () {
             ],
         ],
     ]);
-    
+
     $expectedXSharpFileData = [...$xSharpFileData];
     $expectedXSharpFileData['file']['path'] = 'test/1/file.pdf';
-    
+
     expect(Person::first()->bio)->toEqual(
         '<x-sharp-file file="'.e(json_encode($expectedXSharpFileData['file'])).'"></x-sharp-file>'
     );
-    
+
     Storage::disk('local')->assertExists('test/1/file.pdf');
 });

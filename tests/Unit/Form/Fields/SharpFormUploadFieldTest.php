@@ -13,7 +13,7 @@ it('sets only default values', function () {
             'transformable' => true,
             'transformKeepOriginal' => true,
             'storageBasePath' => 'data',
-            'storageDisk' => 'local'
+            'storageDisk' => 'local',
         ]);
 });
 
