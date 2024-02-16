@@ -134,9 +134,9 @@ Set the destination storage disk (as configured in Laravel’s  `config/filesyst
 
 Set the destination base storage path. 
 
-If you want to use the `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/markdown')`), you must be in one of this two cases:
- - your entity is an Eloquent model, and you are leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
- - or you are on your own, and you must implement `SharpForm::handleDeferredStoreOperations($instanceId, array $data)` method to handle creation case, when the instance id is not known yet (see TODO)
+::: warning
+If you want to use the `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/markdown')`), you must be the Eloquent case, leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
+:::
 
 ### `setFileFilter($fileFilter)`
 

@@ -34,10 +34,6 @@ Here you can declare the form fields of the embed; the API is the same as buildi
 You can choose to name one (and only one) field `slot`: it will be stored as the component content, rather than in an attribute. This could be easier to handle complex data (an Editor HTML text for instance) this way, in the public site, where you can use the standard `{{ $slot }}` attribute to display it.
 :::
 
-::: warning
-You can NOT use the special `{id}` segment for the `storageBathPath` of an Upload field, because embeds are technically separated from the instance defining the Editor they are embedded in: the `{id}` segment would not be resolved.
-:::
-
 ### `updateContent(array $data = []): array`
 
 This method is called on posting the form. Here you should validate the input if needed, and return the data.
