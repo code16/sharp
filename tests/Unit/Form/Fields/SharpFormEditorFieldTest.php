@@ -1,6 +1,6 @@
 <?php
 
-use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbedUpload;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 
 it('sets only default values', function () {
@@ -59,7 +59,7 @@ it('allows to define height with maxHeight', function () {
 
 it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
-        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
+        ->allowUploads(function (SharpFormEditorUpload $upload) {
             $upload->setFileFilterImages()
                 ->setMaxFileSize(50)
                 ->setCropRatio('16:9')
@@ -68,21 +68,21 @@ it('allows to allow uploads with configuration', function () {
         });
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', true)
-        ->toHaveKey('embeds.upload.ratioX', 16)
-        ->toHaveKey('embeds.upload.ratioY', 9)
-        ->toHaveKey('embeds.upload.fileFilter', ['.jpg', '.pdf'])
-        ->toHaveKey('embeds.upload.legend', true);
+        ->toHaveKey('embeds.upload.fields.file.maxFileSize', 50)
+        ->toHaveKey('embeds.upload.fields.file.transformable', true)
+        ->toHaveKey('embeds.upload.fields.file.ratioX', 16)
+        ->toHaveKey('embeds.upload.fields.file.ratioY', 9)
+        ->toHaveKey('embeds.upload.fields.file.fileFilter', ['.jpg', '.pdf'])
+        ->toHaveKey('embeds.upload.fields.legend');
 
     $formField = SharpFormEditorField::make('text')
-        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
+        ->allowUploads(function (SharpFormEditorUpload $upload) {
             $upload->setFileFilterImages()
                 ->setTransformable(false);
         });
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.transformable', false);
+        ->toHaveKey('embeds.upload.fields.file.transformable', false);
 });
 
 it('allows to define toolbar', function () {

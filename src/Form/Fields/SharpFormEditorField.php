@@ -2,7 +2,10 @@
 
 namespace Code16\Sharp\Form\Fields;
 
+use Closure;
 use Code16\Sharp\Enums\FormEditorToolbarButton;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
@@ -123,6 +126,44 @@ class SharpFormEditorField extends SharpFormField
 
         return $this;
     }
+    
+    /**
+     * @param Closure(SharpFormEditorUpload):mixed $callback
+     */
+    public function allowUploads(Closure $callback): self
+    {
+        $this->uploadsConfig = SharpFormEditorUpload::make('file');
+        $this->uploadsConfig->setMaxFileSize(2);
+        
+        if (! $this->uploadsConfig->fileFilter()) {
+            $this->uploadsConfig->setFileFilterImages();
+        }
+        
+        $callback($this->uploadsConfig);
+        
+        return $this;
+    }
+    
+    public function uploadsConfig(): SharpFormEditorUpload
+    {
+        return $this->uploadsConfig;
+    }
+    
+    protected function innerComponentUploadConfiguration(): array
+    {
+        if (! $this->uploadsConfig) {
+            return ['upload' => []];
+        }
+        
+        $form = new SharpFormEditorUploadForm($this->uploadsConfig);
+        
+        return [
+            'upload' => [
+                'fields' => $form->fields(),
+                'layout' => $form->formLayout(),
+            ]
+        ];
+    }
 
     protected function validationRules(): array
     {
@@ -161,29 +202,5 @@ class SharpFormEditorField extends SharpFormField
                 ),
             ],
         );
-    }
-
-    protected function innerComponentUploadConfiguration(): array
-    {
-        if (! $embedUploadsConfig = $this->embedUploadsConfig()) {
-            return ['upload' => []];
-        }
-
-        $uploadConfig = [
-            'maxFileSize' => $embedUploadsConfig->maxFileSize() ?: 2,
-            'transformable' => $embedUploadsConfig->isTransformable(),
-            'transformKeepOriginal' => $embedUploadsConfig->isTransformKeepOriginal(),
-            'transformableFileTypes' => $embedUploadsConfig->transformableFileTypes(),
-            'ratioX' => $embedUploadsConfig->cropRatio() ? (int) $embedUploadsConfig->cropRatio()[0] : null,
-            'ratioY' => $embedUploadsConfig->cropRatio() ? (int) $embedUploadsConfig->cropRatio()[1] : null,
-            'legend' => $embedUploadsConfig->hasLegend(),
-        ];
-
-        if (! $embedUploadsConfig->fileFilter()) {
-            $embedUploadsConfig->setFileFilterImages();
-        }
-        $uploadConfig['fileFilter'] = $embedUploadsConfig->fileFilter();
-
-        return ['upload' => $uploadConfig];
     }
 }

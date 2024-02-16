@@ -18,17 +18,17 @@ it('renders content', function () {
                 {!! $content !!}
             </x-sharp-content>
         blade, [
-        'content' => <<<'blade'
+        'content' => '
                 <p>Text</p>
-                <x-sharp-image path="storage/path.png"></x-sharp-image>
-            blade,
+                <x-sharp-image file="'.e(json_encode(['name' => 'path.png', 'path' => 'storage/path.png'])).'"></x-sharp-image>
+            ',
     ]);
 
     $imageComponent = view()->shared('sharp-image');
 
     $this->assertEquals(
         [
-            'path' => 'storage/path.png',
+            'file' => json_encode(['name' => 'path.png', 'path' => 'storage/path.png']),
             'thumbnail-width' => 500,
             'thumbnail-height' => 500,
         ],

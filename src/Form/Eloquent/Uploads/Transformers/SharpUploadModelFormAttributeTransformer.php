@@ -18,6 +18,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;
     private bool $dynamicSharpUploadModel = false;
+    protected array $additionalData = [];
 
     public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
     {
@@ -30,6 +31,13 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     {
         $this->dynamicSharpUploadModel = true;
 
+        return $this;
+    }
+    
+    public function with(array $data): self
+    {
+        $this->additionalData = $data;
+        
         return $this;
     }
 
@@ -98,6 +106,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                 : [],
             $upload->custom_properties ?? [], // Including filters
             ['id' => $upload->id],
+            $this->additionalData,
         );
     }
 

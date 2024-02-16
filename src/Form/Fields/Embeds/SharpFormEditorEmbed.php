@@ -5,6 +5,8 @@ namespace Code16\Sharp\Form\Fields\Embeds;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\HasModalForm;
+use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
@@ -14,10 +16,11 @@ use Illuminate\Support\Str;
 
 abstract class SharpFormEditorEmbed
 {
-    use HandleFields,
-        HandlePageAlertMessage,
-        WithCustomTransformers,
-        HandleValidation;
+    use HandleFields;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
+    use HandleValidation;
+    use HasModalFormLayout;
 
     protected ?string $label = null;
     protected ?string $tagName = null;
@@ -88,21 +91,9 @@ abstract class SharpFormEditorEmbed
 
     final public function formLayout(): ?array
     {
-        if ($fields = $this->fieldsContainer()->getFields()) {
-            return (new FormLayout())
-                ->setTabbed(false)
-                ->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
-                    $this->buildFormLayout($column);
-
-                    if (! $column->hasFields()) {
-                        collect($fields)
-                            ->each(fn ($field) => $column->withField($field->key()));
-                    }
-                })
-                ->toArray();
-        }
-
-        return null;
+        return $this->modalFormLayout(function (FormLayoutColumn $column) {
+            $this->buildFormLayout($column);
+        });
     }
 
     /**

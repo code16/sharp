@@ -15,8 +15,8 @@ final class FormUploadFieldData extends Data
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Upload->value.'"')]
         public FormFieldType $type,
-        public bool $transformable,
-        public bool $compactThumbnail,
+        public bool $transformable = true,
+        public bool $compactThumbnail = false,
         public ?bool $transformKeepOriginal = null,
         /** @var array<string> */
         public ?array $transformableFileTypes = null,
@@ -25,6 +25,8 @@ final class FormUploadFieldData extends Data
         public ?float $maxFileSize = null,
         /** @var array<string> */
         public array|null $fileFilter = null,
+        public ?string $storageBasePath = null,
+        public ?string $storageDisk = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,
@@ -35,6 +37,10 @@ final class FormUploadFieldData extends Data
 
     public static function from(array $field): self
     {
+        if(is_string($field['type'])) {
+            $field['type'] = FormFieldType::from($field['type']);
+        }
+        
         return new self(...$field);
     }
 }

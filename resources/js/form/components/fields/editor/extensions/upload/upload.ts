@@ -6,13 +6,12 @@ import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { FormFieldProps } from "@/form/components/types";
 
 export type UploadOptions = {
-    fieldProps: FormFieldProps<FormEditorFieldData>,
+    editorProps: FormFieldProps<FormEditorFieldData>,
     isReady: () => boolean,
     getFile: () => void,
     registerFile: () => Promise<FormUploadFieldValueData>,
-    onInput: () => void,
-    onRemove: () => void,
-    onUpdate: () => void,
+    onRemove: (removedFile: FormUploadFieldValueData) => void,
+    onUpdate: (updatedFile: FormUploadFieldValueData) => void,
 }
 
 export type UploadAttributes = {
@@ -49,7 +48,12 @@ export const Upload = Node.create<UploadOptions>({
                 parseHTML: element => ({
                     file: JSON.parse(element.getAttribute('file') ?? 'null'),
                 }),
-                renderHTML: (attributes) => JSON.stringify(attributes.file),
+                renderHTML: (attributes) => {
+                    const { uploaded, transformed, ...file } = attributes.file; // uploaded & transformed are only needed in editor "files" array
+                    return {
+                        file: JSON.stringify(file),
+                    }
+                },
             },
             /**
              * @type File
@@ -101,7 +105,7 @@ export const Upload = Node.create<UploadOptions>({
                     .insertContentAt(pos ?? tr.selection.to, {
                         type: this.name,
                         attrs: {
-                            file,
+                            nativeFile: file,
                             isImage: file.type.match(/^image\//),
                         },
                     });

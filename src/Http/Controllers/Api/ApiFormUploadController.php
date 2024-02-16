@@ -26,6 +26,7 @@ class ApiFormUploadController extends Controller
 
         return response()->json([
             'name' => $filename,
+            'uploaded' => true,
         ]);
     }
 }

@@ -12,6 +12,8 @@ it('sets only default values', function () {
             'compactThumbnail' => false,
             'transformable' => true,
             'transformKeepOriginal' => true,
+            'storageBasePath' => 'data',
+            'storageDisk' => 'local'
         ]);
 });
 

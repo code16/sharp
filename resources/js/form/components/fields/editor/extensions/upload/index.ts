@@ -45,26 +45,30 @@ export function getUploadExtension(
     }
 
     const options: UploadOptions = {
-        fieldProps: props.field.embeds.upload,
-        fieldErrorKey: props.fieldErrorKey,
+        editorProps: props,
+        // fieldProps: props.field,
+        // fieldErrorKey: props.fieldErrorKey,
         state,
-        async registerFile(attrs) {
+        async registerFile(file: FormUploadFieldValueData) {
             if(state.created) {
                 onUpdate([
                     ...props.value.files,
-                    attrs,
+                    file,
                 ]);
-                return attrs;
+                return file;
             }
 
-            state.registeredFiles.push(attrs);
+            state.registeredFiles.push(file);
             await state.resolved;
-            return props.value.files.find(file => filesEquals(attrs, file));
+            return props.value.files.find(valueFile => filesEquals(file, valueFile));
         },
         onSuccess(uploadedFile: FormUploadFieldValueData) {
             onUpdate([
                 ...props.value.files,
-                uploadedFile,
+                {
+                    ...uploadedFile,
+                    uploaded: true,
+                },
             ]);
         },
         onRemove(removedFile: FormUploadFieldValueData) {
@@ -76,7 +80,7 @@ export function getUploadExtension(
         onUpdate(updatedFile: FormUploadFieldValueData) {
             onUpdate(
                 props.value.files
-                    .map(file => filesEquals(file, updatedFile) ? updatedFile : file),
+                    .map(file => filesEquals(file, updatedFile) ? { ...updatedFile, transformed:true } : file),
             );
         }
     };

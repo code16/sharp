@@ -13,7 +13,7 @@
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
 
     const props = defineProps<{
-        form: Form,
+        form: Form
         entityKey: string,
         instanceId?: string | number,
         postFn?: Function,

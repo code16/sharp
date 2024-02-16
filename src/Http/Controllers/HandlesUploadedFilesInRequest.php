@@ -3,6 +3,9 @@
 namespace Code16\Sharp\Http\Controllers;
 
 use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
@@ -17,32 +20,55 @@ trait HandlesUploadedFilesInRequest
         $instanceId = null
     ): void {
         collect($form->fieldsContainer()->getFields())
-            ->filter(fn ($field) => $field instanceof IsUploadField)
-            // TODO WARNING: Editor is no longer an IsUploadField !!!!!!!!!!!!!!!!!!!!!!!!!
-            ->each(function (IsUploadField $field) use ($instanceId, $request, $formattedData) {
-                $wasUploaded = ($request[$field->key]['uploaded'] ?? false)
-                    && ($formattedData[$field->key]['file_name'] ?? false);
-                $wasTransformed = $field->isTransformOriginal()
-                    && ($request[$field->key]['transformed'] ?? false);
-
-                if ($wasUploaded) {
-                    HandleUploadedFileJob::dispatch(
-                        uploadedFileName: $request[$field->key]['name'],
-                        disk: $field->storageDisk(),
-                        filePath: $formattedData[$field->key]['file_name'],
-                        instanceId: $instanceId,
-                        shouldOptimizeImage: $field->isShouldOptimizeImage(),
-                        transformFilters: $wasTransformed
-                            ? $request[$field->key]['filters']
-                            : null,
+            ->each(function (SharpFormField $field) use ($instanceId, $request, $formattedData) {
+                if($field instanceof SharpFormUploadField) {
+                    $this->handleFieldPostedFile(
+                        uploadField: $field,
+                        filePath: $formattedData[$field->key]['file_name'] ?? null,
+                        requestFile: $request[$field->key] ?? null,
+                        instanceId: $instanceId
                     );
-                } elseif ($wasTransformed) {
-                    HandleTransformedFileJob::dispatch(
-                        disk: $field->storageDisk(),
-                        fileData: $formattedData[$field->key]['file_name'],
-                        transformFilters: $request[$field->key]['filters'],
-                    );
+                } elseif ($field instanceof SharpFormEditorField) {
+                    collect($request[$field->key]['files'] ?? [])
+                        ->each(function (array $file) use ($field, $instanceId, $request) {
+                            $this->handleFieldPostedFile(
+                                uploadField: $field->uploadsConfig(),
+                                filePath: $file['path'] ?? null, // <x-sharp-file> case
+                                requestFile: $file,
+                                instanceId: $instanceId,
+                            );
+                        });
                 }
             });
+    }
+    
+    protected function handleFieldPostedFile(
+        IsUploadField $uploadField,
+        ?string $filePath,
+        array $requestFile,
+        $instanceId = null
+    ) {
+        $wasUploaded = ($requestFile['uploaded'] ?? false) && $filePath;
+        $wasTransformed = $uploadField->isTransformOriginal()
+            && ($requestFile['transformed'] ?? false);
+        
+        if ($wasUploaded) {
+            HandleUploadedFileJob::dispatch(
+                uploadedFileName: $requestFile['name'],
+                disk: $uploadField->storageDisk(),
+                filePath: $filePath,
+                instanceId: $instanceId,
+                shouldOptimizeImage: $uploadField->isShouldOptimizeImage(),
+                transformFilters: $wasTransformed
+                    ? $requestFile['filters']
+                    : null,
+            );
+        } elseif ($wasTransformed) {
+            HandleTransformedFileJob::dispatch(
+                disk: $uploadField->storageDisk(),
+                filePath: $filePath,
+                transformFilters: $requestFile['filters'],
+            );
+        }
     }
 }

@@ -21,14 +21,20 @@ class SharpShowFileField extends SharpShowField
 
         return $this;
     }
-
+    
+    /**
+     * @deprecated Not needed, we deduce the disk from the value ("disk" attribute)
+     */
     public function setStorageDisk(string $storageDisk): self
     {
         $this->storageDisk = $storageDisk;
 
         return $this;
     }
-
+    
+    /**
+     * @deprecated Not needed, we deduce the base path the value ("path" attribute)
+     */
     public function setStorageBasePath(string $storageBasePath): self
     {
         $this->storageBasePath = $storageBasePath;

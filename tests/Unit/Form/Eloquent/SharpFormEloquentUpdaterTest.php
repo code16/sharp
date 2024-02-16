@@ -1,7 +1,8 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
-use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbedUpload;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -588,7 +589,7 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
                 )
                 ->addField(
                     SharpFormEditorField::make('bio')
-                        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
+                        ->allowUploads(function (SharpFormEditorUpload $upload) {
                             $upload->setStorageBasePath('test/{id}')
                                 ->setStorageDisk('local');
                         })
@@ -616,7 +617,11 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
                         'uploaded' => true,
                     ],
                 ],
-                'text' => '<p>my editor</p><x-sharp-file name="my-file.pdf"></x-sharp-file>',
+                'text' => '<p>my editor</p><x-sharp-file file="'.e(json_encode([
+                        'name' => 'my-file.pdf',
+                        'path' => 'test/'.UploadFormatter::ID_PLACEHOLDER.'/my-file.pdf',
+                        'disk' => 'local',
+                    ])).'"></x-sharp-file>',
             ],
         ])
     );
@@ -624,7 +629,11 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
     $pierre = Person::where('name', 'Pierre Curie')->first();
 
     expect($pierre->bio)
-        ->toBe('<p>my editor</p><x-sharp-file name="my-file.pdf" path="test/'.$pierre->id.'/my-file.pdf" disk="local"></x-sharp-file>');
+        ->toBe('<p>my editor</p><x-sharp-file file="'.e(json_encode([
+                'name' => 'my-file.pdf',
+                'path' => 'test/1/my-file.pdf',
+                'disk' => 'local',
+            ])).'"></x-sharp-file>');
 });
 
 it('handles the relation separator in a belongsTo case', function () {

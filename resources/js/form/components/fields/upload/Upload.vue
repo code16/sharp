@@ -198,6 +198,10 @@
         transformedImg.value = URL.createObjectURL(blob);
     }
 
+    function onEdit() {
+        showEditModal.value = true;
+    }
+
     function onRemove() {
         emit('input', null);
         emit('uploading', false);
@@ -251,7 +255,7 @@
                     <template v-if="!field.readOnly">
                         <div class="flex gap-2 mt-2">
                             <template v-if="value && isTransformable && !hasError">
-                                <Button class="mr-2" outline small @click="showEditModal = true">
+                                <Button class="mr-2" outline small @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </template>
