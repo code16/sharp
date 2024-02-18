@@ -25,7 +25,7 @@ trait HandlesUploadedFilesInRequest
                     $this->handleFieldPostedFile(
                         uploadField: $field,
                         filePath: $formattedData[$field->key]['file_name'] ?? null,
-                        requestFile: $request[$field->key] ?? null,
+                        fileData: $request[$field->key] ?? null,
                         instanceId: $instanceId
                     );
                 } elseif ($field instanceof SharpFormEditorField) {
@@ -34,7 +34,7 @@ trait HandlesUploadedFilesInRequest
                             $this->handleFieldPostedFile(
                                 uploadField: $field->uploadsConfig(),
                                 filePath: $file['path'] ?? null, // <x-sharp-file> case
-                                requestFile: $file,
+                                fileData: $file,
                                 instanceId: $instanceId,
                             );
                         });
@@ -45,29 +45,29 @@ trait HandlesUploadedFilesInRequest
     protected function handleFieldPostedFile(
         IsUploadField $uploadField,
         ?string $filePath,
-        array $requestFile,
+        array $fileData,
         $instanceId = null
     ) {
-        $wasUploaded = ($requestFile['uploaded'] ?? false) && $filePath;
+        $wasUploaded = ($fileData['uploaded'] ?? false) && $filePath;
         $wasTransformed = $uploadField->isTransformOriginal()
-            && ($requestFile['transformed'] ?? false);
+            && ($fileData['transformed'] ?? false);
 
         if ($wasUploaded) {
             HandleUploadedFileJob::dispatch(
-                uploadedFileName: $requestFile['name'],
+                uploadedFileName: $fileData['name'],
                 disk: $uploadField->storageDisk(),
                 filePath: $filePath,
                 instanceId: $instanceId,
                 shouldOptimizeImage: $uploadField->isShouldOptimizeImage(),
                 transformFilters: $wasTransformed
-                    ? $requestFile['filters']
+                    ? $fileData['filters']
                     : null,
             );
         } elseif ($wasTransformed) {
             HandleTransformedFileJob::dispatch(
                 disk: $uploadField->storageDisk(),
                 filePath: $filePath,
-                transformFilters: $requestFile['filters'],
+                transformFilters: $fileData['filters'],
             );
         }
     }
