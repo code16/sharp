@@ -39,7 +39,7 @@ class UploadFormatter extends SharpFieldFormatter
             return [
                 'file_name' => sprintf(
                     '%s/%s',
-                    str($field->storageBasePath())->replace('{id}', self::ID_PLACEHOLDER),
+                    str($field->storageBasePath())->replace('{id}', $this->instanceId ?? self::ID_PLACEHOLDER),
                     app(FileUtil::class)->findAvailableName(
                         $value['name'], $field->storageBasePath(), $field->storageDisk(),
                     )

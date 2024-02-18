@@ -49,7 +49,7 @@ it('can post a newly uploaded file in editor', function () {
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => $uploadedFile])
         ->json();
 
-    $xSharpFileData = $this
+    $editorXSharpFileData = $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [
                 'file' => $uploadedFileData,
@@ -60,14 +60,14 @@ it('can post a newly uploaded file in editor', function () {
 
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
-            'text' => '<x-sharp-file file="'.e(json_encode($xSharpFileData['file'])).'"></x-sharp-file>',
+            'text' => '<x-sharp-file file="'.e(json_encode($editorXSharpFileData['file'])).'"></x-sharp-file>',
             'files' => [
-                $xSharpFileData['file'],
+                $editorXSharpFileData['file'],
             ],
         ],
     ]);
 
-    $expectedXSharpFileData = [...$xSharpFileData];
+    $expectedXSharpFileData = [...$editorXSharpFileData];
     $expectedXSharpFileData['file']['path'] = 'test/1/file.pdf';
 
     expect(Person::first()->bio)->toEqual(
