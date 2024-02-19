@@ -18,9 +18,9 @@ class UploadFormatter extends SharpFieldFormatter
 
         return $this;
     }
-    
+
     /**
-     * @param IsUploadField $field
+     * @param  IsUploadField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -32,12 +32,12 @@ class UploadFormatter extends SharpFieldFormatter
                 'transformOriginal' => $field->isTransformOriginal(),
             ];
         }
-        
+
         return $value;
     }
 
     /**
-     * @param IsUploadField $field
+     * @param  IsUploadField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
@@ -65,7 +65,7 @@ class UploadFormatter extends SharpFieldFormatter
                     ? null
                     : $value['filters'] ?? null,
                 ...$this->alwaysReturnFullObject ? [
-                    'uploaded' => true
+                    'uploaded' => true,
                 ] : [],
             ];
         }
