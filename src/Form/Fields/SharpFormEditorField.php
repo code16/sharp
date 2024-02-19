@@ -144,7 +144,7 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
-    public function uploadsConfig(): SharpFormEditorUpload
+    public function uploadsConfig(): ?SharpFormEditorUpload
     {
         return $this->uploadsConfig;
     }

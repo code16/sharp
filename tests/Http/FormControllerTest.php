@@ -291,10 +291,14 @@ describe('handle uploads', function () {
 
         $this
             ->post('/sharp/s-list/person/s-form/person', [
-                'file' => [
-                    'name' => 'image-2.jpg',
-                    'path' => 'data/test/image-2.jpg',
-                    'uploaded' => true,
+                'bio' => [
+                    'files' => [
+                        [
+                            'name' => 'image-2.jpg',
+                            'path' => 'data/test/image-2.jpg',
+                            'uploaded' => true,
+                        ],
+                    ],
                 ],
             ])
             ->assertSessionHasNoErrors()
@@ -307,9 +311,42 @@ describe('handle uploads', function () {
     });
 
     it('does not dispatch HandlePostedFilesJob if not needed', function () {
+        
+        fakeFormFor('person', new class extends PersonForm
+        {
+            public function buildFormFields(FieldsContainer $formFields): void
+            {
+                $formFields->addField(
+                    SharpFormEditorField::make('bio')
+                        ->allowUploads(function (SharpFormEditorUpload $editorUploads) {
+                            $editorUploads
+                                ->setStorageDisk('local')
+                                ->setStorageBasePath('data/test');
+                        })
+                )->addField(SharpFormUploadField::make('file')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/test')
+                );
+            }
+        });
+        
         $this
             ->post('/sharp/s-list/person/s-form/person/2', [
                 'name' => 'Stephen Hawking',
+                'file' => [
+                    'name' => 'doc.pdf',
+                    'file_name' => 'data/test/doc.pdf',
+                    'disk' => 'local',
+                ],
+                'bio' => [
+                    'files' => [
+                        [
+                            'name' => 'doc-2.pdf',
+                            'file_name' => 'data/test/doc-2.pdf',
+                            'disk' => 'local',
+                        ]
+                    ]
+                ],
             ])
             ->assertSessionHasNoErrors()
             ->assertRedirect();
@@ -317,6 +354,20 @@ describe('handle uploads', function () {
         $this
             ->post('/sharp/s-list/person/s-form/person', [
                 'name' => 'Marie Curie',
+                'file' => [
+                    'name' => 'doc.pdf',
+                    'file_name' => 'data/test/doc.pdf',
+                    'disk' => 'local',
+                ],
+                'bio' => [
+                    'files' => [
+                        [
+                            'name' => 'doc-2.pdf',
+                            'file_name' => 'data/test/doc-2.pdf',
+                            'disk' => 'local',
+                        ]
+                    ]
+                ],
             ])
             ->assertSessionHasNoErrors()
             ->assertRedirect();

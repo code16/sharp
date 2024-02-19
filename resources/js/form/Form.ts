@@ -4,7 +4,7 @@ import {
     FormFieldData,
     FormLayoutFieldsetData,
     FormLayoutTabData,
-    FormListFieldData, LayoutFieldData
+    FormListFieldData, FormUploadFieldValueData, LayoutFieldData
 } from "@/types";
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
@@ -104,6 +104,28 @@ export class Form  implements FormData {
 
     get isUploading(): boolean {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
+    }
+
+    getAllUploadedOrTransformedFiles(postResponseData: FormData['data']): FormUploadFieldValueData[] {
+        const getFiles = (data, responseData, fields: FormData['fields']) => {
+            return Object.values(fields)
+                .map(field => {
+                    if(field.type === 'list') {
+                        return data[field.key].map((item, i) =>
+                            getFiles(item, responseData[field.key]?.[i], field.itemFields)
+                        );
+                    }
+                    if(field.type === 'upload') {
+                        return {
+                            ...data[field.key],
+                            ...responseData[field.key],
+                        }
+                    }
+                    return null;
+                })
+                .filter(Boolean);
+        }
+        return getFiles(this.data, postResponseData, this.fields)
     }
 
     getMeta(fieldKey: string): FieldMeta | undefined {

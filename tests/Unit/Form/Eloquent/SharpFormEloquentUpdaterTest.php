@@ -508,6 +508,12 @@ it('handles the {id} placeholder of uploads in update case', function () {
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+    
+    $savedCount = 0;
+    
+    Person::saved(function () use (&$savedCount) {
+        $savedCount++;
+    });
 
     $form->update(
         $marie->id,
@@ -518,6 +524,8 @@ it('handles the {id} placeholder of uploads in update case', function () {
             ],
         ])
     );
+    
+    $this->assertEquals(1, $savedCount);
 
     $this->assertDatabaseHas('sharp_upload_models', [
         'model_id' => $marie->id,
@@ -547,7 +555,7 @@ it('handles the {id} placeholder of uploads in create case', function () {
 
         public function update($id, array $data)
         {
-            return $this->save(new Person(), $data);
+            return $this->save(new Person(), $data)->id;
         }
     };
 
@@ -598,7 +606,7 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
 
         public function update($id, array $data)
         {
-            return $this->save(new Person(), $data);
+            return $this->save(new Person(), $data)->id;
         }
     };
 

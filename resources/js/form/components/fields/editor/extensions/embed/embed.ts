@@ -1,10 +1,11 @@
-import { Node } from "@tiptap/core";
+import { AnyCommands, Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
-import { serializeAttributeValue, parseAttributeValue } from "@/embeds";
+import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/embeds/utils/attributes";
 import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "@/utils";
+import { EmbedOptions } from "./index";
 
-export const Embed = Node.create({
+export const Embed = Node.create<EmbedOptions>({
     name: 'embed',
 
     group: 'block',
@@ -15,36 +16,38 @@ export const Embed = Node.create({
 
     priority: 150,
 
-    addOptions: () => ({
-        label: null,
-        tag: null,
-        attributes: [],
-        template: null,
-    }),
-
     addAttributes() {
+        const embed = this.options.embed;
         return {
             attributes: {
                 default: {},
-                parseHTML: element => {
-                    const attributes = this.options.attributes
-                        .reduce((res, attributeName) => ({
-                            ...res,
-                            [attributeName]: parseAttributeValue(element.getAttribute(hyphenate(attributeName))),
-                        }), {});
+                parseHTML: (element) => {
+                    const attributes = Object.fromEntries(
+                        embed.attributes.map(attributeName =>
+                            [attributeName, parseAttributeValue(element.getAttribute(hyphenate(attributeName)))]
+                        )
+                    );
 
-                    if(this.options.attributes.includes('slot')) {
+                    if(embed.attributes?.includes('slot')) {
                         attributes.slot = element.innerHTML;
                     }
 
                     return attributes;
                 },
-                renderHTML: attributes => this.options.attributes
-                    .filter(attributeName => attributes.attributes[attributeName] != null)
-                    .reduce((res, attributeName) => ({
-                        ...res,
-                        [hyphenate(attributeName)]: serializeAttributeValue(attributes.attributes[attributeName]),
-                    }), {}),
+                renderHTML: (attributes) => {
+                    return Object.fromEntries(
+                        embed.attributes
+                            ?.filter(attributeName => attributes.attributes[attributeName] != null)
+                            .map((attributeName) => {
+                                const value = embed.fields[attributeName].type === 'upload'
+                                    ? serializeUploadAttributeValue(attributes.attributes[attributeName])
+                                    : serializeAttributeValue(attributes.attributes[attributeName]);
+
+                                return [hyphenate(attributeName), value];
+                            }, {})
+                        ?? []
+                    )
+                },
             },
             additionalData: {
                 default: null,
@@ -81,7 +84,7 @@ export const Embed = Node.create({
         return element;
     },
 
-    addCommands() {
+    addCommands(): AnyCommands {
         return {
             insertEmbed: ({ embedKey }) => ({ commands, tr }) => {
                 return commands

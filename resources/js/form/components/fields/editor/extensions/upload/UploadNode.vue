@@ -1,23 +1,27 @@
 <script setup lang="ts">
-    import { Upload as UploadExtension } from "./upload"
+    import { Upload as UploadExtension, UploadAttributes } from "./upload"
     import { computed, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import { NodeViewProps } from "@tiptap/core";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
     import { Upload } from "@/form/components/fields";
-    import { FormUploadFieldData } from "@/types";
-    import { Modal } from "@/components/ui";
-    import Form from "@/Pages/Form/Form.vue";
+    import { FormUploadFieldData, FormData } from "@/types";
+    import { api } from "@/api";
+    import { route } from "@/utils/url";
+    import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
+    import { Form } from "@/form/Form";
+    import { useParentForm } from "@/form/useParentForm";
 
-    const props = defineProps<Omit<NodeViewProps, 'extension'> & {
+    const props = defineProps<Omit<NodeViewProps, 'extension' | 'node'> & {
         extension: typeof UploadExtension,
+        node: Omit<NodeViewProps['node'], 'attrs'> & { attrs: UploadAttributes }
     }>();
 
     const error = computed(() => {
         if(props.node.attrs.notFound) {
             return __('sharp::form.editor.errors.unknown_file', {
-                path: props.node.attrs.path ?? ''
+                path: props.node.attrs.file.path ?? ''
             });
         }
     });
@@ -88,12 +92,27 @@
     init();
 
     const showEditModal = ref(false);
+    const editForm = ref(null);
+    const form = useParentForm();
+
     function onEdit(event: CustomEvent) {
         const editorProps = props.extension.options.editorProps;
-        if(editorProps.field.embeds.upload.hasLegend) {
+        if(editorProps.field.embeds.upload.fields.legend) {
             event.preventDefault();
+            const formProps = {
+                ...editorProps.field.embeds.upload,
+                data: props.node.attrs,
+            } as FormData;
+            editForm.value = new Form(formProps, form.entityKey, form.instanceId);
             showEditModal.value = true;
         }
+    }
+
+    async function postForm() {
+        const attributes = await api.post(route('code16.sharp.api.form.editor.upload.form.update'))
+            .then(response => response.data);
+
+        props.updateAttributes(attributes);
     }
 
     onUnmounted(() => {
@@ -106,11 +125,11 @@
 <template>
     <NodeRenderer class="editor__node" :node="node">
         <Upload
-            :field="extension.options.editorProps.field.embeds.upload"
+            :field="extension.options.editorProps.field.embeds.upload.fields.file"
             :field-error-key="extension.options.editorProps.fieldErrorKey"
             :value="{
-                ...props.node.attrs.file,
-                file: props.node.attrs.htmlFile,
+                ...node.attrs.file,
+                file: node.attrs.htmlFile,
             }"
             :has-error="!!error"
             :root="false"
@@ -119,16 +138,14 @@
             @error="onError"
             @sucess="onSuccess"
             @remove="onRemove"
+            @edit="onEdit"
         ></Upload>
 
-        <Modal :visible="showEditModal">
+        <EmbedFormModal :visible="showEditModal" :form="editForm" :post="postForm">
             <template v-slot:title>
                 Upload
             </template>
-            <template v-if="showEditModal">
-
-            </template>
-        </Modal>
+        </EmbedFormModal>
 
         <template v-if="error">
             <div class="invalid-feedback d-block" style="font-size: .75rem">

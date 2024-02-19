@@ -2,7 +2,7 @@ import { computed, ComputedRef, Ref } from "vue";
 import { Editor } from "@tiptap/vue-3";
 import { FormEditorFieldData } from "@/types";
 import { FormFieldProps } from "@/form/components/types";
-import { useForm } from "@/form/useForm";
+import { useParentForm } from "@/form/useParentForm";
 
 
 export function useLocalizedEditor(
@@ -10,7 +10,7 @@ export function useLocalizedEditor(
     createEditor: (content: string | null) => Editor
 ): ComputedRef<Editor> {
     if(props.field.localized && typeof props.value.text === 'object') {
-        const form = useForm();
+        const form = useParentForm();
         const localizedEditors = Object.fromEntries(
             form.locales.map(locale => [
                 locale,

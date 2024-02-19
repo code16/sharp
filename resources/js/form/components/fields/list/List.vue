@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { useForm } from "../../../useForm";
+    import { useParentForm } from "../../../useParentForm";
     import FieldColumn from "@/components/ui/FieldGridColumn.vue";
     import Field from "../../Field.vue";
-    import { FormFieldData, FormListFieldData, LayoutFieldData } from "@/types";
+    import { FormFieldData, FormListFieldData, FormUploadFieldValueData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "../../../util";
     import { computed, ref } from "vue";
     import Draggable from 'vuedraggable';
@@ -21,7 +21,7 @@
     }>();
 
     const emit = defineEmits(['input']);
-    const form = useForm();
+    const form = useParentForm();
     const dragging = ref(false);
     const dragActive = ref(false);
     const canAddItem = computed(() => {

@@ -186,28 +186,52 @@ it('transforms a list of upload with transformations', function () {
     );
 });
 
-it('allows to fake an sharpUpload and transform a single upload', function () {
-    $file = createImage();
-
-    $uploadData = [
-        'file_name' => $file,
-        'size' => 120,
-        'disk' => 'local',
-        'filters' => [],
-    ];
-
-    $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
-
-    $this->assertEquals(
-        [
-            'id' => null,
-            'name' => basename($file),
-            'path' => $file,
-            'disk' => 'local',
+describe('dynamicInstance', function () {
+    it('allows to fake a sharpUpload and transform a single upload', function () {
+        $file = createImage();
+        
+        $uploadData = [
+            'file_name' => $file,
             'size' => 120,
-            'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
+            'disk' => 'local',
             'filters' => [],
-        ],
-        $transformer->apply($uploadData, null, 'picture'),
-    );
+        ];
+        
+        $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
+        
+        $this->assertEquals(
+            [
+                'id' => null,
+                'name' => basename($file),
+                'path' => $file,
+                'disk' => 'local',
+                'size' => 120,
+                'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
+                'filters' => [],
+            ],
+            $transformer->apply($uploadData, null, 'picture'),
+        );
+    });
+    
+    it('sends "uploaded" and "transformed" attributes if present', function () {
+        $file = createImage();
+        
+        $uploadData = [
+            'file_name' => $file,
+            'size' => 120,
+            'disk' => 'local',
+            'filters' => [],
+            'uploaded' => true,
+            'transformed' => true,
+        ];
+        
+        $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
+        
+        expect($transformer->apply($uploadData, null, 'picture'))
+            ->toMatchArray([
+                'uploaded' => true,
+                'transformed' => true,
+            ]);
+    });
 });
+

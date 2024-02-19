@@ -17,7 +17,7 @@
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";
     import EditModal from "./EditModal.vue";
-    import { useForm } from "../../../useForm";
+    import { useParentForm } from "../../../useParentForm";
     import UploadDropText from "./UploadDropText.vue";
     import { getCsrfToken } from "@/utils/request";
 
@@ -43,7 +43,7 @@
         remove: [],
         update: [value: FormUploadFieldData['value']],
     }>();
-    const form = useForm();
+    const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
     const showEditModal = ref(false);
     const isTransformable = computed(() => {

@@ -1,11 +1,20 @@
 import { reactive } from 'vue';
 import debounce from 'lodash/debounce';
 import { filesEquals } from "@/utils/upload";
-import { Upload, UploadOptions } from "./upload";
+import { Upload } from "./upload";
 import { api } from "@/api";
 import { FormFieldProps } from "@/form/components/types";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { route } from "@/utils/url";
+
+
+export type UploadOptions = {
+    editorProps: FormFieldProps<FormEditorFieldData>,
+    registerFile: (file: FormUploadFieldValueData) => Promise<FormUploadFieldValueData>,
+    onRemove: (removedFile: FormUploadFieldValueData) => void,
+    onUpdate: (updatedFile: FormUploadFieldValueData) => void,
+    onSuccess: (updatedFile: FormUploadFieldValueData) => void,
+}
 
 export function getUploadExtension(
     props: FormFieldProps<FormEditorFieldData>,
@@ -46,9 +55,6 @@ export function getUploadExtension(
 
     const options: UploadOptions = {
         editorProps: props,
-        // fieldProps: props.field,
-        // fieldErrorKey: props.fieldErrorKey,
-        state,
         async registerFile(file: FormUploadFieldValueData) {
             if(state.created) {
                 onUpdate([

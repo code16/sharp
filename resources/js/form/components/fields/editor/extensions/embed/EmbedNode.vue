@@ -107,7 +107,7 @@
                 this.modalVisible = true;
             },
             async postForm(data) {
-                const attributes = await this.extension.options.postForm(data);
+                const attributes = await this.extension.options.postForm(data, this.modalForm);
                 this.updateAttributes({
                     attributes,
                     additionalData: attributes,

@@ -1,32 +1,15 @@
-import { Node } from "@tiptap/core";
+import { AnyCommands, Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import { getEventsPlugin } from "./events-plugin";
-import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
-import { FormFieldProps } from "@/form/components/types";
-
-export type UploadOptions = {
-    editorProps: FormFieldProps<FormEditorFieldData>,
-    isReady: () => boolean,
-    getFile: () => void,
-    registerFile: () => Promise<FormUploadFieldValueData>,
-    onRemove: (removedFile: FormUploadFieldValueData) => void,
-    onUpdate: (updatedFile: FormUploadFieldValueData) => void,
-}
+import { FormUploadFieldValueData } from "@/types";
+import { serializeUploadAttributeValue } from "@/embeds/utils/attributes";
+import { UploadOptions } from "./index";
 
 export type UploadAttributes = {
-    disk: string,
-    path: string,
-    name: string,
-    size: number,
-    thumbnail: string,
-    filters: {
-        crop: string,
-        rotate: number,
-    },
-    file: File,
+    file: FormUploadFieldValueData,
+    htmlFile: File,
     isImage: boolean,
-    uploaded: boolean,
     notFound: boolean,
 }
 
@@ -49,11 +32,13 @@ export const Upload = Node.create<UploadOptions>({
                     file: JSON.parse(element.getAttribute('file') ?? 'null'),
                 }),
                 renderHTML: (attributes) => {
-                    const { uploaded, transformed, ...file } = attributes.file; // uploaded & transformed are only needed in editor "files" array
                     return {
-                        file: JSON.stringify(file),
+                        file: serializeUploadAttributeValue(attributes.file),
                     }
                 },
+            },
+            legend: {
+                default: null,
             },
             /**
              * @type File
@@ -98,7 +83,7 @@ export const Upload = Node.create<UploadOptions>({
         ]
     },
 
-    addCommands() {
+    addCommands(): AnyCommands {
         return {
             insertUpload: ({ file, pos }) => ({ commands, tr }) => {
                 return commands
@@ -115,6 +100,7 @@ export const Upload = Node.create<UploadOptions>({
                  * @see UploadFileInput
                  */
                 editor.emit('new-upload');
+                return true;
             },
         }
     },

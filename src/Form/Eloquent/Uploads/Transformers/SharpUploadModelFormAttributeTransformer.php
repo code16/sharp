@@ -18,7 +18,6 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     protected int $thumbnailWidth;
     protected int $thumbnailHeight;
     private bool $dynamicSharpUploadModel = false;
-    protected array $additionalData = [];
 
     public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
     {
@@ -30,13 +29,6 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     public function dynamicInstance(): self
     {
         $this->dynamicSharpUploadModel = true;
-
-        return $this;
-    }
-
-    public function with(array $data): self
-    {
-        $this->additionalData = $data;
 
         return $this;
     }
@@ -66,6 +58,12 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'size' => $value['size'] ?? null,
                 ]),
             ];
+            
+            return [
+                ...$this->transformUpload($instance->$attribute),
+                ...($value['uploaded'] ?? false) ? ['uploaded' => true] : [],
+                ...($value['transformed'] ?? false) ? ['transformed' => true] : [],
+            ];
         }
 
         if (! $instance->$attribute) {
@@ -94,8 +92,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 
     protected function transformUpload(SharpUploadModel $upload): array
     {
-        return array_merge(
-            $upload->file_name
+        return [
+            ...$upload->file_name
                 ? [
                     'name' => basename($upload->file_name),
                     'path' => $upload->file_name,
@@ -104,10 +102,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'size' => $upload->size,
                 ]
                 : [],
-            $upload->custom_properties ?? [], // Including filters
-            ['id' => $upload->id],
-            $this->additionalData,
-        );
+            ...$upload->custom_properties ?? [], // Including filters
+            'id' => $upload->id,
+        ];
     }
 
     private function getThumbnailUrl(SharpUploadModel $upload): ?string

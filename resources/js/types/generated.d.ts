@@ -102,6 +102,7 @@ export type EmbedData = {
   tag: string;
   attributes: Array<string>;
   template: string;
+  fields: { [key: string]: FormFieldData };
 };
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -283,7 +284,7 @@ export type FormDynamicOptionsData = {
 export type FormEditorFieldData = {
   value?: {
     text: string | { [locale: string]: string | null } | null;
-    files: Array<FormUploadFieldData["value"]> | null;
+    files: Array<FormUploadFieldValueData> | null;
   };
   key: string;
   type: "editor";
@@ -291,9 +292,7 @@ export type FormEditorFieldData = {
   markdown: boolean;
   inline: boolean;
   showCharacterCount: boolean;
-  embeds: { upload: FormEditorFieldUploadData } & {
-    [key: string]: FormEditorFieldEmbedData;
-  };
+  embeds: { upload: FormEditorFieldUploadData } & { [key: string]: EmbedData };
   toolbar: Array<FormEditorToolbarButton>;
   maxHeight: number | null;
   maxLength: number | null;
@@ -305,21 +304,9 @@ export type FormEditorFieldData = {
   extraStyle: string | null;
   localized: boolean | null;
 };
-export type FormEditorFieldEmbedData = {
-  key: string;
-  label: string;
-  tag: string;
-  attributes: Array<string>;
-  template: string;
-};
 export type FormEditorFieldUploadData = {
-  transformable: boolean;
-  transformKeepOriginal: boolean | null;
-  transformableFileTypes: Array<string> | null;
-  ratioX: number | null;
-  ratioY: number | null;
-  maxFileSize: number | null;
-  fileFilter: Array<any> | string | null;
+  fields: { file: FormUploadFieldData; legend: FormTextFieldData | null };
+  layout: FormLayoutData;
 };
 export type FormEditorToolbarButton =
   | "bold"
@@ -334,8 +321,6 @@ export type FormEditorToolbarButton =
   | "heading-3"
   | "code"
   | "blockquote"
-  | "upload-image"
-  | "upload"
   | "horizontal-rule"
   | "table"
   | "iframe"
@@ -536,6 +521,8 @@ export type FormUploadFieldData = {
   ratioY: number | null;
   maxFileSize: number | null;
   fileFilter: Array<string> | null;
+  storageBasePath: string | null;
+  storageDisk: string | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -550,6 +537,8 @@ export type FormUploadFieldValueData = {
   thumbnail: string | null;
   uploaded: boolean | null;
   transformed: boolean | null;
+  shouldOptimizeImage: boolean | null;
+  transformOriginal: boolean | null;
   filters: {
     crop: { width: number; height: number; x: number; y: number };
     rotate: { angle: number };

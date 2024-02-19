@@ -25,7 +25,7 @@ final class FormEditorFieldData extends Data
         public bool $markdown,
         public bool $inline,
         public bool $showCharacterCount,
-        #[LiteralTypeScriptType('{ upload:FormEditorFieldUploadData } & { [key:string]:FormEditorFieldEmbedData }')]
+        #[LiteralTypeScriptType('{ upload:FormEditorFieldUploadData } & { [key:string]:EmbedData }')]
         public array $embeds,
         #[LiteralTypeScriptType('Array<FormEditorToolbarButton>')]
         public ?array $toolbar = null,

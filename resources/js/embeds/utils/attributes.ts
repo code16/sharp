@@ -1,3 +1,4 @@
+import { FormUploadFieldValueData } from "@/types";
 
 
 export function parseAttributeValue(value) {
@@ -11,6 +12,22 @@ export function parseAttributeValue(value) {
 export function serializeAttributeValue(value) {
     if(value && typeof value === 'object') {
         return JSON.stringify(value);
+    }
+
+    return value;
+}
+
+export function serializeUploadAttributeValue(value: FormUploadFieldValueData | null) {
+    if(value && typeof value === 'object') {
+        const {
+            uploaded,
+            transformed,
+            shouldOptimizeImage,
+            transformOriginal,
+            ...serializable
+        } = value;
+
+        return JSON.stringify(serializable);
     }
 
     return value;

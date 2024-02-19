@@ -274,6 +274,7 @@ declare module 'ziggy-js' {
             "name": "instanceId"
         }
     ],
+    "code16.sharp.api.form.editor.upload.form.update": [],
     "code16.sharp.api.form.upload": [],
     "code16.sharp.login": [],
     "code16.sharp.login.post": [],

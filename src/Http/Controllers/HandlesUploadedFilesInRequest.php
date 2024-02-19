@@ -23,18 +23,22 @@ trait HandlesUploadedFilesInRequest
             ->each(function (SharpFormField $field) use ($instanceId, $request, $formattedData) {
                 if ($field instanceof SharpFormUploadField) {
                     $this->handleFieldPostedFile(
-                        uploadField: $field,
-                        filePath: $formattedData[$field->key]['file_name'] ?? null,
                         fileData: $request[$field->key] ?? null,
+                        disk: $field->storageDisk(),
+                        filePath: $formattedData[$field->key]['file_name'] ?? null,
+                        transformOriginal: $field->isTransformOriginal(),
+                        shouldOptimizeImage: $field->isShouldOptimizeImage(),
                         instanceId: $instanceId
                     );
                 } elseif ($field instanceof SharpFormEditorField) {
                     collect($request[$field->key]['files'] ?? [])
                         ->each(function (array $file) use ($field, $instanceId) {
                             $this->handleFieldPostedFile(
-                                uploadField: $field->uploadsConfig(),
-                                filePath: $file['path'] ?? null, // <x-sharp-file> case
                                 fileData: $file,
+                                disk: $file['disk'] ?? 'local',
+                                filePath: $file['path'] ?? null,
+                                transformOriginal: $file['transformOriginal'] ?? false,
+                                shouldOptimizeImage: $file['shouldOptimizeImage'] ?? false,
                                 instanceId: $instanceId,
                             );
                         });
@@ -43,29 +47,30 @@ trait HandlesUploadedFilesInRequest
     }
 
     protected function handleFieldPostedFile(
-        IsUploadField $uploadField,
-        ?string $filePath,
         array $fileData,
-        $instanceId = null
+        ?string $disk,
+        ?string $filePath,
+        bool $transformOriginal,
+        bool $shouldOptimizeImage,
+        $instanceId
     ) {
         $wasUploaded = ($fileData['uploaded'] ?? false) && $filePath;
-        $wasTransformed = $uploadField->isTransformOriginal()
-            && ($fileData['transformed'] ?? false);
+        $wasTransformed = ($fileData['transformed'] ?? false) && $transformOriginal;
 
         if ($wasUploaded) {
             HandleUploadedFileJob::dispatch(
                 uploadedFileName: $fileData['name'],
-                disk: $uploadField->storageDisk(),
+                disk: $disk,
                 filePath: $filePath,
                 instanceId: $instanceId,
-                shouldOptimizeImage: $uploadField->isShouldOptimizeImage(),
+                shouldOptimizeImage: $shouldOptimizeImage,
                 transformFilters: $wasTransformed
                     ? $fileData['filters']
                     : null,
             );
         } elseif ($wasTransformed) {
             HandleTransformedFileJob::dispatch(
-                disk: $uploadField->storageDisk(),
+                disk: $disk,
                 filePath: $filePath,
                 transformFilters: $fileData['filters'],
             );

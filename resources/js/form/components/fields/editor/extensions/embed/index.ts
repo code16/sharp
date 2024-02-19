@@ -3,13 +3,28 @@ import { Embed } from "./embed";
 import debounce from "lodash/debounce";
 import { api } from "@/api";
 import { route } from "@/utils/url";
+import { EmbedData, FormData } from "@/types";
+import { Form } from "@/form/Form";
 
+export type EmbedOptions = {
+    embed: EmbedData,
+    isReady: () => boolean,
+    getEmbed: (id: number) => any,
+    getAdditionalData: (attrs: any) => Promise<any>,
+    resolveForm: (attrs: any) => Promise<any>,
+    postForm: (data: FormData['data'], form: Form) => Promise<any>,
+}
 
 export function getEmbedExtension({
-    embedKey,
-    embedOptions,
+    embed,
     entityKey,
     instanceId,
+    onUpdated
+}: {
+    embed: EmbedData,
+    entityKey: string,
+    instanceId: string|number,
+    onUpdated: (responseData: FormData['data'], form: Form) => void,
 }) {
     const state = reactive({
         embeds: [],
@@ -25,15 +40,15 @@ export function getEmbedExtension({
         return api
             .post(
                 instanceId
-                    ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
-                    : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
+                    ? route('code16.sharp.api.embed.instance.show', { embedKey: embed.key, entityKey, instanceId })
+                    : route('code16.sharp.api.embed.show', { embedKey: embed.key, entityKey }),
                 { embeds, form: true }
             )
             .then(response => response.data.embeds);
     }
 
     const config = {
-        name: `embed:${embedKey}`,
+        name: `embed:${embed.key}`,
         onCreate: debounce(async () => {
             if(state.currentIndex > 0) {
                 state.embeds = await resolveEmbeds(state.embeds);
@@ -43,12 +58,8 @@ export function getEmbedExtension({
         }),
     }
 
-    const options = {
-        label: embedOptions.label,
-        tag: embedOptions.tag,
-        attributes: embedOptions.attributes ?? [],
-        template: embedOptions.template,
-        state,
+    const options: EmbedOptions = {
+        embed,
         isReady: () => {
             return state.created;
         },
@@ -64,35 +75,28 @@ export function getEmbedExtension({
             await state.resolved;
             return state.embeds[index];
         },
-        onUpdate: (id, data) => {
-            state.embeds = {
-                ...state.embeds,
-                [id]: data,
-            }
-        },
-        onRemove: (id) => {
-            const { [id]:removedEmbed, ...embed } = state.embeds;
-            state.embeds = embed;
-        },
         resolveForm(attributes) {
             return api
                 .post(
                     instanceId
-                        ? route('code16.sharp.api.embed.instance.form.show', { embedKey, entityKey, instanceId })
-                        : route('code16.sharp.api.embed.form.show', { embedKey, entityKey }),
+                        ? route('code16.sharp.api.embed.instance.form.show', { embedKey: embed.key, entityKey, instanceId })
+                        : route('code16.sharp.api.embed.form.show', { embedKey: embed.key, entityKey }),
                     { ...attributes }
                 )
                 .then(response => response.data);
         },
-        postForm(data) {
+        postForm(data: FormData['data'], form: Form) {
             return api
                 .post(
                     instanceId
-                        ? route('code16.sharp.api.embed.instance.form.update', { embedKey, entityKey, instanceId })
-                        : route('code16.sharp.api.embed.form.update', { embedKey, entityKey }),
+                        ? route('code16.sharp.api.embed.instance.form.update', { embedKey: embed.key, entityKey, instanceId })
+                        : route('code16.sharp.api.embed.form.update', { embedKey: embed.key, entityKey }),
                     { ...data }
                 )
-                .then(response => response.data);
+                .then(response => {
+                    onUpdated(response.data, form);
+                    return response.data;
+                });
         },
     }
 

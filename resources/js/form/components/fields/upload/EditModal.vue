@@ -7,7 +7,7 @@
     import Cropper from "cropperjs";
     import { rotate, rotateTo } from "./util/rotate";
     import { Modal, Loading, Button } from '@/components/ui';
-    import { useForm } from "../../../useForm";
+    import { useParentForm } from "../../../useParentForm";
     import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
     import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
     import { route } from "@/utils/url";
@@ -24,7 +24,7 @@
     const cropper = ref<Cropper>();
     const cropperData = ref<Partial<Cropper.Data>>();
     const cropperImg = ref();
-    const form = useForm();
+    const form = useParentForm();
 
     watch(cropperImg, () => {
         // console.log(cropperImg.value);

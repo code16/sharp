@@ -21,15 +21,11 @@ class ApiFormEditorUploadFormController extends Controller
                 ->setHasLegend(request()->has('fields.legend'))
         );
 
-        $formattedData = $form->formatAndValidateRequestData(request()->get('data'));
+        $formattedData = $form->formatRequestData(request()->get('data'));
         $transformedData = $form
             ->setCustomTransformer(
                 'file',
                 (new SharpUploadModelFormAttributeTransformer(withThumbnails: false))
-                    ->with([
-                        ...request()->input('data.file.uploaded') ? ['uploaded' => true] : [],
-                        ...request()->input('data.file.transformed') ? ['transformed' => true] : [],
-                    ])
                     ->dynamicInstance(),
             )
             ->transform($formattedData);

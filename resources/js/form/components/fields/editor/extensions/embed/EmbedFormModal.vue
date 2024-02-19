@@ -1,6 +1,5 @@
 <template>
     <Modal
-        modal-class="form-modal"
         :visible="visible"
         :loading="loading"
         @ok="handleSubmitButtonClicked"

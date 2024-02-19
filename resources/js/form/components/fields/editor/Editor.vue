@@ -15,7 +15,7 @@
     import { config } from "@/utils/config";
     import { Iframe } from "@/form/components/fields/editor/extensions/iframe/iframe";
     import { getEmbedExtension } from "@/form/components/fields/editor/extensions/embed";
-    import { useForm } from "@/form/useForm";
+    import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
     import { getDefaultExtensions, getUploadExtension } from "@/form/components/fields/editor/extensions";
 
@@ -24,7 +24,7 @@
         FormFieldProps<FormEditorFieldData>
     >();
 
-    const form = useForm();
+    const form = useParentForm();
     const header = ref<HTMLElement>();
     const editor = useLocalizedEditor(
         props,
@@ -48,13 +48,25 @@
                         instanceId: form.instanceId,
                     })
                     : null,
-                ...Object.entries({ ...field.embeds, upload: null })
-                    .map(([embedKey, embedOptions]) =>
-                        embedOptions && getEmbedExtension({
-                            embedKey,
-                            embedOptions,
+                ...Object.values({ ...field.embeds, upload: null })
+                    .filter(Boolean)
+                    .map((embed) =>
+                        getEmbedExtension({
+                            embed,
                             entityKey: form.entityKey,
                             instanceId: form.instanceId,
+                            onUpdated(responseData, form) {
+                                emit('input', {
+                                    ...props.value,
+                                    files: Object.values({
+                                        ...Object.fromEntries(props.value.files?.map(file => [`${file.disk}:${file.path}`, file]) ?? []),
+                                        ...Object.fromEntries(form
+                                            .getAllUploadedOrTransformedFiles(responseData)
+                                            .map(file => [`${file.disk}:${file.path}`, file]) ?? []
+                                        )
+                                    }),
+                                });
+                            }
                         }),
                     ),
             ].filter(Boolean);

@@ -14,7 +14,8 @@ it('handles image transformations on an existing file if isTransformOriginal is 
 
     HandleUploadedFileJob::dispatch(
         uploadedFileName: 'image.jpg',
-        fileData: ['file_name' => 'data/image.jpg', 'disk' => 'local'],
+        disk: 'local',
+        filePath: 'data/image.jpg',
         shouldOptimizeImage: false,
         transformFilters: [
             'rotate' => ['angle' => 90],
@@ -31,4 +32,4 @@ it('handles image transformations on an existing file if isTransformOriginal is 
         $originalSize,
         Storage::disk('local')->size('data/image.jpg')
     );
-})->todo();
+});

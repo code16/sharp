@@ -19,7 +19,7 @@
     import Text from "./fields/Text.vue";
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
-    import { useForm } from "../useForm";
+    import { useParentForm } from "../useParentForm";
     import { FormFieldProps } from "@/form/components/types";
 
     const props = defineProps<FormFieldProps & {
@@ -28,7 +28,7 @@
     }>();
 
     const emit = defineEmits(['input', 'locale-change']);
-    const form = useForm();
+    const form = useParentForm();
     const id = computed(() => `form-field_${props.fieldErrorKey}`);
 
     const components: Record<FormFieldData['type'], Component> = {

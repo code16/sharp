@@ -36,6 +36,7 @@ abstract class SharpFormEditorEmbed
             'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'template' => $template,
+            'fields' => $this->fields(),
         ];
 
         $this->validate($config, [

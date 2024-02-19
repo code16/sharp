@@ -1,10 +1,9 @@
 <script setup lang="ts">
-    import { FormEditorFieldData, FormEditorFieldEmbedData, FormEditorToolbarButton } from "@/types";
+    import { EmbedData, FormEditorFieldData, FormEditorToolbarButton } from "@/types";
     import { FormFieldProps } from "@/form/components/types";
     import { Editor } from "@tiptap/vue-3";
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";
-    import OptionsDropdown from "./OptionsDropdown.vue";
     import { Button, Dropdown, DropdownItem } from "@/components/ui";
     import { buttons } from './config';
     import { computed } from "vue";
@@ -25,7 +24,7 @@
         }, [[]])
     );
 
-    const customEmbeds = computed<FormEditorFieldEmbedData[]>(() => {
+    const customEmbeds = computed<EmbedData[]>(() => {
         const { upload, ...customEmbeds } = props.field.embeds;
         return Object.values(customEmbeds);
     });
@@ -92,7 +91,7 @@
 
                         <template v-slot:default>
                             <template v-for="embed in customEmbeds">
-                                <DropdownItem @click="editor.chain().focus().insertEmbed({ embedKey: embed.key }).run()">
+                                <DropdownItem @click="editor.chain().focus().insertEmbed({ embed }).run()">
                                     {{ embed.label }}
                                 </DropdownItem>
                             </template>

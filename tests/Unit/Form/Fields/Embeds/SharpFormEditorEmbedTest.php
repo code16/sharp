@@ -3,6 +3,7 @@
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Arr;
 
 it('sets default values in config', function () {
     $defaultEmbed = new class() extends SharpFormEditorEmbed
@@ -25,8 +26,8 @@ it('sets default values in config', function () {
         }
     };
     $defaultEmbed->buildEmbedConfig();
-
-    expect($defaultEmbed->toConfigArray(true))
+    
+    expect(Arr::except($defaultEmbed->toConfigArray(true), ['fields']))
         ->toEqual([
             'key' => $defaultEmbed->key(),
             'label' => 'default_fake_sharp_form_editor_embed',
@@ -34,6 +35,10 @@ it('sets default values in config', function () {
             'attributes' => ['text'],
             'template' => 'Empty template',
         ]);
+    
+    expect($defaultEmbed->toConfigArray(true))
+        ->toHaveKey('fields.text')
+        ->toHaveKey('fields.text.type', 'text');
 });
 
 it('allows to configure tag', function () {
