@@ -58,7 +58,7 @@ it('can post a newly uploaded file in editor, create case', function () {
             'fields' => $form->fields()['bio']['embeds']['upload']['fields'],
         ])
         ->json();
-    
+
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
             'text' => sprintf(
@@ -70,7 +70,7 @@ it('can post a newly uploaded file in editor, create case', function () {
             ],
         ],
     ]);
-    
+
     expect(Person::first()->bio)->toEqual(
         sprintf(
             '<x-sharp-file file="%s"></x-sharp-file>',
@@ -86,11 +86,11 @@ it('can post a newly uploaded file in editor, create case', function () {
 
 it('can post a newly uploaded file in editor, update case', function () {
     Person::create(['bio' => '']);
-    
+
     fakeFormFor('person', $form = new class extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
-        
+
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields
@@ -102,19 +102,19 @@ it('can post a newly uploaded file in editor, update case', function () {
                         })
                 );
         }
-        
+
         public function update($id, array $data)
         {
             return $this->save(Person::findOrFail($id), $data)->id;
         }
     });
-    
+
     $uploadedFile = UploadedFile::fake()->create('file.pdf');
-    
+
     $uploadedFileData = $this
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => $uploadedFile])
         ->json();
-    
+
     $editorXSharpFileData = $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [
@@ -123,7 +123,7 @@ it('can post a newly uploaded file in editor, update case', function () {
             'fields' => $form->fields()['bio']['embeds']['upload']['fields'],
         ])
         ->json();
-    
+
     $this->post('/sharp/s-list/person/s-form/person/1', [
         'bio' => [
             'text' => sprintf(
@@ -145,7 +145,7 @@ it('can post a newly uploaded file in editor, update case', function () {
             ]))
         )
     );
-    
+
     Storage::disk('local')->assertExists('test/1/file.pdf');
 });
 
@@ -153,7 +153,7 @@ it('can post an embed with upload, create case', function () {
     fakeFormFor('person', new class extends FakeSharpForm
     {
         use WithSharpFormEloquentUpdater;
-        
+
         public function buildFormFields(FieldsContainer $formFields): void
         {
             $formFields
@@ -164,29 +164,29 @@ it('can post an embed with upload, create case', function () {
                         ])
                 );
         }
-        
+
         public function update($id, array $data)
         {
             return $this->save(new Person(), $data)->id;
         }
     });
-    
+
     $uploadedFile = UploadedFile::fake()->create('file.pdf');
-    
+
     $uploadedFileData = $this
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => $uploadedFile])
         ->json();
-    
+
     $editorXEmbedData = $this
         ->postJson(route('code16.sharp.api.embed.instance.form.update', [
             str(FormEditorUploadsTestEmbed::class)->replace('/', '.'),
             'person',
             1,
         ]), [
-            'file' => $uploadedFileData
+            'file' => $uploadedFileData,
         ])
         ->json();
-    
+
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
             'text' => sprintf(
@@ -198,7 +198,7 @@ it('can post an embed with upload, create case', function () {
             ],
         ],
     ]);
-    
+
     expect(Person::first()->bio)->toEqual(
         sprintf(
             '<x-embed file="%s"></x-embed>',
@@ -208,6 +208,6 @@ it('can post an embed with upload, create case', function () {
             ]))
         )
     );
-    
+
     Storage::disk('local')->assertExists('test/1/file.pdf');
 });

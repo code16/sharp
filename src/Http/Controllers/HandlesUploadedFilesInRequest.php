@@ -6,7 +6,6 @@ use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
@@ -32,7 +31,7 @@ trait HandlesUploadedFilesInRequest
                     );
                 } elseif ($field instanceof SharpFormEditorField) {
                     collect($request[$field->key]['files'] ?? [])
-                        ->each(function (array $file) use ($field, $instanceId) {
+                        ->each(function (array $file) use ($instanceId) {
                             $this->handleFieldPostedFile(
                                 fileData: $file,
                                 disk: $file['disk'] ?? 'local',

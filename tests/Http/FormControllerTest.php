@@ -311,7 +311,6 @@ describe('handle uploads', function () {
     });
 
     it('does not dispatch HandlePostedFilesJob if not needed', function () {
-        
         fakeFormFor('person', new class extends PersonForm
         {
             public function buildFormFields(FieldsContainer $formFields): void
@@ -329,7 +328,7 @@ describe('handle uploads', function () {
                 );
             }
         });
-        
+
         $this
             ->post('/sharp/s-list/person/s-form/person/2', [
                 'name' => 'Stephen Hawking',
@@ -344,8 +343,8 @@ describe('handle uploads', function () {
                             'name' => 'doc-2.pdf',
                             'file_name' => 'data/test/doc-2.pdf',
                             'disk' => 'local',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
             ])
             ->assertSessionHasNoErrors()
@@ -365,8 +364,8 @@ describe('handle uploads', function () {
                             'name' => 'doc-2.pdf',
                             'file_name' => 'data/test/doc-2.pdf',
                             'disk' => 'local',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
             ])
             ->assertSessionHasNoErrors()

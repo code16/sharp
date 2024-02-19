@@ -508,9 +508,9 @@ it('handles the {id} placeholder of uploads in update case', function () {
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $savedCount = 0;
-    
+
     Person::saved(function () use (&$savedCount) {
         $savedCount++;
     });
@@ -524,7 +524,7 @@ it('handles the {id} placeholder of uploads in update case', function () {
             ],
         ])
     );
-    
+
     $this->assertEquals(1, $savedCount);
 
     $this->assertDatabaseHas('sharp_upload_models', [

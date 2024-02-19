@@ -189,16 +189,16 @@ it('transforms a list of upload with transformations', function () {
 describe('dynamicInstance', function () {
     it('allows to fake a sharpUpload and transform a single upload', function () {
         $file = createImage();
-        
+
         $uploadData = [
             'file_name' => $file,
             'size' => 120,
             'disk' => 'local',
             'filters' => [],
         ];
-        
+
         $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
-        
+
         $this->assertEquals(
             [
                 'id' => null,
@@ -212,10 +212,10 @@ describe('dynamicInstance', function () {
             $transformer->apply($uploadData, null, 'picture'),
         );
     });
-    
+
     it('sends "uploaded" and "transformed" attributes if present', function () {
         $file = createImage();
-        
+
         $uploadData = [
             'file_name' => $file,
             'size' => 120,
@@ -224,9 +224,9 @@ describe('dynamicInstance', function () {
             'uploaded' => true,
             'transformed' => true,
         ];
-        
+
         $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
-        
+
         expect($transformer->apply($uploadData, null, 'picture'))
             ->toMatchArray([
                 'uploaded' => true,
@@ -234,4 +234,3 @@ describe('dynamicInstance', function () {
             ]);
     });
 });
-

@@ -26,7 +26,7 @@ it('sets default values in config', function () {
         }
     };
     $defaultEmbed->buildEmbedConfig();
-    
+
     expect(Arr::except($defaultEmbed->toConfigArray(true), ['fields']))
         ->toEqual([
             'key' => $defaultEmbed->key(),
@@ -35,7 +35,7 @@ it('sets default values in config', function () {
             'attributes' => ['text'],
             'template' => 'Empty template',
         ]);
-    
+
     expect($defaultEmbed->toConfigArray(true))
         ->toHaveKey('fields.text')
         ->toHaveKey('fields.text.type', 'text');

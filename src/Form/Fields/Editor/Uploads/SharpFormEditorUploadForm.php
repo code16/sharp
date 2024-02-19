@@ -52,7 +52,7 @@ class SharpFormEditorUploadForm
     {
         return [];
     }
-    
+
     final public function formatRequestData(array $data): array
     {
         return collect($data)
@@ -61,12 +61,12 @@ class SharpFormEditorUploadForm
                 if (! $field = $this->findFieldByKey($key)) {
                     return $value;
                 }
-                
+
                 if (is_a($field, SharpFormUploadField::class)) {
                     // Uploads are a bit different in this case
                     $field->formatter()->setAlwaysReturnFullObject();
                 }
-                
+
                 // Apply formatter based on field configuration
                 return $field
                     ->formatter()

@@ -58,7 +58,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'size' => $value['size'] ?? null,
                 ]),
             ];
-            
+
             return [
                 ...$this->transformUpload($instance->$attribute),
                 ...($value['uploaded'] ?? false) ? ['uploaded' => true] : [],

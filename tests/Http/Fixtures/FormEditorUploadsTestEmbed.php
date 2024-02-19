@@ -9,7 +9,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FormEditorUploadsTestEmbed extends SharpFormEditorEmbed
 {
-    
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields->addField(
@@ -18,14 +17,14 @@ class FormEditorUploadsTestEmbed extends SharpFormEditorEmbed
                 ->setStorageDisk('local')
         );
     }
-    
+
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
         return $this
             ->setCustomTransformer('file', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->transform($data);
     }
-    
+
     public function updateContent(array $data = []): array
     {
         return $data;
