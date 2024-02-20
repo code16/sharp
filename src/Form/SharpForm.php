@@ -134,14 +134,6 @@ abstract class SharpForm
         return new SharpNotification($title);
     }
 
-    final public function getEditorFieldsWithEmbeddedUploads(): Collection
-    {
-        return collect($this->fieldsContainer()->getFields())
-            ->filter(fn ($field) => $field instanceof SharpFormEditorField
-                && $field->embedUploadsConfig() !== null
-            );
-    }
-
     /**
      * @deprecated use ->validate() or rules() methods instead; will be removed in 10.x
      */

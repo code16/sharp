@@ -18,6 +18,7 @@ final class FormUploadFieldData extends Data
         public bool $transformable = true,
         public bool $compactThumbnail = false,
         public ?bool $transformKeepOriginal = null,
+        public ?bool $shouldOptimizeImage = null,
         /** @var array<string> */
         public ?array $transformableFileTypes = null,
         public ?int $ratioX = null,

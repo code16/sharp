@@ -81,7 +81,7 @@ export function getEmbedExtension({
                     instanceId
                         ? route('code16.sharp.api.embed.instance.form.show', { embedKey: embed.key, entityKey, instanceId })
                         : route('code16.sharp.api.embed.form.show', { embedKey: embed.key, entityKey }),
-                    { ...attributes }
+                    { ...attributes, '_embed':embed }
                 )
                 .then(response => response.data);
         },
@@ -91,7 +91,7 @@ export function getEmbedExtension({
                     instanceId
                         ? route('code16.sharp.api.embed.instance.form.update', { embedKey: embed.key, entityKey, instanceId })
                         : route('code16.sharp.api.embed.form.update', { embedKey: embed.key, entityKey }),
-                    { ...data }
+                    { ...data, '_embed':embed }
                 )
                 .then(response => {
                     onUpdated(response.data, form);

@@ -251,7 +251,7 @@ describe('handle uploads', function () {
             {
                 $formFields->addField(
                     SharpFormEditorField::make('bio')
-                        ->allowUploads(function (SharpFormEditorUpload $editorUploads) {
+                        ->allowUploads(function (SharpFormEditorUpload $upload) {
                             $editorUploads
                                 ->setStorageDisk('local')
                                 ->setStorageBasePath('data/test');
@@ -317,7 +317,7 @@ describe('handle uploads', function () {
             {
                 $formFields->addField(
                     SharpFormEditorField::make('bio')
-                        ->allowUploads(function (SharpFormEditorUpload $editorUploads) {
+                        ->allowUploads(function (SharpFormEditorUpload $upload) {
                             $editorUploads
                                 ->setStorageDisk('local')
                                 ->setStorageBasePath('data/test');

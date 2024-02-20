@@ -1,6 +1,9 @@
 <?php
 
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,6 +17,16 @@ it('can post a file and legend', function () {
     UploadedFile::fake()
         ->image('image.jpg', 600, 600)
         ->storeAs('tmp', 'image.jpg', ['disk' => 'local']);
+    
+    $editor = SharpFormEditorField::make('upload')
+        ->allowUploads(function (SharpFormEditorUpload $upload) {
+            $upload
+                ->setStorageDisk('local')
+                ->setStorageBasePath('data/Posts/'.UploadFormatter::ID_PLACEHOLDER)
+                ->shouldOptimizeImage()
+                ->setTransformable(true, false)
+                ->setHasLegend();
+        });
 
     $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
@@ -24,18 +37,10 @@ it('can post a file and legend', function () {
                 ],
                 'legend' => 'Awesome image',
             ],
-            'fields' => [
-                'file' => [
-                    'key' => 'file',
-                    'type' => 'upload',
-                    'storageBasePath' => 'data/Posts/{id}',
-                    'storageDisk' => 'local',
-                ],
-                'legend' => [],
-            ],
+            'fields' => $editor->toArray()['embeds']['upload']['fields'],
         ])
         ->assertOk()
-        ->assertJson([
+        ->assertExactJson([
             'file' => [
                 'name' => 'image.jpg',
                 'path' => 'data/Posts/'.UploadFormatter::ID_PLACEHOLDER.'/image.jpg',
@@ -44,6 +49,9 @@ it('can post a file and legend', function () {
                 'size' => 6467,
                 'filters' => null,
                 'id' => null,
+                'uploaded' => true,
+                'shouldOptimizeImage' => true,
+                'transformOriginal' => true,
             ],
             'legend' => 'Awesome image',
         ]);

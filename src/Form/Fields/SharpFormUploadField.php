@@ -196,6 +196,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             'compactThumbnail' => (bool) $this->compactThumbnail,
             'storageBasePath' => $this->storageBasePath,
             'storageDisk' => $this->storageDisk,
+            'shouldOptimizeImage' => $this->shouldOptimizeImage,
         ]);
     }
 }
