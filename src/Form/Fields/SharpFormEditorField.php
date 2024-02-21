@@ -5,7 +5,6 @@ namespace Code16\Sharp\Form\Fields;
 use Closure;
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadEmbed;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;

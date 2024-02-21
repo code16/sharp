@@ -14,7 +14,7 @@ it('sets only default values', function () {
             'transformKeepOriginal' => true,
             'storageBasePath' => 'data',
             'storageDisk' => 'local',
-            'shouldOptimizeImage' => false
+            'shouldOptimizeImage' => false,
         ]);
 });
 

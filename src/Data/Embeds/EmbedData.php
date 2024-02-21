@@ -19,11 +19,11 @@ final class EmbedData extends Data
         public DataCollection $fields,
     ) {
     }
-    
+
     public static function from(array $embed): self
     {
         $embed['fields'] = FormFieldData::collection($embed['fields']);
-        
+
         return new self(...$embed);
     }
 }

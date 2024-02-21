@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form;
 
-use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
@@ -12,7 +11,6 @@ use Code16\Sharp\Utils\Traits\HandleLocalizedFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
-use Illuminate\Support\Collection;
 
 abstract class SharpForm
 {

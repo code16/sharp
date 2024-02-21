@@ -1,7 +1,6 @@
 <?php
 
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Illuminate\Http\UploadedFile;
@@ -17,7 +16,7 @@ it('can post a file and legend', function () {
     UploadedFile::fake()
         ->image('image.jpg', 600, 600)
         ->storeAs('tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $editor = SharpFormEditorField::make('upload')
         ->allowUploads(function (SharpFormEditorUpload $upload) {
             $upload

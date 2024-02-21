@@ -131,14 +131,14 @@ it('sends transformOriginal & shouldOptimizeImage to front for editor embed uplo
         ->shouldOptimizeImage()
         ->setTransformable(true, false)
         ->setStorageBasePath('data/Test');
-    
+
     expect(
         app(UploadFormatter::class)
             ->setAlwaysReturnFullObject()
             ->toFront($field, [
                 'name' => 'image.jpg',
                 'path' => 'data/Test/image.jpg',
-                'disk' => 'local'
+                'disk' => 'local',
             ])
     )->toEqual([
         'name' => 'image.jpg',
