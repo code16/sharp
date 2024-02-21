@@ -6,7 +6,7 @@ import { FormUploadFieldValueData } from "@/types";
 import { serializeUploadAttributeValue } from "@/embeds/utils/attributes";
 import { UploadOptions } from "./index";
 
-export type UploadAttributes = {
+export type UploadNodeAttributes = {
     file: FormUploadFieldValueData,
     htmlFile: File,
     isImage: boolean,

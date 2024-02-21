@@ -8,10 +8,8 @@ import { Form } from "@/form/Form";
 
 export type EmbedOptions = {
     embed: EmbedData,
-    isReady: () => boolean,
-    getEmbed: (id: number) => any,
     getAdditionalData: (attrs: any) => Promise<any>,
-    resolveForm: (attrs: any) => Promise<any>,
+    postResolveForm: (attrs: any) => Promise<any>,
     postForm: (data: FormData['data'], form: Form) => Promise<any>,
 }
 
@@ -60,12 +58,6 @@ export function getEmbedExtension({
 
     const options: EmbedOptions = {
         embed,
-        isReady: () => {
-            return state.created;
-        },
-        getEmbed: id => {
-            return state.embeds[id];
-        },
         async getAdditionalData(attrs) {
             if(state.created) {
                 return null;
@@ -75,13 +67,13 @@ export function getEmbedExtension({
             await state.resolved;
             return state.embeds[index];
         },
-        resolveForm(attributes) {
+        postResolveForm(attributes) {
             return api
                 .post(
                     instanceId
                         ? route('code16.sharp.api.embed.instance.form.show', { embedKey: embed.key, entityKey, instanceId })
                         : route('code16.sharp.api.embed.form.show', { embedKey: embed.key, entityKey }),
-                    { ...attributes, '_embed':embed }
+                    { ...attributes }
                 )
                 .then(response => response.data);
         },
@@ -91,7 +83,7 @@ export function getEmbedExtension({
                     instanceId
                         ? route('code16.sharp.api.embed.instance.form.update', { embedKey: embed.key, entityKey, instanceId })
                         : route('code16.sharp.api.embed.form.update', { embedKey: embed.key, entityKey }),
-                    { ...data, '_embed':embed }
+                    { ...data }
                 )
                 .then(response => {
                     onUpdated(response.data, form);

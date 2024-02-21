@@ -1,9 +1,22 @@
-import { AnyCommands, Node } from "@tiptap/core";
+import { AnyCommands, Attribute, Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/embeds/utils/attributes";
 import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "@/utils";
 import { EmbedOptions } from "./index";
+import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
+
+
+export type EmbedNodeAttributes = {
+    embedAttributes: {
+        [key: string]: any,
+        slot: string,
+    },
+    additionalData: {
+        [key: string]: any,
+    },
+    isNew: boolean,
+}
 
 export const Embed = Node.create<EmbedOptions>({
     name: 'embed',
@@ -16,10 +29,10 @@ export const Embed = Node.create<EmbedOptions>({
 
     priority: 150,
 
-    addAttributes() {
+    addAttributes(): ExtensionAttributesSpec<EmbedNodeAttributes> {
         const embed = this.options.embed;
         return {
-            attributes: {
+            embedAttributes: {
                 default: {},
                 parseHTML: (element) => {
                     const attributes = Object.fromEntries(
@@ -63,13 +76,13 @@ export const Embed = Node.create<EmbedOptions>({
     parseHTML() {
         return [
             {
-                tag: this.options.tag,
+                tag: this.options.embed.tag,
             },
         ]
     },
 
     renderHTML({ node, HTMLAttributes }) {
-        const element = document.createElement(this.options.tag);
+        const element = document.createElement(this.options.embed.tag);
 
         Object.entries(HTMLAttributes)
             .filter(([name]) => name !== 'slot')
@@ -89,7 +102,7 @@ export const Embed = Node.create<EmbedOptions>({
             insertEmbed: ({ embedKey }) => ({ commands, tr }) => {
                 return commands
                     .insertContentAt(tr.selection.to, {
-                        type: `embed:${embedKey}`,
+                        type: this.name,
                         attrs: {
                             isNew: true,
                         },

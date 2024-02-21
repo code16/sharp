@@ -22,7 +22,7 @@ it('can post a file and legend', function () {
         ->allowUploads(function (SharpFormEditorUpload $upload) {
             $upload
                 ->setStorageDisk('local')
-                ->setStorageBasePath('data/Posts/'.UploadFormatter::ID_PLACEHOLDER)
+                ->setStorageBasePath('data/Posts/{id}')
                 ->shouldOptimizeImage()
                 ->setTransformable(true, false)
                 ->setHasLegend();

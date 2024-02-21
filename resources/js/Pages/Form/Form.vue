@@ -30,8 +30,8 @@
 
     function submit() {
         const { uri, entityKey, instanceId } = route().params;
-        const onStart = () => loading.value = true;
-        const onFinish = () => loading.value = false;
+        const onStart = () => { loading.value = true };
+        const onFinish = () => { loading.value = false };
 
         if(route().current('code16.sharp.form.create')) {
             router.post(

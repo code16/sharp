@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Upload as UploadExtension, UploadAttributes } from "./upload"
+    import { Upload as UploadExtension, UploadNodeAttributes } from "./upload"
     import { computed, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import { NodeViewProps } from "@tiptap/core";
@@ -15,7 +15,7 @@
 
     const props = defineProps<Omit<NodeViewProps, 'extension' | 'node'> & {
         extension: typeof UploadExtension,
-        node: Omit<NodeViewProps['node'], 'attrs'> & { attrs: UploadAttributes }
+        node: Omit<NodeViewProps['node'], 'attrs'> & { attrs: UploadNodeAttributes }
     }>();
 
     const error = computed(() => {
@@ -93,7 +93,7 @@
 
     const showEditModal = ref(false);
     const editForm = ref(null);
-    const form = useParentForm();
+    const parentForm = useParentForm();
 
     function onEdit(event: CustomEvent) {
         const editorProps = props.extension.options.editorProps;
@@ -103,7 +103,7 @@
                 ...editorProps.field.embeds.upload,
                 data: props.node.attrs,
             } as FormData;
-            editForm.value = new Form(formProps, form.entityKey, form.instanceId);
+            editForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
             showEditModal.value = true;
         }
     }

@@ -18,14 +18,34 @@
     import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
     import { getDefaultExtensions, getUploadExtension } from "@/form/components/fields/editor/extensions";
+    import { useEmbedExtensions } from "@/form/components/fields/editor/extensions/embed/useEmbedExtensions";
+    import { EmbedManager } from "@/form/components/fields/editor/extensions/embed/EmbedManager";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
         FormFieldProps<FormEditorFieldData>
     >();
 
+    function mergeFiles(ownFiles, newFiles) {
+        return Object.values({
+            ...Object.fromEntries(ownFiles?.map(file => [`${file.disk}:${file.path}`, file]) ?? []),
+            ...Object.fromEntries(newFiles?.map(file => [`${file.disk}:${file.path}`, file]) ?? []),
+        });
+    }
+
     const form = useParentForm();
     const header = ref<HTMLElement>();
+    const embedExtensions = useEmbedExtensions(
+        props,
+        new EmbedManager(form, {
+            onEmbedUpdated(uploadedOrTransformedFiles) {
+                emit('input', {
+                    ...props.value,
+                    files: mergeFiles(props.value.files, uploadedOrTransformedFiles),
+                });
+            }
+        })
+    )
     const editor = useLocalizedEditor(
         props,
         (content) => {
@@ -48,27 +68,7 @@
                         instanceId: form.instanceId,
                     })
                     : null,
-                ...Object.values({ ...field.embeds, upload: null })
-                    .filter(Boolean)
-                    .map((embed) =>
-                        getEmbedExtension({
-                            embed,
-                            entityKey: form.entityKey,
-                            instanceId: form.instanceId,
-                            onUpdated(responseData, form) {
-                                emit('input', {
-                                    ...props.value,
-                                    files: Object.values({
-                                        ...Object.fromEntries(props.value.files?.map(file => [`${file.disk}:${file.path}`, file]) ?? []),
-                                        ...Object.fromEntries(form
-                                            .getAllUploadedOrTransformedFiles(responseData)
-                                            .map(file => [`${file.disk}:${file.path}`, file]) ?? []
-                                        )
-                                    }),
-                                });
-                            }
-                        }),
-                    ),
+                embedExtensions,
             ].filter(Boolean);
 
             const editor = new Editor({
