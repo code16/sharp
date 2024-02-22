@@ -1,11 +1,11 @@
 <?php
 
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
@@ -259,8 +259,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                 && $job->instanceId == 12
                 && $job->uploadedFileName == '/image.jpg'
                 && $job->transformFilters == null;
-            });
-
+        });
     } else {
         Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
             return $job->filePath == 'data/test/image.jpg'
@@ -268,9 +267,8 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                 && $job->instanceId == 12
                 && $job->uploadedFileName == '/image.jpg'
                 && $job->transformFilters == ['rotate' => ['angle' => 90]];
-            });
+        });
     }
-
 })->with(['transformKeepOriginal' => true, 'not transformKeepOriginal' => false]);
 
 it('handles isTransformOriginal to transform the image on an existing file', function ($transformKeepOriginal) {
@@ -316,7 +314,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
 
     Bus::assertNotDispatched(HandleUploadedFileJob::class);
 
-    if($transformKeepOriginal) {
+    if ($transformKeepOriginal) {
         Bus::assertNotDispatched(HandleTransformedFileJob::class);
     } else {
         Bus::assertDispatched(HandleTransformedFileJob::class, function ($job) {
