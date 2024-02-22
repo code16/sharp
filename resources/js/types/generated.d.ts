@@ -284,7 +284,10 @@ export type FormDynamicOptionsData = {
 export type FormEditorFieldData = {
   value?: {
     text: string | { [locale: string]: string | null } | null;
-    files: Array<FormUploadFieldValueData> | null;
+    files: {
+      upload: Array<FormUploadFieldValueData>;
+      [embedKey: string]: Array<FormUploadFieldValueData>;
+    } | null;
   };
   key: string;
   type: "editor";
@@ -516,6 +519,7 @@ export type FormUploadFieldData = {
   transformable: boolean;
   compactThumbnail: boolean;
   transformKeepOriginal: boolean | null;
+  shouldOptimizeImage: boolean | null;
   transformableFileTypes: Array<string> | null;
   ratioX: number | null;
   ratioY: number | null;

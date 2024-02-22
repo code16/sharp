@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { Embed } from "./embed";
+import { Embed } from "./Embed";
 import debounce from "lodash/debounce";
 import { api } from "@/api";
 import { route } from "@/utils/url";

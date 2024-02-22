@@ -1,6 +1,6 @@
 import { FormFieldProps } from "@/form/components/types";
 import { FormEditorFieldData } from "@/types";
-import { Embed } from "@/form/components/fields/editor/extensions/embed/embed";
+import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
 import { Extension } from "@tiptap/core";
 import { provide } from "vue";
 import { EmbedManager } from "@/form/components/fields/editor/extensions/embed/EmbedManager";
@@ -16,7 +16,8 @@ export function useEmbedExtensions(
     return [
         Extension.create({
             onCreate() {
-                embeds.resolveAll();
+                embeds.editorCreated = true;
+                embeds.resolveAllInitialContentEmbeds();
             }
         }),
         Object.values({ ...props.field.embeds, upload: null })

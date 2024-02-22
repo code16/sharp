@@ -5,33 +5,44 @@
     import NodeRenderer from "../../NodeRenderer.vue";
     import EmbedFormModal from "./EmbedFormModal.vue";
     import { Form } from "@/form/Form";
-    import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/embed";
-    import { nextTick, ref } from "vue";
+    import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
+    import { inject, nextTick, ref } from "vue";
     import { useParentForm } from "@/form/useParentForm";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
+    import { EmbedManager } from "@/form/components/fields/editor/extensions/embed/EmbedManager";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
     const modalVisible = ref(false);
     const embedForm = ref<Form>();
     const parentForm = useParentForm();
+    const embeds = inject<EmbedManager>('embeds');
 
     async function showFormModal() {
-        const form = await props.extension.options.postResolveForm({
-            ...props.node.attrs.embedAttributes,
-            ...props.node.attrs.additionalData,
-        });
+        const form = await embeds.postResolveForm(
+            props.extension.options.embed,
+            {
+                ...props.node.attrs.embedAttributes,
+                ...props.node.attrs.additionalData,
+            }
+        );
         embedForm.value = new Form(form, parentForm.entityKey, parentForm.instanceId);
         modalVisible.value = true;
     }
 
     async function postForm(data) {
-        const embedAttributes = await props.extension.options.postForm(data, this.modalForm);
+        const responseData = await embeds.postForm(
+            props.extension.options.embed,
+            data,
+            embedForm.value
+        );
+
         props.updateAttributes({
-            embedAttributes,
-            additionalData: embedAttributes,
+            embedAttributes: responseData,
+            additionalData: responseData,
             isNew: false,
         });
+
         modalVisible.value = false;
     }
 
@@ -57,7 +68,10 @@
             }
         } else {
             if(props.extension.options.embed.attributes.length) {
-                const additionalData = await props.extension.options.getAdditionalData(props.node.attrs.embedAttributes);
+                const additionalData = await embeds.registerContentEmbed(
+                    props.extension.options.embed,
+                    props.node.attrs.embedAttributes
+                );
                 if(additionalData) {
                     props.updateAttributes({
                         additionalData,

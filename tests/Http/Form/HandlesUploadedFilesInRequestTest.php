@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
@@ -103,7 +104,6 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'bio' => [
-                // we don't care about editor content here
                 'files' => [
                     [
                         'name' => 'image.jpg',
@@ -140,6 +140,75 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
+    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+        return $job->filePath == 'data/test/image-2.jpg'
+            && $job->uploadedFileName == 'image-2.jpg';
+    });
+});
+
+it('dispatches HandlePostedFilesJob for lists on update and on create if needed', function () {
+    $this->withoutExceptionHandling();
+    
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormListField::make('pictures')
+                    ->addItemField(
+                        SharpFormUploadField::make('file')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data/test')
+                    )
+            );
+        }
+    });
+    
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+    
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'pictures' => [
+                [
+                    'id' => 1,
+                    'file' => [
+                        'name' => 'image.jpg',
+                        'path' => 'data/test/image.jpg',
+                        'uploaded' => true,
+                    ],
+                ]
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+    
+    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+        return $job->filePath == 'data/test/image.jpg'
+            && $job->uploadedFileName == 'image.jpg';
+    });
+    
+    UploadedFile::fake()
+        ->image('image-2.jpg')
+        ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
+    
+    $this
+        ->post('/sharp/s-list/person/s-form/person', [
+            'pictures' => [
+                [
+                    'id' => 1,
+                    'file' => [
+                        'name' => 'image-2.jpg',
+                        'path' => 'data/test/image-2.jpg',
+                        'uploaded' => true,
+                    ],
+                ]
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+    
     Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == 'image-2.jpg';
@@ -269,7 +338,10 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                 && $job->transformFilters == ['rotate' => ['angle' => 90]];
         });
     }
-})->with(['transformKeepOriginal' => true, 'not transformKeepOriginal' => false]);
+})->with([
+    'transformKeepOriginal' => true,
+    'not transformKeepOriginal' => false,
+]);
 
 it('handles isTransformOriginal to transform the image on an existing file', function ($transformKeepOriginal) {
     fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
@@ -323,4 +395,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
                 && $job->transformFilters == ['rotate' => ['angle' => 90]];
         });
     }
-})->with(['transformKeepOriginal' => true, 'not transformKeepOriginal' => false]);
+})->with([
+    'transformKeepOriginal' => true,
+    'not transformKeepOriginal' => false,
+]);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { Upload as UploadExtension, UploadNodeAttributes } from "./upload"
+    import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
     import { computed, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import { NodeViewProps } from "@tiptap/core";

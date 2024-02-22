@@ -179,7 +179,7 @@ it('can post an embed with upload, create case', function () {
 
     $editorXEmbedData = $this
         ->postJson(route('code16.sharp.api.embed.instance.form.update', [
-            str(FormEditorUploadsTestEmbed::class)->replace('/', '.'),
+            (new FormEditorUploadsTestEmbed)->key(),
             'person',
             1,
         ]), [
@@ -193,8 +193,12 @@ it('can post an embed with upload, create case', function () {
                 '<x-embed file="%s"></x-embed>',
                 e(json_encode($editorXEmbedData['file']))
             ),
-            'files' => [
-                $editorXEmbedData['file'],
+            'embeds' => [
+                (new FormEditorUploadsTestEmbed)->key() => [
+                    [
+                        'file' => $editorXEmbedData['file']
+                    ]
+                ],
             ],
         ],
     ]);

@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import debounce from 'lodash/debounce';
 import { filesEquals } from "@/utils/upload";
-import { Upload } from "./upload";
+import { Upload } from "./Upload";
 import { api } from "@/api";
 import { FormFieldProps } from "@/form/components/types";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";

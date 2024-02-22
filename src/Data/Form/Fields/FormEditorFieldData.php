@@ -13,7 +13,7 @@ final class FormEditorFieldData extends Data
     #[Optional]
     #[LiteralTypeScriptType('{
         text: string | { [locale:string]: string|null } | null,
-        files: Array<FormUploadFieldValueData> | null
+        files: { upload:Array<FormUploadFieldValueData>, [embedKey:string]:Array<FormUploadFieldValueData> } | null
     }')]
     public array|null $value;
 
