@@ -252,18 +252,26 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) use ($transformKeepOriginal) {
-        return $job->filePath == 'data/test/image.jpg'
-        && $job->disk == 'local'
-        && $job->instanceId == 12
-        && $job->uploadedFileName == '/image.jpg'
-        && $job->transformFilters == $transformKeepOriginal
-            ? null
-            : ['rotate' => ['angle' => 90]];
-    });
-})->with([
-    'transformKeepOriginal' => [true, false],
-]);
+    if ($transformKeepOriginal) {
+        Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+            return $job->filePath == 'data/test/image.jpg'
+                && $job->disk == 'local'
+                && $job->instanceId == 12
+                && $job->uploadedFileName == '/image.jpg'
+                && $job->transformFilters == null;
+            });
+
+    } else {
+        Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+            return $job->filePath == 'data/test/image.jpg'
+                && $job->disk == 'local'
+                && $job->instanceId == 12
+                && $job->uploadedFileName == '/image.jpg'
+                && $job->transformFilters == ['rotate' => ['angle' => 90]];
+            });
+    }
+
+})->with(['transformKeepOriginal' => true, 'not transformKeepOriginal' => false]);
 
 it('handles isTransformOriginal to transform the image on an existing file', function ($transformKeepOriginal) {
     fakeFormFor('person', new class($transformKeepOriginal) extends PersonForm
@@ -293,7 +301,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'file' => [
-                'path' => '/data/test/image.jpg',
+                'path' => 'data/test/image.jpg',
                 'size' => 12,
                 'disk' => 'local',
                 'uploaded' => false,
@@ -308,13 +316,13 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
 
     Bus::assertNotDispatched(HandleUploadedFileJob::class);
 
-    Bus::assertNotDispatched(HandleTransformedFileJob::class, function ($job) use ($transformKeepOriginal) {
-        return $job->filePath == 'data/test/image.jpg'
-        && $job->disk == 'local'
-        && $job->transformFilters == $transformKeepOriginal
-            ? null
-            : ['rotate' => ['angle' => 90]];
-    });
-})->with([
-    'transformKeepOriginal' => [true, false],
-]);
+    if($transformKeepOriginal) {
+        Bus::assertNotDispatched(HandleTransformedFileJob::class);
+    } else {
+        Bus::assertDispatched(HandleTransformedFileJob::class, function ($job) {
+            return $job->filePath == 'data/test/image.jpg'
+                && $job->disk == 'local'
+                && $job->transformFilters == ['rotate' => ['angle' => 90]];
+        });
+    }
+})->with(['transformKeepOriginal' => true, 'not transformKeepOriginal' => false]);
