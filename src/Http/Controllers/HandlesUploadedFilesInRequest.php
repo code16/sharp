@@ -4,7 +4,6 @@ namespace Code16\Sharp\Http\Controllers;
 
 use Code16\Sharp\EntityList\Commands\Command;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\SharpForm;
@@ -15,7 +14,7 @@ use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 trait HandlesUploadedFilesInRequest
 {
     use HandleEmbed;
-    
+
     protected function handlePostedFiles(
         SharpForm|Command $form,
         array $request,
@@ -30,7 +29,7 @@ trait HandlesUploadedFilesInRequest
                     fileData: $request[$field->key] ?? null,
                     instanceId: $instanceId
                 );
-            } elseif($field instanceof SharpFormListField) {
+            } elseif ($field instanceof SharpFormListField) {
                 $this->handleListFieldPostedFiles(
                     listField: $field,
                     listData: $request[$field->key] ?? null,
@@ -46,7 +45,7 @@ trait HandlesUploadedFilesInRequest
             }
         }
     }
-    
+
     protected function handleEditorFieldPostedFiles(
         SharpFormEditorField $editorField,
         ?array $editorData,
@@ -60,22 +59,22 @@ trait HandlesUploadedFilesInRequest
                 instanceId: $instanceId,
             );
         }
-        
+
         foreach ($editorData['embeds'] ?? [] as $embedKey => $embeds) {
             $embed = $this->getEmbedFromKey($embedKey);
-            
+
             foreach ($embeds as $embedFields) {
                 foreach ($embedFields as $fieldKey => $embedFieldData) {
                     $embedField = $embed->findFieldByKey($fieldKey);
-                    
-                    if($embedField instanceof SharpFormListField) {
+
+                    if ($embedField instanceof SharpFormListField) {
                         $this->handleListFieldPostedFiles(
                             listField: $embedField,
                             listData: $embedFieldData,
                             formattedListData: $embedFieldData,
                             instanceId: $instanceId
                         );
-                    } elseif($embedField instanceof SharpFormUploadField) {
+                    } elseif ($embedField instanceof SharpFormUploadField) {
                         $this->handleUploadFieldPostedFile(
                             uploadField: $embedField,
                             filePath: $embedFieldData['path'] ?? null,
@@ -87,14 +86,14 @@ trait HandlesUploadedFilesInRequest
             }
         }
     }
-    
+
     protected function handleListFieldPostedFiles(
         SharpFormListField $listField,
         ?array $listData,
         ?array $formattedListData,
         $instanceId,
     ) {
-        if($uploadField = $listField->itemFields()->whereInstanceOf(SharpFormUploadField::class)->first()) {
+        if ($uploadField = $listField->itemFields()->whereInstanceOf(SharpFormUploadField::class)->first()) {
             foreach ($listData ?? [] as $i => $item) {
                 $this->handleUploadFieldPostedFile(
                     uploadField: $uploadField,
@@ -103,7 +102,7 @@ trait HandlesUploadedFilesInRequest
                     instanceId: $instanceId,
                 );
             }
-        };
+        }
     }
 
     protected function handleUploadFieldPostedFile(

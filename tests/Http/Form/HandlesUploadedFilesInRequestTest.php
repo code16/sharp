@@ -148,7 +148,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
 
 it('dispatches HandlePostedFilesJob for lists on update and on create if needed', function () {
     $this->withoutExceptionHandling();
-    
+
     fakeFormFor('person', new class extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -163,11 +163,11 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
             );
         }
     });
-    
+
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'pictures' => [
@@ -178,21 +178,21 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
                         'path' => 'data/test/image.jpg',
                         'uploaded' => true,
                     ],
-                ]
+                ],
             ],
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
         return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == 'image.jpg';
     });
-    
+
     UploadedFile::fake()
         ->image('image-2.jpg')
         ->storeAs('/tmp', 'image-2.jpg', ['disk' => 'local']);
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'pictures' => [
@@ -203,12 +203,12 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
                         'path' => 'data/test/image-2.jpg',
                         'uploaded' => true,
                     ],
-                ]
+                ],
             ],
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == 'image-2.jpg';

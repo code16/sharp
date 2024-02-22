@@ -196,8 +196,8 @@ it('can post an embed with upload, create case', function () {
             'embeds' => [
                 (new FormEditorUploadsTestEmbed)->key() => [
                     [
-                        'file' => $editorXEmbedData['file']
-                    ]
+                        'file' => $editorXEmbedData['file'],
+                    ],
                 ],
             ],
         ],
