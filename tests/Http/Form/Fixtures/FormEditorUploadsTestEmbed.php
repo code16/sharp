@@ -1,6 +1,6 @@
 <?php
 
-namespace Code16\Sharp\Tests\Http\Fixtures;
+namespace Code16\Sharp\Tests\Http\Form\Fixtures;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;

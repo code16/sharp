@@ -5,7 +5,7 @@ use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Http\Fixtures\FormEditorUploadsTestEmbed;
+use Code16\Sharp\Tests\Http\Form\Fixtures\FormEditorUploadsTestEmbed;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
