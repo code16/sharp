@@ -149,19 +149,17 @@ class SharpFormEditorField extends SharpFormField
         return $this->uploadsConfig;
     }
 
-    protected function innerComponentUploadConfiguration(): array
+    protected function innerComponentUploadsConfiguration(): array
     {
         if (! $this->uploadsConfig) {
-            return ['upload' => []];
+            return [];
         }
 
         $form = new SharpFormEditorUploadForm($this->uploadsConfig);
 
         return [
-            'upload' => [
-                'fields' => $form->fields(),
-                'layout' => $form->formLayout(),
-            ],
+            'fields' => $form->fields(),
+            'layout' => $form->formLayout(),
         ];
     }
 
@@ -196,10 +194,8 @@ class SharpFormEditorField extends SharpFormField
                 'inline' => $this->withoutParagraphs,
                 'showCharacterCount' => $this->showCharacterCount,
                 'maxLength' => $this->maxLength,
-                'embeds' => array_merge(
-                    $this->innerComponentUploadConfiguration(),
-                    $this->innerComponentEmbedsConfiguration()
-                ),
+                'uploads' => $this->innerComponentUploadsConfiguration(),
+                'embeds' => $this->innerComponentEmbedsConfiguration(),
             ],
         );
     }

@@ -2,15 +2,18 @@ import { AnyCommands, Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import { getEventsPlugin } from "./events-plugin";
-import { FormUploadFieldValueData } from "@/types";
+import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { serializeUploadAttributeValue } from "@/embeds/utils/attributes";
-import { UploadOptions } from "./index";
 
 export type UploadNodeAttributes = {
     file: FormUploadFieldValueData,
     htmlFile: File,
     isImage: boolean,
     notFound: boolean,
+}
+
+export type UploadOptions = {
+    editorField: FormEditorFieldData,
 }
 
 export const Upload = Node.create<UploadOptions>({

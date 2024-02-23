@@ -18,8 +18,6 @@ class ApiFormEditorUploadFormController extends Controller
             SharpFormEditorUpload::make('file')
                 ->setStorageBasePath($uploadFieldData->storageBasePath)
                 ->setStorageDisk($uploadFieldData->storageDisk)
-                ->shouldOptimizeImage($uploadFieldData->shouldOptimizeImage ?? false)
-                ->setTransformable($uploadFieldData->transformable ?? true, $uploadFieldData->transformKeepOriginal ?? true)
                 ->setHasLegend(request()->has('fields.legend'))
         );
 

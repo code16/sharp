@@ -1,50 +1,56 @@
 import { Form } from "@/form/Form";
-import { EmbedData, FormData, FormUploadFieldValueData } from "@/types";
+import { EmbedData, FormData } from "@/types";
 import { api } from "@/api";
 import { route } from "@/utils/url";
 import { EmbedAttributesData } from "@/form/components/fields/editor/extensions/embed/Embed";
 
+
 export class EmbedManager {
-    initialContentEmbeds: {
-        [embedKey: string]: Array<EmbedAttributesData>
-    } = {};
+    embeds: { [embedKey: string]: EmbedAttributesData[] } = {}
 
     allInitialEmbedsResolved = Promise.withResolvers();
 
     parentForm: Form;
 
-    onEmbedUpdated: (uploadedOrTransformedFiles: FormUploadFieldValueData[]) => any;
+    onEmbedsUpdated: (embeds: { [embedKey: string]: EmbedAttributesData[] }) => any
 
     editorCreated = false;
 
-    constructor(parentForm: Form, { onEmbedUpdated }: { onEmbedUpdated: EmbedManager['onEmbedUpdated'] }) {
+    uniqueId = 0;
+
+    constructor(parentForm: Form, { onEmbedsUpdated }: { onEmbedsUpdated: EmbedManager['onEmbedsUpdated'] }) {
         this.parentForm = parentForm;
-        this.onEmbedUpdated = onEmbedUpdated;
+        this.onEmbedsUpdated = onEmbedsUpdated;
     }
 
-    async registerContentEmbed(embed: EmbedData, contentEmbedAttributes: EmbedAttributesData): Promise<EmbedAttributesData | null> {
+    getEmbedUniqueId(embed: EmbedData) {
+        return `${embed.key}-${this.uniqueId++}`;
+    }
+
+    async registerContentEmbed(uniqueId: string, embed: EmbedData, contentEmbedAttributes: EmbedAttributesData): Promise<EmbedAttributesData | null> {
         if(this.editorCreated) {
             return null;
         }
 
-        this.initialContentEmbeds[embed.key] = [
-            ...(this.initialContentEmbeds[embed.key] ?? []),
-            contentEmbedAttributes,
-        ];
-        const index = this.initialContentEmbeds[embed.key].length - 1;
+        const index = this.embeds?.[embed.key]?.length ?? 0;
+
+        this.embeds[embed.key] = [
+            ...(this.embeds[embed.key] ?? []),
+            { ...contentEmbedAttributes, _uniqueId: uniqueId },
+        ]
 
         await this.allInitialEmbedsResolved.promise;
 
-        return this.initialContentEmbeds[embed.key][index];
+        return this.embeds[embed.key][index];
     }
 
     async resolveAllInitialContentEmbeds() {
         const { entityKey, instanceId } = this.parentForm;
 
         await Promise.allSettled(
-            Object.entries(this.initialContentEmbeds)
+            Object.entries(this.embeds)
                 .map(([embedKey, embeds]) => async () => {
-                    this.initialContentEmbeds[embedKey] = await api.post(
+                    this.embeds[embedKey] = await api.post(
                         instanceId
                             ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
                             : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
@@ -55,6 +61,10 @@ export class EmbedManager {
         );
 
         this.allInitialEmbedsResolved.resolve(true);
+    }
+
+    removeEmbed(uniqueId: string, embed: EmbedData) {
+        this.embeds[embed.key] = this.embeds[embed.key]?.filter(embedData => embedData._uniqueId !== uniqueId);
     }
 
     postResolveForm(embed: EmbedData, contentEmbedAttributes: EmbedAttributesData): Promise<FormData> {
@@ -70,7 +80,7 @@ export class EmbedManager {
             .then(response => response.data);
     }
 
-    async postForm(embed: EmbedData, data: FormData['data'], embedForm: Form): Promise<EmbedAttributesData> {
+    async postForm(uniqueId: string, embed: EmbedData, data: EmbedAttributesData): Promise<EmbedAttributesData> {
         const { entityKey, instanceId } = this.parentForm;
         const responseData = await api
             .post(
@@ -81,7 +91,15 @@ export class EmbedManager {
             )
             .then(response => response.data);
 
-        this.onEmbedUpdated(embedForm.getAllUploadedOrTransformedFiles(responseData));
+        const index = this.embeds[embed.key]?.findIndex(embed => embed._uniqueId === uniqueId) ?? -1;
+
+        if(index < 0) {
+            this.embeds[embed.key] = [...(this.embeds[embed.key] ?? []), { ...responseData, _uniqueId: uniqueId }];
+        } else {
+            this.embeds[embed.key][index] = responseData;
+        }
+
+        this.onEmbedsUpdated(this.embeds);
 
         return responseData;
     }

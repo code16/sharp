@@ -7,13 +7,15 @@ use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormEditorFieldData extends Data
 {
     #[Optional]
     #[LiteralTypeScriptType('{
         text: string | { [locale:string]: string|null } | null,
-        files: { upload:Array<FormUploadFieldValueData>, [embedKey:string]:Array<FormUploadFieldValueData> } | null
+        files?: Array<FormUploadFieldValueData>
+        embeds?: { [embedKey:string]:Array<FormData["data"]> }
     }')]
     public array|null $value;
 
@@ -25,7 +27,9 @@ final class FormEditorFieldData extends Data
         public bool $markdown,
         public bool $inline,
         public bool $showCharacterCount,
-        #[LiteralTypeScriptType('{ upload:FormEditorFieldUploadData } & { [key:string]:EmbedData }')]
+        #[TypeScriptType(FormEditorFieldUploadData::class)]
+        public array $uploads,
+        #[LiteralTypeScriptType('{ [embedKey:string]:EmbedData }')]
         public array $embeds,
         #[LiteralTypeScriptType('Array<FormEditorToolbarButton>')]
         public ?array $toolbar = null,

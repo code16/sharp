@@ -55,7 +55,7 @@ it('can post a newly uploaded file in editor, create case', function () {
             'data' => [
                 'file' => $uploadedFileData,
             ],
-            'fields' => $form->fields()['bio']['embeds']['upload']['fields'],
+            'fields' => $form->fields()['bio']['uploads']['fields'],
         ])
         ->json();
 
@@ -120,7 +120,7 @@ it('can post a newly uploaded file in editor, update case', function () {
             'data' => [
                 'file' => $uploadedFileData,
             ],
-            'fields' => $form->fields()['bio']['embeds']['upload']['fields'],
+            'fields' => $form->fields()['bio']['uploads']['fields'],
         ])
         ->json();
 

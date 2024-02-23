@@ -36,7 +36,7 @@ it('can post a file and legend', function () {
                 ],
                 'legend' => 'Awesome image',
             ],
-            'fields' => $editor->toArray()['embeds']['upload']['fields'],
+            'fields' => $editor->toArray()['uploads']['fields'],
         ])
         ->assertOk()
         ->assertExactJson([
@@ -49,8 +49,6 @@ it('can post a file and legend', function () {
                 'filters' => null,
                 'id' => null,
                 'uploaded' => true,
-                'shouldOptimizeImage' => true,
-                'transformOriginal' => true,
             ],
             'legend' => 'Awesome image',
         ]);

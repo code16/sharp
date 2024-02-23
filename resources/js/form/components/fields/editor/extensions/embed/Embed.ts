@@ -5,17 +5,15 @@ import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "@/utils";
 import { EmbedOptions } from "./index";
 import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
+import { FormData } from "@/types";
 
+export type EmbedAttributesData = FormData['data'] & { slot: string, _uniqueId: string };
 
 export type EmbedNodeAttributes = {
-    embedAttributes: {
-        [key: string]: any,
-        slot: string,
-    },
-    additionalData: {
-        [key: string]: any,
-    },
+    embedAttributes: EmbedAttributesData,
+    additionalData: EmbedAttributesData,
     isNew: boolean,
+    dataUniqueId: string,
 }
 
 export const Embed = Node.create<EmbedOptions>({
@@ -61,6 +59,9 @@ export const Embed = Node.create<EmbedOptions>({
                         ?? []
                     )
                 },
+            },
+            dataUniqueId: {
+                default: null,
             },
             additionalData: {
                 default: null,

@@ -284,10 +284,8 @@ export type FormDynamicOptionsData = {
 export type FormEditorFieldData = {
   value?: {
     text: string | { [locale: string]: string | null } | null;
-    files: {
-      upload: Array<FormUploadFieldValueData>;
-      [embedKey: string]: Array<FormUploadFieldValueData>;
-    } | null;
+    files?: Array<FormUploadFieldValueData>;
+    embeds?: { [embedKey: string]: Array<FormData["data"]> };
   };
   key: string;
   type: "editor";
@@ -295,7 +293,8 @@ export type FormEditorFieldData = {
   markdown: boolean;
   inline: boolean;
   showCharacterCount: boolean;
-  embeds: { upload: FormEditorFieldUploadData } & { [key: string]: EmbedData };
+  uploads: FormEditorFieldUploadData;
+  embeds: { [embedKey: string]: EmbedData };
   toolbar: Array<FormEditorToolbarButton>;
   maxHeight: number | null;
   maxLength: number | null;

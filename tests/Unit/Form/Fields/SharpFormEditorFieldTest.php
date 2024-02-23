@@ -20,9 +20,8 @@ it('sets only default values', function () {
                 SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::A,
             ],
-            'embeds' => [
-                'upload' => [],
-            ],
+            'uploads' => [],
+            'embeds' => [],
             'markdown' => false,
             'inline' => false,
         ]);
@@ -60,12 +59,12 @@ it('allows to allow uploads with configuration', function () {
         });
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.fields.file.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.fields.file.transformable', true)
-        ->toHaveKey('embeds.upload.fields.file.ratioX', 16)
-        ->toHaveKey('embeds.upload.fields.file.ratioY', 9)
-        ->toHaveKey('embeds.upload.fields.file.fileFilter', ['.jpg', '.pdf'])
-        ->toHaveKey('embeds.upload.fields.legend');
+        ->toHaveKey('uploads.fields.file.maxFileSize', 50)
+        ->toHaveKey('uploads.fields.file.transformable', true)
+        ->toHaveKey('uploads.fields.file.ratioX', 16)
+        ->toHaveKey('uploads.fields.file.ratioY', 9)
+        ->toHaveKey('uploads.fields.file.fileFilter', ['.jpg', '.pdf'])
+        ->toHaveKey('uploads.fields.legend');
 
     $formField = SharpFormEditorField::make('text')
         ->allowUploads(function (SharpFormEditorUpload $upload) {
@@ -74,7 +73,7 @@ it('allows to allow uploads with configuration', function () {
         });
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.fields.file.transformable', false);
+        ->toHaveKey('uploads.fields.file.transformable', false);
 });
 
 it('allows to define toolbar', function () {

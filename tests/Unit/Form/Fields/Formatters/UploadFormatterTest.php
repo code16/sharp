@@ -123,28 +123,3 @@ it('returns full object after only transformations if configured', function () {
             ->fromFront($field, 'attr', $value),
     );
 });
-
-it('sends transformOriginal & shouldOptimizeImage to front for editor embed upload handling', function () {
-    $field = SharpFormUploadField::make('upload')
-        ->setStorageDisk('local')
-        ->setTransformable()
-        ->shouldOptimizeImage()
-        ->setTransformable(true, false)
-        ->setStorageBasePath('data/Test');
-
-    expect(
-        app(UploadFormatter::class)
-            ->setAlwaysReturnFullObject()
-            ->toFront($field, [
-                'name' => 'image.jpg',
-                'path' => 'data/Test/image.jpg',
-                'disk' => 'local',
-            ])
-    )->toEqual([
-        'name' => 'image.jpg',
-        'path' => 'data/Test/image.jpg',
-        'disk' => 'local',
-        'shouldOptimizeImage' => true,
-        'transformOriginal' => true,
-    ]);
-});

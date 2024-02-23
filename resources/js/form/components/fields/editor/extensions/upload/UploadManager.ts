@@ -1,89 +1,82 @@
 import { api } from "@/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
-import { FormUploadFieldValueData } from "@/types";
+import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
+import { filesEquals } from "@/utils/upload";
 
+export type FormEditorUploadData = {
+    file: FormUploadFieldValueData,
+    legend?: string,
+}
 
 export class UploadManager {
 
-    editorUploadFiles: FormUploadFieldValueData[] = [];
+    files: FormUploadFieldValueData[] = [];
+
+    editorField: FormEditorFieldData;
 
     allInitialUploadsResolved = Promise.withResolvers();
 
     parentForm: Form;
 
-    onUpdated: (uploadedOrTransformedFiles: FormUploadFieldValueData[]) => any;
-
-    onUploadSuccess: (uploadedFile: FormUploadFieldValueData) => any;
-
-    onUploadRemoved: (removedFile: FormUploadFieldValueData) => any;
+    onFilesUpdated: (files: FormUploadFieldValueData[]) => any;
 
     editorCreated = false;
 
-    constructor(parentForm: Form, { onUpdated }: { onUpdated: UploadManager['onUpdated'] }) {
+    constructor(
+        parentForm: Form,
+        editorField: FormEditorFieldData,
+        { onFilesUpdated }: { onFilesUpdated: UploadManager['onFilesUpdated'] }
+    ) {
         this.parentForm = parentForm;
-        this.onUpdated = onUpdated;
+        this.editorField = editorField;
+        this.onFilesUpdated = onFilesUpdated;
     }
 
     async registerUploadFile(file: FormUploadFieldValueData): Promise<FormUploadFieldValueData> {
         if(this.editorCreated) {
-            this.onUpdated([file]);
             return file;
         }
 
-        const index = this.editorUploadFiles.length;
-        this.editorUploadFiles.push(file);
+        const index = this.files.length;
+        this.files.push(file);
 
         await this.allInitialUploadsResolved.promise;
 
-        return this.editorUploadFiles[index];
+        return this.files[index];
     }
 
-    postResolveForm(upload: UploadData, contentUploadAttributes: UploadAttributesData): Promise<FormData> {
+    async resolveAllInitialContentUploads() {
         const { entityKey, instanceId } = this.parentForm;
 
-        return api
-            .post(
-                instanceId
-                    ? route('code16.sharp.api.upload.instance.form.show', { uploadKey: upload.key, entityKey, instanceId })
-                    : route('code16.sharp.api.upload.form.show', { uploadKey: upload.key, entityKey }),
-                { ...contentUploadAttributes }
-            )
-            .then(response => response.data);
+        if(this.files.length) {
+            this.files = await api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), { files: this.files })
+                .then(response => response.data.files);
+
+            this.allInitialUploadsResolved.resolve(true);
+        }
     }
 
-    async postForm(upload: UploadData, data: FormData['data'], uploadForm: Form): Promise<UploadAttributesData> {
-        const { entityKey, instanceId } = this.parentForm;
-        const responseData = await api
-            .post(
-                instanceId
-                    ? route('code16.sharp.api.upload.instance.form.update', { uploadKey: upload.key, entityKey, instanceId })
-                    : route('code16.sharp.api.upload.form.update', { uploadKey: upload.key, entityKey }),
-                { ...data }
-            )
+    async postForm(data: FormEditorUploadData): Promise<FormEditorUploadData> {
+        const responseData = await api.post(
+            route('code16.sharp.api.form.editor.upload.form.update'), {
+                data,
+                fields: this.editorField.embeds.upload.fields,
+            }
+        )
             .then(response => response.data);
 
-        this.onUploadUpdated(uploadForm.getAllUploadedOrTransformedFiles(responseData));
+        const index = this.files.findIndex(file => filesEquals(file, data.file));
+
+        if(index < 0) {
+            this.files.push(responseData);
+        } else {
+            this.files[index] = responseData;
+        }
+
+        this.onFilesUpdated(this.files);
 
         return responseData;
-    }
-
-    async resolveAllContentUploads() {
-        const { entityKey, instanceId } = this.parentForm;
-
-        const uploads = Object.entries(this.contentUploads)
-            .map(([uploadKey, attributes]) => ({ key: uploadKey, attributes }));
-
-        const responseData = await api
-            .post(
-                instanceId
-                    ? route('code16.sharp.api.upload.instance.form.show', { entityKey, instanceId })
-                    : route('code16.sharp.api.upload.form.show', { entityKey }),
-                { uploads }
-            )
-            .then(response => response.data);
-
-        this.onUploadUpdated(this.parentForm.getAllUploadedOrTransformedFiles(responseData));
     }
 
 }

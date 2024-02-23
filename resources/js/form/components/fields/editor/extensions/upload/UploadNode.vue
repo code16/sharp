@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
-    import { computed, onUnmounted, ref } from "vue";
+    import { computed, inject, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import { NodeViewProps } from "@tiptap/core";
     import NodeRenderer from "../../NodeRenderer.vue";
@@ -12,11 +12,14 @@
     import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
     import { Form } from "@/form/Form";
     import { useParentForm } from "@/form/useParentForm";
+    import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
 
     const props = defineProps<Omit<NodeViewProps, 'extension' | 'node'> & {
         extension: typeof UploadExtension,
         node: Omit<NodeViewProps['node'], 'attrs'> & { attrs: UploadNodeAttributes }
     }>();
+
+    const uploads = inject<UploadManager>('uploads');
 
     const error = computed(() => {
         if(props.node.attrs.notFound) {
@@ -43,12 +46,13 @@
             }
         });
         if(!props.node.attrs.htmlFile) {
-            props.extension.options.onUpdate(value);
+            uploads.onUploadTransformed(value);
         }
     }
 
     function onRemove() {
         props.deleteNode();
+        uploads.onUploadRemoved(props.node.attrs.file);
         setTimeout(() => {
             props.editor.commands.focus();
         }, 0);
@@ -59,7 +63,7 @@
             file: value,
             htmlFile: null,
         });
-        props.extension.options.onSuccess(value);
+        uploads.onUploadSuccess(value);
     }
 
     function onError(message: string, file: File) {
@@ -75,7 +79,7 @@
             return;
         }
 
-        const registeredFile = await props.extension.options.registerFile(
+        const registeredFile = await uploads.registerUploadFile(
             props.node.attrs.file
         );
         if(registeredFile) {
@@ -96,11 +100,10 @@
     const parentForm = useParentForm();
 
     function onEdit(event: CustomEvent) {
-        const editorProps = props.extension.options.editorProps;
-        if(editorProps.field.embeds.upload.fields.legend) {
+        if(props.extension.options.editorField.uploads.fields.legend) {
             event.preventDefault();
             const formProps = {
-                ...editorProps.field.embeds.upload,
+                ...props.extension.options.editorField.uploads,
                 data: props.node.attrs,
             } as FormData;
             editForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
@@ -108,16 +111,18 @@
         }
     }
 
-    async function postForm() {
-        const attributes = await api.post(route('code16.sharp.api.form.editor.upload.form.update'))
-            .then(response => response.data);
+    async function postForm(data) {
+        const responseData = await uploads.postForm(data);
 
-        props.updateAttributes(attributes);
+        props.updateAttributes({
+            file: responseData.file,
+            legend: responseData.legend,
+        });
     }
 
     onUnmounted(() => {
         if(!props.node.attrs.htmlFile) {
-            props.extension.options.onRemove(props.node.attrs.file);
+            uploads.onRemove(props.node.attrs.file);
         }
     });
 </script>
@@ -125,8 +130,8 @@
 <template>
     <NodeRenderer class="editor__node" :node="node">
         <Upload
-            :field="extension.options.editorProps.field.embeds.upload.fields.file"
-            :field-error-key="extension.options.editorProps.fieldErrorKey"
+            :field="extension.options.editorField.uploads.fields.file"
+            :field-error-key="null"
             :value="{
                 ...node.attrs.file,
                 file: node.attrs.htmlFile,

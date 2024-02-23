@@ -26,22 +26,15 @@
         FormFieldProps<FormEditorFieldData>
     >();
 
-    function mergeFiles(ownFiles, newFiles) {
-        return Object.values({
-            ...Object.fromEntries(ownFiles?.map(file => [`${file.disk}:${file.path}`, file]) ?? []),
-            ...Object.fromEntries(newFiles?.map(file => [`${file.disk}:${file.path}`, file]) ?? []),
-        });
-    }
-
     const form = useParentForm();
     const header = ref<HTMLElement>();
     const embedExtensions = useEmbedExtensions(
         props,
         new EmbedManager(form, {
-            onEmbedUpdated(uploadedOrTransformedFiles) {
+            onEmbedsUpdated(embeds) {
                 emit('input', {
                     ...props.value,
-                    files: mergeFiles(props.value.files, uploadedOrTransformedFiles),
+                    embeds,
                 });
             }
         })

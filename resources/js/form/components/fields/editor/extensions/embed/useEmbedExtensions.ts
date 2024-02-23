@@ -11,6 +11,10 @@ export function useEmbedExtensions(
     props: FormFieldProps<FormEditorFieldData>,
     embeds: EmbedManager
 ) {
+    if(!props.field.embeds?.length) {
+        return [];
+    }
+
     provide('embeds', embeds);
 
     return [
@@ -20,7 +24,7 @@ export function useEmbedExtensions(
                 embeds.resolveAllInitialContentEmbeds();
             }
         }),
-        Object.values({ ...props.field.embeds, upload: null })
+        Object.values(props.field.embeds)
             .filter(Boolean)
             .map((embed) => {
                 Embed.extend({ name: `embed:${embed.key}` })

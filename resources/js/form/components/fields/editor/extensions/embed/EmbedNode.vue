@@ -32,9 +32,9 @@
 
     async function postForm(data) {
         const responseData = await embeds.postForm(
+            props.node.attrs.dataUniqueId,
             props.extension.options.embed,
             data,
-            embedForm.value
         );
 
         props.updateAttributes({
@@ -55,7 +55,19 @@
         }
     }
 
+    function onRemove() {
+        embeds.removeEmbed(props.node.attrs.dataUniqueId, props.extension.options.embed);
+        props.deleteNode();
+    }
+
     async function init() {
+        const uniqueId = props.node.attrs.dataUniqueId ?? embeds.getEmbedUniqueId(props.extension.options.embed);
+        if(!uniqueId) {
+            props.updateAttributes({
+                dataUniqueId: uniqueId,
+            });
+        }
+
         if(props.node.attrs.isNew) {
             if(props.extension.options.embed.attributes.length) {
                 await showFormModal();
@@ -69,6 +81,7 @@
         } else {
             if(props.extension.options.embed.attributes.length) {
                 const additionalData = await embeds.registerContentEmbed(
+                    uniqueId,
                     props.extension.options.embed,
                     props.node.attrs.embedAttributes
                 );
@@ -107,7 +120,7 @@
                                 </div>
                             </template>
                             <div>
-                                <Button variant="danger" outline small @click="deleteNode()">
+                                <Button variant="danger" outline small @click="onRemove">
                                     {{ __('sharp::form.upload.remove_button') }}
                                 </Button>
                             </div>

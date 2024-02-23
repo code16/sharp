@@ -24,15 +24,6 @@ class UploadFormatter extends SharpFieldFormatter
      */
     public function toFront(SharpFormField $field, $value)
     {
-        // in editor embeds case, we add some extra data to handle the file afterwards
-        if (is_array($value) && $this->alwaysReturnFullObject) {
-            return [
-                ...$value,
-                'shouldOptimizeImage' => $field->isShouldOptimizeImage(),
-                'transformOriginal' => $field->isTransformOriginal(),
-            ];
-        }
-
         return $value;
     }
 

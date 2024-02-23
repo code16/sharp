@@ -217,3 +217,4 @@ export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
 }
 
 export * from './upload';
+export { UploadOptions } from "@/form/components/fields/editor/extensions/upload/Upload";
