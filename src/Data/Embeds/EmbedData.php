@@ -13,7 +13,7 @@ final class EmbedData extends Data
     #[Optional]
     #[LiteralTypeScriptType('FormData["data"] & { slot: string }')]
     public array|null $value;
-    
+
     public function __construct(
         public string $key,
         public string $label,

@@ -11,7 +11,6 @@ use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
