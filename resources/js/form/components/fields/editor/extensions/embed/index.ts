@@ -6,12 +6,6 @@ import { route } from "@/utils/url";
 import { EmbedData, FormData } from "@/types";
 import { Form } from "@/form/Form";
 
-export type EmbedOptions = {
-    embed: EmbedData,
-    getAdditionalData: (attrs: any) => Promise<any>,
-    postResolveForm: (attrs: any) => Promise<any>,
-    postForm: (data: FormData['data'], form: Form) => Promise<any>,
-}
 
 export function getEmbedExtension({
     embed,

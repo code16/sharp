@@ -8,6 +8,8 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) })
             .use(plugin);
 
+        app.config.errorHandler = e => console.error(e);
+
         app.mount(el);
 
         nextTick(() => {

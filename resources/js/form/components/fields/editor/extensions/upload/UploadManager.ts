@@ -49,6 +49,10 @@ export class UploadManager {
     async resolveAllInitialContentUploads() {
         const { entityKey, instanceId } = this.parentForm;
 
+        if(this.editorCreated) {
+            return;
+        }
+
         if(this.files.length) {
             this.files = await api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), { files: this.files })
                 .then(response => response.data.files);

@@ -3,7 +3,6 @@ import { FormEditorFieldData } from "@/types";
 import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
 import { provide } from "vue";
 import { Extension } from "@tiptap/core";
-import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
 import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
 
 
@@ -19,11 +18,14 @@ export function useUploadExtensions(
 
     return [
         Extension.create({
+            name: 'initUploads',
             onCreate() {
-                uploads.editorCreated = true;
                 uploads.resolveAllInitialContentUploads();
+                uploads.editorCreated = true;
             }
         }),
-        Upload,
+        Upload.configure({
+            editorField: props.field,
+        }),
     ];
 }

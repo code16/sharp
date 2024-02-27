@@ -76,6 +76,17 @@
                     </template>
                 </div>
             </template>
+            <template v-if="field.uploads">
+                <div class="btn-group">
+                    <Button
+                        variant="light"
+                        :disabled="field.readOnly"
+                        @click="editor.chain().focus().insertUpload().run()"
+                    >
+                        <i class="fas fa-file-upload"></i>
+                    </Button>
+                </div>
+            </template>
             <template v-if="field.embeds && customEmbeds.length > 0">
                 <div class="btn-group">
                     <Dropdown

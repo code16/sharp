@@ -34,14 +34,14 @@
     });
 
     const emit = defineEmits<{
-        input: [value: typeof props['value']],
-        error: [message: string, file: Blob | File],
-        success: [file: FormUploadFieldData['value']],
-        clear: [],
-        thumbnail: [preview: string],
-        uploading: [uploading: boolean],
-        remove: [],
-        update: [value: FormUploadFieldData['value']],
+        (e: 'input', value: typeof props['value']): void
+        (e: 'error', message: string, file: Blob | File): void
+        (e: 'success', file: FormUploadFieldData['value']): void
+        (e: 'clear'): void
+        (e: 'thumbnail', preview: string): void
+        (e: 'uploading', uploading: boolean): void
+        (e: 'remove'): void
+        (e: 'update', value: FormUploadFieldData['value']): void
     }>();
     const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);

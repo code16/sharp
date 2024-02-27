@@ -3,8 +3,8 @@
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
     import { FormFieldProps } from "@/form/components/types";
-    import { nextTick, onMounted, ref, watch } from "vue";
-    import { Editor } from "@tiptap/vue-3";
+    import { ref, watch } from "vue";
+    import { Editor, type EditorOptions } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
     import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
@@ -20,6 +20,9 @@
     import { getDefaultExtensions, getUploadExtension } from "@/form/components/fields/editor/extensions";
     import { useEmbedExtensions } from "@/form/components/fields/editor/extensions/embed/useEmbedExtensions";
     import { EmbedManager } from "@/form/components/fields/editor/extensions/embed/EmbedManager";
+    import { useUploadExtensions } from "@/form/components/fields/editor/extensions/upload/useUploadExtensions";
+    import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+    import { Serializable } from "@/form/Serializable";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -39,9 +42,20 @@
             }
         })
     )
+    const uploadExtensions = useUploadExtensions(
+        props,
+        new UploadManager(form, props.field, {
+            onFilesUpdated(uploads) {
+                emit('input', {
+                    ...props.value,
+                    uploads,
+                });
+            }
+        })
+    );
     const editor = useLocalizedEditor(
         props,
-        (content) => {
+        (locale) => {
             const { field } = props;
             const extensions = [
                 ...getDefaultExtensions({
@@ -54,18 +68,14 @@
                         breaks: config('sharp.markdown_editor.nl2br'),
                     })
                     : null,
-                field.embeds.upload
-                    ? getUploadExtension(props, {
-                        onUpdate: files => emit('input', { ...props.value, files }),
-                        entityKey: form.entityKey,
-                        instanceId: form.instanceId,
-                    })
-                    : null,
-                embedExtensions,
+                ...uploadExtensions,
+                ...embedExtensions,
             ].filter(Boolean);
 
             const editor = new Editor({
-                content,
+                content: props.field.localized && typeof props.value.text === 'object'
+                    ? props.value.text[locale] ?? ''
+                    : props.value.text ?? '',
                 editable: !field.readOnly,
                 enableInputRules: false,
                 enablePasteRules: [Iframe],
@@ -96,15 +106,19 @@
                 const content = props.field.markdown
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
+                const serializedContent = content.replace(/ data-unique-id="[^"]+"/g, '');
 
-                if(props.field.localized && typeof props.value.text === 'object') {
-                    emit('input', {
-                        ...props.value,
-                        text: { ...props.value.text, [props.locale]: content }
-                    }, { error });
-                } else {
-                    emit('input', { ...props.value, text: content }, { error });
-                }
+                const value = new Serializable(content, serializedContent, content => {
+                    if(props.field.localized && typeof props.value.text === 'object') {
+                        return {
+                            ...props.value,
+                            text: { ...props.value.text, [props.locale]: content }
+                        }
+                    }
+                    return { ...props.value, text: content };
+                });
+
+                emit('input', value, { error });
             }, 50));
 
             editor.on('selectionUpdate', () => {
@@ -146,7 +160,7 @@
                 </div>
             </template>
 
-            <EditorContent :editor="editor" />
+            <EditorContent :editor="editor" :key="locale ?? 'editor'" />
 
             <template v-if="editor && !field.readOnly">
                 <template v-if="field.embeds.upload">

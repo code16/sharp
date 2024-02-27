@@ -39,15 +39,14 @@
         <template v-slot:title>
             <slot name="title"></slot>
         </template>
-        <template v-if="visible">
-            <FormComponent
-                :entity-key="parentForm.entityKey"
-                :instance-id="parentForm.instanceId"
-                :form="form"
-                :post-fn="post"
-                style="transition-duration: 300ms"
-                ref="form"
-            />
-        </template>
+
+        <FormComponent
+            :entity-key="parentForm.entityKey"
+            :instance-id="parentForm.instanceId"
+            :form="form"
+            :post-fn="post"
+            style="transition-duration: 300ms"
+            ref="formComponent"
+        />
     </Modal>
 </template>

@@ -4,10 +4,13 @@ import UploadNode from "./UploadNode.vue";
 import { getEventsPlugin } from "./events-plugin";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { serializeUploadAttributeValue } from "@/embeds/utils/attributes";
+import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
 
 export type UploadNodeAttributes = {
     file: FormUploadFieldValueData,
-    htmlFile: File,
+    legend: string,
+    isNew: boolean,
+    nativeFile: File,
     isImage: boolean,
     notFound: boolean,
 }
@@ -27,7 +30,7 @@ export const Upload = Node.create<UploadOptions>({
 
     priority: 150,
 
-    addAttributes() {
+    addAttributes(): ExtensionAttributesSpec<UploadNodeAttributes> {
         return {
             file: {
                 default: null,
@@ -48,16 +51,20 @@ export const Upload = Node.create<UploadOptions>({
              */
             nativeFile: {
                 default: null,
-                renderHTML: () => null,
+                rendered: false,
+            },
+            isNew: {
+                default: false,
+                rendered: false,
+            },
+            notFound: {
+                default: false,
+                rendered: false,
             },
             isImage: {
                 default: false,
                 parseHTML: element => element.matches('x-sharp-image'),
-                renderHTML: () => null,
-            },
-            notFound: {
-                default: false,
-                renderHTML: () => null,
+                rendered: false,
             },
         }
     },
@@ -88,22 +95,22 @@ export const Upload = Node.create<UploadOptions>({
 
     addCommands(): AnyCommands {
         return {
-            insertUpload: ({ file, pos }) => ({ commands, tr }) => {
+            insertUpload: () => ({ commands, tr }) => {
                 return commands
-                    .insertContentAt(pos ?? tr.selection.to, {
+                    .insertContentAt(tr.selection.to, {
                         type: this.name,
                         attrs: {
-                            nativeFile: file,
-                            isImage: file.type.match(/^image\//),
+                            isNew: true,
                         },
                     });
-            },
-            newUpload: () => ({ editor }) => {
-                /**
-                 * @see UploadFileInput
-                 */
-                editor.emit('new-upload');
-                return true;
+                // return commands
+                //     .insertContentAt(pos ?? tr.selection.to, {
+                //         type: this.name,
+                //         attrs: {
+                //             nativeFile: file,
+                //             isImage: file.type.match(/^image\//),
+                //         },
+                //     });
             },
         }
     },

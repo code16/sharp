@@ -97,6 +97,7 @@ export type DateRangeFilterValueData = {
   end: Date | string;
 };
 export type EmbedData = {
+  value?: FormData["data"] & { slot: string };
   key: string;
   label: string;
   tag: string;
@@ -536,7 +537,7 @@ export type FormUploadFieldValueData = {
   name: string;
   disk: string;
   path: string;
-  size: string;
+  size: number;
   thumbnail: string | null;
   uploaded: boolean | null;
   transformed: boolean | null;

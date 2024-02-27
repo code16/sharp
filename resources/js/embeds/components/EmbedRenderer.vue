@@ -1,9 +1,19 @@
+<script lang="ts" setup>
+    import { TemplateRenderer } from "@/components";
+    import { EmbedAttributesData } from "@/form/components/fields/editor/extensions/embed/Embed";
+    import { EmbedData } from "@/types";
+
+    defineProps<{
+        data: EmbedAttributesData;
+        embed: EmbedData,
+    }>();
+</script>
+
 <template>
     <TemplateRenderer
         name="Embed"
-        :template-data="templateData"
-        :template-props="templateProps"
-        :template="options.template"
+        :template-data="data"
+        :template="embed.template"
     >
         <slot>
             <template v-if="data.slot">
@@ -12,27 +22,3 @@
         </slot>
     </TemplateRenderer>
 </template>
-
-<script>
-    import { TemplateRenderer } from "@/components";
-
-    export default {
-        components: {
-            TemplateRenderer,
-        },
-        props: {
-            data: Object,
-            options: Object,
-        },
-        computed: {
-            templateData() {
-                const { slot, ...data } = this.data;
-                return data;
-            },
-            templateProps() {
-                return this.options.attributes
-                    .filter(attr => attr !== 'slot');
-            },
-        },
-    }
-</script>

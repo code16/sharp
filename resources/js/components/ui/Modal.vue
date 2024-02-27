@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { ref } from 'vue'
+    import { onErrorCaptured, ref } from 'vue'
     import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
     import { XMarkIcon } from "@heroicons/vue/24/outline";
     import Button from "./Button.vue";
@@ -28,6 +28,10 @@
 
         emit('update:visible', false);
     }
+
+    // onErrorCaptured(e => {
+    //     console.error(e);
+    // })
 </script>
 
 <template>

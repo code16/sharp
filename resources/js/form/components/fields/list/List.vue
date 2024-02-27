@@ -12,6 +12,7 @@
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta } from "../../../types";
     import { SortableOptions } from "sortablejs";
+    import { Serializable } from "@/form/Serializable";
 
     const props = defineProps<{
         field: FormListFieldData,
@@ -103,17 +104,21 @@
         e.target.value = '';
     }
 
-    function onFieldInput(itemIndex: number, fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
-        emit('input', props.value.map((item, i) => {
-            if(i === itemIndex) {
-                return {
-                    ...item,
-                    ...(!force ? getDependantFieldsResetData(props.field.itemFields, fieldKey) : null),
-                    [fieldKey]: value,
+    function onFieldInput(itemIndex: number, itemFieldKey: string, itemFieldValue: FormFieldData['value'], { force = false } = {}) {
+        const newListValue = Serializable.wrap(itemFieldValue, itemFieldValue =>
+            props.value.map((item, i) => {
+                if(i === itemIndex) {
+                    return {
+                        ...item,
+                        ...(!force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
+                        [itemFieldKey]: itemFieldValue,
+                    }
                 }
-            }
-            return item;
-        }));
+                return item;
+            })
+        );
+
+        emit('input', newListValue);
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {

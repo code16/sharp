@@ -2,19 +2,22 @@ import { Form } from "@/form/Form";
 import { EmbedData, FormData } from "@/types";
 import { api } from "@/api";
 import { route } from "@/utils/url";
-import { EmbedAttributesData } from "@/form/components/fields/editor/extensions/embed/Embed";
+import debounce from "lodash/debounce";
 
+type ContentEmbed = {
+    id: string,
+    embed: EmbedData,
+    state: 'registered' | 'resolving' | 'resolved',
+    value: EmbedData['value'],
+}
 
 export class EmbedManager {
-    embeds: { [embedKey: string]: EmbedAttributesData[] } = {}
-
-    allInitialEmbedsResolved = Promise.withResolvers();
+    contentEmbeds: { [embedKey:string]: ContentEmbed[] } = {}
+    queues: { [embedKey: string]: PromiseWithResolvers<true> & { debounced?:() => void } } = {}
 
     parentForm: Form;
 
-    onEmbedsUpdated: (embeds: { [embedKey: string]: EmbedAttributesData[] }) => any
-
-    editorCreated = false;
+    onEmbedsUpdated: (embeds: { [embedKey: string]: Array<EmbedData['value']> }) => any
 
     uniqueId = 0;
 
@@ -23,51 +26,101 @@ export class EmbedManager {
         this.onEmbedsUpdated = onEmbedsUpdated;
     }
 
+    get serializedEmbeds() {
+        return Object.fromEntries(
+            Object.entries(this.contentEmbeds).map(([embedKey, contentEmbeds]) =>
+                [embedKey, contentEmbeds.map(contentEmbed => contentEmbed.value)]
+            )
+        )
+    }
+
     getEmbedUniqueId(embed: EmbedData) {
         return `${embed.key}-${this.uniqueId++}`;
     }
 
-    async registerContentEmbed(uniqueId: string, embed: EmbedData, contentEmbedAttributes: EmbedAttributesData): Promise<EmbedAttributesData | null> {
-        if(this.editorCreated) {
+    getContentEmbed(uniqueId: string) {
+        return Object.values(this.contentEmbeds).flat().find(embed => embed.id === uniqueId);
+    }
+
+    async registerContentEmbed(uniqueId: string, embed: EmbedData, contentEmbedAttributes: EmbedData['value']): Promise<EmbedData['value'] | null> {
+        if(this.getContentEmbed(uniqueId)) {
             return null;
         }
 
-        const index = this.embeds?.[embed.key]?.length ?? 0;
+        if(!this.contentEmbeds[embed.key]) {
+            this.contentEmbeds[embed.key] = [];
+        }
 
-        this.embeds[embed.key] = [
-            ...(this.embeds[embed.key] ?? []),
-            { ...contentEmbedAttributes, _uniqueId: uniqueId },
-        ]
+        this.contentEmbeds[embed.key].push({
+            id: uniqueId,
+            embed,
+            state: 'registered',
+            value: contentEmbedAttributes,
+        });
 
-        await this.allInitialEmbedsResolved.promise;
+        await this.queueResolve(embed.key);
 
-        return this.embeds[embed.key][index];
+        return this.getContentEmbed(uniqueId).value;
     }
 
-    async resolveAllInitialContentEmbeds() {
-        const { entityKey, instanceId } = this.parentForm;
-
-        await Promise.allSettled(
-            Object.entries(this.embeds)
-                .map(([embedKey, embeds]) => async () => {
-                    this.embeds[embedKey] = await api.post(
-                        instanceId
-                            ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
-                            : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
-                        { embeds, form: true }
-                    )
-                        .then(response => response.data.embeds)
-                })
+    updateContentEmbeds(embedKey: string, updatedContentEmbeds: ContentEmbed[]) {
+        this.contentEmbeds[embedKey] = this.contentEmbeds[embedKey].map(contentEmbed =>
+            updatedContentEmbeds.find(updatedContentEmbed => updatedContentEmbed.id === contentEmbed.id) ?? contentEmbed
         );
+    }
 
-        this.allInitialEmbedsResolved.resolve(true);
+    async queueResolve(embedKey: string) {
+        this.queues[embedKey] ??= {
+            ...Promise.withResolvers(),
+            debounced: debounce(() => {
+                const resolve = this.queues[embedKey].resolve;
+                this.queues[embedKey] = null;
+                this.resolveRegisteredContentEmbeds(embedKey)
+                    .finally(() => {
+                        resolve(true);
+                    });
+            }),
+        };
+
+        this.queues[embedKey].debounced();
+
+        await this.queues[embedKey].promise;
+    }
+
+    async resolveRegisteredContentEmbeds(embedKey: string) {
+        const { entityKey, instanceId } = this.parentForm;
+        const contentEmbeds = this.contentEmbeds[embedKey].filter(contentEmbed => contentEmbed.state === 'registered');
+
+        if(!contentEmbeds?.length) {
+            return;
+        }
+
+        this.updateContentEmbeds(embedKey, contentEmbeds.map((contentEmbed) => ({
+            ...contentEmbed,
+            state: 'resolving',
+        })));
+
+        const embeds = await api.post(
+            instanceId
+                ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
+                : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
+            { embeds: contentEmbeds.map(contentEmbed => contentEmbed.value), form: true }
+        )
+            .then(response => response.data.embeds);
+
+        this.updateContentEmbeds(embedKey, contentEmbeds.map((contentEmbed, i) => ({
+            ...contentEmbed,
+            state: 'resolved',
+            value: embeds[i],
+        })));
     }
 
     removeEmbed(uniqueId: string, embed: EmbedData) {
-        this.embeds[embed.key] = this.embeds[embed.key]?.filter(embedData => embedData._uniqueId !== uniqueId);
+        this.contentEmbeds[embed.key] = this.contentEmbeds[embed.key]?.filter(contentEmbed => contentEmbed.id !== uniqueId);
+        this.onEmbedsUpdated(this.serializedEmbeds);
     }
 
-    postResolveForm(embed: EmbedData, contentEmbedAttributes: EmbedAttributesData): Promise<FormData> {
+    postResolveForm(embed: EmbedData, contentEmbedAttributes: EmbedData['value']): Promise<FormData> {
         const { entityKey, instanceId } = this.parentForm;
 
         return api
@@ -80,7 +133,7 @@ export class EmbedManager {
             .then(response => response.data);
     }
 
-    async postForm(uniqueId: string, embed: EmbedData, data: EmbedAttributesData): Promise<EmbedAttributesData> {
+    async postForm(uniqueId: string, embed: EmbedData, data: EmbedData['value']): Promise<EmbedData['value']> {
         const { entityKey, instanceId } = this.parentForm;
         const responseData = await api
             .post(
@@ -91,15 +144,13 @@ export class EmbedManager {
             )
             .then(response => response.data);
 
-        const index = this.embeds[embed.key]?.findIndex(embed => embed._uniqueId === uniqueId) ?? -1;
+        this.contentEmbeds[embed.key] = this.contentEmbeds[embed.key].map(contentEmbed =>
+            contentEmbed.id === uniqueId
+                ? { ...contentEmbed, value: responseData }
+                : contentEmbed
+        );
 
-        if(index < 0) {
-            this.embeds[embed.key] = [...(this.embeds[embed.key] ?? []), { ...responseData, _uniqueId: uniqueId }];
-        } else {
-            this.embeds[embed.key][index] = responseData;
-        }
-
-        this.onEmbedsUpdated(this.embeds);
+        this.onEmbedsUpdated(this.serializedEmbeds);
 
         return responseData;
     }

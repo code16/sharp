@@ -11,7 +11,7 @@ final class FormUploadFieldValueData extends Data
         public string $name,
         public string $disk,
         public string $path,
-        public string $size,
+        public int $size,
         public ?string $thumbnail,
         public ?bool $uploaded,
         public ?bool $transformed,

@@ -2,14 +2,14 @@ import { parseAttributeValue } from "@/embeds/utils/attributes";
 import EmbedRenderer from '@/embeds/components/EmbedRenderer.vue';
 import { EmbedData } from "@/types";
 
-export function createEmbedComponent(embedOptions: EmbedData) {
+export function createEmbedComponent(embed: EmbedData) {
     return {
-        name: `Embed_${embedOptions.tag}`,
+        name: `Embed_${embed.tag}`,
         template: `
-            <component :is="embedOptions.tag" class="embed">
+            <component :is="embed.tag" class="embed">
                 <EmbedRenderer
                     :data="embedData"
-                    :options="embedOptions"
+                    :embed="embed"
                 >
                     <slot />
                 </EmbedRenderer>
@@ -22,7 +22,7 @@ export function createEmbedComponent(embedOptions: EmbedData) {
             'state',
         ],
         props: {
-            ...embedOptions.attributes
+            ...embed.attributes
                 ?.filter(name => name !== 'slot')
                 .reduce((res, attributeName) => ({
                     ...res,
@@ -35,14 +35,14 @@ export function createEmbedComponent(embedOptions: EmbedData) {
             }
         },
         computed: {
-            embedOptions() {
-                return embedOptions;
+            embed() {
+                return embed;
             },
             embedData() {
-                const additionalData = this.state.embeds[embedOptions.key][this.index];
+                const additionalData = this.state.embeds[embed.key][this.index];
 
                 return {
-                    ...embedOptions.attributes?.reduce((res, attributeName) => ({
+                    ...embed.attributes?.reduce((res, attributeName) => ({
                         ...res,
                         [attributeName]: parseAttributeValue(this.$props[attributeName]),
                     }), {}),
@@ -51,8 +51,8 @@ export function createEmbedComponent(embedOptions: EmbedData) {
             },
         },
         created() {
-            this.index = this.state.embeds[embedOptions.key].length;
-            this.state.embeds[embedOptions.key].push(this.embedData);
+            this.index = this.state.embeds[embed.key].length;
+            this.state.embeds[embed.key].push(this.embedData);
 
             // ignoreVueElement(this.embedOptions.tag);
         },

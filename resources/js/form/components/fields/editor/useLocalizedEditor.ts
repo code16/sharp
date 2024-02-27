@@ -7,21 +7,21 @@ import { useParentForm } from "@/form/useParentForm";
 
 export function useLocalizedEditor(
     props: FormFieldProps<FormEditorFieldData>,
-    createEditor: (content: string | null) => Editor
+    createEditor: (locale?: string) => Editor
 ): ComputedRef<Editor> {
-    if(props.field.localized && typeof props.value.text === 'object') {
+    if(props.field.localized) {
         const form = useParentForm();
         const localizedEditors = Object.fromEntries(
             form.locales.map(locale => [
                 locale,
-                createEditor(props.value?.text?.[locale] ?? null),
+                createEditor(locale),
             ])
         );
 
         return computed(() => localizedEditors[props.locale]);
     }
 
-    const editor = createEditor(props.value?.text as string);
+    const editor = createEditor();
 
     return computed(() => editor);
 }

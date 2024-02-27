@@ -9,7 +9,7 @@
     import Autocomplete from "./fields/Autocomplete.vue";
     import Check from "./fields/Check.vue";
     import DateInput from "./fields/date/Date.vue";
-    import Editor from "./fields/editor/EditorField.vue";
+    import Editor from "./fields/editor/Editor.vue";
     import Geolocation from "./fields/geolocation/Geolocation.vue";
     import Html from "./fields/Html.vue";
     import List from "./fields/list/List.vue";
@@ -35,7 +35,7 @@
         // 'autocomplete': Autocomplete,
         'check': Check,
         // 'date': DateInput,
-        // 'editor': Editor,
+        'editor': Editor,
         'geolocation': Geolocation,
         // 'html': Html,
         // 'list': List,

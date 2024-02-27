@@ -10,6 +10,9 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
+/**
+ * @internal
+ */
 class SharpFormEditorUploadForm
 {
     use HandleFormFields;

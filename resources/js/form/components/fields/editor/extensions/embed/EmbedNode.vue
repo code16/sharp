@@ -27,12 +27,13 @@
             }
         );
         embedForm.value = new Form(form, parentForm.entityKey, parentForm.instanceId);
+        console.log(embedForm.value);
         modalVisible.value = true;
     }
 
     async function postForm(data) {
         const responseData = await embeds.postForm(
-            props.node.attrs.dataUniqueId,
+            props.node.attrs['data-unique-id'],
             props.extension.options.embed,
             data,
         );
@@ -47,6 +48,7 @@
     }
 
     function onCancel() {
+        modalVisible.value = false;
         if(props.node.attrs.isNew) {
             props.deleteNode();
             setTimeout(() => {
@@ -56,15 +58,17 @@
     }
 
     function onRemove() {
-        embeds.removeEmbed(props.node.attrs.dataUniqueId, props.extension.options.embed);
+        embeds.removeEmbed(props.node.attrs['data-unique-id'], props.extension.options.embed);
         props.deleteNode();
     }
 
     async function init() {
-        const uniqueId = props.node.attrs.dataUniqueId ?? embeds.getEmbedUniqueId(props.extension.options.embed);
+        let uniqueId = props.node.attrs['data-unique-id'];
+
         if(!uniqueId) {
+            uniqueId = embeds.getEmbedUniqueId(props.extension.options.embed);
             props.updateAttributes({
-                dataUniqueId: uniqueId,
+                'data-unique-id': uniqueId,
             });
         }
 
@@ -99,46 +103,48 @@
 
 <template>
     <NodeRenderer class="editor__node embed-node" :node="node">
-        <template v-if="!node.attrs.isNew">
-            <div class="card">
-                <div class="card-body">
-                    <EmbedRenderer
-                        class="embed-node__template"
-                        :data="{
-                            ...node.attrs.embedAttributes,
-                            ...node.attrs.additionalData,
-                        }"
-                        :options="extension.options"
-                    />
-                    <div class="mt-3">
-                        <div class="row row-cols-auto gx-2">
-                            <template v-if="extension.options.embed.attributes.length">
+        <div>
+            <template v-if="!node.attrs.isNew">
+                <div class="card">
+                    <div class="card-body">
+                        <EmbedRenderer
+                            class="embed-node__template"
+                            :data="{
+                                ...node.attrs.embedAttributes,
+                                ...node.attrs.additionalData,
+                            }"
+                            :embed="extension.options.embed"
+                        />
+                        <div class="mt-3">
+                            <div class="row row-cols-auto gx-2">
+                                <template v-if="extension.options.embed.attributes.length">
+                                    <div>
+                                        <Button outline small @click="showFormModal()">
+                                            {{ __('sharp::form.upload.edit_button') }}
+                                        </Button>
+                                    </div>
+                                </template>
                                 <div>
-                                    <Button outline small @click="showFormModal()">
-                                        {{ __('sharp::form.upload.edit_button') }}
+                                    <Button variant="danger" outline small @click="onRemove">
+                                        {{ __('sharp::form.upload.remove_button') }}
                                     </Button>
                                 </div>
-                            </template>
-                            <div>
-                                <Button variant="danger" outline small @click="onRemove">
-                                    {{ __('sharp::form.upload.remove_button') }}
-                                </Button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </template>
-
-        <EmbedFormModal
-            v-model:visible="modalVisible"
-            :form="embedForm"
-            :post="postForm"
-            @cancel="onCancel()"
-        >
-            <template v-slot:title>
-                {{ extension.options.embed.label }}
             </template>
-        </EmbedFormModal>
+
+            <EmbedFormModal
+                v-model:visible="modalVisible"
+                :form="embedForm"
+                :post="postForm"
+                @cancel="onCancel"
+            >
+                <template v-slot:title>
+                    {{ extension.options.embed.label }}
+                </template>
+            </EmbedFormModal>
+        </div>
     </NodeRenderer>
 </template>

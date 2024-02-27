@@ -1,19 +1,20 @@
-import { AnyCommands, Attribute, Node } from "@tiptap/core";
+import { AnyCommands, Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/embeds/utils/attributes";
 import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "@/utils";
-import { EmbedOptions } from "./index";
 import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
-import { FormData } from "@/types";
-
-export type EmbedAttributesData = FormData['data'] & { slot: string, _uniqueId: string };
+import { EmbedData, FormData, FormUploadFieldValueData } from "@/types";
 
 export type EmbedNodeAttributes = {
-    embedAttributes: EmbedAttributesData,
-    additionalData: EmbedAttributesData,
+    embedAttributes: EmbedData['value'],
+    additionalData: { [key: string]: any },
     isNew: boolean,
-    dataUniqueId: string,
+    'data-unique-id': string,
+}
+
+export type EmbedOptions = {
+    embed: EmbedData | null,
 }
 
 export const Embed = Node.create<EmbedOptions>({
@@ -27,8 +28,13 @@ export const Embed = Node.create<EmbedOptions>({
 
     priority: 150,
 
+    addOptions() {
+        return {
+        } as EmbedOptions;
+    },
+
     addAttributes(): ExtensionAttributesSpec<EmbedNodeAttributes> {
-        const embed = this.options.embed;
+        const embed: EmbedData = this.options.embed;
         return {
             embedAttributes: {
                 default: {},
@@ -45,14 +51,14 @@ export const Embed = Node.create<EmbedOptions>({
 
                     return attributes;
                 },
-                renderHTML: (attributes) => {
+                renderHTML: (attributes: EmbedNodeAttributes) => {
                     return Object.fromEntries(
                         embed.attributes
-                            ?.filter(attributeName => attributes.attributes[attributeName] != null)
+                            ?.filter(attributeName => attributes.embedAttributes[attributeName] != null)
                             .map((attributeName) => {
                                 const value = embed.fields[attributeName].type === 'upload'
-                                    ? serializeUploadAttributeValue(attributes.attributes[attributeName])
-                                    : serializeAttributeValue(attributes.attributes[attributeName]);
+                                    ? serializeUploadAttributeValue(attributes.embedAttributes[attributeName] as FormUploadFieldValueData)
+                                    : serializeAttributeValue(attributes.embedAttributes[attributeName]);
 
                                 return [hyphenate(attributeName), value];
                             }, {})
@@ -60,7 +66,7 @@ export const Embed = Node.create<EmbedOptions>({
                     )
                 },
             },
-            dataUniqueId: {
+            'data-unique-id': {
                 default: null,
             },
             additionalData: {
@@ -103,7 +109,7 @@ export const Embed = Node.create<EmbedOptions>({
             insertEmbed: ({ embedKey }) => ({ commands, tr }) => {
                 return commands
                     .insertContentAt(tr.selection.to, {
-                        type: this.name,
+                        type: `${this.name}:${embedKey}`,
                         attrs: {
                             isNew: true,
                         },

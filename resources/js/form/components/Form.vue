@@ -11,6 +11,7 @@
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
+    import { Serializable } from "@/form/Serializable";
 
     const props = defineProps<{
         form: Form
@@ -33,7 +34,7 @@
 
         loading.value = true;
 
-        postFn(form.data)
+        return postFn(form.data)
             .catch(error => {
                 if (error.response?.status === 422) {
                     props.form.errors = error.response.data.errors ?? {};
@@ -58,11 +59,14 @@
     }
 
     function onFieldInput(fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
-        props.form.data = {
+        const data = Serializable.wrap(value, value => ({
             ...props.form.data,
             ...(!force ? getDependantFieldsResetData(props.form.fields, fieldKey) : null),
             [fieldKey]: value,
-        }
+        }));
+
+        props.form.data = data.localValue;
+        props.form.serializedData = data.serialized;
     }
 
     defineExpose({ submit });
