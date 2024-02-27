@@ -16,7 +16,7 @@ beforeEach(function () {
 
 it('returns fields and layout of an embed', function () {
     $name = Str::random();
-    
+
     $this->withoutExceptionHandling();
 
     $this
