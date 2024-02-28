@@ -1,10 +1,9 @@
 <script lang="ts" setup>
     import { TemplateRenderer } from "@/components";
-    import { EmbedAttributesData } from "@/form/components/fields/editor/extensions/embed/Embed";
     import { EmbedData } from "@/types";
 
     defineProps<{
-        data: EmbedAttributesData;
+        data: EmbedData['value'];
         embed: EmbedData,
     }>();
 </script>

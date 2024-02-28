@@ -9,7 +9,7 @@
     import { inject, nextTick, ref } from "vue";
     import { useParentForm } from "@/form/useParentForm";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
-    import { EmbedManager } from "@/form/components/fields/editor/extensions/embed/EmbedManager";
+    import { EmbedManager } from "@/embeds/EmbedManager";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
@@ -18,16 +18,13 @@
     const parentForm = useParentForm();
     const embeds = inject<EmbedManager>('embeds');
 
+
     async function showFormModal() {
         const form = await embeds.postResolveForm(
+            props.node.attrs['data-unique-id'],
             props.extension.options.embed,
-            {
-                ...props.node.attrs.embedAttributes,
-                ...props.node.attrs.additionalData,
-            }
         );
         embedForm.value = new Form(form, parentForm.entityKey, parentForm.instanceId);
-        console.log(embedForm.value);
         modalVisible.value = true;
     }
 
@@ -40,7 +37,6 @@
 
         props.updateAttributes({
             embedAttributes: responseData,
-            additionalData: responseData,
             isNew: false,
         });
 
@@ -58,20 +54,11 @@
     }
 
     function onRemove() {
-        embeds.removeEmbed(props.node.attrs['data-unique-id'], props.extension.options.embed);
+        embeds.removeEmbed(props.node.attrs['data-unique-id']);
         props.deleteNode();
     }
 
     async function init() {
-        let uniqueId = props.node.attrs['data-unique-id'];
-
-        if(!uniqueId) {
-            uniqueId = embeds.getEmbedUniqueId(props.extension.options.embed);
-            props.updateAttributes({
-                'data-unique-id': uniqueId,
-            });
-        }
-
         if(props.node.attrs.isNew) {
             if(props.extension.options.embed.attributes.length) {
                 await showFormModal();
@@ -84,10 +71,9 @@
             }
         } else {
             if(props.extension.options.embed.attributes.length) {
-                const additionalData = await embeds.registerContentEmbed(
-                    uniqueId,
-                    props.extension.options.embed,
-                    props.node.attrs.embedAttributes
+                const additionalData = await embeds.getResolvedEmbed(
+                    props.node.attrs['data-unique-id'],
+                    props.extension.options.embed
                 );
                 if(additionalData) {
                     props.updateAttributes({

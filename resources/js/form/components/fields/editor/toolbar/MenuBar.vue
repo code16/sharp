@@ -9,6 +9,7 @@
     import { computed } from "vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
+    import { EmbedManager } from "@/embeds/EmbedManager";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
@@ -23,11 +24,6 @@
             return res;
         }, [[]])
     );
-
-    const customEmbeds = computed<EmbedData[]>(() => {
-        const { upload, ...customEmbeds } = props.field.embeds;
-        return Object.values(customEmbeds);
-    });
 </script>
 
 <template>
@@ -87,7 +83,7 @@
                     </Button>
                 </div>
             </template>
-            <template v-if="field.embeds && customEmbeds.length > 0">
+            <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
                 <div class="btn-group">
                     <Dropdown
                         class="editor__dropdown"
@@ -101,7 +97,7 @@
                         </template>
 
                         <template v-slot:default>
-                            <template v-for="embed in customEmbeds">
+                            <template v-for="embed in props.field.embeds">
                                 <DropdownItem @click="editor.chain().focus().insertEmbed({ embed }).run()">
                                     {{ embed.label }}
                                 </DropdownItem>

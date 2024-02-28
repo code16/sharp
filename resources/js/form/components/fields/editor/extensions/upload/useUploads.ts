@@ -6,7 +6,7 @@ import { Extension } from "@tiptap/core";
 import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
 
 
-export function useUploadExtensions(
+export function useUploads(
     props: FormFieldProps<FormEditorFieldData>,
     uploads: UploadManager,
 ) {

@@ -104,20 +104,6 @@ export const Embed = Node.create<EmbedOptions>({
         return element;
     },
 
-    addCommands(): AnyCommands {
-        return {
-            insertEmbed: ({ embedKey }) => ({ commands, tr }) => {
-                return commands
-                    .insertContentAt(tr.selection.to, {
-                        type: `${this.name}:${embedKey}`,
-                        attrs: {
-                            isNew: true,
-                        },
-                    });
-            },
-        }
-    },
-
     addNodeView() {
         return VueNodeViewRenderer(EmbedNode);
     },
