@@ -53,14 +53,14 @@
     const uppy = new Uppy({
         id: props.fieldErrorKey,
         restrictions: {
-            maxFileSize: (props.field.maxFileSize ?? 0) * 1024 * 1024,
+            maxFileSize: (props.field.validation.maximumFileSize ?? 0) * 1024 * 1024,
             maxNumberOfFiles: 1,
-            allowedFileTypes: props.field.fileFilter
+            allowedFileTypes: props.field.validation.allowedExtensions
         },
         locale: {
             strings: {
                 exceedsSize: __('sharp::form.upload.message.file_too_big', {
-                    size: filesizeLabel((props.field.maxFileSize ?? 0) * 1024 * 1024),
+                    size: filesizeLabel((props.field.validation.maximumFileSize ?? 0) * 1024 * 1024),
                 }),
                 youCanOnlyUploadFileTypes: __('sharp::form.upload.message.bad_extension'),
             },
@@ -296,13 +296,13 @@
                     </UploadDropText>
                 </div>
                 <p class="text-xs leading-5 text-gray-600">
-                    <template v-if="field.fileFilter?.length">
+                    <template v-if="field.validation.allowedExtensions?.length">
                         <span class="uppercase">
-                            {{ field.fileFilter.map(extension => extension.replace('.', '')).join(', ') }}
+                            {{ field.validation.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}
                         </span>
                     </template>
-                    <template v-if="field.maxFileSize">
-                        {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
+                    <template v-if="field.validation.maximumFileSize">
+                        {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.validation.maximumFileSize * 1024 * 1024) }) }}
                     </template>
                 </p>
             </div>

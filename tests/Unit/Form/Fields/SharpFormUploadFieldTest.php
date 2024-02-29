@@ -18,7 +18,11 @@ it('sets only default values', function () {
             'storageBasePath' => 'data',
             'storageDisk' => 'local',
             'shouldOptimizeImage' => false,
-            'rule' => ['file'],
+            'validation' => [
+                'rule' => ['file'],
+                'allowedExtensions' => [],
+                'maximumFileSize' => null,
+            ],
         ]);
 });
 
@@ -99,7 +103,7 @@ it('allows to define a custom validation rule on a file', function () {
                 ->max('3mb')
         );
 
-    expect($formField->toArray()['rule'])
+    expect($formField->toArray()['validation']['rule'])
         ->toEqual(['file', 'max:3000']);
 });
 
@@ -111,7 +115,7 @@ it('allows to define a custom validation rule on an image file', function () {
                 ->max('3mb')
         );
 
-    expect($formField->toArray()['rule'])
+    expect($formField->toArray()['validation']['rule'])
         ->toEqual(['file', 'max:3000', 'image', 'dimensions:max_width=100,max_height=100']);
 });
 
@@ -119,7 +123,7 @@ it('allows to define maxFileSize in the deprecated way', function () {
     $formField = SharpFormUploadField::make('file')
         ->setMaxFileSize(.5);
 
-    expect($formField->toArray()['rule'])
+    expect($formField->toArray()['validation']['rule'])
         ->toEqual(['file', 'max:512']);
 });
 
@@ -127,18 +131,18 @@ it('allows to define fileFilter in the deprecated way', function () {
     $formField = SharpFormUploadField::make('file')
         ->setFileFilter('jpg');
 
-    expect($formField->toArray()['rule'])
+    expect($formField->toArray()['validation']['rule'])
         ->toEqual(['file', 'extensions:.jpg']);
 
     $formField = SharpFormUploadField::make('file')
         ->setFileFilter('jpg, gif');
 
-    expect($formField->toArray()['rule'])
+    expect($formField->toArray()['validation']['rule'])
         ->toEqual(['file', 'extensions:.jpg,.gif']);
 
     $formField = SharpFormUploadField::make('file')
         ->setFileFilter(['jpg', 'gif ']);
 
-    expect($formField->toArray()['rule'])
+    expect($formField->toArray()['validation']['rule'])
         ->toEqual(['file', 'extensions:.jpg,.gif']);
 });

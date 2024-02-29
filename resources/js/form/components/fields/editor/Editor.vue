@@ -84,7 +84,7 @@
                 injectCSS: false,
                 editorProps: {
                     attributes: {
-                        class: 'card-body editor__content form-control',
+                        class: 'card-body editor__content form-control p-2',
                     },
                 }
             });

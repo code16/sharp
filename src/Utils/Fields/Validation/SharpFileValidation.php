@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Fields\Validation;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Validation\Rules\File;
 
@@ -63,6 +64,8 @@ class SharpFileValidation
 
     public function toArray(): array
     {
-        return $this->baseRule->toArray();
+        return collect($this->baseRule->toArray())
+            ->map(fn ($value) => is_object($value) ? $value->__toString() : $value)
+            ->toArray();
     }
 }

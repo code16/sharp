@@ -65,7 +65,7 @@ it('allows to allow uploads with configuration', function () {
         });
 
     expect($formField->toArray())
-        ->toHaveKey('uploads.fields.file.rule', [
+        ->toHaveKey('uploads.fields.file.validation.rule', [
             'file', 'extensions:jpg,gif', 'max:5000', 'image',
         ])
         ->toHaveKey('uploads.fields.file.transformable', true)
@@ -95,7 +95,7 @@ it('allows to allow uploads with deprecated configuration', function () {
         });
 
     expect($formField->toArray())
-        ->toHaveKey('uploads.fields.file.rule', [
+        ->toHaveKey('uploads.fields.file.validation.rule', [
             'file', 'extensions:.jpg,.gif', 'max:5120',
         ])
         ->toHaveKey('uploads.fields.file.transformable', true)

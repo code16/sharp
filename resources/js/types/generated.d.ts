@@ -524,10 +524,13 @@ export type FormUploadFieldData = {
   transformKeepOriginal: boolean | null;
   shouldOptimizeImage: boolean | null;
   transformableFileTypes: Array<string> | null;
+  validation: {
+    rule: string[];
+    allowedExtensions: string[];
+    maximumFileSize: number;
+  };
   ratioX: number | null;
   ratioY: number | null;
-  maxFileSize: number | null;
-  fileFilter: Array<string> | null;
   storageBasePath: string | null;
   storageDisk: string | null;
   label: string | null;

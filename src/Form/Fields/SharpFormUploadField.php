@@ -203,7 +203,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     public function toArray(): array
     {
         return parent::buildArray([
-            'rule' => $this->buildValidationRule(),
+            'validation' => $this->buildValidation(),
             'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
             'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
             'transformable' => $this->transformable,
@@ -215,16 +215,48 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             'shouldOptimizeImage' => $this->shouldOptimizeImage,
         ]);
     }
-
-    private function buildValidationRule(): array
+    
+    private function buildValidation(): array
     {
         // Backward compatibility
         $rule = $this->validationRule ?: SharpFileValidation::make()
             ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
             ->when($this->maxFileSize, fn (SharpFileValidation $file) => $file->max($this->maxFileSize * 1024));
-
-        return collect($rule->toArray())
-            ->map(fn ($value) => is_object($value) ? $value->__toString() : $value)
-            ->toArray();
+        
+        return [
+            'rule' => $rule->toArray(),
+            'allowedExtensions' => $this->getAllowedExtensions($rule->toArray()),
+            'maximumFileSize' => $this->getMaximumFileSize($rule->toArray()),
+        ];
+    }
+    
+    private function getMaximumFileSize(array $rules): ?int
+    {
+        $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'max:'));
+        
+        return $rule ? (int) str_replace('max:', '', $rule) : null;
+    }
+    
+    private function getAllowedExtensions(array $rules): array
+    {
+        $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'extensions:'));
+        
+        $allowedExtensions = $rule
+            ? str($rule)
+                ->remove('extensions:')
+                ->explode(',')
+                ->filter()
+                ->map(fn ($ext) => str($ext)->start('.')->value())
+                ->toArray()
+            : [];
+        
+        /**
+         * @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage()
+         */
+        if(in_array('image', $rules) && empty($allowedExtensions)) {
+            $allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp'];
+        }
+        
+        return $allowedExtensions;
     }
 }
