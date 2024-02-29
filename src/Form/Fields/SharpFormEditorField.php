@@ -166,7 +166,7 @@ class SharpFormEditorField extends SharpFormField
         ];
     }
 
-    protected function toolbarArray(): array|null
+    protected function toolbarArray(): ?array
     {
         if (! $this->showToolbar) {
             return null;
@@ -177,28 +177,29 @@ class SharpFormEditorField extends SharpFormField
                 if (is_string($button)) {
                     if (in_array($button, $this->embeds)) {
                         return 'embed:'.app($button)->key();
-                    } else {
-                        throw new SharpInvalidConfigException(
-                            sprintf("%s ('%s') : %s must be present in ->allowEmbeds() array to have it in the toolbar",
-                                class_basename($this),
-                                $this->key(),
-                                $button
-                            )
-                        );
                     }
-                }
-                if (($button === static::UPLOAD || $button === static::UPLOAD_IMAGE) && ! $this->uploadsConfig()) {
-                    throw new SharpInvalidConfigException(sprintf("%s ('%s') : ->allowUploads() must be called to have upload in the toolbar",
-                        class_basename($this),
-                        $this->key(),
-                    ));
+
+                    throw new SharpInvalidConfigException(
+                        sprintf('%s ("%s") : %s must be present in ->allowEmbeds() array to have it in the toolbar',
+                            class_basename($this),
+                            $this->key(),
+                            $button
+                        )
+                    );
                 }
 
-                return is_string($button) && in_array($button, $this->embeds)
-                    ? 'embed:'.app($button)->key()
-                    : $button;
+                if (($button === static::UPLOAD || $button === static::UPLOAD_IMAGE) && ! $this->uploadsConfig()) {
+                    throw new SharpInvalidConfigException(
+                        sprintf('%s ("%s") : ->allowUploads() must be called to have upload in the toolbar',
+                            class_basename($this),
+                            $this->key(),
+                        )
+                    );
+                }
+
+                return $button;
             })
-            ->all();
+            ->toArray();
     }
 
     protected function validationRules(): array
