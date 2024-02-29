@@ -33,12 +33,13 @@ it('sets default values in config', function () {
             'label' => 'default_fake_sharp_form_editor_embed',
             'tag' => 'x-default-fake-sharp-form-editor-embed',
             'attributes' => ['text'],
+            'icon' => null,
             'template' => 'Empty template',
-        ]);
-
-    expect($defaultEmbed->toConfigArray(true))
+        ])
+        ->and($defaultEmbed->toConfigArray(true))
         ->toHaveKey('fields.text')
         ->toHaveKey('fields.text.type', 'text');
+
 });
 
 it('allows to configure tag', function () {
