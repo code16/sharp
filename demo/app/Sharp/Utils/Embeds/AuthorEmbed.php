@@ -9,6 +9,7 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Support\Arr;
 
@@ -41,9 +42,11 @@ class AuthorEmbed extends SharpFormEditorEmbed
             )
             ->addField(
                 SharpFormUploadField::make('picture')
-                    ->setMaxFileSize(1)
+                    ->setValidationRule(
+                        SharpImageValidation::make()
+                            ->max('1mb')
+                    )
                     ->setLabel('Picture')
-                    ->setFileFilterImages()
                     ->setCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/embeds'),

@@ -10,6 +10,7 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 class ProfileSingleForm extends SharpSingleForm
 {
@@ -21,8 +22,10 @@ class ProfileSingleForm extends SharpSingleForm
             ->addField(
                 SharpFormUploadField::make('avatar')
                     ->setLabel('Avatar')
-                    ->setFileFilterImages()
-                    ->setMaxFileSize(1)
+                    ->setValidationRule(
+                        SharpImageValidation::make()
+                            ->max('1mb')
+                    )
                     ->shouldOptimizeImage()
                     ->setStorageDisk('local')
                     ->setCropRatio('1:1')

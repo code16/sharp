@@ -26,6 +26,8 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
+use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 class PostForm extends SharpForm
 {
@@ -64,7 +66,7 @@ class PostForm extends SharpForm
                         $editorUpload
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
-                            ->setMaxFileSize(1);
+                            ->setValidationRule(SharpFileValidation::make()->max('1mb'));
                     })
                     ->setMaxLength(1000)
                     ->setHeight(300, 0)
@@ -77,9 +79,8 @@ class PostForm extends SharpForm
             )
             ->addField(
                 SharpFormUploadField::make('cover')
-                    ->setMaxFileSize(1)
+                    ->setValidationRule(SharpImageValidation::make()->max('1mb'))
                     ->setLabel('Cover')
-                    ->setFileFilterImages()
                     ->setCropRatio('16:9')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}'),
@@ -123,8 +124,11 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormUploadField::make('document')
-                            ->setFileFilter(['pdf', 'zip'])
-                            ->setMaxFileSize(1)
+                            ->setValidationRule(
+                                SharpFileValidation::make()
+                                    ->extensions(['pdf', 'zip'])
+                                    ->max('1mb')
+                            )
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
