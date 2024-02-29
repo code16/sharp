@@ -66,7 +66,7 @@ it('allows to allow uploads with configuration', function () {
 
     expect($formField->toArray())
         ->toHaveKey('uploads.fields.file.rule', [
-            'file', 'extensions:jpg,gif', 'max:5000', 'image'
+            'file', 'extensions:jpg,gif', 'max:5000', 'image',
         ])
         ->toHaveKey('uploads.fields.file.transformable', true)
         ->toHaveKey('uploads.fields.file.ratioX', 16)
@@ -96,7 +96,7 @@ it('allows to allow uploads with deprecated configuration', function () {
 
     expect($formField->toArray())
         ->toHaveKey('uploads.fields.file.rule', [
-            'file', 'extensions:.jpg,.gif', 'max:5120'
+            'file', 'extensions:.jpg,.gif', 'max:5120',
         ])
         ->toHaveKey('uploads.fields.file.transformable', true)
         ->toHaveKey('uploads.fields.file.ratioX', 16)
@@ -179,7 +179,7 @@ it('allows to allows embeds', function () {
         ])
         ->setToolbar([
             SharpFormEditorField::H1,
-            FakeSharpEditorEmbed::class
+            FakeSharpEditorEmbed::class,
         ]);
 
     expect($formField->toArray()['embeds'])
@@ -193,7 +193,7 @@ it('allows to place an allowed embed in the toolbar', function () {
         ])
         ->setToolbar([
             SharpFormEditorField::H1,
-            FakeSharpEditorEmbed::class
+            FakeSharpEditorEmbed::class,
         ]);
 
     expect($formField->toArray()['toolbar'][1])
@@ -203,7 +203,7 @@ it('allows to place an allowed embed in the toolbar', function () {
 it('throws an exception when setting an embed item in the toolbar without allowing it', function () {
     $formField = SharpFormEditorField::make('text')
         ->setToolbar([
-            FakeSharpEditorEmbed::class
+            FakeSharpEditorEmbed::class,
         ]);
 
     $formField->toArray();

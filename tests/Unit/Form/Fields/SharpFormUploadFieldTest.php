@@ -18,7 +18,7 @@ it('sets only default values', function () {
             'storageBasePath' => 'data',
             'storageDisk' => 'local',
             'shouldOptimizeImage' => false,
-            'rule' => ['file']
+            'rule' => ['file'],
         ]);
 });
 
