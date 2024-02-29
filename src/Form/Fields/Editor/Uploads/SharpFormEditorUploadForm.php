@@ -31,6 +31,7 @@ class SharpFormEditorUploadForm
             ->when($this->editorUpload->hasLegend(), function (FieldsContainer $formFields) {
                 $formFields->addField(
                     SharpFormTextField::make('legend')
+                        ->setLabel(__('sharp::form.editor.dialogs.upload.legend_field.label'))
                 );
             });
     }

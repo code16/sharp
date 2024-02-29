@@ -20,7 +20,7 @@
     const modalVisible = ref(false);
     const editorUploadForm = ref<Form>(null);
     const parentForm = useParentForm();
-    const uploads = inject<UploadManager>('uploads');
+    const uploads = inject<UploadManager<Form>>('uploads');
     const uploadComponent = ref<InstanceType<typeof Upload>>();
 
     const error = computed(() => {
@@ -69,17 +69,14 @@
 
     function onTransformed(value: FormUploadFieldData['value']) {
         props.updateAttributes({
-            file: {
-                ...props.node.attrs.file,
-                filters: value.filters,
-            }
+            file: value,
         });
 
         if(!props.node.attrs.isNew) {
             uploads.updateUpload(props.node.attrs['data-unique-id'], {
-                file: props.node.attrs.file,
+                file: value,
                 legend: props.node.attrs.legend,
-            })
+            });
         }
     }
 
@@ -99,6 +96,7 @@
             }
         )
         props.updateAttributes({
+            isNew: false,
             file: responseData.file,
             nativeFile: null,
         });
@@ -116,6 +114,16 @@
         if(props.extension.options.editorField.uploads.fields.legend) {
             event.preventDefault();
             showFormModal();
+        }
+    }
+
+    function onCancel() {
+        if(props.node.attrs.isNew) {
+            modalVisible.value = false;
+            props.deleteNode();
+            setTimeout(() => {
+                props.editor.commands.focus();
+            }, 0);
         }
     }
 
@@ -156,7 +164,7 @@
             :has-error="!!error"
             :root="false"
             @thumbnail="onThumbnail"
-            @update="onTransformed"
+            @transform="onTransformed"
             @error="onError"
             @success="onSuccess"
             @remove="onRemove"
@@ -174,9 +182,15 @@
             :visible="modalVisible"
             :form="editorUploadForm"
             :post="postForm"
+            @cancel="onCancel"
         >
             <template v-slot:title>
-                Upload
+                <template v-if="props.node.attrs.isNew">
+                    {{ __('sharp::form.editor.dialogs.upload.title.new') }}
+                </template>
+                <template v-else>
+                    {{ __('sharp::form.editor.dialogs.upload.title.update') }}
+                </template>
             </template>
         </EmbedFormModal>
     </NodeRenderer>
