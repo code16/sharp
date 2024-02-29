@@ -54,7 +54,7 @@ return [
 
     'editor.character_count' => ':count characters',
     'editor.errors.unknown_file' => 'Unknown file ":path"',
-    
+
     'editor.dialogs.upload.title.new' => 'Insert file',
     'editor.dialogs.upload.title.update' => 'Update',
     'editor.dialogs.upload.legend_field.label' => 'Legend',

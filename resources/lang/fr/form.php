@@ -58,7 +58,7 @@ return [
     'editor.dialogs.upload.title.new' => 'Insérer un fichier',
     'editor.dialogs.upload.title.update' => 'Modifier le fichier',
     'editor.dialogs.upload.legend_field.label' => 'Légende',
-    
+
     'editor.dialogs.link.text_label' => 'Texte',
     'editor.dialogs.link.url_label' => 'URL',
     'editor.dialogs.link.insert_button' => 'Insérer le lien',
