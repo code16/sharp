@@ -39,7 +39,6 @@ it('sets default values in config', function () {
         ->and($defaultEmbed->toConfigArray(true))
         ->toHaveKey('fields.text')
         ->toHaveKey('fields.text.type', 'text');
-
 });
 
 it('allows to configure tag', function () {

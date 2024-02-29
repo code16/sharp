@@ -16,7 +16,8 @@ class SharpFileValidation
     public static function make(): static
     {
         return new static(
-            new class extends File {
+            new class extends File
+            {
                 public function toArray(): array
                 {
                     return $this->buildValidationRules();

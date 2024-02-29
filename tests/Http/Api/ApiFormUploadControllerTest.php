@@ -58,14 +58,14 @@ it('copies the file to the wanted directory', function () {
 it('throws a validation exception on missing file even without explicit rule', function () {
     $this
         ->postJson('/sharp/api/upload', [
-            'file' => null
+            'file' => null,
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
 
     $this
         ->postJson('/sharp/api/upload', [
-            'file' => 'not a file'
+            'file' => 'not a file',
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
@@ -75,7 +75,7 @@ it('validates on explicit rules', function () {
     $this
         ->postJson('/sharp/api/upload', [
             'file' => UploadedFile::fake()->create('file.xls'),
-            'rule' => 'required|image'
+            'rule' => 'required|image',
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
@@ -83,7 +83,7 @@ it('validates on explicit rules', function () {
     $this
         ->postJson('/sharp/api/upload', [
             'file' => UploadedFile::fake()->create('file.xls', 1024 * 3),
-            'rule' => 'required|max:2048'
+            'rule' => 'required|max:2048',
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
