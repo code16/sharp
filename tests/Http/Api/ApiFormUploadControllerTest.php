@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Storage;
 beforeEach(function () {
     config()->set('sharp.uploads.tmp_dir', 'tmp');
     Storage::fake('local');
-    $this->withoutExceptionHandling();
 });
 
 it('allows to upload a file', function () {
@@ -54,4 +53,38 @@ it('copies the file to the wanted directory', function () {
         ]);
 
     $this->assertTrue(Storage::disk('local')->exists('/tmp/image.jpg'));
+});
+
+it('throws a validation exception on missing file even without explicit rule', function () {
+    $this
+        ->postJson('/sharp/api/upload', [
+            'file' => null
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrorFor('file');
+
+    $this
+        ->postJson('/sharp/api/upload', [
+            'file' => 'not a file'
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrorFor('file');
+});
+
+it('validates on explicit rules', function () {
+    $this
+        ->postJson('/sharp/api/upload', [
+            'file' => UploadedFile::fake()->create('file.xls'),
+            'rule' => 'required|image'
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrorFor('file');
+
+    $this
+        ->postJson('/sharp/api/upload', [
+            'file' => UploadedFile::fake()->create('file.xls', 1024 * 3),
+            'rule' => 'required|max:2048'
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrorFor('file');
 });

@@ -3,14 +3,18 @@
 namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Utils\FileUtil;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 
 class ApiFormUploadController extends Controller
 {
+    use ValidatesRequests;
+
     public function store(FileUtil $fileUtil)
     {
-        throw_if(! request()->hasFile('file'), new FileNotFoundException());
+        $this->validate(request(), [
+            'file' => request()->input('rule') ?: ['required', 'file'],
+        ]);
 
         $file = request()->file('file');
         $baseDir = config('sharp.uploads.tmp_dir', 'tmp');
