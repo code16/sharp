@@ -215,32 +215,32 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             'shouldOptimizeImage' => $this->shouldOptimizeImage,
         ]);
     }
-    
+
     private function buildValidation(): array
     {
         // Backward compatibility
         $rule = $this->validationRule ?: SharpFileValidation::make()
             ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
             ->when($this->maxFileSize, fn (SharpFileValidation $file) => $file->max($this->maxFileSize * 1024));
-        
+
         return [
             'rule' => $rule->toArray(),
             'allowedExtensions' => $this->getAllowedExtensions($rule->toArray()),
             'maximumFileSize' => $this->getMaximumFileSize($rule->toArray()),
         ];
     }
-    
+
     private function getMaximumFileSize(array $rules): ?int
     {
         $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'max:'));
-        
+
         return $rule ? (int) str_replace('max:', '', $rule) : null;
     }
-    
+
     private function getAllowedExtensions(array $rules): array
     {
         $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'extensions:'));
-        
+
         $allowedExtensions = $rule
             ? str($rule)
                 ->remove('extensions:')
@@ -249,14 +249,14 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
                 ->map(fn ($ext) => str($ext)->start('.')->value())
                 ->toArray()
             : [];
-        
+
         /**
          * @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage()
          */
-        if(in_array('image', $rules) && empty($allowedExtensions)) {
+        if (in_array('image', $rules) && empty($allowedExtensions)) {
             $allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp'];
         }
-        
+
         return $allowedExtensions;
     }
 }

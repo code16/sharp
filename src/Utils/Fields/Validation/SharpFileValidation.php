@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Utils\Fields\Validation;
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Validation\Rules\File;
 
