@@ -150,3 +150,30 @@ it('allows to configure show template', function () {
         ->and($defaultEmbed->toConfigArray(true)['template'])
         ->toEqual('Empty template');
 });
+
+it('allows to configure icon', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array
+        {
+        }
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('test')
+                ->configureIcon('fa-user');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->toConfigArray(true)['icon'])
+        ->toEqual('fa-user');
+});

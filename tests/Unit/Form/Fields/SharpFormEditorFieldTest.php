@@ -1,7 +1,9 @@
 <?php
 
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Tests\Unit\Form\Fields\Fakes\FakeSharpEditorEmbed;
 
 it('sets only default values', function () {
     $formField = SharpFormEditorField::make('text');
@@ -125,3 +127,49 @@ it('allows to define maxLength and showCount', function () {
         ->and(SharpFormEditorField::make('text')->showCharacterCount()->toArray())
         ->toHaveKey('showCharacterCount', true);
 });
+
+it('throws an exception when setting an UPLOAD item in the toolbar without defining allowUploads', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            SharpFormEditorField::UPLOAD,
+        ]);
+
+    $formField->toArray();
+})->expectException(SharpInvalidConfigException::class);
+
+it('allows to allows embeds', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowEmbeds([
+            FakeSharpEditorEmbed::class,
+        ])
+        ->setToolbar([
+            SharpFormEditorField::H1,
+            FakeSharpEditorEmbed::class
+        ]);
+
+    expect($formField->toArray()['embeds'])
+        ->toHaveKey(app(FakeSharpEditorEmbed::class)->key());
+});
+
+it('allows to place an allowed embed in the toolbar', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowEmbeds([
+            FakeSharpEditorEmbed::class,
+        ])
+        ->setToolbar([
+            SharpFormEditorField::H1,
+            FakeSharpEditorEmbed::class
+        ]);
+
+    expect($formField->toArray()['toolbar'][1])
+        ->toEqual('embed:'.app(FakeSharpEditorEmbed::class)->key());
+});
+
+it('throws an exception when setting an embed item in the toolbar without allowing it', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            FakeSharpEditorEmbed::class
+        ]);
+
+    $formField->toArray();
+})->expectException(SharpInvalidConfigException::class);
