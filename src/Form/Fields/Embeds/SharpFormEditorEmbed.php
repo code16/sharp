@@ -143,11 +143,11 @@ abstract class SharpFormEditorEmbed
 
         return $this;
     }
-    
+
     final protected function configureIcon(string $icon): self
     {
         $this->icon = $icon;
-        
+
         return $this;
     }
 

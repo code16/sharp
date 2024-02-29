@@ -23,6 +23,7 @@ trait SharpFormFieldWithEmbeds
             ->map(fn (string $embedClass) => app($embedClass))
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
                 $embed->buildEmbedConfig();
+
                 return [
                     $embed->key() => $embed->toConfigArray($isForm),
                 ];

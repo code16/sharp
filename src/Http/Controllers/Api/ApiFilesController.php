@@ -20,10 +20,10 @@ class ApiFilesController extends Controller
         return response()->json([
             'files' => collect(request()->get('files'))
                 ->map(function (array $file) use ($thumbnailHeight, $thumbnailWidth) {
-                    if(!isset($file['disk'], $file['path'])) {
+                    if (! isset($file['disk'], $file['path'])) {
                         return [...$file, 'not_found' => true];
                     }
-                    
+
                     $disk = Storage::disk($file['disk']);
                     if (! $disk->exists($file['path'])) {
                         return [...$file, 'not_found' => true];

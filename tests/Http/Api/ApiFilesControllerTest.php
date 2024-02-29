@@ -173,7 +173,7 @@ it('sends missing files with "not_found" attribute', function () {
                     'path' => '/files/missing2.txt',
                     'disk' => 'local',
                     'not_found' => true,
-                ]
+                ],
             ],
         ]);
 });
