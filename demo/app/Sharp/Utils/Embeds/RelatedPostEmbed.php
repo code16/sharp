@@ -4,7 +4,6 @@ namespace App\Sharp\Utils\Embeds;
 
 use App\Enums\PostState;
 use App\Models\Post;
-use App\Models\User;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -32,11 +31,11 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
                     ->setLabel('Post')
             );
     }
-    
+
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
         $post = Post::find($data['post']);
-        
+
         return $this
             ->setCustomTransformer('title', function ($value) use ($post) {
                 return $post?->title;
