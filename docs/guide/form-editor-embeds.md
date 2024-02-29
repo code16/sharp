@@ -60,6 +60,7 @@ This is not required, but you should implement `buildEmbedConfig(): void`, where
 - `configureTagName(string $tagName): self`: to define the tag name (typically starting with `x-`)
 - `configureFormInlineTemplate(string $template): self` and `configureFormTemplatePath(string $templatePath): self`: to define the .vue template for displaying the embed in the Editor field in the form
 - `configureShowInlineTemplate(string $template): self` and `configureShowTemplatePath(string $templatePath): self`: same, but for the show page, only you need to have a different version for it.
+- TODO configureIcon(string $icon) define icon, place it in toolbar...
 
 Here's a complete example:
 
