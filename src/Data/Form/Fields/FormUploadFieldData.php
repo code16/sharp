@@ -21,11 +21,9 @@ final class FormUploadFieldData extends Data
         public ?bool $shouldOptimizeImage = null,
         /** @var array<string> */
         public ?array $transformableFileTypes = null,
+        public ?array $rule = null,
         public ?int $ratioX = null,
         public ?int $ratioY = null,
-        public ?float $maxFileSize = null,
-        /** @var array<string> */
-        public array|null $fileFilter = null,
         public ?string $storageBasePath = null,
         public ?string $storageDisk = null,
         public ?string $label = null,

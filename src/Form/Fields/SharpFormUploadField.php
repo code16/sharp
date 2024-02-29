@@ -218,6 +218,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
     private function buildValidationRule(): array
     {
+        // Backward compatibility
         $rule = $this->validationRule ?: SharpFileValidation::make()
             ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
             ->when($this->maxFileSize, fn (SharpFileValidation $file) => $file->max($this->maxFileSize * 1024));
