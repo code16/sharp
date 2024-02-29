@@ -1,33 +1,62 @@
 <script setup lang="ts">
     import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
-    import { computed, inject, onUnmounted, ref } from "vue";
+    import { computed, inject, onMounted, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
-    import { NodeViewProps } from "@tiptap/core";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
     import { Upload } from "@/form/components/fields";
     import { FormUploadFieldData, FormData } from "@/types";
-    import { api } from "@/api";
-    import { route } from "@/utils/url";
     import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
     import { Form } from "@/form/Form";
     import { useParentForm } from "@/form/useParentForm";
-    import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+    import {
+        FormEditorUploadData,
+        UploadManager
+    } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+    import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
 
-    const props = defineProps<Omit<NodeViewProps, 'extension' | 'node'> & {
-        extension: typeof UploadExtension,
-        node: Omit<NodeViewProps['node'], 'attrs'> & { attrs: UploadNodeAttributes }
-    }>();
+    const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
+    const modalVisible = ref(false);
+    const editorUploadForm = ref<Form>(null);
+    const parentForm = useParentForm();
     const uploads = inject<UploadManager>('uploads');
+    const uploadComponent = ref<InstanceType<typeof Upload>>();
 
     const error = computed(() => {
-        if(props.node.attrs.notFound) {
+        if(props.node.attrs.file?.not_found) {
             return __('sharp::form.editor.errors.unknown_file', {
                 path: props.node.attrs.file.path ?? ''
             });
         }
     });
+
+    function showFormModal() {
+        const formProps = {
+            fields: props.extension.options.editorField.uploads.fields,
+            layout: props.extension.options.editorField.uploads.layout,
+            data: {
+                file: props.node.attrs.file,
+                legend: props.node.attrs.legend,
+            },
+        } as FormData;
+        editorUploadForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
+        modalVisible.value = true;
+    }
+
+    async function postForm(data: FormEditorUploadData) {
+        const responseData = await uploads.postForm(
+            props.node.attrs['data-unique-id'],
+            data
+        );
+
+        props.updateAttributes({
+            file: responseData.file,
+            legend: responseData.legend,
+        });
+
+        modalVisible.value = false;
+    }
 
     function onThumbnail(preview: string) {
         props.updateAttributes({
@@ -38,32 +67,41 @@
         });
     }
 
-    function onUpdate(value: FormUploadFieldData['value']) {
+    function onTransformed(value: FormUploadFieldData['value']) {
         props.updateAttributes({
             file: {
                 ...props.node.attrs.file,
                 filters: value.filters,
             }
         });
-        if(!props.node.attrs.htmlFile) {
-            uploads.onUploadTransformed(value);
+
+        if(!props.node.attrs.isNew) {
+            uploads.updateUpload(props.node.attrs['data-unique-id'], {
+                file: props.node.attrs.file,
+                legend: props.node.attrs.legend,
+            })
         }
     }
 
     function onRemove() {
         props.deleteNode();
-        uploads.onUploadRemoved(props.node.attrs.file);
+        uploads.removeUpload(props.node.attrs['data-unique-id']);
         setTimeout(() => {
             props.editor.commands.focus();
         }, 0);
     }
 
-    function onSuccess(value: FormUploadFieldData['value']) {
+    async function onSuccess(value: FormUploadFieldData['value']) {
+        const responseData = await uploads.postForm(
+            props.node.attrs['data-unique-id'],
+            {
+                file: value,
+            }
+        )
         props.updateAttributes({
-            file: value,
-            htmlFile: null,
+            file: responseData.file,
+            nativeFile: null,
         });
-        uploads.onUploadSuccess(value);
     }
 
     function onError(message: string, file: File) {
@@ -74,56 +112,38 @@
         });
     }
 
-    async function init() {
-        if(props.node.attrs.htmlFile || props.node.attrs.notFound) {
-            return;
-        }
-
-        const registeredFile = await uploads.registerUploadFile(
-            props.node.attrs.file
-        );
-        if(registeredFile) {
-            props.updateAttributes({
-                file: registeredFile,
-            });
-        } else {
-            props.updateAttributes({
-                notFound: true,
-            });
-        }
-    }
-
-    init();
-
-    const showEditModal = ref(false);
-    const editForm = ref(null);
-    const parentForm = useParentForm();
-
     function onEdit(event: CustomEvent) {
         if(props.extension.options.editorField.uploads.fields.legend) {
             event.preventDefault();
-            const formProps = {
-                ...props.extension.options.editorField.uploads,
-                data: props.node.attrs,
-            } as FormData;
-            editForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
-            showEditModal.value = true;
+            showFormModal();
         }
     }
 
-    async function postForm(data) {
-        const responseData = await uploads.postForm(data);
-
-        props.updateAttributes({
-            file: responseData.file,
-            legend: responseData.legend,
-        });
+    async function init() {
+        if(props.node.attrs.isNew) {
+            if(props.extension.options.editorField.uploads.fields.legend) {
+                showFormModal();
+            } else {
+                uploadComponent.value.browseFiles();
+            }
+        } else {
+            const resolved = await uploads.getResolvedUpload(
+                props.node.attrs['data-unique-id']
+            );
+            if(resolved) {
+                props.updateAttributes({
+                    file: resolved.file,
+                });
+            }
+        }
     }
+
+    onMounted(() => {
+        init();
+    });
 
     onUnmounted(() => {
-        if(!props.node.attrs.htmlFile) {
-            uploads.onRemove(props.node.attrs.file);
-        }
+        uploads.removeUpload(props.node.attrs['data-unique-id']);
     });
 </script>
 
@@ -132,30 +152,32 @@
         <Upload
             :field="extension.options.editorField.uploads.fields.file"
             :field-error-key="null"
-            :value="{
-                ...node.attrs.file,
-                file: node.attrs.htmlFile,
-            }"
+            :value="node.attrs.file"
             :has-error="!!error"
             :root="false"
             @thumbnail="onThumbnail"
-            @update="onUpdate"
+            @update="onTransformed"
             @error="onError"
-            @sucess="onSuccess"
+            @success="onSuccess"
             @remove="onRemove"
             @edit="onEdit"
+            ref="uploadComponent"
         ></Upload>
 
-        <EmbedFormModal :visible="showEditModal" :form="editForm" :post="postForm">
+        <template v-if="error">
+            <div class="text-sm text-red-700 mt-1">
+                {{ error }}
+            </div>
+        </template>
+
+        <EmbedFormModal
+            :visible="modalVisible"
+            :form="editorUploadForm"
+            :post="postForm"
+        >
             <template v-slot:title>
                 Upload
             </template>
         </EmbedFormModal>
-
-        <template v-if="error">
-            <div class="invalid-feedback d-block" style="font-size: .75rem">
-                {{ error }}
-            </div>
-        </template>
     </NodeRenderer>
 </template>

@@ -21,8 +21,8 @@ trait SharpFormFieldWithEmbeds
     {
         return collect($this->embeds)
             ->map(fn (string $embedClass) => app($embedClass))
-            ->each->buildEmbedConfig()
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
+                $embed->buildEmbedConfig();
                 return [
                     $embed->key() => $embed->toConfigArray($isForm),
                 ];

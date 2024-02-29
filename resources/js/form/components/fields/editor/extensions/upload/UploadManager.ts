@@ -5,6 +5,7 @@ import { EmbedData, FormEditorFieldData, FormUploadFieldValueData } from "@/type
 import { filesEquals } from "@/utils/upload";
 import { parseAttributeValue } from "@/embeds/utils/attributes";
 import { hyphenate } from "@/utils";
+import { Show } from "@/show/Show";
 
 export type FormEditorUploadData = {
     file: FormUploadFieldValueData,
@@ -14,30 +15,32 @@ export type FormEditorUploadData = {
 type ContentUpload = {
     id: string,
     resolved?: PromiseWithResolvers<true>
+    removed?: boolean,
     value: FormEditorUploadData,
 }
 
-export class UploadManager {
+export class UploadManager<Root extends Form | Show> {
     contentUploads: { [id:string]: ContentUpload } = {};
-    editorField: FormEditorFieldData;
-    root: Form;
-    onFilesUpdated: (files: FormUploadFieldValueData[]) => any;
+    root: Form | Show;
+    onFilesUpdated: Root extends Form ? (files: FormUploadFieldValueData[]) => any : null;
+    editorField: Root extends Form ? FormEditorFieldData : null;
     uniqueId = 0
 
     constructor(
-        root: Form,
-        { editorField, onFilesUpdated }: {
-            editorField?: UploadManager['editorField'],
-            onFilesUpdated?: UploadManager['onFilesUpdated']
-        } = {}
+        root: Root,
+        config: {
+            editorField: UploadManager<Root>['editorField'],
+            onFilesUpdated: UploadManager<Root>['onFilesUpdated'],
+        } = { editorField: null, onFilesUpdated: null }
     ) {
         this.root = root;
-        this.editorField = editorField;
-        this.onFilesUpdated = onFilesUpdated;
+        this.editorField = config.editorField;
+        this.onFilesUpdated = config.onFilesUpdated;
     }
 
     get files() {
         return Object.values(this.contentUploads)
+            .filter(contentUpload => !contentUpload.removed)
             .map(contentUpload => contentUpload.value.file);
     }
 
@@ -71,7 +74,7 @@ export class UploadManager {
 
         const contentUploads = [...document.querySelectorAll('x-sharp-file,x-sharp-image')]
             .map(element => ({
-                id: element.getAttribute('data-unique-id'),
+                id: element.getAttribute('data-uid'),
                 resolved: Promise.withResolvers<true>(),
                 value: {
                     file: parseAttributeValue(element.getAttribute('file')),
@@ -104,16 +107,42 @@ export class UploadManager {
         })();
     }
 
+    updateUpload(id: string, value: FormEditorUploadData) {
+        this.contentUploads[id].value = value;
+        this.onFilesUpdated(this.files);
+    }
+
+    removeUpload(id: string) {
+        this.contentUploads[id] = {
+            ...this.contentUploads[id],
+            removed: true,
+        };
+        this.onFilesUpdated(this.files);
+    }
+
+    async getResolvedUpload(id: string): Promise<FormEditorUploadData | undefined> {
+        if(this.contentUploads[id]?.removed) {
+            this.contentUploads[id].removed = false;
+        }
+
+        await this.contentUploads[id]?.resolved?.promise;
+
+        return this.contentUploads[id]?.value;
+    }
+
     async postForm(id: string, data: FormEditorUploadData): Promise<FormEditorUploadData> {
         const responseData = await api.post(
             route('code16.sharp.api.form.editor.upload.form.update'), {
                 data,
-                fields: this.editorField.embeds.upload.fields,
+                fields: this.editorField.uploads.fields,
             }
         )
             .then(response => response.data);
 
-        this.contentUploads[id].value = responseData;
+        this.contentUploads[id] = {
+            id,
+            value: responseData,
+        }
 
         this.onFilesUpdated(this.files);
 

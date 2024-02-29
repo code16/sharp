@@ -2,6 +2,9 @@
 
 namespace Code16\Sharp\Enums;
 
+/**
+ * @internal
+ */
 enum FormEditorToolbarButton: string
 {
     case Bold = 'bold';
@@ -16,6 +19,8 @@ enum FormEditorToolbarButton: string
     case Heading3 = 'heading-3';
     case Code = 'code';
     case Blockquote = 'blockquote';
+    case Upload = 'upload';
+    case UploadImage = 'upload-image';
     case HorizontalRule = 'horizontal-rule';
     case Table = 'table';
     case Iframe = 'iframe';

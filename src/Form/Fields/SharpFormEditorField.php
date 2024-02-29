@@ -4,13 +4,20 @@ namespace Code16\Sharp\Form\Fields;
 
 use Closure;
 use Code16\Sharp\Enums\FormEditorToolbarButton;
+use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Illuminate\Contracts\Validation\DataAwareRule;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\MessageBag;
+use Illuminate\Validation\Rule;
 
 class SharpFormEditorField extends SharpFormField
 {
@@ -36,6 +43,8 @@ class SharpFormEditorField extends SharpFormField
     const H3 = FormEditorToolbarButton::Heading3;
     const CODE = FormEditorToolbarButton::Code;
     const QUOTE = FormEditorToolbarButton::Blockquote;
+    const UPLOAD_IMAGE = FormEditorToolbarButton::UploadImage;
+    const UPLOAD = FormEditorToolbarButton::Upload;
     const HR = FormEditorToolbarButton::HorizontalRule;
     const TABLE = FormEditorToolbarButton::Table;
     const IFRAME = FormEditorToolbarButton::Iframe;
@@ -162,6 +171,40 @@ class SharpFormEditorField extends SharpFormField
             'layout' => $form->formLayout(),
         ];
     }
+    
+    protected function toolbarArray(): array|null
+    {
+        if(!$this->showToolbar) {
+            return null;
+        }
+        
+        return collect($this->toolbar)
+            ->map(function (FormEditorToolbarButton|string $button) {
+                if(is_string($button)) {
+                    if(in_array($button, $this->embeds)) {
+                        return 'embed:'.app($button)->key();
+                    } else {
+                        throw new SharpInvalidConfigException(
+                            sprintf("%s ('%s') : %s must be present in ->allowEmbeds() array to have it in the toolbar",
+                                class_basename($this),
+                                $this->key(),
+                                $button
+                            )
+                        );
+                    }
+                }
+                if(($button === static::UPLOAD || $button === static::UPLOAD_IMAGE) && !$this->uploadsConfig()) {
+                    throw new SharpInvalidConfigException(sprintf("%s ('%s') : ->allowUploads() must be called to have upload in the toolbar",
+                        class_basename($this),
+                        $this->key(),
+                    ));
+                }
+                return is_string($button) && in_array($button, $this->embeds)
+                    ? 'embed:'.app($button)->key()
+                    : $button;
+            })
+            ->all();
+    }
 
     protected function validationRules(): array
     {
@@ -187,7 +230,7 @@ class SharpFormEditorField extends SharpFormField
             [
                 'minHeight' => $this->minHeight,
                 'maxHeight' => $this->maxHeight,
-                'toolbar' => $this->showToolbar ? $this->toolbar : null,
+                'toolbar' => $this->toolbarArray(),
                 'placeholder' => $this->placeholder,
                 'localized' => $this->localized,
                 'markdown' => $this->renderAsMarkdown,

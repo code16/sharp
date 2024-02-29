@@ -9,28 +9,36 @@ import { Show } from "@/show/Show";
 type ContentEmbed = {
     id: string,
     resolved?: PromiseWithResolvers<true>,
-    embed: EmbedData
+    embed: EmbedData,
+    removed?: boolean,
     value: EmbedData['value'],
 }
 
-export class EmbedManager {
+export class EmbedManager<Root extends Form | Show> {
     contentEmbeds: { [id: string] : ContentEmbed } = {}
     embeds: { [embedKey:string]: EmbedData } = {};
-    onEmbedsUpdated: (embeds: { [embedKey: string]: Array<EmbedData['value']> }) => any
+    onEmbedsUpdated: Root extends Form ? (embeds: { [embedKey: string]: Array<EmbedData['value']> }) => any : null
     root: Form | Show;
     uniqueId = 0
 
-    constructor(root: Form | Show, embeds: EmbedManager['embeds'], { onEmbedsUpdated }: { onEmbedsUpdated?: EmbedManager['onEmbedsUpdated'] } = {}) {
+    constructor(
+        root: Root,
+        embeds: EmbedManager<Root>['embeds'],
+        config: {
+            onEmbedsUpdated: EmbedManager<Root>['onEmbedsUpdated']
+        } = { onEmbedsUpdated: null }) {
         this.root = root;
         this.embeds = embeds;
-        this.onEmbedsUpdated = onEmbedsUpdated;
+        this.onEmbedsUpdated = config.onEmbedsUpdated;
     }
 
     get serializedEmbeds() {
         return Object.values(this.contentEmbeds)
             .reduce((res, contentEmbed) => ({
                 ...res,
-                [contentEmbed.embed.key]: [...(res[contentEmbed.embed.key] ?? []), contentEmbed],
+                [contentEmbed.embed.key]: !contentEmbed.removed
+                    ? [...(res[contentEmbed.embed.key] ?? []), contentEmbed.value]
+                    : res[contentEmbed.embed.key],
             }), {});
     }
 
@@ -109,13 +117,20 @@ export class EmbedManager {
 
 
     async getResolvedEmbed(id: string): Promise<EmbedData['value'] | undefined> {
+        if(this.contentEmbeds[id]?.removed) {
+            this.contentEmbeds[id].removed = false;
+        }
+
         await this.contentEmbeds[id]?.resolved?.promise;
 
         return this.contentEmbeds[id]?.value;
     }
 
     removeEmbed(id: string) {
-        delete this.contentEmbeds[id];
+        this.contentEmbeds[id] = {
+            ...this.contentEmbeds[id],
+            removed: true,
+        }
         this.onEmbedsUpdated(this.serializedEmbeds);
     }
 

@@ -54,6 +54,18 @@
                                 <i :class="buttons[button].icon" data-test="table"></i>
                             </TableDropdown>
                         </template>
+                        <template v-else-if="button.startsWith('embed:')">
+                            <Button
+                                variant="light"
+                                :active="editor.isActive(button)"
+                                :disabled="field.readOnly"
+                                :title="field.embeds[button.replace('embed:', '')]?.label"
+                                @click="editor.commands.insertEmbed(field.embeds[button.replace('embed:', '')])"
+                                :data-test="button"
+                            >
+                                <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
+                            </Button>
+                        </template>
                         <template v-else :key="button">
                             <Button
                                 variant="light"
@@ -70,17 +82,6 @@
                             </Button>
                         </template>
                     </template>
-                </div>
-            </template>
-            <template v-if="field.uploads">
-                <div class="btn-group">
-                    <Button
-                        variant="light"
-                        :disabled="field.readOnly"
-                        @click="editor.chain().focus().insertUpload().run()"
-                    >
-                        <i class="fas fa-file-upload"></i>
-                    </Button>
                 </div>
             </template>
             <template v-if="Object.values(props.field.embeds ?? {}).length > 0">

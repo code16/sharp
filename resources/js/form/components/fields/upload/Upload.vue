@@ -20,13 +20,10 @@
     import { useParentForm } from "../../../useParentForm";
     import UploadDropText from "./UploadDropText.vue";
     import { getCsrfToken } from "@/utils/request";
+    import { FormFieldProps } from "@/form/components/types";
 
-    const props = defineProps<{
-        field: FormUploadFieldData,
-        fieldErrorKey: string,
+    const props = defineProps<FormFieldProps<FormUploadFieldData> & {
         value: FormUploadFieldData['value'] & { file?: File } | null,
-        root: boolean,
-        hasError: boolean,
     }>();
 
     defineOptions({
@@ -36,12 +33,12 @@
     const emit = defineEmits<{
         (e: 'input', value: typeof props['value']): void
         (e: 'error', message: string, file: Blob | File): void
-        (e: 'success', file: FormUploadFieldData['value']): void
+        (e: 'success', file: typeof props['value']): void
         (e: 'clear'): void
         (e: 'thumbnail', preview: string): void
         (e: 'uploading', uploading: boolean): void
         (e: 'remove'): void
-        (e: 'update', value: FormUploadFieldData['value']): void
+        (e: 'update', value: typeof props['value']): void
     }>();
     const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
@@ -215,6 +212,14 @@
     function onTransformSubmit(cropper: Cropper) {
         onImageTransform(cropper);
     }
+
+    function browseFiles() {
+        dropTarget.value.querySelector('input').click();
+    }
+
+    defineExpose({
+        browseFiles,
+    });
 </script>
 
 <template>

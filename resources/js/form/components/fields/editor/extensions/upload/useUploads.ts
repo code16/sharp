@@ -4,28 +4,38 @@ import { UploadManager } from "@/form/components/fields/editor/extensions/upload
 import { provide } from "vue";
 import { Extension } from "@tiptap/core";
 import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
-
+import { Form } from "@/form/Form";
 
 export function useUploads(
     props: FormFieldProps<FormEditorFieldData>,
-    uploads: UploadManager,
+    uploadManager: UploadManager<Form>,
+    content: string,
 ) {
     if(!props.field.uploads) {
-        return [];
+        return { extensions: [] };
     }
 
-    provide('uploads', uploads);
+    provide('uploads', uploadManager);
 
-    return [
-        Extension.create({
-            name: 'initUploads',
-            onCreate() {
-                uploads.resolveAllInitialContentUploads();
-                uploads.editorCreated = true;
-            }
-        }),
-        Upload.configure({
-            editorField: props.field,
-        }),
-    ];
+    const updatedContent = uploadManager.withUploadUniqueId(content);
+
+    uploadManager.resolveUploads(updatedContent);
+
+    return {
+        extensions: [
+            Extension.create({
+                name: 'initUploads',
+                onBeforeCreate() {
+                    this.editor.setOptions({
+                        content: updatedContent,
+                    });
+                },
+            }),
+            Upload.configure({
+                editorField: props.field,
+                uploadManager,
+            }),
+        ]
+    };
 }
+

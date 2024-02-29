@@ -117,7 +117,7 @@ it('returns thumbnails if file is an image', function () {
         ]);
 });
 
-it('strips out missing files', function () {
+it('sends missing files with "not_found" attribute', function () {
     $this->withoutExceptionHandling();
 
     $file1 = UploadedFile::fake()->create('test.doc', Str::random());
@@ -161,11 +161,19 @@ it('strips out missing files', function () {
                     'disk' => 'local',
                     'size' => 16,
                 ], [
+                    'path' => '/files/missing.jpg',
+                    'disk' => 's3',
+                    'not_found' => true,
+                ], [
                     'name' => 'test.pdf',
                     'path' => '/files/pdfs/test.pdf',
                     'disk' => 's3',
                     'size' => 32,
-                ],
+                ], [
+                    'path' => '/files/missing2.txt',
+                    'disk' => 'local',
+                    'not_found' => true,
+                ]
             ],
         ]);
 });

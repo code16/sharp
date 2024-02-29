@@ -17,11 +17,12 @@
     import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
     import { getDefaultExtensions } from "@/form/components/fields/editor/extensions";
-    import { useEmbedExtensions, useEmbeds } from "@/form/components/fields/editor/extensions/embed/useEmbeds";
+    import { useEmbeds } from "@/form/components/fields/editor/extensions/embed/useEmbeds";
     import { EmbedManager } from "@/embeds/EmbedManager";
     import { useUploads } from "@/form/components/fields/editor/extensions/upload/useUploads";
     import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
     import { Serializable } from "@/form/Serializable";
+    import { Form } from "@/form/Form";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -30,19 +31,8 @@
 
     const form = useParentForm();
     const header = ref<HTMLElement>();
-    const services: { embeds: EmbedManager, uploads: UploadManager } = {};
+    const services: { embeds: EmbedManager<Form>, uploads: UploadManager<Form> } = {};
 
-    const uploadExtensions = useUploads(
-        props,
-        new UploadManager(form, props.field, {
-            onFilesUpdated(uploads) {
-                emit('input', {
-                    ...props.value,
-                    uploads,
-                });
-            }
-        })
-    );
     const editor = useLocalizedEditor(
         props,
         (locale) => {
@@ -51,6 +41,16 @@
                     ? props.value.text?.[locale] ?? ''
                     : String(props.value.text ?? '');
 
+            const { extensions: uploadExtensions } = useUploads(
+                props,
+                services.uploads ??= new UploadManager(form, {
+                    editorField: props.field,
+                    onFilesUpdated(files) {
+                        emit('input', { ...props.value, files });
+                    }
+                }),
+                content,
+            )
             const { extensions: embedExtensions } = useEmbeds(
                 props,
                 services.embeds ??= new EmbedManager(form, props.field.embeds, {
@@ -59,7 +59,6 @@
                     }
                 }),
                 content,
-                locale,
             );
             const extensions = [
                 ...getDefaultExtensions({
@@ -108,7 +107,10 @@
                 const content = props.field.markdown
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
-                const serializedContent = services.embeds.serializeContent(content);
+                let serializedContent = content;
+
+                serializedContent = services.embeds.serializeContent(serializedContent);
+                serializedContent = services.uploads.serializeContent(serializedContent);
 
                 const value = new Serializable(content, serializedContent, content => {
                     if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {

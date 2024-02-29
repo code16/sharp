@@ -1,10 +1,12 @@
-import { AnyCommands, Node } from "@tiptap/core";
+import { AnyCommands, Node, type Range } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/embeds/utils/attributes";
 import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "@/utils";
-import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
+import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { EmbedData, FormData, FormUploadFieldValueData } from "@/types";
+import { EmbedManager } from "@/embeds/EmbedManager";
+import { UploadOptions } from "@/form/components/fields/editor/extensions/upload/Upload";
 
 export type EmbedNodeAttributes = {
     embedAttributes: EmbedData['value'],
@@ -15,9 +17,10 @@ export type EmbedNodeAttributes = {
 
 export type EmbedOptions = {
     embed: EmbedData | null,
+    embedManager: EmbedManager,
 }
 
-export const Embed = Node.create<EmbedOptions>({
+export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedOptions>({
     name: 'embed',
 
     group: 'block',
@@ -27,11 +30,6 @@ export const Embed = Node.create<EmbedOptions>({
     isolating: true,
 
     priority: 150,
-
-    addOptions() {
-        return {
-        } as EmbedOptions;
-    },
 
     addAttributes(): ExtensionAttributesSpec<EmbedNodeAttributes> {
         const embed: EmbedData = this.options.embed;
@@ -104,7 +102,29 @@ export const Embed = Node.create<EmbedOptions>({
         return element;
     },
 
+    addCommands(): AnyCommands {
+        return {
+            insertEmbed: (embed: EmbedData) => ({ commands, tr }) => {
+                return commands.insertContentAt(tr.selection.to, {
+                    type: `embed:${embed.key}`,
+                    attrs: {
+                        isNew: true,
+                        'data-unique-id': this.options.embedManager.newId(embed)
+                    },
+                });
+            },
+        }
+    },
+
     addNodeView() {
         return VueNodeViewRenderer(EmbedNode);
     },
 });
+
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        embed: {
+            insertEmbed: (embed: EmbedData) => ReturnType
+        }
+    }
+}

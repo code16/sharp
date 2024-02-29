@@ -52,6 +52,7 @@ class PostForm extends SharpForm
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::IFRAME,
+                        SharpFormEditorField::UPLOAD,
                     ])
                     ->allowEmbeds([
                         RelatedPostEmbed::class,

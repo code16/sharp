@@ -15,8 +15,7 @@ final class FormUploadFieldValueData extends Data
         public ?string $thumbnail,
         public ?bool $uploaded,
         public ?bool $transformed,
-        public ?bool $shouldOptimizeImage,
-        public ?bool $transformOriginal,
+        public ?bool $not_found,
         #[LiteralTypeScriptType('{
             crop: { width:number, height:number, x:number, y:number },
             rotate: { angle:number }

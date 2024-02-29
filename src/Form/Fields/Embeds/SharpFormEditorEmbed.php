@@ -22,6 +22,7 @@ abstract class SharpFormEditorEmbed
 
     protected ?string $label = null;
     protected ?string $tagName = null;
+    protected ?string $icon = null;
     protected array $templates = [];
 
     public function toConfigArray(bool $isForm): array
@@ -36,6 +37,7 @@ abstract class SharpFormEditorEmbed
             'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'template' => $template,
+            'icon' => $this->icon,
             'fields' => $this->fields(),
         ];
 
@@ -139,6 +141,13 @@ abstract class SharpFormEditorEmbed
     {
         $this->tagName = $tagName;
 
+        return $this;
+    }
+    
+    final protected function configureIcon(string $icon): self
+    {
+        $this->icon = $icon;
+        
         return $this;
     }
 

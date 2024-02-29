@@ -6,10 +6,11 @@
     import EmbedFormModal from "./EmbedFormModal.vue";
     import { Form } from "@/form/Form";
     import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
-    import { inject, nextTick, ref } from "vue";
+    import { inject, nextTick, onUnmounted, ref } from "vue";
     import { useParentForm } from "@/form/useParentForm";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { EmbedManager } from "@/embeds/EmbedManager";
+    import { EmbedData } from "@/types";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
@@ -28,7 +29,7 @@
         modalVisible.value = true;
     }
 
-    async function postForm(data) {
+    async function postForm(data: EmbedData['value']) {
         const responseData = await embeds.postForm(
             props.node.attrs['data-unique-id'],
             props.extension.options.embed,
@@ -72,8 +73,7 @@
         } else {
             if(props.extension.options.embed.attributes.length) {
                 const additionalData = await embeds.getResolvedEmbed(
-                    props.node.attrs['data-unique-id'],
-                    props.extension.options.embed
+                    props.node.attrs['data-unique-id']
                 );
                 if(additionalData) {
                     props.updateAttributes({
@@ -83,6 +83,10 @@
             }
         }
     }
+
+    onUnmounted(() => {
+        embeds.removeEmbed(props.node.attrs['data-unique-id']);
+    });
 
     init();
 </script>

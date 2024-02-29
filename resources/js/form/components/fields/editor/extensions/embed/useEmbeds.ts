@@ -6,6 +6,7 @@ import { getCurrentInstance, nextTick, provide, watch } from "vue";
 import { EmbedManager } from "@/embeds/EmbedManager";
 
 
+
 export function useEmbeds(
     props: FormFieldProps<FormEditorFieldData>,
     embedManager: EmbedManager,
@@ -30,26 +31,16 @@ export function useEmbeds(
                         content: updatedContent,
                     });
                 },
-                addCommands(): AnyCommands {
-                    return {
-                        insertEmbed: ({ embed }: { embed: EmbedData }) => ({ commands, tr }) => {
-                            return commands
-                                .insertContentAt(tr.selection.to, {
-                                    type: `embed:${embed.key}`,
-                                    attrs: {
-                                        isNew: true,
-                                        'data-unique-id': embedManager.newId(embed)
-                                    },
-                                });
-                        },
-                    }
-                },
             }),
             ...Object.values(props.field.embeds)
                 .filter(Boolean)
                 .map((embed) => {
-                    return Embed.extend({ name: `embed:${embed.key}` })
-                        .configure({ embed: {...embed} })
+                    return Embed.extend({
+                        name: `embed:${embed.key}`,
+                        addOptions() {
+                            return { embed, embedManager }
+                        }
+                    })
                 }),
         ]
     };

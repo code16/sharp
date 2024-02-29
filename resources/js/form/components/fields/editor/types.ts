@@ -1,4 +1,4 @@
-import { Attribute, Node, NodeViewProps } from "@tiptap/core";
+import { Attribute, Extension, Node, NodeViewProps } from "@tiptap/core";
 
 export type ExtensionNodeProps<N extends Node, Attrs> =
     Omit<NodeViewProps, 'extension' | 'node' | 'updateAttributes'> & {
@@ -10,3 +10,8 @@ export type ExtensionNodeProps<N extends Node, Attrs> =
 export type ExtensionAttributesSpec<Attrs> = {
     [name in keyof Attrs]: Partial<Attribute>
 }
+
+export type WithRequiredOptions<E extends Node> =
+    Omit<E, 'configure'> & {
+        configure(options: E['options']): E
+    }

@@ -101,6 +101,7 @@ export type EmbedData = {
   key: string;
   label: string;
   tag: string;
+  icon: string | null;
   attributes: Array<string>;
   template: string;
   fields: { [key: string]: FormFieldData };
@@ -324,6 +325,8 @@ export type FormEditorToolbarButton =
   | "heading-3"
   | "code"
   | "blockquote"
+  | "upload"
+  | "upload-image"
   | "horizontal-rule"
   | "table"
   | "iframe"
@@ -541,8 +544,7 @@ export type FormUploadFieldValueData = {
   thumbnail: string | null;
   uploaded: boolean | null;
   transformed: boolean | null;
-  shouldOptimizeImage: boolean | null;
-  transformOriginal: boolean | null;
+  not_found: boolean | null;
   filters: {
     crop: { width: number; height: number; x: number; y: number };
     rotate: { angle: number };

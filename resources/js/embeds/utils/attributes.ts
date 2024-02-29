@@ -22,8 +22,7 @@ export function serializeUploadAttributeValue(value: FormUploadFieldValueData | 
         const {
             uploaded,
             transformed,
-            shouldOptimizeImage,
-            transformOriginal,
+            not_found,
             ...serializable
         } = value;
 

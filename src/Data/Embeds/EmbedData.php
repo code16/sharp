@@ -18,6 +18,7 @@ final class EmbedData extends Data
         public string $key,
         public string $label,
         public string $tag,
+        public ?string $icon,
         /** @var string[] */
         public array $attributes,
         public string $template,

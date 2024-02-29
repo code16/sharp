@@ -4,7 +4,8 @@ import {
     FormFieldData,
     FormLayoutFieldsetData,
     FormLayoutTabData,
-    FormListFieldData, FormUploadFieldValueData, LayoutFieldData
+    FormListFieldData,
+    LayoutFieldData
 } from "@/types";
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
