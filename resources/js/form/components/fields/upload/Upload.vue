@@ -38,7 +38,7 @@
         (e: 'thumbnail', preview: string): void
         (e: 'uploading', uploading: boolean): void
         (e: 'remove'): void
-        (e: 'update', value: typeof props['value']): void
+        (e: 'transform', value: typeof props['value']): void
     }>();
     const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
@@ -188,7 +188,7 @@
                 }),
             }
         }
-        emit('update', value);
+        emit('transform', value);
         emit('input', value);
 
         const blob = await new Promise<Blob>(resolve => cropper.getCroppedCanvas().toBlob(resolve));
@@ -259,7 +259,7 @@
                     </div>
                     <template v-if="!field.readOnly">
                         <div class="flex gap-2 mt-2">
-                            <template v-if="value && isTransformable && !hasError">
+                            <template v-if="value && (!uppyFile || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
                                 <Button class="mr-2" outline small @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>

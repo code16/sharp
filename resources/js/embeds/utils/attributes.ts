@@ -23,6 +23,7 @@ export function serializeUploadAttributeValue(value: FormUploadFieldValueData | 
             uploaded,
             transformed,
             not_found,
+            thumbnail,
             ...serializable
         } = value;
 

@@ -66,7 +66,8 @@ class PostForm extends SharpForm
                         $editorUpload
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
-                            ->setValidationRule(SharpFileValidation::make()->max('1mb'));
+                            ->setValidationRule(SharpFileValidation::make()->max('1mb'))
+                            ->setHasLegend();
                     })
                     ->setMaxLength(1000)
                     ->setHeight(300, 0)
