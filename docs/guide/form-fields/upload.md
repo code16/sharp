@@ -21,21 +21,18 @@ This `tmp_dir` path is relative to the `uploads.tmp_disk` filesystem defined.
 
 ## Field Configuration
 
-### `setMaxFileSize(float $sizeInMB)`
-
-Max file size allowed.
-
 ### `setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
 
 Allow the user to crop or rotate the visual, after the upload.  
 The argument `$transformKeepOriginal` overrides the following config which is `true` by default.
+
 ```php
 // config/sharp.php
-
 'uploads' => [
     'transform_keep_original_image' => true,
 ]
 ```
+
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
 
 ### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
@@ -59,14 +56,6 @@ You can use the `{id}` special placeholder to add the instance id in the path, w
 For instance:
 `$field->setStorageBasePath('/users/{id}/avatar')`
 
-### `setFileFilter($fileFilter)`
-
-Set the allowed file extensions. You can pass either an array or a comma-separated list.
-
-### `setFileFilterImages()`
-
-Just a `setFileFilter(['.jpg','.jpeg','.gif','.png'])` shorthand.
-
 ### `setCompactThumbnail(bool $compactThumbnail = true)`
 
 If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
@@ -82,6 +71,69 @@ If true, some optimization will be applied on the uploaded images (in order to r
 - [cwebp](https://developers.google.com/speed/webp/docs/precompiled)
 
 Check their documentation for [more instructions](https://github.com/spatie/image-optimizer#optimization-tools) on how to install.
+
+## Validation
+
+To handle validation, you should use the `setValidationRule()` method, which relies on the standard Laravel File Rule validation system. Here's an example:
+
+```php
+use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
+// [...]
+
+class MyForm extends SharpForm
+{
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormUploadField::make('report')
+                    ->setValidationRule(
+                        SharpFileValidation::make()
+                            ->extensions(['pdf', 'zip'])
+                            ->max('5mb')
+                    )
+                    // [...]
+            )
+            ->addField(
+                // [...]
+            );
+    }    
+)
+```
+
+The `SharpFileValidation` mimics Laravel's `File` validation rule (see [Laravel documentation](https://laravel.com/docs/10.x/validation#validating-files)).
+
+If you want to force images only, and act on the image dimensions, you can use the `SharpImageValidation` class instead:
+
+```php
+use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Rules\Dimensions;
+// [...]
+
+class MyForm extends SharpForm
+{
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormUploadField::make('cover')
+                    ->setValidationRule(
+                        SharpImageValidation::make()
+                            ->dimensions(
+                                Rule::dimensions()
+                                    ->maxWidth(1000)
+                                    ->maxHeight(1000)
+                            )
+                            ->max('2mb')
+                    )
+                    // [...]
+            )
+            ->addField(
+                // [...]
+            );
+    }    
+)
+```
 
 ## Formatter
 
