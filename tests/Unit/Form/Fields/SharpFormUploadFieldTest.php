@@ -19,9 +19,9 @@ it('sets only default values', function () {
             'storageDisk' => 'local',
             'shouldOptimizeImage' => false,
             'validation' => [
-                'rule' => ['file'],
+                'rule' => ['file', 'max:'.config('sharp.uploads.max_file_size') * 1024],
                 'allowedExtensions' => [],
-                'maximumFileSize' => null,
+                'maximumFileSize' => config('sharp.uploads.max_file_size') * 1024,
             ],
         ]);
 });
@@ -98,25 +98,21 @@ it('allows to define shouldOptimizeImage', function () {
 
 it('allows to define a custom validation rule on a file', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setValidationRule(
-            SharpFileValidation::make()
-                ->max('3mb')
-        );
+        ->setMaxFileSize(3)
+        ->setFileFilter('zip');
 
     expect($formField->toArray()['validation']['rule'])
-        ->toEqual(['file', 'max:3000']);
+        ->toEqual(['file', 'extensions:.zip', 'max:3072']);
 });
 
 it('allows to define a custom validation rule on an image file', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setValidationRule(
-            SharpImageValidation::make()
-                ->dimensions(Rule::dimensions()->maxWidth(100)->maxHeight(100))
-                ->max('3mb')
-        );
+        ->setIsImage()
+        ->setMaxFileSize(3)
+        ->setImageDimensions(Rule::dimensions()->maxWidth(100)->maxHeight(100));
 
     expect($formField->toArray()['validation']['rule'])
-        ->toEqual(['file', 'max:3000', 'image', 'dimensions:max_width=100,max_height=100']);
+        ->toEqual(['file', 'max:3072', 'image', 'dimensions:max_width=100,max_height=100']);
 });
 
 it('allows to define maxFileSize in the deprecated way', function () {
@@ -127,22 +123,11 @@ it('allows to define maxFileSize in the deprecated way', function () {
         ->toEqual(['file', 'max:512']);
 });
 
-it('allows to define fileFilter in the deprecated way', function () {
-    $formField = SharpFormUploadField::make('file')
-        ->setFileFilter('jpg');
-
-    expect($formField->toArray()['validation']['rule'])
-        ->toEqual(['file', 'extensions:.jpg']);
-
-    $formField = SharpFormUploadField::make('file')
-        ->setFileFilter('jpg, gif');
-
-    expect($formField->toArray()['validation']['rule'])
-        ->toEqual(['file', 'extensions:.jpg,.gif']);
-
-    $formField = SharpFormUploadField::make('file')
-        ->setFileFilter(['jpg', 'gif ']);
-
-    expect($formField->toArray()['validation']['rule'])
-        ->toEqual(['file', 'extensions:.jpg,.gif']);
+it('allows to define fileFilter', function () {
+    expect(SharpFormUploadField::make('file')->setFileFilter('jpg')->toArray()['validation']['rule'])
+        ->toContain('extensions:.jpg')
+        ->and(SharpFormUploadField::make('file')->setFileFilter('jpg, gif')->toArray()['validation']['rule'])
+        ->toContain('extensions:.jpg,.gif')
+        ->and(SharpFormUploadField::make('file')->setFileFilter(['jpg', 'gif '])->toArray()['validation']['rule'])
+        ->toContain('extensions:.jpg,.gif');
 });

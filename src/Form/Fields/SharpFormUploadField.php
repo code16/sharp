@@ -6,6 +6,8 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
+use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Rules\Dimensions;
 
 class SharpFormUploadField extends SharpFormField implements IsUploadField
 {
@@ -17,39 +19,17 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     protected string|Closure $storageBasePath = 'data';
     protected bool $transformable = true;
     protected ?bool $transformKeepOriginal = null;
+    protected bool $isImage = false;
+    protected ?Dimensions $imageDimensions = null;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
-    protected ?SharpFileValidation $validationRule = null;
-
-    /** @deprecated */
     protected ?float $maxFileSize = null;
-    /** @deprecated */
-    protected string|array|null $fileFilter = null;
+    protected ?float $minFileSize = null;
+    protected array $fileFilter = [];
 
     public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, app(UploadFormatter::class));
-    }
-
-    /** @deprecated use setValidationRule() instead */
-    public function setMaxFileSize(float $maxFileSizeInMB): self
-    {
-        $this->maxFileSize = $maxFileSizeInMB;
-
-        return $this;
-    }
-
-    /** @deprecated */
-    public function maxFileSize(): ?float
-    {
-        return $this->maxFileSize;
-    }
-
-    public function setValidationRule(SharpFileValidation $validationRule): self
-    {
-        $this->validationRule = $validationRule;
-
-        return $this;
     }
 
     public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
@@ -64,6 +44,38 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             $this->cropRatio = null;
             $this->transformableFileTypes = null;
         }
+
+        return $this;
+    }
+
+    public function setMaxFileSize(float $maxFileSizeInMB): self
+    {
+        $this->maxFileSize = $maxFileSizeInMB;
+
+        return $this;
+    }
+
+    public function setMinFileSize(float $minFileSizeInMB): self
+    {
+        $this->minFileSize = $minFileSizeInMB;
+
+        return $this;
+    }
+
+    public function setIsImage(bool $isImage = true): self
+    {
+        $this->isImage = $isImage;
+
+        if($this->fileFilter === null) {
+            $this->setFileFilterImages();
+        }
+
+        return $this;
+    }
+
+    public function setImageDimensions(Dimensions $dimensions): self
+    {
+        $this->imageDimensions = $dimensions;
 
         return $this;
     }
@@ -132,7 +144,6 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    /** @deprecated use setValidationRule() instead */
     public function setFileFilter(string|array $fileFilter): self
     {
         $this->fileFilter = $this->formatFileExtension($fileFilter);
@@ -140,10 +151,10 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    /** @deprecated use setValidationRule() instead */
     public function setFileFilterImages(): self
     {
-        $this->setFileFilter(['.jpg', '.jpeg', '.gif', '.png']);
+        /** @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage() */
+        $this->setFileFilter(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']);
 
         return $this;
     }
@@ -163,12 +174,6 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this->cropRatio;
     }
 
-    /** @deprecated */
-    public function fileFilter(): ?array
-    {
-        return $this->fileFilter;
-    }
-
     private function formatFileExtension(string|array $fileFilter): array
     {
         if (! is_array($fileFilter)) {
@@ -176,14 +181,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         }
 
         return collect($fileFilter)
-            ->map(function ($filter) {
-                $filter = trim($filter);
-                if (! str_starts_with($filter, '.')) {
-                    $filter = ".$filter";
-                }
-
-                return $filter;
-            })
+            ->map(fn ($filter) => str($filter)->trim()->start('.')->value())
             ->all();
     }
 
@@ -218,45 +216,25 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
     private function buildValidation(): array
     {
-        // Backward compatibility
-        $rule = $this->validationRule ?: SharpFileValidation::make()
+        $validationRule = $this->isImage
+            ? SharpImageValidation::make()
+            : SharpFileValidation::make();
+
+        $maxFileSizeInMB = $this->maxFileSize ?: config('sharp.uploads.max_file_size');
+
+        $validationRule
+            ->max($maxFileSizeInMB * 1024)
             ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
-            ->when($this->maxFileSize, fn (SharpFileValidation $file) => $file->max($this->maxFileSize * 1024));
+            ->when($this->minFileSize, fn (SharpFileValidation $file) => $file->min($this->minFileSize * 1024))
+            ->when(
+                $validationRule instanceof SharpImageValidation && $this->imageDimensions,
+                fn (SharpImageValidation $file) => $file->dimensions($this->imageDimensions)
+            );
 
         return [
-            'rule' => $rule->toArray(),
-            'allowedExtensions' => $this->getAllowedExtensions($rule->toArray()),
-            'maximumFileSize' => $this->getMaximumFileSize($rule->toArray()),
+            'rule' => $validationRule->toArray(),
+            'allowedExtensions' => $this->fileFilter,
+            'maximumFileSize' => $maxFileSizeInMB * 1024,
         ];
-    }
-
-    private function getMaximumFileSize(array $rules): ?int
-    {
-        $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'max:'));
-
-        return $rule ? (int) str_replace('max:', '', $rule) : null;
-    }
-
-    private function getAllowedExtensions(array $rules): array
-    {
-        $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'extensions:'));
-
-        $allowedExtensions = $rule
-            ? str($rule)
-                ->remove('extensions:')
-                ->explode(',')
-                ->filter()
-                ->map(fn ($ext) => str($ext)->start('.')->value())
-                ->toArray()
-            : [];
-
-        /**
-         * @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage()
-         */
-        if (in_array('image', $rules) && empty($allowedExtensions)) {
-            $allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp'];
-        }
-
-        return $allowedExtensions;
     }
 }

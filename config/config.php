@@ -80,6 +80,8 @@ return [
 
         'transform_keep_original_image' => true,
 
+        'max_file_size' => env('SHARP_UPLOADS_MAX_FILE_SIZE_IN_MB', 2),
+
         // Optional SharpUploadModel implementation class name
         // 'model_class' => null,
     ],
