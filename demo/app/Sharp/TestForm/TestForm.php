@@ -3,6 +3,7 @@
 namespace App\Sharp\TestForm;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
@@ -159,12 +160,15 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SUP,
                     ])
+                    ->allowUploads(function(SharpFormEditorUpload $upload) {
+                        $upload
+                            ->setCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data');
+                    })
 //                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
-                    ->setCropRatio('1:1')
                     ->setHeight(350)
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data'),
             )
             ->addField(
                 SharpFormEditorField::make('wysiwyg')

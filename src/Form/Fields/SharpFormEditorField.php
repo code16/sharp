@@ -6,7 +6,7 @@ use Closure;
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
@@ -158,7 +158,7 @@ class SharpFormEditorField extends SharpFormField
             return [];
         }
 
-        $form = new SharpFormEditorUploadForm($this->uploadsConfig);
+        $form = new FormEditorUploadForm($this->uploadsConfig);
 
         return [
             'fields' => $form->fields(),

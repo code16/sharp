@@ -5,7 +5,7 @@ namespace Code16\Sharp\Http\Controllers\Api;
 use Code16\Sharp\Data\Form\Fields\FormUploadFieldData;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Illuminate\Routing\Controller;
 
 class ApiFormEditorUploadFormController extends Controller
@@ -14,7 +14,7 @@ class ApiFormEditorUploadFormController extends Controller
     {
         $uploadFieldData = FormUploadFieldData::from(request()->input('fields.file'));
 
-        $form = new SharpFormEditorUploadForm(
+        $form = new FormEditorUploadForm(
             SharpFormEditorUpload::make('file')
                 ->setStorageBasePath($uploadFieldData->storageBasePath)
                 ->setStorageDisk($uploadFieldData->storageDisk)

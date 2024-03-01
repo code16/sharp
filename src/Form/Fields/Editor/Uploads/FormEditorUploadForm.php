@@ -13,7 +13,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 /**
  * @internal
  */
-class SharpFormEditorUploadForm
+class FormEditorUploadForm
 {
     use HandleFormFields;
     use HasModalFormLayout;
