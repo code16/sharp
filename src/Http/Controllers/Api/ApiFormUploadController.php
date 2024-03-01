@@ -15,7 +15,7 @@ class ApiFormUploadController extends Controller
         $this->validate(request(), [
             'file' => [
                 'required',
-                ...request()->input('validation_rule') ?: ['file']
+                ...request()->input('validation_rule') ?: ['file'],
             ],
         ]);
 
