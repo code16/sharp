@@ -39,9 +39,9 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 Set the destination base storage path.
 
-You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the “Delayed creation” section, at the end of this page if you do.**
-
-For instance: `$field->setStorageBasePath('/users/{id}/avatar')`
+::: warning
+If you want to use a `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/avatar')`), you must be the Eloquent case, leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
+:::
 
 ### `setAllowedExtensions(string|array $allowedExtensions)`
 

@@ -597,10 +597,11 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
                 )
                 ->addField(
                     SharpFormEditorField::make('bio')
-                        ->allowUploads(function (SharpFormEditorUpload $upload) {
-                            $upload->setStorageBasePath('test/{id}')
-                                ->setStorageDisk('local');
-                        })
+                        ->allowUploads(
+                            SharpFormEditorUpload::make()
+                                ->setStorageBasePath('test/{id}')
+                                ->setStorageDisk('local')
+                        )
                 );
         }
 

@@ -9,7 +9,7 @@ class SharpFormEditorUpload extends SharpFormUploadField
 {
     protected bool $hasLegend = false;
 
-    public static function make(string $key): self
+    public static function make(?string $key = 'file'): self
     {
         return new static($key, 'upload', app(UploadFormatter::class));
     }

@@ -159,14 +159,13 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SUP,
                     ])
-                    ->allowUploads(function (SharpFormEditorUpload $upload) {
-                        $upload
-                            ->setCropRatio('1:1')
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
                             ->setStorageDisk('local')
-                            ->setStorageBasePath('data');
-                    })
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
+                            ->setStorageBasePath('data')
+                    )
                     ->setHeight(350)
             )
             ->addField(

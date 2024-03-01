@@ -130,14 +130,9 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @param  Closure(SharpFormEditorUpload):mixed  $callback
-     */
-    public function allowUploads(Closure $callback): self
+    public function allowUploads(SharpFormEditorUpload $formEditorUpload): self
     {
-        $this->uploadsConfig = SharpFormEditorUpload::make('file');
-
-        $callback($this->uploadsConfig);
+        $this->uploadsConfig = $formEditorUpload;
 
         return $this;
     }

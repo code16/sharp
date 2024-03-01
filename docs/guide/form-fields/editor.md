@@ -82,29 +82,26 @@ Display a character count in the status bar. Default is false.
 
 The Editor field can embed images or regular files. To use this feature, you must first allow the field to handle uploads:
 
-### `allowUploads(Closure(SharpFormEditorEmbedUpload $upload) $callback)`
+### `allowUploads(SharpFormEditorEmbedUpload $formEditorUpload)`
 
 This method allows the user to upload files and images in the editor:
 
 ```php
 $formFields->addField(
     SharpFormEditorField::make('bio')
-        ->allowUploads(function (SharpFormEditorEmbedUpload $upload) {
-            $upload->setStorageBasePath('posts/embeds')
-                ->setStorageDisk('local');
-        })
+        ->allowUploads(
+            SharpFormEditorEmbedUpload::make()
+                ->setStorageBasePath('posts/embeds')
+                ->setStorageDisk('local')
+        )
 );
 ```
 
-Here is the list of available methods on the `$upload` object:
+The `SharpFormEditorEmbedUpload` can be configured with the same API as the `SharpFormUploadField`: `setMaxFileSize()`, `setImageOnly()`, `setAllowedExtensions()`, ... ([see full documentation](../form-fields/upload.md))
 
-### `setMaxFileSize(float $sizeInMB)`
+### A note on `setImageTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
 
-Max file size allowed.
-
-### `setTransformable(bool $transformable = true, bool $transformKeepOriginal = true)`
-
-Allow the user to crop or rotate a visual, after the upload.  
+As for a regular upload field, you can allow the user to crop or rotate the visual, after the upload.  
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored directly in the `<x-sharp-image/>` tag. For instance:
 
 ```blade
@@ -117,34 +114,6 @@ With `$transformKeepOriginal` set to true, the original file will remain unchang
 ```
 
 Then at render Sharp will take care of that for the thumbnail (see *Display embedded files in the public site* below).
-
-### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
-
-Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
-
-When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
-
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it would break animation.
-
-### `setStorageDisk(string $storageDisk)`
-
-Set the destination storage disk (as configured in Laravel’s  `config/filesystem.php` config file).
-
-### `setStorageBasePath(string $storageBasePath)`
-
-Set the destination base storage path. 
-
-::: warning
-If you want to use the `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/markdown')`), you must be the Eloquent case, leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
-:::
-
-### `setFileFilter($fileFilter)`
-
-Set the allowed file extensions. You can pass either an array, or a comma-separated list.
-
-### `setFileFilterImages()`
-
-Just a `setFileFilter(['.jpg','.jpeg','.gif','.png'])` shorthand.
 
 ### Store images and files
 

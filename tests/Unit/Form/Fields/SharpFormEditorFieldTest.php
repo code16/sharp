@@ -52,14 +52,14 @@ it('allows to define height with maxHeight', function () {
 
 it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
-        ->allowUploads(function (SharpFormEditorUpload $upload) {
-            $upload
+        ->allowUploads(
+            SharpFormEditorUpload::make()
                 ->setImageOnly()
                 ->setMaxFileSize(5)
                 ->setAllowedExtensions(['jpg', 'gif'])
                 ->setImageCropRatio('16:9')
-                ->setHasLegend();
-        });
+                ->setHasLegend()
+        );
 
     expect($formField->toArray())
         ->toHaveKey('uploads.fields.file.validation.rule', [
@@ -71,11 +71,11 @@ it('allows to allow uploads with configuration', function () {
         ->toHaveKey('uploads.fields.legend');
 
     $formField = SharpFormEditorField::make('text')
-        ->allowUploads(function (SharpFormEditorUpload $upload) {
-            $upload
+        ->allowUploads(
+            SharpFormEditorUpload::make()
                 ->setImageOnly()
-                ->setImageTransformable(false);
-        });
+                ->setImageTransformable(false)
+        );
 
     expect($formField->toArray())
         ->toHaveKey('uploads.fields.file.transformable', false);

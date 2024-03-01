@@ -60,13 +60,13 @@ class PostForm extends SharpForm
                         CodeEmbed::class,
                         TableOfContentsEmbed::class,
                     ])
-                    ->allowUploads(function (SharpFormEditorUpload $editorUpload) {
-                        $editorUpload
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
                             ->setMaxFileSize(1)
-                            ->setHasLegend();
-                    })
+                            ->setHasLegend()
+                    )
                     ->setMaxLength(1000)
                     ->setHeight(300, 0)
             )
