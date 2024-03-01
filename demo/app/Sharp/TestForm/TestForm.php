@@ -23,7 +23,6 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 class TestForm extends SharpSingleForm
 {
@@ -160,14 +159,13 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SUP,
                     ])
-                    ->allowUploads(function(SharpFormEditorUpload $upload) {
-                        $upload
-                            ->setCropRatio('1:1')
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
                             ->setStorageDisk('local')
-                            ->setStorageBasePath('data');
-                    })
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
+                            ->setStorageBasePath('data')
+                    )
                     ->setHeight(350)
             )
             ->addField(
@@ -237,11 +235,8 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
-                    ->setValidationRule(
-                        SharpImageValidation::make()
-                            ->max('5mb')
-                    )
-                    ->setCropRatio('1:1')
+                    ->setMaxFileSize(5)
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
             );

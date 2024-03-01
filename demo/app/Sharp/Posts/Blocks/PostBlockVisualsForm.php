@@ -9,7 +9,6 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 class PostBlockVisualsForm extends AbstractPostBlockForm
 {
@@ -33,10 +32,7 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                 ->allowBulkUploadForField('file')
                 ->addItemField(
                     SharpFormUploadField::make('file')
-                        ->setValidationRule(
-                            SharpImageValidation::make()
-                                ->max('1mb')
-                        )
+                        ->setMaxFileSize(1)
                         ->setStorageDisk('local')
                         ->setStorageBasePath(function () {
                             return sprintf(

@@ -31,10 +31,11 @@ it('can post a newly uploaded file in editor, create case', function () {
             $formFields
                 ->addField(
                     SharpFormEditorField::make('bio')
-                        ->allowUploads(function (SharpFormEditorUpload $upload) {
-                            $upload->setStorageBasePath('test/{id}')
-                                ->setStorageDisk('local');
-                        })
+                        ->allowUploads(
+                            SharpFormEditorUpload::make()
+                                ->setStorageBasePath('test/{id}')
+                                ->setStorageDisk('local')
+                        )
                 );
         }
 
@@ -96,10 +97,11 @@ it('can post a newly uploaded file in editor, update case', function () {
             $formFields
                 ->addField(
                     SharpFormEditorField::make('bio')
-                        ->allowUploads(function (SharpFormEditorUpload $upload) {
-                            $upload->setStorageBasePath('test/{id}')
-                                ->setStorageDisk('local');
-                        })
+                        ->allowUploads(
+                            SharpFormEditorUpload::make()
+                                ->setStorageBasePath('test/{id}')
+                                ->setStorageDisk('local')
+                        )
                 );
         }
 

@@ -88,11 +88,11 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         {
             $formFields->addField(
                 SharpFormEditorField::make('bio')
-                    ->allowUploads(function (SharpFormEditorUpload $upload) {
-                        $upload
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
                             ->setStorageDisk('local')
-                            ->setStorageBasePath('data/test');
-                    })
+                            ->setStorageBasePath('data/test')
+                    )
             );
         }
     });
@@ -220,17 +220,20 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
     {
         public function buildFormFields(FieldsContainer $formFields): void
         {
-            $formFields->addField(
-                SharpFormEditorField::make('bio')
-                    ->allowUploads(function (SharpFormEditorUpload $upload) {
-                        $upload
-                            ->setStorageDisk('local')
-                            ->setStorageBasePath('data/test');
-                    })
-            )->addField(SharpFormUploadField::make('file')
-                ->setStorageDisk('local')
-                ->setStorageBasePath('data/test')
-            );
+            $formFields
+                ->addField(
+                    SharpFormEditorField::make('bio')
+                        ->allowUploads(
+                            SharpFormEditorUpload::make()
+                                ->setStorageDisk('local')
+                                ->setStorageBasePath('data/test')
+                        )
+                )
+                ->addField(
+                    SharpFormUploadField::make('file')
+                        ->setStorageDisk('local')
+                        ->setStorageBasePath('data/test')
+                );
         }
     });
 
@@ -293,7 +296,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                     SharpFormUploadField::make('file')
                         ->setStorageDisk('local')
                         ->setStorageBasePath('data/test')
-                        ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
+                        ->setImageTransformable(transformKeepOriginal: $this->transformKeepOriginal)
                 );
         }
 
@@ -357,7 +360,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
                     SharpFormUploadField::make('file')
                         ->setStorageDisk('local')
                         ->setStorageBasePath('data/test')
-                        ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
+                        ->setImageTransformable(transformKeepOriginal: $this->transformKeepOriginal)
                 );
         }
     });

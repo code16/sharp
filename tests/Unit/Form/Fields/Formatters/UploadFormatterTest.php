@@ -58,7 +58,7 @@ it('allows to use a closure as storageBasePath', function () {
         ->setStorageBasePath(function () use (&$path) {
             return $path;
         })
-        ->setCropRatio('16:9')
+        ->setImageCropRatio('16:9')
         ->setStorageDisk('local');
 
     $path = '/some/updated/path';
@@ -72,7 +72,7 @@ it('allows to use a closure as storageBasePath', function () {
 it('returns full object after no change was made if configured', function () {
     $field = SharpFormUploadField::make('upload')
         ->setStorageDisk('local')
-        ->setTransformable()
+        ->setImageTransformable()
         ->setStorageBasePath('data/Test');
 
     $value = [
@@ -96,7 +96,7 @@ it('returns full object after no change was made if configured', function () {
 it('returns full object after only transformations if configured', function () {
     $field = SharpFormUploadField::make('upload')
         ->setStorageDisk('local')
-        ->setTransformable()
+        ->setImageTransformable()
         ->setStorageBasePath('data/Test');
 
     $value = [

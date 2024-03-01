@@ -18,14 +18,14 @@ it('can post a file and legend', function () {
         ->storeAs('tmp', 'image.jpg', ['disk' => 'local']);
 
     $editor = SharpFormEditorField::make('upload')
-        ->allowUploads(function (SharpFormEditorUpload $upload) {
-            $upload
+        ->allowUploads(
+            SharpFormEditorUpload::make()
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Posts/{id}')
-                ->shouldOptimizeImage()
-                ->setTransformable(true, false)
-                ->setHasLegend();
-        });
+                ->setImageOptimize()
+                ->setImageTransformable(true, false)
+                ->setHasLegend()
+        );
 
     $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [

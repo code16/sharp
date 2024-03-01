@@ -2,11 +2,10 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Closure;
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
@@ -130,19 +129,9 @@ class SharpFormEditorField extends SharpFormField
         return $this;
     }
 
-    /**
-     * @param  Closure(SharpFormEditorUpload):mixed  $callback
-     */
-    public function allowUploads(Closure $callback): self
+    public function allowUploads(SharpFormEditorUpload $formEditorUpload): self
     {
-        $this->uploadsConfig = SharpFormEditorUpload::make('file');
-        $this->uploadsConfig->setMaxFileSize(2);
-
-        if (! $this->uploadsConfig->fileFilter()) {
-            $this->uploadsConfig->setFileFilterImages();
-        }
-
-        $callback($this->uploadsConfig);
+        $this->uploadsConfig = $formEditorUpload;
 
         return $this;
     }

@@ -112,7 +112,7 @@ trait HandlesUploadedFilesInRequest
         $instanceId
     ): void {
         $wasUploaded = ($fileData['uploaded'] ?? false) && $filePath;
-        $wasTransformed = ($fileData['transformed'] ?? false) && $uploadField->isTransformOriginal();
+        $wasTransformed = ($fileData['transformed'] ?? false) && $uploadField->isImageTransformOriginal();
 
         if ($wasUploaded) {
             HandleUploadedFileJob::dispatch(
@@ -120,7 +120,7 @@ trait HandlesUploadedFilesInRequest
                 disk: $uploadField->storageDisk(),
                 filePath: $filePath,
                 instanceId: $instanceId,
-                shouldOptimizeImage: $uploadField->isShouldOptimizeImage(),
+                shouldOptimizeImage: $uploadField->isImageOptimize(),
                 transformFilters: $wasTransformed
                     ? $fileData['filters']
                     : null,
