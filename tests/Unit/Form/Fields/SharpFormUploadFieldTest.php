@@ -1,8 +1,6 @@
 <?php
 
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 use Illuminate\Validation\Rule;
 
 it('sets only default values', function () {
