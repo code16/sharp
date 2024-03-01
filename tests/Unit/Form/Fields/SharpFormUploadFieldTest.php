@@ -115,7 +115,7 @@ it('allows to define a custom validation rule on an image file', function () {
             'extensions:.jpg,.jpeg,.png,.gif,.bmp,.svg,.webp',
             'max:3072',
             'image',
-            'dimensions:max_width=100,max_height=100'
+            'dimensions:max_width=100,max_height=100',
         ]);
 });
 
