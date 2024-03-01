@@ -2,9 +2,9 @@ import { Node, type Range } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
-import { serializeUploadAttributeValue } from "@/embeds/utils/attributes";
+import { serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
-import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+import { ContentUploadManager } from "@/content/ContentUploadManager";
 import { Plugin } from "@tiptap/pm/state";
 import { Form } from "@/form/Form";
 
@@ -19,7 +19,7 @@ export type UploadNodeAttributes = {
 
 export type UploadOptions = {
     editorField: FormEditorFieldData,
-    uploadManager: UploadManager<Form>,
+    uploadManager: ContentUploadManager<Form>,
 }
 
 export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<UploadOptions>({

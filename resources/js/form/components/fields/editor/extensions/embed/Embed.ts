@@ -1,11 +1,11 @@
 import { AnyCommands, Node, type Range } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
-import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/embeds/utils/attributes";
+import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import EmbedNode from "./EmbedNode.vue";
 import { hyphenate } from "@/utils";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { EmbedData, FormData, FormUploadFieldValueData } from "@/types";
-import { EmbedManager } from "@/embeds/EmbedManager";
+import { ContentEmbedManager } from "@/content/ContentEmbedManager";
 import { UploadOptions } from "@/form/components/fields/editor/extensions/upload/Upload";
 
 export type EmbedNodeAttributes = {
@@ -17,7 +17,7 @@ export type EmbedNodeAttributes = {
 
 export type EmbedOptions = {
     embed: EmbedData | null,
-    embedManager: EmbedManager,
+    embedManager: ContentEmbedManager,
 }
 
 export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedOptions>({

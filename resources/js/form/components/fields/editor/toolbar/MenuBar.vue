@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { EmbedData, FormEditorFieldData, FormEditorToolbarButton } from "@/types";
-    import { FormFieldProps } from "@/form/components/types";
     import { Editor } from "@tiptap/vue-3";
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";
@@ -9,7 +8,8 @@
     import { computed } from "vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
-    import { EmbedManager } from "@/embeds/EmbedManager";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
+    import { FormFieldProps } from "@/form/types";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,

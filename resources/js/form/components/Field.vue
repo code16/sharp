@@ -20,7 +20,8 @@
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
     import { useParentForm } from "../useParentForm";
-    import { FormFieldProps } from "@/form/components/types";
+
+    import { FormFieldProps } from "@/form/types";
 
     const props = defineProps<FormFieldProps & {
         field: FormFieldData,

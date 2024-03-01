@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { Button } from "@/components/ui";
-    import EmbedRenderer from '@/embeds/components/EmbedRenderer.vue';
+    import EmbedRenderer from '@/content/components/EmbedRenderer.vue';
     import NodeRenderer from "../../NodeRenderer.vue";
     import EmbedFormModal from "./EmbedFormModal.vue";
     import { Form } from "@/form/Form";
@@ -9,7 +9,7 @@
     import { inject, nextTick, onUnmounted, ref } from "vue";
     import { useParentForm } from "@/form/useParentForm";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
-    import { EmbedManager } from "@/embeds/EmbedManager";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { EmbedData } from "@/types";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
@@ -17,7 +17,7 @@
     const modalVisible = ref(false);
     const embedForm = ref<Form>();
     const parentForm = useParentForm();
-    const embeds = inject<EmbedManager>('embeds');
+    const embeds = inject<ContentEmbedManager>('embeds');
 
 
     async function showFormModal() {

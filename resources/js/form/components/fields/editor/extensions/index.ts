@@ -215,5 +215,3 @@ export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
         .flat()
         .filter(extension => !!extension);
 }
-
-export * from './upload';

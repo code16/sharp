@@ -1,12 +1,9 @@
 <script setup lang="ts">
     import FieldLayout from "../FieldLayout.vue";
     import { ShowPictureFieldData } from "@/types";
-    import { ShowFieldProps } from "../types";
+    import { ShowFieldProps } from "../../types";
 
-    defineProps<ShowFieldProps & {
-        field: ShowPictureFieldData,
-        value: ShowPictureFieldData['value']
-    }>();
+    defineProps<ShowFieldProps<ShowPictureFieldData>>();
 </script>
 
 <template>

@@ -2,9 +2,11 @@ import { Form } from "@/form/Form";
 import { EmbedData, FormData } from "@/types";
 import { api } from "@/api";
 import { route } from "@/utils/url";
-import { parseAttributeValue } from "@/embeds/utils/attributes";
+import { parseAttributeValue } from "@/content/utils/attributes";
 import { hyphenate } from "@/utils";
 import { Show } from "@/show/Show";
+import { MaybeLocalizedContent } from "@/content/types";
+import { ContentManager } from "@/content/ContentManager";
 
 type ContentEmbed = {
     id: string,
@@ -14,7 +16,7 @@ type ContentEmbed = {
     value: EmbedData['value'],
 }
 
-export class EmbedManager<Root extends Form | Show> {
+export class ContentEmbedManager<Root extends Form | Show> extends ContentManager {
     contentEmbeds: { [id: string] : ContentEmbed } = {}
     embeds: { [embedKey:string]: EmbedData } = {};
     onEmbedsUpdated: Root extends Form ? (embeds: { [embedKey: string]: Array<EmbedData['value']> }) => any : null
@@ -23,12 +25,14 @@ export class EmbedManager<Root extends Form | Show> {
 
     constructor(
         root: Root,
-        embeds: EmbedManager<Root>['embeds'],
+        embeds: ContentEmbedManager<Root>['embeds'] | null,
         config: {
-            onEmbedsUpdated: EmbedManager<Root>['onEmbedsUpdated']
-        } = { onEmbedsUpdated: null }) {
+            onEmbedsUpdated: ContentEmbedManager<Root>['onEmbedsUpdated']
+        } = { onEmbedsUpdated: null }
+    ) {
+        super();
         this.root = root;
-        this.embeds = embeds;
+        this.embeds = embeds ?? {};
         this.onEmbedsUpdated = config.onEmbedsUpdated;
     }
 
@@ -46,31 +50,41 @@ export class EmbedManager<Root extends Form | Show> {
         return `${embed.key}-${this.uniqueId++}`;
     }
 
-    withEmbedUniqueId(content: string, toggle: boolean = true): string {
-        const parser = new DOMParser();
-        const document = parser.parseFromString(content, 'text/html');
+    withEmbedUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
+        if(Object.values(this.embeds).length) {
+            return content;
+        }
 
-        Object.values(this.embeds).forEach(embed => {
-            document.querySelectorAll(embed.tag).forEach(element => {
-                if(toggle) {
-                    element.setAttribute('data-unique-id', this.newId(embed));
-                } else {
-                    element.removeAttribute('data-unique-id');
-                }
+        return this.maybeLocalized(content, content => {
+            const parser = new DOMParser();
+            const document = parser.parseFromString(content, 'text/html');
+
+            Object.values(this.embeds).forEach(embed => {
+                document.querySelectorAll(embed.tag).forEach(element => {
+                    if(toggle) {
+                        element.setAttribute('data-unique-id', this.newId(embed));
+                    } else {
+                        element.removeAttribute('data-unique-id');
+                    }
+                });
             });
-        });
 
-        return document.body.innerHTML;
+            return document.body.innerHTML;
+        });
     }
 
     serializeContent(content: string): string {
+        if(Object.values(this.embeds).length) {
+            return content;
+        }
+
         return this.withEmbedUniqueId(content, false);
     }
 
-    async resolveEmbeds(content: string) {
+    async resolveContentEmbeds<Content extends MaybeLocalizedContent>(content: Content) {
         const { entityKey, instanceId } = this.root;
         const parser = new DOMParser();
-        const document = parser.parseFromString(content, 'text/html');
+        const document = parser.parseFromString(this.allContent(content), 'text/html');
 
         Object.values(this.embeds)
             .map(embed => {
@@ -115,6 +129,9 @@ export class EmbedManager<Root extends Form | Show> {
             });
     }
 
+    getEmbedConfig(id: string): EmbedData|null {
+        return this.contentEmbeds[id]?.embed;
+    }
 
     async getResolvedEmbed(id: string): Promise<EmbedData['value'] | undefined> {
         if(this.contentEmbeds[id]?.removed) {

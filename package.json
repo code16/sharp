@@ -94,7 +94,6 @@
     "vue-router": "^3.4.9",
     "vue-template-compiler": "^2.7.14",
     "vue2-animate": "^2.0.0",
-    "vue2-google-maps": "^0.10.7",
     "vue3-apexcharts": "^1.4.4",
     "vuedraggable": "^4.1.0",
     "vuejs-datepicker": "^0.9.16",

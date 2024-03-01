@@ -6,7 +6,7 @@
     import File from "./fields/File.vue";
     import List from "./fields/List.vue";
     import { isCustomField, resolveCustomField } from "@/utils/fields";
-    import { ShowFieldProps } from "./types";
+    import { ShowFieldProps } from "../types";
     import { ShowFieldData } from "@/types";
 
     defineProps<ShowFieldProps & {

@@ -11,8 +11,8 @@
     import { useParentForm } from "@/form/useParentForm";
     import {
         FormEditorUploadData,
-        UploadManager
-    } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+        ContentUploadManager
+    } from "@/content/ContentUploadManager";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
@@ -20,7 +20,7 @@
     const modalVisible = ref(false);
     const editorUploadForm = ref<Form>(null);
     const parentForm = useParentForm();
-    const uploads = inject<UploadManager<Form>>('uploads');
+    const uploads = inject<ContentUploadManager<Form>>('uploads');
     const uploadComponent = ref<InstanceType<typeof Upload>>();
 
     const error = computed(() => {

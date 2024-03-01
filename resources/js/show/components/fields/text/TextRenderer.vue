@@ -1,116 +1,42 @@
+<script setup lang="ts">
+    import { Component, ComponentOptions, computed } from "vue";
+    import File from "@/show/components/fields/text/nodes/File.vue";
+    import Html from "@/show/components/fields/text/nodes/Html.vue";
+    import { ShowFieldProps } from "@/show/types";
+    import { ShowTextFieldData } from "@/types";
+    import Embed from "@/show/components/fields/text/nodes/Embed.vue";
+
+    const props = defineProps<ShowFieldProps<ShowTextFieldData> & {
+        content: string,
+    }>();
+
+    const formattedContent = computed(() => {
+        const dom = document.createElement('template');
+        dom.innerHTML = props.content;
+        dom.content.querySelectorAll('[data-html-content]').forEach(htmlNode => {
+            const component = document.createElement('html-content');
+            component.setAttribute('content', htmlNode.innerHTML.trim());
+            dom.content.insertBefore(component, htmlNode);
+            dom.content.removeChild(htmlNode);
+        });
+        return dom.innerHTML;
+    })
+
+    const component = computed<ComponentOptions>(() => ({
+        template: `<div>${formattedContent.value}</div>`,
+        components: {
+            'x-sharp-file': File,
+            'x-sharp-image': File,
+            'html-content': Html,
+            ...Object.fromEntries(
+                Object.entries(props.field.embeds ?? {})
+                    .map(([embedKey, embed]) => [embed.tag, Embed])
+            ),
+        },
+    }));
+</script>
+
 <template>
-    <component :is="component"/>
+    <component :is="component" />
 </template>
 
-<script>
-    import { createEmbedComponent } from "./nodes/embed";
-    import File from "./nodes/File.vue";
-    import Html from "./nodes/Html.vue";
-    import { api } from "@/api";
-
-    export default {
-        props: {
-            content: String,
-            embeds: Object,
-            entityKey: String,
-            instanceId: String,
-        },
-        provide() {
-            return {
-                state: this.state,
-            }
-        },
-        data() {
-            return {
-                state: {
-                    files: [],
-                    embeds: {},
-                },
-            }
-        },
-        watch: {
-            content: 'handleContentChanged',
-        },
-        computed: {
-            component() {
-                return {
-                    template: `
-                        <div>${this.formattedContent}</div>`,
-                    components: {
-                        'x-sharp-file': File,
-                        'x-sharp-image': File,
-                        'html-content': Html,
-                        ...Object.values(this.embeds ?? {}).reduce((res, embedOptions) => ({
-                            ...res,
-                            [embedOptions.tag]: createEmbedComponent(embedOptions),
-                        }), {}),
-                    },
-                }
-            },
-            formattedContent() {
-                const dom = document.createElement('template');
-                dom.innerHTML = this.content;
-                dom.content.querySelectorAll('[data-html-content]').forEach(htmlNode => {
-                    const component = document.createElement('html-content');
-                    component.setAttribute('content', htmlNode.innerHTML.trim());
-                    dom.content.insertBefore(component, htmlNode);
-                    dom.content.removeChild(htmlNode);
-                });
-                return dom.innerHTML;
-            },
-        },
-        methods: {
-            async init() {
-                const entityKey = this.entityKey;
-                const instanceId = this.instanceId;
-                const files = this.state.files;
-
-                if (files.length > 0) {
-                    this.state.files = await api.post(
-                        route('code16.sharp.api.files.show', { entityKey, instanceId }),
-                        { files }
-                    )
-                        .then(response => response.data.files);
-                }
-
-                Object.entries(this.state.embeds)
-                    .filter(([embedKey, embeds]) => embeds.length > 0)
-                    .forEach(async ([embedKey, embeds]) => {
-                        const resolved = await api
-                            .post(
-                                instanceId
-                                    ? route('code16.sharp.api.embed.instance.show', { embedKey, entityKey, instanceId })
-                                    : route('code16.sharp.api.embed.show', { embedKey, entityKey }),
-                                { embeds }
-                            )
-                            .then(response => response.data.embeds);
-
-                        this.state.embeds = {
-                            ...this.state.embeds,
-                            [embedKey]: resolved,
-                        }
-                    });
-            },
-            initState() {
-                this.state.files = [];
-                this.state.embeds = Object.fromEntries(
-                    Object.entries(this.embeds ?? {}).map(([embedKey]) => [
-                        embedKey,
-                        []
-                    ])
-                );
-            },
-            async handleContentChanged() {
-                this.initState();
-                await this.$nextTick();
-                await this.init();
-            },
-        },
-        created() {
-            this.initState()
-        },
-        mounted() {
-            this.init();
-        },
-    }
-</script>

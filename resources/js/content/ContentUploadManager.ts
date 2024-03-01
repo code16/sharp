@@ -1,11 +1,11 @@
 import { api } from "@/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
-import { EmbedData, FormEditorFieldData, FormUploadFieldValueData } from "@/types";
-import { filesEquals } from "@/utils/upload";
-import { parseAttributeValue } from "@/embeds/utils/attributes";
-import { hyphenate } from "@/utils";
+import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
+import { parseAttributeValue } from "@/content/utils/attributes";
 import { Show } from "@/show/Show";
+import { ContentManager } from "@/content/ContentManager";
+import { MaybeLocalizedContent } from "@/content/types";
 
 export type FormEditorUploadData = {
     file: FormUploadFieldValueData,
@@ -19,7 +19,7 @@ type ContentUpload = {
     value: FormEditorUploadData,
 }
 
-export class UploadManager<Root extends Form | Show> {
+export class ContentUploadManager<Root extends Form | Show> extends ContentManager {
     contentUploads: { [id:string]: ContentUpload } = {};
     root: Form | Show;
     onFilesUpdated: Root extends Form ? (files: FormUploadFieldValueData[]) => any : null;
@@ -29,10 +29,11 @@ export class UploadManager<Root extends Form | Show> {
     constructor(
         root: Root,
         config: {
-            editorField: UploadManager<Root>['editorField'],
-            onFilesUpdated: UploadManager<Root>['onFilesUpdated'],
+            editorField: ContentUploadManager<Root>['editorField'],
+            onFilesUpdated: ContentUploadManager<Root>['onFilesUpdated'],
         } = { editorField: null, onFilesUpdated: null }
     ) {
+        super();
         this.root = root;
         this.editorField = config.editorField;
         this.onFilesUpdated = config.onFilesUpdated;
@@ -48,29 +49,39 @@ export class UploadManager<Root extends Form | Show> {
         return `${this.uniqueId++}`;
     }
 
-    withUploadUniqueId(content: string, toggle: boolean = true): string {
-        const parser = new DOMParser();
-        const document = parser.parseFromString(content, 'text/html');
+    withUploadUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
+        if(!this.editorField.uploads) {
+            return content;
+        }
 
-        document.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
-            if(toggle) {
-                element.setAttribute('data-unique-id', this.newId());
-            } else {
-                element.removeAttribute('data-unique-id');
-            }
+        return this.maybeLocalized(content, content => {
+            const parser = new DOMParser();
+            const document = parser.parseFromString(content, 'text/html');
+
+            document.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
+                if(toggle) {
+                    element.setAttribute('data-unique-id', this.newId());
+                } else {
+                    element.removeAttribute('data-unique-id');
+                }
+            });
+
+            return document.body.innerHTML;
         });
-
-        return document.body.innerHTML;
     }
 
     serializeContent(content: string): string {
+        if(!this.editorField.uploads) {
+            return content;
+        }
+
         return this.withUploadUniqueId(content, false);
     }
 
-    async resolveUploads(content: string) {
+    async resolveContentUploads<Content extends MaybeLocalizedContent>(content: Content) {
         const { entityKey, instanceId } = this.root;
         const parser = new DOMParser();
-        const document = parser.parseFromString(content, 'text/html');
+        const document = parser.parseFromString(this.allContent(content), 'text/html');
 
         const contentUploads = [...document.querySelectorAll('x-sharp-file,x-sharp-image')]
             .map(element => ({

@@ -1,14 +1,14 @@
-import { FormFieldProps } from "@/form/components/types";
 import { FormEditorFieldData } from "@/types";
-import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+import { ContentUploadManager } from "@/content/ContentUploadManager";
 import { provide } from "vue";
 import { Extension } from "@tiptap/core";
 import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
 import { Form } from "@/form/Form";
+import { FormFieldProps } from "@/form/types";
 
 export function useUploads(
     props: FormFieldProps<FormEditorFieldData>,
-    uploadManager: UploadManager<Form>,
+    uploadManager: ContentUploadManager<Form>,
     content: string,
 ) {
     if(!props.field.uploads) {
@@ -19,7 +19,7 @@ export function useUploads(
 
     const updatedContent = uploadManager.withUploadUniqueId(content);
 
-    uploadManager.resolveUploads(updatedContent);
+    uploadManager.resolveContentUploads(updatedContent);
 
     return {
         extensions: [

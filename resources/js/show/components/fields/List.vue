@@ -4,16 +4,12 @@
     import { LayoutFieldData, ShowListFieldData } from "@/types";
     import { UnknownField } from '@/components';
     import FieldLayout from "../FieldLayout.vue";
-    import { ShowFieldProps } from "../types";
+    import { ShowFieldProps } from "../../types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
 
-    defineProps<ShowFieldProps & {
-        field: ShowListFieldData,
-        value: ShowListFieldData['value'],
-        layout: LayoutFieldData,
-    }>()
+    defineProps<ShowFieldProps<ShowListFieldData>>();
 </script>
 
 <template>
@@ -23,19 +19,19 @@
                 <template v-for="item in value">
                     <div class="px-4 py-2">
                         <FieldGrid class="gap-x-4 gap-y-4">
-                            <template v-for="row in layout.item">
+                            <template v-for="row in fieldLayout.item">
                                 <FieldGridRow>
-                                    <template v-for="fieldLayout in row">
-                                        <FieldGridColumn :layout="fieldLayout">
-                                            <template v-if="field.itemFields?.[fieldLayout.key]">
+                                    <template v-for="itemFieldLayout in row">
+                                        <FieldGridColumn :layout="itemFieldLayout">
+                                            <template v-if="field.itemFields?.[itemFieldLayout.key]">
                                                 <ShowField
                                                     v-bind="$props"
-                                                    :field="field.itemFields?.[fieldLayout.key]"
-                                                    :value="item[fieldLayout.key]"
+                                                    :field="field.itemFields?.[itemFieldLayout.key]"
+                                                    :value="item[itemFieldLayout.key]"
                                                 />
                                             </template>
                                             <template v-else>
-                                                <UnknownField :name="fieldLayout.key" />
+                                                <UnknownField :name="itemFieldLayout.key" />
                                             </template>
                                         </FieldGridColumn>
                                     </template>

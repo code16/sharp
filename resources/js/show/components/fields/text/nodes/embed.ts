@@ -1,5 +1,5 @@
-import { parseAttributeValue } from "@/embeds/utils/attributes";
-import EmbedRenderer from '@/embeds/components/EmbedRenderer.vue';
+import { parseAttributeValue } from "@/content/utils/attributes";
+import EmbedRenderer from '@/content/components/EmbedRenderer.vue';
 import { EmbedData } from "@/types";
 
 export function createEmbedComponent(embed: EmbedData) {
@@ -53,7 +53,6 @@ export function createEmbedComponent(embed: EmbedData) {
         created() {
             this.index = this.state.embeds[embed.key].length;
             this.state.embeds[embed.key].push(this.embedData);
-
             // ignoreVueElement(this.embedOptions.tag);
         },
     }

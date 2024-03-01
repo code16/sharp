@@ -23,8 +23,6 @@ it('sets only default values', function () {
                 SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::A,
             ],
-            'uploads' => [],
-            'embeds' => [],
             'markdown' => false,
             'inline' => false,
         ]);

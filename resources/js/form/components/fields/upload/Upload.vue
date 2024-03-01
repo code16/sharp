@@ -20,7 +20,8 @@
     import { useParentForm } from "../../../useParentForm";
     import UploadDropText from "./UploadDropText.vue";
     import { getCsrfToken } from "@/utils/request";
-    import { FormFieldProps } from "@/form/components/types";
+
+    import { FormFieldProps } from "@/form/types";
 
     const props = defineProps<FormFieldProps<FormUploadFieldData> & {
         value: FormUploadFieldData['value'] & { file?: File } | null,

@@ -2,12 +2,10 @@
     import { __ } from "@/utils/i18n";
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
-    import { FormFieldProps } from "@/form/components/types";
     import { ref, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
-    import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
     import MenuBar from "./toolbar/MenuBar.vue";
     import { normalizeText } from "@/form/util/text";
     import { useLocalizedEditor } from "@/form/components/fields/editor/useLocalizedEditor";
@@ -18,11 +16,12 @@
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
     import { getDefaultExtensions } from "@/form/components/fields/editor/extensions";
     import { useEmbeds } from "@/form/components/fields/editor/extensions/embed/useEmbeds";
-    import { EmbedManager } from "@/embeds/EmbedManager";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { useUploads } from "@/form/components/fields/editor/extensions/upload/useUploads";
-    import { UploadManager } from "@/form/components/fields/editor/extensions/upload/UploadManager";
+    import { ContentUploadManager } from "@/content/ContentUploadManager";
     import { Serializable } from "@/form/Serializable";
     import { Form } from "@/form/Form";
+    import { FormFieldProps } from "@/form/types";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -31,7 +30,7 @@
 
     const form = useParentForm();
     const header = ref<HTMLElement>();
-    const services: { embeds: EmbedManager<Form>, uploads: UploadManager<Form> } = {};
+    const services: { embeds: ContentEmbedManager<Form>, uploads: ContentUploadManager<Form> } = {};
 
     const editor = useLocalizedEditor(
         props,
@@ -43,7 +42,7 @@
 
             const { extensions: uploadExtensions } = useUploads(
                 props,
-                services.uploads ??= new UploadManager(form, {
+                services.uploads ??= new ContentUploadManager(form, {
                     editorField: props.field,
                     onFilesUpdated(files) {
                         emit('input', { ...props.value, files });
@@ -53,7 +52,7 @@
             )
             const { extensions: embedExtensions } = useEmbeds(
                 props,
-                services.embeds ??= new EmbedManager(form, props.field.embeds, {
+                services.embeds ??= new ContentEmbedManager(form, props.field.embeds, {
                     onEmbedsUpdated(embeds) {
                         emit('input', { ...props.value, embeds });
                     }
@@ -165,12 +164,6 @@
             </template>
 
             <EditorContent :editor="editor" :key="locale ?? 'editor'" />
-
-            <template v-if="editor && !field.readOnly">
-                <template v-if="field.embeds.upload">
-                    <UploadFileInput :editor="editor" />
-                </template>
-            </template>
 
             <template v-if="editor && field.showCharacterCount">
                 <div class="card-footer fs-8 text-muted bg-white">

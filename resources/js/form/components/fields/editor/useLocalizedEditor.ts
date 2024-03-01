@@ -1,8 +1,8 @@
 import { computed, ComputedRef, Ref } from "vue";
 import { Editor } from "@tiptap/vue-3";
 import { FormEditorFieldData } from "@/types";
-import { FormFieldProps } from "@/form/components/types";
 import { useParentForm } from "@/form/useParentForm";
+import { FormFieldProps } from "@/form/types";
 
 
 export function useLocalizedEditor(

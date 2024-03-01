@@ -152,10 +152,10 @@ class SharpFormEditorField extends SharpFormField
         return $this->uploadsConfig;
     }
 
-    protected function innerComponentUploadsConfiguration(): array
+    protected function innerComponentUploadsConfiguration(): ?array
     {
         if (! $this->uploadsConfig) {
-            return [];
+            return null;
         }
 
         $form = new FormEditorUploadForm($this->uploadsConfig);
