@@ -66,7 +66,7 @@ class PostForm extends SharpForm
                         $editorUpload
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
-                            ->setValidationRule(SharpFileValidation::make()->max('1mb'))
+                            ->setMaxFileSize(1)
                             ->setHasLegend();
                     })
                     ->setMaxLength(1000)
@@ -80,7 +80,8 @@ class PostForm extends SharpForm
             )
             ->addField(
                 SharpFormUploadField::make('cover')
-                    ->setValidationRule(SharpImageValidation::make()->max('1mb'))
+                    ->setMaxFileSize(1)
+                    ->setIsImage()
                     ->setLabel('Cover')
                     ->setCropRatio('16:9')
                     ->setStorageDisk('local')
@@ -125,11 +126,8 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormUploadField::make('document')
-                            ->setValidationRule(
-                                SharpFileValidation::make()
-                                    ->extensions(['pdf', 'zip'])
-                                    ->max('1mb')
-                            )
+                            ->setMaxFileSize(1)
+                            ->setFileFilter(['pdf', 'zip'])
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),

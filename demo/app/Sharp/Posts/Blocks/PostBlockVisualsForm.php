@@ -33,10 +33,7 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                 ->allowBulkUploadForField('file')
                 ->addItemField(
                     SharpFormUploadField::make('file')
-                        ->setValidationRule(
-                            SharpImageValidation::make()
-                                ->max('1mb')
-                        )
+                        ->setMaxFileSize(1)
                         ->setStorageDisk('local')
                         ->setStorageBasePath(function () {
                             return sprintf(
