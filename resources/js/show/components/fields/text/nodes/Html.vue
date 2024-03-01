@@ -1,3 +1,9 @@
+<script setup lang="ts">
+    defineProps<{
+        content: string
+    }>();
+</script>
+
 <template>
     <div class="card mb-3 html-content overflow-auto" data-html-content="true">
         <div class="card-body">
@@ -5,11 +11,3 @@
         </div>
     </div>
 </template>
-
-<script>
-    export default {
-        props: {
-            content: String,
-        }
-    }
-</script>

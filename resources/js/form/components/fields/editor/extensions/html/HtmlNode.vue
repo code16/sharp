@@ -1,5 +1,9 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
+    import { Html, HtmlContentNodeAttributes } from "@/form/components/fields/editor/extensions/html/Html";
+
+    defineProps<ExtensionNodeProps<typeof Html, HtmlContentNodeAttributes>>();
 </script>
 
 <template>
@@ -26,7 +30,7 @@
             ref="modal"
         >
             <template v-slot:title>
-                <template v-if="node.attrs.new">
+                <template v-if="node.attrs.isNew">
                     {{ __('sharp::form.editor.dialogs.raw_html.insert_title') }}
                 </template>
                 <template v-else>
@@ -42,20 +46,13 @@
 <script lang="ts">
     import { Button, Modal } from "@/components/ui";
     import { NodeViewWrapper } from '@tiptap/vue-3';
-    import { elementFromString } from "./util";
+    import { elementFromString } from "./utils";
 
     export default {
         components: {
             NodeViewWrapper,
             Button,
             Modal
-        },
-        props: {
-            node: Object,
-            editor: Object,
-            updateAttributes: Function,
-            selected: Boolean,
-            deleteNode: Function,
         },
         data() {
             return {

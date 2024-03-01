@@ -1,19 +1,30 @@
 import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import HtmlNode from "./HtmlNode.vue";
-import { setupContent, setupContentDOM } from "./util";
+import { setupContent, setupContentDOM } from "./utils";
+import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
+
+export type HtmlContentNodeAttributes = {
+    content: string,
+    isNew: boolean
+}
 
 export const Html = Node.create({
     name: 'html-content',
     group: 'block',
-    onBeforeCreate() {
-        if(!this.editor.storage.markdown) {
-            this.editor.setOptions({
-                content: setupContent(
-                    this.editor.options.content,
-                    this.editor.schema
-                )
-            });
+
+    addAttributes(): ExtensionAttributesSpec<HtmlContentNodeAttributes> {
+        return {
+            content: {
+                default: '',
+                parseHTML(element) {
+                    return element.innerHTML.trim();
+                },
+            },
+            isNew: {
+                default: false,
+                rendered: false,
+            },
         }
     },
 
@@ -29,17 +40,14 @@ export const Html = Node.create({
         }
     },
 
-    addAttributes() {
-        return {
-            content: {
-                default: '',
-                parseHTML(element) {
-                    return element.innerHTML.trim();
-                },
-            },
-            new: {
-                default: false,
-            },
+    onBeforeCreate() {
+        if(!this.editor.storage.markdown) {
+            this.editor.setOptions({
+                content: setupContent(
+                    this.editor.options.content,
+                    this.editor.schema
+                )
+            });
         }
     },
 
@@ -64,7 +72,7 @@ export const Html = Node.create({
                 return commands.insertContent({
                     type: this.name,
                     attrs: {
-                        new: true,
+                        isNew: true,
                     },
                 })
             },
@@ -75,3 +83,11 @@ export const Html = Node.create({
         return VueNodeViewRenderer(HtmlNode);
     },
 });
+
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        'html-content': {
+            insertHtml: () => ReturnType
+        }
+    }
+}

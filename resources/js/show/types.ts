@@ -4,7 +4,7 @@ export type ShowFieldProps<Data extends ShowFieldData = ShowFieldData> = {
     field: Data,
     value: Data['value'],
     fieldLayout?: LayoutFieldData,
-    locale: string,
+    locale?: string,
     collapsable?: boolean,
     root?: boolean,
 }

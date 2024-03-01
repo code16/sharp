@@ -7,7 +7,7 @@
     import Cropper from "cropperjs";
     import { rotate, rotateTo } from "./util/rotate";
     import { Modal, Loading, Button } from '@/components/ui';
-    import { useParentForm } from "../../../useParentForm";
+    import { useParentForm } from "@/form/useParentForm";
     import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
     import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
     import { route } from "@/utils/url";
@@ -89,7 +89,7 @@
         cropper.value = new Cropper(cropperImg.value, {
             viewMode: 2,
             dragMode: 'move',
-            aspectRatio: props.field.ratioX / props.field.ratioY,
+            aspectRatio: props.field.imageCropRatio[0] / props.field.imageCropRatio[1],
             autoCropArea: 1,
             guides: false,
             background: true,

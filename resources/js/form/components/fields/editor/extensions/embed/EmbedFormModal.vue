@@ -9,7 +9,7 @@
     const emit = defineEmits(['cancel']);
 
     const props = defineProps<{
-        form: Form,
+        form?: Form,
         visible: boolean,
         post: (data: FormData['data']) => Promise<void>,
     }>()

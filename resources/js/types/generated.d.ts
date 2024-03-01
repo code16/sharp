@@ -519,18 +519,14 @@ export type FormUploadFieldData = {
   value: FormUploadFieldValueData | null;
   key: string;
   type: "upload";
-  transformable: boolean;
-  compactThumbnail: boolean;
-  transformKeepOriginal: boolean | null;
-  shouldOptimizeImage: boolean | null;
-  transformableFileTypes: Array<string> | null;
-  validation: {
-    rule: string[];
-    allowedExtensions: string[];
-    maximumFileSize: number;
-  };
-  ratioX: number | null;
-  ratioY: number | null;
+  imageCropRatio: [number, number];
+  imageTransformable: boolean;
+  imageCompactThumbnail: boolean;
+  imageTransformKeepOriginal: boolean | null;
+  imageTransformableFileTypes: Array<string> | null;
+  allowedExtensions: Array<string> | null;
+  maxFileSize: number | null;
+  validationRule: Array<string> | null;
   storageBasePath: string | null;
   storageDisk: string | null;
   label: string | null;

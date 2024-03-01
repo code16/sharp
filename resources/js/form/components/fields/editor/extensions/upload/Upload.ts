@@ -18,7 +18,6 @@ export type UploadNodeAttributes = {
 }
 
 export type UploadOptions = {
-    editorField: FormEditorFieldData,
     uploadManager: ContentUploadManager<Form>,
 }
 

@@ -6,22 +6,21 @@
     import EmbedFormModal from "./EmbedFormModal.vue";
     import { Form } from "@/form/Form";
     import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
-    import { inject, nextTick, onUnmounted, ref } from "vue";
+    import { nextTick, onUnmounted, ref } from "vue";
     import { useParentForm } from "@/form/useParentForm";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
-    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { EmbedData } from "@/types";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
 
     const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
 
     const modalVisible = ref(false);
     const embedForm = ref<Form>();
     const parentForm = useParentForm();
-    const embeds = inject<ContentEmbedManager>('embeds');
-
+    const embedManager = useParentEditor().embedManager;
 
     async function showFormModal() {
-        const form = await embeds.postResolveForm(
+        const form = await embedManager.postResolveForm(
             props.node.attrs['data-unique-id'],
             props.extension.options.embed,
         );
@@ -30,7 +29,7 @@
     }
 
     async function postForm(data: EmbedData['value']) {
-        const responseData = await embeds.postForm(
+        const responseData = await embedManager.postForm(
             props.node.attrs['data-unique-id'],
             props.extension.options.embed,
             data,
@@ -55,7 +54,7 @@
     }
 
     function onRemove() {
-        embeds.removeEmbed(props.node.attrs['data-unique-id']);
+        embedManager.removeEmbed(props.node.attrs['data-unique-id']);
         props.deleteNode();
     }
 
@@ -72,7 +71,7 @@
             }
         } else {
             if(props.extension.options.embed.attributes.length) {
-                const additionalData = await embeds.getResolvedEmbed(
+                const additionalData = await embedManager.getResolvedEmbed(
                     props.node.attrs['data-unique-id']
                 );
                 if(additionalData) {
@@ -85,7 +84,7 @@
     }
 
     onUnmounted(() => {
-        embeds.removeEmbed(props.node.attrs['data-unique-id']);
+        embedManager.removeEmbed(props.node.attrs['data-unique-id']);
     });
 
     init();

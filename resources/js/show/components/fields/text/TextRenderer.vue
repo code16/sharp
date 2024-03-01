@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { Component, ComponentOptions, computed } from "vue";
-    import File from "@/show/components/fields/text/nodes/File.vue";
+    import { type Component, computed } from "vue";
+    import File from "@/show/components/fields/text/nodes/Upload.vue";
     import Html from "@/show/components/fields/text/nodes/Html.vue";
     import { ShowFieldProps } from "@/show/types";
     import { ShowTextFieldData } from "@/types";
@@ -22,7 +22,7 @@
         return dom.innerHTML;
     })
 
-    const component = computed<ComponentOptions>(() => ({
+    const component = computed<Component>(() => ({
         template: `<div>${formattedContent.value}</div>`,
         components: {
             'x-sharp-file': File,

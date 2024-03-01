@@ -29,3 +29,11 @@ export const Small = Mark.create({
         }
     },
 });
+
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        small: {
+            toggleSmall: () => ReturnType
+        }
+    }
+}

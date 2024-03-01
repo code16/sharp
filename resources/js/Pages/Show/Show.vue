@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { provide, ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
     import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
     import WithCommands from "@/commands/components/WithCommands.vue";
@@ -36,6 +36,8 @@
     const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();
     const commands = useCommands();
+
+    provide('show', show);
 
     function onCommand(command: CommandData) {
         commands.send(command, {
@@ -204,9 +206,9 @@
                                                                         <template v-if="show.fields[fieldLayout.key]">
                                                                             <ShowField
                                                                                 :field="show.fields[fieldLayout.key]"
+                                                                                :field-layout="fieldLayout"
                                                                                 :value="show.data[fieldLayout.key]"
                                                                                 :locale="locale"
-                                                                                :layout="fieldLayout"
                                                                                 :collapsable="section.collapsable"
                                                                                 :entity-key="entityKey"
                                                                                 :instance-id="instanceId"

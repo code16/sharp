@@ -5,18 +5,20 @@
     import { Show } from "@/show/Show";
     import { EmbedData } from "@/types";
 
-    const contentEmbedManager = inject<ContentEmbedManager<Show>>('contentEmbedManager');
+    const embedManager = inject<ContentEmbedManager<Show>>('embedManager');
 
-    const embed = contentEmbedManager.getEmbedConfig(useAttrs()['data-unique-id'] as string);
+    const embed = embedManager.getEmbedConfig(useAttrs()['data-unique-id'] as string);
     const data = ref<EmbedData['value']>();
 
     async function init() {
-        data.value = await contentEmbedManager.getResolvedEmbed(useAttrs()['data-unique-id'] as string);
+        data.value = await embedManager.getResolvedEmbed(useAttrs()['data-unique-id'] as string);
     }
+
+    init();
 </script>
 
 <template>
-    <component :is="embed.tag" class="embed" component="">
+    <component v-if="data" :is="embed.tag" class="embed">
         <EmbedRenderer
             :data="data"
             :embed="embed"

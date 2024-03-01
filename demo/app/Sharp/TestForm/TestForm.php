@@ -186,6 +186,13 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
 //                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
                     ->setHeight(350, 0),

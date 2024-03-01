@@ -50,8 +50,8 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
         return `${embed.key}-${this.uniqueId++}`;
     }
 
-    withEmbedUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
-        if(Object.values(this.embeds).length) {
+    withEmbedsUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
+        if(!Object.values(this.embeds).length) {
             return content;
         }
 
@@ -78,13 +78,13 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
             return content;
         }
 
-        return this.withEmbedUniqueId(content, false);
+        return this.withEmbedsUniqueId(content, false);
     }
 
     async resolveContentEmbeds<Content extends MaybeLocalizedContent>(content: Content) {
         const { entityKey, instanceId } = this.root;
         const parser = new DOMParser();
-        const document = parser.parseFromString(this.allContent(content), 'text/html');
+        const document = parser.parseFromString(`<body>${this.allContent(content)}</body>`, 'text/html');
 
         Object.values(this.embeds)
             .map(embed => {

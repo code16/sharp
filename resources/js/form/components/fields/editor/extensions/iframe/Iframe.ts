@@ -2,8 +2,19 @@ import { Node } from '@tiptap/core'
 import { PasteRule } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import IframeNode from "./IframeNode.vue";
+import { ExtensionAttributesSpec } from "@/form/components/fields/editor/types";
 
-export const Iframe =  Node.create({
+export type IframeAttributes = {
+    src: string,
+    frameborder: string,
+    width: string,
+    height: string,
+    allow: string,
+    allowfullscreen: string,
+    isNew: boolean,
+}
+
+export const Iframe = Node.create({
     name: 'iframe',
 
     group: 'block',
@@ -16,13 +27,13 @@ export const Iframe =  Node.create({
         },
     }),
 
-    addAttributes() {
+    addAttributes(): ExtensionAttributesSpec<IframeAttributes> {
         return {
             src: {
                 default: null,
             },
             frameborder: {
-                default: 0,
+                default: '0',
             },
             width: {
                 default: null
@@ -38,7 +49,7 @@ export const Iframe =  Node.create({
             },
             isNew: {
                 default: false,
-                renderHTML: () => null,
+                rendered: false,
             },
         }
     },
@@ -84,3 +95,11 @@ export const Iframe =  Node.create({
         return VueNodeViewRenderer(IframeNode);
     },
 });
+
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        iframe: {
+            insertIframe: () => ReturnType
+        }
+    }
+}

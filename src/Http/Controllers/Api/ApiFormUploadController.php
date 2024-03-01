@@ -13,7 +13,10 @@ class ApiFormUploadController extends Controller
     public function store(FileUtil $fileUtil)
     {
         $this->validate(request(), [
-            'file' => request()->input('rule') ?: ['required', 'file'],
+            'file' => [
+                'required',
+                ...request()->input('validation_rule') ?: ['file']
+            ],
         ]);
 
         $file = request()->file('file');

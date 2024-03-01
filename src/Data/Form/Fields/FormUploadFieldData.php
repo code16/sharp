@@ -15,16 +15,18 @@ final class FormUploadFieldData extends Data
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Upload->value.'"')]
         public FormFieldType $type,
-        public bool $transformable = true,
-        public bool $compactThumbnail = false,
-        public ?bool $transformKeepOriginal = null,
-        public ?bool $shouldOptimizeImage = null,
+        #[LiteralTypeScriptType('[number, number]')]
+        public ?array $imageCropRatio = null,
+        public bool $imageTransformable = true,
+        public bool $imageCompactThumbnail = false,
+        public ?bool $imageTransformKeepOriginal = null,
         /** @var array<string> */
-        public ?array $transformableFileTypes = null,
-        #[LiteralTypeScriptType('{ rule: string[], allowedExtensions: string[], maximumFileSize: number|null }')]
-        public ?array $validation = null,
-        public ?int $ratioX = null,
-        public ?int $ratioY = null,
+        public ?array $imageTransformableFileTypes = null,
+        /** @var array<string> */
+        public ?array $allowedExtensions = null,
+        public ?int $maxFileSize = null,
+        /** @var array<string> */
+        public ?array $validationRule = null,
         public ?string $storageBasePath = null,
         public ?string $storageDisk = null,
         public ?string $label = null,

@@ -62,6 +62,7 @@ class PostForm extends SharpForm
                     ])
                     ->allowUploads(
                         SharpFormEditorUpload::make()
+//                            ->setImageOnly()
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
                             ->setMaxFileSize(1)

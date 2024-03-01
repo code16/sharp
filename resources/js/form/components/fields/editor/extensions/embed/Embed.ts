@@ -1,4 +1,4 @@
-import { AnyCommands, Node, type Range } from "@tiptap/core";
+import { Node } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import { serializeAttributeValue, parseAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import EmbedNode from "./EmbedNode.vue";
@@ -7,6 +7,7 @@ import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/
 import { EmbedData, FormData, FormUploadFieldValueData } from "@/types";
 import { ContentEmbedManager } from "@/content/ContentEmbedManager";
 import { UploadOptions } from "@/form/components/fields/editor/extensions/upload/Upload";
+import { Form } from "@/form/Form";
 
 export type EmbedNodeAttributes = {
     embedAttributes: EmbedData['value'],
@@ -17,7 +18,7 @@ export type EmbedNodeAttributes = {
 
 export type EmbedOptions = {
     embed: EmbedData | null,
-    embedManager: ContentEmbedManager,
+    embedManager: ContentEmbedManager<Form>,
 }
 
 export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedOptions>({
@@ -102,7 +103,7 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
         return element;
     },
 
-    addCommands(): AnyCommands {
+    addCommands() {
         return {
             insertEmbed: (embed: EmbedData) => ({ commands, tr }) => {
                 return commands.insertContentAt(tr.selection.to, {

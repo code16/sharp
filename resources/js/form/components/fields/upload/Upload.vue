@@ -46,27 +46,30 @@
     const showEditModal = ref(false);
     const isTransformable = computed(() => {
         const { field } = props;
-        return field.transformable &&
-            (!field.transformableFileTypes || field.transformableFileTypes?.includes(extension.value));
+        return field.imageTransformable &&
+            (!field.imageTransformableFileTypes || field.imageTransformableFileTypes?.includes(extension.value));
     });
     const transformedImg = ref();
     const uppyFile = ref<UppyFile>();
     const uppy = new Uppy({
         id: props.fieldErrorKey,
         restrictions: {
-            maxFileSize: (props.field.validation.maximumFileSize ?? 0) * 1024 * 1024,
+            maxFileSize: (props.field.maxFileSize ?? 0) * 1024 * 1024,
             maxNumberOfFiles: 1,
-            allowedFileTypes: props.field.validation.allowedExtensions
+            allowedFileTypes: props.field.allowedExtensions
         },
         locale: {
             strings: {
                 exceedsSize: __('sharp::form.upload.message.file_too_big', {
-                    size: filesizeLabel((props.field.validation.maximumFileSize ?? 0) * 1024 * 1024),
+                    size: filesizeLabel((props.field.maxFileSize ?? 0) * 1024 * 1024),
                 }),
                 youCanOnlyUploadFileTypes: __('sharp::form.upload.message.bad_extension'),
             },
         },
         autoProceed: true,
+        meta: {
+            'validation_rule[]': props.field.validationRule,
+        },
     })
         .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300 })
         .use(XHRUpload, {
@@ -91,14 +94,14 @@
             uppyFile.value = uppy.getFile(file.id);
             console.log('thumbnail:generated', JSON.parse(JSON.stringify(uppyFile.value)));
 
-            if(isTransformable.value && field.ratioX && field.ratioY) {
+            if(isTransformable.value && field.imageCropRatio) {
                 const cropper = await new Promise<Cropper>((resolve) => {
                     const container = document.createElement('div');
                     const image = document.createElement('img');
                     image.src = preview;
                     container.appendChild(image);
                     return new Cropper(image, {
-                        aspectRatio: props.field.ratioY / props.field.ratioX,
+                        aspectRatio: field.imageCropRatio[0] / field.imageCropRatio[1],
                         autoCropArea: 1,
                         ready: (e) => {
                             resolve(e.currentTarget.cropper);
@@ -297,13 +300,13 @@
                     </UploadDropText>
                 </div>
                 <p class="text-xs leading-5 text-gray-600">
-                    <template v-if="field.validation.allowedExtensions?.length">
+                    <template v-if="field.allowedExtensions?.length">
                         <span class="uppercase">
-                            {{ field.validation.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}
+                            {{ field.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}
                         </span>
                     </template>
-                    <template v-if="field.validation.maximumFileSize">
-                        {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.validation.maximumFileSize * 1024 * 1024) }) }}
+                    <template v-if="field.maxFileSize">
+                        {{ ' '+__('sharp::form.upload.help_text.max_file_size', { size: filesizeLabel(field.maxFileSize * 1024 * 1024) }) }}
                     </template>
                 </p>
             </div>

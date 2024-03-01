@@ -20,7 +20,7 @@ export class ContentManager {
             return '';
         }
         if(typeof content === 'object') {
-            return Object.values(content).join('');
+            return Object.values(content).join('\n');
         }
         return content;
     }

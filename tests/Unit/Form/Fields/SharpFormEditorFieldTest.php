@@ -60,12 +60,11 @@ it('allows to allow uploads with configuration', function () {
         );
 
     expect($formField->toArray())
-        ->toHaveKey('uploads.fields.file.validation.rule', [
-            'file', 'extensions:.jpg,.gif', 'max:5120', 'image',
+        ->toHaveKey('uploads.fields.file.validationRule', [
+            'file', 'extensions:jpg,gif', 'max:5120', 'image',
         ])
-        ->toHaveKey('uploads.fields.file.transformable', true)
-        ->toHaveKey('uploads.fields.file.ratioX', 16)
-        ->toHaveKey('uploads.fields.file.ratioY', 9)
+        ->toHaveKey('uploads.fields.file.imageTransformable', true)
+        ->toHaveKey('uploads.fields.file.imageCropRatio', [16, 9])
         ->toHaveKey('uploads.fields.legend');
 
     $formField = SharpFormEditorField::make('text')
@@ -76,7 +75,7 @@ it('allows to allow uploads with configuration', function () {
         );
 
     expect($formField->toArray())
-        ->toHaveKey('uploads.fields.file.transformable', false);
+        ->toHaveKey('uploads.fields.file.imageTransformable', false);
 });
 
 it('allows to define toolbar', function () {

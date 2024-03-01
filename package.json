@@ -47,7 +47,7 @@
   "dependencies": {
     "@fawmi/vue-google-maps": "^0.9.79",
     "@fortawesome/fontawesome-free": "^6.4.0",
-    "@headlessui/vue": "^1.7.14",
+    "@headlessui/vue": "^1.7.19",
     "@heroicons/vue": "^2.0.18",
     "@inertiajs/vue3": "^1.0.9",
     "@tiptap/core": "^2.2.2",

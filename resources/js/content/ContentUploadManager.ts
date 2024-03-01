@@ -5,12 +5,7 @@ import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { parseAttributeValue } from "@/content/utils/attributes";
 import { Show } from "@/show/Show";
 import { ContentManager } from "@/content/ContentManager";
-import { MaybeLocalizedContent } from "@/content/types";
-
-export type FormEditorUploadData = {
-    file: FormUploadFieldValueData,
-    legend?: string,
-}
+import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
 
 type ContentUpload = {
     id: string,
@@ -49,8 +44,8 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         return `${this.uniqueId++}`;
     }
 
-    withUploadUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
-        if(!this.editorField.uploads) {
+    withUploadsUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
+        if(this.editorField && !this.editorField.uploads) {
             return content;
         }
 
@@ -71,17 +66,17 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
     }
 
     serializeContent(content: string): string {
-        if(!this.editorField.uploads) {
+        if(this.editorField && !this.editorField.uploads) {
             return content;
         }
 
-        return this.withUploadUniqueId(content, false);
+        return this.withUploadsUniqueId(content, false);
     }
 
     async resolveContentUploads<Content extends MaybeLocalizedContent>(content: Content) {
         const { entityKey, instanceId } = this.root;
         const parser = new DOMParser();
-        const document = parser.parseFromString(this.allContent(content), 'text/html');
+        const document = parser.parseFromString(`<body>${this.allContent(content)}</body>`, 'text/html');
 
         const contentUploads = [...document.querySelectorAll('x-sharp-file,x-sharp-image')]
             .map(element => ({

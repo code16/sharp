@@ -75,7 +75,7 @@ it('validates on explicit rules', function () {
     $this
         ->postJson('/sharp/api/upload', [
             'file' => UploadedFile::fake()->create('file.xls'),
-            'rule' => 'required|image',
+            'validation_rule' => ['image'],
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
@@ -83,7 +83,7 @@ it('validates on explicit rules', function () {
     $this
         ->postJson('/sharp/api/upload', [
             'file' => UploadedFile::fake()->create('file.xls', 1024 * 3),
-            'rule' => 'required|max:2048',
+            'validation_rule' => ['max:2048'],
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');

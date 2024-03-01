@@ -21,7 +21,6 @@
     }>();
 
     provide('form', props.form);
-    provide('$form', props.form);
 
     const loading = ref(false);
 

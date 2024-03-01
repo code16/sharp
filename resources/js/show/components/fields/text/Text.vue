@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { ShowTextFieldData } from "@/types";
-    import { computed, ref } from "vue";
+    import { computed, provide, ref } from "vue";
     import FieldLayout from "../../FieldLayout.vue";
     import TextRenderer from "./TextRenderer.vue";
     import clip from "text-clipper";
@@ -16,21 +16,22 @@
     const expanded = ref(false);
     const show = useParentShow();
 
-    const contentEmbedManager = new ContentEmbedManager(show, props.field.embeds);
-    const contentUploadManager = new ContentUploadManager(show);
+    const embedManager = new ContentEmbedManager(show, props.field.embeds);
+    const uploadManager = new ContentUploadManager(show);
 
-    const formattedValue = computed(() => {
-        return (
-            contentEmbedManager.withEmbedUniqueId(
-                contentUploadManager.withUploadUniqueId(
-                    props.value
-                )
+    provide('embedManager', embedManager);
+    provide('uploadManager', uploadManager);
+
+    const formattedValue = ref(
+        embedManager.withEmbedsUniqueId(
+            uploadManager.withUploadsUniqueId(
+                props.value
             )
-        );
-    });
+        )
+    );
 
-    contentEmbedManager.resolveContentEmbeds(props.value);
-    contentUploadManager.resolveContentUploads(props.value);
+    embedManager.resolveContentEmbeds(formattedValue.value);
+    uploadManager.resolveContentUploads(formattedValue.value);
 
     const localizedValue = computed<string | null>(() => {
         return props.field.localized
@@ -91,6 +92,8 @@
             <TextRenderer
                 class="ShowTextField__content"
                 :content="currentContent"
+                :field="field"
+                :value="value"
             />
         </template>
         <template v-else>
