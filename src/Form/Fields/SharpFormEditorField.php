@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Form\Fields;
 
-use Closure;
 use Code16\Sharp\Enums\FormEditorToolbarButton;
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
