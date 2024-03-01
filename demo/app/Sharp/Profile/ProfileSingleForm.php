@@ -23,9 +23,9 @@ class ProfileSingleForm extends SharpSingleForm
                     ->setLabel('Avatar')
                     ->setMaxFileSize(1)
                     ->setImageOnly()
-                    ->shouldOptimizeImage()
+                    ->setImageOptimize()
                     ->setStorageDisk('local')
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageBasePath('data/users/{id}'),
             )
             ->addField(

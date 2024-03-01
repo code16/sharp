@@ -44,7 +44,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
                     ->setMaxFileSize(1)
                     ->setImageOnly()
                     ->setLabel('Picture')
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/embeds'),
             )

@@ -293,7 +293,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                     SharpFormUploadField::make('file')
                         ->setStorageDisk('local')
                         ->setStorageBasePath('data/test')
-                        ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
+                        ->setImageTransformable(transformKeepOriginal: $this->transformKeepOriginal)
                 );
         }
 
@@ -357,7 +357,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
                     SharpFormUploadField::make('file')
                         ->setStorageDisk('local')
                         ->setStorageBasePath('data/test')
-                        ->setTransformable(transformKeepOriginal: $this->transformKeepOriginal)
+                        ->setImageTransformable(transformKeepOriginal: $this->transformKeepOriginal)
                 );
         }
     });

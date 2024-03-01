@@ -233,7 +233,7 @@ class TestForm extends SharpSingleForm
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
                     ->setMaxFileSize(5)
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
             );

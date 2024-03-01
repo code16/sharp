@@ -52,7 +52,7 @@ class UploadFormatter extends SharpFieldFormatter
                 'mime_type' => Storage::disk(config('sharp.uploads.tmp_disk', 'local'))
                     ->mimeType($uploadedFieldRelativePath),
                 'disk' => $field->storageDisk(),
-                'filters' => $field->isTransformOriginal()
+                'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
                 ...$this->alwaysReturnFullObject ? [
