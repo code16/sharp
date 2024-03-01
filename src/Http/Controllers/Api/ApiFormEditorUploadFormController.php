@@ -4,8 +4,8 @@ namespace Code16\Sharp\Http\Controllers\Api;
 
 use Code16\Sharp\Data\Form\Fields\FormUploadFieldData;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
-use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Illuminate\Routing\Controller;
 
 class ApiFormEditorUploadFormController extends Controller
