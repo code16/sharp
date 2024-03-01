@@ -10,7 +10,7 @@ interface IsUploadField
 
     public function setImageCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self;
 
-    public function setImageOptimize(bool $mageOptimize = true): self;
+    public function setImageOptimize(bool $imageOptimize = true): self;
 
     public function isImageOptimize(): bool;
 
@@ -24,7 +24,7 @@ interface IsUploadField
 
     public function setStorageBasePath(string|Closure $storageBasePath): self;
 
-    public function setFileFilter(string|array $fileFilter): self;
+    public function setAllowedExtensions(string|array $extensions): self;
 
     public function setFileFilterImages(): self;
 

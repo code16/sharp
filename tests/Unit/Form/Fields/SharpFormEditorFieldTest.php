@@ -56,7 +56,7 @@ it('allows to allow uploads with configuration', function () {
             $upload
                 ->setImageOnly()
                 ->setMaxFileSize(5)
-                ->setFileFilter(['jpg', 'gif'])
+                ->setAllowedExtensions(['jpg', 'gif'])
                 ->setImageCropRatio('16:9')
                 ->setHasLegend();
         });

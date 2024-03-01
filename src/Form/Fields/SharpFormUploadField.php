@@ -17,11 +17,11 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     protected string|Closure $storageBasePath = 'data';
     protected ?float $maxFileSize = null;
     protected ?float $minFileSize = null;
-    protected array $fileFilter = [];
+    protected array $allowedExtensions = [];
     protected bool $imageTransformable = true;
     protected ?bool $imageTransformKeepOriginal = null;
     protected bool $isImageOnly = false;
-    protected ?Dimensions $imageDimensions = null;
+    protected ?Dimensions $imageDimensionConstraints = null;
     protected bool $imageCompactThumbnail = false;
     protected bool $imageOptimize = false;
     protected ?array $imageCropRatio = null;
@@ -50,9 +50,9 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     {
         $this->isImageOnly = $imageOnly;
 
-        if (! $this->fileFilter) {
+        if (! $this->allowedExtensions) {
             /** @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage() */
-            $this->setFileFilter(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']);
+            $this->setAllowedExtensions(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']);
         }
 
         return $this;
@@ -74,16 +74,16 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    public function setImageDimensions(Dimensions $dimensions): self
+    public function setImageDimensionConstraints(Dimensions $dimensions): self
     {
-        $this->imageDimensions = $dimensions;
+        $this->imageDimensionConstraints = $dimensions;
 
         return $this;
     }
 
-    public function setImageOptimize(bool $mageOptimize = true): self
+    public function setImageOptimize(bool $imageOptimize = true): self
     {
-        $this->imageOptimize = $mageOptimize;
+        $this->imageOptimize = $imageOptimize;
 
         return $this;
     }
@@ -145,9 +145,9 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    public function setFileFilter(string|array $fileFilter): self
+    public function setAllowedExtensions(string|array $extensions): self
     {
-        $this->fileFilter = $this->formatFileExtension($fileFilter);
+        $this->allowedExtensions = $this->formatFileExtension($extensions);
 
         return $this;
     }
@@ -217,47 +217,53 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
         $validationRule
             ->max($maxFileSizeInMB * 1024)
-            ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
+            ->when($this->allowedExtensions, fn (SharpFileValidation $file) => $file->extensions($this->allowedExtensions))
             ->when($this->minFileSize, fn (SharpFileValidation $file) => $file->min($this->minFileSize * 1024))
             ->when(
-                $validationRule instanceof SharpImageValidation && $this->imageDimensions,
-                fn (SharpImageValidation $file) => $file->dimensions($this->imageDimensions)
+                $validationRule instanceof SharpImageValidation && $this->imageDimensionConstraints,
+                fn (SharpImageValidation $file) => $file->dimensions($this->imageDimensionConstraints)
             );
 
         return [
             'rule' => $validationRule->toArray(),
-            'allowedExtensions' => $this->fileFilter,
+            'allowedExtensions' => $this->allowedExtensions,
             'maximumFileSize' => $maxFileSizeInMB * 1024,
         ];
     }
 
-    /** @deprecated  */
+    /** @deprecated use setImageCropRatio()  */
     public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
     {
         return $this->setImageCropRatio($ratio, $transformableFileTypes);
     }
 
-    /** @deprecated */
+    /** @deprecated use setImageOptimize() */
     public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
     {
         return $this->setImageOptimize($shouldOptimizeImage);
     }
 
-    /** @deprecated  */
+    /** @deprecated use setImageCompactThumbnail() */
     public function setCompactThumbnail(bool $compactThumbnail = true): self
     {
         return $this->setImageCompactThumbnail($compactThumbnail);
     }
 
-    /** @deprecated  */
+    /** @deprecated use setImageTransformable()  */
     public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
     {
         return $this->setImageTransformable($transformable, $transformKeepOriginal);
     }
 
-    /** @deprecated */
+    /** @deprecated use setImageOnly() */
     public function setFileFilterImages(): self
     {
         return $this->setImageOnly();
+    }
+
+    /** @deprecated use setAllowExtensions() */
+    public function setFileFilter(string|array $fileFilter): self
+    {
+        $this->setAllowedExtensions($fileFilter);
     }
 }

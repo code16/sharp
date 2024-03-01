@@ -125,7 +125,7 @@ class PostForm extends SharpForm
                     ->addItemField(
                         SharpFormUploadField::make('document')
                             ->setMaxFileSize(1)
-                            ->setFileFilter(['pdf', 'zip'])
+                            ->setAllowedExtensions(['pdf', 'zip'])
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
