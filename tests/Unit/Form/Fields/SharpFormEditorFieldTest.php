@@ -4,7 +4,6 @@ use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Tests\Unit\Form\Fields\Fakes\FakeSharpEditorEmbed;
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 it('sets only default values', function () {
     $formField = SharpFormEditorField::make('text');

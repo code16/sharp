@@ -10,7 +10,6 @@ use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 class ProfileSingleForm extends SharpSingleForm
 {

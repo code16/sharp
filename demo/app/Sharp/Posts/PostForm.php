@@ -26,8 +26,6 @@ use Code16\Sharp\Form\Layout\FormLayoutFieldset;
 use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
 
 class PostForm extends SharpForm
 {
