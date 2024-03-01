@@ -107,7 +107,7 @@ it('allows to define a custom validation rule on a file', function () {
 
 it('allows to define a custom validation rule on an image file', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setIsImage()
+        ->setImageOnly()
         ->setMaxFileSize(3)
         ->setImageDimensions(Rule::dimensions()->maxWidth(100)->maxHeight(100));
 

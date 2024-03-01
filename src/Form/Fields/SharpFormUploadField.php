@@ -19,7 +19,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     protected string|Closure $storageBasePath = 'data';
     protected bool $transformable = true;
     protected ?bool $transformKeepOriginal = null;
-    protected bool $isImage = false;
+    protected bool $isImageOnly = false;
     protected ?Dimensions $imageDimensions = null;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
@@ -62,11 +62,11 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    public function setIsImage(bool $isImage = true): self
+    public function setImageOnly(bool $imageOnly = true): self
     {
-        $this->isImage = $isImage;
+        $this->isImageOnly = $imageOnly;
 
-        if($this->fileFilter === null) {
+        if (!$this->fileFilter) {
             $this->setFileFilterImages();
         }
 
@@ -216,7 +216,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
     private function buildValidation(): array
     {
-        $validationRule = $this->isImage
+        $validationRule = $this->isImageOnly
             ? SharpImageValidation::make()
             : SharpFileValidation::make();
 

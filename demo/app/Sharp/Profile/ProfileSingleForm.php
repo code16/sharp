@@ -23,7 +23,7 @@ class ProfileSingleForm extends SharpSingleForm
                 SharpFormUploadField::make('avatar')
                     ->setLabel('Avatar')
                     ->setMaxFileSize(1)
-                    ->setIsImage()
+                    ->setImageOnly()
                     ->shouldOptimizeImage()
                     ->setStorageDisk('local')
                     ->setCropRatio('1:1')

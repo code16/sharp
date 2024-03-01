@@ -43,7 +43,7 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->addField(
                 SharpFormUploadField::make('picture')
                     ->setMaxFileSize(1)
-                    ->setIsImage()
+                    ->setImageOnly()
                     ->setLabel('Picture')
                     ->setCropRatio('1:1')
                     ->setStorageDisk('local')

@@ -55,7 +55,7 @@ it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
         ->allowUploads(function (SharpFormEditorUpload $upload) {
             $upload
-                ->setIsImage()
+                ->setImageOnly()
                 ->setMaxFileSize(5)
                 ->setFileFilter(['jpg', 'gif'])
                 ->setCropRatio('16:9')
@@ -74,7 +74,7 @@ it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
         ->allowUploads(function (SharpFormEditorUpload $upload) {
             $upload
-                ->setIsImage()
+                ->setImageOnly()
                 ->setTransformable(false);
         });
 

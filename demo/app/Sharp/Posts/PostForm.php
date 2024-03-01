@@ -81,7 +81,7 @@ class PostForm extends SharpForm
             ->addField(
                 SharpFormUploadField::make('cover')
                     ->setMaxFileSize(1)
-                    ->setIsImage()
+                    ->setImageOnly()
                     ->setLabel('Cover')
                     ->setCropRatio('16:9')
                     ->setStorageDisk('local')
