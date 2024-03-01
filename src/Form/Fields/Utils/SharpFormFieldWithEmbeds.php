@@ -19,10 +19,10 @@ trait SharpFormFieldWithEmbeds
 
     protected function innerComponentEmbedsConfiguration(bool $isForm = true): ?array
     {
-        if(empty($this->embeds)) {
+        if (empty($this->embeds)) {
             return null;
         }
-        
+
         return collect($this->embeds)
             ->map(fn (string $embedClass) => app($embedClass))
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
