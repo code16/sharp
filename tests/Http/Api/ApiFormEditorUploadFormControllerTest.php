@@ -22,8 +22,8 @@ it('can post a file and legend', function () {
             $upload
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Posts/{id}')
-                ->shouldOptimizeImage()
-                ->setTransformable(true, false)
+                ->setImageOptimize()
+                ->setImageTransformable(true, false)
                 ->setHasLegend();
         });
 

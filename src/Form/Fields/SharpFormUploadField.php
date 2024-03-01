@@ -6,32 +6,32 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
+use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Rules\Dimensions;
 
 class SharpFormUploadField extends SharpFormField implements IsUploadField
 {
     const FIELD_TYPE = 'upload';
 
-    protected ?array $cropRatio = null;
-    protected ?array $transformableFileTypes = null;
     protected string $storageDisk = 'local';
     protected string|Closure $storageBasePath = 'data';
-    protected bool $transformable = true;
-    protected ?bool $transformKeepOriginal = null;
-    protected bool $compactThumbnail = false;
-    protected bool $shouldOptimizeImage = false;
-    protected ?SharpFileValidation $validationRule = null;
-
-    /** @deprecated */
     protected ?float $maxFileSize = null;
-    /** @deprecated */
-    protected string|array|null $fileFilter = null;
+    protected ?float $minFileSize = null;
+    protected array $allowedExtensions = [];
+    protected bool $imageTransformable = true;
+    protected ?bool $imageTransformKeepOriginal = null;
+    protected bool $isImageOnly = false;
+    protected ?Dimensions $imageDimensionConstraints = null;
+    protected bool $imageCompactThumbnail = false;
+    protected bool $imageOptimize = false;
+    protected ?array $imageCropRatio = null;
+    protected ?array $imageTransformableFileTypes = null;
 
     public static function make(string $key): self
     {
         return new static($key, static::FIELD_TYPE, app(UploadFormatter::class));
     }
 
-    /** @deprecated use setValidationRule() instead */
     public function setMaxFileSize(float $maxFileSizeInMB): self
     {
         $this->maxFileSize = $maxFileSizeInMB;
@@ -39,83 +39,96 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    /** @deprecated */
-    public function maxFileSize(): ?float
+    public function setMinFileSize(float $minFileSizeInMB): self
     {
-        return $this->maxFileSize;
-    }
-
-    public function setValidationRule(SharpFileValidation $validationRule): self
-    {
-        $this->validationRule = $validationRule;
+        $this->minFileSize = $minFileSizeInMB;
 
         return $this;
     }
 
-    public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
+    public function setImageOnly(bool $imageOnly = true): self
+    {
+        $this->isImageOnly = $imageOnly;
+
+        if (! $this->allowedExtensions) {
+            /** @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage() */
+            $this->setAllowedExtensions(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']);
+        }
+
+        return $this;
+    }
+
+    public function setImageCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
     {
         if ($ratio) {
-            $this->cropRatio = explode(':', $ratio);
+            $this->imageCropRatio = explode(':', $ratio);
 
-            $this->transformableFileTypes = $transformableFileTypes
+            $this->imageTransformableFileTypes = $transformableFileTypes
                 ? $this->formatFileExtension($transformableFileTypes)
                 : null;
         } else {
-            $this->cropRatio = null;
-            $this->transformableFileTypes = null;
+            $this->imageCropRatio = null;
+            $this->imageTransformableFileTypes = null;
         }
 
         return $this;
     }
 
-    public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
+    public function setImageDimensionConstraints(Dimensions $dimensions): self
     {
-        $this->shouldOptimizeImage = $shouldOptimizeImage;
+        $this->imageDimensionConstraints = $dimensions;
 
         return $this;
     }
 
-    public function isShouldOptimizeImage(): bool
+    public function setImageOptimize(bool $imageOptimize = true): self
     {
-        return $this->shouldOptimizeImage;
-    }
-
-    public function setCompactThumbnail(bool $compactThumbnail = true): self
-    {
-        $this->compactThumbnail = $compactThumbnail;
+        $this->imageOptimize = $imageOptimize;
 
         return $this;
     }
 
-    public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
+    public function isImageOptimize(): bool
     {
-        $this->transformable = $transformable;
+        return $this->imageOptimize;
+    }
+
+    public function setImageCompactThumbnail(bool $compactThumbnail = true): self
+    {
+        $this->imageCompactThumbnail = $compactThumbnail;
+
+        return $this;
+    }
+
+    public function setImageTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
+    {
+        $this->imageTransformable = $transformable;
 
         if ($transformable && ! is_null($transformKeepOriginal)) {
-            $this->transformKeepOriginal = $transformKeepOriginal;
+            $this->imageTransformKeepOriginal = $transformKeepOriginal;
         }
 
         return $this;
     }
 
-    public function isTransformable(): bool
+    public function isImageTransformable(): bool
     {
-        return $this->transformable;
+        return $this->imageTransformable;
     }
 
-    public function isTransformOriginal(): bool
+    public function isImageTransformOriginal(): bool
     {
-        return $this->transformable && ! $this->isTransformKeepOriginal();
+        return $this->imageTransformable && ! $this->isImageTransformKeepOriginal();
     }
 
-    public function isTransformKeepOriginal(): bool
+    public function isImageTransformKeepOriginal(): bool
     {
-        return $this->transformKeepOriginal ?? config('sharp.uploads.transform_keep_original_image', true);
+        return $this->imageTransformKeepOriginal ?? config('sharp.uploads.transform_keep_original_image', true);
     }
 
-    public function transformableFileTypes(): ?array
+    public function imageTransformableFileTypes(): ?array
     {
-        return $this->transformableFileTypes;
+        return $this->imageTransformableFileTypes;
     }
 
     public function setStorageDisk(string $storageDisk): self
@@ -132,18 +145,9 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this;
     }
 
-    /** @deprecated use setValidationRule() instead */
-    public function setFileFilter(string|array $fileFilter): self
+    public function setAllowedExtensions(string|array $extensions): self
     {
-        $this->fileFilter = $this->formatFileExtension($fileFilter);
-
-        return $this;
-    }
-
-    /** @deprecated use setValidationRule() instead */
-    public function setFileFilterImages(): self
-    {
-        $this->setFileFilter(['.jpg', '.jpeg', '.gif', '.png']);
+        $this->allowedExtensions = $this->formatFileExtension($extensions);
 
         return $this;
     }
@@ -160,13 +164,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
 
     public function cropRatio(): ?array
     {
-        return $this->cropRatio;
-    }
-
-    /** @deprecated */
-    public function fileFilter(): ?array
-    {
-        return $this->fileFilter;
+        return $this->imageCropRatio;
     }
 
     private function formatFileExtension(string|array $fileFilter): array
@@ -176,14 +174,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         }
 
         return collect($fileFilter)
-            ->map(function ($filter) {
-                $filter = trim($filter);
-                if (! str_starts_with($filter, '.')) {
-                    $filter = ".$filter";
-                }
-
-                return $filter;
-            })
+            ->map(fn ($filter) => str($filter)->trim()->start('.')->value())
             ->all();
     }
 
@@ -204,59 +195,75 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     {
         return parent::buildArray([
             'validation' => $this->buildValidation(),
-            'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
-            'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
-            'transformable' => $this->transformable,
-            'transformableFileTypes' => $this->transformableFileTypes,
-            'transformKeepOriginal' => $this->isTransformKeepOriginal(),
-            'compactThumbnail' => (bool) $this->compactThumbnail,
+            'ratioX' => $this->imageCropRatio ? (int) $this->imageCropRatio[0] : null,
+            'ratioY' => $this->imageCropRatio ? (int) $this->imageCropRatio[1] : null,
+            'transformable' => $this->imageTransformable,
+            'transformableFileTypes' => $this->imageTransformableFileTypes,
+            'transformKeepOriginal' => $this->isImageTransformKeepOriginal(),
+            'compactThumbnail' => (bool) $this->imageCompactThumbnail,
             'storageBasePath' => $this->storageBasePath,
             'storageDisk' => $this->storageDisk,
-            'shouldOptimizeImage' => $this->shouldOptimizeImage,
+            'shouldOptimizeImage' => $this->imageOptimize,
         ]);
     }
 
     private function buildValidation(): array
     {
-        // Backward compatibility
-        $rule = $this->validationRule ?: SharpFileValidation::make()
-            ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
-            ->when($this->maxFileSize, fn (SharpFileValidation $file) => $file->max($this->maxFileSize * 1024));
+        $validationRule = $this->isImageOnly
+            ? SharpImageValidation::make()
+            : SharpFileValidation::make();
+
+        $maxFileSizeInMB = $this->maxFileSize ?: config('sharp.uploads.max_file_size');
+
+        $validationRule
+            ->max($maxFileSizeInMB * 1024)
+            ->when($this->allowedExtensions, fn (SharpFileValidation $file) => $file->extensions($this->allowedExtensions))
+            ->when($this->minFileSize, fn (SharpFileValidation $file) => $file->min($this->minFileSize * 1024))
+            ->when(
+                $validationRule instanceof SharpImageValidation && $this->imageDimensionConstraints,
+                fn (SharpImageValidation $file) => $file->dimensions($this->imageDimensionConstraints)
+            );
 
         return [
-            'rule' => $rule->toArray(),
-            'allowedExtensions' => $this->getAllowedExtensions($rule->toArray()),
-            'maximumFileSize' => $this->getMaximumFileSize($rule->toArray()),
+            'rule' => $validationRule->toArray(),
+            'allowedExtensions' => $this->allowedExtensions,
+            'maximumFileSize' => $maxFileSizeInMB * 1024,
         ];
     }
 
-    private function getMaximumFileSize(array $rules): ?int
+    /** @deprecated use setImageCropRatio()  */
+    public function setCropRatio(string $ratio = null, ?array $transformableFileTypes = null): self
     {
-        $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'max:'));
-
-        return $rule ? (int) str_replace('max:', '', $rule) : null;
+        return $this->setImageCropRatio($ratio, $transformableFileTypes);
     }
 
-    private function getAllowedExtensions(array $rules): array
+    /** @deprecated use setImageOptimize() */
+    public function shouldOptimizeImage(bool $shouldOptimizeImage = true): self
     {
-        $rule = collect($rules)->first(fn ($rule) => str_starts_with($rule, 'extensions:'));
+        return $this->setImageOptimize($shouldOptimizeImage);
+    }
 
-        $allowedExtensions = $rule
-            ? str($rule)
-                ->remove('extensions:')
-                ->explode(',')
-                ->filter()
-                ->map(fn ($ext) => str($ext)->start('.')->value())
-                ->toArray()
-            : [];
+    /** @deprecated use setImageCompactThumbnail() */
+    public function setCompactThumbnail(bool $compactThumbnail = true): self
+    {
+        return $this->setImageCompactThumbnail($compactThumbnail);
+    }
 
-        /**
-         * @see \Illuminate\Validation\Concerns\ValidatesAttributes::validateImage()
-         */
-        if (in_array('image', $rules) && empty($allowedExtensions)) {
-            $allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp'];
-        }
+    /** @deprecated use setImageTransformable()  */
+    public function setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null): self
+    {
+        return $this->setImageTransformable($transformable, $transformKeepOriginal);
+    }
 
-        return $allowedExtensions;
+    /** @deprecated use setImageOnly() */
+    public function setFileFilterImages(): self
+    {
+        return $this->setImageOnly();
+    }
+
+    /** @deprecated use setAllowExtensions() */
+    public function setFileFilter(string|array $fileFilter): self
+    {
+        $this->setAllowedExtensions($fileFilter);
     }
 }

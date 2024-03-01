@@ -136,11 +136,6 @@ class SharpFormEditorField extends SharpFormField
     public function allowUploads(Closure $callback): self
     {
         $this->uploadsConfig = SharpFormEditorUpload::make('file');
-        $this->uploadsConfig->setMaxFileSize(2);
-
-        if (! $this->uploadsConfig->fileFilter()) {
-            $this->uploadsConfig->setFileFilterImages();
-        }
 
         $callback($this->uploadsConfig);
 

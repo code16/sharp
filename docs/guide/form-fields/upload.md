@@ -19,9 +19,46 @@ First, in order to get the upload part working, you have to define a "tmp" path 
 
 This `tmp_dir` path is relative to the `uploads.tmp_disk` filesystem defined.
 
-## Field Configuration
+You should also configure the default max upload file size:
 
-### `setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
+```php
+// in config/sharp.php
+
+'uploads' => [
+    'max_file_size' => env('SHARP_UPLOADS_MAX_FILE_SIZE_IN_MB', 2),
+]
+```
+
+## General field Configuration
+
+### `setStorageDisk(string $storageDisk)`
+
+Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
+
+### `setStorageBasePath(string|Closure $storageBasePath)`
+
+Set the destination base storage path.
+
+You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the “Delayed creation” section, at the end of this page if you do.**
+
+For instance: `$field->setStorageBasePath('/users/{id}/avatar')`
+
+### `setAllowedExtensions(string|array $allowedExtensions)`
+
+Define the allowed file extensions. 
+
+For instance: `$field->setAllowedExtensions(['pdf', 'zip'])`
+
+## Field Configuration in image case
+
+### `setImageOnly(bool $imageOnly = true)`
+
+When an upload field is configured to accept only images:
+- the field will be forced to accept only images (allowed extensions set to "jpg, png, gif, svg, webp, bmp" by default),
+- the uploaded file will be validated as an image (see below for more options),
+- a thumbnail will be generated for the uploaded image.
+
+### `setImageTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
 
 Allow the user to crop or rotate the visual, after the upload.  
 The argument `$transformKeepOriginal` overrides the following config which is `true` by default.
@@ -35,7 +72,7 @@ The argument `$transformKeepOriginal` overrides the following config which is `t
 
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
 
-### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
+### `setImageCropRatio(string $ratio, array $croppableFileTypes = null)`
 
 Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
 
@@ -43,24 +80,11 @@ When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
 
 The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
 
-### `setStorageDisk(string $storageDisk)`
-
-Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
-
-### `setStorageBasePath(string|Closure $storageBasePath)`
-
-Set the destination base storage path. 
-
-You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the “Delayed creation” section, at the end of this page if you do.**
-
-For instance:
-`$field->setStorageBasePath('/users/{id}/avatar')`
-
-### `setCompactThumbnail(bool $compactThumbnail = true)`
+### `setImageCompactThumbnail(bool $compactThumbnail = true)`
 
 If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
 
-### `shouldOptimizeImage(bool $shouldOptimizeImage = true)`
+### `setImageOptimizeImage(bool $imageOptimize = true)`
 
 If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [image-optimizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these packages on your system:
 - [JpegOptim](http://freecode.com/projects/jpegoptim)
@@ -74,66 +98,17 @@ Check their documentation for [more instructions](https://github.com/spatie/imag
 
 ## Validation
 
-To handle validation, you should use the `setValidationRule()` method, which relies on the standard Laravel File Rule validation system. Here's an example:
+First, notice that `setAllowedExtensions()` and `setImageOnly()` already are basic validation rules, that Sharp will use both on the front-end and in the back-end.
 
-```php
-use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
-// [...]
+But there are a few more rules available:
 
-class MyForm extends SharpForm
-{
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-        $formFields
-            ->addField(
-                SharpFormUploadField::make('report')
-                    ->setValidationRule(
-                        SharpFileValidation::make()
-                            ->extensions(['pdf', 'zip'])
-                            ->max('5mb')
-                    )
-                    // [...]
-            )
-            ->addField(
-                // [...]
-            );
-    }    
-)
-```
+### `setMaxFileSize(int $maxFileSizeInMB)` and `setMinFileSize(int $minFileSizeInMB)`
 
-The `SharpFileValidation` mimics Laravel's `File` validation rule (see [Laravel documentation](https://laravel.com/docs/10.x/validation#validating-files)).
+Set the maximum and minimum (even if this is a rare use-case) file size in MB.
 
-If you want to force images only, and act on the image dimensions, you can use the `SharpImageValidation` class instead:
+### `setImageDimensionConstraints(Illuminate\Validation\Rules\Dimensions $dimensions)`
 
-```php
-use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
-use Illuminate\Validation\Rules\Dimensions;
-// [...]
-
-class MyForm extends SharpForm
-{
-    public function buildFormFields(FieldsContainer $formFields): void
-    {
-        $formFields
-            ->addField(
-                SharpFormUploadField::make('cover')
-                    ->setValidationRule(
-                        SharpImageValidation::make()
-                            ->dimensions(
-                                Rule::dimensions()
-                                    ->maxWidth(1000)
-                                    ->maxHeight(1000)
-                            )
-                            ->max('2mb')
-                    )
-                    // [...]
-            )
-            ->addField(
-                // [...]
-            );
-    }    
-)
-```
+Set image dimension constraints, leveraging the dedicated Laravel validation rule (see [the documentation](https://laravel.com/docs/validation#rule-dimensions)).
 
 ## Formatter
 
