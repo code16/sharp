@@ -28,6 +28,8 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
 use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class PostForm extends SharpForm
 {
@@ -66,7 +68,7 @@ class PostForm extends SharpForm
                         $editorUpload
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
-                            ->setValidationRule(SharpFileValidation::make()->max('1mb'))
+                            ->setValidationRule(Rule::file()->max('1mb'))
                             ->setHasLegend();
                     })
                     ->setMaxLength(1000)
@@ -80,7 +82,7 @@ class PostForm extends SharpForm
             )
             ->addField(
                 SharpFormUploadField::make('cover')
-                    ->setValidationRule(SharpImageValidation::make()->max('1mb'))
+                    ->setValidationRule(Rule::imageFile()->max('1mb'))
                     ->setLabel('Cover')
                     ->setCropRatio('16:9')
                     ->setStorageDisk('local')
@@ -125,11 +127,7 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormUploadField::make('document')
-                            ->setValidationRule(
-                                SharpFileValidation::make()
-                                    ->extensions(['pdf', 'zip'])
-                                    ->max('1mb')
-                            )
+                            ->setValidationRule(Rule::file()->extensions(['pdf', 'zip'])->max('1mb'))
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),

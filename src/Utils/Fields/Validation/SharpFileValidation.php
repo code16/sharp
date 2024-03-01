@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Fields\Validation;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
 class SharpFileValidation
@@ -60,6 +61,31 @@ class SharpFileValidation
         $this->baseRule->max($size);
 
         return $this;
+    }
+    
+    public static function getRulesArrayFrom(File $file): array
+    {
+        $fakeValidator = Validator::make([], []);
+        
+        $fileRules = [];
+        
+        Validator::resolver(function ($translator, $data, $rules, $messages, $attributes) use (&$fileRules) {
+            $fileRules = $rules['file'];
+            return new \Illuminate\Validation\Validator($translator, $data, $rules, $messages, $attributes);
+        });
+        
+        (clone $file)
+            ->setValidator($fakeValidator)
+            ->setData([])
+            ->passes('file', null);
+        
+        Validator::resolver(function ($translator, $data, $rules, $messages, $attributes) {
+            return new \Illuminate\Validation\Validator($translator, $data, $rules, $messages, $attributes);
+        });
+        
+        return collect($fileRules)
+            ->map(fn ($value) => is_object($value) ? $value->__toString() : $value)
+            ->toArray();
     }
 
     public function toArray(): array

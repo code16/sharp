@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Utils\Fields\Validation\SharpFileValidation;
+use Illuminate\Validation\Rules;
 
 class SharpFormUploadField extends SharpFormField implements IsUploadField
 {
@@ -19,7 +20,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     protected ?bool $transformKeepOriginal = null;
     protected bool $compactThumbnail = false;
     protected bool $shouldOptimizeImage = false;
-    protected ?SharpFileValidation $validationRule = null;
+    protected ?Rules\File $validationRule = null;
 
     /** @deprecated */
     protected ?float $maxFileSize = null;
@@ -45,7 +46,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
         return $this->maxFileSize;
     }
 
-    public function setValidationRule(SharpFileValidation $validationRule): self
+    public function setValidationRule(Rules\File $validationRule): self
     {
         $this->validationRule = $validationRule;
 
@@ -219,14 +220,16 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     private function buildValidation(): array
     {
         // Backward compatibility
-        $rule = $this->validationRule ?: SharpFileValidation::make()
+        $rule = $this->validationRule ?: (new Rules\File())
             ->when($this->fileFilter, fn (SharpFileValidation $file) => $file->extensions($this->fileFilter))
             ->when($this->maxFileSize, fn (SharpFileValidation $file) => $file->max($this->maxFileSize * 1024));
         
+        $rulesArray = SharpFileValidation::getRulesArrayFrom($rule);
+        
         return [
-            'rule' => $rule->toArray(),
-            'allowedExtensions' => $this->getAllowedExtensions($rule->toArray()),
-            'maximumFileSize' => $this->getMaximumFileSize($rule->toArray()),
+            'rule' => $rulesArray,
+            'allowedExtensions' => $this->getAllowedExtensions($rulesArray),
+            'maximumFileSize' => $this->getMaximumFileSize($rulesArray),
         ];
     }
     

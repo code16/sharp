@@ -23,6 +23,7 @@ use Code16\Sharp\Form\Layout\FormLayoutTab;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\Validation\SharpImageValidation;
+use Illuminate\Validation\Rule;
 
 class TestForm extends SharpSingleForm
 {
@@ -233,10 +234,7 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
-                    ->setValidationRule(
-                        SharpImageValidation::make()
-                            ->max('5mb')
-                    )
+                    ->setValidationRule(Rule::imageFile()->max('5mb'))
                     ->setCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
