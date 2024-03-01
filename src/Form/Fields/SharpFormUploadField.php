@@ -66,7 +66,7 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
     {
         $this->isImageOnly = $imageOnly;
 
-        if (!$this->fileFilter) {
+        if (! $this->fileFilter) {
             $this->setFileFilterImages();
         }
 
