@@ -19,7 +19,7 @@ class ApiFormUploadController extends Controller
                 'regex:/^(file$|image$|mimes:|mimetypes:|extensions:|dimensions:|size:|between:|min:|max:)/',
             ],
         ]);
-        
+
         $this->validate(request(), [
             'file' => [
                 'required',
