@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class Image extends Component
 {
     use UsesSharpUploadModel;
-    
+
     public array $file;
     public ?string $name = null;
     public ?SharpUploadModel $fileModel = null;

@@ -29,7 +29,7 @@ class SharpUploadModel extends Model
             return $file ? [
                 'file_name' => $file['path'] ?? $file['file_name'],
                 ...Arr::only($file, [
-                    'size', 'mime_type', 'disk', 'filters'
+                    'size', 'mime_type', 'disk', 'filters',
                 ]),
             ] : [];
         });

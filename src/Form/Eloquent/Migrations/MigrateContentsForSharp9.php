@@ -13,7 +13,7 @@ trait MigrateContentsForSharp9
         if (! in_array($primaryKey, $query->getColumns())) {
             throw new \Exception("You must select the primary key column ($primaryKey) to update.");
         }
-        
+
         $contentColumns = array_diff($query->getColumns(), [$primaryKey]);
 
         if (empty($contentColumns)) {
