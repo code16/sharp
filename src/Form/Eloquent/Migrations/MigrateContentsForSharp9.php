@@ -10,13 +10,11 @@ trait MigrateContentsForSharp9
 {
     protected function updateContentOf(Builder $query, string $primaryKey = 'id'): self
     {
-        $columns = $query->getColumns();
-
-        if (! in_array($primaryKey, $columns)) {
+        if (! in_array($primaryKey, $query->getColumns())) {
             throw new \Exception("You must select the primary key column ($primaryKey) to update.");
         }
-
-        $contentColumns = collect($columns)->diff([$primaryKey])->toArray();
+        
+        $contentColumns = array_diff($query->getColumns(), [$primaryKey]);
 
         if (empty($contentColumns)) {
             throw new \Exception('You must select at least one column to update.');

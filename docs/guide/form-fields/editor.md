@@ -105,11 +105,14 @@ As for a regular upload field, you can allow the user to crop or rotate the visu
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored directly in the `<x-sharp-image/>` tag. For instance:
 
 ```blade
+{{-- (attribute JSON formatted for readability) --}}
 <x-sharp-image 
-    name="filename.jpg"
-    filter-crop="0.1495,0,0.5625,1"
-    path="data/Spaceship/10/markdown/filename.jpg"
-    disk="local">
+    file='{
+      "name":"image.jpg",
+      "path": "data/Posts/1/image.jpg",
+      "disk": "local",
+      "filters": { "crop": { "x":0, "y":0, "width":.5, "height":.5 } } }
+    '>
 </x-sharp-image>
 ```
 
@@ -122,19 +125,25 @@ Sharp takes care of copying the file at the right place (after image transformat
 When inserting a file, the following tag is added in field text value:
 
 ```blade
+{{-- (attribute JSON formatted for readability) --}}
 <x-sharp-file 
-    name="filename.pdf"
-    path="data/Spaceship/10/markdown/filename.pdf"
-    disk="local">
+    file='{
+      "name": "doc.pdf",
+      "path": "data/Posts/1/doc.pdf",
+      "disk": "local"
+    '>
 </x-sharp-file>
 ```
 In case of an image the inserted tag is:
 
 ```blade
+{{-- (attribute JSON formatted for readability) --}}
 <x-sharp-image
-    name="filename.jpg"
-    path="data/Spaceship/10/markdown/filename.jpg"
-    disk="local">
+    file='{
+      "name":"image.jpg",
+      "path": "data/Posts/1/image.jpg",
+      "disk": "local",
+    '>
 </x-sharp-image>
 ```
 
