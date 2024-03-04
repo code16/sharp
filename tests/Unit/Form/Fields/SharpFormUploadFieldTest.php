@@ -124,11 +124,11 @@ it('allows to define fileFilter', function () {
     $field = SharpFormUploadField::make('file')->setAllowedExtensions('jpg');
     expect($field->toArray()['validationRule'])->toContain('extensions:jpg')
         ->and($field->toArray()['allowedExtensions'])->toEqual(['.jpg']);
-    
+
     $field = SharpFormUploadField::make('file')->setAllowedExtensions('jpg, gif');
     expect($field->toArray()['validationRule'])->toContain('extensions:jpg,gif')
         ->and($field->toArray()['allowedExtensions'])->toEqual(['.jpg', '.gif']);
-    
+
     $field = SharpFormUploadField::make('file')->setAllowedExtensions(['jpg', 'gif ']);
     expect($field->toArray()['validationRule'])->toContain('extensions:jpg,gif')
         ->and($field->toArray()['allowedExtensions'])->toEqual(['.jpg', '.gif']);

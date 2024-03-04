@@ -215,13 +215,13 @@ class SharpFormUploadField extends SharpFormField implements IsUploadField
             : SharpFileValidation::make();
 
         $maxFileSizeInMB = $this->maxFileSize ?: config('sharp.uploads.max_file_size');
-        
+
         $validationRule
             ->max($maxFileSizeInMB * 1024)
             ->when($this->allowedExtensions, function (SharpFileValidation $file) {
                 return $file->extensions(
                     collect($this->allowedExtensions)
-                        ->map(fn($extension) => ltrim($extension, '.'))
+                        ->map(fn ($extension) => ltrim($extension, '.'))
                         ->toArray()
                 );
             })

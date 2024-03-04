@@ -88,3 +88,14 @@ it('validates on explicit rules', function () {
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
 });
+
+it('does not permit to send insecure validation rules', function () {
+    $this
+        ->postJson('/sharp/api/upload', [
+            'file' => UploadedFile::fake()->create('file.xls'),
+            'id' => 1,
+            'validation_rule' => ['file', 'exists:users,id'],
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrorFor('validation_rule.1');
+});
