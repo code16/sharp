@@ -4,10 +4,13 @@ namespace Code16\Sharp\Tests;
 
 use Code16\ContentRenderer\ContentRendererServiceProvider;
 use Code16\Sharp\SharpServiceProvider;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+    use InteractsWithViews;
+    
     protected function setUp(): void
     {
         parent::setUp();

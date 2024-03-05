@@ -1,20 +1,16 @@
 <script setup lang="ts">
     import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
-    import { computed, inject, onMounted, onUnmounted, ref } from "vue";
+    import { computed, onMounted, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
-    import { Upload } from "@/form/components/fields";
-    import { FormUploadFieldData, FormData, FormEditorFieldData } from "@/types";
+    import Upload from "@/form/components/fields/upload/Upload.vue";
+    import { FormUploadFieldData, FormData } from "@/types";
     import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
     import { Form } from "@/form/Form";
     import { useParentForm } from "@/form/useParentForm";
-    import {
-        ContentUploadManager
-    } from "@/content/ContentUploadManager";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { FormEditorUploadData } from "@/content/types";
-    import { FormFieldProps } from "@/form/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();

@@ -24,10 +24,13 @@ class Image extends Component
         public ?string $legend = null,
         public ?int $thumbnailWidth = null,
         public ?int $thumbnailHeight = null,
+        public ?array $filters = [],
     ) {
-        if ($this->file = json_decode($file, true)) {
+        if ($this->file = json_decode(htmlspecialchars_decode($file), true)) {
             $this->fileModel = static::getUploadModelClass()::make([
-                'file' => $this->file,
+                'file_name' => $this->file['path'],
+                'disk' => $this->file['disk'] ?? null,
+                'filters' => $this->file['filters'] ?? null,
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);
             $this->exists = $this->disk->exists($this->fileModel->file_name);

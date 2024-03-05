@@ -51,11 +51,11 @@ trait HandlesUploadedFilesInRequest
         ?array $editorData,
         $instanceId,
     ): void {
-        foreach ($editorData['files'] ?? [] as $file) {
+        foreach ($editorData['uploads'] ?? [] as $upload) {
             $this->handleUploadFieldPostedFile(
                 uploadField: $editorField->uploadsConfig(),
-                filePath: $file['path'] ?? null,
-                fileData: $file,
+                filePath: $upload['file']['path'] ?? null,
+                fileData: $upload['file'] ?? null,
                 instanceId: $instanceId,
             );
         }

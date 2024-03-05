@@ -35,8 +35,8 @@
 
     const uploadManager = new ContentUploadManager(form, {
         editorField: props.field,
-        onFilesUpdated(files) {
-            emit('input', { ...props.value, files });
+        onUploadsUpdated(uploads) {
+            emit('input', { ...props.value, uploads });
         }
     });
     const embedManager = new ContentEmbedManager(form, props.field.embeds, {

@@ -24,14 +24,9 @@ class SharpUploadModel extends Model
     protected function file(): Attribute
     {
         // We use this magical "file" attribute to fill at the same time
-        // file_name, mime_type, disk and size in a MorphMany case & editor uploads
+        // file_name, mime_type, disk and size in a MorphMany case
         return Attribute::make(set: function (?array $file) {
-            return $file ? [
-                'file_name' => $file['path'] ?? $file['file_name'],
-                ...Arr::only($file, [
-                    'size', 'mime_type', 'disk', 'filters',
-                ]),
-            ] : [];
+            return $file ?: [];
         });
     }
 

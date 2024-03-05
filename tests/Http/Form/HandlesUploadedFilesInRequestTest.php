@@ -104,12 +104,14 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'bio' => [
-                'files' => [
+                'uploads' => [
                     [
-                        'name' => 'image.jpg',
-                        'path' => 'data/test/image.jpg',
-                        'uploaded' => true,
-                    ],
+                        'file' => [
+                            'name' => 'image.jpg',
+                            'path' => 'data/test/image.jpg',
+                            'uploaded' => true,
+                        ],
+                    ]
                 ],
             ],
         ])
@@ -128,12 +130,14 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'bio' => [
-                'files' => [
+                'uploads' => [
                     [
-                        'name' => 'image-2.jpg',
-                        'path' => 'data/test/image-2.jpg',
-                        'uploaded' => true,
-                    ],
+                        'file' => [
+                            'name' => 'image-2.jpg',
+                            'path' => 'data/test/image-2.jpg',
+                            'uploaded' => true,
+                        ],
+                    ]
                 ],
             ],
         ])
@@ -246,13 +250,17 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
                 'disk' => 'local',
             ],
             'bio' => [
-                'files' => [
+                'uploads' => [
                     [
-                        'name' => 'doc-2.pdf',
-                        'file_name' => 'data/test/doc-2.pdf',
-                        'disk' => 'local',
+                        'file' => [
+                            [
+                                'name' => 'doc-2.pdf',
+                                'file_name' => 'data/test/doc-2.pdf',
+                                'disk' => 'local',
+                            ],
+                        ],
                     ],
-                ],
+                ]
             ],
         ])
         ->assertSessionHasNoErrors()

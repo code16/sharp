@@ -153,6 +153,7 @@
             name: props.value.file.name,
             type: props.value.file.type,
             data: props.value.file,
+            isRemote: true,
         });
         emit('input', {});
     }

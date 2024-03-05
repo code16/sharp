@@ -86,33 +86,49 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
         const parser = new DOMParser();
         const document = parser.parseFromString(`<body>${this.allContent(content)}</body>`, 'text/html');
 
-        Object.values(this.embeds)
-            .map(embed => {
-                const contentEmbeds = [...document.querySelectorAll(embed.tag)]
-                    .map(element => ({
-                        id: element.getAttribute('data-unique-id'),
-                        resolved: Promise.withResolvers<true>(),
-                        embed,
-                        value: Object.fromEntries(
-                            embed.attributes.map(attributeName =>
-                                [attributeName, parseAttributeValue(element.getAttribute(hyphenate(attributeName)))]
-                            )
-                        ) as EmbedData['value']
-                    }));
+        this.contentEmbeds = {
+            ...this.contentEmbeds,
+            ...Object.fromEntries(
+                Object.values(this.embeds)
+                    .map(embed => {
+                        const contentEmbeds = [...document.querySelectorAll(embed.tag)]
+                            .map(element => ({
+                                id: element.getAttribute('data-unique-id'),
+                                resolved: Promise.withResolvers<true>(),
+                                embed,
+                                value: Object.fromEntries(
+                                    embed.attributes.map(attributeName =>
+                                        [attributeName, parseAttributeValue(element.getAttribute(hyphenate(attributeName)))]
+                                    )
+                                ) as EmbedData['value']
+                            }));
 
-                if(!contentEmbeds.length) {
-                    return;
-                }
+                        return contentEmbeds.map(contentEmbed => [contentEmbed.id, contentEmbed]);
+                    })
+                    .filter(Boolean)
+                    .flat()
+            ),
+        }
 
-                this.contentEmbeds = {
-                    ...this.contentEmbeds,
-                    ...Object.fromEntries(contentEmbeds.map(contentEmbed => [contentEmbed.id, contentEmbed])),
-                }
+        this.onEmbedsUpdated?.(this.serializedEmbeds);
 
-                return (async () => {
+        await Promise.allSettled(
+            Object.values(this.embeds)
+                .map(embed => (async () => {
+                    const contentEmbeds = Object.values(this.contentEmbeds)
+                        .filter(contentEmbed => contentEmbed.embed.key === embed.key);
+
+                    if(!contentEmbeds.length) {
+                        return;
+                    }
+
                     const resolvedEmbeds = await api.post(
                         instanceId
-                            ? route('code16.sharp.api.embed.instance.show', { embedKey: embed.key, entityKey, instanceId })
+                            ? route('code16.sharp.api.embed.instance.show', {
+                                embedKey: embed.key,
+                                entityKey,
+                                instanceId
+                            })
                             : route('code16.sharp.api.embed.show', { embedKey: embed.key, entityKey }),
                         {
                             embeds: contentEmbeds.map(contentEmbed => contentEmbed.value),
@@ -125,8 +141,10 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
                         this.contentEmbeds[contentEmbeds[index].id].value = resolvedEmbed;
                         this.contentEmbeds[contentEmbeds[index].id].resolved.resolve(true);
                     });
-                })();
-            });
+                })())
+        );
+
+        this.onEmbedsUpdated?.(this.serializedEmbeds);
     }
 
     getEmbedConfig(id: string): EmbedData|null {

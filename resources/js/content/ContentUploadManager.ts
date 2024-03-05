@@ -17,7 +17,7 @@ type ContentUpload = {
 export class ContentUploadManager<Root extends Form | Show> extends ContentManager {
     contentUploads: { [id:string]: ContentUpload } = {};
     root: Form | Show;
-    onFilesUpdated: Root extends Form ? (files: FormUploadFieldValueData[]) => any : null;
+    onUploadsUpdated: Root extends Form ? (uploads: FormEditorUploadData[]) => any : null;
     editorField: Root extends Form ? FormEditorFieldData : null;
     uniqueId = 0
 
@@ -25,19 +25,19 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         root: Root,
         config: {
             editorField: ContentUploadManager<Root>['editorField'],
-            onFilesUpdated: ContentUploadManager<Root>['onFilesUpdated'],
-        } = { editorField: null, onFilesUpdated: null }
+            onUploadsUpdated: ContentUploadManager<Root>['onUploadsUpdated'],
+        } = { editorField: null, onUploadsUpdated: null }
     ) {
         super();
         this.root = root;
         this.editorField = config.editorField;
-        this.onFilesUpdated = config.onFilesUpdated;
+        this.onUploadsUpdated = config.onUploadsUpdated;
     }
 
-    get files() {
+    get serializedUploads() {
         return Object.values(this.contentUploads)
             .filter(contentUpload => !contentUpload.removed)
-            .map(contentUpload => contentUpload.value.file);
+            .map(contentUpload => contentUpload.value);
     }
 
     newId() {
@@ -78,44 +78,49 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         const parser = new DOMParser();
         const document = parser.parseFromString(`<body>${this.allContent(content)}</body>`, 'text/html');
 
-        const contentUploads = [...document.querySelectorAll('x-sharp-file,x-sharp-image')]
-            .map(element => ({
-                id: element.getAttribute('data-uid'),
-                resolved: Promise.withResolvers<true>(),
-                value: {
-                    file: parseAttributeValue(element.getAttribute('file')),
-                    legend: parseAttributeValue(element.getAttribute('legend')),
-                }
-            }));
+        this.contentUploads = {
+            ...this.contentUploads,
+            ...Object.fromEntries(
+                [...document.querySelectorAll('x-sharp-file,x-sharp-image')]
+                    .map(element => ({
+                        id: element.getAttribute('data-unique-id'),
+                        resolved: Promise.withResolvers<true>(),
+                        value: {
+                            file: parseAttributeValue(element.getAttribute('file')),
+                            legend: parseAttributeValue(element.getAttribute('legend')),
+                        }
+                    }))
+                    .map(contentUpload => [contentUpload.id, contentUpload])
+            ),
+        }
+
+        this.onUploadsUpdated?.(this.serializedUploads);
+
+        const contentUploads = Object.values(this.contentUploads);
 
         if(!contentUploads.length) {
             return;
         }
 
-        this.contentUploads = {
-            ...this.contentUploads,
-            ...Object.fromEntries(contentUploads.map(contentUpload => [contentUpload.id, contentUpload])),
-        }
+        const resolvedFiles = await api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), {
+            files: contentUploads.map(contentUpload => contentUpload.value.file)
+        })
+            .then(response => response.data.files) as FormUploadFieldValueData[]
 
-        return (async () => {
-            const resolvedFiles = await api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), {
-                files: contentUploads.map(contentUpload => contentUpload.value)
-            })
-                .then(response => response.data.files) as FormUploadFieldValueData[]
+        resolvedFiles.forEach((resolvedFile, index) => {
+            this.contentUploads[contentUploads[index].id].value = {
+                ...this.contentUploads[contentUploads[index].id].value,
+                file: resolvedFile,
+            }
+            this.contentUploads[contentUploads[index].id].resolved.resolve(true);
+        });
 
-            resolvedFiles.forEach((resolvedFile, index) => {
-                this.contentUploads[contentUploads[index].id].value = {
-                    ...this.contentUploads[contentUploads[index].id].value,
-                    file: resolvedFile,
-                }
-                this.contentUploads[contentUploads[index].id].resolved.resolve(true);
-            });
-        })();
+        this.onUploadsUpdated?.(this.serializedUploads);
     }
 
     updateUpload(id: string, value: FormEditorUploadData) {
         this.contentUploads[id].value = value;
-        this.onFilesUpdated(this.files);
+        this.onUploadsUpdated(this.serializedUploads);
     }
 
     removeUpload(id: string) {
@@ -123,7 +128,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
             ...this.contentUploads[id],
             removed: true,
         };
-        this.onFilesUpdated(this.files);
+        this.onUploadsUpdated(this.serializedUploads);
     }
 
     async getResolvedUpload(id: string): Promise<FormEditorUploadData | undefined> {
@@ -150,7 +155,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
             value: responseData,
         }
 
-        this.onFilesUpdated(this.files);
+        this.onUploadsUpdated(this.serializedUploads);
 
         return responseData;
     }

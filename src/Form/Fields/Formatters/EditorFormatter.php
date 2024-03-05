@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 
 class EditorFormatter extends SharpFieldFormatter
@@ -12,7 +13,10 @@ class EditorFormatter extends SharpFieldFormatter
             'text' => $value,
         ];
     }
-
+    
+    /**
+     * @param SharpFormEditorField $field
+     */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
         $content = $value['text'] ?? '';
@@ -33,9 +37,22 @@ class EditorFormatter extends SharpFieldFormatter
 
         return preg_replace('/\R/u', "\n", $content);
     }
-
-    public function afterUpdate(SharpFormField $field, $attribute, $value): ?string
+    
+    /**
+     * @param SharpFormEditorField $field
+     */
+    public function afterUpdate(SharpFormField $field, $attribute, $value): string|array|null
     {
+        if($value !== null && $field->isLocalized()) {
+            return collect($value)
+                ->map(function (?string $localizedContent) {
+                    return $localizedContent
+                        ? str($localizedContent)->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)->value()
+                        : null;
+                })
+                ->toArray();
+        }
+        
         return $value
             ? str($value)->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)->value()
             : null;

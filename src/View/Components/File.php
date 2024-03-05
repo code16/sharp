@@ -23,9 +23,10 @@ class File extends Component
         string $file,
         public ?string $legend = null
     ) {
-        if ($this->file = json_decode($file, true)) {
+        if ($this->file = json_decode(htmlspecialchars_decode($file), true)) {
             $this->fileModel = static::getUploadModelClass()::make([
-                'file' => $this->file,
+                'file_name' => $this->file['path'],
+                'disk' => $this->file['disk'] ?? null,
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);
             $this->exists = $this->disk->exists($this->fileModel->file_name);
