@@ -1,9 +1,7 @@
 <?php
 
 use Code16\Sharp\Tests\Unit\View\Components\Fakes\Image;
-use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Blade;
-
 
 it('renders content', function () {
     Blade::component(Image::class, 'sharp-image');

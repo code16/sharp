@@ -111,7 +111,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
                             'path' => 'data/test/image.jpg',
                             'uploaded' => true,
                         ],
-                    ]
+                    ],
                 ],
             ],
         ])
@@ -137,7 +137,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
                             'path' => 'data/test/image-2.jpg',
                             'uploaded' => true,
                         ],
-                    ]
+                    ],
                 ],
             ],
         ])
@@ -260,7 +260,7 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
         ])
         ->assertSessionHasNoErrors()

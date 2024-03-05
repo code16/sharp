@@ -49,7 +49,7 @@ it('can post a newly uploaded file in editor, create case', function () {
     $uploadedFileData = $this
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->create('file.pdf')])
         ->json();
-    
+
     $editorXSharpFileData = $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [
@@ -58,11 +58,11 @@ it('can post a newly uploaded file in editor, create case', function () {
             'fields' => $form->fields()['bio']['uploads']['fields'],
         ])
         ->json();
-    
+
     $uploadedImageData = $this
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 400, 400)])
         ->json();
-    
+
     $editorXSharpImageData = $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [
@@ -102,9 +102,9 @@ it('can post a newly uploaded file in editor, create case', function () {
 
     Storage::disk('local')->assertExists('test/1/file.pdf');
     Storage::disk('local')->assertExists('test/1/image.jpg');
-    
+
     $this->blade('<x-sharp-content :image-thumbnail-width="400">{!! $content !!}</x-sharp-content>', [
-        'content' => Person::first()->bio
+        'content' => Person::first()->bio,
     ])
         ->assertSeeText('file.pdf')
         ->assertSee(SharpUploadModel::make([
@@ -151,11 +151,11 @@ it('can post a newly uploaded file in editor, update case', function () {
             'fields' => $form->fields()['bio']['uploads']['fields'],
         ])
         ->json();
-    
+
     $uploadedImageData = $this
         ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 400, 400)])
         ->json();
-    
+
     $editorXSharpImageData = $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
             'data' => [
@@ -174,7 +174,7 @@ it('can post a newly uploaded file in editor, update case', function () {
             ),
             'uploads' => [
                 $editorXSharpFileData,
-                $editorXSharpImageData
+                $editorXSharpImageData,
             ],
         ],
     ]);
@@ -192,12 +192,12 @@ it('can post a newly uploaded file in editor, update case', function () {
             ]))
         )
     );
-    
+
     Storage::disk('local')->assertExists('test/1/file.pdf');
     Storage::disk('local')->assertExists('test/1/image.jpg');
-    
+
     $this->blade('<x-sharp-content :image-thumbnail-width="400">{!! $content !!}</x-sharp-content>', [
-        'content' => Person::first()->bio
+        'content' => Person::first()->bio,
     ])
         ->assertSeeText('file.pdf')
         ->assertSee(SharpUploadModel::make([
