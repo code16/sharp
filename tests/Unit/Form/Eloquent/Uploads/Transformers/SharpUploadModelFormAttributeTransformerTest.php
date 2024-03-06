@@ -32,6 +32,7 @@ it('transforms a single upload', function () {
             'disk' => 'local',
             'size' => $upload->size,
             'thumbnail' => $upload->thumbnail(200, 200),
+            'exists' => true,
         ],
         $transformer->apply('', $picturable, 'picture'),
     );
@@ -79,6 +80,7 @@ it('transforms a single upload with transformations', function () {
                     'angle' => 45,
                 ],
             ],
+            'exists' => true,
         ],
         $transformer->apply('', $picturable, 'picture'),
     );
@@ -111,6 +113,7 @@ it('transforms a list of upload', function () {
                     'disk' => 'local',
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
+                    'exists' => true,
                 ],
                 'id' => $upload1->id,
             ], [
@@ -120,6 +123,7 @@ it('transforms a list of upload', function () {
                     'disk' => 'local',
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
+                    'exists' => true,
                 ],
                 'id' => $upload2->id,
             ],
@@ -169,6 +173,7 @@ it('transforms a list of upload with transformations', function () {
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
                     'filters' => $filters,
+                    'exists' => true,
                 ],
                 'id' => $upload1->id,
             ], [
@@ -178,6 +183,7 @@ it('transforms a list of upload with transformations', function () {
                     'disk' => 'local',
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
+                    'exists' => true,
                 ],
                 'id' => $upload2->id,
             ],
@@ -208,6 +214,7 @@ describe('dynamicInstance', function () {
                 'size' => 120,
                 'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
                 'filters' => [],
+                'exists' => true,
             ],
             $transformer->apply($uploadData, null, 'picture'),
         );

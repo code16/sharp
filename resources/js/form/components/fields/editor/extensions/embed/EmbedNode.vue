@@ -46,7 +46,9 @@
     function onCancel() {
         modalVisible.value = false;
         if(props.node.attrs.isNew) {
-            props.deleteNode();
+            props.editor.commands.withoutHistory(() => {
+                props.deleteNode();
+            });
             setTimeout(() => {
                 props.editor.commands.focus();
             }, 0);
@@ -64,8 +66,10 @@
                 await showFormModal();
             } else {
                 await nextTick();
-                props.updateAttributes({
-                    isNew: false,
+                props.editor.commands.withoutHistory(() => {
+                    props.updateAttributes({
+                        isNew: false,
+                    });
                 });
                 props.editor.commands.focus();
             }
@@ -75,8 +79,10 @@
                     props.node.attrs['data-unique-id']
                 );
                 if(additionalData) {
-                    props.updateAttributes({
-                        additionalData,
+                    props.editor.commands.withoutHistory(() => {
+                        props.updateAttributes({
+                            additionalData,
+                        });
                     });
                 }
             }

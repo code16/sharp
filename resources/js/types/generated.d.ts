@@ -536,6 +536,7 @@ export type FormUploadFieldData = {
   extraStyle: string | null;
 };
 export type FormUploadFieldValueData = {
+  id: number | null;
   name: string;
   disk: string;
   path: string;
@@ -544,10 +545,12 @@ export type FormUploadFieldValueData = {
   uploaded: boolean | null;
   transformed: boolean | null;
   not_found: boolean | null;
+  exists: boolean | null;
   filters: {
     crop: { width: number; height: number; x: number; y: number };
     rotate: { angle: number };
   } | null;
+  nativeFile?: File;
 };
 export type GlobalFiltersData = {
   filters: ConfigFiltersData;

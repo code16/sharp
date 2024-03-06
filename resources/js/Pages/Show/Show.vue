@@ -71,7 +71,7 @@
         if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
             router.delete(
                 route('code16.sharp.show.delete', {
-                    uri: route().params.uri as string,
+                    parentUri: route().params.parentUri as string,
                     entityKey,
                     instanceId
                 })

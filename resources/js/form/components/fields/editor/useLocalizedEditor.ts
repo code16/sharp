@@ -1,4 +1,4 @@
-import { computed, ComputedRef, Ref } from "vue";
+import { computed, ComputedRef } from "vue";
 import { Editor } from "@tiptap/vue-3";
 import { FormEditorFieldData } from "@/types";
 import { useParentForm } from "@/form/useParentForm";

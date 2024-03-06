@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
-    import { provide, ref, watch } from "vue";
+    import { provide, Ref, ref, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
@@ -15,15 +15,15 @@
     import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
     import { getDefaultExtensions } from "@/form/components/fields/editor/extensions";
-    import { useEditorEmbeds } from "@/form/components/fields/editor/extensions/embed/useEditorEmbeds";
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
-    import { useEditorUploads } from "@/form/components/fields/editor/extensions/upload/useEditorUploads";
     import { ContentUploadManager } from "@/content/ContentUploadManager";
     import { Serializable } from "@/form/Serializable";
     import { FormFieldProps } from "@/form/types";
     import { ParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
     import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
+    import { Extension } from "@tiptap/core";
+    import { withoutHistory } from "@/form/components/fields/editor/commands/withoutHistory";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -86,6 +86,7 @@
                             }
                         })
                     }),
+                Extension.create({ name: 'withoutHistory', addCommands() { return { withoutHistory } } })
             ].filter(Boolean);
 
             const editor = new Editor({
@@ -122,7 +123,6 @@
                 const content = props.field.markdown
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
-
                 const value = new Serializable(
                     content,
                     embedManager.serializeContent(uploadManager.serializeContent(content)),

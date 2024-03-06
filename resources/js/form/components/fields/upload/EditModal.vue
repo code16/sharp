@@ -80,8 +80,8 @@
 
     async function onShow() {
         ready.value = false;
-        // if the value has a thumbnail we now it exists so we can fetch a larger thumbnail
-        if(props.value?.thumbnail) {
+        // if the value does not have 'uploaded: true' we now it exists so we can fetch a larger thumbnail
+        if(props.value && !props.value.uploaded) {
             await loadOriginalImg();
         }
         ready.value = true;
@@ -89,7 +89,9 @@
         cropper.value = new Cropper(cropperImg.value, {
             viewMode: 2,
             dragMode: 'move',
-            aspectRatio: props.field.imageCropRatio[0] / props.field.imageCropRatio[1],
+            aspectRatio: props.field.imageCropRatio
+                ? props.field.imageCropRatio[0] / props.field.imageCropRatio[1]
+                : null,
             autoCropArea: 1,
             guides: false,
             background: true,

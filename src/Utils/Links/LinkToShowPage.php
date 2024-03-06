@@ -43,7 +43,7 @@ class LinkToShowPage extends SharpLinkTo
     protected function generateUrl(): string
     {
         return route('code16.sharp.show.show', [
-            'uri' => sprintf('s-list/%s', $this->entityKey),
+            'parentUri' => sprintf('s-list/%s', $this->entityKey),
             'entityKey' => $this->entityKey,
             'instanceId' => $this->instanceId,
         ]);

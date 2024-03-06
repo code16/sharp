@@ -15,7 +15,7 @@
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
-    import {getAppendableUri, route} from "@/utils/url";
+    import {getAppendableParentUri, route} from "@/utils/url";
     import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button,  Search } from '@/components/ui';
     import { ChevronDownIcon } from "@heroicons/vue/20/solid";
     import EntityActions from "./EntityActions.vue";
@@ -254,7 +254,7 @@
                                         </template>
                                         <template v-for="form in Object.values(entityList.forms).filter(form => !!form.label)">
                                             <DropdownItem
-                                                :href="route('code16.sharp.form.create', { uri: getAppendableUri(), entityKey: `${entityKey}:${form.key}` })"
+                                                :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })"
                                             >
                                                 {{ form.label }}
                                             </DropdownItem>
@@ -264,7 +264,7 @@
                                 <template v-else>
                                     <Button
                                         :disabled="reordering || selecting"
-                                        :href="route('code16.sharp.form.create', { uri: getAppendableUri(), entityKey })"
+                                        :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
                                     >
                                         {{ __('sharp::action_bar.list.create_button') }}
                                     </Button>

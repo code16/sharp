@@ -1,4 +1,4 @@
-import { Attribute, Extension, Node, NodeViewProps } from "@tiptap/core";
+import { Attribute, Node, NodeViewProps } from "@tiptap/core";
 
 export type ExtensionNodeProps<N extends Node, Attrs> =
     Omit<NodeViewProps, 'extension' | 'node' | 'updateAttributes'> & {

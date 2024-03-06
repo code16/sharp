@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
-    import { computed, onMounted, onUnmounted, ref } from "vue";
+    import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
     import { __ } from "@/utils/i18n";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
@@ -52,23 +52,25 @@
         props.updateAttributes({
             file: responseData.file,
             legend: responseData.legend,
+            isNew: false,
+            'data-thumbnail': data.file.thumbnail,
         });
 
         modalVisible.value = false;
     }
 
-    function onThumbnail(preview: string) {
-        props.updateAttributes({
-            file: {
-                ...props.node.attrs.file,
-                thumbnail: preview,
-            }
+    function onThumbnailGenerated(preview: string) {
+        props.editor.commands.withoutHistory(() => {
+            props.updateAttributes({
+                'data-thumbnail': preview,
+            });
         });
     }
 
-    function onTransformed(value: FormUploadFieldData['value']) {
+    function onUploadTransformed(value: FormUploadFieldData['value']) {
         props.updateAttributes({
             file: value,
+            'data-thumbnail': value.thumbnail,
         });
 
         if(!props.node.attrs.isNew) {
@@ -87,28 +89,6 @@
         }, 0);
     }
 
-    async function onSuccess(value: FormUploadFieldData['value']) {
-        const responseData = await uploadManager.postForm(
-            props.node.attrs['data-unique-id'],
-            {
-                file: value,
-            }
-        )
-        props.updateAttributes({
-            isNew: false,
-            file: responseData.file,
-            nativeFile: null,
-        });
-    }
-
-    function onError(message: string, file: File) {
-        props.deleteNode();
-        showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
-            isError: true,
-            title: __(`sharp::modals.error.title`),
-        });
-    }
-
     function onEdit(event: CustomEvent) {
         if(parentEditor.props.field.uploads.fields.legend) {
             event.preventDefault();
@@ -116,10 +96,27 @@
         }
     }
 
-    function onCancel() {
+    async function onUploadSuccess(value: FormUploadFieldData['value']) {
+        await postForm({
+            file: value,
+        });
+    }
+
+    function onUploadError(message: string, file: File) {
+        props.deleteNode();
+        showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
+            isError: true,
+            title: __(`sharp::modals.error.title`),
+        });
+    }
+
+    function onModalCancel() {
+        modalVisible.value = false;
+
         if(props.node.attrs.isNew) {
-            modalVisible.value = false;
-            props.deleteNode();
+            props.editor.commands.withoutHistory(() => {
+                props.deleteNode();
+            });
             setTimeout(() => {
                 props.editor.commands.focus();
             }, 0);
@@ -127,10 +124,23 @@
     }
 
     async function init() {
+        if(props.node.attrs.nativeFile) {
+            // drag and drop / copy paste case, nativeFile is passed to Upload value
+            await nextTick();
+            props.editor.commands.withoutHistory(() => {
+                props.updateAttributes({
+                    isNew: false,
+                    nativeFile: null,
+                });
+            });
+            return;
+        }
+
         if(props.node.attrs.isNew) {
             if(parentEditor.props.field.uploads.fields.legend) {
                 showFormModal();
             } else {
+                await nextTick();
                 uploadComponent.value.browseFiles();
             }
         } else {
@@ -138,8 +148,11 @@
                 props.node.attrs['data-unique-id']
             );
             if(resolved) {
-                props.updateAttributes({
-                    file: resolved.file,
+                props.editor.commands.withoutHistory(() => {
+                    props.updateAttributes({
+                        file: resolved.file,
+                        'data-thumbnail': resolved.file.thumbnail,
+                    });
                 });
             }
         }
@@ -156,20 +169,33 @@
 
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <Upload
-            :field="parentEditor.props.field.uploads.fields.file"
-            :field-error-key="null"
-            :value="node.attrs.file"
-            :has-error="!!error"
-            :root="false"
-            @thumbnail="onThumbnail"
-            @transform="onTransformed"
-            @error="onError"
-            @success="onSuccess"
-            @remove="onRemove"
-            @edit="onEdit"
-            ref="uploadComponent"
-        ></Upload>
+        <div v-show="!node.attrs.isNew">
+            <div class="border rounded p-4">
+                <Upload
+                    :field="parentEditor.props.field.uploads.fields.file"
+                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-unique-id']}`"
+                    :value="{
+                        ...node.attrs.file,
+                        nativeFile: node.attrs.nativeFile,
+                        thumbnail: node.attrs['data-thumbnail'] ?? node.attrs.file?.thumbnail,
+                    }"
+                    :has-error="!!error"
+                    :root="false"
+                    @thumbnail="onThumbnailGenerated"
+                    @transform="onUploadTransformed"
+                    @error="onUploadError"
+                    @success="onUploadSuccess"
+                    @remove="onRemove"
+                    @edit="onEdit"
+                    ref="uploadComponent"
+                ></Upload>
+                <template v-if="node.attrs.legend">
+                    <div class="text-sm mt-2">
+                        {{ node.attrs.legend }}
+                    </div>
+                </template>
+            </div>
+        </div>
 
         <template v-if="error">
             <div class="text-sm text-red-700 mt-1">
@@ -181,7 +207,7 @@
             :visible="modalVisible"
             :form="editorUploadForm"
             :post="postForm"
-            @cancel="onCancel"
+            @cancel="onModalCancel"
         >
             <template v-slot:title>
                 <template v-if="props.node.attrs.isNew">

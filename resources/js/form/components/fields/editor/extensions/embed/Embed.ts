@@ -105,14 +105,17 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
 
     addCommands() {
         return {
-            insertEmbed: (embed: EmbedData) => ({ commands, tr }) => {
-                return commands.insertContentAt(tr.selection.to, {
-                    type: `embed:${embed.key}`,
-                    attrs: {
-                        isNew: true,
-                        'data-unique-id': this.options.embedManager.newId(embed)
-                    },
-                });
+            insertEmbed: (embed: EmbedData) => ({ chain, tr }) => {
+                return chain()
+                    .withoutHistory()
+                    .insertContentAt(tr.selection.to, {
+                        type: `embed:${embed.key}`,
+                        attrs: {
+                            isNew: true,
+                            'data-unique-id': this.options.embedManager.newId(embed)
+                        },
+                    })
+                    .run();
             },
         }
     },

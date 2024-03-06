@@ -24,8 +24,7 @@ class ApiFilesController extends Controller
                         return [...$file, 'not_found' => true];
                     }
 
-                    $disk = Storage::disk($file['disk']);
-                    if (! $disk->exists($file['path'])) {
+                    if (! Storage::disk($file['disk'])->exists($file['path'])) {
                         return [...$file, 'not_found' => true];
                     }
 
@@ -34,11 +33,12 @@ class ApiFilesController extends Controller
                             'name' => basename($file['path']),
                             'path' => $file['path'],
                             'disk' => $file['disk'],
-                            'size' => $disk->size($file['path']),
+                            'size' => Storage::disk($file['disk'])->size($file['path']),
                             'filters' => $file['filters'] ?? null,
+                            'exists' => true,
                         ],
-                        function (array &$file) use ($disk, $thumbnailHeight, $thumbnailWidth) {
-                            if ($this->isMimetypeAnImage($disk->mimeType($file['path']))) {
+                        function (array &$file) use ($thumbnailHeight, $thumbnailWidth) {
+                            if ($this->isMimetypeAnImage(Storage::disk($file['disk'])->mimeType($file['path']))) {
                                 $model = static::getUploadModelClass()::make([
                                     'disk' => $file['disk'],
                                     'file_name' => $file['path'],

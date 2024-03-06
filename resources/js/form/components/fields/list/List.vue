@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { useParentForm } from "../../../useParentForm";
-    import FieldColumn from "@/components/ui/FieldGridColumn.vue";
     import Field from "../../Field.vue";
     import { FormFieldData, FormListFieldData, FormUploadFieldValueData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "../../../util";
@@ -13,6 +12,8 @@
     import { FieldsMeta } from "../../../types";
     import { SortableOptions } from "sortablejs";
     import { Serializable } from "@/form/Serializable";
+    import FieldGridRow from "@/components/ui/FieldGridRow.vue";
+    import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
 
     const props = defineProps<{
         field: FormListFieldData,
@@ -97,7 +98,7 @@
         emit('input', [
             ...props.value,
             ...files.map(file => createItem({
-                [props.field.bulkUploadField]: { file },
+                [props.field.bulkUploadField]: { nativeFile: file } satisfies Partial<FormUploadFieldValueData>,
             })),
         ]);
 
@@ -181,22 +182,23 @@
                     </template>
 
                     <template v-for="row in fieldLayout.item">
-                        <div class="flex flex-wrap -mx-4">
+                        <FieldGridRow>
                             <template v-for="itemFieldLayout in row">
-                                <FieldColumn class="px-4" :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
+                                <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
                                     <Field
                                         :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
                                         :field-layout="itemFieldLayout"
                                         :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
                                         :value="itemData[itemFieldLayout.key]"
                                         :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                        :row="row"
                                         @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
                                         @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
                                         @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
                                     />
-                                </FieldColumn>
+                                </FieldGridColumn>
                             </template>
-                        </div>
+                        </FieldGridRow>
                     </template>
 
                     <template v-if="field.removable && !field.readOnly && !dragActive">

@@ -1,7 +1,7 @@
-import { Node, type Range } from "@tiptap/core";
+import { Node, type Range, RawCommands } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
-import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
+import { FormUploadFieldValueData } from "@/types";
 import { serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { ContentUploadManager } from "@/content/ContentUploadManager";
@@ -15,6 +15,7 @@ export type UploadNodeAttributes = {
     nativeFile: File,
     isImage: boolean,
     'data-unique-id': string,
+    'data-thumbnail': string|null,
 }
 
 export type UploadOptions = {
@@ -50,6 +51,10 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
             },
             'data-unique-id': {
                 default: null,
+            },
+            'data-thumbnail': {
+                default: null,
+                rendered: false,
             },
             nativeFile: {
                 default: null,
@@ -87,18 +92,22 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
 
     addCommands() {
         return {
-            insertUpload: (file?: File, pos?: number | Range) => ({ commands, tr }) => {
-                return commands.insertContentAt(pos ?? tr.selection.to, {
-                    type: Upload.name,
-                    attrs: {
-                        file: null,
-                        legend: null,
-                        isNew: true,
-                        nativeFile: file,
-                        isImage: !!file?.type.match(/^image\//),
-                        'data-unique-id': this.options.uploadManager.newId(),
-                    } satisfies UploadNodeAttributes,
-                });
+            insertUpload: (file, pos) => ({ chain, tr }) => {
+                return chain()
+                    .withoutHistory()
+                    .insertContentAt(pos ?? tr.selection.to, {
+                        type: Upload.name,
+                        attrs: {
+                            file: null,
+                            legend: null,
+                            isNew: true,
+                            nativeFile: file,
+                            isImage: !!file?.type.match(/^image\//),
+                            'data-unique-id': this.options.uploadManager.newId(),
+                            'data-thumbnail': null,
+                        } satisfies UploadNodeAttributes,
+                    })
+                    .run();
             },
         }
     },

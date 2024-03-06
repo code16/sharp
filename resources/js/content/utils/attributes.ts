@@ -20,9 +20,11 @@ export function serializeAttributeValue(value) {
 export function serializeUploadAttributeValue(value: FormUploadFieldValueData | null) {
     if(value && typeof value === 'object') {
         const {
+            id,
             uploaded,
             transformed,
             not_found,
+            exists,
             thumbnail,
             ...serializable
         } = value;

@@ -51,7 +51,7 @@ it('can post a newly uploaded file in editor, create case', function () {
         ->json();
     
     $editorXSharpFileData = $this
-        ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
+        ->postJson(route('code16.sharp.api.form.editor.upload.form.update', ['person']), [
             'data' => [
                 'file' => $uploadedFileData,
             ],
@@ -64,7 +64,7 @@ it('can post a newly uploaded file in editor, create case', function () {
         ->json();
     
     $editorXSharpImageData = $this
-        ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
+        ->postJson(route('code16.sharp.api.form.editor.upload.form.update', ['person']), [
             'data' => [
                 'file' => $uploadedImageData,
             ],
@@ -144,7 +144,7 @@ it('can post a newly uploaded file in editor, update case', function () {
         ->json();
 
     $editorXSharpFileData = $this
-        ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
+        ->postJson(route('code16.sharp.api.form.editor.upload.form.update', ['person', 1]), [
             'data' => [
                 'file' => $uploadedFileData,
             ],
@@ -157,7 +157,7 @@ it('can post a newly uploaded file in editor, update case', function () {
         ->json();
     
     $editorXSharpImageData = $this
-        ->postJson(route('code16.sharp.api.form.editor.upload.form.update'), [
+        ->postJson(route('code16.sharp.api.form.editor.upload.form.update', ['person', 1]), [
             'data' => [
                 'file' => $uploadedImageData,
             ],

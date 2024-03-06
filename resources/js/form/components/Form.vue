@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import Field from "./Field.vue";
     import FormLayout from "./FormLayout.vue";
-    import { FormFieldData, FormLayoutTabData } from "@/types";
+    import { FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
 
     import { provide, ref } from "vue";
@@ -123,6 +123,8 @@
                                                                                 :field-error-key="fieldLayout.key"
                                                                                 :value="form.data[fieldLayout.key]"
                                                                                 :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                                                :row="row"
+                                                                                root
                                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                                                 @uploading="onFieldUploading(fieldLayout.key, $event)"
@@ -144,6 +146,8 @@
                                                     :field-error-key="fieldLayout.key"
                                                     :value="form.data[fieldLayout.key]"
                                                     :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                    :row="row as LayoutFieldData[]"
+                                                    root
                                                     @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                     @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                     @uploading="onFieldUploading(fieldLayout.key, $event)"

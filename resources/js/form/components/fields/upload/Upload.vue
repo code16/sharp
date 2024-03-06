@@ -23,9 +23,7 @@
 
     import { FormFieldProps } from "@/form/types";
 
-    const props = defineProps<FormFieldProps<FormUploadFieldData> & {
-        value: FormUploadFieldData['value'] & { file?: File } | null,
-    }>();
+    const props = defineProps<FormFieldProps<FormUploadFieldData>>();
 
     defineOptions({
         inheritAttrs: false,
@@ -40,6 +38,7 @@
         (e: 'uploading', uploading: boolean): void
         (e: 'remove'): void
         (e: 'transform', value: typeof props['value']): void
+        (e: 'edit', event: CustomEvent): void
     }>();
     const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
@@ -49,7 +48,7 @@
         return field.imageTransformable &&
             (!field.imageTransformableFileTypes || field.imageTransformableFileTypes?.includes(extension.value));
     });
-    const transformedImg = ref();
+    const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
     const uppy = new Uppy({
         id: props.fieldErrorKey,
@@ -122,10 +121,12 @@
         .on('upload-success', (file, response) => {
             emit('input', {
                 ...response.body,
-                uploaded: true,
+                thumbnail: transformedImg?.value ?? uppyFile.value.preview,
+                size: file.size,
             });
             emit('success', {
                 ...response.body,
+                thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 size: file.size,
             });
             uppyFile.value = uppy.getFile(file.id);
@@ -148,14 +149,15 @@
             emit('uploading', false);
         });
 
-    if(props.value?.file) {
+    if(props.value?.nativeFile) {
         uppy.addFile({
-            name: props.value.file.name,
-            type: props.value.file.type,
-            data: props.value.file,
+            name: props.value.nativeFile.name,
+            type: props.value.nativeFile.type,
+            data: props.value.nativeFile,
             isRemote: true,
         });
-        emit('input', {});
+        const { nativeFile, ...value } = props.value;
+        emit('input', { ...value });
     }
 
     const isDraggingOver = ref(false);
@@ -173,17 +175,21 @@
         }
     });
 
-    onUnmounted(() => {
-        uppy.close({ reason: 'unmount' });
-        emit('uploading', false);
-    });
-
     async function onImageTransform(cropper: Cropper) {
         const cropData = cropper.getData(true);
         const imageData = cropper.getImageData();
-        const value = {
+        const blob = await new Promise<Blob>(resolve => cropper.getCroppedCanvas().toBlob(resolve));
+
+        if(transformedImg.value) {
+            URL.revokeObjectURL(transformedImg.value);
+        }
+
+        transformedImg.value = URL.createObjectURL(blob);
+
+        const value: typeof props['value'] = {
             ...props.value,
             transformed: true,
+            thumbnail: transformedImg.value,
             filters: {
                 ...props.value?.filters,
                 ...getFiltersFromCropData({
@@ -192,16 +198,19 @@
                     imageHeight: imageData.naturalHeight,
                 }),
             }
-        }
+        };
+
         emit('transform', value);
         emit('input', value);
-
-        const blob = await new Promise<Blob>(resolve => cropper.getCroppedCanvas().toBlob(resolve));
-        transformedImg.value = URL.createObjectURL(blob);
     }
 
     function onEdit() {
-        showEditModal.value = true;
+        const event = new CustomEvent('edit', { cancelable: true });
+        emit('edit', event);
+
+        if(!event.defaultPrevented) {
+            showEditModal.value = true;
+        }
     }
 
     function onRemove() {
@@ -225,16 +234,21 @@
     defineExpose({
         browseFiles,
     });
+
+    onUnmounted(() => {
+        uppy.close({ reason: 'unmount' });
+        emit('uploading', false);
+    });
 </script>
 
 <template>
     <template v-if="value || uppyFile">
-        <div class="bg-white rounded border p-4">
+        <div class="bg-white" :class="{ 'rounded border p-4': root }">
             <div class="flex">
-                <template v-if="value?.thumbnail ?? transformedImg ?? uppyFile?.preview">
+                <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
                     <img class="mr-4"
                         width="100"
-                        :src="value?.thumbnail ?? transformedImg ?? uppyFile.preview"
+                        :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
                         alt=""
                     >
                 </template>
@@ -248,7 +262,7 @@
                                 {{ filesizeLabel(value?.size ?? uppyFile.size) }}
                             </div>
                         </template>
-                        <template v-if="value?.path">
+                        <template v-if="value?.exists">
                             <a class="text-sm text-primary-700 underline"
                                 :href="route('code16.sharp.download.show', {
                                     entityKey: form.entityKey,
@@ -285,8 +299,12 @@
         </div>
     </template>
     <template v-else>
-        <div class="relative flex justify-center rounded-lg border border-dashed  px-6 py-10"
-            :class="[isDraggingOver ? 'border-primary-600' : 'border-gray-900/25']"
+        <div class="relative flex justify-center rounded-lg border border-dashed px-6 py-10"
+            :class="[
+                isDraggingOver ? 'border-primary-600' :
+                hasError ? 'border-red-600' :
+                'border-gray-900/25'
+            ]"
             ref="dropTarget"
         >
             <div class="text-center" :class="{ 'invisible': isDraggingOver }">

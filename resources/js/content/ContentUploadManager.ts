@@ -58,6 +58,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
                     element.setAttribute('data-unique-id', this.newId());
                 } else {
                     element.removeAttribute('data-unique-id');
+                    element.removeAttribute('data-thumbnail');
                 }
             });
 
@@ -103,7 +104,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         }
 
         const resolvedFiles = await api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), {
-            files: contentUploads.map(contentUpload => contentUpload.value.file)
+            files: contentUploads.map(contentUpload => contentUpload.value.file).filter(Boolean)
         })
             .then(response => response.data.files) as FormUploadFieldValueData[]
 
@@ -142,8 +143,10 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
     }
 
     async postForm(id: string, data: FormEditorUploadData): Promise<FormEditorUploadData> {
+        const { entityKey, instanceId } = this.root;
+
         const responseData = await api.post(
-            route('code16.sharp.api.form.editor.upload.form.update'), {
+            route('code16.sharp.api.form.editor.upload.form.update', { entityKey, instanceId }), {
                 data,
                 fields: this.editorField.uploads.fields,
             }

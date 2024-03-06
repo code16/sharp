@@ -22,7 +22,7 @@ class ShowController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $uri, string $entityKey, string $instanceId)
+    public function show(string $parentUri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
@@ -62,7 +62,7 @@ class ShowController extends SharpProtectedController
         ]);
     }
 
-    public function delete(string $uri, string $entityKey, string $instanceId)
+    public function delete(string $parentUri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('delete', $entityKey, $instanceId);
 

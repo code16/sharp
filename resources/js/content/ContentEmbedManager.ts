@@ -38,12 +38,12 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
 
     get serializedEmbeds() {
         return Object.values(this.contentEmbeds)
-            .reduce((res, contentEmbed) => ({
-                ...res,
-                [contentEmbed.embed.key]: !contentEmbed.removed
-                    ? [...(res[contentEmbed.embed.key] ?? []), contentEmbed.value]
-                    : res[contentEmbed.embed.key],
-            }), {});
+            .reduce((res, contentEmbed) => {
+                return contentEmbed.removed ? res : {
+                    ...res,
+                    [contentEmbed.embed.key]: [...(res[contentEmbed.embed.key] ?? []), contentEmbed.value],
+                }
+            }, {});
     }
 
     newId(embed: EmbedData) {
@@ -177,7 +177,7 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
                 instanceId
                     ? route('code16.sharp.api.embed.instance.form.show', { embedKey: embed.key, entityKey, instanceId })
                     : route('code16.sharp.api.embed.form.show', { embedKey: embed.key, entityKey }),
-                { ...this.contentEmbeds[id].value }
+                { ...this.contentEmbeds[id]?.value }
             )
             .then(response => response.data);
     }

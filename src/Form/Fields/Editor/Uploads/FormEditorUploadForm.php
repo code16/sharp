@@ -8,6 +8,7 @@ use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
+use Code16\Sharp\Utils\Traits\HandleValidation;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 /**
@@ -16,6 +17,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 class FormEditorUploadForm
 {
     use HandleFormFields;
+    use HandleValidation;
     use HasModalFormLayout;
     use WithCustomTransformers;
 
@@ -51,32 +53,17 @@ class FormEditorUploadForm
             $this->buildFormLayout($column);
         });
     }
+    
+    public function rules()
+    {
+        return [
+            'file' => ['required', 'array'],
+            'legend' => ['nullable'],
+        ];
+    }
 
     public function getDataLocalizations(): array
     {
         return [];
-    }
-
-    final public function formatRequestData(array $data): array
-    {
-        return collect($data)
-            ->filter(fn ($value, $key) => in_array($key, $this->getDataKeys()))
-            ->map(function ($value, $key) {
-                if (! $field = $this->findFieldByKey($key)) {
-                    return $value;
-                }
-
-                if (is_a($field, SharpFormUploadField::class)) {
-                    // Uploads are a bit different in this case
-                    $field->formatter()->setAlwaysReturnFullObject();
-                }
-
-                // Apply formatter based on field configuration
-                return $field
-                    ->formatter()
-                    ->setDataLocalizations($this->getDataLocalizations())
-                    ->fromFront($field, $key, $value);
-            })
-            ->toArray();
     }
 }

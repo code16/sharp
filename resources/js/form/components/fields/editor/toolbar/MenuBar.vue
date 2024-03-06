@@ -99,7 +99,7 @@
 
                         <template v-slot:default>
                             <template v-for="embed in props.field.embeds">
-                                <DropdownItem @click="editor.chain().focus().insertEmbed({ embed }).run()">
+                                <DropdownItem @click="editor.chain().insertEmbed(embed).run()">
                                     {{ embed.label }}
                                 </DropdownItem>
                             </template>
