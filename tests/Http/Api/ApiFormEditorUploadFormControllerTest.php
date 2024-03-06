@@ -56,14 +56,14 @@ it('can post a file with known instanceId', function () {
     UploadedFile::fake()
         ->image('image.jpg', 600, 600)
         ->storeAs('tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $editor = SharpFormEditorField::make('upload')
         ->allowUploads(
             SharpFormEditorUpload::make()
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Posts/{id}')
         );
-    
+
     $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update', ['person', 1]), [
             'data' => [
@@ -92,7 +92,7 @@ it('fail if no file provided', function () {
                 ->setStorageDisk('local')
                 ->setStorageBasePath('data/Posts/{id}')
         );
-    
+
     $this
         ->postJson(route('code16.sharp.api.form.editor.upload.form.update', ['person', 1]), [
             'data' => [
@@ -103,5 +103,3 @@ it('fail if no file provided', function () {
         ->assertStatus(422)
         ->assertJsonValidationErrorFor('file');
 });
-
-

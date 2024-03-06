@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Form\Fields\Editor\Uploads;
 
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
@@ -53,7 +52,7 @@ class FormEditorUploadForm
             $this->buildFormLayout($column);
         });
     }
-    
+
     public function rules()
     {
         return [

@@ -28,9 +28,9 @@ Route::group([
 
     Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
         ->name('code16.sharp.download.show');
-    
+
     Route::where([
-        'parentUri' => '(s-list|s-show)/.+'
+        'parentUri' => '(s-list|s-show)/.+',
     ])->group(function () {
         Route::get('/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show.show');
