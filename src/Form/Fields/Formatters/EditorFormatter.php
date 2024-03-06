@@ -13,9 +13,9 @@ class EditorFormatter extends SharpFieldFormatter
             'text' => $value,
         ];
     }
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
@@ -37,13 +37,13 @@ class EditorFormatter extends SharpFieldFormatter
 
         return preg_replace('/\R/u', "\n", $content);
     }
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function afterUpdate(SharpFormField $field, $attribute, $value): string|array|null
     {
-        if($value !== null && $field->isLocalized()) {
+        if ($value !== null && $field->isLocalized()) {
             return collect($value)
                 ->map(function (?string $localizedContent) {
                     return $localizedContent
@@ -52,7 +52,7 @@ class EditorFormatter extends SharpFieldFormatter
                 })
                 ->toArray();
         }
-        
+
         return $value
             ? str($value)->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)->value()
             : null;

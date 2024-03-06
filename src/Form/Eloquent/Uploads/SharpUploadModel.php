@@ -6,7 +6,6 @@ use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Arr;
 
 class SharpUploadModel extends Model
 {

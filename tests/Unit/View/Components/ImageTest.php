@@ -12,9 +12,9 @@ it('renders <x-sharp-image>', function () {
         'disk' => 'local',
         'file_name' => createImage(),
     ]);
-    
+
     $filters = ['fit' => ['w' => 400, 'h' => 400]];
-    
+
     $this->blade(
         sprintf('<x-sharp-image file="%s" legend="Legendary" :attributes="$attributes" />', e(json_encode([
             'name' => 'test.png',
@@ -27,7 +27,7 @@ it('renders <x-sharp-image>', function () {
                 'thumbnailHeight' => 400,
                 'filters' => $filters,
                 'alt' => 'Image',
-            ])
+            ]),
         ]
     )
         ->assertSee(

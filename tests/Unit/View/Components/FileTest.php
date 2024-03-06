@@ -10,7 +10,7 @@ beforeEach(function () {
 
 it('renders <x-sharp-file>', function () {
     $filePath = UploadedFile::fake()->create('doc.pdf')->storeAs('data', 'doc.pdf', 'local');
-    
+
     $this->blade(
         sprintf('<x-sharp-file file="%s" :attributes="$attributes" />', e(json_encode([
             'name' => 'doc.pdf',
@@ -40,7 +40,7 @@ it('renders <x-sharp-file> legend', function () {
 
 it('provides fileModel', function () {
     $filePath = UploadedFile::fake()->create('doc.pdf')->storeAs('data', 'doc.pdf', 'local');
-    
+
     $component = $this->component(\Code16\Sharp\View\Components\File::class, [
         'file' => e(json_encode([
             'name' => 'doc.pdf',
@@ -48,7 +48,7 @@ it('provides fileModel', function () {
             'disk' => 'local',
         ])),
     ]);
-    
+
     expect($component->fileModel)->toBeInstanceOf(SharpUploadModel::class)
         ->and($component->fileModel->file_name)->toBe($filePath)
         ->and($component->fileModel->disk)->toBe('local');
