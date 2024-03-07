@@ -82,9 +82,9 @@ class AuthorEmbed extends SharpFormEditorEmbed
 
     public function updateContent(array $data = []): array
     {
-        $this->validate($data, [
-            'author' => ['required'],
-        ]);
+//        $this->validate($data, [
+//            'author' => ['required'],
+//        ]);
 
         return $data;
     }

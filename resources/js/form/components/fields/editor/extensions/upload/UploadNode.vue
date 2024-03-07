@@ -43,7 +43,7 @@
         modalVisible.value = true;
     }
 
-    async function postForm(data: FormEditorUploadData) {
+    async function postModalForm(data: FormEditorUploadData) {
         const responseData = await uploadManager.postForm(
             props.node.attrs['data-unique-id'],
             data
@@ -53,7 +53,6 @@
             file: responseData.file,
             legend: responseData.legend,
             isNew: false,
-            'data-thumbnail': data.file.thumbnail,
         });
 
         modalVisible.value = false;
@@ -62,7 +61,10 @@
     function onThumbnailGenerated(preview: string) {
         props.editor.commands.withoutHistory(() => {
             props.updateAttributes({
-                'data-thumbnail': preview,
+                file: {
+                    ...props.node.attrs.file,
+                    thumbnail: preview,
+                },
             });
         });
     }
@@ -70,7 +72,6 @@
     function onUploadTransformed(value: FormUploadFieldData['value']) {
         props.updateAttributes({
             file: value,
-            'data-thumbnail': value.thumbnail,
         });
 
         if(!props.node.attrs.isNew) {
@@ -97,7 +98,7 @@
     }
 
     async function onUploadSuccess(value: FormUploadFieldData['value']) {
-        await postForm({
+        await postModalForm({
             file: value,
         });
     }
@@ -126,7 +127,8 @@
     async function init() {
         if(props.node.attrs.nativeFile) {
             // drag and drop / copy paste case, nativeFile is passed to Upload value
-            await nextTick();
+            uploadComponent.value.upload(props.node.attrs.nativeFile);
+
             props.editor.commands.withoutHistory(() => {
                 props.updateAttributes({
                     isNew: false,
@@ -141,7 +143,13 @@
                 showFormModal();
             } else {
                 await nextTick();
-                uploadComponent.value.browseFiles();
+                const file = await uploadComponent.value.browseFiles();
+                props.editor.commands.focus(props.getPos() + props.node.nodeSize);
+                if(!file) {
+                    props.editor.commands.withoutHistory(() => {
+                        props.deleteNode();
+                    });
+                }
             }
         } else {
             const resolved = await uploadManager.getResolvedUpload(
@@ -151,7 +159,6 @@
                 props.editor.commands.withoutHistory(() => {
                     props.updateAttributes({
                         file: resolved.file,
-                        'data-thumbnail': resolved.file.thumbnail,
                     });
                 });
             }
@@ -174,11 +181,11 @@
                 <Upload
                     :field="parentEditor.props.field.uploads.fields.file"
                     :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-unique-id']}`"
-                    :value="{
+                    :value="node.attrs.file ? {
                         ...node.attrs.file,
                         nativeFile: node.attrs.nativeFile,
                         thumbnail: node.attrs['data-thumbnail'] ?? node.attrs.file?.thumbnail,
-                    }"
+                    } : null"
                     :has-error="!!error"
                     :root="false"
                     @thumbnail="onThumbnailGenerated"
@@ -206,7 +213,7 @@
         <EmbedFormModal
             :visible="modalVisible"
             :form="editorUploadForm"
-            :post="postForm"
+            :post="postModalForm"
             @cancel="onModalCancel"
         >
             <template v-slot:title>

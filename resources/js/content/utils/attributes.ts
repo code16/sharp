@@ -17,8 +17,12 @@ export function serializeAttributeValue(value) {
     return value;
 }
 
-export function serializeUploadAttributeValue(value: FormUploadFieldValueData | null) {
-    if(value && typeof value === 'object') {
+export function serializeUploadAttributeValue(value: FormUploadFieldValueData | null): string {
+    if(!value) {
+        return 'null';
+    }
+
+    if(typeof value === 'object') {
         const {
             id,
             uploaded,

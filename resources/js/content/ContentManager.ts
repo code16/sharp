@@ -24,4 +24,9 @@ export class ContentManager {
         }
         return content;
     }
+
+    contentDOM(content: string | null): Document {
+        const parser = new DOMParser();
+        return parser.parseFromString(content ?? '', 'text/html');
+    }
 }

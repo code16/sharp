@@ -2,7 +2,7 @@ import { Form } from "@/form/Form";
 import { EmbedData, FormData } from "@/types";
 import { api } from "@/api";
 import { route } from "@/utils/url";
-import { parseAttributeValue } from "@/content/utils/attributes";
+import { parseAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { hyphenate } from "@/utils";
 import { Show } from "@/show/Show";
 import { MaybeLocalizedContent } from "@/content/types";
@@ -50,48 +50,59 @@ export class ContentEmbedManager<Root extends Form | Show> extends ContentManage
         return `${embed.key}-${this.uniqueId++}`;
     }
 
-    withEmbedsUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
+    withEmbedsUniqueId<Content extends MaybeLocalizedContent>(content: Content): Content {
         if(!Object.values(this.embeds).length) {
             return content;
         }
 
         return this.maybeLocalized(content, content => {
-            const parser = new DOMParser();
-            const document = parser.parseFromString(content, 'text/html');
+            const contentDOM = new DOMParser().parseFromString(content, 'text/html');
 
             Object.values(this.embeds).forEach(embed => {
-                document.querySelectorAll(embed.tag).forEach(element => {
-                    if(toggle) {
-                        element.setAttribute('data-unique-id', this.newId(embed));
-                    } else {
-                        element.removeAttribute('data-unique-id');
-                    }
+                contentDOM.querySelectorAll(embed.tag).forEach(element => {
+                    element.setAttribute('data-unique-id', this.newId(embed));
                 });
             });
 
-            return document.body.innerHTML;
+            return contentDOM.body.innerHTML;
         });
     }
 
     serializeContent(content: string): string {
-        if(Object.values(this.embeds).length) {
+        if(!Object.values(this.embeds).length) {
             return content;
         }
 
-        return this.withEmbedsUniqueId(content, false);
+        const contentDOM = new DOMParser().parseFromString(content, 'text/html');
+
+        Object.values(this.embeds).forEach(embed => {
+            contentDOM.querySelectorAll(embed.tag).forEach(element => {
+                element.removeAttribute('data-unique-id');
+                Object.values(embed.fields)
+                    .forEach(embedField => {
+                        if(embedField.type === 'upload') {
+                            element.setAttribute(
+                                hyphenate(embedField.key),
+                                serializeUploadAttributeValue(parseAttributeValue(element.getAttribute(embedField.key)))
+                            );
+                        }
+                    });
+            });
+        });
+
+        return contentDOM.body.innerHTML;
     }
 
     async resolveContentEmbeds<Content extends MaybeLocalizedContent>(content: Content) {
         const { entityKey, instanceId } = this.root;
-        const parser = new DOMParser();
-        const document = parser.parseFromString(`<body>${this.allContent(content)}</body>`, 'text/html');
+        const contentDOM = new DOMParser().parseFromString(this.allContent(content), 'text/html');
 
         this.contentEmbeds = {
             ...this.contentEmbeds,
             ...Object.fromEntries(
                 Object.values(this.embeds)
                     .map(embed => {
-                        const contentEmbeds = [...document.querySelectorAll(embed.tag)]
+                        const contentEmbeds = [...contentDOM.querySelectorAll(embed.tag)]
                             .map(element => ({
                                 id: element.getAttribute('data-unique-id'),
                                 resolved: Promise.withResolvers<true>(),

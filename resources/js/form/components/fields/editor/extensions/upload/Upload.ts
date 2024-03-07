@@ -2,7 +2,7 @@ import { Node, type Range, RawCommands } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import { FormUploadFieldValueData } from "@/types";
-import { serializeUploadAttributeValue } from "@/content/utils/attributes";
+import { serializeAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { ContentUploadManager } from "@/content/ContentUploadManager";
 import { Plugin } from "@tiptap/pm/state";
@@ -15,7 +15,6 @@ export type UploadNodeAttributes = {
     nativeFile: File,
     isImage: boolean,
     'data-unique-id': string,
-    'data-thumbnail': string|null,
 }
 
 export type UploadOptions = {
@@ -42,7 +41,7 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                 }),
                 renderHTML: (attributes) => {
                     return {
-                        file: serializeUploadAttributeValue(attributes.file),
+                        file: serializeAttributeValue(attributes.file),
                     }
                 },
             },
@@ -51,10 +50,6 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
             },
             'data-unique-id': {
                 default: null,
-            },
-            'data-thumbnail': {
-                default: null,
-                rendered: false,
             },
             nativeFile: {
                 default: null,
@@ -104,7 +99,6 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                             nativeFile: file,
                             isImage: !!file?.type.match(/^image\//),
                             'data-unique-id': this.options.uploadManager.newId(),
-                            'data-thumbnail': null,
                         } satisfies UploadNodeAttributes,
                     })
                     .run();

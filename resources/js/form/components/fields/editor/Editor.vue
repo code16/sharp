@@ -123,6 +123,7 @@
                 const content = props.field.markdown
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
+
                 const value = new Serializable(
                     content,
                     embedManager.serializeContent(uploadManager.serializeContent(content)),
@@ -181,18 +182,20 @@
 
             <EditorContent :editor="editor" :key="locale ?? 'editor'" />
 
-            <template v-if="editor && field.showCharacterCount">
-                <div class="card-footer fs-8 text-muted bg-white">
-                    <template v-if="field.maxLength">
-                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">
-                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}
-                        </span>
-                    </template>
-                    <template v-else>
-                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}
-                    </template>
-                </div>
-            </template>
+            <!-- Commenting this for now because it causes infinite loop on HMR -->
+
+<!--            <template v-if="editor && field.showCharacterCount">-->
+<!--                <div class="card-footer fs-8 text-muted bg-white">-->
+<!--                    <template v-if="field.maxLength">-->
+<!--                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">-->
+<!--                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}-->
+<!--                        </span>-->
+<!--                    </template>-->
+<!--                    <template v-else>-->
+<!--                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}-->
+<!--                    </template>-->
+<!--                </div>-->
+<!--            </template>-->
         </div>
     </div>
 </template>

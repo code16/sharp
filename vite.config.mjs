@@ -22,6 +22,9 @@ export default defineConfig(({ mode, command }) => {
                 'vue': 'vue/dist/vue.esm-browser.js',
             }
         },
+        server: {
+            hmr: false,
+        },
         plugins: [
             warmup({
                 clientFiles: [

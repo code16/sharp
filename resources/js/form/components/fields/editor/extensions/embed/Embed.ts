@@ -55,11 +55,7 @@ export const Embed: WithRequiredOptions<Node<EmbedOptions>> = Node.create<EmbedO
                         embed.attributes
                             ?.filter(attributeName => attributes.embedAttributes[attributeName] != null)
                             .map((attributeName) => {
-                                const value = embed.fields[attributeName].type === 'upload'
-                                    ? serializeUploadAttributeValue(attributes.embedAttributes[attributeName] as FormUploadFieldValueData)
-                                    : serializeAttributeValue(attributes.embedAttributes[attributeName]);
-
-                                return [hyphenate(attributeName), value];
+                                return [hyphenate(attributeName), serializeAttributeValue(attributes.embedAttributes[attributeName])];
                             }, {})
                         ?? []
                     )

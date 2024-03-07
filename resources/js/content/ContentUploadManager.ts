@@ -2,7 +2,7 @@ import { api } from "@/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
-import { parseAttributeValue } from "@/content/utils/attributes";
+import { parseAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { Show } from "@/show/Show";
 import { ContentManager } from "@/content/ContentManager";
 import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
@@ -44,25 +44,19 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         return `${this.uniqueId++}`;
     }
 
-    withUploadsUniqueId<Content extends MaybeLocalizedContent>(content: Content, toggle: boolean = true): Content {
+    withUploadsUniqueId<Content extends MaybeLocalizedContent>(content: Content,): Content {
         if(this.editorField && !this.editorField.uploads) {
             return content;
         }
 
         return this.maybeLocalized(content, content => {
-            const parser = new DOMParser();
-            const document = parser.parseFromString(content, 'text/html');
+            const contentDOM = new DOMParser().parseFromString(content, 'text/html');
 
-            document.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
-                if(toggle) {
-                    element.setAttribute('data-unique-id', this.newId());
-                } else {
-                    element.removeAttribute('data-unique-id');
-                    element.removeAttribute('data-thumbnail');
-                }
+            contentDOM.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
+                element.setAttribute('data-unique-id', this.newId());
             });
 
-            return document.body.innerHTML;
+            return contentDOM.body.innerHTML;
         });
     }
 
@@ -71,18 +65,26 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
             return content;
         }
 
-        return this.withUploadsUniqueId(content, false);
+        return this.maybeLocalized(content, content => {
+            const contentDOM = new DOMParser().parseFromString(content, 'text/html');
+
+            contentDOM.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
+                element.removeAttribute('data-unique-id');
+                element.setAttribute('file', serializeUploadAttributeValue(parseAttributeValue(element.getAttribute('file'))));
+            });
+
+            return contentDOM.body.innerHTML;
+        });
     }
 
     async resolveContentUploads<Content extends MaybeLocalizedContent>(content: Content) {
         const { entityKey, instanceId } = this.root;
-        const parser = new DOMParser();
-        const document = parser.parseFromString(`<body>${this.allContent(content)}</body>`, 'text/html');
+        const contentDOM = new DOMParser().parseFromString(this.allContent(content), 'text/html');
 
         this.contentUploads = {
             ...this.contentUploads,
             ...Object.fromEntries(
-                [...document.querySelectorAll('x-sharp-file,x-sharp-image')]
+                [...contentDOM.querySelectorAll('x-sharp-file,x-sharp-image')]
                     .map(element => ({
                         id: element.getAttribute('data-unique-id'),
                         resolved: Promise.withResolvers<true>(),

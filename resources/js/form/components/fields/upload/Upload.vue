@@ -154,10 +154,8 @@
             name: props.value.nativeFile.name,
             type: props.value.nativeFile.type,
             data: props.value.nativeFile,
-            isRemote: true,
         });
-        const { nativeFile, ...value } = props.value;
-        emit('input', { ...value });
+        emit('input', null);
     }
 
     const isDraggingOver = ref(false);
@@ -227,12 +225,30 @@
         onImageTransform(cropper);
     }
 
-    function browseFiles() {
-        dropTarget.value.querySelector('input').click();
-    }
-
     defineExpose({
-        browseFiles,
+        browseFiles() {
+            return new Promise((resolve) => {
+                dropTarget.value.querySelector('input').click();
+                uppy.once('file-added', (file) => {
+                    resolve(file);
+                });
+                window.addEventListener('focus', () => {
+                    uppy.once('file-added', (file) => {
+                        resolve(file);
+                    });
+                    setTimeout(() => {
+                        resolve(null);
+                    }, 500);
+                }, { once: true });
+            });
+        },
+        upload(file: File) {
+            uppy.addFile({
+                name: file.name,
+                type: file.type,
+                data: file,
+            });
+        }
     });
 
     onUnmounted(() => {
@@ -242,7 +258,7 @@
 </script>
 
 <template>
-    <template v-if="value || uppyFile">
+    <template v-if="value?.path || uppyFile">
         <div class="bg-white" :class="{ 'rounded border p-4': root }">
             <div class="flex">
                 <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
