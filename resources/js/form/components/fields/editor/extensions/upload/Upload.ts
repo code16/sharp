@@ -8,13 +8,20 @@ import { ContentUploadManager } from "@/content/ContentUploadManager";
 import { Plugin } from "@tiptap/pm/state";
 import { Form } from "@/form/Form";
 
+
+
 export type UploadNodeAttributes = {
     file: FormUploadFieldValueData,
     legend: string,
-    isNew: boolean,
-    nativeFile: File,
-    isImage: boolean,
     'data-unique-id': string,
+    isNew: boolean,
+    isImage: boolean,
+    droppedFile: File,
+    savedFile?: File,
+    // /**
+    //  * This is used to store the history state of the upload node. (e.g. to preserve thumbnail on undo / redo)
+    //  */
+    // savedState: Partial<UploadNodeAttributes> | null,
 }
 
 export type UploadOptions = {
@@ -51,7 +58,11 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
             'data-unique-id': {
                 default: null,
             },
-            nativeFile: {
+            droppedFile: {
+                default: null,
+                rendered: false,
+            },
+            savedFile: {
                 default: null,
                 rendered: false,
             },
@@ -88,17 +99,22 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
     addCommands() {
         return {
             insertUpload: (file, pos) => ({ chain, tr }) => {
-                return chain()
-                    .withoutHistory()
-                    .insertContentAt(pos ?? tr.selection.to, {
+                const commands = chain();
+
+                if(!file) {
+                    // we want the user to select file / validate modal before writing to editor history (undo/redo)
+                    commands.withoutHistory();
+                }
+
+                return commands.insertContentAt(pos ?? tr.selection.to, {
                         type: Upload.name,
                         attrs: {
                             file: null,
                             legend: null,
-                            isNew: true,
-                            nativeFile: file,
-                            isImage: !!file?.type.match(/^image\//),
                             'data-unique-id': this.options.uploadManager.newId(),
+                            isNew: true,
+                            droppedFile: file,
+                            isImage: !!file?.type.match(/^image\//),
                         } satisfies UploadNodeAttributes,
                     })
                     .run();

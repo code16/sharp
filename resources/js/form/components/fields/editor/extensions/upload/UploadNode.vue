@@ -50,9 +50,13 @@
         );
 
         props.updateAttributes({
-            file: responseData.file,
+            file: {
+                ...responseData.file,
+                thumbnail: data.file.thumbnail,
+            },
             legend: responseData.legend,
             isNew: false,
+            droppedFile: null,
         });
 
         modalVisible.value = false;
@@ -125,16 +129,9 @@
     }
 
     async function init() {
-        if(props.node.attrs.nativeFile) {
-            // drag and drop / copy paste case, nativeFile is passed to Upload value
-            uploadComponent.value.upload(props.node.attrs.nativeFile);
+        if(props.node.attrs.droppedFile) {
+            uploadComponent.value.upload(props.node.attrs.droppedFile);
 
-            props.editor.commands.withoutHistory(() => {
-                props.updateAttributes({
-                    isNew: false,
-                    nativeFile: null,
-                });
-            });
             return;
         }
 
@@ -143,9 +140,9 @@
                 showFormModal();
             } else {
                 await nextTick();
-                const file = await uploadComponent.value.browseFiles();
+                const chosen = await uploadComponent.value.browseFiles();
                 props.editor.commands.focus(props.getPos() + props.node.nodeSize);
-                if(!file) {
+                if(!chosen) {
                     props.editor.commands.withoutHistory(() => {
                         props.deleteNode();
                     });
@@ -176,15 +173,13 @@
 
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <div v-show="!node.attrs.isNew">
+        <div v-show="!node.attrs.isNew || node.attrs.droppedFile">
             <div class="border rounded p-4">
                 <Upload
                     :field="parentEditor.props.field.uploads.fields.file"
                     :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-unique-id']}`"
                     :value="node.attrs.file ? {
                         ...node.attrs.file,
-                        nativeFile: node.attrs.nativeFile,
-                        thumbnail: node.attrs['data-thumbnail'] ?? node.attrs.file?.thumbnail,
                     } : null"
                     :has-error="!!error"
                     :root="false"

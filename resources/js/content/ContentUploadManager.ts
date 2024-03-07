@@ -14,6 +14,8 @@ type ContentUpload = {
     value: FormEditorUploadData,
 }
 
+type State = 'empty' | 'file-chosen' | 'uploading' | 'uploaded' | 'error' | 'existing';
+
 export class ContentUploadManager<Root extends Form | Show> extends ContentManager {
     contentUploads: { [id:string]: ContentUpload } = {};
     root: Form | Show;
@@ -157,7 +159,13 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
 
         this.contentUploads[id] = {
             id,
-            value: responseData,
+            value: {
+                ...responseData,
+                file: {
+                    ...responseData.file,
+                    thumbnail: data.file.thumbnail,
+                }
+            },
         }
 
         this.onUploadsUpdated(this.serializedUploads);

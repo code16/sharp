@@ -128,6 +128,7 @@
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 size: file.size,
+                nativeFile: file.data,
             });
             uppyFile.value = uppy.getFile(file.id);
             console.log('upload-success', JSON.parse(JSON.stringify(uppyFile.value)));
@@ -228,18 +229,19 @@
     defineExpose({
         browseFiles() {
             return new Promise((resolve) => {
-                dropTarget.value.querySelector('input').click();
-                uppy.once('file-added', (file) => {
-                    resolve(file);
-                });
-                window.addEventListener('focus', () => {
-                    uppy.once('file-added', (file) => {
-                        resolve(file);
-                    });
-                    setTimeout(() => {
-                        resolve(null);
-                    }, 500);
-                }, { once: true });
+                const input =  dropTarget.value.querySelector('input');
+                input.click();
+                input.addEventListener('change', () => resolve(true), { once: true });
+
+                if('oncancel' in input) {
+                    input.addEventListener('cancel', () => resolve(false), { once: true })
+                } else {
+                    window.addEventListener('focus', () => {
+                        setTimeout(() => {
+                            resolve(false);
+                        }, 300);
+                    }, { once: true });
+                }
             });
         },
         upload(file: File) {
@@ -248,11 +250,12 @@
                 type: file.type,
                 data: file,
             });
-        }
+        },
     });
 
     onUnmounted(() => {
         uppy.close({ reason: 'unmount' });
+        uppy.emit('cancel-all', { reason: 'user' });
         emit('uploading', false);
     });
 </script>
@@ -294,7 +297,7 @@
                     </div>
                     <template v-if="!field.readOnly">
                         <div class="flex gap-2 mt-2">
-                            <template v-if="value && (!uppyFile || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
+                            <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
                                 <Button class="mr-2" outline small @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
