@@ -4,7 +4,7 @@ namespace Code16\Sharp\Tests\Unit\View\Components\Fakes;
 
 use Illuminate\View\Component;
 
-class Image extends Component
+class ImageFake extends Component
 {
     public static self $lastRendered;
     

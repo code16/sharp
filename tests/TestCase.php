@@ -16,6 +16,7 @@ class TestCase extends Orchestra
         $this->withoutVite();
 
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+        config()->set('view.cache', false);
     }
 
     protected function getPackageProviders($app)
