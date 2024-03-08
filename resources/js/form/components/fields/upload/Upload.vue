@@ -17,48 +17,45 @@
     import { __ } from "@/utils/i18n";
     import { filesizeLabel } from "@/utils/file";
     import EditModal from "./EditModal.vue";
-    import { useForm } from "../../../useForm";
+    import { useParentForm } from "../../../useParentForm";
     import UploadDropText from "./UploadDropText.vue";
     import { getCsrfToken } from "@/utils/request";
 
-    const props = defineProps<{
-        field: FormUploadFieldData,
-        fieldErrorKey: string,
-        value: FormUploadFieldData['value'] & { file?: File } | null,
-        root: boolean,
-        hasError: boolean,
-    }>();
+    import { FormFieldProps } from "@/form/types";
+
+    const props = defineProps<FormFieldProps<FormUploadFieldData>>();
 
     defineOptions({
         inheritAttrs: false,
     });
 
     const emit = defineEmits<{
-        input: [value: typeof props['value']],
-        error: [message: string, file: Blob | File],
-        success: [file: FormUploadFieldData['value']],
-        clear: [],
-        thumbnail: [preview: string],
-        uploading: [uploading: boolean],
-        remove: [],
-        update: [value: FormUploadFieldData['value']],
+        (e: 'input', value: typeof props['value']): void
+        (e: 'error', message: string, file: Blob | File): void
+        (e: 'success', file: typeof props['value']): void
+        (e: 'clear'): void
+        (e: 'thumbnail', preview: string): void
+        (e: 'uploading', uploading: boolean): void
+        (e: 'remove'): void
+        (e: 'transform', value: typeof props['value']): void
+        (e: 'edit', event: CustomEvent): void
     }>();
-    const form = useForm();
+    const form = useParentForm();
     const extension = computed(() => props.value?.name?.match(/\.[0-9a-z]+$/i)[0]);
     const showEditModal = ref(false);
     const isTransformable = computed(() => {
         const { field } = props;
-        return field.transformable &&
-            (!field.transformableFileTypes || field.transformableFileTypes?.includes(extension.value));
+        return field.imageTransformable &&
+            (!field.imageTransformableFileTypes || field.imageTransformableFileTypes?.includes(extension.value));
     });
-    const transformedImg = ref();
+    const transformedImg = ref<string>();
     const uppyFile = ref<UppyFile>();
     const uppy = new Uppy({
         id: props.fieldErrorKey,
         restrictions: {
             maxFileSize: (props.field.maxFileSize ?? 0) * 1024 * 1024,
             maxNumberOfFiles: 1,
-            allowedFileTypes: props.field.fileFilter
+            allowedFileTypes: props.field.allowedExtensions
         },
         locale: {
             strings: {
@@ -69,6 +66,9 @@
             },
         },
         autoProceed: true,
+        meta: {
+            'validation_rule[]': props.field.validationRule,
+        },
     })
         .use(ThumbnailGenerator, { thumbnailWidth: 300, thumbnailHeight: 300 })
         .use(XHRUpload, {
@@ -93,14 +93,14 @@
             uppyFile.value = uppy.getFile(file.id);
             console.log('thumbnail:generated', JSON.parse(JSON.stringify(uppyFile.value)));
 
-            if(isTransformable.value && field.ratioX && field.ratioY) {
+            if(isTransformable.value && field.imageCropRatio) {
                 const cropper = await new Promise<Cropper>((resolve) => {
                     const container = document.createElement('div');
                     const image = document.createElement('img');
                     image.src = preview;
                     container.appendChild(image);
                     return new Cropper(image, {
-                        aspectRatio: props.field.ratioY / props.field.ratioX,
+                        aspectRatio: field.imageCropRatio[0] / field.imageCropRatio[1],
                         autoCropArea: 1,
                         ready: (e) => {
                             resolve(e.currentTarget.cropper);
@@ -121,11 +121,14 @@
         .on('upload-success', (file, response) => {
             emit('input', {
                 ...response.body,
-                uploaded: true,
+                thumbnail: transformedImg?.value ?? uppyFile.value.preview,
+                size: file.size,
             });
             emit('success', {
                 ...response.body,
+                thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 size: file.size,
+                nativeFile: file.data,
             });
             uppyFile.value = uppy.getFile(file.id);
             console.log('upload-success', JSON.parse(JSON.stringify(uppyFile.value)));
@@ -147,13 +150,13 @@
             emit('uploading', false);
         });
 
-    if(props.value?.file) {
+    if(props.value?.nativeFile) {
         uppy.addFile({
-            name: props.value.file.name,
-            type: props.value.file.type,
-            data: props.value.file,
+            name: props.value.nativeFile.name,
+            type: props.value.nativeFile.type,
+            data: props.value.nativeFile,
         });
-        emit('input', {});
+        emit('input', null);
     }
 
     const isDraggingOver = ref(false);
@@ -171,17 +174,21 @@
         }
     });
 
-    onUnmounted(() => {
-        uppy.close({ reason: 'unmount' });
-        emit('uploading', false);
-    });
-
     async function onImageTransform(cropper: Cropper) {
         const cropData = cropper.getData(true);
         const imageData = cropper.getImageData();
-        const value = {
+        const blob = await new Promise<Blob>(resolve => cropper.getCroppedCanvas().toBlob(resolve));
+
+        if(transformedImg.value) {
+            URL.revokeObjectURL(transformedImg.value);
+        }
+
+        transformedImg.value = URL.createObjectURL(blob);
+
+        const value: typeof props['value'] = {
             ...props.value,
             transformed: true,
+            thumbnail: transformedImg.value,
             filters: {
                 ...props.value?.filters,
                 ...getFiltersFromCropData({
@@ -190,12 +197,19 @@
                     imageHeight: imageData.naturalHeight,
                 }),
             }
-        }
-        emit('update', value);
-        emit('input', value);
+        };
 
-        const blob = await new Promise<Blob>(resolve => cropper.getCroppedCanvas().toBlob(resolve));
-        transformedImg.value = URL.createObjectURL(blob);
+        emit('transform', value);
+        emit('input', value);
+    }
+
+    function onEdit() {
+        const event = new CustomEvent('edit', { cancelable: true });
+        emit('edit', event);
+
+        if(!event.defaultPrevented) {
+            showEditModal.value = true;
+        }
     }
 
     function onRemove() {
@@ -211,16 +225,49 @@
     function onTransformSubmit(cropper: Cropper) {
         onImageTransform(cropper);
     }
+
+    defineExpose({
+        browseFiles() {
+            return new Promise((resolve) => {
+                const input =  dropTarget.value.querySelector('input');
+                input.click();
+                input.addEventListener('change', () => resolve(true), { once: true });
+
+                if('oncancel' in input) {
+                    input.addEventListener('cancel', () => resolve(false), { once: true })
+                } else {
+                    window.addEventListener('focus', () => {
+                        setTimeout(() => {
+                            resolve(false);
+                        }, 300);
+                    }, { once: true });
+                }
+            });
+        },
+        upload(file: File) {
+            uppy.addFile({
+                name: file.name,
+                type: file.type,
+                data: file,
+            });
+        },
+    });
+
+    onUnmounted(() => {
+        uppy.close({ reason: 'unmount' });
+        uppy.emit('cancel-all', { reason: 'user' });
+        emit('uploading', false);
+    });
 </script>
 
 <template>
-    <template v-if="value || uppyFile">
-        <div class="bg-white rounded border p-4">
+    <template v-if="value?.path || uppyFile">
+        <div class="bg-white" :class="{ 'rounded border p-4': root }">
             <div class="flex">
-                <template v-if="value?.thumbnail ?? transformedImg ?? uppyFile?.preview">
+                <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
                     <img class="mr-4"
                         width="100"
-                        :src="value?.thumbnail ?? transformedImg ?? uppyFile.preview"
+                        :src="transformedImg ?? value?.thumbnail ?? uppyFile.preview"
                         alt=""
                     >
                 </template>
@@ -234,7 +281,7 @@
                                 {{ filesizeLabel(value?.size ?? uppyFile.size) }}
                             </div>
                         </template>
-                        <template v-if="value?.path">
+                        <template v-if="value?.exists">
                             <a class="text-sm text-primary-700 underline"
                                 :href="route('code16.sharp.download.show', {
                                     entityKey: form.entityKey,
@@ -250,8 +297,8 @@
                     </div>
                     <template v-if="!field.readOnly">
                         <div class="flex gap-2 mt-2">
-                            <template v-if="value && isTransformable && !hasError">
-                                <Button class="mr-2" outline small @click="showEditModal = true">
+                            <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
+                                <Button class="mr-2" outline small @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </template>
@@ -271,8 +318,12 @@
         </div>
     </template>
     <template v-else>
-        <div class="relative flex justify-center rounded-lg border border-dashed  px-6 py-10"
-            :class="[isDraggingOver ? 'border-primary-600' : 'border-gray-900/25']"
+        <div class="relative flex justify-center rounded-lg border border-dashed px-6 py-10"
+            :class="[
+                isDraggingOver ? 'border-primary-600' :
+                hasError ? 'border-red-600' :
+                'border-gray-900/25'
+            ]"
             ref="dropTarget"
         >
             <div class="text-center" :class="{ 'invisible': isDraggingOver }">
@@ -287,9 +338,9 @@
                     </UploadDropText>
                 </div>
                 <p class="text-xs leading-5 text-gray-600">
-                    <template v-if="field.fileFilter?.length">
+                    <template v-if="field.allowedExtensions?.length">
                         <span class="uppercase">
-                            {{ field.fileFilter.map(extension => extension.replace('.', '')).join(', ') }}
+                            {{ field.allowedExtensions.map(extension => extension.replace('.', '')).join(', ') }}
                         </span>
                     </template>
                     <template v-if="field.maxFileSize">

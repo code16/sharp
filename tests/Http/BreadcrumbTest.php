@@ -32,7 +32,7 @@ it('builds the breadcrumb for a show page', function () {
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])
@@ -65,7 +65,7 @@ it('builds the breadcrumb for a form', function () {
     $this
         ->get(
             route('code16.sharp.form.edit', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])
@@ -82,7 +82,7 @@ it('builds the breadcrumb for a form through a show page', function () {
     $this
         ->get(
             route('code16.sharp.form.edit', [
-                'uri' => 's-list/person/s-show/person/1',
+                'parentUri' => 's-list/person/s-show/person/1',
                 'person',
                 1,
             ])
@@ -103,7 +103,7 @@ it('uses labels defined for entities in the config', function () {
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])
@@ -132,7 +132,7 @@ it('uses custom labels on leaves if configured', function () {
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])

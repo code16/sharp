@@ -103,13 +103,13 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|'>]: ButtonCo
         label: () => __('sharp::form.editor.toolbar.link.title'),
     },
     'upload-image': {
-        command: editor => editor.chain().focus().newUpload().run(),
+        command: editor => editor.chain().focus().insertUpload().run(),
         isActive: editor => editor.isActive('upload') || editor.isActive('image'),
         icon: getToolbarIcon('image'),
         label: () => __('sharp::form.editor.toolbar.upload_image.title'),
     },
     'upload': {
-        command: editor => editor.chain().focus().newUpload().run(),
+        command: editor => editor.chain().focus().insertUpload().run(),
         isActive: editor => editor.isActive('upload'),
         icon: getToolbarIcon('document'),
         label: () => __('sharp::form.editor.toolbar.upload.title'),
@@ -130,21 +130,25 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|'>]: ButtonCo
         command: editor => editor.chain().focus().insertTable().run(), // handled in TableDropdown
         isActive: editor => editor.isActive('table'),
         icon: getToolbarIcon('table'),
+        label: () => null,
     },
     'html': {
         command: editor => editor.chain().focus().insertHtml().run(),
         isActive: editor => editor.isActive('html'),
         icon: getToolbarIcon('html'),
+        label: () => null,
     },
     'code-block': {
         command: editor => editor.chain().focus().toggleCodeBlock().run(),
         isActive: editor => editor.isActive('codeBlock'),
         icon: getToolbarIcon('code-block'),
+        label: () => null,
     },
     'superscript': {
         command: editor => editor.chain().focus().toggleSuperscript().run(),
         isActive: editor => editor.isActive('superscript'),
         icon: getToolbarIcon('superscript'),
+        label: () => null,
     },
     'undo': {
         command: editor => editor.chain().undo().run(),

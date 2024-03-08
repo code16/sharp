@@ -23,7 +23,7 @@ class FormController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function create(string $uri, string $entityKey)
+    public function create(string $parentUri, string $entityKey)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -36,7 +36,7 @@ class FormController extends SharpProtectedController
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
-            return $this->edit($uri, $entityKey);
+            return $this->edit($parentUri, $entityKey);
         }
 
         $form->buildFormConfig();
@@ -50,7 +50,7 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function edit(string $uri, string $entityKey, string $instanceId = null)
+    public function edit(string $parentUri, string $entityKey, string $instanceId = null)
     {
         $entity = $this->entityManager->entityFor($entityKey);
 
@@ -79,7 +79,7 @@ class FormController extends SharpProtectedController
         ]);
     }
 
-    public function update(string $uri, string $entityKey, string $instanceId = null)
+    public function update(string $parentUri, string $entityKey, string $instanceId = null)
     {
         sharp_check_ability('update', $entityKey, $instanceId);
 
@@ -100,13 +100,13 @@ class FormController extends SharpProtectedController
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }
 
-    public function store(string $uri, string $entityKey)
+    public function store(string $parentUri, string $entityKey)
     {
         $form = $this->entityManager->entityFor($entityKey)->getFormOrFail(sharp_normalize_entity_key($entityKey)[1]);
 
         if ($form instanceof SharpSingleForm) {
             // There is no creation in SingleForms
-            return $this->update($uri, $entityKey);
+            return $this->update($parentUri, $entityKey);
         }
 
         sharp_check_ability('create', $entityKey);

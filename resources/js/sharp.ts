@@ -8,6 +8,8 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) })
             .use(plugin);
 
+        app.config.errorHandler = e => console.error(e);
+
         app.mount(el);
 
         nextTick(() => {
@@ -23,6 +25,13 @@ window.addEventListener('popstate', () => {
     }, { once: true });
 });
 
+// on server error (e.g. 500) we want to visit errored page for debugging purposes
+router.on('invalid', event => {
+    const response = event.detail.response;
+    if(response.config.method.toLowerCase() === 'get') {
+        location.href = event.detail.response.config.url;
+    }
+});
 
 
 

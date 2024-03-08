@@ -3,6 +3,7 @@
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Illuminate\Support\Arr;
 
 it('sets default values in config', function () {
     $defaultEmbed = new class() extends SharpFormEditorEmbed
@@ -26,14 +27,18 @@ it('sets default values in config', function () {
     };
     $defaultEmbed->buildEmbedConfig();
 
-    expect($defaultEmbed->toConfigArray(true))
+    expect(Arr::except($defaultEmbed->toConfigArray(true), ['fields']))
         ->toEqual([
             'key' => $defaultEmbed->key(),
             'label' => 'default_fake_sharp_form_editor_embed',
             'tag' => 'x-default-fake-sharp-form-editor-embed',
             'attributes' => ['text'],
+            'icon' => null,
             'template' => 'Empty template',
-        ]);
+        ])
+        ->and($defaultEmbed->toConfigArray(true))
+        ->toHaveKey('fields.text')
+        ->toHaveKey('fields.text.type', 'text');
 });
 
 it('allows to configure tag', function () {
@@ -143,4 +148,31 @@ it('allows to configure show template', function () {
         ->toEqual('show {{text}}')
         ->and($defaultEmbed->toConfigArray(true)['template'])
         ->toEqual('Empty template');
+});
+
+it('allows to configure icon', function () {
+    $defaultEmbed = new class() extends SharpFormEditorEmbed
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormTextField::make('text')
+            );
+        }
+
+        public function updateContent(array $data = []): array
+        {
+        }
+
+        public function buildEmbedConfig(): void
+        {
+            $this->configureTagName('test')
+                ->configureIcon('fa-user');
+        }
+    };
+
+    $defaultEmbed->buildEmbedConfig();
+
+    expect($defaultEmbed->toConfigArray(true)['icon'])
+        ->toEqual('fa-user');
 });

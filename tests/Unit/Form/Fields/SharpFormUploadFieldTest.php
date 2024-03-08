@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
+use Illuminate\Validation\Rule;
 
 it('sets only default values', function () {
     $formField = SharpFormUploadField::make('file');
@@ -9,43 +10,39 @@ it('sets only default values', function () {
         ->toEqual([
             'key' => 'file',
             'type' => 'upload',
-            'compactThumbnail' => false,
-            'transformable' => true,
-            'transformKeepOriginal' => true,
+            'imageCompactThumbnail' => false,
+            'imageTransformable' => true,
+            'imageTransformKeepOriginal' => true,
+            'storageBasePath' => 'data',
+            'storageDisk' => 'local',
+            'maxFileSize' => config('sharp.uploads.max_file_size'),
+            'validationRule' => ['file', 'max:'.config('sharp.uploads.max_file_size') * 1024],
         ]);
-});
-
-it('allows to define maxFileSize', function () {
-    $formField = SharpFormUploadField::make('file')
-        ->setMaxFileSize(.5);
-
-    expect($formField->toArray())
-        ->toHaveKey('maxFileSize', .5);
 });
 
 it('allows to define compactThumbnail', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setCompactThumbnail();
+        ->setImageCompactThumbnail();
 
     expect($formField->toArray())
-        ->toHaveKey('compactThumbnail', true);
+        ->toHaveKey('imageCompactThumbnail', true);
 });
 
 it('allows to define transformable', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setTransformable(false);
+        ->setImageTransformable(false);
 
     expect($formField->toArray())
-        ->toHaveKey('transformable', false);
+        ->toHaveKey('imageTransformable', false);
 });
 
 it('allows to define transformKeepOriginal with transformable', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setTransformable(true, false);
+        ->setImageTransformable(true, false);
 
     expect($formField->toArray())
-        ->toHaveKey('transformKeepOriginal', false)
-        ->toHaveKey('transformable', true);
+        ->toHaveKey('imageTransformKeepOriginal', false)
+        ->toHaveKey('imageTransformable', true);
 });
 
 it('allows to define transformKeepOriginal with config', function () {
@@ -54,61 +51,85 @@ it('allows to define transformKeepOriginal with config', function () {
     $formField = SharpFormUploadField::make('file');
 
     expect($formField->toArray())
-        ->toHaveKey('transformKeepOriginal', false)
-        ->toHaveKey('transformable', true);
-});
-
-it('allows to define fileFilter', function () {
-    $formField = SharpFormUploadField::make('file')
-        ->setFileFilter('jpg');
-
-    expect($formField->toArray())
-        ->toHaveKey('fileFilter', ['.jpg']);
-
-    $formField = SharpFormUploadField::make('file')
-        ->setFileFilter('jpg, gif');
-
-    expect($formField->toArray())
-        ->toHaveKey('fileFilter', ['.jpg', '.gif']);
-
-    $formField = SharpFormUploadField::make('file')
-        ->setFileFilter(['jpg', 'gif ']);
-
-    expect($formField->toArray())
-        ->toHaveKey('fileFilter', ['.jpg', '.gif']);
+        ->toHaveKey('imageTransformKeepOriginal', false)
+        ->toHaveKey('imageTransformable', true);
 });
 
 it('allows to define cropRatio', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setCropRatio('16:9');
+        ->setImageCropRatio('16:9');
 
     expect($formField->toArray())
-        ->toHaveKey('ratioX', 16)
-        ->toHaveKey('ratioY', 9);
+        ->toHaveKey('imageCropRatio', [16, 9]);
 });
 
 it('allows to define transformableFileTypes', function () {
     $formField = SharpFormUploadField::make('file')
-        ->setCropRatio('16:9', ['jpg', 'jpeg']);
+        ->setImageCropRatio('16:9', ['jpg', 'jpeg']);
 
     expect($formField->toArray())
-        ->toHaveKey('transformableFileTypes', ['.jpg', '.jpeg'])
-        ->toHaveKey('ratioX', 16)
-        ->toHaveKey('ratioY', 9);
+        ->toHaveKey('imageTransformableFileTypes', ['.jpg', '.jpeg'])
+        ->toHaveKey('imageCropRatio', [16, 9]);
 
     $formField = SharpFormUploadField::make('file')
-        ->setCropRatio('16:9', ['.jpg', '.jpeg']);
+        ->setImageCropRatio('16:9', ['.jpg', '.jpeg']);
 
     expect($formField->toArray())
-        ->toHaveKey('transformableFileTypes', ['.jpg', '.jpeg'])
-        ->toHaveKey('ratioX', 16)
-        ->toHaveKey('ratioY', 9);
+        ->toHaveKey('imageTransformableFileTypes', ['.jpg', '.jpeg'])
+        ->toHaveKey('imageCropRatio', [16, 9]);
 });
 
 it('allows to define shouldOptimizeImage', function () {
-    $formField = SharpFormUploadField::make('file')->shouldOptimizeImage();
-    expect($formField->isShouldOptimizeImage())->toBeTrue();
+    $formField = SharpFormUploadField::make('file')->setImageOptimize();
+    expect($formField->isImageOptimize())->toBeTrue();
 
-    $formField2 = SharpFormUploadField::make('file')->shouldOptimizeImage(false);
-    expect($formField2->isShouldOptimizeImage())->toBeFalse();
+    $formField2 = SharpFormUploadField::make('file')->setImageOptimize(false);
+    expect($formField2->isImageOptimize())->toBeFalse();
+});
+
+it('allows to define a custom validation rule on a file', function () {
+    $formField = SharpFormUploadField::make('file')
+        ->setMaxFileSize(3)
+        ->setAllowedExtensions('zip');
+
+    expect($formField->toArray()['validationRule'])
+        ->toEqual(['file', 'extensions:zip', 'max:3072']);
+});
+
+it('allows to define a custom validation rule on an image file', function () {
+    $formField = SharpFormUploadField::make('file')
+        ->setImageOnly()
+        ->setMaxFileSize(3)
+        ->setImageDimensionConstraints(Rule::dimensions()->maxWidth(100)->maxHeight(100));
+
+    expect($formField->toArray()['validationRule'])
+        ->toEqual([
+            'file',
+            'extensions:jpg,jpeg,png,gif,bmp,svg,webp',
+            'max:3072',
+            'image',
+            'dimensions:max_width=100,max_height=100',
+        ]);
+});
+
+it('allows to define maxFileSize in the deprecated way', function () {
+    $formField = SharpFormUploadField::make('file')
+        ->setMaxFileSize(.5);
+
+    expect($formField->toArray()['validationRule'])
+        ->toEqual(['file', 'max:512']);
+});
+
+it('allows to define fileFilter', function () {
+    $field = SharpFormUploadField::make('file')->setAllowedExtensions('jpg');
+    expect($field->toArray()['validationRule'])->toContain('extensions:jpg')
+        ->and($field->toArray()['allowedExtensions'])->toEqual(['.jpg']);
+
+    $field = SharpFormUploadField::make('file')->setAllowedExtensions('jpg, gif');
+    expect($field->toArray()['validationRule'])->toContain('extensions:jpg,gif')
+        ->and($field->toArray()['allowedExtensions'])->toEqual(['.jpg', '.gif']);
+
+    $field = SharpFormUploadField::make('file')->setAllowedExtensions(['jpg', 'gif ']);
+    expect($field->toArray()['validationRule'])->toContain('extensions:jpg,gif')
+        ->and($field->toArray()['allowedExtensions'])->toEqual(['.jpg', '.gif']);
 });

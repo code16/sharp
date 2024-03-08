@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -57,6 +58,7 @@ class HandleUploadedFileJob implements ShouldQueue
     {
         return str($this->filePath)
             ->replace('{id}', $this->instanceId)
+            ->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)
             ->toString();
     }
 }

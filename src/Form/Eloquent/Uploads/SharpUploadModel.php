@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Eloquent\Uploads;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -19,13 +20,13 @@ class SharpUploadModel extends Model
         return $this->morphTo('model');
     }
 
-    public function setFileAttribute($value)
+    protected function file(): Attribute
     {
         // We use this magical "file" attribute to fill at the same time
         // file_name, mime_type, disk and size in a MorphMany case
-        if ($value) {
-            $this->fill($value);
-        }
+        return Attribute::make(set: function (?array $file) {
+            return $file ?: [];
+        });
     }
 
     /**

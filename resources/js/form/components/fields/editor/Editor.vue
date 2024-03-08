@@ -2,33 +2,68 @@
     import { __ } from "@/utils/i18n";
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
-    import { FormFieldProps } from "@/form/components/types";
-    import { nextTick, onMounted, ref, watch } from "vue";
+    import { provide, Ref, ref, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
-    import UploadFileInput from "./extensions/upload/UploadFileInput.vue";
     import MenuBar from "./toolbar/MenuBar.vue";
     import { normalizeText } from "@/form/util/text";
     import { useLocalizedEditor } from "@/form/components/fields/editor/useLocalizedEditor";
     import { Markdown } from "tiptap-markdown";
     import { config } from "@/utils/config";
-    import { Iframe } from "@/form/components/fields/editor/extensions/iframe/iframe";
-    import { getEmbedExtension } from "@/form/components/fields/editor/extensions/embed";
-    import { useForm } from "@/form/useForm";
+    import { Iframe } from "@/form/components/fields/editor/extensions/iframe/Iframe";
+    import { useParentForm } from "@/form/useParentForm";
     import { trimHTML } from "@/form/components/fields/editor/utils/html";
-    import { getDefaultExtensions, getUploadExtension } from "@/form/components/fields/editor/extensions";
+    import { getDefaultExtensions } from "@/form/components/fields/editor/extensions";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
+    import { ContentUploadManager } from "@/content/ContentUploadManager";
+    import { Serializable } from "@/form/Serializable";
+    import { FormFieldProps } from "@/form/types";
+    import { ParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
+    import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
+    import { Extension } from "@tiptap/core";
+    import { withoutHistory } from "@/form/components/fields/editor/commands/withoutHistory";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
         FormFieldProps<FormEditorFieldData>
     >();
 
-    const form = useForm();
     const header = ref<HTMLElement>();
+    const form = useParentForm();
+
+    const uploadManager = new ContentUploadManager(form, {
+        editorField: props.field,
+        onUploadsUpdated(uploads) {
+            emit('input', { ...props.value, uploads });
+        }
+    });
+    const embedManager = new ContentEmbedManager(form, props.field.embeds, {
+        onEmbedsUpdated(embeds) {
+            emit('input', { ...props.value, embeds });
+        }
+    });
+    const initialFormattedContent = (
+        uploadManager.withUploadsUniqueId(
+            embedManager.withEmbedsUniqueId(
+                props.value?.text
+            )
+        )
+    );
+
+    uploadManager.resolveContentUploads(initialFormattedContent);
+    embedManager.resolveContentEmbeds(initialFormattedContent);
+
+    provide<ParentEditor>('editor', {
+        props,
+        embedManager,
+        uploadManager,
+    });
+
     const editor = useLocalizedEditor(
         props,
-        (content) => {
+        (locale) => {
             const { field } = props;
             const extensions = [
                 ...getDefaultExtensions({
@@ -36,31 +71,28 @@
                     toolbar: field.toolbar,
                     inline: field.inline,
                 }),
-                field.markdown
-                    ? Markdown.configure({
-                        breaks: config('sharp.markdown_editor.nl2br'),
-                    })
-                    : null,
-                field.embeds.upload
-                    ? getUploadExtension(props, {
-                        onUpdate: files => emit('input', { ...props.value, files }),
-                        entityKey: form.entityKey,
-                        instanceId: form.instanceId,
-                    })
-                    : null,
-                ...Object.entries({ ...field.embeds, upload: null })
-                    .map(([embedKey, embedOptions]) =>
-                        embedOptions && getEmbedExtension({
-                            embedKey,
-                            embedOptions,
-                            entityKey: form.entityKey,
-                            instanceId: form.instanceId,
-                        }),
-                    ),
+                field.markdown && Markdown.configure({
+                    breaks: config('sharp.markdown_editor.nl2br'),
+                }),
+                props.field.uploads && Upload.configure({
+                    uploadManager,
+                }),
+                ...Object.values(props.field.embeds ?? {})
+                    .map((embed) => {
+                        return Embed.extend({
+                            name: `embed:${embed.key}`,
+                            addOptions() {
+                                return { embed, embedManager }
+                            }
+                        })
+                    }),
+                Extension.create({ name: 'withoutHistory', addCommands() { return { withoutHistory } } })
             ].filter(Boolean);
 
             const editor = new Editor({
-                content,
+                content: props.field.localized && typeof initialFormattedContent === 'object'
+                    ? initialFormattedContent?.[locale] ?? ''
+                    : initialFormattedContent ?? '',
                 editable: !field.readOnly,
                 enableInputRules: false,
                 enablePasteRules: [Iframe],
@@ -68,7 +100,7 @@
                 injectCSS: false,
                 editorProps: {
                     attributes: {
-                        class: 'card-body editor__content form-control',
+                        class: 'card-body editor__content form-control p-2',
                     },
                 }
             });
@@ -92,14 +124,21 @@
                     ? normalizeText(editor.storage.markdown.getMarkdown() ?? '')
                     : normalizeText(trimHTML(editor.getHTML(), { inline: props.field.inline }));
 
-                if(props.field.localized && typeof props.value.text === 'object') {
-                    emit('input', {
-                        ...props.value,
-                        text: { ...props.value.text, [props.locale]: content }
-                    }, { error });
-                } else {
-                    emit('input', { ...props.value, text: content }, { error });
-                }
+                const value = new Serializable(
+                    content,
+                    embedManager.serializeContent(uploadManager.serializeContent(content)),
+                    content => {
+                        if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {
+                            return {
+                                ...props.value,
+                                text: { ...props.value.text, [locale]: content }
+                            }
+                        }
+                        return { ...props.value, text: content };
+                    }
+                );
+
+                emit('input', value, { error });
             }, 50));
 
             editor.on('selectionUpdate', () => {
@@ -141,26 +180,22 @@
                 </div>
             </template>
 
-            <EditorContent :editor="editor" />
+            <EditorContent :editor="editor" :key="locale ?? 'editor'" />
 
-            <template v-if="editor && !field.readOnly">
-                <template v-if="field.embeds.upload">
-                    <UploadFileInput :editor="editor" />
-                </template>
-            </template>
+            <!-- Commenting this for now because it causes infinite loop on HMR -->
 
-            <template v-if="editor && field.showCharacterCount">
-                <div class="card-footer fs-8 text-muted bg-white">
-                    <template v-if="field.maxLength">
-                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">
-                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}
-                        </span>
-                    </template>
-                    <template v-else>
-                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}
-                    </template>
-                </div>
-            </template>
+<!--            <template v-if="editor && field.showCharacterCount">-->
+<!--                <div class="card-footer fs-8 text-muted bg-white">-->
+<!--                    <template v-if="field.maxLength">-->
+<!--                        <span :class="{ 'text-danger': editor.storage.characterCount.characters() > field.maxLength }">-->
+<!--                            {{ __('sharp::form.editor.character_count', { count: `${editor.storage.characterCount.characters()} / ${field.maxLength}` }) }}-->
+<!--                        </span>-->
+<!--                    </template>-->
+<!--                    <template v-else>-->
+<!--                        {{ __('sharp::form.editor.character_count', { count: editor.storage.characterCount.characters() }) }}-->
+<!--                    </template>-->
+<!--                </div>-->
+<!--            </template>-->
         </div>
     </div>
 </template>

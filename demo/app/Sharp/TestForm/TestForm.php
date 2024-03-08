@@ -3,6 +3,7 @@
 namespace App\Sharp\TestForm;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
@@ -158,12 +159,14 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SUP,
                     ])
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
-                    ->setCropRatio('1:1')
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
                     ->setHeight(350)
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data'),
             )
             ->addField(
                 SharpFormEditorField::make('wysiwyg')
@@ -183,6 +186,13 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
 //                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
                     ->setHeight(350, 0),
@@ -233,8 +243,7 @@ class TestForm extends SharpSingleForm
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
                     ->setMaxFileSize(5)
-                    ->setFileFilterImages()
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
             );

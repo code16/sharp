@@ -29,20 +29,20 @@
     });
 
     function submit() {
-        const { uri, entityKey, instanceId } = route().params;
-        const onStart = () => loading.value = true;
-        const onFinish = () => loading.value = false;
+        const { parentUri, entityKey, instanceId } = route().params;
+        const onStart = () => { loading.value = true };
+        const onFinish = () => { loading.value = false };
 
         if(route().current('code16.sharp.form.create')) {
             router.post(
-                route('code16.sharp.form.store', { uri, entityKey }),
-                form.data,
+                route('code16.sharp.form.store', { parentUri, entityKey }),
+                form.serializedData,
                 { onStart, onFinish }
             );
         } else if(route().current('code16.sharp.form.edit')) {
             router.post(
-                route('code16.sharp.form.update', { uri, entityKey, instanceId }),
-                form.data,
+                route('code16.sharp.form.update', { parentUri, entityKey, instanceId }),
+                form.serializedData,
                 { onStart, onFinish }
             );
         }

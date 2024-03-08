@@ -8,6 +8,7 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
@@ -58,6 +59,12 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'size' => $value['size'] ?? null,
                 ]),
             ];
+
+            return [
+                ...$this->transformUpload($instance->$attribute),
+                ...($value['uploaded'] ?? false) ? ['uploaded' => true] : [],
+                ...($value['transformed'] ?? false) ? ['transformed' => true] : [],
+            ];
         }
 
         if (! $instance->$attribute) {
@@ -71,7 +78,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             return $instance->$attribute
                 ->map(function ($upload) {
                     $array = $this->transformUpload($upload);
-                    $fileAttrs = ['name', 'path', 'disk', 'thumbnail', 'size', 'filters'];
+                    $fileAttrs = ['name', 'path', 'disk', 'thumbnail', 'size', 'filters', 'exists'];
 
                     return array_merge(
                         ['file' => Arr::only($array, $fileAttrs) ?: null],
@@ -86,19 +93,20 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 
     protected function transformUpload(SharpUploadModel $upload): array
     {
-        return array_merge(
-            $upload->file_name
+        return [
+            ...$upload->file_name
                 ? [
                     'name' => basename($upload->file_name),
                     'path' => $upload->file_name,
                     'disk' => $upload->disk,
                     'thumbnail' => $this->getThumbnailUrl($upload),
                     'size' => $upload->size,
+                    'exists' => Storage::disk($upload->disk)->exists($upload->file_name),
                 ]
                 : [],
-            $upload->custom_properties ?? [], // Including filters
-            ['id' => $upload->id],
-        );
+            ...$upload->custom_properties ?? [], // Including filters
+            'id' => $upload->id,
+        ];
     }
 
     private function getThumbnailUrl(SharpUploadModel $upload): ?string

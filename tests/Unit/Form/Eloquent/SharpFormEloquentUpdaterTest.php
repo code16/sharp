@@ -1,6 +1,9 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
+use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
+use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -11,6 +14,7 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 it('allows to update a simple attribute', function () {
     $person = Person::create(['name' => 'Marie Curry']);
@@ -474,7 +478,7 @@ it('allows to update a morphMany attribute', function () {
     ]);
 });
 
-it('handles the {id} placeholder of uploads in both update and creation cases', function () {
+it('handles the {id} placeholder of uploads in update case', function () {
     Storage::fake('local');
     $marie = Person::create(['name' => 'Marie Curie']);
 
@@ -497,13 +501,19 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
 
         public function update($id, array $data)
         {
-            return $this->save($id ? Person::findOrFail($id) : new Person(), $data);
+            return $this->save(Person::findOrFail($id), $data);
         }
     };
 
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $savedCount = 0;
+
+    Person::saved(function () use (&$savedCount) {
+        $savedCount++;
+    });
 
     $form->update(
         $marie->id,
@@ -515,10 +525,39 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
         ])
     );
 
+    $this->assertEquals(1, $savedCount);
+
     $this->assertDatabaseHas('sharp_upload_models', [
         'model_id' => $marie->id,
         'file_name' => 'test/'.$marie->id.'/image.jpg',
     ]);
+});
+
+it('handles the {id} placeholder of uploads in create case', function () {
+    Storage::fake('local');
+
+    $form = new class extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormTextField::make('name')
+                )
+                ->addField(
+                    SharpFormUploadField::make('upload')
+                        ->setStorageBasePath('test/{id}')
+                        ->setStorageDisk('local')
+                );
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(new Person(), $data)->id;
+        }
+    };
 
     UploadedFile::fake()
         ->image('image-2.jpg')
@@ -541,6 +580,69 @@ it('handles the {id} placeholder of uploads in both update and creation cases', 
         'model_id' => $pierre->id,
         'file_name' => 'test/'.$pierre->id.'/image-2.jpg',
     ]);
+});
+
+it('handles the {id} placeholder of Editor’s embedded uploads in create case', function () {
+    Storage::fake('local');
+
+    $form = new class extends FakeSharpForm
+    {
+        use WithSharpFormEloquentUpdater;
+
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields
+                ->addField(
+                    SharpFormTextField::make('name')
+                )
+                ->addField(
+                    SharpFormEditorField::make('bio')
+                        ->allowUploads(
+                            SharpFormEditorUpload::make()
+                                ->setStorageBasePath('test/{id}')
+                                ->setStorageDisk('local')
+                        )
+                );
+        }
+
+        public function update($id, array $data)
+        {
+            return $this->save(new Person(), $data)->id;
+        }
+    };
+
+    UploadedFile::fake()
+        ->create('my-file.pdf')
+        ->storeAs('/tmp', 'my-file.pdf', ['disk' => 'local']);
+
+    $form->update(
+        null,
+        $form->formatAndValidateRequestData([
+            'name' => 'Pierre Curie',
+            'bio' => [
+                'files' => [
+                    [
+                        'name' => 'my-file.pdf',
+                        'uploaded' => true,
+                    ],
+                ],
+                'text' => '<p>my editor</p><x-sharp-file file="'.e(json_encode([
+                    'name' => 'my-file.pdf',
+                    'path' => 'test/'.UploadFormatter::ID_PLACEHOLDER.'/my-file.pdf',
+                    'disk' => 'local',
+                ])).'"></x-sharp-file>',
+            ],
+        ])
+    );
+
+    $pierre = Person::where('name', 'Pierre Curie')->first();
+
+    expect($pierre->bio)
+        ->toBe('<p>my editor</p><x-sharp-file file="'.e(json_encode([
+            'name' => 'my-file.pdf',
+            'path' => 'test/1/my-file.pdf',
+            'disk' => 'local',
+        ])).'"></x-sharp-file>');
 });
 
 it('handles the relation separator in a belongsTo case', function () {

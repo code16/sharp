@@ -27,16 +27,19 @@ trait WithSharpFormEloquentUpdater
     {
         $data = $this->applyTransformers($data, forceFullObject: false);
 
-        // Then handle manually ignored attributes...
+        // Handle manually ignored attributes
         if (count($this->ignoredAttributes)) {
             $data = collect($data)
                 ->filter(fn ($value, $attribute) => ! in_array($attribute, $this->ignoredAttributes))
                 ->all();
         }
 
-        // Finally call updater
+        // Call updater
         return app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
+            ->fillAfterUpdateWith(
+                fn ($instanceId) => $this->formatDataAfterUpdate($data, $instanceId)
+            )
             ->update($instance, $data);
     }
 

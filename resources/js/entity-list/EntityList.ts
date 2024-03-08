@@ -5,7 +5,7 @@ import {
     EntityStateValueData,
     FilterData,
 } from "@/types";
-import { getAppendableUri, route } from "@/utils/url";
+import { getAppendableParentUri, route } from "@/utils/url";
 import { Instance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
@@ -106,7 +106,7 @@ export class EntityList implements EntityListData {
 
         if(this.config.hasShowPage) {
             return route('code16.sharp.show.show', {
-                uri: getAppendableUri(),
+                parentUri: getAppendableParentUri(),
                 entityKey,
                 instanceId,
             });
@@ -116,14 +116,14 @@ export class EntityList implements EntityListData {
             const multiform = Object.values(this.forms).find(form => form.instances.includes(instanceId));
 
             return route('code16.sharp.form.edit', {
-                uri: getAppendableUri(),
+                parentUri: getAppendableParentUri(),
                 entityKey: `${entityKey}:${multiform.key}`,
                 instanceId,
             });
         }
 
         return route('code16.sharp.form.edit', {
-            uri: getAppendableUri(),
+            parentUri: getAppendableParentUri(),
             entityKey,
             instanceId,
         });

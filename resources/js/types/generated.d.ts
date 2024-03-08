@@ -97,11 +97,14 @@ export type DateRangeFilterValueData = {
   end: Date | string;
 };
 export type EmbedData = {
+  value?: FormData["data"] & { slot: string };
   key: string;
   label: string;
   tag: string;
+  icon: string | null;
   attributes: Array<string>;
   template: string;
+  fields: { [key: string]: FormFieldData };
 };
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -283,7 +286,8 @@ export type FormDynamicOptionsData = {
 export type FormEditorFieldData = {
   value?: {
     text: string | { [locale: string]: string | null } | null;
-    files: Array<FormUploadFieldData["value"]> | null;
+    files?: Array<FormUploadFieldValueData>;
+    embeds?: { [embedKey: string]: Array<FormData["data"]> };
   };
   key: string;
   type: "editor";
@@ -291,9 +295,8 @@ export type FormEditorFieldData = {
   markdown: boolean;
   inline: boolean;
   showCharacterCount: boolean;
-  embeds: { upload: FormEditorFieldUploadData } & {
-    [key: string]: FormEditorFieldEmbedData;
-  };
+  uploads: FormEditorFieldUploadData;
+  embeds: { [embedKey: string]: EmbedData };
   toolbar: Array<FormEditorToolbarButton>;
   maxHeight: number | null;
   maxLength: number | null;
@@ -305,21 +308,9 @@ export type FormEditorFieldData = {
   extraStyle: string | null;
   localized: boolean | null;
 };
-export type FormEditorFieldEmbedData = {
-  key: string;
-  label: string;
-  tag: string;
-  attributes: Array<string>;
-  template: string;
-};
 export type FormEditorFieldUploadData = {
-  transformable: boolean;
-  transformKeepOriginal: boolean | null;
-  transformableFileTypes: Array<string> | null;
-  ratioX: number | null;
-  ratioY: number | null;
-  maxFileSize: number | null;
-  fileFilter: Array<any> | string | null;
+  fields: { file: FormUploadFieldData; legend: FormTextFieldData | null };
+  layout: FormLayoutData;
 };
 export type FormEditorToolbarButton =
   | "bold"
@@ -334,8 +325,8 @@ export type FormEditorToolbarButton =
   | "heading-3"
   | "code"
   | "blockquote"
-  | "upload-image"
   | "upload"
+  | "upload-image"
   | "horizontal-rule"
   | "table"
   | "iframe"
@@ -528,14 +519,16 @@ export type FormUploadFieldData = {
   value: FormUploadFieldValueData | null;
   key: string;
   type: "upload";
-  transformable: boolean;
-  compactThumbnail: boolean;
-  transformKeepOriginal: boolean | null;
-  transformableFileTypes: Array<string> | null;
-  ratioX: number | null;
-  ratioY: number | null;
+  imageCropRatio: [number, number];
+  imageTransformable: boolean;
+  imageCompactThumbnail: boolean;
+  imageTransformKeepOriginal: boolean | null;
+  imageTransformableFileTypes: Array<string> | null;
+  allowedExtensions: Array<string> | null;
   maxFileSize: number | null;
-  fileFilter: Array<string> | null;
+  validationRule: Array<string> | null;
+  storageBasePath: string | null;
+  storageDisk: string | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
@@ -543,17 +536,21 @@ export type FormUploadFieldData = {
   extraStyle: string | null;
 };
 export type FormUploadFieldValueData = {
+  id: number | null;
   name: string;
   disk: string;
   path: string;
-  size: string;
+  size: number;
   thumbnail: string | null;
   uploaded: boolean | null;
   transformed: boolean | null;
+  not_found: boolean | null;
+  exists: boolean | null;
   filters: {
     crop: { width: number; height: number; x: number; y: number };
     rotate: { angle: number };
   } | null;
+  nativeFile?: File;
 };
 export type GlobalFiltersData = {
   filters: ConfigFiltersData;

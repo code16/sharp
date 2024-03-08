@@ -29,26 +29,25 @@ Route::group([
     Route::get('/download/{entityKey}/{instanceId?}', [DownloadController::class, 'show'])
         ->name('code16.sharp.download.show');
 
-    Route::group([
-        'prefix' => '/{uri}',
-        'where' => ['uri' => '(s-list|s-show)/.+'],
-    ], function () {
-        Route::get('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
+    Route::where([
+        'parentUri' => '(s-list|s-show)/.+',
+    ])->group(function () {
+        Route::get('/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'show'])
             ->name('code16.sharp.show.show');
 
-        Route::delete('/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
+        Route::delete('/{parentUri}/s-show/{entityKey}/{instanceId}', [ShowController::class, 'delete'])
             ->name('code16.sharp.show.delete');
 
-        Route::get('/s-form/{entityKey}', [FormController::class, 'create'])
+        Route::get('/{parentUri}/s-form/{entityKey}', [FormController::class, 'create'])
             ->name('code16.sharp.form.create');
 
-        Route::post('/s-form/{entityKey}', [FormController::class, 'store'])
+        Route::post('/{parentUri}/s-form/{entityKey}', [FormController::class, 'store'])
             ->name('code16.sharp.form.store');
 
-        Route::get('/s-form/{entityKey}/{instanceId}', [FormController::class, 'edit'])
+        Route::get('/{parentUri}/s-form/{entityKey}/{instanceId}', [FormController::class, 'edit'])
             ->name('code16.sharp.form.edit');
 
-        Route::post('/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
+        Route::post('/{parentUri}/s-form/{entityKey}/{instanceId}', [FormController::class, 'update'])
             ->name('code16.sharp.form.update');
     });
 

@@ -1,13 +1,13 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { ref, watch } from "vue";
+    import { nextTick, ref, watch } from "vue";
     import { getCropDataFromFilters } from "./util/filters";
     import { api } from "@/api";
     import { FormUploadFieldData } from "@/types";
     import Cropper from "cropperjs";
     import { rotate, rotateTo } from "./util/rotate";
     import { Modal, Loading, Button } from '@/components/ui';
-    import { useForm } from "../../../useForm";
+    import { useParentForm } from "@/form/useParentForm";
     import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
     import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
     import { route } from "@/utils/url";
@@ -24,33 +24,7 @@
     const cropper = ref<Cropper>();
     const cropperData = ref<Partial<Cropper.Data>>();
     const cropperImg = ref();
-    const form = useForm();
-
-    watch(cropperImg, () => {
-        // console.log(cropperImg.value);
-        if(cropperImg.value) {
-            cropper.value = new Cropper(cropperImg.value, {
-                viewMode: 2,
-                dragMode: 'move',
-                aspectRatio: props.field.ratioX / props.field.ratioY,
-                autoCropArea: 1,
-                guides: false,
-                background: true,
-                rotatable: true,
-                restore: false, // reset crop area on resize because it's buggy
-                data: cropperData.value,
-                ready: () => {
-                    if(cropperData.value?.rotate) {
-                        rotateTo(cropper.value, cropperData.value.rotate);
-                        cropper.value.setData(cropperData.value);
-                    }
-                },
-            });
-            // console.log(cropper.value);
-        } else {
-            cropper.value.destroy();
-        }
-    });
+    const form = useParentForm();
 
     watch(() => props.value, () => {
         cropperData.value = null;
@@ -106,11 +80,35 @@
 
     async function onShow() {
         ready.value = false;
-        console.log('onShow');
-        if(props.value?.path) {
+        // if the value does not have 'uploaded: true' we now it exists so we can fetch a larger thumbnail
+        if(props.value && !props.value.uploaded) {
             await loadOriginalImg();
         }
         ready.value = true;
+        await nextTick();
+        cropper.value = new Cropper(cropperImg.value, {
+            viewMode: 2,
+            dragMode: 'move',
+            aspectRatio: props.field.imageCropRatio
+                ? props.field.imageCropRatio[0] / props.field.imageCropRatio[1]
+                : null,
+            autoCropArea: 1,
+            guides: false,
+            background: true,
+            rotatable: true,
+            restore: false, // reset crop area on resize because it's buggy
+            data: cropperData.value,
+            ready: () => {
+                if(cropperData.value?.rotate) {
+                    rotateTo(cropper.value, cropperData.value.rotate);
+                    cropper.value.setData(cropperData.value);
+                }
+            },
+        });
+    }
+
+    function onHidden() {
+        cropper.value.destroy();
     }
 
     function onOk() {
@@ -127,6 +125,7 @@
         max-width="4xl"
         @ok="onOk"
         @show="onShow"
+        @hidden="onHidden"
     >
         <template v-if="ready">
             <div class="h-full">

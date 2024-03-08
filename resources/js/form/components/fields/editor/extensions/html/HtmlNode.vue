@@ -1,5 +1,38 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { Button, Modal } from "@/components/ui";
+    import { NodeViewWrapper } from '@tiptap/vue-3';
+    import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
+    import { Html, HtmlContentNodeAttributes } from "@/form/components/fields/editor/extensions/html/Html";
+    import { elementFromString } from "./utils";
+    import { ref } from "vue";
+
+    const props = defineProps<ExtensionNodeProps<typeof Html, HtmlContentNodeAttributes>>();
+
+    const modalVisible = ref(false);
+    const editContent = ref('');
+
+    function onEdit() {
+        editContent.value = props.node.attrs.content;
+        modalVisible.value = true;
+    }
+
+    function onModalOk() {
+        const content = elementFromString(this.editContent).innerHTML;
+        props.updateAttributes({
+            content,
+            isNew: false,
+        });
+    }
+
+    function onModalHidden() {
+        if(!props.node.attrs.content) {
+            props.deleteNode();
+        }
+        setTimeout(() => {
+            props.editor.commands.focus();
+        });
+    }
 </script>
 
 <template>
@@ -11,7 +44,7 @@
                         <pre class="mb-0">{{ node.attrs.content }}</pre>
                     </div>
                     <div class="col-auto me-n2 my-n2">
-                        <Button small variant="light" @click="handleEditClicked">
+                        <Button small variant="light" @click="onEdit">
                             <i class="fas fa-pencil-alt fs-7"></i>
                         </Button>
                     </div>
@@ -19,14 +52,12 @@
             </div>
         </div>
         <Modal
-            v-model:visible="editVisible"
-            @ok="handleModalOk"
-            @hidden="handleModalHidden"
-            @shown="handleModalShown"
-            ref="modal"
+            v-model:visible="modalVisible"
+            @ok="onModalOk"
+            @hidden="onModalHidden"
         >
             <template v-slot:title>
-                <template v-if="node.attrs.new">
+                <template v-if="node.attrs.isNew">
                     {{ __('sharp::form.editor.dialogs.raw_html.insert_title') }}
                 </template>
                 <template v-else>
@@ -38,54 +69,3 @@
         </Modal>
     </NodeViewWrapper>
 </template>
-
-<script lang="ts">
-    import { Button, Modal } from "@/components/ui";
-    import { NodeViewWrapper } from '@tiptap/vue-3';
-    import { elementFromString } from "./util";
-
-    export default {
-        components: {
-            NodeViewWrapper,
-            Button,
-            Modal
-        },
-        props: {
-            node: Object,
-            editor: Object,
-            updateAttributes: Function,
-            selected: Boolean,
-            deleteNode: Function,
-        },
-        data() {
-            return {
-                editContent: null,
-                editVisible: this.node.attrs.new,
-            }
-        },
-        methods: {
-            handleEditClicked() {
-                this.editContent = this.node.attrs.content;
-                this.editVisible = true;
-            },
-            handleModalOk() {
-                const content = elementFromString(this.editContent).innerHTML;
-                this.updateAttributes({
-                    content,
-                    new: false,
-                });
-            },
-            handleModalShown(e) {
-                e.target.querySelector('textarea').focus();
-            },
-            handleModalHidden() {
-                if(!this.node.attrs.content) {
-                    this.deleteNode();
-                }
-                setTimeout(() => {
-                    this.editor.commands.focus();
-                });
-            },
-        },
-    }
-</script>

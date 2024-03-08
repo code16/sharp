@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import Field from "./Field.vue";
     import FormLayout from "./FormLayout.vue";
-    import { FormFieldData, FormLayoutTabData } from "@/types";
+    import { FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
 
     import { provide, ref } from "vue";
@@ -11,16 +11,16 @@
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
+    import { Serializable } from "@/form/Serializable";
 
     const props = defineProps<{
-        form: Form,
+        form: Form
         entityKey: string,
         instanceId?: string | number,
         postFn?: Function,
     }>();
 
     provide('form', props.form);
-    provide('$form', props.form);
 
     const loading = ref(false);
 
@@ -33,7 +33,7 @@
 
         loading.value = true;
 
-        postFn(form.data)
+        return postFn(form.data)
             .catch(error => {
                 if (error.response?.status === 422) {
                     props.form.errors = error.response.data.errors ?? {};
@@ -58,11 +58,14 @@
     }
 
     function onFieldInput(fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
-        props.form.data = {
+        const data = Serializable.wrap(value, value => ({
             ...props.form.data,
             ...(!force ? getDependantFieldsResetData(props.form.fields, fieldKey) : null),
             [fieldKey]: value,
-        }
+        }));
+
+        props.form.data = data.localValue;
+        props.form.serializedData = data.serialized;
     }
 
     defineExpose({ submit });
@@ -120,6 +123,8 @@
                                                                                 :field-error-key="fieldLayout.key"
                                                                                 :value="form.data[fieldLayout.key]"
                                                                                 :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                                                :row="row"
+                                                                                root
                                                                                 @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                                                 @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                                                 @uploading="onFieldUploading(fieldLayout.key, $event)"
@@ -141,6 +146,8 @@
                                                     :field-error-key="fieldLayout.key"
                                                     :value="form.data[fieldLayout.key]"
                                                     :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                    :row="row as LayoutFieldData[]"
+                                                    root
                                                     @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
                                                     @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
                                                     @uploading="onFieldUploading(fieldLayout.key, $event)"

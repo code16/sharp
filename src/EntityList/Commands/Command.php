@@ -3,8 +3,8 @@
 namespace Code16\Sharp\EntityList\Commands;
 
 use Code16\Sharp\Enums\CommandAction;
-use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
@@ -18,6 +18,7 @@ abstract class Command
     use HandlePageAlertMessage;
     use WithCustomTransformers;
     use HandleValidation;
+    use HasModalFormLayout;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -178,21 +179,9 @@ abstract class Command
 
     final public function formLayout(): ?array
     {
-        if ($fields = $this->fieldsContainer()->getFields()) {
-            return (new FormLayout())
-                ->setTabbed(false)
-                ->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
-                    $this->buildFormLayout($column);
-
-                    if (! $column->hasFields()) {
-                        collect($fields)
-                            ->each(fn ($field) => $column->withField($field->key()));
-                    }
-                })
-                ->toArray();
-        }
-
-        return null;
+        return $this->modalFormLayout(function (FormLayoutColumn $column) {
+            $this->buildFormLayout($column);
+        });
     }
 
     final public function setGroupIndex($index): void

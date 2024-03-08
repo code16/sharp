@@ -19,32 +19,17 @@ First, in order to get the upload part working, you have to define a "tmp" path 
 
 This `tmp_dir` path is relative to the `uploads.tmp_disk` filesystem defined.
 
-## Field Configuration
+You should also configure the default max upload file size:
 
-### `setMaxFileSize(float $sizeInMB)`
-
-Max file size allowed.
-
-### `setTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
-
-Allow the user to crop or rotate the visual, after the upload.  
-The argument `$transformKeepOriginal` overrides the following config which is `true` by default.
 ```php
-// config/sharp.php
+// in config/sharp.php
 
 'uploads' => [
-    'transform_keep_original_image' => true,
+    'max_file_size' => env('SHARP_UPLOADS_MAX_FILE_SIZE_IN_MB', 2),
 ]
 ```
-With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
 
-### `setCropRatio(string $ratio, array $croppableFileTypes = null)`
-
-Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
-
-When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
-
-The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
+## General field Configuration
 
 ### `setStorageDisk(string $storageDisk)`
 
@@ -52,26 +37,54 @@ Set the destination storage disk (as configured in Laravel's  `config/filesystem
 
 ### `setStorageBasePath(string|Closure $storageBasePath)`
 
-Set the destination base storage path. 
+Set the destination base storage path.
 
-You can use the `{id}` special placeholder to add the instance id in the path, which can be useful sometimes; **be sure to read the “Delayed creation” section, at the end of this page if you do.**
+::: warning
+If you want to use a `{id}` special placeholder to add the instance id in the path (for instance: `$field->setStorageBasePath('/users/{id}/avatar')`), you must be the Eloquent case, leveraging `Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater` (see [Eloquent form](../building-form#eloquent-case-where-the-magic-happens))
+:::
 
-For instance:
-`$field->setStorageBasePath('/users/{id}/avatar')`
+### `setAllowedExtensions(string|array $allowedExtensions)`
 
-### `setFileFilter($fileFilter)`
+Define the allowed file extensions. 
 
-Set the allowed file extensions. You can pass either an array or a comma-separated list.
+For instance: `$field->setAllowedExtensions(['pdf', 'zip'])`
 
-### `setFileFilterImages()`
+## Field Configuration in image case
 
-Just a `setFileFilter(['.jpg','.jpeg','.gif','.png'])` shorthand.
+### `setImageOnly(bool $imageOnly = true)`
 
-### `setCompactThumbnail(bool $compactThumbnail = true)`
+When an upload field is configured to accept only images:
+- the field will be forced to accept only images (allowed extensions set to "jpg, png, gif, svg, webp, bmp" by default),
+- the uploaded file will be validated as an image (see below for more options),
+- a thumbnail will be generated for the uploaded image.
+
+### `setImageTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
+
+Allow the user to crop or rotate the visual, after the upload.  
+The argument `$transformKeepOriginal` overrides the following config which is `true` by default.
+
+```php
+// config/sharp.php
+'uploads' => [
+    'transform_keep_original_image' => true,
+]
+```
+
+With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
+
+### `setImageCropRatio(string $ratio, array $croppableFileTypes = null)`
+
+Set a ratio constraint to uploaded images, formatted like this: `width:height`. For instance: `16:9`, or `1:1`.
+
+When a crop ratio is set, any uploaded picture will be auto-cropped (centered).
+
+The second argument, `$croppableFileTypes`, provide a way to limit the crop configuration to a list of image files extensions. For instance, it can be useful to define a crop for jpg and png, but not for gif because it will destroy animation.
+
+### `setImageCompactThumbnail(bool $compactThumbnail = true)`
 
 If true and if the upload has a thumbnail, it is limited to 60px high (to compact in a list item, for instance).
 
-### `shouldOptimizeImage(bool $shouldOptimizeImage = true)`
+### `setImageOptimizeImage(bool $imageOptimize = true)`
 
 If true, some optimization will be applied on the uploaded images (in order to reduce files weight). It relies on spatie's [image-optimizer](https://github.com/spatie/image-optimizer). Please note that you will need some of these packages on your system:
 - [JpegOptim](http://freecode.com/projects/jpegoptim)
@@ -82,6 +95,20 @@ If true, some optimization will be applied on the uploaded images (in order to r
 - [cwebp](https://developers.google.com/speed/webp/docs/precompiled)
 
 Check their documentation for [more instructions](https://github.com/spatie/image-optimizer#optimization-tools) on how to install.
+
+## Validation
+
+First, notice that `setAllowedExtensions()` and `setImageOnly()` already are basic validation rules, that Sharp will use both on the front-end and in the back-end.
+
+But there are a few more rules available:
+
+### `setMaxFileSize(int $maxFileSizeInMB)` and `setMinFileSize(int $minFileSizeInMB)`
+
+Set the maximum and minimum (even if this is a rare use-case) file size in MB.
+
+### `setImageDimensionConstraints(Illuminate\Validation\Rules\Dimensions $dimensions)`
+
+Set image dimension constraints, leveraging the dedicated Laravel validation rule (see [the documentation](https://laravel.com/docs/validation#rule-dimensions)).
 
 ## Formatter
 

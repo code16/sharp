@@ -1,15 +1,15 @@
 <script setup lang="ts">
-    import { FormEditorFieldData, FormEditorFieldEmbedData, FormEditorToolbarButton } from "@/types";
-    import { FormFieldProps } from "@/form/components/types";
+    import { EmbedData, FormEditorFieldData, FormEditorToolbarButton } from "@/types";
     import { Editor } from "@tiptap/vue-3";
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";
-    import OptionsDropdown from "./OptionsDropdown.vue";
     import { Button, Dropdown, DropdownItem } from "@/components/ui";
     import { buttons } from './config';
     import { computed } from "vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
+    import { FormFieldProps } from "@/form/types";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
@@ -24,11 +24,6 @@
             return res;
         }, [[]])
     );
-
-    const customEmbeds = computed<FormEditorFieldEmbedData[]>(() => {
-        const { upload, ...customEmbeds } = props.field.embeds;
-        return Object.values(customEmbeds);
-    });
 </script>
 
 <template>
@@ -59,6 +54,18 @@
                                 <i :class="buttons[button].icon" data-test="table"></i>
                             </TableDropdown>
                         </template>
+                        <template v-else-if="button.startsWith('embed:')">
+                            <Button
+                                variant="light"
+                                :active="editor.isActive(button)"
+                                :disabled="field.readOnly"
+                                :title="field.embeds[button.replace('embed:', '')]?.label"
+                                @click="editor.commands.insertEmbed(field.embeds[button.replace('embed:', '')])"
+                                :data-test="button"
+                            >
+                                <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
+                            </Button>
+                        </template>
                         <template v-else :key="button">
                             <Button
                                 variant="light"
@@ -77,7 +84,7 @@
                     </template>
                 </div>
             </template>
-            <template v-if="field.embeds && customEmbeds.length > 0">
+            <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
                 <div class="btn-group">
                     <Dropdown
                         class="editor__dropdown"
@@ -91,8 +98,8 @@
                         </template>
 
                         <template v-slot:default>
-                            <template v-for="embed in customEmbeds">
-                                <DropdownItem @click="editor.chain().focus().insertEmbed({ embedKey: embed.key }).run()">
+                            <template v-for="embed in props.field.embeds">
+                                <DropdownItem @click="editor.chain().insertEmbed(embed).run()">
                                     {{ embed.label }}
                                 </DropdownItem>
                             </template>

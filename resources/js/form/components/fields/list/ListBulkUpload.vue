@@ -49,7 +49,7 @@
             type="file"
             :aria-label="transLink(__(`sharp::form.list.bulk_upload.text`))"
             :disabled="disabled"
-            :accept="(field.itemFields[field.bulkUploadField] as FormUploadFieldData).fileFilter?.join(',')"
+            :accept="(field.itemFields[field.bulkUploadField] as FormUploadFieldData).allowedExtensions?.join(',')"
             multiple
             @change="$emit('change', $event)"
             @dragenter="droppingFile = true"

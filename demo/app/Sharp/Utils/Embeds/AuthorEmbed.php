@@ -42,9 +42,9 @@ class AuthorEmbed extends SharpFormEditorEmbed
             ->addField(
                 SharpFormUploadField::make('picture')
                     ->setMaxFileSize(1)
+                    ->setImageOnly()
                     ->setLabel('Picture')
-                    ->setFileFilterImages()
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/embeds'),
             )
@@ -82,9 +82,9 @@ class AuthorEmbed extends SharpFormEditorEmbed
 
     public function updateContent(array $data = []): array
     {
-        $this->validate($data, [
-            'author' => ['required'],
-        ]);
+//        $this->validate($data, [
+//            'author' => ['required'],
+//        ]);
 
         return $data;
     }

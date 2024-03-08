@@ -1,9 +1,8 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { useForm } from "../../../useForm";
-    import FieldColumn from "@/components/ui/FieldGridColumn.vue";
+    import { useParentForm } from "../../../useParentForm";
     import Field from "../../Field.vue";
-    import { FormFieldData, FormListFieldData, LayoutFieldData } from "@/types";
+    import { FormFieldData, FormListFieldData, FormUploadFieldValueData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "../../../util";
     import { computed, ref } from "vue";
     import Draggable from 'vuedraggable';
@@ -12,6 +11,9 @@
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta } from "../../../types";
     import { SortableOptions } from "sortablejs";
+    import { Serializable } from "@/form/Serializable";
+    import FieldGridRow from "@/components/ui/FieldGridRow.vue";
+    import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
 
     const props = defineProps<{
         field: FormListFieldData,
@@ -21,7 +23,7 @@
     }>();
 
     const emit = defineEmits(['input']);
-    const form = useForm();
+    const form = useParentForm();
     const dragging = ref(false);
     const dragActive = ref(false);
     const canAddItem = computed(() => {
@@ -96,24 +98,28 @@
         emit('input', [
             ...props.value,
             ...files.map(file => createItem({
-                [props.field.bulkUploadField]: { file },
+                [props.field.bulkUploadField]: { nativeFile: file } satisfies Partial<FormUploadFieldValueData>,
             })),
         ]);
 
         e.target.value = '';
     }
 
-    function onFieldInput(itemIndex: number, fieldKey: string, value: FormFieldData['value'], { force = false } = {}) {
-        emit('input', props.value.map((item, i) => {
-            if(i === itemIndex) {
-                return {
-                    ...item,
-                    ...(!force ? getDependantFieldsResetData(props.field.itemFields, fieldKey) : null),
-                    [fieldKey]: value,
+    function onFieldInput(itemIndex: number, itemFieldKey: string, itemFieldValue: FormFieldData['value'], { force = false } = {}) {
+        const newListValue = Serializable.wrap(itemFieldValue, itemFieldValue =>
+            props.value.map((item, i) => {
+                if(i === itemIndex) {
+                    return {
+                        ...item,
+                        ...(!force ? getDependantFieldsResetData(props.field.itemFields, itemFieldKey) : null),
+                        [itemFieldKey]: itemFieldValue,
+                    }
                 }
-            }
-            return item;
-        }));
+                return item;
+            })
+        );
+
+        emit('input', newListValue);
     }
 
     function onFieldLocaleChange(fieldKey: string, locale: string) {
@@ -176,22 +182,23 @@
                     </template>
 
                     <template v-for="row in fieldLayout.item">
-                        <div class="flex flex-wrap -mx-4">
+                        <FieldGridRow>
                             <template v-for="itemFieldLayout in row">
-                                <FieldColumn class="px-4" :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
+                                <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
                                     <Field
                                         :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
                                         :field-layout="itemFieldLayout"
                                         :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
                                         :value="itemData[itemFieldLayout.key]"
                                         :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                        :row="row"
                                         @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
                                         @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
                                         @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
                                     />
-                                </FieldColumn>
+                                </FieldGridColumn>
                             </template>
-                        </div>
+                        </FieldGridRow>
                     </template>
 
                     <template v-if="field.removable && !field.readOnly && !dragActive">

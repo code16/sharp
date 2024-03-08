@@ -17,6 +17,8 @@ beforeEach(function () {
 it('returns fields and layout of an embed', function () {
     $name = Str::random();
 
+    $this->withoutExceptionHandling();
+
     $this
         ->postJson(
             route('code16.sharp.api.embed.instance.form.show', [ApiEmbedsFormControllerTestEmbed::$key, 'person', 1]),

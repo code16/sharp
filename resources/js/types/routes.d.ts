@@ -27,7 +27,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.show.show": [
         {
-            "name": "uri"
+            "name": "parentUri"
         },
         {
             "name": "entityKey"
@@ -38,7 +38,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.show.delete": [
         {
-            "name": "uri"
+            "name": "parentUri"
         },
         {
             "name": "entityKey"
@@ -49,7 +49,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.create": [
         {
-            "name": "uri"
+            "name": "parentUri"
         },
         {
             "name": "entityKey"
@@ -57,7 +57,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.store": [
         {
-            "name": "uri"
+            "name": "parentUri"
         },
         {
             "name": "entityKey"
@@ -65,7 +65,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.edit": [
         {
-            "name": "uri"
+            "name": "parentUri"
         },
         {
             "name": "entityKey"
@@ -76,7 +76,7 @@ declare module 'ziggy-js' {
     ],
     "code16.sharp.form.update": [
         {
-            "name": "uri"
+            "name": "parentUri"
         },
         {
             "name": "entityKey"
@@ -267,6 +267,14 @@ declare module 'ziggy-js' {
         {
             "name": "embedKey"
         },
+        {
+            "name": "entityKey"
+        },
+        {
+            "name": "instanceId"
+        }
+    ],
+    "code16.sharp.api.form.editor.upload.form.update": [
         {
             "name": "entityKey"
         },

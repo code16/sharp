@@ -1,7 +1,7 @@
 import { hasDependency } from './dynamic-attributes';
 import { getDynamicAttributeOptions } from './dynamic-attributes/util';
 
-export function getDependantFieldsResetData(fields, key, transformValue) {
+export function getDependantFieldsResetData(fields, key, transformValue = null) {
     return Object.values(fields)
         .filter(field => hasDependency(key, field.dynamicAttributes, field))
         .reduce((res, field) => ({

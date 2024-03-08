@@ -19,13 +19,13 @@ class ApiFilesController extends Controller
 
         return response()->json([
             'files' => collect(request()->get('files'))
-                ->filter(function (array $file) {
-                    return isset($file['disk'], $file['path']);
-                })
                 ->map(function (array $file) use ($thumbnailHeight, $thumbnailWidth) {
-                    $disk = Storage::disk($file['disk']);
-                    if (! $disk->exists($file['path'])) {
-                        return null;
+                    if (! isset($file['disk'], $file['path'])) {
+                        return [...$file, 'not_found' => true];
+                    }
+
+                    if (! Storage::disk($file['disk'])->exists($file['path'])) {
+                        return [...$file, 'not_found' => true];
                     }
 
                     return tap(
@@ -33,11 +33,12 @@ class ApiFilesController extends Controller
                             'name' => basename($file['path']),
                             'path' => $file['path'],
                             'disk' => $file['disk'],
-                            'size' => $disk->size($file['path']),
+                            'size' => Storage::disk($file['disk'])->size($file['path']),
                             'filters' => $file['filters'] ?? null,
+                            'exists' => true,
                         ],
-                        function (array &$file) use ($disk, $thumbnailHeight, $thumbnailWidth) {
-                            if ($this->isMimetypeAnImage($disk->mimeType($file['path']))) {
+                        function (array &$file) use ($thumbnailHeight, $thumbnailWidth) {
+                            if ($this->isMimetypeAnImage(Storage::disk($file['disk'])->mimeType($file['path']))) {
                                 $model = static::getUploadModelClass()::make([
                                     'disk' => $file['disk'],
                                     'file_name' => $file['path'],
@@ -49,7 +50,6 @@ class ApiFilesController extends Controller
                         },
                     );
                 })
-                ->filter()
                 ->values()
                 ->toArray(),
         ]);

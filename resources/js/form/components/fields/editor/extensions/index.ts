@@ -13,12 +13,12 @@ import { TableCell } from "@tiptap/extension-table-cell";
 import { Highlight } from "@tiptap/extension-highlight";
 import { CodeBlock } from "@tiptap/extension-code-block";
 import { Superscript } from "@tiptap/extension-superscript";
-import { Selected } from "./selected";
-import { Html } from "./html";
-import { TrailingNode } from "./trailing-node";
-import { Iframe } from "./iframe/iframe";
-import { Paste } from "./paste";
-import { Small } from "./small";
+import { Selected } from "./Selected";
+import { Html } from "./html/Html";
+import { TrailingNode } from "./TrailingNode";
+import { Iframe } from "./iframe/Iframe";
+import { Paste } from "./Paste";
+import { Small } from "./Small";
 import CharacterCount from '@tiptap/extension-character-count';
 import { getAllowedHeadingLevels, toolbarHasButton } from "../utils";
 
@@ -215,5 +215,3 @@ export function getDefaultExtensions({ placeholder, toolbar, inline } = {}) {
         .flat()
         .filter(extension => !!extension);
 }
-
-export * from './upload';

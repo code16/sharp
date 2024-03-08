@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
 use Code16\Sharp\Http\Controllers\Api\ApiFilesController;
+use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
 use Code16\Sharp\Http\Controllers\Api\ApiSearchController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiDashboardCommandController;
@@ -87,6 +88,9 @@ Route::group([
 
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form', [ApiEmbedsFormController::class, 'update'])
         ->name('code16.sharp.api.embed.instance.form.update');
+
+    Route::post('/form/editors/upload/form/{entityKey}/{instanceId?}', [ApiFormEditorUploadFormController::class, 'update'])
+        ->name('code16.sharp.api.form.editor.upload.form.update');
 
     Route::post('/upload', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');
