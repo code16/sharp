@@ -6,9 +6,9 @@
         "bacon/bacon-qr-code": "~2.0",
         "code16/laravel-content-renderer": "^1.1.0",
         "guzzlehttp/guzzle": "^7.2",
-        "intervention/image": "^2.7",
-        "laravel/framework": "^10.0",
-        "laravel/sanctum": "^3.2",
+        "intervention/image": "^3.4",
+        "intervention/image-laravel": "^1.2",
+        "laravel/framework": "^11.0",
         "laravel/tinker": "^2.7",
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
@@ -18,8 +18,8 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
+        "nunomaduro/collision": "^8.0",
+        "phpunit/phpunit": "^10.0",
         "spatie/laravel-ignition": "^2.0",
         "spatie/laravel-ray": "^1.29"
     },
@@ -65,6 +65,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

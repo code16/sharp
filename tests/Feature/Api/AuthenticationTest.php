@@ -4,21 +4,32 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Route;
 
 class AuthenticationTest extends BaseApiTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Have to define a "login" route in Laravel 11
+        Route::get('/test-login', fn() => 'ok')->name('login');
+    }
+
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
         $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
-        $this->json('get', '/sharp/api/list/person')->assertStatus(401);
+        $this->json('get', '/sharp/api/list/person')
+            ->assertStatus(401);
     }
 
     /** @test */
     public function unauthenticated_user_are_redirected_on_a_web_call()
     {
+        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->get('/sharp/s-list/person')
