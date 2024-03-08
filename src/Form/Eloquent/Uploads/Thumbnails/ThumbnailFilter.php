@@ -18,5 +18,5 @@ abstract class ThumbnailFilter
         return false;
     }
 
-    public abstract function applyFilter(Image $image);
+    abstract public function applyFilter(Image $image);
 }

@@ -11,7 +11,7 @@ class GreyscaleFilter extends ThumbnailFilter
 {
     public function applyFilter(Image $image)
     {
-       return (new GreyscaleModifier($this->params))
-            ->apply($image);
+        return (new GreyscaleModifier($this->params))
+             ->apply($image);
     }
 }
