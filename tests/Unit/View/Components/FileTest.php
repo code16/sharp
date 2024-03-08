@@ -3,10 +3,15 @@
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+
+uses(InteractsWithViews::class);
 
 beforeEach(function () {
     Storage::fake('local');
 });
+
+uses(InteractsWithViews::class);
 
 it('renders <x-sharp-file>', function () {
     $filePath = UploadedFile::fake()->create('doc.pdf')->storeAs('data', 'doc.pdf', 'local');

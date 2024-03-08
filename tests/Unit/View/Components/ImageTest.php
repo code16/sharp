@@ -2,6 +2,9 @@
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+
+uses(InteractsWithViews::class);
 
 beforeEach(function () {
     Storage::fake('local');

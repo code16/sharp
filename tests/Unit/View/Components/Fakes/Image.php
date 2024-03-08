@@ -6,6 +6,8 @@ use Illuminate\View\Component;
 
 class Image extends Component
 {
+    public static self $lastRendered;
+    
     public function __construct()
     {
         view()->share('sharp-image', $this);

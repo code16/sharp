@@ -9,8 +9,6 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
-    use InteractsWithViews;
-
     protected function setUp(): void
     {
         parent::setUp();

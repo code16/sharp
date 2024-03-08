@@ -24,7 +24,7 @@ it('Migrate <x-sharp-image> for sharp 9', function () {
 
         public function up(): void
         {
-            $this->updateContentOf(DB::table('posts')->select(['id', 'content']));
+            $this->updateContentOf(DB::table('posts'), ['content']);
         }
     };
 
@@ -57,7 +57,7 @@ it('Migrate <x-sharp-file> for sharp 9', function () {
 
         public function up(): void
         {
-            $this->updateContentOf(DB::table('posts')->select(['id', 'content']));
+            $this->updateContentOf(DB::table('posts'), ['content']);
         }
     };
 

@@ -2,6 +2,9 @@
 
 use Code16\Sharp\Tests\Unit\View\Components\Fakes\Image;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+
+uses(InteractsWithViews::class);
 
 it('renders content', function () {
     Blade::component(Image::class, 'sharp-image');

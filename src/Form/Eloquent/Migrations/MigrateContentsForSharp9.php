@@ -8,18 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 trait MigrateContentsForSharp9
 {
-    protected function updateContentOf(Builder $query, string $primaryKey = 'id'): self
+    protected function updateContentOf(Builder $query, array $contentColumns, string $primaryKey = 'id'): self
     {
-        if (! in_array($primaryKey, $query->getColumns())) {
-            throw new \Exception("You must select the primary key column ($primaryKey) to update.");
-        }
-
-        $contentColumns = array_diff($query->getColumns(), [$primaryKey]);
-
-        if (empty($contentColumns)) {
-            throw new \Exception('You must select at least one column to update.');
-        }
-
         $rows = $query
             ->tap(function (Builder $query) use ($contentColumns) {
                 collect($contentColumns)->each(fn ($column) => $query
