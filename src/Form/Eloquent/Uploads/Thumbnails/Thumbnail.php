@@ -8,8 +8,10 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\ImageInterface;
 
 class Thumbnail
 {
@@ -24,7 +26,7 @@ class Thumbnail
     public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
     {
         $this->uploadModel = $model;
-        $this->imageManager = $imageManager ?: app(ImageManager::class);
+        $this->imageManager = $imageManager ?: new ImageManager(new Driver());
         $this->storage = $storage ?: app(FilesystemManager::class);
     }
 
@@ -124,7 +126,7 @@ class Thumbnail
             }
 
             try {
-                $sourceImg = $this->imageManager->make(
+                $sourceImg = $this->imageManager->read(
                     $this->storage->disk($sourceDisk)->get($sourceRelativeFilePath),
                 );
 
@@ -146,26 +148,29 @@ class Thumbnail
 
                 // Custom filters
                 $alreadyResized = false;
-                foreach ($filters as $filter => $params) {
-                    $filterInstance = $this->resolveFilterClass($filter, $params);
-                    if ($filterInstance) {
-                        $sourceImg->filter($filterInstance);
-                        $alreadyResized = $alreadyResized || $filterInstance->resized();
+                foreach ($filters as $modifier => $params) {
+                    $modifierInstance = $this->resolveModifierClass($modifier, $params);
+                    if ($modifierInstance) {
+                        $sourceImg->modify($modifierInstance);
+                        $alreadyResized = $alreadyResized || $modifierInstance->resized();
                     }
                 }
 
                 // Resize if needed
                 if (! $alreadyResized) {
-                    $sourceImg->resize($width, $height, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
+                    $sourceImg->scaleDown($width, $height);
                 }
 
-                $thumbnailDisk->put($thumbnailPath, $sourceImg->stream(null, $this->quality));
-            } catch (FileNotFoundException $ex) {
-                return null;
-            } catch (NotReadableException $ex) {
+                if ($this->isPng($sourceImg)) {
+                    $sourceImg = $sourceImg->toPng();
+                } if ($this->isGif($sourceImg)) {
+                    $sourceImg = $sourceImg->toGif();
+                } else {
+                    $sourceImg = $sourceImg->toJpeg($this->quality);
+                }
+
+                $thumbnailDisk->put($thumbnailPath, $sourceImg);
+            } catch (FileNotFoundException|NotReadableException) {
                 return null;
             }
         }
@@ -174,16 +179,27 @@ class Thumbnail
             .($this->appendTimestamp ? '?'.$thumbnailDisk->lastModified($thumbnailPath) : '');
     }
 
-    private function resolveFilterClass(string $class, array $params): ?ThumbnailFilter
+    private function resolveModifierClass(string $class, array $params): ?ThumbnailModifier
     {
         if (! Str::contains($class, '\\')) {
-            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
+            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Modifier';
+
+            // Backward compatibility
+            if (!class_exists($class)) {
+                $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
+            }
         }
 
-        if (class_exists($class)) {
-            return new $class($params);
-        }
+        return class_exists($class) ? new $class($params) : null;
+    }
 
-        return null;
+    private function isPng(ImageInterface $image): bool
+    {
+        return false;
+    }
+
+    private function isGif(ImageInterface $image): bool
+    {
+        return false;
     }
 }

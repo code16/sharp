@@ -124,7 +124,7 @@ class SharpServiceProvider extends ServiceProvider
             ReorderHandlerMakeCommand::class,
         ]);
 
-        $this->app->register(ImageServiceProviderLaravelRecent::class);
+        $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
     }
 
     protected function registerMiddleware(): void
