@@ -13,7 +13,7 @@ class AuthenticationTest extends BaseApiTestCase
         parent::setUp();
 
         // Have to define a "login" route in Laravel 11
-        Route::get('/test-login', fn() => 'ok')->name('login');
+        Route::get('/test-login', fn () => 'ok')->name('login');
     }
 
     /** @test */
