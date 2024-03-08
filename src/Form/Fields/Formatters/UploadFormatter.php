@@ -10,6 +10,7 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
+use Intervention\Image\Gd\Driver;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
@@ -146,9 +147,9 @@ class UploadFormatter extends SharpFieldFormatter
         return "{$basePath}/{$fileName}";
     }
 
-    protected function handleImageTransformations($fileContent, array &$filters): Image
+    protected function handleImageTransformations($fileContent, array &$filters)
     {
-        $img = $this->imageManager->make($fileContent);
+        $img = $this->imageManager->read($fileContent);
 
         if ($rotate = Arr::get($filters, 'filters.rotate.angle')) {
             $img->rotate($rotate);

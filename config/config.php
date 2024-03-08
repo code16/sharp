@@ -77,6 +77,8 @@ return [
         'thumbnails_disk' => env('SHARP_UPLOADS_THUMBS_DISK', 'public'),
         'thumbnails_dir' => env('SHARP_UPLOADS_THUMBS_DIR', 'thumbnails'),
 
+        'image_driver' => env('SHARP_UPLOADS_IMAGE_DRIVER', \Intervention\Image\Drivers\Gd\Driver::class),
+
         'transform_keep_original_image' => true,
 
         // Optional SharpUploadModel implementation class name

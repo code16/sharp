@@ -8,7 +8,6 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -26,7 +25,7 @@ class Thumbnail
     public function __construct(SharpUploadModel $model, ImageManager $imageManager = null, FilesystemManager $storage = null)
     {
         $this->uploadModel = $model;
-        $this->imageManager = $imageManager ?: new ImageManager(new Driver());
+        $this->imageManager = $imageManager ?: app(ImageManager::class);
         $this->storage = $storage ?: app(FilesystemManager::class);
     }
 

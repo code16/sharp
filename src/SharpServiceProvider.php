@@ -34,6 +34,7 @@ use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\ImageManager;
 use Intervention\Image\ImageServiceProviderLaravelRecent;
 
 class SharpServiceProvider extends ServiceProvider
@@ -89,6 +90,11 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(
             SharpMenuManager::class,
             SharpMenuManager::class
+        );
+
+        $this->app->singleton(
+            ImageManager::class,
+            fn () => new ImageManager(config('sharp.uploads.image_driver', \Intervention\Image\Drivers\Gd\Driver::class)),
         );
 
         if (class_exists("\PragmaRX\Google2FA\Google2FA")) {
