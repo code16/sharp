@@ -10,7 +10,6 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
-use Intervention\Image\Gd\Driver;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Spatie\ImageOptimizer\OptimizerChainFactory;

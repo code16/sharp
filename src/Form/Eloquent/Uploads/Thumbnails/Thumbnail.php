@@ -184,7 +184,7 @@ class Thumbnail
             $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Modifier';
 
             // Backward compatibility
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
             }
         }
