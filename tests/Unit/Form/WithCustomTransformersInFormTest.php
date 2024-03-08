@@ -14,7 +14,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class WithCustomTransformersInTest extends SharpEloquentBaseTest
+class WithCustomTransformersInFormTest extends SharpEloquentBaseTest
 {
     /** @test */
     public function we_can_retrieve_an_array_version_of_a_model()
