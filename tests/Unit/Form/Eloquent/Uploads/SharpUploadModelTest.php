@@ -4,10 +4,10 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 use Illuminate\Support\Facades\Storage;
 
-class SharpUploadModelTest extends SharpEloquentBaseTest
+class SharpUploadModelTest extends SharpEloquentBaseTestCase
 {
     use TestWithSharpUploadModel;
 

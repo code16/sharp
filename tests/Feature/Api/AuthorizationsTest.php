@@ -5,7 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
-class AuthorizationsTest extends BaseApiTest
+class AuthorizationsTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

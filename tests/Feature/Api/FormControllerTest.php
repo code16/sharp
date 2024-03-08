@@ -9,7 +9,7 @@ use Code16\Sharp\Tests\Unit\Utils\WithCurrentSharpRequestFake;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
-class FormControllerTest extends BaseApiTest
+class FormControllerTest extends BaseApiTestCase
 {
     use WithCurrentSharpRequestFake;
 

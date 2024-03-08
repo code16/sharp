@@ -4,9 +4,9 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\Relationships\MorphManyRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 
-class MorphManyRelationUpdaterTest extends SharpEloquentBaseTest
+class MorphManyRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
     public function we_can_create_a_morphMany_related()

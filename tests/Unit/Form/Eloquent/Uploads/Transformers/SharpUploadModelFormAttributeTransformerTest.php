@@ -5,12 +5,12 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads\Transformers;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Utils\TestWithSharpUploadModel;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTest
+class SharpUploadModelFormAttributeTransformerTest extends SharpEloquentBaseTestCase
 {
     use TestWithSharpUploadModel {
         getEnvironmentSetUp as protected traitGetEnvironmentSetUp;

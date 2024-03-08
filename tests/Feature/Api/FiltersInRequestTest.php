@@ -10,7 +10,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpEntityListAgeFilter;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityListAgeMultipleFilter;
 use Illuminate\Contracts\Support\Arrayable;
 
-class FiltersInRequestTest extends BaseApiTest
+class FiltersInRequestTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

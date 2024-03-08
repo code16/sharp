@@ -4,12 +4,12 @@ namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\Dashboard\Commands\DashboardCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Tests\Fixtures\SharpDashboard;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class DashboardCommandControllerTest extends BaseApiTest
+class DashboardCommandControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

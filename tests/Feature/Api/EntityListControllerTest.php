@@ -10,7 +10,7 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
-class EntityListControllerTest extends BaseApiTest
+class EntityListControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

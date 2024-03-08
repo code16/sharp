@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-class DashboardControllerTest extends BaseApiTest
+class DashboardControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

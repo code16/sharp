@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-class SetLocaleTest extends BaseApiTest
+class SetLocaleTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

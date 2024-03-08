@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Fields\Formatters\AbstractSimpleFormatter;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Str;
 
-trait WithSimpleFormatterTest
+trait WithSimpleTestFormatter
 {
     public function checkSimpleFormatterToFront(SharpFormField $field, AbstractSimpleFormatter $formatter)
     {

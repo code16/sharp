@@ -4,10 +4,10 @@ namespace Code16\Sharp\Tests\Feature\Auth;
 
 use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faTotpHandler;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 
-class LoginTotp2faControllerTest extends BaseApiTest
+class LoginTotp2faControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

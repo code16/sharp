@@ -8,7 +8,7 @@ use Code16\Sharp\Tests\SharpTestCase;
 
 class TextareaFormatterTest extends SharpTestCase
 {
-    use WithSimpleFormatterTest;
+    use WithSimpleTestFormatter;
 
     /** @test */
     public function we_can_format_value_to_front()

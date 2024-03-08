@@ -5,7 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Illuminate\Support\Str;
 
-class GlobalFiltersTest extends BaseApiTest
+class GlobalFiltersTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

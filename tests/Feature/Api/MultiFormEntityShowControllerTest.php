@@ -8,7 +8,7 @@ use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class MultiFormEntityShowControllerTest extends BaseApiTest
+class MultiFormEntityShowControllerTest extends BaseApiTestCase
 {
     /** @test */
     public function we_get_the_multiform_attribute_valuated_on_a_multiform_entity()

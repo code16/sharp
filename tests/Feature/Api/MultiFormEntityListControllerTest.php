@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
 
-class MultiFormEntityListControllerTest extends BaseApiTest
+class MultiFormEntityListControllerTest extends BaseApiTestCase
 {
     /** @test */
     public function we_get_the_forms_attributes_on_a_multiform_entity()

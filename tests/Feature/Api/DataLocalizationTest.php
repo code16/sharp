@@ -10,7 +10,7 @@ use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class DataLocalizationTest extends BaseApiTest
+class DataLocalizationTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

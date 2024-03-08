@@ -4,12 +4,12 @@ namespace Code16\Sharp\Tests\Feature\Auth;
 
 use Code16\Sharp\Auth\TwoFactor\Sharp2faDefaultNotification;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Notification;
 
-class LoginNotification2faControllerTest extends BaseApiTest
+class LoginNotification2faControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

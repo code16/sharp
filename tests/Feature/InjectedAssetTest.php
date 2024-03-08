@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Tests\Feature;
 
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 
-class InjectedAssetTest extends BaseApiTest
+class InjectedAssetTest extends BaseApiTestCase
 {
     /** @test */
     public function we_can_define_assets_to_render_in_views()

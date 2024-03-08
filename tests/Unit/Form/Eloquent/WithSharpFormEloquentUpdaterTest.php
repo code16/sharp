@@ -10,10 +10,10 @@ use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTest
+class WithSharpFormEloquentUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
     public function we_can_update_a_simple_attribute()

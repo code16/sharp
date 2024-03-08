@@ -4,9 +4,9 @@ namespace Code16\Sharp\Tests\Unit\EntityList\Eloquent;
 
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 
-class SimpleEloquentReorderHandlerTest extends SharpEloquentBaseTest
+class SimpleEloquentReorderHandlerTest extends SharpEloquentBaseTestCase
 {
     /** @test */
     public function we_can_use_SimpleEloquentReorderHandler()

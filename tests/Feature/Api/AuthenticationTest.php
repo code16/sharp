@@ -6,7 +6,7 @@ use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Route;
 
-class AuthenticationTest extends BaseApiTest
+class AuthenticationTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

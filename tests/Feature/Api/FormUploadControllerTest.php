@@ -5,7 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-class FormUploadControllerTest extends BaseApiTest
+class FormUploadControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

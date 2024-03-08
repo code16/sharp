@@ -4,13 +4,13 @@ namespace Code16\Sharp\Tests\Feature\Api\Embeds;
 
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Tests\Fixtures\PersonSharpForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
 
-class EmbedsControllerTest extends BaseApiTest
+class EmbedsControllerTest extends BaseApiTestCase
 {
     /** @test */
     public function we_can_get_data_of_an_embed_which_is_identical_by_default()

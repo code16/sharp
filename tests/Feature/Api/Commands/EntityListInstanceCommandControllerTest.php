@@ -4,12 +4,12 @@ namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Tests\Fixtures\PersonSharpEntityList;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
-class EntityListInstanceCommandControllerTest extends BaseApiTest
+class EntityListInstanceCommandControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {
