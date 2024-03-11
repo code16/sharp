@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
-use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Tests\Fixtures\Person;
+use Code16\Sharp\Utils\Thumbnail;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
@@ -79,13 +79,13 @@ it('allows to call a closure after a thumbnail creation', function () {
     $file = createImage();
     $upload = createSharpUploadModel($file);
 
-    (new Thumbnail($upload))
+    Thumbnail::for($upload)
         ->setAfterClosure(function (bool $wasCreated, string $path, $disk) use (&$thumbWasCreated) {
             $thumbWasCreated = $wasCreated;
         })
         ->make(150);
 
-    (new Thumbnail($upload))
+    Thumbnail::for($upload)
         ->setAfterClosure(function (bool $wasCreated, string $path, $disk) use (&$thumbWasCreatedTwice) {
             $thumbWasCreatedTwice = $wasCreated;
         })
@@ -93,6 +93,23 @@ it('allows to call a closure after a thumbnail creation', function () {
 
     expect($thumbWasCreated)->toBeTrue()
         ->and($thumbWasCreatedTwice)->toBeFalse();
+});
+
+it('allows to define an encoder when creating the thumbnail', function () {
+    $file = createImage(name: 'my-image.png');
+    $upload = createSharpUploadModel($file);
+
+    $thumb = Thumbnail::for($upload)
+        ->setQuality(80)
+        ->when($upload->mime_type == 'image/png', function ($thumbnail) {
+            $thumbnail->forceWebpEncoder();
+        })
+        ->make(150);
+
+    expect($thumb)
+        ->toEqual('/storage/thumbnails/data/150-_q-80/my-image.webp')
+        ->and(Storage::disk('public')->exists('thumbnails/data/150-_q-80/my-image.webp'))
+        ->toBeTrue();
 });
 
 function createSharpUploadModel(string $file, ?object $model = null, ?string $modelKey = 'test'): SharpUploadModel
