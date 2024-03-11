@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\Encoders\AvifEncoder;
-use Intervention\Image\Encoders\FileExtensionEncoder;
 use Intervention\Image\Encoders\FilePathEncoder;
 use Intervention\Image\Encoders\GifEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
@@ -108,7 +106,7 @@ class ThumbnailBuilder
 
     public function make(?int $width = null, ?int $height = null): ?string
     {
-        if (!$this->uploadModel || !$this->uploadModel->disk || !$this->uploadModel->file_name) {
+        if (! $this->uploadModel || ! $this->uploadModel->disk || ! $this->uploadModel->file_name) {
             return null;
         }
 
@@ -218,8 +216,8 @@ class ThumbnailBuilder
             return $modifier;
         }
 
-        if (!Str::contains($modifier, '\\')) {
-            $modifier = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($modifier) . 'Modifier';
+        if (! Str::contains($modifier, '\\')) {
+            $modifier = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($modifier).'Modifier';
         }
 
         if (class_exists($modifier) && is_subclass_of($modifier, ThumbnailModifier::class)) {
