@@ -10,9 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Encoders\AutoEncoder;
-use Intervention\Image\Exceptions\EncoderException;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Interfaces\ImageInterface;
 
 class Thumbnail
 {
@@ -181,7 +179,7 @@ class Thumbnail
             $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Modifier';
 
             // Backward compatibility
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
             }
         }

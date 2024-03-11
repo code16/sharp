@@ -1,9 +1,9 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\ComponentAttributeBag;
-use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 
 uses(InteractsWithViews::class);
 
