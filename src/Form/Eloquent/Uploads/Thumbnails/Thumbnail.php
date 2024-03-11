@@ -8,9 +8,8 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Intervention\Image\Exception\NotReadableException;
+use Intervention\Image\Exceptions\EncoderException;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Interfaces\ImageInterface;
 
 class Thumbnail
 {
@@ -160,16 +159,8 @@ class Thumbnail
                     $sourceImg->scaleDown($width, $height);
                 }
 
-                if ($this->isPng($sourceImg)) {
-                    $sourceImg = $sourceImg->toPng();
-                } if ($this->isGif($sourceImg)) {
-                    $sourceImg = $sourceImg->toGif();
-                } else {
-                    $sourceImg = $sourceImg->toJpeg($this->quality);
-                }
-
-                $thumbnailDisk->put($thumbnailPath, $sourceImg);
-            } catch (FileNotFoundException|NotReadableException) {
+                $thumbnailDisk->put($thumbnailPath, $sourceImg->encode());
+            } catch (FileNotFoundException|EncoderException) {
                 return null;
             }
         }
@@ -190,15 +181,5 @@ class Thumbnail
         }
 
         return class_exists($class) ? new $class($params) : null;
-    }
-
-    private function isPng(ImageInterface $image): bool
-    {
-        return false;
-    }
-
-    private function isGif(ImageInterface $image): bool
-    {
-        return false;
     }
 }
