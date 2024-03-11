@@ -2,11 +2,11 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
-use Arr;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 
@@ -23,7 +23,7 @@ class HandleTransformedFileJob implements ShouldQueue
 
     public function handle(ImageManager $imageManager): void
     {
-        $img = $imageManager->make(Storage::disk($this->disk)->get($this->filePath));
+        $img = $imageManager->read(Storage::disk($this->disk)->get($this->filePath));
 
         if ($rotate = Arr::get($this->transformFilters, 'rotate.angle')) {
             $img->rotate($rotate);
