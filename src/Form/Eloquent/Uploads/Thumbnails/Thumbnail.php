@@ -10,6 +10,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Encoders\AutoEncoder;
+use Intervention\Image\Exceptions\DecoderException;
+use Intervention\Image\Exceptions\EncoderException;
 use Intervention\Image\ImageManager;
 
 class Thumbnail
@@ -164,7 +166,7 @@ class Thumbnail
                     $thumbnailPath,
                     $sourceImg->encode(new AutoEncoder(quality: $this->quality))
                 );
-            } catch (FileNotFoundException) {
+            } catch (FileNotFoundException|EncoderException|DecoderException) {
                 return null;
             }
         }
