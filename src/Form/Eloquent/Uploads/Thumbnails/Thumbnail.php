@@ -9,7 +9,6 @@ use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\ImageInterface;
 
@@ -170,7 +169,7 @@ class Thumbnail
                 }
 
                 $thumbnailDisk->put($thumbnailPath, $sourceImg);
-            } catch (FileNotFoundException|NotReadableException) {
+            } catch (FileNotFoundException) {
                 return null;
             }
         }
