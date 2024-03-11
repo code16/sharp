@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 class ImageFake extends Component
 {
     public static self $lastRendered;
-    
+
     public function __construct()
     {
         view()->share('sharp-image', $this);

@@ -110,7 +110,7 @@ it('returns thumbnails if file is an image', function () {
                         '/storage/thumbnails/data/400-400_q-90/%s?%s',
                         basename($file2),
                         Storage::disk('public')
-                            ->lastModified('/thumbnails/data/400-400_q-90/' . basename($file2))
+                            ->lastModified('/thumbnails/data/400-400_q-90/'.basename($file2))
                     ),
                     'size' => 1148,
                 ],
