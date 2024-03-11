@@ -106,9 +106,9 @@ function fakePolicyFor(string $entityKey, $fakeImplementation)
     return test();
 }
 
-function createImage(string $disk = 'local'): string
+function createImage(string $disk = 'local', string $name = 'test.png'): string
 {
-    $file = UploadedFile::fake()->image('test.png', 600, 600);
+    $file = UploadedFile::fake()->image($name, 600, 600);
 
-    return $file->storeAs('data', 'test.png', ['disk' => $disk]);
+    return $file->storeAs('data', $name, ['disk' => $disk]);
 }

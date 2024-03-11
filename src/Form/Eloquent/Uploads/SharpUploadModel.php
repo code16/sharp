@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Form\Eloquent\Uploads;
 
-use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
+use Code16\Sharp\Facades\Thumbnail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -76,7 +76,7 @@ class SharpUploadModel extends Model
 
     public function thumbnail(int $width = null, int $height = null, array $customFilters = []): ?string
     {
-        return (new Thumbnail($this))
+        return Thumbnail::for($this)
             ->setTransformationFilters($this->filters ?: null)
             ->setAppendTimestamp()
             ->make($width, $height, $customFilters);
