@@ -8,6 +8,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Exceptions\EncoderException;
 use Intervention\Image\ImageManager;
 
@@ -160,7 +161,7 @@ class Thumbnail
                 }
 
                 $thumbnailDisk->put($thumbnailPath, $sourceImg->encode());
-            } catch (FileNotFoundException|EncoderException) {
+            } catch (FileNotFoundException|EncoderException|DecoderException) {
                 return null;
             }
         }
