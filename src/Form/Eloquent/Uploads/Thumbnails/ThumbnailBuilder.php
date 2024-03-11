@@ -12,6 +12,8 @@ use Illuminate\Support\Traits\Conditionable;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\Encoders\AvifEncoder;
+use Intervention\Image\Encoders\FileExtensionEncoder;
+use Intervention\Image\Encoders\FilePathEncoder;
 use Intervention\Image\Encoders\GifEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Encoders\PngEncoder;
@@ -21,7 +23,7 @@ use Intervention\Image\Exceptions\EncoderException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncoderInterface;
 
-class Thumbnail
+class ThumbnailBuilder
 {
     use Conditionable;
 
@@ -32,17 +34,13 @@ class Thumbnail
     protected bool $appendTimestamp = false;
     protected ?Closure $afterClosure = null;
     protected ?array $transformationFilters = null;
+    protected array $modifiers = [];
 
-    public function __construct(ImageManager $imageManager = null)
-    {
-        $this->imageManager = $imageManager ?: new ImageManager(new Driver());
-    }
-
-    public function for(SharpUploadModel $model): self
+    public function __construct(?SharpUploadModel $model = null)
     {
         $this->uploadModel = $model;
-
-        return $this;
+        $this->transformationFilters = $model?->filters;
+        $this->imageManager = new ImageManager(new Driver());
     }
 
     public function setQuality(int $quality): self
@@ -62,13 +60,6 @@ class Thumbnail
     public function setAppendTimestamp(bool $appendTimestamp = true): self
     {
         $this->appendTimestamp = $appendTimestamp;
-
-        return $this;
-    }
-
-    public function setTransformationFilters(array $transformationFilters = null): self
-    {
-        $this->transformationFilters = $transformationFilters;
 
         return $this;
     }
@@ -108,17 +99,25 @@ class Thumbnail
         return $this;
     }
 
-    public function make(?int $width, ?int $height = null, array $filters = []): ?string
+    public function addModifier(ThumbnailModifier|string $modifier): self
     {
-        if (! $this->uploadModel->disk || ! $this->uploadModel->file_name) {
+        $this->modifiers[] = $modifier;
+
+        return $this;
+    }
+
+    public function make(?int $width = null, ?int $height = null): ?string
+    {
+        if (!$this->uploadModel || !$this->uploadModel->disk || !$this->uploadModel->file_name) {
             return null;
         }
 
-        $thumbnailDisk = Storage::disk(config('sharp.uploads.thumbnails_disk', 'public'));
-
-        $thumbDirNameAppender = ($this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '')
-            .(sizeof($filters) ? '_'.md5(serialize($filters)) : '')
-            ."_q-$this->quality";
+        $thumbDirNameAppender = sprintf(
+            '%s%s_q-%s',
+            $this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '',
+            sizeof($this->modifiers) ? '_'.md5(serialize($this->modifiers)) : '',
+            $this->quality
+        );
 
         $extension = $this->resolveThumbnailExtension();
 
@@ -134,8 +133,9 @@ class Thumbnail
         // Strip double /
         $thumbnailPath = Str::replace('//', '/', $thumbnailPath);
 
+        $thumbnailDisk = Storage::disk(config('sharp.uploads.thumbnails_disk', 'public'));
         $wasCreated = ! $thumbnailDisk->exists($thumbnailPath);
-        $url = $this->generateThumbnail($thumbnailPath, $width, $height, $filters);
+        $url = $this->generateThumbnail($thumbnailPath, $width, $height);
 
         if ($closure = $this->afterClosure) {
             $closure($wasCreated, $thumbnailPath, $thumbnailDisk);
@@ -144,16 +144,7 @@ class Thumbnail
         return $url;
     }
 
-    public function destroyAllThumbnails(): void
-    {
-        $thumbnailDisk = Storage::disk(config('sharp.uploads.thumbnails_disk', 'public'));
-        $thumbnailPath = config('sharp.uploads.thumbnails_dir', 'thumbnails');
-        $destinationRelativeBasePath = dirname($this->uploadModel->file_name);
-
-        $thumbnailDisk->deleteDirectory("$thumbnailPath/$destinationRelativeBasePath");
-    }
-
-    private function generateThumbnail(string $thumbnailPath, ?int $width, ?int $height, array $filters): ?string
+    private function generateThumbnail(string $thumbnailPath, ?int $width, ?int $height): ?string
     {
         if ($width == 0) {
             $width = null;
@@ -193,10 +184,10 @@ class Thumbnail
                     }
                 }
 
-                // Custom filters
+                // Custom modifiers
                 $alreadyResized = false;
-                foreach ($filters as $modifier => $params) {
-                    $modifierInstance = $this->resolveModifierClass($modifier, $params);
+                foreach ($this->modifiers as $modifier) {
+                    $modifierInstance = $this->resolveModifierClass($modifier);
                     if ($modifierInstance) {
                         $sourceImg->modify($modifierInstance);
                         $alreadyResized = $alreadyResized || $modifierInstance->resized();
@@ -221,18 +212,21 @@ class Thumbnail
             .($this->appendTimestamp ? '?'.$thumbnailDisk->lastModified($thumbnailPath) : '');
     }
 
-    private function resolveModifierClass(string $class, array $params): ?ThumbnailModifier
+    private function resolveModifierClass(ThumbnailModifier|string $modifier): ?ThumbnailModifier
     {
-        if (! Str::contains($class, '\\')) {
-            $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Modifier';
-
-            // Backward compatibility
-            if (! class_exists($class)) {
-                $class = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\'.ucfirst($class).'Filter';
-            }
+        if ($modifier instanceof ThumbnailModifier) {
+            return $modifier;
         }
 
-        return class_exists($class) ? new $class($params) : null;
+        if (!Str::contains($modifier, '\\')) {
+            $modifier = 'Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\\' . ucfirst($modifier) . 'Modifier';
+        }
+
+        if (class_exists($modifier) && is_subclass_of($modifier, ThumbnailModifier::class)) {
+            return new $modifier();
+        }
+
+        return null;
     }
 
     private function resolveEncoder(): EncoderInterface
@@ -248,7 +242,7 @@ class Thumbnail
             throw new EncoderException('Encoder class ('.$this->encoderClass.') does not exist or does not implement EncoderInterface.');
         }
 
-        return new AutoEncoder(quality: $this->quality);
+        return new FilePathEncoder(path: $this->uploadModel->file_name, quality: $this->quality);
     }
 
     private function resolveThumbnailExtension(): string

@@ -22,7 +22,6 @@ use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
-use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
@@ -103,8 +102,6 @@ class SharpServiceProvider extends ServiceProvider
                 config('sharp.uploads.image_driver', \Intervention\Image\Drivers\Gd\Driver::class)
             ),
         );
-
-        $this->app->bind('thumbnail', fn () => new Thumbnail());
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
             $this->app->bind(

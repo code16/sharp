@@ -1,8 +1,8 @@
 <?php
 
-use Code16\Sharp\Facades\Thumbnail;
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Tests\Fixtures\Person;
+use Code16\Sharp\Utils\Thumbnail;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
