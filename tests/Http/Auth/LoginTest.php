@@ -4,12 +4,16 @@ use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
+use Illuminate\Support\Facades\Route;
 
 beforeEach(function () {
     config()->set(
         'sharp.entities.person',
         PersonEntity::class,
     );
+
+    // Have to define a "login" route in Laravel 11
+    Route::get('/test-login', fn () => 'ok')->name('login');
 });
 
 function setTestAuthGuard(): void

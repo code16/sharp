@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Exceptions\DecoderException;
 
 class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransformer
 {
@@ -115,11 +116,15 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             return null;
         }
 
-        $url = $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight);
+        try {
+            $url = $upload->thumbnail($this->thumbnailWidth, $this->thumbnailHeight);
 
-        // Return relative URL if possible, to avoid CORS issues in multidomain case.
-        return Str::startsWith($url, config('app.url'))
-            ? Str::after($url, config('app.url'))
-            : $url;
+            // Return relative URL if possible, to avoid CORS issues in multidomain case.
+            return Str::startsWith($url, config('app.url'))
+                ? Str::after($url, config('app.url'))
+                : $url;
+        } catch (DecoderException) {
+            return null;
+        }
     }
 }

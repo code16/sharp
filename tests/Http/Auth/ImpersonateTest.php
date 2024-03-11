@@ -4,6 +4,8 @@ use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Testing\AssertableInertia as Assert;
 
 function migrateUsersTable()
@@ -14,6 +16,11 @@ function migrateUsersTable()
         $table->timestamps();
     });
 }
+
+beforeEach(function () {
+    // Have to define a "login" route in Laravel 11
+    Route::get('/test-login', fn () => 'ok')->name('login');
+});
 
 it('redirects to impersonation page if enabled and guest', function () {
     config()->set('sharp.auth.impersonate.handler', new class() extends SharpImpersonationHandler
