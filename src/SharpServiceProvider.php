@@ -104,7 +104,7 @@ class SharpServiceProvider extends ServiceProvider
             ),
         );
 
-        $this->app->bind('thumbnail', fn() => new Thumbnail());
+        $this->app->bind('thumbnail', fn () => new Thumbnail());
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
             $this->app->bind(

@@ -12,13 +12,9 @@ use Illuminate\Support\Traits\Conditionable;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\Encoders\AvifEncoder;
-use Intervention\Image\Encoders\BmpEncoder;
 use Intervention\Image\Encoders\GifEncoder;
-use Intervention\Image\Encoders\HeicEncoder;
-use Intervention\Image\Encoders\Jpeg2000Encoder;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Encoders\PngEncoder;
-use Intervention\Image\Encoders\TiffEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Exceptions\EncoderException;
@@ -157,7 +153,8 @@ class Thumbnail
         $thumbnailDisk->deleteDirectory("$thumbnailPath/$destinationRelativeBasePath");
     }
 
-    private function generateThumbnail(string $thumbnailPath, ?int $width, ?int $height, array $filters): ?string {
+    private function generateThumbnail(string $thumbnailPath, ?int $width, ?int $height, array $filters): ?string
+    {
         if ($width == 0) {
             $width = null;
         }
