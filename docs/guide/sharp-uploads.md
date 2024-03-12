@@ -134,28 +134,25 @@ For instance, you can display a 150px width thumbnail in a view like this:
 <img src="{{ $book->cover->thumbnail(150) }}" alt="My picture">
 ```
 
-#### The Thumbnail class
-
-The `Code16\Sharp\Utils\Thumbnail` class allows more control on thumbnail creation.
+Another option is to use the fluent API, calling `thumbnail()` without parameters:
 
 ```php
-$thumb = Thumbnail::for($book->cover)->make(150);
+$thumb = $book->cover->thumnail()->setQuality(60)->toJpeg()->make(150);
 ```
 
 Available methods are:
 
-- `for(SharpUploadModel $upload)`: define the Upload model to work with — this method is required, and must be the first one called.
-
 - `setQuality(int $quality)`: set the quality of the thumbnail used by some encoders (default to 90).
 
-- `forceWebpEncoder()`, `forcePngEncoder()`, `forceJpegEncoder()`, `forceGifEncoder()`, `forceAvifEncoder()`: force the use of a specific encoder for the thumbnail.
+- `toWebp()`, `toPng()`, `toJpeg()`, `toGif()`, `toAvif()`: force the use of a specific encoder for the thumbnail.
 
 - `setAppendTimestamp(bool $appendTimestamp = true)`: append a timestamp to the thumbnail URL (useful for browser cache).
 
 - `setAfterClosure(Closure $closure)`: set a closure to be executed after the thumbnail creation. Intended to be used like this:
 
 ```php
-Thumbnail::for($book->cover)
+$book->cover
+    ->thumbnail()
     ->setAfterClosure(function ($wasCreated, $thumbnailPath, $thumbnailDisk) {
         // Do something...
     })
@@ -187,8 +184,8 @@ The following modifiers are available out of the box:
 
 You can provide a custom Modifier; you’ll need to create a class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailModifier`, implementing:
 
-- `function apply(ImageInterface $image): ImageInterface`: apply you filter, using the great [Intervention API](https://image.intervention.io/v3).
-- `function resized(): bool`: (optional, default to false) Return true if the resize is part of the `apply()` code.
+- `function apply(ImageInterface $image): ImageInterface`: apply your filter, using the great [Intervention API](https://image.intervention.io/v3).
+- `function resized(): bool`: must return true if the resize is part of the `apply()` code (optional, default to false).
 
 ## Update with Sharp
 

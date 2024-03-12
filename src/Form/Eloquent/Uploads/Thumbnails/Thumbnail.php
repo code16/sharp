@@ -21,7 +21,7 @@ use Intervention\Image\Exceptions\EncoderException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncoderInterface;
 
-class ThumbnailBuilder
+class Thumbnail
 {
     use Conditionable;
 
@@ -62,35 +62,35 @@ class ThumbnailBuilder
         return $this;
     }
 
-    public function forceWebpEncoder(): self
+    public function toWebp(): self
     {
         $this->encoderClass = WebpEncoder::class;
 
         return $this;
     }
 
-    public function forcePngEncoder(): self
+    public function toPng(): self
     {
         $this->encoderClass = PngEncoder::class;
 
         return $this;
     }
 
-    public function forceJpegEncoder(): self
+    public function toJpeg(): self
     {
         $this->encoderClass = JpegEncoder::class;
 
         return $this;
     }
 
-    public function forceGifEncoder(): self
+    public function toGif(): self
     {
         $this->encoderClass = GifEncoder::class;
 
         return $this;
     }
 
-    public function forceAvifEncoder(): self
+    public function toAvif(): self
     {
         $this->encoderClass = AvifEncoder::class;
 

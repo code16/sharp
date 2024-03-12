@@ -2,7 +2,6 @@
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Utils\Thumbnail;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
@@ -45,7 +44,7 @@ it('returns null on error with a thumbnail creation', function () {
     // Corrupt data
     $upload->update(['file_name' => null]);
 
-    expect($upload->thumbnail())->toBeNull();
+    expect($upload->thumbnail(150))->toBeNull();
 });
 
 it('handles transformation filters when creating a thumbnail', function () {
@@ -79,13 +78,13 @@ it('allows to call a closure after a thumbnail creation', function () {
     $file = createImage();
     $upload = createSharpUploadModel($file);
 
-    Thumbnail::for($upload)
+    $upload->thumbnail()
         ->setAfterClosure(function (bool $wasCreated, string $path, $disk) use (&$thumbWasCreated) {
             $thumbWasCreated = $wasCreated;
         })
         ->make(150);
 
-    Thumbnail::for($upload)
+    $upload->thumbnail()
         ->setAfterClosure(function (bool $wasCreated, string $path, $disk) use (&$thumbWasCreatedTwice) {
             $thumbWasCreatedTwice = $wasCreated;
         })
@@ -99,11 +98,9 @@ it('allows to define an encoder when creating the thumbnail', function () {
     $file = createImage(name: 'my-image.png');
     $upload = createSharpUploadModel($file);
 
-    $thumb = Thumbnail::for($upload)
+    $thumb = $upload->thumbnail()
         ->setQuality(80)
-        ->when($upload->mime_type == 'image/png', function ($thumbnail) {
-            $thumbnail->forceWebpEncoder();
-        })
+        ->when($upload->mime_type == 'image/png', fn ($thumbnail) => $thumbnail->toWebp())
         ->make(150);
 
     expect($thumb)
