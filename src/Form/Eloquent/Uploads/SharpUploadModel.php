@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Form\Eloquent\Uploads;
 
-use Code16\Sharp\Utils\Thumbnail;
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\Thumbnail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -74,15 +74,19 @@ class SharpUploadModel extends Model
         ]);
     }
 
-    public function thumbnail(int $width = null, int $height = null, array $modifiers = []): ?string
+    public function thumbnail(int $width = null, int $height = null, array $modifiers = []): string|Thumbnail|null
     {
-        $thumb = Thumbnail::for($this)
-            ->setAppendTimestamp();
-
-        foreach ($modifiers as $modifier) {
-            $thumb->addModifier($modifier);
+        if (empty(func_get_args())) {
+            return new Thumbnail($this);
         }
 
-        return $thumb->make($width, $height);
+        return (new Thumbnail($this))
+            ->when($modifiers, function (Thumbnail $thumb, array $modifiers) {
+                foreach ($modifiers as $modifier) {
+                    $thumb->addModifier($modifier);
+                }
+            })
+            ->setAppendTimestamp()
+            ->make($width, $height);
     }
 }

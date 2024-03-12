@@ -2,7 +2,6 @@
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\FitModifier;
-use Code16\Sharp\Utils\Thumbnail;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\ComponentAttributeBag;
@@ -38,7 +37,7 @@ it('renders <x-sharp-image>', function () {
             ]
         )
         ->assertSee(
-            sprintf('<img src="%s" alt="Image">', Thumbnail::for($model)->addModifier($modifier)->setAppendTimestamp()->make(400, 400)),
+            sprintf('<img src="%s" alt="Image">', $model->thumbnail()->addModifier($modifier)->setAppendTimestamp()->make(400, 400)),
             false
         )
         ->assertSee('Legendary');
