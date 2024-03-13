@@ -16,7 +16,7 @@
 
 
 <template>
-    <AuthLayout show-site-name>
+    <AuthLayout :show-site-name="config('sharp.auth.login_form.display_app_name')">
         <Title>
             {{ __('sharp::pages/auth/login.title') }}
         </Title>

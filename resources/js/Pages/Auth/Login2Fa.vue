@@ -4,6 +4,7 @@
     import { __ } from "@/utils/i18n";
     import Title from "@/components/Title.vue";
     import { route } from "@/utils/url";
+    import {config} from "@/utils/config";
 
     defineProps<{
         helpText: string
@@ -15,7 +16,7 @@
 </script>
 
 <template>
-    <AuthLayout show-site-name>
+    <AuthLayout :show-site-name="config('sharp.auth.login_form.display_app_name')">
         <Title>
             {{ __('sharp::pages/auth/login.title') }}
         </Title>
