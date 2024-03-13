@@ -57,7 +57,9 @@ return [
 ];
 ```
 
-The logo file should be an SVG or PNG file, and must fit in 200 pixels in width and 100 pixels in height. If not set, the `theme.logo_url` will be displayed, or the Sharp logo as a last resort.
+The `display_app_name` option allows you to display the `config('sharp.name')` on the login form.
+
+`logo_url` should point to an SVG or PNG file, which must fit in 200 pixels in width and 100 pixels in height. If not set, the `theme.logo_url` file will be displayed, or the Sharp logo as a last resort.
 
 The custom message is displayed under the form; you'll need to create a new template file:
 

@@ -50,7 +50,7 @@ class HandleInertiaRequests extends Middleware
                 'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),
                 'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),
                 'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
-                'sharp.auth.login_form.logo_url' => config('sharp.auth.login_form.logo_url', config('sharp.theme.logo_urls.login')),
+                'sharp.auth.login_form.logo_url' => config('sharp.auth.login_form.logo_url', config('sharp.theme.logo_urls.login')) ?: config('sharp.theme.logo_url'),
                 'sharp.custom_url_segment' => config('sharp.custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),

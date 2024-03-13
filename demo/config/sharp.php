@@ -78,7 +78,7 @@ return [
     'theme' => [
         'primary_color' => '#0c4589',
         'favicon_url' => '/img/sharp/favicon-32x32.png',
-        'logo_url' => '/img/sharp/logo.svg',
+        'logo_url' => '/img/sharp/logo.png',
     ],
 
     'extensions' => [
