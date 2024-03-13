@@ -4,6 +4,7 @@ namespace Code16\Sharp\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+
 use function Laravel\Prompts\confirm;
 
 class InstallCommand extends Command
