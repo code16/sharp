@@ -6,13 +6,13 @@ return [
     '2fa' => [
         'validation_error' => 'Please enter a value for the code',
         'invalid' => 'This code is invalid',
-        'form_help_text' => 'Please enter the 6 figures of the validation code',
+        'form_help_text' => 'Please enter the 6-digit code',
         'notification' => [
             'mail_subject' => 'Your connection code',
             'mail_body' => 'Here is the code to enter to connect:',
         ],
         'totp' => [
-            'form_help_text' => 'Please enter the 6 figures of the validation code, or one of your recovery codes that you have not used previously.',
+            'form_help_text' => 'Please enter the 6-digit from your application, or one of your recovery codes that you have not used previously.',
             'commands' => [
                 'activate' => [
                     'command_label' => 'Configure two-factor authentication',
