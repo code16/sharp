@@ -86,7 +86,7 @@ class InstallCommand extends Command
 
         $this->addMenuToSharpConfig();
 
-        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace() . "\\SharpMenu.php");
+        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace().'\\SharpMenu.php');
     }
 
     private function getSharpRootNamespace()
@@ -99,7 +99,7 @@ class InstallCommand extends Command
         $this->replaceFileContent(
             config_path('sharp.php'),
             "'menu' => null, //\\App\\Sharp\\SharpMenu::class",
-            "'menu' => " . $this->getSharpRootNamespace() . "\\SharpMenu::class,",
+            "'menu' => ".$this->getSharpRootNamespace().'\\SharpMenu::class,',
         );
     }
 
@@ -111,7 +111,7 @@ class InstallCommand extends Command
 
         $this->addCheckHandlerToSharpConfig();
 
-        $this->components->twoColumnDetail('Custom check handler', $this->getSharpRootNamespace() . "\\SharpCheckHandler.php");
+        $this->components->twoColumnDetail('Custom check handler', $this->getSharpRootNamespace().'\\SharpCheckHandler.php');
     }
 
     private function addCheckHandlerToSharpConfig()
@@ -119,7 +119,7 @@ class InstallCommand extends Command
         $this->replaceFileContent(
             config_path('sharp.php'),
             "'auth' => [".PHP_EOL,
-            "'auth' => [".PHP_EOL."        'check_handler' => ".$this->getSharpRootNamespace()."\\SharpCheckHandler::class,".PHP_EOL,
+            "'auth' => [".PHP_EOL."        'check_handler' => ".$this->getSharpRootNamespace().'\\SharpCheckHandler::class,'.PHP_EOL,
         );
     }
 }
