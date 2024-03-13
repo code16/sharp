@@ -11,8 +11,8 @@ return [
     // Optional. You can prevent Sharp version to be displayed in the page title. Default is true.
     'display_sharp_version_in_title' => true,
 
-    // Optional. You can display a breadcrumb on all Sharp pages. Default is false.
-    'display_breadcrumb' => false,
+    // Optional. You can display a breadcrumb on all Sharp pages. Default is true.
+    'display_breadcrumb' => true,
 
     // Optional. Handle extensions.
     //    'extensions' => [
@@ -133,6 +133,20 @@ return [
             'handler' => null,
         ],
 
+        'login_form' => [
+            // Handle a "remember me" flag (with a checkbox on the login form)
+            'suggest_remember_me' => false,
+
+            // Display the app name on the login page.
+            'display_app_name' => true,
+
+            // Optional logo on the login page (default to theme.logo_url and to sharp logo)
+            // 'logo_url' => '/sharp-assets/login-logo.png',
+
+            // Optional additional message on the login page.
+            // 'message_blade_path' => 'sharp/_login-page-message',
+        ]
+
         // Optional additional auth check.
         // 'check_handler' => \App\Sharp\Auth\MySharpCheckHandler::class,
 
@@ -140,15 +154,10 @@ return [
         // 'guard' => 'sharp',
     ],
 
-    // 'login_page_message_blade_path' => env('SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH', 'sharp/_login-page-message'),
-
     'theme' => [
         'primary_color' => '#004c9b',
         // 'favicon_url' => '',
-        // 'logo_urls' => [
-        //     'menu' => '/sharp-assets/menu-icon.png',
-        //     'login' => '/sharp-assets/login-icon.png',
-        // ],
+        // 'logo_url' => '/sharp-assets/menu-icon.png',
     ],
 
 ];
