@@ -13,8 +13,10 @@ class InstallCommand extends Command
 
     public function handle()
     {
+        $this->components->warn('By default, Sharp will be accessible to all users that can login with their email and password.');
+
         $shouldCreateCheckHandler = confirm(
-            label: 'Should create a check handler to restrict Sharp access only to some users (admins, etc) ?',
+            label: 'Should create a custom check handler to restrict Sharp access only to specific users (admins, etc) ?',
         );
 
         $this->publishConfig();
@@ -23,8 +25,9 @@ class InstallCommand extends Command
         if ($shouldCreateCheckHandler) {
             $this->createCheckHandler();
         }
+        $this->components->info('Sharp has been installed! You can now generate your first sharp entity with the help of an artisan command. Use `artisan sharp:generator`');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function publishConfig()
@@ -34,7 +37,7 @@ class InstallCommand extends Command
             '--tag' => 'config',
         ]);
 
-        $this->components->info('Sharp config has been published successfully to [config/sharp.php].');
+        $this->components->twoColumnDetail('Config', 'config/sharp.php');
     }
 
     private function publishAssets()
@@ -44,7 +47,7 @@ class InstallCommand extends Command
             '--tag' => 'assets',
         ]);
 
-        $this->components->info('Sharp assets have been published successfully to [public/vendor/sharp].');
+        $this->components->twoColumnDetail('Assets', 'public/vendor/sharp');
 
         $this->replaceFileContent(
             base_path('composer.json'),
@@ -52,7 +55,15 @@ class InstallCommand extends Command
             'ComposerScripts::postAutoloadDump",'.PHP_EOL.'            "@php artisan vendor:publish --provider=Code16\\\\\\\\Sharp\\\\\\\\SharpServiceProvider --tag=assets --force",'.PHP_EOL,
         );
 
-        $this->components->info('Refresh assets has been added successfully to the `scripts.post-autoload-dump` section in [composer.json].');
+        $this->components->twoColumnDetail('Post autoload script', 'composer.json');
+
+        $this->replaceFileContent(
+            base_path('.gitignore'),
+            PHP_EOL.'/vendor'.PHP_EOL,
+            PHP_EOL.'/vendor'.PHP_EOL.'/public/vendor'.PHP_EOL,
+        );
+
+        $this->components->twoColumnDetail('Ignore assets in git', '.gitignore');
     }
 
     private function replaceFileContent($targetFilePath, $search, $replace)
@@ -74,7 +85,12 @@ class InstallCommand extends Command
 
         $this->addMenuToSharpConfig();
 
-        $this->components->info('A default menu has been added successfully');
+        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace() . "\\SharpMenu.php");
+    }
+
+    private function getSharpRootNamespace()
+    {
+        return $this->laravel->getNamespace().'Sharp';
     }
 
     private function addMenuToSharpConfig()
@@ -82,7 +98,7 @@ class InstallCommand extends Command
         $this->replaceFileContent(
             config_path('sharp.php'),
             "'menu' => null, //\\App\\Sharp\\SharpMenu::class",
-            "'menu' => \\App\\Sharp\\SharpMenu::class,",
+            "'menu' => " . $this->getSharpRootNamespace() . "\\SharpMenu::class,",
         );
     }
 
@@ -94,7 +110,7 @@ class InstallCommand extends Command
 
         $this->addCheckHandlerToSharpConfig();
 
-        $this->components->info('A default check handler has been added successfully');
+        $this->components->twoColumnDetail('Custom check handler', $this->getSharpRootNamespace() . "\\SharpCheckHandler.php");
     }
 
     private function addCheckHandlerToSharpConfig()
@@ -102,7 +118,7 @@ class InstallCommand extends Command
         $this->replaceFileContent(
             config_path('sharp.php'),
             "'auth' => [".PHP_EOL,
-            "'auth' => [".PHP_EOL."        'check_handler' => \\App\\Sharp\\SharpCheckHandler::class,".PHP_EOL,
+            "'auth' => [".PHP_EOL."        'check_handler' => ".$this->getSharpRootNamespace()."\\SharpCheckHandler::class,".PHP_EOL,
         );
     }
 }
