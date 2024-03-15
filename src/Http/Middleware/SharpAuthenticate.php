@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
