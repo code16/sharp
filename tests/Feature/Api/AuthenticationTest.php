@@ -8,18 +8,17 @@ use Illuminate\Support\Facades\Route;
 
 class AuthenticationTest extends BaseApiTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Have to define a "login" route in Laravel 11
-        Route::get('/test-login', fn () => 'ok')->name('login');
-    }
+//    protected function setUp(): void
+//    {
+//        parent::setUp();
+//
+//        // Have to define a "login" route in Laravel 11
+//        Route::get('/test-login', fn () => 'ok')->name('login');
+//    }
 
     /** @test */
     public function unauthenticated_user_wont_pass_on_an_api_call()
     {
-        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->json('get', '/sharp/api/list/person')
@@ -27,9 +26,8 @@ class AuthenticationTest extends BaseApiTestCase
     }
 
     /** @test */
-    public function unauthenticated_user_are_redirected_on_a_web_call()
+    public function unauthenticated_users_are_redirected_on_a_web_call()
     {
-        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->get('/sharp/s-list/person')
@@ -39,7 +37,6 @@ class AuthenticationTest extends BaseApiTestCase
     /** @test */
     public function authenticated_user_are_redirected_on_a_guest_route()
     {
-        $this->withoutExceptionHandling();
         $this->buildTheWorld();
 
         $this->login();
