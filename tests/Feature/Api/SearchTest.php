@@ -5,7 +5,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
 
-class SearchTest extends BaseApiTest
+class SearchTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

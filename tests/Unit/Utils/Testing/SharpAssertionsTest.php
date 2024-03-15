@@ -32,7 +32,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_getSharpForm()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -55,7 +55,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_updateSharpForm()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -84,7 +84,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_storeSharpForm()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -113,7 +113,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_deleteSharpEntityList()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -136,7 +136,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_deleteSharpShow()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -159,7 +159,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_callSharpInstanceCommandFromList()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -189,7 +189,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_callSharpInstanceCommandFromShow()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -219,7 +219,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_test_callSharpInstanceCommandFromList_with_a_wizard_step()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -240,7 +240,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function we_can_define_a_current_breadcrumb()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 
@@ -269,7 +269,7 @@ class SharpAssertionsTest extends SharpTestCase
     /** @test */
     public function when_no_current_breadcrumb_is_defined_a_default_one_is_set()
     {
-        $fake = new class extends SharpTestCase
+        $fake = new class('test') extends SharpTestCase
         {
             use SharpAssertions;
 

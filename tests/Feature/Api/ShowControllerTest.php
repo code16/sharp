@@ -4,7 +4,7 @@ namespace Code16\Sharp\Tests\Feature\Api;
 
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
-class ShowControllerTest extends BaseApiTest
+class ShowControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

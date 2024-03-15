@@ -2,22 +2,21 @@
 
 namespace Code16\Sharp\Form\Eloquent\Uploads\Thumbnails;
 
-use Intervention\Image\Filters\FilterInterface;
+use Intervention\Image\Image;
 
-abstract class ThumbnailFilter implements FilterInterface
+/**
+ * @deprecated Use ThumbnailModifier instead
+ */
+abstract class ThumbnailFilter
 {
-    /**
-     * @var array
-     */
-    protected $params;
-
-    public function __construct(array $params)
+    public function __construct(protected array $params)
     {
-        $this->params = $params;
     }
 
     public function resized()
     {
         return false;
     }
+
+    abstract public function applyFilter(Image $image);
 }

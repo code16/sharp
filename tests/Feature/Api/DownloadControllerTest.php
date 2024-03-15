@@ -7,7 +7,7 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-class DownloadControllerTest extends BaseApiTest
+class DownloadControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

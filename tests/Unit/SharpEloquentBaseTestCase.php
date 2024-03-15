@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 
-abstract class SharpEloquentBaseTest extends SharpTestCase
+abstract class SharpEloquentBaseTestCase extends SharpTestCase
 {
     use DatabaseTransactions;
 

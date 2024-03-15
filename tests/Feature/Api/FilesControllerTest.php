@@ -6,7 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class FilesControllerTest extends BaseApiTest
+class FilesControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

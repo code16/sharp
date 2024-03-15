@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class AutocompleteFormatterTest extends SharpTestCase
 {
-    use WithSimpleFormatterTest;
+    use WithSimpleTestFormatter;
 
     /** @test */
     public function we_can_format_local_value_to_front()

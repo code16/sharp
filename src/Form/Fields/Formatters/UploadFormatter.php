@@ -146,9 +146,9 @@ class UploadFormatter extends SharpFieldFormatter
         return "{$basePath}/{$fileName}";
     }
 
-    protected function handleImageTransformations($fileContent, array &$filters): Image
+    protected function handleImageTransformations($fileContent, array &$filters)
     {
-        $img = $this->imageManager->make($fileContent);
+        $img = $this->imageManager->read($fileContent);
 
         if ($rotate = Arr::get($filters, 'filters.rotate.angle')) {
             $img->rotate($rotate);

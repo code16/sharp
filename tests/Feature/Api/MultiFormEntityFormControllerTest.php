@@ -12,7 +12,7 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MultiFormEntityFormControllerTest extends BaseApiTest
+class MultiFormEntityFormControllerTest extends BaseApiTestCase
 {
     use WithCurrentSharpRequestFake;
 

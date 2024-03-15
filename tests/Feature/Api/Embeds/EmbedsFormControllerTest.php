@@ -6,12 +6,12 @@ use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Support\Str;
 
-class EmbedsFormControllerTest extends BaseApiTest
+class EmbedsFormControllerTest extends BaseApiTestCase
 {
     /** @test */
     public function we_can_get_fields_and_layout_of_an_embed()

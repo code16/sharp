@@ -8,7 +8,7 @@ use Code16\Sharp\Tests\Fixtures\SinglePersonEntity;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\SharpTestCase;
 
-abstract class BaseApiTest extends SharpTestCase
+abstract class BaseApiTestCase extends SharpTestCase
 {
     protected function getEnvironmentSetUp($app)
     {

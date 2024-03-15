@@ -2,9 +2,7 @@
 
 namespace Code16\Sharp\Tests\Feature\Api;
 
-use Carbon\Carbon;
-
-class SetLocaleTest extends BaseApiTest
+class SetLocaleTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {
@@ -18,11 +16,11 @@ class SetLocaleTest extends BaseApiTest
     {
         $this->buildTheWorld();
 
-        $this->assertEquals('monday', strtolower(Carbon::now()->startOfWeek()->formatLocalized('%A')));
+        $this->assertEquals('monday', strtolower(now()->startOfWeek()->dayName));
 
         $this->getJson('/sharp/api/form/person/1');
 
-        $this->assertEquals('monday', strtolower(Carbon::now()->startOfWeek()->formatLocalized('%A')));
+        $this->assertEquals('monday', strtolower(now()->startOfWeek()->dayName));
     }
 
     /** @test */
@@ -32,11 +30,11 @@ class SetLocaleTest extends BaseApiTest
 
         config(['sharp.locale' => 'fr_FR.UTF-8']);
 
-        $this->assertEquals('monday', strtolower(Carbon::now()->startOfWeek()->formatLocalized('%A')));
+        $this->assertEquals('monday', strtolower(now()->startOfWeek()->dayName));
 
         // Locale is set through the SetSharpLocale middleware for the request
         $this->getJson('/sharp/api/form/person/1');
 
-        $this->assertEquals('lundi', strtolower(Carbon::now()->startOfWeek()->formatLocalized('%A')));
+        $this->assertEquals('lundi', strtolower(now()->startOfWeek()->dayName));
     }
 }

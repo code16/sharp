@@ -5,6 +5,7 @@ return [
     'custom_url_segment' => 'sharp',
     'display_sharp_version_in_title' => true,
     'display_breadcrumb' => true,
+    'locale' => 'fr_FR.UTF-8',
     'entities' => [
         'posts' => \App\Sharp\Entities\PostEntity::class,
         'blocks' => \App\Sharp\Entities\PostBlockEntity::class,

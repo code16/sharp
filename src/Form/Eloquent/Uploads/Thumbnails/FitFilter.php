@@ -4,19 +4,15 @@ namespace Code16\Sharp\Form\Eloquent\Uploads\Thumbnails;
 
 use Intervention\Image\Image;
 
+/**
+ * @deprecated Use FitModifier instead
+ */
 class FitFilter extends ThumbnailFilter
 {
-    /**
-     * Applies filter effects to given image.
-     *
-     * @param  Image  $image
-     * @return Image
-     */
     public function applyFilter(Image $image)
     {
-        $image->fit($this->params['w'], $this->params['h']);
-
-        return $image;
+        return (new FitModifier($this->params))
+            ->apply($image);
     }
 
     public function resized()

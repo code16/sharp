@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\Tests\Feature;
 
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 
-class CustomUrlSegmentTest extends BaseApiTest
+class CustomUrlSegmentTest extends BaseApiTestCase
 {
     protected function getEnvironmentSetUp($app)
     {

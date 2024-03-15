@@ -6,7 +6,7 @@ use Code16\Sharp\Auth\SharpEntityPolicy;
 use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
-class PolicyAuthorizationsTest extends BaseApiTest
+class PolicyAuthorizationsTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

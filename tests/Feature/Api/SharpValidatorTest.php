@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Validator\SharpFormRequest;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SharpValidatorTest extends BaseApiTest
+class SharpValidatorTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

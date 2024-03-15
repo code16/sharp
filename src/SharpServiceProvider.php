@@ -34,7 +34,7 @@ use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\ImageServiceProviderLaravelRecent;
+use Intervention\Image\ImageManager;
 
 class SharpServiceProvider extends ServiceProvider
 {
@@ -91,6 +91,11 @@ class SharpServiceProvider extends ServiceProvider
             SharpMenuManager::class
         );
 
+        $this->app->singleton(
+            ImageManager::class,
+            fn () => new ImageManager(config('sharp.uploads.image_driver', \Intervention\Image\Drivers\Gd\Driver::class)),
+        );
+
         if (class_exists("\PragmaRX\Google2FA\Google2FA")) {
             $this->app->bind(
                 Sharp2faTotpEngine::class,
@@ -124,7 +129,7 @@ class SharpServiceProvider extends ServiceProvider
             ReorderHandlerMakeCommand::class,
         ]);
 
-        $this->app->register(ImageServiceProviderLaravelRecent::class);
+        $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
     }
 
     protected function registerMiddleware(): void

@@ -6,7 +6,7 @@ use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
-class BreadcrumbTest extends BaseApiTest
+class BreadcrumbTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

@@ -5,9 +5,9 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 use Code16\Sharp\Form\Eloquent\Relationships\MorphOneRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Fixtures\Picture;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 
-class MorphOneRelationUpdaterTest extends SharpEloquentBaseTest
+class MorphOneRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
     public function we_can_create_a_morphOne_related()

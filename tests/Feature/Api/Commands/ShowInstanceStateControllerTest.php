@@ -4,12 +4,12 @@ namespace Code16\Sharp\Tests\Feature\Api\Commands;
 
 use Code16\Sharp\EntityList\Commands\EntityState;
 use Code16\Sharp\EntityList\Commands\SingleEntityState;
-use Code16\Sharp\Tests\Feature\Api\BaseApiTest;
+use Code16\Sharp\Tests\Feature\Api\BaseApiTestCase;
 use Code16\Sharp\Tests\Fixtures\PersonSharpShow;
 use Code16\Sharp\Tests\Fixtures\PersonSharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 
-class ShowInstanceStateControllerTest extends BaseApiTest
+class ShowInstanceStateControllerTest extends BaseApiTestCase
 {
     protected function setUp(): void
     {

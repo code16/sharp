@@ -4,9 +4,9 @@ namespace Code16\Sharp\Tests\Unit\Form\Eloquent\Relationships;
 
 use Code16\Sharp\Form\Eloquent\Relationships\BelongsToManyRelationUpdater;
 use Code16\Sharp\Tests\Fixtures\Person;
-use Code16\Sharp\Tests\Unit\SharpEloquentBaseTest;
+use Code16\Sharp\Tests\Unit\SharpEloquentBaseTestCase;
 
-class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTest
+class BelongsToManyRelationUpdaterTest extends SharpEloquentBaseTestCase
 {
     /** @test */
     public function we_can_update_a_belongsToMany_relation()

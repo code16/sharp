@@ -4,14 +4,14 @@ namespace Code16\Sharp\Tests\Unit\Show;
 
 use Code16\Sharp\EntityList\Commands\InstanceCommand;
 use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpShowDefaultTest;
+use Code16\Sharp\Tests\Unit\Show\Utils\BaseSharpShowTestDefault;
 
 class SharpShowCommandTest extends SharpTestCase
 {
     /** @test */
     public function we_can_configure_show_instance_command_in_sections()
     {
-        $show = new class extends BaseSharpShowDefaultTest
+        $show = new class extends BaseSharpShowTestDefault
         {
             public function getInstanceCommands(): ?array
             {
@@ -56,7 +56,7 @@ class SharpShowCommandTest extends SharpTestCase
     /** @test */
     public function we_can_configure_show_instance_command_in_sections_with_custom_keys()
     {
-        $show = new class extends BaseSharpShowDefaultTest
+        $show = new class extends BaseSharpShowTestDefault
         {
             public function getInstanceCommands(): ?array
             {
