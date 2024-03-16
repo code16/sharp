@@ -12,7 +12,7 @@ return [
             'mail_body' => 'Here is the code to enter to connect:',
         ],
         'totp' => [
-            'form_help_text' => 'Please enter the 6-digit validation code, or one of your recovery codes that you have not used previously.',
+            'form_help_text' => 'Please enter the 6-digit validation code from your application, or one of your recovery codes that you have not used previously.',
             'commands' => [
                 'activate' => [
                     'command_label' => 'Configure two-factor authentication',
