@@ -11,9 +11,6 @@ beforeEach(function () {
         'sharp.entities.person',
         PersonEntity::class,
     );
-
-    // Have to define a "login" route in Laravel 11
-    Route::get('/test-login', fn () => 'ok')->name('login');
 });
 
 function setTestAuthGuard(): void

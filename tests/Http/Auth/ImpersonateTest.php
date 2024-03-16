@@ -17,11 +17,6 @@ function migrateUsersTable()
     });
 }
 
-beforeEach(function () {
-    // Have to define a "login" route in Laravel 11
-    Route::get('/test-login', fn () => 'ok')->name('login');
-});
-
 it('redirects to impersonation page if enabled and guest', function () {
     config()->set('sharp.auth.impersonate.handler', new class() extends SharpImpersonationHandler
     {
