@@ -7,6 +7,9 @@ use Code16\Sharp\Utils\Links\SharpLinkTo;
 
 class SharpOrderedListWidget extends SharpWidget
 {
+    /**
+     * @var (\Closure(array): (string|SharpLinkTo))|null
+     */
     protected ?Closure $itemLinkBuilderClosure = null;
     protected bool $html = false;
 
@@ -15,6 +18,9 @@ class SharpOrderedListWidget extends SharpWidget
         return new static($key, 'list');
     }
 
+    /**
+     * @param  (\Closure(array): (string|SharpLinkTo))  $itemLinkBuilderClosure
+     */
     public function buildItemLink(Closure $itemLinkBuilderClosure): self
     {
         $this->itemLinkBuilderClosure = $itemLinkBuilderClosure;

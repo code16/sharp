@@ -2,12 +2,16 @@
 
 namespace Code16\Sharp\Form\Layout;
 
+use Code16\Sharp\Utils\Layout\LayoutColumn;
 use Code16\Sharp\Utils\Layout\LayoutField;
 
 trait HasFieldRows
 {
     protected array $rows = [];
 
+    /**
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
+     */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
     {
         $this->addRowLayout([
@@ -29,6 +33,9 @@ trait HasFieldRows
         return $this;
     }
 
+    /**
+     * @param  (\Closure(LayoutColumn): mixed)|null  $subLayoutCallback
+     */
     public function insertSingleFieldAt(int $index, string $fieldKey, \Closure $subLayoutCallback = null): self
     {
         $rows = collect($this->rows);
