@@ -137,7 +137,7 @@ For instance, you can display a 150px width thumbnail in a view like this:
 Another option is to use the fluent API, calling `thumbnail()` without parameters:
 
 ```php
-$thumb = $book->cover->thumnail()->setQuality(60)->toJpeg()->make(150);
+$thumb = $book->cover->thumbnail()->setQuality(60)->toJpeg()->make(150);
 ```
 
 Available methods are:
