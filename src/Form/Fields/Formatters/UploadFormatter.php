@@ -56,9 +56,9 @@ class UploadFormatter extends SharpFieldFormatter
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
-//                ...$this->alwaysReturnFullObject ? [
-//                    'uploaded' => true,
-//                ] : [],
+                //                ...$this->alwaysReturnFullObject ? [
+                //                    'uploaded' => true,
+                //                ] : [],
             ];
         }
 

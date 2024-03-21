@@ -27,12 +27,12 @@ it('allows to format a text value to front', function () {
 it('allows to format a text with uploads to front', function () {
     $formatter = new EditorFormatter;
     $field = SharpFormEditorField::make('md');
-    
+
     $image = UploadedFile::fake()->image('test.jpg', 600, 600);
     $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
     $file = UploadedFile::fake()->create('doc.pdf');
     $file->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
-    
+
     $value = sprintf('<x-sharp-image file="%s" legend="Legendary"></x-sharp-image><x-sharp-file file="%s"></x-sharp-file>',
         e(json_encode([
             'file_name' => 'data/Posts/1/image.jpg',
@@ -47,9 +47,9 @@ it('allows to format a text with uploads to front', function () {
             'disk' => 'local',
         ]))
     );
-    
+
     ray($formatter->toFront($field, $value));
-    
+
     expect($formatter->toFront($field, $value))->toEqual([
         'text' => '<x-sharp-image id="0"></x-sharp-image><x-sharp-file id="1"></x-sharp-file>',
         'uploads' => [
@@ -65,7 +65,7 @@ it('allows to format a text with uploads to front', function () {
                     'size' => 120,
                     'exists' => true,
                     'filters' => null,
-                    'id' => null
+                    'id' => null,
                 ],
                 'legend' => 'Legendary',
             ],
@@ -78,11 +78,11 @@ it('allows to format a text with uploads to front', function () {
                     'size' => 120,
                     'exists' => true,
                     'filters' => null,
-                    'id' => null
+                    'id' => null,
                 ],
                 'legend' => null,
             ],
-        ]
+        ],
     ]);
 });
 

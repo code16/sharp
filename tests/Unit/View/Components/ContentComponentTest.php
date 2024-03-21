@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\Tests\Unit\View\Components\Fakes\ImageFake;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+use Illuminate\Support\Facades\Blade;
 
 uses(InteractsWithViews::class);
 

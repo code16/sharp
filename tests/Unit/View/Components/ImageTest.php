@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
-use Illuminate\View\ComponentAttributeBag;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+use Illuminate\View\ComponentAttributeBag;
 
 uses(InteractsWithViews::class);
 
