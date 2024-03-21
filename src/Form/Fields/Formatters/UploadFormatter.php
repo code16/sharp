@@ -5,6 +5,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
 use Code16\Sharp\Utils\FileUtil;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class UploadFormatter extends SharpFieldFormatter
@@ -55,16 +56,16 @@ class UploadFormatter extends SharpFieldFormatter
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
-                ...$this->alwaysReturnFullObject ? [
-                    'uploaded' => true,
-                ] : [],
+//                ...$this->alwaysReturnFullObject ? [
+//                    'uploaded' => true,
+//                ] : [],
             ];
         }
 
         if ($value['transformed'] ?? false) {
             // Transformation on an existing file
             return $this->alwaysReturnFullObject
-                ? $value
+                ? ['file_name' => $value['path'], ...Arr::only($value, ['size', 'disk', 'mime_type', 'filters'])]
                 : [
                     'file_name' => $value['path'],
                     'size' => $value['size'],
@@ -75,7 +76,7 @@ class UploadFormatter extends SharpFieldFormatter
 
         // No change was made
         return $this->alwaysReturnFullObject
-            ? $value
+            ? ['file_name' => $value['path'], ...Arr::only($value, ['size', 'disk', 'mime_type', 'filters'])]
             : ($value === null ? null : []);
     }
 
