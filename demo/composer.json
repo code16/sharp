@@ -11,6 +11,7 @@
         "intervention/image-laravel": "^1.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
+        "masterminds/html5": "^2.8",
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^6.0",
