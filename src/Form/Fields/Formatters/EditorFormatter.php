@@ -9,11 +9,11 @@ use Illuminate\Support\Collection;
 class EditorFormatter extends SharpFieldFormatter
 {
     use HasMaybeLocalizedValue;
-    
+
     public function toFront(SharpFormField $field, $value)
     {
         return collect([
-            'text' => $value
+            'text' => $value,
         ])
             ->pipeThrough([
                 fn (Collection $collection) => $collection->merge(
@@ -27,7 +27,7 @@ class EditorFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
@@ -40,27 +40,27 @@ class EditorFormatter extends SharpFieldFormatter
         );
         $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
         $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
-        
+
         return $text;
     }
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, $value)
     {
         $text = $value;
         $text = $this->editorUploadsFormatter()->afterUpdate($field, $attribute, $text);
         $text = $this->editorEmbedsFormatter()->afterUpdate($field, $attribute, $text);
-        
+
         return $text;
     }
-    
+
     protected function editorUploadsFormatter(): EditorUploadsFormatter
     {
         return (new EditorUploadsFormatter())->setInstanceId($this->instanceId);
     }
-    
+
     protected function editorEmbedsFormatter(): EditorEmbedsFormatter
     {
         return (new EditorEmbedsFormatter())->setInstanceId($this->instanceId);

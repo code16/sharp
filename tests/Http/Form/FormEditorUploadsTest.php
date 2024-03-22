@@ -9,15 +9,15 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Code16\Sharp\Tests\Http\Form\Fixtures\FormEditorUploadsTestEmbed;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 uses(InteractsWithViews::class);
 
 beforeEach(function () {
     config()->set('sharp.uploads.tmp_dir', 'tmp');
-    config()->set('sharp.entities.person', PersonEntity::class,);
+    config()->set('sharp.entities.person', PersonEntity::class);
     Storage::fake('local');
     $this->withoutExceptionHandling();
     login();
