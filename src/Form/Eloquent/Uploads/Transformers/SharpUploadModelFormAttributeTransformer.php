@@ -56,6 +56,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                 $attribute => static::getUploadModelClass()::make([
                     'file_name' => $value['file_name'] ?? $value['path'],
                     'filters' => $value['filters'] ?? null,
+                    'mime_type' => $value['mime_type'] ?? null,
                     'disk' => $value['disk'],
                     'size' => $value['size'] ?? null,
                 ]),
@@ -100,6 +101,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'name' => basename($upload->file_name),
                     'path' => $upload->file_name,
                     'disk' => $upload->disk,
+                    'mime_type' => $upload->mime_type,
                     'thumbnail' => $this->getThumbnailUrl($upload),
                     'size' => $upload->size,
                     'exists' => Storage::disk($upload->disk)->exists($upload->file_name),

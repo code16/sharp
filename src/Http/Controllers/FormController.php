@@ -15,6 +15,7 @@ class FormController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
     use HandlesUploadedFilesInRequest;
+    use DispatchesFormatterJobs;
 
     public function __construct(
         private readonly SharpAuthorizationManager $sharpAuthorizationManager,
@@ -95,7 +96,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
         $form->update($instanceId, $formattedData);
-        $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
+        $this->dispatchFormatterJobs($instanceId);
 
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }

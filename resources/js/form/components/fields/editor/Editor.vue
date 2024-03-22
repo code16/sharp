@@ -33,7 +33,7 @@
     const header = ref<HTMLElement>();
     const form = useParentForm();
 
-    const uploadManager = new ContentUploadManager(form, {
+    const uploadManager = new ContentUploadManager(form, props.value.uploads, {
         editorField: props.field,
         onUploadsUpdated(uploads) {
             emit('input', { ...props.value, uploads });
@@ -44,16 +44,6 @@
             emit('input', { ...props.value, embeds });
         }
     });
-    const initialFormattedContent = (
-        uploadManager.withUploadsUniqueId(
-            embedManager.withEmbedsUniqueId(
-                props.value?.text
-            )
-        )
-    );
-
-    uploadManager.resolveContentUploads(initialFormattedContent);
-    embedManager.resolveContentEmbeds(initialFormattedContent);
 
     provide<ParentEditor>('editor', {
         props,
@@ -90,9 +80,9 @@
             ].filter(Boolean);
 
             const editor = new Editor({
-                content: props.field.localized && typeof initialFormattedContent === 'object'
-                    ? initialFormattedContent?.[locale] ?? ''
-                    : initialFormattedContent ?? '',
+                content: props.field.localized && typeof props.value?.text === 'object'
+                    ? props.value?.text?.[locale] ?? ''
+                    : props.value?.text ?? '',
                 editable: !field.readOnly,
                 enableInputRules: false,
                 enablePasteRules: [Iframe],
@@ -126,7 +116,7 @@
 
                 const value = new Serializable(
                     content,
-                    embedManager.serializeContent(uploadManager.serializeContent(content)),
+                    content,
                     content => {
                         if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {
                             return {

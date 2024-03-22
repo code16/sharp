@@ -21,11 +21,12 @@
     const parentEditor = useParentEditor();
     const uploadManager = parentEditor.uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
+    const upload = computed(() => uploadManager.getUpload(props.node.attrs.id));
 
     const error = computed(() => {
-        if(props.node.attrs.file?.not_found) {
+        if(upload.value.file?.not_found) {
             return __('sharp::form.editor.errors.unknown_file', {
-                path: props.node.attrs.file.path ?? ''
+                path: uploadManager.getUpload(props.node.attrs.id).file.path ?? ''
             });
         }
     });
@@ -34,27 +35,16 @@
         const formProps = {
             fields: parentEditor.props.field.uploads.fields,
             layout: parentEditor.props.field.uploads.layout,
-            data: {
-                file: props.node.attrs.file,
-                legend: props.node.attrs.legend,
-            },
+            data: upload.value,
         } as FormData;
         editorUploadForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
         modalVisible.value = true;
     }
 
     async function postModalForm(data: FormEditorUploadData) {
-        const responseData = await uploadManager.postForm(
-            props.node.attrs['data-unique-id'],
-            data
-        );
+        await uploadManager.postForm(props.node.attrs.id, data);
 
         props.updateAttributes({
-            file: {
-                ...responseData.file,
-                thumbnail: data.file.thumbnail,
-            },
-            legend: responseData.legend,
             isNew: false,
             droppedFile: null,
         });
@@ -63,32 +53,27 @@
     }
 
     function onThumbnailGenerated(preview: string) {
-        props.editor.commands.withoutHistory(() => {
-            props.updateAttributes({
-                file: {
-                    ...props.node.attrs.file,
-                    thumbnail: preview,
-                },
-            });
-        });
+        const value = uploadManager.getUpload(props.node.attrs.id);
+
+        uploadManager.updateUpload(props.node.attrs.id, {
+            file: {
+                ...value.file,
+                thumbnail: preview,
+            }
+        })
     }
 
     function onUploadTransformed(value: FormUploadFieldData['value']) {
-        props.updateAttributes({
-            file: value,
-        });
-
         if(!props.node.attrs.isNew) {
-            uploadManager.updateUpload(props.node.attrs['data-unique-id'], {
+            uploadManager.updateUpload(props.node.attrs.id, {
                 file: value,
-                legend: props.node.attrs.legend,
             });
         }
     }
 
     function onRemove() {
         props.deleteNode();
-        uploadManager.removeUpload(props.node.attrs['data-unique-id']);
+        uploadManager.removeUpload(props.node.attrs.id);
         setTimeout(() => {
             props.editor.commands.focus();
         }, 0);
@@ -149,16 +134,7 @@
                 }
             }
         } else {
-            const resolved = await uploadManager.getResolvedUpload(
-                props.node.attrs['data-unique-id']
-            );
-            if(resolved) {
-                props.editor.commands.withoutHistory(() => {
-                    props.updateAttributes({
-                        file: resolved.file,
-                    });
-                });
-            }
+            uploadManager.restoreUpload(props.node.attrs.id);
         }
     }
 
@@ -167,7 +143,7 @@
     });
 
     onUnmounted(() => {
-        uploadManager.removeUpload(props.node.attrs['data-unique-id']);
+        uploadManager.removeUpload(props.node.attrs.id);
     });
 </script>
 
@@ -177,10 +153,8 @@
             <div class="border rounded p-4">
                 <Upload
                     :field="parentEditor.props.field.uploads.fields.file"
-                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-unique-id']}`"
-                    :value="node.attrs.file ? {
-                        ...node.attrs.file,
-                    } : null"
+                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs.id}`"
+                    :value="upload?.file"
                     :has-error="!!error"
                     :root="false"
                     @thumbnail="onThumbnailGenerated"
@@ -191,9 +165,9 @@
                     @edit="onEdit"
                     ref="uploadComponent"
                 ></Upload>
-                <template v-if="node.attrs.legend">
+                <template v-if="upload.legend">
                     <div class="text-sm mt-2">
-                        {{ node.attrs.legend }}
+                        {{ upload.legend }}
                     </div>
                 </template>
             </div>

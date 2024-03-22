@@ -23,6 +23,7 @@ use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Http\Jobs\CurrentRequestJobs;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
@@ -91,9 +92,10 @@ class SharpServiceProvider extends ServiceProvider
 
         $this->registerMiddleware();
 
-        $this->app->singleton(SharpAuthorizationManager::class, SharpAuthorizationManager::class);
-        $this->app->singleton(CurrentSharpRequest::class, CurrentSharpRequest::class);
-        $this->app->singleton(SharpMenuManager::class, SharpMenuManager::class);
+        $this->app->singleton(SharpAuthorizationManager::class);
+        $this->app->singleton(CurrentSharpRequest::class);
+        $this->app->singleton(SharpMenuManager::class);
+        $this->app->singleton(CurrentRequestJobs::class);
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
             $this->app->bind(

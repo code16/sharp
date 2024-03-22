@@ -12,13 +12,12 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class HandleUploadedFileJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable, AfterSaveDispatchable, InteractsWithQueue, Queueable;
 
     public function __construct(
         public string $uploadedFileName,
         public string $disk,
         public string $filePath,
-        public ?string $instanceId = null,
         public bool $shouldOptimizeImage = true,
         public ?array $transformFilters = null,
     ) {
@@ -58,7 +57,6 @@ class HandleUploadedFileJob implements ShouldQueue
     {
         return str($this->filePath)
             ->replace('{id}', $this->instanceId)
-            ->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)
             ->toString();
     }
 }

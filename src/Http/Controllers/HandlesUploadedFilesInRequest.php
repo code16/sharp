@@ -8,8 +8,11 @@ use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Controllers\Api\Embeds\HandleEmbed;
+use Code16\Sharp\Http\Jobs\CurrentRequestJobs;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
+use Illuminate\Bus\Dispatcher;
+use Illuminate\Support\Facades\Bus;
 
 trait HandlesUploadedFilesInRequest
 {
@@ -17,33 +20,35 @@ trait HandlesUploadedFilesInRequest
 
     protected function handlePostedFiles(
         SharpForm|Command $form,
-        array $request,
-        array $formattedData,
         $instanceId = null
     ): void {
-        foreach ($form->fieldsContainer()->getFields() as $field) {
-            if ($field instanceof SharpFormUploadField) {
-                $this->handleUploadFieldPostedFile(
-                    uploadField: $field,
-                    filePath: $formattedData[$field->key]['file_name'] ?? null,
-                    fileData: $request[$field->key] ?? null,
-                    instanceId: $instanceId
-                );
-            } elseif ($field instanceof SharpFormListField) {
-                $this->handleListFieldPostedFiles(
-                    listField: $field,
-                    listData: $request[$field->key] ?? null,
-                    formattedListData: $formattedData[$field->key] ?? null,
-                    instanceId: $instanceId
-                );
-            } elseif ($field instanceof SharpFormEditorField) {
-                $this->handleEditorFieldPostedFiles(
-                    editorField: $field,
-                    editorData: $request[$field->key] ?? null,
-                    instanceId: $instanceId
-                );
-            }
-        }
+        app(CurrentRequestJobs::class)->jobs->each->setInstanceId($instanceId);
+        app(CurrentRequestJobs::class)
+            ->allowFailures()
+            ->dispatch();
+//        foreach ($form->fieldsContainer()->getFields() as $field) {
+//            if ($field instanceof SharpFormUploadField) {
+//                $this->handleUploadFieldPostedFile(
+//                    uploadField: $field,
+//                    filePath: $formattedData[$field->key]['file_name'] ?? null,
+//                    fileData: $request[$field->key] ?? null,
+//                    instanceId: $instanceId
+//                );
+//            } elseif ($field instanceof SharpFormListField) {
+//                $this->handleListFieldPostedFiles(
+//                    listField: $field,
+//                    listData: $request[$field->key] ?? null,
+//                    formattedListData: $formattedData[$field->key] ?? null,
+//                    instanceId: $instanceId
+//                );
+//            } elseif ($field instanceof SharpFormEditorField) {
+//                $this->handleEditorFieldPostedFiles(
+//                    editorField: $field,
+//                    editorData: $request[$field->key] ?? null,
+//                    instanceId: $instanceId
+//                );
+//            }
+//        }
     }
 
     protected function handleEditorFieldPostedFiles(

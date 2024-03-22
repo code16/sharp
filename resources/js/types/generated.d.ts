@@ -286,7 +286,7 @@ export type FormDynamicOptionsData = {
 export type FormEditorFieldData = {
   value?: {
     text: string | { [locale: string]: string | null } | null;
-    files?: Array<FormUploadFieldValueData>;
+    uploads?: Array<{ file: FormUploadFieldValueData; legend?: string | null }>;
     embeds?: { [embedKey: string]: Array<FormData["data"]> };
   };
   key: string;

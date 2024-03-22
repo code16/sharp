@@ -11,9 +11,10 @@ import { Form } from "@/form/Form";
 
 
 export type UploadNodeAttributes = {
-    file: FormUploadFieldValueData,
-    legend: string,
-    'data-unique-id': string,
+    id: string,
+    // file: FormUploadFieldValueData,
+    // legend: string,
+    // 'data-unique-id': string,
     isNew: boolean,
     isImage: boolean,
     droppedFile: File,
@@ -41,23 +42,24 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
 
     addAttributes(): ExtensionAttributesSpec<UploadNodeAttributes> {
         return {
-            file: {
-                default: null,
-                parseHTML: element => ({
-                    file: JSON.parse(element.getAttribute('file') ?? 'null'),
-                }),
-                renderHTML: (attributes) => {
-                    return {
-                        file: serializeAttributeValue(attributes.file),
-                    }
-                },
-            },
-            legend: {
-                default: null,
-            },
-            'data-unique-id': {
-                default: null,
-            },
+            id: {},
+            // file: {
+            //     default: null,
+            //     parseHTML: element => ({
+            //         file: JSON.parse(element.getAttribute('file') ?? 'null'),
+            //     }),
+            //     renderHTML: (attributes) => {
+            //         return {
+            //             file: serializeAttributeValue(attributes.file),
+            //         }
+            //     },
+            // },
+            // legend: {
+            //     default: null,
+            // },
+            // 'data-unique-id': {
+            //     default: null,
+            // },
             droppedFile: {
                 default: null,
                 rendered: false,
@@ -106,12 +108,12 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                     commands.withoutHistory();
                 }
 
+                const id = this.options.uploadManager.insertUpload();
+
                 return commands.insertContentAt(pos ?? tr.selection.to, {
                         type: Upload.name,
                         attrs: {
-                            file: null,
-                            legend: null,
-                            'data-unique-id': this.options.uploadManager.newId(),
+                            id,
                             isNew: true,
                             droppedFile: file,
                             isImage: !!file?.type.match(/^image\//),

@@ -66,6 +66,8 @@ class EditorUploadsFormatter extends SharpFieldFormatter
                         ->setAlwaysReturnFullObject()
                         ->fromFront($field->uploadsConfig(), 'file', $file);
                     
+                    $formatted = collect($formatted)->whereNotNull()->toArray();
+                    
                     $element->setAttribute('file', json_encode($formatted));
                     
                     if($legend = $value['uploads'][$id]['legend'] ?? null) {

@@ -12,7 +12,7 @@ use Intervention\Image\ImageManager;
 
 class HandleTransformedFileJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable, AfterSaveDispatchable, InteractsWithQueue, Queueable;
 
     public function __construct(
         public string $disk,
