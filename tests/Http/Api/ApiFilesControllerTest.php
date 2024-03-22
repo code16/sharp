@@ -68,11 +68,10 @@ it('allows to get files info', function () {
 it('returns thumbnails if file is an image', function () {
     $this->withoutExceptionHandling();
 
-    $file1 = UploadedFile::fake()->create('test.doc', Str::random(16));
-    $file1->storeAs('/files/docs', 'test.doc', ['disk' => 'local']);
+    UploadedFile::fake()->create('test.doc', Str::random())
+        ->storeAs('/files/docs', 'test.doc', ['disk' => 'local']);
 
-    $file2 = UploadedFile::fake()->image('test.jpg', 600, 600);
-    $file2->storeAs('/files/images', 'test.jpg', ['disk' => 's3']);
+    $file2 = createImage('s3');
 
     $this
         ->postJson(
@@ -86,7 +85,7 @@ it('returns thumbnails if file is an image', function () {
                         'path' => '/files/docs/test.doc',
                         'disk' => 'local',
                     ], [
-                        'path' => '/files/images/test.jpg',
+                        'path' => $file2,
                         'disk' => 's3',
                     ],
                 ],
@@ -104,14 +103,16 @@ it('returns thumbnails if file is an image', function () {
                     'size' => 16,
                 ],
                 [
-                    'name' => 'test.jpg',
-                    'path' => '/files/images/test.jpg',
+                    'name' => basename($file2),
+                    'path' => $file2,
                     'disk' => 's3',
                     'thumbnail' => sprintf(
-                        '/storage/thumbnails/files/images/400-400_q-90/test.jpg?%s',
-                        Storage::disk('public')->lastModified('/thumbnails/files/images/400-400_q-90/test.jpg')
+                        '/storage/thumbnails/data/400-400_q-90/%s?%s',
+                        basename($file2),
+                        Storage::disk('public')
+                            ->lastModified('/thumbnails/data/400-400_q-90/'.basename($file2))
                     ),
-                    'size' => 6467,
+                    'size' => 1148,
                 ],
             ],
         ]);

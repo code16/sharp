@@ -178,6 +178,13 @@ function buildShowLayout(ShowLayout $showLayout): void
 
 Like regular sections, embedded Entity List can be declared *collapsable*.
 
+```php
+function buildShowLayout(ShowLayout $showLayout): void
+{
+    $showLayout->addEntityListSection('members', collapsable: true);
+}
+```
+
 ### `find($id): array`
 
 As for Forms, the method must return a key-value array:

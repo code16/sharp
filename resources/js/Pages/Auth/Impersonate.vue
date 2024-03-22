@@ -20,7 +20,7 @@
     <Title>
         {{ __('sharp::pages/auth/impersonate.title') }}
     </Title>
-    <AuthLayout show-site-name>
+    <AuthLayout :show-site-name="config('sharp.auth.login_form.display_app_name')">
         <form @submit.prevent="form.post(route('code16.sharp.impersonate.post'))">
             <div class="mb-3">
                 <label class="block text-sm font-medium leading-6 text-gray-900 mb-2" for="user_id">

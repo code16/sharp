@@ -4,6 +4,7 @@ use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
+use Illuminate\Support\Facades\Route;
 
 beforeEach(function () {
     config()->set(

@@ -13,9 +13,9 @@
           hsl(var(--primary-h), var(--primary-s), var(--primary-l)) 80%
     )">
         <div class="w-full max-w-sm">
-            <template v-if="config('sharp.theme.logo_urls.login')">
+            <template v-if="config('sharp.auth.login_form.logo_url')">
                 <div class="flex justify-center mb-4">
-                    <img :src="config('sharp.theme.logo_urls.login')" :alt="config('sharp.name')" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
+                    <img :src="config('sharp.auth.login_form.logo_url')" :alt="config('sharp.name')" width="300" class="w-auto h-auto" style="max-height: 100px;max-width: 200px">
                 </div>
             </template>
             <template v-else>
@@ -27,7 +27,7 @@
             <slot name="prepend" />
 
             <div class="bg-white rounded p-4 border-0 mb-3">
-                <template v-if="showSiteName && config('sharp.name') !== 'Sharp'">
+                <template v-if="showSiteName">
                     <div class="card-header bg-transparent border-0 pb-0 pt-4 mb-2">
                         <h1 class="text-center card-title mb-0 fs-4">
                             {{ config("sharp.name") }}

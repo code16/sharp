@@ -1,7 +1,9 @@
 <?php
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
+use Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\FitModifier;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\ComponentAttributeBag;
 
 uses(InteractsWithViews::class);
@@ -16,25 +18,27 @@ it('renders <x-sharp-image>', function () {
         'file_name' => createImage(),
     ]);
 
-    $filters = ['fit' => ['w' => 400, 'h' => 400]];
+    $modifier = new FitModifier(400, 400);
 
-    $this->blade(
-        sprintf('<x-sharp-image file="%s" legend="Legendary" :attributes="$attributes" />', e(json_encode([
-            'name' => 'test.png',
-            'path' => $model->file_name,
-            'disk' => 'local',
-        ]))),
-        [
-            'attributes' => new ComponentAttributeBag([
-                'thumbnailWidth' => 400,
-                'thumbnailHeight' => 400,
-                'filters' => $filters,
-                'alt' => 'Image',
-            ]),
-        ]
-    )
+    $this
+        ->blade(
+            sprintf('<x-sharp-image file="%s" legend="Legendary" :attributes="$attributes" />', e(json_encode([
+                'name' => 'test.png',
+                'path' => $model->file_name,
+                'disk' => 'local',
+            ]))),
+            [
+                'attributes' => new ComponentAttributeBag([
+                    'thumbnailWidth' => 400,
+                    'thumbnailHeight' => 400,
+                    'filters' => [$modifier],
+                    'alt' => 'Image',
+                ]),
+            ]
+        )
         ->assertSee(
-            sprintf('<img src="%s" alt="Image">', $model->thumbnail(400, 400, $filters)),
+            sprintf('<img src="%s" alt="Image">', $model->thumbnail()->addModifier($modifier)->setAppendTimestamp()->make(400, 400)),
             false
-        )->assertSee('Legendary');
+        )
+        ->assertSee('Legendary');
 });

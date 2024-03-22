@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <template v-if="config('sharp.theme.logo_urls.menu')">
+    <template v-if="config('sharp.theme.logo_url')">
         <div class="max-w-[200px]">
-            <img class="h-auto w-auto max-w-full max-h-full" :src="config('sharp.theme.logo_urls.menu')" :alt="config('sharp.name')" />
+            <img class="h-auto w-auto max-w-full max-h-full" :src="config('sharp.theme.logo_url')" :alt="config('sharp.name')" />
         </div>
     </template>
     <template v-else>
