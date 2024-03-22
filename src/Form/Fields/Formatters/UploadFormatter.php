@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\Utils\IsUploadField;
+use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Utils\FileUtil;
@@ -58,12 +59,16 @@ class UploadFormatter extends SharpFieldFormatter
                     ? null
                     : $value['filters'] ?? null,
             ], function ($formatted) use ($field, $value) {
-                HandleUploadedFileJob::dispatchAfterSave(
-                    uploadedFileName: $value['name'],
-                    disk: $field->storageDisk(),
-                    filePath: $formatted['file_name'],
-                    shouldOptimizeImage: $field->isImageOptimize(),
-                    transformFilters: $formatted['filters'],
+                app(CurrentSharpRequest::class)->queueAfterFormUpdate(
+                    new HandleUploadedFileJob(
+                        uploadedFileName: $value['name'],
+                        disk: $field->storageDisk(),
+                        filePath: $formatted['file_name'],
+                        shouldOptimizeImage: $field->isImageOptimize(),
+                        transformFilters: $field->isImageTransformOriginal()
+                            ? ($value['filters'] ?? null)
+                            : null,
+                    )
                 );
             });
         }
@@ -77,11 +82,15 @@ class UploadFormatter extends SharpFieldFormatter
                 'size' => $value['size'],
                 'filters' => $value['filters'] ?? null,
             ], function ($formatted) use ($field, $value) {
-                HandleTransformedFileJob::dispatchAfterSave(
-                    disk: $field->storageDisk(),
-                    filePath: $formatted['file_name'],
-                    transformFilters: $formatted['filters'],
-                );
+                if($field->isImageTransformOriginal()) {
+                    app(CurrentSharpRequest::class)->queueAfterFormUpdate(
+                        new HandleTransformedFileJob(
+                            disk: $field->storageDisk(),
+                            filePath: $formatted['file_name'],
+                            transformFilters: $formatted['filters'],
+                        )
+                    );
+                }
             });
         }
         
@@ -89,7 +98,7 @@ class UploadFormatter extends SharpFieldFormatter
         if ($this->alwaysReturnFullObject) {
             return [
                 'file_name' => $value['path'],
-                'size' => $value['size'],
+                'size' => $value['size'] ?? null,
                 'mime_type' => $value['mime_type'] ?? null,
                 'disk' => $value['disk'],
                 'filters' => $value['filters'] ?? null,

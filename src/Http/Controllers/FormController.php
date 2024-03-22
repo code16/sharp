@@ -14,8 +14,7 @@ use Inertia\Inertia;
 class FormController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    use HandlesUploadedFilesInRequest;
-    use DispatchesFormatterJobs;
+    use DispatchesFormJobs;
 
     public function __construct(
         private readonly SharpAuthorizationManager $sharpAuthorizationManager,
@@ -96,7 +95,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
         $form->update($instanceId, $formattedData);
-        $this->dispatchFormatterJobs($instanceId);
+        $this->dispatchAfterUpdateJobs($instanceId);
 
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }
@@ -115,7 +114,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
-        $this->handlePostedFiles($form, request()->all(), $formattedData, $instanceId);
+        $this->dispatchAfterUpdateJobs();
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
 

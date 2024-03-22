@@ -22,7 +22,7 @@ beforeEach(function () {
     );
 
     Storage::fake('local');
-    Bus::fake();
+    Bus::fake();;
 });
 
 it('dispatches HandlePostedFilesJob on update and on create if needed', function () {
@@ -246,18 +246,16 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
             'name' => 'Stephen Hawking',
             'file' => [
                 'name' => 'doc.pdf',
-                'file_name' => 'data/test/doc.pdf',
+                'path' => 'data/test/doc.pdf',
                 'disk' => 'local',
             ],
             'bio' => [
                 'uploads' => [
                     [
                         'file' => [
-                            [
-                                'name' => 'doc-2.pdf',
-                                'file_name' => 'data/test/doc-2.pdf',
-                                'disk' => 'local',
-                            ],
+                            'name' => 'doc-2.pdf',
+                            'path' => 'data/test/doc-2.pdf',
+                            'disk' => 'local',
                         ],
                     ],
                 ],
@@ -271,14 +269,14 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
             'name' => 'Marie Curie',
             'file' => [
                 'name' => 'doc.pdf',
-                'file_name' => 'data/test/doc.pdf',
+                'path' => 'data/test/doc.pdf',
                 'disk' => 'local',
             ],
             'bio' => [
                 'files' => [
                     [
                         'name' => 'doc-2.pdf',
-                        'file_name' => 'data/test/doc-2.pdf',
+                        'path' => 'data/test/doc-2.pdf',
                         'disk' => 'local',
                     ],
                 ],

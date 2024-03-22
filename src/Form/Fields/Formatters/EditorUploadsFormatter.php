@@ -50,25 +50,29 @@ class EditorUploadsFormatter extends SharpFieldFormatter
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        return $this->maybeLocalized(
-            $field,
-            $value['text'] ?? null,
-            function (string $content) use ($field, $value) {
-                $domDocument = $this->parseHtml($content);
-                
-                foreach ($this->getUploadElements($domDocument) as $element) {
-                    $id = $element->getAttribute('id');
-                    $file = $value['uploads'][$id]['file'];
-                    $formatted = $field
+        $formattedUploads = collect($value['uploads'] ?? [])
+            ->map(function ($upload) use ($field) {
+                return [
+                    'file' => $field
                         ->uploadsConfig()
                         ->formatter()
                         ->setInstanceId($this->instanceId)
                         ->setAlwaysReturnFullObject()
-                        ->fromFront($field->uploadsConfig(), 'file', $file);
-                    
-                    $formatted = collect($formatted)->whereNotNull()->toArray();
-                    
-                    $element->setAttribute('file', json_encode($formatted));
+                        ->fromFront($field->uploadsConfig(), 'file', $upload['file']),
+                    'legend' => $upload['legend'] ?? null,
+                ];
+            });
+        
+        return $this->maybeLocalized(
+            $field,
+            $value['text'] ?? null,
+            function (string $content) use ($field, $value, $formattedUploads) {
+                $domDocument = $this->parseHtml($content);
+                
+                foreach ($this->getUploadElements($domDocument) as $element) {
+                    $id = $element->getAttribute('id');
+                    $file = collect($formattedUploads[$id]['file'])->whereNotNull()->toArray();
+                    $element->setAttribute('file', json_encode($file));
                     
                     if($legend = $value['uploads'][$id]['legend'] ?? null) {
                         $element->setAttribute('legend', $legend);

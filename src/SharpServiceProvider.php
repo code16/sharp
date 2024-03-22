@@ -97,7 +97,6 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(SharpAuthorizationManager::class);
         $this->app->singleton(CurrentSharpRequest::class);
         $this->app->singleton(SharpMenuManager::class);
-        $this->app->singleton(CurrentRequestJobs::class);
         $this->app->singleton(
             ImageManager::class,
             fn () => new ImageManager(

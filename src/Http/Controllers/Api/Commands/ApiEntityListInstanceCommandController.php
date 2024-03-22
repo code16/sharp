@@ -4,13 +4,13 @@ namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
-use Code16\Sharp\Http\Controllers\HandlesUploadedFilesInRequest;
+use Code16\Sharp\Http\Controllers\DispatchesFormJobs;
 
 class ApiEntityListInstanceCommandController extends ApiController
 {
     use HandlesCommandReturn;
     use HandlesCommandForm;
-    use HandlesUploadedFilesInRequest;
+    use DispatchesFormJobs;
 
     public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {
@@ -43,7 +43,7 @@ class ApiEntityListInstanceCommandController extends ApiController
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'), $instanceId);
         $result = $this->returnCommandResult($list, $commandHandler->execute($instanceId, $formattedData));
-        $this->handlePostedFiles($commandHandler, request()->all(), $formattedData, $instanceId);
+        $this->dispatchAfterUpdateJobs();
 
         return $result;
     }
