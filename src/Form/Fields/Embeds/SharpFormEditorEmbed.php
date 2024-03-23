@@ -34,7 +34,7 @@ abstract class SharpFormEditorEmbed
         $config = [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
-            'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
+            'tag' => $this->tagName(),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'template' => $template,
             'icon' => $this->icon,
@@ -191,7 +191,7 @@ abstract class SharpFormEditorEmbed
     
     final public function tagName(): string
     {
-        return $this->tagName;
+        return $this->tagName ?: 'x-'.Str::kebab(class_basename(get_class($this)));
     }
     
     public function getDataLocalizations(): array

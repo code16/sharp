@@ -4,6 +4,7 @@ namespace Code16\Sharp\Form\Fields\Utils;
 
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
+use Illuminate\Support\Collection;
 
 trait SharpFormFieldWithEmbeds
 {
@@ -18,11 +19,16 @@ trait SharpFormFieldWithEmbeds
     }
     
     /**
-     * @return SharpFormEditorEmbed[]
+     * @return Collection<int, SharpFormEditorEmbed>
      */
-    public function embeds(): array
+    public function embeds(): Collection
     {
-        return $this->embeds;
+        return once(fn () => collect($this->embeds)
+            ->map(fn (string $embedClass) => app($embedClass))
+            ->each(function(SharpFormEditorEmbed $embed) {
+                $embed->buildEmbedConfig();
+                return $embed;
+            }));
     }
 
     protected function innerComponentEmbedsConfiguration(bool $isForm = true): ?array
@@ -31,8 +37,7 @@ trait SharpFormFieldWithEmbeds
             return null;
         }
 
-        return collect($this->embeds)
-            ->map(fn (string $embedClass) => app($embedClass))
+        return $this->embeds()
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
                 $embed->buildEmbedConfig();
 

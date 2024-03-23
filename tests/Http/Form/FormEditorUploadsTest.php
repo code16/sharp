@@ -74,8 +74,8 @@ it('can post a newly uploaded file in editor, create case', function () {
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
             'text' => <<<'HTML'
-                <x-sharp-file key="0"></x-sharp-file>
-                <x-sharp-image key="1"></x-sharp-image>
+                <x-sharp-file data-key="0"></x-sharp-file>
+                <x-sharp-image data-key="1"></x-sharp-image>
                 HTML,
             'uploads' => [
                 $editorXSharpFileData,
@@ -163,8 +163,8 @@ it('can post a newly uploaded file in editor, update case', function () {
     $this->post('/sharp/s-list/person/s-form/person/1', [
         'bio' => [
             'text' => <<<'HTML'
-                <x-sharp-file key="0"></x-sharp-file>
-                <x-sharp-image key="1"></x-sharp-image>
+                <x-sharp-file data-key="0"></x-sharp-file>
+                <x-sharp-image data-key="1"></x-sharp-image>
                 HTML,
             'uploads' => [
                 $editorXSharpFileData,

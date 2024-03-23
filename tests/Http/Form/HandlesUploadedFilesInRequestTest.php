@@ -65,6 +65,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
 
     $this
         ->post('/sharp/s-list/person/s-form/person', [
+            'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
             'file' => [
                 'name' => '/image-2.jpg',
                 'uploaded' => true,
@@ -104,6 +105,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'bio' => [
+                'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
                 'uploads' => [
                     [
                         'file' => [
@@ -250,6 +252,7 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
                 'disk' => 'local',
             ],
             'bio' => [
+                'text' => '<x-sharp-file data-key="0"></x-sharp-file>',
                 'uploads' => [
                     [
                         'file' => [

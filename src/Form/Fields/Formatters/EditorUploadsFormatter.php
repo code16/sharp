@@ -36,7 +36,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter
                         ? $element->getAttribute('legend')
                         : null,
                 ];
-                $element->setAttribute('key', count($uploads) - 1);
+                $element->setAttribute('data-key', count($uploads) - 1);
                 $element->removeAttribute('file');
                 $element->removeAttribute('legend');
             }
@@ -61,32 +61,25 @@ class EditorUploadsFormatter extends SharpFieldFormatter
             return $value['text'] ?? null;
         }
         
-        $formattedUploads = collect($value['uploads'] ?? [])
-            ->map(function ($upload) use ($field) {
-                return [
-                    'file' => $field
+        return $this->maybeLocalized(
+            $field,
+            $value['text'] ?? null,
+            function (string $content) use ($field, $value) {
+                $domDocument = $this->parseHtml($content);
+                
+                foreach ($this->getUploadElements($domDocument) as $element) {
+                    $key = $element->getAttribute('data-key');
+                    $file = $field
                         ->uploadsConfig()
                         ->formatter()
                         ->setInstanceId($this->instanceId)
                         ->setAlwaysReturnFullObject()
-                        ->fromFront($field->uploadsConfig(), 'file', $upload['file']),
-                    'legend' => $upload['legend'] ?? null,
-                ];
-            });
-        
-        return $this->maybeLocalized(
-            $field,
-            $value['text'] ?? null,
-            function (string $content) use ($field, $value, $formattedUploads) {
-                $domDocument = $this->parseHtml($content);
-                
-                foreach ($this->getUploadElements($domDocument) as $element) {
-                    $key = $element->getAttribute('key');
-                    $element->setAttribute('file', json_encode($formattedUploads[$key]['file']));
-                    if($legend = $formattedUploads[$key]['legend']) {
+                        ->fromFront($field->uploadsConfig(), 'file', $value['uploads'][$key]['file']);
+                    $element->setAttribute('file', json_encode($file));
+                    if($legend = $value['uploads'][$key]['legend'] ?? null) {
                         $element->setAttribute('legend', $legend);
                     }
-                    $element->removeAttribute('key');
+                    $element->removeAttribute('data-key');
                 }
                 
                 return $this->getHtml($domDocument);

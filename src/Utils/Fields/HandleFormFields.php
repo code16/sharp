@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Fields;
 
+use Code16\Sharp\Form\Fields\Formatters\FormatsAfterUpdate;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 
 trait HandleFormFields
@@ -63,15 +64,11 @@ trait HandleFormFields
                 if (! $field = $this->findFieldByKey($key)) {
                     return $value;
                 }
-
-                if (method_exists($field->formatter(), 'afterUpdate')) {
-                    return $field
-                        ->formatter()
-                        ->setInstanceId($instanceId)
-                        ->afterUpdate($field, $key, $value);
-                }
-
-                return $value;
+                
+                return $field
+                    ->formatter()
+                    ->setInstanceId($instanceId)
+                    ->afterUpdate($field, $key, $value);
             })
             ->all();
     }

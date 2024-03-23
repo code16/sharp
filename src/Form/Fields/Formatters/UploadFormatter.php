@@ -10,7 +10,7 @@ use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Utils\FileUtil;
 use Illuminate\Support\Facades\Storage;
 
-class UploadFormatter extends SharpFieldFormatter
+class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     private bool $alwaysReturnFullObject = false;
     const ID_PLACEHOLDER = '__id_placeholder__';
@@ -98,7 +98,7 @@ class UploadFormatter extends SharpFieldFormatter
         return $this->maybeFullObject($value, $value === null ? null : []);
     }
 
-    public function afterUpdate(SharpFormField $field, string $attribute, $value)
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): mixed
     {
         if ($value['file_name'] ?? null) {
             $value['file_name'] = str($value['file_name'])

@@ -9,6 +9,11 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class FormEditorUploadsTestEmbed extends SharpFormEditorEmbed
 {
+    public function buildEmbedConfig(): void
+    {
+        $this->configureTagName('x-embed');
+    }
+    
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields->addField(
