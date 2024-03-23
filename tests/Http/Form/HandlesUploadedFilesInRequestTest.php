@@ -22,7 +22,7 @@ beforeEach(function () {
     );
 
     Storage::fake('local');
-    Bus::fake();;
+    Bus::fake();
 });
 
 it('dispatches HandlePostedFilesJob on update and on create if needed', function () {

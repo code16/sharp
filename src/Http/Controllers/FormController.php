@@ -114,7 +114,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
-        $this->dispatchAfterUpdateJobs();
+        $this->dispatchAfterUpdateJobs($instanceId);
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
 

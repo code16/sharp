@@ -188,7 +188,12 @@ abstract class SharpFormEditorEmbed
     {
         return Str::replace('\\', '.', get_class($this));
     }
-
+    
+    final public function tagName(): string
+    {
+        return $this->tagName;
+    }
+    
     public function getDataLocalizations(): array
     {
         return [];

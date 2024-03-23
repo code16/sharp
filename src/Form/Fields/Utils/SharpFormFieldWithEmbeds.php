@@ -16,6 +16,14 @@ trait SharpFormFieldWithEmbeds
 
         return $this;
     }
+    
+    /**
+     * @return SharpFormEditorEmbed[]
+     */
+    public function embeds(): array
+    {
+        return $this->embeds;
+    }
 
     protected function innerComponentEmbedsConfiguration(bool $isForm = true): ?array
     {

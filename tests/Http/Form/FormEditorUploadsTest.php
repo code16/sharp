@@ -56,12 +56,11 @@ it('can post a newly uploaded file in editor, create case', function () {
             'data' => [
                 'file' => $uploadedFileData,
             ],
-            'fields' => $form->fields()['bio']['uploads']['fields'],
         ])
         ->json();
 
     $uploadedImageData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 400, 400)])
+        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 200, 200)])
         ->json();
 
     $editorXSharpImageData = $this
@@ -69,17 +68,15 @@ it('can post a newly uploaded file in editor, create case', function () {
             'data' => [
                 'file' => $uploadedImageData,
             ],
-            'fields' => $form->fields()['bio']['uploads']['fields'],
         ])
         ->json();
 
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
-            'text' => sprintf(
-                '<x-sharp-file file="%s"></x-sharp-file><x-sharp-image file="%s"></x-sharp-image>',
-                e(json_encode($editorXSharpFileData['file'])),
-                e(json_encode($editorXSharpImageData['file'])),
-            ),
+            'text' => <<<'HTML'
+                <x-sharp-file key="0"></x-sharp-file>
+                <x-sharp-image key="1"></x-sharp-image>
+                HTML,
             'uploads' => [
                 $editorXSharpFileData,
                 $editorXSharpImageData,
@@ -88,31 +85,27 @@ it('can post a newly uploaded file in editor, create case', function () {
     ]);
 
     expect(Person::first()->bio)->toEqual(
-        sprintf(
-            '<x-sharp-file file="%s"></x-sharp-file><x-sharp-image file="%s"></x-sharp-image>',
+        sprintf(<<<'HTML'
+            <x-sharp-file file="%s"></x-sharp-file>
+            <x-sharp-image file="%s"></x-sharp-image>
+            HTML,
             e(json_encode([
-                ...$editorXSharpFileData['file'],
-                'path' => 'test/1/file.pdf',
+                'file_name' => 'test/1/file.pdf',
+                'size' => 0,
+                'mime_type' => 'application/pdf',
+                'disk' => 'local',
             ])),
             e(json_encode([
-                ...$editorXSharpImageData['file'],
-                'path' => 'test/1/image.jpg',
+                'file_name' => 'test/1/image.jpg',
+                'size' => 1367,
+                'mime_type' => 'image/jpeg',
+                'disk' => 'local',
             ]))
         )
     );
 
     Storage::disk('local')->assertExists('test/1/file.pdf');
     Storage::disk('local')->assertExists('test/1/image.jpg');
-//
-//    $this
-//        ->blade('<x-sharp-content :image-thumbnail-width="400">{!! $content !!}</x-sharp-content>', [
-//            'content' => Person::first()->bio,
-//        ])
-//        ->assertSeeText('file.pdf')
-//        ->assertSee(SharpUploadModel::make([
-//            'disk' => 'local',
-//            'file_name' => 'test/1/image.jpg',
-//        ])->thumbnail(400));
 });
 
 it('can post a newly uploaded file in editor, update case', function () {
@@ -155,7 +148,7 @@ it('can post a newly uploaded file in editor, update case', function () {
         ->json();
 
     $uploadedImageData = $this
-        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 400, 400)])
+        ->postJson(route('code16.sharp.api.form.upload'), ['file' => UploadedFile::fake()->image('image.jpg', 200, 200)])
         ->json();
 
     $editorXSharpImageData = $this
@@ -169,11 +162,10 @@ it('can post a newly uploaded file in editor, update case', function () {
 
     $this->post('/sharp/s-list/person/s-form/person/1', [
         'bio' => [
-            'text' => sprintf(
-                '<x-sharp-file file="%s"></x-sharp-file><x-sharp-image file="%s"></x-sharp-image>',
-                e(json_encode($editorXSharpFileData['file'])),
-                e(json_encode($editorXSharpImageData['file']))
-            ),
+            'text' => <<<'HTML'
+                <x-sharp-file key="0"></x-sharp-file>
+                <x-sharp-image key="1"></x-sharp-image>
+                HTML,
             'uploads' => [
                 $editorXSharpFileData,
                 $editorXSharpImageData,
@@ -182,30 +174,27 @@ it('can post a newly uploaded file in editor, update case', function () {
     ]);
 
     expect(Person::first()->bio)->toEqual(
-        sprintf(
-            '<x-sharp-file file="%s"></x-sharp-file><x-sharp-image file="%s"></x-sharp-image>',
+        sprintf(<<<'HTML'
+            <x-sharp-file file="%s"></x-sharp-file>
+            <x-sharp-image file="%s"></x-sharp-image>
+            HTML,
             e(json_encode([
-                ...$editorXSharpFileData['file'],
-                'path' => 'test/1/file.pdf',
+                'file_name' => 'test/1/file.pdf',
+                'size' => 0,
+                'mime_type' => 'application/pdf',
+                'disk' => 'local',
             ])),
             e(json_encode([
-                ...$editorXSharpImageData['file'],
-                'path' => 'test/1/image.jpg',
+                'file_name' => 'test/1/image.jpg',
+                'size' => 1367,
+                'mime_type' => 'image/jpeg',
+                'disk' => 'local',
             ]))
         )
     );
 
     Storage::disk('local')->assertExists('test/1/file.pdf');
     Storage::disk('local')->assertExists('test/1/image.jpg');
-//
-//    $this->blade('<x-sharp-content :image-thumbnail-width="400">{!! $content !!}</x-sharp-content>', [
-//        'content' => Person::first()->bio,
-//    ])
-//        ->assertSeeText('file.pdf')
-//        ->assertSee(SharpUploadModel::make([
-//            'disk' => 'local',
-//            'file_name' => 'test/1/image.jpg',
-//        ])->thumbnail(400));
 });
 
 it('can post an embed with upload, create case', function () {
@@ -249,8 +238,7 @@ it('can post an embed with upload, create case', function () {
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
             'text' => sprintf(
-                '<x-embed file="%s"></x-embed>',
-                e(json_encode($editorXEmbedData['file']))
+                '<x-embed key="0"></x-embed>',
             ),
             'embeds' => [
                 (new FormEditorUploadsTestEmbed)->key() => [
