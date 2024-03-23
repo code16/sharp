@@ -64,7 +64,7 @@ it('allows to format a text with uploads to front', function () {
     );
     
     expect($formatter->toFront($field, $value))->toEqual([
-        'text' => '<x-sharp-image id="0"></x-sharp-image><x-sharp-file id="1"></x-sharp-file>',
+        'text' => '<x-sharp-image key="0"></x-sharp-image><x-sharp-file key="1"></x-sharp-file>',
         'uploads' => [
             [
                 'file' => [
@@ -76,9 +76,10 @@ it('allows to format a text with uploads to front', function () {
                         Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
                     ),
                     'size' => 120,
+                    'mime_type' => 'image/jpeg',
                     'exists' => true,
                     'filters' => null,
-                    'id' => null
+                    'id' => null,
                 ],
                 'legend' => 'Legendary',
             ],
@@ -89,6 +90,7 @@ it('allows to format a text with uploads to front', function () {
                     'disk' => 'local',
                     'thumbnail' => null,
                     'size' => 120,
+                    'mime_type' => 'application/pdf',
                     'exists' => true,
                     'filters' => null,
                     'id' => null
@@ -109,9 +111,9 @@ it('allows to format text with uploads from front', function () {
     
     expect($formatter->fromFront($field, 'attribute', [
         'text' => <<<'HTML'
-            <x-sharp-image id="0"></x-sharp-image>
-            <x-sharp-image id="1"></x-sharp-image>
-            <x-sharp-file id="2"></x-sharp-file>
+            <x-sharp-image key="0"></x-sharp-image>
+            <x-sharp-image key="1"></x-sharp-image>
+            <x-sharp-file key="2"></x-sharp-file>
             HTML,
         'uploads' => [
             [

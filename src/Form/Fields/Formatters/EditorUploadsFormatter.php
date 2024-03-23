@@ -13,8 +13,15 @@ class EditorUploadsFormatter extends SharpFieldFormatter
     use HasMaybeLocalizedValue;
     use HandlesHtmlContent;
     
+    /**
+     * @param SharpFormEditorField $field
+     */
     public function toFront(SharpFormField $field, $value)
     {
+        if(!$field->uploadsConfig()) {
+            return ['text' => $value];
+        }
+        
         $uploads = [];
         
         $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {
@@ -29,7 +36,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter
                         ? $element->getAttribute('legend')
                         : null,
                 ];
-                $element->setAttribute('id', count($uploads) - 1);
+                $element->setAttribute('key', count($uploads) - 1);
                 $element->removeAttribute('file');
                 $element->removeAttribute('legend');
             }
@@ -50,6 +57,10 @@ class EditorUploadsFormatter extends SharpFieldFormatter
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
+        if(!$field->uploadsConfig()) {
+            return $value['text'] ?? null;
+        }
+        
         $formattedUploads = collect($value['uploads'] ?? [])
             ->map(function ($upload) use ($field) {
                 return [
@@ -70,15 +81,12 @@ class EditorUploadsFormatter extends SharpFieldFormatter
                 $domDocument = $this->parseHtml($content);
                 
                 foreach ($this->getUploadElements($domDocument) as $element) {
-                    $id = $element->getAttribute('id');
-                    $file = collect($formattedUploads[$id]['file'])->whereNotNull()->toArray();
-                    $element->setAttribute('file', json_encode($file));
-                    
-                    if($legend = $value['uploads'][$id]['legend'] ?? null) {
+                    $key = $element->getAttribute('key');
+                    $element->setAttribute('file', json_encode($formattedUploads[$key]['file']));
+                    if($legend = $formattedUploads[$key]['legend']) {
                         $element->setAttribute('legend', $legend);
                     }
-                    
-                    $element->removeAttribute('id');
+                    $element->removeAttribute('key');
                 }
                 
                 return $this->getHtml($domDocument);
@@ -91,6 +99,10 @@ class EditorUploadsFormatter extends SharpFieldFormatter
      */
     public function afterUpdate(SharpFormField $field, string $attribute, $value)
     {
+        if(!$field->uploadsConfig()) {
+            return $value['text'] ?? null;
+        }
+        
         return $this->maybeLocalized(
             $field,
             $value,

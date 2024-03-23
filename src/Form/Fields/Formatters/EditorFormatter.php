@@ -9,7 +9,10 @@ use Illuminate\Support\Collection;
 class EditorFormatter extends SharpFieldFormatter
 {
     use HasMaybeLocalizedValue;
-
+    
+    /**
+     * @param SharpFormEditorField $field
+     */
     public function toFront(SharpFormField $field, $value)
     {
         return collect([
@@ -27,7 +30,7 @@ class EditorFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  SharpFormEditorField  $field
+     * @param SharpFormEditorField $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
@@ -45,7 +48,7 @@ class EditorFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  SharpFormEditorField  $field
+     * @param SharpFormEditorField $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, $value)
     {
@@ -58,11 +61,15 @@ class EditorFormatter extends SharpFieldFormatter
 
     protected function editorUploadsFormatter(): EditorUploadsFormatter
     {
-        return (new EditorUploadsFormatter())->setInstanceId($this->instanceId);
+        return (new EditorUploadsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? [])
+            ->setInstanceId($this->instanceId);
     }
 
     protected function editorEmbedsFormatter(): EditorEmbedsFormatter
     {
-        return (new EditorEmbedsFormatter())->setInstanceId($this->instanceId);
+        return (new EditorEmbedsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? [])
+            ->setInstanceId($this->instanceId);
     }
 }

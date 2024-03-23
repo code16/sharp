@@ -23,7 +23,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  IsUploadField  $field
+     * @param IsUploadField $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -31,7 +31,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  IsUploadField  $field
+     * @param IsUploadField $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
@@ -42,7 +42,7 @@ class UploadFormatter extends SharpFieldFormatter
                 $value['name'],
             );
 
-            return tap([
+            return tap($this->maybeFullObject($value, [
                 'file_name' => sprintf(
                     '%s/%s',
                     str($field->storageBasePath())->replace('{id}', $this->instanceId ?? '{id}'),
@@ -58,7 +58,7 @@ class UploadFormatter extends SharpFieldFormatter
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
-            ], function ($formatted) use ($field, $value) {
+            ]), function ($formatted) use ($field, $value) {
                 app(CurrentSharpRequest::class)->queueAfterFormUpdate(
                     new HandleUploadedFileJob(
                         uploadedFileName: $value['name'],
@@ -76,12 +76,12 @@ class UploadFormatter extends SharpFieldFormatter
         
         if ($value['transformed'] ?? false) {
             // Transformation on an existing file
-            return tap([
+            return tap($this->maybeFullObject($value, [
                 'file_name' => $value['path'],
                 'disk' => $value['disk'],
                 'size' => $value['size'],
                 'filters' => $value['filters'] ?? null,
-            ], function ($formatted) use ($field, $value) {
+            ]), function ($formatted) use ($field, $value) {
                 if($field->isImageTransformOriginal()) {
                     app(CurrentSharpRequest::class)->queueAfterFormUpdate(
                         new HandleTransformedFileJob(
@@ -93,20 +93,9 @@ class UploadFormatter extends SharpFieldFormatter
                 }
             });
         }
-        
-        // For existing file in editor uploads & embeds we want to keep the whole value (encoded in JSON)
-        if ($this->alwaysReturnFullObject) {
-            return [
-                'file_name' => $value['path'],
-                'size' => $value['size'] ?? null,
-                'mime_type' => $value['mime_type'] ?? null,
-                'disk' => $value['disk'],
-                'filters' => $value['filters'] ?? null,
-            ];
-        }
 
         // No change was made
-        return ($value === null ? null : []);
+        return $this->maybeFullObject($value, $value === null ? null : []);
     }
 
     public function afterUpdate(SharpFormField $field, string $attribute, $value)
@@ -118,5 +107,20 @@ class UploadFormatter extends SharpFieldFormatter
         }
 
         return $value;
+    }
+    
+    protected function maybeFullObject(?array $value, ?array $formatted): ?array
+    {
+        if ($this->alwaysReturnFullObject) {
+            return collect([
+                'file_name' => $formatted['file_name'] ?? $value['path'],
+                'size' => $formatted['size'] ?? $value['size'] ?? null,
+                'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
+                'disk' => $formatted['disk'] ?? $value['disk'],
+                'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
+            ])->whereNotNull()->toArray();
+        }
+        
+        return $formatted;
     }
 }
