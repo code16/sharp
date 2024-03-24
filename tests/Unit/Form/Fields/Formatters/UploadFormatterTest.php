@@ -76,23 +76,25 @@ it('returns full object after no change was made if configured', function () {
         ->setStorageBasePath('data/Test');
 
     $value = [
-        'file_name' => 'data/Test/image.jpg',
+        'path' => 'data/Test/image.jpg',
         'size' => 0,
         'mime_type' => 'image/jpeg',
         'disk' => 'local',
         'filters' => ['rotate' => ['angle' => 20]]
     ];
-
-    $this->assertEquals(
-        $value,
+    
+    expect(
         app(UploadFormatter::class)
-            ->setAlwaysReturnFullObject()
-            ->fromFront(
-                $field,
-                'attribute',
-                $value,
-            ),
-    );
+        ->setAlwaysReturnFullObject()
+        ->fromFront($field, 'attribute', $value)
+    )
+        ->toEqual([
+            'file_name' => 'data/Test/image.jpg',
+            'size' => 0,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+            'filters' => ['rotate' => ['angle' => 20]]
+        ]);
 });
 
 it('returns full object after only transformations if configured', function () {
@@ -102,7 +104,9 @@ it('returns full object after only transformations if configured', function () {
         ->setStorageBasePath('data/Test');
 
     $value = [
-        'name' => 'data/Test/image.jpg',
+        'path' => 'data/Test/image.jpg',
+        'disk' => 'local',
+        'size' => 120,
         'uploaded' => false,
         'transformed' => true,
         'filters' => [
@@ -117,11 +121,26 @@ it('returns full object after only transformations if configured', function () {
             ],
         ],
     ];
-
-    $this->assertEquals(
-        $value,
+    
+    expect(
         app(UploadFormatter::class)
             ->setAlwaysReturnFullObject()
-            ->fromFront($field, 'attr', $value),
-    );
+            ->fromFront($field, 'attr', $value)
+    )
+        ->toEqual([
+            'file_name' => 'data/Test/image.jpg',
+            'disk' => 'local',
+            'size' => 120,
+            'filters' => [
+                'crop' => [
+                    'height' => .5,
+                    'width' => .75,
+                    'x' => .3,
+                    'y' => .34,
+                ],
+                'rotate' => [
+                    'angle' => 45,
+                ],
+            ],
+        ]);
 });

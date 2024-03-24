@@ -34,9 +34,8 @@ it('Migrate <x-sharp-image> for sharp 9', function () {
         'content' => sprintf(
             '<x-sharp-image file="%s"></x-sharp-image>',
             e(json_encode([
-                'name' => 'name.jpg',
+                'file_name' => 'data/Posts/1/name.jpg',
                 'disk' => 'local',
-                'path' => 'data/Posts/1/name.jpg',
                 'filters' => [
                     'crop' => ['x' => '0.5', 'y' => '0.5', 'width' => '0.4', 'height' => '0.4'],
                     'rotate' => ['angle' => '90'],
@@ -67,9 +66,8 @@ it('Migrate <x-sharp-file> for sharp 9', function () {
         'content' => sprintf(
             '<x-sharp-file file="%s"></x-sharp-file>',
             e(json_encode([
-                'name' => 'name.pdf',
+                'file_name' => 'data/Posts/1/name.pdf',
                 'disk' => 'local',
-                'path' => 'data/Posts/1/name.pdf',
             ])),
         ),
     ]);

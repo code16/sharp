@@ -23,8 +23,7 @@ it('renders <x-sharp-image>', function () {
     $this
         ->blade(
             sprintf('<x-sharp-image file="%s" legend="Legendary" :attributes="$attributes" />', e(json_encode([
-                'name' => 'test.png',
-                'path' => $model->file_name,
+                'file_name' => $model->file_name,
                 'disk' => 'local',
             ]))),
             [

@@ -205,6 +205,7 @@ describe('dynamicInstance', function () {
             'size' => 120,
             'disk' => 'local',
             'filters' => [],
+            'mime_type' => 'image/png',
         ];
 
         $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
@@ -219,6 +220,7 @@ describe('dynamicInstance', function () {
                 'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
                 'filters' => [],
                 'exists' => true,
+                'mime_type' => 'image/png',
             ],
             $transformer->apply($uploadData, null, 'picture'),
         );

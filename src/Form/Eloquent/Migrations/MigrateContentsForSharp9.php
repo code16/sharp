@@ -70,9 +70,8 @@ trait MigrateContentsForSharp9
                     '<%s file="%s">',
                     $tag,
                     e(json_encode(array_filter([
-                        'name' => $name,
+                        'file_name' => $path,
                         'disk' => $disk,
-                        'path' => $path,
                         'filters' => $filters,
                     ]))),
                 );

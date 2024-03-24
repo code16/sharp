@@ -12,7 +12,8 @@ use Intervention\Image\ImageManager;
 
 class HandleTransformedFileJob implements ShouldQueue
 {
-    use Dispatchable, DispatchableAfterUpdate, InteractsWithQueue, Queueable;
+    use Dispatchable, InteractsWithQueue, Queueable;
+    use DispatchableAfterUpdate;
 
     public function __construct(
         public string $disk,

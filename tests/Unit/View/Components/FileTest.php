@@ -18,8 +18,7 @@ it('renders <x-sharp-file>', function () {
 
     $this->blade(
         sprintf('<x-sharp-file file="%s" :attributes="$attributes" />', e(json_encode([
-            'name' => 'doc.pdf',
-            'path' => $filePath,
+            'file_name' => $filePath,
             'disk' => 'local',
         ]))),
         [
@@ -35,8 +34,7 @@ it('renders <x-sharp-file>', function () {
 it('renders <x-sharp-file> legend', function () {
     $this->blade(
         sprintf('<x-sharp-file file="%s" legend="Legendary" />', e(json_encode([
-            'name' => 'doc.pdf',
-            'path' => UploadedFile::fake()->create('doc.pdf')->storeAs('data', 'doc.pdf', 'local'),
+            'file_name' => UploadedFile::fake()->create('doc.pdf')->storeAs('data', 'doc.pdf', 'local'),
             'disk' => 'local',
         ]))),
     )
@@ -48,8 +46,7 @@ it('provides fileModel', function () {
 
     $component = $this->component(\Code16\Sharp\View\Components\File::class, [
         'file' => e(json_encode([
-            'name' => 'doc.pdf',
-            'path' => $filePath,
+            'file_name' => $filePath,
             'disk' => 'local',
         ])),
     ]);
