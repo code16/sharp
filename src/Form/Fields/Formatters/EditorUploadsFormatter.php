@@ -93,7 +93,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {
         if(!$field->uploadsConfig()) {
-            return $value['text'] ?? null;
+            return $value;
         }
         
         return $this->maybeLocalized(

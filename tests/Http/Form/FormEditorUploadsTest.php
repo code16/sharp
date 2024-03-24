@@ -238,7 +238,7 @@ it('can post an embed with upload, create case', function () {
     $this->post('/sharp/s-list/person/s-form/person', [
         'bio' => [
             'text' => sprintf(
-                '<x-embed key="0"></x-embed>',
+                '<x-embed data-key="0"></x-embed>',
             ),
             'embeds' => [
                 (new FormEditorUploadsTestEmbed)->key() => [
@@ -254,8 +254,10 @@ it('can post an embed with upload, create case', function () {
         sprintf(
             '<x-embed file="%s"></x-embed>',
             e(json_encode([
-                ...$editorXEmbedData['file'],
-                'path' => 'test/1/file.pdf',
+                'file_name' =>  'test/1/file.pdf',
+                'size' => 0,
+                'mime_type' => 'application/pdf',
+                'disk' => 'local',
             ]))
         )
     );

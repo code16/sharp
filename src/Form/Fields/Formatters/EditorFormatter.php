@@ -41,7 +41,7 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         );
         $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
         $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
-
+        
         return $text;
     }
 

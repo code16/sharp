@@ -101,28 +101,20 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                             if($field instanceof SharpFormListField) {
                                 $field->formatter()
                                     ->formatItemFieldUsing(function (SharpFormField $field) {
-                                        if($field instanceof SharpFormUploadField) {
+                                        if ($field instanceof SharpFormUploadField) {
                                             return $field->formatter()->setAlwaysReturnFullObject();
                                         }
-                                        // other field types have already been formatted so we pass value through
-                                        return new class extends AbstractSimpleFormatter
-                                        {
+                                        // other field types have already been formatted, so we pass value through
+                                        return new class extends AbstractSimpleFormatter {
                                         };
                                     })
                                     ->setInstanceId($this->instanceId)
                                     ->fromFront($field, $field->key(), $fieldValue);
                             }
-                            $formatted = $field->formatter()
-                                ->setInstanceId($this->instanceId)
-                                ->fromFront(
-                                    $field,
-                                    $field->key(),
-                                    $value['embeds'][$embed->key()][$dataKey][$field->key()] ?? null
-                                );
-                            if($formatted !== null) {
+                            if($fieldValue !== null) {
                                 $element->setAttribute(
                                     Str::kebab($field->key()),
-                                    is_array($formatted) ? json_encode($formatted) : $formatted
+                                    is_array($fieldValue) ? json_encode($fieldValue) : $fieldValue
                                 );
                             }
                         }

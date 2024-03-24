@@ -132,6 +132,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'bio' => [
+                'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
                 'uploads' => [
                     [
                         'file' => [

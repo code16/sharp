@@ -51,6 +51,10 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             if (! $value || ! is_array($value)) {
                 return null;
             }
+            
+            if($value['uploaded'] ?? false) {
+                return $value;
+            }
 
             $instance = (object) [
                 $attribute => static::getUploadModelClass()::make([
@@ -64,7 +68,6 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 
             return [
                 ...$this->transformUpload($instance->$attribute),
-                ...($value['uploaded'] ?? false) ? ['uploaded' => true] : [],
                 ...($value['transformed'] ?? false) ? ['transformed' => true] : [],
             ];
         }

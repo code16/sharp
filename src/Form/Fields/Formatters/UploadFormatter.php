@@ -123,13 +123,14 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     protected function maybeFullObject(?array $value, ?array $formatted): ?array
     {
         if ($this->alwaysReturnFullObject) {
-            return collect([
-                'file_name' => $formatted['file_name'] ?? $value['path'],
-                'size' => $formatted['size'] ?? $value['size'] ?? null,
-                'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
-                'disk' => $formatted['disk'] ?? $value['disk'],
-                'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
-            ])->whereNotNull()->toArray();
+            return $value === null ? null :
+                 collect([
+                    'file_name' => $formatted['file_name'] ?? $value['path'],
+                    'size' => $formatted['size'] ?? $value['size'] ?? null,
+                    'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
+                    'disk' => $formatted['disk'] ?? $value['disk'],
+                    'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
+                ])->whereNotNull()->toArray();
         }
         
         return $formatted;
