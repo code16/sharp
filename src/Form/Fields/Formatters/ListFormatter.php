@@ -68,17 +68,17 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     {
         return collect($value)
             ->map(function ($item) use ($field) {
-                $itemArray = [];
-                
                 foreach ($item as $key => $value) {
                     $itemField = $field->findItemFormFieldByKey($key);
-                    if($itemField->formatter())
-                    $itemArray[$key] = $itemField->formatter()
-                        ->setInstanceId($this->instanceId)
-                        ->afterUpdate($itemField, $key, $value);
+                    
+                    if($itemField->formatter() instanceof FormatsAfterUpdate) {
+                        $item[$key] = $itemField->formatter()
+                            ->setInstanceId($this->instanceId)
+                            ->afterUpdate($itemField, $key, $value);
+                    }
                 }
                 
-                return $itemArray;
+                return $item;
             })
             ->all();
     }

@@ -15,8 +15,10 @@ trait HasMaybeLocalizedValue
      * @param  SharpFormField&SharpFormFieldWithDataLocalization  $field
      * @param  Closure<string>  $callback
      */
-    protected function maybeLocalized(SharpFormField $field, array|string|null $value, Closure $callback): array|string|null
+    protected function maybeLocalized(SharpFormField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
     {
+        $transformContent ??= fn ($value) => $value;
+        
         if ($value === null) {
             return null;
         }
@@ -26,10 +28,10 @@ trait HasMaybeLocalizedValue
                 ...collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]),
                 ...is_array($value) ? $value : [app()->getLocale() => $value],
             ])
-                ->map(fn ($content) => $content !== null ? $callback($content) : null)
+                ->map(fn ($content) => $content !== null ? $transformContent($content) : null)
                 ->toArray();
         }
 
-        return $callback($value);
+        return $transformContent($value);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Form\Fields\Embeds;
 
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
@@ -109,9 +110,17 @@ abstract class SharpFormEditorEmbed
                     return $value;
                 }
 
-                if (is_a($field, SharpFormUploadField::class)) {
-                    // Uploads are a bit different in this case
-                    $field->formatter()->setAlwaysReturnFullObject();
+                if ($field instanceof SharpFormUploadField) {
+                    // in case of uploads we only want to call formatter on Form store/update
+                    $field->formatter()->passThrough();
+                }
+                
+                if ($field instanceof SharpFormListField) {
+                    $field->itemFields()
+                        ->whereInstanceOf(SharpFormUploadField::class)
+                        ->each(function (SharpFormListField $field) {
+                            $field->formatter()->passThrough();
+                        });
                 }
 
                 // Apply formatter based on field configuration

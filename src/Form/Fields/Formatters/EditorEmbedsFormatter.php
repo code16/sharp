@@ -11,7 +11,7 @@ use DOMNode;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class EditorEmbedsFormatter extends SharpFieldFormatter
+class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     use HasMaybeLocalizedValue;
     use HandlesHtmlContent;
@@ -104,7 +104,6 @@ class EditorEmbedsFormatter extends SharpFieldFormatter
                             }
                             $formatted = $field->formatter()
                                 ->setInstanceId($this->instanceId)
-                                ->setDataLocalizations($this->dataLocalizations ?? [])
                                 ->fromFront(
                                     $field,
                                     $field->key(),
@@ -129,7 +128,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter
     /**
      * @param SharpFormEditorField $field
      */
-    public function afterUpdate(SharpFormField $field, string $attribute, $value)
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {
         if(!count($field->embeds())) {
             return $value;
@@ -145,10 +144,11 @@ class EditorEmbedsFormatter extends SharpFieldFormatter
                     $elements = $this->getRootElementsByTagNames($domDocument, [$embed->tagName()]);
                     foreach ($elements as $element) {
                         foreach ($embed->fieldsContainer()->getFields() as $field) {
-                            if ($element->hasAttribute(Str::kebab($field->key()))) {
+                            if ($field->formatter() instanceof FormatsAfterUpdate
+                                && $element->hasAttribute(Str::kebab($field->key()))
+                            ) {
                                 $formatted = $field->formatter()
                                     ->setInstanceId($this->instanceId)
-                                    ->setDataLocalizations($this->dataLocalizations ?? [])
                                     ->afterUpdate(
                                         $field,
                                         $field->key(),

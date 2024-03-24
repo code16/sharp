@@ -8,7 +8,7 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use DOMDocument;
 use DOMElement;
 
-class EditorUploadsFormatter extends SharpFieldFormatter
+class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     use HasMaybeLocalizedValue;
     use HandlesHtmlContent;
@@ -90,7 +90,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter
     /**
      * @param SharpFormEditorField $field
      */
-    public function afterUpdate(SharpFormField $field, string $attribute, $value)
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {
         if(!$field->uploadsConfig()) {
             return $value['text'] ?? null;

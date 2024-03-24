@@ -6,7 +6,7 @@ use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Illuminate\Support\Collection;
 
-class EditorFormatter extends SharpFieldFormatter
+class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     use HasMaybeLocalizedValue;
     
@@ -37,9 +37,7 @@ class EditorFormatter extends SharpFieldFormatter
         $text = $this->maybeLocalized(
             $field,
             $value['text'] ?? null,
-            function (string $content) {
-                return preg_replace('/\R/u', "\n", $content);
-            }
+            fn (string $content) => preg_replace('/\R/u', "\n", $content)
         );
         $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
         $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
@@ -50,7 +48,7 @@ class EditorFormatter extends SharpFieldFormatter
     /**
      * @param SharpFormEditorField $field
      */
-    public function afterUpdate(SharpFormField $field, string $attribute, $value)
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {
         $text = $value;
         $text = $this->editorUploadsFormatter()->afterUpdate($field, $attribute, $text);
