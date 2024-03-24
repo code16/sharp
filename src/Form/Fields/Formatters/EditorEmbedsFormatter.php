@@ -91,16 +91,26 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                     foreach ($elements as $element) {
                         $dataKey = $element->getAttribute('data-key');
                         foreach ($embed->fieldsContainer()->getFields() as $field) {
+                            $fieldValue = $value['embeds'][$embed->key()][$dataKey][$field->key()] ?? null;
                             if($field instanceof SharpFormUploadField) {
-                                $field->formatter()
-                                    ->setAlwaysReturnFullObject();
+                                $fieldValue = $field->formatter()
+                                    ->setInstanceId($this->instanceId)
+                                    ->setAlwaysReturnFullObject()
+                                    ->fromFront($field, $field->key(), $fieldValue);
                             }
                             if($field instanceof SharpFormListField) {
-                                $field->itemFields()
-                                    ->whereInstanceOf(SharpFormUploadField::class)
-                                    ->each(fn (SharpFormField $field) =>
-                                        $field->formatter()->setAlwaysReturnFullObject()
-                                    );
+                                $field->formatter()
+                                    ->formatItemFieldUsing(function (SharpFormField $field) {
+                                        if($field instanceof SharpFormUploadField) {
+                                            return $field->formatter()->setAlwaysReturnFullObject();
+                                        }
+                                        // other field types have already been formatted so we pass value through
+                                        return new class extends AbstractSimpleFormatter
+                                        {
+                                        };
+                                    })
+                                    ->setInstanceId($this->instanceId)
+                                    ->fromFront($field, $field->key(), $fieldValue);
                             }
                             $formatted = $field->formatter()
                                 ->setInstanceId($this->instanceId)

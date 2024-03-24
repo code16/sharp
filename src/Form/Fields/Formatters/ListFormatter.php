@@ -2,11 +2,24 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
+use Closure;
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 
 class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
+    protected ?Closure $formatItemFieldUsing = null;
+    
+    /**
+     * @param Closure<SharpFieldFormatter> $formatItemFieldUsing
+     */
+    public function formatItemFieldUsing(Closure $formatItemFieldUsing): static
+    {
+        $this->formatItemFieldUsing = $formatItemFieldUsing;
+        
+        return $this;
+    }
+    
     public function toFront(SharpFormField $field, $value)
     {
         return collect($value)
@@ -48,9 +61,9 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
                 foreach ($item as $key => $value) {
                     $itemField = $field->findItemFormFieldByKey($key);
-
+                    
                     if ($itemField) {
-                        $itemArray[$key] = $itemField->formatter()
+                        $itemArray[$key] = $this->itemFieldFormatter($itemField)
                             ->setInstanceId($this->instanceId)
                             ->fromFront($itemField, $key, $value);
                     }
@@ -81,5 +94,14 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 return $item;
             })
             ->all();
+    }
+    
+    protected function itemFieldFormatter(SharpFormField $field): SharpFieldFormatter
+    {
+        if($callback = $this->formatItemFieldUsing) {
+            return $callback($field);
+        }
+        
+        return $field->formatter();
     }
 }
