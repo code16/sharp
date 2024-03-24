@@ -64,11 +64,13 @@ trait HandleFormFields
                 if (! $field = $this->findFieldByKey($key)) {
                     return $value;
                 }
-                
-                return $field
-                    ->formatter()
-                    ->setInstanceId($instanceId)
-                    ->afterUpdate($field, $key, $value);
+                if($field->formatter() instanceof FormatsAfterUpdate) {
+                    return $field
+                        ->formatter()
+                        ->setInstanceId($instanceId)
+                        ->afterUpdate($field, $key, $value);
+                }
+                return $value;
             })
             ->all();
     }

@@ -33,6 +33,7 @@ it('transforms a single upload', function () {
             'size' => $upload->size,
             'thumbnail' => $upload->thumbnail(200, 200),
             'exists' => true,
+            'mime_type' => 'image/png',
         ],
         $transformer->apply('', $picturable, 'picture'),
     );
@@ -68,6 +69,7 @@ it('transforms a single upload with transformations', function () {
             'path' => $upload->file_name,
             'disk' => 'local',
             'size' => $upload->size,
+            'mime_type' => 'image/png',
             'thumbnail' => $upload->thumbnail(200, 200),
             'filters' => [
                 'crop' => [
@@ -114,6 +116,7 @@ it('transforms a list of upload', function () {
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
                     'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload1->id,
             ], [
@@ -124,6 +127,7 @@ it('transforms a list of upload', function () {
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
                     'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload2->id,
             ],
@@ -163,8 +167,8 @@ it('transforms a list of upload with transformations', function () {
 
     $transformer = new SharpUploadModelFormAttributeTransformer();
 
-    $this->assertEquals(
-        [
+    expect($transformer->apply('', $picturable, 'pictures'))
+        ->toEqual([
             [
                 'file' => [
                     'name' => basename($upload1->file_name),
@@ -174,6 +178,7 @@ it('transforms a list of upload with transformations', function () {
                     'thumbnail' => $upload1->thumbnail(200, 200),
                     'filters' => $filters,
                     'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload1->id,
             ], [
@@ -184,12 +189,11 @@ it('transforms a list of upload with transformations', function () {
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
                     'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload2->id,
             ],
-        ],
-        $transformer->apply('', $picturable, 'pictures'),
-    );
+        ]);
 });
 
 describe('dynamicInstance', function () {

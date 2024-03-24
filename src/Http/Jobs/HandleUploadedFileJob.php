@@ -55,8 +55,10 @@ class HandleUploadedFileJob implements ShouldQueue
 
     private function determineFilePath(): string
     {
-        return str($this->filePath)
-            ->replace('{id}', $this->instanceId)
-            ->toString();
+        if($this->instanceId) {
+            return str_replace('{id}', $this->instanceId, $this->filePath);
+        }
+        
+        return $this->filePath;
     }
 }

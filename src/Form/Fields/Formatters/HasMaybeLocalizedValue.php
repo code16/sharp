@@ -18,10 +18,6 @@ trait HasMaybeLocalizedValue
     protected function maybeLocalized(SharpFormField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
     {
         $transformContent ??= fn ($value) => $value;
-        
-        if ($value === null) {
-            return null;
-        }
 
         if ($field->isLocalized()) {
             return collect([
@@ -32,6 +28,6 @@ trait HasMaybeLocalizedValue
                 ->toArray();
         }
 
-        return $transformContent($value);
+        return $value === null ? null : $transformContent($value);
     }
 }

@@ -76,9 +76,11 @@ it('returns full object after no change was made if configured', function () {
         ->setStorageBasePath('data/Test');
 
     $value = [
-        'name' => 'data/Test/image.jpg',
-        'uploaded' => false,
-        'transformed' => false,
+        'file_name' => 'data/Test/image.jpg',
+        'size' => 0,
+        'mime_type' => 'image/jpeg',
+        'disk' => 'local',
+        'filters' => ['rotate' => ['angle' => 20]]
     ];
 
     $this->assertEquals(

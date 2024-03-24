@@ -64,7 +64,7 @@ it('allows to format a text with uploads to front', function () {
     );
     
     expect($formatter->toFront($field, $value))->toEqual([
-        'text' => '<x-sharp-image key="0"></x-sharp-image><x-sharp-file key="1"></x-sharp-file>',
+        'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
         'uploads' => [
             [
                 'file' => [
@@ -111,9 +111,9 @@ it('allows to format text with uploads from front', function () {
     
     expect($formatter->fromFront($field, 'attribute', [
         'text' => <<<'HTML'
-            <x-sharp-image key="0"></x-sharp-image>
-            <x-sharp-image key="1"></x-sharp-image>
-            <x-sharp-file key="2"></x-sharp-file>
+            <x-sharp-image data-key="0"></x-sharp-image>
+            <x-sharp-image data-key="1"></x-sharp-image>
+            <x-sharp-file data-key="2"></x-sharp-file>
             HTML,
         'uploads' => [
             [

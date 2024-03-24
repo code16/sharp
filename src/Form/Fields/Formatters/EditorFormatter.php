@@ -34,6 +34,10 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
+        if($value === null) {
+            return null;
+        }
+        
         $text = $this->maybeLocalized(
             $field,
             $value['text'] ?? null,
