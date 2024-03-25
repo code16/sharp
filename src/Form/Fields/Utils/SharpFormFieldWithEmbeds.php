@@ -39,8 +39,6 @@ trait SharpFormFieldWithEmbeds
 
         return $this->embeds()
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
-                $embed->buildEmbedConfig();
-
                 return [
                     $embed->key() => $embed->toConfigArray($isForm),
                 ];

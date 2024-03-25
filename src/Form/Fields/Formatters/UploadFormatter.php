@@ -13,19 +13,11 @@ use Illuminate\Support\Facades\Storage;
 class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     private bool $alwaysReturnFullObject = false;
-    private bool $passThrough = false;
 
     public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
     {
         $this->alwaysReturnFullObject = $returnFullObject;
 
-        return $this;
-    }
-    
-    public function passThrough(): self
-    {
-        $this->passThrough = false;
-        
         return $this;
     }
 
@@ -42,10 +34,6 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
      */
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
-        if($this->passThrough) {
-            return $value;
-        }
-        
         if ($value['uploaded'] ?? false) {
             $uploadedFieldRelativePath = sprintf(
                 '%s/%s',

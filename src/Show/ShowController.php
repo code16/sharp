@@ -1,12 +1,13 @@
 <?php
 
-namespace Code16\Sharp\Http\Controllers;
+namespace Code16\Sharp\Show;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
-use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Http\Controllers\HandlesSharpNotificationsInRequest;
+use Code16\Sharp\Http\Controllers\SharpProtectedController;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
