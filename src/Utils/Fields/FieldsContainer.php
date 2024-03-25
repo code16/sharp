@@ -18,7 +18,7 @@ class FieldsContainer
 
         return $this;
     }
-    
+
     /**
      * @return (SharpFormField|SharpShowField)[]
      */

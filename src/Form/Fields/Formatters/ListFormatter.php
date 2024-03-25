@@ -9,17 +9,17 @@ use Code16\Sharp\Form\Fields\SharpFormListField;
 class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     protected ?Closure $formatItemFieldUsing = null;
-    
+
     /**
-     * @param Closure<SharpFieldFormatter> $formatItemFieldUsing
+     * @param  Closure<SharpFieldFormatter>  $formatItemFieldUsing
      */
     public function formatItemFieldUsing(Closure $formatItemFieldUsing): static
     {
         $this->formatItemFieldUsing = $formatItemFieldUsing;
-        
+
         return $this;
     }
-    
+
     public function toFront(SharpFormField $field, $value)
     {
         return collect($value)
@@ -61,7 +61,7 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
                 foreach ($item as $key => $value) {
                     $itemField = $field->findItemFormFieldByKey($key);
-                    
+
                     if ($itemField) {
                         $itemArray[$key] = $this->itemFieldFormatter($itemField)
                             ->setInstanceId($this->instanceId)
@@ -73,9 +73,9 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             })
             ->all();
     }
-    
+
     /**
-     * @param SharpFormListField $field
+     * @param  SharpFormListField  $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): array
     {
@@ -83,25 +83,25 @@ class ListFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
             ->map(function ($item) use ($field) {
                 foreach ($item as $key => $value) {
                     $itemField = $field->findItemFormFieldByKey($key);
-                    
-                    if($itemField && $itemField->formatter() instanceof FormatsAfterUpdate) {
+
+                    if ($itemField && $itemField->formatter() instanceof FormatsAfterUpdate) {
                         $item[$key] = $itemField->formatter()
                             ->setInstanceId($this->instanceId)
                             ->afterUpdate($itemField, $key, $value);
                     }
                 }
-                
+
                 return $item;
             })
             ->all();
     }
-    
+
     protected function itemFieldFormatter(SharpFormField $field): SharpFieldFormatter
     {
-        if($callback = $this->formatItemFieldUsing) {
+        if ($callback = $this->formatItemFieldUsing) {
             return $callback($field);
         }
-        
+
         return $field->formatter();
     }
 }

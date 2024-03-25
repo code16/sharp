@@ -9,9 +9,9 @@ use Illuminate\Support\Collection;
 class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     use HasMaybeLocalizedValue;
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -30,14 +30,14 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     }
 
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        if($value === null) {
+        if ($value === null) {
             return null;
         }
-        
+
         $text = $this->maybeLocalized(
             $field,
             $value['text'] ?? null,
@@ -45,12 +45,12 @@ class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
         );
         $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
         $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
-        
+
         return $text;
     }
 
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {

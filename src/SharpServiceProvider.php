@@ -23,7 +23,6 @@ use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Console\ValidatorMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
-use Code16\Sharp\Http\Jobs\CurrentRequestJobs;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;

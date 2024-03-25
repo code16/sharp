@@ -20,31 +20,32 @@ trait HandlesHtmlContent
     {
         return (new HTML5())->saveHTML($this->getAllRootNodes($domDocument));
     }
-    
+
     protected function getAllRootNodes(DOMDocument $domDocument): \DOMNodeList
     {
         return $domDocument->getElementsByTagName('body')[0]->childNodes;
     }
-    
+
     protected function getInnerHtml(DOMElement $element): string
     {
         $html = new HTML5();
+
         return collect($element->childNodes)
             ->map(fn (DOMNode $node) => $html->saveHTML($node))
             ->implode('');
     }
-    
+
     protected function setInnerHtml(DOMElement $element, string $html): void
     {
         $fragment = (new HTML5())->loadHTMLFragment($html, ['target_document' => $element->ownerDocument]);
         while ($element->hasChildNodes()) {
             $element->removeChild($element->firstChild);
         }
-        if($fragment->hasChildNodes()) {
+        if ($fragment->hasChildNodes()) {
             $element->appendChild($fragment);
         }
     }
-    
+
     /**
      * @return DOMElement[]
      */

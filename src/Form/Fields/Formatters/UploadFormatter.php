@@ -4,9 +4,6 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Http\Context\CurrentSharpRequest;
-use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
-use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Utils\FileUtil;
 use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +20,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     }
 
     /**
-     * @param SharpFormUploadField $field
+     * @param  SharpFormUploadField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -31,7 +28,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
     }
 
     /**
-     * @param SharpFormUploadField $field
+     * @param  SharpFormUploadField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
@@ -70,8 +67,7 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 );
             });
         }
-        
-        
+
         if ($value['transformed'] ?? false) {
             // Transformation on an existing file
             return tap($this->maybeFullObject($value, [
@@ -79,8 +75,8 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 'disk' => $value['disk'],
                 'size' => $value['size'],
                 'filters' => $value['filters'] ?? null,
-            ]), function ($formatted) use ($field, $value) {
-                if($field->isImageTransformOriginal()) {
+            ]), function ($formatted) use ($field) {
+                if ($field->isImageTransformOriginal()) {
                     app(SharpUploadManager::class)->queueHandleTransformedFile(
                         disk: $field->storageDisk(),
                         filePath: $formatted['file_name'],
@@ -104,20 +100,20 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 
         return $value;
     }
-    
+
     protected function maybeFullObject(?array $value, ?array $formatted): ?array
     {
         if ($this->alwaysReturnFullObject) {
             return $value === null ? null :
                  collect([
-                    'file_name' => $formatted['file_name'] ?? $value['path'],
-                    'size' => $formatted['size'] ?? $value['size'] ?? null,
-                    'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
-                    'disk' => $formatted['disk'] ?? $value['disk'],
-                    'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
-                ])->whereNotNull()->toArray();
+                     'file_name' => $formatted['file_name'] ?? $value['path'],
+                     'size' => $formatted['size'] ?? $value['size'] ?? null,
+                     'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
+                     'disk' => $formatted['disk'] ?? $value['disk'],
+                     'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
+                 ])->whereNotNull()->toArray();
         }
-        
+
         return $formatted;
     }
 }

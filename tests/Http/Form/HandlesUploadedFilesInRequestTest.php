@@ -10,8 +10,8 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     login();
@@ -20,7 +20,7 @@ beforeEach(function () {
         'sharp.entities.person',
         PersonEntity::class,
     );
-    
+
     $this->withoutExceptionHandling();
     Storage::fake('local');
     Queue::fake();
@@ -52,7 +52,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == '/image.jpg';
@@ -72,7 +72,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == '/image-2.jpg';
@@ -116,7 +116,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == 'image.jpg';
@@ -143,7 +143,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == 'image-2.jpg';
@@ -210,7 +210,7 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == 'image-2.jpg';
@@ -389,7 +389,7 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertNotPushed(HandleUploadedFileJob::class);
 
     if ($transformKeepOriginal) {
@@ -418,11 +418,11 @@ it('pushes jobs on right queue / connections', function () {
             );
         }
     });
-    
+
     UploadedFile::fake()
         ->image('image.jpg')
         ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'file' => [
@@ -432,15 +432,15 @@ it('pushes jobs on right queue / connections', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->queue == 'default'
             && $job->connection == 'sync';
     });
-    
+
     config()->set('sharp.uploads.file_handling_queue_connection', 'redis');
     config()->set('sharp.uploads.file_handling_queue', 'uploads');
-    
+
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'file' => [
@@ -450,7 +450,7 @@ it('pushes jobs on right queue / connections', function () {
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect();
-    
+
     Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->queue == 'uploads'
             && $job->connection == 'redis';

@@ -19,17 +19,17 @@ trait HandleFields
 
         return $this->fieldsContainer;
     }
-    
+
     /**
      * @return Collection<string, SharpFormField>
      */
     final public function getBuiltFields(): Collection
     {
         $this->checkFormIsBuilt();
-        
+
         return collect($this->fieldsContainer()->getFields())
             ->mapWithKeys(fn (SharpFormField|SharpShowField $field) => [
-                $field->key => $field
+                $field->key => $field,
             ]);
     }
 

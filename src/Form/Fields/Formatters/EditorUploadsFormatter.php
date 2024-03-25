@@ -12,21 +12,21 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
 {
     use HasMaybeLocalizedValue;
     use HandlesHtmlContent;
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
-        if(!$field->uploadsConfig()) {
+        if (! $field->uploadsConfig()) {
             return ['text' => $value];
         }
-        
+
         $uploads = [];
-        
+
         $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {
             $domDocument = $this->parseHtml($content);
-            
+
             foreach ($this->getUploadElements($domDocument) as $element) {
                 $file = json_decode($element->getAttribute('file'), true);
                 $file = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance()->apply($file);
@@ -40,33 +40,33 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                 $element->removeAttribute('file');
                 $element->removeAttribute('legend');
             }
-            
+
             return $this->getHtml($domDocument);
         });
-        
+
         return [
             'text' => $text,
             ...count($uploads) ? [
-                'uploads' => $uploads
+                'uploads' => $uploads,
             ] : [],
         ];
     }
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        if(!$field->uploadsConfig()) {
+        if (! $field->uploadsConfig()) {
             return $value['text'] ?? null;
         }
-        
+
         return $this->maybeLocalized(
             $field,
             $value['text'] ?? null,
             function (string $content) use ($field, $value) {
                 $domDocument = $this->parseHtml($content);
-                
+
                 foreach ($this->getUploadElements($domDocument) as $element) {
                     $key = $element->getAttribute('data-key');
                     $file = $field
@@ -76,32 +76,32 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                         ->setAlwaysReturnFullObject()
                         ->fromFront($field->uploadsConfig(), 'file', $value['uploads'][$key]['file']);
                     $element->setAttribute('file', json_encode($file));
-                    if($legend = $value['uploads'][$key]['legend'] ?? null) {
+                    if ($legend = $value['uploads'][$key]['legend'] ?? null) {
                         $element->setAttribute('legend', $legend);
                     }
                     $element->removeAttribute('data-key');
                 }
-                
+
                 return $this->getHtml($domDocument);
             }
         );
     }
-    
+
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {
-        if(!$field->uploadsConfig()) {
+        if (! $field->uploadsConfig()) {
             return $value;
         }
-        
+
         return $this->maybeLocalized(
             $field,
             $value,
             function (string $content) use ($field) {
                 $domDocument = $this->parseHtml($content);
-                
+
                 foreach ($this->getUploadElements($domDocument) as $element) {
                     $file = json_decode($element->getAttribute('file'), true);
                     $file = $field
@@ -109,15 +109,15 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                         ->formatter()
                         ->setInstanceId($this->instanceId)
                         ->afterUpdate($field->uploadsConfig(), 'file', $file);
-                    
+
                     $element->setAttribute('file', json_encode($file));
                 }
-                
+
                 return $this->getHtml($domDocument);
             }
         );
     }
-    
+
     /**
      * @return DOMElement[]
      */

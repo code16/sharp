@@ -1,6 +1,5 @@
 <?php
 
-use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
@@ -254,7 +253,7 @@ it('can post an embed with upload, create case', function () {
         sprintf(
             '<x-embed file="%s"></x-embed>',
             e(json_encode([
-                'file_name' =>  'test/1/file.pdf',
+                'file_name' => 'test/1/file.pdf',
                 'size' => 0,
                 'mime_type' => 'application/pdf',
                 'disk' => 'local',

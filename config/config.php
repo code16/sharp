@@ -83,7 +83,7 @@ return [
         'transform_keep_original_image' => true,
 
         'max_file_size' => env('SHARP_UPLOADS_MAX_FILE_SIZE_IN_MB', 2),
-        
+
         'file_handling_queue_connection' => env('SHARP_UPLOADS_FILE_HANDLING_QUEUE_CONNECTION', 'sync'),
         'file_handling_queue' => env('SHARP_UPLOADS_FILE_HANDLING_QUEUE', 'default'),
 
@@ -148,7 +148,7 @@ return [
 
             // Optional additional message on the login page.
             // 'message_blade_path' => 'sharp/_login-page-message',
-        ]
+        ],
 
         // Optional additional auth check.
         // 'check_handler' => \App\Sharp\Auth\MySharpCheckHandler::class,

@@ -17,7 +17,7 @@ trait SharpFormFieldWithEmbeds
 
         return $this;
     }
-    
+
     /**
      * @return Collection<string, SharpFormEditorEmbed>
      */
@@ -27,6 +27,7 @@ trait SharpFormFieldWithEmbeds
             ->map(fn (string $embedClass) => app($embedClass))
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) {
                 $embed->buildEmbedConfig();
+
                 return [
                     $embed->key() => $embed,
                 ];

@@ -13,7 +13,7 @@ class FormEditorUploadsTestEmbed extends SharpFormEditorEmbed
     {
         $this->configureTagName('x-embed');
     }
-    
+
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields->addField(
