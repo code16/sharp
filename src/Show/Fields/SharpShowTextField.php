@@ -4,6 +4,7 @@ namespace Code16\Sharp\Show\Fields;
 
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
+use Code16\Sharp\Show\Fields\Formatters\SharpShowTextFieldFormatter;
 
 class SharpShowTextField extends SharpShowField
 {
@@ -18,7 +19,7 @@ class SharpShowTextField extends SharpShowField
 
     public static function make(string $key): SharpShowTextField
     {
-        return new static($key, static::FIELD_TYPE);
+        return new static($key, static::FIELD_TYPE, new SharpShowTextFieldFormatter());
     }
 
     public function setLabel(string $label): self

@@ -359,3 +359,25 @@ it('allows to configure a page alert with a closure as content', function () {
             ->etc()
         );
 });
+
+it('passes through transformers to return show data for an instance', function () {
+    $this->withoutExceptionHandling();
+
+    fakeShowFor('person', new class extends PersonShow
+    {
+        public function find($id): array
+        {
+            return $this
+                ->setCustomTransformer('name', fn ($name) => strtoupper($name))
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.data.name', 'JAMES CLERK MAXWELL')
+        );
+});
