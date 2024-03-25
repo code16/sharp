@@ -29,10 +29,7 @@ class ShowController extends SharpProtectedController
 
         $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
 
-        abort_if(
-            $show instanceof SharpSingleShow,
-            404,
-        );
+        abort_if($show instanceof SharpSingleShow, 404);
 
         $show->buildShowConfig();
 
