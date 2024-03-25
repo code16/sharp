@@ -9,16 +9,17 @@ use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Form\SharpSingleForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\SharpBreadcrumb;
+use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Inertia\Inertia;
 
 class FormController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
-    use DispatchesFormJobs;
 
     public function __construct(
         private readonly SharpAuthorizationManager $sharpAuthorizationManager,
         private readonly SharpEntityManager $entityManager,
+        private readonly SharpUploadManager $uploadManager,
     ) {
         parent::__construct();
     }
@@ -95,7 +96,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all(), $instanceId);
         $form->update($instanceId, $formattedData);
-        $this->dispatchAfterUpdateJobs($instanceId);
+        $this->uploadManager->dispatchJobs($instanceId);
 
         return redirect()->to($this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem());
     }
@@ -114,7 +115,7 @@ class FormController extends SharpProtectedController
 
         $formattedData = $form->formatAndValidateRequestData(request()->all());
         $instanceId = $form->update(null, $formattedData);
-        $this->dispatchAfterUpdateJobs($instanceId);
+        $this->uploadManager->dispatchJobs($instanceId);
 
         $previousUrl = $this->currentSharpRequest->getUrlOfPreviousBreadcrumbItem();
 

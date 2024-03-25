@@ -19,15 +19,17 @@ trait SharpFormFieldWithEmbeds
     }
     
     /**
-     * @return Collection<int, SharpFormEditorEmbed>
+     * @return Collection<string, SharpFormEditorEmbed>
      */
     public function embeds(): Collection
     {
         return once(fn () => collect($this->embeds)
             ->map(fn (string $embedClass) => app($embedClass))
-            ->each(function(SharpFormEditorEmbed $embed) {
+            ->mapWithKeys(function (SharpFormEditorEmbed $embed) {
                 $embed->buildEmbedConfig();
-                return $embed;
+                return [
+                    $embed->key() => $embed,
+                ];
             }));
     }
 
@@ -38,11 +40,7 @@ trait SharpFormFieldWithEmbeds
         }
 
         return $this->embeds()
-            ->mapWithKeys(function (SharpFormEditorEmbed $embed) use ($isForm) {
-                return [
-                    $embed->key() => $embed->toConfigArray($isForm),
-                ];
-            })
+            ->map(fn (SharpFormEditorEmbed $embed) => $embed->toConfigArray($isForm))
             ->toArray();
     }
 }

@@ -13,7 +13,7 @@ trait HasMaybeLocalizedValue
 {
     /**
      * @param  SharpFormField&SharpFormFieldWithDataLocalization  $field
-     * @param  Closure<string>  $callback
+     * @param  ?Closure<string>  $transformContent
      */
     protected function maybeLocalized(SharpFormField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
     {

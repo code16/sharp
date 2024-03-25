@@ -33,21 +33,19 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
             foreach ($field->embeds() as $embed) {
                 $elements = $this->getRootElementsByTagNames($domDocument, [$embed->tagName()]);
                 foreach ($elements as $element) {
-                    $embeds[$embed->key()][] = collect($embed->fieldsContainer()->getFields())
-                        ->mapWithKeys(function (SharpFormField $field) use ($element) {
-                            if(!$element->hasAttribute(Str::kebab($field->key()))) {
-                                return [
-                                    $field->key() => null
-                                ];
+                    $embeds[$embed->key()][] = $embed->getBuiltFields()
+                        ->map(function (SharpFormField $field, $fieldKey) use ($element) {
+                            if($fieldKey === 'slot') {
+                                return tap($this->getInnerHtml($element), function () use ($element) {
+                                    $this->setInnerHtml($element, '');
+                                });
                             }
-                            return [
-                                $field->key() => $this->tryJsonDecode(
-                                    $element->getAttribute(Str::kebab($field->key()))
-                                ),
-                            ];
+                            return $element->hasAttribute(Str::kebab($fieldKey))
+                                ? $this->tryJsonDecode($element->getAttribute(Str::kebab($fieldKey)))
+                                : null;
                         })
-                        ->pipe(function ($data) use ($embed) {
-                            return $embed->transformDataForTemplate($data, true);
+                        ->pipe(function ($collection) use ($embed) {
+                            return $embed->transformDataForTemplate($collection->toArray(), true);
                         });
                     
                     // remove all attributes as not needed by the front
@@ -86,36 +84,41 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
             function (string $content) use ($field, $value) {
                 $domDocument = $this->parseHtml($content);
                 
-                foreach ($field->embeds() as $embed) {
+                foreach ($field->embeds() as $embedKey => $embed) {
                     $elements = $this->getRootElementsByTagNames($domDocument, [$embed->tagName()]);
                     foreach ($elements as $element) {
                         $dataKey = $element->getAttribute('data-key');
-                        foreach ($embed->fieldsContainer()->getFields() as $field) {
-                            $fieldValue = $value['embeds'][$embed->key()][$dataKey][$field->key()] ?? null;
+                        foreach ($embed->getBuiltFields() as $fieldKey => $field) {
+                            $fieldValue = $value['embeds'][$embedKey][$dataKey][$fieldKey] ?? null;
                             if($field instanceof SharpFormUploadField) {
                                 $fieldValue = $field->formatter()
                                     ->setInstanceId($this->instanceId)
                                     ->setAlwaysReturnFullObject()
-                                    ->fromFront($field, $field->key(), $fieldValue);
+                                    ->fromFront($field, $fieldKey, $fieldValue);
                             }
                             if($field instanceof SharpFormListField) {
-                                $field->formatter()
+                                $fieldValue = $field->formatter()
                                     ->formatItemFieldUsing(function (SharpFormField $field) {
                                         if ($field instanceof SharpFormUploadField) {
                                             return $field->formatter()->setAlwaysReturnFullObject();
                                         }
                                         // other field types have already been formatted, so we pass value through
-                                        return new class extends AbstractSimpleFormatter {
+                                        return new class extends AbstractSimpleFormatter
+                                        {
                                         };
                                     })
                                     ->setInstanceId($this->instanceId)
-                                    ->fromFront($field, $field->key(), $fieldValue);
+                                    ->fromFront($field, $fieldKey, $fieldValue);
                             }
                             if($fieldValue !== null) {
-                                $element->setAttribute(
-                                    Str::kebab($field->key()),
-                                    is_array($fieldValue) ? json_encode($fieldValue) : $fieldValue
-                                );
+                                if($fieldKey === 'slot') {
+                                    $this->setInnerHtml($element, $fieldValue);
+                                } else {
+                                    $element->setAttribute(
+                                        Str::kebab($fieldKey),
+                                        is_array($fieldValue) ? json_encode($fieldValue) : $fieldValue
+                                    );
+                                }
                             }
                         }
                         $element->removeAttribute('data-key');
@@ -145,20 +148,20 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                 foreach ($field->embeds() as $embed) {
                     $elements = $this->getRootElementsByTagNames($domDocument, [$embed->tagName()]);
                     foreach ($elements as $element) {
-                        foreach ($embed->fieldsContainer()->getFields() as $field) {
+                        foreach ($embed->getBuiltFields() as $fieldKey => $field) {
                             if ($field->formatter() instanceof FormatsAfterUpdate
-                                && $element->hasAttribute(Str::kebab($field->key()))
+                                && $element->hasAttribute(Str::kebab($fieldKey))
                             ) {
                                 $formatted = $field->formatter()
                                     ->setInstanceId($this->instanceId)
                                     ->afterUpdate(
                                         $field,
-                                        $field->key(),
-                                        $this->tryJsonDecode($element->getAttribute(Str::kebab($field->key())))
+                                        $fieldKey,
+                                        $this->tryJsonDecode($element->getAttribute(Str::kebab($fieldKey)))
                                     );
                                 
                                 $element->setAttribute(
-                                    Str::kebab($field->key()),
+                                    Str::kebab($fieldKey),
                                     is_array($formatted) ? json_encode($formatted) : $formatted
                                 );
                             }

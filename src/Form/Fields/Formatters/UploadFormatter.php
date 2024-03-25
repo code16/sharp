@@ -8,6 +8,7 @@ use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Code16\Sharp\Utils\FileUtil;
+use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Illuminate\Support\Facades\Storage;
 
 class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
@@ -58,16 +59,14 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                     ? null
                     : $value['filters'] ?? null,
             ]), function ($formatted) use ($field, $value) {
-                app(CurrentSharpRequest::class)->queueAfterFormUpdate(
-                    new HandleUploadedFileJob(
-                        uploadedFileName: $value['name'],
-                        disk: $field->storageDisk(),
-                        filePath: $formatted['file_name'],
-                        shouldOptimizeImage: $field->isImageOptimize(),
-                        transformFilters: $field->isImageTransformOriginal()
-                            ? ($value['filters'] ?? null)
-                            : null,
-                    )
+                app(SharpUploadManager::class)->queueHandleUploadedFile(
+                    uploadedFileName: $value['name'],
+                    disk: $field->storageDisk(),
+                    filePath: $formatted['file_name'],
+                    shouldOptimizeImage: $field->isImageOptimize(),
+                    transformFilters: $field->isImageTransformOriginal()
+                        ? ($value['filters'] ?? null)
+                        : null,
                 );
             });
         }
@@ -82,12 +81,10 @@ class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
                 'filters' => $value['filters'] ?? null,
             ]), function ($formatted) use ($field, $value) {
                 if($field->isImageTransformOriginal()) {
-                    app(CurrentSharpRequest::class)->queueAfterFormUpdate(
-                        new HandleTransformedFileJob(
-                            disk: $field->storageDisk(),
-                            filePath: $formatted['file_name'],
-                            transformFilters: $formatted['filters'],
-                        )
+                    app(SharpUploadManager::class)->queueHandleTransformedFile(
+                        disk: $field->storageDisk(),
+                        filePath: $formatted['file_name'],
+                        transformFilters: $formatted['filters'],
                     );
                 }
             });

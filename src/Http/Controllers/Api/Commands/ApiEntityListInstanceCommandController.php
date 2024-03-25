@@ -4,13 +4,18 @@ namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
-use Code16\Sharp\Http\Controllers\DispatchesFormJobs;
+use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
 class ApiEntityListInstanceCommandController extends ApiController
 {
     use HandlesCommandReturn;
     use HandlesCommandForm;
-    use DispatchesFormJobs;
+    
+    public function __construct(
+        private readonly SharpUploadManager $uploadManager,
+    ) {
+        parent::__construct();
+    }
 
     public function show(string $entityKey, string $commandKey, mixed $instanceId)
     {
@@ -43,7 +48,7 @@ class ApiEntityListInstanceCommandController extends ApiController
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'), $instanceId);
         $result = $this->returnCommandResult($list, $commandHandler->execute($instanceId, $formattedData));
-        $this->dispatchAfterUpdateJobs();
+        $this->uploadManager->dispatchJobs();
 
         return $result;
     }

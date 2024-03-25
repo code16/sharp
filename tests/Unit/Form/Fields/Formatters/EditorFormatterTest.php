@@ -3,6 +3,7 @@
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -77,7 +78,6 @@ it('allows to format a text with uploads to front', function () {
                     ),
                     'size' => 120,
                     'mime_type' => 'image/jpeg',
-                    'exists' => true,
                     'filters' => null,
                     'id' => null,
                 ],
@@ -91,7 +91,6 @@ it('allows to format a text with uploads to front', function () {
                     'thumbnail' => null,
                     'size' => 120,
                     'mime_type' => 'application/pdf',
-                    'exists' => true,
                     'filters' => null,
                     'id' => null
                 ],
@@ -169,6 +168,48 @@ it('allows to format text with uploads from front', function () {
             'disk' => 'local',
         ]))
     ));
+});
+
+
+it('allows to format embeds with uploads to front', function () {
+    $formatter = (new EditorFormatter)->setInstanceId(1);
+    $field = SharpFormEditorField::make('md')
+        ->allowEmbeds([EditorFormatterTestEmbed::class]);
+    
+    expect($formatter->toFront($field, <<<'HTML'
+        <x-embed>My <em>contentful</em> content</x-embed>
+        HTML
+    ))->toEqual([
+        'text' => <<<'HTML'
+            <x-embed data-key="0"></x-embed>
+            HTML,
+        'embeds' => [
+            (new EditorFormatterTestEmbed())->key() => [
+                [
+                    'slot' => 'My <em>contentful</em> content',
+                ],
+            ],
+        ],
+    ]);
+});
+
+it('allows to format embeds with uploads from front', function () {
+    $formatter = (new EditorFormatter)->setInstanceId(1);
+    $field = SharpFormEditorField::make('md')
+        ->allowEmbeds([EditorFormatterTestEmbed::class]);
+    
+    expect($formatter->fromFront($field, 'attribute', [
+        'text' => <<<'HTML'
+            <x-embed data-key="0"></x-embed>
+            HTML,
+        'embeds' => [
+            (new EditorFormatterTestEmbed())->key() => [
+                [
+                    'slot' => 'My <em>contentful</em> content',
+                ],
+            ],
+        ],
+    ]))->toEqual('<x-embed>My <em>contentful</em> content</x-embed>');
 });
 
 it('allows to format a unicode text value from front', function () {

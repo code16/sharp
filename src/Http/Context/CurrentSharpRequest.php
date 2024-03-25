@@ -13,8 +13,6 @@ use Illuminate\Support\Str;
 
 class CurrentSharpRequest
 {
-    use HandlesFormJobs;
-    
     protected ?Collection $breadcrumb = null;
     private Collection $cachedInstances;
 

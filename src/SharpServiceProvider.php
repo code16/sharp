@@ -27,6 +27,7 @@ use Code16\Sharp\Http\Jobs\CurrentRequestJobs;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
+use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
@@ -97,6 +98,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(SharpAuthorizationManager::class);
         $this->app->singleton(CurrentSharpRequest::class);
         $this->app->singleton(SharpMenuManager::class);
+        $this->app->singleton(SharpUploadManager::class);
         $this->app->singleton(
             ImageManager::class,
             fn () => new ImageManager(

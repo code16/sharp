@@ -13,7 +13,6 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 class HandleUploadedFileJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
-    use DispatchableAfterUpdate;
 
     public function __construct(
         public string $uploadedFileName,
@@ -21,9 +20,8 @@ class HandleUploadedFileJob implements ShouldQueue
         public string $filePath,
         public bool $shouldOptimizeImage = true,
         public ?array $transformFilters = null,
-        ?string $instanceId = null,
+        public ?string $instanceId = null,
     ) {
-        $this->instanceId = $instanceId;
     }
 
     public function handle(): void
