@@ -230,7 +230,6 @@
         browseFiles() {
             return new Promise((resolve) => {
                 const input = dropTarget.value.querySelector('input');
-                console.log('input', input);
                 input.click();
                 input.addEventListener('change', () => resolve(true), { once: true });
 

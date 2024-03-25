@@ -21,15 +21,7 @@
     const parentEditor = useParentEditor();
     const uploadManager = parentEditor.uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
-    const upload = computed(() => uploadManager.getUpload(props.node.attrs.id));
-
-    const error = computed(() => {
-        if(upload.value.file?.not_found) {
-            return __('sharp::form.editor.errors.unknown_file', {
-                path: uploadManager.getUpload(props.node.attrs.id).file.path ?? ''
-            });
-        }
-    });
+    const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
 
     function showFormModal() {
         const formProps = {
@@ -42,10 +34,9 @@
     }
 
     async function postModalForm(data: FormEditorUploadData) {
-        await uploadManager.postForm(props.node.attrs.id, data);
+        await uploadManager.postForm(props.node.attrs['data-key'], data);
 
         props.updateAttributes({
-            isNew: false,
             droppedFile: null,
         });
 
@@ -53,11 +44,9 @@
     }
 
     function onThumbnailGenerated(preview: string) {
-        const value = uploadManager.getUpload(props.node.attrs.id);
-
-        uploadManager.updateUpload(props.node.attrs.id, {
+        uploadManager.updateUpload(props.node.attrs['data-key'], {
             file: {
-                ...value.file,
+                ...upload.value.file,
                 thumbnail: preview,
             }
         })
@@ -65,7 +54,7 @@
 
     function onUploadTransformed(value: FormUploadFieldData['value']) {
         if(!props.node.attrs.isNew) {
-            uploadManager.updateUpload(props.node.attrs.id, {
+            uploadManager.updateUpload(props.node.attrs['data-key'], {
                 file: value,
             });
         }
@@ -73,7 +62,7 @@
 
     function onRemove() {
         props.deleteNode();
-        uploadManager.removeUpload(props.node.attrs.id);
+        uploadManager.removeUpload(props.node.attrs['data-key']);
         setTimeout(() => {
             props.editor.commands.focus();
         }, 0);
@@ -104,9 +93,9 @@
         modalVisible.value = false;
 
         if(props.node.attrs.isNew) {
-            props.editor.commands.withoutHistory(() => {
+            // props.editor.commands.withoutHistory(() => {
                 props.deleteNode();
-            });
+            // });
             setTimeout(() => {
                 props.editor.commands.focus();
             }, 0);
@@ -120,22 +109,22 @@
             return;
         }
 
-        if(props.node.attrs.isNew) {
-            if(parentEditor.props.field.uploads.fields.legend) {
-                showFormModal();
-            } else {
-                await nextTick();
-                const chosen = await uploadComponent.value.browseFiles();
-                props.editor.commands.focus(props.getPos() + props.node.nodeSize);
-                if(!chosen) {
-                    props.editor.commands.withoutHistory(() => {
-                        props.deleteNode();
-                    });
-                }
-            }
-        } else {
-            uploadManager.restoreUpload(props.node.attrs.id);
-        }
+        // if(props.node.attrs.isNew) {
+        //     if(parentEditor.props.field.uploads.fields.legend) {
+        //         showFormModal();
+        //     } else {
+        //         await nextTick();
+        //         const hasChosenFile = await uploadComponent.value.browseFiles();
+        //         props.editor.commands.focus(props.getPos() + props.node.nodeSize);
+        //         if(!hasChosenFile) {
+        //             // props.editor.commands.withoutHistory(() => {
+        //                 props.deleteNode();
+        //             // });
+        //         }
+        //     }
+        // } else {
+            uploadManager.restoreUpload(props.node.attrs['data-key']);
+        // }
     }
 
     onMounted(() => {
@@ -143,19 +132,18 @@
     });
 
     onUnmounted(() => {
-        uploadManager.removeUpload(props.node.attrs.id);
+        uploadManager.removeUpload(props.node.attrs['data-key']);
     });
 </script>
 
 <template>
     <NodeRenderer class="editor__node" :node="node">
-        <div v-show="!node.attrs.isNew || node.attrs.droppedFile">
+        <div>
             <div class="border rounded p-4">
                 <Upload
                     :field="parentEditor.props.field.uploads.fields.file"
-                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs.id}`"
+                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
                     :value="upload?.file"
-                    :has-error="!!error"
                     :root="false"
                     @thumbnail="onThumbnailGenerated"
                     @transform="onUploadTransformed"
@@ -172,12 +160,6 @@
                 </template>
             </div>
         </div>
-
-        <template v-if="error">
-            <div class="text-sm text-red-700 mt-1">
-                {{ error }}
-            </div>
-        </template>
 
         <EmbedFormModal
             :visible="modalVisible"

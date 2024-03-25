@@ -90,7 +90,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
     /**
      * @param SharpFormEditorField $field
      */
-    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): array|string|null
     {
         if(!$field->uploadsConfig()) {
             return $value;

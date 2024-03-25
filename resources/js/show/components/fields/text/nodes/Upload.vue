@@ -10,7 +10,7 @@
     const uploadManager = inject<ContentUploadManager<Show>>('uploadManager');
 
     async function init() {
-        value.value = await uploadManager.getResolvedUpload(useAttrs()['data-unique-id'] as string);
+        value.value = await uploadManager.getUpload(useAttrs()['data-key'] as string);
     }
 
     init();

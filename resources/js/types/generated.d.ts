@@ -769,7 +769,11 @@ export type ShowPictureFieldData = {
   emptyVisible: boolean;
 };
 export type ShowTextFieldData = {
-  value?: string | { [key: string]: string };
+  value?: {
+    text: string | { [locale: string]: string | null } | null;
+    uploads?: Array<{ file: FormUploadFieldValueData; legend?: string | null }>;
+    embeds?: { [embedKey: string]: Array<FormData["data"]> };
+  };
   key: string;
   type: "text";
   emptyVisible: boolean;

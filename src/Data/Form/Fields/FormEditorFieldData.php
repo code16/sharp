@@ -4,6 +4,7 @@ namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
+use Code16\Sharp\Data\Show\Fields\ShowTextFieldData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
@@ -11,6 +12,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormEditorFieldData extends Data
 {
+    /**
+     * Same value that @see ShowTextFieldData
+     */
     #[Optional]
     #[LiteralTypeScriptType('{
         text: string | { [locale:string]: string|null } | null,

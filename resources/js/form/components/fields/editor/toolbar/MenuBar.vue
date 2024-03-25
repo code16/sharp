@@ -72,7 +72,7 @@
                                 :active="buttons[button].isActive(editor)"
                                 :disabled="field.readOnly"
                                 :title="buttons[button].label()"
-                                @click="buttons[button].command(editor)"
+                                @click="button === 'upload' || button === 'upload-image' ? $emit('upload') : buttons[button].command(editor)"
                                 :data-test="button"
                             >
                                 <i :class="buttons[button].icon"></i>

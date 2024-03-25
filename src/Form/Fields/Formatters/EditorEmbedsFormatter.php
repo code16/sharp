@@ -133,7 +133,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
     /**
      * @param SharpFormEditorField $field
      */
-    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): array|string|null
     {
         if(!count($field->embeds())) {
             return $value;

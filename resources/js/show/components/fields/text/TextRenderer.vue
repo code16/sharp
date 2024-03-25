@@ -6,7 +6,8 @@
     import { ShowTextFieldData } from "@/types";
     import Embed from "@/show/components/fields/text/nodes/Embed.vue";
 
-    const props = defineProps<ShowFieldProps<ShowTextFieldData> & {
+    const props = defineProps<{
+        field: ShowTextFieldData,
         content: string,
     }>();
 

@@ -24,6 +24,7 @@
     import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
     import { Extension } from "@tiptap/core";
     import { withoutHistory } from "@/form/components/fields/editor/commands/withoutHistory";
+    import UploadModal from "@/form/components/fields/editor/extensions/upload/UploadModal.vue";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -31,6 +32,7 @@
     >();
 
     const header = ref<HTMLElement>();
+    const uploadModal = ref<InstanceType<typeof UploadModal>>();
     const form = useParentForm();
 
     const uploadManager = new ContentUploadManager(form, props.value.uploads, {
@@ -66,6 +68,7 @@
                 }),
                 props.field.uploads && Upload.configure({
                     uploadManager,
+                    uploadModal,
                 }),
                 ...Object.values(props.field.embeds ?? {})
                     .map((embed) => {
@@ -166,11 +169,18 @@
                     <MenuBar
                         :editor="editor"
                         v-bind="$props"
+                        @upload="uploadModal.open()"
                     />
                 </div>
             </template>
 
             <EditorContent :editor="editor" :key="locale ?? 'editor'" />
+
+            <UploadModal
+                :field="field"
+                :editor="editor"
+                ref="uploadModal"
+            />
 
             <!-- Commenting this for now because it causes infinite loop on HMR -->
 

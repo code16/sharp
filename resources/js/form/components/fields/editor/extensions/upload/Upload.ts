@@ -1,32 +1,25 @@
 import { Node, type Range, RawCommands } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
-import { FormUploadFieldValueData } from "@/types";
-import { serializeAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { ContentUploadManager } from "@/content/ContentUploadManager";
 import { Plugin } from "@tiptap/pm/state";
 import { Form } from "@/form/Form";
+import UploadModal from "@/form/components/fields/editor/extensions/upload/UploadModal.vue";
+import { Ref } from "vue";
 
 
 
 export type UploadNodeAttributes = {
-    id: string,
-    // file: FormUploadFieldValueData,
-    // legend: string,
-    // 'data-unique-id': string,
-    isNew: boolean,
+    'data-key': string,
+    // isNew: boolean,
     isImage: boolean,
     droppedFile: File,
-    savedFile?: File,
-    // /**
-    //  * This is used to store the history state of the upload node. (e.g. to preserve thumbnail on undo / redo)
-    //  */
-    // savedState: Partial<UploadNodeAttributes> | null,
 }
 
 export type UploadOptions = {
     uploadManager: ContentUploadManager<Form>,
+    uploadModal: Ref<InstanceType<typeof UploadModal>>,
 }
 
 export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<UploadOptions>({
@@ -42,36 +35,15 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
 
     addAttributes(): ExtensionAttributesSpec<UploadNodeAttributes> {
         return {
-            id: {},
-            // file: {
-            //     default: null,
-            //     parseHTML: element => ({
-            //         file: JSON.parse(element.getAttribute('file') ?? 'null'),
-            //     }),
-            //     renderHTML: (attributes) => {
-            //         return {
-            //             file: serializeAttributeValue(attributes.file),
-            //         }
-            //     },
-            // },
-            // legend: {
-            //     default: null,
-            // },
-            // 'data-unique-id': {
-            //     default: null,
-            // },
+            'data-key': {},
             droppedFile: {
                 default: null,
                 rendered: false,
             },
-            savedFile: {
-                default: null,
-                rendered: false,
-            },
-            isNew: {
-                default: false,
-                rendered: false,
-            },
+            // isNew: {
+            //     default: false,
+            //     rendered: false,
+            // },
             isImage: {
                 default: false,
                 parseHTML: element => element.matches('x-sharp-image'),
@@ -102,19 +74,18 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
         return {
             insertUpload: (file, pos) => ({ chain, tr }) => {
                 const commands = chain();
-
-                if(!file) {
-                    // we want the user to select file / validate modal before writing to editor history (undo/redo)
-                    commands.withoutHistory();
-                }
+                //
+                // if(!file) {
+                //     // we want the user to select file / validate modal before writing to editor history (undo/redo)
+                //     commands.withoutHistory();
+                // }
 
                 const id = this.options.uploadManager.insertUpload();
 
                 return commands.insertContentAt(pos ?? tr.selection.to, {
                         type: Upload.name,
                         attrs: {
-                            id,
-                            isNew: true,
+                            'data-key': id,
                             droppedFile: file,
                             isImage: !!file?.type.match(/^image\//),
                         } satisfies UploadNodeAttributes,
