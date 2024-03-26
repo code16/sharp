@@ -98,7 +98,7 @@ Check their documentation for [more instructions](https://github.com/spatie/imag
 
 ## Validation
 
-First, notice that `setAllowedExtensions()` and `setImageOnly()` already are basic validation rules, that Sharp will use both on the front-end and in the back-end.
+Notice that `setAllowedExtensions()` and `setImageOnly()` already are basic validation rules that Sharp will use both on the front-end and in the back-end.
 
 But there are a few more rules available:
 
