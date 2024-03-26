@@ -3,22 +3,24 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
+use Code16\Sharp\Show\Fields\SharpFieldWithDataLocalization;
+use Code16\Sharp\Utils\Fields\LocalizedSharpField;
 use Illuminate\Support\Collection;
 
-class SharpFormAutocompleteField extends SharpFormField
+class SharpFormAutocompleteField extends SharpFormField implements LocalizedSharpField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithTemplates,
-        SharpFormFieldWithOptions, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithTemplates;
+    use SharpFormFieldWithOptions;
+    use SharpFieldWithDataLocalization;
 
     const FIELD_TYPE = 'autocomplete';
 
     protected string $mode;
-    /** @var Collection|array */
-    protected $localValues = [];
+    protected Collection|array $localValues = [];
     protected array $localSearchKeys = ['value'];
     protected string $remoteMethod = 'GET';
     protected ?string $remoteEndpoint = null;
@@ -29,11 +31,6 @@ class SharpFormAutocompleteField extends SharpFormField
     protected string $dataWrapper = '';
     protected int $debounceDelay = 300;
 
-    /**
-     * @param  string  $key
-     * @param  string  $mode  "local" or "remote"
-     * @return static
-     */
     public static function make(string $key, string $mode): self
     {
         $instance = new static($key, static::FIELD_TYPE, new AutocompleteFormatter());
@@ -42,11 +39,7 @@ class SharpFormAutocompleteField extends SharpFormField
         return $instance;
     }
 
-    /**
-     * @param  array|Collection  $localValues
-     * @return $this
-     */
-    public function setLocalValues($localValues): self
+    public function setLocalValues(array|Collection $localValues): self
     {
         $this->localValues = $localValues;
 

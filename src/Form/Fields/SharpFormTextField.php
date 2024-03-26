@@ -3,13 +3,16 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Code16\Sharp\Show\Fields\SharpFieldWithDataLocalization;
+use Code16\Sharp\Utils\Fields\LocalizedSharpField;
 
-class SharpFormTextField extends SharpFormField
+class SharpFormTextField extends SharpFormField implements LocalizedSharpField
 {
-    use SharpFormFieldWithPlaceholder, SharpFormFieldWithMaxLength, SharpFormFieldWithDataLocalization;
+    use SharpFormFieldWithPlaceholder;
+    use SharpFormFieldWithMaxLength;
+    use SharpFieldWithDataLocalization;
 
     const FIELD_TYPE = 'text';
 

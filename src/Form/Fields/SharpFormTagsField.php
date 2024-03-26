@@ -3,11 +3,12 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Form\Fields\Formatters\TagsFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Show\Fields\SharpFieldWithDataLocalization;
+use Code16\Sharp\Utils\Fields\LocalizedSharpField;
 
-class SharpFormTagsField extends SharpFormField
+class SharpFormTagsField extends SharpFormField implements LocalizedSharpField
 {
-    use SharpFormFieldWithDataLocalization;
+    use SharpFieldWithDataLocalization;
 
     const FIELD_TYPE = 'tags';
 

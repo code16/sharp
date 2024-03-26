@@ -3,8 +3,7 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Closure;
-use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
+use Code16\Sharp\Utils\Fields\LocalizedSharpField;
 
 /**
  * @mixin SharpFieldFormatter
@@ -12,10 +11,10 @@ use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
 trait HasMaybeLocalizedValue
 {
     /**
-     * @param  SharpFormField&SharpFormFieldWithDataLocalization  $field
+     * @param  LocalizedSharpField  $field
      * @param  ?Closure<string>  $transformContent
      */
-    protected function maybeLocalized(SharpFormField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
+    protected function maybeLocalized(LocalizedSharpField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
     {
         $transformContent ??= fn ($value) => $value;
 

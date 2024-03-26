@@ -2,19 +2,18 @@
 
 namespace Code16\Sharp\Form\Fields\Formatters;
 
-use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use DOMDocument;
-use DOMElement;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorUploadsToFront;
 
 class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     use HasMaybeLocalizedValue;
     use HandlesHtmlContent;
+    use FormatsEditorUploadsToFront;
 
     /**
-     * @param  SharpFormEditorField  $field
+     * @param SharpFormEditorField $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -22,38 +21,11 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
             return ['text' => $value];
         }
 
-        $uploads = [];
-
-        $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {
-            $domDocument = $this->parseHtml($content);
-
-            foreach ($this->getUploadElements($domDocument) as $element) {
-                $file = json_decode($element->getAttribute('file'), true);
-                $file = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance()->apply($file);
-                $uploads[] = [
-                    'file' => $file,
-                    'legend' => $element->hasAttribute('legend')
-                        ? $element->getAttribute('legend')
-                        : null,
-                ];
-                $element->setAttribute('data-key', count($uploads) - 1);
-                $element->removeAttribute('file');
-                $element->removeAttribute('legend');
-            }
-
-            return $this->getHtml($domDocument);
-        });
-
-        return [
-            'text' => $text,
-            ...count($uploads) ? [
-                'uploads' => $uploads,
-            ] : [],
-        ];
+        return $this->formatsEditorUploadsToFront($field, $value);
     }
 
     /**
-     * @param  SharpFormEditorField  $field
+     * @param SharpFormEditorField $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
@@ -88,7 +60,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
     }
 
     /**
-     * @param  SharpFormEditorField  $field
+     * @param SharpFormEditorField $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {
@@ -116,13 +88,5 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                 return $this->getHtml($domDocument);
             }
         );
-    }
-
-    /**
-     * @return DOMElement[]
-     */
-    private function getUploadElements(DOMDocument $domDocument): array
-    {
-        return $this->getRootElementsByTagNames($domDocument, ['x-sharp-image', 'x-sharp-file']);
     }
 }

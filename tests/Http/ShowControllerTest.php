@@ -378,6 +378,6 @@ it('passes through transformers to return show data for an instance', function (
     $this->get('/sharp/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('show.data.name', 'JAMES CLERK MAXWELL')
+            ->where('show.data.name', ['text' => 'JAMES CLERK MAXWELL'])
         );
 });
