@@ -35,7 +35,7 @@
     const uploadModal = ref<InstanceType<typeof UploadModal>>();
     const form = useParentForm();
 
-    const uploadManager = new ContentUploadManager(form, props.value.uploads, {
+    const uploadManager = new ContentUploadManager(form, props.value?.uploads, {
         editorField: props.field,
         onUploadsUpdated(uploads) {
             emit('input', { ...props.value, uploads });
@@ -51,7 +51,8 @@
         props,
         embedManager,
         uploadManager,
-    });
+        uploadModal,
+    } satisfies ParentEditor);
 
     const editor = useLocalizedEditor(
         props,
@@ -68,7 +69,6 @@
                 }),
                 props.field.uploads && Upload.configure({
                     uploadManager,
-                    uploadModal,
                 }),
                 ...Object.values(props.field.embeds ?? {})
                     .map((embed) => {

@@ -17,7 +17,7 @@
     const show = useParentShow();
 
     const embedManager = new ContentEmbedManager(show, props.field.embeds);
-    const uploadManager = new ContentUploadManager(show, props.value.uploads);
+    const uploadManager = new ContentUploadManager(show, props.value?.uploads);
 
     provide('embedManager', embedManager);
     provide('uploadManager', uploadManager);
@@ -25,7 +25,7 @@
     const localizedValue = computed<string | null>(() => {
         return props.field.localized
             ? props.value.text?.[props.locale]
-            : props.value.text as string;
+            : props.value?.text as string;
     });
 
     function stripTags(html) {

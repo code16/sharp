@@ -10,6 +10,7 @@
     import { __ } from "@/utils/i18n";
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { FormFieldProps } from "@/form/types";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
@@ -72,7 +73,9 @@
                                 :active="buttons[button].isActive(editor)"
                                 :disabled="field.readOnly"
                                 :title="buttons[button].label()"
-                                @click="button === 'upload' || button === 'upload-image' ? $emit('upload') : buttons[button].command(editor)"
+                                @click="button === 'upload' || button === 'upload-image'
+                                    ? $emit('upload')
+                                    : buttons[button].command(editor)"
                                 :data-test="button"
                             >
                                 <i :class="buttons[button].icon"></i>

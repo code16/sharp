@@ -8,15 +8,13 @@ import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
 import { reactive } from "vue";
 
 type ContentUpload = {
-    id: string,
-    // resolved?: PromiseWithResolvers<true>
     removed?: boolean,
     value: FormEditorUploadData,
 }
 
 export class ContentUploadManager<Root extends Form | Show> extends ContentManager {
     root: Form | Show;
-    onUploadsUpdated: Root extends Form ? (uploads: FormEditorUploadData[]) => any : null;
+    onUploadsUpdated: Root extends Form ? (uploads: { [id:string]: FormEditorUploadData }) => any : null;
     editorField: Root extends Form ? FormEditorFieldData : null;
     uniqueId = 0;
 
@@ -38,9 +36,9 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         this.editorField = config.editorField;
         this.onUploadsUpdated = config.onUploadsUpdated;
         this.contentUploads = Object.fromEntries(
-            initialUploads?.map((upload, index) =>
-                [index, { id:String(index), value:upload }]
-            ) ?? []
+            Object.entries(initialUploads ?? {}).map(([id, upload]) =>
+                [id, { value:upload }]
+            )
         );
     }
 
@@ -53,18 +51,21 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
     }
 
     get serializedUploads() {
-        return Object.values(this.contentUploads)
-            .filter(contentUpload => !contentUpload.removed)
-            .map(contentUpload => contentUpload.value);
+        return Object.fromEntries(
+            Object.entries(this.contentUploads)
+                .filter(([id, contentUpload]) => !contentUpload.removed)
+                .map(([id, contentUpload]) => [id, contentUpload.value])
+        );
     }
 
-    newId() {
-        return String(this.uniqueId++);
-    }
-
-    insertUpload() {
-        const id = this.newId();
-        this.contentUploads[id] = { id, value: { file: null, legend: null } };
+    newUpload(nativeFile?: File) {
+        const id = String(this.uniqueId++);
+        this.contentUploads[id] = {
+            value: {
+                file: nativeFile ? { nativeFile } : null,
+                legend: null,
+            },
+        };
         return id;
     }
 
@@ -93,7 +94,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         return this.contentUploads[id].value;
     }
 
-    async postForm(id: string|null, data: FormEditorUploadData): Promise<FormEditorUploadData> {
+    async postForm(id: string|null, data: FormEditorUploadData): Promise<string> {
         const { entityKey, instanceId } = this.root;
 
         const responseData = await api.post(
@@ -104,10 +105,9 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         )
             .then(response => response.data);
 
-        id ??= this.insertUpload();
+        id ??= this.newUpload();
 
         this.contentUploads[id] = {
-            id,
             value: {
                 ...responseData,
                 file: {
@@ -119,7 +119,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
 
         this.onUploadsUpdated(this.serializedUploads);
 
-        return responseData;
+        return id;
     }
 
 }

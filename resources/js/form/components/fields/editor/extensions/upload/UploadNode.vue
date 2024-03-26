@@ -16,32 +16,30 @@
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
     const modalVisible = ref(false);
-    const editorUploadForm = ref<Form>(null);
-    const parentForm = useParentForm();
     const parentEditor = useParentEditor();
     const uploadManager = parentEditor.uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
 
-    function showFormModal() {
-        const formProps = {
-            fields: parentEditor.props.field.uploads.fields,
-            layout: parentEditor.props.field.uploads.layout,
-            data: upload.value,
-        } as FormData;
-        editorUploadForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
-        modalVisible.value = true;
-    }
-
-    async function postModalForm(data: FormEditorUploadData) {
-        await uploadManager.postForm(props.node.attrs['data-key'], data);
-
-        props.updateAttributes({
-            droppedFile: null,
-        });
-
-        modalVisible.value = false;
-    }
+    // function showFormModal() {
+    //     const formProps = {
+    //         fields: parentEditor.props.field.uploads.fields,
+    //         layout: parentEditor.props.field.uploads.layout,
+    //         data: upload.value,
+    //     } as FormData;
+    //     editorUploadForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
+    //     modalVisible.value = true;
+    // }
+    //
+    // async function postModalForm(data: FormEditorUploadData) {
+    //     await uploadManager.postForm(props.node.attrs['data-key'], data);
+    //
+    //     props.updateAttributes({
+    //         droppedFile: null,
+    //     });
+    //
+    //     modalVisible.value = false;
+    // }
 
     function onThumbnailGenerated(preview: string) {
         uploadManager.updateUpload(props.node.attrs['data-key'], {
@@ -53,11 +51,23 @@
     }
 
     function onUploadTransformed(value: FormUploadFieldData['value']) {
-        if(!props.node.attrs.isNew) {
-            uploadManager.updateUpload(props.node.attrs['data-key'], {
-                file: value,
-            });
-        }
+        uploadManager.updateUpload(props.node.attrs['data-key'], {
+            file: value,
+        });
+    }
+
+    async function onUploadSuccess(value: FormUploadFieldData['value']) {
+        await uploadManager.postForm(props.node.attrs['data-key'], {
+            file: value,
+        });
+    }
+
+    function onUploadError(message: string, file: File) {
+        props.deleteNode();
+        showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
+            isError: true,
+            title: __(`sharp::modals.error.title`),
+        });
     }
 
     function onRemove() {
@@ -71,44 +81,11 @@
     function onEdit(event: CustomEvent) {
         if(parentEditor.props.field.uploads.fields.legend) {
             event.preventDefault();
-            showFormModal();
-        }
-    }
-
-    async function onUploadSuccess(value: FormUploadFieldData['value']) {
-        await postModalForm({
-            file: value,
-        });
-    }
-
-    function onUploadError(message: string, file: File) {
-        props.deleteNode();
-        showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
-            isError: true,
-            title: __(`sharp::modals.error.title`),
-        });
-    }
-
-    function onModalCancel() {
-        modalVisible.value = false;
-
-        if(props.node.attrs.isNew) {
-            // props.editor.commands.withoutHistory(() => {
-                props.deleteNode();
-            // });
-            setTimeout(() => {
-                props.editor.commands.focus();
-            }, 0);
+            parentEditor.uploadModal.value.open(props.node.attrs['data-key']);
         }
     }
 
     async function init() {
-        if(props.node.attrs.droppedFile) {
-            uploadComponent.value.upload(props.node.attrs.droppedFile);
-
-            return;
-        }
-
         // if(props.node.attrs.isNew) {
         //     if(parentEditor.props.field.uploads.fields.legend) {
         //         showFormModal();
@@ -123,12 +100,12 @@
         //         }
         //     }
         // } else {
-            uploadManager.restoreUpload(props.node.attrs['data-key']);
+
         // }
     }
 
     onMounted(() => {
-        init();
+        uploadManager.restoreUpload(props.node.attrs['data-key']);
     });
 
     onUnmounted(() => {
@@ -161,20 +138,20 @@
             </div>
         </div>
 
-        <EmbedFormModal
-            :visible="modalVisible"
-            :form="editorUploadForm"
-            :post="postModalForm"
-            @cancel="onModalCancel"
-        >
-            <template v-slot:title>
-                <template v-if="props.node.attrs.isNew">
-                    {{ __('sharp::form.editor.dialogs.upload.title.new') }}
-                </template>
-                <template v-else>
-                    {{ __('sharp::form.editor.dialogs.upload.title.update') }}
-                </template>
-            </template>
-        </EmbedFormModal>
+<!--        <EmbedFormModal-->
+<!--            :visible="modalVisible"-->
+<!--            :form="editorUploadForm"-->
+<!--            :post="postModalForm"-->
+<!--            @cancel="onModalCancel"-->
+<!--        >-->
+<!--            <template v-slot:title>-->
+<!--                <template v-if="props.node.attrs.isNew">-->
+<!--                    {{ __('sharp::form.editor.dialogs.upload.title.new') }}-->
+<!--                </template>-->
+<!--                <template v-else>-->
+<!--                    {{ __('sharp::form.editor.dialogs.upload.title.update') }}-->
+<!--                </template>-->
+<!--            </template>-->
+<!--        </EmbedFormModal>-->
     </NodeRenderer>
 </template>

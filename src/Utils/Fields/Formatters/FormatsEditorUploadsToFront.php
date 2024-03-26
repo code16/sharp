@@ -37,7 +37,7 @@ trait FormatsEditorUploadsToFront
         return [
             'text' => $text,
             ...count($uploads) ? [
-                'uploads' => $uploads,
+                'uploads' => (object)$uploads,
             ] : [],
         ];
     }

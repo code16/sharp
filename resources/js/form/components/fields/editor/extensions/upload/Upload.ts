@@ -1,25 +1,20 @@
-import { Node, type Range, RawCommands } from "@tiptap/core";
+import { Node, type Range } from "@tiptap/core";
 import { VueNodeViewRenderer } from "@tiptap/vue-3";
 import UploadNode from "./UploadNode.vue";
 import { ExtensionAttributesSpec, WithRequiredOptions } from "@/form/components/fields/editor/types";
 import { ContentUploadManager } from "@/content/ContentUploadManager";
 import { Plugin } from "@tiptap/pm/state";
 import { Form } from "@/form/Form";
-import UploadModal from "@/form/components/fields/editor/extensions/upload/UploadModal.vue";
-import { Ref } from "vue";
 
 
 
 export type UploadNodeAttributes = {
     'data-key': string,
-    // isNew: boolean,
     isImage: boolean,
-    droppedFile: File,
 }
 
 export type UploadOptions = {
     uploadManager: ContentUploadManager<Form>,
-    uploadModal: Ref<InstanceType<typeof UploadModal>>,
 }
 
 export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<UploadOptions>({
@@ -36,10 +31,6 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
     addAttributes(): ExtensionAttributesSpec<UploadNodeAttributes> {
         return {
             'data-key': {},
-            droppedFile: {
-                default: null,
-                rendered: false,
-            },
             // isNew: {
             //     default: false,
             //     rendered: false,
@@ -72,7 +63,7 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
 
     addCommands() {
         return {
-            insertUpload: (file, pos) => ({ chain, tr }) => {
+            insertUpload: (id, file, pos) => ({ chain, tr }) => {
                 const commands = chain();
                 //
                 // if(!file) {
@@ -80,13 +71,12 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                 //     commands.withoutHistory();
                 // }
 
-                const id = this.options.uploadManager.insertUpload();
+                id ??= this.options.uploadManager.newUpload(file);
 
                 return commands.insertContentAt(pos ?? tr.selection.to, {
                         type: Upload.name,
                         attrs: {
                             'data-key': id,
-                            droppedFile: file,
                             isImage: !!file?.type.match(/^image\//),
                         } satisfies UploadNodeAttributes,
                     })
@@ -112,7 +102,7 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                         const commands = this.editor.chain();
 
                         [...clipboardData.files].forEach(file => {
-                            commands.insertUpload(file, this.editor.state.selection)
+                            commands.insertUpload(null, file, this.editor.state.selection)
                         });
 
                         commands.run();
@@ -132,7 +122,7 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
                             const commands = this.editor.chain();
 
                             [...event.dataTransfer.files].forEach(file => {
-                                commands.insertUpload(file, coordinates.pos)
+                                commands.insertUpload(null, file, coordinates.pos)
                             });
 
                             commands.run();
@@ -153,7 +143,7 @@ export const Upload: WithRequiredOptions<Node<UploadOptions>> = Node.create<Uplo
 declare module '@tiptap/core' {
     interface Commands<ReturnType> {
         upload: {
-            insertUpload: (file?: File, pos?: number | Range) => ReturnType
+            insertUpload: (id: string|null, file?: File, pos?: number | Range) => ReturnType
         }
     }
 }

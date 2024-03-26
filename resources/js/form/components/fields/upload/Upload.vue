@@ -128,7 +128,6 @@
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
                 size: file.size,
-                nativeFile: file.data,
             });
             uppyFile.value = uppy.getFile(file.id);
             console.log('upload-success', JSON.parse(JSON.stringify(uppyFile.value)));
@@ -261,7 +260,7 @@
 </script>
 
 <template>
-    <template v-if="value?.path || uppyFile">
+    <template v-if="value?.path || value?.uploaded || uppyFile">
         <div class="bg-white" :class="{ 'rounded border p-4': root }">
             <div class="flex">
                 <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
@@ -281,14 +280,14 @@
                                 {{ filesizeLabel(value?.size ?? uppyFile.size) }}
                             </div>
                         </template>
-                        <template v-if="value?.exists">
+                        <template v-if="value?.path">
                             <a class="text-sm text-primary-700 underline"
                                 :href="route('code16.sharp.download.show', {
-                                    entityKey: form.entityKey,
-                                    instanceId: form.instanceId,
-                                    disk: value.disk,
-                                    path: value.path,
-                                })"
+                                entityKey: form.entityKey,
+                                instanceId: form.instanceId,
+                                disk: value.disk,
+                                path: value.path,
+                            })"
                                 :download="value?.name?.split('/').at(-1)"
                             >
                                 {{ __('sharp::form.upload.download_link') }}

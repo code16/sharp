@@ -20,11 +20,11 @@
 
     const uploadManager = useParentEditor().uploadManager;
 
-    function showFormModal(id: string|null, data) {
+    function showFormModal(id: string|null) {
         const formProps = {
             fields: props.field.uploads.fields,
             layout: props.field.uploads.layout,
-            data,
+            data: id ? uploadManager.getUpload(id) : {},
         } as FormData;
 
         currentModalUpload.value = {
@@ -34,21 +34,26 @@
     }
 
     async function postModalForm(data: FormEditorUploadData) {
-        await uploadManager.postForm(currentModalUpload.value.id, data);
+        const id = await uploadManager.postForm(currentModalUpload.value.id, data);
+
+        if(!currentModalUpload.value.id) {
+            props.editor.commands.insertUpload(id);
+        }
 
         currentModalUpload.value = null;
     }
 
-    async function open(id?: string, value?: FormEditorUploadData) {
+    async function open(id?: string) {
         if(props.field.uploads.fields.legend) {
-            showFormModal(id, value);
+            showFormModal(id);
         } else {
             input.value.click();
         }
     }
 
-    function onInputChange(e) {
-        props.editor.commands.insertUpload(e.value.files[0]);
+    function onInputChange(e: Event & { target: HTMLInputElement }) {
+        props.editor.commands.insertUpload(null, e.target.files[0]);
+        e.target.value = '';
     }
 
     defineExpose({
@@ -57,11 +62,11 @@
 </script>
 
 <template>
-    <input type="file" :accept="props.field.uploads.fields.file.allowedExtensions" @change="onInputChange" ref="input">
+    <input class="hidden" type="file" :accept="props.field.uploads.fields.file.allowedExtensions" @change="onInputChange" ref="input">
 
     <EmbedFormModal
         :visible="!!currentModalUpload"
-        :form="currentModalUpload.form"
+        :form="currentModalUpload?.form"
         :post="postModalForm"
         @cancel="currentModalUpload = null"
     >
