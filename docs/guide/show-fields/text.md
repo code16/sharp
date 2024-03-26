@@ -12,6 +12,14 @@ Set the field label.
 
 Collapse the text if too long, and add a "show more" link. Use it for long texts (even markdown formatted) in sections with only one field.
 
+### `doNotCollapse()`
+
+Reset the collapse configuration.
+
+### `setHtml(bool $html = true)`
+
+By default, the text is escaped. If you want to display HTML, set this to true.
+
 ### `allowEmbeds(array $embeds)`
 
 This method expects an array of embeds that could be inserted in the content, declared as full class names. An embed class must extend `Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed`.

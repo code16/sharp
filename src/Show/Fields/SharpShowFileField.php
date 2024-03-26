@@ -7,8 +7,6 @@ class SharpShowFileField extends SharpShowField
     const FIELD_TYPE = 'file';
 
     protected ?string $label = null;
-    protected string $storageDisk = 'local';
-    protected string $storageBasePath = 'data';
 
     public static function make(string $key): SharpShowFileField
     {
@@ -27,8 +25,6 @@ class SharpShowFileField extends SharpShowField
      */
     public function setStorageDisk(string $storageDisk): self
     {
-        $this->storageDisk = $storageDisk;
-
         return $this;
     }
 
@@ -37,19 +33,7 @@ class SharpShowFileField extends SharpShowField
      */
     public function setStorageBasePath(string $storageBasePath): self
     {
-        $this->storageBasePath = $storageBasePath;
-
         return $this;
-    }
-
-    public function storageDisk(): string
-    {
-        return $this->storageDisk;
-    }
-
-    public function storageBasePath(): string
-    {
-        return $this->storageBasePath;
     }
 
     public function toArray(): array
