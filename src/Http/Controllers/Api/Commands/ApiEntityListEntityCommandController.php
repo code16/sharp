@@ -14,7 +14,7 @@ class ApiEntityListEntityCommandController extends ApiController
 {
     use HandlesCommandReturn;
     use HandlesCommandForm;
-    
+
     public function __construct(
         private readonly SharpUploadManager $uploadManager,
     ) {

@@ -8,7 +8,6 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Exceptions\DecoderException;
 
@@ -51,8 +50,8 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             if (! $value || ! is_array($value)) {
                 return null;
             }
-            
-            if($value['uploaded'] ?? false) {
+
+            if ($value['uploaded'] ?? false) {
                 return $value;
             }
 

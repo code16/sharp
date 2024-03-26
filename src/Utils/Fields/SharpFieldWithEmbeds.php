@@ -1,12 +1,12 @@
 <?php
 
-namespace Code16\Sharp\Form\Fields\Utils;
+namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Illuminate\Support\Collection;
 
-trait SharpFormFieldWithEmbeds
+trait SharpFieldWithEmbeds
 {
     protected array $embeds = [];
     protected ?SharpFormEditorUpload $uploadsConfig = null;
@@ -17,7 +17,7 @@ trait SharpFormFieldWithEmbeds
 
         return $this;
     }
-    
+
     /**
      * @return Collection<string, SharpFormEditorEmbed>
      */
@@ -27,6 +27,7 @@ trait SharpFormFieldWithEmbeds
             ->map(fn (string $embedClass) => app($embedClass))
             ->mapWithKeys(function (SharpFormEditorEmbed $embed) {
                 $embed->buildEmbedConfig();
+
                 return [
                     $embed->key() => $embed,
                 ];

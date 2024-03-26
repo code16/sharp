@@ -103,7 +103,7 @@ abstract class SharpFormEditorEmbed
     /**
      * Applies Field Formatters on $data.
      */
-    final public function formatRequestData(array $data, ): array
+    final public function formatRequestData(array $data): array
     {
         return collect($data)
             ->filter(fn ($value, $key) => in_array($key, $this->getDataKeys()))
@@ -116,14 +116,14 @@ abstract class SharpFormEditorEmbed
                     // in case of uploads we only want to call formatter on Form store/update
                     return $value;
                 }
-                
+
                 if ($field instanceof SharpFormListField) {
                     $field->formatter()->formatItemFieldUsing(function (SharpFormField $itemField) {
-                        if($itemField instanceof SharpFormUploadField) {
-                            return new class extends AbstractSimpleFormatter
-                            {
+                        if ($itemField instanceof SharpFormUploadField) {
+                            return new class extends AbstractSimpleFormatter {
                             };
                         }
+
                         return $itemField->formatter();
                     });
                 }
@@ -202,12 +202,12 @@ abstract class SharpFormEditorEmbed
     {
         return Str::replace('\\', '.', get_class($this));
     }
-    
+
     final public function tagName(): string
     {
         return $this->tagName ?: 'x-'.Str::kebab(class_basename(get_class($this)));
     }
-    
+
     public function getDataLocalizations(): array
     {
         return [];

@@ -5,7 +5,6 @@ namespace Code16\Sharp\Form\Eloquent\Migrations;
 use Illuminate\Console\Concerns\InteractsWithIO;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -15,12 +14,12 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 trait MigrateContentsForSharp9
 {
     use InteractsWithIO;
-    
+
     protected function updateContentOf(Builder $query, array $contentColumns, string $primaryKey = 'id', bool $fetchMissingDataFromFileSystem = true): self
     {
         $this->input ??= new StringInput('');
         $this->output ??= new OutputStyle($this->input, new ConsoleOutput());
-        
+
         $rows = $query
             ->tap(function (Builder $query) use ($contentColumns) {
                 collect($contentColumns)->each(fn ($column) => $query
@@ -36,10 +35,10 @@ trait MigrateContentsForSharp9
                 $data[$column] = $this->updateContent(
                     $row->{$column},
                     $fetchMissingDataFromFileSystem,
-                    sprintf("%s[%s][%s]", $query->from, $row->{$primaryKey}, $column),
+                    sprintf('%s[%s][%s]', $query->from, $row->{$primaryKey}, $column),
                 );
             }
-            
+
             DB::table($query->from)
                 ->where($primaryKey, $row->{$primaryKey})
                 ->update($data);
@@ -79,8 +78,8 @@ trait MigrateContentsForSharp9
                         'angle' => $matchesRotate[1],
                     ];
                 }
-                
-                if($fetchMissingDataFromFileSystem) {
+
+                if ($fetchMissingDataFromFileSystem) {
                     try {
                         $size = Storage::disk($disk)->size($path);
                         $mime_type = Storage::disk($disk)->mimeType($path);

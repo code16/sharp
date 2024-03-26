@@ -5,12 +5,11 @@ namespace Code16\Sharp\Utils\Uploads;
 use Code16\Sharp\Http\Jobs\HandleTransformedFileJob;
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 
-
 class SharpUploadManager
 {
     protected array $uploadedFileQueue = [];
     protected array $transformedFileQueue = [];
-    
+
     public function dispatchJobs(?string $instanceId = null): void
     {
         foreach ($this->uploadedFileQueue as $params) {
@@ -25,7 +24,7 @@ class SharpUploadManager
                 ->onConnection(config('sharp.uploads.file_handling_queue_connection', 'sync'));
         }
     }
-    
+
     public function queueHandleUploadedFile(
         string $uploadedFileName,
         string $disk,
@@ -41,7 +40,7 @@ class SharpUploadManager
             'transformFilters',
         );
     }
-    
+
     public function queueHandleTransformedFile(
         string $disk,
         string $filePath,

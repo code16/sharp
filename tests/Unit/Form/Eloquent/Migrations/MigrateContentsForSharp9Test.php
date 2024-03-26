@@ -18,7 +18,7 @@ beforeEach(function () {
 
 it('Migrate <x-sharp-image> for sharp 9', function () {
     UploadedFile::fake()->image('name.jpg', 200, 200)->storeAs('data/Posts/1', 'name.jpg');
-    
+
     DB::table('posts')->insert([
         'content' => '<x-sharp-image name="name.jpg" disk="local" path="data/Posts/1/name.jpg" filter-crop="0.5,0.5,0.4,0.4" filter-rotate="90"></x-sharp-image>',
     ]);
@@ -54,7 +54,7 @@ it('Migrate <x-sharp-image> for sharp 9', function () {
 
 it('Migrate <x-sharp-file> for sharp 9', function () {
     UploadedFile::fake()->createWithContent('name.pdf', 'test')->storeAs('data/Posts/1', 'name.pdf');
-    
+
     DB::table('posts')->insert([
         'content' => '<x-sharp-file name="name.pdf" disk="local" path="data/Posts/1/name.pdf"></x-sharp-file>',
     ]);
@@ -84,23 +84,22 @@ it('Migrate <x-sharp-file> for sharp 9', function () {
     ]);
 });
 
-
 it('Should not throw if file does not exists', function () {
     $this->expectNotToPerformAssertions();
-    
+
     DB::table('posts')->insert([
         'content' => '<x-sharp-file name="name.pdf" disk="local" path="data/Posts/1/name.pdf"></x-sharp-file>',
     ]);
-    
+
     $migration = new class extends Migration
     {
         use MigrateContentsForSharp9;
-        
+
         public function up(): void
         {
             $this->updateContentOf(DB::table('posts'), ['content']);
         }
     };
-    
+
     $migration->up();
 });

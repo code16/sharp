@@ -43,12 +43,12 @@ it('allows to format a text with uploads to front', function () {
     $formatter = new EditorFormatter;
     $field = SharpFormEditorField::make('md')
         ->allowUploads(SharpFormEditorUpload::make());
-    
+
     $image = UploadedFile::fake()->image('test.jpg', 600, 600);
     $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
     $file = UploadedFile::fake()->create('doc.pdf');
     $file->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
-    
+
     $value = sprintf('<x-sharp-image file="%s" legend="Legendary"></x-sharp-image><x-sharp-file file="%s"></x-sharp-file>',
         e(json_encode([
             'file_name' => 'data/Posts/1/image.jpg',
@@ -63,7 +63,7 @@ it('allows to format a text with uploads to front', function () {
             'disk' => 'local',
         ]))
     );
-    
+
     expect($formatter->toFront($field, $value))->toEqual([
         'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
         'uploads' => [
@@ -92,11 +92,11 @@ it('allows to format a text with uploads to front', function () {
                     'size' => 120,
                     'mime_type' => 'application/pdf',
                     'filters' => null,
-                    'id' => null
+                    'id' => null,
                 ],
                 'legend' => null,
             ],
-        ]
+        ],
     ]);
 });
 
@@ -104,10 +104,10 @@ it('allows to format text with uploads from front', function () {
     $formatter = (new EditorFormatter)->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowUploads(SharpFormEditorUpload::make()->setStorageBasePath('data/Posts/{id}'));
-    
+
     UploadedFile::fake()->image('uploaded.jpg', 600, 600)
         ->storeAs('/tmp', 'uploaded.jpg', ['disk' => 'local']);
-    
+
     expect($formatter->fromFront($field, 'attribute', [
         'text' => <<<'HTML'
             <x-sharp-image data-key="0"></x-sharp-image>
@@ -141,7 +141,7 @@ it('allows to format text with uploads from front', function () {
                     'disk' => 'local',
                     'size' => 120,
                 ],
-            ]
+            ],
         ],
     ]))->toEqual(sprintf(<<<'HTML'
         <x-sharp-image file="%s" legend="Legendary"></x-sharp-image>
@@ -170,12 +170,11 @@ it('allows to format text with uploads from front', function () {
     ));
 });
 
-
 it('allows to format embeds with uploads to front', function () {
     $formatter = (new EditorFormatter)->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
-    
+
     expect($formatter->toFront($field, <<<'HTML'
         <x-embed>My <em>contentful</em> content</x-embed>
         HTML
@@ -197,7 +196,7 @@ it('allows to format embeds with uploads from front', function () {
     $formatter = (new EditorFormatter)->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
-    
+
     expect($formatter->fromFront($field, 'attribute', [
         'text' => <<<'HTML'
             <x-embed data-key="0"></x-embed>

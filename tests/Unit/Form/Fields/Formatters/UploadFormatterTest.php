@@ -80,9 +80,9 @@ it('returns full object after no change was made if configured', function () {
         'size' => 0,
         'mime_type' => 'image/jpeg',
         'disk' => 'local',
-        'filters' => ['rotate' => ['angle' => 20]]
+        'filters' => ['rotate' => ['angle' => 20]],
     ];
-    
+
     expect(
         app(UploadFormatter::class)
         ->setAlwaysReturnFullObject()
@@ -93,7 +93,7 @@ it('returns full object after no change was made if configured', function () {
             'size' => 0,
             'mime_type' => 'image/jpeg',
             'disk' => 'local',
-            'filters' => ['rotate' => ['angle' => 20]]
+            'filters' => ['rotate' => ['angle' => 20]],
         ]);
 });
 
@@ -121,7 +121,7 @@ it('returns full object after only transformations if configured', function () {
             ],
         ],
     ];
-    
+
     expect(
         app(UploadFormatter::class)
             ->setAlwaysReturnFullObject()

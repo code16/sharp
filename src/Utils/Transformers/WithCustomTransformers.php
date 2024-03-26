@@ -51,9 +51,11 @@ trait WithCustomTransformers
 
         if ($this instanceof SharpShow) {
             // Show case: there's only one model
-            return $this->applyTransformers(
-                model: $models,
-                forceFullObject: false
+            return $this->applyFormatters(
+                $this->applyTransformers(
+                    model: $models,
+                    forceFullObject: false
+                )
             );
         }
 

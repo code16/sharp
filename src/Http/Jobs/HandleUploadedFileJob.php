@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Jobs;
 
-use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -56,10 +55,10 @@ class HandleUploadedFileJob implements ShouldQueue
 
     private function determineFilePath(): string
     {
-        if($this->instanceId) {
+        if ($this->instanceId) {
             return str_replace('{id}', $this->instanceId, $this->filePath);
         }
-        
+
         return $this->filePath;
     }
 }
