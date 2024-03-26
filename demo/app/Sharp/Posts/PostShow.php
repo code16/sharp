@@ -55,8 +55,6 @@ class PostShow extends SharpShow
                     ->addItemField(
                         SharpShowFileField::make('document')
                             ->setLabel('File')
-                            ->setStorageDisk('local')
-                            ->setStorageBasePath('data/posts/{id}')
                     )
             )
             ->addField(
@@ -153,7 +151,7 @@ class PostShow extends SharpShow
                     ->implode(', ');
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
-            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(false))
+            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(withThumbnails: false))
             ->setCustomTransformer('attachments[link_url]', function ($value, $instance) {
                 return $instance->is_link
                     ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))

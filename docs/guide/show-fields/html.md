@@ -1,17 +1,19 @@
-# Html
+# Text
 
-Class: `Code16\Sharp\Form\Fields\SharpFormHtmlField`
-
-This field is read-only, and is meant to display some dynamic information in the form.
+Class: `Code16\Sharp\Show\Fields\SharpShowHtmlField`
 
 ## Configuration
+
+### `setLabel()`
+
+Set the field label.
 
 ### `setInlineTemplate(string $template)`
 
 Write the template as a string, using placeholders for data (eg: `{{var}}`). Example:
 
 ```php
-SharpFormHtmlField::make('panel')
+SharpShowHtmlField::make('panel')
     ->setInlineTemplate('This product is offline since <strong>{{date}}</strong>')
 ```
 
@@ -30,7 +32,7 @@ function find($id): array
 
 ### `setTemplatePath(string $templatePath)`
 
-Use this if you need more control: give the path of a full template, in its own file.
+se this if you need more control: give the path of a full template, in its own file.
 
 The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.html), meaning you can add data placeholders, DOM structure but also directives, and anything that Vue will parse. For instance:
 
@@ -42,8 +44,3 @@ The template will be [interpreted by Vue.js](https://vuejs.org/v2/guide/syntax.h
 ### `setAdditionalTemplateData(array $data)`
 
 Pass data to the template that is not part of the transformed data.
-
-## Formatter
-
-- `toFront`: sent as provided.
-- `fromFront`: returns null (read-only).
