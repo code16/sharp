@@ -55,7 +55,9 @@ trait FormatsEditorEmbedsToFront
         return [
             'text' => $text,
             ...count($embeds) ? [
-                'embeds' => (object)$embeds,
+                'embeds' => collect($embeds)
+                    ->map(fn ($embeds) => (object) $embeds)
+                    ->toArray(),
             ] : [],
         ];
     }

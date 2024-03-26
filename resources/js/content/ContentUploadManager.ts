@@ -1,7 +1,7 @@
 import { api } from "@/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
-import { FormEditorFieldData } from "@/types";
+import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { Show } from "@/show/Show";
 import { ContentManager } from "@/content/ContentManager";
 import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
@@ -32,7 +32,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
     ) {
         super();
         this.root = root;
-        this.uniqueId = initialUploads?.length ?? 0;
+        this.uniqueId = Object.keys(initialUploads ?? {}).length;
         this.editorField = config.editorField;
         this.onUploadsUpdated = config.onUploadsUpdated;
         this.contentUploads = Object.fromEntries(
@@ -62,7 +62,9 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         const id = String(this.uniqueId++);
         this.contentUploads[id] = {
             value: {
-                file: nativeFile ? { nativeFile } : null,
+                file: nativeFile
+                    ? { nativeFile } as FormUploadFieldValueData // auto upload with this file
+                    : null,
                 legend: null,
             },
         };
@@ -108,13 +110,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         id ??= this.newUpload();
 
         this.contentUploads[id] = {
-            value: {
-                ...responseData,
-                file: {
-                    ...responseData.file,
-                    thumbnail: data.file.thumbnail,
-                }
-            },
+            value: responseData,
         }
 
         this.onUploadsUpdated(this.serializedUploads);

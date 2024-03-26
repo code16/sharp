@@ -103,13 +103,13 @@ export const buttons: { [key in Exclude<FormEditorToolbarButton, '|'>]: ButtonCo
         label: () => __('sharp::form.editor.toolbar.link.title'),
     },
     'upload-image': {
-        command: editor => editor.chain().focus().insertUpload().run(),
+        command: () => {}, // handled in MenuBar
         isActive: editor => editor.isActive('upload') || editor.isActive('image'),
         icon: getToolbarIcon('image'),
         label: () => __('sharp::form.editor.toolbar.upload_image.title'),
     },
     'upload': {
-        command: editor => editor.chain().focus().insertUpload().run(),
+        command: () => {}, // handled in MenuBar
         isActive: editor => editor.isActive('upload'),
         icon: getToolbarIcon('document'),
         label: () => __('sharp::form.editor.toolbar.upload.title'),

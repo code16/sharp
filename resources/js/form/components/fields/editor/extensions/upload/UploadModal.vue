@@ -37,7 +37,7 @@
         const id = await uploadManager.postForm(currentModalUpload.value.id, data);
 
         if(!currentModalUpload.value.id) {
-            props.editor.commands.insertUpload(id);
+            props.editor.commands.insertUpload({ id, type: data.file.mime_type });
         }
 
         currentModalUpload.value = null;
@@ -52,7 +52,7 @@
     }
 
     function onInputChange(e: Event & { target: HTMLInputElement }) {
-        props.editor.commands.insertUpload(null, e.target.files[0]);
+        props.editor.commands.insertUpload({ nativeFile: e.target.files[0] });
         e.target.value = '';
     }
 

@@ -540,6 +540,7 @@ export type FormUploadFieldValueData = {
   name: string;
   disk: string;
   path: string;
+  mime_type: string;
   size: number;
   thumbnail: string | null;
   uploaded: boolean | null;

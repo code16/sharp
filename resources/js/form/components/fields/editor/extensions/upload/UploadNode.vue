@@ -5,41 +5,16 @@
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
     import Upload from "@/form/components/fields/upload/Upload.vue";
-    import { FormUploadFieldData, FormData } from "@/types";
-    import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
-    import { Form } from "@/form/Form";
-    import { useParentForm } from "@/form/useParentForm";
+    import { FormUploadFieldData } from "@/types";
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
-    import { FormEditorUploadData } from "@/content/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
 
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
-    const modalVisible = ref(false);
     const parentEditor = useParentEditor();
     const uploadManager = parentEditor.uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
-
-    // function showFormModal() {
-    //     const formProps = {
-    //         fields: parentEditor.props.field.uploads.fields,
-    //         layout: parentEditor.props.field.uploads.layout,
-    //         data: upload.value,
-    //     } as FormData;
-    //     editorUploadForm.value = new Form(formProps, parentForm.entityKey, parentForm.instanceId);
-    //     modalVisible.value = true;
-    // }
-    //
-    // async function postModalForm(data: FormEditorUploadData) {
-    //     await uploadManager.postForm(props.node.attrs['data-key'], data);
-    //
-    //     props.updateAttributes({
-    //         droppedFile: null,
-    //     });
-    //
-    //     modalVisible.value = false;
-    // }
 
     function onThumbnailGenerated(preview: string) {
         uploadManager.updateUpload(props.node.attrs['data-key'], {
@@ -47,7 +22,7 @@
                 ...upload.value.file,
                 thumbnail: preview,
             }
-        })
+        });
     }
 
     function onUploadTransformed(value: FormUploadFieldData['value']) {
@@ -57,7 +32,7 @@
     }
 
     async function onUploadSuccess(value: FormUploadFieldData['value']) {
-        await uploadManager.postForm(props.node.attrs['data-key'], {
+        uploadManager.updateUpload(props.node.attrs['data-key'], {
             file: value,
         });
     }
@@ -83,25 +58,6 @@
             event.preventDefault();
             parentEditor.uploadModal.value.open(props.node.attrs['data-key']);
         }
-    }
-
-    async function init() {
-        // if(props.node.attrs.isNew) {
-        //     if(parentEditor.props.field.uploads.fields.legend) {
-        //         showFormModal();
-        //     } else {
-        //         await nextTick();
-        //         const hasChosenFile = await uploadComponent.value.browseFiles();
-        //         props.editor.commands.focus(props.getPos() + props.node.nodeSize);
-        //         if(!hasChosenFile) {
-        //             // props.editor.commands.withoutHistory(() => {
-        //                 props.deleteNode();
-        //             // });
-        //         }
-        //     }
-        // } else {
-
-        // }
     }
 
     onMounted(() => {
@@ -137,21 +93,5 @@
                 </template>
             </div>
         </div>
-
-<!--        <EmbedFormModal-->
-<!--            :visible="modalVisible"-->
-<!--            :form="editorUploadForm"-->
-<!--            :post="postModalForm"-->
-<!--            @cancel="onModalCancel"-->
-<!--        >-->
-<!--            <template v-slot:title>-->
-<!--                <template v-if="props.node.attrs.isNew">-->
-<!--                    {{ __('sharp::form.editor.dialogs.upload.title.new') }}-->
-<!--                </template>-->
-<!--                <template v-else>-->
-<!--                    {{ __('sharp::form.editor.dialogs.upload.title.update') }}-->
-<!--                </template>-->
-<!--            </template>-->
-<!--        </EmbedFormModal>-->
     </NodeRenderer>
 </template>

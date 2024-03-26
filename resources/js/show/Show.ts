@@ -106,8 +106,10 @@ export class Show implements ShowData {
             return true;
         }
 
-        if(field.type === 'text' && field.localized) {
-            return !!(value as ShowTextFieldData['value'])?.[locale];
+        if(field.type === 'text') {
+            return field.localized
+                ? !!(value as ShowTextFieldData['value'])?.text?.[locale]
+                : !!(value as ShowTextFieldData['value'])?.text;
         }
 
         if(field.type === 'list') {
