@@ -31,7 +31,13 @@
             'html-content': Html,
             ...Object.fromEntries(
                 Object.entries(props.field.embeds ?? {})
-                    .map(([embedKey, embed]) => [embed.tag, Embed])
+                    .map(([embedKey, embed]) => [
+                        embed.tag,
+                        {
+                            template: '<Embed :embed="embed" v-bind="$attrs"></Embed>',
+                            data: () => ({ embed }),
+                        }
+                    ])
             ),
         },
     }));

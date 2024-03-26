@@ -3,7 +3,6 @@ import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
 import { Show } from "@/show/Show";
-import { ContentManager } from "@/content/ContentManager";
 import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
 import { reactive } from "vue";
 
@@ -12,11 +11,10 @@ type ContentUpload = {
     value: FormEditorUploadData,
 }
 
-export class ContentUploadManager<Root extends Form | Show> extends ContentManager {
+export class ContentUploadManager<Root extends Form | Show> {
     root: Form | Show;
     onUploadsUpdated: Root extends Form ? (uploads: { [id:string]: FormEditorUploadData }) => any : null;
     editorField: Root extends Form ? FormEditorFieldData : null;
-    uniqueId = 0;
 
     state = reactive<{ contentUploads: { [id:string]: ContentUpload } }>({
         contentUploads: {}
@@ -30,9 +28,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
             onUploadsUpdated: ContentUploadManager<Root>['onUploadsUpdated'],
         } = { editorField: null, onUploadsUpdated: null }
     ) {
-        super();
         this.root = root;
-        this.uniqueId = Object.keys(initialUploads ?? {}).length;
         this.editorField = config.editorField;
         this.onUploadsUpdated = config.onUploadsUpdated;
         this.contentUploads = Object.fromEntries(
@@ -58,8 +54,12 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         );
     }
 
+    getUpload(id: string): FormEditorUploadData {
+        return this.contentUploads[id].value;
+    }
+
     newUpload(nativeFile?: File) {
-        const id = String(this.uniqueId++);
+        const id = String(Object.keys(this.contentUploads).length);
         this.contentUploads[id] = {
             value: {
                 file: nativeFile
@@ -92,10 +92,6 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         this.onUploadsUpdated(this.serializedUploads);
     }
 
-    getUpload(id: string): FormEditorUploadData {
-        return this.contentUploads[id].value;
-    }
-
     async postForm(id: string|null, data: FormEditorUploadData): Promise<string> {
         const { entityKey, instanceId } = this.root;
 
@@ -117,5 +113,4 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
 
         return id;
     }
-
 }

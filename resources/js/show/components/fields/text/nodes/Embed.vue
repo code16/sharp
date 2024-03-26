@@ -4,23 +4,18 @@
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { Show } from "@/show/Show";
     import { EmbedData } from "@/types";
+    const props = defineProps<{
+        embed: EmbedData,
+    }>();
 
     const embedManager = inject<ContentEmbedManager<Show>>('embedManager');
-
-    const embed = embedManager.getEmbedConfig(useAttrs()['data-unique-id'] as string);
-    const data = ref<EmbedData['value']>();
-
-    async function init() {
-        data.value = await embedManager.getResolvedEmbed(useAttrs()['data-unique-id'] as string);
-    }
-
-    init();
+    const embedData = embedManager.getEmbed(useAttrs()['data-key'] as string, props.embed);
 </script>
 
 <template>
-    <component v-if="data" :is="embed.tag" class="embed">
+    <component v-if="embedData" :is="embed.tag" class="embed">
         <EmbedRenderer
-            :data="data"
+            :data="embedData"
             :embed="embed"
         >
             <slot />

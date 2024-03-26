@@ -61,7 +61,7 @@
                                 :active="editor.isActive(button)"
                                 :disabled="field.readOnly"
                                 :title="field.embeds[button.replace('embed:', '')]?.label"
-                                @click="editor.commands.insertEmbed(field.embeds[button.replace('embed:', '')])"
+                                @click="$emit('embed', field.embeds[button.replace('embed:', '')])"
                                 :data-test="button"
                             >
                                 <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
@@ -102,7 +102,7 @@
 
                         <template v-slot:default>
                             <template v-for="embed in props.field.embeds">
-                                <DropdownItem @click="editor.chain().insertEmbed(embed).run()">
+                                <DropdownItem @click="$emit('embed', embed)">
                                     {{ embed.label }}
                                 </DropdownItem>
                             </template>

@@ -17,23 +17,9 @@
     const input = ref<HTMLInputElement | null>(null);
     const parentForm = useParentForm();
     const currentModalUpload = ref<{ id: string, form: Form } | null>(null);
-
     const uploadManager = useParentEditor().uploadManager;
 
-    function showFormModal(id: string|null) {
-        const formProps = {
-            fields: props.field.uploads.fields,
-            layout: props.field.uploads.layout,
-            data: id ? uploadManager.getUpload(id) : {},
-        } as FormData;
-
-        currentModalUpload.value = {
-            id,
-            form: new Form(formProps, parentForm.entityKey, parentForm.instanceId),
-        }
-    }
-
-    async function postModalForm(data: FormEditorUploadData) {
+    async function postForm(data: FormEditorUploadData) {
         const id = await uploadManager.postForm(currentModalUpload.value.id, data);
 
         if(!currentModalUpload.value.id) {
@@ -43,9 +29,19 @@
         currentModalUpload.value = null;
     }
 
-    async function open(id?: string) {
+    function open(id?: string) {
         if(props.field.uploads.fields.legend) {
-            showFormModal(id);
+            currentModalUpload.value = {
+                id,
+                form: new Form({
+                        fields: props.field.uploads.fields,
+                        layout: props.field.uploads.layout,
+                        data: id ? uploadManager.getUpload(id) : {},
+                    } as FormData,
+                    parentForm.entityKey,
+                    parentForm.instanceId,
+                ),
+            }
         } else {
             input.value.click();
         }
@@ -67,7 +63,7 @@
     <EmbedFormModal
         :visible="!!currentModalUpload"
         :form="currentModalUpload?.form"
-        :post="postModalForm"
+        :post="postForm"
         @cancel="currentModalUpload = null"
     >
         <template v-slot:title>

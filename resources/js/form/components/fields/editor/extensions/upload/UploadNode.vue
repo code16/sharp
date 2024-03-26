@@ -12,7 +12,8 @@
     const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
     const parentEditor = useParentEditor();
-    const uploadManager = parentEditor.uploadManager;
+    const uploadModal = useParentEditor().uploadModal;
+    const uploadManager = useParentEditor().uploadManager;
     const uploadComponent = ref<InstanceType<typeof Upload>>();
     const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
 
@@ -47,7 +48,6 @@
 
     function onRemove() {
         props.deleteNode();
-        uploadManager.removeUpload(props.node.attrs['data-key']);
         setTimeout(() => {
             props.editor.commands.focus();
         }, 0);
@@ -56,7 +56,7 @@
     function onEdit(event: CustomEvent) {
         if(parentEditor.props.field.uploads.fields.legend) {
             event.preventDefault();
-            parentEditor.uploadModal.value.open(props.node.attrs['data-key']);
+            uploadModal.value.open(props.node.attrs['data-key']);
         }
     }
 
