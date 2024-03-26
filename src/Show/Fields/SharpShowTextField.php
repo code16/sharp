@@ -5,8 +5,8 @@ namespace Code16\Sharp\Show\Fields;
 use Code16\Sharp\Show\Fields\Formatters\TextFieldFormatter;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
-use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
 class SharpShowTextField extends SharpShowField implements IsSharpFieldWithLocalization, IsSharpFieldWithEmbeds
 {

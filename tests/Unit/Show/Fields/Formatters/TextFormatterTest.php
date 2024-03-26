@@ -106,4 +106,3 @@ it('allows to format embeds with uploads to front', function () {
         ],
     ]);
 });
-

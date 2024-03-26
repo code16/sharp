@@ -15,7 +15,7 @@ class TextUploadsFormatter extends SharpShowFieldFormatter
     use FormatsEditorUploadsToFront;
 
     /**
-     * @param SharpShowTextField $field
+     * @param  SharpShowTextField  $field
      */
     public function toFront(SharpShowField $field, $value)
     {

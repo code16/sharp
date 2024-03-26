@@ -13,7 +13,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
     use FormatsEditorUploadsToFront;
 
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -25,7 +25,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
     }
 
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
@@ -60,7 +60,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
     }
 
     /**
-     * @param SharpFormEditorField $field
+     * @param  SharpFormEditorField  $field
      */
     public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?string
     {

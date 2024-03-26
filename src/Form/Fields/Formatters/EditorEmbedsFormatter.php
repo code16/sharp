@@ -7,7 +7,6 @@ use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorEmbedsToFront;
-use DOMAttr;
 use Illuminate\Support\Str;
 
 class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate

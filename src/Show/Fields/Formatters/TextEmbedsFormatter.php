@@ -15,7 +15,7 @@ class TextEmbedsFormatter extends SharpShowFieldFormatter
     use FormatsEditorEmbedsToFront;
 
     /**
-     * @param SharpShowTextField $field
+     * @param  SharpShowTextField  $field
      */
     public function toFront(SharpShowField $field, $value)
     {

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Show\Fields\Formatters;
 
-use Code16\Sharp\Form\Fields\Formatters\EditorUploadsFormatter;
 use Code16\Sharp\Show\Fields\SharpShowField;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Illuminate\Support\Collection;
@@ -10,7 +9,7 @@ use Illuminate\Support\Collection;
 class TextFieldFormatter extends SharpShowFieldFormatter
 {
     /**
-     * @param SharpShowTextField $field
+     * @param  SharpShowTextField  $field
      */
     public function toFront(SharpShowField $field, $value)
     {
