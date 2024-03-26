@@ -17,25 +17,24 @@ class TextFieldFormatter extends SharpShowFieldFormatter
         return collect(['text' => $value])
             ->pipeThrough([
                 fn (Collection $collection) => $collection->merge(
-                    $this->editorUploadsFormatter()->toFront($field, $collection['text'])
+                    $this->textUploadsFormatter()->toFront($field, $collection['text'])
                 ),
-//                fn (Collection $collection) => $collection->merge(
-//                    $this->editorEmbedsFormatter()->toFront($field, $collection['text'])
-//                ),
+                fn (Collection $collection) => $collection->merge(
+                    $this->textEmbedsFormatter()->toFront($field, $collection['text'])
+                ),
             ])
             ->toArray();
     }
 
-    protected function editorUploadsFormatter(): TextUploadsFormatter
+    protected function textUploadsFormatter(): TextUploadsFormatter
     {
         return (new TextUploadsFormatter())
             ->setDataLocalizations($this->dataLocalizations ?? []);
     }
 
-    protected function editorEmbedsFormatter(): EditorEmbedsFormatter
+    protected function textEmbedsFormatter(): TextEmbedsFormatter
     {
-        return (new EditorEmbedsFormatter())
-            ->setDataLocalizations($this->dataLocalizations ?? [])
-            ->setInstanceId($this->instanceId);
+        return (new TextEmbedsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? []);
     }
 }

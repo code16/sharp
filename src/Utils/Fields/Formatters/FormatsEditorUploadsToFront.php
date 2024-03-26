@@ -3,13 +3,14 @@
 namespace Code16\Sharp\Utils\Fields\Formatters;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
-use Code16\Sharp\Utils\Fields\LocalizedSharpField;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use DOMDocument;
 use DOMElement;
 
 trait FormatsEditorUploadsToFront
 {
-    public function formatsEditorUploadsToFront(LocalizedSharpField $field, $value)
+    protected function formatsEditorUploadsToFront(IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization $field, $value): array
     {
         $uploads = [];
 

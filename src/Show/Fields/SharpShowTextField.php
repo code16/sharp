@@ -2,14 +2,16 @@
 
 namespace Code16\Sharp\Show\Fields;
 
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Show\Fields\Formatters\TextFieldFormatter;
-use Code16\Sharp\Utils\Fields\LocalizedSharpField;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
 
-class SharpShowTextField extends SharpShowField implements LocalizedSharpField
+class SharpShowTextField extends SharpShowField implements IsSharpFieldWithLocalization, IsSharpFieldWithEmbeds
 {
-    use SharpFieldWithDataLocalization;
-    use SharpFormFieldWithEmbeds;
+    use SharpFieldWithLocalization;
+    use SharpFieldWithEmbeds;
 
     const FIELD_TYPE = 'text';
 

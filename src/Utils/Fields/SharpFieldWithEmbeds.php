@@ -1,12 +1,12 @@
 <?php
 
-namespace Code16\Sharp\Form\Fields\Utils;
+namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Illuminate\Support\Collection;
 
-trait SharpFormFieldWithEmbeds
+trait SharpFieldWithEmbeds
 {
     protected array $embeds = [];
     protected ?SharpFormEditorUpload $uploadsConfig = null;

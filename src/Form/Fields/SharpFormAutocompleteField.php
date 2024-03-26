@@ -6,16 +6,16 @@ use Code16\Sharp\Form\Fields\Formatters\AutocompleteFormatter;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithOptions;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithTemplates;
-use Code16\Sharp\Show\Fields\SharpFieldWithDataLocalization;
-use Code16\Sharp\Utils\Fields\LocalizedSharpField;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 use Illuminate\Support\Collection;
 
-class SharpFormAutocompleteField extends SharpFormField implements LocalizedSharpField
+class SharpFormAutocompleteField extends SharpFormField implements IsSharpFieldWithLocalization
 {
     use SharpFormFieldWithPlaceholder;
     use SharpFormFieldWithTemplates;
     use SharpFormFieldWithOptions;
-    use SharpFieldWithDataLocalization;
+    use SharpFieldWithLocalization;
 
     const FIELD_TYPE = 'autocomplete';
 

@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\Utils\Fields;
 
-interface LocalizedSharpField
+interface IsSharpFieldWithLocalization
 {
     function setLocalized(bool $localized = true): self;
     function isLocalized(): bool;

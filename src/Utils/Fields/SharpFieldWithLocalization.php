@@ -1,8 +1,8 @@
 <?php
 
-namespace Code16\Sharp\Show\Fields;
+namespace Code16\Sharp\Utils\Fields;
 
-trait SharpFieldWithDataLocalization
+trait SharpFieldWithLocalization
 {
     protected ?bool $localized = null;
 
