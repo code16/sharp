@@ -66,7 +66,7 @@ class PostForm extends SharpForm
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}/embed')
                             ->setMaxFileSize(1)
-//                            ->setHasLegend()
+                            ->setHasLegend()
                     )
                     ->setMaxLength(1000)
                     ->setHeight(300, 0)

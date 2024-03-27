@@ -2,7 +2,6 @@
 
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
-use Code16\Sharp\Form\Fields\Formatters\UploadFormatter;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -620,17 +619,15 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
         $form->formatAndValidateRequestData([
             'name' => 'Pierre Curie',
             'bio' => [
-                'files' => [
+                'text' => '<p>my editor</p><x-sharp-file data-key="0"></x-sharp-file>',
+                'uploads' => [
                     [
-                        'name' => 'my-file.pdf',
-                        'uploaded' => true,
+                        'file' => [
+                            'name' => 'my-file.pdf',
+                            'uploaded' => true,
+                        ],
                     ],
                 ],
-                'text' => '<p>my editor</p><x-sharp-file file="'.e(json_encode([
-                    'name' => 'my-file.pdf',
-                    'path' => 'test/'.UploadFormatter::ID_PLACEHOLDER.'/my-file.pdf',
-                    'disk' => 'local',
-                ])).'"></x-sharp-file>',
             ],
         ])
     );
@@ -638,11 +635,12 @@ it('handles the {id} placeholder of Editor’s embedded uploads in create case',
     $pierre = Person::where('name', 'Pierre Curie')->first();
 
     expect($pierre->bio)
-        ->toBe('<p>my editor</p><x-sharp-file file="'.e(json_encode([
-            'name' => 'my-file.pdf',
-            'path' => 'test/1/my-file.pdf',
+        ->toBe(sprintf('<p>my editor</p><x-sharp-file file="%s"></x-sharp-file>', e(json_encode([
+            'file_name' => 'test/1/my-file.pdf',
+            'size' => 0,
+            'mime_type' => 'application/pdf',
             'disk' => 'local',
-        ])).'"></x-sharp-file>');
+        ]))));
 });
 
 it('handles the relation separator in a belongsTo case', function () {

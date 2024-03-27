@@ -8,7 +8,6 @@ use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Exceptions\DecoderException;
 
@@ -16,16 +15,13 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 {
     use UsesSharpUploadModel;
 
-    protected bool $withThumbnails;
-    protected int $thumbnailWidth;
-    protected int $thumbnailHeight;
     private bool $dynamicSharpUploadModel = false;
 
-    public function __construct(bool $withThumbnails = true, int $thumbnailWidth = 200, int $thumbnailHeight = 200)
-    {
-        $this->withThumbnails = $withThumbnails;
-        $this->thumbnailWidth = $thumbnailWidth;
-        $this->thumbnailHeight = $thumbnailHeight;
+    public function __construct(
+        protected bool $withThumbnails = true,
+        protected int $thumbnailWidth = 200,
+        protected int $thumbnailHeight = 200
+    ) {
     }
 
     public function dynamicInstance(): self
@@ -35,14 +31,6 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         return $this;
     }
 
-    /**
-     * Transform a model attribute to array (json-able).
-     *
-     * @param  $value
-     * @param  $instance
-     * @param  string  $attribute
-     * @return mixed
-     */
     public function apply($value, $instance = null, $attribute = null)
     {
         if ($this->dynamicSharpUploadModel) {
@@ -52,10 +40,15 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                 return null;
             }
 
+            if ($value['uploaded'] ?? false) {
+                return $value;
+            }
+
             $instance = (object) [
                 $attribute => static::getUploadModelClass()::make([
                     'file_name' => $value['file_name'] ?? $value['path'],
                     'filters' => $value['filters'] ?? null,
+                    'mime_type' => $value['mime_type'] ?? null,
                     'disk' => $value['disk'],
                     'size' => $value['size'] ?? null,
                 ]),
@@ -63,7 +56,6 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
 
             return [
                 ...$this->transformUpload($instance->$attribute),
-                ...($value['uploaded'] ?? false) ? ['uploaded' => true] : [],
                 ...($value['transformed'] ?? false) ? ['transformed' => true] : [],
             ];
         }
@@ -79,7 +71,7 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
             return $instance->$attribute
                 ->map(function ($upload) {
                     $array = $this->transformUpload($upload);
-                    $fileAttrs = ['name', 'path', 'disk', 'thumbnail', 'size', 'filters', 'exists'];
+                    $fileAttrs = ['name', 'path', 'disk', 'thumbnail', 'size', 'filters', 'mime_type'];
 
                     return array_merge(
                         ['file' => Arr::only($array, $fileAttrs) ?: null],
@@ -100,9 +92,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
                     'name' => basename($upload->file_name),
                     'path' => $upload->file_name,
                     'disk' => $upload->disk,
+                    'mime_type' => $upload->mime_type,
                     'thumbnail' => $this->getThumbnailUrl($upload),
                     'size' => $upload->size,
-                    'exists' => Storage::disk($upload->disk)->exists($upload->file_name),
                 ]
                 : [],
             ...$upload->custom_properties ?? [], // Including filters
@@ -113,6 +105,11 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
     private function getThumbnailUrl(SharpUploadModel $upload): ?string
     {
         if (! $this->withThumbnails) {
+            return null;
+        }
+        
+        // prevent generating thumbnail for non-image files
+        if ($upload->mime_type && !str($upload->mime_type)->startsWith('image/')) {
             return null;
         }
 

@@ -3,7 +3,7 @@
 use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Tests\Unit\Form\Fields\Fakes\FakeSharpEditorEmbed;
+use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
 
 it('sets only default values', function () {
     $formField = SharpFormEditorField::make('text');
@@ -140,35 +140,35 @@ it('throws an exception when setting an UPLOAD item in the toolbar without defin
 it('allows to allows embeds', function () {
     $formField = SharpFormEditorField::make('text')
         ->allowEmbeds([
-            FakeSharpEditorEmbed::class,
+            EditorFormatterTestEmbed::class,
         ])
         ->setToolbar([
             SharpFormEditorField::H1,
-            FakeSharpEditorEmbed::class,
+            EditorFormatterTestEmbed::class,
         ]);
 
     expect($formField->toArray()['embeds'])
-        ->toHaveKey(app(FakeSharpEditorEmbed::class)->key());
+        ->toHaveKey(app(EditorFormatterTestEmbed::class)->key());
 });
 
 it('allows to place an allowed embed in the toolbar', function () {
     $formField = SharpFormEditorField::make('text')
         ->allowEmbeds([
-            FakeSharpEditorEmbed::class,
+            EditorFormatterTestEmbed::class,
         ])
         ->setToolbar([
             SharpFormEditorField::H1,
-            FakeSharpEditorEmbed::class,
+            EditorFormatterTestEmbed::class,
         ]);
 
     expect($formField->toArray()['toolbar'][1])
-        ->toEqual('embed:'.app(FakeSharpEditorEmbed::class)->key());
+        ->toEqual('embed:'.app(EditorFormatterTestEmbed::class)->key());
 });
 
 it('throws an exception when setting an embed item in the toolbar without allowing it', function () {
     $formField = SharpFormEditorField::make('text')
         ->setToolbar([
-            FakeSharpEditorEmbed::class,
+            EditorFormatterTestEmbed::class,
         ]);
 
     $formField->toArray();

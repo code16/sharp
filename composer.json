@@ -18,8 +18,9 @@
         "inertiajs/inertia-laravel": "^1.0",
         "intervention/image": "^3.4",
         "intervention/image-laravel": "^1.2",
-        "laravel/framework": "^10.0|^11.0",
+        "laravel/framework": "^11.0",
         "league/commonmark": "^2.4",
+        "masterminds/html5": "^2.8",
         "spatie/image-optimizer": "^1.6",
         "tightenco/ziggy": "^1.8"
     },

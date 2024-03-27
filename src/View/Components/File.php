@@ -25,7 +25,7 @@ class File extends Component
     ) {
         if ($this->file = json_decode(htmlspecialchars_decode($file), true)) {
             $this->fileModel = static::getUploadModelClass()::make([
-                'file_name' => $this->file['path'],
+                'file_name' => $this->file['file_name'],
                 'disk' => $this->file['disk'] ?? null,
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);

@@ -2,129 +2,85 @@ import { api } from "@/api";
 import { route } from "@/utils/url";
 import { Form } from "@/form/Form";
 import { FormEditorFieldData, FormUploadFieldValueData } from "@/types";
-import { parseAttributeValue, serializeUploadAttributeValue } from "@/content/utils/attributes";
 import { Show } from "@/show/Show";
-import { ContentManager } from "@/content/ContentManager";
 import { FormEditorUploadData, MaybeLocalizedContent } from "@/content/types";
+import { reactive } from "vue";
 
 type ContentUpload = {
-    id: string,
-    resolved?: PromiseWithResolvers<true>
     removed?: boolean,
     value: FormEditorUploadData,
 }
 
-type State = 'empty' | 'file-chosen' | 'uploading' | 'uploaded' | 'error' | 'existing';
-
-export class ContentUploadManager<Root extends Form | Show> extends ContentManager {
-    contentUploads: { [id:string]: ContentUpload } = {};
+export class ContentUploadManager<Root extends Form | Show> {
     root: Form | Show;
-    onUploadsUpdated: Root extends Form ? (uploads: FormEditorUploadData[]) => any : null;
+    onUploadsUpdated: Root extends Form ? (uploads: { [id:string]: FormEditorUploadData }) => any : null;
     editorField: Root extends Form ? FormEditorFieldData : null;
-    uniqueId = 0
+
+    state = reactive<{ contentUploads: { [id:string]: ContentUpload } }>({
+        contentUploads: {}
+    });
 
     constructor(
         root: Root,
+        initialUploads: FormEditorFieldData['value']['uploads'] | undefined,
         config: {
             editorField: ContentUploadManager<Root>['editorField'],
             onUploadsUpdated: ContentUploadManager<Root>['onUploadsUpdated'],
         } = { editorField: null, onUploadsUpdated: null }
     ) {
-        super();
         this.root = root;
         this.editorField = config.editorField;
         this.onUploadsUpdated = config.onUploadsUpdated;
+        this.contentUploads = Object.fromEntries(
+            Object.entries(initialUploads ?? {}).map(([id, upload]) =>
+                [id, { value:upload }]
+            )
+        );
+    }
+
+    get contentUploads() {
+        return this.state.contentUploads;
+    }
+
+    set contentUploads(contentUploads: { [id:string]: ContentUpload }) {
+        this.state.contentUploads = contentUploads;
     }
 
     get serializedUploads() {
-        return Object.values(this.contentUploads)
-            .filter(contentUpload => !contentUpload.removed)
-            .map(contentUpload => contentUpload.value);
+        return Object.fromEntries(
+            Object.entries(this.contentUploads)
+                .filter(([id, contentUpload]) => !contentUpload.removed)
+                .map(([id, contentUpload]) => [id, contentUpload.value])
+        );
     }
 
-    newId() {
-        return `${this.uniqueId++}`;
+    getUpload(id: string): FormEditorUploadData {
+        return this.contentUploads[id].value;
     }
 
-    withUploadsUniqueId<Content extends MaybeLocalizedContent>(content: Content,): Content {
-        if(this.editorField && !this.editorField.uploads) {
-            return content;
-        }
-
-        return this.maybeLocalized(content, content => {
-            const contentDOM = new DOMParser().parseFromString(content, 'text/html');
-
-            contentDOM.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
-                element.setAttribute('data-unique-id', this.newId());
-            });
-
-            return contentDOM.body.innerHTML;
-        });
-    }
-
-    serializeContent(content: string): string {
-        if(this.editorField && !this.editorField.uploads) {
-            return content;
-        }
-
-        return this.maybeLocalized(content, content => {
-            const contentDOM = new DOMParser().parseFromString(content, 'text/html');
-
-            contentDOM.querySelectorAll('x-sharp-file,x-sharp-image').forEach(element => {
-                element.removeAttribute('data-unique-id');
-                element.setAttribute('file', serializeUploadAttributeValue(parseAttributeValue(element.getAttribute('file'))));
-            });
-
-            return contentDOM.body.innerHTML;
-        });
-    }
-
-    async resolveContentUploads<Content extends MaybeLocalizedContent>(content: Content) {
-        const { entityKey, instanceId } = this.root;
-        const contentDOM = new DOMParser().parseFromString(this.allContent(content), 'text/html');
-
-        this.contentUploads = {
-            ...this.contentUploads,
-            ...Object.fromEntries(
-                [...contentDOM.querySelectorAll('x-sharp-file,x-sharp-image')]
-                    .map(element => ({
-                        id: element.getAttribute('data-unique-id'),
-                        resolved: Promise.withResolvers<true>(),
-                        value: {
-                            file: parseAttributeValue(element.getAttribute('file')),
-                            legend: parseAttributeValue(element.getAttribute('legend')),
-                        }
-                    }))
-                    .map(contentUpload => [contentUpload.id, contentUpload])
-            ),
-        }
-
-        this.onUploadsUpdated?.(this.serializedUploads);
-
-        const contentUploads = Object.values(this.contentUploads);
-
-        if(!contentUploads.length) {
-            return;
-        }
-
-        const resolvedFiles = await api.post(route('code16.sharp.api.files.show', { entityKey, instanceId }), {
-            files: contentUploads.map(contentUpload => contentUpload.value.file).filter(Boolean)
-        })
-            .then(response => response.data.files) as FormUploadFieldValueData[]
-
-        resolvedFiles.forEach((resolvedFile, index) => {
-            this.contentUploads[contentUploads[index].id].value = {
-                ...this.contentUploads[contentUploads[index].id].value,
-                file: resolvedFile,
-            }
-            this.contentUploads[contentUploads[index].id].resolved.resolve(true);
-        });
-
-        this.onUploadsUpdated?.(this.serializedUploads);
+    newUpload(nativeFile?: File) {
+        const id = String(Object.keys(this.contentUploads).length);
+        this.contentUploads[id] = {
+            value: {
+                file: nativeFile
+                    ? { nativeFile } as FormUploadFieldValueData // auto upload with this file
+                    : null,
+                legend: null,
+            },
+        };
+        return id;
     }
 
     updateUpload(id: string, value: FormEditorUploadData) {
-        this.contentUploads[id].value = value;
+        this.contentUploads[id].value = { ...this.contentUploads[id].value, ...value };
+        this.onUploadsUpdated(this.serializedUploads);
+    }
+
+    restoreUpload(id: string) {
+        this.contentUploads[id] = {
+            ...this.contentUploads[id],
+            removed: false,
+        };
         this.onUploadsUpdated(this.serializedUploads);
     }
 
@@ -136,17 +92,7 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         this.onUploadsUpdated(this.serializedUploads);
     }
 
-    async getResolvedUpload(id: string): Promise<FormEditorUploadData | undefined> {
-        if(this.contentUploads[id]?.removed) {
-            this.contentUploads[id].removed = false;
-        }
-
-        await this.contentUploads[id]?.resolved?.promise;
-
-        return this.contentUploads[id]?.value;
-    }
-
-    async postForm(id: string, data: FormEditorUploadData): Promise<FormEditorUploadData> {
+    async postForm(id: string|null, data: FormEditorUploadData): Promise<{ id:string }> {
         const { entityKey, instanceId } = this.root;
 
         const responseData = await api.post(
@@ -157,20 +103,14 @@ export class ContentUploadManager<Root extends Form | Show> extends ContentManag
         )
             .then(response => response.data);
 
+        id ??= this.newUpload();
+
         this.contentUploads[id] = {
-            id,
-            value: {
-                ...responseData,
-                file: {
-                    ...responseData.file,
-                    thumbnail: data.file.thumbnail,
-                }
-            },
+            value: responseData,
         }
 
         this.onUploadsUpdated(this.serializedUploads);
 
-        return responseData;
+        return { id };
     }
-
 }

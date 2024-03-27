@@ -32,7 +32,7 @@ it('transforms a single upload', function () {
             'disk' => 'local',
             'size' => $upload->size,
             'thumbnail' => $upload->thumbnail(200, 200),
-            'exists' => true,
+            'mime_type' => 'image/png',
         ],
         $transformer->apply('', $picturable, 'picture'),
     );
@@ -68,6 +68,7 @@ it('transforms a single upload with transformations', function () {
             'path' => $upload->file_name,
             'disk' => 'local',
             'size' => $upload->size,
+            'mime_type' => 'image/png',
             'thumbnail' => $upload->thumbnail(200, 200),
             'filters' => [
                 'crop' => [
@@ -80,7 +81,6 @@ it('transforms a single upload with transformations', function () {
                     'angle' => 45,
                 ],
             ],
-            'exists' => true,
         ],
         $transformer->apply('', $picturable, 'picture'),
     );
@@ -113,7 +113,7 @@ it('transforms a list of upload', function () {
                     'disk' => 'local',
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
-                    'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload1->id,
             ], [
@@ -123,7 +123,7 @@ it('transforms a list of upload', function () {
                     'disk' => 'local',
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
-                    'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload2->id,
             ],
@@ -163,8 +163,8 @@ it('transforms a list of upload with transformations', function () {
 
     $transformer = new SharpUploadModelFormAttributeTransformer();
 
-    $this->assertEquals(
-        [
+    expect($transformer->apply('', $picturable, 'pictures'))
+        ->toEqual([
             [
                 'file' => [
                     'name' => basename($upload1->file_name),
@@ -173,7 +173,7 @@ it('transforms a list of upload with transformations', function () {
                     'size' => $upload1->size,
                     'thumbnail' => $upload1->thumbnail(200, 200),
                     'filters' => $filters,
-                    'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload1->id,
             ], [
@@ -183,13 +183,11 @@ it('transforms a list of upload with transformations', function () {
                     'disk' => 'local',
                     'size' => $upload2->size,
                     'thumbnail' => $upload2->thumbnail(200, 200),
-                    'exists' => true,
+                    'mime_type' => 'image/png',
                 ],
                 'id' => $upload2->id,
             ],
-        ],
-        $transformer->apply('', $picturable, 'pictures'),
-    );
+        ]);
 });
 
 describe('dynamicInstance', function () {
@@ -201,6 +199,7 @@ describe('dynamicInstance', function () {
             'size' => 120,
             'disk' => 'local',
             'filters' => [],
+            'mime_type' => 'image/png',
         ];
 
         $transformer = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance();
@@ -214,7 +213,7 @@ describe('dynamicInstance', function () {
                 'size' => 120,
                 'thumbnail' => (new SharpUploadModel($uploadData))->thumbnail(200, 200),
                 'filters' => [],
-                'exists' => true,
+                'mime_type' => 'image/png',
             ],
             $transformer->apply($uploadData, null, 'picture'),
         );

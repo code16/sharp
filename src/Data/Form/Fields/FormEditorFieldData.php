@@ -4,6 +4,7 @@ namespace Code16\Sharp\Data\Form\Fields;
 
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
+use Code16\Sharp\Data\Show\Fields\ShowTextFieldData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
@@ -11,12 +12,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormEditorFieldData extends Data
 {
-    #[Optional]
-    #[LiteralTypeScriptType('{
+    const VALUE_TS_TYPE = '{
         text: string | { [locale:string]: string|null } | null,
-        files?: Array<FormUploadFieldValueData>
-        embeds?: { [embedKey:string]:Array<FormData["data"]> }
-    }')]
+        uploads?: { [id:string]: { file:FormUploadFieldValueData, legend?: string|null } },
+        embeds?: { [embedKey:string]: { [id:string]: EmbedData["value"] } },
+    }';
+    
+    #[Optional]
+    #[LiteralTypeScriptType(FormEditorFieldData::VALUE_TS_TYPE)]
     public array|null $value;
 
     public function __construct(

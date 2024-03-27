@@ -13,6 +13,7 @@ final class FormUploadFieldValueData extends Data
         public string $name,
         public string $disk,
         public string $path,
+        public string $mime_type,
         public int $size,
         public ?string $thumbnail,
         public ?bool $uploaded,

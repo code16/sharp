@@ -12,11 +12,14 @@ Set the field label.
 
 ## Transformer
 
-Sharp expects an array with 3 keys:
+Sharp expects an array formatted like this:
 
 ```php
 [
     'name' => '', // Relative file path
+    'path' => '', // Full file path
+    'disk' => '', // Disk name
+    'mime_type' => '', // Mime type
     'thumbnail' => '', // 1000px w * 400px h thumbnail full url
     'size' => x, // Size in bytes
 ]

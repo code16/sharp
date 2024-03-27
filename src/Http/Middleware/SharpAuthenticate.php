@@ -14,7 +14,7 @@ class SharpAuthenticate extends BaseAuthenticate
         $this->authenticate($request, $guards);
 
         if ($checkHandler = config('sharp.auth.check_handler')) {
-            if(! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
+            if (! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
                 $this->unauthenticated($request, $guards);
             }
         }

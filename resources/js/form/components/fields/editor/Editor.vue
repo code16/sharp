@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { vSticky } from "@/directives/sticky";
     import { FormEditorFieldData } from "@/types";
-    import { provide, Ref, ref, watch } from "vue";
+    import { provide, ref, watch } from "vue";
     import { Editor } from "@tiptap/vue-3";
     import debounce from 'lodash/debounce';
     import { EditorContent } from '@tiptap/vue-3';
@@ -24,6 +24,8 @@
     import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
     import { Extension } from "@tiptap/core";
     import { withoutHistory } from "@/form/components/fields/editor/commands/withoutHistory";
+    import EditorUploadModal from "@/form/components/fields/editor/extensions/upload/EditorUploadModal.vue";
+    import EditorEmbedModal from "@/form/components/fields/editor/extensions/embed/EditorEmbedModal.vue";
 
     const emit = defineEmits(['input']);
     const props = defineProps<
@@ -33,33 +35,28 @@
     const header = ref<HTMLElement>();
     const form = useParentForm();
 
-    const uploadManager = new ContentUploadManager(form, {
+    const uploadManager = new ContentUploadManager(form, props.value?.uploads, {
         editorField: props.field,
         onUploadsUpdated(uploads) {
             emit('input', { ...props.value, uploads });
         }
     });
-    const embedManager = new ContentEmbedManager(form, props.field.embeds, {
+    const uploadModal = ref<InstanceType<typeof EditorUploadModal>>();
+
+    const embedManager = new ContentEmbedManager(form, props.field.embeds, props.value?.embeds, {
         onEmbedsUpdated(embeds) {
             emit('input', { ...props.value, embeds });
         }
     });
-    const initialFormattedContent = (
-        uploadManager.withUploadsUniqueId(
-            embedManager.withEmbedsUniqueId(
-                props.value?.text
-            )
-        )
-    );
-
-    uploadManager.resolveContentUploads(initialFormattedContent);
-    embedManager.resolveContentEmbeds(initialFormattedContent);
+    const embedModal = ref<InstanceType<typeof EditorEmbedModal>>();
 
     provide<ParentEditor>('editor', {
         props,
-        embedManager,
         uploadManager,
-    });
+        uploadModal,
+        embedManager,
+        embedModal,
+    } satisfies ParentEditor);
 
     const editor = useLocalizedEditor(
         props,
@@ -90,9 +87,9 @@
             ].filter(Boolean);
 
             const editor = new Editor({
-                content: props.field.localized && typeof initialFormattedContent === 'object'
-                    ? initialFormattedContent?.[locale] ?? ''
-                    : initialFormattedContent ?? '',
+                content: props.field.localized && typeof props.value?.text === 'object'
+                    ? props.value?.text?.[locale] ?? ''
+                    : props.value?.text ?? '',
                 editable: !field.readOnly,
                 enableInputRules: false,
                 enablePasteRules: [Iframe],
@@ -126,7 +123,7 @@
 
                 const value = new Serializable(
                     content,
-                    embedManager.serializeContent(uploadManager.serializeContent(content)),
+                    content,
                     content => {
                         if(props.field.localized && typeof (props.value.text ?? {}) === 'object') {
                             return {
@@ -176,11 +173,25 @@
                     <MenuBar
                         :editor="editor"
                         v-bind="$props"
+                        @upload="uploadModal.open()"
+                        @embed="embed => embedModal.open({ embed })"
                     />
                 </div>
             </template>
 
             <EditorContent :editor="editor" :key="locale ?? 'editor'" />
+
+            <EditorUploadModal
+                :field="field"
+                :editor="editor"
+                ref="uploadModal"
+            />
+
+            <EditorEmbedModal
+                :editor="editor"
+                :field="field"
+                ref="embedModal"
+            />
 
             <!-- Commenting this for now because it causes infinite loop on HMR -->
 

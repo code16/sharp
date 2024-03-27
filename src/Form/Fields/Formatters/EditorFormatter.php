@@ -4,14 +4,29 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Illuminate\Support\Collection;
 
-class EditorFormatter extends SharpFieldFormatter
+class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
+    use HasMaybeLocalizedValue;
+
+    /**
+     * @param  SharpFormEditorField  $field
+     */
     public function toFront(SharpFormField $field, $value)
     {
-        return [
+        return collect([
             'text' => $value,
-        ];
+        ])
+            ->pipeThrough([
+                fn (Collection $collection) => $collection->merge(
+                    $this->editorUploadsFormatter()->toFront($field, $collection['text'])
+                ),
+                fn (Collection $collection) => $collection->merge(
+                    $this->editorEmbedsFormatter()->toFront($field, $collection['text'])
+                ),
+            ])
+            ->toArray();
     }
 
     /**
@@ -19,42 +34,44 @@ class EditorFormatter extends SharpFieldFormatter
      */
     public function fromFront(SharpFormField $field, string $attribute, $value)
     {
-        $content = $value['text'] ?? '';
-
-        if ($value !== null && $field->isLocalized()) {
-            return collect(is_array($content) ? $content : [app()->getLocale() => $content])
-                ->union(collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]))
-                ->map(function (?string $localizedContent) {
-                    return $localizedContent
-                        ? preg_replace(
-                            '/\R/', "\n",
-                            $localizedContent,
-                        )
-                        : null;
-                })
-                ->toArray();
+        if ($value === null) {
+            return null;
         }
 
-        return preg_replace('/\R/u', "\n", $content);
+        $text = $this->maybeLocalized(
+            $field,
+            $value['text'] ?? null,
+            fn (string $content) => preg_replace('/\R/u', "\n", $content)
+        );
+        $text = $this->editorUploadsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
+        $text = $this->editorEmbedsFormatter()->fromFront($field, $attribute, [...$value, 'text' => $text]);
+
+        return $text;
     }
 
     /**
      * @param  SharpFormEditorField  $field
      */
-    public function afterUpdate(SharpFormField $field, $attribute, $value): string|array|null
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): array|string|null
     {
-        if ($value !== null && $field->isLocalized()) {
-            return collect($value)
-                ->map(function (?string $localizedContent) {
-                    return $localizedContent
-                        ? str($localizedContent)->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)->value()
-                        : null;
-                })
-                ->toArray();
-        }
+        $text = $value;
+        $text = $this->editorUploadsFormatter()->afterUpdate($field, $attribute, $text);
+        $text = $this->editorEmbedsFormatter()->afterUpdate($field, $attribute, $text);
 
-        return $value
-            ? str($value)->replace(UploadFormatter::ID_PLACEHOLDER, $this->instanceId)->value()
-            : null;
+        return $text;
+    }
+
+    protected function editorUploadsFormatter(): EditorUploadsFormatter
+    {
+        return (new EditorUploadsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? [])
+            ->setInstanceId($this->instanceId);
+    }
+
+    protected function editorEmbedsFormatter(): EditorEmbedsFormatter
+    {
+        return (new EditorEmbedsFormatter())
+            ->setDataLocalizations($this->dataLocalizations ?? [])
+            ->setInstanceId($this->instanceId);
     }
 }

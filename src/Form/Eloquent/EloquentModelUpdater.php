@@ -11,7 +11,7 @@ class EloquentModelUpdater
 {
     protected array $relationshipsConfiguration = [];
     protected array $relationships = [];
-    protected ?Closure $fillAfterUpdateWith = null;
+    protected ?Closure $fillAfterUpdateUsing = null;
 
     public function update(Model $instance, array $data): Model
     {
@@ -20,7 +20,7 @@ class EloquentModelUpdater
         // End of "normal" attributes.
         $instance->save();
 
-        if ($closure = $this->fillAfterUpdateWith) {
+        if ($closure = $this->fillAfterUpdateUsing) {
             $data = $closure($instance->getKey());
 
             // Second pass, to handle attributes that could depend on the instance id.
@@ -37,9 +37,9 @@ class EloquentModelUpdater
         return $instance;
     }
 
-    public function fillAfterUpdateWith(Closure $closure): self
+    public function fillAfterUpdateUsing(Closure $closure): self
     {
-        $this->fillAfterUpdateWith = $closure;
+        $this->fillAfterUpdateUsing = $closure;
 
         return $this;
     }

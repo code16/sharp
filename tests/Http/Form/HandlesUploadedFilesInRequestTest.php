@@ -10,7 +10,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\Sharp\PersonForm;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
@@ -21,13 +21,12 @@ beforeEach(function () {
         PersonEntity::class,
     );
 
+    $this->withoutExceptionHandling();
     Storage::fake('local');
-    Bus::fake();
+    Queue::fake();
 });
 
 it('dispatches HandlePostedFilesJob on update and on create if needed', function () {
-    $this->withoutExceptionHandling();
-
     fakeFormFor('person', new class extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -54,7 +53,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == '/image.jpg';
     });
@@ -65,6 +64,7 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
 
     $this
         ->post('/sharp/s-list/person/s-form/person', [
+            'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
             'file' => [
                 'name' => '/image-2.jpg',
                 'uploaded' => true,
@@ -73,15 +73,13 @@ it('dispatches HandlePostedFilesJob on update and on create if needed', function
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == '/image-2.jpg';
     });
 });
 
 it('dispatches HandlePostedFilesJob for editors on update and on create if needed', function () {
-    $this->withoutExceptionHandling();
-
     fakeFormFor('person', new class extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -104,6 +102,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
             'bio' => [
+                'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
                 'uploads' => [
                     [
                         'file' => [
@@ -118,7 +117,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == 'image.jpg';
     });
@@ -130,6 +129,7 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
     $this
         ->post('/sharp/s-list/person/s-form/person', [
             'bio' => [
+                'text' => '<x-sharp-image data-key="0"></x-sharp-image>',
                 'uploads' => [
                     [
                         'file' => [
@@ -144,15 +144,13 @@ it('dispatches HandlePostedFilesJob for editors on update and on create if neede
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == 'image-2.jpg';
     });
 });
 
 it('dispatches HandlePostedFilesJob for lists on update and on create if needed', function () {
-    $this->withoutExceptionHandling();
-
     fakeFormFor('person', new class extends PersonForm
     {
         public function buildFormFields(FieldsContainer $formFields): void
@@ -188,7 +186,7 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image.jpg'
             && $job->uploadedFileName == 'image.jpg';
     });
@@ -213,7 +211,7 @@ it('dispatches HandlePostedFilesJob for lists on update and on create if needed'
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
         return $job->filePath == 'data/test/image-2.jpg'
             && $job->uploadedFileName == 'image-2.jpg';
     });
@@ -246,18 +244,17 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
             'name' => 'Stephen Hawking',
             'file' => [
                 'name' => 'doc.pdf',
-                'file_name' => 'data/test/doc.pdf',
+                'path' => 'data/test/doc.pdf',
                 'disk' => 'local',
             ],
             'bio' => [
+                'text' => '<x-sharp-file data-key="0"></x-sharp-file>',
                 'uploads' => [
                     [
                         'file' => [
-                            [
-                                'name' => 'doc-2.pdf',
-                                'file_name' => 'data/test/doc-2.pdf',
-                                'disk' => 'local',
-                            ],
+                            'name' => 'doc-2.pdf',
+                            'path' => 'data/test/doc-2.pdf',
+                            'disk' => 'local',
                         ],
                     ],
                 ],
@@ -271,14 +268,14 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
             'name' => 'Marie Curie',
             'file' => [
                 'name' => 'doc.pdf',
-                'file_name' => 'data/test/doc.pdf',
+                'path' => 'data/test/doc.pdf',
                 'disk' => 'local',
             ],
             'bio' => [
                 'files' => [
                     [
                         'name' => 'doc-2.pdf',
-                        'file_name' => 'data/test/doc-2.pdf',
+                        'path' => 'data/test/doc-2.pdf',
                         'disk' => 'local',
                     ],
                 ],
@@ -287,7 +284,7 @@ it('does not dispatch HandlePostedFilesJob if not needed', function () {
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertNotDispatched(HandleUploadedFileJob::class);
+    Queue::assertNotPushed(HandleUploadedFileJob::class);
 });
 
 it('handles isTransformOriginal to transform the image on a newly uploaded file', function ($transformKeepOriginal) {
@@ -333,7 +330,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
         ->assertRedirect();
 
     if ($transformKeepOriginal) {
-        Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+        Queue::assertPushed(function (HandleUploadedFileJob $job) {
             return $job->filePath == 'data/test/image.jpg'
                 && $job->disk == 'local'
                 && $job->instanceId == 12
@@ -341,7 +338,7 @@ it('handles isTransformOriginal to transform the image on a newly uploaded file'
                 && $job->transformFilters == null;
         });
     } else {
-        Bus::assertDispatched(HandleUploadedFileJob::class, function ($job) {
+        Queue::assertPushed(function (HandleUploadedFileJob $job) {
             return $job->filePath == 'data/test/image.jpg'
                 && $job->disk == 'local'
                 && $job->instanceId == 12
@@ -377,8 +374,6 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
         ->image('image.jpg')
         ->storeAs('/data/test', 'image.jpg', ['disk' => 'local']);
 
-    $this->withoutExceptionHandling();
-
     $this
         ->post('/sharp/s-list/person/s-form/person/1', [
             'file' => [
@@ -395,12 +390,12 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
         ->assertSessionHasNoErrors()
         ->assertRedirect();
 
-    Bus::assertNotDispatched(HandleUploadedFileJob::class);
+    Queue::assertNotPushed(HandleUploadedFileJob::class);
 
     if ($transformKeepOriginal) {
-        Bus::assertNotDispatched(HandleTransformedFileJob::class);
+        Queue::assertNotPushed(HandleTransformedFileJob::class);
     } else {
-        Bus::assertDispatched(HandleTransformedFileJob::class, function ($job) {
+        Queue::assertPushed(function (HandleTransformedFileJob $job) {
             return $job->filePath == 'data/test/image.jpg'
                 && $job->disk == 'local'
                 && $job->transformFilters == ['rotate' => ['angle' => 90]];
@@ -410,3 +405,54 @@ it('handles isTransformOriginal to transform the image on an existing file', fun
     'transformKeepOriginal' => true,
     'not transformKeepOriginal' => false,
 ]);
+
+it('pushes jobs on right queue / connections', function () {
+    fakeFormFor('person', new class extends PersonForm
+    {
+        public function buildFormFields(FieldsContainer $formFields): void
+        {
+            $formFields->addField(
+                SharpFormUploadField::make('file')
+                    ->setStorageDisk('local')
+                    ->setStorageBasePath('data/test')
+            );
+        }
+    });
+
+    UploadedFile::fake()
+        ->image('image.jpg')
+        ->storeAs('/tmp', 'image.jpg', ['disk' => 'local']);
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'file' => [
+                'name' => '/image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
+        return $job->queue == 'default'
+            && $job->connection == 'sync';
+    });
+
+    config()->set('sharp.uploads.file_handling_queue_connection', 'redis');
+    config()->set('sharp.uploads.file_handling_queue', 'uploads');
+
+    $this
+        ->post('/sharp/s-list/person/s-form/person/2', [
+            'file' => [
+                'name' => '/image.jpg',
+                'uploaded' => true,
+            ],
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect();
+
+    Queue::assertPushed(function (HandleUploadedFileJob $job) {
+        return $job->queue == 'uploads'
+            && $job->connection == 'redis';
+    });
+});

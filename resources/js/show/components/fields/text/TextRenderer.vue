@@ -6,7 +6,8 @@
     import { ShowTextFieldData } from "@/types";
     import Embed from "@/show/components/fields/text/nodes/Embed.vue";
 
-    const props = defineProps<ShowFieldProps<ShowTextFieldData> & {
+    const props = defineProps<{
+        field: ShowTextFieldData,
         content: string,
     }>();
 
@@ -30,7 +31,14 @@
             'html-content': Html,
             ...Object.fromEntries(
                 Object.entries(props.field.embeds ?? {})
-                    .map(([embedKey, embed]) => [embed.tag, Embed])
+                    .map(([embedKey, embed]) => [
+                        embed.tag,
+                        {
+                            template: '<Embed :embed="embed" v-bind="$attrs"></Embed>',
+                            components: { Embed },
+                            data: () => ({ embed }),
+                        }
+                    ])
             ),
         },
     }));

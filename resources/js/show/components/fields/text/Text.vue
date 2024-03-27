@@ -16,27 +16,16 @@
     const expanded = ref(false);
     const show = useParentShow();
 
-    const embedManager = new ContentEmbedManager(show, props.field.embeds);
-    const uploadManager = new ContentUploadManager(show);
+    const embedManager = new ContentEmbedManager(show, props.field.embeds, props.value?.embeds);
+    const uploadManager = new ContentUploadManager(show, props.value?.uploads);
 
     provide('embedManager', embedManager);
     provide('uploadManager', uploadManager);
 
-    const formattedValue = ref(
-        embedManager.withEmbedsUniqueId(
-            uploadManager.withUploadsUniqueId(
-                props.value
-            )
-        )
-    );
-
-    embedManager.resolveContentEmbeds(formattedValue.value);
-    uploadManager.resolveContentUploads(formattedValue.value);
-
     const localizedValue = computed<string | null>(() => {
         return props.field.localized
-            ? formattedValue.value?.[props.locale]
-            : formattedValue.value as string;
+            ? props.value.text?.[props.locale]
+            : props.value?.text as string;
     });
 
     function stripTags(html) {
@@ -93,7 +82,6 @@
                 class="ShowTextField__content"
                 :content="currentContent"
                 :field="field"
-                :value="value"
             />
         </template>
         <template v-else>

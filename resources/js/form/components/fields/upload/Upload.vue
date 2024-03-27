@@ -7,7 +7,7 @@
     import FileInput from '@uppy/vue/lib/file-input';
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
-    import { computed, onUnmounted, ref, watch } from "vue";
+    import { computed, onMounted, onUnmounted, ref, watch } from "vue";
     import { getErrorMessage, handleErrorAlert } from "@/api";
     import { getFiltersFromCropData } from "./util/filters";
     import { Button } from "@/components/ui";
@@ -122,13 +122,14 @@
             emit('input', {
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
+                mime_type: file.type,
                 size: file.size,
             });
             emit('success', {
                 ...response.body,
                 thumbnail: transformedImg?.value ?? uppyFile.value.preview,
+                mime_type: file.type,
                 size: file.size,
-                nativeFile: file.data,
             });
             uppyFile.value = uppy.getFile(file.id);
             console.log('upload-success', JSON.parse(JSON.stringify(uppyFile.value)));
@@ -149,15 +150,6 @@
         .on('complete', () => {
             emit('uploading', false);
         });
-
-    if(props.value?.nativeFile) {
-        uppy.addFile({
-            name: props.value.nativeFile.name,
-            type: props.value.nativeFile.type,
-            data: props.value.nativeFile,
-        });
-        emit('input', null);
-    }
 
     const isDraggingOver = ref(false);
     const dropTarget = ref<HTMLElement>();
@@ -226,31 +218,15 @@
         onImageTransform(cropper);
     }
 
-    defineExpose({
-        browseFiles() {
-            return new Promise((resolve) => {
-                const input =  dropTarget.value.querySelector('input');
-                input.click();
-                input.addEventListener('change', () => resolve(true), { once: true });
-
-                if('oncancel' in input) {
-                    input.addEventListener('cancel', () => resolve(false), { once: true })
-                } else {
-                    window.addEventListener('focus', () => {
-                        setTimeout(() => {
-                            resolve(false);
-                        }, 300);
-                    }, { once: true });
-                }
-            });
-        },
-        upload(file: File) {
+    onMounted(() => {
+        if(props.value?.nativeFile && !props.value?.uploaded) {
             uppy.addFile({
-                name: file.name,
-                type: file.type,
-                data: file,
+                name: props.value.nativeFile.name,
+                type: props.value.nativeFile.type,
+                data: props.value.nativeFile,
             });
-        },
+            emit('input', null);
+        }
     });
 
     onUnmounted(() => {
@@ -261,7 +237,7 @@
 </script>
 
 <template>
-    <template v-if="value?.path || uppyFile">
+    <template v-if="value?.path || value?.uploaded || uppyFile">
         <div class="bg-white" :class="{ 'rounded border p-4': root }">
             <div class="flex">
                 <template v-if="transformedImg ?? value?.thumbnail  ?? uppyFile?.preview">
@@ -271,8 +247,8 @@
                         alt=""
                     >
                 </template>
-                <div>
-                    <div class="text-sm font-medium truncate text-gray-800">
+                <div class="flex-1 min-w-0">
+                    <div class="text-sm font-medium truncate text-gray-800 text-truncate">
                         {{ value?.name?.split('/').at(-1) ?? uppyFile?.name }}
                     </div>
                     <div class="flex gap-2 mt-2">
@@ -281,14 +257,14 @@
                                 {{ filesizeLabel(value?.size ?? uppyFile.size) }}
                             </div>
                         </template>
-                        <template v-if="value?.exists">
+                        <template v-if="value?.path">
                             <a class="text-sm text-primary-700 underline"
                                 :href="route('code16.sharp.download.show', {
-                                    entityKey: form.entityKey,
-                                    instanceId: form.instanceId,
-                                    disk: value.disk,
-                                    path: value.path,
-                                })"
+                                entityKey: form.entityKey,
+                                instanceId: form.instanceId,
+                                disk: value.disk,
+                                path: value.path,
+                            })"
                                 :download="value?.name?.split('/').at(-1)"
                             >
                                 {{ __('sharp::form.upload.download_link') }}

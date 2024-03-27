@@ -37,7 +37,7 @@ trait WithSharpFormEloquentUpdater
         // Call updater
         return app(EloquentModelUpdater::class)
             ->initRelationshipsConfiguration($this->getFormListFieldsConfiguration())
-            ->fillAfterUpdateWith(
+            ->fillAfterUpdateUsing(
                 fn ($instanceId) => $this->formatDataAfterUpdate($data, $instanceId)
             )
             ->update($instance, $data);

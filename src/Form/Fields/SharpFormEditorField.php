@@ -7,16 +7,18 @@ use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpFormEditorField extends SharpFormField
+class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLocalization, IsSharpFieldWithEmbeds
 {
     use SharpFormFieldWithPlaceholder;
-    use SharpFormFieldWithDataLocalization;
-    use SharpFormFieldWithEmbeds;
+    use SharpFieldWithLocalization;
+    use SharpFieldWithEmbeds;
     use SharpFormFieldWithMaxLength {
         setMaxLength as protected parentSetMaxLength;
     }

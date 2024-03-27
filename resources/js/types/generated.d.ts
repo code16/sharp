@@ -286,8 +286,10 @@ export type FormDynamicOptionsData = {
 export type FormEditorFieldData = {
   value?: {
     text: string | { [locale: string]: string | null } | null;
-    files?: Array<FormUploadFieldValueData>;
-    embeds?: { [embedKey: string]: Array<FormData["data"]> };
+    uploads?: {
+      [id: string]: { file: FormUploadFieldValueData; legend?: string | null };
+    };
+    embeds?: { [embedKey: string]: { [id: string]: EmbedData["value"] } };
   };
   key: string;
   type: "editor";
@@ -540,6 +542,7 @@ export type FormUploadFieldValueData = {
   name: string;
   disk: string;
   path: string;
+  mime_type: string;
   size: number;
   thumbnail: string | null;
   uploaded: boolean | null;
@@ -769,7 +772,13 @@ export type ShowPictureFieldData = {
   emptyVisible: boolean;
 };
 export type ShowTextFieldData = {
-  value?: string | { [key: string]: string };
+  value?: {
+    text: string | { [locale: string]: string | null } | null;
+    uploads?: {
+      [id: string]: { file: FormUploadFieldValueData; legend?: string | null };
+    };
+    embeds?: { [embedKey: string]: { [id: string]: EmbedData["value"] } };
+  };
   key: string;
   type: "text";
   emptyVisible: boolean;

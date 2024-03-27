@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Show\Fields;
 
 use Code16\Sharp\Exceptions\Show\SharpShowFieldValidationException;
+use Code16\Sharp\Show\Fields\Formatters\SharpShowFieldFormatter;
 use Illuminate\Support\Facades\Validator;
 
 abstract class SharpShowField
@@ -10,11 +11,13 @@ abstract class SharpShowField
     public string $key;
     protected string $type;
     protected bool $emptyVisible = false;
+    protected ?SharpShowFieldFormatter $formatter;
 
-    protected function __construct(string $key, string $type)
+    protected function __construct(string $key, string $type, ?SharpShowFieldFormatter $formatter = null)
     {
         $this->key = $key;
         $this->type = $type;
+        $this->formatter = $formatter ?: new SharpShowFieldFormatter();
     }
 
     public function setShowIfEmpty(bool $showIfEmpty = true): self
@@ -22,6 +25,11 @@ abstract class SharpShowField
         $this->emptyVisible = $showIfEmpty;
 
         return $this;
+    }
+
+    public function formatter(): SharpShowFieldFormatter
+    {
+        return $this->formatter;
     }
 
     protected function buildArray(array $childArray): array

@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Fields;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Show\Fields\SharpShowField;
+use Illuminate\Support\Collection;
 
 trait HandleFields
 {
@@ -20,13 +21,24 @@ trait HandleFields
     }
 
     /**
-     * Get the SharpFormField|SharpShowField array representation.
+     * @return Collection<string, SharpFormField>
      */
-    final public function fields(): array
+    final public function getBuiltFields(): Collection
     {
         $this->checkFormIsBuilt();
 
         return collect($this->fieldsContainer()->getFields())
+            ->mapWithKeys(fn (SharpFormField|SharpShowField $field) => [
+                $field->key => $field,
+            ]);
+    }
+
+    /**
+     * Get the SharpFormField|SharpShowField array representation.
+     */
+    final public function fields(): array
+    {
+        return $this->getBuiltFields()
             ->when($this->pageAlertHtmlField ?? null, fn ($collection) => $collection->push($this->pageAlertHtmlField))
             ->when($this->pageTitleField ?? null, fn ($collection) => $collection->push($this->pageTitleField))
             ->map(fn ($collection) => $collection->toArray())
@@ -46,18 +58,15 @@ trait HandleFields
 
     final public function findFieldByKey(string $key): SharpFormField|SharpShowField|null
     {
-        $this->checkFormIsBuilt();
-
-        $fields = collect($this->fieldsContainer()->getFields());
+        $fields = $this->getBuiltFields();
 
         if (str_contains($key, '.')) {
             [$key, $itemKey] = explode('.', $key);
-            $listField = $fields->where('key', $key)->first();
 
-            return $listField->findItemFormFieldByKey($itemKey);
+            return $fields[$key]->findItemFormFieldByKey($itemKey);
         }
 
-        return $fields->where('key', $key)->first();
+        return $fields[$key] ?? null;
     }
 
     /**

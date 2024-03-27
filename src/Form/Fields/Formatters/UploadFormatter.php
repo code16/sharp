@@ -3,14 +3,14 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Form\Fields\Utils\IsUploadField;
+use Code16\Sharp\Form\Fields\SharpFormUploadField;
 use Code16\Sharp\Utils\FileUtil;
+use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 use Illuminate\Support\Facades\Storage;
 
-class UploadFormatter extends SharpFieldFormatter
+class UploadFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
     private bool $alwaysReturnFullObject = false;
-    const ID_PLACEHOLDER = '__id_placeholder__';
 
     public function setAlwaysReturnFullObject(?bool $returnFullObject = true): self
     {
@@ -20,7 +20,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  IsUploadField  $field
+     * @param  SharpFormUploadField  $field
      */
     public function toFront(SharpFormField $field, $value)
     {
@@ -28,7 +28,7 @@ class UploadFormatter extends SharpFieldFormatter
     }
 
     /**
-     * @param  IsUploadField  $field
+     * @param  SharpFormUploadField  $field
      */
     public function fromFront(SharpFormField $field, string $attribute, $value): ?array
     {
@@ -39,10 +39,10 @@ class UploadFormatter extends SharpFieldFormatter
                 $value['name'],
             );
 
-            return [
+            return tap($this->maybeFullObject($value, [
                 'file_name' => sprintf(
                     '%s/%s',
-                    str($field->storageBasePath())->replace('{id}', $this->instanceId ?? self::ID_PLACEHOLDER),
+                    str($field->storageBasePath())->replace('{id}', $this->instanceId ?? '{id}'),
                     app(FileUtil::class)->findAvailableName(
                         $value['name'], $field->storageBasePath(), $field->storageDisk(),
                     )
@@ -55,38 +55,65 @@ class UploadFormatter extends SharpFieldFormatter
                 'filters' => $field->isImageTransformOriginal()
                     ? null
                     : $value['filters'] ?? null,
-                ...$this->alwaysReturnFullObject ? [
-                    'uploaded' => true,
-                ] : [],
-            ];
+            ]), function ($formatted) use ($field, $value) {
+                app(SharpUploadManager::class)->queueHandleUploadedFile(
+                    uploadedFileName: $value['name'],
+                    disk: $field->storageDisk(),
+                    filePath: $formatted['file_name'],
+                    shouldOptimizeImage: $field->isImageOptimize(),
+                    transformFilters: $field->isImageTransformOriginal()
+                        ? ($value['filters'] ?? null)
+                        : null,
+                );
+            });
         }
 
         if ($value['transformed'] ?? false) {
             // Transformation on an existing file
-            return $this->alwaysReturnFullObject
-                ? $value
-                : [
-                    'file_name' => $value['path'],
-                    'size' => $value['size'],
-                    'disk' => $value['disk'],
-                    'filters' => $value['filters'] ?? null,
-                ];
+            return tap($this->maybeFullObject($value, [
+                'file_name' => $value['path'],
+                'disk' => $value['disk'],
+                'size' => $value['size'],
+                'filters' => $value['filters'] ?? null,
+            ]), function ($formatted) use ($field) {
+                if ($field->isImageTransformOriginal()) {
+                    app(SharpUploadManager::class)->queueHandleTransformedFile(
+                        disk: $field->storageDisk(),
+                        filePath: $formatted['file_name'],
+                        transformFilters: $formatted['filters'],
+                    );
+                }
+            });
         }
 
         // No change was made
-        return $this->alwaysReturnFullObject
-            ? $value
-            : ($value === null ? null : []);
+        return $this->maybeFullObject($value, $value === null ? null : []);
     }
 
-    public function afterUpdate(SharpFormField $field, string $attribute, $value)
+    public function afterUpdate(SharpFormField $field, string $attribute, mixed $value): ?array
     {
         if ($value['file_name'] ?? null) {
             $value['file_name'] = str($value['file_name'])
-                ->replace(self::ID_PLACEHOLDER, $this->instanceId)
+                ->replace('{id}', $this->instanceId)
                 ->value();
         }
 
         return $value;
+    }
+
+    protected function maybeFullObject(?array $value, ?array $formatted): ?array
+    {
+        if ($this->alwaysReturnFullObject) {
+            return $value === null ? null :
+                 collect([
+                     'file_name' => $formatted['file_name'] ?? $value['path'],
+                     'size' => $formatted['size'] ?? $value['size'] ?? null,
+                     'mime_type' => $formatted['mime_type'] ?? $value['mime_type'] ?? null,
+                     'disk' => $formatted['disk'] ?? $value['disk'],
+                     'filters' => $formatted['filters'] ?? $value['filters'] ?? null,
+                 ])->whereNotNull()->toArray();
+        }
+
+        return $formatted;
     }
 }

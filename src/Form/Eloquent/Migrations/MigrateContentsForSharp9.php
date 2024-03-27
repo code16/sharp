@@ -2,14 +2,24 @@
 
 namespace Code16\Sharp\Form\Eloquent\Migrations;
 
+use Illuminate\Console\Concerns\InteractsWithIO;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\UnableToRetrieveMetadata;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 trait MigrateContentsForSharp9
 {
-    protected function updateContentOf(Builder $query, array $contentColumns, string $primaryKey = 'id'): self
+    use InteractsWithIO;
+
+    protected function updateContentOf(Builder $query, array $contentColumns, string $primaryKey = 'id', bool $fetchMissingDataFromFileSystem = true): self
     {
+        $this->input ??= new StringInput('');
+        $this->output ??= new OutputStyle($this->input, new ConsoleOutput());
+
         $rows = $query
             ->tap(function (Builder $query) use ($contentColumns) {
                 collect($contentColumns)->each(fn ($column) => $query
@@ -20,21 +30,24 @@ trait MigrateContentsForSharp9
             ->get();
 
         foreach ($rows as $row) {
+            $data = [];
+            foreach ($contentColumns as $column) {
+                $data[$column] = $this->updateContent(
+                    $row->{$column},
+                    $fetchMissingDataFromFileSystem,
+                    sprintf('%s[%s][%s]', $query->from, $row->{$primaryKey}, $column),
+                );
+            }
+
             DB::table($query->from)
                 ->where($primaryKey, $row->{$primaryKey})
-                ->update(
-                    Arr::mapWithKeys($contentColumns, function ($column) use ($row) {
-                        return [
-                            $column => $this->updateContent($row->{$column}),
-                        ];
-                    })
-                );
+                ->update($data);
         }
 
         return $this;
     }
 
-    protected function updateContent(?string $content): ?string
+    protected function updateContent(?string $content, bool $fetchMissingDataFromFileSystem = true, string $rowLocation = ''): ?string
     {
         if (is_null($content)) {
             return null;
@@ -42,7 +55,7 @@ trait MigrateContentsForSharp9
 
         $result = preg_replace_callback(
             '/<(x-sharp-file|x-sharp-image) ([^>]+)>/m',
-            function ($matches) {
+            function ($matches) use ($fetchMissingDataFromFileSystem, $rowLocation) {
                 $tag = $matches[1];
                 $attributes = $matches[2];
                 $name = preg_match('/name="([^"]+)"/', $attributes, $matchesName) ? $matchesName[1] : '';
@@ -66,15 +79,25 @@ trait MigrateContentsForSharp9
                     ];
                 }
 
+                if ($fetchMissingDataFromFileSystem) {
+                    try {
+                        $size = Storage::disk($disk)->size($path);
+                        $mime_type = Storage::disk($disk)->mimeType($path);
+                    } catch (UnableToRetrieveMetadata $e) {
+                        $this->warn($e->getMessage()."Found in $rowLocation");
+                    }
+                }
+
                 return sprintf(
                     '<%s file="%s">',
                     $tag,
                     e(json_encode(array_filter([
-                        'name' => $name,
+                        'file_name' => $path,
+                        'size' => $size ?? null,
+                        'mime_type' => $mime_type ?? null,
                         'disk' => $disk,
-                        'path' => $path,
-                        'filters' => $filters,
-                    ]))),
+                        'filters' => count($filters) ? $filters : null,
+                    ], fn ($value) => $value !== null))),
                 );
             },
             $content
