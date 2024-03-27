@@ -15,7 +15,7 @@ trait HandlesHtmlContent
 
         return (new HTML5())->loadHTML("<body>$html</body>");
     }
-    
+
     protected function toHtml(DOMDocument $domDocument): string
     {
         return (new HTML5())->saveHTML($this->getAllRootNodes($domDocument));
@@ -40,7 +40,7 @@ trait HandlesHtmlContent
             $element->appendChild($fragment);
         }
     }
-    
+
     protected function getAllRootNodes(DOMDocument $domDocument): \DOMNodeList
     {
         return $domDocument->getElementsByTagName('body')[0]->childNodes;

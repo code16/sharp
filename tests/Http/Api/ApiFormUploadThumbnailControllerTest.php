@@ -8,14 +8,14 @@ beforeEach(function () {
         'sharp.entities.person',
         PersonEntity::class,
     );
-    
+
     login();
 });
 
 it('returns thumbnail', function () {
     UploadedFile::fake()->image('test.jpg', 600, 600)
         ->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
-    
+
     $this->postJson(route('code16.sharp.api.form.upload.thumbnail.show', [
         'entityKey' => 'person',
         'instanceId' => '1',

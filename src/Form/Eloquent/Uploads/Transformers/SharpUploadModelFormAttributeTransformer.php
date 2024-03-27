@@ -107,9 +107,9 @@ class SharpUploadModelFormAttributeTransformer implements SharpAttributeTransfor
         if (! $this->withThumbnails) {
             return null;
         }
-        
+
         // prevent generating thumbnail for non-image files
-        if ($upload->mime_type && !str($upload->mime_type)->startsWith('image/')) {
+        if ($upload->mime_type && ! str($upload->mime_type)->startsWith('image/')) {
             return null;
         }
 
