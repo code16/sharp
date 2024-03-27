@@ -12,15 +12,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormEditorFieldData extends Data
 {
-    /**
-     * Same value that @see ShowTextFieldData
-     */
-    #[Optional]
-    #[LiteralTypeScriptType('{
+    const VALUE_TS_TYPE = '{
         text: string | { [locale:string]: string|null } | null,
         uploads?: { [id:string]: { file:FormUploadFieldValueData, legend?: string|null } },
         embeds?: { [embedKey:string]: { [id:string]: EmbedData["value"] } },
-    }')]
+    }';
+    
+    #[Optional]
+    #[LiteralTypeScriptType(FormEditorFieldData::VALUE_TS_TYPE)]
     public array|null $value;
 
     public function __construct(

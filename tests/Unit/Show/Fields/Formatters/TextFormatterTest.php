@@ -51,8 +51,8 @@ it('allows to format a text with uploads to front', function () {
 
     expect($formatter->toFront($field, $value))->toEqual([
         'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
-        'uploads' => [
-            [
+        'uploads' => (object) [
+            '0' => [
                 'file' => [
                     'name' => 'image.jpg',
                     'path' => 'data/Posts/1/image.jpg',
@@ -68,7 +68,7 @@ it('allows to format a text with uploads to front', function () {
                 ],
                 'legend' => 'Legendary',
             ],
-            [
+            '1' => [
                 'file' => [
                     'name' => 'doc.pdf',
                     'path' => 'data/Posts/1/doc.pdf',
@@ -98,9 +98,10 @@ it('allows to format embeds with uploads to front', function () {
             <x-embed data-key="0"></x-embed>
             HTML,
         'embeds' => [
-            (new EditorFormatterTestEmbed())->key() => [
-                [
+            (new EditorFormatterTestEmbed())->key() => (object) [
+                '0' => [
                     'slot' => 'My <em>contentful</em> content',
+                    'visual' => null,
                 ],
             ],
         ],

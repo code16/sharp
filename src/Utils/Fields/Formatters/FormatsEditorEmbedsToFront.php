@@ -49,7 +49,7 @@ trait FormatsEditorEmbedsToFront
                 }
             }
 
-            return $this->getHtml($domDocument);
+            return $this->toHtml($domDocument);
         });
 
         return [

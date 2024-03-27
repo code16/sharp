@@ -44,10 +44,10 @@ it('allows to format a text with uploads to front', function () {
     $field = SharpFormEditorField::make('md')
         ->allowUploads(SharpFormEditorUpload::make());
 
-    $image = UploadedFile::fake()->image('test.jpg', 600, 600);
-    $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
-    $file = UploadedFile::fake()->create('doc.pdf');
-    $file->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
+    UploadedFile::fake()->image('test.jpg', 600, 600)
+        ->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+    UploadedFile::fake()->create('doc.pdf')
+        ->storeAs('data/Posts/1', 'doc.pdf', ['disk' => 'local']);
 
     $value = sprintf('<x-sharp-image file="%s" legend="Legendary"></x-sharp-image><x-sharp-file file="%s"></x-sharp-file>',
         e(json_encode([
@@ -66,8 +66,8 @@ it('allows to format a text with uploads to front', function () {
 
     expect($formatter->toFront($field, $value))->toEqual([
         'text' => '<x-sharp-image data-key="0"></x-sharp-image><x-sharp-file data-key="1"></x-sharp-file>',
-        'uploads' => [
-            [
+        'uploads' => (object) [
+            '0' => [
                 'file' => [
                     'name' => 'image.jpg',
                     'path' => 'data/Posts/1/image.jpg',
@@ -174,18 +174,42 @@ it('allows to format embeds with uploads to front', function () {
     $formatter = (new EditorFormatter)->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
-
-    expect($formatter->toFront($field, <<<'HTML'
-        <x-embed>My <em>contentful</em> content</x-embed>
-        HTML
-    ))->toEqual([
+    
+    $image = UploadedFile::fake()->image('test.jpg', 600, 600);
+    $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
+    
+    $value = sprintf(<<<'HTML'
+        <x-embed visual="%s">My <em>contentful</em> content</x-embed>
+        HTML,
+        e(json_encode([
+            'file_name' => 'data/Posts/1/image.jpg',
+            'size' => 120,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+        ]))
+    );
+    
+    expect($formatter->toFront($field, $value))->toEqual([
         'text' => <<<'HTML'
             <x-embed data-key="0"></x-embed>
             HTML,
         'embeds' => [
-            (new EditorFormatterTestEmbed())->key() => [
-                [
+            (new EditorFormatterTestEmbed())->key() => (object)[
+                '0' => [
                     'slot' => 'My <em>contentful</em> content',
+                    'visual' => [
+                        'name' => 'image.jpg',
+                        'path' => 'data/Posts/1/image.jpg',
+                        'disk' => 'local',
+                        'thumbnail' => sprintf(
+                            '/storage/thumbnails/data/Posts/1/200-200_q-90/image.jpg?%s',
+                            Storage::disk('public')->lastModified('/thumbnails/data/Posts/1/200-200_q-90/image.jpg')
+                        ),
+                        'size' => 120,
+                        'mime_type' => 'image/jpeg',
+                        'filters' => null,
+                        'id' => null,
+                    ]
                 ],
             ],
         ],
@@ -203,12 +227,29 @@ it('allows to format embeds with uploads from front', function () {
             HTML,
         'embeds' => [
             (new EditorFormatterTestEmbed())->key() => [
-                [
+                '0' => [
                     'slot' => 'My <em>contentful</em> content',
+                    'visual' => [
+                        'name' => 'image.jpg',
+                        'path' => 'data/Posts/1/image.jpg',
+                        'disk' => 'local',
+                        'thumbnail' => 'thumbnail.jpg',
+                        'size' => 120,
+                        'mime_type' => 'image/jpeg',
+                        'filters' => null,
+                        'id' => null,
+                    ]
                 ],
             ],
         ],
-    ]))->toEqual('<x-embed>My <em>contentful</em> content</x-embed>');
+    ]))->toEqual(sprintf('<x-embed visual="%s">My <em>contentful</em> content</x-embed>',
+        e(json_encode([
+            'file_name' => 'data/Posts/1/image.jpg',
+            'size' => 120,
+            'mime_type' => 'image/jpeg',
+            'disk' => 'local',
+        ]))
+    ));
 });
 
 it('allows to format a unicode text value from front', function () {

@@ -2,7 +2,7 @@
     import { ref } from "vue";
     import { Form } from "@/form/Form";
     import EmbedFormModal from "@/form/components/fields/editor/extensions/embed/EmbedFormModal.vue";
-    import { EmbedData, FormData, FormEditorFieldData } from "@/types";
+    import { EmbedData, FormEditorFieldData } from "@/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import { Editor } from "@tiptap/vue-3";
     import { useParentForm } from "@/form/useParentForm";
@@ -16,7 +16,7 @@
     const embedManager = useParentEditor().embedManager;
 
     async function postForm(data: EmbedData['value']) {
-        const id = await embedManager.postForm(
+        const { id } = await embedManager.postForm(
             currentModalEmbed.value.id,
             currentModalEmbed.value.embed,
             data
@@ -29,18 +29,12 @@
         currentModalEmbed.value = null;
     }
 
-    function open({ id, embed }: { id?: string, embed:EmbedData }) {
+    async function open({ id, embed }: { id?: string, embed:EmbedData }) {
+        const embedForm = await embedManager.postResolveForm(id, embed);
         currentModalEmbed.value = {
             id,
             embed,
-            form: new Form({
-                    fields: props.field.uploads.fields,
-                    layout: props.field.uploads.layout,
-                    data: id ? embedManager.getEmbed(id, embed) : {},
-                } as FormData,
-                parentForm.entityKey,
-                parentForm.instanceId,
-            ),
+            form: new Form(embedForm, parentForm.entityKey, parentForm.instanceId),
         }
     }
 

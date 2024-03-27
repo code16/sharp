@@ -74,7 +74,7 @@ export class ContentEmbedManager<Root extends Form | Show> {
         return this.contentEmbeds[embed.key][id].value;
     }
 
-    newEmbed(embed: EmbedData) {
+    newEmbed(embed: EmbedData): string {
         const id = String(Object.keys(this.contentEmbeds[embed.key] ?? {}).length);
         this.contentEmbeds[embed.key] ??= {};
         this.contentEmbeds[embed.key][id] = {
@@ -100,7 +100,20 @@ export class ContentEmbedManager<Root extends Form | Show> {
         this.onEmbedsUpdated(this.serializedEmbeds);
     }
 
-    async postForm(id: string, embed: EmbedData, data: EmbedData['value']): Promise<string> {
+    postResolveForm(id: string, embed: EmbedData): Promise<FormData> {
+        const { entityKey, instanceId } = this.root;
+
+        return api
+            .post(
+                instanceId
+                    ? route('code16.sharp.api.embed.instance.form.show', { embedKey: embed.key, entityKey, instanceId })
+                    : route('code16.sharp.api.embed.form.show', { embedKey: embed.key, entityKey }),
+                { ...this.contentEmbeds[embed.key]?.[id]?.value }
+            )
+            .then(response => response.data);
+    }
+
+    async postForm(id: string, embed: EmbedData, data: EmbedData['value']): Promise<{ id:string }> {
         const { entityKey, instanceId } = this.root;
         const responseData = await api
             .post(
@@ -120,6 +133,8 @@ export class ContentEmbedManager<Root extends Form | Show> {
 
         this.onEmbedsUpdated(this.serializedEmbeds);
 
-        return responseData;
+        return {
+            id
+        };
     }
 }

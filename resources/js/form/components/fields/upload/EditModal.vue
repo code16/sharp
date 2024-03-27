@@ -35,22 +35,17 @@
         if(originalImg.value) {
             return;
         }
-        const files = await api.post(route('code16.sharp.api.files.show', {
+        const data = await api.post(route('code16.sharp.api.form.upload.thumbnail.show', {
             entityKey: form.entityKey,
             instanceId: form.instanceId,
-        }), {
-            files: [
-                {
-                    path: props.value.path,
-                    disk: props.value.disk,
-                }
-            ],
-            thumbnail_width: 1200,
-            thumbnail_height: 1000,
-        })
-            .then(response => response.data.files);
+            path: props.value.path,
+            disk: props.value.disk,
+            width: 1200,
+            height: 1000,
+        }))
+            .then(response => response.data) as { thumbnail: string|null };
 
-        originalImg.value = files[0]?.thumbnail;
+        originalImg.value = data.thumbnail;
 
         if(!originalImg.value) {
             return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');

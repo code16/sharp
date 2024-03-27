@@ -79,7 +79,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                     }
                 }
 
-                return $this->getHtml($domDocument);
+                return $this->toHtml($domDocument);
             }
         );
     }
@@ -123,7 +123,7 @@ class EditorEmbedsFormatter extends SharpFieldFormatter implements FormatsAfterU
                     }
                 }
 
-                return $this->getHtml($domDocument);
+                return $this->toHtml($domDocument);
             }
         );
     }

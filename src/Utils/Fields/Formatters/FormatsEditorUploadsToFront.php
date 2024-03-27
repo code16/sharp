@@ -19,7 +19,10 @@ trait FormatsEditorUploadsToFront
 
             foreach ($this->getUploadElements($domDocument) as $element) {
                 $file = json_decode($element->getAttribute('file'), true);
-                $file = (new SharpUploadModelFormAttributeTransformer())->dynamicInstance()->apply($file);
+                $file = (new SharpUploadModelFormAttributeTransformer(
+                    withThumbnails: $element->tagName === 'x-sharp-image'
+                ))->dynamicInstance()->apply($file);
+                
                 $uploads[] = [
                     'file' => $file,
                     'legend' => $element->hasAttribute('legend')
@@ -31,7 +34,7 @@ trait FormatsEditorUploadsToFront
                 $element->removeAttribute('legend');
             }
 
-            return $this->getHtml($domDocument);
+            return $this->toHtml($domDocument);
         });
 
         return [

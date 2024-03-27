@@ -16,7 +16,7 @@
     const expanded = ref(false);
     const show = useParentShow();
 
-    const embedManager = new ContentEmbedManager(show, props.field.embeds);
+    const embedManager = new ContentEmbedManager(show, props.field.embeds, props.value?.embeds);
     const uploadManager = new ContentUploadManager(show, props.value?.uploads);
 
     provide('embedManager', embedManager);

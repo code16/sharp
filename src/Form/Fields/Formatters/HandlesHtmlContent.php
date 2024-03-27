@@ -15,15 +15,10 @@ trait HandlesHtmlContent
 
         return (new HTML5())->loadHTML("<body>$html</body>");
     }
-
-    protected function getHtml(DOMDocument $domDocument): string
+    
+    protected function toHtml(DOMDocument $domDocument): string
     {
         return (new HTML5())->saveHTML($this->getAllRootNodes($domDocument));
-    }
-
-    protected function getAllRootNodes(DOMDocument $domDocument): \DOMNodeList
-    {
-        return $domDocument->getElementsByTagName('body')[0]->childNodes;
     }
 
     protected function getInnerHtml(DOMElement $element): string
@@ -44,6 +39,11 @@ trait HandlesHtmlContent
         if ($fragment->hasChildNodes()) {
             $element->appendChild($fragment);
         }
+    }
+    
+    protected function getAllRootNodes(DOMDocument $domDocument): \DOMNodeList
+    {
+        return $domDocument->getElementsByTagName('body')[0]->childNodes;
     }
 
     /**

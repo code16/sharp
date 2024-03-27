@@ -20,7 +20,7 @@
     const uploadManager = useParentEditor().uploadManager;
 
     async function postForm(data: FormEditorUploadData) {
-        const id = await uploadManager.postForm(currentModalUpload.value.id, data);
+        const { id } = await uploadManager.postForm(currentModalUpload.value.id, data);
 
         if(!currentModalUpload.value.id) {
             props.editor.commands.insertUpload({ id, type: data.file.mime_type });

@@ -54,7 +54,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                     $element->removeAttribute('data-key');
                 }
 
-                return $this->getHtml($domDocument);
+                return $this->toHtml($domDocument);
             }
         );
     }
@@ -85,7 +85,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
                     $element->setAttribute('file', json_encode($file));
                 }
 
-                return $this->getHtml($domDocument);
+                return $this->toHtml($domDocument);
             }
         );
     }

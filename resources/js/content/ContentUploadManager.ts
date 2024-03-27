@@ -92,7 +92,7 @@ export class ContentUploadManager<Root extends Form | Show> {
         this.onUploadsUpdated(this.serializedUploads);
     }
 
-    async postForm(id: string|null, data: FormEditorUploadData): Promise<string> {
+    async postForm(id: string|null, data: FormEditorUploadData): Promise<{ id:string }> {
         const { entityKey, instanceId } = this.root;
 
         const responseData = await api.post(
@@ -111,6 +111,6 @@ export class ContentUploadManager<Root extends Form | Show> {
 
         this.onUploadsUpdated(this.serializedUploads);
 
-        return id;
+        return { id };
     }
 }

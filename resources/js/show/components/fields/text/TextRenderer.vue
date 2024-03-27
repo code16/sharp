@@ -35,6 +35,7 @@
                         embed.tag,
                         {
                             template: '<Embed :embed="embed" v-bind="$attrs"></Embed>',
+                            components: { Embed },
                             data: () => ({ embed }),
                         }
                     ])
