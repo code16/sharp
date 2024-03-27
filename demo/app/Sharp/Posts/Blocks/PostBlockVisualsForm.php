@@ -32,7 +32,6 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
                 ->allowBulkUploadForField('file')
                 ->addItemField(
                     SharpFormUploadField::make('file')
-                        ->setFileFilterImages()
                         ->setMaxFileSize(1)
                         ->setStorageDisk('local')
                         ->setStorageBasePath(function () {
@@ -52,9 +51,9 @@ class PostBlockVisualsForm extends AbstractPostBlockForm
     protected function addAdditionalFieldsToLayout(FormLayoutColumn $column): void
     {
         $column
-            ->withSingleField('files', function (FormLayoutColumn $item) {
-                $item->withSingleField('file')
-                    ->withSingleField('legend');
+            ->withListField('files', function (FormLayoutColumn $item) {
+                $item->withField('file')
+                    ->withField('legend');
             });
     }
 

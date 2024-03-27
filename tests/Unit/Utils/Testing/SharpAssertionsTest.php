@@ -1,289 +1,261 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Utils\Testing;
-
-use Code16\Sharp\Tests\SharpTestCase;
 use Code16\Sharp\Utils\Testing\SharpAssertions;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class SharpAssertionsTest extends SharpTestCase
-{
-    use SharpAssertions;
+uses(SharpAssertions::class);
 
-    /** @test */
-    public function we_can_assert_has_authorization()
+it('allows to assert_has_authorization', function () {
+    $this->initSharpAssertions();
+
+    $response = TestResponse::fromBaseResponse(
+        new JsonResponse([
+            'authorizations' => [
+                'create' => true,
+                'update' => false,
+            ],
+        ]),
+    );
+
+    $response->assertSharpHasAuthorization('create');
+    $response->assertSharpHasNotAuthorization('update');
+})->todo();
+
+it('allows to test getSharpForm', function () {
+    $fake = new class('a') extends Orchestra\Testbench\TestCase
     {
-        $this->initSharpAssertions();
+        use SharpAssertions;
 
-        $response = TestResponse::fromBaseResponse(
-            new JsonResponse([
-                'authorizations' => [
-                    'create' => true,
-                    'update' => false,
-                ],
-            ]),
-        );
-
-        $response->assertSharpHasAuthorization('create');
-        $response->assertSharpHasNotAuthorization('update');
-    }
-
-    /** @test */
-    public function we_can_test_getSharpForm()
-    {
-        $fake = new class('test') extends SharpTestCase
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->getSharpForm('leaves', 6);
 
-        $response = $fake->getSharpForm('leaves', 6);
+    $this->assertEquals(
+        route('code16.sharp.api.form.edit', ['leaves', 6]),
+        $response->uri,
+    );
+})->todo();
 
-        $this->assertEquals(
-            route('code16.sharp.api.form.edit', ['leaves', 6]),
-            $response->uri,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_updateSharpForm()
+it('allows to test_updateSharpForm', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
+            $this->postedData = get_object_vars(json_decode($content));
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = get_object_vars(json_decode($content));
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->updateSharpForm('leaves', 6, ['attr' => 'some_value']);
 
-        $response = $fake->updateSharpForm('leaves', 6, ['attr' => 'some_value']);
+    $this->assertEquals(
+        route('code16.sharp.api.form.update', ['leaves', 6]),
+        $response->uri,
+    );
 
-        $this->assertEquals(
-            route('code16.sharp.api.form.update', ['leaves', 6]),
-            $response->uri,
-        );
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+})->todo();
 
-        $this->assertEquals(
-            ['attr' => 'some_value'],
-            $response->postedData,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_storeSharpForm()
+it('allows to test_storeSharpForm', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
+            $this->postedData = get_object_vars(json_decode($content));
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = get_object_vars(json_decode($content));
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->storeSharpForm('leaves', ['attr' => 'some_value']);
 
-        $response = $fake->storeSharpForm('leaves', ['attr' => 'some_value']);
+    $this->assertEquals(
+        route('code16.sharp.api.form.store', ['leaves']),
+        $response->uri,
+    );
 
-        $this->assertEquals(
-            route('code16.sharp.api.form.store', ['leaves']),
-            $response->uri,
-        );
+    $this->assertEquals(
+        ['attr' => 'some_value'],
+        $response->postedData,
+    );
+})->todo();
 
-        $this->assertEquals(
-            ['attr' => 'some_value'],
-            $response->postedData,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_deleteSharpEntityList()
+it('allows to test_deleteSharpEntityList', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->deleteSharpEntityList('leaves', 6);
 
-        $response = $fake->deleteSharpEntityList('leaves', 6);
+    $this->assertEquals(
+        route('code16.sharp.api.list.delete', ['leaves', 6]),
+        $response->uri,
+    );
+})->todo();
 
-        $this->assertEquals(
-            route('code16.sharp.api.list.delete', ['leaves', 6]),
-            $response->uri,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_deleteSharpShow()
+it('allows to test_deleteSharpShow', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->deleteSharpShow('leaves', 6);
 
-        $response = $fake->deleteSharpShow('leaves', 6);
+    $this->assertEquals(
+        route('code16.sharp.api.show.delete', ['leaves', 6]),
+        $response->uri,
+    );
+})->todo();
 
-        $this->assertEquals(
-            route('code16.sharp.api.show.delete', ['leaves', 6]),
-            $response->uri,
-        );
-    }
-
-    /** @test */
-    public function we_can_test_callSharpInstanceCommandFromList()
+it('allows to test_callSharpInstanceCommandFromList', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
+            $this->postedData = json_decode($content);
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = json_decode($content);
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value']);
 
-        $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value']);
+    $this->assertEquals(
+        route('code16.sharp.api.list.command.instance', [
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+            'commandKey' => 'command',
+        ]),
+        $response->uri,
+    );
 
-        $this->assertEquals(
-            route('code16.sharp.api.list.command.instance', [
-                'entityKey' => 'leaves',
-                'instanceId' => 6,
-                'commandKey' => 'command',
-            ]),
-            $response->uri,
-        );
+    $this->assertEquals('some_value', $response->postedData->data->attr);
+})->todo();
 
-        $this->assertEquals('some_value', $response->postedData->data->attr);
-    }
-
-    /** @test */
-    public function we_can_test_callSharpInstanceCommandFromShow()
+it('allows to test_callSharpInstanceCommandFromShow', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
+            $this->postedData = json_decode($content);
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = json_decode($content);
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->callSharpInstanceCommandFromShow('leaves', 6, 'command', ['attr' => 'some_value']);
 
-        $response = $fake->callSharpInstanceCommandFromShow('leaves', 6, 'command', ['attr' => 'some_value']);
+    $this->assertEquals(
+        route('code16.sharp.api.show.command.instance', [
+            'entityKey' => 'leaves',
+            'instanceId' => 6,
+            'commandKey' => 'command',
+        ]),
+        $response->uri,
+    );
 
-        $this->assertEquals(
-            route('code16.sharp.api.show.command.instance', [
-                'entityKey' => 'leaves',
-                'instanceId' => 6,
-                'commandKey' => 'command',
-            ]),
-            $response->uri,
-        );
+    $this->assertEquals('some_value', $response->postedData->data->attr);
+})->todo();
 
-        $this->assertEquals('some_value', $response->postedData->data->attr);
-    }
-
-    /** @test */
-    public function we_can_test_callSharpInstanceCommandFromList_with_a_wizard_step()
+it('allows to test_callSharpInstanceCommandFromList_with_a_wizard_step', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->uri = $uri;
+            $this->postedData = json_decode($content);
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->uri = $uri;
-                $this->postedData = json_decode($content);
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
 
-        $response = $fake->callSharpInstanceCommandFromList('leaves', 6, 'command', ['attr' => 'some_value'], 'my-step:123');
+    $this->assertEquals('my-step:123', $response->postedData->command_step);
+})->todo();
 
-        $this->assertEquals('my-step:123', $response->postedData->command_step);
-    }
-
-    /** @test */
-    public function we_can_define_a_current_breadcrumb()
+it('allows to define_a_current_breadcrumb', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            $this->referer = $this->defaultHeaders['referer'];
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                $this->referer = $this->defaultHeaders['referer'];
+            return $this;
+        }
+    };
 
-                return $this;
-            }
-        };
+    $response = $fake
+        ->withSharpCurrentBreadcrumb([
+            ['list', 'trees'],
+            ['show', 'trees', 2],
+            ['show', 'leaves', 6],
+        ])
+        ->getSharpForm('leaves', 6);
 
-        $response = $fake
-            ->withSharpCurrentBreadcrumb([
-                ['list', 'trees'],
-                ['show', 'trees', 2],
-                ['show', 'leaves', 6],
-            ])
-            ->getSharpForm('leaves', 6);
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6',
+        $response->referer,
+    );
+})->todo();
 
-        $this->assertEquals(
-            'http://localhost/sharp/s-list/trees/s-show/trees/2/s-show/leaves/6',
-            $response->referer,
-        );
-    }
-
-    /** @test */
-    public function when_no_current_breadcrumb_is_defined_a_default_one_is_set()
+it('when_no_current_breadcrumb_is_defined_a_default_one_is_set', function () {
+    $fake = new class extends Orchestra\Testbench\TestCase
     {
-        $fake = new class('test') extends SharpTestCase
+        use SharpAssertions;
+
+        public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         {
-            use SharpAssertions;
+            return $this;
+        }
+    };
 
-            public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-            {
-                return $this;
-            }
-        };
+    $response = $fake->getSharpForm('trees', 6);
 
-        $response = $fake->getSharpForm('trees', 6);
-
-        $this->assertEquals(
-            'http://localhost/sharp/s-list/trees/s-form/trees/6',
-            $response->defaultHeaders['referer'],
-        );
-    }
-}
+    $this->assertEquals(
+        'http://localhost/sharp/s-list/trees/s-form/trees/6',
+        $response->defaultHeaders['referer'],
+    );
+})->todo();

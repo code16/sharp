@@ -2,6 +2,8 @@
 
 namespace App\Sharp\TestForm;
 
+use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
@@ -24,8 +26,6 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 class TestForm extends SharpSingleForm
 {
-    protected ?string $formValidatorClass = TestValidator::class;
-
     public function buildFormFields(FieldsContainer $formFields): void
     {
         $formFields
@@ -159,12 +159,14 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::CODE_BLOCK,
                         SharpFormEditorField::SUP,
                     ])
-//                    ->hideToolbar()
-//                    ->setWithoutParagraphs()
-                    ->setCropRatio('1:1')
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
                     ->setHeight(350)
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data'),
             )
             ->addField(
                 SharpFormEditorField::make('wysiwyg')
@@ -184,6 +186,13 @@ class TestForm extends SharpSingleForm
                         SharpFormEditorField::SEPARATOR,
                         SharpFormEditorField::CODE_BLOCK,
                     ])
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setImageCropRatio('1:1')
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data')
+                    )
 //                    ->hideToolbar()
 //                    ->setWithoutParagraphs()
                     ->setHeight(350, 0),
@@ -233,8 +242,8 @@ class TestForm extends SharpSingleForm
             ->addField(
                 SharpFormUploadField::make('upload')
                     ->setLabel('Upload')
-                    ->setFileFilterImages()
-                    ->setCropRatio('1:1')
+                    ->setMaxFileSize(5)
+                    ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
             );
@@ -246,60 +255,60 @@ class TestForm extends SharpSingleForm
             ->addTab('Simple', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('text')
+                        $column->withField('text')
                             ->withFields('datetime')
                             ->withFields('date|6', 'time|6')
-                            ->withSingleField('check');
+                            ->withField('check');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('number')
-                            ->withSingleField('html');
+                        $column->withField('number')
+                            ->withField('html');
                     });
             })
             ->addTab('Textarea', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('markdown')
-                            ->withSingleField('textarea');
+                        $column->withField('markdown')
+                            ->withField('textarea');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('wysiwyg');
+                        $column->withField('wysiwyg');
                     });
             })
             ->addTab('Select', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('autocomplete_local')
-                            ->withSingleField('autocomplete_remote')
-                            ->withSingleField('select_dropdown');
+                        $column->withField('autocomplete_local')
+                            ->withField('autocomplete_remote')
+                            ->withField('select_dropdown');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('select_list')
-                            ->withSingleField('select_list_multiple')
-                            ->withSingleField('tags');
+                        $column->withField('select_list')
+                            ->withField('select_list_multiple')
+                            ->withField('tags');
                     });
             })
             ->addTab('List', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('autocomplete_list', function (FormLayoutColumn $listItem) {
-                            $listItem->withSingleField('item');
+                        $column->withListField('autocomplete_list', function (FormLayoutColumn $listItem) {
+                            $listItem->withField('item');
                         });
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('list', function (FormLayoutColumn $listItem) {
+                        $column->withListField('list', function (FormLayoutColumn $listItem) {
                             $listItem->withFields('date|5', 'check|7')
-                                ->withSingleField('markdown2');
+                                ->withField('markdown2');
                         });
                     });
             })
             ->addTab('Special', function (FormLayoutTab $tab) {
                 $tab
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('upload');
+                        $column->withField('upload');
                     })
                     ->addColumn(6, function (FormLayoutColumn $column) {
-                        $column->withSingleField('geolocation');
+                        $column->withField('geolocation');
                     });
             });
     }
@@ -307,30 +316,29 @@ class TestForm extends SharpSingleForm
     protected function findSingle()
     {
         if (! $rawData = (array) session()->get('sharp_test_form')) {
-            $faker = \Faker\Factory::create();
             $rawData = [
                 'text' => [
-                    'fr' => $faker->words(3, true),
-                    'en' => $faker->words(3, true),
+                    'fr' => fake()->words(3, true),
+                    'en' => fake()->words(3, true),
                 ],
                 'autocomplete_local' => 1,
                 'autocomplete_remote' => null,
                 'autocomplete_list' => null,
                 'check' => true,
-                'datetime' => $faker->date('Y-m-d H:i:s'),
-                'date' => $faker->date('Y-m-d'),
-                'time' => $faker->date('H:i:s'),
+                'datetime' => fake()->date('Y-m-d H:i:s'),
+                'date' => fake()->date('Y-m-d'),
+                'time' => fake()->date('H:i:s'),
                 'html' => [
-                    'name' => $faker->name,
+                    'name' => fake()->name,
                 ],
                 'markdown' => [
                     'fr' => "Du **texte** avec *style* \n\n",
                     'en' => 'Some **text** with *style*',
                 ],
-                'number' => $faker->numberBetween(1, 100),
+                'number' => fake()->numberBetween(1, 100),
                 'textarea' => [
-                    'fr' => $faker->paragraph(3),
-                    'en' => $faker->paragraph(3),
+                    'fr' => fake()->paragraph(3),
+                    'en' => fake()->paragraph(3),
                 ],
                 'wysiwyg' => [
                     'fr' => '<p>fezfjklez fezjkflezjfkez fezjkflezjfklezjkflezj</p>',
@@ -339,7 +347,16 @@ class TestForm extends SharpSingleForm
             ];
         }
 
-        return $this->transform($rawData);
+        return $this
+            ->setCustomTransformer('upload', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
+            ->transform($rawData);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'date' => 'required|before_or_equal:'.date('Y-m-d'),
+        ];
     }
 
     protected function updateSingle(array $data)

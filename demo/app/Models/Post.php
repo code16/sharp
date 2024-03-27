@@ -72,7 +72,12 @@ class Post extends Model
 
     public function isOnline(): bool
     {
-        return $this->state->value === 'online';
+        return $this->state->value === PostState::ONLINE;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->state === PostState::DRAFT;
     }
 
     public function getDefaultAttributesFor($attribute)

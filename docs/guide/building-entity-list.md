@@ -135,9 +135,9 @@ A filter is referenced by a `filterKey` and has a `value`. So we can grab this c
 
 #### Pagination
 
-It's very common to return in `getListData()` paginated results: return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` in this case.
+It's very common to return in `getListData()` paginated results: return a `Illuminate\Contracts\Pagination\LengthAwarePaginator` or a `Illuminate\Contracts\Pagination\Paginator` in this case.
 
-With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` on the query.
+With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` or `simplePaginate($count)` on the query.
 
 ### `delete($id): void`
 
@@ -161,8 +161,7 @@ function buildListConfig()
 {
     $this->configureInstanceIdAttribute('id')
         ->configureSearchable()
-        ->configureDefaultSort('name', 'asc')
-        ->configurePaginated();
+        ->configureDefaultSort('name', 'asc');
 }
 ```
 
@@ -175,9 +174,6 @@ Here is the full list of available methods:
 - `configureSearchable()`: Sharp will display a search text input and process its content to fill `EntityListQueryParams $queryParams` (see above)
 
 - `configureDefaultSort(string $sortBy, string $sortDir = "asc")`: `EntityListQueryParams $queryParams` will be filled with this default value (see above)
-
-- `configurePaginated(bool $paginated = true)`: this means that `getListData()` must return an instance
-  of `LengthAwarePaginator` (see above) and that Sharp will display pagination links if needed
 
 - `configureMultiformAttribute(string $attribute)`: handle various types of entities; see [detailed doc](multiforms.md)
 

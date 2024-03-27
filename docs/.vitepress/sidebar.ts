@@ -16,7 +16,8 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
                 { text: 'Building an Entity List', link: '/guide/building-entity-list.md' },
                 { text: 'Filters', link: '/guide/filters.md' },
                 { text: 'Entity States', link: '/guide/entity-states.md' },
-                { text: 'Reordering instances', link: '/guide/reordering-instances.md' }
+                { text: 'Reordering instances', link: '/guide/reordering-instances.md' },
+                { text: 'Avoid n+1 queries in Entity Lists', link: '/guide/avoid-n1-queries-in-entity-lists.md' }
             ]
         },
         {
@@ -107,6 +108,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Migrations guide',
             collapsed: true,
             items: [
+                { text: 'Upgrading from 8.x to 9.x', link: '/guide/upgrading/9.0.md' },
                 { text: 'Upgrading from 7.x to 8.x', link: '/guide/upgrading/8.0.md' },
                 { text: 'Upgrading from 6.x to 7.x', link: '/guide/upgrading/7.0.md' },
                 { text: 'Upgrading from 5.x to 6.x', link: '/guide/upgrading/6.0.md' },

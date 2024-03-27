@@ -22,6 +22,7 @@ use Code16\Sharp\Show\SharpShow;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToShowPage;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Support\Str;
 
@@ -54,8 +55,6 @@ class PostShow extends SharpShow
                     ->addItemField(
                         SharpShowFileField::make('document')
                             ->setLabel('File')
-                            ->setStorageDisk('local')
-                            ->setStorageBasePath('data/posts/{id}')
                     )
             )
             ->addField(
@@ -72,22 +71,22 @@ class PostShow extends SharpShow
                 $section
                     ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
-                            ->withSingleField('categories')
-                            ->withSingleField('author')
-                            ->withSingleField('attachments', function (ShowLayoutColumn $item) {
-                                $item->withSingleField('link_url')
-                                    ->withSingleField('document');
+                            ->withField('categories')
+                            ->withField('author')
+                            ->withListField('attachments', function (ShowLayoutColumn $item) {
+                                $item->withField('link_url')
+                                    ->withField('document');
                             });
                     })
                     ->addColumn(5, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('cover');
+                        $column->withField('cover');
                     });
             })
             ->addSection('Content', function (ShowLayoutSection $section) {
                 $section
                     ->setKey('content-section')
                     ->addColumn(8, function (ShowLayoutColumn $column) {
-                        $column->withSingleField('content');
+                        $column->withField('content');
                     });
             })
             ->addEntityListSection('blocks');
@@ -99,12 +98,21 @@ class PostShow extends SharpShow
             ->configureEntityState('state', PostStateHandler::class)
             ->configureBreadcrumbCustomLabelAttribute('breadcrumb')
             ->configurePageTitleAttribute('title', localized: true)
-            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?')
-            ->configurePageAlert(
-                '<span v-if="is_planed"><i class="fa fa-calendar"></i> This post is planed for publication, on {{published_at}}</span>',
-                static::$pageAlertLevelInfo,
-                'publication',
-            );
+            ->configureDeleteConfirmationText('Are you sure you want to delete this post (this will permanently delete its data)?');
+    }
+
+    protected function buildPageAlert(PageAlert $pageAlert): void
+    {
+        $pageAlert
+            ->setLevelInfo()
+            ->setMessage(function (array $data) {
+                return $data['publication']['is_planned']
+                    ? sprintf(
+                        '<i class="fa fa-calendar"></i> This post is planned for publication, on %s',
+                        $data['publication']['published_at'],
+                    )
+                    : null;
+            });
     }
 
     public function getInstanceCommands(): ?array
@@ -126,7 +134,7 @@ class PostShow extends SharpShow
             })
             ->setCustomTransformer('publication', function ($value, Post $instance) {
                 return [
-                    'is_planed' => $instance->isOnline() && $instance->published_at->isFuture(),
+                    'is_planned' => $instance->isOnline() && $instance->published_at->isFuture(),
                     'published_at' => $instance->published_at->isoFormat('LLL'),
                 ];
             })
@@ -143,7 +151,7 @@ class PostShow extends SharpShow
                     ->implode(', ');
             })
             ->setCustomTransformer('cover', new SharpUploadModelThumbnailUrlTransformer(500))
-            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(false))
+            ->setCustomTransformer('attachments[document]', new SharpUploadModelFormAttributeTransformer(withThumbnails: false))
             ->setCustomTransformer('attachments[link_url]', function ($value, $instance) {
                 return $instance->is_link
                     ? sprintf('<a href="%s" alt="">%s</a>', $value, str($value)->limit(30))

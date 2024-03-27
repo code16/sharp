@@ -1,58 +1,38 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Form\Fields;
-
 use Code16\Sharp\Exceptions\Form\SharpFormFieldValidationException;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpFormTextareaFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function only_default_values_are_set()
-    {
-        $formField = SharpFormTextareaField::make('text');
+it('sets only default values', function () {
+    $formField = SharpFormTextareaField::make('text');
 
-        $this->assertEquals(
-            [
-                'key' => 'text',
-                'type' => 'textarea',
-            ],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toEqual([
+            'key' => 'text',
+            'type' => 'textarea',
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_row_count()
-    {
-        $formField = SharpFormTextareaField::make('text')
-            ->setRowCount(5);
+it('allows to define row count', function () {
+    $formField = SharpFormTextareaField::make('text')
+        ->setRowCount(5);
 
-        $this->assertArraySubset(
-            ['rows' => 5],
-            $formField->toArray(),
-        );
-    }
+    expect($formField->toArray())
+        ->toHaveKey('rows', 5);
+});
 
-    /** @test */
-    public function we_cant_define_an_invalid_row_count()
-    {
-        $this->expectException(SharpFormFieldValidationException::class);
+it('allows tot define an invalid row count', function () {
+    $this->expectException(SharpFormFieldValidationException::class);
 
-        SharpFormTextareaField::make('text')
-            ->setRowCount(0)
-            ->toArray();
-    }
+    SharpFormTextareaField::make('text')
+        ->setRowCount(0)
+        ->toArray();
+});
 
-    /** @test */
-    public function we_can_define_maxLength()
-    {
-        $formField = SharpFormTextareaField::make('text')
-            ->setMaxLength(10);
+it('allows to define maxLength', function () {
+    $formField = SharpFormTextareaField::make('text')
+        ->setMaxLength(10);
 
-        $this->assertArraySubset(
-            ['maxLength' => 10],
-            $formField->toArray(),
-        );
-    }
-}
+    expect($formField->toArray())
+        ->toHaveKey('maxLength', 10);
+});

@@ -1,209 +1,120 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\Show\Fields;
-
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
-use Code16\Sharp\Tests\SharpTestCase;
 
-class SharpShowEntityListFieldTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_define_entity_list_field()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey');
+it('allows to define a EEL field', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey');
 
-        $this->assertEquals(
-            [
-                'key' => 'entityListField',
-                'type' => 'entityList',
-                'entityListKey' => 'entityKey',
-                'showEntityState' => true,
-                'showCreateButton' => true,
-                'showReorderButton' => true,
-                'showSearchField' => true,
-                'emptyVisible' => false,
-                'showCount' => false,
-                'hiddenCommands' => ['entity' => [], 'instance' => []],
-            ],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray())->toEqual([
+        'key' => 'entityListField',
+        'type' => 'entityList',
+        'entityListKey' => 'entityKey',
+        'showEntityState' => true,
+        'showCreateButton' => true,
+        'showReorderButton' => true,
+        'showSearchField' => true,
+        'emptyVisible' => false,
+        'showCount' => false,
+        'hiddenCommands' => ['entity' => [], 'instance' => []],
+    ]);
+});
 
-    /** @test */
-    public function we_can_define_entity_list_field_with_default_key()
-    {
-        $field = SharpShowEntityListField::make('instances');
+it('allows to define EEL field with default key', function () {
+    $field = SharpShowEntityListField::make('instances');
 
-        $this->assertEquals(
-            [
-                'key' => 'instances',
-                'type' => 'entityList',
-                'entityListKey' => 'instances',
-                'showEntityState' => true,
-                'showCreateButton' => true,
-                'showReorderButton' => true,
-                'showSearchField' => true,
-                'emptyVisible' => false,
-                'showCount' => false,
-                'hiddenCommands' => ['entity' => [], 'instance' => []],
-            ],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray())->toEqual([
+        'key' => 'instances',
+        'type' => 'entityList',
+        'entityListKey' => 'instances',
+        'showEntityState' => true,
+        'showCreateButton' => true,
+        'showReorderButton' => true,
+        'showSearchField' => true,
+        'emptyVisible' => false,
+        'showCount' => false,
+        'hiddenCommands' => ['entity' => [], 'instance' => []],
+    ]);
+});
 
-    /** @test */
-    public function we_can_define_hideFilterWithValue()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->hideFilterWithValue('f1', 'value1');
+it('handles hideFilterWithValue', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->hideFilterWithValue('f1', 'value1');
 
-        $this->assertArraySubset(
-            [
-                'hiddenFilters' => [
-                    'f1' => 'value1',
-                ],
-            ],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['hiddenFilters'])->toEqual([
+        'f1' => 'value1',
+    ]);
+});
 
-    /** @test */
-    public function we_can_define_hideFilterWithValue_with_a_callable()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->hideFilterWithValue('f1', function ($instanceId) {
-                return 'computed';
-            });
+it('handles hideFilterWithValue with a callable', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->hideFilterWithValue('f1', fn () => 'computed');
 
-        $this->assertArraySubset(
-            [
-                'hiddenFilters' => [
-                    'f1' => 'computed',
-                ],
-            ],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['hiddenFilters'])->toEqual([
+        'f1' => 'computed',
+    ]);
+});
 
-    /** @test */
-    public function we_can_define_showEntityState()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->showEntityState(false);
+it('handles showEntityState', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->showEntityState(false);
 
-        $this->assertArraySubset(
-            ['showEntityState' => false],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['showEntityState'])->toBeFalse();
+});
 
-    /** @test */
-    public function we_can_define_showReorderButton()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->showReorderButton(false);
+it('handles showReorderButton', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->showReorderButton(false);
 
-        $this->assertArraySubset(
-            ['showReorderButton' => false],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['showReorderButton'])->toBeFalse();
+});
 
-    /** @test */
-    public function we_can_define_showCreateButton()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->showCreateButton(false);
+it('handles showCreateButton', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->showCreateButton(false);
 
-        $this->assertArraySubset(
-            ['showCreateButton' => false],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['showCreateButton'])->toBeFalse();
+});
 
-    /** @test */
-    public function we_can_define_showSearchField()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->showSearchField(false);
+it('handles showSearchField', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->showSearchField(false);
 
-        $this->assertArraySubset(
-            ['showSearchField' => false],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['showSearchField'])->toBeFalse();
+});
 
-    /** @test */
-    public function we_can_define_showCount()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->showCount();
+it('handles showCount', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->showCount();
 
-        $this->assertArraySubset(
-            ['showCount' => true],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['showCount'])->toBeTrue();
+});
 
-    /** @test */
-    public function we_can_define_hideEntityCommands()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->hideEntityCommand(['c1', 'c2']);
+it('handles hideEntityCommands', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->hideEntityCommand(['c1', 'c2']);
 
-        $this->assertArraySubset(
-            [
-                'hiddenCommands' => [
-                    'entity' => [
-                        'c1', 'c2',
-                    ],
-                ],
-            ],
-            $field->toArray(),
-        );
+    expect($field->toArray()['hiddenCommands']['entity'])->toEqual(
+        ['c1', 'c2'],
+    );
 
-        $field->hideEntityCommand('c3');
+    $field->hideEntityCommand('c3');
 
-        $this->assertArraySubset(
-            [
-                'hiddenCommands' => [
-                    'entity' => [
-                        'c1', 'c2', 'c3',
-                    ],
-                ],
-            ],
-            $field->toArray(),
-        );
-    }
+    expect($field->toArray()['hiddenCommands']['entity'])->toEqual(
+        ['c1', 'c2', 'c3']
+    );
+});
 
-    /** @test */
-    public function we_can_define_hideInstanceCommands()
-    {
-        $field = SharpShowEntityListField::make('entityListField', 'entityKey')
-            ->hideInstanceCommand(['c1', 'c2']);
+it('handles hideInstanceCommands', function () {
+    $field = SharpShowEntityListField::make('entityListField', 'entityKey')
+        ->hideInstanceCommand(['c1', 'c2']);
 
-        $this->assertArraySubset(
-            [
-                'hiddenCommands' => [
-                    'instance' => [
-                        'c1', 'c2',
-                    ],
-                ],
-            ],
-            $field->toArray(),
-        );
+    expect($field->toArray()['hiddenCommands']['instance'])->toEqual(
+        ['c1', 'c2'],
+    );
 
-        $field->hideInstanceCommand('c3');
+    $field->hideInstanceCommand('c3');
 
-        $this->assertArraySubset(
-            [
-                'hiddenCommands' => [
-                    'instance' => [
-                        'c1', 'c2', 'c3',
-                    ],
-                ],
-            ],
-            $field->toArray(),
-        );
-    }
-}
+    expect($field->toArray()['hiddenCommands']['instance'])->toEqual(
+        ['c1', 'c2', 'c3'],
+    );
+});

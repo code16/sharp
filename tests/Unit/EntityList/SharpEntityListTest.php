@@ -1,313 +1,243 @@
 <?php
 
-namespace Code16\Sharp\Tests\Unit\EntityList;
-
+use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\Show\Fields\SharpShowHtmlField;
-use Code16\Sharp\Tests\SharpTestCase;
-use Code16\Sharp\Tests\Unit\EntityList\Utils\SharpEntityDefaultTestList;
+use Code16\Sharp\Enums\PageAlertLevel;
+use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
+use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class SharpEntityListTest extends SharpTestCase
-{
-    /** @test */
-    public function we_can_get_containers()
+it('gets fields with layout', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer->addField(
-                    EntityListField::make('name')
-                        ->setLabel('Name'),
-                );
-            }
-        };
+            $fields->addField(
+                EntityListField::make('name')
+                    ->setLabel('Name')
+                    ->setWidth(6)
+            );
+        }
+    };
 
-        $this->assertEquals(
-            [
-                'name' => [
-                    'key' => 'name',
-                    'label' => 'Name',
-                    'sortable' => false,
-                    'html' => true,
-                ],
-            ],
-            $list->fields(),
-        );
-    }
+    expect($list->fields())->toEqual([
+        [
+            'key' => 'name',
+            'label' => 'Name',
+            'sortable' => false,
+            'html' => true,
+            'size' => 6,
+            'sizeXS' => 6,
+            'hideOnXS' => false,
+        ],
+    ]);
+});
 
-    /** @test */
-    public function we_can_get_layout()
+it('allows to define layout for small screens', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer
-                    ->addField(EntityListField::make('name')->setWidth(6))
-                    ->addField(EntityListField::make('age')->setWidth(6));
-            }
-        };
+            $fields
+                ->addField(EntityListField::make('name')->setWidth(6)->setWidthOnSmallScreens(12))
+                ->addField(EntityListField::make('age')->setWidth(6)->hideOnSmallScreens());
+        }
+    };
 
-        $this->assertEquals(
-            [
-                ['key' => 'name', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false],
-                ['key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => false],
-            ],
-            $list->listLayout(),
-        );
-    }
+    expect($list->fields()[0])
+        ->toEqual([
+            'key' => 'name',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'size' => 6,
+            'sizeXS' => 12,
+            'hideOnXS' => false,
+        ])
+        ->and($list->fields()[1])->toEqual([
+            'key' => 'age',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'size' => 6,
+            'sizeXS' => 6,
+            'hideOnXS' => true,
+        ]);
+});
 
-    /** @test */
-    public function we_can_define_a_layout_for_small_screens()
+it('allows to configure a column to fill left space', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildList(EntityListFieldsContainer $fields): void
         {
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer
-                    ->addField(EntityListField::make('name')->setWidth(6)->setWidthOnSmallScreens(12))
-                    ->addField(EntityListField::make('age')->setWidth(6)->hideOnSmallScreens());
-            }
-        };
+            $fields
+                ->addField(EntityListField::make('name')->setWidthOnSmallScreens(4))
+                ->addField(EntityListField::make('age'));
+        }
+    };
 
-        $this->assertEquals(
-            [
-                ['key' => 'name', 'size' => 6, 'sizeXS' => 12, 'hideOnXS' => false],
-                ['key' => 'age', 'size' => 6, 'sizeXS' => 6, 'hideOnXS' => true],
-            ],
-            $list->listLayout(),
-        );
-    }
+    expect($list->fields()[0])
+        ->toHaveKey('size', 'fill')
+        ->toHaveKey('sizeXS', 4)
+        ->toHaveKey('hideOnXS', false)
+        ->and($list->fields()[1])
+        ->toHaveKey('size', 'fill')
+        ->toHaveKey('sizeXS', 'fill')
+        ->toHaveKey('hideOnXS', false);
+});
 
-    /** @test */
-    public function we_can_configure_a_column_to_fill_left_space()
+it('returns list data', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function getListData(): array
         {
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer
-                    ->addField(EntityListField::make('name')->setWidthOnSmallScreens(4))
-                    ->addField(EntityListField::make('age'));
-            }
-        };
+            return [
+                ['name' => 'John Wayne', 'age' => 22, 'job' => 'actor'],
+                ['name' => 'Mary Wayne', 'age' => 26, 'job' => 'truck driver'],
+            ];
+        }
 
-        $this->assertEquals(
-            [
-                ['key' => 'name', 'size' => 'fill', 'sizeXS' => 4, 'hideOnXS' => false],
-                ['key' => 'age', 'size' => 'fill', 'sizeXS' => 'fill', 'hideOnXS' => false],
-            ],
-            $list->listLayout(),
-        );
-    }
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addField(EntityListField::make('age'));
+        }
+    };
 
-    /** @test */
-    public function we_can_get_list_data()
+    expect($list->data()['items'])->toEqual([
+        ['name' => 'John Wayne', 'age' => 22],
+        ['name' => 'Mary Wayne', 'age' => 26],
+    ]);
+});
+
+it('can return paginated data', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function getListData(): array|Arrayable
         {
-            public function getListData(): array
-            {
-                return [
-                    ['name' => 'John Wayne', 'age' => 22, 'job' => 'actor'],
-                    ['name' => 'Mary Wayne', 'age' => 26, 'job' => 'truck driver'],
-                ];
-            }
+            $data = [
+                ['name' => 'John Wayne', 'age' => 22, 'job' => 'actor'],
+                ['name' => 'Mary Wayne', 'age' => 26, 'job' => 'truck driver'],
+            ];
 
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer
-                    ->addField(
-                        EntityListField::make('name'),
-                    )
-                    ->addField(
-                        EntityListField::make('age'),
-                    );
-            }
-        };
+            return new LengthAwarePaginator($data, 10, 2, 1);
+        }
 
-        $this->assertEquals(
-            [
-                'items' => [
-                    ['name' => 'John Wayne', 'age' => 22],
-                    ['name' => 'Mary Wayne', 'age' => 26],
-                ],
-            ],
-            $list->data()['list'],
-        );
-    }
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addField(EntityListField::make('age'));
+        }
+    };
 
-    /** @test */
-    public function we_can_get_paginated_list_data()
+    expect($list->data()['items'])
+        ->toEqual([
+            ['name' => 'John Wayne', 'age' => 22],
+            ['name' => 'Mary Wayne', 'age' => 26],
+        ])
+        ->and($list->data()['meta'])
+        ->toMatchArray([
+            'current_page' => 1,
+            'from' => 1,
+            'to' => 2,
+            'last_page' => 5,
+            'per_page' => 2,
+            'total' => 10,
+        ]);
+});
+
+it('returns list config', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function getListData(): array|Arrayable
-            {
-                $data = [
-                    ['name' => 'John Wayne', 'age' => 22, 'job' => 'actor'],
-                    ['name' => 'Mary Wayne', 'age' => 26, 'job' => 'truck driver'],
-                ];
+            $this->configureSearchable()
+                ->configureDefaultSort('name');
+        }
+    };
 
-                return new LengthAwarePaginator($data, 10, 2, 1);
-            }
+    $list->buildListConfig();
 
-            public function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-            {
-                $fieldsContainer
-                    ->addField(
-                        EntityListField::make('name'),
-                    )
-                    ->addField(
-                        EntityListField::make('age'),
-                    );
-            }
-        };
+    expect($list->listConfig())->toEqual([
+        'searchable' => true,
+        'reorderable' => false,
+        'hasShowPage' => false,
+        'instanceIdAttribute' => 'id',
+        'multiformAttribute' => null,
+        'defaultSort' => 'name',
+        'defaultSortDir' => 'asc',
+        'deleteHidden' => false,
+        'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
+    ]);
+});
 
-        $this->assertEquals(
-            [
-                'items' => [
-                    ['name' => 'John Wayne', 'age' => 22],
-                    ['name' => 'Mary Wayne', 'age' => 26],
-                ],
-                'page' => 1,
-                'pageSize' => 2,
-                'totalCount' => 10,
-            ],
-            $list->data()['list'],
-        );
-    }
-
-    /** @test */
-    public function we_can_get_list_config()
+it('allows to configure a page alert', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildPageAlert(PageAlert $pageAlert): void
         {
-            public function buildListConfig(): void
-            {
-                $this->configureSearchable()
-                    ->configurePaginated();
-            }
-        };
+            $pageAlert
+                ->setLevelDanger()
+                ->setMessage('My page alert');
+        }
+    };
 
-        $list->buildListConfig();
+    expect($list->pageAlert())
+        ->toEqual([
+            'text' => 'My page alert',
+            'level' => PageAlertLevel::Danger,
+        ]);
+});
 
-        $this->assertEquals(
-            [
-                'searchable' => true,
-                'paginated' => true,
-                'reorderable' => false,
-                'hasShowPage' => false,
-                'instanceIdAttribute' => 'id',
-                'multiformAttribute' => null,
-                'defaultSort' => null,
-                'defaultSortDir' => null,
-                'deleteHidden' => false,
-                'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
-            ],
-            $list->listConfig(),
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_a_global_message_field_without_data()
+it('allows to configure the deletion action to disallow it', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function buildListConfig(): void
-            {
-                $this->configurePageAlert('template', null, 'test-key');
-            }
-        };
+            $this->configureDelete(hide: true);
+        }
+    };
 
-        $list->buildListConfig();
+    $list->buildListConfig();
 
-        $this->assertEquals('test-key', $list->listConfig()['globalMessage']['fieldKey']);
-        $this->assertEquals(
-            SharpShowHtmlField::make('test-key')->setInlineTemplate('template')->toArray(),
-            $list->listMetaFields()['test-key'],
-        );
-    }
+    expect($list->listConfig()['deleteHidden'])->toBeTrue();
+});
 
-    /** @test */
-    public function we_can_configure_a_global_message_field_with_template_data()
+it('allows to configure the deletion action confirmation text', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function buildListConfig(): void
-            {
-                $this->configurePageAlert('Hello {{name}}', null, 'test-key');
-            }
+            $this->configureDelete(confirmationText: 'ok?');
+        }
+    };
 
-            public function getGlobalMessageData(): ?array
-            {
-                return [
-                    'name' => 'Bob',
-                ];
-            }
-        };
+    $list->buildListConfig();
 
-        $list->buildListConfig();
+    expect($list->listConfig()['deleteHidden'])->toBeFalse()
+        ->and($list->listConfig()['deleteConfirmationText'])->toEqual('ok?');
+});
 
-        $this->assertEquals(
-            ['name' => 'Bob'],
-            $list->data()['test-key'],
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_a_global_message_field_with_alert_level()
+it('allows to configure a reorder handler', function () {
+    $list = new class extends FakeSharpEntityList
     {
-        $list = new class extends SharpEntityDefaultTestList
+        public function buildListConfig(): void
         {
-            public function buildListConfig(): void
+            $this->configureReorderable(new class implements ReorderHandler
             {
-                $this->configurePageAlert('alert', static::$pageAlertLevelDanger);
-            }
-        };
+                public function reorder(array $ids): void
+                {
+                }
+            });
+        }
+    };
 
-        $list->buildListConfig();
+    $list->buildListConfig();
 
-        $this->assertEquals(
-            'danger',
-            $list->listConfig()['globalMessage']['alertLevel'],
-        );
-    }
-
-    /** @test */
-    public function we_can_configure_the_deletion_action_to_disallow_it()
-    {
-        $list = new class extends SharpEntityDefaultTestList
-        {
-            public function buildListConfig(): void
-            {
-                $this->configureDelete(hide: true);
-            }
-        };
-
-        $list->buildListConfig();
-
-        $this->assertTrue($list->listConfig()['deleteHidden']);
-    }
-
-    /** @test */
-    public function we_can_configure_the_deletion_action_confirmation_text()
-    {
-        $list = new class extends SharpEntityDefaultTestList
-        {
-            public function buildListConfig(): void
-            {
-                $this->configureDelete(confirmationText: 'ok?');
-            }
-        };
-
-        $list->buildListConfig();
-
-        $this->assertFalse($list->listConfig()['deleteHidden']);
-        $this->assertEquals('ok?', $list->listConfig()['deleteConfirmationText']);
-    }
-}
+    expect($list->listConfig()['reorderable'])->toBeTrue()
+        ->and($list->reorderHandler())->toBeInstanceOf(ReorderHandler::class);
+});

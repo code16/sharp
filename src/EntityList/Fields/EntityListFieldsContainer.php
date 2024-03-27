@@ -3,9 +3,12 @@
 namespace Code16\Sharp\EntityList\Fields;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\Conditionable;
 
 class EntityListFieldsContainer
 {
+    use Conditionable;
+
     protected array $fields = [];
 
     final public function addField(EntityListField $field): self
@@ -39,14 +42,6 @@ class EntityListFieldsContainer
     final public function getFields(): Collection
     {
         return collect($this->fields)
-            ->map(fn (EntityListField $field) => $field->getFieldProperties())
-            ->keyBy('key');
-    }
-
-    final public function getLayout(): Collection
-    {
-        return collect($this->fields)
-            ->map(fn (EntityListField $field) => $field->getLayoutProperties())
-            ->values();
+            ->map(fn (EntityListField $field) => $field->getFieldProperties());
     }
 }

@@ -5,7 +5,6 @@ return [
     'custom_url_segment' => 'sharp',
     'display_sharp_version_in_title' => true,
     'display_breadcrumb' => true,
-    'locale' => 'fr_FR.UTF-8',
     'entities' => [
         'posts' => \App\Sharp\Entities\PostEntity::class,
         'blocks' => \App\Sharp\Entities\PostBlockEntity::class,
@@ -49,20 +48,38 @@ return [
                 ? 'totp'
                 : \App\Sharp\Demo2faNotificationHandler::class,
         ],
+        'forgotten_password' => [
+            'enabled' => true,
+            // 'password_broker' => null,
+            //  'reset_password_callback' => null,
+        ],
         'display_attribute' => 'name',
+        'impersonate' => [
+            'enabled' => env('SHARP_IMPERSONATE', false),
+            'handler' => null,
+        ],
+        'login_form' => [
+            // Handle a "remember me" flag (with a checkbox on the login form)
+            'suggest_remember_me' => false,
+
+            // Display the app name on the login page.
+            'display_app_name' => true,
+
+            // Optional logo on the login page (default to theme.logo_url and to sharp logo)
+            // 'logo_url' => '/img/sharp/login-icon.png',
+
+            // Optional additional message on the login page.
+            'message_blade_path' => 'sharp/_login-page-message',
+        ],
+
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
     ],
 
     'theme' => [
         'primary_color' => '#0c4589',
         'favicon_url' => '/img/sharp/favicon-32x32.png',
-        'logo_urls' => [
-            'menu' => '/img/sharp/menu-icon.png',
-            'login' => '/img/sharp/login-icon.png',
-        ],
+        'logo_url' => '/img/sharp/logo.png',
     ],
-
-    'login_page_message_blade_path' => env('SHARP_LOGIN_PAGE_MESSAGE_BLADE_PATH', 'sharp/_login-page-message'),
 
     'extensions' => [
         'assets' => [

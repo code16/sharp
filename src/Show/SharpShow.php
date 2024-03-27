@@ -15,13 +15,13 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class SharpShow
 {
-    use WithCustomTransformers,
-        HandleFields,
-        HandleEntityState,
-        HandleInstanceCommands,
-        HandlePageAlertMessage,
-        HandleCustomBreadcrumb,
-        HandleLocalizedFields;
+    use WithCustomTransformers;
+    use HandleFields;
+    use HandleEntityState;
+    use HandleInstanceCommands;
+    use HandlePageAlertMessage;
+    use HandleCustomBreadcrumb;
+    use HandleLocalizedFields;
 
     protected ?ShowLayout $showLayout = null;
     protected ?string $multiformAttribute = null;
@@ -47,9 +47,12 @@ abstract class SharpShow
             // Filter model attributes on actual show labels
             ->only(
                 collect($this->getDataKeys())
+                    ->merge(array_keys($this->transformers))
                     ->when($this->breadcrumbAttribute, fn ($collect) => $collect->push($this->breadcrumbAttribute))
                     ->when($this->entityStateAttribute, fn ($collect) => $collect->push($this->entityStateAttribute))
                     ->when($this->multiformAttribute, fn ($collect) => $collect->push($this->multiformAttribute))
+                    ->unique()
+                    ->values()
                     ->toArray()
             )
             ->all();
@@ -73,7 +76,6 @@ abstract class SharpShow
             $this->appendBreadcrumbCustomLabelAttribute($config);
             $this->appendEntityStateToConfig($config, $instanceId);
             $this->appendInstanceCommandsToConfig($config, $instanceId);
-            $this->appendGlobalMessageToConfig($config);
         });
     }
 

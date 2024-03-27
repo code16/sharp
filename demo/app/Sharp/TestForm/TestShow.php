@@ -20,7 +20,7 @@ class TestShow extends SharpSingleShow
     {
         $showLayout->addSection('', function (ShowLayoutSection $section) {
             $section->addColumn(12, function (ShowLayoutColumn $column) {
-                $column->withSingleField('message');
+                $column->withField('message');
             });
         });
     }

@@ -13,10 +13,9 @@ trait HasFiltersInQuery
     {
         if (class_exists($filterFullClassNameOrKey)) {
             $key = tap(
-                app($filterFullClassNameOrKey), function (Filter $filter) {
-                    $filter->buildFilterConfig();
-                })
-                ->getKey();
+                app($filterFullClassNameOrKey),
+                fn (Filter $filter) => $filter->buildFilterConfig()
+            )->getKey();
         } else {
             $key = $filterFullClassNameOrKey;
         }

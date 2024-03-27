@@ -107,9 +107,9 @@ Here's how we can define the layout for the simple two-fields form we built abov
 ```php
 function buildFormLayout(FormLayout $formLayout)
 {
-    $formLayout->addColumn(6, function(FormLayoutColumn $column) {
-        $column->withSingleField('name')
-            ->withSingleField('capacity');
+    $formLayout->addColumn(6, function (FormLayoutColumn $column) {
+        $column->withField('name')
+            ->withField('capacity');
     });
 }
 ```
@@ -122,11 +122,11 @@ Here's another possible layout, with two unequally large columns:
 function buildFormLayout(FormLayout $formLayout)
 {
     $formLayout
-        ->addColumn(7, function(FormLayoutColumn $column) {
-            $column->withSingleField('name');
+        ->addColumn(7, function (FormLayoutColumn $column) {
+            $column->withField('name');
     	})
-    	->addColumn(5, function(FormLayoutColumn $column) {
-            $column->withSingleField('capacity');
+    	->addColumn(5, function (FormLayoutColumn $column) {
+            $column->withField('capacity');
     	});
 }
 ```
@@ -138,7 +138,7 @@ One final way is to put fields side by side on the same column:
 ```php
 function buildFormLayout(FormLayout $formLayout)
 {
-    $formLayout->addColumn(6, function(FormLayoutColumn $column) {
+    $formLayout->addColumn(6, function (FormLayoutColumn $column) {
         $column->withFields('name', 'capacity');
     });
 }
@@ -170,11 +170,11 @@ Here, `name` will take 8/12 of the width on large screens, and 6/12 on smaller o
 Fieldsets are useful to group some fields in a labelled block. Here's how they work:
 
 ```php
-$formLayout->addColumn(6, function(FormLayoutColumn $column) {
-    $column->withFieldset('Details', function(FormLayoutFieldset $fieldset) {
+$formLayout->addColumn(6, function (FormLayoutColumn $column) {
+    $column->withFieldset('Details', function (FormLayoutFieldset $fieldset) {
         return $fieldset
-            ->withSingleField('name')
-            ->withSingleField('capacity');
+            ->withField('name')
+            ->withField('capacity');
     });
 });
 ```
@@ -183,17 +183,27 @@ $formLayout->addColumn(6, function(FormLayoutColumn $column) {
 
 #### Lists of fields
 
-In a `List` case, which is a form fields container [documented here](form-fields/list.md), we have to describe the list item layout. It goes like this:
+In a `List` case, which is a form fields container [documented here](form-fields/list.md), we have to describe the list item layout, using `->withListField()` and passing a Closure as second argument:
 
 ```php
-$column->withSingleField('pictures', function(FormLayoutColumn $listItem) {
+$column->withListField('pictures', function (FormLayoutColumn $listItem) {
     $listItem
-        ->withSingleField('file')
-        ->withSingleField('legend');
+        ->withField('file')
+        ->withField('legend');
 });
 ```
 
-Notice we added a `Closure` on a `withSingleField()` call, meaning we define an "item layout" for this field. The item is made of two fields in this example.
+#### Conditions
+
+Since layout classes apply Laravel's `Conditionable` trait, you can use the `when()` method to conditionally display a column:
+
+```php
+$column
+	->withField('title')
+	->when(currentSharpRequest()->isUpdate(), function (FormLayoutColumn $column) {
+		$column->withField('author');
+	});
+```
 
 #### Tabs
 
@@ -201,9 +211,9 @@ Finally, columns can be wrapped in tabs if the form needs to be in parts:
 
 ```php
 $formLayout
-    ->addTab('tab 1', function(FormLayoutTab $tab) {
-        $tab->addColumn(6, function(FormLayoutColumn $column) {
-            $column->withSingleField('name');
+    ->addTab('tab 1', function (FormLayoutTab $tab) {
+        $tab->addColumn(6, function (FormLayoutColumn $column) {
+            $column->withField('name');
             // [...]
 	    });
     })
@@ -361,48 +371,41 @@ function buildFormConfig(): void
 
 ## Input validation
 
-In order to have an input validation on your form, you can create a [Laravel Form Request class](https://laravel.com/docs/8.x/validation#form-request-validation), and declare it in the Form itself:
+In order to have an input validation on your form, you can either declare a `rules()` methode (and an optional `messages()` one):
 
 ```php
 class ProductForm extends SharpForm
 {
-    protected ?string $formValidatorClass = ProductValidator::class;
+	// ...
     
-    // ...
+    public function rules(): array
+    {
+    	return [
+    		'name' => 'required',
+			'price' => ['required', 'numeric'],
+		];
+    }
 }
 ```
 
-You can, as an alternative, override the `protected function getFormValidatorClass(): ?string` method, which should return the classname of the validator, in case you need more control.
+Or you can manually call `->validate()` in the `update()` method:
+
+```php
+class ProductForm extends SharpForm
+{
+	// ...
+    
+    public function update($id, array $data)
+    {
+    	$this->validate($data, [
+    		'name' => 'required',
+			'price' => ['required', 'numeric'],
+		]);
+    }
+}
+```
 
 Sharp will handle the error display in the form.
-
-### Validate rich text fields (editor fields)
-
-Rich text are structured in a certain way by Sharp. This means that a rule like this will not work out of the box:
-
-```php
-public function rules()
-{
-    return [
-        'bio' => 'required'
-    ];
-}
-```
-
-To make it work, you have two options:
-
-Either add a ".text" suffix to your field key in the rules:
-
-```php
-public function rules()
-{
-    return [
-        'bio.text' => 'required'
-    ];
-}
-```
-
-Or make your FormRequest class extend `Code16\Sharp\Form\Validator\SharpFormRequest` instead of `Illuminate\Foundation\Http\FormRequest`. Note that in this case, if you have to define a `withValidator($validator)` function (see the [Laravel doc](https://laravel.com/docs/5.5/validation#form-request-validation)), make sure you call `parent::withValidator($validator)` in it.
 
 ## Declare the form
 

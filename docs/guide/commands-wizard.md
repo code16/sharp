@@ -55,7 +55,7 @@ class SendEmailWithPostsWizardCommand extends EntityWizardCommand
     
     protected function buildFormLayoutForFirstStep(FormLayoutColumn &$column): void
     {
-        $column->withSingleField('posts');
+        $column->withField('posts');
     }
 }
 ```

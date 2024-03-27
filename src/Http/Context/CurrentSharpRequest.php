@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Http\Context;
 
+use Closure;
 use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
+use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
@@ -11,6 +13,7 @@ use Illuminate\Support\Str;
 class CurrentSharpRequest
 {
     protected ?Collection $breadcrumb = null;
+    private Collection $cachedInstances;
 
     public function breadcrumb(): Collection
     {
@@ -103,35 +106,40 @@ class CurrentSharpRequest
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isEntityList() : false;
+        return $current && $current->isEntityList();
     }
 
     public function isShow(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isShow() : false;
+        return $current && $current->isShow();
     }
 
     public function isForm(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current ? $current->isForm() : false;
+        return $current && $current->isForm();
     }
 
     public function isCreation(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current && $current->isForm() && ! $current->isSingleForm() && $current->instanceId() === null;
+        return $current
+            && $current->isForm()
+            && ! $current->isSingleForm()
+            && $current->instanceId() === null;
     }
 
     public function isUpdate(): bool
     {
         $current = $this->getCurrentBreadcrumbItem();
 
-        return $current && $current->isForm() && ($current->instanceId() !== null || $current->isSingleForm());
+        return $current
+            && $current->isForm()
+            && ($current->instanceId() !== null || $current->isSingleForm());
     }
 
     public function entityKey(): ?string
@@ -148,13 +156,31 @@ class CurrentSharpRequest
         return $current?->instanceId();
     }
 
-    final public function globalFilterFor(string $handlerClass): array|string|null
+    final public function globalFilterFor(string $handlerClassOrKey): array|string|null
     {
-        $handler = app($handlerClass);
+        $handler = class_exists($handlerClassOrKey)
+            ? app($handlerClassOrKey)
+            : app(GlobalFilters::class)->findFilter($handlerClassOrKey);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
         return $handler->currentValue();
+    }
+
+    final public function cacheInstances(?Collection $instances): self
+    {
+        $this->cachedInstances = $instances ?: collect();
+
+        return $this;
+    }
+
+    final public function findCachedInstance($instanceId, Closure $notFoundCallback): mixed
+    {
+        if (isset($this->cachedInstances)) {
+            $instance = $this->cachedInstances[$instanceId] ?? null;
+        }
+
+        return $instance ?? $notFoundCallback($instanceId);
     }
 
     private function buildBreadcrumb(): void

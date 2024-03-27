@@ -37,9 +37,15 @@ class LinkToShowPage extends SharpLinkTo
             );
         }
 
-        return route('code16.sharp.list.subpage', [
+        return $this->generateUrl();
+    }
+
+    protected function generateUrl(): string
+    {
+        return route('code16.sharp.show.show', [
+            'parentUri' => sprintf('s-list/%s', $this->entityKey),
             'entityKey' => $this->entityKey,
-            'uri' => $this->generateUri(),
+            'instanceId' => $this->instanceId,
         ]);
     }
 

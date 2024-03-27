@@ -11,7 +11,6 @@ use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 abstract class SharpDashboard
 {
@@ -24,7 +23,6 @@ abstract class SharpDashboard
     protected array $panelWidgetsData = [];
     protected array $figureWidgetsData = [];
     protected array $orderedListWidgetsData = [];
-    protected ?array $pageAlertData = null;
     protected ?DashboardQueryParams $queryParams;
     protected ?DashboardLayout $dashboardLayout = null;
     protected ?WidgetsContainer $widgetsContainer = null;
@@ -102,7 +100,6 @@ abstract class SharpDashboard
         return tap([], function (&$config) {
             $this->appendFiltersToConfig($config);
             $this->appendDashboardCommandsToConfig($config);
-            $this->appendGlobalMessageToConfig($config);
         });
     }
 
@@ -164,11 +161,6 @@ abstract class SharpDashboard
                     })
             )
 
-            // And then, pageAlert
-            ->when(
-                $this->pageAlertData,
-                fn (Collection $data, array $pageAlertData) => $data->merge($pageAlertData)
-            )
             ->toArray();
     }
 
@@ -206,24 +198,6 @@ abstract class SharpDashboard
         $this->orderedListWidgetsData[$panelWidgetKey] = $data;
 
         return $this;
-    }
-
-    final protected function setPageAlertData(array $data): self
-    {
-        $this->pageAlertData = [$this->pageAlertHtmlField->key => $data];
-
-        return $this;
-    }
-
-    final public function dashboardMetaFields(): array
-    {
-        if ($this->pageAlertHtmlField) {
-            return [
-                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray(),
-            ];
-        }
-
-        return [];
     }
 
     private function checkDashboardIsBuilt(): void

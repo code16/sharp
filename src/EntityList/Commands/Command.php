@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFormFields;
 use Code16\Sharp\Utils\SharpNotification;
@@ -12,10 +14,11 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 
 abstract class Command
 {
-    use HandleFormFields,
-        HandlePageAlertMessage,
-        WithCustomTransformers,
-        HandleValidation;
+    use HandleFormFields;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
+    use HandleValidation;
+    use HasModalFormLayout;
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
@@ -27,7 +30,7 @@ abstract class Command
     protected function info(string $message): array
     {
         return [
-            'action' => 'info',
+            'action' => CommandAction::Info->value,
             'message' => $message,
         ];
     }
@@ -35,7 +38,7 @@ abstract class Command
     protected function link(string $link): array
     {
         return [
-            'action' => 'link',
+            'action' => CommandAction::Link->value,
             'link' => $link,
         ];
     }
@@ -43,14 +46,14 @@ abstract class Command
     protected function reload(): array
     {
         return [
-            'action' => 'reload',
+            'action' => CommandAction::Reload->value,
         ];
     }
 
     protected function refresh($ids): array
     {
         return [
-            'action' => 'refresh',
+            'action' => CommandAction::Refresh->value,
             'items' => (array) $ids,
         ];
     }
@@ -58,7 +61,7 @@ abstract class Command
     protected function view(string $bladeView, array $params = []): array
     {
         return [
-            'action' => 'view',
+            'action' => CommandAction::View->value,
             'html' => view($bladeView, $params)->render(),
         ];
     }
@@ -66,7 +69,7 @@ abstract class Command
     protected function download(string $filePath, string $fileName = null, string $diskName = null): array
     {
         return [
-            'action' => 'download',
+            'action' => CommandAction::Download->value,
             'file' => $filePath,
             'disk' => $diskName,
             'name' => $fileName,
@@ -76,7 +79,7 @@ abstract class Command
     protected function streamDownload(string $fileContent, string $fileName): array
     {
         return [
-            'action' => 'streamDownload',
+            'action' => CommandAction::StreamDownload->value,
             'content' => $fileContent,
             'name' => $fileName,
         ];
@@ -169,17 +172,6 @@ abstract class Command
     {
     }
 
-    final public function commandFormConfig(): ?array
-    {
-        if ($this->pageAlertHtmlField === null) {
-            return null;
-        }
-
-        return tap([], function (&$config) {
-            $this->appendGlobalMessageToConfig($config);
-        });
-    }
-
     final public function form(): array
     {
         return $this->fields();
@@ -187,20 +179,9 @@ abstract class Command
 
     final public function formLayout(): ?array
     {
-        if ($fields = $this->fieldsContainer()->getFields()) {
-            $column = new FormLayoutColumn(12);
+        return $this->modalFormLayout(function (FormLayoutColumn $column) {
             $this->buildFormLayout($column);
-
-            if (empty($column->fieldsToArray()['fields'])) {
-                foreach ($fields as $field) {
-                    $column->withSingleField($field->key());
-                }
-            }
-
-            return $column->fieldsToArray()['fields'];
-        }
-
-        return null;
+        });
     }
 
     final public function setGroupIndex($index): void

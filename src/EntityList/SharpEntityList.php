@@ -4,7 +4,6 @@ namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
@@ -12,26 +11,23 @@ use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Arr;
 
 abstract class SharpEntityList
 {
-    use HandleFilters,
-        HandleEntityState,
-        HandleEntityCommands,
-        HandleInstanceCommands,
-        HandlePageAlertMessage,
-        WithCustomTransformers;
+    use HandleFilters;
+    use HandleEntityState;
+    use HandleEntityCommands;
+    use HandleInstanceCommands;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
 
     private ?EntityListFieldsContainer $fieldsContainer = null;
-    private ?EntityListFieldsLayout $fieldsLayout = null;
-    private ?EntityListFieldsLayout $xsFieldsLayout = null;
     protected ?EntityListQueryParams $queryParams;
     protected string $instanceIdAttribute = 'id';
     protected ?string $multiformAttribute = null;
     protected bool $searchable = false;
-    protected bool $paginated = false;
     protected ?ReorderHandler $reorderHandler = null;
     protected ?string $defaultSort = null;
     protected ?string $defaultSortDir = null;
@@ -66,64 +62,38 @@ abstract class SharpEntityList
             ->toArray();
     }
 
-    final public function listLayout(): array
+    final public function data(): array
     {
-        $this->checkListIsBuilt();
+        $listItems = $this->getListData();
 
-        return $this->fieldsContainer
-            ->getLayout()
-            ->toArray();
-    }
-
-    final public function data($items = null): array
-    {
-        $items = $items ?: $this->getListData();
-        $page = $totalCount = $pageSize = null;
-
-        if ($items instanceof LengthAwarePaginator) {
-            $page = $items->currentPage();
-            $totalCount = $items->total();
-            $pageSize = $items->perPage();
-            $items = $items->items();
-        }
+        $items = $listItems instanceof AbstractPaginator
+            ? $listItems->items()
+            : $listItems;
 
         $this->addInstanceCommandsAuthorizationsToConfigForItems($items);
 
-        $keys = $this->getDataKeys();
         $items = collect($items)
-            ->map(function ($row) use ($keys) {
-                // Filter model attributes on actual form fields
-                return collect($row)
-                    ->only(
-                        array_merge(
-                            $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
-                            $this->multiformAttribute ? [$this->multiformAttribute] : [],
-                            [$this->instanceIdAttribute],
-                            $keys,
-                        ),
-                    )
-                    ->toArray();
-            })
+            // Filter model attributes on actual form fields
+            ->map(fn ($row) => collect($row)
+                ->only(
+                    array_merge(
+                        array_keys($this->transformers),
+                        $this->entityStateAttribute ? [$this->entityStateAttribute] : [],
+                        $this->multiformAttribute ? [$this->multiformAttribute] : [],
+                        [$this->instanceIdAttribute],
+                        $this->getDataKeys(),
+                    ),
+                )
+                ->toArray()
+            )
             ->toArray();
 
-        return collect(
-            [
-                'list' => collect(['items' => $items ?? []])
-                    ->when($page !== null, function (Collection $collection) use ($page, $totalCount, $pageSize) {
-                        $collection['page'] = $page;
-                        $collection['totalCount'] = $totalCount;
-                        $collection['pageSize'] = $pageSize;
-
-                        return $collection;
-                    })
-                    ->toArray(),
-            ])
-            ->when($this->pageAlertHtmlField !== null, function (Collection $collection) {
-                $collection[$this->pageAlertHtmlField->key] = $this->getGlobalMessageData();
-
-                return $collection;
-            })
-            ->toArray();
+        return [
+            'items' => $items,
+            'meta' => $listItems instanceof AbstractPaginator
+                ? Arr::except($listItems->withQueryString()->toArray(), 'data')
+                : null,
+        ];
     }
 
     final public function listConfig(bool $hasShowPage = false): array
@@ -132,7 +102,6 @@ abstract class SharpEntityList
             'instanceIdAttribute' => $this->instanceIdAttribute,
             'multiformAttribute' => $this->multiformAttribute,
             'searchable' => $this->searchable,
-            'paginated' => $this->paginated,
             'reorderable' => ! is_null($this->reorderHandler),
             'defaultSort' => $this->defaultSort,
             'defaultSortDir' => $this->defaultSortDir,
@@ -146,19 +115,7 @@ abstract class SharpEntityList
             $this->appendEntityStateToConfig($config);
             $this->appendInstanceCommandsToConfig($config);
             $this->appendEntityCommandsToConfig($config);
-            $this->appendGlobalMessageToConfig($config);
         });
-    }
-
-    final public function listMetaFields(): array
-    {
-        if ($this->pageAlertHtmlField) {
-            return [
-                $this->pageAlertHtmlField->key => $this->pageAlertHtmlField->toArray(),
-            ];
-        }
-
-        return [];
     }
 
     final public function configureInstanceIdAttribute(string $instanceIdAttribute): self
@@ -196,13 +153,6 @@ abstract class SharpEntityList
     {
         $this->defaultSort = $sortBy;
         $this->defaultSortDir = $sortDir;
-
-        return $this;
-    }
-
-    final public function configurePaginated(bool $paginated = true): self
-    {
-        $this->paginated = $paginated;
 
         return $this;
     }
@@ -266,14 +216,6 @@ abstract class SharpEntityList
     }
 
     /**
-     * Return global message data if needed.
-     */
-    protected function getGlobalMessageData(): ?array
-    {
-        return null;
-    }
-
-    /**
      * Delete the given instance. Do not implement this method if you want to delegate
      * the deletion responsibility to the Show Page (then implement it there).
      */
@@ -282,75 +224,20 @@ abstract class SharpEntityList
     }
 
     /**
+     * Build list fields and layout.
+     */
+    abstract protected function buildList(EntityListFieldsContainer $fields): void;
+
+    /**
      * Retrieve all rows data as an array.
      */
     abstract public function getListData(): array|Arrayable;
 
     /**
-     * Build list fields and layout.
+     * @deprecated no more in use, will be removed in v10.x
      */
-    protected function buildList(EntityListFieldsContainer $fields): void
+    final public function configurePaginated(bool $paginated = true): self
     {
-        // This default implementation is there to avoid breaking changes;
-        // it will be removed in the next major version of Sharp.
-        $this->fieldsContainer = new EntityListFieldsContainer();
-        $this->buildListFields($this->fieldsContainer);
-
-        $fieldsLayout = new EntityListFieldsLayout();
-        $this->buildListLayout($fieldsLayout);
-        $xsFieldsLayout = new EntityListFieldsLayout();
-        $this->buildListLayoutForSmallScreens($xsFieldsLayout);
-
-        $this->fieldsContainer
-            ->getFields()
-            ->pluck('key')
-            ->each(function ($key) use ($fieldsLayout, $xsFieldsLayout) {
-                if (isset($fieldsLayout->getColumns()[$key])) {
-                    $width = $fieldsLayout->getColumns()[$key];
-                    $widthXs = $xsFieldsLayout->hasColumns()
-                        ? $xsFieldsLayout->getColumns()[$key] ?? null
-                        : $width;
-                    $this->fieldsContainer
-                        ->setWidthOfField(
-                            $key,
-                            match ($width) {
-                                'fill' => null,
-                                default => $width,
-                            },
-                            match ($widthXs) {
-                                'fill' => null,
-                                null => false,
-                                default => $widthXs,
-                            },
-                        );
-                }
-            });
-    }
-
-    /**
-     * Build list fields.
-     *
-     * @deprecated use buildList instead
-     */
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
-    {
-    }
-
-    /**
-     * Build list layout.
-     *
-     * @deprecated use buildList instead
-     */
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-    }
-
-    /**
-     * Build layout for small screen. Optional, only if needed.
-     *
-     * @deprecated use buildList instead
-     */
-    protected function buildListLayoutForSmallScreens(EntityListFieldsLayout $fieldsLayout): void
-    {
+        return $this;
     }
 }

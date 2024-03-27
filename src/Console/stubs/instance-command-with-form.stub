@@ -25,7 +25,7 @@ class DummyClass extends InstanceCommand
 
     public function buildFormLayout(FormLayoutColumn &$column): void
     {
-        // $column->withSingleField(...)
+        // $column->withField(...)
     }
 
     public function execute($instanceId, array $data = []): array
