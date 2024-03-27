@@ -4,6 +4,7 @@
     "require": {
         "php": "^8.2",
         "bacon/bacon-qr-code": "~2.0",
+        "blade-ui-kit/blade-icons": "^1.6",
         "code16/laravel-content-renderer": "^1.2",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^1.0",
@@ -12,6 +13,7 @@
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "masterminds/html5": "^2.8",
+        "owenvoke/blade-fontawesome": "^2.6",
         "pragmarx/google2fa": "^8.0",
         "spatie/image-optimizer": "^1.6",
         "spatie/laravel-translatable": "^6.0",
