@@ -11,6 +11,7 @@
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { FormFieldProps } from "@/form/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import Icon from "@/components/ui/Icon.vue";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
@@ -64,7 +65,7 @@
                                 @click="$emit('embed', field.embeds[button.replace('embed:', '')])"
                                 :data-test="button"
                             >
-                                <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
+                                <Icon :icon="field.embeds[button.replace('embed:', '')].icon" class="w-4 h-4" />
                             </Button>
                         </template>
                         <template v-else :key="button">

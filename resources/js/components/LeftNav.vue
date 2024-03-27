@@ -6,6 +6,7 @@ import { GlobalFiltersData, MenuData } from "@/types";
 import { Link } from "@inertiajs/vue3";
 import GlobalFilters from '@/filters/components/GlobalFilters.vue';
 import Logo from "@/components/Logo.vue";
+import Icon from "@/components/ui/Icon.vue";
 
 const menu = usePage().props.menu as MenuData;
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
@@ -39,7 +40,8 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                                             <template v-else>
                                                 <component :is="childItem.isExternalLink ? 'a' : Link" :href="childItem.url" :class="[childItem.current ? 'bg-gray-50' : 'hover:bg-gray-50', 'flex  items-center gap-x-3 rounded-md py-2 px-2 text-sm leading-6 text-gray-700']">
                                                     <template v-if="childItem.icon">
-                                                        <i class="fa fa-fw" :class="[childItem.icon, childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']"></i>
+                                                        <Icon :icon="childItem.icon" class="w-4 h-4" :class="[childItem.icon, childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']" />
+<!--                                                        <i class="fa fa-fw" :class="[childItem.icon, childItem.current ? 'text-primary-600' : 'text-gray-400 group-hover:text-primary-600']"></i>-->
                                                     </template>
                                                     {{ childItem.label }}
                                                 </component>

@@ -1,20 +1,21 @@
 <script setup lang="ts">
     import useMenu from "@/composables/useMenu";
     import { BreadcrumbData } from "@/types";
+    import Icon from "@/components/ui/Icon.vue";
 
     const props = defineProps<{
         breadcrumb: BreadcrumbData,
     }>();
 
-    const menu = useMenu();
-    const currentEntityItem = menu.getEntityItem(props.breadcrumb.items.at(-1)?.entityKey);
+    const currentEntityItem = useMenu().getEntityItem(props.breadcrumb.items.at(-1)?.entityKey);
 </script>
 <template>
     <div class="d-flex">
         <div class="d-flex align-items-center">
             <template v-if="currentEntityItem">
                 <div class="me-2 pe-1">
-                    <i class="fa fa-sm d-block text-primary opacity-75 fs-8" :class="currentEntityItem.icon"></i>
+                    <Icon :icon="currentEntityItem.icon" class="w-4 h-4"></Icon>
+<!--                    <i class="fa fa-sm d-block text-primary opacity-75 fs-8" :class="currentEntityItem.icon"></i>-->
                 </div>
             </template>
 
