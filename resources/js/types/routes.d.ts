@@ -209,14 +209,6 @@ declare module 'ziggy-js' {
         }
     ],
     "code16.sharp.api.search.index": [],
-    "code16.sharp.api.files.show": [
-        {
-            "name": "entityKey"
-        },
-        {
-            "name": "instanceId"
-        }
-    ],
     "code16.sharp.api.embed.show": [
         {
             "name": "embedKey"
@@ -282,6 +274,7 @@ declare module 'ziggy-js' {
             "name": "instanceId"
         }
     ],
+    "code16.sharp.api.form.upload.thumbnail.show": [],
     "code16.sharp.api.form.upload": [],
     "code16.sharp.login": [],
     "code16.sharp.login.post": [],
