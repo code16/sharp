@@ -22,8 +22,6 @@
     import { ParentEditor } from "@/form/components/fields/editor/useParentEditor";
     import { Upload } from "@/form/components/fields/editor/extensions/upload/Upload";
     import { Embed } from "@/form/components/fields/editor/extensions/embed/Embed";
-    import { Extension } from "@tiptap/core";
-    import { withoutHistory } from "@/form/components/fields/editor/commands/withoutHistory";
     import EditorUploadModal from "@/form/components/fields/editor/extensions/upload/EditorUploadModal.vue";
     import EditorEmbedModal from "@/form/components/fields/editor/extensions/embed/EditorEmbedModal.vue";
 
@@ -83,7 +81,6 @@
                             }
                         })
                     }),
-                Extension.create({ name: 'withoutHistory', addCommands() { return { withoutHistory } } })
             ].filter(Boolean);
 
             const editor = new Editor({
