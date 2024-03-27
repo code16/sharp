@@ -22,7 +22,7 @@ trait FormatsEditorUploadsToFront
                 $file = (new SharpUploadModelFormAttributeTransformer(
                     withThumbnails: $element->tagName === 'x-sharp-image'
                 ))->dynamicInstance()->apply($file);
-                
+
                 $uploads[] = [
                     'file' => $file,
                     'legend' => $element->hasAttribute('legend')

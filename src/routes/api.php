@@ -1,7 +1,6 @@
 <?php
 
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
-use Code16\Sharp\Http\Controllers\Api\ApiFilesController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadThumbnailController;
@@ -12,7 +11,6 @@ use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityStateControlle
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListInstanceCommandController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowEntityStateController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowInstanceCommandController;
-use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsController;
 use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsFormController;
 use Code16\Sharp\Http\Controllers\EntityListController;
 use Illuminate\Support\Facades\Route;
@@ -83,7 +81,7 @@ Route::group([
 
     Route::post('/form/editors/upload/form/{entityKey}/{instanceId?}', [ApiFormEditorUploadFormController::class, 'update'])
         ->name('code16.sharp.api.form.editor.upload.form.update');
-    
+
     Route::post('/upload/thumbnail/{entityKey}/{instanceId?}', [ApiFormUploadThumbnailController::class, 'show'])
         ->name('code16.sharp.api.form.upload.thumbnail.show');
 

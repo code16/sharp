@@ -24,13 +24,13 @@ class EditorFormatterTestEmbed extends SharpFormEditorEmbed
                 SharpFormUploadField::make('visual')->setImageOnly()
             );
     }
-    
+
     public function transformDataForTemplate(array $data, bool $isForm): array
     {
         return $this->setCustomTransformer('visual', (new SharpUploadModelFormAttributeTransformer())->dynamicInstance())
             ->transformForTemplate($data);
     }
-    
+
     public function updateContent(array $data = []): array
     {
         return $data;

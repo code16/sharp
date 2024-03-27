@@ -174,10 +174,10 @@ it('allows to format embeds with uploads to front', function () {
     $formatter = (new EditorFormatter)->setInstanceId(1);
     $field = SharpFormEditorField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
-    
+
     $image = UploadedFile::fake()->image('test.jpg', 600, 600);
     $image->storeAs('data/Posts/1', 'image.jpg', ['disk' => 'local']);
-    
+
     $value = sprintf(<<<'HTML'
         <x-embed visual="%s">My <em>contentful</em> content</x-embed>
         HTML,
@@ -188,13 +188,13 @@ it('allows to format embeds with uploads to front', function () {
             'disk' => 'local',
         ]))
     );
-    
+
     expect($formatter->toFront($field, $value))->toEqual([
         'text' => <<<'HTML'
             <x-embed data-key="0"></x-embed>
             HTML,
         'embeds' => [
-            (new EditorFormatterTestEmbed())->key() => (object)[
+            (new EditorFormatterTestEmbed())->key() => (object) [
                 '0' => [
                     'slot' => 'My <em>contentful</em> content',
                     'visual' => [
@@ -209,7 +209,7 @@ it('allows to format embeds with uploads to front', function () {
                         'mime_type' => 'image/jpeg',
                         'filters' => null,
                         'id' => null,
-                    ]
+                    ],
                 ],
             ],
         ],
@@ -238,7 +238,7 @@ it('allows to format embeds with uploads from front', function () {
                         'mime_type' => 'image/jpeg',
                         'filters' => null,
                         'id' => null,
-                    ]
+                    ],
                 ],
             ],
         ],
