@@ -13,7 +13,7 @@ class ApiFormUploadThumbnailController extends Controller
     public function show(string $entityKey, ?string $instanceId = null)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
-        
+
         return response()->json([
             'thumbnail' => static::getUploadModelClass()::make([
                 'file_name' => request()->input('path'),
