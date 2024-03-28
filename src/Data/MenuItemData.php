@@ -2,20 +2,20 @@
 
 namespace Code16\Sharp\Data;
 
+use Code16\Sharp\Utils\Icons\IconManager;
 use Code16\Sharp\Utils\Menu\SharpMenuItem;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 
 final class MenuItemData extends Data
 {
     public function __construct(
-        public ?string $icon = null,
+        public ?array $icon = null,
         public ?string $label = null,
         public ?string $url = null,
         public bool $isExternalLink = false,
         public ?string $entityKey = null,
         public bool $isSeparator = false,
         public bool $current = false,
-
         /** @var DataCollection<MenuItemData> */
         public ?DataCollection $children = null,
         public bool $isCollapsible = false,
@@ -44,7 +44,7 @@ final class MenuItemData extends Data
         }
 
         return new self(
-            icon: $item->getIcon(),
+            icon: app(IconManager::class)->iconToArray($item->getIcon()),
             label: $item->getLabel(),
             url: $item->getUrl(),
             isExternalLink: $item->isExternalLink(),
