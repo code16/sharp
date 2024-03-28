@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import EmbedRenderer from '@/content/components/EmbedRenderer.vue';
     import NodeRenderer from "../../NodeRenderer.vue";
     import EmbedFormModal from "./EmbedFormModal.vue";
@@ -40,7 +40,7 @@
                     <div class="row row-cols-auto gx-2">
                         <template v-if="extension.options.embed.attributes.length">
                             <div>
-                                <Button outline small
+                                <Button variant="outline" size="sm"
                                     @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })"
                                 >
                                     {{ __('sharp::form.upload.edit_button') }}
@@ -48,7 +48,7 @@
                             </div>
                         </template>
                         <div>
-                            <Button variant="danger" outline small @click="deleteNode()">
+                            <Button variant="destructive" size="sm" @click="deleteNode()">
                                 {{ __('sharp::form.upload.remove_button') }}
                             </Button>
                         </div>

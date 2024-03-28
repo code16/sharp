@@ -6,7 +6,7 @@
 
 <style>
     :root {
-        --primary: {{ $primaryColor }};
+        {{----primary: {{ $primaryColor }};--}}
         --primary-h: {{ $self->formatNumber($primaryColorHSL[0]) }}deg;
         --primary-s: {{ $self->formatNumber($primaryColorHSL[1]) }}%;
         --primary-l: {{ $self->formatNumber($primaryColorHSL[2]) }}%;

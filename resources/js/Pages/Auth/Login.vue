@@ -5,6 +5,7 @@
     import { __ } from "@/utils/i18n";
     import Title from "@/components/Title.vue";
     import { route } from "@/utils/url";
+    import { Button } from "@/components/ui/button";
 
     const append = document.querySelector('#login-append')?.innerHTML;
     const form = useForm({
@@ -60,9 +61,9 @@
             </template>
 
             <div class="text-center mt-4">
-                <button type="submit" id="submit" class="btn btn-primary btn-lg w-full">
+                <Button type="submit" class="w-full">
                     {{ __('sharp::pages/auth/login.button') }}
-                </button>
+                </Button>
             </div>
         </form>
 

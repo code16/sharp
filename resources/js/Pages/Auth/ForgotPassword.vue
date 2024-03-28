@@ -4,7 +4,7 @@
     import { __ } from "@/utils/i18n";
     import { useForm } from "@inertiajs/vue3";
     import TextInput from "@/form/components/fields/text/TextInput.vue";
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import { route } from "@/utils/url";
 
     const props = defineProps<{

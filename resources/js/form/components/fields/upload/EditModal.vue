@@ -6,7 +6,8 @@
     import { FormUploadFieldData } from "@/types";
     import Cropper from "cropperjs";
     import { rotate, rotateTo } from "./util/rotate";
-    import { Modal, Loading, Button } from '@/components/ui';
+    import { Button } from '@/components/ui/button';
+    import { Modal, Loading } from '@/components/ui';
     import { useParentForm } from "@/form/useParentForm";
     import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
     import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
@@ -136,10 +137,10 @@
         <template v-slot:footer-prepend>
             <div class="flex gap-4">
                 <div class="flex gap-4">
-                    <Button text @click="onRotate(-90)">
+                    <Button variant="outline" @click="onRotate(-90)">
                         <ArrowUturnLeftIcon class="w-4 h-4" />
                     </Button>
-                    <Button text @click="onRotate(90)">
+                    <Button variant="outline" @click="onRotate(90)">
                         <ArrowUturnRightIcon class="w-4 h-4" />
                     </Button>
                 </div>

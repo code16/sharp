@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { Button, Modal } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
+    import { Modal } from "@/components/ui";
     import { NodeViewWrapper } from '@tiptap/vue-3';
     import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
     import { Html, HtmlContentNodeAttributes } from "@/form/components/fields/editor/extensions/html/Html";
@@ -44,7 +45,7 @@
                         <pre class="mb-0">{{ node.attrs.content }}</pre>
                     </div>
                     <div class="col-auto me-n2 my-n2">
-                        <Button small variant="light" @click="onEdit">
+                        <Button variant="secondary" size="sm" @click="onEdit">
                             <i class="fas fa-pencil-alt fs-7"></i>
                         </Button>
                     </div>

@@ -10,7 +10,7 @@
     import Breadcrumb from "@/components/Breadcrumb.vue";
     import { ref, watchEffect } from "vue";
     import { __ } from "@/utils/i18n";
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import { vSticky } from "@/directives/sticky";
 
     const props = defineProps<{
@@ -85,7 +85,7 @@
                         <div class="flex gap-4">
                             <div class="flex-1">
                             </div>
-                            <Button :href="breadcrumb.items.at(-2)?.url" outline>
+                            <Button as="a" :href="breadcrumb.items.at(-2)?.url" variant="outline">
                                 <template v-if="form.canEdit">
                                     {{ __('sharp::action_bar.form.cancel_button') }}
                                 </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import { EmbedData, FormEditorFieldData, FormEditorToolbarButton } from "@/types";
+    import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
     import { Editor } from "@tiptap/vue-3";
     import LinkDropdown from "./LinkDropdown.vue";
     import TableDropdown from "./TableDropdown.vue";
-    import { Button, Dropdown, DropdownItem } from "@/components/ui";
+    import { Dropdown, DropdownItem } from "@/components/ui";
     import { buttons } from './config';
     import { computed } from "vue";
     import { config } from "@/utils/config";
@@ -11,6 +11,7 @@
     import { ContentEmbedManager } from "@/content/ContentEmbedManager";
     import { FormFieldProps } from "@/form/types";
     import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import { Toggle } from "@/components/ui/toggle";
 
     const props = defineProps<FormFieldProps<FormEditorFieldData> & {
         editor: Editor,
@@ -33,6 +34,11 @@
             <template v-for="group in toolbarGroups">
                 <div class="btn-group">
                     <template v-for="button in group">
+
+                        <!--
+                            TODO move to shadcn ToggleGroup
+                        -->
+
                         <template v-if="button === 'link'">
                             <LinkDropdown
                                 :id="fieldErrorKey"
@@ -56,21 +62,19 @@
                             </TableDropdown>
                         </template>
                         <template v-else-if="button.startsWith('embed:')">
-                            <Button
-                                variant="light"
-                                :active="editor.isActive(button)"
+                            <Toggle
+                                :pressed="editor.isActive(button)"
                                 :disabled="field.readOnly"
                                 :title="field.embeds[button.replace('embed:', '')]?.label"
                                 @click="$emit('embed', field.embeds[button.replace('embed:', '')])"
                                 :data-test="button"
                             >
                                 <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
-                            </Button>
+                            </Toggle>
                         </template>
                         <template v-else :key="button">
-                            <Button
-                                variant="light"
-                                :active="buttons[button].isActive(editor)"
+                            <Toggle
+                                :pressed="buttons[button].isActive(editor)"
                                 :disabled="field.readOnly"
                                 :title="buttons[button].label()"
                                 @click="button === 'upload' || button === 'upload-image'
@@ -82,7 +86,7 @@
                                 <template v-if="button === 'small'">
                                     <i class="fas fa-font fa-xs" style="margin-top: .25em"></i>
                                 </template>
-                            </Button>
+                            </Toggle>
                         </template>
                     </template>
                 </div>

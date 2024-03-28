@@ -5,6 +5,7 @@
     import Title from "@/components/Title.vue";
     import { route } from "@/utils/url";
     import {config} from "@/utils/config";
+    import { Button } from "@/components/ui/button";
 
     defineProps<{
         helpText: string
@@ -37,9 +38,9 @@
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" id="submit" class="btn btn-primary btn-lg">
+                <Button type="submit" class="w-full">
                     {{ __('sharp::pages/auth/login.button') }}
-                </button>
+                </Button>
             </div>
         </form>
     </AuthLayout>
