@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue';
 import * as path from 'path';
 import ignoreImport from 'rollup-plugin-ignore-import';
 import { splitVendorChunkPlugin } from 'vite';
-import { warmup } from 'vite-plugin-warmup';
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, path.join(process.cwd(), '/demo'), '');
@@ -24,20 +23,19 @@ export default defineConfig(({ mode, command }) => {
         },
         server: {
             hmr: false,
-        },
-        plugins: [
-            warmup({
+            warmup: {
                 clientFiles: [
                     './resources/js/Pages/**/*.vue',
                 ],
-            }),
+            }
+        },
+        plugins: [
             splitVendorChunkPlugin(),
             laravel({
                 input: [
                     'resources/js/sharp.ts',
-                    'resources/sass/app.css',
-                    // 'resources/sass/app.scss',
-                    'resources/sass/vendors.scss',
+                    'resources/css/app.css',
+                    'resources/css/vendors.css',
                 ],
                 publicDirectory: '/dist',
                 refresh: true,
@@ -53,29 +51,11 @@ export default defineConfig(({ mode, command }) => {
                     },
                 },
             }),
-            // watch({
-            //     pattern: "src/{Data,Enums}/**/*.php",
-            //     command: "composer typescript:transform",
-            // }),
             ignoreImport({
                 include: [
                     /moment\/locale\/(?!fr\.js$).*\.js$/,
-                    /bootstrap-vue\/esm\/(icons\/icons)/,
                 ],
-                // exclude: [
-                //
-                // ],
             }),
-            ...(command === 'build' ? [
-                babel({
-                    babelHelpers: 'bundled',
-                    exclude: [
-                        "node_modules/**",
-                        /type=style/, // ignore .vue outputs with styles
-                    ],
-                    extensions: ['.js', '.vue'],
-                })
-            ] : []),
         ],
     }
 });

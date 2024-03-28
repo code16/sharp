@@ -124,7 +124,7 @@
             ></textarea>
 
             <template v-if="previewHtml && !invalid">
-                <div class="[&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$=%]]:h-[260px] mt-3" v-html="previewHtml">
+                <div class="[&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$='%']]:h-[260px] mt-3" v-html="previewHtml">
                 </div>
             </template>
         </Modal>

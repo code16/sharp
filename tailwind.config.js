@@ -1,8 +1,8 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-const plugin = require('tailwindcss/plugin');
+import plugin from 'tailwindcss/plugin';
+import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     content: [
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
@@ -46,7 +46,7 @@ module.exports = {
     },
 
     plugins: [
-        require('@tailwindcss/forms'),
+        forms,
         plugin(function ({ matchUtilities, theme }) {
             matchUtilities({
                 'gap-x': (value) => {

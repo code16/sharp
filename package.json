@@ -4,6 +4,7 @@
   "workspaces": [
     "packages/*"
   ],
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -22,14 +23,14 @@
     "@types/leaflet": "^1.9.6",
     "@types/qs": "^6.9.7",
     "@types/sortablejs": "^1.15.3",
-    "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue": "^5.0.4",
     "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "^10.4.14",
     "core-js": "^3.36.0",
     "cross-env": "3.1.3",
     "jest": "^27.5.1",
     "js-beautify": "^1.7.4",
-    "laravel-vite-plugin": "^0.8.0",
+    "laravel-vite-plugin": "^1.0.2",
     "moment-timezone": "^0.5.13",
     "moxios": "^0.4.0",
     "prosemirror-model": "^1.19.4",
@@ -38,11 +39,9 @@
     "rollup-plugin-ignore-import": "^1.3.2",
     "sass": "npm:sass-embedded@^1.60.0",
     "tailwindcss": "^3.3.3",
-    "typescript": "^5.4.0-beta",
-    "vite": "^4.4.11",
-    "vite-bundle-visualizer": "^0.8.1",
-    "vite-plugin-warmup": "^0.1.0",
-    "vite-plugin-watch": "^0.2.0"
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6",
+    "vite-bundle-visualizer": "^0.8.1"
   },
   "dependencies": {
     "@fawmi/vue-google-maps": "^0.9.79",

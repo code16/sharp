@@ -13,8 +13,6 @@
 </template>
 
 <script>
-    // import { BTab } from 'bootstrap-vue';
-
     export default {
         name: 'SharpTab',
         components: {

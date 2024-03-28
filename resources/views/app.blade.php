@@ -8,9 +8,8 @@
 
         <x-sharp::vite>
             @vite([
-                'resources/sass/vendors.scss',
-        //        'resources/sass/app.scss',
-            'resources/css/app.css',
+                'resources/css/vendors.css',
+                'resources/css/app.css',
             ], '/vendor/sharp')
         </x-sharp::vite>
 
@@ -26,7 +25,9 @@
 
         <x-sharp::extensions.custom-fields-script />
 
-        @php(config()->set('ziggy', ['only' => 'code16.sharp.*']))
+        @php
+            config()->set('ziggy', ['only' => 'code16.sharp.*'])
+        @endphp
         @routes
         @inertiaHead
 
