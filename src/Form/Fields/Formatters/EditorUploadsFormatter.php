@@ -4,13 +4,13 @@ namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormField;
-use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorUploadsToFront;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsEditorUploads;
+use Code16\Sharp\Utils\Fields\Formatters\FormatsHtmlContent;
 
 class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
-    use HasMaybeLocalizedValue;
-    use HandlesHtmlContent;
-    use FormatsEditorUploadsToFront;
+    use FormatsHtmlContent;
+    use FormatsEditorUploads;
 
     /**
      * @param  SharpFormEditorField  $field
@@ -21,7 +21,7 @@ class EditorUploadsFormatter extends SharpFieldFormatter implements FormatsAfter
             return ['text' => $value];
         }
 
-        return $this->formatsEditorUploadsToFront($field, $value);
+        return $this->formatEditorUploadsToFront($field, $value);
     }
 
     /**

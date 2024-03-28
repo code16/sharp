@@ -8,10 +8,18 @@ use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use DOMDocument;
 use DOMElement;
 
-trait FormatsEditorUploadsToFront
+trait FormatsEditorUploads
 {
-    protected function formatsEditorUploadsToFront(IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization $field, $value): array
+    use FormatsHtmlContent;
+    
+    protected function formatEditorUploadsToFront(IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization $field, $value): array
     {
+        if(!str_contains($value, '<x-sharp-image') && !str_contains($value, '<x-sharp-file')) {
+            return [
+                'text' => $value,
+            ];
+        }
+        
         $uploads = [];
 
         $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {

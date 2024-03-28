@@ -1,13 +1,13 @@
 <?php
 
-namespace Code16\Sharp\Form\Fields\Formatters;
+namespace Code16\Sharp\Utils\Fields\Formatters;
 
 use DOMDocument;
 use DOMElement;
 use DOMNode;
 use Masterminds\HTML5;
 
-trait HandlesHtmlContent
+trait FormatsHtmlContent
 {
     protected function parseHtml(string $html): DOMDocument
     {

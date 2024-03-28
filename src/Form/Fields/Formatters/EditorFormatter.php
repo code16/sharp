@@ -8,8 +8,6 @@ use Illuminate\Support\Collection;
 
 class EditorFormatter extends SharpFieldFormatter implements FormatsAfterUpdate
 {
-    use HasMaybeLocalizedValue;
-
     /**
      * @param  SharpFormEditorField  $field
      */
