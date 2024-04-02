@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import AuthLayout from "@/Layouts/AuthLayout.vue";
+    import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
     import Title from "@/components/Title.vue";
     import { __ } from "@/utils/i18n";
     import { useForm } from "@inertiajs/vue3";

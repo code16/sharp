@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useForm } from "@inertiajs/vue3";
-    import AuthLayout from "@/Layouts/AuthLayout.vue";
+    import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
     import Title from "@/components/Title.vue";

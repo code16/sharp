@@ -2,8 +2,8 @@
 
 return [
     'title' => 'Connexion',
-    'login_field' => 'identifiant',
-    'password_field' => 'mot de passe',
+    'login_field' => 'Identifiant',
+    'password_field' => 'Mot de passe',
     'code_field' => 'code',
     'remember' => 'Rester connecté',
     'button' => 'Connexion',

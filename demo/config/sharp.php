@@ -37,7 +37,6 @@ return [
     'auth' => [
         'login_attribute' => 'email',
         'password_attribute' => 'password',
-        'suggest_remember_me' => false,
         'rate_limiting' => [
             'enabled' => true,
             'max_attempts' => 5,
@@ -60,16 +59,24 @@ return [
         ],
         'login_form' => [
             // Handle a "remember me" flag (with a checkbox on the login form)
-            'suggest_remember_me' => false,
+            'suggest_remember_me' => true,
 
             // Display the app name on the login page.
             'display_app_name' => true,
 
             // Optional logo on the login page (default to theme.logo_url and to sharp logo)
             // 'logo_url' => '/img/sharp/login-icon.png',
-
+            
+            'description' => 'You can also log with editor@example.org',
+            
             // Optional additional message on the login page.
-            'message_blade_path' => 'sharp/_login-page-message',
+//            'message_blade_path' => 'sharp/_login-page-message',
+            
+            /** @internal */
+            'prefill' => [
+                'login' => 'admin@example.org',
+                'password' => 'password',
+            ],
         ],
 
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
@@ -78,7 +85,7 @@ return [
     'theme' => [
         'primary_color' => '#0c4589',
         'favicon_url' => '/img/sharp/favicon-32x32.png',
-        'logo_url' => '/img/sharp/logo.png',
+        'logo_url' => '/img/sharp/logo.svg',
     ],
 
     'extensions' => [

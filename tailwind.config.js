@@ -113,7 +113,7 @@ export default {
     },
     plugins: [
         animate,
-        forms,
+        // forms,
         plugin(function ({ matchUtilities, theme }) {
             matchUtilities({
                 'gap-x': (value) => {

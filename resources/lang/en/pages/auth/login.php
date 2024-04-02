@@ -2,8 +2,8 @@
 
 return [
     'title' => 'Login',
-    'login_field' => 'login',
-    'password_field' => 'password',
+    'login_field' => 'Login',
+    'password_field' => 'Password',
     'code_field' => 'code',
     'remember' => 'Remember me',
     'button' => 'Login',

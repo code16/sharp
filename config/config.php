@@ -124,9 +124,6 @@ return [
             'reset_password_callback' => null,
         ],
 
-        // Handle a "remember me" flag (with a checkbox on the login form)
-        'suggest_remember_me' => false,
-
         // Name of the attribute used to display the current user in the UI.
         'display_attribute' => 'name',
 

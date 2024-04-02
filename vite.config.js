@@ -22,7 +22,7 @@ export default defineConfig(({ mode, command }) => {
             }
         },
         server: {
-            hmr: false,
+            // hmr: false,
             warmup: {
                 clientFiles: [
                     './resources/js/Pages/**/*.vue',
