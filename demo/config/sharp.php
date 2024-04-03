@@ -2,7 +2,6 @@
 
 return [
     'name' => 'Demo project',
-    'custom_url_segment' => 'sharp',
     'display_sharp_version_in_title' => true,
     'display_breadcrumb' => true,
     'entities' => [

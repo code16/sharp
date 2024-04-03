@@ -10,6 +10,7 @@ use Code16\Sharp\Auth\TwoFactor\Engines\Sharp2faTotpEngine;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faEloquentDefaultTotpHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Auth\TwoFactor\Sharp2faNotificationHandler;
+use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Console\DashboardMakeCommand;
 use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
@@ -98,6 +99,7 @@ class SharpServiceProvider extends ServiceProvider
         $this->app->singleton(CurrentSharpRequest::class);
         $this->app->singleton(SharpMenuManager::class);
         $this->app->singleton(SharpUploadManager::class);
+        $this->app->singleton(SharpConfigBuilder::class);
         $this->app->singleton(
             ImageManager::class,
             fn () => new ImageManager(

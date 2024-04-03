@@ -5,6 +5,11 @@ function currentSharpRequest(): \Code16\Sharp\Http\Context\CurrentSharpRequest
     return app(\Code16\Sharp\Http\Context\CurrentSharpRequest::class);
 }
 
+function sharpConfig(): \Code16\Sharp\Config\SharpConfigBuilder
+{
+    return app(\Code16\Sharp\Config\SharpConfigBuilder::class);
+}
+
 function sharp_version(): string
 {
     return \Code16\Sharp\SharpServiceProvider::VERSION;
@@ -45,11 +50,6 @@ function sharp_normalize_entity_key(string $entityKey): array
     $parts = explode(':', $entityKey);
 
     return count($parts) == 1 ? [$parts[0], null] : $parts;
-}
-
-function sharp_base_url_segment(): string
-{
-    return config('sharp.custom_url_segment', 'sharp');
 }
 
 /**

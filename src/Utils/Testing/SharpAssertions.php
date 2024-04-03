@@ -255,6 +255,6 @@ trait SharpAssertions
             ->filter()
             ->implode('/');
 
-        return url(sprintf('/%s/%s', sharp_base_url_segment(), $uri));
+        return url(sprintf('/%s/%s', sharpConfig()->get('custom_url_segment'), $uri));
     }
 }
