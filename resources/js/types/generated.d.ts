@@ -790,6 +790,7 @@ export type ShowTextFieldData = {
 };
 export type UserData = {
   name: string | null;
+  email: string | null;
 };
 export type UserMenuData = {
   items: Array<MenuItemData>;

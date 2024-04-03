@@ -39,13 +39,6 @@
         <x-sharp::alert.assets-outdated />
 
         @inertia
-
-        @if($login ?? false)
-            <template id="login-append">
-                @includeIf(config("sharp.auth.login_form.message_blade_path", config("sharp.login_page_message_blade_path")))
-            </template>
-        @endif
-
         @stack('script')
     </body>
 </html>

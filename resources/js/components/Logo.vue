@@ -9,7 +9,7 @@
         </div>
     </template>
     <template v-else>
-        <div class="text-white">
+        <div>
             {{ config('sharp.name') }}
         </div>
     </template>

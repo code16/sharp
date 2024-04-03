@@ -14,11 +14,13 @@
     import { session } from "@/utils/session";
     import { FormItem } from "@/components/ui/form";
     import { Check } from "lucide-vue-next";
+    import TemplateRenderer from "@/components/TemplateRenderer.vue";
 
     const props = defineProps<{
+        loginIsEmail: boolean,
         login: string|null,
         password: string|null,
-        description: string|null,
+        message: string|null,
     }>();
 
     const append = document.querySelector('#login-append')?.innerHTML;
@@ -56,15 +58,20 @@
         <form @submit.prevent="form.post(route('code16.sharp.login.post'))">
             <AuthCard>
                 <template #title>
-                    Connexion
-                </template>
-                <template v-if="description" #description>
-                    {{ description }}
+                    {{ __('sharp::pages/auth/login.title') }}
                 </template>
                 <div class="grid gap-4">
                     <FormItem>
-                        <Label for="login">{{ __('sharp::pages/auth/login.login_field') }}</Label>
-                        <Input type="text" name="login" id="login" v-model="form.login" autocomplete="username" autofocus />
+                        <Label for="login">
+                            {{ loginIsEmail ? __('sharp::pages/auth/login.login_field_for_email') : __('sharp::pages/auth/login.login_field') }}
+                        </Label>
+                        <Input
+                            id="login"
+                            :type="loginIsEmail ? 'email' : 'text'"
+                            :autocomplete="loginIsEmail ? 'email' : 'username'"
+                            v-model="form.login"
+                            autofocus
+                        />
                     </FormItem>
                     <FormItem>
                         <div class="flex items-center">
@@ -96,8 +103,10 @@
             </AuthCard>
         </form>
 
-        <template v-if="append" v-slot:append>
-            <div v-html="append"></div>
+        <template v-if="message" v-slot:append>
+            <div class="mt-4">
+                <TemplateRenderer :template="message" />
+            </div>
         </template>
     </AuthLayout>
 </template>

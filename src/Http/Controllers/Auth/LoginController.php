@@ -29,11 +29,16 @@ class LoginController extends Controller
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
         }
-
+        
+        if($message = config('sharp.auth.login_form.message_blade_path', config('sharp.login_page_message_blade_path'))) {
+            $message = view()->exists($message) ? view($message)->render() : null;
+        }
+ 
         return Inertia::render('Auth/Login', [
-            'description' => config('sharp.auth.login_form.description'),
+            'loginIsEmail' => config('sharp.auth.login_attribute') === 'email',
             'login' => config('sharp.auth.login_form.prefill.login'),
             'password' => config('sharp.auth.login_form.prefill.password'),
+            'message' => $message,
         ]);
     }
 

@@ -67,10 +67,8 @@ return [
             // Optional logo on the login page (default to theme.logo_url and to sharp logo)
             // 'logo_url' => '/img/sharp/login-icon.png',
             
-            'description' => 'You can also log with editor@example.org',
-            
             // Optional additional message on the login page.
-//            'message_blade_path' => 'sharp/_login-page-message',
+            'message_blade_path' => 'sharp/_login-page-message',
             
             /** @internal */
             'prefill' => [
