@@ -14,9 +14,9 @@ use Illuminate\Support\Arr;
 
 abstract class SharpDashboard
 {
-    use HandleFilters,
-        HandleDashboardCommands,
-        HandlePageAlertMessage;
+    use HandleFilters;
+    use HandleDashboardCommands;
+    use HandlePageAlertMessage;
 
     protected bool $dashboardBuilt = false;
     protected array $graphWidgetDataSets = [];
