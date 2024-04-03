@@ -16,15 +16,15 @@ class InstallCommand extends Command
     {
         $this->components->warn('By default, Sharp will be accessible to all users that can login with their email and password.');
 
-        $shouldCreateCheckHandler = confirm(
-            label: 'Should create a custom check handler to restrict Sharp access only to specific users (admins, etc) ?',
+        $shouldAddDefaultGate = confirm(
+            label: 'Should add a default gate in AppServiceProvider that you will customize to restrict Sharp access only to specific users (admins, etc) ?',
         );
 
         $this->publishConfig();
         $this->publishAssets();
         $this->initSharpMenu();
-        if ($shouldCreateCheckHandler) {
-            $this->createCheckHandler();
+        if ($shouldAddDefaultGate) {
+            $this->addDefaultGate();
         }
         $this->components->info('Sharp has been installed! You can now generate your first sharp entity with the help of an artisan command. Use `artisan sharp:generator`');
 
@@ -86,7 +86,7 @@ class InstallCommand extends Command
 
         $this->addMenuToSharpConfig();
 
-        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace().'\\SharpMenu.php');
+        $this->components->twoColumnDetail('Menu', app_path('SharpMenu.php'));
     }
 
     private function getSharpRootNamespace()
@@ -103,23 +103,26 @@ class InstallCommand extends Command
         );
     }
 
-    private function createCheckHandler()
+    private function addDefaultGate()
     {
-        Artisan::call('sharp:make:check-handler', [
-            'name' => 'SharpCheckHandler',
-        ]);
+        $this->addSharpGateToAppServiceProvider();
 
-        $this->addCheckHandlerToSharpConfig();
-
-        $this->components->twoColumnDetail('Custom check handler', $this->getSharpRootNamespace().'\\SharpCheckHandler.php');
+        $this->components->twoColumnDetail('Defaut gate', app_path('Providers/AppServiceProvider.php'));
     }
 
-    private function addCheckHandlerToSharpConfig()
+    private function addSharpGateToAppServiceProvider()
     {
+
         $this->replaceFileContent(
-            config_path('sharp.php'),
-            "'auth' => [".PHP_EOL,
-            "'auth' => [".PHP_EOL."        'check_handler' => ".$this->getSharpRootNamespace().'\\SharpCheckHandler::class,'.PHP_EOL,
+            app_path('Providers/AppServiceProvider.php'),
+            "Illuminate\Support\ServiceProvider;".PHP_EOL,
+            "Illuminate\Support\ServiceProvider;".PHP_EOL."use Illuminate\Support\Facades\Gate;".PHP_EOL,
+        );
+
+        $this->replaceFileContent(
+            app_path('Providers/AppServiceProvider.php'),
+            "boot()".PHP_EOL."    {".PHP_EOL,
+            "boot()".PHP_EOL."    {".PHP_EOL."        Gate::define('viewSharp', function(\$user) {".PHP_EOL."            return true;".PHP_EOL."        });".PHP_EOL,
         );
     }
 }
