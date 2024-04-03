@@ -2,9 +2,9 @@
 
 return [
     'title' => 'Iniciar sesión',
-    'login_field' => 'login',
-    'password_field' => 'contraseña',
-    'code_field' => 'código',
+    'login_field' => 'Login',
+    'password_field' => 'Contraseña',
+    'code_field' => 'Código',
     'remember' => 'Mantener sesión activa',
     'button' => 'login',
 ];

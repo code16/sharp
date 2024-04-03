@@ -31,7 +31,6 @@ class LoginController extends Controller
         }
 
         return Inertia::render('Auth/Login', [
-            'status' => session('status'),
             'description' => config('sharp.auth.login_form.description'),
             'login' => config('sharp.auth.login_form.prefill.login'),
             'password' => config('sharp.auth.login_form.prefill.password'),

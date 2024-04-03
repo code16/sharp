@@ -51,7 +51,7 @@ class PasswordResetController extends Controller
 
         if ($status == Password::PASSWORD_RESET) {
             return redirect()->route('code16.sharp.login')
-                ->with('status', __("sharp::$status"));
+                ->with('status', __('sharp::passwords.reset'));
         }
 
         throw ValidationException::withMessages([

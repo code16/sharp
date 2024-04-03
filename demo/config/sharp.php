@@ -55,7 +55,7 @@ return [
         'display_attribute' => 'name',
         'impersonate' => [
             'enabled' => env('SHARP_IMPERSONATE', false),
-            'handler' => null,
+            'handler' => Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler::class,
         ],
         'login_form' => [
             // Handle a "remember me" flag (with a checkbox on the login form)

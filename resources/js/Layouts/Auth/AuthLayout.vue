@@ -1,18 +1,13 @@
 <script setup lang="ts">
+import { Alert } from "@/components/ui/alert";
+import SharpIcon from "@/svg/SharpIcon.vue";
 </script>
 
 <template>
     <div id="sharp-app" class="p-4 h-screen flex justify-center items-center">
+        <SharpIcon class="absolute top-8 left-8 w-[100px]" />
         <div class="w-full max-w-sm">
             <slot name="prepend" />
-
-            <template v-if="$page.props.status">
-                <div class="rounded-md bg-green-50 p-4 my-4">
-                    <p class="text-sm font-medium text-green-800">
-                        {{ $page.props.status }}
-                    </p>
-                </div>
-            </template>
 
             <slot />
 
