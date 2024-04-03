@@ -220,7 +220,7 @@ it('handles custom auth check', function () {
 });
 
 it('checks useSharp Gate', function () {
-    Gate::define('useSharp', fn ($user) => $user->name === 'ok');
+    Gate::define('viewSharp', fn ($user) => $user->name === 'ok');
 
     login(new User(['name' => 'ok']));
     $this->get('/sharp/s-list/person')

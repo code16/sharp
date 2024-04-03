@@ -14,11 +14,11 @@ class SharpAuthenticate extends BaseAuthenticate
     {
         $this->authenticate($request, $guards);
 
-        if (Gate::has('useSharp')) {
-            if (!Gate::allows('useSharp')) {
+        if (Gate::has('viewSharp')) {
+            if (! Gate::allows('viewSharp')) {
                 $this->unauthenticated($request, $guards);
             }
-        } else if ($checkHandler = config('sharp.auth.check_handler')) {
+        } elseif ($checkHandler = config('sharp.auth.check_handler')) {
             if (! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
                 $this->unauthenticated($request, $guards);
             }

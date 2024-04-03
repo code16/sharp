@@ -62,7 +62,7 @@ It's very likely that you don't want to authorize all users to access Sharp. You
 
 ### Global authorization gate
 
-A simple way to restrict access to Sharp is to define the `useSharp` global Gate (typically in your `AppServiceProvider`):
+A simple way to restrict access to Sharp is to define the `viewSharp` global Gate (typically in your `AppServiceProvider`):
 
 ```php
 class AppServiceProvider extends ServiceProvider
@@ -71,7 +71,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::define('useSharp', function ($user) {
+        Gate::define('viewSharp', function ($user) {
             return $user->is_sharp_admin; // Or any check you need
         });
     }
