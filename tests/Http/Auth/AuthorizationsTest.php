@@ -1,10 +1,13 @@
 <?php
 
+use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+use Code16\Sharp\Tests\Fixtures\User;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -193,4 +196,37 @@ it('checks the main entity prohibited actions in case of a sub entity', function
     $this->post('/sharp/s-list/person/s-form/person:big/50')->assertRedirect();
     $this->delete('/sharp/s-list/person/s-show/person:big/50')->assertForbidden();
     $this->get('/sharp/s-list/person')->assertOk();
+});
+
+it('handles custom auth check', function () {
+    $this->app['config']->set(
+        'sharp.auth.check_handler',
+        fn () => new class implements SharpAuthenticationCheckHandler
+        {
+            public function check($user): bool
+            {
+                return $user->name == 'ok';
+            }
+        }
+    );
+
+    login(new User(['name' => 'ok']));
+    $this->get('/sharp/s-list/person')
+        ->assertOk();
+
+    login(new User(['name' => 'ko']));
+    $this->get('/sharp/s-list/person')
+        ->assertRedirect(route('code16.sharp.login'));
+});
+
+it('checks useSharp Gate', function () {
+    Gate::define('useSharp', fn ($user) => $user->name === 'ok');
+
+    login(new User(['name' => 'ok']));
+    $this->get('/sharp/s-list/person')
+        ->assertOk();
+
+    login(new User(['name' => 'ko']));
+    $this->get('/sharp/s-list/person')
+        ->assertRedirect(route('code16.sharp.login'));
 });
