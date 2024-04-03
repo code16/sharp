@@ -110,28 +110,8 @@ class Thumbnail
             return null;
         }
 
-        $thumbDirNameAppender = sprintf(
-            '%s%s_q-%s',
-            $this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '',
-            sizeof($this->modifiers) ? '_'.md5(serialize($this->modifiers)) : '',
-            $this->quality
-        );
-
-        $extension = $this->resolveThumbnailExtension();
-
-        $thumbnailPath = sprintf(
-            '%s/%s/%s-%s%s/%s.%s',
-            config('sharp.uploads.thumbnails_dir', 'thumbnails'),
-            dirname($this->uploadModel->file_name),
-            $width, $height, $thumbDirNameAppender,
-            str(basename($this->uploadModel->file_name))->beforeLast('.'),
-            $extension
-        );
-
-        // Strip double /
-        $thumbnailPath = Str::replace('//', '/', $thumbnailPath);
-
         $thumbnailDisk = Storage::disk(config('sharp.uploads.thumbnails_disk', 'public'));
+        $thumbnailPath = $this->resolveThumbnailPath($width, $height);
         $wasCreated = ! $thumbnailDisk->exists($thumbnailPath);
         $url = $this->generateThumbnail($thumbnailPath, $width, $height);
 
@@ -253,5 +233,29 @@ class Thumbnail
             PngEncoder::class => 'png',
             default => str($this->uploadModel->file_name)->afterLast('.'),
         };
+    }
+
+    private function resolveThumbnailPath(int $width = null, int $height = null): string
+    {
+        $thumbDirNameAppender = sprintf(
+            '%s%s_q-%s',
+            $this->transformationFilters ? '_'.md5(serialize($this->transformationFilters)) : '',
+            sizeof($this->modifiers) ? '_'.md5(serialize($this->modifiers)) : '',
+            $this->quality
+        );
+
+        $thumbnailPath = sprintf(
+            '%s/%s/%s-%s%s/%s.%s',
+            config('sharp.uploads.thumbnails_dir', 'thumbnails'),
+            dirname($this->uploadModel->file_name),
+            $width,
+            $height,
+            $thumbDirNameAppender,
+            Str::of(basename($this->uploadModel->file_name))->beforeLast('.'),
+            $this->resolveThumbnailExtension()
+        );
+
+        // Strip double /
+        return Str::replace('//', '/', $thumbnailPath);
     }
 }
