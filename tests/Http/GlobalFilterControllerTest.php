@@ -7,7 +7,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 beforeEach(function () {
     login();
 
-    config()->set('sharp.global_filters', fn () => [
+    sharpConfig()->addGlobalFilter(
         new class extends GlobalRequiredFilter
         {
             public function buildFilterConfig(): void
@@ -28,8 +28,8 @@ beforeEach(function () {
             {
                 return 2;
             }
-        },
-    ]);
+        }
+    );
 });
 
 it('allows to user to update a global filter', function () {

@@ -5,6 +5,7 @@ namespace Code16\Sharp\Config;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Entities\SharpEntity;
 use Code16\Sharp\Utils\Entities\SharpEntityResolver;
+use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Support\Traits\Conditionable;
 
@@ -84,6 +85,13 @@ class SharpConfigBuilder
     {
         $this->config['entity_resolver'] = $resolverClassName;
         $this->config['entities'] = [];
+
+        return $this;
+    }
+
+    public function addGlobalFilter(string|GlobalRequiredFilter $filter): self
+    {
+        $this->config['global_filters'][] = instanciate($filter);
 
         return $this;
     }

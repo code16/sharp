@@ -11,13 +11,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->register(SharpInternalServiceProvider::class);
-        $this->app->register(DemoSharpServiceProvider::class);
 //        $this->app->bind(SharpUploadModel::class, Media::class)
-
-        if (class_exists(SharpDevServiceProvider::class)) {
-            $this->app->register(SharpDevServiceProvider::class);
-        }
 
         $this->app->bind(SharpViteComponent::class, function () {
             return new SharpViteComponent(hotFile: base_path('../dist/hot'));
@@ -26,6 +20,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        //
+        $this->app->register(SharpInternalServiceProvider::class);
+        $this->app->register(DemoSharpServiceProvider::class);
+
+        if (class_exists(SharpDevServiceProvider::class)) {
+            $this->app->register(SharpDevServiceProvider::class);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\View\Components;
 
+use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuItemLink;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Support\Collection;
@@ -15,14 +16,14 @@ class Menu extends Component
     public bool $hasGlobalFilters;
     public bool $isVisible = true;
 
-    public function __construct(private SharpMenuManager $menuManager)
+    public function __construct(private readonly SharpMenuManager $menuManager)
     {
         $this->title = config('sharp.name', 'Sharp');
         $this->currentEntityKey = currentSharpRequest()->breadcrumb()->first()->key ?? null;
         $this->currentEntityItem = $this->currentEntityKey
             ? $this->menuManager->getEntityMenuItem($this->currentEntityKey)
             : null;
-        $this->hasGlobalFilters = sizeof(value(config('sharp.global_filters')) ?? []) > 0;
+        $this->hasGlobalFilters = app(GlobalFilters::class)->isEnabled();
         $this->isVisible = $this->menuManager->menu()?->isVisible() ?? true;
     }
 
