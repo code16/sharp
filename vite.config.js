@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import * as path from 'path';
 import ignoreImport from 'rollup-plugin-ignore-import';
 import { splitVendorChunkPlugin } from 'vite';
+import svgLoader from 'vite-svg-loader';
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, path.join(process.cwd(), '/demo'), '');
@@ -31,6 +32,7 @@ export default defineConfig(({ mode, command }) => {
         },
         plugins: [
             splitVendorChunkPlugin(),
+            svgLoader({ svgo: false }),
             laravel({
                 input: [
                     'resources/js/sharp.ts',

@@ -590,6 +590,10 @@ export type LayoutFieldData = {
   sizeXS: number;
   item: Array<Array<LayoutFieldData>> | null;
 };
+export type LogoData = {
+  svg: string | null;
+  url: string;
+};
 export type MenuData = {
   items: Array<MenuItemData>;
   userMenu: UserMenuData;

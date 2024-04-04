@@ -158,6 +158,7 @@ return [
         'primary_color' => '#004c9b',
         // 'favicon_url' => '',
         // 'logo_url' => '/sharp-assets/menu-icon.png',
+        // 'logo_height' => '1.5rem',
     ],
 
 ];

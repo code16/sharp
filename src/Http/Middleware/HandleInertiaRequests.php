@@ -3,18 +3,24 @@
 namespace Code16\Sharp\Http\Middleware;
 
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
+use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'sharp::app';
+    
+    public function __construct(
+        protected Filesystem $filesystem
+    ) {
+    }
 
     public function share(Request $request)
     {
@@ -63,7 +69,17 @@ class HandleInertiaRequests extends Middleware
                 'sharp.search.enabled' => value(config('sharp.search.enabled', false)),
                 'sharp.search.placeholder' => config('sharp.search.placeholder'),
                 'sharp.theme.logo_url' => config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
+                'sharp.theme.logo_height' => config('sharp.theme.logo_height'),
             ],
+            'logo' => LogoData::optional(transform(
+                config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
+                fn ($url) => $url ? [
+                    'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
+                        ? $this->filesystem->get(public_path($url))
+                        : null,
+                    'url' => $url,
+                ] : null,
+            )),
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class))
                 : null,

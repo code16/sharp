@@ -41,7 +41,8 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.4.3",
     "vite": "^5.2.6",
-    "vite-bundle-visualizer": "^0.8.1"
+    "vite-bundle-visualizer": "^0.8.1",
+    "vite-svg-loader": "^5.1.0"
   },
   "dependencies": {
     "@fawmi/vue-google-maps": "^0.9.79",

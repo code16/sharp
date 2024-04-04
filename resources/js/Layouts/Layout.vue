@@ -29,31 +29,34 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { config } from "@/utils/config";
-import { GlobalFiltersData } from "@/types";
+import { GlobalFiltersData, LogoData } from "@/types";
 import GlobalFilters from "@/filters/components/GlobalFilters.vue";
 import ColorModeDropdown from "@/components/ColorModeDropdown.vue";
+import SharpLogoMini from '../../svg/logo-mini.svg';
 
 const dialogs = useDialogs();
 const menu = useMenu();
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 </script>
 
-
 <template>
     <div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div class="hidden border-r bg-muted/40 md:block">
             <div class="flex h-full max-h-screen flex-col gap-2">
                 <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-                    <div class="flex items-center gap-2 font-semibold">
-                        <template v-if="config('sharp.theme.logo_url')">
-                            <img class="w-[100px]" :src="config('sharp.theme.logo_url')" :alt="config('sharp.name')" />
-                        </template>
-                        <template v-else>
-                            <div>
-                                {{ config('sharp.name') }}
+                    <template v-if="$page.props.logo">
+                        <Logo />
+                    </template>
+                    <template v-else>
+                        <div class="flex items-center gap-2 font-semibold">
+                            <div class="grid place-content-center w-6 h-6">
+                                <SharpLogoMini class="w-3 h-3" />
                             </div>
-                        </template>
-                    </div>
+                            <span>
+                                {{ config('sharp.name') }}
+                            </span>
+                        </div>
+                    </template>
 <!--                    <Button variant="outline" size="icon" class="ml-auto h-8 w-8">-->
 <!--                        <Bell class="h-4 w-4" />-->
 <!--                        <span class="sr-only">Toggle notifications</span>-->

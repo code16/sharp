@@ -17,7 +17,7 @@ createInertiaApp({
         });
     },
     progress: {
-        delay: 100,
+        delay: 150,
         color: 'hsl(var(--primary))',
     }
 });
