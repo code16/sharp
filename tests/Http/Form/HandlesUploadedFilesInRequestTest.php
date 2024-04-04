@@ -14,14 +14,9 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-    login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
-
     $this->withoutExceptionHandling();
+    sharpConfig()->addEntity('person', PersonEntity::class);
+    login();
     Storage::fake('local');
     Queue::fake();
 });

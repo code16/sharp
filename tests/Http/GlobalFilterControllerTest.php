@@ -59,10 +59,7 @@ it('does not allow to set a global filter to an unexpected value', function () {
 });
 
 it('the current value of the global filter is sent with every inertia request', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
     $this
         ->get('/sharp/s-list/person')

@@ -11,11 +11,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 });
 
 it('allows to configure a policy', function () {
@@ -176,10 +172,7 @@ it('allows to set the entity authorization in a policy', function () {
 });
 
 it('allows to set dashboard view policy to handle whole dashboard visibility', function () {
-    config()->set(
-        'sharp.entities.dashboard',
-        DashboardEntity::class,
-    );
+    sharpConfig()->addEntity('dashboard', DashboardEntity::class);
 
     fakePolicyFor('dashboard', new class extends SharpEntityPolicy
     {

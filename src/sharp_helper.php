@@ -10,9 +10,9 @@ function sharpConfig(): \Code16\Sharp\Config\SharpConfigBuilder
     return app(\Code16\Sharp\Config\SharpConfigBuilder::class);
 }
 
-function sharp_version(): string
+function sharpVersion(): string
 {
-    return \Code16\Sharp\SharpServiceProvider::VERSION;
+    return \Code16\Sharp\SharpInternalServiceProvider::VERSION;
 }
 
 function instanciate($class)

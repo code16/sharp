@@ -3,7 +3,7 @@
 namespace Code16\Sharp\Tests;
 
 use Code16\ContentRenderer\ContentRendererServiceProvider;
-use Code16\Sharp\SharpServiceProvider;
+use Code16\Sharp\SharpInternalServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -21,7 +21,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            SharpServiceProvider::class,
+            SharpInternalServiceProvider::class,
             ContentRendererServiceProvider::class,
         ];
     }

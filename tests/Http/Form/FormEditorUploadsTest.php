@@ -16,7 +16,7 @@ uses(InteractsWithViews::class);
 
 beforeEach(function () {
     config()->set('sharp.uploads.tmp_dir', 'tmp');
-    config()->set('sharp.entities.person', PersonEntity::class);
+    sharpConfig()->addEntity('person', PersonEntity::class);
     Storage::fake('local');
     $this->withoutExceptionHandling();
     login();

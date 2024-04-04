@@ -10,12 +10,8 @@ use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('adds the locales array if configured to the form', function () {

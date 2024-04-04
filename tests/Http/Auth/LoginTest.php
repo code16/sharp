@@ -6,10 +6,7 @@ use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 
 beforeEach(function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 });
 
 function setTestAuthGuard(): void

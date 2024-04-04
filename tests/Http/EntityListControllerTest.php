@@ -15,12 +15,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('gets list data for an entity', function () {

@@ -8,10 +8,7 @@ use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
     auth()->extend('sharp', fn () => new TestAuthGuard());
     config()->set('sharp.auth.guard', 'sharp');

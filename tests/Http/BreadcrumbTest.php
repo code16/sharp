@@ -8,13 +8,10 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    config()->set('sharp.display_breadcrumb', true);
+    sharpConfig()
+        ->displayBreadcrumb()
+        ->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('builds the breadcrumb for an entity list', function () {
@@ -46,10 +43,7 @@ it('builds the breadcrumb for a show page', function () {
 });
 
 it('builds the breadcrumb for a single show page', function () {
-    config()->set(
-        'sharp.entities.single-person',
-        SinglePersonEntity::class,
-    );
+    sharpConfig()->addEntity('single-person', SinglePersonEntity::class);
 
     $this
         ->get(route('code16.sharp.single-show', 'single-person'))

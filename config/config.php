@@ -32,13 +32,6 @@ return [
         // \App\Sharp\Filters\MyGlobalFilter::class
     ],
 
-    // Optional. Your global search implementation.
-    //    'search' => [
-    //        'enabled' => true,
-    //        'placeholder' => 'Search for anything...',
-    //        'engine' => \App\Sharp\MySearchEngine::class,
-    //    ],
-
     // Required. The main menu (left bar), which may contain links to entities, dashboards
     // or external URLs, grouped in categories.
     'menu' => null, //\App\Sharp\SharpMenu::class

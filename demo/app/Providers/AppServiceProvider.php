@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Code16\Sharp\Dev\SharpDevServiceProvider;
-use Code16\Sharp\SharpServiceProvider;
+use Code16\Sharp\SharpInternalServiceProvider;
 use Code16\Sharp\View\Components\Vite as SharpViteComponent;
 use Illuminate\Support\ServiceProvider;
 
@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->register(SharpServiceProvider::class);
+        $this->app->register(SharpInternalServiceProvider::class);
         $this->app->register(DemoSharpServiceProvider::class);
 //        $this->app->bind(SharpUploadModel::class, Media::class)
 

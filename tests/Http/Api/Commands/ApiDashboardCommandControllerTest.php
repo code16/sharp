@@ -7,12 +7,8 @@ use Code16\Sharp\Tests\Fixtures\Sharp\TestDashboard;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('dashboard', DashboardEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.dashboard',
-        DashboardEntity::class,
-    );
 });
 
 it('allows to call an info dashboard command', function () {
