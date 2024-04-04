@@ -3,8 +3,8 @@
     import { router } from "@inertiajs/vue3";
     import { ref } from "vue";
     import { useFilters } from "../useFilters";
-    import FilterSelect from './filters/FilterSelect.vue';
     import { route } from "@/utils/url";
+    import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
     const props = defineProps<{
         globalFilters: GlobalFiltersData,
@@ -23,22 +23,25 @@
 </script>
 
 <template>
-    <div class="SharpGlobalFilters">
-        <template v-if="open">
-            <div class="absolute inset-0" style="z-index: 1">
-            </div>
-        </template>
+    <div class="grid gap-2">
         <template v-for="filter in filters.rootFilters" :key="filter.key">
-            <FilterSelect
-                v-if="filter.type === 'select'"
-                :filter="filter"
-                :value="filters.values[filter.key] as SelectFilterData['value']"
-                global
-                @input="onChanged(filter, $event)"
-                @open="open = true"
-                @close="open = false"
-                style="z-index: 2"
-            />
+            <template v-if="filter.type === 'select'">
+                <Select
+                    :model-value="String(filters.values[filter.key])"
+                    @update:model-value="onChanged(filter, $event)"
+                >
+                    <SelectTrigger>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <template v-for="value in filter.values">
+                            <SelectItem :value="String(value.id)">
+                                {{ value.label ?? value.id }}
+                            </SelectItem>
+                        </template>
+                    </SelectContent>
+                </Select>
+            </template>
         </template>
     </div>
 </template>

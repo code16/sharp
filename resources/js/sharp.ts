@@ -16,6 +16,10 @@ createInertiaApp({
             window.dispatchEvent(new CustomEvent('sharp:mounted'));
         });
     },
+    progress: {
+        delay: 100,
+        color: 'hsl(var(--primary))',
+    }
 });
 
 // force reload on previous navigation to invalidate outdated data / state

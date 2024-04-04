@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import LeftNav from "../components/LeftNav.vue";
 import { ref } from "vue";
-import { CircleUser, ChevronsUpDown, LogOut } from "lucide-vue-next";
+import { CircleUser, ChevronsUpDown, LogOut, Menu } from "lucide-vue-next";
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
-import { Modal } from '@/components/ui';
 import useMenu from "@/composables/useMenu";
 import Logo from "@/components/Logo.vue";
 import { auth } from "@/utils/auth";
@@ -18,7 +17,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import { CollapsibleTrigger } from "radix-vue";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -29,9 +28,14 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
+import { config } from "@/utils/config";
+import { GlobalFiltersData } from "@/types";
+import GlobalFilters from "@/filters/components/GlobalFilters.vue";
+import ColorModeDropdown from "@/components/ColorModeDropdown.vue";
 
 const dialogs = useDialogs();
 const menu = useMenu();
+const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 </script>
 
 
@@ -40,48 +44,67 @@ const menu = useMenu();
         <div class="hidden border-r bg-muted/40 md:block">
             <div class="flex h-full max-h-screen flex-col gap-2">
                 <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-                    <a href="/" class="flex items-center gap-2 font-semibold">
-                        <Logo />
-                    </a>
+                    <div class="flex items-center gap-2 font-semibold">
+                        <template v-if="config('sharp.theme.logo_url')">
+                            <img class="w-[100px]" :src="config('sharp.theme.logo_url')" :alt="config('sharp.name')" />
+                        </template>
+                        <template v-else>
+                            <div>
+                                {{ config('sharp.name') }}
+                            </div>
+                        </template>
+                    </div>
 <!--                    <Button variant="outline" size="icon" class="ml-auto h-8 w-8">-->
 <!--                        <Bell class="h-4 w-4" />-->
 <!--                        <span class="sr-only">Toggle notifications</span>-->
 <!--                    </Button>-->
                 </div>
-                <div class="flex-1">
-                    <nav class="grid items-start px-2 text-sm font-medium lg:px-4">
+                <div class="flex-1 px-2 lg:px-3">
+                    <template v-if="globalFilters">
+                        <div class="mb-4 mt-2">
+                            <GlobalFilters :global-filters="globalFilters" />
+                        </div>
+                    </template>
+                    <nav class="grid items-start text-sm font-medium">
                         <template v-for="item in menu.items">
                             <template v-if="item.children">
-                                <Collapsible default-open>
-                                    <CollapsibleTrigger as-child>
-                                        <Button class="gap-3" variant="ghost">
-                                            <i class="fa h-4 w-4" :class="item.icon"></i>
-                                            {{ item.label }}
-                                            <ChevronsUpDown class="h-4 w-4 ml-auto" />
-                                        </Button>
-                                    </CollapsibleTrigger>
-                                    <CollapsibleContent>
-                                        <ul>
-                                            <template v-for="childItem in item.children">
-                                                <li>
-                                                    <template v-if="childItem.isSeparator">
-                                                        <hr>
-                                                    </template>
-                                                    <template v-else>
-                                                        <component :is="childItem.isExternalLink ? 'a' : Link"
-                                                            :href="childItem.url"
-                                                            class="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
-                                                            :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
-                                                        >
-                                                            <i class="fa fa-fw h-4 w-4" :class="childItem.icon"></i>
-                                                            {{ childItem.label }}
-                                                        </component>
-                                                    </template>
-                                                </li>
+                                <div class="py-2 mb-4 last:mb-0">
+                                    <Collapsible default-open v-slot="{ open }">
+                                        <div class="flex items-center space-x-4 mb-2">
+                                            <h2 class="flex-1 text-lg font-semibold pl-4 tracking-tight">
+                                                {{ item.label }}
+                                            </h2>
+                                            <template v-if="item.isCollapsible">
+                                                <CollapsibleTrigger as-child>
+                                                    <Button class="gap-3" size="sm" variant="ghost">
+                                                        <ChevronsUpDown class="h-4 w-4" />
+                                                    </Button>
+                                                </CollapsibleTrigger>
                                             </template>
-                                        </ul>
-                                    </CollapsibleContent>
-                                </Collapsible>
+                                        </div>
+                                        <CollapsibleContent>
+                                            <ul>
+                                                <template v-for="childItem in item.children">
+                                                    <li>
+                                                        <template v-if="childItem.isSeparator">
+                                                            <hr>
+                                                        </template>
+                                                        <template v-else>
+                                                            <component :is="childItem.isExternalLink ? 'a' : Link"
+                                                                :href="childItem.url"
+                                                                class="flex items-center gap-3 rounded-lg px-4 py-2 transition-all hover:text-primary"
+                                                                :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
+                                                            >
+                                                                <i class="fa fa-fw h-4 w-4" :class="childItem.icon"></i>
+                                                                {{ childItem.label }}
+                                                            </component>
+                                                        </template>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </CollapsibleContent>
+                                    </Collapsible>
+                                </div>
                             </template>
                             <template v-else>
                                 <component :is="item.isExternalLink ? 'a' : Link"
@@ -115,54 +138,30 @@ const menu = useMenu();
                         <nav class="grid gap-2 text-lg font-medium">
                             <template v-for="item in menu.items">
                                 <template v-if="item.children">
-                                    <h2 class="mb-2 px-4 text-lg font-semibold tracking-tight">
-                                        {{ item.label }}
-                                    </h2>
-                                    <ul>
-                                        <template v-for="childItem in item.children">
-                                            <template v-if="childItem.isSeparator">
-                                                <hr>
-                                            </template>
-                                            <template v-else>
-                                                <li>
-                                                    <component :is="childItem.isExternalLink ? 'a' : Link"
-                                                        :href="childItem.url"
-                                                        class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                                                        :class="childItem.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
-                                                    >
-                                                        <i class="fa h-4 w-4" :class="childItem.icon"></i>
-                                                        {{ childItem.label }}
-                                                    </component>
-                                                </li>
-                                            </template>
-                                        </template>
-                                    </ul>
-                                    <Collapsible default-open>
-                                        <CollapsibleTrigger as-child>
-                                            <Button class="gap-3" variant="ghost">
-                                                <i class="fa h-4 w-4" :class="item.icon"></i>
-                                                {{ item.label }}
-                                                <ChevronsUpDown class="h-4 w-4 ml-auto" />
-                                            </Button>
-                                        </CollapsibleTrigger>
-                                        <CollapsibleContent>
+                                    <div class="py-2 mb-4 last:mb-0">
+                                        <h2 class="mb-2 text-lg font-semibold tracking-tight">
+                                            {{ item.label }}
+                                        </h2>
+                                        <ul>
                                             <template v-for="childItem in item.children">
                                                 <template v-if="childItem.isSeparator">
                                                     <hr>
                                                 </template>
                                                 <template v-else>
-                                                    <component :is="childItem.isExternalLink ? 'a' : Link"
-                                                        :href="childItem.url"
-                                                        class="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
-                                                        :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
-                                                    >
-                                                        <i class="fa h-4 w-4" :class="childItem.icon"></i>
-                                                        {{ childItem.label }}
-                                                    </component>
+                                                    <li>
+                                                        <component :is="childItem.isExternalLink ? 'a' : Link"
+                                                            :href="childItem.url"
+                                                            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                                                            :class="childItem.current ? 'bg-muted text-foreground' : 'text-muted-foreground'"
+                                                        >
+                                                            <i class="fa h-4 w-4" :class="childItem.icon"></i>
+                                                            {{ childItem.label }}
+                                                        </component>
+                                                    </li>
                                                 </template>
                                             </template>
-                                        </CollapsibleContent>
-                                    </Collapsible>
+                                        </ul>
+                                    </div>
                                 </template>
                                 <template v-else>
                                     <component :is="item.isExternalLink ? 'a' : Link"
@@ -190,6 +189,7 @@ const menu = useMenu();
 <!--                        </div>-->
 <!--                    </form>-->
                 </div>
+                <ColorModeDropdown />
                 <DropdownMenu>
                     <DropdownMenuTrigger as-child>
                         <Button variant="secondary" size="icon" class="rounded-full">
