@@ -19,6 +19,26 @@ class SharpConfigBuilder
         'display_breadcrumb' => true,
         'entities' => [],
         'entity_resolver' => null,
+        'global_filters' => [],
+        'middleware' => [
+            'common' => [
+                \Illuminate\Cookie\Middleware\EncryptCookies::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+                \Illuminate\Session\Middleware\StartSession::class,
+                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+                \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ],
+            'web' => [
+                \Code16\Sharp\Http\Middleware\InvalidateCache::class,
+                \Code16\Sharp\Http\Middleware\HandleSharpErrors::class,
+                \Code16\Sharp\Http\Middleware\HandleInertiaRequests::class,
+            ],
+            'api' => [
+                \Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
+                \Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
+            ],
+        ],
         'search' => [
             'enabled' => false,
         ],
@@ -71,6 +91,34 @@ class SharpConfigBuilder
     public function setLeftMenu(string|SharpMenu $sharpMenu): self
     {
         $this->config['menu'] = instanciate($sharpMenu);
+
+        return $this;
+    }
+
+    public function appendToMiddlewareWebGroup(string $middlewareClassName): self
+    {
+        $this->config['middleware']['web'][] = $middlewareClassName;
+
+        return $this;
+    }
+
+    public function appendToMiddlewareApiGroup(string $middlewareClassName): self
+    {
+        $this->config['middleware']['api'][] = $middlewareClassName;
+
+        return $this;
+    }
+
+    public function appendToMiddleware(string $middlewareClassName): self
+    {
+        $this->config['middleware']['common'][] = $middlewareClassName;
+
+        return $this;
+    }
+
+    public function replaceAllMiddleware(array $middlewareList): self
+    {
+        $this->config['middleware'] = $middlewareList;
 
         return $this;
     }
