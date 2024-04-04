@@ -1,7 +1,6 @@
 <script setup lang="ts">
-    import { FilterData, GlobalFiltersData, SelectFilterData } from "@/types";
+    import { FilterData, GlobalFiltersData } from "@/types";
     import { router } from "@inertiajs/vue3";
-    import { ref } from "vue";
     import { useFilters } from "../useFilters";
     import { route } from "@/utils/url";
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,7 +10,6 @@
     }>();
 
     const filters = useFilters(props.globalFilters.filters);
-    const open = ref(false);
 
     function onChanged(filter: FilterData, value: FilterData['value']) {
         router.post(
