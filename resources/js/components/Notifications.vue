@@ -9,11 +9,20 @@
 
     onMounted(() => {
         notifications?.forEach(notification => {
-            toast(notification.title, {
+            const options = {
                 description: notification.message,
                 duration: notification.autoHide ? 3000 : Infinity,
                 closeButton: !notification.autoHide,
-            });
+            };
+            if(notification.level === 'success') {
+                toast.success(notification.title, options);
+            } else if(notification.level === 'danger') {
+                toast.error(notification.title, options);
+            } else if(notification.level === 'warning') {
+                toast.warning(notification.title, options);
+            } else {
+                toast(notification, options); // no icon for info level
+            }
         });
     });
 </script>
