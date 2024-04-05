@@ -53,11 +53,12 @@
                 @update:query="onQueryChange"
             >
                 <template v-slot:title>
-                    <EntityListTitle :count="entityList.count">
-                        <template v-if="config('sharp.display_breadcrumb')">
-                            <Breadcrumb :breadcrumb="breadcrumb" />
-                        </template>
-                    </EntityListTitle>
+                    {{ breadcrumb.items[0].label }}
+<!--                    <EntityListTitle :count="entityList.count">-->
+<!--                        <template v-if="config('sharp.display_breadcrumb')">-->
+<!--                            <Breadcrumb :breadcrumb="breadcrumb" />-->
+<!--                        </template>-->
+<!--                    </EntityListTitle>-->
                 </template>
             </EntityListComponent>
         </div>
