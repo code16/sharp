@@ -15,10 +15,9 @@ use Illuminate\Support\Facades\Storage;
 uses(InteractsWithViews::class);
 
 beforeEach(function () {
-    config()->set('sharp.uploads.tmp_dir', 'tmp');
+    $this->withoutExceptionHandling();
     sharpConfig()->addEntity('person', PersonEntity::class);
     Storage::fake('local');
-    $this->withoutExceptionHandling();
     login();
 });
 

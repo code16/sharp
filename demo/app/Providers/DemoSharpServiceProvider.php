@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Media;
 use App\Sharp\AppSearchEngine;
 use App\Sharp\DummyGlobalFilter;
 use App\Sharp\Entities\AuthorEntity;
@@ -33,6 +34,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
                 auth()->id() === 1,
                 fn (SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
             )
+            ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setLeftMenu(SharpMenu::class)
             ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...');
     }

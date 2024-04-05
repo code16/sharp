@@ -91,9 +91,7 @@ class SharpInternalServiceProvider extends ServiceProvider
         );
         $this->app->singleton(
             ImageManager::class,
-            fn () => new ImageManager(
-                config('sharp.uploads.image_driver', \Intervention\Image\Drivers\Gd\Driver::class)
-            ),
+            fn () => new ImageManager(sharpConfig()->get('uploads.image_driver'))
         );
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {

@@ -3,8 +3,6 @@
 namespace Code16\Sharp\Config;
 
 use Code16\Sharp\Search\SharpSearchEngine;
-use Code16\Sharp\Utils\Entities\SharpEntity;
-use Code16\Sharp\Utils\Entities\SharpEntityResolver;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
 use Illuminate\Support\Traits\Conditionable;
@@ -39,6 +37,18 @@ class SharpConfigBuilder
                 \Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
                 \Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
             ],
+        ],
+        'uploads' => [
+            'tmp_disk' => 'local',
+            'tmp_dir' => 'tmp',
+            'thumbnails_disk' => 'public',
+            'thumbnails_dir' => 'thumbnails',
+            'transform_keep_original_image' => true,
+            'max_file_size' => 5,
+            'model_class' => null,
+            'image_driver' => \Intervention\Image\Drivers\Gd\Driver::class,
+            'file_handling_queue' => 'default',
+            'file_handling_queue_connection' => 'sync',
         ],
         'search' => [
             'enabled' => false,
@@ -147,6 +157,40 @@ class SharpConfigBuilder
         $this->config['search'] = [
             'enabled' => false,
         ];
+
+        return $this;
+    }
+
+    public function configureUploads(
+        string $uploadDisk = 'local',
+        string $uploadDirectory = 'tmp',
+        int    $globalMaxFileSize = 5,
+        string $fileHandingQueue = 'default',
+        string $fileHandlingQueueConnection = 'sync',
+    ): self
+    {
+        $this->config['uploads']['tmp_disk'] = $uploadDisk;
+        $this->config['uploads']['tmp_dir'] = $uploadDirectory;
+        $this->config['uploads']['max_file_size'] = $globalMaxFileSize;
+        $this->config['uploads']['file_handling_queue'] = $fileHandingQueue;
+        $this->config['uploads']['file_handling_queue_connection'] = $fileHandlingQueueConnection;
+
+        return $this;
+    }
+
+    public function configureUploadsThumbnailCreation(
+        string $thumbnailsDisk = 'public',
+        string $thumbnailsDir = 'thumbnails',
+        bool $keepOriginalImageOnTransform = true,
+        ?string $uploadModelClass = null,
+        string $imageDriverClass = \Intervention\Image\Drivers\Gd\Driver::class,
+    ): self
+    {
+        $this->config['uploads']['thumbnails_disk'] = $thumbnailsDisk;
+        $this->config['uploads']['thumbnails_dir'] = $thumbnailsDir;
+        $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
+        $this->config['uploads']['model_class'] = $uploadModelClass;
+        $this->config['uploads']['image_driver'] = $imageDriverClass;
 
         return $this;
     }

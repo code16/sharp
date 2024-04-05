@@ -110,7 +110,7 @@ class Thumbnail
             return null;
         }
 
-        $thumbnailDisk = Storage::disk(config('sharp.uploads.thumbnails_disk', 'public'));
+        $thumbnailDisk = Storage::disk(sharpConfig()->get('uploads.thumbnails_disk'));
         $thumbnailPath = $this->resolveThumbnailPath($width, $height);
         $wasCreated = ! $thumbnailDisk->exists($thumbnailPath);
         $url = $this->generateThumbnail($thumbnailPath, $width, $height);
@@ -133,7 +133,7 @@ class Thumbnail
 
         $sourceDisk = $this->uploadModel->disk;
         $sourceRelativeFilePath = $this->uploadModel->file_name;
-        $thumbnailDisk = Storage::disk(config('sharp.uploads.thumbnails_disk', 'public'));
+        $thumbnailDisk = Storage::disk(sharpConfig()->get('uploads.thumbnails_disk'));
 
         if (! $thumbnailDisk->exists($thumbnailPath)) {
             // Create thumbnail directories if needed
@@ -246,7 +246,7 @@ class Thumbnail
 
         $thumbnailPath = sprintf(
             '%s/%s/%s-%s%s/%s.%s',
-            config('sharp.uploads.thumbnails_dir', 'thumbnails'),
+            sharpConfig()->get('uploads.thumbnails_dir'),
             dirname($this->uploadModel->file_name),
             $width,
             $height,

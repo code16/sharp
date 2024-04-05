@@ -433,8 +433,10 @@ it('pushes jobs on right queue / connections', function () {
             && $job->connection == 'sync';
     });
 
-    config()->set('sharp.uploads.file_handling_queue_connection', 'redis');
-    config()->set('sharp.uploads.file_handling_queue', 'uploads');
+    sharpConfig()->configureUploads(
+        fileHandingQueue: 'uploads',
+        fileHandlingQueueConnection: 'redis'
+    );
 
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [
