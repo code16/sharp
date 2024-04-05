@@ -3,15 +3,15 @@
     import { NotificationData } from "@/types";
     import { toast } from "vue-sonner";
     import Sonner from "@/components/ui/sonner/Sonner.vue";
-    import { onMounted } from "vue";
+    import { nextTick, onMounted } from "vue";
 
     const notifications = usePage().props.notifications as NotificationData[]
 
-    onMounted(() => {
-        notifications?.forEach(notification => {
+    onMounted(async () => {
+        for (const notification of notifications ?? []) {
             const options = {
                 description: notification.message,
-                duration: notification.autoHide ? 3000 : Infinity,
+                duration: notification.autoHide ? 4000 : Infinity,
                 closeButton: !notification.autoHide,
             };
             if(notification.level === 'success') {
@@ -21,12 +21,13 @@
             } else if(notification.level === 'warning') {
                 toast.warning(notification.title, options);
             } else {
-                toast(notification, options); // no icon for info level
+                toast(notification.title, options); // no icon for info level
             }
-        });
+            await nextTick();
+        }
     });
 </script>
 
 <template>
-    <Sonner close-button />
+    <Sonner />
 </template>
