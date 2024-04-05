@@ -57,7 +57,7 @@ class HandleInertiaRequests extends Middleware
                     ->toArray();
             }),
             'config' => [
-                'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),
+                'sharp.auth.forgotten_password.enabled' => sharpConfig()->get('auth.forgotten_password.enabled'),
                 'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
                 'sharp.auth.login_form.suggest_remember_me' => config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false)),
                 'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),

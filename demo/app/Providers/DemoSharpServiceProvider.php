@@ -37,7 +37,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setLeftMenu(SharpMenu::class)
             ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem')
             ->enableImpersonation()
-//            ->enableForgottenPassword()
+            ->enableForgottenPassword()
 //            ->enable2faNotification()
 //            ->enable2faTotp()
 //            ->enable2faCustom()

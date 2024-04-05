@@ -156,7 +156,7 @@ class SharpInternalServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
         $this->loadRoutesFrom(__DIR__ . '/routes/auth/login.php');
 
-        if (config('sharp.auth.forgotten_password.enabled')) {
+        if (sharpConfig()->get('auth.forgotten_password.enabled')) {
             $this->loadRoutesFrom(__DIR__ . '/routes/auth/forgotten_password.php');
 
             ResetPassword::createUrlUsing(function ($user, string $token) {

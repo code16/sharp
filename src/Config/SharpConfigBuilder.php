@@ -2,11 +2,13 @@
 
 namespace Code16\Sharp\Config;
 
+use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
+use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Support\Traits\Conditionable;
 
 class SharpConfigBuilder
@@ -42,6 +44,9 @@ class SharpConfigBuilder
         ],
         'auth' => [
             'impersonate' => [
+                'enabled' => false,
+            ],
+            'forgotten_password' => [
                 'enabled' => false,
             ],
         ],
@@ -239,6 +244,26 @@ class SharpConfigBuilder
     public function disableImpersonation(): self
     {
         $this->config['auth']['impersonate'] = [
+            'enabled' => false,
+        ];
+
+        return $this;
+    }
+
+    public function enableForgottenPassword(PasswordBroker|string|null $broker = null, ?Closure $resetCallback = null): self
+    {
+        $this->config['auth']['forgotten_password'] = [
+            'enabled' => true,
+            'password_broker' => $broker ? instanciate($broker) : null,
+            'reset_password_callback' => $resetCallback,
+        ];
+
+        return $this;
+    }
+
+    public function disableForgottenPassword(): self
+    {
+        $this->config['auth']['forgotten_password'] = [
             'enabled' => false,
         ];
 

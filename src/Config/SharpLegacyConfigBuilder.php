@@ -20,6 +20,10 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
             return value(config('sharp.auth.impersonate.handler'));
         }
 
+        if ($key == 'auth.forgotten_password.password_broker') {
+            return value(config('sharp.auth.forgotten_password.password_broker'));
+        }
+
         return config('sharp.' . $key);
     }
 }

@@ -18,10 +18,10 @@ class ImpersonateController extends Controller
         $this->middleware('sharp_guest'.$guardSuffix);
     }
 
-    public function create(SharpImpersonationHandler $impersonationHandler): RedirectResponse|Response
+    public function create(?SharpImpersonationHandler $impersonationHandler): RedirectResponse|Response
     {
         return Inertia::render('Auth/Impersonate', [
-            'impersonateUsers' => $impersonationHandler->enabled()
+            'impersonateUsers' => $impersonationHandler?->enabled()
                 ? $impersonationHandler->getUsers()
                 : null,
         ]);
