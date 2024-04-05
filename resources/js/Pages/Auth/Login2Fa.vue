@@ -8,7 +8,6 @@
     import { Button } from "@/components/ui/button";
     import { Alert, AlertDescription } from "@/components/ui/alert";
     import { Card } from "@/components/ui/card";
-    import AuthCardHeader from "@/Layouts/Auth/AuthCardHeader.vue";
     import AuthCard from "@/Layouts/Auth/AuthCard.vue";
     import { Label } from "@/components/ui/label";
     import { Input } from "@/components/ui/input";
