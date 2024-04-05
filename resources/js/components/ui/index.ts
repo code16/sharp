@@ -1,4 +1,3 @@
-export { default as Button } from './Button.vue';
 export { default as ClearButton } from './ClearButton.vue';
 export { default as DataList } from './DataList.vue';
 export { default as DataListRow } from './DataListRow.vue';

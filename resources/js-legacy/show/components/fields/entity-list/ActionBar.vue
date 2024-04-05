@@ -87,7 +87,7 @@
 
                                 <template v-if="primaryCommand && !reordering">
                                     <div class="col-auto">
-                                        <Button variant="primary" small @click="handleCommandSelected(primaryCommand)">
+                                        <Button size="sm" @click="handleCommandSelected(primaryCommand)">
                                             {{ primaryCommand.label }}
                                         </Button>
                                     </div>
@@ -106,7 +106,7 @@
                                                 />
                                             </template>
                                             <template v-else>
-                                                <Button variant="primary" small @click="handleCreateButtonClicked">
+                                                <Button size="sm" @click="handleCreateButtonClicked">
                                                     {{ __('sharp::action_bar.list.create_button') }}
                                                 </Button>
                                             </template>

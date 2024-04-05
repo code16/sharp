@@ -37,7 +37,6 @@ return [
     'auth' => [
         'login_attribute' => 'email',
         'password_attribute' => 'password',
-        'suggest_remember_me' => false,
         'rate_limiting' => [
             'enabled' => true,
             'max_attempts' => 5,
@@ -56,13 +55,19 @@ return [
         'display_attribute' => 'name',
         'impersonate' => [
             'enabled' => env('SHARP_IMPERSONATE', false),
-            'handler' => null,
+            'handler' => Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler::class,
         ],
         'login_form' => [
-            'suggest_remember_me' => false,
+            'suggest_remember_me' => true,
             'display_app_name' => true,
             // 'logo_url' => '/img/sharp/login-icon.png',
             'message_blade_path' => 'sharp/_login-page-message',
+            
+            /** @internal */
+            'prefill' => [
+                'login' => 'admin@example.org',
+                'password' => 'password',
+            ],
         ],
 
         // "check_handler" => \App\Sharp\Auth\MySharpCheckHandler::class,
@@ -71,7 +76,8 @@ return [
     'theme' => [
         'primary_color' => '#0c4589',
         'favicon_url' => '/img/sharp/favicon-32x32.png',
-        'logo_url' => '/img/sharp/logo.png',
+        'logo_url' => '/img/sharp/logo.svg',
+        'logo_height' => '1rem',
     ],
 
     'extensions' => [

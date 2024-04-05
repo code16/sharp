@@ -113,9 +113,6 @@ return [
             'reset_password_callback' => null,
         ],
 
-        // Handle a "remember me" flag (with a checkbox on the login form)
-        'suggest_remember_me' => false,
-
         // Name of the attribute used to display the current user in the UI.
         'display_attribute' => 'name',
 
@@ -147,6 +144,7 @@ return [
         'primary_color' => '#004c9b',
         // 'favicon_url' => '',
         // 'logo_url' => '/sharp-assets/menu-icon.png',
+        // 'logo_height' => '1.5rem',
     ],
 
 ];

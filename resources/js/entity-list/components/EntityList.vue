@@ -16,7 +16,8 @@
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
     import {getAppendableParentUri, route} from "@/utils/url";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon,  Button,  Search } from '@/components/ui';
+    import { Button } from '@/components/ui/button';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, Search } from '@/components/ui';
     import { ChevronDownIcon } from "@heroicons/vue/20/solid";
     import EntityActions from "./EntityActions.vue";
     import { api } from "@/api";
@@ -180,7 +181,7 @@
                         <template v-if="showReorderButton && entityList.canReorder && !selecting">
                             <template v-if="reordering">
                                 <div class="col-auto">
-                                    <Button outline @click="reorderedItems = null">
+                                    <Button variant="outline" @click="reorderedItems = null">
                                         {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                     </Button>
                                 </div>
@@ -192,7 +193,7 @@
                             </template>
                             <template v-else>
                                 <div class="col-auto">
-                                    <Button outline @click="reorderedItems = [...entityList.data]">
+                                    <Button variant="outline" @click="reorderedItems = [...entityList.data]">
                                         {{ __('sharp::action_bar.list.reorder_button') }}
                                     </Button>
                                 </div>
@@ -202,14 +203,14 @@
                         <template v-if="entityList.canSelect && !reordering">
                             <template v-if="selecting">
                                 <div class="col-auto">
-                                    <Button key="cancel" outline @click="selectedItems = null">
+                                    <Button key="cancel" variant="outline" @click="selectedItems = null">
                                         {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                     </Button>
                                 </div>
                             </template>
                             <template v-else>
                                 <div class="col-auto">
-                                    <Button key="select" outline @click="selectedItems = []">
+                                    <Button key="select" variant="outline" @click="selectedItems = []">
                                         {{ __('sharp::action_bar.list.select_button') }}
                                     </Button>
                                 </div>
@@ -306,9 +307,9 @@
                                     />
                                 </template>
                                 <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
-                                    <button class="btn btn-link d-inline-flex align-items-center btn-sm fs-8" @click="onResetAll">
+                                    <Button variant="link" size="sm" @click="onResetAll">
                                         {{ __('sharp::filters.reset_all') }}
-                                    </button>
+                                    </Button>
                                 </template>
                             </div>
                         </template>

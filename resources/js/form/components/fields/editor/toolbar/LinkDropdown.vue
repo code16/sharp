@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { Button, Dropdown } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
+    import { Dropdown } from "@/components/ui";
     import TextInput from '../../text/TextInput.vue';
     import {Editor} from "@tiptap/vue-3";
     import {ref} from "vue";
@@ -72,14 +73,14 @@
 
         <template>
             <form @submit.prevent="handleLinkSubmitted">
-                <template v-if="inserted">
-                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"
-                        type="button"
-                        @click="handleCancelClicked"
-                    >
-                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>
-                    </button>
-                </template>
+<!--                <template v-if="inserted">-->
+<!--                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"-->
+<!--                        type="button"-->
+<!--                        @click="handleCancelClicked"-->
+<!--                    >-->
+<!--                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>-->
+<!--                    </button>-->
+<!--                </template>-->
 
                 <template v-if="!active && !hasSelectedText">
                     <div class="mb-3">
@@ -100,7 +101,7 @@
                 <div class="mt-3">
                     <div class="row g-2 flex-sm-nowrap">
                         <div class="col-auto">
-                            <Button type="submit" small variant="primary">
+                            <Button type="submit" size="sm">
                                 <template v-if="inserted">
                                     {{ __('sharp::form.editor.dialogs.link.update_button') }}
                                 </template>
@@ -111,12 +112,12 @@
                         </div>
                         <div class="col-auto">
                             <template v-if="inserted">
-                                <Button type="button" small variant="danger" outline @click="handleRemoveClicked">
+                                <Button type="button" variant="destructive" size="sm" @click="handleRemoveClicked">
                                     {{ __('sharp::form.editor.dialogs.link.remove_button') }}
                                 </Button>
                             </template>
                             <template v-else>
-                                <Button type="button" small variant="light" @click="handleCancelClicked">
+                                <Button type="button" variant="outline" size="sm" @click="handleCancelClicked">
                                     {{ __('sharp::modals.cancel_button') }}
                                 </Button>
                             </template>

@@ -6,8 +6,8 @@ use Code16\Sharp\Http\Controllers\EntityListController;
 use Code16\Sharp\Http\Controllers\FormController;
 use Code16\Sharp\Http\Controllers\GlobalFilterController;
 use Code16\Sharp\Http\Controllers\HomeController;
+use Code16\Sharp\Http\Controllers\ShowController;
 use Code16\Sharp\Http\Controllers\SingleShowController;
-use Code16\Sharp\Show\ShowController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([

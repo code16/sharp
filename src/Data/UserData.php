@@ -8,6 +8,7 @@ final class UserData extends Data
 {
     public function __construct(
         public ?string $name,
+        public ?string $email,
     ) {
     }
 
@@ -15,6 +16,7 @@ final class UserData extends Data
     {
         return new self(
             name: $user->{config('sharp.auth.display_attribute', 'name')} ?? null,
+            email: $user->{config('sharp.auth.login_attribute', 'email')} ?? null,
         );
     }
 }

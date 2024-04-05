@@ -5,7 +5,8 @@
     import WithCommands from "@/commands/components/WithCommands.vue";
     import ShowField from '@/show/components/Field.vue';
     import Section from "@/show/components/Section.vue";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@/components/ui';
+    import { Button } from '@/components/ui/button';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle } from '@/components/ui';
     import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import LocaleSelect from "@/form/components/LocaleSelect.vue";
@@ -142,7 +143,7 @@
                         </template>
                         <template v-if="show.authorizations.update">
                             <div class="col-auto">
-                                <Button :href="show.formUrl" :disabled="isReordering">
+                                <Button as="a" :href="show.formUrl" :disabled="isReordering">
                                     {{ __('sharp::action_bar.show.edit_button') }}
                                 </Button>
                             </div>

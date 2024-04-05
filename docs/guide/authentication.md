@@ -340,7 +340,7 @@ You can override this behavior by providing a custom handler class, see below.
 :::
 
 Configured like this, Sharp wil display a dropdown list of all users in the login form, allowing you to select one and be logged in as this user. 
-But if you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide your own handler class, which must extend `Code16\Sharp\Auth\Impersonation\SharpImpersonationHandler`:
+But if you want more control on this users list, or if you need to opt out from this default Eloquent implementation, you can provide your own handler class, which must extend `Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler`:
 
 ```php
 // config/sharp.php
@@ -351,7 +351,7 @@ return [
         'impersonate' => [
             'enabled' => true,
             // You can provide a full class name here instead of an inline implementation
-            'handler' => new class extends Code16\Sharp\Auth\Impersonation\SharpImpersonationHandler {
+            'handler' => new class extends Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler {
                 public function getUsers(): array
                 {
                     return User::where('is_admin', true)

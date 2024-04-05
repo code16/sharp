@@ -4,10 +4,12 @@ namespace Code16\Sharp\Http\Middleware;
 
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
+use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
 use Code16\Sharp\Data\UserData;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
@@ -16,6 +18,11 @@ class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'sharp::app';
 
+    public function __construct(
+        protected Filesystem $filesystem
+    ) {
+    }
+
     public function share(Request $request)
     {
         return [
@@ -23,7 +30,9 @@ class HandleInertiaRequests extends Middleware
             'sharpVersion' => sharpVersion(),
             'locale' => app()->getLocale(),
             'session' => [
-                'token' => session()->token(),
+                '_token' => session()->token(),
+                'status' => session('status'),
+                'status_title' => session('status_title'),
             ],
             'translations' => Cache::rememberForever('sharp.translations.'.sharpVersion(), function () {
                 return collect([
@@ -48,10 +57,10 @@ class HandleInertiaRequests extends Middleware
                     ->toArray();
             }),
             'config' => [
-                'sharp.auth.suggest_remember_me' => config('sharp.auth.suggest_remember_me', false),
                 'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),
                 'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
                 'sharp.auth.login_form.logo_url' => config('sharp.auth.login_form.logo_url', config('sharp.theme.logo_urls.login')) ?: config('sharp.theme.logo_url'),
+                'sharp.auth.login_form.suggest_remember_me' => config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false)),
                 'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
@@ -61,7 +70,17 @@ class HandleInertiaRequests extends Middleware
                 'sharp.search.enabled' => sharpConfig()->get('search.enabled'), // value(config('sharp.search.enabled', false)),
                 'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'), // config('sharp.search.placeholder'),
                 'sharp.theme.logo_url' => config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
+                'sharp.theme.logo_height' => config('sharp.theme.logo_height'),
             ],
+            'logo' => LogoData::optional(transform(
+                config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
+                fn ($url) => $url ? [
+                    'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
+                        ? $this->filesystem->get(public_path($url))
+                        : null,
+                    'url' => $url,
+                ] : null,
+            )),
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
                 ? GlobalFiltersData::from(app(GlobalFilters::class))
                 : null,

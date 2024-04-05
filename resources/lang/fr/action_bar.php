@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'color-mode-dropdown.label' => 'Thème',
+    'color-mode-dropdown.light' => 'Clair',
+    'color-mode-dropdown.dark' => 'Sombre',
+    'color-mode-dropdown.system' => 'Système',
 
     'list.items_count' => ':count élément(s)',
     'list.search.placeholder' => 'Rechercher',
