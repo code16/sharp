@@ -32,6 +32,9 @@
         @inertiaHead
 
         <x-sharp::vite>
+            @if(!Vite::isRunningHot())
+                @vite(['vite/legacy-polyfills'], '/vendor/sharp')
+            @endif
             @vite('resources/js/sharp.ts', '/vendor/sharp')
         </x-sharp::vite>
     </head>

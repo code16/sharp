@@ -52,7 +52,7 @@
 
 <script>
     import DataListRow from './DataListRow.vue';
-    import Draggable from 'vuedraggable';
+    // import Draggable from 'vuedraggable';
 
     export default {
         components: {

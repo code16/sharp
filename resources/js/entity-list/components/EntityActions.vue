@@ -1,17 +1,11 @@
 <script setup lang="ts">
-    import { nextTick, ref } from "vue";
+    import { ref } from "vue";
 
-    const stateDropdown = ref();
-
-    async function openStateDropdown() {
-        await nextTick();
-        stateDropdown.value.open();
-    }
+    const stateDropdownOpened = ref(false);
 </script>
 
 <template>
     <slot v-bind="{
-        stateDropdownRef: el => stateDropdown = el,
-        openStateDropdown,
+        stateDropdownOpened,
     }" />
 </template>
