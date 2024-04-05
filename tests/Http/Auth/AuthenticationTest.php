@@ -117,29 +117,6 @@ it('allows users to logout', function () {
     expect(auth()->check())->toBeFalse();
 });
 
-it('handles custom auth check', function () {
-    $this->app['config']->set(
-        'sharp.auth.check_handler',
-        fn () => new class implements SharpAuthenticationCheckHandler
-        {
-            public function check($user): bool
-            {
-                return $user->name == 'ok';
-            }
-        }
-    );
-
-    login(new User(['name' => 'ok']));
-
-    $this->get('/sharp/s-list/person')
-        ->assertOk();
-
-    login(new User(['name' => 'ko']));
-
-    $this->get('/sharp/s-list/person')
-        ->assertRedirect(route('code16.sharp.login'));
-});
-
 it('allows custom auth guard', function () {
     auth()->extend('test', function () {
         return new class implements \Illuminate\Contracts\Auth\Guard

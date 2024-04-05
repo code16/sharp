@@ -1,6 +1,6 @@
 <?php
 
-use Code16\Sharp\Show\Fields\Formatters\TextFieldFormatter;
+use Code16\Sharp\Show\Fields\Formatters\TextFormatter;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
 use Illuminate\Http\UploadedFile;
@@ -13,7 +13,7 @@ beforeEach(function () {
 });
 
 it('allows to format a text value to front', function () {
-    $formatter = new TextFieldFormatter();
+    $formatter = new TextFormatter();
     $field = SharpShowTextField::make('md');
     $value = Str::random()."\n\n".Str::random();
 
@@ -26,7 +26,7 @@ it('allows to format a text value to front', function () {
 });
 
 it('allows to format a text with uploads to front', function () {
-    $formatter = new TextFieldFormatter();
+    $formatter = new TextFormatter();
     $field = SharpShowTextField::make('md');
 
     $image = UploadedFile::fake()->image('test.jpg', 600, 600);
@@ -86,7 +86,7 @@ it('allows to format a text with uploads to front', function () {
 });
 
 it('allows to format embeds with uploads to front', function () {
-    $formatter = (new TextFieldFormatter);
+    $formatter = (new TextFormatter);
     $field = SharpShowTextField::make('md')
         ->allowEmbeds([EditorFormatterTestEmbed::class]);
 

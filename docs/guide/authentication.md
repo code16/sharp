@@ -56,9 +56,31 @@ return [
 
 You can tweak this default form with a custom logo and an HTML message / section: see [related documentation here](style-visual-theme.md#login-and-menu-logos).
 
-## Custom guard
+## Restrict access to Sharp to some users
 
-It's very likely that you don't want to authorize all users to access Sharp. You can hook into the [Laravel custom guards](https://laravel.com/docs/authentication#adding-custom-guards) functionality, with one config key:
+It's very likely that you don't want to authorize all users to access Sharp. You can fix this in two ways:
+
+### Global authorization gate
+
+A simple way to restrict access to Sharp is to define the `viewSharp` global Gate (typically in your `AppServiceProvider`):
+
+```php
+class AppServiceProvider extends ServiceProvider
+{
+    // [...]
+
+    public function boot(): void
+    {
+        Gate::define('viewSharp', function ($user) {
+            return $user->is_sharp_admin; // Or any check you need
+        });
+    }
+}
+```
+
+### Custom guard
+
+You can also hook into the [Laravel custom guards](https://laravel.com/docs/authentication#adding-custom-guards) functionality, with one config key:
 
 ```php
 // config/sharp.php
@@ -71,40 +93,7 @@ return [
 ]
 ```
 
-Of course, this implies that you defined a “sharp” guard in `config/auth.php`, as detailed in the Laravel documentation.
-
-## Authentication check
-
-If you want a simple way to authorize some users to access Sharp in a project where you have other users, you can define an auth check rather than using custom guard.
-
-First write a class which implements `Code16\Sharp\Auth\SharpAuthenticationCheckHandler`:
-
-```php
-class SharpCheckHandler implements SharpAuthenticationCheckHandler
-{
-    public function check($user): bool
-    {
-        return $user->hasGroup('sharp');
-    }
-}
-```
-
-Perform in the `check()` method any test you need to make on the authenticated user.
-
-Finally, enable this feature by adding a config key:
-
-```php
-// config/sharp.php
-return [
-    // [...]
-
-    'auth' => [
-        'check_handler' => \App\Sharp\Auth\SharpCheckHandler::class,
-    ],
-]
-```
-
-And you are good to go.
+This implies that you defined a “sharp” guard in `config/auth.php`, as detailed [in the Laravel documentation](https://laravel.com/docs/authentication#adding-custom-guards).
 
 ## Two-factor authentication
 

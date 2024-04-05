@@ -7,9 +7,11 @@ use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 use DOMAttr;
 use Illuminate\Support\Str;
 
-trait FormatsEditorEmbedsToFront
+trait FormatsEditorEmbeds
 {
-    protected function formatsEditorEmbedsToFront(IsSharpFieldWithLocalization $field, $value): array
+    use FormatsHtmlContent;
+    
+    protected function formatEditorEmbedsToFront(IsSharpFieldWithLocalization $field, $value): array
     {
         if (! count($field->embeds())) {
             return ['text' => $value];

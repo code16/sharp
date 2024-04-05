@@ -6,6 +6,7 @@ use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SharpAuthenticate extends BaseAuthenticate
 {
@@ -13,7 +14,11 @@ class SharpAuthenticate extends BaseAuthenticate
     {
         $this->authenticate($request, $guards);
 
-        if ($checkHandler = config('sharp.auth.check_handler')) {
+        if (Gate::has('viewSharp')) {
+            if (! Gate::allows('viewSharp')) {
+                $this->unauthenticated($request, $guards);
+            }
+        } elseif ($checkHandler = config('sharp.auth.check_handler')) {
             if (! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
                 $this->unauthenticated($request, $guards);
             }
