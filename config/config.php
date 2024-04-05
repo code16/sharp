@@ -150,9 +150,6 @@ return [
             // 'message_blade_path' => 'sharp/_login-page-message',
         ],
 
-        // Optional additional auth check.
-        // 'check_handler' => \App\Sharp\Auth\MySharpCheckHandler::class,
-
         // Optional custom guard
         // 'guard' => 'sharp',
     ],
