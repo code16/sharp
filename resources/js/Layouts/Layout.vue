@@ -246,6 +246,8 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
         </div>
     </div>
 
+    <Notifications />
+
     <template v-for="dialog in dialogs" :key="dialog.id">
         <AlertDialog
             default-open
