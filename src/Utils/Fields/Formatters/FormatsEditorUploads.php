@@ -14,15 +14,13 @@ trait FormatsEditorUploads
     
     protected function formatEditorUploadsToFront(IsSharpFieldWithEmbeds&IsSharpFieldWithLocalization $field, $value): array
     {
-        if(!str_contains($value, '<x-sharp-image') && !str_contains($value, '<x-sharp-file')) {
-            return [
-                'text' => $value,
-            ];
-        }
-        
         $uploads = [];
 
         $text = $this->maybeLocalized($field, $value, function (string $content) use (&$uploads) {
+            if(!str_contains($content, '<x-sharp-image') && !str_contains($content, '<x-sharp-file')) {
+                return $content;
+            }
+            
             $domDocument = $this->parseHtml($content);
 
             foreach ($this->getUploadElements($domDocument) as $element) {
