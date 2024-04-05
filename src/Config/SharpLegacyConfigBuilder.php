@@ -16,6 +16,10 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
             return config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu'));
         }
 
+        if ($key == 'auth.impersonate.handler') {
+            return value(config('sharp.auth.impersonate.handler'));
+        }
+
         return config('sharp.' . $key);
     }
 }

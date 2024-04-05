@@ -33,7 +33,7 @@ class SharpAuthenticate extends BaseAuthenticate
             return $loginPageUrl;
         }
 
-        if (app(SharpImpersonationHandler::class)->enabled()) {
+        if (app(SharpImpersonationHandler::class)?->enabled()) {
             return route('code16.sharp.impersonate');
         }
 

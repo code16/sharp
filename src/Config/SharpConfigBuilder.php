@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Config;
 
+use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
+use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
@@ -36,6 +38,11 @@ class SharpConfigBuilder
             'api' => [
                 \Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,
                 \Code16\Sharp\Http\Middleware\Api\HandleSharpApiErrors::class,
+            ],
+        ],
+        'auth' => [
+            'impersonate' => [
+                'enabled' => false,
             ],
         ],
         'uploads' => [
@@ -213,6 +220,27 @@ class SharpConfigBuilder
         $this->config['theme']['logo_url'] = $logoUrl;
         $this->config['theme']['logo_height'] = $logoHeight;
         $this->config['theme']['favicon_url'] = $faviconUrl;
+
+        return $this;
+    }
+
+    public function enableImpersonation(SharpImpersonationHandler|string $handler = null): self
+    {
+        $this->config['auth']['impersonate'] = [
+            'enabled' => true,
+            'handler' => $handler
+                ? instanciate($handler)
+                : app(SharpDefaultEloquentImpersonationHandler::class),
+        ];
+
+        return $this;
+    }
+
+    public function disableImpersonation(): self
+    {
+        $this->config['auth']['impersonate'] = [
+            'enabled' => false,
+        ];
 
         return $this;
     }

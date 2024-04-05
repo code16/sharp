@@ -113,11 +113,9 @@ class SharpInternalServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(SharpImpersonationHandler::class, function () {
-            if (! $handler = config('sharp.auth.impersonate.handler')) {
-                return new SharpDefaultEloquentImpersonationHandler();
-            }
-
-            return is_string($handler) ? app($handler) : value($handler);
+            return sharpConfig()->get('auth.impersonate.enabled')
+                ? sharpConfig()->get('auth.impersonate.handler')
+                : null;
         });
 
         $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
@@ -169,7 +167,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             });
         }
 
-        if (config('sharp.auth.impersonate.enabled')) {
+        if (sharpConfig()->get('auth.impersonate.enabled')) {
             $this->loadRoutesFrom(__DIR__ . '/routes/auth/impersonate.php');
         }
     }
