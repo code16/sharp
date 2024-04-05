@@ -22,7 +22,6 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->setName('Demo project')
-//            ->setCustomUrlSegment('demo-sharp')
             ->addEntity('posts', PostEntity::class)
             ->addEntity('blocks', PostBlockEntity::class)
             ->addEntity('categories', CategoryEntity::class)
