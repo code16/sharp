@@ -34,7 +34,8 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $remember = config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember');
+        $remember = config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false))
+            && $this->boolean('remember');
 
         if (! $this->attemptToLogin($remember)) {
             RateLimiter::hit($this->throttleKey());

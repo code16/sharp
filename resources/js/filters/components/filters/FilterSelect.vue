@@ -13,7 +13,6 @@
         value: SelectFilterData['value'],
         filter: Omit<SelectFilterData, 'value'>,
         disabled?: boolean,
-        global?: boolean,
     }>();
 
     const emit = defineEmits(['input'])

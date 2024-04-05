@@ -2,24 +2,32 @@ import { __ } from "./i18n";
 import { ModalProps } from "@/components/ui/types";
 import { ref } from "vue";
 
+type Dialog = {
+    id: number,
+    title?: string,
+    text: string,
+    okTitle?: string,
+    okVariant?: 'destructive',
+    isError?: boolean,
+    okOnly?: boolean,
+    onOk: () => void,
+    onHidden: () => void,
+}
+
 let modalId = 0;
-let dialogs = ref([]);
+let dialogs = ref<Dialog[]>([]);
 
 export function useDialogs() {
     return dialogs;
 }
 
-export function showDialog(text: string, props: ModalProps = {}) {
+export function showDialog(text: string, props: Partial<Dialog> = null) {
     const id = modalId++;
 
     return new Promise((resolve) => {
         dialogs.value.push({
             id,
-            props: {
-                visible: true,
-                maxWidth: 'sm',
-                ...props,
-            },
+            ...props,
             text,
             onOk: () => resolve(true),
             onHidden: () => {
@@ -30,14 +38,14 @@ export function showDialog(text: string, props: ModalProps = {}) {
     });
 }
 
-export function showAlert(message: string, props: ModalProps = {}) {
+export function showAlert(message: string, props: Partial<Dialog> = null) {
     return showDialog(message, {
         okOnly: true,
         ...props
     });
 }
 
-export function showConfirm(message: string, props: ModalProps = {}) {
+export function showConfirm(message: string, props: Partial<Dialog> = null) {
     return showDialog(message, {
         okTitle: __('sharp::modals.confirm.ok_button'),
         ...props
@@ -47,6 +55,6 @@ export function showConfirm(message: string, props: ModalProps = {}) {
 export function showDeleteConfirm(message: string) {
     return showConfirm(message, {
         okTitle: __('sharp::modals.confirm.delete.ok_button'),
-        okVariant: 'danger',
+        okVariant: 'destructive',
     });
 }

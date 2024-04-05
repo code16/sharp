@@ -1,4 +1,4 @@
-import { usePage } from "@inertiajs/vue3";
+import { session } from "@/utils/session";
 
 export function parseBlobJSONContent(blob) {
     return new Promise(resolve => {
@@ -11,5 +11,5 @@ export function parseBlobJSONContent(blob) {
 }
 
 export function getCsrfToken() {
-    return usePage().props.session.token;
+    return session('_token');
 }

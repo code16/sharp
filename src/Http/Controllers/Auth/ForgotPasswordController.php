@@ -34,6 +34,7 @@ class ForgotPasswordController extends Controller
         if ($status == Password::RESET_LINK_SENT || $status == Password::INVALID_USER) {
             return redirect()
                 ->back()
+                ->with('status_title', __('sharp::passwords.sent_title'))
                 ->with('status', __('sharp::passwords.sent'));
         }
 

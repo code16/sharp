@@ -6,7 +6,7 @@
     import { getDependantFieldsResetData } from "../../../util";
     import { computed, ref } from "vue";
     import Draggable from 'vuedraggable';
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta } from "../../../types";
@@ -14,6 +14,7 @@
     import { Serializable } from "@/form/Serializable";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
+    import { Toggle } from "@/components/ui/toggle";
 
     const props = defineProps<{
         field: FormListFieldData,
@@ -141,11 +142,10 @@
     >
         <div class="SharpList__sticky-wrapper text-end">
             <template v-if="field.sortable && value?.length > 1">
-                <Button
+                <Toggle
                     class="SharpList__sort-button"
-                    text
-                    small
-                    :active="dragActive"
+                    size="sm"
+                    :pressed="dragActive"
                     :disabled="isUploading"
                     style="pointer-events: auto"
                     @click="dragActive = !dragActive"
@@ -154,7 +154,7 @@
                     <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
                         <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
                     </svg>
-                </Button>
+                </Toggle>
             </template>
         </div>
 
@@ -175,7 +175,7 @@
                 >
                     <template v-if="canAddItem && field.sortable && !dragActive">
                         <div class="SharpList__new-item-zone">
-                            <Button small @click="onInsert(index)">
+                            <Button size="sm" @click="onInsert(index)">
                                 {{ __('sharp::form.list.insert_button') }}
                             </Button>
                         </div>
@@ -202,11 +202,13 @@
                     </template>
 
                     <template v-if="field.removable && !field.readOnly && !dragActive">
-                        <button
-                            class="SharpList__remove-button btn-close"
+                        <Button
+                            class=""
+                            variant="ghost"
+                            size="icon"
                             :aria-label="__('sharp::form.list.remove_button')"
                             @click="onRemove(index)"
-                        >&times;</button>
+                        >&times;</Button>
                     </template>
 
                     <template v-if="field.sortable && value?.length > 1 && !isUploading">
@@ -231,7 +233,12 @@
         </Draggable>
         <template v-if="canAddItem">
             <div class="mt-3">
-                <Button class="SharpList__add-button" :disabled="field.readOnly || dragActive" text block @click="onAdd">
+                <Button
+                    class="SharpList__add-button w-full"
+                    :disabled="field.readOnly || dragActive"
+                    variant="secondary"
+                    @click="onAdd"
+                >
                     ＋ {{ field.addText }}
                 </Button>
             </div>

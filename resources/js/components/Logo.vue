@@ -1,16 +1,22 @@
 <script setup lang="ts">
     import { config } from "@/utils/config";
+    import { usePage } from "@inertiajs/vue3";
+    import { LogoData } from "@/types";
+    const logo = usePage().props.logo as LogoData | null;
 </script>
 
 <template>
-    <template v-if="config('sharp.theme.logo_url')">
-        <div class="max-w-[200px]">
-            <img class="h-auto w-auto max-w-full max-h-full" :src="config('sharp.theme.logo_url')" :alt="config('sharp.name')" />
-        </div>
+    <template v-if="logo.svg">
+        <div class="[&_svg]:w-auto [&_svg]:max-w-full [&_svg]:h-[--height]"
+            :style="{ '--height': config('sharp.theme.logo_height') ?? '1.5rem' }"
+            v-html="logo.svg"
+        ></div>
     </template>
     <template v-else>
-        <div class="text-white">
-            {{ config('sharp.name') }}
-        </div>
+        <img class="w-auto h-[--height]"
+            :style="{ '--height': config('sharp.theme.logo_height') ?? '1.5rem' }"
+            :src="logo.url"
+            :alt="config('sharp.name')"
+        >
     </template>
 </template>

@@ -1,13 +1,12 @@
 <?php
 
-namespace Code16\Sharp\Show;
+namespace Code16\Sharp\Http\Controllers;
 
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Data\BreadcrumbData;
 use Code16\Sharp\Data\NotificationData;
 use Code16\Sharp\Data\Show\ShowData;
-use Code16\Sharp\Http\Controllers\HandlesSharpNotificationsInRequest;
-use Code16\Sharp\Http\Controllers\SharpProtectedController;
+use Code16\Sharp\Show\SharpSingleShow;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\SharpBreadcrumb;
 use Inertia\Inertia;
@@ -17,8 +16,8 @@ class ShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
 
     public function __construct(
-        private SharpAuthorizationManager $sharpAuthorizationManager,
-        private SharpEntityManager $entityManager,
+        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
+        private readonly SharpEntityManager $entityManager,
     ) {
         parent::__construct();
     }

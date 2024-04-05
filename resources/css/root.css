@@ -1,31 +1,32 @@
 
+@layer base {
+    :root {
+        --primary-hsl: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
 
-:root {
-    --primary-hsl: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+        --accent-bg-amount: 20%;
+        --accent-bg-l: calc(var(--primary-l) + var(--accent-bg-amount));
+        --accent-bg: hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l));
 
-    --accent-bg-amount: 20%;
-    --accent-bg-l: calc(var(--primary-l) + var(--accent-bg-amount));
-    --accent-bg: hsl(var(--primary-h), var(--primary-s), var(--accent-bg-l));
+        --l-threshold: 80%;
 
-    --l-threshold: 80%;
+        --component-active-bg: var(--primary-hsl);
+        --component-active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000));
 
-    --component-active-bg: var(--primary-hsl);
-    --component-active-color: hsl(0, 0%, calc((var(--primary-l) - var(--l-threshold)) * -100000));
+        --navbar-height: 4rem;
+        --navbar-top: 0;
+        --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
 
-    --navbar-height: 4rem;
-    --navbar-top: 0;
-    --navbar-color: hsl(0, 0%, calc((var(--accent-bg-l) - var(--l-threshold)) * -100000));
+        --field-header-sticky-top: var(--navbar-height);
 
-    --field-header-sticky-top: var(--navbar-height);
-
-    --color-primary-50: hsl(var(--primary-h), var(--primary-s), 90%);
-    --color-primary-100: hsl(var(--primary-h), var(--primary-s), 80%);
-    --color-primary-200: hsl(var(--primary-h), var(--primary-s), 70%);
-    --color-primary-300: hsl(var(--primary-h), var(--primary-s), 60%);
-    --color-primary-400: hsl(var(--primary-h), var(--primary-s), 50%);
-    --color-primary-500: hsl(var(--primary-h), var(--primary-s), 40%);
-    --color-primary-600: hsl(var(--primary-h), var(--primary-s), 30%);
-    --color-primary-700: hsl(var(--primary-h), var(--primary-s), 20%);
-    --color-primary-800: hsl(var(--primary-h), var(--primary-s), 10%);
-    --color-primary-900: hsl(var(--primary-h), var(--primary-s), 5%);
+        --color-primary-50: hsl(var(--primary-h), var(--primary-s), 90%);
+        --color-primary-100: hsl(var(--primary-h), var(--primary-s), 80%);
+        --color-primary-200: hsl(var(--primary-h), var(--primary-s), 70%);
+        --color-primary-300: hsl(var(--primary-h), var(--primary-s), 60%);
+        --color-primary-400: hsl(var(--primary-h), var(--primary-s), 50%);
+        --color-primary-500: hsl(var(--primary-h), var(--primary-s), 40%);
+        --color-primary-600: hsl(var(--primary-h), var(--primary-s), 30%);
+        --color-primary-700: hsl(var(--primary-h), var(--primary-s), 20%);
+        --color-primary-800: hsl(var(--primary-h), var(--primary-s), 10%);
+        --color-primary-900: hsl(var(--primary-h), var(--primary-s), 5%);
+    }
 }

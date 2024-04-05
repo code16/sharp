@@ -26,13 +26,14 @@ return [
     // [...]
     
     'theme' => [
-        'logo_url' => '/my-sharp-assets/my-custom-menu-icon.png',
+        'logo_url' => '/my-sharp-assets/my-custom-menu-icon.svg',
+        'logo_height' => '1.5rem',
         // [...]
     ],
 ];
 ```
 
-The file should be an SVG or PNG file, and must fit in 150 pixels in width and 50 pixels in height.
+The file should be an SVG, you can customize the logo height by setting the `logo_height` config.
 
 ### Login form
 
@@ -50,7 +51,6 @@ return [
         'login_form' => [
             // [...]
             'display_app_name' => true,
-            'logo_url' => '/my-sharp-assets/login-logo.png',
             'message_blade_path' => 'sharp/login-page-message',
         ],
     ],
@@ -59,16 +59,14 @@ return [
 
 The `display_app_name` option allows you to display the `config('sharp.name')` on the login form.
 
-`logo_url` should point to an SVG or PNG file, which must fit in 200 pixels in width and 100 pixels in height. If not set, the `theme.logo_url` file will be displayed, or the Sharp logo as a last resort.
-
 The custom message is displayed under the form; you'll need to create a new template file:
 
 ```blade
 <!-- resources/views/sharp/login-page-message.blade.php -->
 
-<div class="alert alert-info">
+<x-sharp::card>
     Display a custom message to your users
-</div>
+</x-sharp::card>
 ```
 
 ### Favicon

@@ -2,9 +2,9 @@
 
 return [
     'title' => 'Login',
-    'login_field' => 'login',
-    'password_field' => 'password',
-    'code_field' => 'code',
+    'login_field' => 'Login',
+    'password_field' => 'Password',
+    'code_field' => 'Code',
     'remember' => 'Angemeldet bleiben',
     'button' => 'login',
 ];

@@ -10,7 +10,7 @@
     import { computed, onMounted, onUnmounted, ref, watch } from "vue";
     import { getErrorMessage, handleErrorAlert } from "@/api";
     import { getFiltersFromCropData } from "./util/filters";
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import { ArrowDownOnSquareIcon } from "@heroicons/vue/24/outline";
     import { route } from "@/utils/url";
 
@@ -274,11 +274,11 @@
                     <template v-if="!field.readOnly">
                         <div class="flex gap-2 mt-2">
                             <template v-if="value && (!uppyFile || !uppyFile.progress.uploadStarted || uppyFile.progress.uploadComplete) && isTransformable && !hasError">
-                                <Button class="mr-2" outline small @click="onEdit">
+                                <Button class="mr-2" variant="outline" size="sm" @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </template>
-                            <Button variant="danger" outline small @click="onRemove">
+                            <Button variant="destructive" size="sm" @click="onRemove">
                                 {{ __('sharp::form.upload.remove_button') }}
                             </Button>
                         </div>

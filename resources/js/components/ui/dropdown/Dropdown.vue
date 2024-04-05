@@ -3,7 +3,7 @@
     import { ChevronDownIcon } from '@heroicons/vue/20/solid';
     import { ButtonProps } from "../types";
     import { ref } from "vue";
-    import Button from "../Button.vue";
+    import Button from "../../../../js-legacy/components/ui/Button.vue";
 
     withDefaults(defineProps<ButtonProps & {
         right?: boolean,

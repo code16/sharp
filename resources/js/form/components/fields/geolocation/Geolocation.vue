@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { Modal, Button } from "@/components/ui";
-
+    import { Button } from '@/components/ui/button';
+    import { Modal } from "@/components/ui";
     import GeolocationEdit from './GeolocationEdit.vue';
     import { FormGeolocationFieldData } from "@/types";
     import type { Component } from "vue";
@@ -55,7 +55,7 @@
             {{ __('sharp::form.geolocation.loading') }}
         </template>
         <template v-else-if="!value">
-            <Button text block @click="modalVisible = true">
+            <Button variant="secondary" class="w-full" @click="modalVisible = true">
                 {{ __('sharp::form.geolocation.browse_button') }}
             </Button>
         </template>
@@ -80,12 +80,12 @@
                                 <div><small>Longitude : {{ field.displayUnit === 'DMS' ? dd2dms(value.lng, true) : value.lng }}</small></div>
                             </div>
                             <div>
-                                <Button class="remove-button" variant="danger" small outline :disabled="field.readOnly"
+                                <Button variant="destructive" size="sm" :disabled="field.readOnly"
                                     @click="$emit('input', null)"
                                 >
                                     {{ __('sharp::form.geolocation.remove_button') }}
                                 </Button>
-                                <Button small outline :disabled="field.readOnly" @click="modalVisible = true">
+                                <Button variant="outline" size="sm" :disabled="field.readOnly" @click="modalVisible = true">
                                     {{ __('sharp::form.geolocation.edit_button') }}
                                 </Button>
                             </div>

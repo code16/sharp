@@ -100,9 +100,9 @@
     import { logError } from "@/utils/log";
     import { getErrorMessage, handleErrorAlert } from "@/api";
     import { Button } from '@/components/ui';
-    import { getFiltersFromCropData } from "./util/filters";
-    import { getImageBlobUrl } from "./util/image";
-    import EditModal from "./EditModal.vue";
+    import { getFiltersFromCropData } from "@/form/components/fields/upload/util/filters";
+    import { getImageBlobUrl } from "@/form/components/fields/upload/util/image";
+    import EditModal from "@/form/components/fields/upload/EditModal.vue";
 
     export default {
         name: 'SharpVueClip',
