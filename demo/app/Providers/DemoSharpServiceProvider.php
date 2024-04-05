@@ -35,6 +35,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             )
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setLeftMenu(SharpMenu::class)
+            ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem')
             ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...');
     }
 }

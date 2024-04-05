@@ -53,6 +53,12 @@ class SharpConfigBuilder
         'search' => [
             'enabled' => false,
         ],
+        'theme' => [
+            'primary_color' => '#004c9b',
+            'favicon_url' => null,
+            'logo_url' => null,
+            'logo_height' => '1.5rem',
+        ],
     ];
 
     public function setName(string $name): self
@@ -191,6 +197,22 @@ class SharpConfigBuilder
         $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
         $this->config['uploads']['model_class'] = $uploadModelClass;
         $this->config['uploads']['image_driver'] = $imageDriverClass;
+
+        return $this;
+    }
+
+    public function setThemeColor(string $hexColor): self
+    {
+        $this->config['theme']['primary_color'] = $hexColor;
+
+        return $this;
+    }
+
+    public function setThemeLogo(string $logoUrl, string $logoHeight = '1.5rem', ?string $faviconUrl = null): self
+    {
+        $this->config['theme']['logo_url'] = $logoUrl;
+        $this->config['theme']['logo_height'] = $logoHeight;
+        $this->config['theme']['favicon_url'] = $faviconUrl;
 
         return $this;
     }

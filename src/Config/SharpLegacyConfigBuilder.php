@@ -12,6 +12,10 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
                 : null;
         }
 
+        if ($key == 'theme.logo_url') {
+            return config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu'));
+        }
+
         return config('sharp.' . $key);
     }
 }

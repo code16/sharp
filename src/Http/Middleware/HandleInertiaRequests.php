@@ -59,7 +59,6 @@ class HandleInertiaRequests extends Middleware
             'config' => [
                 'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),
                 'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
-                'sharp.auth.login_form.logo_url' => config('sharp.auth.login_form.logo_url', config('sharp.theme.logo_urls.login')) ?: config('sharp.theme.logo_url'),
                 'sharp.auth.login_form.suggest_remember_me' => config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false)),
                 'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
@@ -67,13 +66,13 @@ class HandleInertiaRequests extends Middleware
                 'sharp.markdown_editor.tight_lists_only' => config('sharp.markdown_editor.tight_lists_only', true),
                 'sharp.markdown_editor.nl2br' => config('sharp.markdown_editor.nl2br', false),
                 'sharp.name' => config('sharp.name', 'Sharp'),
-                'sharp.search.enabled' => sharpConfig()->get('search.enabled'), // value(config('sharp.search.enabled', false)),
-                'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'), // config('sharp.search.placeholder'),
-                'sharp.theme.logo_url' => config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
-                'sharp.theme.logo_height' => config('sharp.theme.logo_height'),
+                'sharp.search.enabled' => sharpConfig()->get('search.enabled'),
+                'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'),
+//                'sharp.theme.logo_url' => sharpConfig()->get('theme.logo_url'),
+                'sharp.theme.logo_height' => sharpConfig()->get('theme.logo_height'),
             ],
             'logo' => LogoData::optional(transform(
-                config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
+                sharpConfig()->get('theme.logo_url'),
                 fn ($url) => $url ? [
                     'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
                         ? $this->filesystem->get(public_path($url))
