@@ -66,15 +66,16 @@ it('displays impersonatable users from a custom handler', function () {
 it('allow to use default eloquent implementation handler', function () {
     migrateUsersTable();
 
-    config()->set('sharp.auth.login_attribute', 'name');
-    // We override the default handler just to skip the enabled() check
-    sharpConfig()->enableImpersonation(new class() extends SharpDefaultEloquentImpersonationHandler
-    {
-        public function enabled(): bool
+    sharpConfig()
+        ->setLoginAttributes(login: 'name')
+        // We override the default handler just to skip the enabled() check
+        ->enableImpersonation(new class() extends SharpDefaultEloquentImpersonationHandler
         {
-            return true;
-        }
-    });
+            public function enabled(): bool
+            {
+                return true;
+            }
+        });
 
     User::create(['id' => 10, 'name' => 'Marie Curie']);
     User::create(['id' => 20, 'name' => 'Albert Einstein']);

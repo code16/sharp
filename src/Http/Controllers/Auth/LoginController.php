@@ -35,7 +35,7 @@ class LoginController extends Controller
         }
  
         return Inertia::render('Auth/Login', [
-            'loginIsEmail' => config('sharp.auth.login_attribute') === 'email',
+            'loginIsEmail' => sharpConfig()->get('auth.login_attribute') === 'email',
             'login' => config('sharp.auth.login_form.prefill.login'),
             'password' => config('sharp.auth.login_form.prefill.password'),
             'message' => $message,

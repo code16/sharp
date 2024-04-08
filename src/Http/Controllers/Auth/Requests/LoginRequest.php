@@ -52,8 +52,8 @@ class LoginRequest extends FormRequest
     {
         $guard = $this->getGuard();
         $credentials = [
-            config('sharp.auth.login_attribute', 'email') => $this->input('login'),
-            config('sharp.auth.password_attribute', 'password') => $this->input('password'),
+            sharpConfig()->get('auth.login_attribute') => $this->input('login'),
+            sharpConfig()->get('auth.password_attribute') => $this->input('password'),
         ];
 
         if (config('sharp.auth.2fa.enabled')) {

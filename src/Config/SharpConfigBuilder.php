@@ -43,6 +43,9 @@ class SharpConfigBuilder
             ],
         ],
         'auth' => [
+            'display_attribute' => 'name',
+            'login_attribute' => 'email',
+            'password_attribute' => 'password',
             'impersonate' => [
                 'enabled' => false,
             ],
@@ -266,6 +269,21 @@ class SharpConfigBuilder
         $this->config['auth']['forgotten_password'] = [
             'enabled' => false,
         ];
+
+        return $this;
+    }
+
+    public function setLoginAttributes(string $login = 'email', string $password = 'password'): self
+    {
+        $this->config['auth']['login_attribute'] = $login;
+        $this->config['auth']['password_attribute'] = $password;
+
+        return $this;
+    }
+
+    public function setUserDisplayAttribute(string $displayAttribute): self
+    {
+        $this->config['auth']['display_attribute'] = $displayAttribute;
 
         return $this;
     }
