@@ -1,11 +1,15 @@
 <script setup lang="ts">
     import { ref } from "vue";
 
-    const stateDropdownOpened = ref(false);
+    const slotProps = {
+        stateDropdownOpened: ref(false),
+    };
+
+    defineSlots<{
+        default: (props: typeof slotProps) => any
+    }>();
 </script>
 
 <template>
-    <slot v-bind="{
-        stateDropdownOpened,
-    }" />
+    <slot v-bind="slotProps" />
 </template>

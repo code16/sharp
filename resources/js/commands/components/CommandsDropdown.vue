@@ -23,7 +23,7 @@
         <DropdownMenuTrigger as-child>
             <slot name="trigger" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
             <slot name="prepend" />
             <template v-for="(group, i) in commands?.filter(group => group.length > 0)">
                 <template v-if="i > 0">

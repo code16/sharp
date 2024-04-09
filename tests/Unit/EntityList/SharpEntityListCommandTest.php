@@ -390,8 +390,9 @@ it('allows to define separators in instance commands', function () {
     };
 
     $list->buildListConfig();
-
-    expect($list->listConfig()['commands']['instance'][0][0]['key'])->toEqual('command-1')
+    
+    expect($list->listConfig()['commands']['instance'])->toHaveCount(2)
+        ->and($list->listConfig()['commands']['instance'][0][0]['key'])->toEqual('command-1')
         ->and($list->listConfig()['commands']['instance'][0][1]['key'])->toEqual('command-2')
         ->and($list->listConfig()['commands']['instance'][1][0]['key'])->toEqual('command-3');
 });
@@ -441,8 +442,9 @@ it('allows to define separators in entity commands', function () {
     };
 
     $list->buildListConfig();
-
-    expect($list->listConfig()['commands']['entity'][0][0]['key'])->toEqual('command-1')
+    
+    expect($list->listConfig()['commands']['entity'])->toHaveCount(2)
+        ->and($list->listConfig()['commands']['entity'][0][0]['key'])->toEqual('command-1')
         ->and($list->listConfig()['commands']['entity'][1][0]['key'])->toEqual('command-2')
         ->and($list->listConfig()['commands']['entity'][1][1]['key'])->toEqual('command-3');
 });
