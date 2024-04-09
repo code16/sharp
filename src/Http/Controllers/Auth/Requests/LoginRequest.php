@@ -56,7 +56,7 @@ class LoginRequest extends FormRequest
             sharpConfig()->get('auth.password_attribute') => $this->input('password'),
         ];
 
-        if (config('sharp.auth.2fa.enabled')) {
+        if (sharpConfig()->get('auth.2fa.enabled')) {
             // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
             if ($guard->once($credentials)) {
                 $handler = app(Sharp2faHandler::class);

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp;
 
-use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
 use Code16\Sharp\Auth\SharpAuthorizationManager;
 use Code16\Sharp\Auth\TwoFactor\Engines\GoogleTotpEngine;
@@ -85,13 +84,13 @@ class SharpInternalServiceProvider extends ServiceProvider
         $this->app->singleton(SharpUploadManager::class);
         $this->app->singleton(
             SharpConfigBuilder::class,
-            fn () => file_exists(config_path('sharp.php'))
+            fn() => file_exists(config_path('sharp.php'))
                 ? new SharpLegacyConfigBuilder()
                 : new SharpConfigBuilder()
         );
         $this->app->singleton(
             ImageManager::class,
-            fn () => new ImageManager(sharpConfig()->get('uploads.image_driver'))
+            fn() => new ImageManager(sharpConfig()->get('uploads.image_driver'))
         );
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
@@ -103,12 +102,10 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         $this->app->bind(
             Sharp2faHandler::class,
-            fn () => match (config('sharp.auth.2fa.handler')) {
+            fn() => match (sharpConfig()->get('auth.2fa.handler')) {
                 'notification' => app(Sharp2faNotificationHandler::class),
                 'totp' => app(Sharp2faEloquentDefaultTotpHandler::class),
-                default => is_string(config('sharp.auth.2fa.handler'))
-                    ? app(config('sharp.auth.2fa.handler'))
-                    : value(config('sharp.auth.2fa.handler')),
+                default => sharpConfig()->get('auth.2fa.handler'),
             }
         );
 
@@ -132,7 +129,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             ->aliasMiddleware('sharp_guest', SharpRedirectIfAuthenticated::class);
     }
 
-    private function declareConsoleCommands():void
+    private function declareConsoleCommands(): void
     {
         $this->commands([
             CreateUploadsMigration::class,
@@ -152,12 +149,12 @@ class SharpInternalServiceProvider extends ServiceProvider
 
     public function loadRoutes(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
-        $this->loadRoutesFrom(__DIR__ . '/routes/auth/login.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/auth/login.php');
 
         if (sharpConfig()->get('auth.forgotten_password.enabled')) {
-            $this->loadRoutesFrom(__DIR__ . '/routes/auth/forgotten_password.php');
+            $this->loadRoutesFrom(__DIR__.'/routes/auth/forgotten_password.php');
 
             ResetPassword::createUrlUsing(function ($user, string $token) {
                 return route('code16.sharp.password.reset', [
@@ -168,7 +165,7 @@ class SharpInternalServiceProvider extends ServiceProvider
         }
 
         if (sharpConfig()->get('auth.impersonate.enabled')) {
-            $this->loadRoutesFrom(__DIR__ . '/routes/auth/impersonate.php');
+            $this->loadRoutesFrom(__DIR__.'/routes/auth/impersonate.php');
         }
     }
 }

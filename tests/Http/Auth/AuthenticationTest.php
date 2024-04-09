@@ -11,8 +11,8 @@ beforeEach(function () {
 function setTestAuthGuard(): void
 {
     auth()->extend('sharp', fn() => new TestAuthGuard());
-    sharpConfig()->setAuthCustomGuard('sharp');
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
+    sharpConfig()->setAuthCustomGuard('sharp');
 }
 
 it('redirects guests to the login page', function () {
@@ -34,6 +34,7 @@ it('displays the login page', function () {
 
 it('allows guests to login', function () {
     setTestAuthGuard();
+    $this->withoutExceptionHandling();
 
     $this
         ->post(route('code16.sharp.login.post'), [

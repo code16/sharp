@@ -24,6 +24,14 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
             return value(config('sharp.auth.forgotten_password.password_broker'));
         }
 
-        return config('sharp.' . $key);
+        if ($key == 'auth.2fa.handler') {
+            if (in_array(config('sharp.auth.2fa.handler'), ['notification', 'totp'])) {
+                return app(config('sharp.auth.2fa.handler'));
+            }
+
+            return value(config('sharp.auth.2fa.handler'));
+        }
+
+        return config('sharp.'.$key);
     }
 }

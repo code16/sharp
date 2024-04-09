@@ -11,10 +11,10 @@ beforeEach(function () {
     auth()->extend('sharp', fn() => new TestAuthGuard());
 
     sharpConfig()->addEntity('person', PersonEntity::class)
-        ->setAuthCustomGuard('sharp');
+        ->setAuthCustomGuard('sharp')
+        ->enable2faByNotification();
 
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
-    config()->set('sharp.auth.2fa', ['enabled' => true, 'handler' => 'notification']);
 });
 
 it('redirects to 2fa code page after successful first step login', function () {
@@ -49,8 +49,8 @@ it('sends to the user a 2fa notification after successful first step login', fun
 it('logs in the user after successful 2fa code validation', function () {
     Notification::fake();
 
-    config()->set(
-        'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler {
+    sharpConfig()->enable2faCustom(
+        new class extends Sharp2faNotificationHandler {
             protected function generateRandomCode(): int
             {
                 return 123456;

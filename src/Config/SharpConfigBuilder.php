@@ -5,6 +5,7 @@ namespace Code16\Sharp\Config;
 use Closure;
 use Code16\Sharp\Auth\Impersonate\SharpDefaultEloquentImpersonationHandler;
 use Code16\Sharp\Auth\Impersonate\SharpImpersonationHandler;
+use Code16\Sharp\Auth\TwoFactor\Sharp2faHandler;
 use Code16\Sharp\Search\SharpSearchEngine;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Menu\SharpMenu;
@@ -55,6 +56,9 @@ class SharpConfigBuilder
             'rate_limiting' => [
                 'enabled' => true,
                 'max_attempts' => 5,
+            ],
+            '2fa' => [
+                'enabled' => false,
             ],
             'guard' => null,
         ],
@@ -315,6 +319,45 @@ class SharpConfigBuilder
     public function setAuthCustomGuard(?string $guardName): self
     {
         $this->config['auth']['guard'] = $guardName;
+
+        return $this;
+    }
+
+    public function enable2faByNotification(): self
+    {
+        $this->config['auth']['2fa'] = [
+            'enabled' => true,
+            'handler' => 'notification',
+        ];
+
+        return $this;
+    }
+
+    public function enable2faByTotp(): self
+    {
+        $this->config['auth']['2fa'] = [
+            'enabled' => true,
+            'handler' => 'totp',
+        ];
+
+        return $this;
+    }
+
+    public function enable2faCustom(string|Sharp2faHandler $customHandler): self
+    {
+        $this->config['auth']['2fa'] = [
+            'enabled' => true,
+            'handler' => instanciate($customHandler),
+        ];
+
+        return $this;
+    }
+
+    public function disable2fa(): self
+    {
+        $this->config['auth']['2fa'] = [
+            'enabled' => false,
+        ];
 
         return $this;
     }
