@@ -16,9 +16,8 @@ beforeEach(function () {
 });
 
 it('allows to define an external url in the menu', function () {
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this
@@ -38,9 +37,8 @@ it('allows to define an external url in the menu', function () {
 it('allows to define a direct entity link in the menu', function () {
     sharpConfig()->addEntity('person', PersonEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this
@@ -61,9 +59,8 @@ it('allows to define a direct entity link in the menu', function () {
 it('allows to define a category in the menu', function () {
     sharpConfig()->addEntity('person', PersonEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this->addSection('Data', function ($section) {
@@ -91,9 +88,8 @@ it('allows to define a category in the menu', function () {
 it('allows to define a dashboard in the menu', function () {
     sharpConfig()->addEntity('personal_dashboard', DashboardEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this
@@ -116,9 +112,8 @@ it('allows to define a dashboard in the menu', function () {
 it('allows to define a single show entity link in the menu', function () {
     sharpConfig()->addEntity('person', SinglePersonEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this->addEntityLink('person', 'people', 'fa-user');
@@ -140,9 +135,8 @@ it('allows to define a single show entity link in the menu', function () {
 it('allows to define a separator in the menu via class', function () {
     sharpConfig()->addEntity('person', PersonEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this
@@ -171,9 +165,8 @@ it('allows to define a separator in the menu via class', function () {
 it('separators in last position are hidden', function () {
     sharpConfig()->addEntity('person', PersonEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this
@@ -193,9 +186,8 @@ it('separators in last position are hidden', function () {
 it('stacked separators are hidden', function () {
     sharpConfig()->addEntity('person', PersonEntity::class);
 
-    sharpConfig()->setLeftMenu(
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this

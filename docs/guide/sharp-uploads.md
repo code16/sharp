@@ -110,17 +110,23 @@ $author = $book->cover->author;
 
 ### Thumbnails
 
-Thumbnail creation is built-in. You must first define the thumbnail directory, in Sharp's config:
+Thumbnail creation is built-in; you can configure thumbnail disk and base directory:
 
 ```php
-// config/sharp.php
-
-'uploads' => [
-    'thumbnails_dir' => 'thumbnails',
-],
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->configureUploadsThumbnailCreation(
+                // NB: all these values are the default ones
+                thumbnailsDisk: 'public',
+                thumbnailsDir: 'thumbnails',
+            )
+            // [...]
+    }
+}
 ```
-
-This path is relative to the `public` directory.
 
 Then you can create a thumbnail using the `thumbnail` method directly on the upload model:
 
@@ -143,11 +149,8 @@ $thumb = $book->cover->thumbnail()->setQuality(60)->toJpeg()->make(150);
 Available methods are:
 
 - `setQuality(int $quality)`: set the quality of the thumbnail used by some encoders (default to 90).
-
 - `toWebp()`, `toPng()`, `toJpeg()`, `toGif()`, `toAvif()`: force the use of a specific encoder for the thumbnail.
-
 - `setAppendTimestamp(bool $appendTimestamp = true)`: append a timestamp to the thumbnail URL (useful for browser cache).
-
 - `setAfterClosure(Closure $closure)`: set a closure to be executed after the thumbnail creation. Intended to be used like this:
 
 ```php
@@ -160,7 +163,6 @@ $book->cover
 ```
 
 - `addModifier(ThumbnailModifier $modifier)`: apply an image modifier (see below).
-
 - `make(int $width = null, int $height = null)`: create the thumbnail, with the given size. Must be called last.
 
 #### Modifiers
@@ -305,7 +307,7 @@ All set.
 ```php
 $this->addField(
     SharpFormListField::make('pictures')
-        [...]
+        // [...]
         ->addItemField(
             SharpFormUploadField::make('file')
         )

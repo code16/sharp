@@ -46,7 +46,7 @@ it('allows to define transformKeepOriginal with transformable', function () {
 });
 
 it('allows to define transformKeepOriginal with config', function () {
-    sharpConfig()->configureUploadsThumbnailCreation(
+    sharpConfig()->configureUploads(
         keepOriginalImageOnTransform: false
     );
 

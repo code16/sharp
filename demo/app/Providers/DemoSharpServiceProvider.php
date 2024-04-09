@@ -40,7 +40,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
                 fn(SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
             )
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
-            ->setLeftMenu(SharpMenu::class)
+            ->setSharpMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')
             ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem')
 //            ->redirectLoginToUrl('/my-login')

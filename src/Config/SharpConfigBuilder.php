@@ -139,7 +139,7 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function setLeftMenu(string|SharpMenu $sharpMenu): self
+    public function setSharpMenu(string|SharpMenu $sharpMenu): self
     {
         $this->config['menu'] = instanciate($sharpMenu);
 
@@ -198,12 +198,14 @@ class SharpConfigBuilder
         string $uploadDisk = 'local',
         string $uploadDirectory = 'tmp',
         int $globalMaxFileSize = 5,
+        bool $keepOriginalImageOnTransform = true,
         string $fileHandingQueue = 'default',
         string $fileHandlingQueueConnection = 'sync',
     ): self {
         $this->config['uploads']['tmp_disk'] = $uploadDisk;
         $this->config['uploads']['tmp_dir'] = $uploadDirectory;
         $this->config['uploads']['max_file_size'] = $globalMaxFileSize;
+        $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
         $this->config['uploads']['file_handling_queue'] = $fileHandingQueue;
         $this->config['uploads']['file_handling_queue_connection'] = $fileHandlingQueueConnection;
 
@@ -213,13 +215,11 @@ class SharpConfigBuilder
     public function configureUploadsThumbnailCreation(
         string $thumbnailsDisk = 'public',
         string $thumbnailsDir = 'thumbnails',
-        bool $keepOriginalImageOnTransform = true,
         ?string $uploadModelClass = null,
         string $imageDriverClass = \Intervention\Image\Drivers\Gd\Driver::class,
     ): self {
         $this->config['uploads']['thumbnails_disk'] = $thumbnailsDisk;
         $this->config['uploads']['thumbnails_dir'] = $thumbnailsDir;
-        $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
         $this->config['uploads']['model_class'] = $uploadModelClass;
         $this->config['uploads']['image_driver'] = $imageDriverClass;
 
