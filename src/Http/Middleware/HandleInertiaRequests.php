@@ -67,7 +67,6 @@ class HandleInertiaRequests extends Middleware
                 'sharp.name' => config('sharp.name', 'Sharp'),
                 'sharp.search.enabled' => sharpConfig()->get('search.enabled'),
                 'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'),
-//                'sharp.theme.logo_url' => sharpConfig()->get('theme.logo_url'),
                 'sharp.theme.logo_height' => sharpConfig()->get('theme.logo_height'),
             ],
             'logo' => LogoData::optional(transform(

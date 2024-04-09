@@ -2,7 +2,9 @@
 
 ### Custom colors
 
-The primary color is customisable, and is applied to the header and buttons. Although every hue works well, too light colors aren't supported (e.g. works well with [tailwind colors](https://tailwindcss.com/docs/customizing-colors#color-palette-reference) >= 600).
+The primary color is customisable, and is applied to the header and buttons. Although every hue works well, too light
+colors aren't supported (e.g. works well
+with [tailwind colors](https://tailwindcss.com/docs/customizing-colors#color-palette-reference) >= 600).
 
 ```php
 // config/sharp.php
@@ -17,7 +19,8 @@ return [
 
 ### Header logo
 
-By default, the `config('sharp.name')` is displayed on the header. If you want to show custom logo, you can do it with this config:
+By default, the `config('sharp.name')` is displayed on the header. If you want to show custom logo, you can do it with
+this config:
 
 ```php
 // config/sharp.php
@@ -37,7 +40,7 @@ The file should be an SVG, you can customize the logo height by setting the `log
 
 ### Login form
 
-You can customize the login form with a custom logo and a custom message.
+You can customize the login form with a custom message.
 
 ```php
 // config/sharp.php
@@ -50,14 +53,11 @@ return [
         
         'login_form' => [
             // [...]
-            'display_app_name' => true,
             'message_blade_path' => 'sharp/login-page-message',
         ],
     ],
 ];
 ```
-
-The `display_app_name` option allows you to display the `config('sharp.name')` on the login form.
 
 The custom message is displayed under the form; you'll need to create a new template file:
 
@@ -87,7 +87,8 @@ return [
 
 ### Injecting Assets
 
-You may globally inject custom CSS files after the Sharp assets by defining their paths in the `config/sharp.php` config file.
+You may globally inject custom CSS files after the Sharp assets by defining their paths in the `config/sharp.php` config
+file.
 
 ```php
 // config/sharp.php
@@ -115,4 +116,5 @@ The `strategy` defines how the asset path will be rendered
 - `raw` to output the path in the form it appears in your array
 - `asset` to pass the path to the laravel [`asset()`](https://laravel.com/docs/5.6/helpers#method-asset) function
 - `mix` to pass the path to the laravel [`mix()`](https://laravel.com/docs/5.6/helpers#method-mix) function
-- `vite` to pass to path to the laravel [`Vite::asset()`](https://laravel.com/docs/10.x/vite#blade-processing-static-assets) function
+- `vite` to pass to path to the
+  laravel [`Vite::asset()`](https://laravel.com/docs/10.x/vite#blade-processing-static-assets) function
