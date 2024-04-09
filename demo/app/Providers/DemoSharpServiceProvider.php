@@ -39,7 +39,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
 //            ->replaceLoginPageByUrl('/login')
             ->enableImpersonation()
             ->enableForgottenPassword()
-//            ->setCustomAuthGuard('web')
+//            ->setAuthCustomGuard('web')
             ->setLoginAttributes('email', 'password')
             ->setUserDisplayAttribute('name')
 //            ->enable2faByNotification()

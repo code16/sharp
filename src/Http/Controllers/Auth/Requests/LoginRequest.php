@@ -105,6 +105,6 @@ class LoginRequest extends FormRequest
 
     private function getGuard(): StatefulGuard
     {
-        return Auth::guard(config('sharp.auth.guard'));
+        return Auth::guard(sharpConfig()->get('auth.guard'));
     }
 }

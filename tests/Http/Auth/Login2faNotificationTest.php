@@ -8,10 +8,11 @@ use Code16\Sharp\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    auth()->extend('sharp', fn() => new TestAuthGuard());
 
-    auth()->extend('sharp', fn () => new TestAuthGuard());
-    config()->set('sharp.auth.guard', 'sharp');
+    sharpConfig()->addEntity('person', PersonEntity::class)
+        ->setAuthCustomGuard('sharp');
+
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
     config()->set('sharp.auth.2fa', ['enabled' => true, 'handler' => 'notification']);
 });
@@ -49,8 +50,7 @@ it('logs in the user after successful 2fa code validation', function () {
     Notification::fake();
 
     config()->set(
-        'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler
-        {
+        'sharp.auth.2fa.handler', new class extends Sharp2faNotificationHandler {
             protected function generateRandomCode(): int
             {
                 return 123456;

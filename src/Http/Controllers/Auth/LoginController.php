@@ -15,13 +15,9 @@ class LoginController extends Controller
 {
     public function __construct()
     {
-        $guardSuffix = config('sharp.auth.guard') ? ':'.config('sharp.auth.guard') : '';
-
-        $this->middleware('sharp_guest'.$guardSuffix)
-            ->only(['create', 'store']);
-
-        $this->middleware('sharp_auth'.$guardSuffix)
-            ->only('destroy');
+        $guardSuffix = sharpConfig()->get('auth.guard') ? ':'.sharpConfig()->get('auth.guard') : '';
+        $this->middleware('sharp_guest'.$guardSuffix)->only(['create', 'store']);
+        $this->middleware('sharp_auth'.$guardSuffix)->only('destroy');
     }
 
     public function create(): RedirectResponse|Response
@@ -29,11 +25,12 @@ class LoginController extends Controller
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
             return redirect()->to($loginPageUrl);
         }
-        
-        if($message = config('sharp.auth.login_form.message_blade_path', config('sharp.login_page_message_blade_path'))) {
+
+        if ($message = config('sharp.auth.login_form.message_blade_path',
+            config('sharp.login_page_message_blade_path'))) {
             $message = view()->exists($message) ? view($message)->render() : null;
         }
- 
+
         return Inertia::render('Auth/Login', [
             'loginIsEmail' => sharpConfig()->get('auth.login_attribute') === 'email',
             'login' => config('sharp.auth.login_form.prefill.login'),
@@ -58,10 +55,9 @@ class LoginController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard(config('sharp.auth.guard'))->logout();
+        Auth::guard(sharpConfig()->get('auth.guard'))->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {

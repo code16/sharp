@@ -11,7 +11,7 @@ beforeEach(function () {
 function setTestAuthGuard(): void
 {
     auth()->extend('sharp', fn() => new TestAuthGuard());
-    config()->set('sharp.auth.guard', 'sharp');
+    sharpConfig()->setAuthCustomGuard('sharp');
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
 }
 
@@ -154,14 +154,13 @@ it('allows custom auth guard', function () {
         };
     });
 
-    $this->app['config']->set('sharp.auth.guard', 'test');
+    sharpConfig()->setAuthCustomGuard('test');
 
     $this->app['config']->set(
         'auth.guards.test', [
         'driver' => 'test',
         'provider' => 'users',
-    ],
-    );
+    ]);
 
     login(new User(['name' => 'ok']));
 

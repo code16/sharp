@@ -52,6 +52,11 @@ class SharpConfigBuilder
             'forgotten_password' => [
                 'enabled' => false,
             ],
+            'rate_limiting' => [
+                'enabled' => true,
+                'max_attempts' => 5,
+            ],
+            'guard' => null,
         ],
         'uploads' => [
             'tmp_disk' => 'local',
@@ -303,6 +308,13 @@ class SharpConfigBuilder
     public function setUserDisplayAttribute(string $displayAttribute): self
     {
         $this->config['auth']['display_attribute'] = $displayAttribute;
+
+        return $this;
+    }
+
+    public function setAuthCustomGuard(?string $guardName): self
+    {
+        $this->config['auth']['guard'] = $guardName;
 
         return $this;
     }

@@ -68,7 +68,7 @@ trait SharpAssertions
                     }
                 }
 
-                if (! $found) {
+                if (!$found) {
                     PHPUnit::fail("The field [$name] was not found on the layout part.");
                 }
             }
@@ -168,8 +168,13 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpInstanceCommandFromList(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
-    {
+    public function callSharpInstanceCommandFromList(
+        string $entityKey,
+        $instanceId,
+        string $commandKeyOrClassName,
+        array $data = [],
+        ?string $commandStep = null
+    ) {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -190,8 +195,13 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpInstanceCommandFromShow(string $entityKey, $instanceId, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
-    {
+    public function callSharpInstanceCommandFromShow(
+        string $entityKey,
+        $instanceId,
+        string $commandKeyOrClassName,
+        array $data = [],
+        ?string $commandStep = null
+    ) {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -213,8 +223,12 @@ trait SharpAssertions
             );
     }
 
-    public function callSharpEntityCommandFromList(string $entityKey, string $commandKeyOrClassName, array $data = [], ?string $commandStep = null)
-    {
+    public function callSharpEntityCommandFromList(
+        string $entityKey,
+        string $commandKeyOrClassName,
+        array $data = [],
+        ?string $commandStep = null
+    ) {
         $commandKey = class_exists($commandKeyOrClassName)
             ? class_basename($commandKeyOrClassName)
             : $commandKeyOrClassName;
@@ -234,7 +248,7 @@ trait SharpAssertions
 
     public function loginAsSharpUser($user): self
     {
-        return $this->actingAs($user, config('sharp.auth.guard', config('auth.defaults.guard')));
+        return $this->actingAs($user, sharpConfig()->get('auth.guard') ?: config('auth.defaults.guard'));
     }
 
     protected function buildRefererUrl(array $segments): string

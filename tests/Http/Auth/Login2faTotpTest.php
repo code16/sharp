@@ -6,16 +6,17 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 
 beforeEach(function () {
-    sharpConfig()->addEntity('person', PersonEntity::class);
+    auth()->extend('sharp', fn() => new TestAuthGuard());
 
-    auth()->extend('sharp', fn () => new TestAuthGuard());
-    config()->set('sharp.auth.guard', 'sharp');
+    sharpConfig()
+        ->addEntity('person', PersonEntity::class)
+        ->setAuthCustomGuard('sharp');
+
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
     config()->set(
         'sharp.auth.2fa', [
             'enabled' => true,
-            'handler' => fn () => new class(app(Sharp2faTotpEngine::class)) extends Sharp2faTotpHandler
-            {
+            'handler' => fn() => new class(app(Sharp2faTotpEngine::class)) extends Sharp2faTotpHandler {
                 public function isEnabledFor($user): bool
                 {
                     return true;
@@ -29,8 +30,11 @@ beforeEach(function () {
                 {
                 }
 
-                protected function saveUserSecretAndRecoveryCodes($user, string $encryptedSecret, string $encryptedRecoveryCodes): void
-                {
+                protected function saveUserSecretAndRecoveryCodes(
+                    $user,
+                    string $encryptedSecret,
+                    string $encryptedRecoveryCodes
+                ): void {
                 }
 
                 protected function getUserEncryptedSecret($userId): string
@@ -58,8 +62,7 @@ beforeEach(function () {
 
     app()->bind(
         Sharp2faTotpEngine::class,
-        fn () => new class implements Sharp2faTotpEngine
-        {
+        fn() => new class implements Sharp2faTotpEngine {
             public function verify(string $code, string $secret): bool
             {
                 return $code === '123456';
