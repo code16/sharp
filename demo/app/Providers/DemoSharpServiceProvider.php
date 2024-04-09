@@ -19,6 +19,11 @@ use Code16\Sharp\SharpAppServiceProvider;
 
 class DemoSharpServiceProvider extends SharpAppServiceProvider
 {
+    public function accessGate(): void
+    {
+
+    }
+
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
