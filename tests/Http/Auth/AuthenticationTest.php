@@ -60,7 +60,7 @@ it('does not allow to login with invalid payload', function () {
 it('handles remember_me option', function () {
     setTestAuthGuard();
 
-    config()->set('sharp.auth.suggest_remember_me', true);
+    sharpConfig()->suggestRememberMeOnLoginForm();
 
     $this
         ->post(route('code16.sharp.login.post'), [
@@ -76,7 +76,7 @@ it('handles remember_me option', function () {
 it('does not allow remember_me option without proper config', function () {
     setTestAuthGuard();
 
-    config()->set('sharp.auth.suggest_remember_me', false);
+    sharpConfig()->suggestRememberMeOnLoginForm(false);
 
     $this
         ->post(route('code16.sharp.login.post'), [

@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Http\Middleware;
 
-use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
@@ -51,7 +50,7 @@ class HandleInertiaRequests extends Middleware
                 ])
                     ->map(function ($group) {
                         return collect(__($group, [], app()->getFallbackLocale()))
-                            ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")]);
+                            ->mapWithKeys(fn($value, $key) => ["$group.$key" => __("$group.$key")]);
                     })
                     ->collapse()
                     ->toArray();
@@ -59,7 +58,7 @@ class HandleInertiaRequests extends Middleware
             'config' => [
                 'sharp.auth.forgotten_password.enabled' => sharpConfig()->get('auth.forgotten_password.enabled'),
                 'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
-                'sharp.auth.login_form.suggest_remember_me' => config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false)),
+                'sharp.auth.suggest_remember_me' => sharpConfig()->get('auth.suggest_remember_me'),
                 'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
@@ -73,7 +72,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'logo' => LogoData::optional(transform(
                 sharpConfig()->get('theme.logo_url'),
-                fn ($url) => $url ? [
+                fn($url) => $url ? [
                     'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
                         ? $this->filesystem->get(public_path($url))
                         : null,
@@ -84,8 +83,8 @@ class HandleInertiaRequests extends Middleware
                 ? GlobalFiltersData::from(app(GlobalFilters::class))
                 : null,
             ...auth()->check() ? [
-                'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
-                'auth' => fn () => [
+                'menu' => fn() => MenuData::from(app(SharpMenuManager::class)),
+                'auth' => fn() => [
                     'user' => UserData::from(auth()->user()),
                 ],
             ] : [],

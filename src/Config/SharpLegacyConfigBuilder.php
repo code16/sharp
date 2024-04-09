@@ -32,6 +32,15 @@ class SharpLegacyConfigBuilder extends SharpConfigBuilder
             return value(config('sharp.auth.2fa.handler'));
         }
 
+        if ($key == 'auth.message_blade_path') {
+            $blade = config('sharp.auth.message_blade_path');
+            if ($blade && view()->exists($blade)) {
+                return view($blade)->render();
+            }
+
+            return null;
+        }
+
         return config('sharp.'.$key);
     }
 }

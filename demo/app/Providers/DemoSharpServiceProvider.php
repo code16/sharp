@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Media;
 use App\Sharp\AppSearchEngine;
+use App\Sharp\Demo2faNotificationHandler;
 use App\Sharp\DummyGlobalFilter;
 use App\Sharp\Entities\AuthorEntity;
 use App\Sharp\Entities\CategoryEntity;
@@ -37,17 +38,16 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->setLeftMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')
             ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem')
-//            ->replaceLoginPageByUrl('/login')
+//            ->redirectLoginToUrl('/my-login')
             ->enableImpersonation()
             ->enableForgottenPassword()
             ->setAuthCustomGuard('web')
             ->setLoginAttributes('email', 'password')
             ->setUserDisplayAttribute('name')
-            ->enable2faByNotification()
-            ->enable2faByTotp()
-//            ->enable2faCustom()
+            ->enable2faCustom(Demo2faNotificationHandler::class)
             ->enableLoginRateLimiting(maxAttempts: 3)
-//            ->configureLoginForm()
+            ->suggestRememberMeOnLoginForm()
+            ->appendMessageOnLoginForm('sharp._login-page-message')
             ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...');
     }
 }

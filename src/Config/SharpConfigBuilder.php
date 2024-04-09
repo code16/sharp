@@ -44,6 +44,7 @@ class SharpConfigBuilder
             ],
         ],
         'auth' => [
+            'login_page_url' => null,
             'display_attribute' => 'name',
             'login_attribute' => 'email',
             'password_attribute' => 'password',
@@ -60,6 +61,8 @@ class SharpConfigBuilder
             '2fa' => [
                 'enabled' => false,
             ],
+            'suggest_remember_me' => false,
+            'login_form_message' => null,
             'guard' => null,
         ],
         'uploads' => [
@@ -358,6 +361,29 @@ class SharpConfigBuilder
         $this->config['auth']['2fa'] = [
             'enabled' => false,
         ];
+
+        return $this;
+    }
+
+    public function suggestRememberMeOnLoginForm(bool $suggestRememberMe = true): self
+    {
+        $this->config['auth']['suggest_remember_me'] = $suggestRememberMe;
+
+        return $this;
+    }
+
+    public function appendMessageOnLoginForm(string $messageOrBladePath): self
+    {
+        $this->config['auth']['login_form_message'] = view()->exists($messageOrBladePath)
+            ? view($messageOrBladePath)->render()
+            : $messageOrBladePath;
+
+        return $this;
+    }
+
+    public function redirectLoginToUrl(?string $url): self
+    {
+        $this->config['auth']['login_page_url'] = $url;
 
         return $this;
     }
