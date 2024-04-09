@@ -31,7 +31,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->addEntity('test', TestEntity::class)
             ->when(
                 auth()->id() === 1,
-                fn (SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
+                fn(SharpConfigBuilder $config) => $config->addGlobalFilter(DummyGlobalFilter::class)
             )
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setLeftMenu(SharpMenu::class)
@@ -45,7 +45,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
 //            ->enable2faByNotification()
 //            ->enable2faByTotp()
 //            ->enable2faCustom()
-//            ->enableRateLimiting(maxAttempts: 5)
+            ->enableLoginRateLimiting(maxAttempts: 3)
 //            ->configureLoginForm()
             ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...');
     }

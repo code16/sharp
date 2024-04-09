@@ -37,7 +37,7 @@ class LoginRequest extends FormRequest
         $remember = config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false))
             && $this->boolean('remember');
 
-        if (! $this->attemptToLogin($remember)) {
+        if (!$this->attemptToLogin($remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -75,11 +75,14 @@ class LoginRequest extends FormRequest
 
     private function ensureIsNotRateLimited(): void
     {
-        if (config('sharp.auth.rate_limiting.enabled', true) === false) {
+        if (sharpConfig()->get('auth.rate_limiting.enabled') === false) {
             return;
         }
 
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), config('sharp.auth.rate_limiting.max_attempts', 5))) {
+        if (!RateLimiter::tooManyAttempts(
+            $this->throttleKey(),
+            sharpConfig()->get('auth.rate_limiting.max_attempts'))
+        ) {
             return;
         }
 

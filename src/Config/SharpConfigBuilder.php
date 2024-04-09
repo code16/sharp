@@ -185,11 +185,10 @@ class SharpConfigBuilder
     public function configureUploads(
         string $uploadDisk = 'local',
         string $uploadDirectory = 'tmp',
-        int    $globalMaxFileSize = 5,
+        int $globalMaxFileSize = 5,
         string $fileHandingQueue = 'default',
         string $fileHandlingQueueConnection = 'sync',
-    ): self
-    {
+    ): self {
         $this->config['uploads']['tmp_disk'] = $uploadDisk;
         $this->config['uploads']['tmp_dir'] = $uploadDirectory;
         $this->config['uploads']['max_file_size'] = $globalMaxFileSize;
@@ -205,8 +204,7 @@ class SharpConfigBuilder
         bool $keepOriginalImageOnTransform = true,
         ?string $uploadModelClass = null,
         string $imageDriverClass = \Intervention\Image\Drivers\Gd\Driver::class,
-    ): self
-    {
+    ): self {
         $this->config['uploads']['thumbnails_disk'] = $thumbnailsDisk;
         $this->config['uploads']['thumbnails_dir'] = $thumbnailsDir;
         $this->config['uploads']['transform_keep_original_image'] = $keepOriginalImageOnTransform;
@@ -253,8 +251,10 @@ class SharpConfigBuilder
         return $this;
     }
 
-    public function enableForgottenPassword(PasswordBroker|string|null $broker = null, ?Closure $resetCallback = null): self
-    {
+    public function enableForgottenPassword(
+        PasswordBroker|string|null $broker = null,
+        ?Closure $resetCallback = null
+    ): self {
         $this->config['auth']['forgotten_password'] = [
             'enabled' => true,
             'password_broker' => $broker ? instanciate($broker) : null,
@@ -267,6 +267,25 @@ class SharpConfigBuilder
     public function disableForgottenPassword(): self
     {
         $this->config['auth']['forgotten_password'] = [
+            'enabled' => false,
+        ];
+
+        return $this;
+    }
+
+    public function enableLoginRateLimiting(?int $maxAttempts = 5): self
+    {
+        $this->config['auth']['rate_limiting'] = [
+            'enabled' => true,
+            'max_attempts' => $maxAttempts,
+        ];
+
+        return $this;
+    }
+
+    public function disableLoginRateLimiting(): self
+    {
+        $this->config['auth']['rate_limiting'] = [
             'enabled' => false,
         ];
 
@@ -295,7 +314,7 @@ class SharpConfigBuilder
             $config = $this->config;
 
             foreach ($parts as $part) {
-                if (! isset($config[$part])) {
+                if (!isset($config[$part])) {
                     return null;
                 }
 
