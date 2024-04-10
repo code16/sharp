@@ -4,10 +4,10 @@
 
 In Sharp, we handle `entities`; an `entity` is simply a data structure which has a meaning in the application context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
 
-Each instance of an `entity` is called... an `instance`.
+An instance of an `entity` is simply called an `instance`.
 
 Each `entity` in Sharp can be displayed:
-- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, pagination, and perform searches. From there we also gain access to applicative `commands` applied either to an `instance` or to the whole (filtered) list, and to a simple `state` changer (the published state of an Article, for instance). All of that is described below.
+- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, pagination, and perform searches. From there we also gain access to applicative `commands` applied either to any particular `instance` or to the whole (filtered) list, and to a simple `state` changer (the published state of an Article, for instance). All of that is described below.
 - In a `Show Page`, optionally, to display an `instance` details.
 - And in a `Form`, either to update or create a new `instance`.
 
@@ -41,7 +41,7 @@ This is a simple example to illustrate the main concepts of Sharp: we'll see in 
 
 ## Installation
 
-Sharp 8 needs Laravel 10+ and PHP 8.2+.
+Sharp 9 needs Laravel 11+ and PHP 8.2+.
 
 - Add the package with composer: `composer require code16/sharp`
 - And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
@@ -63,7 +63,7 @@ A tip on this last command: you'll need fresh assets each time Sharp is updated,
 }
 ```
 
-## Configuration
+## Configuration via a new Service Provider
 
 To configure all Sharp behavior, you must create a Service Provider which extends `Code16\Sharp\SharpAppServiceProvider` and implements the `configureSharp()` method:
 
@@ -131,7 +131,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
-            ->setCustomUrlSegment('admin')
+            ->setCustomUrlSegment('/admin')
             ->addEntity('product', ProductEntity::class)
             // [...]
     }

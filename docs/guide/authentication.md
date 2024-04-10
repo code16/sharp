@@ -44,16 +44,16 @@ class SharpServiceProvider extends SharpAppServiceProvider
 
 It's very likely that you don't want to authorize all users to access Sharp. You can fix this in two ways:
 
-### Global authorization gate
+### Global access gate
 
-A simple way to restrict access to Sharp is to define the `viewSharp` global Gate:
+A simple way to restrict access to Sharp is to define the `viewSharp` global Gate, in the Service Provider:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
 {
     // [...]
 
-    public function gate(): void
+    public function declareAccessGate(): void
     {
         Gate::define('viewSharp', function ($user) {
             return $user->is_sharp_admin; // Or any check you need

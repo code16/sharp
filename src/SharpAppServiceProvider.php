@@ -9,7 +9,7 @@ abstract class SharpAppServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->accessGate();
+        $this->declareAccessGate();
     }
 
     public function register()
@@ -17,7 +17,7 @@ abstract class SharpAppServiceProvider extends ServiceProvider
         $this->configureSharp(app(SharpConfigBuilder::class));
     }
 
-    public function accessGate(): void
+    protected function declareAccessGate(): void
     {
     }
 
