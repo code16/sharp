@@ -131,7 +131,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     protected function configureSharp(SharpConfigBuilder $config): void
     {
         $config
-            ->setCustomUrlSegment('/admin')
+            ->setCustomUrlSegment('admin')
             ->addEntity('product', ProductEntity::class)
             // [...]
     }
