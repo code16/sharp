@@ -124,6 +124,9 @@ class SharpConfigBuilder
         return $this;
     }
 
+    /**
+     * @deprecated will be removed in a future version. Use regular addEntity() calls instead.
+     */
     public function declareEntityResolver(string $resolverClassName): self
     {
         $this->config['entity_resolver'] = $resolverClassName;
