@@ -4,11 +4,7 @@ use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Illuminate\Http\UploadedFile;
 
 beforeEach(function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
-
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
 });
 

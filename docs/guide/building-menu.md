@@ -28,16 +28,18 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
-And should be declared in the config file:
+And should be declared:
 
 ```php
-// config/sharp.php
-
-return [
-    // [...]
-    
-    'menu' => MySharpMenu::class,
-]
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setSharpMenu(MySharpMenu::class)
+            // [...]
+    }
+}
 ```
 
 ### Link to an Entity List, a Dashboard or to a single Show Page

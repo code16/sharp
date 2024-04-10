@@ -25,10 +25,10 @@ class HandleUploadedFileJob implements ShouldQueue
 
     public function handle(): void
     {
-        $tmpDisk = config('sharp.uploads.tmp_disk', 'local');
+        $tmpDisk = sharpConfig()->get('uploads.tmp_disk');
         $tmpFilePath = sprintf(
             '%s/%s',
-            config('sharp.uploads.tmp_dir', 'tmp'),
+            sharpConfig()->get('uploads.tmp_dir'),
             $this->uploadedFileName,
         );
 

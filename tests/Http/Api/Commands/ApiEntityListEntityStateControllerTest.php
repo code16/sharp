@@ -7,12 +7,8 @@ use Code16\Sharp\Tests\Fixtures\Sharp\PersonList;
 use Illuminate\Contracts\Support\Arrayable;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('updates the state of an instance from a list and return a "refresh" action by default', function () {

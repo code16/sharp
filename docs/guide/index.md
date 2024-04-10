@@ -49,31 +49,48 @@ Sharp 8 needs Laravel 10+ and PHP 8.2+.
 A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
 
 ```json
-"scripts": {
-    [...]
+{
+  "name": "code16/sharp",
+  ...
+  "scripts": {
+    ...
     "post-autoload-dump": [
-        "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-        "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
-        "@php artisan package:discover"
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
+      "@php artisan package:discover"
     ]
-},
+  }
+}
 ```
 
 ## Configuration
 
-Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. 
-
-You can initialize this file with `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=config`
-
-Here's an example:
+To configure all Sharp behavior, you must create a Service Provider which extends `Code16\Sharp\SharpAppServiceProvider` and implements the `configureSharp()` method:
 
 ```php
-return [
-    'entities' => [
-        'products' => \App\Sharp\Entities\ProductEntity::class,
-        // Other entities...
-    ]
-];
+use Code16\Sharp\SharpAppServiceProvider;
+
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        // [...]
+    }
+}
+```
+
+Be sure to [register this new Service Provider](https://laravel.com/docs/providers#registering-providers) in your app.
+
+Next declare your entities in this `configureSharp()` method:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config->addEntity('product', ProductEntity::class);
+    }
+}
 ```
 
 This `ProductEntity` class could be written like this:
@@ -106,14 +123,17 @@ Instead of directly declaring an array of entities in the config file, you can t
 
 ## Access to Sharp
 
-Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to define the `custom_url_segment` config value, in `config/sharp.php`:
+Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to configure a custom segment path:
 
 ```php
-// config/sharp.php
-
-return [
-    'name' => 'My Sharp app',
-    'custom_url_segment' => 'admin',
-    // ...
-]
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setCustomUrlSegment('admin')
+            ->addEntity('product', ProductEntity::class)
+            // [...]
+    }
+}
 ```

@@ -16,10 +16,8 @@ beforeEach(function () {
 });
 
 it('allows to define an external url in the menu', function () {
-    config()->set(
-        'sharp.menu',
-        new class extends SharpMenu
-        {
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
             public function build(): SharpMenu
             {
                 return $this
@@ -37,23 +35,17 @@ it('allows to define an external url in the menu', function () {
 });
 
 it('allows to define a direct entity link in the menu', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this
-                        ->addEntityLink('person', 'people', 'fa-user');
-                }
+                return $this
+                    ->addEntityLink('person', 'people', 'fa-user');
             }
-        );
+        }
+    );
 
     $item = app(Menu::class)->getItems()[0];
     $this->assertInstanceOf(SharpMenuItemLink::class, $item);
@@ -65,24 +57,18 @@ it('allows to define a direct entity link in the menu', function () {
 });
 
 it('allows to define a category in the menu', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this->addSection('Data', function ($section) {
-                        $section->addEntityLink('person', 'people', 'fa-user');
-                    });
-                }
+                return $this->addSection('Data', function ($section) {
+                    $section->addEntityLink('person', 'people', 'fa-user');
+                });
             }
-        );
+        }
+    );
 
     $menu = app(Menu::class);
 
@@ -100,23 +86,17 @@ it('allows to define a category in the menu', function () {
 });
 
 it('allows to define a dashboard in the menu', function () {
-    config()->set(
-        'sharp.entities.personal_dashboard',
-        DashboardEntity::class,
-    );
+    sharpConfig()->addEntity('personal_dashboard', DashboardEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this
-                        ->addEntityLink('personal_dashboard', 'My Dashboard', 'fa-dashboard');
-                }
+                return $this
+                    ->addEntityLink('personal_dashboard', 'My Dashboard', 'fa-dashboard');
             }
-        );
+        }
+    );
 
     $menu = app(Menu::class);
 
@@ -130,22 +110,16 @@ it('allows to define a dashboard in the menu', function () {
 });
 
 it('allows to define a single show entity link in the menu', function () {
-    config()->set(
-        'sharp.entities.person',
-        SinglePersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', SinglePersonEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this->addEntityLink('person', 'people', 'fa-user');
-                }
+                return $this->addEntityLink('person', 'people', 'fa-user');
             }
-        );
+        }
+    );
 
     $menu = app(Menu::class);
 
@@ -159,27 +133,21 @@ it('allows to define a single show entity link in the menu', function () {
 });
 
 it('allows to define a separator in the menu via class', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this
-                        ->addSection('Data', function ($section) {
-                            $section->addEntityLink('person', 'people', 'fa-user')
-                                ->addSeparator('Separator')
-                                ->addEntityLink('person', 'other people', 'fa-user-o');
-                        });
-                }
+                return $this
+                    ->addSection('Data', function ($section) {
+                        $section->addEntityLink('person', 'people', 'fa-user')
+                            ->addSeparator('Separator')
+                            ->addEntityLink('person', 'other people', 'fa-user-o');
+                    });
             }
-        );
+        }
+    );
 
     $menu = app(Menu::class);
 
@@ -195,26 +163,20 @@ it('allows to define a separator in the menu via class', function () {
 });
 
 it('separators in last position are hidden', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this
-                        ->addSection('Data', function ($section) {
-                            $section->addEntityLink('person', 'people', 'fa-user')
-                                ->addSeparator('Separator');
-                        });
-                }
+                return $this
+                    ->addSection('Data', function ($section) {
+                        $section->addEntityLink('person', 'people', 'fa-user')
+                            ->addSeparator('Separator');
+                    });
             }
-        );
+        }
+    );
 
     $menu = app(Menu::class);
 
@@ -222,28 +184,22 @@ it('separators in last position are hidden', function () {
 });
 
 it('stacked separators are hidden', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
-    config()
-        ->set(
-            'sharp.menu',
-            new class extends SharpMenu
+    sharpConfig()->setSharpMenu(
+        new class extends SharpMenu {
+            public function build(): SharpMenu
             {
-                public function build(): SharpMenu
-                {
-                    return $this
-                        ->addSection('Data', function ($section) {
-                            $section->addEntityLink('person', 'people', 'fa-user')
-                                ->addSeparator('Not wanted')
-                                ->addSeparator('Separator')
-                                ->addEntityLink('person', 'people', 'fa-user');
-                        });
-                }
+                return $this
+                    ->addSection('Data', function ($section) {
+                        $section->addEntityLink('person', 'people', 'fa-user')
+                            ->addSeparator('Not wanted')
+                            ->addSeparator('Separator')
+                            ->addEntityLink('person', 'people', 'fa-user');
+                    });
             }
-        );
+        }
+    );
 
     $menu = app(Menu::class);
 

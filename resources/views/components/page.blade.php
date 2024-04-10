@@ -6,10 +6,10 @@
         {{ $slot }}
     @else
         <sharp-action-view>
-            @if(value(config('sharp.search.enabled', false)))
+            @if(sharpConfig()->get('search.enabled'))
                 <template v-slot:search>
                     <sharp-global-search
-                        placeholder="{{ config('sharp.search.placeholder') }}"
+                        placeholder="{{ sharpConfig()->get('search.placeholder') }}"
                     ></sharp-global-search>
                 </template>
             @endif

@@ -7,12 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     Storage::fake('local');
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
-
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
 });
 

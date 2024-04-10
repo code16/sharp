@@ -3,10 +3,14 @@
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Tests\Unit\Form\Eloquent\Uploads\Transformers\Fakes\FakePicturable;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-    config()->set('sharp.uploads.thumbnails_disk', 'public');
-    config()->set('sharp.uploads.thumbnails_dir', 'thumbnails');
+//    sharpConfig()->configureUploadsThumbnailCreation(
+//        thumbnailsDisk: 'public',
+//        thumbnailsDir: 'thumbnails',
+//    );
+
 
     Storage::fake('local');
     Storage::fake('public');

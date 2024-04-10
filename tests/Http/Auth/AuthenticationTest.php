@@ -1,22 +1,18 @@
 <?php
 
-use Code16\Sharp\Auth\SharpAuthenticationCheckHandler;
 use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
 use Code16\Sharp\Tests\Fixtures\TestAuthGuard;
 use Code16\Sharp\Tests\Fixtures\User;
 
 beforeEach(function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 });
 
 function setTestAuthGuard(): void
 {
-    auth()->extend('sharp', fn () => new TestAuthGuard());
-    config()->set('sharp.auth.guard', 'sharp');
+    auth()->extend('sharp', fn() => new TestAuthGuard());
     config()->set('auth.guards.sharp', ['driver' => 'sharp', 'provider' => 'users']);
+    sharpConfig()->setAuthCustomGuard('sharp');
 }
 
 it('redirects guests to the login page', function () {
@@ -38,6 +34,7 @@ it('displays the login page', function () {
 
 it('allows guests to login', function () {
     setTestAuthGuard();
+    $this->withoutExceptionHandling();
 
     $this
         ->post(route('code16.sharp.login.post'), [
@@ -63,7 +60,7 @@ it('does not allow to login with invalid payload', function () {
 it('handles remember_me option', function () {
     setTestAuthGuard();
 
-    config()->set('sharp.auth.suggest_remember_me', true);
+    sharpConfig()->suggestRememberMeOnLoginForm();
 
     $this
         ->post(route('code16.sharp.login.post'), [
@@ -79,7 +76,7 @@ it('handles remember_me option', function () {
 it('does not allow remember_me option without proper config', function () {
     setTestAuthGuard();
 
-    config()->set('sharp.auth.suggest_remember_me', false);
+    sharpConfig()->suggestRememberMeOnLoginForm(false);
 
     $this
         ->post(route('code16.sharp.login.post'), [
@@ -95,7 +92,7 @@ it('does not allow remember_me option without proper config', function () {
 it('hits rate limiter if configured', function () {
     setTestAuthGuard();
 
-    config()->set('sharp.auth.rate_limiting', ['enabled' => true, 'max_attempts' => 1]);
+    sharpConfig()->enableLoginRateLimiting(1);
 
     $this->post(route('code16.sharp.login.post'), ['login' => 'test@example.org', 'password' => 'bad'])
         ->assertSessionHasErrors(['login' => trans('sharp::auth.invalid_credentials')]);
@@ -119,8 +116,7 @@ it('allows users to logout', function () {
 
 it('allows custom auth guard', function () {
     auth()->extend('test', function () {
-        return new class implements \Illuminate\Contracts\Auth\Guard
-        {
+        return new class implements \Illuminate\Contracts\Auth\Guard {
             protected $user;
 
             public function check()
@@ -159,14 +155,13 @@ it('allows custom auth guard', function () {
         };
     });
 
-    $this->app['config']->set('sharp.auth.guard', 'test');
+    sharpConfig()->setAuthCustomGuard('test');
 
     $this->app['config']->set(
         'auth.guards.test', [
-            'driver' => 'test',
-            'provider' => 'users',
-        ],
-    );
+        'driver' => 'test',
+        'provider' => 'users',
+    ]);
 
     login(new User(['name' => 'ok']));
 

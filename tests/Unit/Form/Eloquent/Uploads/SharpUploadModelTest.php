@@ -5,8 +5,10 @@ use Code16\Sharp\Tests\Fixtures\Person;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-    config()->set('sharp.uploads.thumbnails_disk', 'public');
-    config()->set('sharp.uploads.thumbnails_dir', 'thumbnails');
+//    sharpConfig()->configureUploadsThumbnailCreation(
+//        thumbnailsDisk: 'public',
+//        thumbnailsDir: 'thumbnails',
+//    );
 
     Storage::fake('local');
     Storage::fake('public');

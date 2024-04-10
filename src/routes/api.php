@@ -16,7 +16,7 @@ use Code16\Sharp\Http\Controllers\EntityListController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => '/'.sharp_base_url_segment().'/api',
+    'prefix' => '/'.sharpConfig()->get('custom_url_segment').'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
     Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [ApiDashboardCommandController::class, 'show'])

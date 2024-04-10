@@ -10,7 +10,7 @@ final class GlobalFilters implements Arrayable
 
     public function getFilters(): array
     {
-        return value(config('sharp.global_filters'));
+        return sharpConfig()->get('global_filters');
     }
 
     public function isEnabled(): bool
@@ -28,7 +28,6 @@ final class GlobalFilters implements Arrayable
     public function findFilter(string $key): ?GlobalRequiredFilter
     {
         return collect($this->getFilters())
-            ->map(fn ($filter) => instanciate($filter))
             ->each(fn (Filter $filter) => $filter->buildFilterConfig())
             ->filter(fn (Filter $filter) => $filter->getKey() == $key)
             ->first();

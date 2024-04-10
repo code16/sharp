@@ -6,34 +6,32 @@ Class: `Code16\Sharp\Form\Fields\SharpFormUploadField`
 
 ## General configuration
 
-First, in order to get the upload part working, you have to define a "tmp" path where files will be stored until they are moved to the final folder. Here's the default:
+You can define the temp disk and directory where files will be stored until they are moved to the final folder, as well as a global max file size (which can be overriden by each field). Here are the default values:
 
 ```php
-// in config/sharp.php
-
-'uploads' => [
-    'tmp_disk' => env('SHARP_UPLOADS_TMP_DISK', 'local'),
-    'tmp_dir' => env('SHARP_UPLOADS_TMP_DIR', 'tmp'),
-]
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->configureUploads(
+                uploadDisk: 'local',
+                uploadDirectory: 'tmp',
+                globalMaxFileSize: 5,
+                keepOriginalImageOnTransform: true
+            )
+            // [...]
+    }
+}
 ```
 
-This `tmp_dir` path is relative to the `uploads.tmp_disk` filesystem defined.
+The fourth argument, `keepOriginalImageOnTransform`, is a boolean that defines if the original image should be kept when a transformation is applied on it (meaning that transformations are stored and applied on-the-fly: this is transparent when using Sharp’s [built-in way to handle uploads](../sharp-uploads.md). It can be overriden by each field (see below).
 
-You should also configure the default max upload file size:
-
-```php
-// in config/sharp.php
-
-'uploads' => [
-    'max_file_size' => env('SHARP_UPLOADS_MAX_FILE_SIZE_IN_MB', 2),
-]
-```
-
-## General field Configuration
+## Field Configuration
 
 ### `setStorageDisk(string $storageDisk)`
 
-Set the destination storage disk (as configured in Laravel's  `config/filesystem.php` config file).
+Set the destination storage disk (as configured in Laravel’s `config/filesystem.php` config file).
 
 ### `setStorageBasePath(string|Closure $storageBasePath)`
 
@@ -61,14 +59,7 @@ When an upload field is configured to accept only images:
 ### `setImageTransformable(bool $transformable = true, ?bool $transformKeepOriginal = null)`
 
 Allow the user to crop or rotate the visual, after the upload.  
-The argument `$transformKeepOriginal` overrides the following config which is `true` by default.
-
-```php
-// config/sharp.php
-'uploads' => [
-    'transform_keep_original_image' => true,
-]
-```
+The argument `$transformKeepOriginal` overrides the global config (which is `true` by default).
 
 With `$transformKeepOriginal` set to true, the original file will remain unchanged, meaning the transformations will be stored apart: using the [built-in way to handle uploads](../sharp-uploads.md), it's transparent. Otherwise, see the Formatter part below.
 
@@ -153,15 +144,13 @@ function find($id): array
                     'name' => basename($product->picture->name),
                     'path' => $product->picture->name,
                     'disk' => 's3',
-                    'thumbnail' => [...],
+                    'thumbnail' => /* thumbnail URL */,
                     'size' => $product->picture->size,
                     'filters' => $product->picture->filters
                 ];
             }
         )
-        ->transform(
-            Product::findOrFail($id)
-        );
+        ->transform(Product::find($id));
 }
 ```
 
@@ -239,3 +228,24 @@ The formatter will return `null` (note that the file **will not** be deleted fro
 #### existing and unchanged file
 
 The formatter will return **an empty array**.
+
+## Configure files jobs
+
+Sharp handle files in jobs (copy / move and transformation). You can configure how these job should be dispatched:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->configureUploads(
+                fileHandingQueue: 'default',
+                fileHandlingQueueConnection: 'sync',
+            )
+            // [...]
+    }
+}
+```
+
+Queue and connection should be [properly configured](https://laravel.com/docs/queues).
