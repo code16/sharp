@@ -14,14 +14,9 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-    login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
-
     $this->withoutExceptionHandling();
+    sharpConfig()->addEntity('person', PersonEntity::class);
+    login();
     Storage::fake('local');
     Queue::fake();
 });
@@ -438,8 +433,10 @@ it('pushes jobs on right queue / connections', function () {
             && $job->connection == 'sync';
     });
 
-    config()->set('sharp.uploads.file_handling_queue_connection', 'redis');
-    config()->set('sharp.uploads.file_handling_queue', 'uploads');
+    sharpConfig()->configureUploads(
+        fileHandingQueue: 'uploads',
+        fileHandlingQueueConnection: 'redis'
+    );
 
     $this
         ->post('/sharp/s-list/person/s-form/person/2', [

@@ -31,7 +31,7 @@ class Login2faRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! $sharp2faService->checkCode($this->input('code'))) {
+        if (!$sharp2faService->checkCode($this->input('code'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -50,7 +50,7 @@ class Login2faRequest extends FormRequest
 
     private function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 3)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 3)) {
             return;
         }
 
@@ -73,6 +73,6 @@ class Login2faRequest extends FormRequest
 
     private function getGuard(): StatefulGuard
     {
-        return Auth::guard(config('sharp.auth.guard'));
+        return Auth::guard(sharpConfig()->get('auth.guard'));
     }
 }

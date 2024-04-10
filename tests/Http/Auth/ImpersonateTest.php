@@ -17,7 +17,7 @@ function migrateUsersTable()
 }
 
 it('redirects to impersonation page if enabled and guest', function () {
-    config()->set('sharp.auth.impersonate.handler', new class() extends SharpImpersonationHandler
+    sharpConfig()->enableImpersonation(new class() extends SharpImpersonationHandler
     {
         public function enabled(): bool
         {
@@ -40,7 +40,7 @@ it('displays impersonatable users from a custom handler', function () {
         2 => 'Albert Einstein',
     ];
 
-    config()->set('sharp.auth.impersonate.handler', new class($users) extends SharpImpersonationHandler
+    sharpConfig()->enableImpersonation(new class($users) extends SharpImpersonationHandler
     {
         public function __construct(private readonly array $users)
         {
@@ -66,15 +66,16 @@ it('displays impersonatable users from a custom handler', function () {
 it('allow to use default eloquent implementation handler', function () {
     migrateUsersTable();
 
-    config()->set('sharp.auth.login_attribute', 'name');
-    // We override the default handler just to skip the enabled() check
-    config()->set('sharp.auth.impersonate.handler', new class() extends SharpDefaultEloquentImpersonationHandler
-    {
-        public function enabled(): bool
+    sharpConfig()
+        ->setLoginAttributes(login: 'name')
+        // We override the default handler just to skip the enabled() check
+        ->enableImpersonation(new class() extends SharpDefaultEloquentImpersonationHandler
         {
-            return true;
-        }
-    });
+            public function enabled(): bool
+            {
+                return true;
+            }
+        });
 
     User::create(['id' => 10, 'name' => 'Marie Curie']);
     User::create(['id' => 20, 'name' => 'Albert Einstein']);
@@ -94,7 +95,7 @@ it('does not display impersonatable users if impersonation is not enabled', func
         2 => 'Albert Einstein',
     ];
 
-    config()->set('sharp.auth.impersonate.handler', new class($users) extends SharpImpersonationHandler
+    sharpConfig()->enableImpersonation(new class($users) extends SharpImpersonationHandler
     {
         public function __construct(private readonly array $users)
         {
@@ -106,14 +107,14 @@ it('does not display impersonatable users if impersonation is not enabled', func
         }
     });
 
-    config()->set('sharp.auth.impersonate.enabled', false);
+    sharpConfig()->disableImpersonation();
     $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('impersonateUsers', null)
         );
 
     // Even if the handler is enabled, since the env is not "local", it should not display the impersonation
-    config()->set('sharp.auth.impersonate.enabled', true);
+    sharpConfig()->enableImpersonation();
     $this->get(route('code16.sharp.impersonate'))
         ->assertInertia(fn (Assert $page) => $page
             ->where('impersonateUsers', null)
@@ -124,7 +125,7 @@ it('allows to impersonate a registered user', function () {
     migrateUsersTable();
     User::create(['id' => 1, 'name' => 'Marie Curie']);
 
-    config()->set('sharp.auth.impersonate.handler', new class() extends SharpDefaultEloquentImpersonationHandler
+    sharpConfig()->enableImpersonation(new class() extends SharpDefaultEloquentImpersonationHandler
     {
         public function enabled(): bool
         {
@@ -147,7 +148,7 @@ it('does not allow to impersonate an existing user who is not listed in the hand
     User::create(['id' => 1, 'name' => 'Marie Curie']);
     User::create(['id' => 2, 'name' => 'Albert Einstein']);
 
-    config()->set('sharp.auth.impersonate.handler', new class() extends SharpDefaultEloquentImpersonationHandler
+    sharpConfig()->enableImpersonation(new class() extends SharpDefaultEloquentImpersonationHandler
     {
         public function enabled(): bool
         {

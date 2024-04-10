@@ -5,7 +5,7 @@ use Code16\Sharp\Http\Controllers\Auth\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => '/'.sharp_base_url_segment(),
+    'prefix' => '/'.sharpConfig()->get('custom_url_segment'),
     'middleware' => ['sharp_common', 'sharp_web', 'sharp_guest'],
 ], function () {
     Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])

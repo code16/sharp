@@ -15,8 +15,8 @@ final class UserData extends Data
     public static function from(Authenticatable $user): self
     {
         return new self(
-            name: $user->{config('sharp.auth.display_attribute', 'name')} ?? null,
-            email: $user->{config('sharp.auth.login_attribute', 'email')} ?? null,
+            name: $user->{sharpConfig()->get('auth.display_attribute')} ?? null,
+            email: $user->{sharpConfig()->get('auth.login_attribute')} ?? null,
         );
     }
 }

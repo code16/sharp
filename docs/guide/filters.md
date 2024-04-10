@@ -313,18 +313,18 @@ class OrganizationGlobalFilter extends GlobalRequiredFilter
 }
 ```
 
-And then, we declare it in Sharp's config file:
+And then, we declare it:
 
 ```php
-// in config/sharp.php
-
-return [
-    // [...]
-
-    'global_filters' => [
-        OrganizationGlobalFilter::class
-    ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->addGlobalFilter(OrganizationGlobalFilter::class)
+            // [...]
+    }
+}
 ```
 
 Finally, to get the actual value of the filter on your Entity List, Show Page or Form classes, you must use the context:

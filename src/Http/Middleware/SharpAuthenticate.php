@@ -15,11 +15,11 @@ class SharpAuthenticate extends BaseAuthenticate
         $this->authenticate($request, $guards);
 
         if (Gate::has('viewSharp')) {
-            if (! Gate::allows('viewSharp')) {
+            if (!Gate::allows('viewSharp')) {
                 $this->unauthenticated($request, $guards);
             }
         } elseif ($checkHandler = config('sharp.auth.check_handler')) {
-            if (! instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
+            if (!instanciate($checkHandler)->check(auth()->guard($guards[0] ?? null)->user())) {
                 $this->unauthenticated($request, $guards);
             }
         }
@@ -29,11 +29,11 @@ class SharpAuthenticate extends BaseAuthenticate
 
     protected function redirectTo(Request $request)
     {
-        if ($loginPageUrl = value(config('sharp.auth.login_page_url'))) {
+        if ($loginPageUrl = sharpConfig()->get('auth.login_page_url')) {
             return $loginPageUrl;
         }
 
-        if (app(SharpImpersonationHandler::class)->enabled()) {
+        if (app(SharpImpersonationHandler::class)?->enabled()) {
             return route('code16.sharp.impersonate');
         }
 

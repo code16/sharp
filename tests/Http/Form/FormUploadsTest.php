@@ -5,7 +5,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-    config()->set('sharp.uploads.tmp_dir', 'tmp');
     Storage::fake('local');
 });
 

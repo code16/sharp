@@ -18,7 +18,7 @@ class SharpBreadcrumb
 
     public function getItems(array $data): array
     {
-        $url = sharp_base_url_segment();
+        $url = sharpConfig()->get('custom_url_segment');
         $breadcrumb = $this->currentSharpRequest->breadcrumb();
         $displayBreadcrumb = config('sharp.display_breadcrumb', false);
         $this->data = $data;

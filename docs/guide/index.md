@@ -4,10 +4,10 @@
 
 In Sharp, we handle `entities`; an `entity` is simply a data structure which has a meaning in the application context. For instance, a `Person`, a `Post` or an `Order`. In the Eloquent world, for which Sharp is optimized, it's typically a Model — but it's not necessarily a 1-1 relationship, a Sharp `entity` can represent a portion of a Model, or several Models.
 
-Each instance of an `entity` is called... an `instance`.
+An instance of an `entity` is simply called an `instance`.
 
 Each `entity` in Sharp can be displayed:
-- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, pagination, and perform searches. From there we also gain access to applicative `commands` applied either to an `instance` or to the whole (filtered) list, and to a simple `state` changer (the published state of an Article, for instance). All of that is described below.
+- in an `Entity List`, which is the list of all the `instances` for this `entity`: with some configuration and code, the user can sort the data, add filters, pagination, and perform searches. From there we also gain access to applicative `commands` applied either to any particular `instance` or to the whole (filtered) list, and to a simple `state` changer (the published state of an Article, for instance). All of that is described below.
 - In a `Show Page`, optionally, to display an `instance` details.
 - And in a `Form`, either to update or create a new `instance`.
 
@@ -41,7 +41,7 @@ This is a simple example to illustrate the main concepts of Sharp: we'll see in 
 
 ## Installation
 
-Sharp 8 needs Laravel 10+ and PHP 8.2+.
+Sharp 9 needs Laravel 11+ and PHP 8.2+.
 
 - Add the package with composer: `composer require code16/sharp`
 - And then publish assets: `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=assets`
@@ -49,31 +49,48 @@ Sharp 8 needs Laravel 10+ and PHP 8.2+.
 A tip on this last command: you'll need fresh assets each time Sharp is updated, so a good practice is to add the command in the `scripts.post-autoload-dump` section of your `composer.json` file:
 
 ```json
-"scripts": {
-    [...]
+{
+  "name": "code16/sharp",
+  ...
+  "scripts": {
+    ...
     "post-autoload-dump": [
-        "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-        "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
-        "@php artisan package:discover"
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force",
+      "@php artisan package:discover"
     ]
-},
+  }
+}
 ```
 
-## Configuration
+## Configuration via a new Service Provider
 
-Sharp needs a `config/sharp.php` config file, mainly to declare `entities`. 
-
-You can initialize this file with `php artisan vendor:publish --provider="Code16\Sharp\SharpServiceProvider" --tag=config`
-
-Here's an example:
+To configure all Sharp behavior, you must create a Service Provider which extends `Code16\Sharp\SharpAppServiceProvider` and implements the `configureSharp()` method:
 
 ```php
-return [
-    'entities' => [
-        'products' => \App\Sharp\Entities\ProductEntity::class,
-        // Other entities...
-    ]
-];
+use Code16\Sharp\SharpAppServiceProvider;
+
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        // [...]
+    }
+}
+```
+
+Be sure to [register this new Service Provider](https://laravel.com/docs/providers#registering-providers) in your app.
+
+Next declare your entities in this `configureSharp()` method:
+
+```php
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config->addEntity('product', ProductEntity::class);
+    }
+}
 ```
 
 This `ProductEntity` class could be written like this:
@@ -100,20 +117,19 @@ Almost each one is optional, in fact: we could skip the `show` and go straight t
 
 We'll get into all those classes in this guide. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 
-::: tip
-Instead of directly declaring an array of entities in the config file, you can type the full path of a class that implements the `Code16\Sharp\Utils\Entities\SharpEntityResolver` interface, and define here a `public function entityClassName(string $entityKey): ?string` method.
-:::
-
 ## Access to Sharp
 
-Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to define the `custom_url_segment` config value, in `config/sharp.php`:
+Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to configure a custom segment path:
 
 ```php
-// config/sharp.php
-
-return [
-    'name' => 'My Sharp app',
-    'custom_url_segment' => 'admin',
-    // ...
-]
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->setCustomUrlSegment('admin')
+            ->addEntity('product', ProductEntity::class)
+            // [...]
+    }
+}
 ```

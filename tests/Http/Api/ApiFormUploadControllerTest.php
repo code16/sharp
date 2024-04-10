@@ -4,7 +4,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
-    config()->set('sharp.uploads.tmp_dir', 'tmp');
     Storage::fake('local');
 });
 
@@ -18,7 +17,7 @@ it('allows to upload a file', function () {
 });
 
 it('allows to upload a file on a custom defined disk', function () {
-    config()->set('sharp.uploads.tmp_disk', 'uploads');
+    sharpConfig()->configureUploads(uploadDisk: 'uploads');
     Storage::fake('uploads');
 
     $this

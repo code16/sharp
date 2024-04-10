@@ -66,7 +66,7 @@ class CurrentSharpRequest
         return url(
             sprintf(
                 '%s/%s',
-                config('sharp.custom_url_segment', 'sharp'),
+                sharpConfig()->get('custom_url_segment'),
                 $breadcrumb
                     ->map(fn (BreadcrumbItem $item) => $item->toUri())
                     ->implode('/'),
@@ -228,9 +228,9 @@ class CurrentSharpRequest
             $urlToParse = request()->header('referer');
 
             return collect(explode('/', parse_url($urlToParse)['path']))
-                ->filter(function (string $segment) {
-                    return strlen(trim($segment)) && $segment !== sharp_base_url_segment();
-                })
+                ->filter(fn (string $segment) => strlen(trim($segment))
+                    && $segment !== sharpConfig()->get('custom_url_segment')
+                )
                 ->values();
         }
 

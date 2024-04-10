@@ -16,7 +16,7 @@ use Inertia\Middleware;
 class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'sharp::app';
-    
+
     public function __construct(
         protected Filesystem $filesystem
     ) {
@@ -26,14 +26,14 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'sharpVersion' => sharp_version(),
+            'sharpVersion' => sharpVersion(),
             'locale' => app()->getLocale(),
             'session' => [
                 '_token' => session()->token(),
                 'status' => session('status'),
                 'status_title' => session('status_title'),
             ],
-            'translations' => Cache::rememberForever('sharp.translations.'.sharp_version(), function () {
+            'translations' => Cache::rememberForever('sharp.translations.'.sharpVersion(), function () {
                 return collect([
                     'sharp::action_bar',
                     'sharp::dashboard',
@@ -50,30 +50,28 @@ class HandleInertiaRequests extends Middleware
                 ])
                     ->map(function ($group) {
                         return collect(__($group, [], app()->getFallbackLocale()))
-                            ->mapWithKeys(fn ($value, $key) => ["$group.$key" => __("$group.$key")]);
+                            ->mapWithKeys(fn($value, $key) => ["$group.$key" => __("$group.$key")]);
                     })
                     ->collapse()
                     ->toArray();
             }),
             'config' => [
-                'sharp.auth.forgotten_password.enabled' => config('sharp.auth.forgotten_password.enabled', false),
+                'sharp.auth.forgotten_password.enabled' => sharpConfig()->get('auth.forgotten_password.enabled'),
                 'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
-                'sharp.auth.login_form.logo_url' => config('sharp.auth.login_form.logo_url', config('sharp.theme.logo_urls.login')) ?: config('sharp.theme.logo_url'),
-                'sharp.auth.login_form.suggest_remember_me' => config('sharp.auth.suggest_remember_me', config('sharp.auth.login_form.suggest_remember_me', false)),
-                'sharp.custom_url_segment' => config('sharp.custom_url_segment'),
+                'sharp.auth.suggest_remember_me' => sharpConfig()->get('auth.suggest_remember_me'),
+                'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
                 'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
                 'sharp.markdown_editor.tight_lists_only' => config('sharp.markdown_editor.tight_lists_only', true),
                 'sharp.markdown_editor.nl2br' => config('sharp.markdown_editor.nl2br', false),
                 'sharp.name' => config('sharp.name', 'Sharp'),
-                'sharp.search.enabled' => value(config('sharp.search.enabled', false)),
-                'sharp.search.placeholder' => config('sharp.search.placeholder'),
-                'sharp.theme.logo_url' => config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
-                'sharp.theme.logo_height' => config('sharp.theme.logo_height'),
+                'sharp.search.enabled' => sharpConfig()->get('search.enabled'),
+                'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'),
+                'sharp.theme.logo_height' => sharpConfig()->get('theme.logo_height'),
             ],
             'logo' => LogoData::optional(transform(
-                config('sharp.theme.logo_url', config('sharp.theme.logo_urls.menu')),
-                fn ($url) => $url ? [
+                sharpConfig()->get('theme.logo_url'),
+                fn($url) => $url ? [
                     'svg' => str($url)->startsWith('/') && str($url)->endsWith('.svg') && $this->filesystem->exists(public_path($url))
                         ? $this->filesystem->get(public_path($url))
                         : null,
@@ -84,8 +82,8 @@ class HandleInertiaRequests extends Middleware
                 ? GlobalFiltersData::from(app(GlobalFilters::class))
                 : null,
             ...auth()->check() ? [
-                'menu' => fn () => MenuData::from(app(SharpMenuManager::class)),
-                'auth' => fn () => [
+                'menu' => fn() => MenuData::from(app(SharpMenuManager::class)),
+                'auth' => fn() => [
                     'user' => UserData::from(auth()->user()),
                 ],
             ] : [],

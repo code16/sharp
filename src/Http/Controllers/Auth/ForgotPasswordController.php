@@ -25,9 +25,8 @@ class ForgotPasswordController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $passwordBroker = config('sharp.auth.forgotten_password.password_broker')
-            ? app(config('sharp.auth.forgotten_password.password_broker'))
-            : Password::broker(config('auth.defaults.passwords'));
+        $passwordBroker = sharpConfig()->get('auth.forgotten_password.password_broker')
+            ?: Password::broker(config('auth.defaults.passwords'));
 
         $status = $passwordBroker->sendResetLink($request->only('email'));
 
