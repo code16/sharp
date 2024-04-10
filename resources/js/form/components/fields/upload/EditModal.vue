@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n";
     import { nextTick, ref, watch } from "vue";
     import { getCropDataFromFilters } from "./util/filters";
-    import { api } from "@/api";
+    import { api } from "@/api/api";
     import { FormUploadFieldData } from "@/types";
     import Cropper from "cropperjs";
     import { rotate, rotateTo } from "./util/rotate";

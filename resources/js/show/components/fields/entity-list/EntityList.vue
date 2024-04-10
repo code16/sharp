@@ -9,7 +9,7 @@
     import { useStickyLayout } from "./useStickyLayout";
     import { useFilters } from "@/filters/useFilters";
     import { useCommands } from "@/commands/useCommands";
-    import { api } from "@/api";
+    import { api } from "@/api/api";
     import { FilterQueryParams } from "@/filters/types";
     import { route } from "@/utils/url";
 

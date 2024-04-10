@@ -22,7 +22,7 @@ import { CollapsibleTrigger } from "radix-vue";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
@@ -251,29 +251,31 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 
     <template v-for="dialog in dialogs" :key="dialog.id">
         <AlertDialog
-            default-open
-            @update:open="(open) => !open && dialog.onHidden()"
+            v-model:open="dialog.open"
+            @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
         >
-            <AlertDialogHeader>
-                <template v-if="dialog.title">
-                    <AlertDialogTitle>
-                        {{ dialog.title }}
-                    </AlertDialogTitle>
-                </template>
-                <AlertDialogDescription>
-                    {{ dialog.text }}
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <template v-if="!dialog.okOnly">
-                    <AlertDialogCancel>
-                        {{ __('sharp::modals.cancel_button') }}
-                    </AlertDialogCancel>
-                </template>
-                <AlertDialogAction @click="dialog.onOk()">
-                    {{ dialog.okTitle ?? __('sharp::modals.ok_button') }}
-                </AlertDialogAction>
-            </AlertDialogFooter>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <template v-if="dialog.title">
+                        <AlertDialogTitle>
+                            {{ dialog.title }}
+                        </AlertDialogTitle>
+                    </template>
+                    <AlertDialogDescription>
+                        {{ dialog.text }}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <template v-if="!dialog.okOnly">
+                        <AlertDialogCancel>
+                            {{ __('sharp::modals.cancel_button') }}
+                        </AlertDialogCancel>
+                    </template>
+                    <AlertDialogAction @click="dialog.onOk()">
+                        {{ dialog.okTitle ?? __('sharp::modals.ok_button') }}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
         </AlertDialog>
     </template>
 </template>

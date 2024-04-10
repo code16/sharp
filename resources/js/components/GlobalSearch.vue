@@ -77,7 +77,7 @@
 <script lang="ts">
     import { Modal, Loading } from "@/components/ui";
     import debounce from "lodash/debounce";
-    import {api} from "@/api";
+    import {api} from "@/api/api";
 
     export default {
         components: {

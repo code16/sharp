@@ -8,7 +8,7 @@
     import DropTarget from '@uppy/drop-target';
     import Cropper from 'cropperjs';
     import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-    import { getErrorMessage, handleErrorAlert } from "@/api";
+    import { getErrorMessage, handleErrorAlert } from "@/api/api";
     import { getFiltersFromCropData } from "./util/filters";
     import { Button } from '@/components/ui/button';
     import { ArrowDownOnSquareIcon } from "@heroicons/vue/24/outline";

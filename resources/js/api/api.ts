@@ -2,6 +2,7 @@ import axios from 'axios';
 import paramsSerializer from './paramsSerializer';
 import { installInterceptors } from "./interceptors";
 import { config } from "@/utils/config";
+import { installProgressInterceptors } from "@/api/progress";
 
 export const api = createApi();
 
@@ -11,6 +12,7 @@ export function createApi() {
         paramsSerializer,
     });
     installInterceptors(api);
+    installProgressInterceptors(api);
     return api;
 }
 

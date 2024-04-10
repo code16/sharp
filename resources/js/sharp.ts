@@ -1,6 +1,7 @@
 import { createApp, DefineComponent, h, nextTick } from 'vue';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { progressDelay } from "@/api/progress";
 
 createInertiaApp({
     resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
@@ -9,6 +10,7 @@ createInertiaApp({
             .use(plugin);
 
         app.config.errorHandler = e => console.error(e);
+        app.config.globalProperties.window = window;
 
         app.mount(el);
 
@@ -17,7 +19,7 @@ createInertiaApp({
         });
     },
     progress: {
-        delay: 150,
+        delay: progressDelay,
         color: 'hsl(var(--primary))',
     }
 });

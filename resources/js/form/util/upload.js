@@ -1,4 +1,4 @@
-import { getXsrfToken } from "@/api";
+import { getXsrfToken } from "@/api/api.js";
 import { filesizeLabel } from "@/utils/file";
 import { __ } from "@/utils/i18n";
 

@@ -18,7 +18,7 @@
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
     import { useCommands } from "@/commands/useCommands";
     import Breadcrumb from "@/components/Breadcrumb.vue";
-    import { api } from "@/api";
+    import { api } from "@/api/api";
     import { router } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
     import PageAlert from "@/components/PageAlert.vue";

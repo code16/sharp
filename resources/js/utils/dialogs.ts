@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 type Dialog = {
     id: number,
+    open: boolean,
     title?: string,
     text: string,
     okTitle?: string,
@@ -29,6 +30,7 @@ export function showDialog(text: string, props: Partial<Dialog> = null) {
             id,
             ...props,
             text,
+            open: true,
             onOk: () => resolve(true),
             onHidden: () => {
                 dialogs.value = dialogs.value.filter(dialog => dialog.id !== id);
