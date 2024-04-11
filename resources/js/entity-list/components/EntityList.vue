@@ -38,11 +38,10 @@
         DropdownMenuSubTrigger,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { SelectTrigger as PrimitiveSelect } from "radix-vue";
     import { DropdownMenuPortal } from "radix-vue";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
-    import { SelectTrigger } from "@/components/ui/select";
+    import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -444,9 +443,6 @@
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="start" :align-offset="-16">
-                                                            <SelectTrigger>
-
-                                                            </SelectTrigger>
                                                             <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
                                                                 <DropdownMenuCheckboxItem
                                                                     :checked="stateValue.value == entityList.instanceState(item)"
@@ -475,13 +471,13 @@
                                                                         <DropdownMenuGroup>
                                                                             <DropdownMenuSub v-model:open="stateSubmenuOpened.value">
                                                                                 <DropdownMenuSubTrigger :disabled="!entityList.instanceCanUpdateState(item)">
-                                                                                    <StateIcon class="mr-1" :state-value="entityList.instanceStateValue(item)" />
-                                                                                    <div>
-                                                                                        <template v-if="entityList.instanceCanUpdateState(item)">
-                                                                                            {{ __('sharp::modals.entity_state.edit.title') }} :
-                                                                                        </template>
-                                                                                        {{ entityList.instanceStateValue(item)?.label ?? entityList.instanceState(item) }}
-                                                                                    </div>
+                                                                                    <template v-if="entityList.instanceCanUpdateState(item)">
+                                                                                        {{ __('sharp::modals.entity_state.edit.title') }} :
+                                                                                    </template>
+                                                                                    <Badge class="ml-1.5" variant="outline">
+                                                                                        <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
+                                                                                        {{ entityList.instanceStateValue(item)?.label }}
+                                                                                    </Badge>
                                                                                 </DropdownMenuSubTrigger>
                                                                                 <DropdownMenuPortal>
                                                                                     <DropdownMenuSubContent>
@@ -490,7 +486,7 @@
                                                                                                 :checked="stateValue.value == entityList.instanceState(item)"
                                                                                                 @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
                                                                                             >
-                                                                                                <StateIcon class="mr-1" :state-value="stateValue" />
+                                                                                                <StateIcon class="mr-1.5" :state-value="stateValue" />
                                                                                                 <span class="truncate">{{ stateValue.label }}</span>
                                                                                             </DropdownMenuCheckboxItem>
                                                                                         </template>
