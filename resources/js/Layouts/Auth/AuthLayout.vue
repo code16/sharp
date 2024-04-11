@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Logo from "@/components/Logo.vue";
-import SharpLogo from '../../../svg/logo.svg';
+    import Logo from "@/components/Logo.vue";
+    import SharpLogo from '../../../svg/logo.svg';
 </script>
 
 <template>
@@ -20,11 +20,7 @@ import SharpLogo from '../../../svg/logo.svg';
         </div>
 
         <div class="w-full max-w-sm">
-            <slot name="prepend" />
-
             <slot />
-
-            <slot name="append" />
 
             <p class="text-center text-xs text-muted-foreground opacity-50 mt-2">
                 <span>powered by </span>

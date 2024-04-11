@@ -23,7 +23,7 @@
     import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
     import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
-    import { useDraggable, UseDraggableOptions, vDraggable } from "vue-draggable-plus";
+    import { useDraggable } from "vue-draggable-plus";
     import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
     import { ChevronDown, MoreHorizontal } from "lucide-vue-next";
@@ -33,18 +33,16 @@
         DropdownMenuContent,
         DropdownMenuGroup,
         DropdownMenuItem,
-        DropdownMenuLabel,
-        DropdownMenuRadioGroup,
-        DropdownMenuRadioItem,
         DropdownMenuSeparator,
         DropdownMenuSub, DropdownMenuSubContent,
         DropdownMenuSubTrigger,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { SortableOptions } from "sortablejs";
+    import { SelectTrigger as PrimitiveSelect } from "radix-vue";
     import { DropdownMenuPortal } from "radix-vue";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
+    import { SelectTrigger } from "@/components/ui/select";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -440,18 +438,21 @@
                                                         <DropdownMenuTrigger>
                                                             <Button variant="ghost" size="sm">
                                                                 <Badge variant="outline">
-                                                                    <StateIcon class="mr-1" :state-value="entityList.instanceStateValue(item)" />
+                                                                    <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
                                                                     {{ entityList.instanceStateValue(item)?.label }}
                                                                 </Badge>
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="start" :align-offset="-16">
+                                                            <SelectTrigger>
+
+                                                            </SelectTrigger>
                                                             <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
                                                                 <DropdownMenuCheckboxItem
                                                                     :checked="stateValue.value == entityList.instanceState(item)"
                                                                     @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
                                                                 >
-                                                                    <StateIcon class="mr-1" :state-value="stateValue" />
+                                                                    <StateIcon class="mr-1.5" :state-value="stateValue" />
                                                                     <span class="truncate">{{ stateValue.label }}</span>
                                                                 </DropdownMenuCheckboxItem>
                                                             </template>
@@ -463,8 +464,6 @@
                                                 <TableCell class="relative">
                                                     <EntityActions v-slot="{ menuOpened, stateSubmenuOpened, requestedStateMenu, openStateMenu }">
                                                         <div class="flex items-center">
-
-
                                                             <DropdownMenu v-model:open="menuOpened.value">
                                                                 <DropdownMenuTrigger as-child>
                                                                     <Button variant="ghost" size="icon">

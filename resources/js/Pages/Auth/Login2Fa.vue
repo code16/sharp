@@ -4,10 +4,8 @@
     import { __ } from "@/utils/i18n";
     import Title from "@/components/Title.vue";
     import { route } from "@/utils/url";
-    import {config} from "@/utils/config";
     import { Button } from "@/components/ui/button";
     import { Alert, AlertDescription } from "@/components/ui/alert";
-    import { Card } from "@/components/ui/card";
     import AuthCard from "@/Layouts/Auth/AuthCard.vue";
     import { Label } from "@/components/ui/label";
     import { Input } from "@/components/ui/input";
@@ -23,12 +21,12 @@
 </script>
 
 <template>
-    <AuthLayout :show-site-name="config('sharp.auth.login_form.display_app_name')">
+    <AuthLayout>
         <Title>
             {{ __('sharp::pages/auth/login.title') }}
         </Title>
 
-        <template v-if="form.hasErrors" #prepend>
+        <template v-if="form.hasErrors">
             <Alert class="mb-4" variant="destructive">
                 <AlertDescription>
                     {{ Object.values(form.errors)[0] }}
@@ -46,7 +44,7 @@
                 </template>
                 <FormItem>
                     <Label for="code">
-                        {{ __('sharp::pages/auth/login.code_field')}}
+                        {{ __('sharp::pages/auth/login.code_field') }}
                     </Label>
                     <Input type="text" id="code" v-model="form.code" />
                 </FormItem>
