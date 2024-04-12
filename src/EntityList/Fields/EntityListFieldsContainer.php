@@ -18,6 +18,13 @@ class EntityListFieldsContainer
         return $this;
     }
 
+    final public function addStateField(?string $label = null): self
+    {
+        $this->fields[] = new EntityListStateField($label ?? '');
+
+        return $this;
+    }
+
     public function setWidthOfField(string $fieldKey, ?int $width, int|bool|null $widthOnSmallScreens): self
     {
         if ($width !== null && ($field = collect($this->fields)->firstWhere('key', $fieldKey))) {
@@ -42,6 +49,6 @@ class EntityListFieldsContainer
     final public function getFields(): Collection
     {
         return collect($this->fields)
-            ->map(fn (EntityListField $field) => $field->getFieldProperties());
+            ->map(fn (IsEntityListField $field) => $field->getFieldProperties());
     }
 }
