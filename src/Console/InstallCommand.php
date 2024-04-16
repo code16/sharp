@@ -28,6 +28,8 @@ class InstallCommand extends Command
             'name' => 'SharpServiceProvider',
         ]);
 
+        $this->registerSharpProvider();
+
         $this->components->twoColumnDetail('Service provider', app_path('Providers/SharpServiceProvider.php'));
     }
 
@@ -95,6 +97,15 @@ class InstallCommand extends Command
         file_put_contents(
             $targetFilePath,
             str_replace($search, $replace, $targetContent)
+        );
+    }
+
+    private function registerSharpProvider(): void
+    {
+        $this->replaceFileContent(
+            app_path('Providers/AppServiceProvider.php'),
+            'public function boot(): void'.PHP_EOL.'    {'.PHP_EOL,
+            'public function boot(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this->app->register(SharpServiceProvider::class);'.PHP_EOL,
         );
     }
 }

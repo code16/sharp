@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
 //        $this->app->bind(SharpUploadModel::class, Media::class)
 
@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->app->register(SharpInternalServiceProvider::class);
         $this->app->register(DemoSharpServiceProvider::class);
