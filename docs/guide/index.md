@@ -44,11 +44,13 @@ This is a simple example to illustrate the main concepts of Sharp: we'll see in 
 Sharp 9 needs Laravel 11+ and PHP 8.2+.
 
 - Add the package with composer: `composer require code16/sharp`
-- And then run: `php artisan sharp:install`
+- Then run: `php artisan sharp:install`
+
+This last script will publish required assets, create a `SharpServiceProvider` in the `App\Providers` namespace, and a `SharpMenu` class in the `App\Sharp` namespace.
 
 ## Configuration via a new Service Provider
 
-All Sharp behavior is configured in the `App\Sharp\SharpServiceProvider` class created by the `sharp:install` command; you can declare your entities in the `configureSharp()` method:
+All Sharp behavior is configured in the `App\Providers\SharpServiceProvider` class created by the `sharp:install` command; you can declare your entities in the `configureSharp()` method:
 
 ```php
 use Code16\Sharp\SharpAppServiceProvider;
