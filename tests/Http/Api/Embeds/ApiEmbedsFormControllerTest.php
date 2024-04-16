@@ -6,16 +6,14 @@ use Code16\Sharp\Tests\Http\Api\Embeds\Fixtures\ApiEmbedsFormControllerTestEmbed
 use Illuminate\Support\Str;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('returns fields and layout of an embed', function () {
     $name = Str::random();
+
+    $this->withoutExceptionHandling();
 
     $this
         ->postJson(

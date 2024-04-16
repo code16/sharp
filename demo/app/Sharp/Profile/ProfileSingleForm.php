@@ -21,11 +21,11 @@ class ProfileSingleForm extends SharpSingleForm
             ->addField(
                 SharpFormUploadField::make('avatar')
                     ->setLabel('Avatar')
-                    ->setFileFilterImages()
                     ->setMaxFileSize(1)
-                    ->shouldOptimizeImage()
+                    ->setImageOnly()
+                    ->setImageOptimize()
                     ->setStorageDisk('local')
-                    ->setCropRatio('1:1')
+                    ->setImageCropRatio('1:1')
                     ->setStorageBasePath('data/users/{id}'),
             )
             ->addField(

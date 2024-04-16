@@ -2,6 +2,7 @@
 
 namespace App\Sharp\Utils\Embeds;
 
+use App\Enums\PostState;
 use App\Models\Post;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\Fields\SharpFormSelectField;
@@ -40,7 +41,7 @@ class RelatedPostEmbed extends SharpFormEditorEmbed
                 return $post?->title;
             })
             ->setCustomTransformer('online', function ($value) use ($post) {
-                return $post?->state === 'online';
+                return $post?->state === PostState::ONLINE;
             })
             ->transformForTemplate($data);
     }

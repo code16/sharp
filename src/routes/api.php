@@ -1,8 +1,9 @@
 <?php
 
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
-use Code16\Sharp\Http\Controllers\Api\ApiFilesController;
+use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
+use Code16\Sharp\Http\Controllers\Api\ApiFormUploadThumbnailController;
 use Code16\Sharp\Http\Controllers\Api\ApiSearchController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiDashboardCommandController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityCommandController;
@@ -10,13 +11,12 @@ use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListEntityStateControlle
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiEntityListInstanceCommandController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowEntityStateController;
 use Code16\Sharp\Http\Controllers\Api\Commands\ApiShowInstanceCommandController;
-use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsController;
 use Code16\Sharp\Http\Controllers\Api\Embeds\ApiEmbedsFormController;
 use Code16\Sharp\Http\Controllers\EntityListController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => '/'.sharp_base_url_segment().'/api',
+    'prefix' => '/'.sharpConfig()->get('custom_url_segment').'/api',
     'middleware' => ['sharp_common', 'sharp_api'],
 ], function () {
     Route::get('/dashboard/{dashboardKey}/command/{commandKey}/form', [ApiDashboardCommandController::class, 'show'])
@@ -67,26 +67,23 @@ Route::group([
     Route::get('/search', [ApiSearchController::class, 'index'])
         ->name('code16.sharp.api.search.index');
 
-    Route::post('/files/{entityKey}/{instanceId?}', [ApiFilesController::class, 'show'])
-        ->name('code16.sharp.api.files.show');
-
-    Route::post('/embeds/{embedKey}/{entityKey}', [ApiEmbedsController::class, 'show'])
-        ->name('code16.sharp.api.embed.show');
-
     Route::post('/embeds/{embedKey}/{entityKey}/form/init', [ApiEmbedsFormController::class, 'show'])
         ->name('code16.sharp.api.embed.form.show');
 
     Route::post('/embeds/{embedKey}/{entityKey}/form', [ApiEmbedsFormController::class, 'update'])
         ->name('code16.sharp.api.embed.form.update');
 
-    Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}', [ApiEmbedsController::class, 'show'])
-        ->name('code16.sharp.api.embed.instance.show');
-
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form/init', [ApiEmbedsFormController::class, 'show'])
         ->name('code16.sharp.api.embed.instance.form.show');
 
     Route::post('/embeds/{embedKey}/{entityKey}/{instanceId}/form', [ApiEmbedsFormController::class, 'update'])
         ->name('code16.sharp.api.embed.instance.form.update');
+
+    Route::post('/form/editors/upload/form/{entityKey}/{instanceId?}', [ApiFormEditorUploadFormController::class, 'update'])
+        ->name('code16.sharp.api.form.editor.upload.form.update');
+
+    Route::post('/upload/thumbnail/{entityKey}/{instanceId?}', [ApiFormUploadThumbnailController::class, 'show'])
+        ->name('code16.sharp.api.form.upload.thumbnail.show');
 
     Route::post('/upload', [ApiFormUploadController::class, 'store'])
         ->name('code16.sharp.api.form.upload');

@@ -8,9 +8,8 @@
 
         <x-sharp::vite>
             @vite([
-                'resources/sass/vendors.scss',
-        //        'resources/sass/app.scss',
-            'resources/css/app.css',
+                'resources/css/vendors.css',
+                'resources/css/app.css',
             ], '/vendor/sharp')
         </x-sharp::vite>
 
@@ -26,25 +25,23 @@
 
         <x-sharp::extensions.custom-fields-script />
 
-        @php(config()->set('ziggy', ['only' => 'code16.sharp.*']))
+        @php
+            config()->set('ziggy', ['only' => 'code16.sharp.*'])
+        @endphp
         @routes
         @inertiaHead
 
         <x-sharp::vite>
+            @if(!Vite::isRunningHot())
+                @vite(['vite/legacy-polyfills'], '/vendor/sharp')
+            @endif
             @vite('resources/js/sharp.ts', '/vendor/sharp')
         </x-sharp::vite>
     </head>
-    <body>
+    <body class="antialiased">
         <x-sharp::alert.assets-outdated />
 
         @inertia
-
-        @if($login ?? false)
-            <template id="login-append">
-                @includeIf(config("sharp.login_page_message_blade_path"))
-            </template>
-        @endif
-
         @stack('script')
     </body>
 </html>

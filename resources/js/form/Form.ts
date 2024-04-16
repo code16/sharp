@@ -4,7 +4,8 @@ import {
     FormFieldData,
     FormLayoutFieldsetData,
     FormLayoutTabData,
-    FormListFieldData, LayoutFieldData
+    FormListFieldData,
+    LayoutFieldData
 } from "@/types";
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
@@ -32,6 +33,8 @@ export class Form  implements FormData {
         errors: {},
     });
 
+    serializedData: FormData['data'];
+
     entityKey: string;
     instanceId: string | number;
 
@@ -39,6 +42,7 @@ export class Form  implements FormData {
         Object.assign(this, data);
         this.entityKey = entityKey;
         this.instanceId = instanceId;
+        this.serializedData = this.data;
     }
 
     get data() {
@@ -87,10 +91,10 @@ export class Form  implements FormData {
         return !this.canEdit;
     }
 
-    get currentLocale(): string {
+    get currentLocale(): string|null {
         const selectedLocales = [...new Set(this.allFieldsMeta.map(fieldMeta => fieldMeta.locale))];
         if(!selectedLocales.length) {
-            return this.locales[0];
+            return this.locales?.[0] ?? null;
         }
         if(selectedLocales.length === 1) {
             return selectedLocales[0];
@@ -105,6 +109,8 @@ export class Form  implements FormData {
     get isUploading(): boolean {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
     }
+
+
 
     getMeta(fieldKey: string): FieldMeta | undefined {
         return get(this.meta, fieldKey);

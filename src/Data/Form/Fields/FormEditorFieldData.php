@@ -6,11 +6,19 @@ use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\Form\Fields\Common\FormConditionalDisplayData;
 use Code16\Sharp\Enums\FormFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
+use Spatie\TypeScriptTransformer\Attributes\Optional;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 final class FormEditorFieldData extends Data
 {
+    const VALUE_TS_TYPE = '{
+        text: string | { [locale:string]: string|null } | null,
+        uploads?: { [id:string]: { file:FormUploadFieldValueData, legend?: string|null } },
+        embeds?: { [embedKey:string]: { [id:string]: EmbedData["value"] } },
+    }';
+
     #[Optional]
-    #[LiteralTypeScriptType('{ text: string | { [locale:string]: string|null } | null }')]
+    #[LiteralTypeScriptType(FormEditorFieldData::VALUE_TS_TYPE)]
     public array|null $value;
 
     public function __construct(
@@ -21,8 +29,10 @@ final class FormEditorFieldData extends Data
         public bool $markdown,
         public bool $inline,
         public bool $showCharacterCount,
-        #[LiteralTypeScriptType('{ upload:FormEditorFieldUploadData } & { [key:string]:FormEditorFieldEmbedData }')]
-        public array $embeds,
+        #[TypeScriptType(FormEditorFieldUploadData::class)]
+        public ?array $uploads = null,
+        #[LiteralTypeScriptType('{ [embedKey:string]:EmbedData }')]
+        public ?array $embeds = null,
         #[LiteralTypeScriptType('Array<FormEditorToolbarButton>')]
         public ?array $toolbar = null,
         public ?int $maxHeight = null,

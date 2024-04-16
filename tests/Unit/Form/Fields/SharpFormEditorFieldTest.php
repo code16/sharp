@@ -1,8 +1,11 @@
 <?php
 
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Tests\Unit\Form\Fields\Formatters\Fixtures\EditorFormatterTestEmbed;
 
-it('only_default_values_are_set', function () {
+it('sets only default values', function () {
     $formField = SharpFormEditorField::make('text');
 
     expect($formField->toArray())
@@ -12,21 +15,12 @@ it('only_default_values_are_set', function () {
             'minHeight' => 200,
             'showCharacterCount' => false,
             'toolbar' => [
-                SharpFormEditorField::B, SharpFormEditorField::I, SharpFormEditorField::SEPARATOR,
+                SharpFormEditorField::B,
+                SharpFormEditorField::I,
+                SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::UL,
                 SharpFormEditorField::SEPARATOR,
                 SharpFormEditorField::A,
-            ],
-            'embeds' => [
-                'upload' => [
-                    'maxFileSize' => 2,
-                    'transformable' => true,
-                    'fileFilter' => ['.jpg', '.jpeg', '.gif', '.png'],
-                    'transformKeepOriginal' => true,
-                    'transformableFileTypes' => null,
-                    'ratioX' => null,
-                    'ratioY' => null,
-                ],
             ],
             'markdown' => false,
             'inline' => false,
@@ -54,52 +48,47 @@ it('allows to define height with maxHeight', function () {
         ->not->toHaveKey('maxHeight');
 });
 
-it('allows to define upload configuration', function () {
+it('allows to allow uploads with configuration', function () {
     $formField = SharpFormEditorField::make('text')
-        ->setMaxFileSize(50);
+        ->allowUploads(
+            SharpFormEditorUpload::make()
+                ->setImageOnly()
+                ->setMaxFileSize(5)
+                ->setAllowedExtensions(['jpg', 'gif'])
+                ->setImageCropRatio('16:9')
+                ->setHasLegend()
+        );
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', true);
+        ->toHaveKey('uploads.fields.file.validationRule', [
+            'file', 'extensions:jpg,gif', 'max:5120', 'image',
+        ])
+        ->toHaveKey('uploads.fields.file.imageTransformable', true)
+        ->toHaveKey('uploads.fields.file.imageCropRatio', [16, 9])
+        ->toHaveKey('uploads.fields.legend');
 
-    $formField->setCropRatio('16:9');
-
-    expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', true)
-        ->toHaveKey('embeds.upload.ratioX', 16)
-        ->toHaveKey('embeds.upload.ratioY', 9);
-
-    $formField->setFileFilter(['jpg', 'pdf']);
-
-    expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', true)
-        ->toHaveKey('embeds.upload.ratioX', 16)
-        ->toHaveKey('embeds.upload.ratioY', 9)
-        ->toHaveKey('embeds.upload.fileFilter', ['.jpg', '.pdf']);
-
-    $formField->setTransformable(false);
+    $formField = SharpFormEditorField::make('text')
+        ->allowUploads(
+            SharpFormEditorUpload::make()
+                ->setImageOnly()
+                ->setImageTransformable(false)
+        );
 
     expect($formField->toArray())
-        ->toHaveKey('embeds.upload.maxFileSize', 50)
-        ->toHaveKey('embeds.upload.transformable', false)
-        ->toHaveKey('embeds.upload.ratioX', 16)
-        ->toHaveKey('embeds.upload.ratioY', 9)
-        ->toHaveKey('embeds.upload.fileFilter', ['.jpg', '.pdf']);
+        ->toHaveKey('uploads.fields.file.imageTransformable', false);
 });
 
 it('allows to define toolbar', function () {
     $formField = SharpFormEditorField::make('text')
         ->setToolbar([
-            SharpFormEditorField::UPLOAD,
+            SharpFormEditorField::TABLE,
             SharpFormEditorField::SEPARATOR,
             SharpFormEditorField::UL,
         ]);
 
     expect($formField->toArray())
         ->toHaveKey('toolbar', [
-            SharpFormEditorField::UPLOAD,
+            SharpFormEditorField::TABLE,
             SharpFormEditorField::SEPARATOR,
             SharpFormEditorField::UL,
         ]);
@@ -138,3 +127,49 @@ it('allows to define maxLength and showCount', function () {
         ->and(SharpFormEditorField::make('text')->showCharacterCount()->toArray())
         ->toHaveKey('showCharacterCount', true);
 });
+
+it('throws an exception when setting an UPLOAD item in the toolbar without defining allowUploads', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            SharpFormEditorField::UPLOAD,
+        ]);
+
+    $formField->toArray();
+})->expectException(SharpInvalidConfigException::class);
+
+it('allows to allows embeds', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowEmbeds([
+            EditorFormatterTestEmbed::class,
+        ])
+        ->setToolbar([
+            SharpFormEditorField::H1,
+            EditorFormatterTestEmbed::class,
+        ]);
+
+    expect($formField->toArray()['embeds'])
+        ->toHaveKey(app(EditorFormatterTestEmbed::class)->key());
+});
+
+it('allows to place an allowed embed in the toolbar', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->allowEmbeds([
+            EditorFormatterTestEmbed::class,
+        ])
+        ->setToolbar([
+            SharpFormEditorField::H1,
+            EditorFormatterTestEmbed::class,
+        ]);
+
+    expect($formField->toArray()['toolbar'][1])
+        ->toEqual('embed:'.app(EditorFormatterTestEmbed::class)->key());
+});
+
+it('throws an exception when setting an embed item in the toolbar without allowing it', function () {
+    $formField = SharpFormEditorField::make('text')
+        ->setToolbar([
+            EditorFormatterTestEmbed::class,
+        ]);
+
+    $formField->toArray();
+})->expectException(SharpInvalidConfigException::class);

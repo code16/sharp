@@ -1,3 +1,4 @@
+import { session } from "@/utils/session";
 
 export function parseBlobJSONContent(blob) {
     return new Promise(resolve => {
@@ -7,4 +8,8 @@ export function parseBlobJSONContent(blob) {
         });
         reader.readAsText(blob);
     });
+}
+
+export function getCsrfToken() {
+    return session('_token');
 }

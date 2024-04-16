@@ -39,8 +39,5 @@
                 return this.rendered[1];
             },
         },
-        created() {
-            // ignoreVueElement(this.tag);
-        },
     }
 </script>

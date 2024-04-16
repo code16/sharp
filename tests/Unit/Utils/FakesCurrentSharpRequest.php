@@ -24,7 +24,9 @@ trait FakesCurrentSharpRequest
                     protected function getSegmentsFromRequest(): Collection
                     {
                         return collect(explode('/', parse_url(url($this->url))['path']))
-                            ->filter(fn (string $segment) => strlen(trim($segment)) && $segment !== sharp_base_url_segment())
+                            ->filter(fn (string $segment) => strlen(trim($segment))
+                                && $segment !== sharpConfig()->get('custom_url_segment')
+                            )
                             ->values();
                     }
                 };

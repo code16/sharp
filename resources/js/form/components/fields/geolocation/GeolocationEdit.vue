@@ -6,7 +6,8 @@
     import type { Component } from 'vue';
     import GmapsEditable from "./gmaps/GmapsEditable.vue";
     import OsmEditable from "./osm/OsmEditable.vue";
-    import { Loading, Button } from '@/components/ui';
+    import { Button } from '@/components/ui/button';
+    import { Loading } from '@/components/ui';
     import { EditableMapComponentProps, GeocodeParams, LatLng } from "./types";
     import gmapsGeocode from "./gmaps/geocode";
     import osmGeocode from "./osm/geocode";
@@ -89,7 +90,7 @@
                             />
                             <Loading class="absolute right-0 -translate-y-1/2 top-1/2" :visible="loading" small />
                         </div>
-                        <Button class="ml-2" outline>{{ __('sharp::form.geolocation.modal.search_button') }}</Button>
+                        <Button class="ml-2" variant="outline">{{ __('sharp::form.geolocation.modal.search_button') }}</Button>
                     </div>
                 </form>
 

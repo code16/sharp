@@ -9,12 +9,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('allows to reorder instances', function () {

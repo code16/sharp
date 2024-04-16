@@ -5,7 +5,7 @@ namespace Tests\Feature\Auth;
 use Code16\Sharp\Tests\Fixtures\TestPasswordBroker;
 
 beforeEach(function () {
-    config()->set('sharp.auth.forgotten_password.password_broker', TestPasswordBroker::class);
+    sharpConfig()->enableForgottenPassword(broker: TestPasswordBroker::class);
 });
 
 it('allows to display password link screen', function () {
@@ -22,9 +22,10 @@ it('allows to request a reset password link', function () {
 });
 
 it('allows to reset password', function () {
-    config()->set(
-        'sharp.auth.forgotten_password.reset_password_callback',
-        function ($user, $password) {
+    $this->withoutExceptionHandling();
+    sharpConfig()->enableForgottenPassword(
+        broker: TestPasswordBroker::class,
+        resetCallback: function ($user, $password) {
             throw_if(
                 $user->email !== 'test@example.org' || $password !== 'password',
                 new \Exception('Invalid credentials')

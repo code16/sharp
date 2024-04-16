@@ -16,22 +16,19 @@ class ShowController extends SharpProtectedController
     use HandlesSharpNotificationsInRequest;
 
     public function __construct(
-        private SharpAuthorizationManager $sharpAuthorizationManager,
-        private SharpEntityManager $entityManager,
+        private readonly SharpAuthorizationManager $sharpAuthorizationManager,
+        private readonly SharpEntityManager $entityManager,
     ) {
         parent::__construct();
     }
 
-    public function show(string $uri, string $entityKey, string $instanceId)
+    public function show(string $parentUri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
         $show = $this->entityManager->entityFor($entityKey)->getShowOrFail();
 
-        abort_if(
-            $show instanceof SharpSingleShow,
-            404,
-        );
+        abort_if($show instanceof SharpSingleShow, 404);
 
         $show->buildShowConfig();
 
@@ -62,7 +59,7 @@ class ShowController extends SharpProtectedController
         ]);
     }
 
-    public function delete(string $uri, string $entityKey, string $instanceId)
+    public function delete(string $parentUri, string $entityKey, string $instanceId)
     {
         sharp_check_ability('delete', $entityKey, $instanceId);
 

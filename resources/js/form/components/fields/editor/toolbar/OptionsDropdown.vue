@@ -1,21 +1,33 @@
+<script  lang="ts" setup>
+    import { Dropdown, DropdownItem } from "@/components/ui";
+    import { Editor } from "@tiptap/vue-3";
+
+    defineProps<{
+        editor: Editor,
+        options: Array<{
+            command: () => void,
+            disabled: boolean,
+            label: string,
+        }>,
+    }>();
+</script>
+
 <template>
     <Dropdown
         class="editor__dropdown"
         variant="light"
         small
-        :disabled="disabled"
-        v-bind="$attrs"
-        ref="dropdown"
+        :disabled="options.every(option => option.disabled)"
     >
         <template v-slot:text>
             Options
         </template>
 
-        <template v-slot:default="{ hide }">
+        <template v-slot:default>
             <template v-for="option in options">
                 <DropdownItem
                     :disabled="option.disabled"
-                    @click="runCommand(option)"
+                    @click="option.command()"
                 >
                     {{ option.label }}
                 </DropdownItem>
@@ -23,38 +35,3 @@
         </template>
     </Dropdown>
 </template>
-
-<script>
-    import { Dropdown, DropdownItem } from "@/components/ui";
-
-    export default {
-        components: {
-            Dropdown,
-            DropdownItem,
-        },
-        props: {
-            id: String,
-            editor: Object,
-            options: Array,
-        },
-        data() {
-            return {
-            }
-        },
-        computed: {
-            disabled() {
-                return this.options.every(option => option.disabled);
-            },
-        },
-        methods: {
-            runCommand(option) {
-                option.command();
-                setTimeout(() => {
-                    this.editor.chain()
-                        .focus()
-                        .run();
-                }, 0);
-            }
-        }
-    }
-</script>

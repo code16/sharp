@@ -97,11 +97,14 @@ export type DateRangeFilterValueData = {
   end: Date | string;
 };
 export type EmbedData = {
+  value?: FormData["data"] & { slot: string };
   key: string;
   label: string;
   tag: string;
+  icon: string | null;
   attributes: Array<string>;
   template: string;
+  fields: { [key: string]: FormFieldData };
 };
 export type EmbedFormData = {
   data: { [key: string]: FormFieldData["value"] };
@@ -281,16 +284,21 @@ export type FormDynamicOptionsData = {
     | Array<{ id: string | number; label: string }>;
 };
 export type FormEditorFieldData = {
-  value: { text: string | { [locale: string]: string | null } | null };
+  value?: {
+    text: string | { [locale: string]: string | null } | null;
+    uploads?: {
+      [id: string]: { file: FormUploadFieldValueData; legend?: string | null };
+    };
+    embeds?: { [embedKey: string]: { [id: string]: EmbedData["value"] } };
+  };
   key: string;
   type: "editor";
   minHeight: number;
   markdown: boolean;
   inline: boolean;
   showCharacterCount: boolean;
-  embeds: { upload: FormEditorFieldUploadData } & {
-    [key: string]: FormEditorFieldEmbedData;
-  };
+  uploads: FormEditorFieldUploadData;
+  embeds: { [embedKey: string]: EmbedData };
   toolbar: Array<FormEditorToolbarButton>;
   maxHeight: number | null;
   maxLength: number | null;
@@ -302,21 +310,9 @@ export type FormEditorFieldData = {
   extraStyle: string | null;
   localized: boolean | null;
 };
-export type FormEditorFieldEmbedData = {
-  key: string;
-  label: string;
-  tag: string;
-  attributes: Array<string>;
-  template: string;
-};
 export type FormEditorFieldUploadData = {
-  transformable: boolean;
-  transformKeepOriginal: boolean | null;
-  transformableFileTypes: Array<string> | null;
-  ratioX: number | null;
-  ratioY: number | null;
-  maxFileSize: number | null;
-  fileFilter: Array<any> | string | null;
+  fields: { file: FormUploadFieldData; legend: FormTextFieldData | null };
+  layout: FormLayoutData;
 };
 export type FormEditorToolbarButton =
   | "bold"
@@ -331,8 +327,8 @@ export type FormEditorToolbarButton =
   | "heading-3"
   | "code"
   | "blockquote"
-  | "upload-image"
   | "upload"
+  | "upload-image"
   | "horizontal-rule"
   | "table"
   | "iframe"
@@ -522,34 +518,42 @@ export type FormTextareaFieldData = {
   extraStyle: string | null;
 };
 export type FormUploadFieldData = {
-  value: {
-    name: string;
-    disk: string;
-    path: string;
-    size: number;
-    thumbnail?: string;
-    uploaded?: boolean;
-    transformed?: boolean;
-    filters?: {
-      crop: { width: number; height: number; x: number; y: number };
-      rotate: { angle: number };
-    };
-  } | null;
+  value: FormUploadFieldValueData | null;
   key: string;
   type: "upload";
-  transformable: boolean;
-  compactThumbnail: boolean;
-  transformKeepOriginal: boolean | null;
-  transformableFileTypes: Array<string> | null;
-  ratioX: number | null;
-  ratioY: number | null;
+  imageCropRatio: [number, number];
+  imageTransformable: boolean;
+  imageCompactThumbnail: boolean;
+  imageTransformKeepOriginal: boolean | null;
+  imageTransformableFileTypes: Array<string> | null;
+  allowedExtensions: Array<string> | null;
   maxFileSize: number | null;
-  fileFilter: Array<string> | null;
+  validationRule: Array<string> | null;
+  storageBasePath: string | null;
+  storageDisk: string | null;
   label: string | null;
   readOnly: boolean | null;
   conditionalDisplay: FormConditionalDisplayData | null;
   helpMessage: string | null;
   extraStyle: string | null;
+};
+export type FormUploadFieldValueData = {
+  id: number | null;
+  name: string;
+  disk: string;
+  path: string;
+  mime_type: string;
+  size: number;
+  thumbnail: string | null;
+  uploaded: boolean | null;
+  transformed: boolean | null;
+  not_found: boolean | null;
+  exists: boolean | null;
+  filters: {
+    crop: { width: number; height: number; x: number; y: number };
+    rotate: { angle: number };
+  } | null;
+  nativeFile?: File;
 };
 export type GlobalFiltersData = {
   filters: ConfigFiltersData;
@@ -585,6 +589,10 @@ export type LayoutFieldData = {
   size: number;
   sizeXS: number;
   item: Array<Array<LayoutFieldData>> | null;
+};
+export type LogoData = {
+  svg: string | null;
+  url: string;
 };
 export type MenuData = {
   items: Array<MenuItemData>;
@@ -768,7 +776,13 @@ export type ShowPictureFieldData = {
   emptyVisible: boolean;
 };
 export type ShowTextFieldData = {
-  value?: string | { [key: string]: string };
+  value?: {
+    text: string | { [locale: string]: string | null } | null;
+    uploads?: {
+      [id: string]: { file: FormUploadFieldValueData; legend?: string | null };
+    };
+    embeds?: { [embedKey: string]: { [id: string]: EmbedData["value"] } };
+  };
   key: string;
   type: "text";
   emptyVisible: boolean;
@@ -780,6 +794,7 @@ export type ShowTextFieldData = {
 };
 export type UserData = {
   name: string | null;
+  email: string | null;
 };
 export type UserMenuData = {
   items: Array<MenuItemData>;

@@ -34,9 +34,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $remember = config('sharp.auth.suggest_remember_me', false) && $this->boolean('remember');
+        $remember = sharpConfig()->get('auth.suggest_remember_me') && $this->boolean('remember');
 
-        if (! $this->attemptToLogin($remember)) {
+        if (!$this->attemptToLogin($remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -51,11 +51,11 @@ class LoginRequest extends FormRequest
     {
         $guard = $this->getGuard();
         $credentials = [
-            config('sharp.auth.login_attribute', 'email') => $this->input('login'),
-            config('sharp.auth.password_attribute', 'password') => $this->input('password'),
+            sharpConfig()->get('auth.login_attribute') => $this->input('login'),
+            sharpConfig()->get('auth.password_attribute') => $this->input('password'),
         ];
 
-        if (config('sharp.auth.2fa.enabled')) {
+        if (sharpConfig()->get('auth.2fa.enabled')) {
             // 2fa is globally configured, but we have to ensure that the user has 2fa enabled
             if ($guard->once($credentials)) {
                 $handler = app(Sharp2faHandler::class);
@@ -74,11 +74,14 @@ class LoginRequest extends FormRequest
 
     private function ensureIsNotRateLimited(): void
     {
-        if (config('sharp.auth.rate_limiting.enabled', true) === false) {
+        if (sharpConfig()->get('auth.rate_limiting.enabled') === false) {
             return;
         }
 
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), config('sharp.auth.rate_limiting.max_attempts', 5))) {
+        if (!RateLimiter::tooManyAttempts(
+            $this->throttleKey(),
+            sharpConfig()->get('auth.rate_limiting.max_attempts'))
+        ) {
             return;
         }
 
@@ -101,6 +104,6 @@ class LoginRequest extends FormRequest
 
     private function getGuard(): StatefulGuard
     {
-        return Auth::guard(config('sharp.auth.guard'));
+        return Auth::guard(sharpConfig()->get('auth.guard'));
     }
 }

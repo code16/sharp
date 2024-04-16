@@ -2,6 +2,7 @@
 
 use Code16\Sharp\Http\Jobs\HandleUploadedFileJob;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 beforeEach(function () {

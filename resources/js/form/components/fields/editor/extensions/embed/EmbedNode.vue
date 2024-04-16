@@ -1,146 +1,60 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { Button } from '@/components/ui/button';
+    import EmbedRenderer from '@/content/components/EmbedRenderer.vue';
+    import NodeRenderer from "../../NodeRenderer.vue";
+    import EmbedFormModal from "./EmbedFormModal.vue";
+    import { Form } from "@/form/Form";
+    import { Embed, EmbedNodeAttributes } from "@/form/components/fields/editor/extensions/embed/Embed";
+    import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+    import { useParentForm } from "@/form/useParentForm";
+    import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
+    import { EmbedData } from "@/types";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+
+    const props = defineProps<ExtensionNodeProps<typeof Embed, EmbedNodeAttributes>>();
+
+    const embedManager = useParentEditor().embedManager;
+    const embedModal = useParentEditor().embedModal;
+    const embedData = computed(() => embedManager.getEmbed(props.node.attrs['data-key'], props.extension.options.embed));
+
+    onMounted(() => {
+        embedManager.restoreEmbed(props.node.attrs['data-key'], props.extension.options.embed)
+    });
+
+    onUnmounted(() => {
+        embedManager.removeEmbed(props.node.attrs['data-key'], props.extension.options.embed);
+    });
 </script>
 
 <template>
     <NodeRenderer class="editor__node embed-node" :node="node">
-        <template v-if="!node.attrs.isNew">
-            <div class="card">
-                <div class="card-body">
-                    <EmbedRenderer
-                        class="embed-node__template"
-                        :data="embedData"
-                        :options="extension.options"
-                    />
-                    <div class="mt-3">
-                        <div class="row row-cols-auto gx-2">
-                            <template v-if="hasForm">
-                                <div>
-                                    <Button outline small @click="handleEditClicked">
-                                        {{ __('sharp::form.upload.edit_button') }}
-                                    </Button>
-                                </div>
-                            </template>
+        <div class="card">
+            <div class="card-body">
+                <EmbedRenderer
+                    class="embed-node__template"
+                    :data="embedData"
+                    :embed="extension.options.embed"
+                />
+                <div class="mt-3">
+                    <div class="row row-cols-auto gx-2">
+                        <template v-if="extension.options.embed.attributes.length">
                             <div>
-                                <Button variant="danger" outline small @click="handleRemoveClicked">
-                                    {{ __('sharp::form.upload.remove_button') }}
+                                <Button variant="outline" size="sm"
+                                    @click="embedModal.open({ id: node.attrs['data-key'], embed: extension.options.embed })"
+                                >
+                                    {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </div>
+                        </template>
+                        <div>
+                            <Button variant="destructive" size="sm" @click="deleteNode()">
+                                {{ __('sharp::form.upload.remove_button') }}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        </template>
-        <EmbedFormModal
-            v-model:visible="modalVisible"
-            :form="modalForm"
-            :post="postForm"
-            @cancel="handleCancelClicked"
-        >
-            <template v-slot:title>
-                {{ extension.options.label }}
-            </template>
-        </EmbedFormModal>
+        </div>
     </NodeRenderer>
 </template>
-
-<script lang="ts">
-    import { Button } from "@/components/ui";
-    import EmbedRenderer from '@/embeds/components/EmbedRenderer.vue';
-    import NodeRenderer from "../../NodeRenderer.vue";
-    import EmbedFormModal from "./EmbedFormModal.vue";
-    import { Form } from "../../../../../Form";
-
-    export default {
-        components: {
-            EmbedFormModal,
-            NodeRenderer,
-            EmbedRenderer,
-            Button,
-        },
-        inject: ['$form'],
-        props: {
-            editor: Object,
-            node: Object,
-            selected: Object,
-            extension: Object,
-            getPos: Function,
-            updateAttributes: Function,
-            deleteNode: Function,
-        },
-        data() {
-           return {
-               id: null,
-               modalVisible: false,
-               modalForm: null,
-           }
-        },
-        computed: {
-            embedData() {
-                return {
-                    ...this.node.attrs.attributes,
-                    ...this.node.attrs.additionalData,
-                }
-            },
-            hasForm() {
-                return this.extension.options.attributes.length > 0;
-            },
-        },
-        methods: {
-            handleEditClicked() {
-                this.showForm();
-            },
-            handleCancelClicked() {
-                if(this.node.attrs.isNew) {
-                    this.deleteNode();
-                    setTimeout(() => {
-                        this.editor.commands.focus();
-                    }, 0);
-                }
-            },
-            handleRemoveClicked() {
-                this.deleteNode();
-            },
-            async showForm() {
-                const form = await this.extension.options.resolveForm(this.embedData);
-                this.modalForm = new Form(form, this.$form.entityKey, this.$form.instanceId);
-                this.modalVisible = true;
-            },
-            async postForm(data) {
-                const attributes = await this.extension.options.postForm(data);
-                this.updateAttributes({
-                    attributes,
-                    additionalData: attributes,
-                    isNew: false,
-                });
-                this.modalVisible = false;
-            },
-            async init() {
-                if(this.node.attrs.isNew) {
-                    if(this.hasForm) {
-                        await this.showForm();
-                    } else {
-                        await this.$nextTick();
-                        this.updateAttributes({
-                            isNew: false,
-                        });
-                        this.editor.commands.focus();
-                    }
-                    return;
-                }
-
-                if(this.hasForm) {
-                    const additionalData = await this.extension.options.getAdditionalData(this.node.attrs.attributes);
-                    if(additionalData) {
-                        this.updateAttributes({
-                            additionalData,
-                        });
-                    }
-                }
-            },
-        },
-        created() {
-            this.init();
-        },
-    }
-</script>

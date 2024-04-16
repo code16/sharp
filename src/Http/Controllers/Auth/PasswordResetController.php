@@ -31,7 +31,7 @@ class PasswordResetController extends Controller
             'password' => ['required', 'string', 'confirmed', RulesPassword::defaults()],
         ]);
 
-        $resetCallback = function ($user, $password) {
+        $defaultResetCallback = function ($user, $password) {
             $user
                 ->forceFill([
                     config('sharp.auth.password_attribute', 'password') => Hash::make($password),
@@ -40,18 +40,17 @@ class PasswordResetController extends Controller
                 ->save();
         };
 
-        $passwordBroker = config('sharp.auth.forgotten_password.password_broker')
-            ? app(config('sharp.auth.forgotten_password.password_broker'))
-            : Password::broker(config('auth.defaults.passwords'));
+        $passwordBroker = sharpConfig()->get('auth.forgotten_password.password_broker')
+            ?: Password::broker(config('auth.defaults.passwords'));
 
         $status = $passwordBroker->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            config('sharp.auth.forgotten_password.reset_password_callback') ?: $resetCallback
+            sharpConfig()->get('auth.forgotten_password.reset_password_callback') ?: $defaultResetCallback
         );
 
         if ($status == Password::PASSWORD_RESET) {
             return redirect()->route('code16.sharp.login')
-                ->with('status', __("sharp::$status"));
+                ->with('status', __('sharp::passwords.reset'));
         }
 
         throw ValidationException::withMessages([

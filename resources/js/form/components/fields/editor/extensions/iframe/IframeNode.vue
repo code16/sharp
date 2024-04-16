@@ -1,5 +1,75 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
+    import { Iframe, IframeAttributes } from "@/form/components/fields/editor/extensions/iframe/Iframe";
+    import debounce from 'lodash/debounce';
+    import { Button } from '@/components/ui/button';
+    import { Modal } from "@/components/ui";
+    import NodeRenderer from "../../NodeRenderer.vue";
+    import { getHTMLFromFragment } from "@tiptap/core";
+    import { Fragment, Node } from "@tiptap/pm/model";
+    import { ref } from "vue";
+
+    const props = defineProps<ExtensionNodeProps<typeof Iframe, IframeAttributes>>();
+
+    const modalVisible = ref(props.node.attrs.isNew);
+    const html = ref<string>();
+    const previewHtml = ref<string>();
+    const invalid = ref(false);
+
+    function getIframe(html) {
+        const dom = document.createElement('div');
+        dom.innerHTML = html;
+        return dom.querySelector('iframe');
+    }
+
+    function onEdit() {
+        const rendered = getHTMLFromFragment(Fragment.from(props.node as Node), props.editor.schema);
+        html.value = getIframe(rendered).outerHTML;
+        previewHtml.value = html.value;
+        modalVisible.value = true;
+        invalid.value = false;
+    }
+
+    function onRemove() {
+        props.deleteNode();
+    }
+
+    function onModalOk(e) {
+        const iframe = getIframe(html.value);
+        if(iframe) {
+            props.updateAttributes({
+                ...Object.fromEntries(
+                    Object.entries(props.node.type.spec.attrs)
+                        .map(([attr, spec]) => [attr, spec.default])
+                ),
+                ...Object.fromEntries(
+                    [...iframe.attributes].map(attr => [attr.name, attr.value])
+                ),
+                isNew: false,
+            });
+            modalVisible.value = false;
+        } else {
+            e.preventDefault();
+        }
+    }
+
+    function onModalCancel() {
+        if(props.node.attrs.isNew) {
+            props.deleteNode();
+            setTimeout(() => props.editor.commands.focus());
+        }
+    }
+
+    function onModalInputChange() {
+        const iframe = getIframe(html.value);
+        invalid.value = !iframe;
+        if(iframe) {
+            iframe.removeAttribute('style');
+            previewHtml.value = iframe.outerHTML;
+        }
+    }
+    const debouncedOnModalInputChange = debounce(onModalInputChange, 200);
 </script>
 
 <template>
@@ -12,12 +82,12 @@
                     <div class="mt-3">
                         <div class="row row-cols-auto gx-2">
                             <div>
-                                <Button outline small @click="handleEditClicked">
+                                <Button variant="outline" size="sm" @click="onEdit">
                                     {{ __('sharp::form.upload.edit_button') }}
                                 </Button>
                             </div>
                             <div>
-                                <Button variant="danger" outline small @click="handleRemoveClicked">
+                                <Button variant="destructive" size="sm" @click="onRemove">
                                     {{ __('sharp::form.upload.remove_button') }}
                                 </Button>
                             </div>
@@ -29,10 +99,9 @@
 
         <Modal
             v-model:visible="modalVisible"
-            @ok="handleModalOk"
-            @close="handleModalCancel"
-            @cancel="handleModalCancel"
-            @shown="handleModalShown"
+            @ok="onModalOk"
+            @close="onModalCancel"
+            @cancel="onModalCancel"
             ref="modal"
         >
             <template v-slot:title>
@@ -46,110 +115,19 @@
 
             <textarea
                 class="form-control"
-                :class="{ 'is-invalid': invalid }"
+                :class="{ 'border-red-600': invalid }"
                 v-model="html"
                 placeholder="&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;"
-                @input="handleInput"
-                @paste="handleChanged"
+                @input="debouncedOnModalInputChange"
+                @paste="onModalInputChange"
                 @focus="$event.target.select()"
                 rows="6"
-                ref="textarea"
             ></textarea>
 
             <template v-if="previewHtml && !invalid">
-                <div class="iframe-node__modal-renderer mt-3" v-html="previewHtml">
+                <div class="[&_iframe]:w-full [&_iframe]:max-h-[260px] [&_iframe[height$='%']]:h-[260px] mt-3" v-html="previewHtml">
                 </div>
             </template>
         </Modal>
     </NodeRenderer>
 </template>
-
-<script lang="ts">
-    import debounce from 'lodash/debounce';
-    import { Modal, Button } from "@/components/ui";
-    import NodeRenderer from "../../NodeRenderer.vue";
-    import { getHTMLFromFragment } from "@tiptap/core";
-    import { Fragment } from "@tiptap/pm/model";
-
-    export default {
-        components: {
-            Modal,
-            NodeRenderer,
-            Button,
-        },
-        props: {
-            editor: Object,
-            node: Object,
-            selected: Object,
-            extension: Object,
-            getPos: Function,
-            updateAttributes: Function,
-            deleteNode: Function,
-        },
-        data() {
-           return {
-               html: null,
-               previewHtml: null,
-               invalid: false,
-               modalVisible: this.node.attrs.isNew,
-           }
-        },
-        methods: {
-            getIframe(html) {
-                const dom = document.createElement('div');
-                dom.innerHTML = html;
-                return dom.querySelector('iframe');
-            },
-            handleRemoveClicked() {
-                this.deleteNode();
-            },
-            handleEditClicked() {
-                const rendered = getHTMLFromFragment(Fragment.from(this.node), this.editor.schema);
-                this.html = this.getIframe(rendered).outerHTML;
-                this.previewHtml = this.html;
-                this.modalVisible = true;
-                this.invalid = false;
-            },
-            handleChanged() {
-                const iframe = this.getIframe(this.html);
-                this.invalid = !iframe;
-                if(iframe) {
-                    iframe.removeAttribute('style');
-                    this.previewHtml = iframe.outerHTML;
-                }
-            },
-            handleInput() {
-                this.handleChanged();
-            },
-            handleModalOk(e) {
-                const iframe = this.getIframe(this.html);
-                if(iframe) {
-                    this.updateAttributes({
-                        ...this.node.type.defaultAttrs,
-                        ...Object.fromEntries(
-                            [...iframe.attributes].map(attr => [attr.name, attr.value])
-                        ),
-                        isNew: false,
-                    });
-                    this.modalVisible = false;
-                } else {
-                    e.preventDefault();
-                }
-            },
-            handleModalCancel() {
-                if(this.node.attrs.isNew) {
-                    this.deleteNode();
-                    setTimeout(() => this.editor.commands.focus());
-                }
-            },
-            handleModalShown() {
-                if(this.node.attrs.isNew) {
-                    this.$refs.textarea.focus();
-                }
-            },
-        },
-        created() {
-            this.handleInput = debounce(this.handleInput, 200);
-        },
-    }
-</script>

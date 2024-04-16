@@ -10,7 +10,7 @@
     import Breadcrumb from "@/components/Breadcrumb.vue";
     import { ref, watchEffect } from "vue";
     import { __ } from "@/utils/i18n";
-    import { Button } from "@/components/ui";
+    import { Button } from '@/components/ui/button';
     import { vSticky } from "@/directives/sticky";
 
     const props = defineProps<{
@@ -29,20 +29,20 @@
     });
 
     function submit() {
-        const { uri, entityKey, instanceId } = route().params;
-        const onStart = () => loading.value = true;
-        const onFinish = () => loading.value = false;
+        const { parentUri, entityKey, instanceId } = route().params;
+        const onStart = () => { loading.value = true };
+        const onFinish = () => { loading.value = false };
 
         if(route().current('code16.sharp.form.create')) {
             router.post(
-                route('code16.sharp.form.store', { uri, entityKey }),
-                form.data,
+                route('code16.sharp.form.store', { parentUri, entityKey }),
+                form.serializedData,
                 { onStart, onFinish }
             );
         } else if(route().current('code16.sharp.form.edit')) {
             router.post(
-                route('code16.sharp.form.update', { uri, entityKey, instanceId }),
-                form.data,
+                route('code16.sharp.form.update', { parentUri, entityKey, instanceId }),
+                form.serializedData,
                 { onStart, onFinish }
             );
         }
@@ -85,7 +85,7 @@
                         <div class="flex gap-4">
                             <div class="flex-1">
                             </div>
-                            <Button :href="breadcrumb.items.at(-2)?.url" outline>
+                            <Button as="a" :href="breadcrumb.items.at(-2)?.url" variant="outline">
                                 <template v-if="form.canEdit">
                                     {{ __('sharp::action_bar.form.cancel_button') }}
                                 </template>

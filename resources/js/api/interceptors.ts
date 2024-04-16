@@ -1,8 +1,9 @@
 import { parseBlobJSONContent } from "@/utils/request";
 import { handleErrorAlert } from "./errors";
+import { Axios } from "axios";
 
 
-export function installInterceptors(api) {
+export function installInterceptors(api: Axios) {
     api.interceptors.response.use(
         response => {
             if(!response.headers['content-type']?.includes('application/json')

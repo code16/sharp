@@ -13,10 +13,7 @@ beforeEach(function () {
 });
 
 it('allows to call an info instance command from a show', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
     fakeShowFor('person', new class extends PersonShow
     {
@@ -48,10 +45,7 @@ it('allows to call an info instance command from a show', function () {
 });
 
 it('allows to call an info instance command from a single show', function () {
-    config()->set(
-        'sharp.entities.person',
-        SinglePersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', SinglePersonEntity::class);
 
     fakeShowFor('person', new class extends SinglePersonShow
     {
@@ -83,10 +77,7 @@ it('allows to call an info instance command from a single show', function () {
 });
 
 it('gets form and initialize form data in an instance command of a show', function () {
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', PersonEntity::class);
 
     fakeShowFor('person', new class extends PersonShow
     {
@@ -166,10 +157,7 @@ it('gets form and initialize form data in an instance command of a show', functi
 });
 
 it('gets form and initialize form data in an instance command of a single show', function () {
-    config()->set(
-        'sharp.entities.person',
-        SinglePersonEntity::class,
-    );
+    sharpConfig()->addEntity('person', SinglePersonEntity::class);
 
     fakeShowFor('person', new class extends SinglePersonShow
     {

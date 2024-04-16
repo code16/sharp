@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { provide, ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
     import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import ShowField from '@/show/components/Field.vue';
     import Section from "@/show/components/Section.vue";
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle, Button } from '@/components/ui';
+    import { Button } from '@/components/ui/button';
+    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle } from '@/components/ui';
     import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import LocaleSelect from "@/form/components/LocaleSelect.vue";
@@ -17,7 +18,7 @@
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
     import { useCommands } from "@/commands/useCommands";
     import Breadcrumb from "@/components/Breadcrumb.vue";
-    import { api } from "@/api";
+    import { api } from "@/api/api";
     import { router } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
     import PageAlert from "@/components/PageAlert.vue";
@@ -36,6 +37,8 @@
     const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();
     const commands = useCommands();
+
+    provide('show', show);
 
     function onCommand(command: CommandData) {
         commands.send(command, {
@@ -69,7 +72,7 @@
         if(await showDeleteConfirm(show.config.deleteConfirmationText)) {
             router.delete(
                 route('code16.sharp.show.delete', {
-                    uri: route().params.uri as string,
+                    parentUri: route().params.parentUri as string,
                     entityKey,
                     instanceId
                 })
@@ -140,7 +143,7 @@
                         </template>
                         <template v-if="show.authorizations.update">
                             <div class="col-auto">
-                                <Button :href="show.formUrl" :disabled="isReordering">
+                                <Button as="a" :href="show.formUrl" :disabled="isReordering">
                                     {{ __('sharp::action_bar.show.edit_button') }}
                                 </Button>
                             </div>
@@ -204,9 +207,9 @@
                                                                         <template v-if="show.fields[fieldLayout.key]">
                                                                             <ShowField
                                                                                 :field="show.fields[fieldLayout.key]"
+                                                                                :field-layout="fieldLayout"
                                                                                 :value="show.data[fieldLayout.key]"
                                                                                 :locale="locale"
-                                                                                :layout="fieldLayout"
                                                                                 :collapsable="section.collapsable"
                                                                                 :entity-key="entityKey"
                                                                                 :instance-id="instanceId"

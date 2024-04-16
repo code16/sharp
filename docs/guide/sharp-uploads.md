@@ -110,49 +110,84 @@ $author = $book->cover->author;
 
 ### Thumbnails
 
-Thumbnail creation, for image, is built-in, with this function:
+Thumbnail creation is built-in; you can configure thumbnail disk and base directory:
 
 ```php
-thumbnail($width=null, $height=null, $filters=[]);
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->configureUploadsThumbnailCreation(
+                // NB: all these values are the default ones
+                thumbnailsDisk: 'public',
+                thumbnailsDir: 'thumbnails',
+            )
+            // [...]
+    }
+}
 ```
 
-You must first define the thumbnail directory, in Sharp's config:
+Then you can create a thumbnail using the `thumbnail` method directly on the upload model:
 
 ```php
-// config/sharp.php
-
-'uploads' => [
-    'thumbnails_dir' => 'thumbnails',
-],
+thumbnail(int $width = null, int $height = null, array $modifiers = []);
 ```
 
-This path is relative to the `public` directory.
-
-Then you can call `$thumb = $book->cover->thumbnail(150)` to have a full URL to a 150px (width) thumbnail.
-
-#### Filters
-
-The third argument is for Filters. For now, only two are available:
-
-- **greyscale**  
-`->thumbnail(150, null, ['greyscale' => []])`
-
-
-- **fit**: this one has 2 params, `w` for width and `h` for height, and will center-fit the image in those constraints.  
-`->thumbnail(150, null, ['fit' => ['w'=>150, 'h'=>100]])`
-
-But of course you can provide here a custom one. You'll need for that to first create a Filter class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailFilter`, implementing:
-
-- `function applyFilter(Intervention\Image\Image $image)`: apply you filter, using the great [Intervention API](http://image.intervention.io).
-- `function resized()`: (optional, default to false) Return true if the resize is part of the `applyFilter()` code.
-
-Once the class is created, pass the full class path as filter name:
+For instance, you can display a 150px width thumbnail in a view like this:
 
 ```php
-return $this->thumbnail($size, $size, [
-    CustomThumbnailFilter::class => ['w' => $w, 'fill' => '#ffffff']
-]);
+<img src="{{ $book->cover->thumbnail(150) }}" alt="My picture">
 ```
+
+Another option is to use the fluent API, calling `thumbnail()` without parameters:
+
+```php
+$thumb = $book->cover->thumbnail()->setQuality(60)->toJpeg()->make(150);
+```
+
+Available methods are:
+
+- `setQuality(int $quality)`: set the quality of the thumbnail used by some encoders (default to 90).
+- `toWebp()`, `toPng()`, `toJpeg()`, `toGif()`, `toAvif()`: force the use of a specific encoder for the thumbnail.
+- `setAppendTimestamp(bool $appendTimestamp = true)`: append a timestamp to the thumbnail URL (useful for browser cache).
+- `setAfterClosure(Closure $closure)`: set a closure to be executed after the thumbnail creation. Intended to be used like this:
+
+```php
+$book->cover
+    ->thumbnail()
+    ->setAfterClosure(function ($wasCreated, $thumbnailPath, $thumbnailDisk) {
+        // Do something...
+    })
+    ->make(150);
+```
+
+- `addModifier(ThumbnailModifier $modifier)`: apply an image modifier (see below).
+- `make(int $width = null, int $height = null)`: create the thumbnail, with the given size. Must be called last.
+
+#### Modifiers
+
+You can specify Modifiers to perform image processing on the fly. A Modifier must extend the `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailModifier` class:
+
+```php
+class MyModifier extends ThumbnailModifier
+{
+    public function apply(ImageInterface $image): ImageInterface
+    {
+        // Do something...
+    }
+}
+```
+
+The following modifiers are available out of the box:
+
+- `GreyscaleModifier`
+- `FitModifier`:  will center-fit the image with a constraints set via `->setSize($width, $height)`.
+
+You can provide a custom Modifier; you’ll need to create a class that extends `Code16\Sharp\Form\Eloquent\Uploads\Thumbnails\ThumbnailModifier`, implementing:
+
+- `function apply(ImageInterface $image): ImageInterface`: apply your filter, using the great [Intervention API](https://image.intervention.io/v3).
+- `function resized(): bool`: must return true if the resize is part of the `apply()` code (optional, default to false).
 
 ## Update with Sharp
 
@@ -272,7 +307,7 @@ All set.
 ```php
 $this->addField(
     SharpFormListField::make('pictures')
-        [...]
+        // [...]
         ->addItemField(
             SharpFormUploadField::make('file')
         )

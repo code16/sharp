@@ -65,17 +65,8 @@ class SharpMenuManager
 
     protected function buildMenu(): void
     {
-        if (($sharpMenu = config('sharp.menu')) === null) {
-            $this->menu = null;
-
-            return;
-        }
-
-        $this->menu = is_string($sharpMenu)
-            ? app($sharpMenu)
-            : $sharpMenu;
-
-        $this->menu->build();
+        $this->menu = sharpConfig()->get('menu');
+        $this->menu?->build();
     }
 
     private function filterSeparators(Collection $items): Collection

@@ -28,7 +28,7 @@
                     :entity-key="commands.state.currentCommandEndpoints.entityKey"
                     :instance-id="commands.state.currentCommandEndpoints.instanceId"
                     :form="commands.state.currentCommandForm"
-                    @loading="commands.state.currentCommandFormLoading = $event"
+                    @loading="(loading) => commands.state.currentCommandFormLoading = loading"
                     style="transition-duration: 300ms"
                     ref="form"
                 />

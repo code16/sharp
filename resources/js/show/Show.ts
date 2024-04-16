@@ -8,7 +8,7 @@ import {
     ShowListFieldData,
     ShowTextFieldData
 } from "@/types";
-import { getAppendableUri, route } from "@/utils/url";
+import { getAppendableParentUri, route } from "@/utils/url";
 
 
 export class Show implements ShowData {
@@ -36,14 +36,14 @@ export class Show implements ShowData {
 
         if(route().params.instanceId) {
             return route('code16.sharp.form.edit', {
-                uri: getAppendableUri(),
+                parentUri: getAppendableParentUri(),
                 entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
                 instanceId: this.instanceId,
             });
         }
 
         return route('code16.sharp.form.create', {
-            uri: getAppendableUri(),
+            parentUri: getAppendableParentUri(),
             entityKey: multiformKey ? `${this.entityKey}:${multiformKey}` : this.entityKey,
         });
     }
@@ -106,8 +106,10 @@ export class Show implements ShowData {
             return true;
         }
 
-        if(field.type === 'text' && field.localized) {
-            return !!(value as ShowTextFieldData['value'])?.[locale];
+        if(field.type === 'text') {
+            return field.localized
+                ? !!(value as ShowTextFieldData['value'])?.text?.[locale]
+                : !!(value as ShowTextFieldData['value'])?.text;
         }
 
         if(field.type === 'list') {

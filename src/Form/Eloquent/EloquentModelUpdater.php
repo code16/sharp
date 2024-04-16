@@ -2,36 +2,58 @@
 
 namespace Code16\Sharp\Form\Eloquent;
 
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use ReflectionClass;
 
 class EloquentModelUpdater
 {
     protected array $relationshipsConfiguration = [];
+    protected array $relationships = [];
+    protected ?Closure $fillAfterUpdateUsing = null;
 
     public function update(Model $instance, array $data): Model
     {
-        $relationships = [];
+        $this->fillInstance($instance, $data);
 
+        // End of "normal" attributes.
+        $instance->save();
+
+        if ($closure = $this->fillAfterUpdateUsing) {
+            $data = $closure($instance->getKey());
+
+            // Second pass, to handle attributes that could depend on the instance id.
+            $this->fillInstance($instance, $data);
+
+            if ($instance->isDirty()) {
+                $instance->save();
+            }
+        }
+
+        // Next, handle relationships.
+        $this->saveRelationships($instance);
+
+        return $instance;
+    }
+
+    public function fillAfterUpdateUsing(Closure $closure): self
+    {
+        $this->fillAfterUpdateUsing = $closure;
+
+        return $this;
+    }
+
+    protected function fillInstance(Model $instance, array $data): void
+    {
         foreach ($data as $attribute => $value) {
             if ($this->isRelationship($instance, $attribute)) {
-                $relationships[$attribute] = $value;
-
+                $this->relationships[$attribute] = $value;
                 continue;
             }
 
             $this->valuateAttribute($instance, $attribute, $value);
         }
-
-        // End of "normal" attributes.
-        $instance->save();
-
-        // Next, handle relationships.
-        $this->saveRelationships($instance, $relationships);
-
-        return $instance;
     }
 
     public function initRelationshipsConfiguration(array|Arrayable $configuration): self
@@ -50,34 +72,18 @@ class EloquentModelUpdater
 
     protected function isRelationship(Model $instance, string $attribute): bool
     {
-        if (str_contains($attribute, ':')) {
-            return true;
-        }
-
-        if (method_exists($instance, $attribute)) {
-            $reflection = new ReflectionClass($instance->$attribute());
-
-            return $reflection && $reflection->isSubclassOf(Relation::class);
-        }
-
-        return false;
+        return str($attribute)->contains(':') || $instance->isRelation($attribute);
     }
 
-    protected function saveRelationships(Model $instance, array $relationships): void
+    protected function saveRelationships(Model $instance): void
     {
-        foreach ($relationships as $attribute => $value) {
+        foreach ($this->relationships as $attribute => $value) {
             $relAttribute = explode(':', $attribute)[0];
             $type = get_class($instance->{$relAttribute}());
 
             $relationshipUpdater = app('Code16\Sharp\Form\Eloquent\Relationships\\'
                 .(new ReflectionClass($type))->getShortName()
                 .'RelationUpdater');
-
-            // Special code to handle file_name attribute in file upload case, when there is an {id} parameter
-            if (is_array($value) && isset($value['file_name']) && str($value['file_name'])->contains('{id}')) {
-                $value['file_name'] = str($value['file_name'])
-                    ->replace('{id}', $instance->id);
-            }
 
             $relationshipUpdater->update(
                 $instance, $attribute, $value, $this->relationshipsConfiguration[$attribute] ?? null,

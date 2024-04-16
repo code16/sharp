@@ -8,13 +8,15 @@ final class UserData extends Data
 {
     public function __construct(
         public ?string $name,
+        public ?string $email,
     ) {
     }
 
     public static function from(Authenticatable $user): self
     {
         return new self(
-            name: $user->{config('sharp.auth.display_attribute', 'name')} ?? null,
+            name: $user->{sharpConfig()->get('auth.display_attribute')} ?? null,
+            email: $user->{sharpConfig()->get('auth.login_attribute')} ?? null,
         );
     }
 }

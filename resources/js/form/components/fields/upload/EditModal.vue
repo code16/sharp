@@ -1,13 +1,14 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import { ref, watch } from "vue";
+    import { nextTick, ref, watch } from "vue";
     import { getCropDataFromFilters } from "./util/filters";
-    import { api } from "@/api";
+    import { api } from "@/api/api";
     import { FormUploadFieldData } from "@/types";
     import Cropper from "cropperjs";
     import { rotate, rotateTo } from "./util/rotate";
-    import { Modal, Loading, Button } from '@/components/ui';
-    import { useForm } from "../../../useForm";
+    import { Button } from '@/components/ui/button';
+    import { Modal, Loading } from '@/components/ui';
+    import { useParentForm } from "@/form/useParentForm";
     import { ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
     import { ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
     import { route } from "@/utils/url";
@@ -24,33 +25,7 @@
     const cropper = ref<Cropper>();
     const cropperData = ref<Partial<Cropper.Data>>();
     const cropperImg = ref();
-    const form = useForm();
-
-    watch(cropperImg, () => {
-        // console.log(cropperImg.value);
-        if(cropperImg.value) {
-            cropper.value = new Cropper(cropperImg.value, {
-                viewMode: 2,
-                dragMode: 'move',
-                aspectRatio: props.field.ratioX / props.field.ratioY,
-                autoCropArea: 1,
-                guides: false,
-                background: true,
-                rotatable: true,
-                restore: false, // reset crop area on resize because it's buggy
-                data: cropperData.value,
-                ready: () => {
-                    if(cropperData.value?.rotate) {
-                        rotateTo(cropper.value, cropperData.value.rotate);
-                        cropper.value.setData(cropperData.value);
-                    }
-                },
-            });
-            // console.log(cropper.value);
-        } else {
-            cropper.value.destroy();
-        }
-    });
+    const form = useParentForm();
 
     watch(() => props.value, () => {
         cropperData.value = null;
@@ -61,22 +36,17 @@
         if(originalImg.value) {
             return;
         }
-        const files = await api.post(route('code16.sharp.api.files.show', {
+        const data = await api.post(route('code16.sharp.api.form.upload.thumbnail.show', {
             entityKey: form.entityKey,
             instanceId: form.instanceId,
-        }), {
-            files: [
-                {
-                    path: props.value.path,
-                    disk: props.value.disk,
-                }
-            ],
-            thumbnail_width: 1200,
-            thumbnail_height: 1000,
-        })
-            .then(response => response.data.files);
+            path: props.value.path,
+            disk: props.value.disk,
+            width: 1200,
+            height: 1000,
+        }))
+            .then(response => response.data) as { thumbnail: string|null };
 
-        originalImg.value = files[0]?.thumbnail;
+        originalImg.value = data.thumbnail;
 
         if(!originalImg.value) {
             return Promise.reject('Sharp Upload: original thumbnail not found in POST /api/files request');
@@ -106,11 +76,35 @@
 
     async function onShow() {
         ready.value = false;
-        console.log('onShow');
-        if(props.value?.path) {
+        // if the value does not have 'uploaded: true' we now it exists so we can fetch a larger thumbnail
+        if(props.value && !props.value.uploaded) {
             await loadOriginalImg();
         }
         ready.value = true;
+        await nextTick();
+        cropper.value = new Cropper(cropperImg.value, {
+            viewMode: 2,
+            dragMode: 'move',
+            aspectRatio: props.field.imageCropRatio
+                ? props.field.imageCropRatio[0] / props.field.imageCropRatio[1]
+                : null,
+            autoCropArea: 1,
+            guides: false,
+            background: true,
+            rotatable: true,
+            restore: false, // reset crop area on resize because it's buggy
+            data: cropperData.value,
+            ready: () => {
+                if(cropperData.value?.rotate) {
+                    rotateTo(cropper.value, cropperData.value.rotate);
+                    cropper.value.setData(cropperData.value);
+                }
+            },
+        });
+    }
+
+    function onHidden() {
+        cropper.value.destroy();
     }
 
     function onOk() {
@@ -127,6 +121,7 @@
         max-width="4xl"
         @ok="onOk"
         @show="onShow"
+        @hidden="onHidden"
     >
         <template v-if="ready">
             <div class="h-full">
@@ -142,10 +137,10 @@
         <template v-slot:footer-prepend>
             <div class="flex gap-4">
                 <div class="flex gap-4">
-                    <Button text @click="onRotate(-90)">
+                    <Button variant="outline" @click="onRotate(-90)">
                         <ArrowUturnLeftIcon class="w-4 h-4" />
                     </Button>
-                    <Button text @click="onRotate(90)">
+                    <Button variant="outline" @click="onRotate(90)">
                         <ArrowUturnRightIcon class="w-4 h-4" />
                     </Button>
                 </div>

@@ -7,15 +7,15 @@ This feature allows the user to globally search across a selected set of entitie
 ## Configuration
 
 ```php
-// In config/sharp.php
-return [
-   // ...
-   'search' => [
-      'enabled' => true,
-      'placeholder' => 'Search for anything...',
-      'engine' => \App\Sharp\MySearchEngine::class,
-   ],
-];
+class SharpServiceProvider extends SharpAppServiceProvider
+{
+    protected function configureSharp(SharpConfigBuilder $config): void
+    {
+        $config
+            ->enableGlobalSearch(\App\Sharp\MySearchEngine::class, 'Search for anything...')
+            // [...]
+    }
+}
 ```
 
 ## Write the class

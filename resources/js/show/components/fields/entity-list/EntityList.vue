@@ -3,26 +3,22 @@
     import { EntityList } from '@/entity-list/EntityList';
     import EntityListComponent from '@/entity-list/components/EntityList.vue'
     import EntityListTitle from '@/entity-list/components/EntityListTitle.vue'
-    import { FieldProps } from "../../types";
+    import { ShowFieldProps } from "../../../types";
     import { EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
     import { Ref, ref } from "vue";
     import { useStickyLayout } from "./useStickyLayout";
     import { useFilters } from "@/filters/useFilters";
     import { useCommands } from "@/commands/useCommands";
-    import { api } from "@/api";
+    import { api } from "@/api/api";
     import { FilterQueryParams } from "@/filters/types";
     import { route } from "@/utils/url";
 
-    const props = defineProps<FieldProps & {
-        field: ShowEntityListFieldData,
-        value: ShowEntityListFieldData['value'],
-    }>();
+    const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
 
     const el = ref();
     const loading = ref(false);
     const collapsed = ref(props.collapsable);
     const { sticky, onListChange } = useStickyLayout(el);
-    const entityKey = props.field.entityListKey;
     const entityList: Ref<EntityList | null> = ref(null);
     const filters = useFilters();
     const query: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({
@@ -37,13 +33,16 @@
 
     async function init(query) {
         loading.value = true;
-        const data = await api.get(route('code16.sharp.api.list', { entityKey }), { params: query })
+        const data = await api.get(
+            route('code16.sharp.api.list', { entityKey: props.field.entityListKey }),
+            { params: query }
+        )
             .then(response => response.data);
 
         loading.value = false;
         entityList.value = new EntityList(
             data,
-            entityKey,
+            props.field.entityListKey,
             props.field.hiddenFilters,
             props.field.hiddenCommands,
         );
@@ -79,7 +78,7 @@
            <EntityListComponent
                v-if="value"
                :entity-list="entityList"
-               :entity-key="entityKey"
+               :entity-key="field.entityListKey"
                :query="query"
                :filters="filters"
                :commands="commands"

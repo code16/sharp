@@ -1,123 +1,119 @@
+<script setup lang="ts">
+    import { FormEditorFieldData, FormEditorToolbarButton } from "@/types";
+    import { Editor } from "@tiptap/vue-3";
+    import LinkDropdown from "./LinkDropdown.vue";
+    import TableDropdown from "./TableDropdown.vue";
+    import { Dropdown, DropdownItem } from "@/components/ui";
+    import { buttons } from './config';
+    import { computed } from "vue";
+    import { config } from "@/utils/config";
+    import { __ } from "@/utils/i18n";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
+    import { FormFieldProps } from "@/form/types";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
+    import { Toggle } from "@/components/ui/toggle";
+
+    const props = defineProps<FormFieldProps<FormEditorFieldData> & {
+        editor: Editor,
+    }>();
+
+    const toolbarGroups = computed<FormEditorToolbarButton[][]>(() =>
+        props.field.toolbar.reduce((res, btn) => {
+            if(btn === '|') {
+                return [...res, []];
+            }
+            res[res.length - 1].push(btn);
+            return res;
+        }, [[]])
+    );
+</script>
+
 <template>
     <div class="editor__toolbar">
         <div class="row row-cols-auto g-2">
             <template v-for="group in toolbarGroups">
                 <div class="btn-group">
                     <template v-for="button in group">
+
+                        <!--
+                            TODO move to shadcn ToggleGroup
+                        -->
+
                         <template v-if="button === 'link'">
                             <LinkDropdown
-                                :id="id"
-                                :active="isActive(button)"
-                                :title="buttonTitle(button)"
+                                :id="fieldErrorKey"
+                                :active="buttons[button].isActive(editor)"
+                                :title="buttons[button].label()"
                                 :editor="editor"
-                                :disabled="disabled"
-                                @submit="handleLinkSubmitted"
-                                @remove="handleRemoveLinkClicked"
+                                :disabled="field.readOnly"
+                                @submit="buttons[button].command(editor)"
+                                @remove="editor.chain().focus().unsetLink().run()"
                             >
-                                <i :class="getIcon(button)" data-test="link"></i>
+                                <i :class="buttons[button].icon" data-test="link"></i>
                             </LinkDropdown>
                         </template>
                         <template v-else-if="button === 'table'">
                             <TableDropdown
-                                :active="isActive(button)"
-                                :disabled="disabled"
+                                :active="buttons[button].isActive(editor)"
+                                :disabled="field.readOnly"
                                 :editor="editor"
                             >
-                                <i :class="getIcon(button)" data-test="table"></i>
+                                <i :class="buttons[button].icon" data-test="table"></i>
                             </TableDropdown>
                         </template>
-                        <template v-else :key="button">
-                            <Button
-                                variant="light"
-                                :active="isActive(button)"
-                                :disabled="disabled"
-                                :title="buttonTitle(button)"
-                                @click="handleClicked(button)"
+                        <template v-else-if="button.startsWith('embed:')">
+                            <Toggle
+                                :pressed="editor.isActive(button)"
+                                :disabled="field.readOnly"
+                                :title="field.embeds[button.replace('embed:', '')]?.label"
+                                @click="$emit('embed', field.embeds[button.replace('embed:', '')])"
                                 :data-test="button"
                             >
-                                <i :class="getIcon(button)"></i>
+                                <i :class="field.embeds[button.replace('embed:', '')].icon"></i>
+                            </Toggle>
+                        </template>
+                        <template v-else :key="button">
+                            <Toggle
+                                :pressed="buttons[button].isActive(editor)"
+                                :disabled="field.readOnly"
+                                :title="buttons[button].label()"
+                                @click="button === 'upload' || button === 'upload-image'
+                                    ? $emit('upload')
+                                    : buttons[button].command(editor)"
+                                :data-test="button"
+                            >
+                                <i :class="buttons[button].icon"></i>
                                 <template v-if="button === 'small'">
                                     <i class="fas fa-font fa-xs" style="margin-top: .25em"></i>
                                 </template>
-                            </Button>
+                            </Toggle>
                         </template>
                     </template>
                 </div>
             </template>
-            <template v-if="options && options.length > 0">
+            <template v-if="Object.values(props.field.embeds ?? {}).length > 0">
                 <div class="btn-group">
-                    <OptionsDropdown :options="options" :editor="editor" />
-                </div>
-            </template>
-            <template v-if="customEmbeds && customEmbeds.length > 0">
-                <div class="btn-group">
-                    <EmbedDropdown :embeds="customEmbeds" :editor="editor" />
+                    <Dropdown
+                        class="editor__dropdown"
+                        variant="light"
+                        small
+                        v-bind="$attrs"
+                        ref="dropdown"
+                    >
+                        <template v-slot:text>
+                            {{ __('sharp::form.editor.dropdown.embeds') }}
+                        </template>
+
+                        <template v-slot:default>
+                            <template v-for="embed in props.field.embeds">
+                                <DropdownItem @click="$emit('embed', embed)">
+                                    {{ embed.label }}
+                                </DropdownItem>
+                            </template>
+                        </template>
+                    </Dropdown>
                 </div>
             </template>
         </div>
     </div>
 </template>
-
-<script>
-    import { Button, Dropdown } from "@/components/ui";
-    import { buttons } from './config';
-    import LinkDropdown from "./LinkDropdown.vue";
-    import TableDropdown from "./TableDropdown.vue";
-    import OptionsDropdown from "./OptionsDropdown.vue";
-    import EmbedDropdown from "./EmbedDropdown.vue";
-
-    export default {
-        components: {
-            EmbedDropdown,
-            TableDropdown,
-            LinkDropdown,
-            OptionsDropdown,
-            Button,
-            Dropdown,
-        },
-        props: {
-            id: String,
-            editor: Object,
-            toolbar: Array,
-            disabled: Boolean,
-            options: Array,
-            embeds: Object,
-        },
-        computed: {
-            toolbarGroups() {
-                return this.toolbar
-                    .reduce((res, btn) => {
-                        if(btn === '|') {
-                            return [...res, []];
-                        }
-                        res[res.length - 1].push(btn);
-                        return res;
-                    }, [[]]);
-            },
-            customEmbeds() {
-                const { upload, ...customEmbeds } = this.embeds ?? {};
-                return Object.values(customEmbeds);
-            },
-        },
-        methods: {
-            getIcon(button) {
-                return buttons()[button]?.icon;
-            },
-            isActive(button) {
-                return buttons()[button]?.isActive?.(this.editor);
-            },
-            buttonTitle(button) {
-                return buttons()[button]?.label;
-            },
-            handleClicked(button) {
-                buttons()[button]?.command(this.editor);
-            },
-            handleLinkSubmitted({ href, label }) {
-                buttons().link.command(this.editor, { href, label });
-            },
-            handleRemoveLinkClicked() {
-                this.editor.chain().focus().unsetLink().run();
-            },
-        },
-    }
-</script>

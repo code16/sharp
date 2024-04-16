@@ -3,20 +3,22 @@
 namespace Code16\Sharp\Form\Fields;
 
 use Code16\Sharp\Enums\FormEditorToolbarButton;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
+use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\Formatters\EditorFormatter;
-use Code16\Sharp\Form\Fields\Utils\IsUploadField;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithDataLocalization;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithEmbeds;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithMaxLength;
 use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithPlaceholder;
-use Code16\Sharp\Form\Fields\Utils\SharpFormFieldWithUpload;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
+use Code16\Sharp\Utils\Fields\SharpFieldWithEmbeds;
+use Code16\Sharp\Utils\Fields\SharpFieldWithLocalization;
 
-class SharpFormEditorField extends SharpFormField implements IsUploadField
+class SharpFormEditorField extends SharpFormField implements IsSharpFieldWithLocalization, IsSharpFieldWithEmbeds
 {
     use SharpFormFieldWithPlaceholder;
-    use SharpFormFieldWithUpload;
-    use SharpFormFieldWithDataLocalization;
-    use SharpFormFieldWithEmbeds;
+    use SharpFieldWithLocalization;
+    use SharpFieldWithEmbeds;
     use SharpFormFieldWithMaxLength {
         setMaxLength as protected parentSetMaxLength;
     }
@@ -129,6 +131,68 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
         return $this;
     }
 
+    public function allowUploads(SharpFormEditorUpload $formEditorUpload): self
+    {
+        $this->uploadsConfig = $formEditorUpload;
+
+        return $this;
+    }
+
+    public function uploadsConfig(): ?SharpFormEditorUpload
+    {
+        return $this->uploadsConfig;
+    }
+
+    protected function innerComponentUploadsConfiguration(): ?array
+    {
+        if (! $this->uploadsConfig) {
+            return null;
+        }
+
+        $form = new FormEditorUploadForm($this->uploadsConfig);
+
+        return [
+            'fields' => $form->fields(),
+            'layout' => $form->formLayout(),
+        ];
+    }
+
+    protected function toolbarArray(): ?array
+    {
+        if (! $this->showToolbar) {
+            return null;
+        }
+
+        return collect($this->toolbar)
+            ->map(function (FormEditorToolbarButton|string $button) {
+                if (is_string($button)) {
+                    if (in_array($button, $this->embeds)) {
+                        return 'embed:'.app($button)->key();
+                    }
+
+                    throw new SharpInvalidConfigException(
+                        sprintf('%s ("%s") : %s must be present in ->allowEmbeds() array to have it in the toolbar',
+                            class_basename($this),
+                            $this->key(),
+                            $button
+                        )
+                    );
+                }
+
+                if (($button === static::UPLOAD || $button === static::UPLOAD_IMAGE) && ! $this->uploadsConfig()) {
+                    throw new SharpInvalidConfigException(
+                        sprintf('%s ("%s") : ->allowUploads() must be called to have upload in the toolbar',
+                            class_basename($this),
+                            $this->key(),
+                        )
+                    );
+                }
+
+                return $button;
+            })
+            ->toArray();
+    }
+
     protected function validationRules(): array
     {
         return [
@@ -153,37 +217,16 @@ class SharpFormEditorField extends SharpFormField implements IsUploadField
             [
                 'minHeight' => $this->minHeight,
                 'maxHeight' => $this->maxHeight,
-                'toolbar' => $this->showToolbar ? $this->toolbar : null,
+                'toolbar' => $this->toolbarArray(),
                 'placeholder' => $this->placeholder,
                 'localized' => $this->localized,
                 'markdown' => $this->renderAsMarkdown,
                 'inline' => $this->withoutParagraphs,
                 'showCharacterCount' => $this->showCharacterCount,
                 'maxLength' => $this->maxLength,
-                'embeds' => array_merge(
-                    $this->innerComponentUploadConfiguration(),
-                    $this->innerComponentEmbedsConfiguration()
-                ),
+                'uploads' => $this->innerComponentUploadsConfiguration(),
+                'embeds' => $this->innerComponentEmbedsConfiguration(),
             ],
         );
-    }
-
-    protected function innerComponentUploadConfiguration(): array
-    {
-        $uploadConfig = [
-            'maxFileSize' => $this->maxFileSize ?: 2,
-            'transformable' => $this->transformable,
-            'transformKeepOriginal' => $this->transformKeepOriginal(),
-            'transformableFileTypes' => $this->transformableFileTypes,
-            'ratioX' => $this->cropRatio ? (int) $this->cropRatio[0] : null,
-            'ratioY' => $this->cropRatio ? (int) $this->cropRatio[1] : null,
-        ];
-
-        if (! $this->fileFilter) {
-            $this->setFileFilterImages();
-        }
-        $uploadConfig['fileFilter'] = $this->fileFilter;
-
-        return ['upload' => $uploadConfig];
     }
 }

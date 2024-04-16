@@ -2,9 +2,12 @@
 
 namespace Code16\Sharp\Form\Fields\Embeds;
 
+use Code16\Sharp\Form\Fields\Formatters\AbstractSimpleFormatter;
+use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormUploadField;
-use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Layout\HasModalFormLayout;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
@@ -14,13 +17,15 @@ use Illuminate\Support\Str;
 
 abstract class SharpFormEditorEmbed
 {
-    use HandleFields,
-        HandlePageAlertMessage,
-        WithCustomTransformers,
-        HandleValidation;
+    use HandleFields;
+    use HandlePageAlertMessage;
+    use WithCustomTransformers;
+    use HandleValidation;
+    use HasModalFormLayout;
 
     protected ?string $label = null;
     protected ?string $tagName = null;
+    protected ?string $icon = null;
     protected array $templates = [];
 
     public function toConfigArray(bool $isForm): array
@@ -32,9 +37,11 @@ abstract class SharpFormEditorEmbed
         $config = [
             'key' => $this->key(),
             'label' => $this->label ?: Str::snake(class_basename(get_class($this))),
-            'tag' => $this->tagName ?: 'x-'.Str::snake(class_basename(get_class($this)), '-'),
+            'tag' => $this->tagName(),
             'attributes' => collect($this->fields())->keys()->toArray(),
             'template' => $template,
+            'icon' => $this->icon,
+            'fields' => $this->fields(),
         ];
 
         $this->validate($config, [
@@ -88,21 +95,9 @@ abstract class SharpFormEditorEmbed
 
     final public function formLayout(): ?array
     {
-        if ($fields = $this->fieldsContainer()->getFields()) {
-            return (new FormLayout())
-                ->setTabbed(false)
-                ->addColumn(12, function (FormLayoutColumn $column) use ($fields) {
-                    $this->buildFormLayout($column);
-
-                    if (! $column->hasFields()) {
-                        collect($fields)
-                            ->each(fn ($field) => $column->withField($field->key()));
-                    }
-                })
-                ->toArray();
-        }
-
-        return null;
+        return $this->modalFormLayout(function (FormLayoutColumn $column) {
+            $this->buildFormLayout($column);
+        });
     }
 
     /**
@@ -117,9 +112,20 @@ abstract class SharpFormEditorEmbed
                     return $value;
                 }
 
-                if (is_a($field, SharpFormUploadField::class)) {
-                    // Uploads are a bit different in this case
-                    $field->formatter()->setAlwaysReturnFullObject();
+                if ($field instanceof SharpFormUploadField) {
+                    // in case of uploads we only want to call formatter on Form store/update
+                    return $value;
+                }
+
+                if ($field instanceof SharpFormListField) {
+                    $field->formatter()->formatItemFieldUsing(function (SharpFormField $itemField) {
+                        if ($itemField instanceof SharpFormUploadField) {
+                            return new class extends AbstractSimpleFormatter {
+                            };
+                        }
+
+                        return $itemField->formatter();
+                    });
                 }
 
                 // Apply formatter based on field configuration
@@ -148,6 +154,13 @@ abstract class SharpFormEditorEmbed
     final protected function configureTagName(string $tagName): self
     {
         $this->tagName = $tagName;
+
+        return $this;
+    }
+
+    final protected function configureIcon(string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }
@@ -188,6 +201,11 @@ abstract class SharpFormEditorEmbed
     final public function key(): string
     {
         return Str::replace('\\', '.', get_class($this));
+    }
+
+    final public function tagName(): string
+    {
+        return $this->tagName ?: 'x-'.Str::kebab(class_basename(get_class($this)));
     }
 
     public function getDataLocalizations(): array

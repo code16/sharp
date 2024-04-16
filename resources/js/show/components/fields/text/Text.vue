@@ -1,22 +1,31 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { ShowTextFieldData } from "@/types";
-    import { computed, ref } from "vue";
+    import { computed, provide, ref } from "vue";
     import FieldLayout from "../../FieldLayout.vue";
     import TextRenderer from "./TextRenderer.vue";
     import clip from "text-clipper";
-    import { FieldProps } from "../../types";
+    import { ShowFieldProps } from "../../../types";
+    import { ContentEmbedManager } from "@/content/ContentEmbedManager";
+    import { useParentShow } from "@/show/useParentShow";
+    import { Show } from "@/show/Show";
+    import { ContentUploadManager } from "@/content/ContentUploadManager";
 
-    const props = defineProps<FieldProps & {
-        field: ShowTextFieldData,
-        value: ShowTextFieldData['value'],
-    }>();
+    const props = defineProps<ShowFieldProps<ShowTextFieldData>>();
 
     const expanded = ref(false);
+    const show = useParentShow();
+
+    const embedManager = new ContentEmbedManager(show, props.field.embeds, props.value?.embeds);
+    const uploadManager = new ContentUploadManager(show, props.value?.uploads);
+
+    provide('embedManager', embedManager);
+    provide('uploadManager', uploadManager);
 
     const localizedValue = computed<string | null>(() => {
-        const { field, locale, value } = props;
-        return field.localized ? value?.[locale] : value;
+        return props.field.localized
+            ? props.value.text?.[props.locale]
+            : props.value?.text as string;
     });
 
     function stripTags(html) {
@@ -42,19 +51,18 @@
         const content = field.html ? value.trim() : text;
         const truncated = truncateToWords(text, field.collapseToWordCount);
         return truncated.length < text.length
-            ? clip(content, truncated.length + 2, { html: field.html })
+            ? clip(content, truncated.length + 2, field.html ? { html: true } : {})
             : null;
     });
 
     const currentContent = computed(() => {
-        const { field } = props;
         if(!localizedValue.value) {
             return null;
         }
         if(collapsedContent.value && !expanded.value) {
             return collapsedContent.value;
         }
-        if(!field.html) {
+        if(!props.field.html) {
             return stripTags(localizedValue.value).trim();
         }
         return localizedValue.value;
@@ -73,9 +81,7 @@
             <TextRenderer
                 class="ShowTextField__content"
                 :content="currentContent"
-                :embeds="field.embeds"
-                :entity-key="entityKey"
-                :instance-id="instanceId"
+                :field="field"
             />
         </template>
         <template v-else>

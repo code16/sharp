@@ -18,12 +18,8 @@ use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('gets show data for an instance', function () {
@@ -183,10 +179,7 @@ it('returns show configuration', function () {
 });
 
 it('gets show data for an instance in a single show case', function () {
-    config()->set(
-        'sharp.entities.single-person',
-        SinglePersonEntity::class,
-    );
+    sharpConfig()->addEntity('single-person', SinglePersonEntity::class);
 
     fakeShowFor('single-person', new class extends PersonSingleShow
     {
@@ -357,5 +350,27 @@ it('allows to configure a page alert with a closure as content', function () {
                 'text' => 'Hello Marie Curie',
             ])
             ->etc()
+        );
+});
+
+it('passes through transformers to return show data for an instance', function () {
+    $this->withoutExceptionHandling();
+
+    fakeShowFor('person', new class extends PersonShow
+    {
+        public function find($id): array
+        {
+            return $this
+                ->setCustomTransformer('name', fn ($name) => strtoupper($name))
+                ->transform([
+                    'name' => 'James Clerk Maxwell',
+                ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.data.name', ['text' => 'JAMES CLERK MAXWELL'])
         );
 });

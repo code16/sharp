@@ -15,6 +15,7 @@ uses()
         Schema::create('people', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
+            $table->text('bio')->nullable();
             $table->unsignedTinyInteger('age')->nullable();
             $table->unsignedTinyInteger('order')->nullable();
             $table->unsignedInteger('partner_id')->nullable();
@@ -72,7 +73,10 @@ uses()
 
 function login(?User $user = null)
 {
-    return test()->actingAs($user ?: new User, config('sharp.auth.guard', 'web'));
+    return test()->actingAs(
+        $user ?: new User,
+        sharpConfig()->get('auth.guard') ?: 'web'
+    );
 }
 
 function fakeListFor(string $entityKey, $fakeImplementation)
@@ -111,9 +115,9 @@ function fakePolicyFor(string $entityKey, $fakeImplementation)
     return test();
 }
 
-function createImage(string $disk = 'local'): string
+function createImage(string $disk = 'local', string $name = 'test.png'): string
 {
-    $file = UploadedFile::fake()->image('test.png', 600, 600);
+    $file = UploadedFile::fake()->image($name, 600, 600);
 
-    return $file->storeAs('data', 'test.png', ['disk' => $disk]);
+    return $file->storeAs('data', $name, ['disk' => $disk]);
 }

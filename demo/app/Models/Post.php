@@ -72,7 +72,7 @@ class Post extends Model
 
     public function isOnline(): bool
     {
-        return $this->state === PostState::ONLINE;
+        return $this->state->value === PostState::ONLINE;
     }
 
     public function isDraft(): bool

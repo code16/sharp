@@ -49,3 +49,8 @@ class MyShow extends SharpShow
 ```
 
 The `$data` array passed to the closure is the result of your `find()` (Show, Form), `getListData()` (Entity List), `buildWidgetsData()` (Dashboard) or `initialData()` (Command) method.
+
+::: tip
+If your message is complex to build, you can defer to a blade template to encapsulate the logic, eg:
+`return view('sharp._post-planned-info', ['data' => $data])->render();`
+:::

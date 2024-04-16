@@ -9,12 +9,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    sharpConfig()->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('filters instances of an entity list', function () {

@@ -9,32 +9,26 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class FormUploadFieldData extends Data
 {
-    #[LiteralTypeScriptType('{ 
-        name: string;
-        disk: string;
-        path: string;
-        size: number;
-        thumbnail?: string;
-        uploaded?: boolean;
-        transformed?: boolean;
-        filters?: { crop: { width:number, height:number, x:number, y:number }, rotate: { angle:number } };
-    } | null')]
-    public ?array $value;
+    public ?FormUploadFieldValueData $value;
 
     public function __construct(
         public string $key,
         #[LiteralTypeScriptType('"'.FormFieldType::Upload->value.'"')]
         public FormFieldType $type,
-        public bool $transformable,
-        public bool $compactThumbnail,
-        public ?bool $transformKeepOriginal = null,
+        #[LiteralTypeScriptType('[number, number]')]
+        public ?array $imageCropRatio = null,
+        public bool $imageTransformable = true,
+        public bool $imageCompactThumbnail = false,
+        public ?bool $imageTransformKeepOriginal = null,
         /** @var array<string> */
-        public ?array $transformableFileTypes = null,
-        public ?int $ratioX = null,
-        public ?int $ratioY = null,
-        public ?float $maxFileSize = null,
+        public ?array $imageTransformableFileTypes = null,
         /** @var array<string> */
-        public array|null $fileFilter = null,
+        public ?array $allowedExtensions = null,
+        public ?int $maxFileSize = null,
+        /** @var array<string> */
+        public ?array $validationRule = null,
+        public ?string $storageBasePath = null,
+        public ?string $storageDisk = null,
         public ?string $label = null,
         public ?bool $readOnly = null,
         public ?FormConditionalDisplayData $conditionalDisplay = null,
@@ -45,6 +39,10 @@ final class FormUploadFieldData extends Data
 
     public static function from(array $field): self
     {
+        if (is_string($field['type'])) {
+            $field['type'] = FormFieldType::from($field['type']);
+        }
+
         return new self(...$field);
     }
 }

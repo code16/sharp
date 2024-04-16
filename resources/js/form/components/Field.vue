@@ -9,7 +9,7 @@
     import Autocomplete from "./fields/Autocomplete.vue";
     import Check from "./fields/Check.vue";
     import DateInput from "./fields/date/Date.vue";
-    import Editor from "./fields/editor/EditorField.vue";
+    import Editor from "./fields/editor/Editor.vue";
     import Geolocation from "./fields/geolocation/Geolocation.vue";
     import Html from "./fields/Html.vue";
     import List from "./fields/list/List.vue";
@@ -19,26 +19,24 @@
     import Text from "./fields/Text.vue";
     import Textarea from "./fields/Textarea.vue";
     import Upload from "./fields/upload/Upload.vue";
-    import { useForm } from "../useForm";
+    import { useParentForm } from "../useParentForm";
 
-    const props = defineProps<{
-        field: FormFieldData,
-        fieldLayout: LayoutFieldData,
-        fieldErrorKey: string,
+    import { FormFieldProps } from "@/form/types";
+
+    const props = defineProps<FormFieldProps & {
+        row: LayoutFieldData[],
         value?: FormFieldData['value'],
-        locale?: string | null,
-        root?: boolean
     }>();
 
     const emit = defineEmits(['input', 'locale-change']);
-    const form = useForm();
+    const form = useParentForm();
     const id = computed(() => `form-field_${props.fieldErrorKey}`);
 
     const components: Record<FormFieldData['type'], Component> = {
         // 'autocomplete': Autocomplete,
         'check': Check,
         // 'date': DateInput,
-        // 'editor': Editor,
+        'editor': Editor,
         'geolocation': Geolocation,
         // 'html': Html,
         // 'list': List,
@@ -88,20 +86,20 @@
         ]"
         :style="field.extraStyle"
     >
-        <div  v-sticky="field.type === 'list'">
-            <div class="flex mb-1">
+        <div v-sticky="field.type === 'list'">
+            <div class="flex">
                 <div class="flex-1">
                     <template v-if="field.label">
-                        <label :for="id" class="SharpForm__label form-label">
+                        <label :for="id" class="SharpForm__label form-label mb-1">
                             {{ field.label }}
                         </label>
                     </template>
-                    <template v-else>
-                        <div class="form-label">&nbsp;</div>
+                    <template v-else-if="row.length > 1">
+                        <div class="form-label mb-1">&nbsp;</div>
                     </template>
                 </div>
                 <template v-if="'localized' in field && field.localized">
-                    <div class="SharpFieldLocaleSelect">
+                    <div class="SharpFieldLocaleSelect mb-1">
                         <nav class="flex">
                             <template v-for="btnLocale in form.locales">
                                 <button
@@ -133,9 +131,9 @@
             <template v-if="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]">
                 <component
                     :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
+                    v-bind="$props"
                     :id="id"
                     :has-error="form.fieldHasError(field, fieldErrorKey, locale)"
-                    v-bind="$props"
                     @error="onError"
                     @clear="onClear"
                     @input="onInput"

@@ -1,5 +1,58 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
+    import { Button } from '@/components/ui/button';
+    import { Dropdown } from "@/components/ui";
+    import TextInput from '../../text/TextInput.vue';
+    import {Editor} from "@tiptap/vue-3";
+    import {ref} from "vue";
+
+    const props = defineProps<{
+        id: string,
+        editor: Editor,
+        active: boolean,
+        disabled: boolean,
+    }>();
+
+    const label = ref();
+    const href = ref();
+    const hasSelectedText = ref(false);
+    const inserted = ref(false);
+    const selection = ref(null);
+    const dropdown = ref<InstanceType<typeof Dropdown>>();
+    const input = ref<InstanceType<typeof TextInput>>();
+
+    function hide(focusEditor = true) {
+        dropdown.value.close();
+        if(focusEditor) {
+            this.editor.chain().focus().run();
+        }
+    }
+
+    function onShow() {
+        href.value = null;
+        inserted.value = false;
+        hasSelectedText.value = !selection.empty;
+
+        if(this.active) {
+            const attrs = this.editor.getAttributes('link');
+            href.value = attrs?.href;
+            inserted.value = true;
+        }
+
+        if(hasSelectedText.value) {
+            props.editor.commands.setLink({ href:'#' });
+            selection.value = {
+                from: props.editor.state.selection.from,
+                to: props.editor.state.selection.to,
+            }
+        }
+    }
+
+    function onShown() {
+        setTimeout(() => {
+            input.value.focus();
+        }, 0);
+    }
 </script>
 
 <template>
@@ -7,9 +60,10 @@
         class="editor__dropdown editor__dropdown--link"
         variant="light"
         :active="active"
+        :disabled="disabled"
         v-bind="$attrs"
-        @show="handleDropdownShow"
-        @shown="handleDropdownShown"
+        @show="onShow"
+        @shown="onShown"
         @hide="handleDropdownHide"
         ref="dropdown"
     >
@@ -17,38 +71,38 @@
             <slot />
         </template>
 
-        <template v-slot:default="{ hide }">
-            <b-dropdown-form @submit.prevent="handleLinkSubmitted">
-                <template v-if="isEdit">
-                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"
-                        type="button"
-                        @click="handleCancelClicked"
-                    >
-                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>
-                    </button>
-                </template>
+        <template>
+            <form @submit.prevent="handleLinkSubmitted">
+<!--                <template v-if="inserted">-->
+<!--                    <button class="btn-close position-absolute end-0 top-0 p-2 fs-8"-->
+<!--                        type="button"-->
+<!--                        @click="handleCancelClicked"-->
+<!--                    >-->
+<!--                        <span class="visually-hidden">{{ __('sharp::modals.cancel_button') }}</span>-->
+<!--                    </button>-->
+<!--                </template>-->
 
-                <template v-if="hasLabelInput">
+                <template v-if="!active && !hasSelectedText">
                     <div class="mb-3">
-                        <label class="form-label" :for="fieldId('label')">
+                        <label class="form-label" :for="`${id}-link-label`">
                             {{ __('sharp::form.editor.dialogs.link.text_label') }}
                         </label>
-                        <TextInput :id="fieldId('label')" v-model="label" />
+                        <TextInput :id="`${id}-link-label`" v-model="label" />
                     </div>
                 </template>
 
                 <div class="mb-3">
-                    <label class="form-label" :for="fieldId('href')">
+                    <label class="form-label" :for="`${id}-href`">
                         {{ __('sharp::form.editor.dialogs.link.url_label') }}
                     </label>
-                    <TextInput :id="fieldId('href')" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
+                    <TextInput :id="`${id}-href`" v-model="href" placeholder="https://example.org" autocomplete="off" ref="input" />
                 </div>
 
                 <div class="mt-3">
                     <div class="row g-2 flex-sm-nowrap">
                         <div class="col-auto">
-                            <Button type="submit" small variant="primary">
-                                <template v-if="isEdit">
+                            <Button type="submit" size="sm">
+                                <template v-if="inserted">
                                     {{ __('sharp::form.editor.dialogs.link.update_button') }}
                                 </template>
                                 <template v-else>
@@ -57,98 +111,29 @@
                             </Button>
                         </div>
                         <div class="col-auto">
-                            <template v-if="isEdit">
-                                <Button type="button" small variant="danger" outline @click="handleRemoveClicked">
+                            <template v-if="inserted">
+                                <Button type="button" variant="destructive" size="sm" @click="handleRemoveClicked">
                                     {{ __('sharp::form.editor.dialogs.link.remove_button') }}
                                 </Button>
                             </template>
                             <template v-else>
-                                <Button type="button" small variant="light" @click="handleCancelClicked">
+                                <Button type="button" variant="outline" size="sm" @click="handleCancelClicked">
                                     {{ __('sharp::modals.cancel_button') }}
                                 </Button>
                             </template>
                         </div>
                     </div>
                 </div>
-            </b-dropdown-form>
+            </form>
         </template>
     </Dropdown>
 </template>
 
 <script lang="ts">
-    // import { BFormGroup, BDropdownForm } from 'bootstrap-vue';
-    import { Button, Dropdown } from "@/components/ui";
-    import TextInput from '../../Text.vue';
-
     export default {
-        components: {
-            Button,
-            Dropdown,
-            BDropdownForm:{
-                template: '<div><slot /></div>',  // todo
-            },
-            BFormGroup: {
-                template: '<div><slot /></div>',  // todo
-            },
-            TextInput,
-        },
-        props: {
-            id: String,
-            active: Boolean,
-            editor: Object,
-        },
-        data() {
-            return {
-                label: null,
-                href: null,
-                hasSelectedText: false,
-                inserted: false,
-                selection: null,
-            }
-        },
-        computed: {
-            hasLabelInput() {
-                return !this.active && !this.hasSelectedText;
-            },
-            isEdit() {
-                return this.inserted;
-            },
-        },
         methods: {
-            fieldId(name) {
-                return `${this.id}-${name}`;
-            },
-            hide(focusEditor = true) {
-                this.$refs.dropdown.hide();
-                if(focusEditor) {
-                    this.editor.chain().focus().run();
-                }
-            },
-            handleDropdownShow() {
-                const selection = this.editor.state.selection;
-
-                this.href = null;
-                this.inserted = false;
-                this.hasSelectedText = !selection.empty;
-
-                if(this.active) {
-                    const attrs = this.editor.getAttributes('link');
-                    this.href = attrs?.href;
-                    this.inserted = true;
-                }
-
-                if(this.hasSelectedText) {
-                    this.editor.commands.setLink({ href:'#' });
-                    this.selection = {
-                        from: selection.from,
-                        to: selection.to,
-                    }
-                }
-            },
             handleDropdownShown() {
-                setTimeout(() => {
-                    this.$refs.input.focus();
-                }, 0);
+
             },
             handleDropdownHide() {
                 if(!this.inserted && this.hasSelectedText) {
@@ -175,6 +160,7 @@
                 this.inserted = true;
             },
             handleRemoveClicked() {
+                this.editor.chain().focus().unsetLink().run()
                 this.$emit('remove');
             },
         }

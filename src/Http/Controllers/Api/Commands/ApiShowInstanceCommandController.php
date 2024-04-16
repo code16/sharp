@@ -4,14 +4,19 @@ namespace Code16\Sharp\Http\Controllers\Api\Commands;
 
 use Code16\Sharp\Data\Commands\CommandFormData;
 use Code16\Sharp\Http\Controllers\Api\ApiController;
-use Code16\Sharp\Http\Controllers\HandlesUploadedFilesInRequest;
 use Code16\Sharp\Show\SharpSingleShow;
+use Code16\Sharp\Utils\Uploads\SharpUploadManager;
 
 class ApiShowInstanceCommandController extends ApiController
 {
     use HandlesCommandReturn;
     use HandlesCommandForm;
-    use HandlesUploadedFilesInRequest;
+
+    public function __construct(
+        private readonly SharpUploadManager $uploadManager,
+    ) {
+        parent::__construct();
+    }
 
     public function show(string $entityKey, string $commandKey, mixed $instanceId = null)
     {
@@ -35,7 +40,7 @@ class ApiShowInstanceCommandController extends ApiController
 
         $formattedData = $commandHandler->formatAndValidateRequestData((array) request('data'), $instanceId);
         $result = $this->returnCommandResult($showPage, $commandHandler->execute($formattedData));
-        $this->handlePostedFiles($commandHandler, request()->all(), $formattedData, $instanceId);
+        $this->uploadManager->dispatchJobs($instanceId);
 
         return $result;
     }

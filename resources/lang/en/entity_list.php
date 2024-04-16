@@ -6,4 +6,6 @@ return [
     'commands.entity.label' => 'Actions',
     'commands.instance.label' => 'Actions',
     'commands.needs_selection_message' => 'This action requires you to select relevant items first',
+    'sort_asc' => 'Sort ascending',
+    'sort_desc' => 'Sort descending',
 ];

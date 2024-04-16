@@ -5,6 +5,7 @@ namespace Code16\Sharp\Data\Show\Fields;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Data\DataCollection;
 use Code16\Sharp\Data\Embeds\EmbedData;
+use Code16\Sharp\Data\Form\Fields\FormEditorFieldData;
 use Code16\Sharp\Enums\ShowFieldType;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
@@ -12,7 +13,7 @@ use Spatie\TypeScriptTransformer\Attributes\Optional;
 final class ShowTextFieldData extends Data
 {
     #[Optional]
-    /** @var string|array<string,string> */
+    #[LiteralTypeScriptType(FormEditorFieldData::VALUE_TS_TYPE)]
     public string|array $value;
 
     public function __construct(

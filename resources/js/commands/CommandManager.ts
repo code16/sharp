@@ -1,5 +1,5 @@
 import { CommandData, CommandFormData, CommandResponseData, FormData } from "@/types";
-import { api } from "@/api";
+import { api } from "@/api/api";
 import { showAlert, showConfirm } from "@/utils/dialogs";
 import { parseBlobJSONContent } from "@/utils/request";
 import { AxiosResponse } from "axios";

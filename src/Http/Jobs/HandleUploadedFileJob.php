@@ -17,18 +17,18 @@ class HandleUploadedFileJob implements ShouldQueue
         public string $uploadedFileName,
         public string $disk,
         public string $filePath,
-        public ?string $instanceId = null,
         public bool $shouldOptimizeImage = true,
         public ?array $transformFilters = null,
+        public ?string $instanceId = null,
     ) {
     }
 
     public function handle(): void
     {
-        $tmpDisk = config('sharp.uploads.tmp_disk', 'local');
+        $tmpDisk = sharpConfig()->get('uploads.tmp_disk');
         $tmpFilePath = sprintf(
             '%s/%s',
-            config('sharp.uploads.tmp_dir', 'tmp'),
+            sharpConfig()->get('uploads.tmp_dir'),
             $this->uploadedFileName,
         );
 
@@ -55,8 +55,10 @@ class HandleUploadedFileJob implements ShouldQueue
 
     private function determineFilePath(): string
     {
-        return str($this->filePath)
-            ->replace('{id}', $this->instanceId)
-            ->toString();
+        if ($this->instanceId) {
+            return str_replace('{id}', $this->instanceId, $this->filePath);
+        }
+
+        return $this->filePath;
     }
 }

@@ -84,3 +84,13 @@ it('handles timezone from front', function () {
     expect($formatter->fromFront($field, 'attr', '2017-05-31T13:00:00.000000Z'))
         ->toEqual('2017-05-31 09:00:00');
 });
+
+it('set seconds to zero', function () {
+    $formatter = new DateFormatter;
+    $field = SharpFormDateField::make('date');
+    $field->setHasDate();
+    $field->setHasTime();
+
+    expect($formatter->fromFront($field, 'attr', '2017-05-31 10:30:17'))
+        ->toEqual('2017-05-31 10:30:00');
+});

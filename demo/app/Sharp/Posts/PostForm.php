@@ -10,6 +10,7 @@ use App\Sharp\Utils\Embeds\RelatedPostEmbed;
 use App\Sharp\Utils\Embeds\TableOfContentsEmbed;
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
@@ -50,20 +51,26 @@ class PostForm extends SharpForm
                         SharpFormEditorField::A,
                         SharpFormEditorField::QUOTE,
                         SharpFormEditorField::SEPARATOR,
-                        SharpFormEditorField::UPLOAD,
                         SharpFormEditorField::IFRAME,
+                        SharpFormEditorField::UPLOAD,
+                        CodeEmbed::class,
                     ])
                     ->allowEmbeds([
                         RelatedPostEmbed::class,
                         AuthorEmbed::class,
-                        CodeEmbed::class,
                         TableOfContentsEmbed::class,
+                        CodeEmbed::class,
                     ])
-                    ->setMaxFileSize(1)
+                    ->allowUploads(
+                        SharpFormEditorUpload::make()
+                            ->setImageOnly()
+                            ->setStorageDisk('local')
+                            ->setStorageBasePath('data/posts/{id}/embed')
+                            ->setMaxFileSize(1)
+                            ->setHasLegend()
+                    )
                     ->setMaxLength(1000)
                     ->setHeight(300, 0)
-                    ->setStorageDisk('local')
-                    ->setStorageBasePath('data/posts/{id}/embed'),
             )
             ->addField(
                 SharpFormTagsField::make('categories', Category::pluck('name', 'id')->toArray())
@@ -74,9 +81,9 @@ class PostForm extends SharpForm
             ->addField(
                 SharpFormUploadField::make('cover')
                     ->setMaxFileSize(1)
+                    ->setImageOnly()
                     ->setLabel('Cover')
-                    ->setFileFilterImages()
-                    ->setCropRatio('16:9')
+                    ->setImageCropRatio('16:9')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data/posts/{id}'),
             )
@@ -119,8 +126,8 @@ class PostForm extends SharpForm
                     )
                     ->addItemField(
                         SharpFormUploadField::make('document')
-                            ->setFileFilter(['pdf', 'zip'])
                             ->setMaxFileSize(1)
+                            ->setAllowedExtensions(['pdf', 'zip'])
                             ->setStorageDisk('local')
                             ->setStorageBasePath('data/posts/{id}')
                             ->addConditionalDisplay('!is_link'),
@@ -191,12 +198,12 @@ class PostForm extends SharpForm
         return [
             'title.fr' => ['required', 'string', 'max:150'],
             'title.en' => ['required', 'string', 'max:150'],
-            'content.text.fr' => ['required', 'string', 'max:2000'],
-            'content.text.en' => ['required', 'string', 'max:2000'],
+            //            'content.text.fr' => ['required', 'string', 'max:2000'],
+            //            'content.text.en' => ['required', 'string', 'max:2000'],
             'published_at' => ['required', 'date'],
-            'attachments.*.title' => ['required', 'string', 'max:50'],
-            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
-            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
+            //            'attachments.*.title' => ['required', 'string', 'max:50'],
+            //            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
+            //            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
         ];
     }
 
@@ -212,7 +219,7 @@ class PostForm extends SharpForm
             ->ignore(auth()->user()->isAdmin() ? [] : ['author_id'])
             ->save($post, $data);
 
-        if (currentSharpRequest()->isCreation() && ! $id) {
+        if (currentSharpRequest()->isCreation()) {
             $this->notify('Your post was created, but not published yet.');
         }
 

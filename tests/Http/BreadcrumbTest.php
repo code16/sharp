@@ -8,13 +8,10 @@ use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
-    config()->set('sharp.display_breadcrumb', true);
+    sharpConfig()
+        ->displayBreadcrumb()
+        ->addEntity('person', PersonEntity::class);
     login();
-
-    config()->set(
-        'sharp.entities.person',
-        PersonEntity::class,
-    );
 });
 
 it('builds the breadcrumb for an entity list', function () {
@@ -32,7 +29,7 @@ it('builds the breadcrumb for a show page', function () {
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])
@@ -46,10 +43,7 @@ it('builds the breadcrumb for a show page', function () {
 });
 
 it('builds the breadcrumb for a single show page', function () {
-    config()->set(
-        'sharp.entities.single-person',
-        SinglePersonEntity::class,
-    );
+    sharpConfig()->addEntity('single-person', SinglePersonEntity::class);
 
     $this
         ->get(route('code16.sharp.single-show', 'single-person'))
@@ -65,7 +59,7 @@ it('builds the breadcrumb for a form', function () {
     $this
         ->get(
             route('code16.sharp.form.edit', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])
@@ -82,7 +76,7 @@ it('builds the breadcrumb for a form through a show page', function () {
     $this
         ->get(
             route('code16.sharp.form.edit', [
-                'uri' => 's-list/person/s-show/person/1',
+                'parentUri' => 's-list/person/s-show/person/1',
                 'person',
                 1,
             ])
@@ -103,7 +97,7 @@ it('uses labels defined for entities in the config', function () {
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])
@@ -132,7 +126,7 @@ it('uses custom labels on leaves if configured', function () {
     $this
         ->get(
             route('code16.sharp.show.show', [
-                'uri' => 's-list/person/',
+                'parentUri' => 's-list/person/',
                 'person',
                 1,
             ])

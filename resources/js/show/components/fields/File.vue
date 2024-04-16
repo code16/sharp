@@ -1,17 +1,16 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { ShowFileFieldData } from "@/types";
-    import { FieldProps } from "../types";
+    import { ShowFieldProps } from "../../types";
     import { computed } from "vue";
     import { getClassNameForExtension } from 'font-awesome-filetypes';
     import { filesizeLabel } from '@/utils/file';
     import FieldLayout from "../FieldLayout.vue";
     import { route } from "@/utils/url";
+    import { useParentShow } from "@/show/useParentShow";
 
-    const props = defineProps<FieldProps & {
-        value: ShowFileFieldData['value'],
-        field: ShowFileFieldData,
-    }>();
+    const props = defineProps<ShowFieldProps<ShowFileFieldData>>();
+    const show = useParentShow();
 
     const iconClass = computed(() => {
         const extension = (props.value?.name ?? '').split('.').pop();
@@ -68,8 +67,8 @@
                             <div class="text-muted">
                                 <i class="fa fas fa-download"></i>
                                 <a :href="route('code16.sharp.download.show', {
-                                        entityKey,
-                                        instanceId,
+                                        entityKey: show.entityKey,
+                                        instanceId: show.instanceId,
                                         disk: value?.disk,
                                         path: value?.path,
                                     })"

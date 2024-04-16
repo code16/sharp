@@ -4,28 +4,29 @@ namespace Code16\Sharp\View\Components;
 
 use Code16\Sharp\Form\Eloquent\Uploads\SharpUploadModel;
 use Code16\Sharp\Form\Eloquent\Uploads\Traits\UsesSharpUploadModel;
-use Code16\Sharp\View\Utils\ContentComponent;
-use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\Component;
 use Illuminate\View\View;
 
-class File extends ContentComponent
+class File extends Component
 {
     use UsesSharpUploadModel;
 
+    public array $file;
+    public ?string $name = null;
     public ?SharpUploadModel $fileModel = null;
-    public ?FilesystemAdapter $disk = null;
+    public ?Filesystem $disk = null;
     public bool $exists = false;
 
     public function __construct(
-        ?string $path = null,
-        ?string $disk = null,
-        public ?string $name = null,
+        string $file,
+        public ?string $legend = null
     ) {
-        if ($path) {
+        if ($this->file = json_decode(htmlspecialchars_decode($file), true)) {
             $this->fileModel = static::getUploadModelClass()::make([
-                'disk' => $disk,
-                'file_name' => $path,
+                'file_name' => $this->file['file_name'],
+                'disk' => $this->file['disk'] ?? null,
             ]);
             $this->disk = Storage::disk($this->fileModel->disk);
             $this->exists = $this->disk->exists($this->fileModel->file_name);

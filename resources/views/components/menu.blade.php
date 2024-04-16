@@ -14,7 +14,7 @@
     @endif
 >
     <template v-slot:title>
-        @if($icon = config('sharp.theme.logo_urls.menu'))
+        @if($icon = sharpConfig()->get('theme.logo_url'))
             <img src="{{ url($icon) }}" alt="{{ $title }}" width="150" class="w-auto h-auto mh-100 mw-100">
         @elseif(file_exists(public_path($icon = 'sharp-assets/menu-icon.png')))
             <img src="{{ asset($icon) }}?{{ filemtime(public_path($icon)) }}" alt="{{ $title }}" width="150" class="w-auto h-auto mh-100 mw-100">

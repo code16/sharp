@@ -1,139 +1,97 @@
-<template>
-    <NodeRenderer class="editor__node" :node="node">
-        <VueClip
-            :value="value"
-            :root="false"
-            :options="options"
-            :invalid="!!error"
-            persist-thumbnails
-            v-bind="fieldProps"
-            @thumbnail="handleThumbnailChanged"
-            @updated="handleUpdated"
-            @removed="handleRemoveClicked"
-            @success="handleSuccess"
-            @error="handleError"
-        />
-        <template v-if="error">
-            <div class="invalid-feedback d-block" style="font-size: .75rem">
-                {{ error }}
-            </div>
-        </template>
-    </NodeRenderer>
-</template>
-
-<script>
-    import VueClip from "../../../upload/VueClip.vue";
+<script setup lang="ts">
+    import { Upload as UploadExtension, UploadNodeAttributes } from "./Upload"
+    import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+    import { __ } from "@/utils/i18n";
     import NodeRenderer from "../../NodeRenderer.vue";
     import { showAlert } from "@/utils/dialogs";
-    import { getUploadOptions } from "../../../../../util/upload";
-    import { __ } from "@/utils/i18n";
+    import Upload from "@/form/components/fields/upload/Upload.vue";
+    import { FormUploadFieldData } from "@/types";
+    import { ExtensionNodeProps } from "@/form/components/fields/editor/types";
+    import { useParentEditor } from "@/form/components/fields/editor/useParentEditor";
 
-    export default {
-        components: {
-            NodeRenderer,
-            VueClip,
-        },
-        props: {
-            editor: Object,
-            node: Object,
-            selected: Object,
-            extension: Object,
-            getPos: Function,
-            updateAttributes: Function,
-            deleteNode: Function,
-        },
-        computed: {
-            value() {
-                const attrs = this.node.attrs;
-                if(attrs.file) {
-                    return {
-                        file: attrs.file,
-                    }
-                }
-                return {
-                    path: attrs.path,
-                    disk: attrs.disk,
-                    name: attrs.name,
-                    filters: attrs.filters,
-                    thumbnail: attrs.thumbnail,
-                    size: attrs.size,
-                    uploaded: attrs.uploaded,
-                }
-            },
-            error() {
-                if(this.node.attrs.notFound) {
-                    return __('sharp::form.editor.errors.unknown_file', {
-                        path: this.node.attrs.path ?? ''
-                    });
-                }
-            },
-            fieldProps() {
-                return this.extension.options.fieldProps;
-            },
-            options() {
-                return getUploadOptions({
-                    fileFilter: this.fieldProps.fileFilter,
-                    maxFileSize: this.fieldProps.maxFileSize,
-                });
-            },
-        },
-        methods: {
-            handleThumbnailChanged(thumbnail) {
-                this.updateAttributes({
-                    thumbnail,
-                });
-            },
-            handleRemoveClicked() {
-                this.deleteNode();
-                setTimeout(() => {
-                    this.editor.commands.focus();
-                }, 0);
-            },
-            handleError(message, file) {
-                this.deleteNode();
-                showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
-                    isError: true,
-                    title: __(`sharp::modals.error.title`),
-                });
-            },
-            handleUpdated(value) {
-                this.updateAttributes({
-                    filters: value.filters,
-                });
-                if(!this.node.attrs.file) {
-                    this.extension.options.onUpdate(value);
-                }
-            },
-            handleSuccess(value) {
-                this.updateAttributes({
-                    ...value,
-                    file: null,
-                    uploaded: true,
-                });
-                this.extension.options.onSuccess(value);
-            },
-            async init() {
-                if(this.node.attrs.file || this.node.attrs.notFound) {
-                    return;
-                }
+    const props = defineProps<ExtensionNodeProps<typeof UploadExtension, UploadNodeAttributes>>();
 
-                const data = await this.extension.options.registerFile(this.value);
-                if(data) {
-                    this.updateAttributes(data);
-                } else {
-                    this.updateAttributes({
-                        notFound: true,
-                    });
-                }
-            },
-        },
-        created() {
-            this.init();
-        },
-        beforeDestroy() {
-            if(!this.node.attrs.file) {
-                this.extension.options.onRemove(this.value);
+    const parentEditor = useParentEditor();
+    const uploadModal = useParentEditor().uploadModal;
+    const uploadManager = useParentEditor().uploadManager;
+    const uploadComponent = ref<InstanceType<typeof Upload>>();
+    const upload = computed(() => uploadManager.getUpload(props.node.attrs['data-key']));
+
+    function onThumbnailGenerated(preview: string) {
+        uploadManager.updateUpload(props.node.attrs['data-key'], {
+            file: {
+                ...upload.value.file,
+                thumbnail: preview,
             }
-        },
+        });
     }
+
+    function onUploadTransformed(value: FormUploadFieldData['value']) {
+        uploadManager.updateUpload(props.node.attrs['data-key'], {
+            file: value,
+        });
+    }
+
+    async function onUploadSuccess(value: FormUploadFieldData['value']) {
+        uploadManager.updateUpload(props.node.attrs['data-key'], {
+            file: value,
+        });
+    }
+
+    function onUploadError(message: string, file: File) {
+        props.deleteNode();
+        showAlert(`${message}<br>&gt;&nbsp;${file.name}`, {
+            isError: true,
+            title: __(`sharp::modals.error.title`),
+        });
+    }
+
+    function onRemove() {
+        props.deleteNode();
+        setTimeout(() => {
+            props.editor.commands.focus();
+        }, 0);
+    }
+
+    function onEdit(event: CustomEvent) {
+        if(parentEditor.props.field.uploads.fields.legend) {
+            event.preventDefault();
+            uploadModal.value.open(props.node.attrs['data-key']);
+        }
+    }
+
+    onMounted(() => {
+        uploadManager.restoreUpload(props.node.attrs['data-key']);
+    });
+
+    onUnmounted(() => {
+        uploadManager.removeUpload(props.node.attrs['data-key']);
+    });
 </script>
+
+<template>
+    <NodeRenderer class="editor__node" :node="node">
+        <div>
+            <div class="border rounded p-4">
+                <Upload
+                    :field="parentEditor.props.field.uploads.fields.file"
+                    :field-error-key="`${parentEditor.props.fieldErrorKey}-upload-${props.node.attrs['data-key']}`"
+                    :value="upload?.file"
+                    :root="false"
+                    @thumbnail="onThumbnailGenerated"
+                    @transform="onUploadTransformed"
+                    @error="onUploadError"
+                    @success="onUploadSuccess"
+                    @remove="onRemove"
+                    @edit="onEdit"
+                    ref="uploadComponent"
+                ></Upload>
+                <template v-if="upload.legend">
+                    <div class="text-sm mt-2">
+                        {{ upload.legend }}
+                    </div>
+                </template>
+            </div>
+        </div>
+    </NodeRenderer>
+</template>

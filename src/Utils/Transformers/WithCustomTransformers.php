@@ -4,6 +4,7 @@ namespace Code16\Sharp\Utils\Transformers;
 
 use Closure;
 use Code16\Sharp\EntityList\Commands\Command;
+use Code16\Sharp\Form\Fields\Editor\Uploads\FormEditorUploadForm;
 use Code16\Sharp\Form\Fields\Embeds\SharpFormEditorEmbed;
 use Code16\Sharp\Form\SharpForm;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
@@ -40,6 +41,7 @@ trait WithCustomTransformers
             $this instanceof SharpForm
             || $this instanceof Command
             || $this instanceof SharpFormEditorEmbed
+            || $this instanceof FormEditorUploadForm
         ) {
             // Form case: there's only one model and we must apply Formatters in the process
             return $this->applyFormatters(
@@ -49,9 +51,11 @@ trait WithCustomTransformers
 
         if ($this instanceof SharpShow) {
             // Show case: there's only one model
-            return $this->applyTransformers(
-                model: $models,
-                forceFullObject: false
+            return $this->applyFormatters(
+                $this->applyTransformers(
+                    model: $models,
+                    forceFullObject: false
+                )
             );
         }
 
