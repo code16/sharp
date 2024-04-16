@@ -13,19 +13,18 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->createSharpServiceProvider();
-//        $this->publishAssets();
+        $this->publishAssets();
         $this->initSharpMenu();
 
-        $this->components->info(
-            'Sharp has been installed! You can now generate your first sharp entity with the help of an artisan command. Use `artisan sharp:generator`'
-        );
+        $this->components->info('Sharp has been installed!');
+        $this->components->info('You can now generate your first Sharp Entity with [php artisan sharp:generator]');
 
         return Command::SUCCESS;
     }
 
     private function createSharpServiceProvider(): void
     {
-        Artisan::call('sharp:make:service-provider', [
+        Artisan::call('sharp:make:provider', [
             'name' => 'SharpServiceProvider',
         ]);
 
@@ -66,7 +65,7 @@ class InstallCommand extends Command
 
         $this->addSharpMenuToServiceProvider();
 
-        $this->components->twoColumnDetail('Menu', app_path('SharpMenu.php'));
+        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace() . '\\SharpMenu.php');
     }
 
     private function getSharpRootNamespace(): string
@@ -79,13 +78,13 @@ class InstallCommand extends Command
         $this->replaceFileContent(
             app_path('Providers/SharpServiceProvider.php'),
             'use Code16\Sharp\SharpAppServiceProvider;'.PHP_EOL,
-            'use Code16\Sharp\SharpAppServiceProvider;'.PHP_EOL.'use '.$this->getSharpRootNamespace().'\\SharpMenu::class'.PHP_EOL,
+            'use Code16\Sharp\SharpAppServiceProvider;'.PHP_EOL.'use '.$this->getSharpRootNamespace().'\\SharpMenu;'.PHP_EOL,
         );
 
         $this->replaceFileContent(
             app_path('Providers/SharpServiceProvider.php'),
             '->setName(\'My new project\');'.PHP_EOL,
-            '->setName(\'My new project\');'.PHP_EOL.'        $config->setMenu(SharpMenu::class);'.PHP_EOL
+            '->setName(\'My new project\')'.PHP_EOL.'            ->setSharpMenu(SharpMenu::class);'.PHP_EOL
         );
     }
 

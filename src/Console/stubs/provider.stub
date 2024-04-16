@@ -2,7 +2,6 @@
 
 namespace DummyNamespace;
 
-use App\Sharp\SharpMenu;
 use Code16\Sharp\Config\SharpConfigBuilder;
 use Code16\Sharp\SharpAppServiceProvider;
 
