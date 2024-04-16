@@ -24,6 +24,7 @@ use Code16\Sharp\Console\MediaMakeCommand;
 use Code16\Sharp\Console\MenuMakeCommand;
 use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
+use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
@@ -139,6 +140,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             CreateUploadsMigration::class,
             InstallCommand::class,
             GeneratorCommand::class,
+            ServiceProviderMakeCommand::class,
             EntityMakeCommand::class,
             EntityListMakeCommand::class,
             FormMakeCommand::class,
