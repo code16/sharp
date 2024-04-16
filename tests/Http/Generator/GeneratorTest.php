@@ -22,13 +22,13 @@ beforeEach(function () {
 
 it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
     $this->artisan('sharp:generator')
-        ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
-        ->expectsQuestion('What is the type of your entity?', 'Classic')
-        ->expectsQuestion('What is the name of your entity?', 'ClosedPeriod')
+        ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
+        ->expectsQuestion('What is the type of your Entity?', 'Regular')
+        ->expectsQuestion('What is the name of your Entity?', 'ClosedPeriod')
         ->expectsQuestion('What is the namespace of your models?', 'App/Models')
-        ->expectsQuestion('What is the label of your entity?', 'Fermetures')
-        ->expectsQuestion('What do you need with your entity?', 'List, form & show page')
-        ->expectsConfirmation('Do you need a policy?', 'yes')
+        ->expectsQuestion('What is the label of your Entity?', 'Fermetures')
+        ->expectsQuestion('What do you need with your Entity?', 'Entity List, Form & Show Page')
+        ->expectsConfirmation('Do you need a Policy?', 'yes')
         ->assertExitCode(0);
 
     // hot reload config/sharp.php that we just modified
@@ -105,11 +105,11 @@ it('can generate a new full sharp entity from console and we can create, display
 
 it('can generate a new sharp single entity from console', function () {
     $this->artisan('sharp:generator')
-        ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
-        ->expectsQuestion('What is the type of your entity?', 'Single')
-        ->expectsQuestion('What is the name of your entity?', 'Settings')
-        ->expectsQuestion('What is the label of your entity?', 'Configuration')
-        ->expectsConfirmation('Do you need a policy?', 'yes')
+        ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
+        ->expectsQuestion('What is the type of your Entity?', 'Single')
+        ->expectsQuestion('What is the name of your Entity?', 'Settings')
+        ->expectsQuestion('What is the label of your Entity?', 'Configuration')
+        ->expectsConfirmation('Do you need a Policy?', 'yes')
         ->assertExitCode(0);
 
     // hot reload config/sharp.php that we just modified
@@ -139,10 +139,10 @@ it('can generate a new sharp single entity from console', function () {
 
 it('can generate a new sharp dashboard from console', function () {
     $this->artisan('sharp:generator')
-        ->expectsQuestion('What do you need?', 'A complete entity (with list, form, etc)')
-        ->expectsQuestion('What is the type of your entity?', 'Dashboard')
-        ->expectsQuestion('What is the name of your dashboard?', 'Financial')
-        ->expectsConfirmation('Do you need a policy?', 'yes')
+        ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
+        ->expectsQuestion('What is the type of your Entity?', 'Dashboard')
+        ->expectsQuestion('What is the name of your Dashboard?', 'Financial')
+        ->expectsConfirmation('Do you need a Policy?', 'yes')
         ->assertExitCode(0);
 
     // hot reload config/sharp.php that we just modified

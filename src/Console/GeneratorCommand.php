@@ -24,25 +24,25 @@ class GeneratorCommand extends Command
     {
         $wizardType = select(
             label: 'What do you need?',
-            options: ['A complete entity (with list, form, dashboard, etc)', 'A command', 'A list filter', 'An entity state', 'A reorder handler'],
-            default: 'A complete entity (with list, form, dashboard, etc)',
+            options: ['A complete Entity (with Entity List, Form, Dashboard, etc)', 'A Command', 'A List Filter', 'An Entity State', 'A Reorder Handler'],
+            default: 'A complete Entity (with Entity List, Form, Dashboard, etc)',
         );
 
         switch ($wizardType) {
             default:
-            case 'A complete entity (with list, form, etc)':
+            case 'A complete Entity (with Entity List, Form, Dashboard, etc)':
                 $this->entityPrompt();
                 break;
-            case 'A command':
+            case 'A Command':
                 $this->commandPrompt();
                 break;
-            case 'A list filter':
+            case 'A List Filter':
                 $this->filterPrompt();
                 break;
-            case 'An entity state':
+            case 'An Entity State':
                 $this->entityStatePrompt();
                 break;
-            case 'A reorder handler':
+            case 'A Reorder Handler':
                 $this->reorderHandlerPrompt();
                 break;
         }
@@ -53,7 +53,7 @@ class GeneratorCommand extends Command
     public function entityStatePrompt(): void
     {
         $name = text(
-            label: 'What is the name of your entity state?',
+            label: 'What is the name of your Entity State?',
             placeholder: 'E.g. Shipping',
             required: true,
             hint: 'An "EntityState" suffix will be added automatically (E.g. ShippingEntityState.php).',
@@ -137,7 +137,7 @@ class GeneratorCommand extends Command
     public function filterPrompt(): void
     {
         $filterType = select(
-            label: 'What is the type of the new Filter?',
+            label: 'What is the type of your Entity Filter?',
             options: ['Select', 'Date range', 'Check'],
             default: 'Select',
         );
@@ -295,19 +295,19 @@ class GeneratorCommand extends Command
 
         switch ($entityType) {
             case 'Regular':
-                [$entityPath, $entityKey, $entityConfigKey] = $this->generateRegularEntity();
+                [$entityPath, $entityKey] = $this->generateRegularEntity();
                 break;
             case 'Single':
-                [$entityPath, $entityKey, $entityConfigKey] = $this->generateSingleEntity();
+                [$entityPath, $entityKey] = $this->generateSingleEntity();
                 break;
             case 'Dashboard':
-                [$entityPath, $entityKey, $entityConfigKey] = $this->generateDashboardEntity();
+                [$entityPath, $entityKey] = $this->generateDashboardEntity();
                 break;
         }
 
         $this->components->info('Your Entity and all related files have been created.');
 
-        $this->addNewEntityToSharpConfig($entityPath, $entityKey, $entityConfigKey);
+        $this->declareEntityInSharpConfiguration($entityPath, $entityKey);
 
         $this->components->info(
             sprintf(
@@ -363,7 +363,6 @@ class GeneratorCommand extends Command
         return [
             $this->getSharpRootNamespace().'\\Entities\\'.$name.'DashboardEntity',
             Str::snake($name),
-            'dashboards',
         ];
     }
 
@@ -465,7 +464,6 @@ class GeneratorCommand extends Command
         return [
             $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity',
             Str::snake($pluralName),
-            'entities',
         ];
     }
 
@@ -525,7 +523,6 @@ class GeneratorCommand extends Command
         return [
             $this->getSharpRootNamespace().'\\Entities\\'.$name.'Entity',
             Str::snake($name),
-            'entities',
         ];
     }
 
@@ -560,13 +557,14 @@ class GeneratorCommand extends Command
             ->toArray();
     }
 
-    /** @deprecated  */
-    private function addNewEntityToSharpConfig(string $entityPath, string $entityKey, string $entityConfigKey): void
+    private function declareEntityInSharpConfiguration(string $entityPath, string $entityKey): void
     {
+        $search = 'protected function configureSharp(SharpConfigBuilder $config): void'.PHP_EOL.'    {'.PHP_EOL.'        $config'.PHP_EOL;
+
         $this->replaceFileContent(
-            config_path('sharp.php'),
-            "'$entityConfigKey' => [".PHP_EOL,
-            "'$entityConfigKey' => [".PHP_EOL."        '$entityKey' => \\$entityPath::class,".PHP_EOL,
+            app_path('Providers/SharpServiceProvider.php'),
+            $search,
+            $search.'            ->addEntity(\''.$entityKey.'\', '.$entityPath.')'.PHP_EOL
         );
     }
 

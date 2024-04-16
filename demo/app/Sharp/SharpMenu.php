@@ -6,7 +6,7 @@ use Code16\Sharp\Utils\Menu\SharpMenu as BaseSharpMenu;
 use Code16\Sharp\Utils\Menu\SharpMenuItemSection;
 use Code16\Sharp\Utils\Menu\SharpMenuUserMenu;
 
-class MySharpMenu extends BaseSharpMenu
+class SharpMenu extends BaseSharpMenu
 {
     public function build(): self
     {
