@@ -3,7 +3,6 @@
 namespace Code16\Sharp\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 
 class InstallCommand extends Command
 {
@@ -24,7 +23,7 @@ class InstallCommand extends Command
 
     private function createSharpServiceProvider(): void
     {
-        Artisan::call('sharp:make:provider', [
+        $this->call('sharp:make:provider', [
             'name' => 'SharpServiceProvider',
         ]);
 
@@ -35,7 +34,7 @@ class InstallCommand extends Command
 
     private function publishAssets(): void
     {
-        Artisan::call('vendor:publish', [
+        $this->call('vendor:publish', [
             '--provider' => '"Code16\Sharp\SharpServiceProvider"',
             '--tag' => 'assets',
         ]);
@@ -61,7 +60,7 @@ class InstallCommand extends Command
 
     private function initSharpMenu(): void
     {
-        Artisan::call('sharp:make:menu', [
+        $this->call('sharp:make:menu', [
             'name' => 'SharpMenu',
         ]);
 

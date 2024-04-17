@@ -6,7 +6,6 @@ use Code16\Sharp\Utils\Links\LinkToDashboard;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Links\LinkToSingleShowPage;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -50,7 +49,7 @@ class GeneratorCommand extends Command
         return 0;
     }
 
-    public function entityStatePrompt(): void
+    protected function entityStatePrompt(): void
     {
         $name = text(
             label: 'What is the name of your Entity State?',
@@ -94,7 +93,7 @@ class GeneratorCommand extends Command
             }
         }
 
-        Artisan::call('sharp:make:entity-state', [
+        $this->call('sharp:make:entity-state', [
             'name' => $entityStatePath.'\\'.$name.'EntityState',
             ...($hasModel ? ['--model' => $model] : []),
         ]);
@@ -134,7 +133,7 @@ class GeneratorCommand extends Command
         $this->components->info('Your Entity State has been created.');
     }
 
-    public function filterPrompt(): void
+    protected function filterPrompt(): void
     {
         $filterType = select(
             label: 'What is the type of your Entity Filter?',
@@ -176,7 +175,7 @@ class GeneratorCommand extends Command
         );
         $filterPath = Str::plural($entityName).'\\Filters';
 
-        Artisan::call('sharp:make:entity-list-filter', [
+        $this->call('sharp:make:entity-list-filter', [
             'name' => $filterPath.'\\'.$name.'Filter',
             ...($isRequired ? ['--required' => ''] : []),
             ...($isMultiple ? ['--multiple' => ''] : []),
@@ -205,7 +204,7 @@ class GeneratorCommand extends Command
         }
     }
 
-    public function commandPrompt(): void
+    protected function commandPrompt(): void
     {
         $commandType = select(
             label: 'What is the type of the new Command?',
@@ -244,7 +243,7 @@ class GeneratorCommand extends Command
         $needsWizard = $needsWizard ?? false;
         $commandPath = Str::plural($entityName).'\\Commands';
 
-        Artisan::call(sprintf('sharp:make:%s-command', Str::lower($commandType)), [
+        $this->call(sprintf('sharp:make:%s-command', Str::lower($commandType)), [
             'name' => $commandPath.'\\'.$name.'Command',
             ...(! $needsWizard && $needsForm ? ['--form' => ''] : []),
             ...($needsWizard ? ['--wizard' => ''] : []),
@@ -285,7 +284,7 @@ class GeneratorCommand extends Command
         }
     }
 
-    public function entityPrompt(): void
+    protected function entityPrompt(): void
     {
         $entityType = select(
             label: 'What is the type of your Entity?',
@@ -293,36 +292,121 @@ class GeneratorCommand extends Command
             default: 'Regular',
         );
 
-        switch ($entityType) {
-            case 'Regular':
-                [$entityPath, $entityKey] = $this->generateRegularEntity();
-                break;
-            case 'Single':
-                [$entityPath, $entityKey] = $this->generateSingleEntity();
-                break;
-            case 'Dashboard':
-                [$entityPath, $entityKey] = $this->generateDashboardEntity();
-                break;
+        [$entityPath, $entityKey] = match($entityType) {
+            'Regular' => $this->generateRegularEntity(),
+            'Single' => $this->generateSingleEntity(),
+            'Dashboard' => $this->generateDashboardEntity(),
+        };
+
+        if (confirm(label: 'Do you want to automatically declare this Entity in the Sharp configuration?')) {
+            $provider = text(
+                label: 'What is the full name of your Sharp Service Provider?',
+                default: 'App\\Providers\\SharpServiceProvider',
+                required: true,
+            );
+            $reflector = new \ReflectionClass($provider);
+            $this->declareEntityInSharpConfiguration($reflector->getFileName(), $entityPath, $entityKey);
+
+            $this->components->info(
+                sprintf(
+                    'Your Entity and all related files have been created, and was successfully declared. You can visit: %s',
+                    match ($entityType) {
+                        'Regular' => LinkToEntityList::make($entityKey)->renderAsUrl(),
+                        'Single' => LinkToSingleShowPage::make($entityKey)->renderAsUrl(),
+                        'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
+                        default => 'unknown url',
+                    },
+                )
+            );
+        } else {
+            $this->components->info('Your Entity and all related files have been created.');
         }
-
-        $this->components->info('Your Entity and all related files have been created.');
-
-        $this->declareEntityInSharpConfiguration($entityPath, $entityKey);
-
-        $this->components->info(
-            sprintf(
-                'Your Entity has been successfully added to entities list in `sharp/config.php`. You can visit: %s',
-                match ($entityType) {
-                    'Classic' => LinkToEntityList::make($entityKey)->renderAsUrl(),
-                    'Single' => LinkToSingleShowPage::make($entityKey)->renderAsUrl(),
-                    'Dashboard' => LinkToDashboard::make($entityKey)->renderAsUrl(),
-                    default => 'unknown url',
-                },
-            )
-        );
     }
 
-    protected function generateDashboardEntity(): array
+    protected function reorderHandlerPrompt(): void
+    {
+        $entityName = search(
+            'Looking for the related Sharp Entity',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getSharpEntitiesList($value)
+                : []
+        );
+        $reorderPath = Str::plural($entityName).'\\ReorderHandlers';
+
+        $modelNamespace = text(
+            label: 'What is the namespace of your models?',
+            default: 'App\\Models',
+            required: true,
+        );
+
+        $modelName = search(
+            'Search for the related model',
+            fn (string $value) => strlen($value) > 0
+                ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
+                : []
+        );
+        $model = $modelNamespace.'\\'.$modelName;
+
+        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
+
+        if (! class_exists($listClass)) {
+            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
+        }
+
+        $isSimple = confirm(
+            label: 'Use the simple Eloquent implementation based on a reorder attribute?',
+        );
+
+        if ($isSimple) {
+            $reorderAttribute = text(
+                label: 'What is the name of your reorder attribute?',
+                default: 'order',
+                required: true,
+            );
+
+            if (class_exists($listClass)) {
+                $this->addNewSimpleEloquentReorderHandlerToList(
+                    $reorderAttribute,
+                    $modelName,
+                    $modelNamespace.'\\',
+                    $listClass,
+                );
+
+                $this->components->info(sprintf('The simple eloquent reorder handler has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
+            }
+
+            return;
+        }
+
+        $name = text(
+            label: 'What is the name of your reorder handler?',
+            placeholder: 'E.g. ProductVisual',
+            required: true,
+            hint: 'A "Reorder" suffix will be added automatically (E.g. ProductVisualReorder.php).',
+        );
+        $name = Str::ucfirst(Str::camel($name));
+
+        $this->call('sharp:make:reorder-handler', [
+            'name' => $reorderPath.'\\'.$name.'Reorder',
+            '--model' => $model,
+        ]);
+
+        $this->components->twoColumnDetail('Reorder handler', $this->getSharpRootNamespace().'\\'.$reorderPath.'\\'.$name.'Reorder.php');
+
+        $this->components->info('Your Reorder Handler has been created.');
+
+        if (class_exists($listClass)) {
+            $this->addNewReorderHandlerToList(
+                $name.'Reorder',
+                $this->getSharpRootNamespace().'\\'.$reorderPath.'\\',
+                $listClass,
+            );
+
+            $this->components->info(sprintf('The Reorder Handler has been successfully added to the related Entity List (%s).', $entityName.'EntityList'));
+        }
+    }
+
+    private function generateDashboardEntity(): array
     {
         $name = text(
             label: 'What is the name of your Dashboard?',
@@ -337,14 +421,14 @@ class GeneratorCommand extends Command
             default: false,
         );
 
-        Artisan::call('sharp:make:dashboard', [
+        $this->call('sharp:make:dashboard', [
             'name' => 'Dashboards\\'.$name.'Dashboard',
         ]);
 
         $this->components->twoColumnDetail('Dashboard', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'Dashboard.php');
 
         if ($needsPolicy) {
-            Artisan::call('sharp:make:policy', [
+            $this->call('sharp:make:policy', [
                 'name' => 'Dashboards\\'.$name.'DashboardPolicy',
                 '--entity-only' => '',
             ]);
@@ -352,7 +436,7 @@ class GeneratorCommand extends Command
             $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\Dashboards\\'.$name.'DashboardPolicy.php');
         }
 
-        Artisan::call('sharp:make:entity', [
+        $this->call('sharp:make:entity', [
             'name' => 'Entities\\'.$name.'DashboardEntity',
             '--dashboard' => '',
             ...($needsPolicy ? ['--policy' => ''] : []),
@@ -366,7 +450,7 @@ class GeneratorCommand extends Command
         ];
     }
 
-    protected function generateRegularEntity(): array
+    private function generateRegularEntity(): array
     {
         $name = text(
             label: 'What is the name of your Entity?',
@@ -377,27 +461,29 @@ class GeneratorCommand extends Command
         $name = Str::ucfirst(Str::camel($name));
         $pluralName = Str::plural($name);
 
-        $modelNamespace = text(
-            label: 'What is the namespace of your models?',
-            default: 'App\\Models',
-            required: true,
-        );
-
-        if (app()->runningUnitTests()) {
-            $model = 'Code16\\Sharp\\Tests\\Fixtures\\ClosedPeriod';
-        } else {
-            $model = search(
-                'Looking for the related model',
-                fn (string $value) => strlen($value) > 0
-                    ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
-                    : []
+        if (confirm('Do you want to attach this Entity to a specific Model?')) {
+            $modelNamespace = text(
+                label: 'What is the namespace of your models?',
+                default: 'App\\Models',
+                required: true,
             );
-            $model = $modelNamespace.'\\'.$model;
-        }
 
-        if (! class_exists($model)) {
-            $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
-            exit(1);
+            if (app()->runningUnitTests()) {
+                $model = 'Code16\\Sharp\\Tests\\Fixtures\\ClosedPeriod';
+            } else {
+                $model = search(
+                    'Looking for the related model',
+                    fn(string $value) => strlen($value) > 0
+                        ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
+                        : []
+                );
+                $model = $modelNamespace.'\\'.$model;
+            }
+
+            if (!class_exists($model)) {
+                $this->components->error(sprintf('Sorry the model class [%s] cannot be found', $model));
+                exit(1);
+            }
         }
 
         $label = text(
@@ -418,40 +504,46 @@ class GeneratorCommand extends Command
             default: false,
         );
 
-        Artisan::call('sharp:make:entity-list', [
-            'name' => $pluralName.'\\'.$name.'EntityList',
-            '--model' => $model,
-        ]);
+        $this->call(
+            'sharp:make:entity-list',
+            collect(['name' => $pluralName.'\\'.$name.'EntityList'])
+                ->when($model ?? null, fn($args) => $args->put('--model', $model))
+                ->toArray()
+        );
 
         $this->components->twoColumnDetail('Entity List', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'EntityList.php');
 
         if (Str::contains($type, 'form')) {
-            Artisan::call('sharp:make:form', [
-                'name' => $pluralName.'\\'.$name.'Form',
-                '--model' => $model,
-            ]);
+            $this->call(
+                'sharp:make:form',
+                collect(['name' => $pluralName.'\\'.$name.'Form'])
+                    ->when($model ?? null, fn($args) => $args->put('--model', $model))
+                    ->toArray()
+            );
 
             $this->components->twoColumnDetail('Form', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Form.php');
         }
 
         if (Str::contains($type, 'show')) {
-            Artisan::call('sharp:make:show-page', [
-                'name' => $pluralName.'\\'.$name.'Show',
-                '--model' => $model,
-            ]);
+            $this->call(
+                'sharp:make:show-page',
+                collect(['name' => $pluralName.'\\'.$name.'Show'])
+                    ->when($model ?? null, fn($args) => $args->put('--model', $model))
+                    ->toArray()
+            );
 
             $this->components->twoColumnDetail('Show Page', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Show.php');
         }
 
         if ($needsPolicy) {
-            Artisan::call('sharp:make:policy', [
+            $this->call('sharp:make:policy', [
                 'name' => $pluralName.'\\'.$name.'Policy',
             ]);
 
             $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Policy.php');
         }
 
-        Artisan::call('sharp:make:entity', [
+        $this->call('sharp:make:entity', [
             'name' => 'Entities\\'.$name.'Entity',
             '--label' => $label,
             ...(Str::contains($type, 'form') ? ['--form' => ''] : []),
@@ -489,14 +581,14 @@ class GeneratorCommand extends Command
             default: false,
         );
 
-        Artisan::call('sharp:make:form', [
+        $this->call('sharp:make:form', [
             'name' => $name.'\\'.$name.'SingleForm',
             '--single' => '',
         ]);
 
         $this->components->twoColumnDetail('Single form', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleForm.php');
 
-        Artisan::call('sharp:make:show-page', [
+        $this->call('sharp:make:show-page', [
             'name' => $name.'\\'.$name.'SingleShow',
             '--single' => '',
         ]);
@@ -504,14 +596,14 @@ class GeneratorCommand extends Command
         $this->components->twoColumnDetail('Single Show Page', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'SingleShow.php');
 
         if ($needsPolicy) {
-            Artisan::call('sharp:make:policy', [
+            $this->call('sharp:make:policy', [
                 'name' => $name.'\\'.$name.'Policy',
             ]);
 
             $this->components->twoColumnDetail('Policy', $this->getSharpRootNamespace().'\\'.$name.'\\'.$name.'Policy.php');
         }
 
-        Artisan::call('sharp:make:entity', [
+        $this->call('sharp:make:entity', [
             'name' => 'Entities\\'.$name.'Entity',
             '--label' => $label,
             '--single' => '',
@@ -557,14 +649,14 @@ class GeneratorCommand extends Command
             ->toArray();
     }
 
-    private function declareEntityInSharpConfiguration(string $entityPath, string $entityKey): void
+    private function declareEntityInSharpConfiguration(string $providerClass, string $entityPath, string $entityKey): void
     {
         $search = 'protected function configureSharp(SharpConfigBuilder $config): void'.PHP_EOL.'    {'.PHP_EOL.'        $config'.PHP_EOL;
 
         $this->replaceFileContent(
-            app_path('Providers/SharpServiceProvider.php'),
+            $providerClass,
             $search,
-            $search.'            ->addEntity(\''.$entityKey.'\', '.$entityPath.')'.PHP_EOL
+            $search.'            ->addEntity(\''.$entityKey.'\', \\'.$entityPath.'::class)'.PHP_EOL
         );
     }
 
@@ -653,89 +745,6 @@ class GeneratorCommand extends Command
             'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL,
             'buildListConfig(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this'.PHP_EOL.'            ->configureReorderable('.PHP_EOL.'                (new SimpleEloquentReorderHandler('.$modelClass.'::class))'.PHP_EOL."                    ->setOrderAttribute('".$reorderAttribute."')".PHP_EOL.'            )'.PHP_EOL,
         );
-    }
-
-    private function reorderHandlerPrompt(): void
-    {
-        $entityName = search(
-            'Looking for the related Sharp Entity',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getSharpEntitiesList($value)
-                : []
-        );
-        $reorderPath = Str::plural($entityName).'\\ReorderHandlers';
-
-        $modelNamespace = text(
-            label: 'What is the namespace of your models?',
-            default: 'App\\Models',
-            required: true,
-        );
-
-        $modelName = search(
-            'Search for the related model',
-            fn (string $value) => strlen($value) > 0
-                ? $this->getModelsList(base_path($this->namespaceToPath($modelNamespace)), $value)
-                : []
-        );
-        $model = $modelNamespace.'\\'.$modelName;
-
-        $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'EntityList';
-
-        if (! class_exists($listClass)) {
-            $listClass = $this->getSharpRootNamespace().'\\'.Str::plural($entityName).'\\'.$entityName.'List';
-        }
-
-        $isSimple = confirm(
-            label: 'Use the simple Eloquent implementation based on a reorder attribute?',
-        );
-
-        if ($isSimple) {
-            $reorderAttribute = text(
-                label: 'What is the name of your reorder attribute?',
-                default: 'order',
-                required: true,
-            );
-
-            if (class_exists($listClass)) {
-                $this->addNewSimpleEloquentReorderHandlerToList(
-                    $reorderAttribute,
-                    $modelName,
-                    $modelNamespace.'\\',
-                    $listClass,
-                );
-
-                $this->components->info(sprintf('The simple eloquent reorder handler has been successfully added to the related entity list (%s).', $entityName.'EntityList'));
-            }
-
-            return;
-        }
-
-        $name = text(
-            label: 'What is the name of your reorder handler?',
-            placeholder: 'E.g. ProductVisual',
-            required: true,
-            hint: 'A "Reorder" suffix will be added automatically (E.g. ProductVisualReorder.php).',
-        );
-        $name = Str::ucfirst(Str::camel($name));
-
-        Artisan::call('sharp:make:reorder-handler', [
-            'name' => $reorderPath.'\\'.$name.'Reorder',
-            '--model' => $model,
-        ]);
-
-        $this->components->twoColumnDetail('Reorder handler', $this->getSharpRootNamespace().'\\'.$reorderPath.'\\'.$name.'Reorder.php');
-
-        $this->components->info('Your Reorder Handler has been created.');
-
-        if (class_exists($listClass)) {
-            $this->addNewReorderHandlerToList(
-                $name.'Reorder',
-                $this->getSharpRootNamespace().'\\'.$reorderPath.'\\',
-                $listClass,
-            );
-
-            $this->components->info(sprintf('The Reorder Handler has been successfully added to the related Entity List (%s).', $entityName.'EntityList'));
-        }
     }
 
     private function replaceFileContent($targetFilePath, $search, $replace): void

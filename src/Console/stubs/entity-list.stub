@@ -44,6 +44,6 @@ class DummyClass extends SharpEntityList
     public function getListData(): array|Arrayable
     {
         return $this
-            ->transform(...)
+            ->transform([]);
     }
 }
