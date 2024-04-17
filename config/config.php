@@ -27,6 +27,11 @@ return [
         // 'my_entity' => \App\Sharp\Entities\MyEntity::class,
     ],
 
+    // Optional. Your dashboards list, as dashboardKey => \App\Sharp\Dashboards\SharpDashboard implementation
+    'dashboards' => [
+        // 'my_dashboard' => \App\Sharp\Dashboards\MyDashboard::class,
+    ],
+
     // Optional. Your global filters list, which will be displayed in the main menu.
     'global_filters' => [
         // \App\Sharp\Filters\MyGlobalFilter::class

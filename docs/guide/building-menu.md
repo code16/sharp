@@ -6,7 +6,7 @@ Sharp UI is organized with two menus: the main one is on a left sidebar, and the
 
 All links shares common things:
 
-- an icon (from [Font Awesome 5](https://fontawesome.com/icons/))
+- an icon (from [Font Awesome 5](https://fontawesome.com/icons/)) 
 - a label
 - and a URL
 

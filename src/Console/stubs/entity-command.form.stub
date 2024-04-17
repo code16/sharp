@@ -1,0 +1,40 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\EntityList\Commands\EntityCommand;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+
+class DummyClass extends EntityCommand
+{
+    public function label(): string
+    {
+        return 'My entity command';
+    }
+
+    public function buildCommandConfig(): void
+    {
+        $this
+            ->configureDescription('My description');
+    }
+
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make('myField')
+                    ->setLabel('My field')
+            );
+    }
+
+    public function execute(array $data = []): array
+    {
+        return $this->reload();
+    }
+
+    public function authorize(): bool
+    {
+        return true;
+    }
+}

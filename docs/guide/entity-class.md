@@ -8,6 +8,12 @@ An `entity` is simply a data structure which has a meaning in the application co
 
 The `entity class` is the place where you can declare the entity configuration: its Entity List, Form, Show Page...
 
+## Generator
+
+```bash
+php artisan sharp:make:entity <class_name> [--label,--dashboard,--show,--form,--policy,--single]
+```
+
 ## Write the class
 
 The class must extend `Code16\Sharp\Entities\SharpEntity`. The easiest way to declare your attached classes is to simply override a bunch of protected attributes: 

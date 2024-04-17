@@ -1,0 +1,17 @@
+<?php
+
+namespace DummyEntitiesNamespace;
+
+use DummyFullSingleFormClass;
+use DummyFullSingleShowClass;
+use DummyFullSinglePolicyClass;
+use Code16\Sharp\Utils\Entities\SharpEntity;
+
+class DummyClass extends SharpEntity
+{
+    protected bool $isSingle = true;
+    protected string $label = 'My dummy label';
+    protected ?string $show = DummySingleShowClass::class;
+    protected ?string $form = DummySingleFormClass::class;
+    protected ?string $policy = DummyPolicyClass::class;
+}

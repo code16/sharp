@@ -6,14 +6,18 @@ return [
     'display_sharp_version_in_title' => true,
     'display_breadcrumb' => true,
     'entities' => [
+        'z_z_zaaaas' => \App\Sharp\Entities\ZZZaaaaEntity::class,
         'posts' => \App\Sharp\Entities\PostEntity::class,
         'blocks' => \App\Sharp\Entities\PostBlockEntity::class,
         'categories' => \App\Sharp\Entities\CategoryEntity::class,
         'authors' => \App\Sharp\Entities\AuthorEntity::class,
         'profile' => \App\Sharp\Entities\ProfileEntity::class,
-        'dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
 
         'test' => \App\Sharp\Entities\TestEntity::class,
+    ],
+
+    'dashboards' => [
+        'dashboard' => \App\Sharp\Entities\DemoDashboardEntity::class,
     ],
 
     'global_filters' => fn () => auth()->id() === 1 ? [] : [\App\Sharp\DummyGlobalFilter::class],

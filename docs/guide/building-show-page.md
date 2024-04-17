@@ -11,7 +11,7 @@ Note that building a Show Page is really optional; but in some situations it cou
 ## Generator
 
 ```bash
-php artisan sharp:make:show-page <class_name> [--model=<model_name>]
+php artisan sharp:make:show-page <class_name> [--model=<model_name>,--single]
 ```
 
 ## Write the class

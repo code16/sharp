@@ -13,8 +13,12 @@ class EntityCommandMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return $this->option('with-form')
-            ? __DIR__.'/stubs/entity-command-with-form.stub'
+        if ($this->option('wizard') !== false) {
+            return __DIR__.'/stubs/entity-command.wizard.stub';
+        }
+
+        return $this->option('form') !== false
+            ? __DIR__.'/stubs/entity-command.form.stub'
             : __DIR__.'/stubs/entity-command.stub';
     }
 
@@ -26,7 +30,8 @@ class EntityCommandMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['with-form', 'f', InputOption::VALUE_NONE, 'Create a command with a form.'],
+            ['form', 'f', InputOption::VALUE_NONE, 'Create a command with a form.'],
+            ['wizard', 'wi', InputOption::VALUE_NONE, 'Create a command with a wizard.'],
         ];
     }
 }

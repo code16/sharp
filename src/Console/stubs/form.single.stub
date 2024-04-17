@@ -1,0 +1,50 @@
+<?php
+
+namespace DummyNamespace;
+
+use Code16\Sharp\Form\SharpSingleForm;
+use Code16\Sharp\Form\Layout\FormLayout;
+use Code16\Sharp\Form\Layout\FormLayoutColumn;
+use Code16\Sharp\Form\Fields\SharpFormTextField;
+use Code16\Sharp\Utils\Fields\FieldsContainer;
+use Code16\Sharp\Form\Eloquent\WithSharpFormEloquentUpdater;
+
+class DummyClass extends SharpSingleForm
+{
+    use WithSharpFormEloquentUpdater;
+
+    public function buildFormFields(FieldsContainer $formFields): void
+    {
+        $formFields
+            ->addField(
+                SharpFormTextField::make('my_field')
+                    ->setLabel('My field')
+            );
+    }
+
+    public function buildFormLayout(FormLayout $formLayout): void
+    {
+        $formLayout
+            ->addColumn(6, function (FormLayoutColumn $column) {
+                $column
+                    ->withSingleField('my_field');
+            });
+    }
+
+    public function findSingle(): array
+    {
+        return $this->transform([]);
+    }
+
+    protected function updateSingle(array $data)
+    {
+        //
+    }
+
+    public function rules(): array
+    {
+    	return [
+    		'my_field' => 'required',
+    	];
+    }
+}

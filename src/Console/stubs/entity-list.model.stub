@@ -3,45 +3,50 @@
 namespace DummyNamespace;
 
 use DummyFullModelClass;
+use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsLayout;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 
 class DummyClass extends SharpEntityList
 {
-    protected function buildListFields(EntityListFieldsContainer $fieldsContainer): void
+    protected function buildList(EntityListFieldsContainer $fields): void
     {
-        // $fieldsContainer->addField(EntityListField::make("myCol"))
+        $fields
+            ->addField(
+                EntityListField::make('my_field')
+                    ->setLabel('My field')
+                    ->setWidth(4)
+                    ->setWidthOnSmallScreens(6),
+            );
     }
-    
-    protected function buildListLayout(EntityListFieldsLayout $fieldsLayout): void
-    {
-        // $fieldsLayout->addColumn("myCol", 6);
-    }
-    
+
     public function buildListConfig(): void
     {
-        //
+        $this
+            ->configureDefaultSort('created_at', 'desc');
     }
-    
+
     protected function getInstanceCommands(): ?array
     {
-        return null;
+        return [];
     }
 
     protected function getEntityCommands(): ?array
     {
-        return null;
+        return [];
     }
 
     protected function getFilters(): array
     {
-        return []; 
+        return [];
     }
-    
+
     public function getListData(): array|Arrayable
     {
-        return $this->transform(DummyModelClass::all());
+        return $this
+            ->transform(
+                DummyModelClass::paginate(40)
+            );
     }
 }
