@@ -5,6 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
+    login();
+});
+
+it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
     if(file_exists(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'))) {
         unlink(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'));
     }
@@ -15,12 +19,8 @@ beforeEach(function () {
         $table->timestamps();
     });
 
-    login();
-});
-
-it('can generate a new full sharp entity from console and we can create, display, update and delete an item', function () {
     $this->artisan('sharp:generator')
-        ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
+        ->expectsQuestion('What do you need?', 'A new Entity')
         ->expectsQuestion('What is the type of your Entity?', 'Regular')
         ->expectsQuestion('What is the name of your Entity?', 'ClosedPeriod')
         ->expectsQuestion('Do you want to attach this Entity to a specific Model?', 'yes')
@@ -33,7 +33,7 @@ it('can generate a new full sharp entity from console and we can create, display
 
     // Manually add this new Entity to the Sharp config
     app(\Code16\Sharp\Config\SharpConfigBuilder::class)
-        ->addEntity('closed_periods', \App\Sharp\Entities\ClosedPeriodEntity::class);
+        ->addEntity('closed_periods', '\App\Sharp\Entities\ClosedPeriodEntity');
 
     $this
         ->get(route('code16.sharp.list', ['entityKey' => 'closed_periods']))
@@ -105,54 +105,58 @@ it('can generate a new full sharp entity from console and we can create, display
 
 it('can generate a new sharp single entity from console', function () {
     $this->artisan('sharp:generator')
-        ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
+        ->expectsQuestion('What do you need?', 'A new Entity')
         ->expectsQuestion('What is the type of your Entity?', 'Single')
         ->expectsQuestion('What is the name of your Entity?', 'Settings')
         ->expectsQuestion('What is the label of your Entity?', 'Configuration')
         ->expectsConfirmation('Do you need a Policy?', 'yes')
+        ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    // hot reload config/sharp.php that we just modified
-    $this->resolveApplicationConfiguration(app());
-    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+    // Manually add this new Entity to the Sharp config
+    app(\Code16\Sharp\Config\SharpConfigBuilder::class)
+        ->addEntity('settings', '\App\Sharp\Entities\SettingsEntity');
 
-    $this->get(route('code16.sharp.single-show', [
-        'uri' => 's-show/settings',
-        'entityKey' => 'settings',
-    ]))
+    $this->get(
+        route('code16.sharp.single-show', [
+            'entityKey' => 'settings',
+        ]))
         ->assertOk();
 
-    $this->get(route('code16.sharp.form.create', [
-        'uri' => 's-show/settings',
-        'entityKey' => 'settings',
-    ]))
+    $this
+        ->get(route('code16.sharp.form.create', [
+            'parentUri' => 's-show/settings',
+            'entityKey' => 'settings',
+        ]))
         ->assertOk();
 
-    $this->post(route('code16.sharp.form.store', [
-        'uri' => 's-show/settings',
-        'entityKey' => 'settings',
-    ]), [
-        'my_field' => 'Arnaud',
-    ])
+    $this->post(
+        route('code16.sharp.form.store', [
+            'parentUri' => 's-show/settings',
+            'entityKey' => 'settings',
+        ]), [
+            'my_field' => 'Arnaud',
+        ])
         ->assertStatus(302);
 });
 
 it('can generate a new sharp dashboard from console', function () {
     $this->artisan('sharp:generator')
-        ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
+        ->expectsQuestion('What do you need?', 'A new Entity')
         ->expectsQuestion('What is the type of your Entity?', 'Dashboard')
         ->expectsQuestion('What is the name of your Dashboard?', 'Financial')
         ->expectsConfirmation('Do you need a Policy?', 'yes')
+        ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    // hot reload config/sharp.php that we just modified
-    $this->resolveApplicationConfiguration(app());
-    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+    // Manually add this new Entity to the Sharp config
+    app(\Code16\Sharp\Config\SharpConfigBuilder::class)
+        ->addEntity('financial', '\App\Sharp\Entities\FinancialDashboardEntity');
 
-    $this->get(route('code16.sharp.dashboard', [
-        'uri' => 's-dashboard/financial',
-        'dashboardKey' => 'financial',
-    ]))
+    $this->get(
+        route('code16.sharp.dashboard', [
+            'dashboardKey' => 'financial',
+        ]))
         ->assertOk()
         ->assertSee('My section title')
         ->assertSee('1234');

@@ -23,13 +23,13 @@ class GeneratorCommand extends Command
     {
         $wizardType = select(
             label: 'What do you need?',
-            options: ['A complete Entity (with Entity List, Form, Dashboard, etc)', 'A Command', 'A List Filter', 'An Entity State', 'A Reorder Handler'],
-            default: 'A complete Entity (with Entity List, Form, Dashboard, etc)',
+            options: ['A new Entity', 'A Command', 'A List Filter', 'An Entity State', 'A Reorder Handler'],
+            default: 'A new Entity',
         );
 
         switch ($wizardType) {
             default:
-            case 'A complete Entity (with Entity List, Form, Dashboard, etc)':
+            case 'A new Entity':
                 $this->entityPrompt();
                 break;
             case 'A Command':
