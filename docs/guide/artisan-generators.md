@@ -10,7 +10,7 @@ php artisan sharp:generator
 php artisan sharp:make:entity <class_name> [--label,--dashboard,--show,--form,--policy,--single]
 
 # Generate the Menu class
-php artisan sharp:make:menu
+php artisan sharp:make:menu <class_name>
 
 # Generate the SharpServiceProvider class
 php artisan sharp:make:provider <class_name>

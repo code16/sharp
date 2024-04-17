@@ -1,12 +1,13 @@
-import type { DefaultTheme } from "vitepress";
+import type {DefaultTheme} from "vitepress";
 
 export function sidebar(): DefaultTheme.SidebarItem[] {
     return [
         {
             text: 'Introduction',
             items: [
-                { text: 'Getting started', link: '/guide/index.md' },
-                { text: 'The entity class', link: '/guide/entity-class.md' }
+                { text: 'Getting started and installation', link: '/guide/index.md' },
+                { text: 'The entity class', link: '/guide/entity-class.md' },
+                { text: 'The Menu', link: '/guide/building-menu.md' }
             ]
         },
         {
@@ -90,8 +91,7 @@ export function sidebar(): DefaultTheme.SidebarItem[] {
             text: 'Generalities',
             collapsed: true,
             items: [
-                { text: 'Building the menu', link: '/guide/building-menu.md' },
-                { text: "Sharp's breadcrumb", link: '/guide/sharp-breadcrumb.md' },
+                { text: 'Sharp’s breadcrumb', link: '/guide/sharp-breadcrumb.md' },
                 { text: 'Implement global search', link: '/guide/global-search.md' },
                 { text: 'How to transform data', link: '/guide/how-to-transform-data.md' },
                 { text: 'Create links to an entity', link: '/guide/link-to.md' },

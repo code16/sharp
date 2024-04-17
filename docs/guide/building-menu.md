@@ -1,18 +1,20 @@
 # Building the menu
 
-Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
+The Sharp UI is organized with two menus: the main one is on a left sidebar, and the user menu is a dropdown located in the top right corner.
 
 ![](./img/menu-v8.png)
 
-All links shares common things:
-
-- an icon (from [Font Awesome 5](https://fontawesome.com/icons/)) 
-- a label
-- and a URL
+All links shares common things: an icon, a label and an URL.
 
 Links can be grouped in categories, like "Blog" in this screenshot.
 
 ## Create a SharpMenu class
+
+### Generator
+
+```bash
+php artisan sharp:make:menu <class_name>
+```
 
 ### Write and declare the class
 
@@ -28,7 +30,7 @@ class MySharpMenu extends Code16\Sharp\Utils\Menu\SharpMenu
 }
 ```
 
-And should be declared:
+And should be declared in your SharpServiceProvider:
 
 ```php
 class SharpServiceProvider extends SharpAppServiceProvider
