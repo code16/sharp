@@ -9,7 +9,7 @@ Forms as used to create or update instances.
 ## Generator
 
 ```bash
-php artisan sharp:make:form <class_name> [--model=<model_name>]
+php artisan sharp:make:form <class_name> [--model=<model_name>,--single]
 ```
 
 ## Write the class

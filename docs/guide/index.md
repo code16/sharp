@@ -94,6 +94,10 @@ Almost each one is optional, in fact: we could skip the `show` and go straight t
 
 We'll get into all those classes in this guide. The important thing to notice is that Sharp provides base classes to handle all the wiring (and more), but as we'll see, the applicative code is totally up to you.
 
+::: tip
+Use the artisan command `php artisan sharp:make:entity` to generate a new entity with all the required classes, or the global one (prompt based) `php artisan sharp:generator`.
+:::
+
 ## Access to Sharp
 
 Once installed, Sharp is accessible via the url `/sharp`, by default. If you wish to change this default value, you'll need to configure a custom segment path:

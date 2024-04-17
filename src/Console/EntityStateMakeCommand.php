@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
-class StateMakeCommand extends GeneratorCommand
+class EntityStateMakeCommand extends GeneratorCommand
 {
     protected $name = 'sharp:make:entity-state';
     protected $description = 'Create a new Entity State class';

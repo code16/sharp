@@ -8,6 +8,14 @@ A Wizard Command can not be configured as bulk (meaning: with instance selection
 
 ![](./img/wizard-command.gif)
 
+## Generator
+
+```bash
+php artisan sharp:make:entity-command <class_name> --wizard [--model=<model_name>]
+php artisan sharp:make:instance-command <class_name> --wizard [--model=<model_name>]
+```
+
+
 ## Write the Wizard Command class
 
 The class must extend either: 

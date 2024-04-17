@@ -16,6 +16,7 @@ use Code16\Sharp\Console\EntityCommandMakeCommand;
 use Code16\Sharp\Console\EntityListFilterMakeCommand;
 use Code16\Sharp\Console\EntityListMakeCommand;
 use Code16\Sharp\Console\EntityMakeCommand;
+use Code16\Sharp\Console\EntityStateMakeCommand;
 use Code16\Sharp\Console\FormMakeCommand;
 use Code16\Sharp\Console\GeneratorCommand;
 use Code16\Sharp\Console\InstallCommand;
@@ -26,7 +27,6 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
-use Code16\Sharp\Console\StateMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
@@ -145,7 +145,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             EntityListMakeCommand::class,
             FormMakeCommand::class,
             ShowPageMakeCommand::class,
-            StateMakeCommand::class,
+            EntityStateMakeCommand::class,
             MediaMakeCommand::class,
             EntityCommandMakeCommand::class,
             InstanceCommandMakeCommand::class,

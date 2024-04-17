@@ -15,11 +15,6 @@ class ServiceProviderMakeCommand extends GeneratorCommand
         return __DIR__.'/stubs/provider.stub';
     }
 
-//    public static function getDefaultName(): ?string
-//    {
-//        return 'SharpServiceProvider';
-//    }
-
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Providers';
