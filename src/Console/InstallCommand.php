@@ -3,47 +3,38 @@
 namespace Code16\Sharp\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
-
-use function Laravel\Prompts\confirm;
 
 class InstallCommand extends Command
 {
     protected $name = 'sharp:install';
-    protected $description = 'An onboarding that helps you start with your sharp setup';
+    protected $description = 'Sharp onboarding command';
 
     public function handle()
     {
-        $this->components->warn('By default, Sharp will be accessible to all users that can login with their email and password.');
-
-        $shouldAddDefaultGate = confirm(
-            label: 'Should add a default gate in AppServiceProvider that you will customize to restrict Sharp access only to specific users (admins, etc) ?',
-        );
-
-        $this->publishConfig();
+        $this->createSharpServiceProvider();
         $this->publishAssets();
         $this->initSharpMenu();
-        if ($shouldAddDefaultGate) {
-            $this->addDefaultGate();
-        }
-        $this->components->info('Sharp has been installed! You can now generate your first sharp entity with the help of an artisan command. Use `artisan sharp:generator`');
+
+        $this->components->info('Sharp has been installed!');
+        $this->components->info('You can now generate your first Sharp Entity with [php artisan sharp:generator]');
 
         return Command::SUCCESS;
     }
 
-    private function publishConfig()
+    private function createSharpServiceProvider(): void
     {
-        Artisan::call('vendor:publish', [
-            '--provider' => 'Code16\Sharp\SharpServiceProvider',
-            '--tag' => 'config',
+        $this->call('sharp:make:provider', [
+            'name' => 'SharpServiceProvider',
         ]);
 
-        $this->components->twoColumnDetail('Config', 'config/sharp.php');
+        $this->registerSharpProvider();
+
+        $this->components->twoColumnDetail('Service provider', app_path('Providers/SharpServiceProvider.php'));
     }
 
-    private function publishAssets()
+    private function publishAssets(): void
     {
-        Artisan::call('vendor:publish', [
+        $this->call('vendor:publish', [
             '--provider' => '"Code16\Sharp\SharpServiceProvider"',
             '--tag' => 'assets',
         ]);
@@ -67,62 +58,58 @@ class InstallCommand extends Command
         $this->components->twoColumnDetail('Ignore assets in git', '.gitignore');
     }
 
-    private function replaceFileContent($targetFilePath, $search, $replace)
+    private function initSharpMenu(): void
     {
-        $targetContent = file_get_contents($targetFilePath);
-
-        file_put_contents($targetFilePath, str_replace(
-            $search,
-            $replace,
-            $targetContent
-        ));
-    }
-
-    private function initSharpMenu()
-    {
-        Artisan::call('sharp:make:menu', [
+        $this->call('sharp:make:menu', [
             'name' => 'SharpMenu',
         ]);
 
-        $this->addMenuToSharpConfig();
+        $this->addSharpMenuToServiceProvider();
 
-        $this->components->twoColumnDetail('Menu', app_path('SharpMenu.php'));
+        $this->components->twoColumnDetail('Menu', $this->getSharpRootNamespace() . '\\SharpMenu.php');
     }
 
-    private function getSharpRootNamespace()
+    private function getSharpRootNamespace(): string
     {
         return $this->laravel->getNamespace().'Sharp';
     }
 
-    private function addMenuToSharpConfig()
+    private function addSharpMenuToServiceProvider(): void
     {
         $this->replaceFileContent(
-            config_path('sharp.php'),
-            "'menu' => null, //\\App\\Sharp\\SharpMenu::class",
-            "'menu' => ".$this->getSharpRootNamespace().'\\SharpMenu::class,',
-        );
-    }
-
-    private function addDefaultGate()
-    {
-        $this->addSharpGateToAppServiceProvider();
-
-        $this->components->twoColumnDetail('Defaut gate', app_path('Providers/AppServiceProvider.php'));
-    }
-
-    private function addSharpGateToAppServiceProvider()
-    {
-
-        $this->replaceFileContent(
-            app_path('Providers/AppServiceProvider.php'),
-            "Illuminate\Support\ServiceProvider;".PHP_EOL,
-            "Illuminate\Support\ServiceProvider;".PHP_EOL."use Illuminate\Support\Facades\Gate;".PHP_EOL,
+            app_path('Providers/SharpServiceProvider.php'),
+            'use Code16\Sharp\SharpAppServiceProvider;'.PHP_EOL,
+            'use Code16\Sharp\SharpAppServiceProvider;'.PHP_EOL.'use '.$this->getSharpRootNamespace().'\\SharpMenu;'.PHP_EOL,
         );
 
         $this->replaceFileContent(
+            app_path('Providers/SharpServiceProvider.php'),
+            '->setName(\'My new project\');'.PHP_EOL,
+            '->setName(\'My new project\')'.PHP_EOL.'            ->setSharpMenu(SharpMenu::class);'.PHP_EOL
+        );
+    }
+
+    private function replaceFileContent(string $targetFilePath, string $search, string $replace): void
+    {
+        if (!file_exists($targetFilePath)) {
+            $this->error("File not found: [$targetFilePath]");
+            return;
+        }
+
+        $targetContent = file_get_contents($targetFilePath);
+
+        file_put_contents(
+            $targetFilePath,
+            str_replace($search, $replace, $targetContent)
+        );
+    }
+
+    private function registerSharpProvider(): void
+    {
+        $this->replaceFileContent(
             app_path('Providers/AppServiceProvider.php'),
-            "boot()".PHP_EOL."    {".PHP_EOL,
-            "boot()".PHP_EOL."    {".PHP_EOL."        Gate::define('viewSharp', function(\$user) {".PHP_EOL."            return true;".PHP_EOL."        });".PHP_EOL,
+            'public function boot(): void'.PHP_EOL.'    {'.PHP_EOL,
+            'public function boot(): void'.PHP_EOL.'    {'.PHP_EOL.'        $this->app->register(SharpServiceProvider::class);'.PHP_EOL,
         );
     }
 }
