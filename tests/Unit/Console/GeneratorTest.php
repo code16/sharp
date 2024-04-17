@@ -2,20 +2,18 @@
 
 use Code16\Sharp\Tests\Fixtures\ClosedPeriod;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
-    Artisan::call('vendor:publish', [
-        '--provider' => 'Code16\Sharp\SharpServiceProvider',
-        '--tag' => 'config',
-        '--force' => true,
-    ]);
+    if(file_exists(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'))) {
+        unlink(base_path('app/Sharp/Entities/ClosedPeriodEntity.php'));
+    }
 
-    Artisan::call('vendor:publish', [
-        '--provider' => 'Code16\Sharp\SharpServiceProvider',
-        '--tag' => 'assets',
-    ]);
+    Schema::create('closed_periods', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('my_field');
+        $table->timestamps();
+    });
 
     login();
 });
@@ -25,38 +23,36 @@ it('can generate a new full sharp entity from console and we can create, display
         ->expectsQuestion('What do you need?', 'A complete Entity (with Entity List, Form, Dashboard, etc)')
         ->expectsQuestion('What is the type of your Entity?', 'Regular')
         ->expectsQuestion('What is the name of your Entity?', 'ClosedPeriod')
+        ->expectsQuestion('Do you want to attach this Entity to a specific Model?', 'yes')
         ->expectsQuestion('What is the namespace of your models?', 'App/Models')
         ->expectsQuestion('What is the label of your Entity?', 'Fermetures')
         ->expectsQuestion('What do you need with your Entity?', 'Entity List, Form & Show Page')
         ->expectsConfirmation('Do you need a Policy?', 'yes')
+        ->expectsConfirmation('Do you want to automatically declare this Entity in the Sharp configuration?', 'no')
         ->assertExitCode(0);
 
-    // hot reload config/sharp.php that we just modified
-    $this->refreshApplication();
-    Schema::create('closed_periods', function (Blueprint $table) {
-        $table->increments('id');
-        $table->string('my_field');
-        $table->timestamps();
-    });
-    config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
-    $this->withoutVite();
-    login();
+    // Manually add this new Entity to the Sharp config
+    app(\Code16\Sharp\Config\SharpConfigBuilder::class)
+        ->addEntity('closed_periods', \App\Sharp\Entities\ClosedPeriodEntity::class);
 
-    $this->get(route('code16.sharp.list', ['closed_periods']))
+    $this
+        ->get(route('code16.sharp.list', ['entityKey' => 'closed_periods']))
         ->assertOk();
 
-    $this->get(route('code16.sharp.form.create', [
-        'uri' => 's-list/closed_periods',
-        'entityKey' => 'closed_periods',
-    ]))
+    $this
+        ->get(route('code16.sharp.form.create', [
+            'parentUri' => 's-list/closed_periods',
+            'entityKey' => 'closed_periods',
+        ]))
         ->assertOk();
 
-    $this->post(route('code16.sharp.form.store', [
-        'uri' => 's-list/closed_periods',
-        'entityKey' => 'closed_periods',
-    ]), [
-        'my_field' => 'Arnaud',
-    ])
+    $this
+        ->post(route('code16.sharp.form.store', [
+            'parentUri' => 's-list/closed_periods',
+            'entityKey' => 'closed_periods',
+        ]), [
+            'my_field' => 'Arnaud',
+        ])
         ->assertStatus(302);
 
     $this->assertDatabaseHas('closed_periods', ['my_field' => 'Arnaud']);
@@ -67,37 +63,41 @@ it('can generate a new full sharp entity from console and we can create, display
 
     $closedPeriod = ClosedPeriod::first();
 
-    $this->get(route('code16.sharp.show.show', [
-        'uri' => 's-list/closed_periods',
-        'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id,
-    ]))
+    $this
+        ->get(route('code16.sharp.show.show', [
+            'parentUri' => 's-list/closed_periods',
+            'entityKey' => 'closed_periods',
+            'instanceId' => $closedPeriod->id,
+        ]))
         ->assertOk()
         ->assertSee('Arnaud');
 
-    $this->get(route('code16.sharp.form.edit', [
-        'uri' => 's-list/closed_periods',
-        'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id,
-    ]))
+    $this
+        ->get(route('code16.sharp.form.edit', [
+            'parentUri' => 's-list/closed_periods',
+            'entityKey' => 'closed_periods',
+            'instanceId' => $closedPeriod->id,
+        ]))
         ->assertOk();
 
-    $this->post(route('code16.sharp.form.update', [
-        'uri' => 's-list/closed_periods',
-        'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id,
-    ]), [
-        'my_field' => 'Benoit',
-    ])
+    $this
+        ->post(route('code16.sharp.form.update', [
+            'parentUri' => 's-list/closed_periods',
+            'entityKey' => 'closed_periods',
+            'instanceId' => $closedPeriod->id,
+        ]), [
+            'my_field' => 'Benoit',
+        ])
         ->assertStatus(302);
 
     $this->assertDatabaseHas('closed_periods', ['my_field' => 'Benoit']);
 
-    $this->delete(route('code16.sharp.show.delete', [
-        'uri' => 's-list/closed_periods',
-        'entityKey' => 'closed_periods',
-        'instanceId' => $closedPeriod->id,
-    ]))
+    $this
+        ->delete(route('code16.sharp.show.delete', [
+            'parentUri' => 's-list/closed_periods',
+            'entityKey' => 'closed_periods',
+            'instanceId' => $closedPeriod->id,
+        ]))
         ->assertStatus(302);
 
     $this->assertDatabaseMissing('closed_periods', ['id' => $closedPeriod->id]);

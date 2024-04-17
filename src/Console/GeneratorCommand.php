@@ -513,7 +513,7 @@ class GeneratorCommand extends Command
 
         $this->components->twoColumnDetail('Entity List', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'EntityList.php');
 
-        if (Str::contains($type, 'form')) {
+        if (Str::contains($type, 'Form')) {
             $this->call(
                 'sharp:make:form',
                 collect(['name' => $pluralName.'\\'.$name.'Form'])
@@ -524,7 +524,7 @@ class GeneratorCommand extends Command
             $this->components->twoColumnDetail('Form', $this->getSharpRootNamespace().'\\'.$pluralName.'\\'.$name.'Form.php');
         }
 
-        if (Str::contains($type, 'show')) {
+        if (Str::contains($type, 'Show Page')) {
             $this->call(
                 'sharp:make:show-page',
                 collect(['name' => $pluralName.'\\'.$name.'Show'])
@@ -546,8 +546,8 @@ class GeneratorCommand extends Command
         $this->call('sharp:make:entity', [
             'name' => 'Entities\\'.$name.'Entity',
             '--label' => $label,
-            ...(Str::contains($type, 'form') ? ['--form' => ''] : []),
-            ...(Str::contains($type, 'show') ? ['--show' => ''] : []),
+            ...(Str::contains($type, 'Form') ? ['--form' => ''] : []),
+            ...(Str::contains($type, 'Show') ? ['--show' => ''] : []),
             ...($needsPolicy ? ['--policy' => ''] : []),
         ]);
 

@@ -91,6 +91,11 @@ class InstallCommand extends Command
 
     private function replaceFileContent(string $targetFilePath, string $search, string $replace): void
     {
+        if (!file_exists($targetFilePath)) {
+            $this->error("File not found: [$targetFilePath]");
+            return;
+        }
+
         $targetContent = file_get_contents($targetFilePath);
 
         file_put_contents(
