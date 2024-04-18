@@ -58,7 +58,7 @@ abstract class SharpEntityList
         $this->checkListIsBuilt();
 
         return $this->fieldsContainer
-            ->getFields()
+            ->getFields(shouldHaveStateField: !!$this->entityStateAttribute)
             ->toArray();
     }
 

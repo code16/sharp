@@ -46,8 +46,14 @@ class EntityListFieldsContainer
         return $this;
     }
 
-    final public function getFields(): Collection
+    final public function getFields(bool $shouldHaveStateField = false): Collection
     {
+        if($shouldHaveStateField
+            && !collect($this->fields)->whereInstanceOf(EntityListStateField::class)->first()
+        ) {
+            $this->addStateField();
+        }
+        
         return collect($this->fields)
             ->map(fn (IsEntityListField $field) => $field->getFieldProperties());
     }
