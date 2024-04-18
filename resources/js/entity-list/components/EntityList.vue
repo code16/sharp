@@ -414,32 +414,30 @@
                                                 </TableCell>
                                             </template>
                                             <template v-for="(field, fieldIndex) in entityList.fields">
-                                                <template v-if="field.key === '@state'">
-                                                    <template v-if="entityList.config.state && showEntityState">
-                                                        <TableCell class="relative">
-                                                            <DropdownMenu>
-                                                                <DropdownMenuTrigger>
-                                                                    <Button variant="ghost" size="sm">
-                                                                        <Badge variant="outline">
-                                                                            <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
-                                                                            {{ entityList.instanceStateValue(item)?.label }}
-                                                                        </Badge>
-                                                                    </Button>
-                                                                </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="start" :align-offset="-16">
-                                                                    <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
-                                                                        <DropdownMenuCheckboxItem
-                                                                            :checked="stateValue.value == entityList.instanceState(item)"
-                                                                            @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
-                                                                        >
-                                                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
-                                                                            <span class="truncate">{{ stateValue.label }}</span>
-                                                                        </DropdownMenuCheckboxItem>
-                                                                    </template>
-                                                                </DropdownMenuContent>
-                                                            </DropdownMenu>
-                                                        </TableCell>
-                                                    </template>
+                                                <template v-if="field.key === '@state' && entityList.config.state && showEntityState">
+                                                    <TableCell>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger as-child>
+                                                                <Button class="relative" variant="ghost" size="sm">
+                                                                    <Badge variant="outline">
+                                                                        <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
+                                                                        {{ entityList.instanceStateValue(item)?.label }}
+                                                                    </Badge>
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="start" :align-offset="-16">
+                                                                <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
+                                                                    <DropdownMenuCheckboxItem
+                                                                        :checked="stateValue.value == entityList.instanceState(item)"
+                                                                        @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                                    >
+                                                                        <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                        <span class="truncate">{{ stateValue.label }}</span>
+                                                                    </DropdownMenuCheckboxItem>
+                                                                </template>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
                                                 </template>
                                                 <template v-else>
                                                     <TableCell>
