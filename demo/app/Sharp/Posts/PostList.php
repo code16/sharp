@@ -35,8 +35,9 @@ class PostList extends SharpEntityList
                 EntityListField::make('title')
                     ->setLabel('Title')
                     ->setWidth(4)
-                    ->setWidthOnSmallScreens(6),
+                    ->setWidthOnSmallScreensFill(),
             )
+            ->addStateField()
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
@@ -48,7 +49,7 @@ class PostList extends SharpEntityList
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
                     ->setWidth(4)
-                    ->setWidthOnSmallScreens(6)
+                    ->setWidthOnSmallScreensFill()
                     ->setSortable(),
             );
     }
@@ -64,7 +65,7 @@ class PostList extends SharpEntityList
 
     protected function buildPageAlert(PageAlert $pageAlert): void
     {
-        if (! auth()->user()->isAdmin()) {
+        if (!auth()->user()->isAdmin()) {
             $pageAlert
                 ->setMessage('As an editor, you can only edit your posts; you can see other posts except those which are still in draft.')
                 ->setLevelSecondary();
@@ -176,7 +177,7 @@ class PostList extends SharpEntityList
                     $instance->getTranslation('title', 'en'),
                     $instance->categories
                         ->pluck('name')
-                        ->map(fn ($name) => '<span class="badge">'.$name.'</span>')
+                        ->map(fn($name) => '<span class="badge">'.$name.'</span>')
                         ->implode(' '),
                 );
             })

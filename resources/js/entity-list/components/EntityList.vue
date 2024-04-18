@@ -414,48 +414,51 @@
                                                 </TableCell>
                                             </template>
                                             <template v-for="(field, fieldIndex) in entityList.fields">
-                                                <TableCell>
-                                                    <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                        <a class="absolute inset-0" :href="entityList.instanceUrl(item)"></a>
-                                                    </template>
-                                                    <template v-if="field.html">
-                                                        <CaptureInternalLinks>
-                                                            <div class="[&_a]:relative [&_a]:underline [&_a]:z-10 [&_a]:text-indigo-600 [&_a:hover]:text-indigo-900"
-                                                                :class="{ '[&_a]:pointer-events-none': selecting || reordering }"
-                                                                v-html="item[field.key]"
-                                                            ></div>
-                                                        </CaptureInternalLinks>
-                                                    </template>
-                                                    <template v-else>
-                                                        {{ item[field.key] }}
-                                                    </template>
-                                                </TableCell>
+                                                <template v-if="field.key === '@state' && entityList.config.state && showEntityState">
+                                                    <TableCell>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger as-child>
+                                                                <Button class="relative" variant="ghost" size="sm">
+                                                                    <Badge variant="outline">
+                                                                        <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
+                                                                        {{ entityList.instanceStateValue(item)?.label }}
+                                                                    </Badge>
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="start" :align-offset="-16">
+                                                                <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
+                                                                    <DropdownMenuCheckboxItem
+                                                                        :checked="stateValue.value == entityList.instanceState(item)"
+                                                                        @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                                    >
+                                                                        <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                        <span class="truncate">{{ stateValue.label }}</span>
+                                                                    </DropdownMenuCheckboxItem>
+                                                                </template>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
+                                                </template>
+                                                <template v-else>
+                                                    <TableCell>
+                                                        <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
+                                                            <a class="absolute inset-0" :href="entityList.instanceUrl(item)"></a>
+                                                        </template>
+                                                        <template v-if="field.html">
+                                                            <CaptureInternalLinks>
+                                                                <div class="[&_a]:relative [&_a]:underline [&_a]:z-10 [&_a]:text-indigo-600 [&_a:hover]:text-indigo-900"
+                                                                    :class="{ '[&_a]:pointer-events-none': selecting || reordering }"
+                                                                    v-html="item[field.key]"
+                                                                ></div>
+                                                            </CaptureInternalLinks>
+                                                        </template>
+                                                        <template v-else>
+                                                            {{ item[field.key] }}
+                                                        </template>
+                                                    </TableCell>
+                                                </template>
                                             </template>
-                                            <template v-if="entityList.config.state && showEntityState">
-                                                <TableCell class="relative">
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger>
-                                                            <Button variant="ghost" size="sm">
-                                                                <Badge variant="outline">
-                                                                    <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
-                                                                    {{ entityList.instanceStateValue(item)?.label }}
-                                                                </Badge>
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="start" :align-offset="-16">
-                                                            <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
-                                                                <DropdownMenuCheckboxItem
-                                                                    :checked="stateValue.value == entityList.instanceState(item)"
-                                                                    @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
-                                                                >
-                                                                    <StateIcon class="mr-1.5" :state-value="stateValue" />
-                                                                    <span class="truncate">{{ stateValue.label }}</span>
-                                                                </DropdownMenuCheckboxItem>
-                                                            </template>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </TableCell>
-                                            </template>
+
                                             <template v-if="!reordering && entityList.instanceHasActions(item, showEntityState)">
                                                 <TableCell class="relative">
                                                     <EntityActions v-slot="{ menuOpened, stateSubmenuOpened, requestedStateMenu, openStateMenu }">

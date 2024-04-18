@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
+use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
@@ -109,3 +110,71 @@ it('handles authorization in a state', function () {
             'authorization' => [1, 2],
         ]);
 });
+
+it('allows to add state field', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('_state', new class extends FakeEntityState
+            {
+                protected function buildStates(): void
+                {
+                    $this->addState('test1', 'Test 1', 'blue');
+                    $this->addState('test2', 'Test 2', 'red');
+                }
+            });
+        }
+        
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields->addStateField(label: 'State');
+        }
+    };
+    
+    $list->buildListConfig();
+    
+    expect($list->fields())->toEqual([
+        [
+            'key' => '@state',
+            'label' => 'State',
+            'sortable' => false,
+            'html' => false,
+            'size' => 'fill',
+            'hideOnXS' => false,
+            'sizeXS' => 'fill'
+        ]
+    ]);
+});
+
+it('always sends state field if state configured', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildListConfig(): void
+        {
+            $this->configureEntityState('_state', new class extends FakeEntityState
+            {
+                protected function buildStates(): void
+                {
+                    $this->addState('test1', 'Test 1', 'blue');
+                    $this->addState('test2', 'Test 2', 'red');
+                }
+            });
+        }
+    };
+    
+    $list->buildListConfig();
+    
+    expect($list->fields())->toEqual([
+        [
+            'key' => '@state',
+            'label' => '',
+            'sortable' => false,
+            'html' => false,
+            'size' => 'fill',
+            'hideOnXS' => false,
+            'sizeXS' => 'fill'
+        ]
+    ]);
+});
+

@@ -2,7 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Fields;
 
-class EntityListField
+class EntityListField implements IsEntityListField
 {
     public string $key;
     protected string $label = '';
