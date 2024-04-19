@@ -15,9 +15,9 @@ class EntityListStateField implements IsEntityListField
             'label' => $this->label,
             'sortable' => false,
             'html' => false,
-            'size' => 'fill',
+            'size' => 0,
             'hideOnXS' => false,
-            'sizeXS' => 'fill',
+            'sizeXS' => 0,
         ];
     }
 }
