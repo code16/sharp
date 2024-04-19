@@ -4,6 +4,7 @@ use Code16\Sharp\EntityList\Commands\ReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\Enums\PageAlertLevel;
+use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
 use Illuminate\Contracts\Support\Arrayable;
@@ -17,7 +18,7 @@ it('gets fields with layout', function () {
             $fields->addField(
                 EntityListField::make('name')
                     ->setLabel('Name')
-                    ->setWidth(6)
+                    ->setWidth(.5)
             );
         }
     };
@@ -28,20 +29,85 @@ it('gets fields with layout', function () {
             'label' => 'Name',
             'sortable' => false,
             'html' => true,
-            'width' => 6,
+            'width' => '50%',
             'hideOnXS' => false,
         ],
     ]);
 });
 
-it('allows to define layout for small screens', function () {
+it('allows to set fields width as a legacy 12-based grid', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildList(EntityListFieldsContainer $fields): void
         {
             $fields
-                ->addField(EntityListField::make('name')->setWidth(6))
-                ->addField(EntityListField::make('age')->setWidth(6)->hideOnSmallScreens());
+                ->addField(EntityListField::make('name')->setWidth(5))
+                ->addField(EntityListField::make('age')->setWidth(7));
+        }
+    };
+
+    expect(collect($list->fields())->pluck('width')->toArray())
+        ->toEqual(['42%', '58%']);
+});
+
+it('allows to set fields width as a floats', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name')->setWidth(.6))
+                ->addField(EntityListField::make('age')->setWidth(.4));
+        }
+    };
+
+    expect(collect($list->fields())->pluck('width')->toArray())
+        ->toEqual(['60%', '40%']);
+});
+
+it('allows to set fields width as a percentage string', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name')->setWidth('60'))
+                ->addField(EntityListField::make('name')->setWidth('10%'))
+                ->addField(EntityListField::make('age')->setWidth('30 %'));
+        }
+    };
+
+    expect(collect($list->fields())->pluck('width')->toArray())
+        ->toEqual(['60%', '10%', '30%']);
+});
+
+it('throws an exception on invalid values for fields width', function ($invalidWidth) {
+    $this->expectException(SharpInvalidConfigException::class);
+
+    $list = new class($invalidWidth) extends FakeSharpEntityList
+    {
+        public function __construct(private $invalidWidth)
+        {
+        }
+
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name')->setWidth($this->invalidWidth));
+        }
+    };
+
+    $list->fields();
+})->with(['foo', '101', '-1', -1, 101, 1.5, -.2]);
+
+it('allows to hide a column on small screens', function () {
+    $list = new class extends FakeSharpEntityList
+    {
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name')->setWidth(.4))
+                ->addField(EntityListField::make('age')->setWidth(.6)->hideOnSmallScreens());
         }
     };
 
@@ -51,7 +117,7 @@ it('allows to define layout for small screens', function () {
             'label' => '',
             'sortable' => false,
             'html' => true,
-            'width' => 6,
+            'width' => '40%',
             'hideOnXS' => false,
         ])
         ->and($list->fields()[1])->toEqual([
@@ -59,7 +125,7 @@ it('allows to define layout for small screens', function () {
             'label' => '',
             'sortable' => false,
             'html' => true,
-            'width' => 6,
+            'width' => '60%',
             'hideOnXS' => true,
         ]);
 });

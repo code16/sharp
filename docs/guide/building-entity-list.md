@@ -35,7 +35,7 @@ class MyList extends SharpEntityList
                 EntityListField::make('name')
                     ->setLabel('Full name')
                     ->setSortable()
-                    ->setWidth(6)
+                    ->setWidth('50%')
                     ->setHtml()
             )
             ->addField(/* ... */);
@@ -46,7 +46,7 @@ class MyList extends SharpEntityList
 
 Setting the label, allowing the column to be sortable and to display html is optional.
 
-The `->setWidth(int)` method accepts an integer on a 12-based grid, and is optional too: if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
+The optional `->setWidth()` method accepts either an integer (eg: `20` for 20%), a float (eg: `.2` for 20%) or a string (eg: `'20'` or `'20%'`); if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
 To hide the column on small screens, use `->hideOnSmallScreens()`.
 
 Sorting columns must be handled in the `getListData()` method, see below.
