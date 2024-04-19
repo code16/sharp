@@ -27,7 +27,6 @@ class PersonList extends SharpEntityList
                     ->setLabel('Name')
                     ->setHtml()
                     ->setWidth(6)
-                    ->setWidthOnSmallScreensFill()
                     ->setSortable(),
             );
     }

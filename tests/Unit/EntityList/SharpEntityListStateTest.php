@@ -143,27 +143,24 @@ it('allows to add state field as a specific column', function () {
             'label' => '',
             'sortable' => false,
             'html' => true,
-            'size' => 'fill',
+            'width' => null,
             'hideOnXS' => false,
-            'sizeXS' => 'fill'
         ],
         [
             'key' => '@state',
             'label' => 'State',
             'sortable' => false,
             'html' => false,
-            'size' => 0,
+            'width' => null,
             'hideOnXS' => false,
-            'sizeXS' => 0
         ],
         [
             'key' => 'age',
             'label' => '',
             'sortable' => false,
             'html' => true,
-            'size' => 'fill',
+            'width' => null,
             'hideOnXS' => false,
-            'sizeXS' => 'fill'
         ]
     ]);
 });
@@ -200,9 +197,8 @@ it('sends state field as last column if state configured and not declared as a c
             'label' => '',
             'sortable' => false,
             'html' => false,
-            'size' => 0,
+            'width' => null,
             'hideOnXS' => false,
-            'sizeXS' => 0
         ]);
 });
 

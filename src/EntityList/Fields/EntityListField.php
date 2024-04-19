@@ -8,8 +8,7 @@ class EntityListField implements IsEntityListField
     protected string $label = '';
     protected bool $sortable = false;
     protected bool $html = true;
-    protected ?int $width;
-    protected int|bool|null $widthXs;
+    protected int|string|null $width = null;
     protected bool $hideOnXs = false;
 
     public static function make(string $key): self
@@ -41,7 +40,7 @@ class EntityListField implements IsEntityListField
         return $this;
     }
 
-    public function setWidth(int $width): self
+    public function setWidth(int|string $width): self
     {
         $this->width = $width;
 
@@ -50,29 +49,31 @@ class EntityListField implements IsEntityListField
 
     public function setWidthFill(): self
     {
-        $this->width = null;
+        $this->width = 'fill';
 
         return $this;
     }
-
-    public function setWidthOnSmallScreens(int $widthOnSmallScreens): self
-    {
-        $this->widthXs = $widthOnSmallScreens;
-
-        return $this;
-    }
-
-    public function setWidthOnSmallScreensFill(): self
-    {
-        $this->widthXs = true;
-
-        return $this;
-    }
-
+    
     public function hideOnSmallScreens(bool $hideOnSmallScreens = true): self
     {
         $this->hideOnXs = $hideOnSmallScreens;
-
+        
+        return $this;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function setWidthOnSmallScreens(int $widthOnSmallScreens): self
+    {
+        return $this;
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function setWidthOnSmallScreensFill(): self
+    {
         return $this;
     }
 
@@ -83,11 +84,8 @@ class EntityListField implements IsEntityListField
             'label' => $this->label,
             'sortable' => $this->sortable,
             'html' => $this->html,
-            'size' => $this->width ?? 'fill',
+            'width' => $this->width,
             'hideOnXS' => $this->hideOnXs,
-            'sizeXS' => isset($this->widthXs)
-                ? ($this->widthXs === true ? 'fill' : $this->widthXs)
-                : ($this->width ?? 'fill'),
         ];
     }
 }

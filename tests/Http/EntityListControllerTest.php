@@ -141,7 +141,6 @@ it('gets containers and layout', function () {
                     EntityListField::make('name')
                         ->setLabel('Name')
                         ->setWidth(6)
-                        ->setWidthOnSmallScreensFill()
                         ->setSortable()
                 )
                 ->addField(
@@ -160,16 +159,15 @@ it('gets containers and layout', function () {
             ->has('entityList.fields.0', fn (Assert $name) => $name
                 ->where('key', 'name')
                 ->where('label', 'Name')
-                ->where('size', '6')
+                ->where('width', '6')
                 ->where('hideOnXS', false)
-                ->where('sizeXS', 'fill')
                 ->where('sortable', true)
                 ->etc()
             )
             ->has('entityList.fields.1', fn (Assert $job) => $job
                 ->where('key', 'job')
                 ->where('label', 'Job')
-                ->where('size', '6')
+                ->where('width', '6')
                 ->where('hideOnXS', true)
                 ->etc()
             )

@@ -28,8 +28,7 @@ it('gets fields with layout', function () {
             'label' => 'Name',
             'sortable' => false,
             'html' => true,
-            'size' => 6,
-            'sizeXS' => 6,
+            'width' => 6,
             'hideOnXS' => false,
         ],
     ]);
@@ -41,7 +40,7 @@ it('allows to define layout for small screens', function () {
         public function buildList(EntityListFieldsContainer $fields): void
         {
             $fields
-                ->addField(EntityListField::make('name')->setWidth(6)->setWidthOnSmallScreens(12))
+                ->addField(EntityListField::make('name')->setWidth(6))
                 ->addField(EntityListField::make('age')->setWidth(6)->hideOnSmallScreens());
         }
     };
@@ -52,8 +51,7 @@ it('allows to define layout for small screens', function () {
             'label' => '',
             'sortable' => false,
             'html' => true,
-            'size' => 6,
-            'sizeXS' => 12,
+            'width' => 6,
             'hideOnXS' => false,
         ])
         ->and($list->fields()[1])->toEqual([
@@ -61,8 +59,7 @@ it('allows to define layout for small screens', function () {
             'label' => '',
             'sortable' => false,
             'html' => true,
-            'size' => 6,
-            'sizeXS' => 6,
+            'width' => 6,
             'hideOnXS' => true,
         ]);
 });
@@ -73,18 +70,16 @@ it('allows to configure a column to fill left space', function () {
         public function buildList(EntityListFieldsContainer $fields): void
         {
             $fields
-                ->addField(EntityListField::make('name')->setWidthOnSmallScreens(4))
-                ->addField(EntityListField::make('age'));
+                ->addField(EntityListField::make('name')->setWidthFill())
+                ->addField(EntityListField::make('age')->setWidthFill());
         }
     };
 
     expect($list->fields()[0])
-        ->toHaveKey('size', 'fill')
-        ->toHaveKey('sizeXS', 4)
+        ->toHaveKey('width', 'fill')
         ->toHaveKey('hideOnXS', false)
         ->and($list->fields()[1])
-        ->toHaveKey('size', 'fill')
-        ->toHaveKey('sizeXS', 'fill')
+        ->toHaveKey('width', 'fill')
         ->toHaveKey('hideOnXS', false);
 });
 

@@ -370,10 +370,11 @@
                                                 <span class="sr-only">Select...</span>
                                             </TableHead>
                                         </template>
-                                        <template v-for="field in entityList.fields">
+                                        <template v-for="(field, fieldIndex) in entityList.fields">
                                             <TableHead
                                                 class="w-[calc(var(--size)/12*100%)]"
-                                                :style="{ '--size': field.size === 'fill' ? 12 / entityList.fields.length : field.size }"
+                                                :class="{ 'pl-0': !fieldIndex }"
+                                                :style="{ '--size': field.width === 'fill' ? 12 / entityList.fields.length : field.width }"
                                             >
                                                 <div class="relative flex items-center" :class="{ 'hover:underline': field.sortable }">
                                                     <div class="flex-1">
@@ -395,7 +396,7 @@
                                             </TableHead>
                                         </template>
                                         <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
-                                            <TableHead>
+                                            <TableHead class="w-0">
                                                 <span class="sr-only">Edit</span>
                                             </TableHead>
                                         </template>
