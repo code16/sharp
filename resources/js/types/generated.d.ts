@@ -145,9 +145,8 @@ export type EntityListFieldData = {
   label: string;
   sortable: boolean;
   html: boolean;
-  size: string;
+  width: string;
   hideOnXS: boolean;
-  sizeXS: string;
 };
 export type EntityListMultiformData = {
   key: string;
@@ -641,12 +640,12 @@ export type PageAlertLevel =
 export type PaginatorMetaData = {
   current_page: number;
   first_page_url: string;
-  from: number;
+  from: number | null;
   next_page_url: string | null;
   path: string;
   per_page: number;
   prev_page_url: string | null;
-  to: number;
+  to: number | null;
   links: Array<{ url: string | null; label: string; active: boolean }>;
   last_page: number | null;
   last_page_url: string | null;

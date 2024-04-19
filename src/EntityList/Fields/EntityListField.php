@@ -8,7 +8,7 @@ class EntityListField implements IsEntityListField
     protected string $label = '';
     protected bool $sortable = false;
     protected bool $html = true;
-    protected int|string|null $width = null;
+    protected ?string $width = null;
     protected bool $hideOnXs = false;
 
     public static function make(string $key): self
@@ -42,6 +42,10 @@ class EntityListField implements IsEntityListField
 
     public function setWidth(int|string $width): self
     {
+        if(is_int($width)) {
+            $width = round($width / 12 * 100, 2).'%';
+        }
+        
         $this->width = $width;
 
         return $this;

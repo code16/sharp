@@ -372,9 +372,8 @@
                                         </template>
                                         <template v-for="(field, fieldIndex) in entityList.fields">
                                             <TableHead
-                                                class="w-[calc(var(--size)/12*100%)]"
-                                                :class="{ 'pl-0': !fieldIndex }"
-                                                :style="{ '--size': field.width === 'fill' ? 12 / entityList.fields.length : field.width }"
+                                                class="w-[--width]"
+                                                :style="{ '--width': field.width === 'fill' ? (100 / entityList.fields.length)+'%' : field.width }"
                                             >
                                                 <div class="relative flex items-center" :class="{ 'hover:underline': field.sortable }">
                                                     <div class="flex-1">
