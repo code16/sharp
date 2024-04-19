@@ -159,7 +159,7 @@ it('gets containers and layout', function () {
             ->has('entityList.fields.0', fn (Assert $name) => $name
                 ->where('key', 'name')
                 ->where('label', 'Name')
-                ->where('width', '6')
+                ->where('width', '50%')
                 ->where('hideOnXS', false)
                 ->where('sortable', true)
                 ->etc()
@@ -167,7 +167,7 @@ it('gets containers and layout', function () {
             ->has('entityList.fields.1', fn (Assert $job) => $job
                 ->where('key', 'job')
                 ->where('label', 'Job')
-                ->where('width', '6')
+                ->where('width', '50%')
                 ->where('hideOnXS', true)
                 ->etc()
             )
