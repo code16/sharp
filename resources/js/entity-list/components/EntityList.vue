@@ -26,7 +26,7 @@
     import { useDraggable } from "vue-draggable-plus";
     import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { ChevronDown, MoreHorizontal } from "lucide-vue-next";
+    import { ChevronDown, MoreHorizontal, PlusCircle } from "lucide-vue-next";
     import { Checkbox } from "@/components/ui/checkbox";
     import {
         DropdownMenu, DropdownMenuCheckboxItem,
@@ -41,7 +41,7 @@
     import { DropdownMenuPortal } from "radix-vue";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
-    import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+    import { Link } from "@inertiajs/vue3";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -213,105 +213,6 @@
                 <div class="flex-1">
                     <slot name="breadcrumb" />
                 </div>
-                <template v-if="entityList">
-                    <div class="flex gap-3">
-                        <template v-if="showReorderButton && entityList.canReorder && !selecting">
-                            <template v-if="reordering">
-                                <div class="col-auto">
-                                    <Button variant="outline" @click="reorderedItems = null">
-                                        {{ __('sharp::action_bar.list.reorder_button.cancel') }}
-                                    </Button>
-                                </div>
-                                <div class="col-auto">
-                                    <Button @click="onReorderSubmit">
-                                        {{ __('sharp::action_bar.list.reorder_button.finish') }}
-                                    </Button>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div class="col-auto">
-                                    <Button variant="outline" @click="reorderedItems = [...entityList.data]">
-                                        {{ __('sharp::action_bar.list.reorder_button') }}
-                                    </Button>
-                                </div>
-                            </template>
-                        </template>
-
-                        <template v-if="entityList.canSelect && !reordering">
-                            <template v-if="selecting">
-                                <div class="col-auto">
-                                    <Button key="cancel" variant="outline" @click="selectedItems = null">
-                                        {{ __('sharp::action_bar.list.reorder_button.cancel') }}
-                                    </Button>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div class="col-auto">
-                                    <Button key="select" variant="outline" @click="selectedItems = Object.fromEntries(entityList.data.map(item => [item.id, false]))">
-                                        {{ __('sharp::action_bar.list.select_button') }}
-                                    </Button>
-                                </div>
-                            </template>
-                        </template>
-
-                        <template v-if="entityList.dropdownEntityCommands(selecting)?.flat().length && !reordering">
-                            <div class="col-auto">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        <Button :disabled="reordering">
-                                            {{ __('sharp::entity_list.commands.entity.label') }}
-                                            <template v-if="selecting">
-                                                ({{ Object.values(selectedItems).filter(Boolean).length }} selected)
-                                            </template>
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <CommandDropdownItems
-                                            :commands="entityList.dropdownEntityCommands(selecting)"
-                                            :selecting="selecting"
-                                            @select="onEntityCommand"
-                                        />
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                        </template>
-
-                        <template v-if="entityList.primaryCommand && !reordering && !selecting">
-                            <div class="col-auto">
-                                <Button @click="onEntityCommand(entityList.primaryCommand)">
-                                    {{ entityList.primaryCommand.label }}
-                                </Button>
-                            </div>
-                        </template>
-
-                        <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
-                            <div class="col-auto">
-                                <template v-if="entityList.forms">
-                                    <Dropdown right>
-                                        <template v-slot:text>
-                                            {{ __('sharp::action_bar.list.forms_dropdown') }}
-                                        </template>
-                                        <template v-for="form in Object.values(entityList.forms).filter(form => !!form.label)">
-                                            <DropdownItem
-                                                :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })"
-                                            >
-                                                {{ form.label }}
-                                            </DropdownItem>
-                                        </template>
-                                    </Dropdown>
-                                </template>
-                                <template v-else>
-                                    <Button
-                                        :disabled="reordering || selecting"
-                                        :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
-                                    >
-                                        {{ __('sharp::action_bar.list.create_button') }}
-                                    </Button>
-                                </template>
-                            </div>
-                        </template>
-                    </div>
-                </template>
             </div>
 
             <div v-show="!loading">
@@ -325,14 +226,13 @@
                 <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
                     <div class="flex gap-3 mb-4">
                         <template v-if="showSearchField && entityList.config.searchable">
-                            <Search
-                                class="h-100 mw-100"
-                                style="--width: 150px; --focused-width: 250px;"
-                                :value="query.search"
-                                :placeholder="__('sharp::action_bar.list.search.placeholder')"
-                                :disabled="reordering"
-                                @submit="onSearchSubmit"
-                            />
+<!--                            <Search-->
+<!--                                style="&#45;&#45;width: 150px; &#45;&#45;focused-width: 250px;"-->
+<!--                                :value="query.search"-->
+<!--                                :placeholder="__('sharp::action_bar.list.search.placeholder')"-->
+<!--                                :disabled="reordering"-->
+<!--                                @submit="onSearchSubmit"-->
+<!--                            />-->
                         </template>
                         <template v-if="entityList.visibleFilters?.length">
                             <div class="flex gap-3">
@@ -351,6 +251,107 @@
                                 </template>
                             </div>
                         </template>
+                        <div class="ml-auto self-end flex gap-2">
+                            <template v-if="showReorderButton && entityList.canReorder && !selecting">
+                                <template v-if="reordering">
+                                    <div class="col-auto">
+                                        <Button variant="outline" @click="reorderedItems = null">
+                                            {{ __('sharp::action_bar.list.reorder_button.cancel') }}
+                                        </Button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <Button @click="onReorderSubmit">
+                                            {{ __('sharp::action_bar.list.reorder_button.finish') }}
+                                        </Button>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <div class="col-auto">
+                                        <Button variant="outline" @click="reorderedItems = [...entityList.data]">
+                                            {{ __('sharp::action_bar.list.reorder_button') }}
+                                        </Button>
+                                    </div>
+                                </template>
+                            </template>
+
+                            <template v-if="entityList.canSelect && !reordering">
+                                <template v-if="selecting">
+                                    <Button class="h-8" size="sm" variant="outline" @click="selectedItems = null">
+                                        {{ __('sharp::action_bar.list.reorder_button.cancel') }}
+                                    </Button>
+                                </template>
+                                <template v-else>
+                                    <Button class="h-8" size="sm" variant="outline" @click="selectedItems = Object.fromEntries(entityList.data.map(item => [item.id, false]))">
+                                        {{ __('sharp::action_bar.list.select_button') }}
+                                    </Button>
+                                </template>
+                            </template>
+
+                            <template v-if="entityList.dropdownEntityCommands(selecting)?.flat().length && !reordering">
+                                <div class="col-auto">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <Button class="h-8" variant="outline" size="sm" :disabled="reordering">
+                                                {{ __('sharp::entity_list.commands.entity.label') }}
+                                                <template v-if="selecting">
+                                                    ({{ Object.values(selectedItems).filter(Boolean).length }} selected)
+                                                </template>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <CommandDropdownItems
+                                                :commands="entityList.dropdownEntityCommands(selecting)"
+                                                :selecting="selecting"
+                                                @select="onEntityCommand"
+                                            />
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                            </template>
+
+                            <template v-if="entityList.primaryCommand && !reordering && !selecting">
+                                <div class="col-auto">
+                                    <Button @click="onEntityCommand(entityList.primaryCommand)">
+                                        {{ entityList.primaryCommand.label }}
+                                    </Button>
+                                </div>
+                            </template>
+
+                            <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
+                                <div class="col-auto">
+                                    <template v-if="entityList.forms">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger as-child>
+                                                <Button class="h-8 gap-1" size="sm">
+                                                    <PlusCircle class="h-3.5 w-3.5" />
+                                                    {{ __('sharp::action_bar.list.forms_dropdown') }}
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <template v-for="form in Object.values(entityList.forms).filter(form => !!form.label)">
+                                                    <DropdownMenuItem as-child>
+                                                        <Link :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })">
+                                                            {{ form.label }}
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                </template>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </template>
+                                    <template v-else>
+                                        <Button
+                                            class="h-8 gap-1"
+                                            size="sm"
+                                            :disabled="reordering || selecting"
+                                            :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
+                                        >
+                                            <PlusCircle class="h-3.5 w-3.5" />
+                                            {{ __('sharp::action_bar.list.create_button') }}
+                                        </Button>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </template>
 

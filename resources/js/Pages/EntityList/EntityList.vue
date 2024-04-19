@@ -34,6 +34,7 @@
     filters.setValuesFromQuery(query);
 
     function onQueryChange(query: FilterQueryParams) {
+        console.log(query, stringifyQuery(query));
         if(location.search !== stringifyQuery(query)) {
             router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
         }
@@ -54,7 +55,7 @@
                 @update:query="onQueryChange"
             >
                 <template v-slot:breadcrumb>
-                    <PageBreadcrumb :breadcrumb="breadcrumb" />
+                    <PageBreadcrumb class="mb-4" :breadcrumb="breadcrumb" />
                     <!--                    <EntityListTitle :count="entityList.count">-->
                     <!--                        <template v-if="config('sharp.display_breadcrumb')">-->
                     <!--                            <Breadcrumb :breadcrumb="breadcrumb" />-->

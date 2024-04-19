@@ -7,7 +7,7 @@
 
     defineProps<{
         filter: FilterData,
-        value: FilterData['value'],
+        value: any,
         disabled?: boolean
     }>();
 

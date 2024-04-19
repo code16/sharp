@@ -1,6 +1,7 @@
 import plugin from 'tailwindcss/plugin';
 import forms from '@tailwindcss/forms';
 import animate from 'tailwindcss-animate';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -34,6 +35,9 @@ export default {
             },
         },
         extend: {
+            fontFamily: {
+                'sans': ['geist-sans', ...defaultTheme.fontFamily.sans]
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
