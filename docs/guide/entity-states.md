@@ -78,6 +78,27 @@ class ProductEntityList extends SharpEntityList
 
 The first parameter is a key which should be the name of the attribute.
 
+## Display the state
+
+The state will be displayed in the top section of the Show Page (if you have one).
+
+In the Entity List, it will be displayed in a new column at the end of the list, unless you have declared a specific column with the `->addStateField()` method (in this case, you can choose where to place it).
+
+```php
+class ProductEntityList extends SharpEntityList
+{
+    protected function buildList(EntityListFieldsContainer $fields): void
+    {
+        $fields
+            ->addField(EntityListField::make('title')->setLabel('Title'))
+            ->addStateField()
+            ->addField(/* ... */);
+            // [...]
+    }
+    // [...]
+}
+```
+
 ## Authorizations
 
 Entity states can declare an authorization check very much like Instance Commands:

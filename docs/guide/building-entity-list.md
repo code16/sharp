@@ -26,25 +26,29 @@ Each one is detailed here:
 A field is a column in the `Entity List`. This first function is responsible to describe each column:
 
 ```php
-function buildList(EntityListFieldsContainer $fields)
+class MyList extends SharpEntityList
 {
-    $fields
-        ->addField(
-            EntityListField::make('name')
-                ->setLabel('Full name')
-                ->setSortable()
-                ->setWidth(6)
-                ->setWidthOnSmallScreens(8)
-                ->setHtml()
-        )
-        ->addField([...]);
+    protected function buildList(EntityListFieldsContainer $fields): void
+    {
+        $fields
+            ->addField(
+                EntityListField::make('name')
+                    ->setLabel('Full name')
+                    ->setSortable()
+                    ->setWidth(6)
+                    ->setWidthOnSmallScreens(8)
+                    ->setHtml()
+            )
+            ->addField(/* ... */);
+    }
+    // [...]
 }
 ```
 
 Setting the label, allowing the column to be sortable and to display html is optional.
 
 The `->setWidth(int)` method accepts an integer on a 12-based grid, and is optional too: if missing, it will be deduced (you can use `->setWidthFill()` to force this last behavior).
-You can also call `->widthOnSmallScreens(int)` or `->widthOnSmallScreensFill)` to define a custom width value for small screens. To hide the column on small screens, use `->hideOnSmallScreens()`.
+You can also call `->widthOnSmallScreens(int)` or `->widthOnSmallScreensFill()` to define a custom width value for small screens. To hide the column on small screens, use `->hideOnSmallScreens()`.
 
 ### `getListData()`
 
@@ -57,24 +61,27 @@ The returned array is meant to be built with 2 rules:
 So for instance, if we defined 2 columns `name` and `price`:
 
 ```php
-function getListData()
+class MyList extends SharpEntityList
 {
-    return [
-        [
-            'id' => 1,
-            'name' => 'Carrot',
-            'price' => '0.5'
-        ], [
-            'id' => 2,
-            'name' => 'Potato',
-            'price' => '0.95'
-        ]
-    ];
+    public function getListData(): array|Arrayable
+    {
+        return [
+            [
+                'id' => 1,
+                'name' => 'Carrot',
+                'price' => '0.5'
+            ], [
+                'id' => 2,
+                'name' => 'Potato',
+                'price' => '0.95'
+            ]
+        ];
+    }
+    // [...]
 }
 ```
 
-Of course, real code would imply some data request in a DB, or a file for instance; the important thing is that Sharp don't care.
-
+Of course, real code would imply some data request in a DB, or a file for instance; the important thing is that Sharp don’t care.
 
 #### Transformers
 
@@ -144,9 +151,13 @@ With `Eloquent` or the `QueryBuilder`, this means calling `->paginate($count)` o
 Here you might write the code performed on a deletion of the instance. It can be anything, here's an Eloquent example:
 
 ```php
-function delete($id): void
+class MyList extends SharpEntityList
 {
-    Product::findOrFail($id)->delete();
+    function delete($id): void
+    {
+        Product::findOrFail($id)->delete();
+    }
+    // [...]
 }
 ```
 
@@ -157,11 +168,15 @@ Deletion is typically an action you perform [in a Show Page](building-show-page.
 Finally, this last function must describe the list config. Let's see an example:
 
 ```php
-function buildListConfig()
+class MyList extends SharpEntityList
 {
-    $this->configureInstanceIdAttribute('id')
-        ->configureSearchable()
-        ->configureDefaultSort('name', 'asc');
+    public function buildListConfig(): void
+    {
+        $this->configureInstanceIdAttribute('id')
+            ->configureSearchable()
+            ->configureDefaultSort('name', 'asc');
+    }
+    // [...]
 }
 ```
 
