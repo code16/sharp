@@ -369,32 +369,35 @@
                                             <TableHead>
                                                 <span class="sr-only">Select...</span>
                                             </TableHead>
-                                            <template v-for="field in entityList.fields">
-                                                <TableHead class="w-[calc(var(--size)/12*100%)]" :style="{ '--size': field.size === 'fill' ? 12 / entityList.fields.length : field.size }">
-                                                    <div class="relative flex items-center" :class="{ 'hover:underline': field.sortable }">
-                                                        <div class="flex-1">
-                                                            {{ field.label }}
-                                                        </div>
-                                                        <template v-if="field.sortable">
-                                                            <button class="shrink-0 ml-2" @click="onSortClick(field.key)">
-                                                                <span class="absolute inset-0"></span>
-                                                                <ChevronDown
-                                                                    class="h-4 w-4 transition-transform duration-200"
-                                                                    :class="{
-                                                                        'rotate-180': query.dir === 'asc',
-                                                                        'invisible': query.sort !== field.key
-                                                                    }"
-                                                                />
-                                                            </button>
-                                                        </template>
+                                        </template>
+                                        <template v-for="field in entityList.fields">
+                                            <TableHead
+                                                class="w-[calc(var(--size)/12*100%)]"
+                                                :style="{ '--size': field.size === 'fill' ? 12 / entityList.fields.length : field.size }"
+                                            >
+                                                <div class="relative flex items-center" :class="{ 'hover:underline': field.sortable }">
+                                                    <div class="flex-1">
+                                                        {{ field.label }}
                                                     </div>
-                                                </TableHead>
-                                            </template>
-                                            <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
-                                                <TableHead>
-                                                    <span class="sr-only">Edit</span>
-                                                </TableHead>
-                                            </template>
+                                                    <template v-if="field.sortable">
+                                                        <button class="shrink-0 ml-2" @click="onSortClick(field.key)">
+                                                            <span class="absolute inset-0"></span>
+                                                            <ChevronDown
+                                                                class="h-4 w-4 transition-transform duration-200"
+                                                                :class="{
+                                                                    'rotate-180': query.dir === 'asc',
+                                                                    'invisible': query.sort !== field.key
+                                                                }"
+                                                            />
+                                                        </button>
+                                                    </template>
+                                                </div>
+                                            </TableHead>
+                                        </template>
+                                        <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
+                                            <TableHead>
+                                                <span class="sr-only">Edit</span>
+                                            </TableHead>
                                         </template>
                                     </TableRow>
                                 </TableHeader>

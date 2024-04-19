@@ -37,7 +37,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->configureUploadsThumbnailCreation(uploadModelClass: Media::class)
             ->setSharpMenu(SharpMenu::class)
             ->setThemeColor('#004c9b')
-            ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem')
+            ->setThemeLogo(logoUrl: '/img/sharp/logo.svg', logoHeight: '1rem', faviconUrl: '/img/sharp/favicon-32x32.png')
 //            ->redirectLoginToUrl('/my-login')
             ->enableImpersonation()
             ->enableForgottenPassword()
