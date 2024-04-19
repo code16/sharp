@@ -111,30 +111,42 @@ it('handles authorization in a state', function () {
         ]);
 });
 
-it('allows to add state field', function () {
+it('allows to add state field as a specific column', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('_state', new class extends FakeEntityState
+            $this->configureEntityState('my_state', new class extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
-                    $this->addState('test1', 'Test 1', 'blue');
-                    $this->addState('test2', 'Test 2', 'red');
+                    $this->addState('test1', 'Test 1', 'blue')
+                        ->addState('test2', 'Test 2', 'red');
                 }
             });
         }
         
         public function buildList(EntityListFieldsContainer $fields): void
         {
-            $fields->addStateField(label: 'State');
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addStateField(label: 'State')
+                ->addField(EntityListField::make('age'));
         }
     };
     
     $list->buildListConfig();
     
     expect($list->fields())->toEqual([
+        [
+            'key' => 'name',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'size' => 'fill',
+            'hideOnXS' => false,
+            'sizeXS' => 'fill'
+        ],
         [
             'key' => '@state',
             'label' => 'State',
@@ -143,30 +155,47 @@ it('allows to add state field', function () {
             'size' => 'fill',
             'hideOnXS' => false,
             'sizeXS' => 'fill'
+        ],
+        [
+            'key' => 'age',
+            'label' => '',
+            'sortable' => false,
+            'html' => true,
+            'size' => 'fill',
+            'hideOnXS' => false,
+            'sizeXS' => 'fill'
         ]
     ]);
 });
 
-it('always sends state field if state configured', function () {
+it('sends state field as last column if state configured and not declared as a column', function () {
     $list = new class extends FakeSharpEntityList
     {
         public function buildListConfig(): void
         {
-            $this->configureEntityState('_state', new class extends FakeEntityState
+            $this->configureEntityState('my_state', new class extends FakeEntityState
             {
                 protected function buildStates(): void
                 {
-                    $this->addState('test1', 'Test 1', 'blue');
-                    $this->addState('test2', 'Test 2', 'red');
+                    $this->addState('test1', 'Test 1', 'blue')
+                        ->addState('test2', 'Test 2', 'red');
                 }
             });
+        }
+
+        public function buildList(EntityListFieldsContainer $fields): void
+        {
+            $fields
+                ->addField(EntityListField::make('name'))
+                ->addField(EntityListField::make('age'))
+                ->addField(EntityListField::make('picture'));
         }
     };
     
     $list->buildListConfig();
-    
-    expect($list->fields())->toEqual([
-        [
+
+    expect($list->fields())->toHaveCount(4)
+        ->and($list->fields()[3])->toEqual([
             'key' => '@state',
             'label' => '',
             'sortable' => false,
@@ -174,7 +203,6 @@ it('always sends state field if state configured', function () {
             'size' => 'fill',
             'hideOnXS' => false,
             'sizeXS' => 'fill'
-        ]
-    ]);
+        ]);
 });
 
