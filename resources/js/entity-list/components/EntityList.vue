@@ -211,7 +211,7 @@
         <div class="SharpEntityList">
             <div class="flex">
                 <div class="flex-1">
-                    <slot name="title" />
+                    <slot name="breadcrumb" />
                 </div>
                 <template v-if="entityList">
                     <div class="flex gap-3">
@@ -372,7 +372,7 @@
                                         </template>
                                         <template v-for="(field, fieldIndex) in entityList.fields">
                                             <TableHead
-                                                class="w-[--width]"
+                                                class="w-[var(--width,auto)]"
                                                 :style="{ '--width': field.width === 'fill' ? (100 / entityList.fields.length)+'%' : field.width }"
                                             >
                                                 <div class="relative flex items-center" :class="{ 'hover:underline': field.sortable }">
@@ -395,7 +395,7 @@
                                             </TableHead>
                                         </template>
                                         <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
-                                            <TableHead class="w-0">
+                                            <TableHead class="w-2">
                                                 <span class="sr-only">Edit</span>
                                             </TableHead>
                                         </template>

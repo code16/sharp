@@ -17,7 +17,7 @@
     import Title from "@/components/Title.vue";
     import { useReorderingLists } from "@/Pages/Show/useReorderingLists";
     import { useCommands } from "@/commands/useCommands";
-    import Breadcrumb from "@/components/Breadcrumb.vue";
+    import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { api } from "@/api/api";
     import { router } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
@@ -91,7 +91,7 @@
                     <div class="row align-items-center gx-3">
                         <div class="col">
                             <template v-if="config('sharp.display_breadcrumb')">
-                                <Breadcrumb :breadcrumb="breadcrumb" />
+                                <PageBreadcrumb :breadcrumb="breadcrumb" />
                             </template>
                         </div>
                         <template v-if="show.locales?.length">

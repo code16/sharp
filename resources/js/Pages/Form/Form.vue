@@ -7,7 +7,7 @@
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
-    import Breadcrumb from "@/components/Breadcrumb.vue";
+    import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { ref, watchEffect } from "vue";
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
@@ -62,7 +62,7 @@
             >
                 <template #title>
                     <template v-if="config('sharp.display_breadcrumb')">
-                        <Breadcrumb :breadcrumb="breadcrumb" />
+                        <PageBreadcrumb :breadcrumb="breadcrumb" />
                     </template>
                 </template>
 

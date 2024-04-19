@@ -5,7 +5,7 @@
     import { BreadcrumbData, EntityListData, EntityListQueryParamsData } from "@/types";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
-    import Breadcrumb from "@/components/Breadcrumb.vue";
+    import Breadcrumb from "@/components/PageBreadcrumb.vue";
     import { EntityList } from "@/entity-list/EntityList";
     import { useFilters } from "@/filters/useFilters";
     import { useCommands } from "@/commands/useCommands";
@@ -14,6 +14,7 @@
     import { router } from "@inertiajs/vue3";
     import { FilterQueryParams } from "@/filters/types";
     import { route } from "@/utils/url";
+    import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -52,13 +53,16 @@
                 :query="query"
                 @update:query="onQueryChange"
             >
+                <template v-slot:breadcrumb>
+                    <PageBreadcrumb :breadcrumb="breadcrumb" />
+                    <!--                    <EntityListTitle :count="entityList.count">-->
+                    <!--                        <template v-if="config('sharp.display_breadcrumb')">-->
+                    <!--                            <Breadcrumb :breadcrumb="breadcrumb" />-->
+                    <!--                        </template>-->
+                    <!--                    </EntityListTitle>-->
+                </template>
                 <template v-slot:title>
                     {{ breadcrumb.items[0].label }}
-<!--                    <EntityListTitle :count="entityList.count">-->
-<!--                        <template v-if="config('sharp.display_breadcrumb')">-->
-<!--                            <Breadcrumb :breadcrumb="breadcrumb" />-->
-<!--                        </template>-->
-<!--                    </EntityListTitle>-->
                 </template>
             </EntityListComponent>
         </div>
