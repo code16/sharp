@@ -35,7 +35,6 @@ class PostList extends SharpEntityList
                 EntityListField::make('title')
                     ->setLabel('Title')
                     ->setWidth(4)
-                    ->setWidthOnSmallScreensFill(),
             )
             ->addStateField()
             ->addField(
@@ -49,7 +48,6 @@ class PostList extends SharpEntityList
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
                     ->setWidth(4)
-                    ->setWidthOnSmallScreensFill()
                     ->setSortable(),
             );
     }
