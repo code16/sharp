@@ -19,25 +19,25 @@ class AuthorList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('avatar')
-                    ->setWidth(1)
+                    ->setWidth(.1)
                     ->setLabel(''),
             )
             ->addField(
                 EntityListField::make('name')
-                    ->setWidth(3)
+                    ->setWidth(.3)
                     ->setLabel('Name')
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('email')
-                    ->setWidth(4)
+                    ->setWidth(.3)
                     ->hideOnSmallScreens()
                     ->setLabel('Email')
                     ->setSortable(),
             )
             ->addField(
                 EntityListField::make('role')
-                    ->setWidth(4)
+                    ->setWidth(.3)
                     ->setLabel('Role'),
             );
     }

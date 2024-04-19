@@ -18,7 +18,7 @@ class PostBlockList extends SharpEntityList
         $fields
             ->addField(
                 EntityListField::make('type_label')
-                    ->setWidth(2)
+                    ->setWidth(.15)
                     ->setLabel('Type')
             )
             ->addField(
