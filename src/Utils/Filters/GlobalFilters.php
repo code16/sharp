@@ -20,9 +20,31 @@ final class GlobalFilters implements Arrayable
 
     public function toArray(): array
     {
-        return tap([], function (&$config) {
-            $this->appendFiltersToConfig($config);
-        });
+        $config = [];
+        $this->appendFiltersToConfig($config);
+        
+        return [
+            'config' => $config,
+            'filterValues' => $this->getFilterValuesToFront(),
+        ];
+    }
+    
+    public function getFilterValuesToFront(): array
+    {
+        return [
+            'default' => $this->getFilterHandlers()
+                ->flatten()
+                ->mapWithKeys(function (Filter $handler) {
+                    return [$handler->getKey() => $handler->defaultValue()];
+                })
+                ->toArray(),
+            'current' => $this->getFilterHandlers()
+                ->flatten()
+                ->mapWithKeys(function (Filter $handler) {
+                    return [$handler->getKey() => $handler->currentValue()];
+                })
+                ->toArray(),
+        ];
     }
 
     public function findFilter(string $key): ?GlobalRequiredFilter

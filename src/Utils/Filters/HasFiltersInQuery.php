@@ -51,9 +51,18 @@ trait HasFiltersInQuery
 
         return $this;
     }
+    
+    /**
+     * @internal
+     */
+    public function getFilterValues(): array {
+        return $this->filters;
+    }
 
     protected function fillFilterWithRequest(array $query = null): void
     {
+        $this->filters = [];
+        
         collect($query)
             ->filter(function ($value, $name) {
                 return Str::startsWith($name, 'filter_');

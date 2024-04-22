@@ -1,6 +1,6 @@
-import { FilterData, ConfigFiltersData } from "@/types";
-import { filterQueryKey, getFiltersValuesFromQuery } from "./utils/query";
-import { parseRange, serializeRange } from "@/utils/querystring";
+import { FilterData, ConfigFiltersData, FilterValuesData } from "@/types";
+import { filterQueryKey } from "./utils/query";
+import { serializeRange } from "@/utils/querystring";
 import isEqual from "lodash/isEqual";
 import { reactive } from "vue";
 import type { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } from "./types";
@@ -9,13 +9,15 @@ import type { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } fr
 export class FilterManager {
     filters?: ConfigFiltersData;
 
+    defaultValues: FilterValuesData['default'];
     state = reactive({
         values: {} as FilterValues,
     })
 
-    constructor(filters?: ConfigFiltersData) {
+    constructor(filters?: ConfigFiltersData, filterValues?: FilterValuesData) {
         this.filters = filters;
-        this.values = this.#defaultValues(this.#allFilters);
+        this.values = filterValues.current;
+        this.defaultValues = filterValues.default;
     }
 
     get rootFilters(): Array<FilterData> {
@@ -25,20 +27,20 @@ export class FilterManager {
     get values() { return this.state.values; }
     set values(values: FilterValues) { this.state.values = values; }
 
-    setValuesFromQuery(query: Partial<FilterQueryParams>) {
-        const queryValues = getFiltersValuesFromQuery(query);
-        this.values = Object.fromEntries(
-            this.#allFilters.map(filter =>
-                [
-                    filter.key,
-                    this.#resolveFilterValue(
-                        filter,
-                        queryValues[filter.key],
-                    ),
-                ]
-            )
-        );
-    }
+    // setValuesFromQuery(query: Partial<FilterQueryParams>) {
+    //     const queryValues = getFiltersValuesFromQuery(query);
+    //     this.values = Object.fromEntries(
+    //         this.#allFilters.map(filter =>
+    //             [
+    //                 filter.key,
+    //                 this.#resolveFilterValue(
+    //                     filter,
+    //                     queryValues[filter.key],
+    //                 ),
+    //             ]
+    //         )
+    //     );
+    // }
 
     isValuated(filters: Array<FilterData>): boolean {
         return !isEqual(
@@ -58,18 +60,18 @@ export class FilterManager {
     }
 
     nextQuery(filter: FilterData, value: FilterData['value']): FilterQueryParams {
-        return this.getQueryParams(this.#nextValues(filter, value));
+        return this.getQueryParams(this.nextValues(filter, value));
     }
 
-    defaultQuery(filters: FilterData[]): FilterQueryParams {
-        return this.getQueryParams(this.#defaultValues(filters));
-    }
+    // defaultQuery(filters: FilterData[]): FilterQueryParams {
+    //     return this.getQueryParams(this.#defaultValues(filters));
+    // }
 
     get #allFilters(): Array<FilterData> {
         return Object.values(this.filters ?? {}).flat();
     }
 
-    #nextValues(filter: FilterData, value: ParsedValue): FilterValues {
+    nextValues(filter: FilterData, value: ParsedValue): FilterValues {
         if(filter.type === 'select' && filter.master) {
             return {
                 ...Object.fromEntries(Object.entries(this.values).map(([key, value]) => [key, null])),
@@ -82,26 +84,26 @@ export class FilterManager {
 
     #defaultValues(filters: FilterData[]) {
         return Object.fromEntries(
-            filters.map(filter => [filter.key, filter.default])
+            filters.map(filter => [filter.key, this.defaultValues[filter.key]])
         );
     }
 
-    #resolveFilterValue(filter: FilterData, value: SerializedValue): ParsedValue {
-        if(value == null) {
-            // @ts-ignore
-            return filter.default;
-        }
-        if(filter.type === 'select' && filter.multiple && !Array.isArray(value)) {
-            return [value];
-        }
-        if(filter.type === 'daterange') {
-            return parseRange(value);
-        }
-        if(filter.type === 'check') {
-            return value === '1';
-        }
-        return value;
-    }
+    // #resolveFilterValue(filter: FilterData, value: SerializedValue): ParsedValue {
+    //     if(value == null) {
+    //         // @ts-ignore
+    //         return filter.default;
+    //     }
+    //     if(filter.type === 'select' && filter.multiple && !Array.isArray(value)) {
+    //         return [value];
+    //     }
+    //     if(filter.type === 'daterange') {
+    //         return parseRange(value);
+    //     }
+    //     if(filter.type === 'check') {
+    //         return value === '1';
+    //     }
+    //     return value;
+    // }
 
     #serializeValue(filter: FilterData | null, value: ParsedValue): SerializedValue {
         if(!filter) {

@@ -12,6 +12,11 @@ declare module 'ziggy-js' {
             "name": "entityKey"
         }
     ],
+    "code16.sharp.list.filters.store": [
+        {
+            "name": "entityKey"
+        }
+    ],
     "code16.sharp.single-show": [
         {
             "name": "entityKey"

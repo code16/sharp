@@ -64,12 +64,13 @@ it('the current value of the global filter is sent with every inertia request', 
     $this
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
-            ->has('globalFilters.filters._root.0', fn (Assert $filter) => $filter
+            ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
                 ->where('required', true)
-                ->where('default', 2)
                 ->etc()
             )
+            ->where('globalFilters.filterValues.current.test', 2)
+            ->where('globalFilters.filterValues.default.test', 2)
         );
 
     $this
@@ -78,10 +79,11 @@ it('the current value of the global filter is sent with every inertia request', 
     $this
         ->get('/sharp/s-list/person')
         ->assertInertia(fn (Assert $page) => $page
-            ->has('globalFilters.filters._root.0', fn (Assert $filter) => $filter
+            ->has('globalFilters.config.filters._root.0', fn (Assert $filter) => $filter
                 ->where('key', 'test')
-                ->where('default', 3)
                 ->etc()
             )
+            ->where('globalFilters.filterValues.current.test', 3)
+            ->where('globalFilters.filterValues.default.test', 2)
         );
 });

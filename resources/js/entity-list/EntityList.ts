@@ -16,6 +16,7 @@ export class EntityList implements EntityListData {
     forms: EntityListData['forms'];
     meta: EntityListData['meta'];
     pageAlert: EntityListData['pageAlert'];
+    filterValues: EntityListData['filterValues'];
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;

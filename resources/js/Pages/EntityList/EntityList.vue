@@ -2,7 +2,7 @@
     import Layout from "@/Layouts/Layout.vue";
     import EntityListComponent from "@/entity-list/components/EntityList.vue";
     import EntityListTitle from "@/entity-list/components/EntityListTitle.vue";
-    import { BreadcrumbData, EntityListData, EntityListQueryParamsData } from "@/types";
+    import { BreadcrumbData, EntityListData, EntityListQueryParamsData, FilterData } from "@/types";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
     import Breadcrumb from "@/components/PageBreadcrumb.vue";
@@ -23,7 +23,7 @@
 
     const entityKey = route().params.entityKey as string;
     const entityList: Ref<EntityList> = ref(new EntityList(props.entityList, entityKey));
-    const filters = useFilters(entityList.value.config.filters);
+    const filters = useFilters(entityList.value.config.filters, entityList.value.filterValues);
     const commands = useCommands({
         refresh: (data) => {
             entityList.value = entityList.value.withRefreshedItems(data.items)
@@ -31,13 +31,21 @@
     });
     const query = parseQuery(location.search) as (EntityListQueryParamsData & FilterQueryParams);
 
-    filters.setValuesFromQuery(query);
-
     function onQueryChange(query: FilterQueryParams) {
-        console.log(query, stringifyQuery(query));
         if(location.search !== stringifyQuery(query)) {
             router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
         }
+    }
+
+    function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        router.post(
+            route('code16.sharp.list.filters.store', { entityKey }),
+            {
+                filterValues: filters.nextValues(filter, value),
+                query,
+            },
+            { preserveState: false, preserveScroll: false }
+        );
     }
 </script>
 
@@ -52,6 +60,7 @@
                 :filters="filters"
                 :commands="commands"
                 :query="query"
+                @filter-change="onFilterChange"
                 @update:query="onQueryChange"
             >
                 <template v-slot:breadcrumb>

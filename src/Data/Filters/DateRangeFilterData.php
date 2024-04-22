@@ -17,7 +17,7 @@ final class DateRangeFilterData extends Data
         public ?string $label,
         #[LiteralTypeScriptType('"'.FilterType::DateRange->value.'"')]
         public FilterType $type,
-        public ?DateRangeFilterValueData $default,
+//        public ?DateRangeFilterValueData $default,
         public bool $required,
         public bool $mondayFirst,
         public string $displayFormat
@@ -26,10 +26,10 @@ final class DateRangeFilterData extends Data
 
     public static function from(array $filter): self
     {
-        $filter = [
-            ...$filter,
-            'default' => DateRangeFilterValueData::optional($filter['default']),
-        ];
+//        $filter = [
+//            ...$filter,
+//            'default' => DateRangeFilterValueData::optional($filter['default']),
+//        ];
 
         return new self(...$filter);
     }

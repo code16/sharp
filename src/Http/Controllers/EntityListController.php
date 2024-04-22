@@ -49,6 +49,7 @@ class EntityListController extends SharpProtectedController
                 $listData['items'],
                 $listConfig,
             ),
+            'filterValues' => $list->getFilterValuesToFront(),
         ];
 
         if (request()->expectsJson()) {

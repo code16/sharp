@@ -8,6 +8,90 @@ use Illuminate\Support\Collection;
 trait HandleFilters
 {
     protected ?Collection $filterHandlers = null;
+    
+    final public function getFilterValuesToFront(): array
+    {
+        return [
+            'default' => $defaultValues = $this->getFilterHandlers()
+                ->flatten()
+                ->mapWithKeys(function (Filter $handler) {
+                    if ($handler instanceof SelectRequiredFilter
+                        || $handler instanceof DateRangeRequiredFilter
+                    ) {
+                        return [$handler->getKey() => $this->formatFilterValueToFront($handler, $handler->defaultValue())];
+                    }
+                    return [$handler->getKey() => null];
+                })
+                ->toArray(),
+            'current' => $this->getFilterHandlers()
+                ->flatten()
+                ->mapWithKeys(function (Filter $handler) use ($defaultValues) {
+                    $value = $this->formatFilterValueToFront(
+                        $handler,
+                        $handler->fromQueryParam(
+                            $this->queryParams->getFilterValues()[$handler->getKey()] ?? null
+                        )
+                    );
+                    
+                    return [$handler->getKey() => $value ?? $defaultValues[$handler->getKey()]];
+                })
+                ->toArray(),
+        ];
+    }
+    
+    final public function getFilterValuesQueryParams(array $filterValues): array
+    {
+        return $this->getFilterHandlers()
+            ->flatten()
+            ->mapWithKeys(function (Filter $handler) use ($filterValues) {
+                $value = $handler->toQueryParam($filterValues[$handler->getKey()] ?? null);
+                return [
+                    'filter_'.$handler->getKey() => $value,
+                ];
+            })
+            ->toArray();
+    }
+    
+    /**
+     * Save "retain" filter values in session. Retain filters
+     * are those whose handler is defining a retainValueInSession()
+     * function which returns true.
+     */
+    final public function putRetainedFilterValuesInSession(array $filterValues): void
+    {
+        $this->getFilterHandlers()
+            ->flatten()
+            // Only filters sent which are declared "retained"
+            ->filter(function (Filter $handler) {
+                return $handler->isRetainInSession();
+            })
+            ->each(function (Filter $handler) use ($filterValues) {
+                $value = $handler->toQueryParam($filterValues[$handler->getKey()] ?? null);
+                
+                if ($value === null || $value === '') {
+                    // No value, we have to unset the retained value
+                    session()->forget("_sharp_retained_filter_{$handler->getKey()}");
+                } else {
+                    session()->put(
+                        "_sharp_retained_filter_{$handler->getKey()}",
+                        $value,
+                    );
+                }
+            });
+        
+        session()->save();
+    }
+    
+    protected function formatFilterValueToFront(Filter $handler, mixed $value)
+    {
+        if ($value && $handler instanceof DateRangeFilter) {
+            $value = [
+                'start' => $value['start']->format('Y-m-d'),
+                'end' => $value['end']->format('Y-m-d'),
+            ];
+        }
+        return $value;
+    }
 
     protected function appendFiltersToConfig(array &$config): void
     {
@@ -21,7 +105,6 @@ trait HandleFilters
                     ->map(function (Filter $filterHandler) {
                         $filterConfigData = [
                             'key' => $filterHandler->getKey(),
-                            'default' => $this->getFilterDefaultValue($filterHandler),
                             'label' => $filterHandler->getLabel(),
                         ];
 
@@ -154,41 +237,6 @@ trait HandleFilters
             ->all();
     }
 
-    /**
-     * Save "retain" filter values in session. Retain filters
-     * are those whose handler is defining a retainValueInSession()
-     * function which returns true.
-     */
-    protected function putRetainedFilterValuesInSession(): void
-    {
-        $this->getFilterHandlers()
-            ->flatten()
-            // Only filters sent which are declared "retained"
-            ->filter(function (Filter $handler) {
-                return request()->has("filter_{$handler->getKey()}")
-                    && $this->isRetainedFilter($handler);
-            })
-            ->each(function ($handler) {
-                // Array case: we store a coma separated string
-                // (to be consistent and only store strings on filter session)
-                $value = is_array(request()->get("filter_{$handler->getKey()}"))
-                    ? implode(',', request()->get("filter_{$handler->getKey()}"))
-                    : request()->get("filter_{$handler->getKey()}");
-
-                if (strlen(trim($value)) === 0) {
-                    // No value, we have to unset the retained value
-                    session()->forget("_sharp_retained_filter_{$handler->getKey()}");
-                } else {
-                    session()->put(
-                        "_sharp_retained_filter_{$handler->getKey()}",
-                        $value,
-                    );
-                }
-            });
-
-        session()->save();
-    }
-
     protected function isRetainedFilter(Filter $handler, $onlyValued = false): bool
     {
         return $handler->isRetainInSession()
@@ -198,58 +246,5 @@ trait HandleFilters
     protected function isGlobalFilter(Filter $handler): bool
     {
         return $handler instanceof GlobalRequiredFilter;
-    }
-
-    /**
-     * Return the filter default value, which can be, in that order:
-     * - the retained value, if the filter is retained
-     * - the default value is the filter is required
-     * - or null.
-     */
-    protected function getFilterDefaultValue(Filter $handler): int|string|array|null
-    {
-        if ($this->isGlobalFilter($handler)) {
-            return $handler->currentValue();
-        }
-
-        if ($this->isRetainedFilter($handler, true)) {
-            $sessionValue = session("_sharp_retained_filter_{$handler->getKey()}");
-
-            if ($handler instanceof SelectMultipleFilter) {
-                return explode(',', $sessionValue);
-            }
-
-            if ($handler instanceof DateRangeFilter) {
-                [$start, $end] = collect(explode('..', $sessionValue))
-                    ->map(function ($date) {
-                        if (strlen($date) == 8) {
-                            // Date was stored with a Ymd format, we need Y-m-d
-                            return sprintf('%s-%s-%s',
-                                substr($date, 0, 4),
-                                substr($date, 4, 2),
-                                substr($date, 6, 2),
-                            );
-                        }
-
-                        return $date;
-                    })
-                    ->toArray();
-
-                return compact('start', 'end');
-            }
-
-            return $sessionValue;
-        }
-
-        if ($handler instanceof SelectRequiredFilter) {
-            return $handler->defaultValue();
-        }
-
-        if ($handler instanceof DateRangeRequiredFilter) {
-            return collect($handler->defaultValue())
-                ->map->format('Y-m-d')->toArray();
-        }
-
-        return null;
     }
 }

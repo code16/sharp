@@ -62,16 +62,12 @@
         showEntityState: true,
     });
 
-    const emit = defineEmits(['update:query', 'reordering']);
+    const emit = defineEmits(['update:query', 'filter-change', 'reordering']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
 
-    function onFilterChanged(filter: FilterData, value: FilterData['value']) {
-        emit('update:query', {
-            ...props.query,
-            ...props.filters.nextQuery(filter, value),
-            page: 1,
-        });
+    function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        emit('filter-change', filter, value);
     }
 
     function onSearchSubmit(search: string) {
@@ -82,12 +78,7 @@
     }
 
     function onResetAll() {
-        emit('update:query', {
-            ...props.query,
-            ...props.filters.defaultQuery(props.entityList.visibleFilters),
-            search: null,
-            page: 1,
-        });
+        emit('update:query', {});
     }
 
     function onPageChange(page: number) {
@@ -241,7 +232,7 @@
                                         :filter="filter"
                                         :value="filters.values[filter.key]"
                                         :disabled="reordering"
-                                        @input="onFilterChanged(filter, $event)"
+                                        @input="onFilterChange(filter, $event)"
                                     />
                                 </template>
                                 <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">

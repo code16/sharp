@@ -29,7 +29,7 @@ abstract class SharpDashboard
 
     final public function init(): self
     {
-        $this->putRetainedFilterValuesInSession();
+//        $this->putRetainedFilterValuesInSession();
 
         $this->queryParams = DashboardQueryParams::create()
             ->fillWithRequest()
