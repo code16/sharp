@@ -35,7 +35,7 @@
             const value = props.filter.values.filter(v => {
                 const alreadySelected = (props.value as Array<number | string>)?.find(vv => v.id == vv);
                 return v.id === selectValue.id ? !alreadySelected : alreadySelected;
-            });
+            }).map(v => v.id);
             emit('input', value);
         } else {
             emit('input', props.value == selectValue.id ? null : selectValue.id);
@@ -49,7 +49,7 @@
             <Button variant="outline" size="sm" class="h-8 border-dashed">
                 <PlusCircle class="mr-2 h-4 w-4" />
                 {{ filter.label }}
-                <template v-if="value != null">
+                <template v-if="Array.isArray(value) ? value.length : value != null">
                     <Separator orientation="vertical" class="mx-2 h-4" />
                     <Badge
                         variant="secondary"
@@ -68,7 +68,7 @@
                                 </Badge>
                             </template>
                             <template v-else>
-                                <template v-for="selectValue in filter.values.filter((v) => (value as Array<string | number>).includes(v.id))" :key="selectValue.id">
+                                <template v-for="selectValue in filter.values.filter((v) => (value as Array<string | number>).some(vv => v.id == vv))" :key="selectValue.id">
                                     <Badge variant="secondary" class="rounded-sm px-1 font-normal">
                                         {{ selectValue.label }}
                                     </Badge>
