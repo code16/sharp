@@ -24,7 +24,6 @@ class EntityListController extends SharpProtectedController
 
     public function show(string $entityKey)
     {
-        dd(request()->input());
         sharp_check_ability('entity', $entityKey);
 
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
