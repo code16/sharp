@@ -110,6 +110,7 @@ it('uses the default value of a required filter if no value was sent', function 
 });
 
 it('handles multiple filter values', function () {
+    $this->withoutExceptionHandling();
     fakeListFor('person', new class extends PersonList
     {
         protected function getFilters(): ?array

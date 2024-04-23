@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -13,15 +12,7 @@ trait HasFiltersInQuery
 
     public function filterFor(string $filterFullClassNameOrKey): mixed
     {
-        $handler = $this->filterHandlers
-            ->flatten()
-            ->filter(function (Filter $filter) use ($filterFullClassNameOrKey) {
-                if (class_exists($filterFullClassNameOrKey)) {
-                    return $filter instanceof $filterFullClassNameOrKey;
-                }
-                return $filter->getKey() === $filterFullClassNameOrKey;
-            })
-            ->first();
+        $handler = $this->findFilterHandler($filterFullClassNameOrKey);
 
         if (!$handler || !isset($this->filterValues[$handler->getKey()])) {
             return null;
@@ -30,6 +21,9 @@ trait HasFiltersInQuery
         return $handler->fromQueryParam($this->filterValues[$handler->getKey()]);
     }
 
+    /**
+     * @internal
+     */
     public function setDefaultFilters(array $filters): self
     {
         collect($filters)
@@ -43,7 +37,8 @@ trait HasFiltersInQuery
     /**
      * @internal
      */
-    public function getFilterValues(): array {
+    public function getFilterValues(): array
+    {
         return $this->filterValues;
     }
 
@@ -53,31 +48,31 @@ trait HasFiltersInQuery
         
         collect($query)
             ->filter(fn ($value, $name) => Str::startsWith($name, 'filter_'))
-            ->each(function ($value, $name) {
-                $this->setFilterValue(Str::after($name, 'filter_'), $value);
-            });
+            ->mapWithKeys(fn ($value, $name) => [Str::after($name, 'filter_') => $value])
+            ->each(fn ($value, $key) => $this->setFilterValue($key, $value));
     }
 
-    protected function setFilterValue(string $filter, array|string|null $value): void
+    protected function setFilterValue(string $filterKey, array|string|null $value): void
     {
-        if (is_array($value)) {
+        if($filterHandler = $this->findFilterHandler($filterKey)) {
             // Force all filter values to be string, to be consistent with all use cases
-            // (filter in EntityList or in Command)
-            if (empty($value)) {
-                $value = null;
-            } elseif (($value['start'] ?? null) instanceof Carbon) {
-                // RangeFilter case
-                $value = collect($value)
-                    ->map->format('Ymd')
-                    ->implode('..');
-            } else {
-                // Multiple filter case
-                $value = implode(',', $value);
-            }
+            $formattedValue = is_string($value) ? $value : $filterHandler->toQueryParam($value);
+            $this->filterValues[$filterHandler->getKey()] = $formattedValue;
+
+            event('filter-'.$filterHandler->getKey().'-was-set', [$formattedValue, $this]);
         }
+    }
 
-        $this->filterValues[$filter] = $value;
-
-        event("filter-{$filter}-was-set", [$value, $this]);
+    private function findFilterHandler(string $filterFullClassNameOrKey): ?Filter
+    {
+        return $this->filterHandlers
+            ->flatten()
+            ->filter(function (Filter $filter) use ($filterFullClassNameOrKey) {
+                if (class_exists($filterFullClassNameOrKey)) {
+                    return $filter instanceof $filterFullClassNameOrKey;
+                }
+                return $filter->getKey() === $filterFullClassNameOrKey;
+            })
+            ->first();
     }
 }
