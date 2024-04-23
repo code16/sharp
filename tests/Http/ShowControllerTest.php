@@ -22,7 +22,25 @@ beforeEach(function () {
     login();
 });
 
-it('gets show data for an instance', function () {
+it('gets formatted show data for an instance', function () {
+    fakeShowFor('person', new class extends PersonShow
+    {
+        public function find($id): array
+        {
+            return $this->transform([
+                'name' => 'James Clerk Maxwell',
+            ]);
+        }
+    });
+
+    $this->get('/sharp/s-list/person/s-show/person/1')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
+        );
+});
+
+it('gets formatted show data even without data transformation', function () {
     fakeShowFor('person', new class extends PersonShow
     {
         public function find($id): array
@@ -36,7 +54,7 @@ it('gets show data for an instance', function () {
     $this->get('/sharp/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('show.data.name', 'James Clerk Maxwell')
+            ->where('show.data.name', ['text' => 'James Clerk Maxwell'])
         );
 });
 
@@ -106,6 +124,7 @@ it('gets attribute for entity state if defined', function () {
 });
 
 it('returns configured show fields', function () {
+    $this->withoutExceptionHandling();
     fakeShowFor('person', new class extends PersonShow
     {
         public function buildShowFields(FieldsContainer $showFields): void

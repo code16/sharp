@@ -109,7 +109,7 @@ it('uses labels defined for entities in the config', function () {
         );
 });
 
-it('uses custom labels on leaves if configured', function () {
+it('uses custom labels on leaves if configured, based on unformatted data', function () {
     fakeShowFor('person', new class extends PersonShow
     {
         public function buildShowConfig(): void
@@ -119,7 +119,10 @@ it('uses custom labels on leaves if configured', function () {
 
         public function find($id): array
         {
-            return ['id' => 1, 'name' => 'Marie Curie'];
+            return $this->transform([
+                'id' => 1,
+                'name' => 'Marie Curie'
+            ]);
         }
     });
 
@@ -134,6 +137,10 @@ it('uses custom labels on leaves if configured', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('breadcrumb.items.0.label', 'List')
+            // Data is not formatted for breadcrumb:
             ->where('breadcrumb.items.1.label', 'Marie Curie')
+            // Data is formatted for fields:
+            ->where('show.data.name', ['text' => 'Marie Curie'])
         );
 });
+

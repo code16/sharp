@@ -15,7 +15,7 @@ final class ShowData extends Data
         public InstanceAuthorizationsData $authorizations,
         public ShowConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: ShowFieldData["value"] }')]
-        public array $data,
+        public ?array $data,
         /** @var DataCollection<string,ShowFieldData> */
         public DataCollection $fields,
         public ShowLayoutData $layout,

@@ -443,6 +443,7 @@ it('disallows to call an unauthorized entity command', function () {
 });
 
 it('returns the form fields of the entity command and build a basic layout if missing', function () {
+    $this->withoutExceptionHandling();
     fakeListFor('person', new class extends PersonList
     {
         protected function getEntityCommands(): ?array
