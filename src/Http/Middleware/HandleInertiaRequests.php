@@ -17,9 +17,8 @@ class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'sharp::app';
 
-    public function __construct(
-        protected Filesystem $filesystem
-    ) {
+    public function __construct(protected Filesystem $filesystem)
+    {
     }
 
     public function share(Request $request)
@@ -57,14 +56,11 @@ class HandleInertiaRequests extends Middleware
             }),
             'config' => [
                 'sharp.auth.forgotten_password.enabled' => sharpConfig()->get('auth.forgotten_password.enabled'),
-                'sharp.auth.login_form.display_app_name' => config('sharp.auth.login_form.display_app_name', true),
                 'sharp.auth.suggest_remember_me' => sharpConfig()->get('auth.suggest_remember_me'),
                 'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
-                'sharp.display_sharp_version_in_title' => config('sharp.display_sharp_version_in_title', true),
-                'sharp.display_breadcrumb' => config('sharp.display_breadcrumb', false),
-                'sharp.markdown_editor.tight_lists_only' => config('sharp.markdown_editor.tight_lists_only', true),
-                'sharp.markdown_editor.nl2br' => config('sharp.markdown_editor.nl2br', false),
-                'sharp.name' => config('sharp.name', 'Sharp'),
+                'sharp.display_sharp_version_in_title' => sharpConfig()->get('display_sharp_version_in_title'),
+                'sharp.display_breadcrumb' => sharpConfig()->get('display_breadcrumb'),
+                'sharp.name' => sharpConfig()->get('sharp.name'),
                 'sharp.search.enabled' => sharpConfig()->get('search.enabled'),
                 'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'),
                 'sharp.theme.logo_height' => sharpConfig()->get('theme.logo_height'),
