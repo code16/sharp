@@ -37,6 +37,17 @@
         }
     }
 
+    function onReset() {
+        router.post(
+            route('code16.sharp.list.filters.store', { entityKey }),
+            {
+                filterValues: filters.defaultValues(filters.rootFilters),
+                query,
+            },
+            { preserveState: false, preserveScroll: false }
+        );
+    }
+
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
         router.post(
             route('code16.sharp.list.filters.store', { entityKey }),
@@ -60,6 +71,7 @@
                 :filters="filters"
                 :commands="commands"
                 :query="query"
+                @reset="onReset"
                 @filter-change="onFilterChange"
                 @update:query="onQueryChange"
             >

@@ -9,7 +9,7 @@ import type { FilterQueryParams, FilterValues, ParsedValue, SerializedValue } fr
 export class FilterManager {
     filters?: ConfigFiltersData;
 
-    defaultValues: FilterValuesData['default'];
+    #defaultValues: FilterValuesData['default'];
     state = reactive({
         values: {} as FilterValues,
     })
@@ -17,7 +17,7 @@ export class FilterManager {
     constructor(filters?: ConfigFiltersData, filterValues?: FilterValuesData) {
         this.filters = filters;
         this.values = filterValues.current;
-        this.defaultValues = filterValues.default;
+        this.#defaultValues = filterValues.default;
     }
 
     get rootFilters(): Array<FilterData> {
@@ -47,7 +47,7 @@ export class FilterManager {
             this.getQueryParams(
                 Object.fromEntries(filters.map(filter => [filter.key, this.values[filter.key]]))
             ),
-            this.getQueryParams(this.#defaultValues(filters))
+            this.getQueryParams(this.defaultValues(filters))
         );
     }
 
@@ -82,9 +82,9 @@ export class FilterManager {
         return { ...this.values, [filter.key]: value };
     }
 
-    #defaultValues(filters: FilterData[]) {
+    defaultValues(filters: FilterData[]) {
         return Object.fromEntries(
-            filters.map(filter => [filter.key, this.defaultValues[filter.key]])
+            filters.map(filter => [filter.key, this.#defaultValues[filter.key]])
         );
     }
 

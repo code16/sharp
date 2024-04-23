@@ -62,7 +62,7 @@
         showEntityState: true,
     });
 
-    const emit = defineEmits(['update:query', 'filter-change', 'reordering']);
+    const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
 
@@ -78,7 +78,7 @@
     }
 
     function onResetAll() {
-        emit('update:query', {});
+        emit('reset');
     }
 
     function onPageChange(page: number) {

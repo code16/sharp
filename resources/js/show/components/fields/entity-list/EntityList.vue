@@ -3,15 +3,20 @@
     import { EntityList } from '@/entity-list/EntityList';
     import EntityListComponent from '@/entity-list/components/EntityList.vue'
     import EntityListTitle from '@/entity-list/components/EntityListTitle.vue'
-    import { ShowFieldProps } from "../../../types";
-    import { EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
+    import { ShowFieldProps } from "@/show/types";
+    import {
+        EntityListData,
+        EntityListQueryParamsData,
+        FilterData,
+        ShowEntityListFieldData
+    } from "@/types";
     import { Ref, ref } from "vue";
     import { useStickyLayout } from "./useStickyLayout";
-    import { useFilters } from "@/filters/useFilters";
     import { useCommands } from "@/commands/useCommands";
     import { api } from "@/api/api";
-    import { FilterQueryParams } from "@/filters/types";
+    import { FilterQueryParams, FilterValues } from "@/filters/types";
     import { route } from "@/utils/url";
+    import { FilterManager } from "@/filters/FilterManager";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
 
@@ -20,50 +25,76 @@
     const collapsed = ref(props.collapsable);
     const { sticky, onListChange } = useStickyLayout(el);
     const entityList: Ref<EntityList | null> = ref(null);
-    const filters = useFilters();
-    const query: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({
-        ...filters.getQueryParams(props.field.hiddenFilters)
-    });
+    const filters: Ref<FilterManager | null> = ref(null);
+    const currentQuery: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({});
     const commands = useCommands({
-        reload: () => init(query.value),
+        reload: () => {
+            init();
+        },
         refresh: (data) => {
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
     });
 
-    async function init(query) {
+    async function init({ query, filterValues }: { query?: EntityListQueryParamsData & FilterQueryParams, filterValues?: FilterValues } = {}) {
         loading.value = true;
-        const data = await api.get(
-            route('code16.sharp.api.list', { entityKey: props.field.entityListKey }),
-            { params: query }
+        const data = await api.post(
+            route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
+            {
+                query: query ?? currentQuery.value,
+                filterValues: filterValues ?? filters.value.values,
+                hiddenFilters: props.field.hiddenFilters ?? {},
+            }
         )
             .then(response => response.data);
 
+        console.log(data);
+
         loading.value = false;
         entityList.value = new EntityList(
-            data,
+            data.data as EntityListData,
             props.field.entityListKey,
             props.field.hiddenFilters,
             props.field.hiddenCommands,
         );
-        filters.filters = entityList.value.config.filters;
-        filters.setValuesFromQuery(query);
+        filters.value = new FilterManager(
+            entityList.value.config.filters,
+            entityList.value.filterValues,
+        );
+        currentQuery.value = (data as any).meta.query;
+    }
+
+    function onQueryChange(newQuery) {
+        init({
+            query: newQuery
+        });
+    }
+
+    function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        init({
+            filterValues: filters.value.nextValues(filter, value),
+        });
+    }
+
+    function onReset() {
+        init({
+            filterValues: filters.value.defaultValues(filters.value.rootFilters),
+        });
     }
 
     function onToggle() {
         collapsed.value = !collapsed.value;
         if(!entityList.value) {
-            init(query.value);
+            init({
+                filterValues: props.field.hiddenFilters ?? {}
+            });
         }
     }
 
-    async function onQueryChange(newQuery) {
-        await init(newQuery);
-        query.value = newQuery;
-    }
-
     if(!props.collapsable) {
-        init(query.value);
+        init({
+            filterValues: props.field.hiddenFilters ?? {}
+        });
     }
 </script>
 
@@ -79,7 +110,7 @@
                v-if="value"
                :entity-list="entityList"
                :entity-key="field.entityListKey"
-               :query="query"
+               :query="currentQuery"
                :filters="filters"
                :commands="commands"
                :show-create-button="field.showCreateButton"
@@ -90,6 +121,8 @@
                inline
                @change="onListChange"
                @update:query="onQueryChange"
+               @filter-change="onFilterChange"
+               @reset="onReset"
                @reordering="$emit('reordering', $event)"
            >
                <template v-slot:title>

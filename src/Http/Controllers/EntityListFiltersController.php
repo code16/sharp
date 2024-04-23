@@ -14,6 +14,8 @@ class EntityListFiltersController extends SharpProtectedController
     
     public function store(string $entityKey)
     {
+        sharp_check_ability('entity', $entityKey);
+        
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         
