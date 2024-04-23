@@ -179,6 +179,7 @@ it('allow access by default', function () {
 });
 
 it('checks the main entity prohibited actions in case of a sub entity', function () {
+
     app(SharpEntityManager::class)
         ->entityFor('person')
         ->setMultiforms([

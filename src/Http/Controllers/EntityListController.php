@@ -22,7 +22,7 @@ class EntityListController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $entityKey)
+    public function show(string $entityKey, SharpBreadcrumb $breadcrumb)
     {
         sharp_check_ability('entity', $entityKey);
 
@@ -59,7 +59,7 @@ class EntityListController extends SharpProtectedController
         return Inertia::render('EntityList/EntityList', [
             'entityList' => EntityListData::from($data),
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => $breadcrumb->getItems(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);

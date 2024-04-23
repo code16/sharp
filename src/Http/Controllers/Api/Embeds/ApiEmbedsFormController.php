@@ -22,7 +22,9 @@ class ApiEmbedsFormController extends Controller
         return EmbedFormData::from([
             'fields' => $embed->fields(),
             'layout' => $embed->formLayout(),
-            'data' => $embed->transformDataForFormFields(request()->all()),
+            'data' => $embed->applyFormatters(
+                $embed->transformDataForFormFields(request()->all())
+            ),
         ]);
     }
 

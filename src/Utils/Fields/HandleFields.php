@@ -69,6 +69,23 @@ trait HandleFields
         return $fields[$key] ?? null;
     }
 
+    final public function applyFormatters(?array $attributes): ?array
+    {
+        if (!$attributes) {
+            return null;
+        }
+
+        return collect($attributes)
+            ->map(function ($value, $key) {
+                $field = $this->findFieldByKey($key);
+
+                return $field
+                    ? $field->formatter()->toFront($field, $value)
+                    : $value;
+            })
+            ->all();
+    }
+
     /**
      * Check if the form was previously built, and build it if not.
      */
