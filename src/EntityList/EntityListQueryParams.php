@@ -4,6 +4,7 @@ namespace Code16\Sharp\EntityList;
 
 use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
 use Code16\Sharp\Utils\StringUtil;
+use Illuminate\Support\Collection;
 
 class EntityListQueryParams
 {
@@ -15,14 +16,12 @@ class EntityListQueryParams
     protected ?string $sortedDir = null;
     protected array $specificIds = [];
 
-    public static function create(): static
+    public static function create(Collection $filterHandlers): static
     {
-        return new static;
-    }
-
-    public function getPage(): ?int
-    {
-        return $this->page;
+        return tap(
+            new static,
+            fn (EntityListQueryParams $instance) => $instance->filterHandlers = $filterHandlers
+        );
     }
 
     public function setDefaultSort(?string $defaultSortedBy, ?string $defaultSortedDir): self
@@ -52,6 +51,11 @@ class EntityListQueryParams
         $this->fillFilterWithRequest($query);
 
         return $this;
+    }
+
+    public function getPage(): ?int
+    {
+        return $this->page;
     }
 
     public function hasSearch(): bool

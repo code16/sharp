@@ -3,14 +3,18 @@
 namespace Code16\Sharp\Dashboard;
 
 use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
+use Illuminate\Support\Collection;
 
 class DashboardQueryParams
 {
     use HasFiltersInQuery;
 
-    public static function create(): self
+    public static function create(Collection $filterHandlers): static
     {
-        return new static;
+        return tap(
+            new static,
+            fn (DashboardQueryParams $instance) => $instance->filterHandlers = $filterHandlers
+        );
     }
 
     public function fillWithRequest(): self

@@ -1,6 +1,9 @@
 <?php
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\Utils\Filters\DateRangeFilter;
+use Code16\Sharp\Utils\Filters\SelectFilter;
+use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
 use Illuminate\Support\Carbon;
 
 it('handles hasSearch', function () {
@@ -41,9 +44,9 @@ it('finds filter values', function () {
         ->and(buildParams()->filterFor('job'))->toBeNull();
 });
 
-function buildParams($p = 1, $s = '', $sb = null, $sd = null, $f = null): EntityListQueryParams
+function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): EntityListQueryParams
 {
-    return new class($p, $s, $sb, $sd, $f) extends EntityListQueryParams
+    return new class($p, $s, $sb, $sd, $filters) extends EntityListQueryParams
     {
         public function __construct($p, $s, $sb, $sd, $f)
         {
@@ -51,8 +54,47 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $f = null): Entity
             $this->search = $s;
             $this->sortedBy = $sb;
             $this->sortedDir = $sd;
+            $this->filterHandlers = collect(['__root' => []]);
             if ($f) {
-                $this->filters = $f;
+                $this->filterValues = $f;
+                $this->filterHandlers['__root'] = collect($f)
+                    ->map (function ($value, $key) {
+                        if (str($value)->contains('..')) {
+                            return new class($key) extends DateRangeFilter
+                            {
+                                public function __construct(string $key)
+                                {
+                                    $this->customKey = $key;
+                                }
+                            };
+                        }
+
+                        if (str($value)->contains(',')) {
+                            return new class($key) extends SelectMultipleFilter
+                            {
+                                public function __construct(string $key)
+                                {
+                                    $this->customKey = $key;
+                                }
+                                public function values(): array
+                                {
+                                    return [];
+                                }
+                            };
+                        }
+
+                        return new class($key) extends SelectFilter
+                        {
+                            public function __construct(string $key)
+                            {
+                                $this->customKey = $key;
+                            }
+                            public function values(): array
+                            {
+                                return [];
+                            }
+                        };
+                    });
             }
         }
     };

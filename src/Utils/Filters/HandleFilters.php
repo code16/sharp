@@ -140,7 +140,7 @@ trait HandleFilters
             });
     }
 
-    private function getFilterHandlers(): Collection
+    final public function getFilterHandlers(): Collection
     {
         if ($this->filterHandlers === null) {
             $this->filterHandlers = collect($this->getFilters())

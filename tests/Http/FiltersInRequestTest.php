@@ -14,6 +14,7 @@ beforeEach(function () {
 });
 
 it('filters instances of an entity list', function () {
+    $this->withoutExceptionHandling();
     fakeListFor('person', new class extends PersonList
     {
         protected function getFilters(): ?array

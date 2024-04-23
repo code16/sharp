@@ -3,43 +3,31 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 trait HasFiltersInQuery
 {
-    protected array $filters;
+    protected Collection $filterHandlers;
+    protected array $filterValues;
 
     public function filterFor(string $filterFullClassNameOrKey): mixed
     {
-        if (class_exists($filterFullClassNameOrKey)) {
-            $key = tap(
-                app($filterFullClassNameOrKey),
-                fn (Filter $filter) => $filter->buildFilterConfig()
-            )->getKey();
-        } else {
-            $key = $filterFullClassNameOrKey;
-        }
+        $handler = $this->filterHandlers
+            ->flatten()
+            ->filter(function (Filter $filter) use ($filterFullClassNameOrKey) {
+                if (class_exists($filterFullClassNameOrKey)) {
+                    return $filter instanceof $filterFullClassNameOrKey;
+                }
+                return $filter->getKey() === $filterFullClassNameOrKey;
+            })
+            ->first();
 
-        if (! isset($this->filters[$key])) {
+        if (!$handler || !isset($this->filterValues[$handler->getKey()])) {
             return null;
         }
 
-        if (Str::contains($this->filters[$key], '..')) {
-            // DateRangeFilter
-            [$start, $end] = explode('..', $this->filters[$key]);
-
-            return [
-                'start' => Carbon::createFromFormat('Ymd', $start)->startOfDay(),
-                'end' => Carbon::createFromFormat('Ymd', $end)->endOfDay(),
-            ];
-        }
-
-        if (Str::contains($this->filters[$key], ',')) {
-            // Multiple
-            return explode(',', $this->filters[$key]);
-        }
-
-        return $this->filters[$key];
+        return $handler->fromQueryParam($this->filterValues[$handler->getKey()]);
     }
 
     public function setDefaultFilters(array $filters): self
@@ -56,17 +44,15 @@ trait HasFiltersInQuery
      * @internal
      */
     public function getFilterValues(): array {
-        return $this->filters;
+        return $this->filterValues;
     }
 
     protected function fillFilterWithRequest(array $query = null): void
     {
-        $this->filters = [];
+        $this->filterValues = [];
         
         collect($query)
-            ->filter(function ($value, $name) {
-                return Str::startsWith($name, 'filter_');
-            })
+            ->filter(fn ($value, $name) => Str::startsWith($name, 'filter_'))
             ->each(function ($value, $name) {
                 $this->setFilterValue(Str::after($name, 'filter_'), $value);
             });
@@ -90,7 +76,7 @@ trait HasFiltersInQuery
             }
         }
 
-        $this->filters[$filter] = $value;
+        $this->filterValues[$filter] = $value;
 
         event("filter-{$filter}-was-set", [$value, $this]);
     }

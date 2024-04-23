@@ -36,9 +36,7 @@ abstract class SharpEntityList
 
     final public function initQueryParams(): self
     {
-//        $this->putRetainedFilterValuesInSession();
-
-        $this->queryParams = EntityListQueryParams::create()
+        $this->queryParams = EntityListQueryParams::create($this->getFilterHandlers())
             ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
             ->fillWithRequest()
             ->setDefaultFilters($this->getFilterDefaultValues());
