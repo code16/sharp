@@ -2,19 +2,17 @@
 
 namespace Code16\Sharp\Dashboard;
 
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
-use Illuminate\Support\Collection;
 
 class DashboardQueryParams
 {
     use HasFiltersInQuery;
-
-    public static function create(Collection $filterHandlers): static
-    {
-        return tap(
-            new static,
-            fn (DashboardQueryParams $instance) => $instance->filterHandlers = $filterHandlers
-        );
+    
+    public function __construct(
+        protected FilterContainer $filterContainer,
+        protected array $filterValues = [],
+    ) {
     }
 
     public function fillWithRequest(): self

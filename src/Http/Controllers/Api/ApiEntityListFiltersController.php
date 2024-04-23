@@ -14,16 +14,17 @@ class ApiEntityListFiltersController extends ApiController
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
         
-        $list->putRetainedFilterValuesInSession(
-            collect(request()->input('filterValues', []))
-                ->diffKeys(request()->input('hiddenFilters', []))
-                ->toArray()
-        );
+        $list->filterContainer()
+            ->putRetainedFilterValuesInSession(
+                collect(request()->input('filterValues', []))
+                    ->diffKeys(request()->input('hiddenFilters', []))
+                    ->toArray()
+            );
         
         return redirect()->route('code16.sharp.api.list', [
             'entityKey' => $entityKey,
             ...request()->input('query', []),
-            ...$list->getFilterValuesQueryParams(request()->input('filterValues', [])),
+            ...$list->filterContainer()->getQueryParamsFromFilterValues(request()->input('filterValues', [])),
             'page' => null,
         ]);
     }

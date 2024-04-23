@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -36,10 +37,16 @@ abstract class SharpEntityList
 
     final public function initQueryParams(): self
     {
-        $this->queryParams = EntityListQueryParams::create($this->getFilterHandlers())
-            ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
-            ->fillWithRequest()
-            ->setDefaultFilters($this->getFilterDefaultValues());
+        $this->queryParams = (new EntityListQueryParams(
+            filterContainer: $this->filterContainer(),
+            filterValues: [
+                ...$this->filterContainer()->getDefaultFilterValues(),
+                ...$this->filterContainer()->getFilterValuesRetainedInSession(),
+            ],
+            sortedBy: $this->defaultSort,
+            sortedDir: $this->defaultSortDir,
+        ))
+            ->fillWithRequest();
 
         return $this;
     }
@@ -106,10 +113,10 @@ abstract class SharpEntityList
             'hasShowPage' => $hasShowPage,
             'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
             'deleteHidden' => $this->deleteHidden,
+            'filters' => $this->filterContainer()->getFiltersConfigArray(),
         ];
 
         return tap($config, function (&$config) {
-            $this->appendFiltersToConfig($config);
             $this->appendEntityStateToConfig($config);
             $this->appendInstanceCommandsToConfig($config);
             $this->appendEntityCommandsToConfig($config);

@@ -20,12 +20,12 @@ class DashboardFiltersController extends SharpProtectedController
         $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
         
-        $dashboard->putRetainedFilterValuesInSession(request()->input('filterValues'));
+        $dashboard->filterContainer()->putRetainedFilterValuesInSession(request()->input('filterValues'));
         
         return redirect()->route('code16.sharp.dashboard', [
             'dashboardKey' => $dashboardKey,
             ...request()->input('query', []),
-            ...$dashboard->getFilterValuesQueryParams(request()->input('filterValues', [])),
+            ...$dashboard->filterContainer()->getQueryParamsFromFilterValues(request()->input('filterValues', [])),
         ]);
     }
 }

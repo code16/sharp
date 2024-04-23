@@ -20,38 +20,29 @@ final class GlobalFilters implements Arrayable
 
     public function toArray(): array
     {
-        $config = [];
-        $this->appendFiltersToConfig($config);
-        
         return [
-            'config' => $config,
-            'filterValues' => $this->getFilterValuesToFront(),
+            'config' => [
+                'filters' => $this->filterContainer()->getFiltersConfigArray(),
+            ],
+            'filterValues' => [
+                'default' => $this->filterContainer()->getFilterHandlers()
+                    ->flatten()
+                    ->mapWithKeys(function (Filter $handler) {
+                        return [$handler->getKey() => $handler->defaultValue()];
+                    })
+                    ->toArray(),
+                'current' => $this->filterContainer()->getFilterHandlers()
+                    ->flatten()
+                    ->mapWithKeys(function (Filter $handler) {
+                        return [$handler->getKey() => $handler->currentValue()];
+                    })
+                    ->toArray(),
+            ],
         ];
     }
     
-    public function getFilterValuesToFront(): array
+    public function findFilter(string $key): ?Filter
     {
-        return [
-            'default' => $this->getFilterHandlers()
-                ->flatten()
-                ->mapWithKeys(function (Filter $handler) {
-                    return [$handler->getKey() => $handler->defaultValue()];
-                })
-                ->toArray(),
-            'current' => $this->getFilterHandlers()
-                ->flatten()
-                ->mapWithKeys(function (Filter $handler) {
-                    return [$handler->getKey() => $handler->currentValue()];
-                })
-                ->toArray(),
-        ];
-    }
-
-    public function findFilter(string $key): ?GlobalRequiredFilter
-    {
-        return collect($this->getFilters())
-            ->each(fn (Filter $filter) => $filter->buildFilterConfig())
-            ->filter(fn (Filter $filter) => $filter->getKey() == $key)
-            ->first();
+        return $this->filterContainer()->findFilterHandler($key);
     }
 }

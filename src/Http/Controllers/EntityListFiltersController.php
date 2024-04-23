@@ -19,12 +19,12 @@ class EntityListFiltersController extends SharpProtectedController
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
         
-        $list->putRetainedFilterValuesInSession(request()->input('filterValues'));
+        $list->filterContainer()->putRetainedFilterValuesInSession(request()->input('filterValues'));
         
         return redirect()->route('code16.sharp.list', [
             'entityKey' => $entityKey,
             ...request()->input('query', []),
-            ...$list->getFilterValuesQueryParams(request()->input('filterValues')),
+            ...$list->filterContainer()->getQueryParamsFromFilterValues(request()->input('filterValues')),
             'page' => null,
         ]);
     }

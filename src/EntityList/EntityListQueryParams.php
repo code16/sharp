@@ -2,9 +2,9 @@
 
 namespace Code16\Sharp\EntityList;
 
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HasFiltersInQuery;
 use Code16\Sharp\Utils\StringUtil;
-use Illuminate\Support\Collection;
 
 class EntityListQueryParams
 {
@@ -12,24 +12,14 @@ class EntityListQueryParams
 
     protected ?int $page;
     protected ?string $search = null;
-    protected ?string $sortedBy = null;
-    protected ?string $sortedDir = null;
     protected array $specificIds = [];
-
-    public static function create(Collection $filterHandlers): static
-    {
-        return tap(
-            new static,
-            fn (EntityListQueryParams $instance) => $instance->filterHandlers = $filterHandlers
-        );
-    }
-
-    public function setDefaultSort(?string $defaultSortedBy, ?string $defaultSortedDir): self
-    {
-        $this->sortedBy = $defaultSortedBy;
-        $this->sortedDir = $defaultSortedDir;
-
-        return $this;
+    
+    public function __construct(
+        protected FilterContainer $filterContainer,
+        protected array $filterValues = [],
+        protected ?string $sortedBy = null,
+        protected ?string $sortedDir = null,
+    ) {
     }
 
     public function fillWithRequest(): self

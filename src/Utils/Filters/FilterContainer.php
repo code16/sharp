@@ -2,12 +2,20 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Exceptions\SharpException;
+use Code16\Sharp\Utils\Filters\Concerns\BuildsFiltersConfigArray;
+use Code16\Sharp\Utils\Filters\Concerns\HandlesFiltersInQueryParams;
+use Code16\Sharp\Utils\Filters\Concerns\HandlesFiltersInSession;
+use Code16\Sharp\Utils\Filters\Concerns\ProvidesFilterValuesToFront;
 use Illuminate\Support\Collection;
 
 class FilterContainer
 {
+    use BuildsFiltersConfigArray;
+    use HandlesFiltersInSession;
+    use HandlesFiltersInQueryParams;
+    use ProvidesFilterValuesToFront;
+    
     protected ?Collection $filterHandlers = null;
     
     public function __construct(
@@ -15,34 +23,7 @@ class FilterContainer
     ) {
     }
     
-    final public function getFilterValuesQueryParams(array $filterValues): array
-    {
-        return $this->getFilterHandlers()
-            ->flatten()
-            ->mapWithKeys(function (Filter $handler) use ($filterValues) {
-                $value = $handler->toQueryParam($filterValues[$handler->getKey()] ?? null);
-                return [
-                    'filter_'.$handler->getKey() => $value,
-                ];
-            })
-            ->toArray();
-    }
-    
-    protected function formatFilterValueToFront(Filter $handler, mixed $value)
-    {
-        if ($value && $handler instanceof DateRangeFilter) {
-            $value = [
-                'start' => $value['start']->format('Y-m-d'),
-                'end' => $value['end']->format('Y-m-d'),
-            ];
-        }
-        return $value;
-    }
-    
-    /**
-     * @internal
-     */
-    final public function getFilterHandlers(): Collection
+    public function getFilterHandlers(): Collection
     {
         if ($this->filterHandlers === null) {
             $this->filterHandlers = collect($this->baseFilters)
@@ -91,46 +72,57 @@ class FilterContainer
         return $this->filterHandlers;
     }
     
-    protected function getFilterDefaultValues(): array
+    public function findFilterHandler(string $filterFullClassNameOrKey): ?Filter
+    {
+        return $this
+            ->getFilterHandlers()
+            ->flatten()
+            ->filter(function (Filter $filter) use ($filterFullClassNameOrKey) {
+                if (class_exists($filterFullClassNameOrKey)) {
+                    return $filter instanceof $filterFullClassNameOrKey;
+                }
+                return $filter->getKey() === $filterFullClassNameOrKey;
+            })
+            ->first();
+    }
+    
+    public function formatSelectFilterValues(SelectFilter $handler): array
+    {
+        $values = $handler->values();
+        
+        if (! is_array(collect($values)->first())) {
+            return collect($values)
+                ->map(function ($label, $id) {
+                    return compact('id', 'label');
+                })
+                ->values()
+                ->all();
+        }
+        
+        return $values;
+    }
+    
+    protected function getCurrentFilterValues(): Collection
+    {
+        return collect([
+            ...$this->getDefaultFilterValues(),
+            ...$this->getFilterValuesRetainedInSession(),
+            ...$this->getFilterValuesFromQueryParams(request()->all()),
+        ]);
+    }
+    
+    public function getDefaultFilterValues(): Collection
     {
         return $this->getFilterHandlers()
             ->flatten()
-            
-            // Only filters which aren't *valuated* in the request
-            ->filter(fn (Filter $handler) => ! request()->get('filter_'.$handler->getKey()))
-            
-            // Only required filters or retained filters with value saved in session
-            ->filter(function (Filter $handler) {
-                return $handler instanceof SelectRequiredFilter
-                    || $handler instanceof DateRangeRequiredFilter
-                    || $this->isRetainedFilter($handler);
-            })
-            
-            ->map(function (Filter $handler) {
-                if ($this->isRetainedFilter($handler)) {
-                    return [
-                        'name' => $handler->getKey(),
-                        'value' => session("_sharp_retained_filter_{$handler->getKey()}"),
-                    ];
-                }
-                
+            ->whereInstanceOf([
+                SelectRequiredFilter::class,
+                DateRangeRequiredFilter::class,
+            ])
+            ->mapWithKeys(function (Filter $handler) {
                 return [
-                    'name' => $handler->getKey(),
-                    'value' => $handler->defaultValue(),
+                    $handler->getKey() => $handler->defaultValue(),
                 ];
-            })
-            ->pluck('value', 'name')
-            ->all();
-    }
-    
-    protected function isRetainedFilter(Filter $handler): bool
-    {
-        return $handler->isRetainInSession()
-            && session()->has("_sharp_retained_filter_{$handler->getKey()}");
-    }
-    
-    protected function isHiddenFilter(Filter $handler): bool
-    {
-        return $handler instanceof HiddenFilter;
+            });
     }
 }

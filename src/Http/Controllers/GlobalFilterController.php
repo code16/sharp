@@ -10,15 +10,15 @@ use Illuminate\Http\RedirectResponse;
 
 class GlobalFilterController extends SharpProtectedController
 {
-    public function update(string $filterKey): RedirectResponse
+    public function update(string $filterKey, GlobalFilters $globalFilters): RedirectResponse
     {
-        $handler = app(GlobalFilters::class)->findFilter($filterKey);
+        $handler = $globalFilters->findFilter($filterKey);
 
         abort_if(! $handler instanceof GlobalRequiredFilter, 404);
 
         // Ensure value is in the filter value-set
         $value = request('value')
-            ? collect($this->formatSelectFilterValues($handler))
+            ? collect($globalFilters->filterContainer()->formatSelectFilterValues($handler))
                 ->where('id', request('value'))
                 ->first()
             : null;

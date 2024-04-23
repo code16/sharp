@@ -61,7 +61,7 @@ class ApiDashboardCommandController extends ApiController
             }
 
             $handler->initQueryParams(
-                DashboardQueryParams::create($dashboard->getFilterHandlers())
+                (new DashboardQueryParams($dashboard->filterContainer()))
                     ->fillWithRequest()
             );
         }

@@ -59,7 +59,7 @@ class ApiEntityListEntityCommandController extends ApiController
         $commandHandler = $list->findEntityCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();
         $commandHandler->initQueryParams(
-            EntityListQueryParams::create($list->getFilterHandlers())
+            (new EntityListQueryParams($list->filterContainer()))
                 ->fillWithRequest()
         );
 

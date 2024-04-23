@@ -8,6 +8,7 @@ use Code16\Sharp\Dashboard\Widgets\SharpGraphWidgetDataSet;
 use Code16\Sharp\Dashboard\Widgets\SharpWidget;
 use Code16\Sharp\Dashboard\Widgets\WidgetsContainer;
 use Code16\Sharp\EntityList\Traits\HandleDashboardCommands;
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Illuminate\Support\Arr;
@@ -29,9 +30,14 @@ abstract class SharpDashboard
 
     final public function initQueryParams(): self
     {
-        $this->queryParams = DashboardQueryParams::create($this->getFilterHandlers())
-            ->fillWithRequest()
-            ->setDefaultFilters($this->getFilterDefaultValues());
+        $this->queryParams = (new DashboardQueryParams(
+            filterContainer: $this->filterContainer(),
+            filterValues: [
+                ...$this->filterContainer()->getDefaultFilterValues(),
+                ...$this->filterContainer()->getFilterValuesRetainedInSession(),
+            ],
+        ))
+            ->fillWithRequest();
 
         return $this;
     }
@@ -95,8 +101,9 @@ abstract class SharpDashboard
 
     final public function dashboardConfig(): array
     {
-        return tap([], function (&$config) {
-            $this->appendFiltersToConfig($config);
+        return tap([
+            'filters' => $this->filterContainer()->getFiltersConfigArray(),
+        ], function (&$config) {
             $this->appendDashboardCommandsToConfig($config);
         });
     }

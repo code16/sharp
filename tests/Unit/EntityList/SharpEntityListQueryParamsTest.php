@@ -3,6 +3,7 @@
 use Code16\Sharp\EntityList\EntityListQueryParams;
 use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Utils\Filters\DateRangeFilter;
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
 use Illuminate\Support\Carbon;
 
@@ -50,14 +51,8 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
     {
         public function __construct($p, $s, $sb, $sd, $f)
         {
-            $this->page = $p;
-            $this->search = $s;
-            $this->sortedBy = $sb;
-            $this->sortedDir = $sd;
-            $this->filterHandlers = collect(['__root' => []]);
-            if ($f) {
-                $this->filterValues = $f;
-                $this->filterHandlers['__root'] = collect($f)
+            $filterContainer = new FilterContainer(
+                collect($f)
                     ->map (function ($value, $key) {
                         if (str($value)->contains('..')) {
                             return new class($key) extends DateRangeFilter
@@ -68,7 +63,7 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
                                 }
                             };
                         }
-
+                        
                         if (str($value)->contains(',')) {
                             return new class($key) extends SelectMultipleFilter
                             {
@@ -82,10 +77,24 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
                                 }
                             };
                         }
-
+                        
                         return HiddenFilter::make($key);
-                    });
-            }
+                    })
+                    ->values()
+                    ->toArray()
+            );
+            
+            parent::__construct(
+                filterContainer: $filterContainer,
+            );
+            
+            $this->page = $p;
+            $this->search = $s;
+            $this->sortedDir = $sd;
+            $this->sortedBy = $sb;
+            $this->fillFilterWithRequest(
+                collect($f)->mapWithKeys(fn ($v, $k) => ["filter_$k" => $v])->toArray()
+            );
         }
     };
 }
