@@ -194,11 +194,12 @@ it('saves retained filters in the session when set', function () {
 
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
     
-    $this->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-        'filterValues' => [
-            'job' => 'physicist',
-        ],
-    ])
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => 'physicist',
+            ],
+        ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person?filter_job=physicist');
     
@@ -225,11 +226,12 @@ it('saves retained filters in the session when set', function () {
         );
     
     // reset retained filter value
-    $this->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-        'filterValues' => [
-            'job' => null,
-        ],
-    ])
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => null,
+            ],
+        ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person');
     
@@ -272,11 +274,12 @@ it('handles retained multiple filter', function () {
 
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
     
-    $this->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-        'filterValues' => [
-            'job' => ['physicist', 'physician'],
-        ],
-    ])
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => ['physicist', 'physician'],
+            ],
+        ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person?filter_job='.urlencode('physicist,physician'));
     
@@ -341,11 +344,12 @@ it('handles retained required filter', function () {
             ])
         );
     
-    $this->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-        'filterValues' => [
-            'job' => 'physician',
-        ],
-    ])
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => 'physician',
+            ],
+        ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person?filter_job=physician');
 
@@ -369,11 +373,12 @@ it('handles retained required filter', function () {
             ])
         );
     
-    $this->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
-        'filterValues' => [
-            'job' => null,
-        ],
-    ])
+    $this
+        ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
+            'filterValues' => [
+                'job' => null,
+            ],
+        ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/sharp/s-list/person');
 
