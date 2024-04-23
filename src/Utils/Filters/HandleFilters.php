@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Exceptions\SharpException;
 use Illuminate\Support\Collection;
 
@@ -102,6 +103,7 @@ trait HandleFilters
                 }
 
                 $config['filters'][$positionKey] = $filterHandlers
+                    ->filter(fn (Filter $handler) => ! $this->isHiddenFilter($handler))
                     ->map(function (Filter $filterHandler) {
                         $filterConfigData = [
                             'key' => $filterHandler->getKey(),
@@ -140,6 +142,9 @@ trait HandleFilters
             });
     }
 
+    /**
+     * @internal
+     */
     final public function getFilterHandlers(): Collection
     {
         if ($this->filterHandlers === null) {
@@ -217,11 +222,11 @@ trait HandleFilters
             ->filter(function (Filter $handler) {
                 return $handler instanceof SelectRequiredFilter
                     || $handler instanceof DateRangeRequiredFilter
-                    || $this->isRetainedFilter($handler, true);
+                    || $this->isRetainedFilter($handler);
             })
 
             ->map(function (Filter $handler) {
-                if ($this->isRetainedFilter($handler, true)) {
+                if ($this->isRetainedFilter($handler)) {
                     return [
                         'name' => $handler->getKey(),
                         'value' => session("_sharp_retained_filter_{$handler->getKey()}"),
@@ -237,14 +242,14 @@ trait HandleFilters
             ->all();
     }
 
-    protected function isRetainedFilter(Filter $handler, $onlyValued = false): bool
+    protected function isRetainedFilter(Filter $handler): bool
     {
         return $handler->isRetainInSession()
-            && (! $onlyValued || session()->has("_sharp_retained_filter_{$handler->getKey()}"));
+            && session()->has("_sharp_retained_filter_{$handler->getKey()}");
     }
 
-    protected function isGlobalFilter(Filter $handler): bool
+    protected function isHiddenFilter(Filter $handler): bool
     {
-        return $handler instanceof GlobalRequiredFilter;
+        return $handler instanceof HiddenFilter;
     }
 }

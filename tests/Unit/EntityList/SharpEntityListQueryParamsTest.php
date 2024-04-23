@@ -1,8 +1,8 @@
 <?php
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\Utils\Filters\DateRangeFilter;
-use Code16\Sharp\Utils\Filters\SelectFilter;
 use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
 use Illuminate\Support\Carbon;
 
@@ -83,17 +83,7 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
                             };
                         }
 
-                        return new class($key) extends SelectFilter
-                        {
-                            public function __construct(string $key)
-                            {
-                                $this->customKey = $key;
-                            }
-                            public function values(): array
-                            {
-                                return [];
-                            }
-                        };
+                        return HiddenFilter::make($key);
                     });
             }
         }
