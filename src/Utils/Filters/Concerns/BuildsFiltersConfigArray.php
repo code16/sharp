@@ -17,7 +17,6 @@ trait BuildsFiltersConfigArray
     public function getFiltersConfigArray(): ?array
     {
         return $this->getFilterHandlers()
-            ->filter(fn (Collection $handlers) => $handlers->count() > 0)
             ->map(function (Collection $filterHandlers) {
                 return $filterHandlers
                     ->filter(fn (Filter $handler) => ! $this->isHiddenFilter($handler))
@@ -56,7 +55,8 @@ trait BuildsFiltersConfigArray
                         return $filterConfigData;
                     });
             })
-            ->pipe(fn (Collection $config) => count($config->flatten()) ? $config->toArray() : null);
+            ->filter(fn (Collection $filters) => count($filters) > 0)
+            ->pipe(fn (Collection $config) => count($config) ? $config->toArray() : null);
     }
     
     protected function isHiddenFilter(Filter $handler): bool
