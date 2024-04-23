@@ -4,27 +4,31 @@ namespace Code16\Sharp\Utils;
 
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class SharpBreadcrumb
 {
-    protected ?array $data = null;
+    private ?string $currentInstanceLabel = null;
 
     public function __construct(protected CurrentSharpRequest $currentSharpRequest)
     {
     }
+    
+    final public function setCurrentInstanceLabel(?string $label): self
+    {
+        $this->currentInstanceLabel = $label;
+        
+        return $this;
+    }
 
-    public function getItems(array $data): array
+    public function getItems(): array
     {
         $url = sharpConfig()->get('custom_url_segment');
         $breadcrumb = $this->currentSharpRequest->breadcrumb();
-        $displayBreadcrumb = config('sharp.display_breadcrumb', false);
-        $this->data = $data;
 
         return $breadcrumb
-            ->map(function ($item, $index) use (&$url, $displayBreadcrumb, $breadcrumb) {
+            ->map(function ($item, $index) use (&$url, $breadcrumb) {
                 $url = sprintf('%s/%s/%s',
                     $url,
                     $item->type,
@@ -34,7 +38,7 @@ class SharpBreadcrumb
 
                 return [
                     'type' => $this->getFrontTypeNameFor($item->type),
-                    'label' => $displayBreadcrumb
+                    'label' => sharpConfig()->get('display_breadcrumb')
                         ? $this->getBreadcrumbLabelFor($item, $isLeaf)
                         : '',
                     'documentTitleLabel' => $this->getDocumentTitleLabelFor($item, $isLeaf),
@@ -122,17 +126,15 @@ class SharpBreadcrumb
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
 
-        if ($isLeaf && $breadcrumbAttribute = $this->data['config']['breadcrumbAttribute'] ?? null) {
-            if ($value = Arr::get(json_decode(json_encode($this->data['data']), true), $breadcrumbAttribute)) {
-                Cache::put($cacheKey, $value, now()->addMinutes(30));
+        if ($isLeaf && $this->currentInstanceLabel) {
+            Cache::put($cacheKey, $this->currentInstanceLabel, now()->addMinutes(30));
 
-                return $value;
-            }
+            return $this->currentInstanceLabel;
         }
 
         if (! $isLeaf) {
             // The breadcrumb custom label may have been cached on the way up
-            if ($value = Cache::get("sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}")) {
+            if ($value = Cache::get($cacheKey)) {
                 return $value;
             }
         }

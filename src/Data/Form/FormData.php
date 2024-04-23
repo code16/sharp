@@ -15,7 +15,7 @@ final class FormData extends Data
         public InstanceAuthorizationsData $authorizations,
         public FormConfigData $config,
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
-        public array $data,
+        public ?array $data,
         /** @var DataCollection<string,FormFieldData> */
         public DataCollection $fields,
         public FormLayoutData $layout,
