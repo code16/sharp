@@ -43,20 +43,13 @@ trait WithCustomTransformers
             || $this instanceof SharpFormEditorEmbed
             || $this instanceof FormEditorUploadForm
         ) {
-            // Form case: there's only one model and we must apply Formatters in the process
-            return $this->applyFormatters(
-                $this->applyTransformers($models),
-            );
+            // Form case: there's only one model
+            return $this->applyTransformers($models);
         }
 
         if ($this instanceof SharpShow) {
             // Show case: there's only one model
-            return $this->applyFormatters(
-                $this->applyTransformers(
-                    model: $models,
-                    forceFullObject: false
-                )
-            );
+            return $this->applyTransformers(model: $models, forceFullObject: false);
         }
 
         // SharpEntityList case: collection of models (potentially paginated)
@@ -163,19 +156,6 @@ trait WithCustomTransformers
         }
 
         return $attributes;
-    }
-
-    protected function applyFormatters(array $attributes): array
-    {
-        return collect($attributes)
-            ->map(function ($value, $key) {
-                $field = $this->findFieldByKey($key);
-
-                return $field
-                    ? $field->formatter()->toFront($field, $value)
-                    : $value;
-            })
-            ->all();
     }
 
     /**

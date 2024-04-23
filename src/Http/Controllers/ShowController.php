@@ -22,7 +22,7 @@ class ShowController extends SharpProtectedController
         parent::__construct();
     }
 
-    public function show(string $parentUri, string $entityKey, string $instanceId)
+    public function show(string $parentUri, string $entityKey, string $instanceId, SharpBreadcrumb $breadcrumb)
     {
         sharp_check_ability('view', $entityKey, $instanceId);
 
@@ -33,11 +33,11 @@ class ShowController extends SharpProtectedController
         $show->buildShowConfig();
 
         $showData = $show->instance($instanceId);
-        $data = [
+        $payload = ShowData::from([
             'config' => $show->showConfig($instanceId),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
-            'data' => $showData,
+            'data' => $show->applyFormatters($showData),
             'pageAlert' => $show->pageAlert($showData),
             'locales' => $show->hasDataLocalizations()
                 ? $show->getDataLocalizations()
@@ -48,12 +48,16 @@ class ShowController extends SharpProtectedController
                 'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey, $instanceId),
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
-        ];
+        ]);
+
+        if ($breadcrumbAttr = $showData[$payload->config->breadcrumbAttribute] ?? false) {
+            $breadcrumb->setCurrentInstanceLabel($breadcrumbAttr);
+        }
 
         return Inertia::render('Show/Show', [
-            'show' => ShowData::from($data),
+            'show' => $payload,
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => $breadcrumb->getItems(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);

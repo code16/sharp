@@ -141,7 +141,7 @@ class FormController extends SharpProtectedController
             'fields' => $form->fields(),
             'layout' => $form->formLayout(),
             'config' => $form->formConfig(),
-            'data' => $formData,
+            'data' => $form->applyFormatters($formData),
             'pageAlert' => $form->pageAlert($formData),
             'locales' => $form->hasDataLocalizations()
                 ? $form->getDataLocalizations()

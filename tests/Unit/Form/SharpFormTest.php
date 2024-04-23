@@ -1,8 +1,6 @@
 <?php
 
 use Code16\Sharp\Enums\PageAlertLevel;
-use Code16\Sharp\Form\Fields\SharpFormCheckField;
-use Code16\Sharp\Form\Fields\SharpFormEditorField;
 use Code16\Sharp\Form\Fields\SharpFormTextField;
 use Code16\Sharp\Form\Layout\FormLayout;
 use Code16\Sharp\Tests\Unit\Form\Fakes\FakeSharpForm;
@@ -97,46 +95,6 @@ it('gets an instance', function () {
             'name' => 'Marie Curie',
             'age' => 22,
         ]);
-});
-
-it('formats data in creation with the default create function', function () {
-    $sharpForm = new class extends FakeSharpForm
-    {
-        public function buildFormFields(FieldsContainer $formFields): void
-        {
-            $formFields
-                ->addField(SharpFormEditorField::make('md'))
-                ->addField(SharpFormCheckField::make('check', 'text'));
-        }
-    };
-
-    $this->assertEquals(
-        [
-            'md' => ['text' => null],
-            'check' => false,
-        ],
-        $sharpForm->newInstance(),
-    );
-});
-
-it('formats data in creation with the default create function with subclasses', function () {
-    $sharpForm = new class extends FakeSharpForm
-    {
-        public function buildFormFields(FieldsContainer $formFields): void
-        {
-            $formFields
-                ->addField(SharpFormTextField::make('name'))
-                ->addField(SharpFormEditorField::make('subclass:company'));
-        }
-    };
-
-    $this->assertEquals(
-        [
-            'name' => '',
-            'subclass:company' => ['text' => null],
-        ],
-        $sharpForm->newInstance(),
-    );
 });
 
 it('handles single forms', function () {

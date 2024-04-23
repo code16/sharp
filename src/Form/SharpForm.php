@@ -102,9 +102,7 @@ abstract class SharpForm
     {
         $attributes = collect($this->getDataKeys())
             ->flip()
-            ->map(function () {
-                return null;
-            })
+            ->map(fn () => null)
             ->all();
 
         // Build a fake Model class based on attributes

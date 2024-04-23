@@ -27,7 +27,7 @@ class ApiShowInstanceCommandController extends ApiController
         return response()->json(
             CommandFormData::from([
                 ...$this->getCommandForm($commandHandler),
-                'data' => $formData,
+                'data' => $commandHandler->applyFormatters($formData),
                 'pageAlert' => $commandHandler->pageAlert($formData),
             ]),
         );

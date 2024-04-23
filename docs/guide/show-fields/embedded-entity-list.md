@@ -22,16 +22,27 @@ Embedded Entity List are really just regular Entity List presented in a Show pag
 
 ### `hideFilterWithValue(string $filterName, $value)`
 
-This is maybe the most important method of the field, since it will not only hide a filter, but also set its value. The purpose is to allow to scope the data to the instance of the Show Page. For instance, let's say we display an Order and that we want to embed a list of products:
+This is the most important method of the field, since it will not only hide a filter, but also set its value. The purpose is to allow to **scope the data to the instance** of the Show Page. For example let’s say we display an Order and that we want to embed a list of its products:
 
 ```php
-SharpShowEntityListField::make('products')
-    ->hideFilterWithValue(OrderFilter::class, 64);
+class OrderShow extends SharpShow
+{
+    // ...
+    
+    public function buildShowFields(FieldsContainer $showFields): void
+    {
+        $showFields->addField(
+            SharpShowEntityListField::make('products')
+                ->hideFilterWithValue(OrderFilter::class, 64)
+        );
+    }
+}
 ```
 
 We defined here that we want a `products` fields related to an Entity List which implementation class is defined in the `products` Entity, and its `OrderFilter` filter (which must be declared as usual in the Entity List implementation) must be hidden AND valued to `64` when gathering the data. In short: we want the products for the order of id `64`.
 
-::: tip Note on the filter name: passing its full classname will always work, but you can also directly pass its `key`, in case you defined one.
+::: tip 
+Note on the filter name: passing its full classname will always work, but you can also directly pass its `key`, in case you defined one.
 :::
 
 You can pass a closure as the value, and it will contain the current Show instance id. In most cases, you'll have to write this:
@@ -39,6 +50,48 @@ You can pass a closure as the value, and it will contain the current Show instan
 ```php
 SharpShowEntityListField::make('products')
     ->hideFilterWithValue(OrderFilter::class, fn ($instanceId) => $instanceId);
+```
+
+One final note: sometimes the linked filter is really just a scope, never displayed to the user. In this case, it can be tedious to write a full implementation in the Entity List. In this situation, you can use the `HiddenFiler` class for the filter, passing a key:
+
+```php
+class OrderShow extends SharpShow
+{
+    // ...
+    
+    public function buildShowFields(FieldsContainer $showFields): void
+    {
+        $showFields->addField(
+            SharpShowEntityListField::make('products')
+                ->hideFilterWithValue('order', fn ($instanceId) => $instanceId);
+        );
+    }
+}
+```
+
+```php
+use \Code16\Sharp\EntityList\Filters\HiddenFilter;
+
+class OrderProductList extends SharpEntityList
+{
+    // ...
+
+    protected function getFilters(): ?array
+    {
+        return [
+            HiddenFilter::make('order')
+        ];
+    }
+    
+    public function getListData(): array|Arrayable
+    {
+        return $this->transform(
+            Products::query()
+                ->forOrderId($this->queryParams->filterFor('order'))
+                ->get()
+        );
+    }
+}
 ```
 
 ### `hideEntityCommand(array|string $commands): self`
