@@ -27,7 +27,7 @@ abstract class SharpDashboard
     protected ?DashboardLayout $dashboardLayout = null;
     protected ?WidgetsContainer $widgetsContainer = null;
 
-    final public function init(): self
+    final public function initQueryParams(): self
     {
         $this->queryParams = DashboardQueryParams::create($this->getFilterHandlers())
             ->fillWithRequest()

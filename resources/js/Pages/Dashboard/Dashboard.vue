@@ -20,10 +20,8 @@
     }>();
 
     const dashboardKey = route().params.dashboardKey as string;
-    const filters = useFilters(props.dashboard.config.filters);
+    const filters = useFilters(props.dashboard.config.filters, props.dashboard.filterValues);
     const commands = useCommands();
-
-    filters.setValuesFromQuery(parseQuery(location.search));
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
         router.get(route('code16.sharp.dashboard', { dashboardKey }) + stringifyQuery({

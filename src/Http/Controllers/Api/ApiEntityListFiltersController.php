@@ -25,8 +25,6 @@ class ApiEntityListFiltersController extends ApiController
             ...request()->input('query', []),
             ...$list->getFilterValuesQueryParams(request()->input('filterValues', [])),
             'page' => null,
-        ], headers: [
-            'Accept' => 'application/json' // force sending JSON response (not inertia)
         ]);
     }
 }

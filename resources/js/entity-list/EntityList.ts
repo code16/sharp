@@ -45,10 +45,10 @@ export class EntityList implements EntityListData {
 
     get visibleCommands(): ConfigCommandsData {
         return {
-            instance: this.config.commands.instance?.map(group => group.filter(command => {
+            instance: this.config.commands?.instance?.map(group => group.filter(command => {
                 return !this.hiddenCommands?.instance?.includes(command.key);
             })),
-            entity: this.config.commands.entity?.map(group => group.filter(command => {
+            entity: this.config.commands?.entity?.map(group => group.filter(command => {
                 return !this.hiddenCommands?.entity?.includes(command.key);
             })),
         }

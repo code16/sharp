@@ -67,6 +67,7 @@ export type DashboardData = {
   config: DashboardConfigData;
   layout: DashboardLayoutData;
   data: { [key: string]: any };
+  filterValues: FilterValuesData;
   pageAlert: PageAlertData | null;
 };
 export type DashboardLayoutData = {
@@ -559,7 +560,7 @@ export type FormUploadFieldValueData = {
 };
 export type GlobalFiltersData = {
   config: Array<any>;
-  filterValues: Array<any> | null;
+  filterValues: FilterValuesData;
 };
 export type GraphWidgetData = {
   value?: {

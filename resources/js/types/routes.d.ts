@@ -116,6 +116,11 @@ declare module 'ziggy-js' {
             "name": "entityKey"
         }
     ],
+    "code16.sharp.api.list.filters.store": [
+        {
+            "name": "entityKey"
+        }
+    ],
     "code16.sharp.api.list.reorder": [
         {
             "name": "entityKey"

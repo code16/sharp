@@ -5,12 +5,11 @@ namespace Code16\Sharp\Http\Controllers;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Filters\GlobalRequiredFilter;
 use Code16\Sharp\Utils\Filters\HandleFilters;
+use Code16\Sharp\Utils\Filters\SelectFilter;
 use Illuminate\Http\RedirectResponse;
 
 class GlobalFilterController extends SharpProtectedController
 {
-    use HandleFilters;
-
     public function update(string $filterKey): RedirectResponse
     {
         $handler = app(GlobalFilters::class)->findFilter($filterKey);
@@ -28,4 +27,5 @@ class GlobalFilterController extends SharpProtectedController
 
         return redirect()->route('code16.sharp.home');
     }
+    
 }
