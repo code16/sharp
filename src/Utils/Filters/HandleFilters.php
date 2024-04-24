@@ -8,8 +8,14 @@ use Illuminate\Support\Collection;
 
 trait HandleFilters
 {
+    /**
+     * @internal
+     */
     protected ?FilterContainer $filterContainer = null;
     
+    /**
+     * @internal
+     */
     final public function filterContainer(): FilterContainer
     {
         return $this->filterContainer ??= new FilterContainer($this->getFilters());

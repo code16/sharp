@@ -92,8 +92,8 @@ export type DateRangeFilterData = {
   displayFormat: string;
 };
 export type DateRangeFilterValueData = {
-  start: Date | string;
-  end: Date | string;
+  start: string;
+  end: string;
 };
 export type EmbedData = {
   value?: FormData["data"] & { slot: string };
@@ -191,6 +191,7 @@ export type FilterType = "select" | "daterange" | "check";
 export type FilterValuesData = {
   current: { [key: string]: any };
   default: { [key: string]: any };
+  valuated: { [key: string]: boolean };
 };
 export type FormAutocompleteFieldData = {
   value: string | number | null | { [locale: string]: string | number | null };
@@ -559,7 +560,7 @@ export type FormUploadFieldValueData = {
   nativeFile?: File;
 };
 export type GlobalFiltersData = {
-  config: Array<any>;
+  config: { filters: ConfigFiltersData };
   filterValues: FilterValuesData;
 };
 export type GraphWidgetData = {

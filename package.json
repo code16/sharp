@@ -91,7 +91,7 @@
     "moment": "^2.19.1",
     "nprogress": "^0.2.0",
     "qs": "^6.6.0",
-    "radix-vue": "^1.5.3",
+    "radix-vue": "^1.7.2",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "text-clipper": "^1.3.0",

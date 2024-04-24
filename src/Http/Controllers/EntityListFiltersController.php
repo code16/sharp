@@ -2,7 +2,9 @@
 
 namespace Code16\Sharp\Http\Controllers;
 
+use App\Http\Kernel;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
+use Illuminate\Http\Request;
 
 class EntityListFiltersController extends SharpProtectedController
 {
@@ -12,7 +14,7 @@ class EntityListFiltersController extends SharpProtectedController
         parent::__construct();
     }
     
-    public function store(string $entityKey)
+    public function store(string $entityKey, Kernel $kernel)
     {
         sharp_check_ability('entity', $entityKey);
         

@@ -37,6 +37,7 @@ final class GlobalFilters implements Arrayable
                         return [$handler->getKey() => $handler->currentValue()];
                     })
                     ->toArray(),
+                'valuated' => [] // not needed here
             ],
         ];
     }

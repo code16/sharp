@@ -8,8 +8,9 @@ use Inertia\Inertia;
 
 class DashboardFiltersController extends SharpProtectedController
 {
-    public function __construct(private SharpEntityManager $entityManager)
-    {
+    public function __construct(
+        readonly private SharpEntityManager $entityManager
+    ) {
         parent::__construct();
     }
 

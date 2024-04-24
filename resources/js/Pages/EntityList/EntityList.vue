@@ -9,12 +9,13 @@
     import { EntityList } from "@/entity-list/EntityList";
     import { useFilters } from "@/filters/useFilters";
     import { useCommands } from "@/commands/useCommands";
-    import { ref, Ref } from "vue";
+    import { ref, Ref, watch } from "vue";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
     import { FilterQueryParams } from "@/filters/types";
     import { route } from "@/utils/url";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
+    import { CardTitle } from "@/components/ui/card";
 
     const props = defineProps<{
         entityList: EntityListData,
@@ -31,21 +32,15 @@
     });
     const query = parseQuery(location.search) as (EntityListQueryParamsData & FilterQueryParams);
 
+    watch(() => props.entityList, () => {
+        entityList.value = new EntityList(props.entityList, entityKey);
+        filters.update(props.entityList.config.filters, props.entityList.filterValues);
+    });
+
     function onQueryChange(query: FilterQueryParams) {
         if(location.search !== stringifyQuery(query)) {
             router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
         }
-    }
-
-    function onReset() {
-        router.post(
-            route('code16.sharp.list.filters.store', { entityKey }),
-            {
-                filterValues: filters.defaultValues(filters.rootFilters),
-                query,
-            },
-            { preserveState: false, preserveScroll: false }
-        );
     }
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
@@ -55,7 +50,18 @@
                 filterValues: filters.nextValues(filter, value),
                 query,
             },
-            { preserveState: false, preserveScroll: false }
+            { preserveState: true, preserveScroll: false }
+        );
+    }
+
+    function onReset() {
+        router.post(
+            route('code16.sharp.list.filters.store', { entityKey }),
+            {
+                filterValues: filters.defaultValues(filters.rootFilters),
+                query,
+            },
+            { preserveState: true, preserveScroll: false }
         );
     }
 </script>
@@ -83,8 +89,10 @@
                     <!--                        </template>-->
                     <!--                    </EntityListTitle>-->
                 </template>
-                <template v-slot:title>
-                    {{ breadcrumb.items[0].label }}
+                <template v-slot:card-header>
+                    <CardTitle>
+                        {{ breadcrumb.items[0].label }}
+                    </CardTitle>
                 </template>
             </EntityListComponent>
         </div>

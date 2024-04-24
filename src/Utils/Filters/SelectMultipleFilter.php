@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
+use Illuminate\Support\Arr;
+
 abstract class SelectMultipleFilter extends SelectFilter
 {
     public function fromQueryParam($value): array
@@ -11,6 +13,6 @@ abstract class SelectMultipleFilter extends SelectFilter
     
     public function toQueryParam($value): ?string
     {
-        return $value ? implode(',', $value) : null;
+        return $value ? implode(',', Arr::wrap($value)) : null;
     }
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-    import FieldLayout from "../../FieldLayout.vue";
     import { EntityList } from '@/entity-list/EntityList';
     import EntityListComponent from '@/entity-list/components/EntityList.vue'
     import EntityListTitle from '@/entity-list/components/EntityListTitle.vue'
+    import { ChevronsUpDown } from "lucide-vue-next";
     import { ShowFieldProps } from "@/show/types";
     import {
         EntityListData,
@@ -18,6 +18,9 @@
     import { route } from "@/utils/url";
     import { FilterManager } from "@/filters/FilterManager";
     import { useParentShow } from "@/show/useParentShow";
+    import { useFilters } from "@/filters/useFilters";
+    import { CardTitle } from "@/components/ui/card";
+    import { Button } from "@/components/ui/button";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
 
@@ -27,7 +30,7 @@
     const collapsed = ref(props.collapsable);
     const { sticky, updateStickyLayout } = useStickyLayout(el);
     const entityList: Ref<EntityList | null> = ref(null);
-    const filters: Ref<FilterManager | null> = ref(null);
+    const filters: FilterManager = useFilters();
     const currentQuery: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({});
     const commands = useCommands({
         reload: () => {
@@ -44,7 +47,7 @@
             route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
             {
                 query: query ?? currentQuery.value,
-                filterValues: filterValues ?? filters.value.values,
+                filterValues: filterValues ?? filters.currentValues,
                 hiddenFilters: props.field.hiddenFilters ?? {},
             }
         )
@@ -61,9 +64,9 @@
             props.field.hiddenFilters,
             props.field.hiddenCommands,
         );
-        filters.value = new FilterManager(
+        filters.update(
             entityList.value.config.filters,
-            entityList.value.filterValues,
+            entityList.value.filterValues
         );
         currentQuery.value = data.meta.query;
         await nextTick();
@@ -78,13 +81,13 @@
 
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
         init({
-            filterValues: filters.value.nextValues(filter, value),
+            filterValues: filters.nextValues(filter, value),
         });
     }
 
     function onReset() {
         init({
-            filterValues: filters.value.defaultValues(filters.value.rootFilters),
+            filterValues: filters.defaultValues(filters.rootFilters),
         });
     }
 
@@ -137,7 +140,6 @@
 <!--       </template>-->
 
        <EntityListComponent
-           v-if="!collapsable || !collapsed"
            :entity-list="entityList"
            :entity-key="field.entityListKey"
            :query="currentQuery"
@@ -148,14 +150,34 @@
            :show-search-field="field.showSearchField"
            :show-entity-state="field.showEntityState"
            :loading="loading"
+           :collapsed="collapsed"
            inline
            @update:query="onQueryChange"
            @filter-change="onFilterChange"
            @reset="onReset"
            @reordering="$emit('reordering', $event)"
        >
-           <template #title>
-               {{ field.label }}
+           <template #card-header>
+               <div class="flex space-x-4">
+                   <CardTitle>
+                       {{ field.label }}
+                   </CardTitle>
+                   <template v-if="collapsable">
+                       <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                           <ChevronsUpDown class="w-4 h-4" />
+                       </Button>
+                   </template>
+               </div>
+<!--               <template v-if="collapsable">-->
+<!--                   <details :open="!collapsed" @toggle="onToggle">-->
+<!--                       <summary class="stretched-link">-->
+<!--                           {{ field.label }}-->
+<!--                       </summary>-->
+<!--                   </details>-->
+<!--               </template>-->
+<!--               <template v-else>-->
+<!--                   {{ field.label }}-->
+<!--               </template>-->
            </template>
 <!--               <template v-slot:action-bar="{ props, listeners }">-->
 <!--                   <ActionBar-->

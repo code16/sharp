@@ -39,8 +39,8 @@ export class EntityList implements EntityListData {
         return this.meta?.total ?? this.data.length;
     }
 
-    get visibleFilters(): Array<FilterData> {
-        return this.config.filters._root.filter(filter => !this.hiddenFilters?.[filter.key]);
+    get visibleFilters(): Array<FilterData>|null {
+        return this.config.filters?._root.filter(filter => !this.hiddenFilters?.[filter.key]);
     }
 
     get visibleCommands(): ConfigCommandsData {

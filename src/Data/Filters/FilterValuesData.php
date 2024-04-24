@@ -13,6 +13,8 @@ final class FilterValuesData extends Data
         public array $current,
         #[LiteralTypeScriptType('{ [key: string]: any }')]
         public array $default,
+        #[LiteralTypeScriptType('{ [key: string]: boolean }')]
+        public array $valuated,
     ) {
     }
 

@@ -179,6 +179,7 @@ it('allows list filter to be required', function () {
         ->and($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
             'default' => ['test' => 'B'],
             'current' => ['test' => 'B'],
+            'valuated' => ['test' => false],
         ]);
 });
 
@@ -356,6 +357,7 @@ it('allows to declare a filter as retained and to set its default value', functi
     expect($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
         'default' => ['test_20' => null],
         'current' => ['test_20' => 2],
+        'valuated' => ['test_20' => true],
     ]);
 });
 
@@ -394,6 +396,7 @@ it('returns retained value for required and retained filters returns by default'
     expect($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
         'default' => ['test_21' => 1],
         'current' => ['test_21' => 2],
+        'valuated' => ['test_21' => true],
     ]);
 });
 
@@ -427,6 +430,7 @@ it('formats date range filter retained value', function () {
                 'end' => '2019-09-25',
             ]
         ],
+        'valuated' => ['test_22' => true],
     ]);
 });
 
@@ -468,6 +472,7 @@ it('allows to declare a date range filter as required', function () {
                     'end' => Carbon::now()->format('Y-m-d'),
                 ]
             ],
+            'valuated' => ['test' => false],
         ]);
 });
 

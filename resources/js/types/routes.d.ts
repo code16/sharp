@@ -7,6 +7,11 @@ declare module 'ziggy-js' {
             "name": "dashboardKey"
         }
     ],
+    "code16.sharp.dashboard.filters.store": [
+        {
+            "name": "dashboardKey"
+        }
+    ],
     "code16.sharp.list": [
         {
             "name": "entityKey"
