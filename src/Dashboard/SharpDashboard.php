@@ -28,25 +28,20 @@ abstract class SharpDashboard
     protected ?DashboardLayout $dashboardLayout = null;
     protected ?WidgetsContainer $widgetsContainer = null;
 
-    final public function initQueryParams(): self
+    final public function initQueryParams(?array $query): self
     {
         $this->queryParams = (new DashboardQueryParams(
             filterContainer: $this->filterContainer(),
             filterValues: [
                 ...$this->filterContainer()->getDefaultFilterValues(),
                 ...$this->filterContainer()->getFilterValuesRetainedInSession(),
+                ...$this->filterContainer()->getFilterValuesFromQueryParams($query),
             ],
-        ))
-            ->fillWithRequest();
+        ));
 
         return $this;
     }
-
-    final public function getQueryParams(): ?DashboardQueryParams
-    {
-        return $this->queryParams;
-    }
-
+    
     final public function widgets(): array
     {
         $this->checkDashboardIsBuilt();

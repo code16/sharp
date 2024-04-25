@@ -28,7 +28,7 @@ class EntityListController extends SharpProtectedController
 
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->all());
 
         $listData = $list->data();
         $listConfig = $list->listConfig($this->entityManager->entityFor($entityKey)->hasShow());

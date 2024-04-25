@@ -35,19 +35,22 @@ abstract class SharpEntityList
     protected bool $deleteHidden = false;
     protected ?string $deleteConfirmationText = null;
 
-    final public function initQueryParams(): self
+    final public function initQueryParams(?array $query): self
     {
         $this->queryParams = (new EntityListQueryParams(
             filterContainer: $this->filterContainer(),
             filterValues: [
                 ...$this->filterContainer()->getDefaultFilterValues(),
                 ...$this->filterContainer()->getFilterValuesRetainedInSession(),
+                ...$this->filterContainer()->getFilterValuesFromQueryParams($query)
             ],
-            sortedBy: $this->defaultSort,
-            sortedDir: $this->defaultSortDir,
-        ))
-            ->fillWithRequest();
-
+            sortedBy: $query['sort'] ?? $this->defaultSort,
+            sortedDir: $query['dir'] ?? $this->defaultSortDir,
+            page: $query['page'] ?? null,
+            search: ($query['search'] ?? null) ? urldecode($query['search']) : null,
+            specificIds: $query['ids'] ?? [],
+        ));
+        
         return $this;
     }
 

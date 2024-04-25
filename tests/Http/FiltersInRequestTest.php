@@ -197,6 +197,7 @@ it('saves retained filters in the session when set', function () {
     expect(session()->all())->not->toHaveKey('_sharp_retained_filter_job');
     
     $this
+        ->withoutExceptionHandling()
         ->post(route('code16.sharp.list.filters.store', ['entityKey' => 'person']), [
             'filterValues' => [
                 'job' => 'physicist',

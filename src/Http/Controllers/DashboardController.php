@@ -19,7 +19,7 @@ class DashboardController extends SharpProtectedController
 
         $dashboard = $this->entityManager->entityFor($dashboardKey)->getViewOrFail();
         $dashboard->buildDashboardConfig();
-        $dashboard->initQueryParams();
+        $dashboard->initQueryParams(request()->all());
         $dashboardData = $dashboard->data();
 
         $data = [

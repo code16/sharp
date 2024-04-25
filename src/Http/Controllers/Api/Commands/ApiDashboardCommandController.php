@@ -41,6 +41,7 @@ class ApiDashboardCommandController extends ApiController
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
+        $dashboard->initQueryParams(request()->input('query'));
 
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
 
@@ -59,11 +60,6 @@ class ApiDashboardCommandController extends ApiController
             if (! $handler->authorize()) {
                 throw new SharpAuthorizationException();
             }
-
-            $handler->initQueryParams(
-                (new DashboardQueryParams($dashboard->filterContainer()))
-                    ->fillWithRequest()
-            );
         }
 
         return $handler;

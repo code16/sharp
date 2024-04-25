@@ -86,14 +86,15 @@ function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): 
             
             parent::__construct(
                 filterContainer: $filterContainer,
-            );
-            
-            $this->page = $p;
-            $this->search = $s;
-            $this->sortedDir = $sd;
-            $this->sortedBy = $sb;
-            $this->fillFilterWithRequest(
-                collect($f)->mapWithKeys(fn ($v, $k) => ["filter_$k" => $v])->toArray()
+                filterValues: [
+                    ...$filterContainer->getFilterValuesFromQueryParams(
+                        collect($f)->mapWithKeys(fn ($v, $k) => ["filter_$k" => $v])->toArray()
+                    )
+                ],
+                sortedBy: $sb,
+                sortedDir: $sd,
+                page: $p,
+                search: $s
             );
         }
     };

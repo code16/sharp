@@ -16,7 +16,7 @@ class ApiEntityListController extends ApiController
 
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->all());
 
         $list->reorderHandler()->reorder(request('instances'));
 

@@ -9,38 +9,16 @@ use Code16\Sharp\Utils\StringUtil;
 class EntityListQueryParams
 {
     use HasFiltersInQuery;
-
-    protected ?int $page;
-    protected ?string $search = null;
-    protected array $specificIds = [];
     
     public function __construct(
         protected FilterContainer $filterContainer,
         protected array $filterValues = [],
         protected ?string $sortedBy = null,
         protected ?string $sortedDir = null,
+        protected ?int $page = null,
+        protected ?string $search = null,
+        protected array $specificIds = [],
     ) {
-    }
-
-    public function fillWithRequest(): self
-    {
-        $query = request()->method() === 'GET' ? request()->all() : request('query');
-
-        $this->search = $query['search'] ?? null ? urldecode($query['search']) : null;
-        $this->page = $query['page'] ?? null;
-
-        if (isset($query['sort'])) {
-            $this->sortedBy = $query['sort'];
-            $this->sortedDir = $query['dir'];
-        }
-
-        if (isset($query['ids'])) {
-            $this->specificIds = $query['ids'];
-        }
-
-        $this->fillFilterWithRequest($query);
-
-        return $this;
     }
 
     public function getPage(): ?int

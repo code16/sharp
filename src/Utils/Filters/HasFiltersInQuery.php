@@ -17,17 +17,4 @@ trait HasFiltersInQuery
 
         return $this->filterValues[$handler->getKey()];
     }
-    
-    protected function fillFilterWithRequest(?array $query): void
-    {
-        $this->filterValues = [
-            ...$this->filterValues,
-            ...$this->filterContainer->getFilterValuesFromQueryParams($query),
-        ];
-        
-        foreach ($this->filterValues as $key => $value) {
-            $handler = $this->filterContainer->findFilterHandler($key);
-            event('filter-'.$handler->getKey().'-was-set', [$value, $this]);
-        }
-    }
 }
