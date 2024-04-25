@@ -125,7 +125,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
             </div>
         </div>
         <div class="flex flex-col">
-            <header class="flex h-14 items-center gap-4 border-b bg-white px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
+            <header class="flex h-14 items-center gap-4 border-b bg-background px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
                 <div class="absolute inset-0 bg-muted/40 -z-10"></div>
                 <Sheet>
                     <SheetTrigger as-child>
@@ -182,6 +182,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                     </SheetContent>
                 </Sheet>
                 <div class="w-full flex-1">
+                    <slot name="breadcrumb" />
 <!--                    <form>-->
 <!--                        <div class="relative">-->
 <!--                            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />-->

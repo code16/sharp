@@ -10,7 +10,7 @@
     import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
     import { FieldsMeta } from "@/form/types";
-    import { SortableOptions } from "sortablejs";
+    import type { SortableOptions } from "sortablejs";
     import { Serializable } from "@/form/Serializable";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";

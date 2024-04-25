@@ -2,8 +2,6 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 trait HasFiltersInQuery
 {

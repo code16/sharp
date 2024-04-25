@@ -47,6 +47,8 @@
     function onCalendarChange() {
         inputs.start = localValue.value.start?.toString() ?? '';
         inputs.end = localValue.value.end?.toString() ?? '';
+        edited.start = true;
+        edited.end = true;
     }
 
     function onResetClick() {
@@ -110,34 +112,39 @@
             </Button>
         </PopoverTrigger>
         <PopoverContent class="w-auto p-0">
-            <div>
-                <RangeCalendar
-                    v-model="localValue"
-                    :number-of-months="2"
-                    @update:start-value="(startDate) => localValue.start = startDate"
-                    @update:model-value="onCalendarChange"
-                    :key="edited.count"
-                />
-                <div class="grid gap-4 p-3" key="footer">
-                    <div class="grid grid-cols-2 gap-4">
-                        <Input class="block" type="date"
-                            v-model="inputs.start"
-                            @update:model-value="onStartChange"
-                        />
-                        <Input class="block" type="date"
-                            v-model="inputs.end"
-                            @update:model-value="onEndChange"
-                        />
-                    </div>
-                    <div class="flex justify-end gap-3 pt-0">
-                        <template v-if="localValue.end">
-                            <Button variant="outline" @click="onResetClick">
-                                {{ __('sharp::filters.select.reset') }}
+            <div class="flex">
+                <div class="shrink-0">
+
+                </div>
+                <div class="flex-1">
+                    <RangeCalendar
+                        v-model="localValue"
+                        :number-of-months="2"
+                        @update:start-value="(startDate) => localValue.start = startDate"
+                        @update:model-value="onCalendarChange"
+                        :key="edited.count"
+                    />
+                    <div class="grid gap-4 p-3" key="footer">
+                        <div class="grid grid-cols-2 gap-4">
+                            <Input class="block" type="date"
+                                v-model="inputs.start"
+                                @update:model-value="onStartChange"
+                            />
+                            <Input class="block" type="date"
+                                v-model="inputs.end"
+                                @update:model-value="onEndChange"
+                            />
+                        </div>
+                        <div class="flex justify-end gap-3 pt-0">
+                            <template v-if="localValue.end">
+                                <Button variant="outline" @click="onResetClick">
+                                    {{ __('sharp::filters.select.reset') }}
+                                </Button>
+                            </template>
+                            <Button @click="onSubmit">
+                                {{ __('sharp::filters.daterange.confirm') }}
                             </Button>
-                        </template>
-                        <Button @click="onSubmit">
-                            {{ __('sharp::filters.daterange.confirm') }}
-                        </Button>
+                        </div>
                     </div>
                 </div>
             </div>

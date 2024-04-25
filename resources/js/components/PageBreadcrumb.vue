@@ -58,6 +58,7 @@
                 </BreadcrumbItem>
             </template>
             <template v-for="item in breadcrumb.items.slice(1).slice(-2)">
+                <BreadcrumbSeparator />
                 <BreadcrumbItem>
                     <template v-if="item.url === breadcrumb.items.at(-1).url">
                         <BreadcrumbPage>

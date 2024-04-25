@@ -3,6 +3,8 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
 
 abstract class DateRangeFilter extends Filter
 {
@@ -33,7 +35,25 @@ abstract class DateRangeFilter extends Filter
         return $this->isMondayFirst;
     }
     
-    public function fromQueryParam($value): ?array
+    final public function getPresets(): array
+    {
+        return [
+            'today' => CarbonPeriod::between('today', 'today'),
+            'yesterday' => CarbonPeriod::between(today()->subDay(), 'today'),
+            'last_7_days' => CarbonPeriod::between(today()->subDays(7), 'today'),
+            'last_30_days' => CarbonPeriod::between(today()->subDays(30), 'today'),
+            'last_365_days' => CarbonPeriod::between(today()->subDays(365), 'today'),
+            'this_month' => CarbonPeriod::between(today()->startOfMonth(), today()->endOfMonth()),
+            'last_month' => CarbonPeriod::between(today()->subMonth()->startOfMonth(), today()->subMonth()->endOfMonth()),
+            'this_year' => CarbonPeriod::between(today()->startOfYear(), today()->endOfYear()),
+            'last_year' => CarbonPeriod::between(today()->subYear()->startOfYear(), today()->subYear()->endOfYear()),
+        ];
+    }
+    
+    /**
+     * @internal
+     */
+    final public function fromQueryParam($value): ?array
     {
         if(!$value) {
             return null;
@@ -47,7 +67,10 @@ abstract class DateRangeFilter extends Filter
         ];
     }
     
-    public function toQueryParam($value): ?string
+    /**
+     * @internal
+     */
+    final public function toQueryParam($value): ?string
     {
         if(!$value) {
             return null;

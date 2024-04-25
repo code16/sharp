@@ -40,6 +40,7 @@ trait BuildsFiltersConfigArray
                                 'template' => $filterHandler->getTemplate(),
                             ];
                         } elseif ($filterHandler instanceof DateRangeFilter) {
+                            dd($filterHandler->getPresets());
                             $filterConfigData += [
                                 'type' => 'daterange',
                                 'required' => $filterHandler instanceof DateRangeRequiredFilter,
