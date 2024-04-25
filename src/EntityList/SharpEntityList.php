@@ -7,6 +7,7 @@ use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Traits\HandleEntityCommands;
 use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
+use Code16\Sharp\Utils\Filters\FilterContainer;
 use Code16\Sharp\Utils\Filters\HandleFilters;
 use Code16\Sharp\Utils\Traits\HandlePageAlertMessage;
 use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
@@ -34,15 +35,18 @@ abstract class SharpEntityList
     protected bool $deleteHidden = false;
     protected ?string $deleteConfirmationText = null;
 
-    final public function initQueryParams(): self
+    final public function initQueryParams(?array $query): self
     {
-        $this->putRetainedFilterValuesInSession();
-
-        $this->queryParams = EntityListQueryParams::create()
-            ->setDefaultSort($this->defaultSort, $this->defaultSortDir)
-            ->fillWithRequest()
-            ->setDefaultFilters($this->getFilterDefaultValues());
-
+        $this->queryParams = (new EntityListQueryParams(
+            filterContainer: $this->filterContainer(),
+            filterValues: $this->filterContainer()->getCurrentFilterValues($query),
+            sortedBy: $query['sort'] ?? $this->defaultSort,
+            sortedDir: $query['dir'] ?? $this->defaultSortDir,
+            page: $query['page'] ?? null,
+            search: ($query['search'] ?? null) ? urldecode($query['search']) : null,
+            specificIds: $query['ids'] ?? [],
+        ));
+        
         return $this;
     }
 
@@ -108,10 +112,10 @@ abstract class SharpEntityList
             'hasShowPage' => $hasShowPage,
             'deleteConfirmationText' => $this->deleteConfirmationText ?: trans('sharp::show.delete_confirmation_text'),
             'deleteHidden' => $this->deleteHidden,
+            'filters' => $this->filterContainer()->getFiltersConfigArray(),
         ];
 
         return tap($config, function (&$config) {
-            $this->appendFiltersToConfig($config);
             $this->appendEntityStateToConfig($config);
             $this->appendInstanceCommandsToConfig($config);
             $this->appendEntityCommandsToConfig($config);

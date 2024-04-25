@@ -49,9 +49,11 @@ export const Paste = Extension.create({
 // needed to keep same references of node/mark types
 function getNormalizedSchema(target, source) {
     const schema = new Schema(target.spec);
+    // @ts-ignore
     schema.nodes = Object.fromEntries(
         Object.entries(source.nodes).filter(([key]) => !!target.nodes[key])
     );
+    // @ts-ignore
     schema.marks = Object.fromEntries(
         Object.entries(source.marks).filter(([key]) => !!target.marks[key])
     );

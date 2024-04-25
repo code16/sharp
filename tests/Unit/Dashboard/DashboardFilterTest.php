@@ -40,7 +40,6 @@ it('handles dashboard filters config', function () {
                         ['id' => 1, 'label' => 'A'],
                         ['id' => 2, 'label' => 'B'],
                     ],
-                    'default' => null,
                     'type' => 'select',
                     'master' => false,
                     'searchable' => false,

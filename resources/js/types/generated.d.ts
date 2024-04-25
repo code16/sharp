@@ -13,7 +13,6 @@ export type CheckFilterData = {
   key: string;
   label: string | null;
   type: "check";
-  default: boolean | null;
 };
 export type CommandAction =
   | "download"
@@ -68,6 +67,7 @@ export type DashboardData = {
   config: DashboardConfigData;
   layout: DashboardLayoutData;
   data: { [key: string]: any };
+  filterValues: FilterValuesData;
   pageAlert: PageAlertData | null;
 };
 export type DashboardLayoutData = {
@@ -87,14 +87,13 @@ export type DateRangeFilterData = {
   key: string;
   label: string | null;
   type: "daterange";
-  default: DateRangeFilterValueData | null;
   required: boolean;
   mondayFirst: boolean;
   displayFormat: string;
 };
 export type DateRangeFilterValueData = {
-  start: Date | string;
-  end: Date | string;
+  start: string;
+  end: string;
 };
 export type EmbedData = {
   value?: FormData["data"] & { slot: string };
@@ -137,6 +136,7 @@ export type EntityListData = {
   fields: Array<EntityListFieldData>;
   data: Array<{ [key: string]: any }>;
   forms: { [key: string]: EntityListMultiformData };
+  filterValues: FilterValuesData;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };
@@ -145,7 +145,7 @@ export type EntityListFieldData = {
   label: string;
   sortable: boolean;
   html: boolean;
-  width: string;
+  width: string | null;
   hideOnXS: boolean;
 };
 export type EntityListMultiformData = {
@@ -188,6 +188,11 @@ export type FilterData =
   | DateRangeFilterData
   | SelectFilterData;
 export type FilterType = "select" | "daterange" | "check";
+export type FilterValuesData = {
+  current: { [key: string]: any };
+  default: { [key: string]: any };
+  valuated: { [key: string]: boolean };
+};
 export type FormAutocompleteFieldData = {
   value: string | number | null | { [locale: string]: string | number | null };
   key: string;
@@ -555,7 +560,8 @@ export type FormUploadFieldValueData = {
   nativeFile?: File;
 };
 export type GlobalFiltersData = {
-  filters: ConfigFiltersData;
+  config: { filters: ConfigFiltersData };
+  filterValues: FilterValuesData;
 };
 export type GraphWidgetData = {
   value?: {
@@ -664,7 +670,6 @@ export type SelectFilterData = {
   key: string;
   label: string | null;
   type: "select";
-  default: number | string | Array<number | string> | null;
   multiple: boolean;
   required: boolean;
   values: Array<{ id: string | number } & { [key: string]: any }>;

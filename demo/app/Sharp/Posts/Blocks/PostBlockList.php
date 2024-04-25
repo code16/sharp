@@ -7,6 +7,7 @@ use App\Models\PostBlock;
 use Code16\Sharp\EntityList\Eloquent\SimpleEloquentReorderHandler;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
@@ -30,6 +31,13 @@ class PostBlockList extends SharpEntityList
     {
         $this->configureMultiformAttribute('type')
             ->configureReorderable(new SimpleEloquentReorderHandler(PostBlock::class));
+    }
+
+    protected function getFilters(): ?array
+    {
+        return [
+            HiddenFilter::make('post')
+        ];
     }
 
     public function getListData(): array|Arrayable

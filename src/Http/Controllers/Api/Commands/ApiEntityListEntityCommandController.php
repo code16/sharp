@@ -25,7 +25,7 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->input('query'));
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
         $formData = $commandHandler->formData() ?: null;
@@ -43,7 +43,7 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->input('query'));
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
 
@@ -58,7 +58,6 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $commandHandler = $list->findEntityCommandHandler($commandKey);
         $commandHandler->buildCommandConfig();
-        $commandHandler->initQueryParams(EntityListQueryParams::create()->fillWithRequest());
 
         if (! $commandHandler->authorize()) {
             throw new SharpAuthorizationException();

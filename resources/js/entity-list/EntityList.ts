@@ -16,6 +16,7 @@ export class EntityList implements EntityListData {
     forms: EntityListData['forms'];
     meta: EntityListData['meta'];
     pageAlert: EntityListData['pageAlert'];
+    filterValues: EntityListData['filterValues'];
 
     entityKey: string;
     hiddenFilters?: Record<string, FilterData['value']>;
@@ -38,16 +39,16 @@ export class EntityList implements EntityListData {
         return this.meta?.total ?? this.data.length;
     }
 
-    get visibleFilters(): Array<FilterData> {
-        return this.config.filters._root.filter(filter => !this.hiddenFilters?.[filter.key]);
+    get visibleFilters(): Array<FilterData>|null {
+        return this.config.filters?._root.filter(filter => !this.hiddenFilters?.[filter.key]);
     }
 
     get visibleCommands(): ConfigCommandsData {
         return {
-            instance: this.config.commands.instance?.map(group => group.filter(command => {
+            instance: this.config.commands?.instance?.map(group => group.filter(command => {
                 return !this.hiddenCommands?.instance?.includes(command.key);
             })),
-            entity: this.config.commands.entity?.map(group => group.filter(command => {
+            entity: this.config.commands?.entity?.map(group => group.filter(command => {
                 return !this.hiddenCommands?.entity?.includes(command.key);
             })),
         }

@@ -2,6 +2,8 @@
 
 namespace Code16\Sharp\Utils\Filters;
 
+use Carbon\Carbon;
+
 abstract class DateRangeFilter extends Filter
 {
     private string $dateFormat = 'YYYY-MM-DD';
@@ -29,5 +31,32 @@ abstract class DateRangeFilter extends Filter
     final public function isMondayFirst(): bool
     {
         return $this->isMondayFirst;
+    }
+    
+    public function fromQueryParam($value): ?array
+    {
+        if(!$value) {
+            return null;
+        }
+        
+        [$start, $end] = explode('..', $value);
+        
+        return [
+            'start' => Carbon::createFromFormat('Ymd', $start)->startOfDay(),
+            'end' => Carbon::createFromFormat('Ymd', $end)->endOfDay(),
+        ];
+    }
+    
+    public function toQueryParam($value): ?string
+    {
+        if(!$value) {
+            return null;
+        }
+        
+        return sprintf(
+            '%s..%s',
+            Carbon::parse($value['start'])->format('Ymd'),
+            Carbon::parse($value['end'])->format('Ymd'),
+        );
     }
 }

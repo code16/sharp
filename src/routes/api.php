@@ -1,6 +1,7 @@
 <?php
 
 use Code16\Sharp\Http\Controllers\Api\ApiEntityListController;
+use Code16\Sharp\Http\Controllers\Api\ApiEntityListFiltersController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormEditorUploadFormController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadController;
 use Code16\Sharp\Http\Controllers\Api\ApiFormUploadThumbnailController;
@@ -28,6 +29,9 @@ Route::group([
     // EEL
     Route::get('/list/{entityKey}', [EntityListController::class, 'show'])
         ->name('code16.sharp.api.list');
+    
+    Route::post('/list/{entityKey}/filters', [ApiEntityListFiltersController::class, 'store'])
+        ->name('code16.sharp.api.list.filters.store');
 
     Route::post('/list/{entityKey}/reorder', [ApiEntityListController::class, 'update'])
         ->name('code16.sharp.api.list.reorder');

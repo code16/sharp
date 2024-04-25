@@ -1,6 +1,10 @@
 <?php
 
 use Code16\Sharp\EntityList\EntityListQueryParams;
+use Code16\Sharp\EntityList\Filters\HiddenFilter;
+use Code16\Sharp\Utils\Filters\DateRangeFilter;
+use Code16\Sharp\Utils\Filters\FilterContainer;
+use Code16\Sharp\Utils\Filters\SelectMultipleFilter;
 use Illuminate\Support\Carbon;
 
 it('handles hasSearch', function () {
@@ -41,19 +45,57 @@ it('finds filter values', function () {
         ->and(buildParams()->filterFor('job'))->toBeNull();
 });
 
-function buildParams($p = 1, $s = '', $sb = null, $sd = null, $f = null): EntityListQueryParams
+function buildParams($p = 1, $s = '', $sb = null, $sd = null, $filters = null): EntityListQueryParams
 {
-    return new class($p, $s, $sb, $sd, $f) extends EntityListQueryParams
+    return new class($p, $s, $sb, $sd, $filters) extends EntityListQueryParams
     {
         public function __construct($p, $s, $sb, $sd, $f)
         {
-            $this->page = $p;
-            $this->search = $s;
-            $this->sortedBy = $sb;
-            $this->sortedDir = $sd;
-            if ($f) {
-                $this->filters = $f;
-            }
+            $filterContainer = new FilterContainer(
+                collect($f)
+                    ->map (function ($value, $key) {
+                        if (str($value)->contains('..')) {
+                            return new class($key) extends DateRangeFilter
+                            {
+                                public function __construct(string $key)
+                                {
+                                    $this->customKey = $key;
+                                }
+                            };
+                        }
+                        
+                        if (str($value)->contains(',')) {
+                            return new class($key) extends SelectMultipleFilter
+                            {
+                                public function __construct(string $key)
+                                {
+                                    $this->customKey = $key;
+                                }
+                                public function values(): array
+                                {
+                                    return [];
+                                }
+                            };
+                        }
+                        
+                        return HiddenFilter::make($key);
+                    })
+                    ->values()
+                    ->toArray()
+            );
+            
+            parent::__construct(
+                filterContainer: $filterContainer,
+                filterValues: [
+                    ...$filterContainer->getFilterValuesFromQueryParams(
+                        collect($f)->mapWithKeys(fn ($v, $k) => ["filter_$k" => $v])->toArray()
+                    )
+                ],
+                sortedBy: $sb,
+                sortedDir: $sd,
+                page: $p,
+                search: $s
+            );
         }
     };
 }
