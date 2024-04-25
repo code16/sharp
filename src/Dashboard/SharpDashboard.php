@@ -32,11 +32,7 @@ abstract class SharpDashboard
     {
         $this->queryParams = (new DashboardQueryParams(
             filterContainer: $this->filterContainer(),
-            filterValues: [
-                ...$this->filterContainer()->getDefaultFilterValues(),
-                ...$this->filterContainer()->getFilterValuesRetainedInSession(),
-                ...$this->filterContainer()->getFilterValuesFromQueryParams($query),
-            ],
+            filterValues: $this->filterContainer()->getCurrentFilterValues($query),
         ));
 
         return $this;

@@ -102,13 +102,13 @@ class FilterContainer
         return $values;
     }
     
-    protected function getCurrentFilterValues(): Collection
+    public function getCurrentFilterValues(?array $query): array
     {
-        return collect([
+        return [
             ...$this->getDefaultFilterValues(),
             ...$this->getFilterValuesRetainedInSession(),
-            ...$this->getFilterValuesFromQueryParams(request()->all()),
-        ]);
+            ...$this->getFilterValuesFromQueryParams($query),
+        ];
     }
     
     public function getDefaultFilterValues(): Collection

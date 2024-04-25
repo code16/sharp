@@ -28,7 +28,7 @@ class DashboardController extends SharpProtectedController
             'layout' => $dashboard->widgetsLayout(),
             'data' => $dashboardData,
             'pageAlert' => $dashboard->pageAlert($dashboardData),
-            'filterValues' => $dashboard->filterContainer()->getCurrentFilterValuesToFront(),
+            'filterValues' => $dashboard->filterContainer()->getCurrentFilterValuesForFront(request()->all()),
         ];
 
         return Inertia::render('Dashboard/Dashboard', [

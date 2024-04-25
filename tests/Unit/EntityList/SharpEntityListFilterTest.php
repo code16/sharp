@@ -176,7 +176,7 @@ it('allows list filter to be required', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['required'])->toBeTrue()
-        ->and($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
+        ->and($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
             'default' => ['test' => 'B'],
             'current' => ['test' => 'B'],
             'valuated' => ['test' => false],
@@ -354,7 +354,7 @@ it('allows to declare a filter as retained and to set its default value', functi
     session()->put('_sharp_retained_filter_test_20', 2);
     $list->buildListConfig();
 
-    expect($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
         'default' => ['test_20' => null],
         'current' => ['test_20' => 2],
         'valuated' => ['test_20' => true],
@@ -393,7 +393,7 @@ it('returns retained value for required and retained filters returns by default'
     session()->put('_sharp_retained_filter_test_21', 2);
     $list->buildListConfig();
     
-    expect($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
         'default' => ['test_21' => 1],
         'current' => ['test_21' => 2],
         'valuated' => ['test_21' => true],
@@ -422,7 +422,7 @@ it('formats date range filter retained value', function () {
     session()->put('_sharp_retained_filter_test_22', '20190922..20190925');
     $list->buildListConfig();
     
-    expect($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
+    expect($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
         'default' => ['test_22' => null],
         'current' => [
             'test_22' => [
@@ -459,7 +459,7 @@ it('allows to declare a date range filter as required', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['required'])->toBeTrue()
-        ->and($list->filterContainer()->getCurrentFilterValuesToFront())->toEqual([
+        ->and($list->filterContainer()->getCurrentFilterValuesForFront(null))->toEqual([
             'default' => [
                 'test' => [
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),

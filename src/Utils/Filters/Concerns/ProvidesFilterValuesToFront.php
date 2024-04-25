@@ -9,17 +9,17 @@ use Illuminate\Support\Arr;
 
 trait ProvidesFilterValuesToFront
 {
-    public function getCurrentFilterValuesToFront(): array
+    public function getCurrentFilterValuesForFront(?array $query): array
     {
         $defaultValues = $this->getDefaultFilterValues();
-        $currentValues = $this->getCurrentFilterValues();
+        $currentValues = $this->getCurrentFilterValues($query);
         
         return [
             'default' => $this->getFilterHandlers()
                 ->flatten()
                 ->mapWithKeys(function (Filter $handler) use ($defaultValues) {
                     return [
-                        $handler->getKey() => $this->formatFilterValueToFront(
+                        $handler->getKey() => $this->formatFilterValueForFront(
                             $handler,
                             $defaultValues[$handler->getKey()] ?? null
                         )
@@ -30,7 +30,7 @@ trait ProvidesFilterValuesToFront
                 ->flatten()
                 ->mapWithKeys(function (Filter $handler) use ($currentValues) {
                     return [
-                        $handler->getKey() => $this->formatFilterValueToFront(
+                        $handler->getKey() => $this->formatFilterValueForFront(
                             $handler,
                             $currentValues[$handler->getKey()] ?? null
                         )
@@ -56,7 +56,7 @@ trait ProvidesFilterValuesToFront
         ];
     }
     
-    protected function formatFilterValueToFront(Filter $handler, mixed $value)
+    protected function formatFilterValueForFront(Filter $handler, mixed $value)
     {
         if ($value && $handler instanceof DateRangeFilter) {
             $value = [

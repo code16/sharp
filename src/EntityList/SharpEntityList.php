@@ -39,11 +39,7 @@ abstract class SharpEntityList
     {
         $this->queryParams = (new EntityListQueryParams(
             filterContainer: $this->filterContainer(),
-            filterValues: [
-                ...$this->filterContainer()->getDefaultFilterValues(),
-                ...$this->filterContainer()->getFilterValuesRetainedInSession(),
-                ...$this->filterContainer()->getFilterValuesFromQueryParams($query)
-            ],
+            filterValues: $this->filterContainer()->getCurrentFilterValues($query),
             sortedBy: $query['sort'] ?? $this->defaultSort,
             sortedDir: $query['dir'] ?? $this->defaultSortDir,
             page: $query['page'] ?? null,
