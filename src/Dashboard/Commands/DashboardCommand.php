@@ -19,10 +19,13 @@ abstract class DashboardCommand extends Command
         $this->queryParams = $queryParams;
     }
 
-    public function formData(): array
+    final public function formData(): array
     {
         return collect($this->initialData())
-            ->only($this->getDataKeys())
+            ->only([
+                ...$this->getDataKeys(),
+                ...array_keys($this->transformers),
+            ])
             ->all();
     }
 

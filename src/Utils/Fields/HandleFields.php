@@ -39,7 +39,6 @@ trait HandleFields
     final public function fields(): array
     {
         return $this->getBuiltFields()
-            ->when($this->pageAlertHtmlField ?? null, fn ($collection) => $collection->push($this->pageAlertHtmlField))
             ->when($this->pageTitleField ?? null, fn ($collection) => $collection->push($this->pageTitleField))
             ->map(fn ($collection) => $collection->toArray())
             ->keyBy('key')

@@ -25,7 +25,7 @@ class ApiEntityListEntityCommandController extends ApiController
     {
         $list = $this->getListInstance($entityKey);
         $list->buildListConfig();
-        $list->initQueryParams(request()->input('query'));
+        $list->initQueryParams(request()->all());
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
         $formData = $commandHandler->formData() ?: null;

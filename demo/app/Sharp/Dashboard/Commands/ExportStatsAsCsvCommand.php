@@ -19,11 +19,11 @@ class ExportStatsAsCsvCommand extends DashboardCommand
     {
         $pageAlert
             ->setLevelInfo()
-            ->setMessage(function (array $data) {
+            ->setMessage(function () {
                 return sprintf(
                     'For the period %s - %s',
-                    $data['period']['start'],
-                    $data['period']['end'],
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
                 );
             });
     }
@@ -45,15 +45,5 @@ class ExportStatsAsCsvCommand extends DashboardCommand
         ]);
 
         return $this->streamDownload('some stats', 'stats.csv');
-    }
-
-    protected function initialData(): array
-    {
-        return [
-            'period' => [
-                'start' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
-                'end' => $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
-            ],
-        ];
     }
 }
