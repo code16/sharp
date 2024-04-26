@@ -70,6 +70,10 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
+        <template #breadcrumb>
+            <PageBreadcrumb :breadcrumb="breadcrumb" />
+        </template>
+
         <div class="container mx-auto">
             <EntityListComponent
                 :entity-key="entityKey"
@@ -81,15 +85,7 @@
                 @filter-change="onFilterChange"
                 @update:query="onQueryChange"
             >
-                <template v-slot:breadcrumb>
-                    <PageBreadcrumb class="mb-4" :breadcrumb="breadcrumb" />
-                    <!--                    <EntityListTitle :count="entityList.count">-->
-                    <!--                        <template v-if="config('sharp.display_breadcrumb')">-->
-                    <!--                            <Breadcrumb :breadcrumb="breadcrumb" />-->
-                    <!--                        </template>-->
-                    <!--                    </EntityListTitle>-->
-                </template>
-                <template v-slot:card-header>
+                <template #card-header>
                     <CardTitle>
                         {{ breadcrumb.items[0].label }}
                     </CardTitle>
