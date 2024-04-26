@@ -4,7 +4,7 @@
     import { DateRangeFilterData } from "@/types";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { Button } from "@/components/ui/button";
-    import { CalendarIcon } from "lucide-vue-next";
+    import { CalendarIcon, ChevronDown, PlusCircle } from "lucide-vue-next";
     import { RangeCalendar } from "@/components/ui/range-calendar";
     import { reactive, ref, watch } from "vue";
     import { Separator } from "@/components/ui/separator";
@@ -12,12 +12,15 @@
     import { Input } from "@/components/ui/input";
     import { __ } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
+    import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
+    import FilterDateRangeValue from "@/filters/components/filters/FilterDateRangeValue.vue";
 
     const props = defineProps<{
         value: DateRangeFilterData['value'],
         filter: Omit<DateRangeFilterData, 'value'>,
         valuated: boolean,
         disabled?: boolean,
+        inline?: boolean,
     }>();
 
     const emit = defineEmits(['input']);
@@ -96,83 +99,88 @@
 </script>
 
 <template>
-    <Label>
-        {{ filter.label }}
-    </Label>
+    <div>
+        <Label v-if="!inline">
+            {{ filter.label }}
+        </Label>
 
-    <Popover v-model:open="open" @update:open="$event && onOpen()">
-        <PopoverTrigger as-child>
-            <Button class="text-left justify-start" variant="outline" size="sm">
-                <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
-                <template v-if="value?.start">
-                    <Separator orientation="vertical" class="mx-2 h-4" />
-                    <Badge
-                        variant="secondary"
-                        class="rounded-sm px-1 font-normal"
+        <Popover v-model:open="open" @update:open="$event && onOpen()">
+            <PopoverTrigger as-child>
+                <template v-if="inline">
+                    <Button variant="outline" size="sm" class="h-8 border-dashed" :disabled="disabled">
+                        <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
+                        {{ filter.label }}
+                        <template v-if="value?.start">
+                            <Separator orientation="vertical" class="mx-2 h-4" />
+                            <FilterDateRangeValue :filter="filter" :value="value" inline />
+                        </template>
+                    </Button>
+                </template>
+                <template v-else>
+                    <Button
+                        class="mt-2 w-full text-left justify-start font-normal"
+                        variant="outline"
+                        size="sm"
+                        :disabled="disabled"
                     >
-                        <template v-if="value.end">
-                            {{ new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(value.start)) }}
-                            -
-                            {{ new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(value.end)) }}
+                        <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
+                        <template v-if="value?.start">
+                            <FilterDateRangeValue :filter="filter" :value="value" />
                         </template>
-
-                        <template v-else>
-                            {{ new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(value.start)) }}
-                        </template>
-                    </Badge>
+                    </Button>
                 </template>
-            </Button>
-        </PopoverTrigger>
-        <PopoverContent class="w-auto p-0">
-            <div class="flex">
-                <template v-if="filter.presets?.length">
-                    <div class="flex flex-col shrink-0 p-3">
-                        <template v-for="preset in filter.presets">
-                            <Button
-                                class="text-left justify-start"
-                                :class="{ 'bg-accent text-accent-foreground': preset.key === localValue.preset }"
-                                size="sm"
-                                variant="ghost"
-                                @click="onPresetSelected(preset)"
-                            >
-                                {{ preset.label }}
-                            </Button>
-                        </template>
-                    </div>
-                </template>
-                <div class="flex-1">
-                    <RangeCalendar
-                        v-model="localValue"
-                        :number-of-months="2"
-                        :locale="window.navigator.language"
-                        @update:start-value="(startDate) => localValue.start = startDate"
-                        @update:model-value="onCalendarChange"
-                        :key="edited.count"
-                    />
-                    <div class="grid gap-4 p-3" key="footer">
-                        <div class="grid grid-cols-2 gap-4">
-                            <Input class="block" type="date"
-                                v-model="inputs.start"
-                                @update:model-value="onStartChange"
-                            />
-                            <Input class="block" type="date"
-                                v-model="inputs.end"
-                                @update:model-value="onEndChange"
-                            />
-                        </div>
-                        <div class="flex justify-end gap-3 pt-0">
-                            <template v-if="localValue.end">
-                                <Button variant="outline" @click="onResetClick">
-                                    {{ __('sharp::filters.select.reset') }}
+            </PopoverTrigger>
+            <PopoverContent class="w-auto p-0">
+                <div class="flex">
+                    <template v-if="filter.presets?.length">
+                        <div class="flex flex-col shrink-0 p-3">
+                            <template v-for="preset in filter.presets">
+                                <Button
+                                    class="text-left justify-start"
+                                    :class="{ 'bg-accent text-accent-foreground': preset.key === localValue.preset }"
+                                    size="sm"
+                                    variant="ghost"
+                                    @click="onPresetSelected(preset)"
+                                >
+                                    {{ preset.label }}
                                 </Button>
                             </template>
-                            <Button @click="onSubmit">
-                                {{ __('sharp::filters.daterange.confirm') }}
-                            </Button>
+                        </div>
+                    </template>
+                    <div class="flex-1">
+                        <RangeCalendar
+                            v-model="localValue"
+                            :number-of-months="2"
+                            :locale="window.navigator.language"
+                            @update:start-value="(startDate) => localValue.start = startDate"
+                            @update:model-value="onCalendarChange"
+                            :key="edited.count"
+                        />
+                        <div class="grid gap-4 p-3" key="footer">
+                            <div class="grid grid-cols-2 gap-4">
+                                <Input class="block" type="date"
+                                    v-model="inputs.start"
+                                    @update:model-value="onStartChange"
+                                />
+                                <Input class="block" type="date"
+                                    v-model="inputs.end"
+                                    @update:model-value="onEndChange"
+                                />
+                            </div>
+                            <div class="flex justify-end gap-3 pt-0">
+                                <template v-if="localValue.end">
+                                    <Button variant="outline" @click="onResetClick">
+                                        {{ __('sharp::filters.select.reset') }}
+                                    </Button>
+                                </template>
+                                <Button @click="onSubmit">
+                                    {{ __('sharp::filters.daterange.confirm') }}
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </PopoverContent>
-    </Popover>
+            </PopoverContent>
+        </Popover>
+    </div>
 </template>

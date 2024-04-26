@@ -7,6 +7,7 @@ return [
     'color-mode-dropdown.system' => 'System',
 
     'list.items_count' => ':count item(s)',
+    'list.search.button' => 'Search',
     'list.search.placeholder' => 'Search...',
     'list.search.title' => 'Results for “:search”',
     'list.create_button' => 'New...',

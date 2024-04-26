@@ -20,12 +20,17 @@
     import { Label } from "@/components/ui/label";
     import { ref } from "vue";
     import { SelectTrigger } from "@/components/ui/select";
+    import FilterControl from "@/filters/components/FilterControl.vue";
+    import FilterControlButton from "@/filters/components/FilterControlButton.vue";
+    import { PopoverAnchor } from "radix-vue";
+    import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
 
     const props = defineProps<{
         value: SelectFilterData['value'],
         filter: Omit<SelectFilterData, 'value'>,
         valuated: boolean,
         disabled?: boolean,
+        inline?: boolean,
     }>();
 
     const emit = defineEmits(['input']);
@@ -52,55 +57,37 @@
 </script>
 
 <template>
-    <div class="">
-        <Label>
+    <div>
+        <Label v-if="!inline">
             {{ filter.label }}
         </Label>
         <Popover v-model:open="open" modal>
             <PopoverTrigger as-child>
-                <Button class="mt-2 w-full text-left justify-start font-normal h-auto min-h-9 py-1.5 gap-1" variant="outline" size="sm" :disabled="disabled">
-
-<!--                    <span data-filter-label>-->
-<!--                        {{ filter.label }}-->
-<!--                    </span>-->
-                    <template v-if="Array.isArray(value) ? value.length : value != null">
-<!--                        <Separator orientation="vertical" class="mx-2 h-4" />-->
-
-                        <div class="flex flex-wrap gap-1">
-                            <template v-if="Array.isArray(value)">
-<!--                                <template v-if="value.length > 2">-->
-<!--                                    <Badge-->
-<!--                                        variant="secondary"-->
-<!--                                        class="rounded-sm px-1 font-normal"-->
-<!--                                    >-->
-<!--                                        {{ value.length }} selected-->
-<!--                                    </Badge>-->
-<!--                                </template>-->
-<!--                                <template v-else>-->
-                                    <template v-for="selectValue in filter.values.filter((v) => (value as Array<string | number>).some(vv => v.id == vv))" :key="selectValue.id">
-                                        <Badge variant="secondary" class="rounded-sm px-1 font-normal">
-                                            {{ selectValue.label }}
-                                        </Badge>
-                                    </template>
-<!--                                </template>-->
-                            </template>
-                            <template v-else>
-                                <Badge variant="secondary" class="rounded-sm px-1 font-normal">
-                                    {{ filter.values.find(selectValue => selectValue.id == value)?.label }}
-                                </Badge>
-                            </template>
-                        </div>
-                    </template>
-                    <template v-else>
-<!--                        {{ __('sharp::form.multiselect.placeholder')}}...-->
-                    </template>
-                    <ChevronDown class="w-4 h-4 opacity-50 shrink-0  ml-auto" />
-<!--                    <template v-else>-->
-<!--                        <PlusCircle class="h-4 w-4 stroke-[1.25]" />-->
-<!--                    </template>-->
-                </Button>
+                <template v-if="inline">
+                    <Button variant="outline" size="sm" class="h-8 border-dashed" :disabled="disabled">
+                        <PlusCircle class="mr-2 w-4 h-4 stroke-[1.25]" />
+                        {{ filter.label }}
+                        <template v-if="Array.isArray(value) ? value.length : value != null">
+                            <Separator orientation="vertical" class="mx-2 h-4" />
+                            <FilterSelectValue :filter="filter" :value="value" inline />
+                        </template>
+                    </Button>
+                </template>
+                <template v-else>
+                    <Button
+                        class="mt-2 w-full text-left justify-start font-normal h-auto min-h-9 py-1.5 gap-1"
+                        variant="outline"
+                        size="sm"
+                        :disabled="disabled"
+                    >
+                        <template v-if="Array.isArray(value) ? value.length : value != null">
+                            <FilterSelectValue :filter="filter" :value="value" />
+                        </template>
+                        <ChevronDown class="w-4 h-4 opacity-50 shrink-0 ml-auto" />
+                    </Button>
+                </template>
             </PopoverTrigger>
-            <PopoverContent class="p-0 w-[--radix-popover-trigger-width]" align="start">
+            <PopoverContent :class="cn('p-0 w-[200px]', !inline ? 'w-[--radix-popover-trigger-width]' : '')" align="start">
                 <Command
                     :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term)) "
                 >
@@ -125,9 +112,9 @@
                                     <template v-if="!filter.multiple">
                                         <Check
                                             :class="cn(
-                                          'h-4 w-4 mr-2',
-                                          isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
-                                        )"
+                                              'h-4 w-4 mr-2',
+                                              isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
+                                            )"
                                         />
                                     </template>
                                     <span>{{ selectValue.label }}</span>

@@ -24,9 +24,9 @@
     import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
     import { useDraggable } from "vue-draggable-plus";
-    import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+    import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { ChevronDown, MoreHorizontal, PlusCircle, ListFilter } from "lucide-vue-next";
+    import { ChevronDown, MoreHorizontal, PlusCircle, ListFilter, Search } from "lucide-vue-next";
     import { Checkbox } from "@/components/ui/checkbox";
     import {
         DropdownMenu, DropdownMenuCheckboxItem,
@@ -45,7 +45,7 @@
     import { FilterQueryParams } from "@/filters/types";
     import { Input } from "@/components/ui/input";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-    import FilterContainer from "@/filters/components/FilterContainer.vue";
+    import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -75,6 +75,7 @@
         emit('filter-change', filter, value);
     }
 
+    const searchFocused = ref(false);
     function onSearchSubmit(search: string) {
         emit('update:query', {
             ...props.query,
@@ -223,25 +224,25 @@
                         <div class="flex gap-3 mb-4">
                             <div class="flex flex-wrap gap-3">
                                 <template v-if="showSearchField && entityList.config.searchable">
-                                    <Input
-                                        :placeholder="__('sharp::action_bar.list.search.placeholder')"
-                                        :model-value="query.search"
-                                        :disabled="reordering"
-                                        class="h-8 w-[150px] lg:w-[250px]"
+                                    <EntityListSearch
+                                        v-model:focused="searchFocused"
+                                        :reordering="reordering"
+                                        :query="query"
+                                        @submit="onSearchSubmit"
                                     />
                                 </template>
                                 <template v-if="entityList.visibleFilters?.length">
-                                    <div class="flex items-center">
+                                    <div class="flex items-center lg:hidden">
                                         <Popover>
                                             <PopoverTrigger as-child>
-                                                <Button class="h-8" variant="outline" size="sm">
-                                                    <ListFilter class="h-3.5 w-3.5 mr-1" />
+                                                <Button class="h-8 gap-1" variant="outline" size="sm">
+                                                    <ListFilter class="h-3.5 w-3.5" />
                                                     <span class="sr-only sm:not-sr-only sm:whitespace-nowrap">
                                                         Filter
                                                     </span>
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent class="min-w-min" align="start" :align-offset="-16">
+                                            <PopoverContent class="min-w-min lg:hidden" align="start" :align-offset="-16">
                                                 <div class="flex flex-col flex-wrap gap-4">
                                                     <template v-for="filter in entityList.visibleFilters" :key="filter.key">
                                                         <SharpFilter
@@ -265,15 +266,18 @@
                                         </template>
                                     </div>
 
-<!--                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">-->
-<!--                                        <SharpFilter-->
-<!--                                            :filter="filter"-->
-<!--                                            :value="filters.currentValues[filter.key]"-->
-<!--                                            :disabled="reordering"-->
-<!--                                            :valuated="filters.isValuated([filter])"-->
-<!--                                            @input="onFilterChange(filter, $event)"-->
-<!--                                        />-->
-<!--                                    </template>-->
+                                    <div class="hidden md:flex gap-3" :class="searchFocused ? 'sr-only' : ''">
+                                        <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                            <SharpFilter
+                                                :filter="filter"
+                                                :value="filters.currentValues[filter.key]"
+                                                :disabled="reordering"
+                                                :valuated="filters.isValuated([filter])"
+                                                inline
+                                                @input="onFilterChange(filter, $event)"
+                                            />
+                                        </template>
+                                    </div>
                                 </template>
                             </div>
                             <div class="ml-auto self-start flex flex-wrap gap-2">
@@ -381,6 +385,11 @@
                 <Card>
                     <CardHeader>
                         <slot name="card-header" />
+                        <template v-if="query.search">
+                            <CardDescription>
+                                {{ __('sharp::action_bar.list.search.title', { search: query.search }) }}
+                            </CardDescription>
+                        </template>
                     </CardHeader>
                     <template v-if="entityList">
                         <CardContent v-show="!collapsed">

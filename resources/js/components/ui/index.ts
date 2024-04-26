@@ -7,7 +7,6 @@ export { default as LoadingOverlay } from './loading/LoadingOverlay.vue';
 export { default as Modal } from './Modal.vue';
 export { default as Multiselect } from './Multiselect.vue';
 export { default as Pagination } from './Pagination.vue';
-export { default as Search } from './Search.vue';
 export { default as SectionTitle } from './section/SectionTitle.vue';
 export { default as StateIcon } from './StateIcon.vue';
 export { default as Tab } from './Tab.vue';
