@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { SelectFilterData } from "@/types";
-    import { PlusCircle } from "lucide-vue-next";
+    import { ChevronDown, PlusCircle } from "lucide-vue-next";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import { Separator } from "@/components/ui/separator";
     import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,9 @@
     import { __ } from "@/utils/i18n";
     import { Check } from "lucide-vue-next";
     import { cn } from "@/utils/cn";
+    import { Label } from "@/components/ui/label";
+    import { ref } from "vue";
+    import { SelectTrigger } from "@/components/ui/select";
 
     const props = defineProps<{
         value: SelectFilterData['value'],
@@ -26,6 +29,7 @@
     }>();
 
     const emit = defineEmits(['input']);
+    const open = ref(false);
 
     function isSelected(selectValue: SelectFilterData['values'][0]) {
         return Array.isArray(props.value)
@@ -41,103 +45,113 @@
             }).map(v => v.id);
             emit('input', value);
         } else {
+            open.value = false;
             emit('input', props.value == selectValue.id ? null : selectValue.id);
         }
     }
 </script>
 
 <template>
-    <Popover>
-        <PopoverTrigger as-child>
-            <Button variant="outline" size="sm" class="h-8 border-dashed" :disabled="disabled">
-                <PlusCircle class="mr-2 h-4 w-4 stroke-[1.25]" />
-                {{ filter.label }}
-                <template v-if="Array.isArray(value) ? value.length : value != null">
-                    <Separator orientation="vertical" class="mx-2 h-4" />
-                    <Badge
-                        variant="secondary"
-                        class="rounded-sm px-1 font-normal lg:hidden"
-                    >
-                        {{ Array.isArray(value) ? value.length : 1 }}
-                    </Badge>
-                    <div class="hidden space-x-1 lg:flex">
-                        <template v-if="Array.isArray(value)">
-                            <template v-if="value.length > 2">
-                                <Badge
-                                    variant="secondary"
-                                    class="rounded-sm px-1 font-normal"
-                                >
-                                    {{ value.length }} selected
-                                </Badge>
+    <div class="">
+        <Label>
+            {{ filter.label }}
+        </Label>
+        <Popover v-model:open="open" modal>
+            <PopoverTrigger as-child>
+                <Button class="mt-2 w-full text-left justify-start font-normal h-auto min-h-9 py-1.5 gap-1" variant="outline" size="sm" :disabled="disabled">
+
+<!--                    <span data-filter-label>-->
+<!--                        {{ filter.label }}-->
+<!--                    </span>-->
+                    <template v-if="Array.isArray(value) ? value.length : value != null">
+<!--                        <Separator orientation="vertical" class="mx-2 h-4" />-->
+
+                        <div class="flex flex-wrap gap-1">
+                            <template v-if="Array.isArray(value)">
+<!--                                <template v-if="value.length > 2">-->
+<!--                                    <Badge-->
+<!--                                        variant="secondary"-->
+<!--                                        class="rounded-sm px-1 font-normal"-->
+<!--                                    >-->
+<!--                                        {{ value.length }} selected-->
+<!--                                    </Badge>-->
+<!--                                </template>-->
+<!--                                <template v-else>-->
+                                    <template v-for="selectValue in filter.values.filter((v) => (value as Array<string | number>).some(vv => v.id == vv))" :key="selectValue.id">
+                                        <Badge variant="secondary" class="rounded-sm px-1 font-normal">
+                                            {{ selectValue.label }}
+                                        </Badge>
+                                    </template>
+<!--                                </template>-->
                             </template>
                             <template v-else>
-                                <template v-for="selectValue in filter.values.filter((v) => (value as Array<string | number>).some(vv => v.id == vv))" :key="selectValue.id">
-                                    <Badge variant="secondary" class="rounded-sm px-1 font-normal">
-                                        {{ selectValue.label }}
-                                    </Badge>
-                                </template>
+                                <Badge variant="secondary" class="rounded-sm px-1 font-normal">
+                                    {{ filter.values.find(selectValue => selectValue.id == value)?.label }}
+                                </Badge>
                             </template>
-                        </template>
-                        <template v-else>
-                            <Badge variant="secondary" class="rounded-sm px-1 font-normal">
-                                {{ filter.values.find(selectValue => selectValue.id == value)?.label }}
-                            </Badge>
-                        </template>
-                    </div>
-                </template>
-            </Button>
-        </PopoverTrigger>
-        <PopoverContent class="w-[200px] p-0" align="start">
-            <Command
-                :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term)) "
-            >
-                <template v-if="filter.searchable">
-                    <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
-                </template>
-                <CommandList>
-                    <CommandEmpty>No results found.</CommandEmpty>
-                    <CommandGroup>
-                        <template v-for="selectValue in filter.values" :key="selectValue.id">
-                            <CommandItem
-                                :value="selectValue"
-                                @select="onSelect(selectValue)"
-                            >
-                                <template v-if="filter.multiple">
-                                    <Checkbox
-                                        class="mr-2"
-                                        :class="{ 'opacity-50': !isSelected(selectValue) }"
-                                        :checked="isSelected(selectValue)"
-                                    />
-                                </template>
-                                <template v-if="!filter.multiple">
-                                    <Check
-                                        :class="cn(
+                        </div>
+                    </template>
+                    <template v-else>
+<!--                        {{ __('sharp::form.multiselect.placeholder')}}...-->
+                    </template>
+                    <ChevronDown class="w-4 h-4 opacity-50 shrink-0  ml-auto" />
+<!--                    <template v-else>-->
+<!--                        <PlusCircle class="h-4 w-4 stroke-[1.25]" />-->
+<!--                    </template>-->
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent class="p-0 w-[--radix-popover-trigger-width]" align="start">
+                <Command
+                    :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term)) "
+                >
+                    <template v-if="filter.searchable">
+                        <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
+                    </template>
+                    <CommandList>
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup>
+                            <template v-for="selectValue in filter.values" :key="selectValue.id">
+                                <CommandItem
+                                    :value="selectValue"
+                                    @select="onSelect(selectValue)"
+                                >
+                                    <template v-if="filter.multiple">
+                                        <Checkbox
+                                            class="mr-2"
+                                            :class="{ 'opacity-50': !isSelected(selectValue) }"
+                                            :checked="isSelected(selectValue)"
+                                        />
+                                    </template>
+                                    <template v-if="!filter.multiple">
+                                        <Check
+                                            :class="cn(
                                           'h-4 w-4 mr-2',
                                           isSelected(selectValue) ? 'opacity-100' : 'opacity-0',
                                         )"
-                                    />
-                                </template>
-                                <span>{{ selectValue.label }}</span>
-                            </CommandItem>
-                        </template>
-                    </CommandGroup>
-
-                    <template v-if="valuated">
-                        <div class="sticky bottom-0 bg-popover">
-                            <CommandSeparator />
-                            <CommandGroup>
-                                <CommandItem
-                                    :value="{ label: __('sharp::filters.select.reset') }"
-                                    class="justify-center text-center"
-                                    @select="$emit('input', null)"
-                                >
-                                    {{ __('sharp::filters.select.reset') }}
+                                        />
+                                    </template>
+                                    <span>{{ selectValue.label }}</span>
                                 </CommandItem>
-                            </CommandGroup>
-                        </div>
-                    </template>
-                </CommandList>
-            </Command>
-        </PopoverContent>
-    </Popover>
+                            </template>
+                        </CommandGroup>
+
+                        <template v-if="valuated">
+                            <div class="sticky bottom-0 bg-popover">
+                                <CommandSeparator />
+                                <CommandGroup>
+                                    <CommandItem
+                                        :value="{ label: __('sharp::filters.select.reset') }"
+                                        class="justify-center text-center"
+                                        @select="$emit('input', null); open = false"
+                                    >
+                                        {{ __('sharp::filters.select.reset') }}
+                                    </CommandItem>
+                                </CommandGroup>
+                            </div>
+                        </template>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    </div>
 </template>

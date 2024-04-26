@@ -40,7 +40,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 </script>
 
 <template>
-    <div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div class="min-h-screen w-full md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div class="hidden border-r bg-muted/40 md:block">
             <div class="flex h-full max-h-screen flex-col gap-2 sticky top-0">
                 <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
@@ -124,7 +124,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                 </div>
             </div>
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col min-w-0">
             <header class="flex h-14 items-center gap-4 border-b bg-background px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
                 <div class="absolute inset-0 bg-muted/40 -z-10"></div>
                 <Sheet>
@@ -242,7 +242,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
-            <main class="flex-1 p-4 lg:p-6">
+            <main class="flex-1 py-4 lg:py-6">
                 <slot />
             </main>
         </div>

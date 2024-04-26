@@ -11,6 +11,7 @@
     import { Badge } from "@/components/ui/badge";
     import { Input } from "@/components/ui/input";
     import { __ } from "@/utils/i18n";
+    import { Label } from "@/components/ui/label";
 
     const props = defineProps<{
         value: DateRangeFilterData['value'],
@@ -95,11 +96,14 @@
 </script>
 
 <template>
+    <Label>
+        {{ filter.label }}
+    </Label>
+
     <Popover v-model:open="open" @update:open="$event && onOpen()">
         <PopoverTrigger as-child>
-            <Button class="h-8 border-dashed" variant="outline" size="sm">
+            <Button class="text-left justify-start" variant="outline" size="sm">
                 <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
-                {{ filter.label }}
                 <template v-if="value?.start">
                     <Separator orientation="vertical" class="mx-2 h-4" />
                     <Badge

@@ -10,13 +10,13 @@
     } from "@/types";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import { CommandManager } from "@/commands/CommandManager";
-    import { Ref, watchEffect } from "vue";
+    import { Ref } from "vue";
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
     import { Instance, InstanceId } from "../types";
     import { getAppendableParentUri, route } from "@/utils/url";
     import { Button } from '@/components/ui/button';
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, Search } from '@/components/ui';
+    import { StateIcon } from '@/components/ui';
     import EntityActions from "./EntityActions.vue";
     import { api } from "@/api/api";
     import Pagination from "@/components/ui/Pagination.vue";
@@ -26,7 +26,7 @@
     import { useDraggable } from "vue-draggable-plus";
     import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-    import { ChevronDown, MoreHorizontal, PlusCircle } from "lucide-vue-next";
+    import { ChevronDown, MoreHorizontal, PlusCircle, ListFilter } from "lucide-vue-next";
     import { Checkbox } from "@/components/ui/checkbox";
     import {
         DropdownMenu, DropdownMenuCheckboxItem,
@@ -43,6 +43,9 @@
     import { Badge } from "@/components/ui/badge";
     import { Link } from "@inertiajs/vue3";
     import { FilterQueryParams } from "@/filters/types";
+    import { Input } from "@/components/ui/input";
+    import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+    import FilterContainer from "@/filters/components/FilterContainer.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -139,7 +142,7 @@
             getForm: route('code16.sharp.api.list.command.entity.form', { entityKey, commandKey: command.key }),
             query: {
                 ...query,
-                ids: Object.entries(selectedItems.value)
+                ids: Object.entries(selectedItems.value ?? {})
                     .filter(([instanceId, selected]) => selected)
                     .map(([instanceId, selected]) => instanceId),
             },
@@ -218,34 +221,62 @@
                 <template v-if="entityList">
                     <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
                         <div class="flex gap-3 mb-4">
-                            <template v-if="showSearchField && entityList.config.searchable">
-                                <!--                            <Search-->
-                                <!--                                style="&#45;&#45;width: 150px; &#45;&#45;focused-width: 250px;"-->
-                                <!--                                :value="query.search"-->
-                                <!--                                :placeholder="__('sharp::action_bar.list.search.placeholder')"-->
-                                <!--                                :disabled="reordering"-->
-                                <!--                                @submit="onSearchSubmit"-->
-                                <!--                            />-->
-                            </template>
-                            <template v-if="entityList.visibleFilters?.length">
-                                <div class="flex gap-3">
-                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                        <SharpFilter
-                                            :filter="filter"
-                                            :value="filters.currentValues[filter.key]"
-                                            :disabled="reordering"
-                                            :valuated="filters.isValuated([filter])"
-                                            @input="onFilterChange(filter, $event)"
-                                        />
-                                    </template>
-                                    <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
-                                        <Button class="h-8" variant="link" size="sm" @click="onResetAll">
-                                            {{ __('sharp::filters.reset_all') }}
-                                        </Button>
-                                    </template>
-                                </div>
-                            </template>
-                            <div class="ml-auto self-end flex gap-2">
+                            <div class="flex flex-wrap gap-3">
+                                <template v-if="showSearchField && entityList.config.searchable">
+                                    <Input
+                                        :placeholder="__('sharp::action_bar.list.search.placeholder')"
+                                        :model-value="query.search"
+                                        :disabled="reordering"
+                                        class="h-8 w-[150px] lg:w-[250px]"
+                                    />
+                                </template>
+                                <template v-if="entityList.visibleFilters?.length">
+                                    <div class="flex items-center">
+                                        <Popover>
+                                            <PopoverTrigger as-child>
+                                                <Button class="h-8" variant="outline" size="sm">
+                                                    <ListFilter class="h-3.5 w-3.5 mr-1" />
+                                                    <span class="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                                        Filter
+                                                    </span>
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent class="min-w-min" align="start" :align-offset="-16">
+                                                <div class="flex flex-col flex-wrap gap-4">
+                                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                                        <SharpFilter
+                                                            :filter="filter"
+                                                            :value="filters.currentValues[filter.key]"
+                                                            :disabled="reordering"
+                                                            :valuated="filters.isValuated([filter])"
+                                                            @input="onFilterChange(filter, $event)"
+                                                        />
+                                                    </template>
+                                                </div>
+                                                <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
+                                                    <Button class="w-full mt-8 h-8" variant="secondary" @click="onResetAll">
+                                                        {{ __('sharp::filters.reset_all') }}
+                                                    </Button>
+                                                </template>
+                                            </PopoverContent>
+                                        </Popover>
+                                        <template v-if="filters.isValuated(filters.rootFilters)">
+                                            <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
+                                        </template>
+                                    </div>
+
+<!--                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">-->
+<!--                                        <SharpFilter-->
+<!--                                            :filter="filter"-->
+<!--                                            :value="filters.currentValues[filter.key]"-->
+<!--                                            :disabled="reordering"-->
+<!--                                            :valuated="filters.isValuated([filter])"-->
+<!--                                            @input="onFilterChange(filter, $event)"-->
+<!--                                        />-->
+<!--                                    </template>-->
+                                </template>
+                            </div>
+                            <div class="ml-auto self-start flex flex-wrap gap-2">
                                 <template v-if="showReorderButton && entityList.canReorder && !selecting">
                                     <template v-if="reordering">
                                         <div class="col-auto">
