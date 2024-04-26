@@ -428,6 +428,7 @@ it('formats date range filter retained value', function () {
             'test_22' => [
                 'start' => '2019-09-22',
                 'end' => '2019-09-25',
+                'preset' => null,
             ]
         ],
         'valuated' => ['test_22' => true],
@@ -464,12 +465,14 @@ it('allows to declare a date range filter as required', function () {
                 'test' => [
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),
                     'end' => Carbon::now()->format('Y-m-d'),
+                    'preset' => null,
                 ]
             ],
             'current' => [
                 'test' => [
                     'start' => Carbon::now()->subDay()->format('Y-m-d'),
                     'end' => Carbon::now()->format('Y-m-d'),
+                    'preset' => null,
                 ]
             ],
             'valuated' => ['test' => false],

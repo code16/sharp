@@ -41,6 +41,7 @@ it('finds filter values', function () {
         ->toEqual([
             'start' => Carbon::createFromFormat('Y-m-d', '2019-02-01')->setTime(0, 0),
             'end' => Carbon::createFromFormat('Y-m-d', '2019-02-10')->setTime(23, 59, 59, 999999),
+            'preset' => null,
         ])
         ->and(buildParams()->filterFor('job'))->toBeNull();
 });

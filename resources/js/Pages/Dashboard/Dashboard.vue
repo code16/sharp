@@ -18,6 +18,7 @@
     import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+    import { watch } from "vue";
 
     const props = defineProps<{
         dashboard: DashboardData,
@@ -27,6 +28,10 @@
     const filters = useFilters(props.dashboard.config.filters, props.dashboard.filterValues);
     const commands = useCommands();
 
+    watch(() => props.dashboard, () => {
+        filters.update(props.dashboard.config.filters, props.dashboard.filterValues);
+    });
+
     function onFilterChange(filter: FilterData, value: FilterData['value']) {
         router.post(
             route('code16.sharp.dashboard.filters.store', { dashboardKey }),
@@ -34,7 +39,7 @@
                 filterValues: filters.nextValues(filter, value),
                 query: parseQuery(location.search),
             },
-            { preserveState: false },
+            { preserveState: true, preserveScroll: true },
         );
     }
 
@@ -45,7 +50,7 @@
                 filterValues: filters.defaultValues(resettedFilters),
                 query: parseQuery(location.search),
             },
-            { preserveState: false },
+            { preserveState: true, preserveScroll: true },
         );
     }
 

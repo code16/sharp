@@ -90,10 +90,12 @@ export type DateRangeFilterData = {
   required: boolean;
   mondayFirst: boolean;
   displayFormat: string;
+  presets: Array<{ key: string; label: string }> | null;
 };
 export type DateRangeFilterValueData = {
   start: string;
   end: string;
+  preset: string | null;
 };
 export type EmbedData = {
   value?: FormData["data"] & { slot: string };

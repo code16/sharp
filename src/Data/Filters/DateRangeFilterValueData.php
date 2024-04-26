@@ -8,10 +8,9 @@ use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 final class DateRangeFilterValueData extends Data
 {
     public function __construct(
-        #[LiteralTypeScriptType('string')]
         public string $start,
-        #[LiteralTypeScriptType('string')]
         public string $end,
+        public ?string $preset,
     ) {
     }
 

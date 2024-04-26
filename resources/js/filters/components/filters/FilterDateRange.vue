@@ -21,23 +21,40 @@
 
     const emit = defineEmits(['input']);
 
-    const localValue = ref<{ start?: CalendarDate, end?: CalendarDate }>();
+    const localValue = ref<{ start?: CalendarDate, end?: CalendarDate, preset?: string }>();
     const inputs = reactive({
         start: '',
         end: ''
     });
     const edited = reactive({ start: false, end: false, count: 0 });
+    const open = ref(false);
 
-    function onOpen() {
+    watch(() => props.value, update);
+
+    function update() {
         localValue.value = props.value ? {
             start: parseDate(props.value.start),
             end: parseDate(props.value.end),
+            preset: props.value.preset,
         } : {};
         inputs.start = localValue.value.start?.toString();
         inputs.end = localValue.value.end?.toString();
+        edited.count++;
+    }
+
+    function onOpen() {
+        update();
+    }
+
+    function onPresetSelected(preset: DateRangeFilterData['presets'][number]) {
+        open.value = false;
+        emit('input', {
+            preset: preset.key,
+        });
     }
 
     function onSubmit() {
+        open.value = false;
         emit('input', localValue.value.start ? {
             start: localValue.value.start.toString(),
             end: localValue.value.end.toString(),
@@ -52,13 +69,8 @@
     }
 
     function onResetClick() {
-        if(props.valuated) {
-            emit('input', null);
-        }
-        localValue.value = {};
-        edited.count++;
-        inputs.start = '';
-        inputs.end = '';
+        open.value = false;
+        emit('input', null);
     }
 
     function onStartChange() {
@@ -83,7 +95,7 @@
 </script>
 
 <template>
-    <Popover @update:open="$event && onOpen()">
+    <Popover v-model:open="open" @update:open="$event && onOpen()">
         <PopoverTrigger as-child>
             <Button
                 variant="outline"
@@ -113,13 +125,26 @@
         </PopoverTrigger>
         <PopoverContent class="w-auto p-0">
             <div class="flex">
-                <div class="shrink-0">
-
-                </div>
+                <template v-if="filter.presets?.length">
+                    <div class="flex flex-col shrink-0 p-3">
+                        <template v-for="preset in filter.presets">
+                            <Button
+                                class="text-left justify-start"
+                                :class="{ 'bg-accent text-accent-foreground': preset.key === localValue.preset }"
+                                size="sm"
+                                variant="ghost"
+                                @click="onPresetSelected(preset)"
+                            >
+                                {{ preset.label }}
+                            </Button>
+                        </template>
+                    </div>
+                </template>
                 <div class="flex-1">
                     <RangeCalendar
                         v-model="localValue"
                         :number-of-months="2"
+                        :locale="window.navigator.language"
                         @update:start-value="(startDate) => localValue.start = startDate"
                         @update:model-value="onCalendarChange"
                         :key="edited.count"

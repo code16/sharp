@@ -62,6 +62,7 @@ trait ProvidesFilterValuesToFront
             $value = [
                 'start' => $value['start']->format('Y-m-d'),
                 'end' => $value['end']->format('Y-m-d'),
+                'preset' => $value['preset'] ?? null,
             ];
         }
         return $value;

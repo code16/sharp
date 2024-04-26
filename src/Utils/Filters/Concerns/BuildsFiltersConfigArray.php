@@ -40,12 +40,15 @@ trait BuildsFiltersConfigArray
                                 'template' => $filterHandler->getTemplate(),
                             ];
                         } elseif ($filterHandler instanceof DateRangeFilter) {
-                            dd($filterHandler->getPresets());
                             $filterConfigData += [
                                 'type' => 'daterange',
                                 'required' => $filterHandler instanceof DateRangeRequiredFilter,
                                 'mondayFirst' => $filterHandler->isMondayFirst(),
                                 'displayFormat' => $filterHandler->getDateFormat(),
+                                'presets' => collect($filterHandler->getPresets())
+                                    ->map(fn ($preset, $key) => ['key' => $key, ...$preset->toArray()])
+                                    ->values()
+                                    ->toArray(),
                             ];
                         } elseif ($filterHandler instanceof CheckFilter) {
                             $filterConfigData += [

@@ -3,13 +3,12 @@
 namespace Code16\Sharp\Utils\Filters;
 
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
-use Carbon\CarbonPeriod;
 
 abstract class DateRangeFilter extends Filter
 {
     private string $dateFormat = 'YYYY-MM-DD';
     private bool $isMondayFirst = true;
+    private bool $showPresets = false;
 
     final public function configureDateFormat(string $dateFormat): self
     {
@@ -24,6 +23,13 @@ abstract class DateRangeFilter extends Filter
 
         return $this;
     }
+    
+    final public function configureShowPresets(bool $showPresets = true): self
+    {
+        $this->showPresets = $showPresets;
+
+        return $this;
+    }
 
     final public function getDateFormat(): string
     {
@@ -35,18 +41,28 @@ abstract class DateRangeFilter extends Filter
         return $this->isMondayFirst;
     }
     
+    /**
+     * @return array<string, DateRangePreset>
+     */
     final public function getPresets(): array
     {
+        if(!$this->showPresets) {
+            return [];
+        }
+        
         return [
-            'today' => CarbonPeriod::between('today', 'today'),
-            'yesterday' => CarbonPeriod::between(today()->subDay(), 'today'),
-            'last_7_days' => CarbonPeriod::between(today()->subDays(7), 'today'),
-            'last_30_days' => CarbonPeriod::between(today()->subDays(30), 'today'),
-            'last_365_days' => CarbonPeriod::between(today()->subDays(365), 'today'),
-            'this_month' => CarbonPeriod::between(today()->startOfMonth(), today()->endOfMonth()),
-            'last_month' => CarbonPeriod::between(today()->subMonth()->startOfMonth(), today()->subMonth()->endOfMonth()),
-            'this_year' => CarbonPeriod::between(today()->startOfYear(), today()->endOfYear()),
-            'last_year' => CarbonPeriod::between(today()->subYear()->startOfYear(), today()->subYear()->endOfYear()),
+            'today' => new DateRangePreset(
+                Carbon::today(), Carbon::today(),
+                'Today'
+            ),
+            'yesterday' => new DateRangePreset(Carbon::yesterday(), Carbon::yesterday(), 'Yesterday'),
+            'last_7_days' => new DateRangePreset(Carbon::today()->subDays(7), Carbon::today(), 'Last 7 days'),
+            'last_30_days' => new DateRangePreset(Carbon::today()->subDays(30), Carbon::today(), 'Last 30 days'),
+            'last_365_days' => new DateRangePreset(Carbon::today()->subDays(365), Carbon::today(), 'Last 365 days'),
+            'this_month' => new DateRangePreset(Carbon::today()->startOfMonth(), Carbon::today()->endOfMonth(), 'This month'),
+            'last_month' => new DateRangePreset(Carbon::today()->subMonth()->startOfMonth(), Carbon::today()->subMonth()->endOfMonth(), 'Last month'),
+            'this_year' => new DateRangePreset(Carbon::today()->startOfYear(), Carbon::today()->endOfYear(), 'This year'),
+            'last_year' => new DateRangePreset(Carbon::today()->subYear()->startOfYear(), Carbon::today()->subYear()->endOfYear(), 'Last year'),
         ];
     }
     
@@ -60,10 +76,15 @@ abstract class DateRangeFilter extends Filter
         }
         
         [$start, $end] = explode('..', $value);
+        $start = Carbon::createFromFormat('Ymd', $start)->startOfDay();
+        $end = Carbon::createFromFormat('Ymd', $end)->endOfDay();
+        $presetKey = collect($this->getPresets())
+            ->search(fn (DateRangePreset $preset) => $preset->getStart()->isSameDay($start) && $preset->getEnd()->isSameDay($end));
         
         return [
-            'start' => Carbon::createFromFormat('Ymd', $start)->startOfDay(),
-            'end' => Carbon::createFromFormat('Ymd', $end)->endOfDay(),
+            'start' => $start,
+            'end' => $end,
+            'preset' => $presetKey ?: null,
         ];
     }
     
@@ -73,6 +94,17 @@ abstract class DateRangeFilter extends Filter
     final public function toQueryParam($value): ?string
     {
         if(!$value) {
+            return null;
+        }
+        
+        if(isset($value['preset'])) {
+            if($preset = $this->getPresets()[$value['preset']] ?? null) {
+                return sprintf(
+                    '%s..%s',
+                    $preset->getStart()->format('Ymd'),
+                    $preset->getEnd()->format('Ymd'),
+                );
+            }
             return null;
         }
         
