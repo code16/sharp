@@ -42,7 +42,7 @@ abstract class EntityCommand extends Command
 
     final public function formData(): array
     {
-        return collect($this->initialData())
+        return collect($this->allFormData())
             ->only(
                 array_merge(
                     $this->getDataKeys(),
@@ -50,6 +50,11 @@ abstract class EntityCommand extends Command
                 )
             )
             ->all();
+    }
+    
+    final public function allFormData(): array
+    {
+        return once(fn () => $this->initialData());
     }
 
     protected function initialData(): array
