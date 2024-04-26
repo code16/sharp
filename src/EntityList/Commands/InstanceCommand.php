@@ -13,14 +13,12 @@ abstract class InstanceCommand extends Command
 
     final public function formData(mixed $instanceId): array
     {
-        return collect($this->allFormData($instanceId))
-            ->only($this->getDataKeys())
+        return collect($this->initialData($instanceId))
+            ->only([
+                ...$this->getDataKeys(),
+                ...array_keys($this->transformers),
+            ])
             ->all();
-    }
-    
-    final public function allFormData(mixed $instanceId): array
-    {
-        return once(fn () => $this->initialData($instanceId));
     }
 
     protected function initialData(mixed $instanceId): array

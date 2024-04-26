@@ -21,14 +21,12 @@ abstract class DashboardCommand extends Command
 
     final public function formData(): array
     {
-        return collect($this->allFormData())
-            ->only($this->getDataKeys())
+        return collect($this->initialData())
+            ->only([
+                ...$this->getDataKeys(),
+                ...array_keys($this->transformers),
+            ])
             ->all();
-    }
-    
-    final public function allFormData(): array
-    {
-        return once(fn () => $this->initialData());
     }
 
     protected function initialData(): array
