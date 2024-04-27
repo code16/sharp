@@ -23,7 +23,7 @@ class EntityListFiltersController extends SharpProtectedController
         
         return redirect()->route('code16.sharp.list', [
             'entityKey' => $entityKey,
-            ...request()->input('query', []),
+            ...(request()->input('query') ?? []),
             ...$list->filterContainer()->getQueryParamsFromFilterValues(request()->input('filterValues')),
             'page' => null,
         ]);

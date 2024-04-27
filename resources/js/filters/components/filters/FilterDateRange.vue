@@ -107,7 +107,7 @@
         <Popover v-model:open="open" @update:open="$event && onOpen()">
             <PopoverTrigger as-child>
                 <template v-if="inline">
-                    <Button variant="outline" size="sm" class="h-8 border-dashed" :disabled="disabled">
+                    <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">
                         <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
                         {{ filter.label }}
                         <template v-if="value?.start">

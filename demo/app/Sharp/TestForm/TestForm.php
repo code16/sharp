@@ -4,11 +4,13 @@ namespace App\Sharp\TestForm;
 
 use Code16\Sharp\Form\Eloquent\Uploads\Transformers\SharpUploadModelFormAttributeTransformer;
 use Code16\Sharp\Form\Fields\Editor\Uploads\SharpFormEditorUpload;
+use Code16\Sharp\Form\Fields\Formatters\TextFormatter;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormAutocompleteListField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormGeolocationField;
 use Code16\Sharp\Form\Fields\SharpFormHtmlField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
@@ -246,7 +248,8 @@ class TestForm extends SharpSingleForm
                     ->setImageCropRatio('1:1')
                     ->setStorageDisk('local')
                     ->setStorageBasePath('data'),
-            );
+            )
+            ->addField(CustomField::make('custom'));
     }
 
     public function buildFormLayout(FormLayout $formLayout): void

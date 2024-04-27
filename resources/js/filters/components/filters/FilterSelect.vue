@@ -20,8 +20,6 @@
     import { Label } from "@/components/ui/label";
     import { ref } from "vue";
     import { SelectTrigger } from "@/components/ui/select";
-    import FilterControl from "@/filters/components/FilterControl.vue";
-    import FilterControlButton from "@/filters/components/FilterControlButton.vue";
     import { PopoverAnchor } from "radix-vue";
     import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
 
@@ -61,10 +59,10 @@
         <Label v-if="!inline">
             {{ filter.label }}
         </Label>
-        <Popover v-model:open="open" modal>
+        <Popover v-model:open="open" :modal="!inline">
             <PopoverTrigger as-child>
                 <template v-if="inline">
-                    <Button variant="outline" size="sm" class="h-8 border-dashed" :disabled="disabled">
+                    <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">
                         <PlusCircle class="mr-2 w-4 h-4 stroke-[1.25]" />
                         {{ filter.label }}
                         <template v-if="Array.isArray(value) ? value.length : value != null">
@@ -87,7 +85,7 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent :class="cn('p-0 w-[200px]', !inline ? 'w-[--radix-popover-trigger-width]' : '')" align="start">
+            <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-[--radix-popover-trigger-width]' : '')" align="start">
                 <Command
                     :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term)) "
                 >
@@ -95,7 +93,7 @@
                         <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />
                     </template>
                     <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandEmpty>{{ __('sharp::form.autocomplete.no_results_text') }}</CommandEmpty>
                         <CommandGroup>
                             <template v-for="selectValue in filter.values" :key="selectValue.id">
                                 <CommandItem
@@ -117,13 +115,13 @@
                                             )"
                                         />
                                     </template>
-                                    <span>{{ selectValue.label }}</span>
+                                    <div class="max-w-80 line-clamp-2">{{ selectValue.label }}</div>
                                 </CommandItem>
                             </template>
                         </CommandGroup>
 
                         <template v-if="valuated">
-                            <div class="sticky bottom-0 bg-popover">
+                            <div class="sticky -bottom-px border-b border-transparent bg-popover">
                                 <CommandSeparator />
                                 <CommandGroup>
                                     <CommandItem

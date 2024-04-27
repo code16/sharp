@@ -22,6 +22,7 @@ final class EntityListData extends Data
         /** @var DataCollection<string, EntityListMultiformData> */
         public DataCollection $forms,
         public FilterValuesData $filterValues,
+        public ?EntityListQueryParamsData $query,
         public ?PaginatorMetaData $meta = null,
         public ?PageAlertData $pageAlert = null,
     ) {
@@ -36,6 +37,7 @@ final class EntityListData extends Data
             data: $entityList['data'],
             forms: EntityListMultiformData::collection($entityList['forms']),
             filterValues: FilterValuesData::from($entityList['filterValues']),
+            query: EntityListQueryParamsData::optional($entityList['query']),
             meta: PaginatorMetaData::optional($entityList['meta'] ?? null),
             pageAlert: PageAlertData::optional($entityList['pageAlert'] ?? null),
         );

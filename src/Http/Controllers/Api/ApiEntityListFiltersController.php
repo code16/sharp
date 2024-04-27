@@ -23,7 +23,7 @@ class ApiEntityListFiltersController extends ApiController
         
         return redirect()->route('code16.sharp.api.list', [
             'entityKey' => $entityKey,
-            ...request()->input('query', []),
+            ...(request()->input('query') ?? []),
             ...$list->filterContainer()->getQueryParamsFromFilterValues(request()->input('filterValues', [])),
             'page' => null,
         ]);

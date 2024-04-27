@@ -65,7 +65,9 @@ abstract class Data implements Arrayable
         $values = [];
 
         foreach (static::$constructorParameterCache[$class] as $parameter) {
-            $name = $parameter->getName();
+            if($parameter->isVariadic()) {
+                continue;
+            }
             if ($parameter->isOptional() && $parameter->getDefaultValue() === null && $this->{$parameter->name} === null) {
                 continue;
             }

@@ -15,18 +15,13 @@ final class ShowCustomFieldData extends Data
         public string $key,
         public string $type,
         public bool $emptyVisible,
+        ...$additionalOptions,
     ) {
+        $this->additional($additionalOptions);
     }
 
     public static function from(array $field): self
     {
-        $commonAttributes = Arr::only($field, [
-            'key',
-            'type',
-            'emptyVisible',
-        ]);
-
-        return (new self(...$commonAttributes))
-            ->additional(Arr::except($field, array_keys($commonAttributes)));
+        return new self(...$field);
     }
 }

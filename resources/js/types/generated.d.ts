@@ -139,6 +139,7 @@ export type EntityListData = {
   data: Array<{ [key: string]: any }>;
   forms: { [key: string]: EntityListMultiformData };
   filterValues: FilterValuesData;
+  query: EntityListQueryParamsData;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };
@@ -156,10 +157,12 @@ export type EntityListMultiformData = {
   instances: Array<number | string>;
 };
 export type EntityListQueryParamsData = {
-  search?: string | null;
-  page?: number | null;
-  sort?: string | null;
+  search?: string;
+  page?: number;
+  sort?: string;
   dir?: "asc" | "desc";
+} & {
+  [filterKey: string]: string;
 };
 export type EntityStateData = {
   attribute: string;

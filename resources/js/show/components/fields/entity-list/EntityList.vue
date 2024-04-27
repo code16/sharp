@@ -31,7 +31,6 @@
     const { sticky, updateStickyLayout } = useStickyLayout(el);
     const entityList: Ref<EntityList | null> = ref(null);
     const filters: FilterManager = useFilters();
-    const currentQuery: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({});
     const commands = useCommands({
         reload: () => {
             init();
@@ -41,21 +40,17 @@
         },
     });
 
-    async function init({ query, filterValues }: { query?: EntityListQueryParamsData & FilterQueryParams, filterValues?: FilterValues } = {}) {
+    async function init({ query, filterValues }: { query?: EntityListQueryParamsData, filterValues?: FilterValues } = {}) {
         loading.value = true;
         const data = await api.post(
             route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
             {
-                query: query ?? currentQuery.value,
+                query: query,
                 filterValues: filterValues ?? filters.currentValues,
                 hiddenFilters: props.field.hiddenFilters ?? {},
             }
         )
-            .then(response => response.data as EntityListData & {
-                meta: EntityListData['meta'] & {
-                    query: EntityListQueryParamsData & FilterQueryParams,
-                }
-            });
+            .then(response => response.data as EntityListData);
 
         loading.value = false;
         entityList.value = new EntityList(
@@ -68,7 +63,6 @@
             entityList.value.config.filters,
             entityList.value.filterValues
         );
-        currentQuery.value = data.meta.query;
         await nextTick();
         updateStickyLayout();
     }
@@ -142,7 +136,7 @@
        <EntityListComponent
            :entity-list="entityList"
            :entity-key="field.entityListKey"
-           :query="currentQuery"
+           :query="entityList?.query ?? {}"
            :filters="filters"
            :commands="commands"
            :show-create-button="field.showCreateButton"

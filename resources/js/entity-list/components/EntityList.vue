@@ -266,7 +266,7 @@
                                         </template>
                                     </div>
 
-                                    <div class="hidden md:flex gap-3" :class="searchFocused ? 'sr-only' : ''">
+                                    <div class="hidden flex-1 md:flex flex-wrap gap-3" :class="searchFocused ? 'opacity-0 pointer-events-none' : ''">
                                         <template v-for="filter in entityList.visibleFilters" :key="filter.key">
                                             <SharpFilter
                                                 :filter="filter"
@@ -277,10 +277,15 @@
                                                 @input="onFilterChange(filter, $event)"
                                             />
                                         </template>
+                                        <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
+                                            <Button class="h-8" variant="ghost" size="sm" @click="onResetAll">
+                                                {{ __('sharp::filters.reset_all') }}
+                                            </Button>
+                                        </template>
                                     </div>
                                 </template>
                             </div>
-                            <div class="ml-auto self-start flex flex-wrap gap-2">
+                            <div class="ml-auto self-start flex flex-wrap gap-2 lg:flex-nowrap">
                                 <template v-if="showReorderButton && entityList.canReorder && !selecting">
                                     <template v-if="reordering">
                                         <div class="col-auto">

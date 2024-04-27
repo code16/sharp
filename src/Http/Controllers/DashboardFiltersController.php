@@ -25,7 +25,7 @@ class DashboardFiltersController extends SharpProtectedController
         
         return redirect()->route('code16.sharp.dashboard', [
             'dashboardKey' => $dashboardKey,
-            ...request()->input('query', []),
+            ...(request()->input('query') ?? []),
             ...$dashboard->filterContainer()->getQueryParamsFromFilterValues(request()->input('filterValues', [])),
         ]);
     }

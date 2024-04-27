@@ -54,27 +54,28 @@
 
 <template>
     <form @submit.prevent="$emit('submit', search)">
-        <div class="group flex gap-3" ref="el">
-            <div class="relative">
-                <Input
-                    :placeholder="__('sharp::action_bar.list.search.placeholder')"
-                    v-model="search"
-                    :disabled="reordering"
-                    :class="cn('w-[150px] lg:w-[200px] px-8 h-8', showButton  ? 'lg:w-[300px]' : '')"
-                    type="search"
-                    ref="input"
-                />
-                <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                <template v-if="query.search">
-                    <Button type="button" class="absolute right-0 top-0 h-8" size="sm" variant="ghost" @click="$emit('submit', null)">
-                        <X class="h-4 w-4 text-muted-foreground" />
-                    </Button>
-                </template>
+        <div class="relative w-[150px] lg:w-[200px] h-8 z-[1]">
+            <div class="absolute top-0 left-0 h-8 group flex gap-3" :class="cn(showButton ? '-mr-[100px]' : '')" ref="el">
+                <div class="relative">
+                    <Input
+                        :placeholder="__('sharp::action_bar.list.search.placeholder')"
+                        v-model="search"
+                        :disabled="reordering"
+                        :class="cn('w-[150px] lg:w-[200px] px-8 h-8', showButton  ? 'lg:w-[300px]' : '')"
+                        type="search"
+                        ref="input"
+                    />
+                    <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                    <template v-if="query.search">
+                        <Button type="button" class="absolute right-0 top-0 h-8" size="sm" variant="ghost" @click="$emit('submit', null)">
+                            <X class="h-4 w-4 text-muted-foreground" />
+                        </Button>
+                    </template>
+                </div>
+                <Button type="submit" :class="cn('h-8 hidden', showButton ? 'inline-flex' : '')" size="sm">
+                    {{ __('sharp::action_bar.list.search.button') }}
+                </Button>
             </div>
-            <Button type="submit" :class="cn('h-8 hidden', showButton ? 'inline-flex' : '')" size="sm">
-                {{ __('sharp::action_bar.list.search.button') }}
-            </Button>
         </div>
     </form>
-
 </template>

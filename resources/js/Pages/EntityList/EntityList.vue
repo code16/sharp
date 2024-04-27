@@ -30,7 +30,6 @@
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
     });
-    const query = parseQuery(location.search) as (EntityListQueryParamsData & FilterQueryParams);
 
     watch(() => props.entityList, () => {
         entityList.value = new EntityList(props.entityList, entityKey);
@@ -38,7 +37,7 @@
     });
 
     function onQueryChange(query: FilterQueryParams) {
-        if(location.search !== stringifyQuery(query)) {
+        if(stringifyQuery(entityList.value.query) !== stringifyQuery(query)) {
             router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
         }
     }
@@ -48,7 +47,7 @@
             route('code16.sharp.list.filters.store', { entityKey }),
             {
                 filterValues: filters.nextValues(filter, value),
-                query,
+                query: entityList.value.query,
             },
             { preserveState: true, preserveScroll: false }
         );
@@ -59,7 +58,7 @@
             route('code16.sharp.list.filters.store', { entityKey }),
             {
                 filterValues: filters.defaultValues(filters.rootFilters),
-                query,
+                query: entityList.value.query,
             },
             { preserveState: true, preserveScroll: false }
         );
@@ -80,7 +79,7 @@
                 :entity-list="entityList"
                 :filters="filters"
                 :commands="commands"
-                :query="query"
+                :query="entityList.query ?? {}"
                 @reset="onReset"
                 @filter-change="onFilterChange"
                 @update:query="onQueryChange"
