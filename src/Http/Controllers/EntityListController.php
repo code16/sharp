@@ -53,7 +53,7 @@ class EntityListController extends SharpProtectedController
             'query' => count(request()->query()) ? request()->query() : null,
         ];
 
-        if (request()->expectsJson() && !request()->inertia()) {
+        if (request()->routeIs('code16.sharp.api.list')) {
             // EEL case, need to return JSON
             return response()->json(EntityListData::from($data)->toArray());
         }

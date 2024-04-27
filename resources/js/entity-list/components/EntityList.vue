@@ -57,7 +57,6 @@
         showReorderButton?: boolean,
         showSearchField?: boolean,
         showEntityState?: boolean,
-        loading?: boolean,
         collapsed?: boolean,
     }>(), {
         showCreateButton: true,
@@ -400,7 +399,7 @@
                 <div class="h-8 mb-4"></div>
             </template>
 
-            <Card class="min-h-[1000px] mb-[500px]">
+            <Card>
                 <CardHeader>
                     <slot name="card-header" />
                     <template v-if="entityList?.query?.search">
@@ -496,7 +495,7 @@
                                                     <template v-else>
                                                         <TableCell>
                                                             <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                <a class="absolute inset-0" :href="entityList.instanceUrl(item)"></a>
+                                                                <Link class="absolute inset-0" :href="entityList.instanceUrl(item)"></Link>
                                                             </template>
                                                             <template v-if="field.html">
                                                                 <CaptureInternalLinks>

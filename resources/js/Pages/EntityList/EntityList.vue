@@ -73,7 +73,7 @@
             <PageBreadcrumb :breadcrumb="breadcrumb" />
         </template>
 
-        <div class="container mx-auto">
+        <div class="container">
             <EntityListComponent
                 :entity-key="entityKey"
                 :entity-list="entityList"

@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\Show\Fields;
 
+use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Code16\Sharp\Utils\Filters\Filter;
 
 class SharpShowEntityListField extends SharpShowField
@@ -119,7 +120,7 @@ class SharpShowEntityListField extends SharpShowField
      */
     public function toArray(): array
     {
-        return parent::buildArray([
+        return tap(parent::buildArray([
             'label' => $this->label,
             'entityListKey' => $this->entityListKey,
             'showEntityState' => $this->showEntityState,
@@ -141,7 +142,16 @@ class SharpShowEntityListField extends SharpShowField
                     })
                     ->all()
                 : null,
-        ]);
+        ]), function (array &$options) {
+            $options['endpointUrl'] = route('code16.sharp.api.list', [
+                'entityKey' => $this->entityListKey,
+                ...app(SharpEntityManager::class)
+                    ->entityFor($this->entityListKey)
+                    ->getListOrFail()
+                    ->filterContainer()
+                    ->getQueryParamsFromFilterValues($options['hiddenFilters'] ?? []),
+            ]);
+        });
     }
 
     protected function validationRules(): array

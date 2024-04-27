@@ -13,6 +13,7 @@ use Inertia\Inertia;
 class SingleShowController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
+    use PreloadsShowEntityLists;
 
     public function __construct(
         private SharpAuthorizationManager $sharpAuthorizationManager,
@@ -30,7 +31,7 @@ class SingleShowController extends SharpProtectedController
         $show->buildShowConfig();
         $showData = $show->instance(null);
 
-        $data = [
+        $payload = ShowData::from([
             'config' => $show->showConfig(null),
             'fields' => $show->fields(),
             'layout' => $show->showLayout(),
@@ -45,12 +46,14 @@ class SingleShowController extends SharpProtectedController
                 'update' => $this->sharpAuthorizationManager->isAllowed('update', $entityKey),
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey),
             ],
-        ];
+        ]);
+        
+        $this->preloadShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [
-            'show' => ShowData::from($data),
+            'show' => $payload,
             'breadcrumb' => BreadcrumbData::from([
-                'items' => app(SharpBreadcrumb::class)->getItems($data),
+                'items' => app(SharpBreadcrumb::class)->getItems(),
             ]),
             'notifications' => NotificationData::collection($this->getSharpNotifications()),
         ]);

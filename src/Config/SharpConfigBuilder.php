@@ -37,6 +37,8 @@ class SharpConfigBuilder
                 \Code16\Sharp\Http\Middleware\InvalidateCache::class,
                 \Code16\Sharp\Http\Middleware\HandleSharpErrors::class,
                 \Code16\Sharp\Http\Middleware\HandleInertiaRequests::class,
+                \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+                \Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests::class,
             ],
             'api' => [
                 \Code16\Sharp\Http\Middleware\Api\BindSharpValidationResolver::class,

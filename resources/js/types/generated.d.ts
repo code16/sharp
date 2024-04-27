@@ -719,6 +719,7 @@ export type ShowEntityListFieldData = {
   showCreateButton: boolean;
   showSearchField: boolean;
   showCount: boolean;
+  endpointUrl: string;
   label: string | null;
   hiddenFilters: { [key: string]: any } | null;
 };
