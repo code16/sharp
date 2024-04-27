@@ -24,7 +24,7 @@ class ApiDashboardCommandController extends ApiController
     {
         $dashboard = $this->getDashboardInstance($entityKey);
         $dashboard->buildDashboardConfig();
-        $dashboard->initQueryParams(request()->all());
+        $dashboard->initQueryParams(request()->query());
 
         $commandHandler = $this->getCommandHandler($dashboard, $commandKey);
         $formData = $commandHandler->formData() ?: null;

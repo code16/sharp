@@ -42,17 +42,15 @@
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
     import { Link } from "@inertiajs/vue3";
-    import { FilterQueryParams } from "@/filters/types";
-    import { Input } from "@/components/ui/input";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
+    import { UseElementBounding } from "@vueuse/components";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
         entityList: EntityList,
         filters: FilterManager,
         commands: CommandManager,
-        query: EntityListQueryParamsData & FilterQueryParams,
         inline?: boolean,
         showCreateButton?: boolean,
         showReorderButton?: boolean,
@@ -78,7 +76,7 @@
     const searchFocused = ref(false);
     function onSearchSubmit(search: string) {
         emit('update:query', {
-            ...props.query,
+            ...props.entityList.query,
             search,
         });
     }
@@ -89,17 +87,17 @@
 
     function onPageChange(page: number) {
         emit('update:query', {
-            ...props.query,
+            ...props.entityList.query,
             page,
         });
     }
 
     function onSortClick(fieldKey: string) {
         emit('update:query', {
-            ...props.query,
+            ...props.entityList.query,
             page: 1,
             sort: fieldKey,
-            dir: props.query.sort === fieldKey && props.query.dir === 'asc'
+            dir: props.entityList.query?.sort === fieldKey && props.entityList.query?.dir === 'asc'
                 ? 'desc'
                 : 'asc',
         });
@@ -124,25 +122,25 @@
     }
 
     function onInstanceCommand(command: CommandData, instanceId: InstanceId) {
-        const { commands, entityKey, query } = props;
+        const { commands, entityKey } = props;
 
         commands.send(command, {
             postCommand: route('code16.sharp.api.list.command.instance', { entityKey, instanceId, commandKey: command.key }),
             getForm: route('code16.sharp.api.list.command.instance.form', { entityKey, instanceId, commandKey: command.key }),
-            query,
+            query: props.entityList.query,
             entityKey,
             instanceId,
         });
     }
 
     async function onEntityCommand(command: CommandData) {
-        const { commands, entityKey, query, filters } = props;
+        const { commands, entityKey } = props;
 
         await commands.send(command, {
             postCommand: route('code16.sharp.api.list.command.entity', { entityKey, commandKey: command.key }),
             getForm: route('code16.sharp.api.list.command.entity.form', { entityKey, commandKey: command.key }),
             query: {
-                ...query,
+                ...props.entityList.query,
                 ids: Object.entries(selectedItems.value ?? {})
                     .filter(([instanceId, selected]) => selected)
                     .map(([instanceId, selected]) => instanceId),
@@ -172,7 +170,7 @@
     const reordering = computed(() => !!reorderedItems.value);
     const sortableTableBody = ref<InstanceType<typeof TableBody>>();
     const sortable = useDraggable<Instance>(
-        sortableTableBody as Ref<HTMLElement>,
+        sortableTableBody as any,
         computed<Instance[]>({
             get: () => reorderedItems.value ?? [],
             set: (newItems) => reorderedItems.value = newItems
@@ -204,204 +202,198 @@
 
 <template>
     <WithCommands :commands="commands">
-        <div class="SharpEntityList">
-<!--            <div class="flex">-->
-<!--                <div class="flex-1">-->
-<!--                    <slot name="breadcrumb" />-->
-<!--                </div>-->
-<!--            </div>-->
+        <div>
+            <template v-if="entityList?.pageAlert">
+                <PageAlert
+                    class="mb-3"
+                    :page-alert="entityList.pageAlert"
+                />
+            </template>
 
-            <div>
-                <template v-if="entityList?.pageAlert">
-                    <PageAlert
-                        class="mb-3"
-                        :page-alert="entityList.pageAlert"
-                    />
-                </template>
-
-                <template v-if="entityList">
-                    <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
-                        <div class="flex gap-3 mb-4">
-                            <div class="flex flex-wrap gap-3">
-                                <template v-if="showSearchField && entityList.config.searchable">
-                                    <EntityListSearch
-                                        v-model:focused="searchFocused"
-                                        :reordering="reordering"
-                                        :query="query"
-                                        @submit="onSearchSubmit"
-                                    />
-                                </template>
-                                <template v-if="entityList.visibleFilters?.length">
-                                    <div class="flex items-center lg:hidden">
-                                        <Popover>
-                                            <PopoverTrigger as-child>
-                                                <Button class="h-8 gap-1" variant="outline" size="sm">
-                                                    <ListFilter class="h-3.5 w-3.5" />
-                                                    <span class="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                                        Filter
-                                                    </span>
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent class="min-w-min lg:hidden" align="start" :align-offset="-16">
-                                                <div class="flex flex-col flex-wrap gap-4">
-                                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                                        <SharpFilter
-                                                            :filter="filter"
-                                                            :value="filters.currentValues[filter.key]"
-                                                            :disabled="reordering"
-                                                            :valuated="filters.isValuated([filter])"
-                                                            @input="onFilterChange(filter, $event)"
-                                                        />
-                                                    </template>
-                                                </div>
-                                                <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
-                                                    <Button class="w-full mt-8 h-8" variant="secondary" @click="onResetAll">
-                                                        {{ __('sharp::filters.reset_all') }}
-                                                    </Button>
+            <template v-if="entityList">
+                <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
+                    <UseElementBounding class="sticky top-3.5 z-20 flex gap-3 mb-4" v-slot="{ top }">
+                        <div class="flex flex-wrap gap-3">
+                            <template v-if="showSearchField && entityList.config.searchable">
+                                <EntityListSearch
+                                    v-model:focused="searchFocused"
+                                    :reordering="reordering"
+                                    :entity-list="entityList"
+                                    @submit="onSearchSubmit"
+                                />
+                            </template>
+                            <template v-if="entityList.visibleFilters?.length">
+                                <div class="flex items-center lg:hidden">
+                                    <Popover>
+                                        <PopoverTrigger as-child>
+                                            <Button class="h-8 gap-1" variant="outline" size="sm">
+                                                <ListFilter class="h-3.5 w-3.5" />
+                                                <span class="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                                    Filter
+                                                </span>
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent class="min-w-min lg:hidden" align="start" :align-offset="-16">
+                                            <div class="flex flex-col flex-wrap gap-4">
+                                                <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                                    <SharpFilter
+                                                        :filter="filter"
+                                                        :value="filters.currentValues[filter.key]"
+                                                        :disabled="reordering"
+                                                        :valuated="filters.isValuated([filter])"
+                                                        @input="onFilterChange(filter, $event)"
+                                                    />
                                                 </template>
-                                            </PopoverContent>
-                                        </Popover>
-                                        <template v-if="filters.isValuated(filters.rootFilters)">
-                                            <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
-                                        </template>
-                                    </div>
-
-                                    <div class="hidden flex-1 md:flex flex-wrap gap-3" :class="searchFocused ? 'opacity-0 pointer-events-none' : ''">
-                                        <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                            <SharpFilter
-                                                :filter="filter"
-                                                :value="filters.currentValues[filter.key]"
-                                                :disabled="reordering"
-                                                :valuated="filters.isValuated([filter])"
-                                                inline
-                                                @input="onFilterChange(filter, $event)"
-                                            />
-                                        </template>
-                                        <template v-if="filters.isValuated(entityList.visibleFilters) || query.search">
-                                            <Button class="h-8" variant="ghost" size="sm" @click="onResetAll">
-                                                {{ __('sharp::filters.reset_all') }}
-                                            </Button>
-                                        </template>
-                                    </div>
-                                </template>
-                            </div>
-                            <div class="ml-auto self-start flex flex-wrap gap-2 lg:flex-nowrap">
-                                <template v-if="showReorderButton && entityList.canReorder && !selecting">
-                                    <template v-if="reordering">
-                                        <div class="col-auto">
-                                            <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = null">
-                                                {{ __('sharp::action_bar.list.reorder_button.cancel') }}
-                                            </Button>
-                                        </div>
-                                        <div class="col-auto">
-                                            <Button class="h-8" size="sm" @click="onReorderSubmit">
-                                                {{ __('sharp::action_bar.list.reorder_button.finish') }}
-                                            </Button>
-                                        </div>
+                                            </div>
+                                            <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
+                                                <Button class="w-full mt-8 h-8" variant="secondary" @click="onResetAll">
+                                                    {{ __('sharp::filters.reset_all') }}
+                                                </Button>
+                                            </template>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <template v-if="filters.isValuated(filters.rootFilters)">
+                                        <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
                                     </template>
-                                    <template v-else>
-                                        <div class="col-auto">
-                                            <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = [...entityList.data]">
-                                                {{ __('sharp::action_bar.list.reorder_button') }}
-                                            </Button>
-                                        </div>
-                                    </template>
-                                </template>
+                                </div>
 
-                                <template v-if="entityList.canSelect && !reordering">
-                                    <template v-if="selecting">
-                                        <Button class="h-8" size="sm" variant="outline" @click="selectedItems = null">
+                                <div class="hidden flex-1 md:flex flex-wrap gap-3" :class="searchFocused ? 'opacity-0 pointer-events-none' : ''">
+                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                        <SharpFilter
+                                            :filter="filter"
+                                            :value="filters.currentValues[filter.key]"
+                                            :disabled="reordering"
+                                            :valuated="filters.isValuated([filter])"
+                                            inline
+                                            @input="onFilterChange(filter, $event)"
+                                        />
+                                    </template>
+                                    <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
+                                        <Button class="h-8" variant="ghost" size="sm" @click="onResetAll">
+                                            {{ __('sharp::filters.reset_all') }}
+                                        </Button>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="ml-auto self-start flex flex-wrap gap-2 lg:flex-nowrap">
+                            <template v-if="showReorderButton && entityList.canReorder && !selecting">
+                                <template v-if="reordering">
+                                    <div class="col-auto">
+                                        <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = null">
                                             {{ __('sharp::action_bar.list.reorder_button.cancel') }}
                                         </Button>
-                                    </template>
-                                    <template v-else>
-                                        <Button class="h-8" size="sm" variant="outline" @click="selectedItems = Object.fromEntries(entityList.data.map(item => [item.id, false]))">
-                                            {{ __('sharp::action_bar.list.select_button') }}
+                                    </div>
+                                    <div class="col-auto">
+                                        <Button class="h-8" size="sm" @click="onReorderSubmit">
+                                            {{ __('sharp::action_bar.list.reorder_button.finish') }}
                                         </Button>
-                                    </template>
+                                    </div>
                                 </template>
+                                <template v-else>
+                                    <div class="col-auto">
+                                        <Button class="h-8" size="sm" variant="outline" @click="reorderedItems = [...entityList.data]">
+                                            {{ __('sharp::action_bar.list.reorder_button') }}
+                                        </Button>
+                                    </div>
+                                </template>
+                            </template>
 
-                                <template v-if="entityList.dropdownEntityCommands(selecting)?.flat().length && !reordering">
+                            <template v-if="entityList.canSelect && !reordering">
+                                <template v-if="selecting">
+                                    <Button class="h-8" size="sm" variant="outline" @click="selectedItems = null">
+                                        {{ __('sharp::action_bar.list.reorder_button.cancel') }}
+                                    </Button>
+                                </template>
+                                <template v-else>
+                                    <Button class="h-8" size="sm" variant="outline" @click="selectedItems = Object.fromEntries(entityList.data.map(item => [item.id, false]))">
+                                        {{ __('sharp::action_bar.list.select_button') }}
+                                    </Button>
+                                </template>
+                            </template>
+
+                            <template v-if="entityList.dropdownEntityCommands(selecting)?.flat().length && !reordering">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Button class="h-8" :variant="selecting ? 'default' : 'outline'" size="sm" :disabled="reordering">
+                                            {{ __('sharp::entity_list.commands.entity.label') }}
+                                            <template v-if="selecting">
+                                                ({{ Object.values(selectedItems).filter(Boolean).length }} selected)
+                                            </template>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <CommandDropdownItems
+                                            :commands="entityList.dropdownEntityCommands(selecting)"
+                                            :selecting="selecting"
+                                            @select="onEntityCommand"
+                                        />
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </template>
+
+                            <template v-if="entityList.primaryCommand && !reordering && !selecting">
+                                <Button class="h-8" size="sm" @click="onEntityCommand(entityList.primaryCommand)">
+                                    {{ entityList.primaryCommand.label }}
+                                </Button>
+                            </template>
+
+                            <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
+                                <template v-if="entityList.forms">
                                     <DropdownMenu>
-                                        <DropdownMenuTrigger>
-                                            <Button class="h-8" :variant="selecting ? 'default' : 'outline'" size="sm" :disabled="reordering">
-                                                {{ __('sharp::entity_list.commands.entity.label') }}
-                                                <template v-if="selecting">
-                                                    ({{ Object.values(selectedItems).filter(Boolean).length }} selected)
-                                                </template>
+                                        <DropdownMenuTrigger as-child>
+                                            <Button class="h-8 gap-1" size="sm">
+                                                <PlusCircle class="h-3.5 w-3.5" />
+                                                {{ __('sharp::action_bar.list.forms_dropdown') }}
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
-                                            <CommandDropdownItems
-                                                :commands="entityList.dropdownEntityCommands(selecting)"
-                                                :selecting="selecting"
-                                                @select="onEntityCommand"
-                                            />
+                                            <template v-for="form in Object.values(entityList.forms).filter(form => !!form.label)">
+                                                <DropdownMenuItem as-child>
+                                                    <Link :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })">
+                                                        {{ form.label }}
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                            </template>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </template>
-
-                                <template v-if="entityList.primaryCommand && !reordering && !selecting">
-                                    <Button class="h-8" size="sm" @click="onEntityCommand(entityList.primaryCommand)">
-                                        {{ entityList.primaryCommand.label }}
+                                <template v-else>
+                                    <Button
+                                        class="h-8 gap-1"
+                                        size="sm"
+                                        :disabled="reordering || selecting"
+                                        :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
+                                    >
+                                        <PlusCircle class="h-3.5 w-3.5" />
+                                        {{ __('sharp::action_bar.list.create_button') }}
                                     </Button>
                                 </template>
-
-                                <template v-if="showCreateButton && entityList.authorizations.create && !reordering && !selecting">
-                                    <template v-if="entityList.forms">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger as-child>
-                                                <Button class="h-8 gap-1" size="sm">
-                                                    <PlusCircle class="h-3.5 w-3.5" />
-                                                    {{ __('sharp::action_bar.list.forms_dropdown') }}
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                <template v-for="form in Object.values(entityList.forms).filter(form => !!form.label)">
-                                                    <DropdownMenuItem as-child>
-                                                        <Link :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey: `${entityKey}:${form.key}` })">
-                                                            {{ form.label }}
-                                                        </Link>
-                                                    </DropdownMenuItem>
-                                                </template>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </template>
-                                    <template v-else>
-                                        <Button
-                                            class="h-8 gap-1"
-                                            size="sm"
-                                            :disabled="reordering || selecting"
-                                            :href="route('code16.sharp.form.create', { parentUri: getAppendableParentUri(), entityKey })"
-                                        >
-                                            <PlusCircle class="h-3.5 w-3.5" />
-                                            {{ __('sharp::action_bar.list.create_button') }}
-                                        </Button>
-                                    </template>
-                                </template>
-                            </div>
+                            </template>
                         </div>
-                    </template>
+                    </UseElementBounding>
                 </template>
-                <template v-else>
-                    <div class="h-8 mb-4"></div>
-                </template>
+            </template>
+            <template v-else>
+                <div class="h-8 mb-4"></div>
+            </template>
 
-                <Card>
-                    <CardHeader>
-                        <slot name="card-header" />
-                        <template v-if="query.search">
-                            <CardDescription>
-                                {{ __('sharp::action_bar.list.search.title', { search: query.search }) }}
-                            </CardDescription>
-                        </template>
-                    </CardHeader>
-                    <template v-if="entityList">
-                        <CardContent v-show="!collapsed">
-                            <template v-if="entityList.data?.length > 0">
+            <Card>
+                <CardHeader>
+                    <slot name="card-header" />
+                    <template v-if="entityList?.query?.search">
+                        <CardDescription>
+                            {{ __('sharp::action_bar.list.search.title', { search: entityList.query.search }) }}
+                        </CardDescription>
+                    </template>
+                </CardHeader>
+                <template v-if="entityList">
+                    <CardContent v-show="!collapsed">
+                        <template v-if="entityList.data?.length > 0">
+                            <div class="-mx-6">
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
+                                        <TableRow class="first:*:pl-6 last:*:pr-6">
                                             <template v-if="selecting">
                                                 <TableHead>
                                                     <span class="sr-only">Select...</span>
@@ -422,8 +414,8 @@
                                                                 <ChevronDown
                                                                     class="h-4 w-4 transition-transform duration-200"
                                                                     :class="{
-                                                                    'rotate-180': query.dir === 'asc',
-                                                                    'invisible': query.sort !== field.key
+                                                                    'rotate-180': entityList.query?.dir === 'asc',
+                                                                    'invisible': entityList.query?.sort !== field.key
                                                                 }"
                                                                 />
                                                             </button>
@@ -431,7 +423,7 @@
                                                     </div>
                                                 </TableHead>
                                             </template>
-                                            <template v-if="!reordering && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
+                                            <template v-if="!reordering && !selecting && entityList.data.some(item => entityList.instanceHasActions(item, showEntityState))">
                                                 <TableHead class="w-2">
                                                     <span class="sr-only">Edit</span>
                                                 </TableHead>
@@ -440,7 +432,7 @@
                                     </TableHeader>
                                     <TableBody ref="sortableTableBody">
                                         <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data">
-                                            <TableRow class="relative [&:has([aria-expanded=true])]:bg-muted/50">
+                                            <TableRow class="relative first:*:pl-6 last:*:pr-6 [&:has([aria-expanded=true])]:bg-muted/50">
                                                 <template v-if="selecting && selectedItems">
                                                     <TableCell>
                                                         <Checkbox
@@ -499,7 +491,7 @@
                                                     </template>
                                                 </template>
 
-                                                <template v-if="!reordering && entityList.instanceHasActions(item, showEntityState)">
+                                                <template v-if="!reordering && !selecting && entityList.instanceHasActions(item, showEntityState)">
                                                     <TableCell class="relative">
                                                         <EntityActions v-slot="{ menuOpened, stateSubmenuOpened, requestedStateMenu, openStateMenu }">
                                                             <div class="flex items-center">
@@ -562,25 +554,25 @@
                                         </template>
                                     </TableBody>
                                 </Table>
-                            </template>
-                            <template v-else>
-                                {{ __('sharp::entity_list.empty_text') }}
-                            </template>
-                        </CardContent>
-                        <template v-if="entityList.meta?.last_page > 1">
-                            <CardFooter v-show="!collapsed">
-                                <div class="mt-12">
-                                    <Pagination
-                                        :paginator="entityList"
-                                        :links-openable="!inline"
-                                        @change="onPageChange"
-                                    />
-                                </div>
-                            </CardFooter>
+                            </div>
                         </template>
+                        <template v-else>
+                            {{ __('sharp::entity_list.empty_text') }}
+                        </template>
+                    </CardContent>
+                    <template v-if="entityList.meta?.last_page > 1">
+                        <CardFooter v-show="!collapsed">
+                            <div class="mt-12">
+                                <Pagination
+                                    :paginator="entityList"
+                                    :links-openable="!inline"
+                                    @change="onPageChange"
+                                />
+                            </div>
+                        </CardFooter>
                     </template>
-                </Card>
-            </div>
+                </template>
+            </Card>
         </div>
     </WithCommands>
 </template>

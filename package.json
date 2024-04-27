@@ -75,6 +75,7 @@
     "@uppy/vue": "^1.0.2",
     "@uppy/xhr-upload": "^3.4.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "@vueuse/components": "^10.9.0",
     "@vueuse/core": "^10.9.0",
     "apexcharts": "^3.35.4",
     "axios": "^1.5.1",

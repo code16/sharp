@@ -139,7 +139,7 @@ export type EntityListData = {
   data: Array<{ [key: string]: any }>;
   forms: { [key: string]: EntityListMultiformData };
   filterValues: FilterValuesData;
-  query: EntityListQueryParamsData;
+  query: EntityListQueryParamsData | null;
   meta: PaginatorMetaData | null;
   pageAlert: PageAlertData | null;
 };

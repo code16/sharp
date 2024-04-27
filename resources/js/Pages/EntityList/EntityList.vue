@@ -79,7 +79,6 @@
                 :entity-list="entityList"
                 :filters="filters"
                 :commands="commands"
-                :query="entityList.query ?? {}"
                 @reset="onReset"
                 @filter-change="onFilterChange"
                 @update:query="onQueryChange"

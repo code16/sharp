@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import { EntityListQueryParamsData } from "@/types";
+    import { EntityListData } from "@/types";
     import { __ } from "@/utils/i18n";
-    import { Search, X, CornerDownLeft } from "lucide-vue-next";
+    import { Search, X } from "lucide-vue-next";
     import { useFocusWithin, useMousePressed } from "@vueuse/core";
     import { ref, watch } from "vue";
     import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@
     import { cn } from "@/utils/cn";
 
     const props = defineProps<{
-        query: EntityListQueryParamsData,
+        entityList: EntityListData,
         reordering: boolean,
         focused: boolean,
     }>();
@@ -20,15 +20,15 @@
     const input = ref<HTMLInputElement>();
     const { focused } = useFocusWithin(el as any);
     const { pressed } = useMousePressed({ target: el as any });
-    const search = ref(props.query.search);
+    const search = ref(props.entityList.query?.search ?? '');
     const showButton = ref(false);
-    let savedSearch = '';
+    let savedSearchBeforeBlur = '';
 
     watch(focused, () => {
         if(focused.value) {
-            if(savedSearch) {
-                search.value = savedSearch;
-                savedSearch = '';
+            if(savedSearchBeforeBlur) {
+                search.value = savedSearchBeforeBlur;
+                savedSearchBeforeBlur = '';
             }
             if(pressed.value) {
                 watch(pressed, () => {
@@ -43,13 +43,15 @@
             }
         } else {
             showButton.value = false;
-            savedSearch = !props.query.search ? search.value : '';
-            search.value = props.query.search;
+            savedSearchBeforeBlur = !props.entityList.query?.search ? search.value : '';
+            search.value = props.entityList.query?.search;
             emit('update:focused', false);
         }
     });
 
-    watch(() => props.query.search, v => search.value = v);
+    watch(() => props.entityList, () => {
+        search.value = props.entityList.query?.search ?? '';
+    });
 </script>
 
 <template>
@@ -66,7 +68,7 @@
                         ref="input"
                     />
                     <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                    <template v-if="query.search">
+                    <template v-if="props.entityList.query?.search">
                         <Button type="button" class="absolute right-0 top-0 h-8" size="sm" variant="ghost" @click="$emit('submit', null)">
                             <X class="h-4 w-4 text-muted-foreground" />
                         </Button>

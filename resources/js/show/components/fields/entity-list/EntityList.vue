@@ -136,7 +136,6 @@
        <EntityListComponent
            :entity-list="entityList"
            :entity-key="field.entityListKey"
-           :query="entityList?.query ?? {}"
            :filters="filters"
            :commands="commands"
            :show-create-button="field.showCreateButton"
