@@ -181,8 +181,8 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                         </nav>
                     </SheetContent>
                 </Sheet>
-                <div class="w-full flex-1">
-                    <slot name="breadcrumb" />
+                <slot name="breadcrumb" />
+                <div class="flex-1 self-stretch ml-3" data-topbar-sticky-safe-area>
 <!--                    <form>-->
 <!--                        <div class="relative">-->
 <!--                            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />-->

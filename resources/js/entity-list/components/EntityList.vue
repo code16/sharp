@@ -44,7 +44,7 @@
     import { Link } from "@inertiajs/vue3";
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
-    import { UseElementBounding } from "@vueuse/components";
+    import StickyTop from "@/components/StickyTop.vue";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -52,6 +52,7 @@
         filters: FilterManager,
         commands: CommandManager,
         inline?: boolean,
+        title?: string,
         showCreateButton?: boolean,
         showReorderButton?: boolean,
         showSearchField?: boolean,
@@ -198,6 +199,12 @@
         await commands.handleCommandResponse({ action: 'reload' });
         reorderedItems.value = null;
     }
+
+    function onStuckChange(stuck: boolean) {
+        if(props.inline) {
+            document.dispatchEvent(new CustomEvent('breadcrumb:updateAppendItem', { detail: stuck ? { label: props.title } : null }));
+        }
+    }
 </script>
 
 <template>
@@ -212,7 +219,10 @@
 
             <template v-if="entityList">
                 <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
-                    <UseElementBounding class="sticky top-3.5 z-20 flex gap-3 mb-4" v-slot="{ top }">
+                    <StickyTop class="group  sticky top-3.5 z-20 flex gap-3 mb-4 transition-[padding] pl-[--sticky-safe-left-offset] pr-[--sticky-safe-right-offset]"
+                        @update:stuck="onStuckChange"
+                        v-slot="{ stuck, largerThanTopbar }"
+                    >
                         <div class="flex flex-wrap gap-3">
                             <template v-if="showSearchField && entityList.config.searchable">
                                 <EntityListSearch
@@ -257,22 +267,34 @@
                                     </template>
                                 </div>
 
-                                <div class="hidden flex-1 md:flex flex-wrap gap-3" :class="searchFocused ? 'opacity-0 pointer-events-none' : ''">
-                                    <template v-for="filter in entityList.visibleFilters" :key="filter.key">
-                                        <SharpFilter
-                                            :filter="filter"
-                                            :value="filters.currentValues[filter.key]"
-                                            :disabled="reordering"
-                                            :valuated="filters.isValuated([filter])"
-                                            inline
-                                            @input="onFilterChange(filter, $event)"
-                                        />
-                                    </template>
-                                    <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
-                                        <Button class="h-8" variant="ghost" size="sm" @click="onResetAll">
-                                            {{ __('sharp::filters.reset_all') }}
+                                <div class="relative flex-1">
+                                    <template v-if="stuck && largerThanTopbar">
+                                        <Button class="absolute top-0 left-0 h-8" variant="outline" size="sm" @click="window.scrollTo({ top:0, behavior: 'smooth'})">
+                                            See filters
                                         </Button>
                                     </template>
+                                    <div class="hidden md:flex flex-wrap gap-3"
+                                        :class="{
+                                            'opacity-0 pointer-events-none': searchFocused,
+                                            'invisible': stuck && largerThanTopbar,
+                                        }"
+                                    >
+                                        <template v-for="filter in entityList.visibleFilters" :key="filter.key">
+                                            <SharpFilter
+                                                :filter="filter"
+                                                :value="filters.currentValues[filter.key]"
+                                                :disabled="reordering"
+                                                :valuated="filters.isValuated([filter])"
+                                                inline
+                                                @input="onFilterChange(filter, $event)"
+                                            />
+                                        </template>
+                                        <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
+                                            <Button class="h-8" variant="ghost" size="sm" @click="onResetAll">
+                                                {{ __('sharp::filters.reset_all') }}
+                                            </Button>
+                                        </template>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -314,7 +336,7 @@
 
                             <template v-if="entityList.dropdownEntityCommands(selecting)?.flat().length && !reordering">
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger>
+                                    <DropdownMenuTrigger as-child>
                                         <Button class="h-8" :variant="selecting ? 'default' : 'outline'" size="sm" :disabled="reordering">
                                             {{ __('sharp::entity_list.commands.entity.label') }}
                                             <template v-if="selecting">
@@ -371,14 +393,14 @@
                                 </template>
                             </template>
                         </div>
-                    </UseElementBounding>
+                    </StickyTop>
                 </template>
             </template>
             <template v-else>
                 <div class="h-8 mb-4"></div>
             </template>
 
-            <Card>
+            <Card class="min-h-[1000px] mb-[500px]">
                 <CardHeader>
                     <slot name="card-header" />
                     <template v-if="entityList?.query?.search">

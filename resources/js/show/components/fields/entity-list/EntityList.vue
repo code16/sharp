@@ -144,6 +144,7 @@
            :show-entity-state="field.showEntityState"
            :loading="loading"
            :collapsed="collapsed"
+           :title="field.label"
            inline
            @update:query="onQueryChange"
            @filter-change="onFilterChange"

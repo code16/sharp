@@ -11,6 +11,7 @@ createInertiaApp({
 
         app.config.errorHandler = e => console.error(e);
         app.config.globalProperties.window = window;
+        app.config.globalProperties.document = document;
         app.config.globalProperties.console = console;
 
         app.mount(el);

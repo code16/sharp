@@ -163,108 +163,108 @@
                 </template>
 
                 <div class="grid gap-4 md:gap-8">
-                        <template v-if="show.getTitle(locale) && show.layout.sections[0] && show.sectionHasField(show.layout.sections[0], 'entityList')">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>
-                                        {{ show.getTitle(locale) }}
-                                    </CardTitle>
-                                </CardHeader>
-                            </Card>
-                        </template>
-                        <template v-for="(section, i) in show.layout.sections">
-                            <Section
-                                v-show="show.sectionShouldBeVisible(section, locale)"
-                                v-slot="{ collapsed, onToggle }"
-                            >
-                                <template v-if="show.sectionHasField(section, 'entityList')">
-                                    <template v-for="column in section.columns">
-                                        <template v-for="row in column.fields">
-                                            <template v-for="fieldLayout in row">
-                                                <template v-if="show.fields[fieldLayout.key]">
-                                                    <EntityList
-                                                        :field="show.fields[fieldLayout.key]"
-                                                        :collapsable="section.collapsable"
-                                                        :value="null"
-                                                        @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                    />
-                                                </template>
-                                                <template v-else>
-                                                    <UnknownField :name="fieldLayout.key" />
-                                                </template>
+                    <template v-if="show.getTitle(locale) && show.layout.sections[0] && show.sectionHasField(show.layout.sections[0], 'entityList')">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>
+                                    {{ show.getTitle(locale) }}
+                                </CardTitle>
+                            </CardHeader>
+                        </Card>
+                    </template>
+                    <template v-for="(section, i) in show.layout.sections">
+                        <Section
+                            v-show="show.sectionShouldBeVisible(section, locale)"
+                            v-slot="{ collapsed, onToggle }"
+                        >
+                            <template v-if="show.sectionHasField(section, 'entityList')">
+                                <template v-for="column in section.columns">
+                                    <template v-for="row in column.fields">
+                                        <template v-for="fieldLayout in row">
+                                            <template v-if="show.fields[fieldLayout.key]">
+                                                <EntityList
+                                                    :field="show.fields[fieldLayout.key]"
+                                                    :collapsable="section.collapsable"
+                                                    :value="null"
+                                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                />
+                                            </template>
+                                            <template v-else>
+                                                <UnknownField :name="fieldLayout.key" />
                                             </template>
                                         </template>
                                     </template>
                                 </template>
-                                <template v-else>
-                                    <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
-                                        <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
-                                            <template v-slot:text>
-                                                {{ __('sharp::entity_list.commands.instance.label') }}
-                                            </template>
-                                        </CommandsDropdown>
-                                    </template>
-                                    <Card>
-                                        <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable">
-                                            <CardHeader>
-                                                <div class="flex gap-4">
-                                                    <template v-if="section.title || (!i && show.getTitle(locale))">
-                                                        <CardTitle>
-                                                            {{ section.title || (!i && show.getTitle(locale)) }}
-                                                        </CardTitle>
-                                                    </template>
-                                                    <template v-if="section.collapsable">
-                                                        <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
-                                                            <ChevronsUpDown class="w-4 h-4" />
-                                                        </Button>
-                                                    </template>
-                                                </div>
-                                            </CardHeader>
+                            </template>
+                            <template v-else>
+                                <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
+                                    <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
+                                        <template v-slot:text>
+                                            {{ __('sharp::entity_list.commands.instance.label') }}
                                         </template>
-                                        <template v-else>
-                                            <CardHeader class="pb-0" />
-                                        </template>
-                                        <CardContent v-show="!collapsed">
-                                            <div class="flex -mx-4">
-                                                <template v-for="column in section.columns">
-                                                    <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
-                                                        <FieldGrid class="gap-x-4 gap-y-4">
-                                                            <template v-for="row in column.fields">
-                                                                <FieldGridRow>
-                                                                    <template v-for="fieldLayout in row">
-                                                                        <FieldGridColumn
-                                                                            :layout="fieldLayout"
-                                                                            v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
-                                                                        >
-                                                                            <template v-if="show.fields[fieldLayout.key]">
-                                                                                <ShowField
-                                                                                    :field="show.fields[fieldLayout.key]"
-                                                                                    :field-layout="fieldLayout"
-                                                                                    :value="show.data[fieldLayout.key]"
-                                                                                    :locale="locale"
-                                                                                    :collapsable="section.collapsable"
-                                                                                    :entity-key="entityKey"
-                                                                                    :instance-id="instanceId"
-                                                                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                                                />
-                                                                            </template>
-                                                                            <template v-else>
-                                                                                <UnknownField :name="fieldLayout.key" />
-                                                                            </template>
-                                                                        </FieldGridColumn>
-                                                                    </template>
-                                                                </FieldGridRow>
-                                                            </template>
-                                                        </FieldGrid>
-                                                    </div>
+                                    </CommandsDropdown>
+                                </template>
+                                <Card>
+                                    <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable">
+                                        <CardHeader>
+                                            <div class="flex gap-4">
+                                                <template v-if="section.title || (!i && show.getTitle(locale))">
+                                                    <CardTitle>
+                                                        {{ section.title || (!i && show.getTitle(locale)) }}
+                                                    </CardTitle>
+                                                </template>
+                                                <template v-if="section.collapsable">
+                                                    <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                                                        <ChevronsUpDown class="w-4 h-4" />
+                                                    </Button>
                                                 </template>
                                             </div>
-                                        </CardContent>
-                                    </Card>
-                                </template>
-                            </Section>
-                        </template>
-                    </div>
+                                        </CardHeader>
+                                    </template>
+                                    <template v-else>
+                                        <CardHeader class="pb-0" />
+                                    </template>
+                                    <CardContent v-show="!collapsed">
+                                        <div class="flex -mx-4">
+                                            <template v-for="column in section.columns">
+                                                <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                                    <FieldGrid class="gap-x-4 gap-y-4">
+                                                        <template v-for="row in column.fields">
+                                                            <FieldGridRow>
+                                                                <template v-for="fieldLayout in row">
+                                                                    <FieldGridColumn
+                                                                        :layout="fieldLayout"
+                                                                        v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                    >
+                                                                        <template v-if="show.fields[fieldLayout.key]">
+                                                                            <ShowField
+                                                                                :field="show.fields[fieldLayout.key]"
+                                                                                :field-layout="fieldLayout"
+                                                                                :value="show.data[fieldLayout.key]"
+                                                                                :locale="locale"
+                                                                                :collapsable="section.collapsable"
+                                                                                :entity-key="entityKey"
+                                                                                :instance-id="instanceId"
+                                                                                @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                                            />
+                                                                        </template>
+                                                                        <template v-else>
+                                                                            <UnknownField :name="fieldLayout.key" />
+                                                                        </template>
+                                                                    </FieldGridColumn>
+                                                                </template>
+                                                            </FieldGridRow>
+                                                        </template>
+                                                    </FieldGrid>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </template>
+                        </Section>
+                    </template>
+                </div>
             </div>
         </WithCommands>
     </Layout>
