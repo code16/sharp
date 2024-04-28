@@ -7,6 +7,7 @@ return [
     '419.message' => 'This action is no longer valid, probably because of a long period of inactivity. The page will be  automatically reloaded.',
 
     'confirm.ok_button' => 'Confirm',
+    'confirm.delete.title' => 'Confirm deletion',
     'confirm.delete.ok_button' => 'Delete',
 
     'command.info.title' => 'Info',

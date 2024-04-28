@@ -183,6 +183,7 @@ class PostList extends SharpEntityList
                 return $value
                     ? LinkToEntityList::make('posts')
                         ->addFilter(AuthorFilter::class, $instance->id)
+                        ->setTooltip('See '.$value.' posts')
                         ->renderAsText($value)
                     : null;
             })

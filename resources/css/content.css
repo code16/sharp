@@ -1,0 +1,17 @@
+
+@layer components {
+  .content {
+    blockquote {
+      @apply mt-6 border-l-2 pl-6 italic;
+    }
+    p {
+      @apply leading-7 [&:not(:first-child)]:mt-6;
+    }
+    a {
+      @apply leading-none p-1.5 -m-1.5 box-decoration-clone font-medium text-primary underline underline-offset-4 hover:rounded-sm hover:bg-primary/10;
+    }
+    ul {
+      @apply my-6 ml-6 list-disc [&>li]:mt-2;
+    }
+  }
+}

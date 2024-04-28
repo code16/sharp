@@ -8,6 +8,7 @@ return [
 
     'confirm.ok_button' => 'Confirmer',
     'confirm.delete.ok_button' => 'Supprimer',
+    'confirm.delete.title' => 'Confirmez la suppression',
 
     'command.info.title' => 'Information',
     'state.422.title' => "Impossible de modifier l'état",

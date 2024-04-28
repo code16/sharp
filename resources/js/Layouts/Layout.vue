@@ -16,7 +16,7 @@ import {
     DropdownMenuLabel, DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Link, usePage } from "@inertiajs/vue3";
 import { CollapsibleTrigger } from "radix-vue";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
@@ -125,8 +125,8 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
             </div>
         </div>
         <div class="flex flex-col min-w-0">
-            <header class="flex h-14 items-center gap-4 border-b bg-background px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
-                <div class="absolute inset-0 bg-muted/40 -z-10"></div>
+            <header class="flex h-14 items-center gap-4 border-b bg-muted/40 backdrop-blur px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
+<!--                <div class="absolute inset-0 bg-muted/40 -z-10"></div>-->
                 <Sheet>
                     <SheetTrigger as-child>
                         <Button
@@ -242,7 +242,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
-            <main class="flex-1 py-4 lg:py-6">
+            <main class="flex-1 pt-4 lg:pt-6 pb-24">
                 <slot />
             </main>
         </div>
@@ -272,7 +272,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                             {{ __('sharp::modals.cancel_button') }}
                         </AlertDialogCancel>
                     </template>
-                    <AlertDialogAction @click="dialog.onOk()">
+                    <AlertDialogAction :class="buttonVariants({ variant: 'destructive' })" @click="dialog.onOk()">
                         {{ dialog.okTitle ?? __('sharp::modals.ok_button') }}
                     </AlertDialogAction>
                 </AlertDialogFooter>

@@ -6,10 +6,10 @@ return [
     'color-mode-dropdown.dark' => 'Dark',
     'color-mode-dropdown.system' => 'System',
 
-    'list.items_count' => ':count item(s)',
+    'list.items_count' => ':count item|:count items',
     'list.search.button' => 'Search',
     'list.search.placeholder' => 'Search...',
-    'list.search.title' => 'Results for “:search”',
+    'list.search.title' => ':count result for “:search”|:count results for “:search”',
     'list.create_button' => 'New...',
     'list.forms_dropdown' => 'New',
     'list.reorder_button' => 'Reorder',

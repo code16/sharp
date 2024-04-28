@@ -1,6 +1,7 @@
 @import "./fonts.css";
 @import "./root.css";
 @import "./shadcn.css";
+@import "./content.css";
 
 @tailwind base;
 @tailwind components;
