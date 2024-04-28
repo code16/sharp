@@ -14,6 +14,7 @@ use Code16\Sharp\Utils\Transformers\WithCustomTransformers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 abstract class SharpEntityList
 {
@@ -94,10 +95,33 @@ abstract class SharpEntityList
 
         return [
             'items' => $items,
-            'meta' => $listItems instanceof AbstractPaginator
-                ? Arr::except($listItems->withQueryString()->toArray(), 'data')
-                : null,
+            'meta' => $this->meta($listItems),
         ];
+    }
+    
+    final public function meta(mixed $items): ?array
+    {
+        if($items instanceof AbstractPaginator) {
+            $meta = Arr::except($items->onEachSide(1)->withQueryString()->toArray(), 'data');
+            return $meta;
+//            if($meta['links'] ?? null) {
+//                $links = collect($meta['links'])
+//                    ->slice(1, -1)
+//                    ->chunkWhile(fn ($item, $key, Collection $chunk) => $item['label'] !== '...')
+//                    ->pipe(function (Collection $links) {
+//                        /** @var Collection<int,Collection<int, array>> $links */
+//                        return [
+//                            ...$links->first()->take(2),
+//                            ...$links->slice(1, -1)->collapse(),
+//                            ...$links->last()->take(1),
+//                            ...$links->last()->skip(1)->take(-2),
+//                        ];
+//                    });
+//                dd($links);
+//            }
+        }
+        
+        return null;
     }
 
     final public function listConfig(bool $hasShowPage = false): array

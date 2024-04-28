@@ -19,7 +19,7 @@
     import { StateIcon } from '@/components/ui';
     import EntityActions from "./EntityActions.vue";
     import { api } from "@/api/api";
-    import Pagination from "@/components/ui/Pagination.vue";
+    import EntityListPagination from "@/entity-list/components/EntityListPagination.vue";
     import CaptureInternalLinks from "@/components/CaptureInternalLinks.vue";
     import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
@@ -401,12 +401,15 @@
 
             <Card>
                 <CardHeader>
-                    <slot name="card-header" />
-                    <template v-if="entityList?.query?.search">
-                        <CardDescription>
-                            {{ __('sharp::action_bar.list.search.title', { search: entityList.query.search }) }}
+                    <div class="flex items-baseline gap-4 lg:gap-6">
+                        <slot name="card-header" />
+                        <CardDescription class="text-xs">
+                            {{ __('sharp::action_bar.list.items_count', { count: entityList.count }) }}
+                            <template v-if="entityList?.query?.search">
+                                {{ __('sharp::action_bar.list.search.title', { search: entityList.query.search }) }}
+                            </template>
                         </CardDescription>
-                    </template>
+                    </div>
                 </CardHeader>
                 <template v-if="entityList">
                     <CardContent v-show="!collapsed">
@@ -581,15 +584,13 @@
                             {{ __('sharp::entity_list.empty_text') }}
                         </template>
                     </CardContent>
-                    <template v-if="entityList.meta?.last_page > 1">
+                    <template v-if="entityList.meta">
                         <CardFooter v-show="!collapsed">
-                            <div class="mt-12">
-                                <Pagination
-                                    :paginator="entityList"
-                                    :links-openable="!inline"
-                                    @change="onPageChange"
-                                />
-                            </div>
+                            <EntityListPagination
+                                :entity-list="entityList"
+                                :links-openable="!inline"
+                                @change="onPageChange"
+                            />
                         </CardFooter>
                     </template>
                 </template>
