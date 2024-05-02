@@ -6,6 +6,7 @@ use Code16\Sharp\EntityList\Traits\HandleEntityState;
 use Code16\Sharp\EntityList\Traits\HandleInstanceCommands;
 use Code16\Sharp\Show\Fields\SharpShowTextField;
 use Code16\Sharp\Show\Layout\ShowLayout;
+use Code16\Sharp\Show\Layout\ShowLayoutLayoutFieldFactory;
 use Code16\Sharp\Utils\Fields\FieldsContainer;
 use Code16\Sharp\Utils\Fields\HandleFields;
 use Code16\Sharp\Utils\Traits\HandleCustomBreadcrumb;
@@ -31,7 +32,7 @@ abstract class SharpShow
     final public function showLayout(): array
     {
         if ($this->showLayout === null) {
-            $this->showLayout = new ShowLayout();
+            $this->showLayout = new ShowLayout(new ShowLayoutLayoutFieldFactory($this->fieldsContainer));
             $this->buildShowLayout($this->showLayout);
         }
 

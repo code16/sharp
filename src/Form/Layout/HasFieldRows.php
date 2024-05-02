@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Form\Layout;
 
 use Closure;
+use Code16\Sharp\Utils\Layout\LayoutFieldFactory;
 use Code16\Sharp\Utils\Layout\LayoutField;
 use Illuminate\Support\Traits\Conditionable;
 
@@ -11,6 +12,7 @@ trait HasFieldRows
     use Conditionable;
 
     protected array $rows = [];
+    protected LayoutFieldFactory $layoutFieldFactory;
 
     /** @deprecated use withField() or withListField() instead */
     public function withSingleField(string $fieldKey, \Closure $subLayoutCallback = null): self
@@ -99,6 +101,6 @@ trait HasFieldRows
 
     protected function newLayoutField(string $fieldKey, \Closure $subLayoutCallback = null): LayoutField
     {
-        return new FormLayoutField($fieldKey, $subLayoutCallback);
+        return $this->layoutFieldFactory->make($fieldKey, $subLayoutCallback);
     }
 }

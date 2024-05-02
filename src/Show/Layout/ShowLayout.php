@@ -10,10 +10,15 @@ class ShowLayout implements HasLayout
     use Conditionable;
 
     protected array $sections = [];
-
+    
+    public function __construct(
+        protected ShowLayoutLayoutFieldFactory $layoutFieldFactory,
+    ) {
+    }
+    
     final public function addSection(string $label, \Closure $callback = null): self
     {
-        $section = new ShowLayoutSection($label);
+        $section = new ShowLayoutSection($label, $this->layoutFieldFactory);
         $this->sections[] = $section;
 
         if ($callback) {
@@ -25,7 +30,7 @@ class ShowLayout implements HasLayout
 
     final public function addEntityListSection(string $entityListKey, ?bool $collapsable = null): self
     {
-        $this->sections[] = (new ShowLayoutSection(''))
+        $this->sections[] = (new ShowLayoutSection('', $this->layoutFieldFactory))
             ->addColumn(12, fn ($column) => $column->withField($entityListKey))
             ->when($collapsable !== null, fn ($section) => $section->setCollapsable($collapsable));
 

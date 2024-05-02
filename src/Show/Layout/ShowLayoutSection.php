@@ -14,14 +14,16 @@ class ShowLayoutSection implements HasLayout
     protected bool $collapsable = false;
     protected ?string $sectionKey = null;
 
-    public function __construct(string $title)
-    {
+    public function __construct(
+        string                                 $title,
+        protected ShowLayoutLayoutFieldFactory $layoutFieldFactory,
+    ) {
         $this->title = $title;
     }
 
     public function addColumn(int $size, \Closure $callback = null): self
     {
-        $column = $this->addColumnLayout(new ShowLayoutColumn($size));
+        $column = $this->addColumnLayout(new ShowLayoutColumn($size, $this->layoutFieldFactory));
 
         if ($callback) {
             $callback($column);

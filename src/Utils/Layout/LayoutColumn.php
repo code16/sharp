@@ -8,11 +8,10 @@ abstract class LayoutColumn
 {
     use HasFieldRows;
 
-    protected int $size;
-
-    public function __construct(int $size)
-    {
-        $this->size = $size;
+    public function __construct(
+        protected int $size,
+        protected LayoutFieldFactory $layoutFieldFactory
+    ) {
     }
 
     public function toArray(): array
