@@ -67,7 +67,7 @@ class PostShow extends SharpShow
     protected function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('', function (ShowLayoutSection $section) {
+            ->addSection(function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(7, function (ShowLayoutColumn $column) {
                         $column
