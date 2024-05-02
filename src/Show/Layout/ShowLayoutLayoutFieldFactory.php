@@ -13,12 +13,18 @@ class ShowLayoutLayoutFieldFactory implements LayoutFieldFactory
     public function __construct(
         protected FieldsContainer $fieldsContainer,
         protected bool $inEntityListSection = false,
+        protected bool $inListItem = false,
     ) {
     }
     
     public function inEntityListSection(): self
     {
-        return new static($this->fieldsContainer, true);
+        return new static($this->fieldsContainer, inEntityListSection: true);
+    }
+    
+    public function inListItem(): self
+    {
+        return new static($this->fieldsContainer, inListItem: true);
     }
     
     public function make(string $key, Closure $subLayoutCallback = null): ShowLayoutField

@@ -8,17 +8,15 @@ use Illuminate\Support\Traits\Conditionable;
 class ShowLayoutSection implements HasLayout
 {
     use Conditionable;
-
-    protected ?string $title = null;
+    
     protected array $columns = [];
     protected bool $collapsable = false;
     protected ?string $sectionKey = null;
 
     public function __construct(
-        string                                 $title,
+        protected string $title,
         protected ShowLayoutLayoutFieldFactory $layoutFieldFactory,
     ) {
-        $this->title = $title;
     }
 
     public function addColumn(int $size, \Closure $callback = null): self

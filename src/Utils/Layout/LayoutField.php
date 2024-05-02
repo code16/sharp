@@ -9,8 +9,11 @@ abstract class LayoutField
     protected int $sizeXS = 12;
     protected array $itemLayout = [];
 
-    public function __construct(string $fieldKey, \Closure $subLayoutCallback = null)
-    {
+    public function __construct(
+        string $fieldKey,
+        protected LayoutFieldFactory $layoutFieldFactory,
+        \Closure $subLayoutCallback = null,
+    ) {
         if (strpos($fieldKey, '|')) {
             [$this->fieldKey, $sizes] = explode('|', $fieldKey);
 
