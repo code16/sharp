@@ -1,11 +1,11 @@
 <script setup lang="ts">
-    import { toReactive, useCurrentElement, useElementBounding } from "@vueuse/core";
-    import { computed, watch } from "vue";
+    import { useCurrentElement, useElementBounding } from "@vueuse/core";
+    import { computed, reactive, watch } from "vue";
 
     const emit = defineEmits(['update:stuck']);
     const el = useCurrentElement();
-    const selfRect = toReactive(useElementBounding(el));
-    const topbarSafeRect = toReactive(useElementBounding(() => document.querySelector('[data-topbar-sticky-safe-area]')));
+    const selfRect = reactive(useElementBounding(el));
+    const topbarSafeRect = reactive(useElementBounding(() => document.querySelector('[data-topbar-sticky-safe-area]')));
     const mustSafe = computed(() => {
         return selfRect.bottom >= 0 && selfRect.top < topbarSafeRect.bottom;
     });

@@ -1,28 +1,6 @@
 <script setup lang="ts">
     import { SelectFilterData } from "@/types";
-    import { ChevronDown, PlusCircle } from "lucide-vue-next";
-    import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-    import { Separator } from "@/components/ui/separator";
     import { Badge } from "@/components/ui/badge";
-    import {
-        Command,
-        CommandEmpty,
-        CommandGroup,
-        CommandInput,
-        CommandItem,
-        CommandList, CommandSeparator
-    } from "@/components/ui/command";
-    import { Checkbox } from "@/components/ui/checkbox";
-    import { Button } from "@/components/ui/button";
-    import { __ } from "@/utils/i18n";
-    import { Check } from "lucide-vue-next";
-    import { cn } from "@/utils/cn";
-    import { Label } from "@/components/ui/label";
-    import { ref } from "vue";
-    import { SelectTrigger } from "@/components/ui/select";
-    import FilterControl from "@/filters/components/FilterControl.vue";
-    import FilterControlButton from "@/filters/components/FilterControlButton.vue";
-    import { PopoverAnchor } from "radix-vue";
 
     const props = defineProps<{
         value: SelectFilterData['value'],

@@ -45,6 +45,7 @@
     import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
     import StickyTop from "@/components/StickyTop.vue";
+    import { cn } from "@/utils/cn";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -65,7 +66,7 @@
         showEntityState: true,
     });
 
-    const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering']);
+    const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering', 'needs-topbar']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
 
@@ -73,7 +74,7 @@
         emit('filter-change', filter, value);
     }
 
-    const searchFocused = ref(false);
+    const searchExpanded = ref(false);
     function onSearchSubmit(search: string) {
         emit('update:query', {
             ...props.entityList.query,
@@ -204,11 +205,18 @@
         reorderedItems.value = null;
     }
 
-    function onStuckChange(stuck: boolean) {
-        if(props.inline) {
-            document.dispatchEvent(new CustomEvent('breadcrumb:updateAppendItem', { detail: stuck ? { label: props.title } : null }));
+    const stuck = ref(false);
+    const needsTopBar = computed(() => reordering.value || selecting.value);
+    watch([stuck, needsTopBar], () => {
+        if(stuck.value) {
+            emit('needs-topbar', needsTopBar.value);
+        } else {
+            emit('needs-topbar', false);
         }
-    }
+        if(props.inline) {
+            document.dispatchEvent(new CustomEvent('breadcrumb:updateAppendItem', { detail: stuck.value ? { label: props.title } : null }));
+        }
+    });
 </script>
 
 <template>
@@ -229,16 +237,20 @@
 
             <template v-if="entityList">
                 <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
-                    <StickyTop class="group  sticky top-3.5 z-20 flex gap-3 mb-4 transition-[padding] pl-[--sticky-safe-left-offset] pr-[--sticky-safe-right-offset]"
-                        :class="reordering ? 'z-[60]' : ''"
-                        @update:stuck="onStuckChange"
-                        v-slot="{ stuck, largerThanTopbar }"
+                    <StickyTop class="sticky group flex gap-3 top-3.5 mb-4 transition-[padding,opacity]"
+                        :class="cn('z-30 pl-[--sticky-safe-left-offset] pr-[--sticky-safe-right-offset]', {
+                            '-top-8 z-0 px-0': inline && !needsTopBar,
+                            // 'opacity-0': inline && stuck && !needsTopBar,
+                        }, {
+                            'z-[60]': reordering,
+                        })"
+                        v-model:stuck="stuck"
+                        v-slot="{ largerThanTopbar }"
                     >
-                        <div class="flex flex-wrap gap-3" v-show="!reordering">
+                        <div class="flex flex-wrap gap-3" v-show="!reordering && !selecting">
                             <template v-if="showSearchField && entityList.config.searchable">
                                 <EntityListSearch
-                                    v-model:focused="searchFocused"
-                                    :reordering="reordering"
+                                    v-model:expanded="searchExpanded"
                                     :entity-list="entityList"
                                     @submit="onSearchSubmit"
                                 />
@@ -286,9 +298,9 @@
                                     </template>
                                     <div class="hidden md:flex flex-wrap gap-3"
                                         :class="{
-                                            'opacity-0 pointer-events-none': searchFocused,
-                                            'invisible': stuck && largerThanTopbar,
-                                        }"
+                                        'opacity-0 pointer-events-none': searchExpanded,
+                                        'invisible': stuck && largerThanTopbar,
+                                    }"
                                     >
                                         <template v-for="filter in entityList.visibleFilters" :key="filter.key">
                                             <SharpFilter
@@ -424,7 +436,7 @@
                     </div>
                 </CardHeader>
                 <template v-if="entityList">
-                    <CardContent class="pb-2" v-show="!collapsed">
+                    <CardContent :class="entityList.count > 0 ? 'pb-2' : ''" v-show="!collapsed">
                         <template v-if="entityList.data?.length > 0">
                             <div class="-mx-6">
                                 <Table>
@@ -449,9 +461,9 @@
                                                                     class="-ml-3 h-8 data-[state=open]:bg-accent"
                                                                 >
                                                                     <span>{{ field.label }}</span>
-                                                                    <template v-if="entityList.query?.sort === field.key">
-                                                                        <ArrowDown v-if="entityList.query?.dir === 'desc'" class="ml-2 h-3.5 w-3.5" />
-                                                                        <ArrowUp v-else-if=" entityList.query?.dir === 'asc'" class="ml-2 h-3.5 w-3.5" />
+                                                                    <template v-if="entityList.currentSort === field.key">
+                                                                        <ArrowDown v-if="entityList.currentSortDir === 'desc'" class="ml-2 h-3.5 w-3.5" />
+                                                                        <ArrowUp v-else-if=" entityList.currentSortDir === 'asc'" class="ml-2 h-3.5 w-3.5" />
                                                                     </template>
                                                                     <template v-else>
                                                                         <ChevronsUpDown class="ml-2 h-3.5 w-3.5" />
@@ -460,7 +472,7 @@
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="start" :align-offset="-48">
                                                                 <DropdownMenuRadioGroup
-                                                                    :model-value="entityList.query?.sort === field.key ? entityList.query?.dir : ''"
+                                                                    :model-value="entityList.currentSort === field.key ? entityList.currentSortDir : ''"
                                                                     @update:model-value="dir => onSortClick(field.key, dir as any)"
                                                                 >
                                                                     <DropdownMenuRadioItem value="asc">
@@ -471,7 +483,8 @@
                                                                         <ArrowDown class="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                                                                         {{ __('sharp::entity_list.sort_desc') }}
                                                                     </DropdownMenuRadioItem>
-                                                                    <template v-if="entityList.query?.sort === field.key">
+                                                                    <template v-if="entityList.currentSort === field.key
+                                                                        && !(entityList.config.defaultSort === field.key && entityList.config.defaultSortDir === entityList.currentSortDir)">
                                                                         <DropdownMenuSeparator />
                                                                         <DropdownMenuRadioItem value="">
                                                                             <div class="mr-2 h-3.5 w-3.5"></div>
@@ -562,61 +575,51 @@
 
                                                 <template v-if="!reordering && !selecting && entityList.instanceHasActions(item, showEntityState)">
                                                     <TableCell class="relative">
-                                                        <EntityActions v-slot="{ menuOpened, stateSubmenuOpened, requestedStateMenu, openStateMenu }">
-                                                            <div class="flex items-center">
-                                                                <DropdownMenu v-model:open="menuOpened.value">
-                                                                    <DropdownMenuTrigger as-child>
-                                                                        <Button class="pointer-events-auto" variant="ghost" size="icon">
-                                                                            <MoreHorizontal class="h-4" />
-                                                                        </Button>
-                                                                    </DropdownMenuTrigger>
-                                                                    <DropdownMenuContent side="bottom" :align="requestedStateMenu.value ? 'end' : 'center'">
-                                                                        <template v-if="entityList.config.state && showEntityState">
-                                                                            <DropdownMenuGroup>
-                                                                                <DropdownMenuSub v-model:open="stateSubmenuOpened.value">
-                                                                                    <DropdownMenuSubTrigger :disabled="!entityList.instanceCanUpdateState(item)">
-                                                                                        <template v-if="entityList.instanceCanUpdateState(item)">
-                                                                                            {{ __('sharp::modals.entity_state.edit.title') }} :
-                                                                                        </template>
-                                                                                        <Badge class="ml-1.5" variant="outline">
-                                                                                            <StateIcon class="-ml-0.5 mr-1.5" :state-value="entityList.instanceStateValue(item)" />
-                                                                                            {{ entityList.instanceStateValue(item)?.label }}
-                                                                                        </Badge>
-                                                                                    </DropdownMenuSubTrigger>
-                                                                                    <DropdownMenuPortal>
-                                                                                        <DropdownMenuSubContent>
-                                                                                            <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
-                                                                                                <DropdownMenuCheckboxItem
-                                                                                                    :checked="stateValue.value == entityList.instanceState(item)"
-                                                                                                    @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
-                                                                                                >
-                                                                                                    <StateIcon class="mr-1.5" :state-value="stateValue" />
-                                                                                                    <span class="truncate">{{ stateValue.label }}</span>
-                                                                                                </DropdownMenuCheckboxItem>
-                                                                                            </template>
-                                                                                        </DropdownMenuSubContent>
-                                                                                    </DropdownMenuPortal>
-                                                                                </DropdownMenuSub>
-                                                                            </DropdownMenuGroup>
-                                                                            <DropdownMenuSeparator />
-                                                                        </template>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger as-child>
+                                                                <Button class="pointer-events-auto" variant="ghost" size="icon">
+                                                                    <MoreHorizontal class="h-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent side="bottom" align="center">
+                                                                <template v-if="entityList.config.state && showEntityState && entityList.instanceCanUpdateState(item)">
+                                                                    <DropdownMenuGroup>
+                                                                        <DropdownMenuSub>
+                                                                            <DropdownMenuSubTrigger>
+                                                                                {{ __('sharp::modals.entity_state.edit.title') }}
+                                                                            </DropdownMenuSubTrigger>
+                                                                            <DropdownMenuPortal>
+                                                                                <DropdownMenuSubContent>
+                                                                                    <template v-for="stateValue in entityList.config.state.values" :key="stateValue.value">
+                                                                                        <DropdownMenuCheckboxItem
+                                                                                            :checked="stateValue.value == entityList.instanceState(item)"
+                                                                                            @update:checked="(checked) => checked && onInstanceStateChange(stateValue.value, entityList.instanceId(item))"
+                                                                                        >
+                                                                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                                            <span class="truncate">{{ stateValue.label }}</span>
+                                                                                        </DropdownMenuCheckboxItem>
+                                                                                    </template>
+                                                                                </DropdownMenuSubContent>
+                                                                            </DropdownMenuPortal>
+                                                                        </DropdownMenuSub>
+                                                                    </DropdownMenuGroup>
+                                                                    <DropdownMenuSeparator />
+                                                                </template>
 
-                                                                        <CommandDropdownItems
-                                                                            :commands="entityList.instanceCommands(item)"
-                                                                            @select="(command) => onInstanceCommand(command, entityList.instanceId(item))"
-                                                                        />
-                                                                        <template v-if="!entityList.config.deleteHidden && entityList.instanceCanDelete(item)">
-                                                                            <template v-if="entityList.instanceCommands(item)?.flat().length">
-                                                                                <DropdownMenuSeparator />
-                                                                            </template>
-                                                                            <DropdownMenuItem class="text-destructive" @click="onDelete(entityList.instanceId(item))">
-                                                                                {{ __('sharp::action_bar.form.delete_button') }}
-                                                                            </DropdownMenuItem>
-                                                                        </template>
-                                                                    </DropdownMenuContent>
-                                                                </DropdownMenu>
-                                                            </div>
-                                                        </EntityActions>
+                                                                <CommandDropdownItems
+                                                                    :commands="entityList.instanceCommands(item)"
+                                                                    @select="(command) => onInstanceCommand(command, entityList.instanceId(item))"
+                                                                />
+                                                                <template v-if="!entityList.config.deleteHidden && entityList.instanceCanDelete(item)">
+                                                                    <template v-if="entityList.instanceCommands(item)?.flat().length">
+                                                                        <DropdownMenuSeparator />
+                                                                    </template>
+                                                                    <DropdownMenuItem class="text-destructive" @click="onDelete(entityList.instanceId(item))">
+                                                                        {{ __('sharp::action_bar.form.delete_button') }}
+                                                                    </DropdownMenuItem>
+                                                                </template>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
                                                     </TableCell>
                                                 </template>
                                             </TableRow>

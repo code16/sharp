@@ -40,6 +40,14 @@ export class EntityList implements EntityListData {
         return this.meta?.total ?? this.data.length;
     }
 
+    get currentSort() {
+        return this.query?.sort ?? this.config.defaultSort;
+    }
+
+    get currentSortDir() {
+        return this.query?.dir ?? this.config.defaultSortDir;
+    }
+
     get visibleFilters(): Array<FilterData>|null {
         return this.config.filters?._root.filter(filter => !this.hiddenFilters?.[filter.key]);
     }

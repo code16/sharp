@@ -38,7 +38,10 @@
 
     function onQueryChange(query: FilterQueryParams) {
         if(stringifyQuery(entityList.value.query) !== stringifyQuery(query)) {
-            router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query));
+            router.visit(route('code16.sharp.list', { entityKey }) + stringifyQuery(query), {
+                preserveState: true,
+                preserveScroll: false,
+            });
         }
     }
 
@@ -58,7 +61,7 @@
             route('code16.sharp.list.filters.store', { entityKey }),
             {
                 filterValues: filters.defaultValues(filters.rootFilters),
-                query: entityList.value.query,
+                query: { ...entityList.value.query, search: null },
             },
             { preserveState: true, preserveScroll: false }
         );

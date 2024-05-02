@@ -78,7 +78,7 @@
         const data = await api.post(
             route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
             {
-                query: entityList.value.query,
+                query: { ...entityList.value.query, search: null },
                 filterValues: filters.defaultValues(filters.rootFilters),
                 hiddenFilters: props.field.hiddenFilters,
             }
@@ -126,6 +126,7 @@
            @filter-change="onFilterChange"
            @reset="onFilterResetAll"
            @reordering="$emit('reordering', $event)"
+           v-bind="$attrs"
        >
            <template #card-header>
                <div class="flex space-x-4">

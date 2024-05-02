@@ -6,12 +6,13 @@
 
     import { provide, ref } from "vue";
     import { Form } from "../Form";
-    import LocaleSelect from "./LocaleSelect.vue";
     import { getDependantFieldsResetData } from "../util";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Serializable } from "@/form/Serializable";
+    import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+    import { Languages } from "lucide-vue-next";
 
     const props = defineProps<{
         form: Form
@@ -78,13 +79,19 @@
                 <slot name="title" />
             </div>
             <template v-if="form.locales?.length">
-                <LocaleSelect
-                    outline
-                    right
-                    :locale="form.currentLocale"
-                    :locales="form.locales"
-                    @change="onLocaleChange"
-                />
+                <Select class="w-auto" :model-value="form.currentLocale" @update:model-value="onLocaleChange">
+                    <SelectTrigger>
+                        <Languages class="w-4 h-4" />
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <template v-for="locale in form.locales" :key="locale">
+                            <SelectItem :value="locale">
+                                <span class="text-uppercase">{{ locale }}</span>
+                            </SelectItem>
+                        </template>
+                    </SelectContent>
+                </Select>
             </template>
         </div>
 

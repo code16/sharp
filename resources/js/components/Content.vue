@@ -10,7 +10,6 @@
 
     const hoveringLink = ref();
     const updatedHtml = computed(() => {
-        console.log(props.html);
         return props.html?.replaceAll('title="', 'data-title="');
     });
 

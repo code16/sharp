@@ -9,7 +9,6 @@
     import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle } from '@/components/ui';
     import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
-    import LocaleSelect from "@/form/components/LocaleSelect.vue";
     import { config } from "@/utils/config";
     import { __ } from "@/utils/i18n";
     import { Show } from '@/show/Show';
@@ -19,7 +18,7 @@
     import { useCommands } from "@/commands/useCommands";
     import PageBreadcrumb from "@/components/PageBreadcrumb.vue";
     import { api } from "@/api/api";
-    import { router } from "@inertiajs/vue3";
+    import { router, Link } from "@inertiajs/vue3";
     import { parseQuery } from "@/utils/querystring";
     import PageAlert from "@/components/PageAlert.vue";
     import { route } from "@/utils/url";
@@ -28,7 +27,20 @@
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
     import EntityList from "@/show/components/fields/entity-list/EntityList.vue";
-    import { ChevronsUpDown } from "lucide-vue-next";
+    import { ChevronDown, ChevronsUpDown, Languages, MoreHorizontal } from "lucide-vue-next";
+    import StickyTop from "@/components/StickyTop.vue";
+    import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+    import {
+        DropdownMenu,
+        DropdownMenuCheckboxItem,
+        DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator,
+        DropdownMenuSub, DropdownMenuSubContent,
+        DropdownMenuSubTrigger,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { Badge } from "@/components/ui/badge";
+    import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
+    import { DropdownMenuPortal } from "radix-vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -39,6 +51,7 @@
     const show = new Show(props.show, entityKey, instanceId);
     const locale = ref(show.locales?.[0]);
     const { isReordering, onEntityListReordering } = useReorderingLists();
+    const entityListNeedsTopBar = ref(false);
     const commands = useCommands();
 
     provide('show', show);
@@ -95,65 +108,110 @@
         </template>
 
         <WithCommands :commands="commands">
-            <div class="container mx-auto">
-                <div class="action-bar mt-4 mb-3">
-                    <div class="row align-items-center gx-3">
-                        <template v-if="show.locales?.length">
-                            <div class="col-auto">
-                                <LocaleSelect
-                                    outline
-                                    right
-                                    :locale="locale"
-                                    :locales="show.locales"
-                                    @change="locale = $event"
-                                />
-                            </div>
-                        </template>
-                        <template v-if="show.config.state">
-                            <div class="col-auto">
-                                <Dropdown
-                                    :show-caret="!!show.config.state.authorization"
-                                    outline
-                                    right
-                                    :disabled="!show.config.state.authorization"
-                                >
-                                    <template v-slot:text>
-                                        <StateIcon class="me-1" :state-value="show.instanceStateValue" style="vertical-align: -.125em" />
-                                        <span class="text-truncate">{{ show.instanceStateValue ? show.instanceStateValue.label : show.instanceState }}</span>
-                                    </template>
-                                    <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                        <DropdownItem :active="show.instanceState === stateValue.value" @click="onStateChange(stateValue.value)">
-                                            <StateIcon class="me-1" :state-value="stateValue" style="vertical-align: -.125em" />
-                                            <span class="text-truncate">{{ stateValue.label }}</span>
-                                        </DropdownItem>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </template>
-                        <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete">
-                            <div class="col-auto">
-                                <CommandsDropdown outline :small="false" :commands="show.allowedInstanceCommands" @select="onCommand">
-                                    <template v-slot:text>
-                                        {{ __('sharp::entity_list.commands.instance.label') }}
-                                    </template>
-                                    <template v-if="show.authorizations.delete" v-slot:append>
-                                        <DropdownSeparator />
-                                        <DropdownItem link-class="text-danger" @click="onDelete">
-                                            {{ __('sharp::action_bar.form.delete_button') }}
-                                        </DropdownItem>
-                                    </template>
-                                </CommandsDropdown>
-                            </div>
-                        </template>
-                        <template v-if="show.authorizations.update">
-                            <div class="col-auto">
-                                <Button as="a" :href="show.formUrl" :disabled="isReordering">
-                                    {{ __('sharp::action_bar.show.edit_button') }}
-                                </Button>
-                            </div>
-                        </template>
+            <div class="container">
+                <StickyTop class="group top-3.5 z-20 flex gap-3 mb-4 transition-[padding] pl-[--sticky-safe-left-offset] pr-[--sticky-safe-right-offset]"
+                    :class="{ 'sticky': !entityListNeedsTopBar }"
+                >
+                    <template v-if="show.locales?.length">
+                        <Select v-model="locale">
+                            <SelectTrigger class="w-auto h-8 pr-2">
+                                <Languages class="w-4 h-4 mr-2" />
+                                <SelectValue class="mr-1" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <template v-for="locale in show.locales" :key="locale">
+                                    <SelectItem :value="locale">
+                                        <span class="uppercase text-xs">{{ locale }}</span>
+                                    </SelectItem>
+                                </template>
+                            </SelectContent>
+                        </Select>
+                    </template>
+                    <div class="flex-1">
                     </div>
-                </div>
+                    <template v-if="show.config.state">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger as-child>
+                                <Button class="h-8" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
+                                    <Badge variant="outline">
+                                        <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
+                                        {{ show.instanceStateValue?.label }}
+                                    </Badge>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                    <DropdownMenuCheckboxItem
+                                        :checked="stateValue.value === show.instanceState"
+                                        @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                    >
+                                        <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                        <span class="truncate">{{ stateValue.label }}</span>
+                                    </DropdownMenuCheckboxItem>
+                                </template>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </template>
+                    <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger as-child>
+                                <Button class="h-8" variant="outline" size="sm">
+                                    {{ __('sharp::entity_list.commands.instance.label') }}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent side="bottom" align="center">
+                                <template v-if="show.config.state && show.config.state.authorization">
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuSub>
+                                            <DropdownMenuSubTrigger>
+                                                {{ __('sharp::modals.entity_state.edit.title') }}
+                                            </DropdownMenuSubTrigger>
+                                            <DropdownMenuPortal>
+                                                <DropdownMenuSubContent>
+                                                    <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                                        <DropdownMenuCheckboxItem
+                                                            :checked="stateValue.value === show.instanceState"
+                                                            @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                                        >
+                                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                            <span class="truncate">{{ stateValue.label }}</span>
+                                                        </DropdownMenuCheckboxItem>
+                                                    </template>
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuPortal>
+                                        </DropdownMenuSub>
+                                    </DropdownMenuGroup>
+                                    <DropdownMenuSeparator />
+                                </template>
+
+                                <CommandDropdownItems
+                                    :commands="show.allowedInstanceCommands"
+                                    @select="onCommand"
+                                />
+                                <template v-if="show.authorizations.delete">
+                                    <template v-if="show.allowedInstanceCommands?.flat().length">
+                                        <DropdownMenuSeparator />
+                                    </template>
+                                    <DropdownMenuItem class="text-destructive" @click="onDelete">
+                                        {{ __('sharp::action_bar.form.delete_button') }}
+                                    </DropdownMenuItem>
+                                </template>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </template>
+                    <template v-if="show.authorizations.update">
+                        <Button class="h-8" size="sm" :disabled="isReordering" as-child>
+                            <template v-if="isReordering">
+                                {{ __('sharp::action_bar.show.edit_button') }}
+                            </template>
+                            <template v-else>
+                                <Link :href="show.formUrl">
+                                    {{ __('sharp::action_bar.show.edit_button') }}
+                                </Link>
+                            </template>
+                        </Button>
+                    </template>
+                </StickyTop>
 
                 <template v-if="show.pageAlert">
                     <PageAlert
@@ -187,6 +245,7 @@
                                                     :collapsable="section.collapsable"
                                                     :value="null"
                                                     @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                    @needs-topbar="entityListNeedsTopBar = $event"
                                                 />
                                             </template>
                                             <template v-else>
