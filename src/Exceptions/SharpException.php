@@ -25,12 +25,8 @@ class SharpException extends \Exception
             return false;
         }
 
-        if ($request->expectsJson() && ! $request->inertia()) {
+        if ($request->routeIs('code16.sharp.api.*')) {
             return false;
-        }
-        
-        if ($this->statusCode === 419) {
-            return redirect()->back();
         }
 
         return Inertia::render('Error', [

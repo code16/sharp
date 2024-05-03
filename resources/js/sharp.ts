@@ -1,3 +1,5 @@
+import '../css/app.css';
+
 import { createApp, DefineComponent, h, nextTick } from 'vue';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';

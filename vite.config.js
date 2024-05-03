@@ -35,8 +35,6 @@ export default defineConfig(({ mode, command }) => {
             laravel({
                 input: [
                     'resources/js/sharp.ts',
-                    'resources/css/app.css',
-                    'resources/css/vendors.css',
                 ],
                 publicDirectory: '/dist',
                 // refresh: true,

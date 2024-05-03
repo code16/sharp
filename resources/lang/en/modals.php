@@ -1,10 +1,8 @@
 <?php
 
 return [
-    '401.title' => 'Unauthenticated',
-    '403.title' => 'Unauthorized',
-    '419.title' => 'Invalid',
-    '419.message' => 'This action is no longer valid, probably because of a long period of inactivity. The page will be automatically reloaded.',
+    'api.401.title' => 'Unauthenticated',
+    'api.403.title' => 'Unauthorized',
 
     'confirm.ok_button' => 'Confirm',
     'confirm.delete.title' => 'Confirm deletion',

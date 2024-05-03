@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <div id="sharp-app" class="p-4 h-screen flex justify-center items-center">
+    <div id="sharp-app" class="p-4 py-16 min-h-screen flex justify-center items-center">
         <div class="absolute inset-0 -z-10">
             <!-- Should be the same as in Layout -->
             <div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">

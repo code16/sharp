@@ -2,6 +2,7 @@
 @import "./root.css";
 @import "./shadcn.css";
 @import "./content.css";
+@import "./vendors.css";
 
 @tailwind base;
 @tailwind components;

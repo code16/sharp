@@ -5,7 +5,9 @@ namespace Code16\Sharp\Http\Middleware;
 use Code16\Sharp\Data\Filters\GlobalFiltersData;
 use Code16\Sharp\Data\LogoData;
 use Code16\Sharp\Data\MenuData;
+use Code16\Sharp\Data\SessionData;
 use Code16\Sharp\Data\UserData;
+use Code16\Sharp\Enums\SessionStatusLevel;
 use Code16\Sharp\Utils\Filters\GlobalFilters;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
 use Illuminate\Filesystem\Filesystem;
@@ -27,11 +29,14 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'sharpVersion' => sharpVersion(),
             'locale' => app()->getLocale(),
-            'session' => [
+            'session' => SessionData::from([
                 '_token' => session()->token(),
                 'status' => session('status'),
                 'status_title' => session('status_title'),
-            ],
+                'status_level' => session('status_level')
+                    ? SessionStatusLevel::from(session('status_level'))
+                    : null,
+            ]),
             'translations' => Cache::rememberForever('sharp.translations.'.app()->getLocale().'.'.sharpVersion(), function () {
                 return collect([
                     'sharp::action_bar',

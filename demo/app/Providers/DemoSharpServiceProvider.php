@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\PrefillLoginWithExampleCredentials;
 use App\Models\Media;
 use App\Sharp\AppSearchEngine;
 use App\Sharp\Demo2faNotificationHandler;
@@ -48,6 +49,7 @@ class DemoSharpServiceProvider extends SharpAppServiceProvider
             ->enableLoginRateLimiting(maxAttempts: 3)
             ->suggestRememberMeOnLoginForm()
             ->appendMessageOnLoginForm('sharp._login-page-message')
-            ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...');
+            ->enableGlobalSearch(AppSearchEngine::class, 'Search for posts or authors...')
+            ->appendToMiddlewareWebGroup(PrefillLoginWithExampleCredentials::class);
     }
 }

@@ -683,6 +683,13 @@ export type SelectFilterData = {
   searchKeys: Array<any>;
   template: string;
 };
+export type SessionData = {
+  _token: string;
+  status: string | null;
+  status_title: string | null;
+  status_level: SessionStatusLevel | null;
+};
+export type SessionStatusLevel = "error" | "success";
 export type ShowConfigData = {
   deleteConfirmationText: string;
   isSingle: boolean;
@@ -763,7 +770,7 @@ export type ShowLayoutColumnData = {
   fields: Array<Array<LayoutFieldData>>;
 };
 export type ShowLayoutData = {
-  sections: Array<ShowLayoutSectionData>;
+  sections: { [key: number]: ShowLayoutSectionData };
 };
 export type ShowLayoutSectionData = {
   key: string | null;

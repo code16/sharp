@@ -27,6 +27,7 @@ use Code16\Sharp\Console\PolicyMakeCommand;
 use Code16\Sharp\Console\ReorderHandlerMakeCommand;
 use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
+use Code16\Sharp\Exceptions\SharpTokenMismatchException;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
 use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
@@ -38,14 +39,13 @@ use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Exceptions\Handler;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
 use Intervention\Image\ImageManager;
-use Symfony\Component\HttpFoundation\Response;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
@@ -76,6 +76,8 @@ class SharpInternalServiceProvider extends ServiceProvider
         Blade::component(Content::class, 'sharp-content');
         Blade::component(File::class, 'sharp-file');
         Blade::component(Image::class, 'sharp-image');
+        
+        $this->registerViewExceptionMapper();
 
         if (config('sharp.locale')) {
             setlocale(LC_ALL, config('sharp.locale'));
@@ -127,18 +129,6 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
         $this->app->register(InertiaServiceProvider::class);
-        
-        $this->app->afterResolving(
-            Handler::class,
-            function (Handler $handler) {
-                ray($handler);
-                $handler->respondUsing(function (Response $response) {
-                    ray($response);
-                    
-                    return $response;
-                });
-            },
-        );
     }
 
     protected function declareMiddleware(): void
@@ -172,6 +162,22 @@ class SharpInternalServiceProvider extends ServiceProvider
             ReorderHandlerMakeCommand::class,
             MenuMakeCommand::class,
         ]);
+    }
+    
+    protected function registerViewExceptionMapper(): void
+    {
+        $handler = $this->app->make(ExceptionHandler::class);
+        
+        if (! method_exists($handler, 'map')) {
+            return;
+        }
+        
+        $handler->map(function (TokenMismatchException $exception) {
+            if(request()->routeIs('code16.sharp.*')) {
+                return new SharpTokenMismatchException($exception);
+            }
+            return $exception;
+        });
     }
 
     public function loadRoutes(): void

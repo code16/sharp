@@ -18,15 +18,17 @@
 
     const props = defineProps<{
         loginIsEmail: boolean,
-        login: string | null,
-        password: string | null,
         message: string | null,
+        prefill?: {
+            login: string | null,
+            password: string | null,
+        },
     }>();
 
 
     const form = useForm({
-        login: props.login,
-        password: props.password,
+        login: props.prefill?.login,
+        password: props.prefill?.password,
         remember: false,
     });
 </script>
@@ -47,7 +49,9 @@
 
         <template v-if="session('status')">
             <Alert class="mb-4">
-                <Check class="w-4 h-4"/>
+                <template v-if="session('status_level') !== 'error'">
+                    <Check class="w-4 h-4"/>
+                </template>
                 <AlertTitle class="mb-0">
                     {{ session('status') }}
                 </AlertTitle>
