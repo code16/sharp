@@ -134,9 +134,10 @@ class PostList extends SharpEntityList
                 function (Builder $builder, $categories) {
                     collect($categories)
                         ->each(function ($categoryId) use ($builder) {
-                            $builder->whereHas('categories', function (Builder $builder) use ($categoryId) {
-                                return $builder->where('categories.id', $categoryId);
-                            });
+                            $builder->whereHas(
+                                'categories',
+                                fn (Builder $builder) => $builder->where('categories.id', $categoryId)
+                            );
                         });
                 },
             )

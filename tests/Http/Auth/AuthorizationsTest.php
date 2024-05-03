@@ -167,7 +167,7 @@ it('allow access by default', function () {
 
     // EEL (json)
     $this
-        ->getJson('/sharp/s-list/person')
+        ->getJson('/sharp/api/list/person')
         ->assertJsonFragment([
             'authorizations' => [
                 'delete' => [1, 2],
