@@ -15,7 +15,6 @@ use Code16\Sharp\Form\Fields\SharpFormAutocompleteField;
 use Code16\Sharp\Form\Fields\SharpFormCheckField;
 use Code16\Sharp\Form\Fields\SharpFormDateField;
 use Code16\Sharp\Form\Fields\SharpFormEditorField;
-use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Form\Fields\SharpFormListField;
 use Code16\Sharp\Form\Fields\SharpFormTagsField;
 use Code16\Sharp\Form\Fields\SharpFormTextareaField;
@@ -199,12 +198,10 @@ class PostForm extends SharpForm
         return [
             'title.fr' => ['required', 'string', 'max:150'],
             'title.en' => ['required', 'string', 'max:150'],
-            //            'content.text.fr' => ['required', 'string', 'max:2000'],
-            //            'content.text.en' => ['required', 'string', 'max:2000'],
             'published_at' => ['required', 'date'],
-            //            'attachments.*.title' => ['required', 'string', 'max:50'],
-            //            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
-            //            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
+            'attachments.*.title' => ['required', 'string', 'max:50'],
+            'attachments.*.link_url' => ['required_if:attachments.*.is_link,true,1', 'nullable', 'url', 'max:150'],
+            'attachments.*.document' => ['required_if:attachments.*.is_link,false,0'],
         ];
     }
 
