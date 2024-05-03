@@ -19,6 +19,7 @@ use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpTagsTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,27 +37,28 @@ class PostList extends SharpEntityList
             ->addField(
                 EntityListField::make('title')
                     ->setLabel('Title')
-                    ->setWidth(.3)
+                    ->setWidth(.2)
             )
             ->addField(
                 EntityListStateField::make()
+                    ->setWidth(.1)
             )
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
-                    ->setWidth(.3)
+                    ->setWidth(.2)
                     ->hideOnSmallScreens()
                     ->setSortable(),
             )
             ->addField(
-                EntityListFilterField::make('categories', CategoryFilter::class)
-                    ->setLabel('Category')
-                    ->setLabelAttribute('name')
+                EntityListField::make('categories')
+                    ->setLabel('Categories')
+                    ->setWidth(.2)
             )
             ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
-                    ->setWidth(.3)
+                    ->setWidth(.2)
                     ->setSortable(),
             );
     }
@@ -197,6 +199,7 @@ class PostList extends SharpEntityList
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
+            ->setCustomTransformer('categories', (new SharpTagsTransformer('name'))->setFilterLink('posts', CategoryFilter::class))
             ->transform($posts->paginate(20));
     }
 }

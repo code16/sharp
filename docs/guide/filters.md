@@ -285,48 +285,6 @@ And with that Sharp will keep the filter value in session and ensure it is value
 In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
-## Display each instance filter value
-
-In many cases, you will need to display the value(s) of the attribute concerned by the filter for each instance in the Entity List. For instance, if you have a "Category" filter and a "Product" list, you might want to display the category name for each product. You can do that manually, adding a regular field to your Entity List, but if you want Sharp to handle the formatting for you can use the dedicated `EntityListFilterField`:
-
-```php
-class ProductEntityList extends SharpEntityList
-{
-    protected function buildList(EntityListFieldsContainer $fields): void
-    {
-        $fields
-            ->addField(EntityListField::make('name')->setLabel('Name'))
-            ->addField(
-                EntityListFilterField::make('categories', CategoryFilter::class)
-                    ->setLabel('Categories')
-                    ->setLabelAttribute('name')
-            );
-    }
-    
-    protected function getFilters(): ?array
-    {
-        return [
-            CategoryFilter::class,
-        ];
-    }
-    
-    public function getListData(): array|Arrayable
-    {
-        return $this->transform(
-            Product::query()
-                ->with('categories') // Assuming a product belongs to many categories
-                ->paginate()
-        );
-    }
-    // ...
-}
-```
-
-With this code, the `categories` field will display the category name for each product, using the `name` attribute of the category, with Sharp's default formatting.
-
-::: tip
-You can have full control on how the categories are labelled leveraging `->setCustomTransformer('categories', function ($value, $product) { /*...*/ })`: you should return an array (given we are in a multiple filter context) of `['name' => ...]` values, as name is the configured label attribute.
-:::
 
 ## Filters for Dashboards
 

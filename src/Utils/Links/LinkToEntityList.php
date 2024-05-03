@@ -2,7 +2,6 @@
 
 namespace Code16\Sharp\Utils\Links;
 
-use Code16\Sharp\Utils\Filters\Filter;
 use Illuminate\Support\Collection;
 
 class LinkToEntityList extends SharpLinkTo
@@ -20,15 +19,9 @@ class LinkToEntityList extends SharpLinkTo
 
     public function addFilter(string $filterFullClassNameOrKey, string $value): self
     {
-        if (class_exists($filterFullClassNameOrKey)) {
-            $key = tap(
-                app($filterFullClassNameOrKey), function (Filter $filter) {
-                    $filter->buildFilterConfig();
-                })
-                ->getKey();
-        } else {
-            $key = $filterFullClassNameOrKey;
-        }
+        $key = class_exists($filterFullClassNameOrKey)
+            ? tap(app($filterFullClassNameOrKey), fn ($filter) => $filter->buildFilterConfig())->getKey()
+            : $filterFullClassNameOrKey;
 
         $this->filters[$key] = $value;
 

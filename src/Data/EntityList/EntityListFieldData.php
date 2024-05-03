@@ -16,10 +16,6 @@ final class EntityListFieldData extends Data
         public bool $hideOnXS,
         #[Optional]
         public ?bool $html = null,
-        #[Optional]
-        public ?string $filterKey = null,
-        #[Optional]
-        public ?string $filterLabelAttribute = null,
     ) {
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use Code16\Sharp\EntityList\Fields\EntityListField;
-use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
 use Code16\Sharp\EntityList\Fields\EntityListFilterField;
 use Code16\Sharp\EntityList\Filters\EntityListCheckFilter;
 use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
@@ -540,44 +538,4 @@ it('allows to define a check filter', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['filters']['_root'][0]['type'])->toEqual('check');
-});
-
-it('allows to add filter field as a specific column', function () {
-    $list = new class extends FakeSharpEntityList
-    {
-        public function buildList(EntityListFieldsContainer $fields): void
-        {
-            $fields
-                ->addField(EntityListField::make('name'))
-                ->addField(
-                    EntityListFilterField::make('hobbies', 'filter-hobbies')
-                        ->setLabel('Hobbies')
-                        ->setLabelAttribute('name')
-                );
-        }
-    };
-
-    $list->buildListConfig();
-
-    expect($list->fields())->toEqual([
-        [
-            'type' => 'text',
-            'key' => 'name',
-            'label' => '',
-            'sortable' => false,
-            'html' => true,
-            'width' => null,
-            'hideOnXS' => false,
-        ],
-        [
-            'type' => 'filter',
-            'key' => 'hobbies',
-            'filterKey' => 'filter-hobbies',
-            'label' => 'Hobbies',
-            'sortable' => false,
-            'width' => null,
-            'hideOnXS' => false,
-            'filterLabelAttribute' => 'name'
-        ]
-    ]);
 });
