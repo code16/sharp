@@ -28,7 +28,7 @@ class EntityListController extends SharpProtectedController
 
         $list = $this->entityManager->entityFor($entityKey)->getListOrFail();
         $list->buildListConfig();
-        $list->initQueryParams();
+        $list->initQueryParams(request()->query());
 
         $listData = $list->data();
         $listConfig = $list->listConfig($this->entityManager->entityFor($entityKey)->hasShow());
@@ -49,11 +49,13 @@ class EntityListController extends SharpProtectedController
                 $listData['items'],
                 $listConfig,
             ),
+            'filterValues' => $list->filterContainer()->getCurrentFilterValuesForFront(request()->all()),
+            'query' => count(request()->query()) ? request()->query() : null,
         ];
 
-        if (request()->expectsJson()) {
+        if (request()->routeIs('code16.sharp.api.list')) {
             // EEL case, need to return JSON
-            return response()->json(EntityListData::from($data));
+            return response()->json(EntityListData::from($data)->toArray());
         }
 
         return Inertia::render('EntityList/EntityList', [

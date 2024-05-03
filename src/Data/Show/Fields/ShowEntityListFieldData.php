@@ -29,6 +29,7 @@ final class ShowEntityListFieldData extends Data
         public bool $showCreateButton,
         public bool $showSearchField,
         public bool $showCount,
+        public string $endpointUrl,
         public ?string $label = null,
         /** @var array<string, mixed> */
         public ?array $hiddenFilters = null,

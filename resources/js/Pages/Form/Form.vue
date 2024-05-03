@@ -76,11 +76,11 @@
                 </template>
 
                 <template #append>
-                    <div class="sticky bottom-0 px-4 py-3 bg-white border-t"
+                    <div class="sticky bottom-0 px-4 py-3 bg-white border-t z-10"
                         :class="{ 'shadow': bottomBarStuck }"
                         v-sticky
                         @stuck-change="bottomBarStuck = $event.detail"
-                        style="z-index: 100; transition: box-shadow .25s ease-in-out"
+                        style="transition: box-shadow .25s ease-in-out"
                     >
                         <div class="flex gap-4">
                             <div class="flex-1">

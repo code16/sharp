@@ -2,7 +2,7 @@
     import { __ } from "@/utils/i18n.js";
     import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
-    import { CommandData } from "@/types/index.js";
+    import { CommandData } from "@/types";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
     const props = defineProps<{

@@ -121,8 +121,8 @@ class DemoDashboard extends SharpDashboard
             ->setMessage(
                 sprintf(
                     'Graphs below are delimited by period %s - %s (and yes, visits figures are randomly generated)',
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
-                    $this->getQueryParams()->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['start']->isoFormat('L'),
+                    $this->queryParams->filterFor(PeriodRequiredFilter::class)['end']->isoFormat('L'),
                 )
             );
     }

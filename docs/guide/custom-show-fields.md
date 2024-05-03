@@ -90,7 +90,7 @@ You can `.version()` this JS file if you want to.
 
 Publish views with:
 ```bash
-php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=views
+php artisan vendor:publish --tag=sharp-views
 ```
 
 Add your `.js` file to `resources/views/vendor/sharp/partials/plugin-scripts.blade.php`:

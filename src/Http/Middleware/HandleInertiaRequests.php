@@ -32,7 +32,7 @@ class HandleInertiaRequests extends Middleware
                 'status' => session('status'),
                 'status_title' => session('status_title'),
             ],
-            'translations' => Cache::rememberForever('sharp.translations.'.sharpVersion(), function () {
+            'translations' => Cache::rememberForever('sharp.translations.'.app()->getLocale().'.'.sharpVersion(), function () {
                 return collect([
                     'sharp::action_bar',
                     'sharp::dashboard',
@@ -75,7 +75,7 @@ class HandleInertiaRequests extends Middleware
                 ] : null,
             )),
             'globalFilters' => app(GlobalFilters::class)->isEnabled()
-                ? GlobalFiltersData::from(app(GlobalFilters::class))
+                ? GlobalFiltersData::from(app(GlobalFilters::class)->toArray())
                 : null,
             ...auth()->check() ? [
                 'menu' => fn() => MenuData::from(app(SharpMenuManager::class)),

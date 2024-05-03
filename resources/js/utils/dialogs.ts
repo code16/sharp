@@ -56,6 +56,7 @@ export function showConfirm(message: string, props: Partial<Dialog> = null) {
 
 export function showDeleteConfirm(message: string) {
     return showConfirm(message, {
+        title: __('sharp::modals.confirm.delete.title'),
         okTitle: __('sharp::modals.confirm.delete.ok_button'),
         okVariant: 'destructive',
     });

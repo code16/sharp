@@ -38,7 +38,7 @@
             @vite('resources/js/sharp.ts', '/vendor/sharp')
         </x-sharp::vite>
     </head>
-    <body class="antialiased">
+    <body class="font-sans antialiased">
         <x-sharp::alert.assets-outdated />
 
         @inertia

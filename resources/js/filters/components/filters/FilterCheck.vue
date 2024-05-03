@@ -1,26 +1,22 @@
 <script setup lang="ts">
     import { CheckFilterData } from "@/types";
+    import { Button } from "@/components/ui/button";
+    import { Checkbox } from "@/components/ui/checkbox";
 
     defineProps<{
         value: CheckFilterData['value'],
         filter: Omit<CheckFilterData, 'value'>,
         disabled?: boolean,
     }>();
+
+    defineEmits(['input']);
 </script>
 
 <template>
-    <div class="SharpFilterCheck form-check mt-1 mx-2">
-        <input
-            :id="`filter-${filter.key}`"
-            class="form-check-input"
-            type="checkbox"
-            :name="filter.key"
-            :checked="value"
-            :disabled="disabled"
-            @change="$emit('input', ($event.target as HTMLInputElement).checked)"
-        >
-        <label class="ui-font fs-8" :for="`filter-${filter.key}`">
+    <Button as="div" class="relative h-8 border-dashed" variant="outline" size="sm">
+        <Checkbox class="after:absolute after:inset-0" :checked="value" @update:checked="$emit('input', $event)" />
+        <span class="ml-2" data-filter-label>
             {{ filter.label }}
-        </label>
-    </div>
+        </span>
+    </Button>
 </template>

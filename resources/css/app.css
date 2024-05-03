@@ -1,9 +1,18 @@
+@import "./fonts.css";
 @import "./root.css";
 @import "./shadcn.css";
+@import "./content.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    [type="search"]::-webkit-search-decoration,
+    [type="search"]::-webkit-search-cancel-button {
+        appearance: none;
+    }
+}
 
 /** see to remove this while supporting legacy bootstrap classes */
 @layer components {
@@ -18,4 +27,8 @@
     .form-control {
         @apply block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6;
     }
+}
+
+.container {
+    @apply max-md:px-4;
 }

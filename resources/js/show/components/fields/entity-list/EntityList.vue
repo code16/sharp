@@ -1,128 +1,155 @@
 <script setup lang="ts">
-    import FieldLayout from "../../FieldLayout.vue";
     import { EntityList } from '@/entity-list/EntityList';
     import EntityListComponent from '@/entity-list/components/EntityList.vue'
     import EntityListTitle from '@/entity-list/components/EntityListTitle.vue'
-    import { ShowFieldProps } from "../../../types";
-    import { EntityListQueryParamsData, ShowEntityListFieldData } from "@/types";
-    import { Ref, ref } from "vue";
-    import { useStickyLayout } from "./useStickyLayout";
-    import { useFilters } from "@/filters/useFilters";
+    import { ChevronsUpDown } from "lucide-vue-next";
+    import { ShowFieldProps } from "@/show/types";
+    import {
+        EntityListData,
+        EntityListQueryParamsData,
+        FilterData,
+        ShowEntityListFieldData
+    } from "@/types";
+    import { nextTick, Ref, ref } from "vue";
     import { useCommands } from "@/commands/useCommands";
     import { api } from "@/api/api";
-    import { FilterQueryParams } from "@/filters/types";
+    import { FilterQueryParams, FilterValues } from "@/filters/types";
     import { route } from "@/utils/url";
+    import { FilterManager } from "@/filters/FilterManager";
+    import { useParentShow } from "@/show/useParentShow";
+    import { useFilters } from "@/filters/useFilters";
+    import { CardTitle } from "@/components/ui/card";
+    import { Button } from "@/components/ui/button";
 
     const props = defineProps<ShowFieldProps<ShowEntityListFieldData>>();
 
     const el = ref();
-    const loading = ref(false);
+    const show = useParentShow();
     const collapsed = ref(props.collapsable);
-    const { sticky, onListChange } = useStickyLayout(el);
     const entityList: Ref<EntityList | null> = ref(null);
-    const filters = useFilters();
-    const query: Ref<EntityListQueryParamsData & FilterQueryParams> = ref({
-        ...filters.getQueryParams(props.field.hiddenFilters)
-    });
+    const filters: FilterManager = useFilters();
     const commands = useCommands({
-        reload: () => init(query.value),
+        reload: () => {
+            init();
+        },
         refresh: (data) => {
             entityList.value = entityList.value.withRefreshedItems(data.items)
         },
     });
 
-    async function init(query) {
-        loading.value = true;
-        const data = await api.get(
-            route('code16.sharp.api.list', { entityKey: props.field.entityListKey }),
-            { params: query }
-        )
-            .then(response => response.data);
-
-        loading.value = false;
+    function update(data: EntityListData) {
         entityList.value = new EntityList(
             data,
             props.field.entityListKey,
             props.field.hiddenFilters,
             props.field.hiddenCommands,
         );
-        filters.filters = entityList.value.config.filters;
-        filters.setValuesFromQuery(query);
+        filters.update(
+            data.config.filters,
+            data.filterValues
+        );
+    }
+
+    async function onQueryChange(newQuery) {
+        const data = await api.get(
+            route('code16.sharp.api.list', { entityKey: props.field.entityListKey }),
+            { params: newQuery }
+        )
+            .then(response => response.data as EntityListData);
+
+        update(data);
+    }
+
+    async function onFilterChange(filter: FilterData, value: FilterData['value']) {
+        const data = await api.post(
+            route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
+            {
+                query: entityList.value.query,
+                filterValues: filters.nextValues(filter, value),
+                hiddenFilters: props.field.hiddenFilters,
+            }
+        )
+            .then(response => response.data as EntityListData);
+
+        update(data);
+    }
+
+    async function onFilterResetAll() {
+        const data = await api.post(
+            route('code16.sharp.api.list.filters.store', { entityKey: props.field.entityListKey }),
+            {
+                query: { ...entityList.value.query, search: null },
+                filterValues: filters.defaultValues(filters.rootFilters),
+                hiddenFilters: props.field.hiddenFilters,
+            }
+        )
+            .then(response => response.data as EntityListData);
+
+        update(data);
+    }
+
+    async function init() {
+        const data = await api.get(props.field.endpointUrl)
+            .then(response => response.data as EntityListData);
+
+        update(data);
     }
 
     function onToggle() {
         collapsed.value = !collapsed.value;
         if(!entityList.value) {
-            init(query.value);
+            init();
         }
     }
 
-    async function onQueryChange(newQuery) {
-        await init(newQuery);
-        query.value = newQuery;
-    }
-
     if(!props.collapsable) {
-        init(query.value);
+        init();
     }
 </script>
 
 <template>
     <div ref="el">
-       <FieldLayout
-           class="ShowEntityListField"
-           :class="{
-               'ShowEntityListField--collapsed': collapsed,
-           }"
+
+       <EntityListComponent
+           :entity-list="entityList"
+           :entity-key="field.entityListKey"
+           :filters="filters"
+           :commands="commands"
+           :show-create-button="field.showCreateButton"
+           :show-reorder-button="field.showReorderButton"
+           :show-search-field="field.showSearchField"
+           :show-entity-state="field.showEntityState"
+           :collapsed="collapsed"
+           :title="field.label"
+           inline
+           @update:query="onQueryChange"
+           @filter-change="onFilterChange"
+           @reset="onFilterResetAll"
+           @reordering="$emit('reordering', $event)"
+           v-bind="$attrs"
        >
-           <EntityListComponent
-               v-if="value"
-               :entity-list="entityList"
-               :entity-key="field.entityListKey"
-               :query="query"
-               :filters="filters"
-               :commands="commands"
-               :show-create-button="field.showCreateButton"
-               :show-reorder-button="field.showReorderButton"
-               :show-search-field="field.showSearchField"
-               :show-entity-state="field.showEntityState"
-               :loading="loading"
-               inline
-               @change="onListChange"
-               @update:query="onQueryChange"
-               @reordering="$emit('reordering', $event)"
-           >
-               <template v-slot:title>
+           <template #card-header>
+               <div class="flex space-x-4">
+                   <CardTitle>
+                       {{ field.label }}
+                   </CardTitle>
                    <template v-if="collapsable">
-                       <div class="section__header section__header--collapsable position-relative">
-                           <div class="row align-items-center gx-0 h-100">
-                               <div class="col-auto">
-                                   <details :open="!collapsed" @toggle="onToggle">
-                                       <summary class="stretched-link">
-                                           <span class="visually-hidden">{{ field.label }}</span>
-                                       </summary>
-                                   </details>
-                               </div>
-                               <div class="col">
-                                   <EntityListTitle :count="field.showCount ? entityList.count : null">
-                                       <h2 class="ShowEntityListField__label section__title mb-0">
-                                           {{ field.label }}
-                                       </h2>
-                                   </EntityListTitle>
-                               </div>
-                           </div>
-                       </div>
+                       <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                           <ChevronsUpDown class="w-4 h-4" />
+                       </Button>
                    </template>
-                   <template v-else>
-                       <div class="section__header d-grid">
-                           <EntityListTitle :count="field.showCount ? entityList.count : null">
-                               <h2 class="ShowEntityListField__label section__title mb-0">
-                                   {{ field.label }}
-                               </h2>
-                           </EntityListTitle>
-                       </div>
-                   </template>
-               </template>
+               </div>
+<!--               <template v-if="collapsable">-->
+<!--                   <details :open="!collapsed" @toggle="onToggle">-->
+<!--                       <summary class="stretched-link">-->
+<!--                           {{ field.label }}-->
+<!--                       </summary>-->
+<!--                   </details>-->
+<!--               </template>-->
+<!--               <template v-else>-->
+<!--                   {{ field.label }}-->
+<!--               </template>-->
+           </template>
 <!--               <template v-slot:action-bar="{ props, listeners }">-->
 <!--                   <ActionBar-->
 <!--                       class="ShowEntityListField__action-bar"-->
@@ -134,7 +161,6 @@
 <!--                      -->
 <!--                   </ActionBar>-->
 <!--               </template>-->
-           </EntityListComponent>
-       </FieldLayout>
+       </EntityListComponent>
    </div>
 </template>

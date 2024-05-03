@@ -14,6 +14,7 @@ use Inertia\Inertia;
 class ShowController extends SharpProtectedController
 {
     use HandlesSharpNotificationsInRequest;
+    use PreloadsShowEntityLists;
 
     public function __construct(
         private readonly SharpAuthorizationManager $sharpAuthorizationManager,
@@ -49,10 +50,12 @@ class ShowController extends SharpProtectedController
                 'delete' => $this->sharpAuthorizationManager->isAllowed('delete', $entityKey, $instanceId),
             ],
         ]);
-
+        
         if ($breadcrumbAttr = $showData[$payload->config->breadcrumbAttribute] ?? false) {
             $breadcrumb->setCurrentInstanceLabel($breadcrumbAttr);
         }
+        
+        $this->preloadShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [
             'show' => $payload,

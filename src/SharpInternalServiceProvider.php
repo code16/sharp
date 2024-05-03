@@ -29,6 +29,7 @@ use Code16\Sharp\Console\ServiceProviderMakeCommand;
 use Code16\Sharp\Console\ShowPageMakeCommand;
 use Code16\Sharp\Form\Eloquent\Uploads\Migration\CreateUploadsMigration;
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Http\Middleware\AddLinkHeadersForPreloadedRequests;
 use Code16\Sharp\Http\Middleware\SharpAuthenticate;
 use Code16\Sharp\Http\Middleware\SharpRedirectIfAuthenticated;
 use Code16\Sharp\Utils\Menu\SharpMenuManager;
@@ -56,7 +57,7 @@ class SharpInternalServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sharp');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sharp');
 
-        $this->publishes([__DIR__.'/../dist' => public_path('vendor/sharp')], 'assets');
+        $this->publishes([__DIR__.'/../dist' => public_path('vendor/sharp')], 'sharp-assets');
 //        $this->publishes([__DIR__.'/../config/config.php' => config_path('sharp.php')], 'config');
         $this->publishes(
             [
@@ -64,7 +65,7 @@ class SharpInternalServiceProvider extends ServiceProvider
                 __DIR__.'/../resources/views/components/image.blade.php' => resource_path('views/vendor/sharp/components/image.blade.php'),
                 __DIR__.'/../resources/views/partials/plugin-script.blade.php' => resource_path('views/vendor/sharp/partials/plugin-script.blade.php'),
             ],
-            'views'
+            'sharp-views'
         );
 
         Blade::componentNamespace('Code16\\Sharp\\View\\Components', 'sharp');
@@ -97,6 +98,7 @@ class SharpInternalServiceProvider extends ServiceProvider
             ImageManager::class,
             fn() => new ImageManager(sharpConfig()->get('uploads.image_driver'))
         );
+        $this->app->singleton(AddLinkHeadersForPreloadedRequests::class);
 
         if (class_exists('\PragmaRX\Google2FA\Google2FA')) {
             $this->app->bind(

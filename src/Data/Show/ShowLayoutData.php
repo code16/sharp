@@ -8,7 +8,7 @@ use Code16\Sharp\Data\DataCollection;
 final class ShowLayoutData extends Data
 {
     public function __construct(
-        /** @var DataCollection<ShowLayoutSectionData> */
+        /** @var DataCollection<int, ShowLayoutSectionData> */
         public DataCollection $sections,
     ) {
     }

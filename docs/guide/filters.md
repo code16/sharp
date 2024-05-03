@@ -146,7 +146,8 @@ class ProductEntityList extends SharpEntityList
 
 ### Configuration
 
-You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday) implementing those two optional methods in your filter implementation:
+You can define the date display format (default is `MM-DD-YYYY`, using [the Moment.js parser syntax](https://momentjs.com/docs/#/parsing/string-format/)) and choose if the week should start on monday (default is sunday).
+With `configureShowPresets()`, a list of buttons is displayed allowing the user to quickly select a date range.
 
 ```php
 class ProductCreationDateFilter extends EntityListDateRangeFilter
@@ -156,7 +157,8 @@ class ProductCreationDateFilter extends EntityListDateRangeFilter
     public function buildFilterConfig(): void
     {
         $this->configureDateFormat("YYYY-MM-DD")
-            ->configureMondayFirst(false);
+            ->configureMondayFirst(false)
+            ->configureShowPresets();
     }
 }
 ```

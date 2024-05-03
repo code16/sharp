@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { BreadcrumbData } from "@/types";
+    import { BreadcrumbData, BreadcrumbItemData } from "@/types";
     import {
         Breadcrumb,
         BreadcrumbEllipsis,
@@ -14,11 +14,16 @@
         DropdownMenuItem,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
+    import { ref } from "vue";
 
     const props = defineProps<{
         breadcrumb: BreadcrumbData,
     }>();
+    const appendItem = ref<BreadcrumbItemData | null>();
 
+    document.addEventListener('breadcrumb:updateAppendItem', (event: CustomEvent<BreadcrumbItemData | null>) => {
+        appendItem.value = event.detail;
+    });
 </script>
 <template>
     <Breadcrumb v-if="breadcrumb.items?.length">
@@ -58,6 +63,7 @@
                 </BreadcrumbItem>
             </template>
             <template v-for="item in breadcrumb.items.slice(1).slice(-2)">
+                <BreadcrumbSeparator />
                 <BreadcrumbItem>
                     <template v-if="item.url === breadcrumb.items.at(-1).url">
                         <BreadcrumbPage>
@@ -71,6 +77,14 @@
                             </Link>
                         </BreadcrumbLink>
                     </template>
+                </BreadcrumbItem>
+            </template>
+            <template v-if="appendItem">
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                    <BreadcrumbPage>
+                        {{ appendItem.label }}
+                    </BreadcrumbPage>
                 </BreadcrumbItem>
             </template>
         </BreadcrumbList>

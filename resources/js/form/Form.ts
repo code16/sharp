@@ -46,7 +46,7 @@ export class Form  implements FormData {
     }
 
     get data() {
-        return this.state.data;
+        return this.state.data ?? {};
     }
     set data(data) {
         this.state.data = data;

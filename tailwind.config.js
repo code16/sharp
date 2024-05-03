@@ -1,6 +1,7 @@
 import plugin from 'tailwindcss/plugin';
 import forms from '@tailwindcss/forms';
 import animate from 'tailwindcss-animate';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -15,25 +16,24 @@ export default {
     ],
 
     theme: {
-        screens: {
-            sm: '640px',
-            md: '768px',
-            lg: '1024px',
-            xl: '1280px',
-            '2xl': '1536px',
-        },
+        // screens: {
+        //     sm: '640px',
+        //     md: '768px',
+        //     lg: '1024px',
+        //     xl: '1280px',
+        //     '2xl': '1536px',
+        // },
         container: {
             center: true,
             padding: "2rem",
-            screens: {
-                sm: '640px',
-                md: '768px',
-                lg: '1024px',
-                xl: '1280px',
-                "2xl": "1400px",
-            },
+            // screens: {
+            //     "2xl": "1400px",
+            // },
         },
         extend: {
+            fontFamily: {
+                'sans': ['geist-sans', ...defaultTheme.fontFamily.sans]
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",

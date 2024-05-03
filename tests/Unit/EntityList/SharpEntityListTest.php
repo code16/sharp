@@ -233,6 +233,7 @@ it('returns list config', function () {
         'defaultSortDir' => 'asc',
         'deleteHidden' => false,
         'deleteConfirmationText' => trans('sharp::show.delete_confirmation_text'),
+        'filters' => null,
     ]);
 });
 
