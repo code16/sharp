@@ -237,8 +237,8 @@
 
             <template v-if="entityList">
                 <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
-                    <StickyTop class="sticky group flex gap-3 top-3.5 mb-4 transition-[padding,opacity]"
-                        :class="cn('z-30 pl-[--sticky-safe-left-offset] pr-[--sticky-safe-right-offset]', {
+                    <StickyTop class="group flex gap-3 top-3.5 mb-4 transition-[padding,opacity] xl:sticky xl:pl-[--sticky-safe-left-offset] xl:pr-[--sticky-safe-right-offset]"
+                        :class="cn('z-30 ', {
                             '-top-8 z-0 px-0': inline && !needsTopBar,
                             // 'opacity-0': inline && stuck && !needsTopBar,
                         }, {
@@ -247,7 +247,7 @@
                         v-model:stuck="stuck"
                         v-slot="{ largerThanTopbar }"
                     >
-                        <div class="flex flex-wrap gap-3" v-show="!reordering && !selecting">
+                        <div class="flex flex-row lg:flex-col flex-wrap gap-3 xl:flex-row" v-show="!reordering && !selecting">
                             <template v-if="showSearchField && entityList.config.searchable">
                                 <EntityListSearch
                                     v-model:expanded="searchExpanded"
@@ -290,7 +290,7 @@
                                     </template>
                                 </div>
 
-                                <div class="relative flex-1">
+                                <div class="relative flex-1 hidden lg:block">
                                     <template v-if="stuck && largerThanTopbar">
                                         <Button class="absolute top-0 left-0 h-8" variant="outline" size="sm" @click="window.scrollTo({ top:0, behavior: 'smooth'})">
                                             See filters
@@ -298,9 +298,9 @@
                                     </template>
                                     <div class="hidden md:flex flex-wrap gap-3"
                                         :class="{
-                                        'opacity-0 pointer-events-none': searchExpanded,
-                                        'invisible': stuck && largerThanTopbar,
-                                    }"
+                                            'opacity-0 pointer-events-none': searchExpanded,
+                                            'invisible': stuck && largerThanTopbar,
+                                        }"
                                     >
                                         <template v-for="filter in entityList.visibleFilters" :key="filter.key">
                                             <SharpFilter

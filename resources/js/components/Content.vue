@@ -3,15 +3,17 @@
     import { config } from "@/utils/config";
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
     import { computed, ref } from "vue";
+    import TemplateRenderer from "@/components/TemplateRenderer.vue";
 
     const props = defineProps<{
         html: string | null,
     }>()
 
-    const hoveringLink = ref();
+    const hoveringElementWithTitle = ref();
     const updatedHtml = computed(() => {
         return props.html?.replaceAll('title="', 'data-title="');
     });
+    const needsTemplate = computed(() => props.html?.includes('<sharp-'));
 
     function onClick(e: MouseEvent & { target: HTMLElement }) {
         const link: HTMLAnchorElement = e.target.closest('a[href]');
@@ -27,16 +29,21 @@
 <template>
     <div class="content"
         @click="onClick"
-        @mouseover="hoveringLink = ($event.target as HTMLElement).closest('a')"
-        @mouseout="hoveringLink = null"
+        @mouseover="hoveringElementWithTitle = ($event.target as HTMLElement).closest('[data-title]')"
+        @mouseout="hoveringElementWithTitle = null"
     >
         <TooltipProvider>
-            <Tooltip :open="!!hoveringLink?.dataset.title">
+            <Tooltip :open="!!hoveringElementWithTitle?.dataset.title">
                 <TooltipTrigger as-child>
-                    <div v-html="updatedHtml"></div>
+                    <template v-if="needsTemplate">
+                        <TemplateRenderer :template="updatedHtml" />
+                    </template>
+                    <template v-else>
+                        <div v-html="updatedHtml"></div>
+                    </template>
                 </TooltipTrigger>
-                <TooltipContent :side-offset="12" :collision-boundary="hoveringLink">
-                    {{ hoveringLink?.dataset.title }}
+                <TooltipContent class="max-w-[--radix-tooltip-content-available-width] md:max-w-md" :side-offset="12" :collision-boundary="hoveringElementWithTitle">
+                    {{ hoveringElementWithTitle?.dataset.title }}
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

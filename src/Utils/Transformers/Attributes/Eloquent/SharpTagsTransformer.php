@@ -6,17 +6,19 @@ use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Str;
 
 class SharpTagsTransformer implements SharpAttributeTransformer
 {
-    const tagStyle = 'background-color: #f0f0f0; color: #333; padding: 2px 5px; border-radius: 3px; margin-right: 5px;';
-
     protected ?string $linkEntityKey = null;
     protected ?string $linkFilter = null;
     protected ?string $linkIdAttribute = null;
 
-    public function __construct(protected string $labelAttribute)
-    {
+    public function __construct(
+        protected string $labelAttribute,
+        protected ?int $labelLimit = 30,
+    ) {
     }
 
     public function setFilterLink(string $entityKey, string $filter, ?string $idAttribute = 'id'): self
@@ -37,26 +39,38 @@ class SharpTagsTransformer implements SharpAttributeTransformer
         if (! $instance->$attribute instanceof Arrayable) {
             throw new SharpException("[$attribute] must be an array");
         }
-
-        return $instance->$attribute
+        
+        $tags = $instance->$attribute
             ->map(fn ($tag) => $this->renderTag($tag))
             ->join('');
+        
+        return <<<HTML
+            <div class="flex gap-2 flex-wrap">
+                $tags
+            </div>
+        HTML;
     }
 
     protected function renderTag(object $tag): string
     {
         $label = $tag->{$this->labelAttribute};
-
-        if($this->linkEntityKey) {
-            $label = LinkToEntityList::make($this->linkEntityKey)
-                ->addFilter($this->linkFilter, $tag->{$this->linkIdAttribute})
-                ->renderAsText($label);
+        
+        if($this->labelLimit) {
+            $limitedLabel = Str::limit($label, $this->labelLimit);
         }
 
-        return sprintf(
-            '<span style="%s">%s</span>',
-            static::tagStyle,
-            $label
-        );
+        if($this->linkEntityKey) {
+            $url = LinkToEntityList::make($this->linkEntityKey)
+                ->addFilter($this->linkFilter, $tag->{$this->linkIdAttribute})
+                ->renderAsUrl();
+        }
+        
+        return Blade::render(<<<'HTML'
+            <x-sharp::badge :href="$url" :title="$title">{{ $label }}</x-sharp::badge>
+        HTML, [
+            'label' => $limitedLabel ?? $label,
+            'title' => isset($limitedLabel) && strlen($label) > strlen($limitedLabel) ? $label : null,
+            'url' => $url ?? null,
+        ]);
     }
 }

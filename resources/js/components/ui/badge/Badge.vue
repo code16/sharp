@@ -2,6 +2,7 @@
 import type { HTMLAttributes } from 'vue'
 import { type BadgeVariants, badgeVariants } from '.'
 import { cn } from '@/utils/cn'
+import { Primitive } from "radix-vue";
 
 const props = defineProps<{
   variant?: BadgeVariants['variant']
@@ -10,7 +11,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div :class="cn(badgeVariants({ variant }), props.class)">
+  <Primitive :class="cn(badgeVariants({ variant }), props.class)">
     <slot />
-  </div>
+  </Primitive>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LeftNav from "../components/LeftNav.vue";
 import { ref } from "vue";
 import { CircleUser, ChevronsUpDown, LogOut, Menu } from "lucide-vue-next";
 import Notifications from "@/components/Notifications.vue";
@@ -95,11 +94,13 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                                                         <template v-else>
                                                             <component :is="childItem.isExternalLink ? 'a' : Link"
                                                                 :href="childItem.url"
-                                                                class="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
+                                                                class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
                                                                 :class="childItem.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
                                                             >
                                                                 <i class="fa fa-fw h-4 w-4" :class="childItem.icon"></i>
-                                                                {{ childItem.label }}
+                                                                <div class="min-w-0 break-words">
+                                                                    {{ childItem.label }}
+                                                                </div>
                                                             </component>
                                                         </template>
                                                     </li>
@@ -112,11 +113,13 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                             <template v-else>
                                 <component :is="item.isExternalLink ? 'a' : Link"
                                     :href="item.url"
-                                    class="flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
+                                    class="flex items-center gap-3 rounded-lg px-3 py-2 min-w-0 transition-all hover:text-primary"
                                     :class="item.current ? 'bg-muted text-primary' : 'text-muted-foreground'"
                                 >
                                     <i class="fa fa-fw h-4 w-4" :class="item.icon"></i>
-                                    {{ item.label }}
+                                    <div class="min-w-0 break-words">
+                                        {{ item.label }}
+                                    </div>
                                 </component>
                             </template>
                         </template>
