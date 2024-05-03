@@ -14,9 +14,12 @@ use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFilterField;
+use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
+use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpTagsTransformer;
 use Code16\Sharp\Utils\Transformers\Attributes\Eloquent\SharpUploadModelThumbnailUrlTransformer;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,20 +37,28 @@ class PostList extends SharpEntityList
             ->addField(
                 EntityListField::make('title')
                     ->setLabel('Title')
-                    ->setWidth(.3)
+                    ->setWidth(.2)
             )
-            ->addStateField()
+            ->addField(
+                EntityListStateField::make()
+                    ->setWidth(.1)
+            )
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
-                    ->setWidth(.3)
+                    ->setWidth(.2)
                     ->hideOnSmallScreens()
                     ->setSortable(),
             )
             ->addField(
+                EntityListField::make('categories')
+                    ->setLabel('Categories')
+                    ->setWidth(.2)
+            )
+            ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
-                    ->setWidth(.3)
+                    ->setWidth(.2)
                     ->setSortable(),
             );
     }
@@ -131,13 +142,15 @@ class PostList extends SharpEntityList
             ->when(
                 $this->queryParams->filterFor(CategoryFilter::class),
                 function (Builder $builder, $categories) {
-                    collect($categories)
-                        ->each(function ($categoryId) use ($builder) {
-                            $builder->whereHas(
-                                'categories',
-                                fn (Builder $builder) => $builder->where('categories.id', $categoryId)
-                            );
-                        });
+                    $builder->where(function (Builder $builder) use ($categories) {
+                        collect($categories)
+                            ->each(function ($categoryId) use ($builder) {
+                                $builder->orWhereHas(
+                                    'categories',
+                                    fn(Builder $builder) => $builder->where('categories.id', $categoryId)
+                                );
+                            });
+                    });
                 },
             )
 
@@ -171,13 +184,9 @@ class PostList extends SharpEntityList
         return $this
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(
-                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div><div>%s</div>',
+                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div>',
                     $instance->getTranslation('title', 'fr'),
-                    $instance->getTranslation('title', 'en'),
-                    $instance->categories
-                        ->pluck('name')
-                        ->map(fn($name) => '<span class="badge">'.$name.'</span>')
-                        ->implode(' '),
+                    $instance->getTranslation('title', 'en')
                 );
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {
@@ -190,6 +199,7 @@ class PostList extends SharpEntityList
             })
             ->setCustomTransformer('cover', (new SharpUploadModelThumbnailUrlTransformer(100))->renderAsImageTag())
             ->setCustomTransformer('published_at', DateTimeCustomTransformer::class)
+            ->setCustomTransformer('categories', (new SharpTagsTransformer('name'))->setFilterLink('posts', CategoryFilter::class))
             ->transform($posts->paginate(20));
     }
 }

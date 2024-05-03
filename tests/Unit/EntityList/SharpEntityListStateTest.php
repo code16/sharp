@@ -2,6 +2,7 @@
 
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeEntityState;
 use Code16\Sharp\Tests\Unit\EntityList\Fakes\FakeSharpEntityList;
 
@@ -130,7 +131,7 @@ it('allows to add state field as a specific column', function () {
         {
             $fields
                 ->addField(EntityListField::make('name'))
-                ->addStateField(label: 'State')
+                ->addField(EntityListStateField::make()->setLabel('State'))
                 ->addField(EntityListField::make('age'));
         }
     };
@@ -139,6 +140,7 @@ it('allows to add state field as a specific column', function () {
     
     expect($list->fields())->toEqual([
         [
+            'type' => 'text',
             'key' => 'name',
             'label' => '',
             'sortable' => false,
@@ -147,14 +149,15 @@ it('allows to add state field as a specific column', function () {
             'hideOnXS' => false,
         ],
         [
+            'type' => 'state',
             'key' => '@state',
             'label' => 'State',
             'sortable' => false,
-            'html' => false,
             'width' => null,
             'hideOnXS' => false,
         ],
         [
+            'type' => 'text',
             'key' => 'age',
             'label' => '',
             'sortable' => false,
@@ -193,10 +196,10 @@ it('sends state field as last column if state configured and not declared as a c
 
     expect($list->fields())->toHaveCount(4)
         ->and($list->fields()[3])->toEqual([
+            'type' => 'state',
             'key' => '@state',
             'label' => '',
             'sortable' => false,
-            'html' => false,
             'width' => null,
             'hideOnXS' => false,
         ]);

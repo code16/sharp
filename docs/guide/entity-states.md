@@ -21,7 +21,7 @@ The goal is to declare the available states for the entity, using `$this->addSta
 ```php
 class ProductEntityState extends EntityState
 {
-    // [...]
+    // ...
     
     protected function buildStates()
     {
@@ -46,7 +46,7 @@ When the user clicks on a state to update it, the `updateState()` method is call
 ```php
 class ProductEntityState extends EntityState
 {
-    // [...]
+    // ...
     
     public function updateState($instanceId, $stateId): array
     {
@@ -67,7 +67,7 @@ Once the Entity state class is defined, we have to add it in the Entity List or 
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function buildListConfig(): void
     {
@@ -82,7 +82,7 @@ The first parameter is a key which should be the name of the attribute.
 
 The state will be displayed in the top section of the Show Page (if you have one).
 
-In the Entity List, it will be displayed in a new column at the end of the list, unless you have declared a specific column with the `->addStateField()` method (in this case, you can choose where to place it).
+In the Entity List, it will be displayed in a new column at the end of the list, unless you have declared a specific column (in this case, you can choose where to place it):
 
 ```php
 class ProductEntityList extends SharpEntityList
@@ -91,11 +91,11 @@ class ProductEntityList extends SharpEntityList
     {
         $fields
             ->addField(EntityListField::make('title')->setLabel('Title'))
-            ->addStateField()
+            ->addField(EntityListStateField::make()->setLabel('State'))
             ->addField(/* ... */);
-            // [...]
     }
-    // [...]
+    
+    // ...
 }
 ```
 
@@ -106,7 +106,7 @@ Entity states can declare an authorization check very much like Instance Command
 ```php
 class ProductEntityState extends EntityState
 {
-    // [...]
+    // ...
     
     public function authorizeFor($instanceId): bool 
     {

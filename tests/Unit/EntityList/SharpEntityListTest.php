@@ -25,6 +25,7 @@ it('gets fields with layout', function () {
 
     expect($list->fields())->toEqual([
         [
+            'type' => 'text',
             'key' => 'name',
             'label' => 'Name',
             'sortable' => false,
@@ -112,19 +113,13 @@ it('allows to hide a column on small screens', function () {
     };
 
     expect($list->fields()[0])
-        ->toEqual([
+        ->toMatchArray([
             'key' => 'name',
-            'label' => '',
-            'sortable' => false,
-            'html' => true,
             'width' => '40%',
             'hideOnXS' => false,
         ])
-        ->and($list->fields()[1])->toEqual([
+        ->and($list->fields()[1])->toMatchArray([
             'key' => 'age',
-            'label' => '',
-            'sortable' => false,
-            'html' => true,
             'width' => '60%',
             'hideOnXS' => true,
         ]);

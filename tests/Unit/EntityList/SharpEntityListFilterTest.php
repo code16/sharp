@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Code16\Sharp\EntityList\Fields\EntityListFilterField;
 use Code16\Sharp\EntityList\Filters\EntityListCheckFilter;
 use Code16\Sharp\EntityList\Filters\EntityListDateRangeFilter;
 use Code16\Sharp\EntityList\Filters\EntityListDateRangeRequiredFilter;

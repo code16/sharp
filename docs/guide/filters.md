@@ -33,7 +33,7 @@ You can implement the optional `buildFilterConfig()` method to configure the fil
 ```php
 class ProductCategoryFilter extends EntityListSelectFilter
 {
-    // [...]
+    // ...
     
     public function buildFilterConfig(): void
     {
@@ -55,7 +55,7 @@ Next, in the Entity List, we must declare the filter:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getFilters(): ?array
     {
@@ -77,7 +77,7 @@ Example:
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -87,7 +87,7 @@ class ProductEntityList extends SharpEntityList
             $products->where('category_id', $cat);
         }
     
-        // [...]
+        // ...
     }
 }
 ```
@@ -101,7 +101,7 @@ In this case, with Eloquent for instance, your might have to modify your code to
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -111,7 +111,7 @@ class ProductEntityList extends SharpEntityList
             $products->whereIn('category_id', $categories);
         }
     
-        // [...]
+        // ...
     }
 }
 ```
@@ -127,7 +127,7 @@ Then you need to adjust the query with selected range (Sharp will return an asso
 ```php
 class ProductEntityList extends SharpEntityList
 {
-    // [...]
+    // ...
     
     function getListData()
     {
@@ -139,7 +139,7 @@ class ProductEntityList extends SharpEntityList
             );
         }
         
-        // [...]
+        // ...
     }
 }
 ```
@@ -152,7 +152,7 @@ With `configureShowPresets()`, a list of buttons is displayed allowing the user 
 ```php
 class ProductCreationDateFilter extends EntityListDateRangeFilter
 {
-    // [...]
+    // ...
     
     public function buildFilterConfig(): void
     {
@@ -285,6 +285,7 @@ And with that Sharp will keep the filter value in session and ensure it is value
 In order to make this feature work, since filters are generalized, you'll need to have unique filters key (the filter class name by default).
 :::
 
+
 ## Filters for Dashboards
 
 [Dashboards](building-dashboard.md) also can take advantage of filters; the API the same, but base classes are specific: `Code16\Sharp\Dashboard\Filters\DashboardSelectFilter`, `Code16\Sharp\Dashboard\Filters\DashboardDateRangeFilter`,`Code16\Sharp\Dashboard\DashboardCheckFilter` and so on.
@@ -324,7 +325,7 @@ class SharpServiceProvider extends SharpAppServiceProvider
     {
         $config
             ->addGlobalFilter(OrganizationGlobalFilter::class)
-            // [...]
+            // ...
     }
 }
 ```
