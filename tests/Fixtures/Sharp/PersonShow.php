@@ -23,7 +23,7 @@ class PersonShow extends SharpShow
     public function buildShowLayout(ShowLayout $showLayout): void
     {
         $showLayout
-            ->addSection('', function (ShowLayoutSection $section) {
+            ->addSection(function (ShowLayoutSection $section) {
                 $section
                     ->addColumn(6, function (ShowLayoutColumn $column) {
                         $column->withField('name');

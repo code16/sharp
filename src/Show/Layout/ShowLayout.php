@@ -14,7 +14,7 @@ class ShowLayout implements HasLayout
 
     final public function addSection(string|Closure $label, ?Closure $callback = null): self
     {
-        if (is_callable($label)) {
+        if ($label instanceof Closure) {
             $callback = $label;
             $label = '';
         }

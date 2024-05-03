@@ -48,7 +48,7 @@ class SingleShowController extends SharpProtectedController
             ],
         ]);
         
-        $this->preloadShowEntityLists($payload);
+        $this->addPreloadHeadersForShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [
             'show' => $payload,

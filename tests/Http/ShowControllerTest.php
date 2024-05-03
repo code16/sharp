@@ -169,6 +169,8 @@ it('returns configured show layout', function () {
         }
     });
 
+    $this->withoutExceptionHandling();
+
     $this->get('/sharp/s-list/person/s-show/person/1')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page

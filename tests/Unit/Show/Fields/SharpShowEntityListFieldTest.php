@@ -1,6 +1,11 @@
 <?php
 
 use Code16\Sharp\Show\Fields\SharpShowEntityListField;
+use Code16\Sharp\Tests\Fixtures\Entities\PersonEntity;
+
+beforeEach(function() {
+    sharpConfig()->addEntity('entityKey', PersonEntity::class);
+});
 
 it('allows to define a EEL field', function () {
     $field = SharpShowEntityListField::make('entityListField', 'entityKey');
@@ -16,10 +21,12 @@ it('allows to define a EEL field', function () {
         'emptyVisible' => false,
         'showCount' => false,
         'hiddenCommands' => ['entity' => [], 'instance' => []],
+        'endpointUrl' => route('code16.sharp.api.list', ['entityKey']),
     ]);
 });
 
 it('allows to define EEL field with default key', function () {
+    sharpConfig()->addEntity('instances', PersonEntity::class);
     $field = SharpShowEntityListField::make('instances');
 
     expect($field->toArray())->toEqual([
@@ -33,6 +40,7 @@ it('allows to define EEL field with default key', function () {
         'emptyVisible' => false,
         'showCount' => false,
         'hiddenCommands' => ['entity' => [], 'instance' => []],
+        'endpointUrl' => route('code16.sharp.api.list', ['instances']),
     ]);
 });
 

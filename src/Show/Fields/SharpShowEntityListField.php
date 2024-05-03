@@ -120,38 +120,40 @@ class SharpShowEntityListField extends SharpShowField
      */
     public function toArray(): array
     {
-        return tap(parent::buildArray([
-            'label' => $this->label,
-            'entityListKey' => $this->entityListKey,
-            'showEntityState' => $this->showEntityState,
-            'showCreateButton' => $this->showCreateButton,
-            'showReorderButton' => $this->showReorderButton,
-            'showSearchField' => $this->showSearchField,
-            'showCount' => $this->showCount,
-            'hiddenCommands' => $this->hiddenCommands,
-            'hiddenFilters' => sizeof($this->hiddenFilters)
-                ? collect($this->hiddenFilters)
-                    ->map(function ($value) {
-                        // Filter value can be a Closure
-                        if (is_callable($value)) {
-                            // Call it with current instanceId
-                            return $value(currentSharpRequest()->instanceId());
-                        }
+        return tap(
+            parent::buildArray([
+                'label' => $this->label,
+                'entityListKey' => $this->entityListKey,
+                'showEntityState' => $this->showEntityState,
+                'showCreateButton' => $this->showCreateButton,
+                'showReorderButton' => $this->showReorderButton,
+                'showSearchField' => $this->showSearchField,
+                'showCount' => $this->showCount,
+                'hiddenCommands' => $this->hiddenCommands,
+                'hiddenFilters' => sizeof($this->hiddenFilters)
+                    ? collect($this->hiddenFilters)
+                        ->map(function ($value) {
+                            // Filter value can be a Closure
+                            if (is_callable($value)) {
+                                // Call it with current instanceId
+                                return $value(currentSharpRequest()->instanceId());
+                            }
 
-                        return $value;
-                    })
-                    ->all()
-                : null,
-        ]), function (array &$options) {
-            $options['endpointUrl'] = route('code16.sharp.api.list', [
-                'entityKey' => $this->entityListKey,
-                ...app(SharpEntityManager::class)
-                    ->entityFor($this->entityListKey)
-                    ->getListOrFail()
-                    ->filterContainer()
-                    ->getQueryParamsFromFilterValues($options['hiddenFilters'] ?? []),
-            ]);
-        });
+                            return $value;
+                        })
+                        ->all()
+                    : null,
+            ]),
+            function (array &$options) {
+                $options['endpointUrl'] = route('code16.sharp.api.list', [
+                    'entityKey' => $this->entityListKey,
+                    ...app(SharpEntityManager::class)
+                        ->entityFor($this->entityListKey)
+                        ->getListOrFail()
+                        ->filterContainer()
+                        ->getQueryParamsFromFilterValues($options['hiddenFilters'] ?? []),
+                ]);
+            });
     }
 
     protected function validationRules(): array

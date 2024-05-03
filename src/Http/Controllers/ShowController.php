@@ -55,7 +55,7 @@ class ShowController extends SharpProtectedController
             $breadcrumb->setCurrentInstanceLabel($breadcrumbAttr);
         }
         
-        $this->preloadShowEntityLists($payload);
+        $this->addPreloadHeadersForShowEntityLists($payload);
 
         return Inertia::render('Show/Show', [
             'show' => $payload,
