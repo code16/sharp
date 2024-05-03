@@ -38,11 +38,14 @@ use Code16\Sharp\View\Components\Content;
 use Code16\Sharp\View\Components\File;
 use Code16\Sharp\View\Components\Image;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ServiceProvider as InertiaServiceProvider;
 use Intervention\Image\ImageManager;
+use Symfony\Component\HttpFoundation\Response;
 
 class SharpInternalServiceProvider extends ServiceProvider
 {
@@ -124,6 +127,18 @@ class SharpInternalServiceProvider extends ServiceProvider
 
         $this->app->register(\Intervention\Image\Laravel\ServiceProvider::class);
         $this->app->register(InertiaServiceProvider::class);
+        
+        $this->app->afterResolving(
+            Handler::class,
+            function (Handler $handler) {
+                ray($handler);
+                $handler->respondUsing(function (Response $response) {
+                    ray($response);
+                    
+                    return $response;
+                });
+            },
+        );
     }
 
     protected function declareMiddleware(): void

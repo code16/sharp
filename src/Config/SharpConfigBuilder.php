@@ -379,9 +379,7 @@ class SharpConfigBuilder
 
     public function appendMessageOnLoginForm(string $messageOrBladePath): self
     {
-        $this->config['auth']['login_form_message'] = view()->exists($messageOrBladePath)
-            ? view($messageOrBladePath)->render()
-            : $messageOrBladePath;
+        $this->config['auth']['login_form_message'] = $messageOrBladePath;
 
         return $this;
     }

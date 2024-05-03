@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,7 +29,9 @@ class LoginController extends Controller
 
         return Inertia::render('Auth/Login', [
             'loginIsEmail' => sharpConfig()->get('auth.login_attribute') === 'email',
-            'message' => sharpConfig()->get('auth.login_form_message'),
+            'message' => sharpConfig()->get('auth.login_form_message')
+                ? view('sharp::partials.login-form-message')->render()
+                : null,
         ]);
     }
 

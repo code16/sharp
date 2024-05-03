@@ -23,7 +23,7 @@ export default defineConfig(({ mode, command }) => {
             }
         },
         server: {
-            // hmr: false,
+            hmr: false,
             warmup: {
                 clientFiles: [
                     './resources/js/Pages/**/*.vue',
@@ -39,7 +39,7 @@ export default defineConfig(({ mode, command }) => {
                     'resources/css/vendors.css',
                 ],
                 publicDirectory: '/dist',
-                refresh: true,
+                // refresh: true,
                 detectTls: env.APP_URL?.startsWith('https')
                     ? env.APP_URL.replace('https://', '')
                     : null,

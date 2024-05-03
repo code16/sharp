@@ -272,7 +272,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                             {{ __('sharp::modals.cancel_button') }}
                         </AlertDialogCancel>
                     </template>
-                    <AlertDialogAction :class="buttonVariants({ variant: 'destructive' })" @click="dialog.onOk()">
+                    <AlertDialogAction :class="buttonVariants({ variant: dialog.okVariant })" @click="dialog.onOk()">
                         {{ dialog.okTitle ?? __('sharp::modals.ok_button') }}
                     </AlertDialogAction>
                 </AlertDialogFooter>

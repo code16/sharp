@@ -39,7 +39,7 @@
 
         <template v-if="form.hasErrors">
             <Alert class="mb-4" variant="destructive">
-                <AlertTitle>
+                <AlertTitle class="mb-0">
                     {{ Object.values(form.errors)[0] }}
                 </AlertTitle>
             </Alert>
@@ -48,7 +48,7 @@
         <template v-if="session('status')">
             <Alert class="mb-4">
                 <Check class="w-4 h-4"/>
-                <AlertTitle>
+                <AlertTitle class="mb-0">
                     {{ session('status') }}
                 </AlertTitle>
             </Alert>

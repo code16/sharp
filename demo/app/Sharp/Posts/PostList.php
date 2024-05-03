@@ -72,6 +72,7 @@ class PostList extends SharpEntityList
 
     protected function getFilters(): ?array
     {
+        
         return [
             StateFilter::class,
             AuthorFilter::class,

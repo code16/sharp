@@ -60,7 +60,7 @@ class HandleInertiaRequests extends Middleware
                 'sharp.custom_url_segment' => sharpConfig()->get('custom_url_segment'),
                 'sharp.display_sharp_version_in_title' => sharpConfig()->get('display_sharp_version_in_title'),
                 'sharp.display_breadcrumb' => sharpConfig()->get('display_breadcrumb'),
-                'sharp.name' => sharpConfig()->get('sharp.name'),
+                'sharp.name' => sharpConfig()->get('name'),
                 'sharp.search.enabled' => sharpConfig()->get('search.enabled'),
                 'sharp.search.placeholder' => sharpConfig()->get('search.placeholder'),
                 'sharp.theme.logo_height' => sharpConfig()->get('theme.logo_height'),
