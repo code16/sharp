@@ -6,6 +6,7 @@ use Code16\Sharp\Exceptions\SharpInvalidConfigException;
 
 trait HasCommonEntityListFieldAttributes
 {
+    public string $key;
     protected string $label = '';
     protected bool $sortable = false;
     protected ?string $width = null;

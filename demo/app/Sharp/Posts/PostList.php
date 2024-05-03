@@ -49,8 +49,9 @@ class PostList extends SharpEntityList
                     ->setSortable(),
             )
             ->addField(
-                EntityListFilterField::make(CategoryFilter::class)
+                EntityListFilterField::make('categories', CategoryFilter::class)
                     ->setLabel('Category')
+                    ->setLabelAttribute('name')
             )
             ->addField(
                 EntityListField::make('published_at')

@@ -6,15 +6,16 @@ class EntityListField implements IsEntityListField
 {
     use HasCommonEntityListFieldAttributes;
 
-    public string $key;
     protected bool $html = true;
+
+    private function __construct(string $key)
+    {
+        $this->key = $key;
+    }
 
     public static function make(string $key): self
     {
-        $instance = new static();
-        $instance->key = $key;
-
-        return $instance;
+        return new static($key);
     }
 
     public function setHtml(bool $html = true): self
