@@ -11,26 +11,40 @@ class EntityListFieldsContainer
 
     protected array $fields = [];
 
-    final public function addField(EntityListField $field): self
+    final public function addField(IsEntityListField $field): self
     {
         $this->fields[] = $field;
 
         return $this;
     }
 
-    final public function addStateField(?string $label = null): self
-    {
-        $this->fields[] = new EntityListStateField($label ?? '');
-
-        return $this;
-    }
-
-    final public function addFilterField(string $filterClassName, ?string $label = null): self
-    {
-        $this->fields[] = new EntityListFilterField($filterClassName, $label ?? '');
-
-        return $this;
-    }
+//    final public function addStateField(?Closure $callback = null): self
+//    {
+//        $field = tap(
+//            new EntityListStateField(),
+//            fn ($field) => $callback ? $callback($field) : null
+//        );
+//
+//        $this->fields[] = $field;
+//
+//        return $this;
+//    }
+//
+//    final public function addFilterField(string $filterKeyOrClassName, ?Closure $callback = null): self
+//    {
+//        $filterKey = class_exists($filterKeyOrClassName)
+//            ? tap(app($filterKeyOrClassName), fn ($filter) => $filter->buildFilterConfig())->getKey()
+//            : $filterKeyOrClassName;
+//
+//        $field = tap(
+//            new EntityListFilterField($filterKey),
+//            fn ($field) => $callback ? $callback($field) : null
+//        );
+//
+//        $this->fields[] = $field;
+//
+//        return $this;
+//    }
 
     public function setWidthOfField(string $fieldKey, ?int $width, int|bool|null $widthOnSmallScreens): self
     {
@@ -58,7 +72,7 @@ class EntityListFieldsContainer
         if($shouldHaveStateField
             && !collect($this->fields)->whereInstanceOf(EntityListStateField::class)->first()
         ) {
-            $this->addStateField();
+            $this->fields[] = EntityListStateField::make();
         }
         
         return collect($this->fields)

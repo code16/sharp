@@ -14,6 +14,8 @@ use App\Sharp\Utils\Filters\PeriodFilter;
 use App\Sharp\Utils\Filters\StateFilter;
 use Code16\Sharp\EntityList\Fields\EntityListField;
 use Code16\Sharp\EntityList\Fields\EntityListFieldsContainer;
+use Code16\Sharp\EntityList\Fields\EntityListFilterField;
+use Code16\Sharp\EntityList\Fields\EntityListStateField;
 use Code16\Sharp\EntityList\SharpEntityList;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\PageAlerts\PageAlert;
@@ -36,7 +38,9 @@ class PostList extends SharpEntityList
                     ->setLabel('Title')
                     ->setWidth(.3)
             )
-            ->addStateField()
+            ->addField(
+                EntityListStateField::make()
+            )
             ->addField(
                 EntityListField::make('author:name')
                     ->setLabel('Author')
@@ -44,7 +48,10 @@ class PostList extends SharpEntityList
                     ->hideOnSmallScreens()
                     ->setSortable(),
             )
-            ->addFilterField(CategoryFilter::class, 'Categories')
+            ->addField(
+                EntityListFilterField::make(CategoryFilter::class)
+                    ->setLabel('Category')
+            )
             ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
