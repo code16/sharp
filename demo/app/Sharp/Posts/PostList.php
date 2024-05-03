@@ -44,6 +44,7 @@ class PostList extends SharpEntityList
                     ->hideOnSmallScreens()
                     ->setSortable(),
             )
+            ->addFilterField(CategoryFilter::class, 'Categories')
             ->addField(
                 EntityListField::make('published_at')
                     ->setLabel('Published at')
@@ -131,13 +132,15 @@ class PostList extends SharpEntityList
             ->when(
                 $this->queryParams->filterFor(CategoryFilter::class),
                 function (Builder $builder, $categories) {
-                    collect($categories)
-                        ->each(function ($categoryId) use ($builder) {
-                            $builder->whereHas(
-                                'categories',
-                                fn (Builder $builder) => $builder->where('categories.id', $categoryId)
-                            );
-                        });
+                    $builder->where(function (Builder $builder) use ($categories) {
+                        collect($categories)
+                            ->each(function ($categoryId) use ($builder) {
+                                $builder->orWhereHas(
+                                    'categories',
+                                    fn(Builder $builder) => $builder->where('categories.id', $categoryId)
+                                );
+                            });
+                    });
                 },
             )
 
@@ -171,13 +174,9 @@ class PostList extends SharpEntityList
         return $this
             ->setCustomTransformer('title', function ($value, Post $instance) {
                 return sprintf(
-                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div><div>%s</div>',
+                    '<div><strong>fr</strong> %s</div><div><strong>en</strong> %s</div>',
                     $instance->getTranslation('title', 'fr'),
-                    $instance->getTranslation('title', 'en'),
-                    $instance->categories
-                        ->pluck('name')
-                        ->map(fn($name) => '<span class="badge">'.$name.'</span>')
-                        ->implode(' '),
+                    $instance->getTranslation('title', 'en')
                 );
             })
             ->setCustomTransformer('author:name', function ($value, $instance) {

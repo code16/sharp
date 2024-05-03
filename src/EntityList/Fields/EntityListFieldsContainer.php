@@ -25,6 +25,13 @@ class EntityListFieldsContainer
         return $this;
     }
 
+    final public function addFilterField(string $filterClassName, ?string $label = null): self
+    {
+        $this->fields[] = new EntityListFilterField($filterClassName, $label ?? '');
+
+        return $this;
+    }
+
     public function setWidthOfField(string $fieldKey, ?int $width, int|bool|null $widthOnSmallScreens): self
     {
         if ($width !== null && ($field = collect($this->fields)->firstWhere('key', $fieldKey))) {
