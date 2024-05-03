@@ -16,7 +16,7 @@
                         Sharp assets are out of date. Please run the following command:
                     </p>
                     <input class="w-full font-mono bg-inherit text-sm"
-                        value="php artisan vendor:publish --provider=Code16\\Sharp\\SharpServiceProvider --tag=assets --force"
+                        value="php artisan vendor:publish --tag=sharp-assets --force"
                         onclick="this.select()" aria-label="Command">
                 </div>
             </div>

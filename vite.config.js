@@ -3,7 +3,6 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import * as path from 'path';
 import ignoreImport from 'rollup-plugin-ignore-import';
-import { splitVendorChunkPlugin } from 'vite';
 import legacy from '@vitejs/plugin-legacy'
 import svgLoader from 'vite-svg-loader';
 
@@ -32,7 +31,6 @@ export default defineConfig(({ mode, command }) => {
             }
         },
         plugins: [
-            splitVendorChunkPlugin(),
             svgLoader({ svgo: false }),
             laravel({
                 input: [

@@ -35,8 +35,7 @@ class InstallCommand extends Command
     private function publishAssets(): void
     {
         $this->call('vendor:publish', [
-            '--provider' => '"Code16\Sharp\SharpServiceProvider"',
-            '--tag' => 'assets',
+            '--tag' => 'sharp-assets',
         ]);
 
         $this->components->twoColumnDetail('Assets', 'public/vendor/sharp');
@@ -44,7 +43,7 @@ class InstallCommand extends Command
         $this->replaceFileContent(
             base_path('composer.json'),
             'ComposerScripts::postAutoloadDump",'.PHP_EOL,
-            'ComposerScripts::postAutoloadDump",'.PHP_EOL.'            "@php artisan vendor:publish --provider=Code16\\\\\\\\Sharp\\\\\\\\SharpServiceProvider --tag=assets --force",'.PHP_EOL,
+            'ComposerScripts::postAutoloadDump",'.PHP_EOL.'            "@php artisan vendor:publish --tag=sharp-assets --force",'.PHP_EOL,
         );
 
         $this->components->twoColumnDetail('Post autoload script', 'composer.json');
