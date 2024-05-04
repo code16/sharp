@@ -26,8 +26,10 @@ export default defineConfig(({ mode, command }) => {
             // hmr: false,
             warmup: {
                 clientFiles: [
-                    // './resources/js/Pages/**/*.vue',
+                    './resources/js/Pages/**/*.vue',
                     // './resources/css/app.css',
+                    './resources/css/sharp.css',
+                    './resources/css/vendors.css',
                 ],
             }
         },
@@ -36,6 +38,8 @@ export default defineConfig(({ mode, command }) => {
             laravel({
                 input: [
                     'resources/js/sharp.ts',
+                    'resources/css/sharp.css',
+                    'resources/css/vendors.css',
                 ],
                 publicDirectory: '/dist',
                 refresh: true,

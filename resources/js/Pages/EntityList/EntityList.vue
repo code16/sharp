@@ -76,22 +76,20 @@
             <PageBreadcrumb :breadcrumb="breadcrumb" />
         </template>
 
-        <div class="container">
-            <EntityListComponent
-                :entity-key="entityKey"
-                :entity-list="entityList"
-                :filters="filters"
-                :commands="commands"
-                @reset="onReset"
-                @filter-change="onFilterChange"
-                @update:query="onQueryChange"
-            >
-                <template #card-header>
-                    <CardTitle>
-                        {{ breadcrumb.items[0].label }}
-                    </CardTitle>
-                </template>
-            </EntityListComponent>
-        </div>
+        <EntityListComponent
+            :entity-key="entityKey"
+            :entity-list="entityList"
+            :filters="filters"
+            :commands="commands"
+            @reset="onReset"
+            @filter-change="onFilterChange"
+            @update:query="onQueryChange"
+        >
+            <template #card-header>
+                <CardTitle>
+                    {{ breadcrumb.items[0].label }}
+                </CardTitle>
+            </template>
+        </EntityListComponent>
     </Layout>
 </template>

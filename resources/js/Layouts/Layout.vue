@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { CircleUser, ChevronsUpDown, LogOut, Menu } from "lucide-vue-next";
+import { CircleUser, ChevronsUpDown, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Moon, Sun } from "lucide-vue-next";
 import Notifications from "@/components/Notifications.vue";
 import { useDialogs } from "@/utils/dialogs";
 import useMenu from "@/composables/useMenu";
@@ -12,12 +12,12 @@ import { getCsrfToken } from "@/utils/request";
 import {
     DropdownMenu,
     DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-    DropdownMenuLabel, DropdownMenuSeparator,
+    DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link, usePage } from "@inertiajs/vue3";
-import { CollapsibleTrigger } from "radix-vue";
+import { CollapsibleTrigger, DropdownMenuPortal } from "radix-vue";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -32,17 +32,19 @@ import { GlobalFiltersData, LogoData } from "@/types";
 import GlobalFilters from "@/filters/components/GlobalFilters.vue";
 import ColorModeDropdown from "@/components/ColorModeDropdown.vue";
 import SharpLogoMini from '../../svg/logo-mini.svg';
+import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
 
 const dialogs = useDialogs();
 const menu = useMenu();
 const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
+const showDesktopLeftNav = ref(true);
 </script>
 
 <template>
-    <div class="min-h-screen w-full md:grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <div class="hidden border-r bg-muted/40 md:block">
+    <div class="min-h-screen w-full md:grid-cols-[220px_1fr] xl:grid-cols-[280px_1fr]" :class="showDesktopLeftNav ? 'md:grid' : 'xl:grid'">
+        <div class="hidden border-r bg-muted/40" :class="showDesktopLeftNav ? 'md:block' : 'xl:block'">
             <div class="flex h-full max-h-screen flex-col gap-2 sticky top-0">
-                <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                <div class="flex h-14 items-center border-b px-4 lg:h-[60px] xl:px-6">
                     <template v-if="$page.props.logo">
                         <Logo />
                     </template>
@@ -61,7 +63,7 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 <!--                        <span class="sr-only">Toggle notifications</span>-->
 <!--                    </Button>-->
                 </div>
-                <div class="flex-1 px-2 lg:px-4">
+                <div class="flex-1 px-2 xl:px-4">
                     <template v-if="globalFilters">
                         <div class="mb-4 mt-2">
                             <GlobalFilters :global-filters="globalFilters" />
@@ -129,7 +131,20 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
         </div>
         <div class="flex flex-col min-w-0">
             <header class="flex h-14 items-center gap-4 border-b bg-muted/40 backdrop-blur px-4 sticky top-0 z-20 lg:h-[60px] lg:px-6">
-<!--                <div class="absolute inset-0 bg-muted/40 -z-10"></div>-->
+                <Button
+                    variant="outline"
+                    size="icon"
+                    class="shrink-0 hidden md:inline-flex xl:hidden"
+                    @click="showDesktopLeftNav = !showDesktopLeftNav"
+                >
+                    <template v-if="showDesktopLeftNav">
+                        <PanelLeftClose class="h-[1.2rem] w-[1.2rem]" />
+                    </template>
+                    <template v-else>
+                        <PanelLeftOpen class="h-[1.2rem] w-[1.2rem]" />
+                    </template>
+                    <span class="sr-only">Toggle navigation menu</span>
+                </Button>
                 <Sheet>
                     <SheetTrigger as-child>
                         <Button
@@ -197,7 +212,21 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
 <!--                        </div>-->
 <!--                    </form>-->
                 </div>
-                <ColorModeDropdown />
+                <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                        <Button class="hidden min-[1900px]:flex" variant="ghost">
+                            <Moon class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                            <Sun class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                            <span class="sr-only">Toggle theme</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>
+                            {{ __('sharp::action_bar.color-mode-dropdown.label') }}
+                        </DropdownMenuLabel>
+                        <ColorModeDropdownItems />
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger as-child>
                         <Button variant="secondary" size="icon" class="rounded-full">
@@ -234,6 +263,19 @@ const globalFilters = usePage().props.globalFilters as GlobalFiltersData | null;
                                 </template>
                             </DropdownMenuGroup>
                         </template>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>
+                                <Sun class="w-4 h-4 mr-2 dark:hidden" />
+                                <Moon class="hidden w-4 h-4 mr-2 dark:block" />
+                                {{ __('sharp::action_bar.color-mode-dropdown.label') }}
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                                <DropdownMenuSubContent>
+                                    <ColorModeDropdownItems />
+                                </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                        </DropdownMenuSub>
                         <DropdownMenuSeparator />
                         <form :action="route('code16.sharp.logout')" method="post">
                             <input name="_token" :value="getCsrfToken()" type="hidden">

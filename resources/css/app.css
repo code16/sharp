@@ -2,7 +2,6 @@
 @import "./root.css";
 @import "./shadcn.css";
 @import "./content.css";
-@import "./vendors.css";
 
 @tailwind base;
 @tailwind components;
@@ -30,6 +29,8 @@
     }
 }
 
-.container {
-    @apply max-md:px-4;
+@layer components {
+    .container {
+        @apply px-4 lg:px-6;
+    }
 }

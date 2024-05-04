@@ -37,6 +37,7 @@
         <div class="flex gap-2">
             <Button
                 :as="entityList.meta.prev_page_url ? 'a' : 'button'"
+                class="hidden sm:flex"
                 size="icon"
                 variant="outline"
                 :href="entityList.meta.first_page_url"
@@ -119,6 +120,7 @@
             </Button>
             <Button
                 :as="entityList.meta.next_page_url ? 'a' : 'button'"
+                class="hidden sm:flex"
                 :class="!entityList.meta.last_page_url ? 'invisible' : ''"
                 size="icon"
                 variant="outline"

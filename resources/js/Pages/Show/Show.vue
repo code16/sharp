@@ -232,6 +232,7 @@
                     </template>
                     <template v-for="(section, i) in show.layout.sections">
                         <Section
+                            class="min-w-0"
                             v-show="show.sectionShouldBeVisible(section, locale)"
                             v-slot="{ collapsed, onToggle }"
                         >
@@ -268,8 +269,7 @@
                                         <CardHeader>
                                             <div class="flex gap-4">
                                                 <template v-if="section.title || (!i && show.getTitle(locale))">
-                                                    <CardTitle>
-                                                        {{ section.title || (!i && show.getTitle(locale)) }}
+                                                    <CardTitle v-html="section.title || (!i && show.getTitle(locale))">
                                                     </CardTitle>
                                                 </template>
                                                 <template v-if="section.collapsable">

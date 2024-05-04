@@ -6,6 +6,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow" />
 
+        <x-sharp::vite>
+            @vite([
+                'resources/css/app.css',
+                'resources/css/vendors.css',
+            ], '/vendor/sharp')
+        </x-sharp::vite>
+
         <x-sharp::root-styles />
 
         <x-sharp::extensions.injected-assets />
