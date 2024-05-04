@@ -6,8 +6,6 @@ use Code16\Sharp\Exceptions\SharpException;
 use Code16\Sharp\Utils\Links\LinkToEntityList;
 use Code16\Sharp\Utils\Transformers\SharpAttributeTransformer;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Str;
 
 class SharpTagsTransformer implements SharpAttributeTransformer
 {
@@ -40,37 +38,17 @@ class SharpTagsTransformer implements SharpAttributeTransformer
             throw new SharpException("[$attribute] must be an array");
         }
         
-        $tags = $instance->$attribute
-            ->map(fn ($tag) => $this->renderTag($tag))
-            ->join('');
-        
-        return <<<HTML
-            <div class="flex gap-2 flex-wrap">
-                $tags
-            </div>
-        HTML;
-    }
-
-    protected function renderTag(object $tag): string
-    {
-        $label = $tag->{$this->labelAttribute};
-        
-        if($this->labelLimit) {
-            $limitedLabel = Str::limit($label, $this->labelLimit);
-        }
-
-        if($this->linkEntityKey) {
-            $url = LinkToEntityList::make($this->linkEntityKey)
-                ->addFilter($this->linkFilter, $tag->{$this->linkIdAttribute})
-                ->renderAsUrl();
-        }
-        
-        return Blade::render(<<<'HTML'
-            <x-sharp::badge :href="$url" :title="$title">{{ $label }}</x-sharp::badge>
-        HTML, [
-            'label' => $limitedLabel ?? $label,
-            'title' => isset($limitedLabel) && strlen($label) > strlen($limitedLabel) ? $label : null,
-            'url' => $url ?? null,
-        ]);
+        return view('sharp::transformers.tags', [
+            'tags' => collect($instance->$attribute)
+                ->map(fn ($tag) => [
+                    'label' => $tag->{$this->labelAttribute},
+                    'url' => $this->linkEntityKey
+                        ? LinkToEntityList::make($this->linkEntityKey)
+                            ->addFilter($this->linkFilter, $tag->{$this->linkIdAttribute})
+                            ->renderAsUrl()
+                        : null
+                ]),
+            'labelLimit' => $this->labelLimit,
+        ])->render();
     }
 }
