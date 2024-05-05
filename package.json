@@ -26,7 +26,7 @@
     "@types/qs": "^6.9.7",
     "@types/sortablejs": "^1.15.3",
     "@vitejs/plugin-legacy": "^5.3.2",
-    "@vitejs/plugin-vue": "^5.0.3",
+    "@vitejs/plugin-vue": "^4.6.2",
     "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "^10.4.14",
     "core-js": "^3.36.0",
