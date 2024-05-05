@@ -104,7 +104,7 @@
             {{ filter.label }}
         </Label>
 
-        <Popover v-model:open="open" @update:open="$event && onOpen()">
+        <Popover v-model:open="open" @update:open="$event && onOpen()" modal>
             <PopoverTrigger as-child>
                 <template v-if="inline">
                     <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">
@@ -118,15 +118,20 @@
                 </template>
                 <template v-else>
                     <Button
-                        class="mt-2 w-full text-left justify-start font-normal"
+                        class="mt-2 w-full text-left justify-between font-normal"
                         variant="outline"
                         size="sm"
                         :disabled="disabled"
                     >
-                        <CalendarIcon class="mr-2 h-4 w-4 stroke-[1.25]" />
                         <template v-if="value?.start">
                             <FilterDateRangeValue :filter="filter" :value="value" />
                         </template>
+                        <template v-else>
+                            <span class="text-muted-foreground">
+                                {{ __('sharp::form.multiselect.placeholder') }}
+                            </span>
+                        </template>
+                        <CalendarIcon class="ml-2 h-4 w-4 stroke-[1.25]" />
                     </Button>
                 </template>
             </PopoverTrigger>

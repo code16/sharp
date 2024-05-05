@@ -10,7 +10,8 @@
 
     const props = defineProps<{
         entityList: EntityListData,
-        expanded: boolean
+        expanded: boolean,
+        inline?: boolean,
     }>();
 
     const emit = defineEmits(['submit', 'update:expanded']);
@@ -18,7 +19,7 @@
     const el = ref<HTMLElement>();
     const input = ref<HTMLInputElement>();
     const { focused: focusedWithin } = useFocusWithin(el);
-    const { pressed } = useMousePressed({ target: input });
+    const { pressed } = useMousePressed({ target: el });
     const search = ref(props.entityList.query?.search ?? '');
     let savedSearchBeforeBlur = '';
 
@@ -63,13 +64,20 @@
 
 <template>
     <form @submit.prevent="onSubmit" ref="el">
-        <div class="relative w-[150px] lg:w-[200px] h-8 z-[1]">
-            <div class="absolute top-0 left-0 h-8 group flex gap-3" :class="cn(expanded ? '-mr-[100px]' : '')">
-                <div class="relative">
+        <div class="relative z-[1]" :class="[inline ? 'h-8 w-[150px] 2xl:w-[200px]' : '']">
+            <div class="top-0 left-0 group flex gap-3" :class="cn(
+                inline ? 'absolute h-8' : 'flex-col',
+                inline && expanded ? '-mr-[100px]' : ''
+            )">
+                <div class="relative" :class="[inline ? '' : 'w-full']">
                     <Input
                         :placeholder="__('sharp::action_bar.list.search.placeholder')"
                         v-model="search"
-                        :class="cn('w-[150px] lg:w-[200px] px-8 h-8', expanded  ? 'lg:w-[300px]' : '')"
+                        :class="cn('w-full pl-8 h-9', {
+                            'h-8 w-[150px] 2xl:w-[200px]': inline,
+                            'sm:!w-[300px]': inline && expanded,
+                            'pr-8': props.entityList.query?.search,
+                        })"
                         type="search"
                         ref="input"
                         @input="onInput"

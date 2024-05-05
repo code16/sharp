@@ -129,12 +129,12 @@
            v-bind="$attrs"
        >
            <template #card-header>
-               <div class="flex space-x-4">
+               <div class="flex items-center gap-x-4">
                    <CardTitle>
                        {{ field.label }}
                    </CardTitle>
                    <template v-if="collapsable">
-                       <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                       <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5 -mr-3" @click="onToggle">
                            <ChevronsUpDown class="w-4 h-4" />
                        </Button>
                    </template>

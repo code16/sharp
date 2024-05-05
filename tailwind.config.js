@@ -28,10 +28,13 @@ export default {
             center: true,
             padding: "2rem",
             screens: {
-                "2xl": "1400px",
+                "2xl": "90rem",
             },
         },
         extend: {
+            boxShadow: {
+                'l-xl': '0 0px 25px -5px rgb(0 0 0 / 0.1), 0 0px 10px -6px rgb(0 0 0 / 0.1)',
+            },
             fontFamily: {
                 'sans': ['geist-sans', ...defaultTheme.fontFamily.sans]
             },

@@ -41,7 +41,10 @@ const showDesktopLeftNav = ref(true);
 </script>
 
 <template>
-    <div class="min-h-screen w-full md:grid-cols-[220px_1fr] xl:grid-cols-[280px_1fr]" :class="showDesktopLeftNav ? 'md:grid' : 'xl:grid'">
+    <div class="min-h-screen w-full md:grid-cols-[220px_1fr]" :class="[
+        'min-[1244px]:grid-cols-[280px_1fr]', // collapse only before 1024px+220px to prevent EL layout shift
+        showDesktopLeftNav ? 'md:grid' : 'xl:grid'
+    ]">
         <div class="hidden border-r bg-muted/40" :class="showDesktopLeftNav ? 'md:block' : 'xl:block'">
             <div class="flex h-full max-h-screen flex-col gap-2 sticky top-0">
                 <div class="flex h-14 items-center border-b px-4 lg:h-[60px] xl:px-6">

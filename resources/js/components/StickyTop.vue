@@ -1,10 +1,16 @@
 <script setup lang="ts">
-    import { useCurrentElement, useElementBounding } from "@vueuse/core";
+    import { throttledRef, throttledWatch, useElementBounding, watchThrottled } from "@vueuse/core";
     import { computed, reactive, ref, watch } from "vue";
 
     defineProps<{
         stuck?: boolean
     }>();
+
+    // function throttled<T>(rect: T): T {
+    //     const t = reactive({ ...rect });
+    //     watchThrottled(rect, (r) => Object.assign(t, r), { throttle: 200 });
+    //     return t;
+    // }
 
     const emit = defineEmits(['update:stuck']);
     const el = ref<HTMLElement>();

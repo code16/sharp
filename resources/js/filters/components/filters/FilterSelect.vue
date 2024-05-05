@@ -81,6 +81,11 @@
                         <template v-if="Array.isArray(value) ? value.length : value != null">
                             <FilterSelectValue :filter="filter" :value="value" />
                         </template>
+                        <template v-else>
+                            <span class="text-muted-foreground">
+                                {{ __('sharp::form.multiselect.placeholder') }}
+                            </span>
+                        </template>
                         <ChevronDown class="w-4 h-4 opacity-50 shrink-0 ml-auto" />
                     </Button>
                 </template>

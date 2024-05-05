@@ -8,8 +8,8 @@
 
         <x-sharp::vite>
             @vite([
-                'resources/css/app.css',
                 'resources/css/vendors.css',
+                'resources/css/app.css',
             ], '/vendor/sharp')
         </x-sharp::vite>
 

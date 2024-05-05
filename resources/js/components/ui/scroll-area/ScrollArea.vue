@@ -8,9 +8,9 @@ import {
 } from 'radix-vue'
 import ScrollBar from './ScrollBar.vue'
 import { cn } from '@/utils/cn'
-    import { useElementSize, useScroll, useThrottleFn } from "@vueuse/core";
+    import { useElementSize, useMediaQuery, useScroll, useThrottleFn } from "@vueuse/core";
 
-const props = defineProps<ScrollAreaRootProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<ScrollAreaRootProps & { class?: HTMLAttributes['class'], touchType?: ScrollAreaRootProps['type'] }>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -18,14 +18,15 @@ const delegatedProps = computed(() => {
   return delegated
 })
 
-const viewport = ref<InstanceType<typeof ScrollAreaViewport>>();
-const { arrivedState, measure } = useScroll(() => viewport.value?.viewportElement);
+    const isTouchscreen = useMediaQuery('(hover: none)');
+    const viewport = ref<InstanceType<typeof ScrollAreaViewport>>();
+    const { arrivedState, measure } = useScroll(() => viewport.value?.viewportElement);
 
     watch(useElementSize(() => viewport.value?.viewportElement).width, useThrottleFn(measure));
 </script>
 
 <template>
-  <ScrollAreaRoot v-bind="delegatedProps" :class="cn('relative overflow-hidden', props.class)">
+  <ScrollAreaRoot v-bind="delegatedProps" :type="isTouchscreen ? touchType : type" :class="cn('relative overflow-hidden', props.class)">
     <ScrollAreaViewport class="group/viewport h-full w-full rounded-[inherit]" :data-scroll-arrived-right="arrivedState.right" ref="viewport">
       <slot />
     </ScrollAreaViewport>

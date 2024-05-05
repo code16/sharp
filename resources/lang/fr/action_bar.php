@@ -9,7 +9,7 @@ return [
     'list.items_count' => ':count élément|:count éléments',
     'list.search.button' => 'Rechercher',
     'list.search.placeholder' => 'Rechercher...',
-    'list.search.title' => ':count résultat pour « :search »|:count résultats pour « :search »',
+    'list.search.title' => ':count résultat|:count résultats',
     'list.create_button' => 'Nouveau...',
     'list.forms_dropdown' => 'Nouveau',
     'list.reorder_button' => 'Réarranger',

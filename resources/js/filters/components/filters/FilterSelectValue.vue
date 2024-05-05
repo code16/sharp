@@ -10,7 +10,7 @@
 </script>
 
 <template>
-    <div class="flex flex-wrap gap-1">
+    <div class="flex gap-1" :class="{ 'flex-wrap': !inline }">
         <template v-if="Array.isArray(value)">
             <template v-if="value.length > 2">
                 <Badge variant="secondary" class="rounded-sm px-1 font-normal">
