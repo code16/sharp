@@ -27,7 +27,6 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     const content = ref<HTMLElement>();
     const contentRect = reactive(useElementBounding(content));
     const { overlayPath, highlightElementRect } = useOverlayPath(props.highlightElement);
-    const overlayPath = ref(false);
     const safeTransformY = computed(() => {
         if(overlayPath.value) {
             const margin = 40;
