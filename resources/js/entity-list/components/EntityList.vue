@@ -68,6 +68,7 @@
         showEntityState: true,
     });
 
+    const el = ref<HTMLElement>();
     const emit = defineEmits(['update:query', 'filter-change', 'reset', 'reordering', 'needs-topbar']);
     const selectedItems: Ref<{ [key: InstanceId]: boolean } | null> = ref(null);
     const selecting = computed(() => !!selectedItems.value);
@@ -129,14 +130,8 @@
             });
     }
 
-    const confirmingItem: Ref<InstanceId | null> = ref();
-
     async function onInstanceCommand(command: CommandData, instanceId: InstanceId) {
         const { commands, entityKey } = props;
-
-        if(command.confirmation) {
-            confirmingItem.value = instanceId;
-        }
 
         await commands.send(command, {
             postCommand: route('code16.sharp.api.list.command.instance', { entityKey, instanceId, commandKey: command.key }),
@@ -144,9 +139,9 @@
             query: props.entityList.query,
             entityKey,
             instanceId,
+        }, {
+            highlightElement: () => el.value?.querySelector(`[data-instance-row="${instanceId}"]`) as HTMLElement,
         });
-
-        confirmingItem.value = null;
     }
 
     async function onEntityCommand(command: CommandData) {
@@ -170,14 +165,11 @@
     async function onDelete(instanceId: InstanceId) {
         const { entityKey, entityList, commands } = props;
 
-        confirmingItem.value = instanceId;
-        try {
-            if(await showDeleteConfirm(entityList.config.deleteConfirmationText)) {
-                await api.delete(route('code16.sharp.api.list.delete', { entityKey, instanceId }));
-                commands.handleCommandResponse({ action: 'reload' });
-            }
-        } finally {
-            confirmingItem.value = null;
+        if(await showDeleteConfirm(entityList.config.deleteConfirmationText, {
+            highlightElement: () => el.value?.querySelector(`[data-instance-row="${instanceId}"]`) as HTMLElement,
+        })) {
+            await api.delete(route('code16.sharp.api.list.delete', { entityKey, instanceId }));
+            commands.handleCommandResponse({ action: 'reload' });
         }
     }
 
@@ -362,7 +354,7 @@
             <div class="h-8 mb-4"></div>
         </template>
 
-        <div class="@container">
+        <div class="@container" ref="el">
             <div class="" :class="[inline ? 'px-0' : 'max-lg:@[66rem]:px-4 lg:@[67rem]:px-6']">
                 <div class="max-w-5xl mx-auto !px-0 @container 2xl:max-w-[87rem] @[67rem]:max-w-[87rem]">
                     <Card class="rounded-none border-x-0 @5xl:!mx-0 @5xl:border-x @5xl:rounded-lg" :class="reordering ? 'relative z-[11]' : ''">
@@ -537,8 +529,9 @@
                                             </TableHeader>
                                             <TableBody ref="sortableTableBody">
                                                 <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data">
-                                                    <TableRow class="relative [&:has([aria-expanded=true])]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6"
-                                                        :class="[confirmingItem && confirmingItem === entityList.instanceId(item) ? 'bg-accent/50 z-[60]' : '', reordering ? 'cursor-move' : '']"
+                                                    <TableRow class="relative hover:bg-transparent has-[[data-row-link]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6"
+                                                        :class="[reordering ? 'cursor-move' : '']"
+                                                        :data-instance-row="entityList.instanceId(item)"
                                                     >
                                                         <template v-if="selecting && selectedItems">
                                                             <TableCell>
@@ -586,7 +579,7 @@
                                                             <template v-else>
                                                                 <TableCell class="max-w-[70cqw]">
                                                                     <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                        <Link class="absolute inset-0" :href="entityList.instanceUrl(item)"></Link>
+                                                                        <Link class="absolute inset-0" data-row-link :href="entityList.instanceUrl(item)"></Link>
                                                                     </template>
                                                                     <template v-if="field.html && typeof item[field.key] === 'string'">
                                                                         <Content class="break-words [&_a]:relative [&_a]:z-10"

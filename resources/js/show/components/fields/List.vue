@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
-    import ShowField from "../Field.vue";
-    import { LayoutFieldData, ShowListFieldData } from "@/types";
+    import { ShowListFieldData } from "@/types";
     import { UnknownField } from '@/components';
     import FieldLayout from "../FieldLayout.vue";
     import { ShowFieldProps } from "../../types";
@@ -24,7 +23,7 @@
                                     <template v-for="itemFieldLayout in row">
                                         <FieldGridColumn :layout="itemFieldLayout">
                                             <template v-if="field.itemFields?.[itemFieldLayout.key]">
-                                                <ShowField
+                                                <SharpShowField
                                                     v-bind="$props"
                                                     :field="field.itemFields?.[itemFieldLayout.key]"
                                                     :value="item[itemFieldLayout.key]"

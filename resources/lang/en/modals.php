@@ -4,6 +4,7 @@ return [
     'api.401.title' => 'Unauthenticated',
     'api.403.title' => 'Unauthorized',
 
+    'confirm.title'  => 'Confirm',
     'confirm.ok_button' => 'Confirm',
     'confirm.delete.title' => 'Confirm deletion',
     'confirm.delete.ok_button' => 'Delete',

@@ -3,10 +3,9 @@
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
     import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
     import WithCommands from "@/commands/components/WithCommands.vue";
-    import ShowField from '@/show/components/Field.vue';
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
-    import { Dropdown, DropdownItem, DropdownSeparator, StateIcon, SectionTitle } from '@/components/ui';
+    import { StateIcon } from '@/components/ui';
     import UnknownField from "@/components/UnknownField.vue";
     import Layout from "@/Layouts/Layout.vue";
     import { config } from "@/utils/config";
@@ -296,7 +295,7 @@
                                                                         v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
                                                                     >
                                                                         <template v-if="show.fields[fieldLayout.key]">
-                                                                            <ShowField
+                                                                            <SharpShowField
                                                                                 :field="show.fields[fieldLayout.key]"
                                                                                 :field-layout="fieldLayout"
                                                                                 :value="show.data[fieldLayout.key]"

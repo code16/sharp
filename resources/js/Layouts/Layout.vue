@@ -303,7 +303,7 @@ const showDesktopLeftNav = ref(true);
             v-model:open="dialog.open"
             @update:open="(open) => !open && window.setTimeout(() => dialog.onHidden(), 200)"
         >
-            <AlertDialogContent>
+            <AlertDialogContent :highlight-element="dialog.highlightElement">
                 <AlertDialogHeader>
                     <template v-if="dialog.title">
                         <AlertDialogTitle>

@@ -5,6 +5,7 @@ namespace Code16\Sharp\Data\Commands;
 use Code16\Sharp\Data\Data;
 use Code16\Sharp\Enums\CommandType;
 use Code16\Sharp\Enums\InstanceSelectionMode;
+use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 
 final class CommandData extends Data
 {
@@ -13,7 +14,8 @@ final class CommandData extends Data
         public ?string $label,
         public ?string $description,
         public CommandType $type,
-        public ?string $confirmation,
+        #[LiteralTypeScriptType('{ title: string, description: string | null } | null')]
+        public ?array $confirmation,
         public ?string $modal_title,
         public ?string $modal_confirm_label,
         public bool $has_form,

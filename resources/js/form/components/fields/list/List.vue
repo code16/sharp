@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { useParentForm } from "@/form/useParentForm";
-    import Field from "../../Field.vue";
     import { FormFieldData, FormListFieldData, FormUploadFieldValueData, LayoutFieldData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
     import { computed, ref } from "vue";
@@ -185,7 +184,7 @@
                         <FieldGridRow>
                             <template v-for="itemFieldLayout in row">
                                 <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
-                                    <Field
+                                    <SharpFormField
                                         :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
                                         :field-layout="itemFieldLayout"
                                         :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"

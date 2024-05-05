@@ -108,7 +108,10 @@ it('handles confirmation on a command', function () {
 
     $list->buildListConfig();
 
-    expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual('Sure?');
+    expect($list->listConfig()['commands']['entity'][0][0]['confirmation'])->toEqual([
+        'title' => 'Sure?',
+        'description' => null,
+    ]);
 });
 
 it('allows to declare instance selection mode on a command', function () {

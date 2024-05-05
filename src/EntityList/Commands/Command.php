@@ -24,7 +24,8 @@ abstract class Command
     protected ?string $commandKey = null;
     private ?string $formModalTitle = null;
     private ?string $formModalButtonLabel = null;
-    private ?string $confirmationText = null;
+    private ?string $confirmationTitle = null;
+    private ?string $confirmationDescription = null;
     private ?string $description = null;
 
     protected function info(string $message): array
@@ -113,7 +114,8 @@ abstract class Command
 
     final protected function configureConfirmationText(string $confirmationText): self
     {
-        $this->confirmationText = $confirmationText;
+        $this->confirmationTitle = strlen($confirmationText) > 50 ? __('sharp::modals.confirm.title') : $confirmationText;
+        $this->confirmationDescription = strlen($confirmationText) > 50 ? $confirmationText : null;
 
         return $this;
     }
@@ -131,9 +133,14 @@ abstract class Command
         return $this->authorize();
     }
 
-    final public function getConfirmationText(): ?string
+    final public function getConfirmationTitle(): ?string
     {
-        return $this->confirmationText;
+        return $this->confirmationTitle;
+    }
+    
+    final public function getConfirmationDescription(): ?string
+    {
+        return $this->confirmationDescription;
     }
 
     final public function getDescription(): ?string

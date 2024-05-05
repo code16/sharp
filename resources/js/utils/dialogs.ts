@@ -1,8 +1,8 @@
 import { __ } from "./i18n";
-import { ModalProps } from "@/components/ui/types";
-import { ref } from "vue";
+import { ref, UnwrapNestedRefs } from "vue";
+import type { MaybeComputedElementRef } from "@vueuse/core";
 
-type Dialog = {
+export type RootAlertDialog = {
     id: number,
     open: boolean,
     title?: string,
@@ -13,22 +13,23 @@ type Dialog = {
     okOnly?: boolean,
     onOk: () => void,
     onHidden: () => void,
+    highlightElement?: MaybeComputedElementRef,
 }
 
 let modalId = 0;
-let dialogs = ref<Dialog[]>([]);
+let dialogs = ref<RootAlertDialog[]>([]);
 
 export function useDialogs() {
     return dialogs;
 }
 
-export function showDialog(text: string, props: Partial<Dialog> = null) {
+export function showDialog(text: string, props: Partial<RootAlertDialog> = null) {
     const id = modalId++;
 
     return new Promise((resolve) => {
         dialogs.value.push({
             id,
-            ...props,
+            ...(props as UnwrapNestedRefs<RootAlertDialog>),
             text,
             open: true,
             onOk: () => resolve(true),
@@ -40,24 +41,26 @@ export function showDialog(text: string, props: Partial<Dialog> = null) {
     });
 }
 
-export function showAlert(message: string, props: Partial<Dialog> = null) {
+export function showAlert(message: string, props: Partial<RootAlertDialog> = null) {
     return showDialog(message, {
         okOnly: true,
         ...props
     });
 }
 
-export function showConfirm(message: string, props: Partial<Dialog> = null) {
+export function showConfirm(message: string, props: Partial<RootAlertDialog> = null) {
     return showDialog(message, {
+        title: props?.title ?? __('sharp::modals.confirm.title'),
         okTitle: __('sharp::modals.confirm.ok_button'),
         ...props
     });
 }
 
-export function showDeleteConfirm(message: string) {
+export function showDeleteConfirm(message: string, props: Partial<RootAlertDialog> = null) {
     return showConfirm(message, {
         title: __('sharp::modals.confirm.delete.title'),
         okTitle: __('sharp::modals.confirm.delete.ok_button'),
         okVariant: 'destructive',
+        ...props,
     });
 }

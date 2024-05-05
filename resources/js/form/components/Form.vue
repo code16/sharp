@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import Field from "./Field.vue";
     import FormLayout from "./FormLayout.vue";
     import { FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
@@ -124,7 +123,7 @@
                                                                 <FieldGridRow>
                                                                     <template v-for="fieldLayout in row">
                                                                         <FieldGridColumn :layout="fieldLayout">
-                                                                            <Field
+                                                                            <SharpFormField
                                                                                 :field="form.getField(fieldLayout.key)"
                                                                                 :field-layout="fieldLayout"
                                                                                 :field-error-key="fieldLayout.key"

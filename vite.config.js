@@ -5,6 +5,7 @@ import * as path from 'path';
 import ignoreImport from 'rollup-plugin-ignore-import';
 import legacy from '@vitejs/plugin-legacy'
 import svgLoader from 'vite-svg-loader';
+import circleDependency from 'vite-plugin-circular-dependency';
 
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, path.join(process.cwd(), '/demo'), '');
@@ -28,24 +29,23 @@ export default defineConfig(({ mode, command }) => {
                 clientFiles: [
                     './resources/js/Pages/**/*.vue',
                     // './resources/css/app.css',
-                    './resources/css/sharp.css',
-                    './resources/css/vendors.css',
                 ],
-            }
+            },
         },
         plugins: [
+            circleDependency(),
             svgLoader({ svgo: false }),
             laravel({
                 input: [
                     'resources/js/sharp.ts',
-                    'resources/css/sharp.css',
-                    'resources/css/vendors.css',
+                    // 'resources/css/sharp.css',
+                    // 'resources/css/vendors.css',
                 ],
                 publicDirectory: '/dist',
-                refresh: true,
+                // refresh: true,
                 detectTls: env.APP_URL?.startsWith('https')
                     ? env.APP_URL.replace('https://', '')
-                    : null,
+                    : false,
             }),
             vue({
                 template: {
@@ -60,10 +60,12 @@ export default defineConfig(({ mode, command }) => {
                     /moment\/locale\/(?!fr\.js$).*\.js$/,
                 ],
             }),
-            legacy({
-                modernPolyfills: ['es/array/to-spliced'],
-                renderLegacyChunks: false,
-            }),
+            ...command === 'build' ? [
+                legacy({
+                    modernPolyfills: ['es/array/to-spliced'],
+                    renderLegacyChunks: false,
+                }),
+            ] : [],
         ],
     }
 });

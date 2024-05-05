@@ -11,7 +11,12 @@ class PreviewPostCommand extends InstanceCommand
     {
         return 'Preview post';
     }
-
+    
+    public function buildCommandConfig(): void
+    {
+        $this->configureConfirmationText('Do you want to preview this post?');
+    }
+    
     public function execute(mixed $instanceId, array $data = []): array
     {
         return $this->view('sharp.post-preview', [

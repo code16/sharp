@@ -1,6 +1,6 @@
 import { CommandData, CommandFormData, CommandResponseData, FormData } from "@/types";
 import { api } from "@/api/api";
-import { showAlert, showConfirm } from "@/utils/dialogs";
+import { RootAlertDialog, showAlert, showConfirm } from "@/utils/dialogs";
 import { parseBlobJSONContent } from "@/utils/request";
 import { AxiosResponse } from "axios";
 import { reactive } from "vue";
@@ -74,7 +74,7 @@ export class CommandManager {
         };
     }
 
-    async send(command: CommandData, endpoints: CommandEndpoints) {
+    async send(command: CommandData, endpoints: CommandEndpoints, confirmDialogOptions?: Partial<RootAlertDialog>) {
         this.state.currentCommand = command;
         this.state.currentCommandEndpoints = endpoints;
 
@@ -84,7 +84,10 @@ export class CommandManager {
         }
 
         if(command.confirmation) {
-            if(! await showConfirm(command.confirmation)) {
+            if(! await showConfirm(command.confirmation.description, {
+                title: command.confirmation.title,
+                ...confirmDialogOptions,
+            })) {
                 this.finish();
                 return;
             }

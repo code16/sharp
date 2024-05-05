@@ -6,12 +6,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="robots" content="noindex, nofollow" />
 
-        <x-sharp::vite>
-            @vite([
-                'resources/css/vendors.css',
-                'resources/css/app.css',
-            ], '/vendor/sharp')
-        </x-sharp::vite>
+{{--        <x-sharp::vite>--}}
+{{--            @vite([--}}
+{{--                'resources/css/vendors.css',--}}
+{{--                'resources/css/app.css',--}}
+{{--            ], '/vendor/sharp')--}}
+{{--        </x-sharp::vite>--}}
 
         <x-sharp::root-styles />
 

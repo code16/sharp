@@ -12,6 +12,11 @@
     [type="search"]::-webkit-search-cancel-button {
         appearance: none;
     }
+
+    tr.relative {
+        transform: scale(100%);
+        clip-path: inset(0);
+    }
 }
 
 /** see to remove this while supporting legacy bootstrap classes */

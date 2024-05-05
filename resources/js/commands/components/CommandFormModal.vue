@@ -1,14 +1,14 @@
 <script setup lang="ts">
     import { Modal } from '@/components/ui';
-    import Form from '@/form/components/Form.vue';
     import { CommandManager } from "../CommandManager";
     import { ref } from "vue";
+    import type SharpForm from '@/form/components/Form.vue';
 
     defineProps<{
         commands: CommandManager,
     }>();
 
-    const form = ref<InstanceType<typeof Form>>();
+    const form = ref<InstanceType<typeof SharpForm>>();
 </script>
 
 <template>
@@ -23,7 +23,7 @@
     >
         <transition>
             <template v-if="!!commands.state.currentCommandForm">
-                <Form
+                <SharpForm
                     :post-fn="commands.postForm"
                     :entity-key="commands.state.currentCommandEndpoints.entityKey"
                     :instance-id="commands.state.currentCommandEndpoints.instanceId"

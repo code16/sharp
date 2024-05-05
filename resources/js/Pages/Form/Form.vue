@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import FormComponent from "@/form/components/Form.vue";
     import { Form } from "@/form/Form";
     import Layout from "@/Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
@@ -54,7 +53,7 @@
         <Title :breadcrumb="breadcrumb" />
 
         <div class="container mx-auto">
-            <FormComponent
+            <SharpForm
                 :form="form"
                 :entity-key="entityKey"
                 :instance-id="instanceId"
@@ -109,7 +108,7 @@
                         </div>
                     </div>
                 </template>
-            </FormComponent>
+            </SharpForm>
         </div>
     </Layout>
 </template>

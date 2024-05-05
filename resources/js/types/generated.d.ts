@@ -28,7 +28,7 @@ export type CommandData = {
   label: string | null;
   description: string | null;
   type: CommandType;
-  confirmation: string | null;
+  confirmation: { title: string; description: string | null } | null;
   modal_title: string | null;
   modal_confirm_label: string | null;
   has_form: boolean;
@@ -144,12 +144,13 @@ export type EntityListData = {
   pageAlert: PageAlertData | null;
 };
 export type EntityListFieldData = {
+  type: string;
   key: string;
   label: string;
   sortable: boolean;
-  html: boolean;
   width: string | null;
   hideOnXS: boolean;
+  html?: boolean | null;
 };
 export type EntityListMultiformData = {
   key: string;

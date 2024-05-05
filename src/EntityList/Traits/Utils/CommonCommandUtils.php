@@ -20,7 +20,10 @@ trait CommonCommandUtils
                             'label' => $handler->label(),
                             'description' => $handler->getDescription(),
                             'type' => $handler->type(),
-                            'confirmation' => $handler->getConfirmationText() ?: null,
+                            'confirmation' => $handler->getConfirmationTitle() ? [
+                                'title' => $handler->getConfirmationTitle(),
+                                'description' => $handler->getConfirmationDescription(),
+                            ] : null,
                             'modal_title' => $handler->getFormModalTitle() ?: null,
                             'modal_confirm_label' => $handler->getFormModalButtonLabel() ?: null,
                             'has_form' => count($handler->form()) > 0,
