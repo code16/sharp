@@ -14,7 +14,6 @@ class PreviewPostCommand extends InstanceCommand
     
     public function buildCommandConfig(): void
     {
-        $this->configureConfirmationText('Do you want to preview this post?');
     }
     
     public function execute(mixed $instanceId, array $data = []): array

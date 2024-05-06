@@ -146,7 +146,7 @@
                                         </template>
                                         <template v-else>
                                             <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                                <Field
+                                                <SharpFormField
                                                     :field="form.getField(fieldLayout.key)"
                                                     :field-layout="fieldLayout"
                                                     :field-error-key="fieldLayout.key"

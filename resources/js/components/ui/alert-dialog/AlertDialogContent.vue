@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { type HTMLAttributes, computed, reactive, ref } from 'vue'
+    import { type HTMLAttributes, computed, reactive, ref, inject, watch, onMounted } from 'vue'
 import {
   AlertDialogContent,
   type AlertDialogContentEmits,
@@ -11,8 +11,9 @@ import {
 import { cn } from '@/utils/cn'
     import {  useElementBounding } from "@vueuse/core";
     import { useOverlayPath } from "@/composables/use-overlay-path/useOverlayPath";
+    import { DialogRootContext } from "radix-vue/dist/Dialog/DialogRoot";
 
-const props = defineProps<AlertDialogContentProps & { class?: HTMLAttributes['class'], highlightElement? }>()
+    const props = defineProps<AlertDialogContentProps & { class?: HTMLAttributes['class'], highlightElement? }>()
 const emits = defineEmits<AlertDialogContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -22,7 +23,6 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-
 
     const content = ref<HTMLElement>();
     const contentRect = reactive(useElementBounding(content));
@@ -63,8 +63,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         :style="{
             'translate' : overlayPath ? `0 ${safeTransformY}px` : '',
         }"
-        ref="content"
     >
+        <div class="absolute inset-0 pointer-events-none" aria-hidden="true" ref="content"></div>
       <slot />
     </AlertDialogContent>
   </AlertDialogPortal>

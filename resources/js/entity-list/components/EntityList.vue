@@ -133,6 +133,10 @@
     async function onInstanceCommand(command: CommandData, instanceId: InstanceId) {
         const { commands, entityKey } = props;
 
+        if(command.confirmation) {
+            el.value.querySelector('[data-radix-scroll-area-viewport]').scrollTo({ left: 0, behavior: 'smooth' });
+        }
+
         await commands.send(command, {
             postCommand: route('code16.sharp.api.list.command.instance', { entityKey, instanceId, commandKey: command.key }),
             getForm: route('code16.sharp.api.list.command.instance.form', { entityKey, instanceId, commandKey: command.key }),
@@ -164,6 +168,8 @@
 
     async function onDelete(instanceId: InstanceId) {
         const { entityKey, entityList, commands } = props;
+
+        el.value.querySelector('[data-radix-scroll-area-viewport]').scrollTo({ left: 0, behavior: 'smooth' });
 
         if(await showDeleteConfirm(entityList.config.deleteConfirmationText, {
             highlightElement: () => el.value?.querySelector(`[data-instance-row="${instanceId}"]`) as HTMLElement,
