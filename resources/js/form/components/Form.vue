@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import FormLayout from "./FormLayout.vue";
-    import { FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
+    import { FormData, FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
 
     import { provide, ref } from "vue";
@@ -12,12 +12,13 @@
     import { Serializable } from "@/form/Serializable";
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
     import { Languages } from "lucide-vue-next";
+    import { ApiResponse } from "@/api/types";
 
     const props = defineProps<{
         form: Form
         entityKey: string,
         instanceId?: string | number,
-        postFn?: Function,
+        postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
     }>();
 
     provide('form', props.form);

@@ -147,6 +147,8 @@ export class CommandManager {
     }
 
     async postForm(data: CommandFormData['data']) {
+        this.state.currentCommandFormLoading = true;
+
         const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
             data,
             query: this.state.currentCommandEndpoints.query,
