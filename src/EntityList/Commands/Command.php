@@ -2,6 +2,7 @@
 
 namespace Code16\Sharp\EntityList\Commands;
 
+use Closure;
 use Code16\Sharp\Enums\CommandAction;
 use Code16\Sharp\Form\Layout\FormLayoutColumn;
 use Code16\Sharp\Form\Layout\HasModalFormLayout;
@@ -22,7 +23,8 @@ abstract class Command
 
     protected int $groupIndex = 0;
     protected ?string $commandKey = null;
-    private ?string $formModalTitle = null;
+    private string|Closure|null $formModalTitle = null;
+    private string|Closure|null $formModalDescription = null;
     private ?string $formModalButtonLabel = null;
     private ?string $confirmationTitle = null;
     private ?string $confirmationDescription = null;
@@ -91,10 +93,17 @@ abstract class Command
         return new SharpNotification($title);
     }
 
-    final protected function configureFormModalTitle(string $formModalTitle): self
+    final protected function configureFormModalTitle(string|Closure $formModalTitle): self
     {
         $this->formModalTitle = $formModalTitle;
 
+        return $this;
+    }
+    
+    final protected function configureFormModalDescription(string|Closure $formModalDescription): self
+    {
+        $this->formModalDescription = $formModalDescription;
+        
         return $this;
     }
 
@@ -148,9 +157,18 @@ abstract class Command
         return $this->description;
     }
 
-    final public function getFormModalTitle(): ?string
+    final public function getFormModalTitle(?array $formData): ?string
     {
-        return $this->formModalTitle;
+        return ($callback = $this->formModalTitle) instanceof Closure
+            ? $callback($formData)
+            : $this->formModalTitle;
+    }
+    
+    final public function getFormModalDescription(?array $formData): ?string
+    {
+        return ($callback = $this->formModalDescription) instanceof Closure
+            ? $callback($formData)
+            : $this->formModalDescription;
     }
 
     final public function getFormModalButtonLabel(): ?string

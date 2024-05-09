@@ -30,11 +30,9 @@ class ApiDashboardCommandController extends ApiController
         $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
-            CommandFormData::from([
-                ...$this->getCommandForm($commandHandler),
-                'data' => $commandHandler->applyFormatters($formData),
-                'pageAlert' => $commandHandler->pageAlert($formData),
-            ]),
+            CommandFormData::from(
+                $this->getCommandForm($commandHandler, $commandHandler->formData())
+            )
         );
     }
 

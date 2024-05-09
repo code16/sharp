@@ -24,8 +24,6 @@ trait CommonCommandUtils
                                 'title' => $handler->getConfirmationTitle(),
                                 'description' => $handler->getConfirmationDescription(),
                             ] : null,
-                            'modal_title' => $handler->getFormModalTitle() ?: null,
-                            'modal_confirm_label' => $handler->getFormModalButtonLabel() ?: null,
                             'has_form' => count($handler->form()) > 0,
                             'authorization' => $instanceId
                                 ? $handler->authorizeFor($instanceId)

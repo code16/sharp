@@ -14,6 +14,7 @@ final class CommandFormData extends Data
     public function __construct(
         #[LiteralTypeScriptType('{ [key:string]: FormFieldData["value"] }')]
         public ?array $data,
+        public CommandFormConfigData $config,
         /** @var DataCollection<string,FormFieldData> */
         public ?DataCollection $fields = null,
         public ?FormLayoutData $layout = null,
@@ -26,7 +27,8 @@ final class CommandFormData extends Data
     public static function from(array $form): self
     {
         return new self(
-            data: $form['data'],
+            data: $form['data'] ?? null,
+            config: CommandFormConfigData::from($form['config']),
             fields: isset($form['fields'])
                 ? FormFieldData::collection($form['fields'])
                 : null,

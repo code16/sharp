@@ -1,4 +1,5 @@
 import {
+    CommandFormData,
     FormData,
     FormEditorFieldData,
     FormFieldData,
@@ -15,9 +16,9 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 
 
-export class Form  implements FormData {
+export class Form implements FormData, CommandFormData {
     authorizations: FormData['authorizations'];
-    config: FormData['config'];
+    config: FormData['config'] & CommandFormData['config'];
     fields: FormData['fields'];
     layout: FormData['layout'];
     locales: FormData['locales'];
@@ -109,8 +110,6 @@ export class Form  implements FormData {
     get isUploading(): boolean {
         return this.allFieldsMeta.some(fieldMeta => fieldMeta.uploading);
     }
-
-
 
     getMeta(fieldKey: string): FieldMeta | undefined {
         return get(this.meta, fieldKey);

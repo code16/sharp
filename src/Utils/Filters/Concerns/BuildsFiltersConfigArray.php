@@ -60,7 +60,8 @@ trait BuildsFiltersConfigArray
                     });
             })
             ->filter(fn (Collection $filters) => count($filters) > 0)
-            ->pipe(fn (Collection $config) => count($config) ? $config->toArray() : null);
+            ->toArray()
+            ?: null;
     }
     
     protected function isHiddenFilter(Filter $handler): bool

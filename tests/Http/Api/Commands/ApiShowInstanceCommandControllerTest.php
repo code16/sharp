@@ -90,6 +90,12 @@ it('gets form and initialize form data in an instance command of a show', functi
                     {
                         return 'instance';
                     }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
+                    }
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
@@ -120,6 +126,10 @@ it('gets form and initialize form data in an instance command of a show', functi
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
             'fields' => [
                 'name' => [
@@ -170,6 +180,12 @@ it('gets form and initialize form data in an instance command of a single show',
                     {
                         return 'instance';
                     }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
+                    }
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
@@ -205,6 +221,10 @@ it('gets form and initialize form data in an instance command of a single show',
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
             'fields' => [
                 'name' => [

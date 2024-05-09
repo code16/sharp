@@ -28,14 +28,11 @@ class ApiEntityListEntityCommandController extends ApiController
         $list->initQueryParams(request()->query());
 
         $commandHandler = $this->getCommandHandler($list, $commandKey);
-        $formData = $commandHandler->formData() ?: null;
 
         return response()->json(
-            CommandFormData::from([
-                ...$this->getCommandForm($commandHandler),
-                'data' => $commandHandler->applyFormatters($formData),
-                'pageAlert' => $commandHandler->pageAlert($formData),
-            ])
+            CommandFormData::from(
+                $this->getCommandForm($commandHandler, $commandHandler->formData())
+            )
         );
     }
 

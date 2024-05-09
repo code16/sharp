@@ -8,7 +8,7 @@ use Code16\Sharp\EntityList\Commands\InstanceCommand;
 
 trait HandlesCommandForm
 {
-    protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler): array
+    protected function getCommandForm(InstanceCommand|EntityCommand|DashboardCommand $commandHandler, ?array $formData): array
     {
         if (! count($formFields = $commandHandler->form())) {
             return [];
@@ -16,12 +16,19 @@ trait HandlesCommandForm
 
         $locales = $commandHandler->getDataLocalizations();
 
-        return array_merge(
-            [
-                'fields' => $formFields,
-                'layout' => $commandHandler->formLayout(),
+        return [
+            'fields' => $formFields,
+            'layout' => $commandHandler->formLayout(),
+            'data' =>  $formData ? $commandHandler->applyFormatters($formData) : null,
+            'pageAlert' => $commandHandler->pageAlert($formData),
+            'config' => [
+                'title' => $commandHandler->getFormModalTitle($formData),
+                'description' => $commandHandler->getFormModalDescription($formData),
+                'buttonLabel' => $commandHandler->getFormModalButtonLabel(),
             ],
-            $locales ? ['locales' => $locales] : [],
-        );
+            ...$locales ? [
+                'locales' => $locales,
+            ] : [],
+        ];
     }
 }

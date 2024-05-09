@@ -403,6 +403,11 @@ it('allows to configure a page alert on an instance command', function () {
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
+                    
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
 
                     public function execute($instanceId, array $data = []): array
                     {
@@ -484,6 +489,12 @@ it('allows to initialize form data in an instance command', function () {
                     {
                         return 'my command';
                     }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
+                    }
 
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
@@ -512,6 +523,10 @@ it('allows to initialize form data in an instance command', function () {
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
         ]);
 });

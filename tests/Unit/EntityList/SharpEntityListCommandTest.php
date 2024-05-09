@@ -56,8 +56,6 @@ it('returns commands config', function () {
                     'description' => null,
                     'instance_selection' => null,
                     'confirmation' => null,
-                    'modal_title' => null,
-                    'modal_confirm_label' => null,
                     'has_form' => false,
                 ],
             ],
@@ -71,8 +69,6 @@ it('returns commands config', function () {
                     'authorization' => [],
                     'description' => null,
                     'confirmation' => null,
-                    'modal_title' => null,
-                    'modal_confirm_label' => null,
                     'has_form' => false,
                 ],
             ],
@@ -213,37 +209,6 @@ it('allows to define a form to a command', function () {
     $list->buildListConfig();
 
     expect($list->listConfig()['commands']['entity'][0][0]['has_form'])->toBeTrue();
-});
-
-it('allows to define a form modal title on a command', function () {
-    $list = new class extends FakeSharpEntityList
-    {
-        public function getEntityCommands(): ?array
-        {
-            return [
-                'entityCommand' => new class extends EntityCommand
-                {
-                    public function label(): string
-                    {
-                        return 'My Entity Command';
-                    }
-
-                    public function buildCommandConfig(): void
-                    {
-                        $this->configureFormModalTitle('My title');
-                    }
-
-                    public function execute(array $data = []): array
-                    {
-                    }
-                },
-            ];
-        }
-    };
-
-    $list->buildListConfig();
-
-    expect($list->listConfig()['commands']['entity'][0][0]['modal_title'])->toEqual('My title');
 });
 
 it('handles authorization in an entity command', function () {

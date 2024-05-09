@@ -55,7 +55,13 @@ it('allows to initialize form data in a dashboard command', function () {
                     {
                         return 'entity';
                     }
-
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
+                    }
+                    
                     public function buildFormFields(FieldsContainer $formFields): void
                     {
                         $formFields->addField(SharpFormTextField::make('name')->setLocalized());
@@ -83,6 +89,10 @@ it('allows to initialize form data in a dashboard command', function () {
         ->assertJsonFragment([
             'data' => [
                 'name' => 'Marie Curie',
+            ],
+            'config' => [
+                'title' => 'Edit Marie Curie',
+                'description' => 'Custom description',
             ],
         ]);
 });

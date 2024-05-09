@@ -5,6 +5,7 @@
     import {
         Dialog,
         DialogClose,
+        DialogDescription,
         DialogFooter,
         DialogHeader,
         DialogScrollContent,
@@ -35,8 +36,13 @@
             <template v-if="commands.state.currentCommandForm">
                 <DialogHeader>
                     <DialogTitle>
-                        {{ commands.state.currentCommand.modal_title ?? commands.state.currentCommand.label }}
+                        {{ commands.state.currentCommandForm.config.title ?? commands.state.currentCommand.label }}
                     </DialogTitle>
+                    <template v-if="commands.state.currentCommandForm.config.description">
+                        <DialogDescription>
+                            {{ commands.state.currentCommandForm.config.description }}
+                        </DialogDescription>
+                    </template>
                 </DialogHeader>
                 <div>
                     <SharpForm
@@ -58,7 +64,7 @@
                         <template v-if="commands.state.currentCommandFormLoading">
                             <Loader2 class="w-4 h-4 mr-2 animate-spin" />
                         </template>
-                        {{ commands.state.currentCommand.modal_confirm_label ?? __('sharp::modals.ok_button') }}
+                        {{ commands.state.currentCommandForm.config.buttonLabel ?? __('sharp::modals.ok_button') }}
                     </Button>
                 </DialogFooter>
             </template>

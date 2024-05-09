@@ -521,7 +521,12 @@ it('allows to configure a page alert on an entity command', function () {
                             ->setLevelInfo()
                             ->setMessage('My page alert');
                     }
-
+                    
+                    public function buildFormFields(FieldsContainer $formFields): void
+                    {
+                        $formFields->addField(SharpFormTextField::make('name'));
+                    }
+                    
                     public function execute(array $data = []): array
                     {
                         return $this->reload();
@@ -532,6 +537,7 @@ it('allows to configure a page alert on an entity command', function () {
     });
 
     $this
+        ->withoutExceptionHandling()
         ->getJson(route('code16.sharp.api.list.command.entity.form', ['person', 'cmd']))
         ->assertOk()
         ->assertJsonFragment([
@@ -601,6 +607,12 @@ it('allows to initialize form data in an entity command', function () {
                     public function label(): ?string
                     {
                         return 'entity';
+                    }
+                    
+                    public function buildCommandConfig(): void
+                    {
+                        $this->configureFormModalTitle(fn ($data) => "Edit {$data['name']}")
+                            ->configureFormModalDescription('Custom description');
                     }
 
                     public function buildFormFields(FieldsContainer $formFields): void

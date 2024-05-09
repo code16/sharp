@@ -29,15 +29,19 @@ export type CommandData = {
   description: string | null;
   type: CommandType;
   confirmation: { title: string; description: string | null } | null;
-  modal_title: string | null;
-  modal_confirm_label: string | null;
   has_form: boolean;
   authorization: Array<string | number> | boolean;
   instance_selection: InstanceSelectionMode | null;
   primary: boolean | null;
 };
+export type CommandFormConfigData = {
+  title: string | null;
+  description: string | null;
+  buttonLabel: string | null;
+};
 export type CommandFormData = {
   data: { [key: string]: FormFieldData["value"] };
+  config: CommandFormConfigData;
   fields: { [key: string]: FormFieldData } | null;
   layout: FormLayoutData | null;
   locales: Array<string> | null;
