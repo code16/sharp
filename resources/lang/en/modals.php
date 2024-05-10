@@ -10,6 +10,7 @@ return [
     'confirm.delete.ok_button' => 'Delete',
 
     'command.info.title' => 'Info',
+    'command.submit_button' => 'Submit',
     'state.422.title' => "Can't change state",
     'cropper.title' => 'Transform picture',
 

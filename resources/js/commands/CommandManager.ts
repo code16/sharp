@@ -149,16 +149,20 @@ export class CommandManager {
     async postForm(data: CommandFormData['data']) {
         this.state.currentCommandFormLoading = true;
 
-        const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
-            data,
-            query: this.state.currentCommandEndpoints.query,
-            command_step: this.state.currentCommandResponse?.action === 'step'
-                ? this.state.currentCommandResponse.step
-                : null,
-        }, {
-            responseType: 'blob',
-        });
+        try {
+            const response = await api.post(this.state.currentCommandEndpoints.postCommand, {
+                data,
+                query: this.state.currentCommandEndpoints.query,
+                command_step: this.state.currentCommandResponse?.action === 'step'
+                    ? this.state.currentCommandResponse.step
+                    : null,
+            }, {
+                responseType: 'blob',
+            });
 
-        this.handleCommandApiResponse(response);
+            this.handleCommandApiResponse(response);
+        } finally {
+            this.state.currentCommandFormLoading = false;
+        }
     }
 }

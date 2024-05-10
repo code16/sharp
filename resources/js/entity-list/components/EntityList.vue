@@ -304,7 +304,7 @@
                                         </template>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
+                                <DropdownMenuContent :collision-padding="20">
                                     <CommandDropdownItems
                                         :commands="entityList.dropdownEntityCommands(selecting)"
                                         :selecting="selecting"
@@ -361,7 +361,7 @@
         </template>
 
         <div class="@container" ref="el">
-            <div class="" :class="[inline ? 'px-0' : 'max-lg:@[66rem]:px-4 lg:@[67rem]:px-6']">
+            <div :class="[inline ? 'px-0' : 'max-lg:@[66rem]:px-4 lg:@[67rem]:px-6']">
                 <div class="max-w-5xl mx-auto !px-0 @container 2xl:max-w-[87rem] @[67rem]:max-w-[87rem]">
                     <Card class="rounded-none border-x-0 @5xl:!mx-0 @5xl:border-x @5xl:rounded-lg" :class="reordering ? 'relative z-[11]' : ''">
                         <CardHeader class="px-4 lg:px-6">
@@ -535,7 +535,7 @@
                                             </TableHeader>
                                             <TableBody ref="sortableTableBody">
                                                 <template v-for="(item, itemIndex) in reorderedItems ?? entityList.data">
-                                                    <TableRow class="relative hover:bg-transparent has-[[data-row-link]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6"
+                                                    <TableRow class="relative hover:bg-transparent has-[[data-row-action]:hover]:bg-muted/50 has-[[aria-expanded=true]]:bg-muted/50 lg:first:*:pl-6 lg:last:*:pr-6"
                                                         :class="[reordering ? 'cursor-move' : '']"
                                                         :data-instance-row="entityList.instanceId(item)"
                                                     >
@@ -546,7 +546,7 @@
                                                                     :checked="selectedItems[entityList.instanceId(item)]"
                                                                     @update:checked="(checked) => selectedItems[entityList.instanceId(item)] = checked"
                                                                 />
-                                                                <label class="absolute inset-0 z-20" :for="`check-${entityKey}-${entityList.instanceId(item)}`">
+                                                                <label class="absolute inset-0 z-20" data-row-action :for="`check-${entityKey}-${entityList.instanceId(item)}`">
                                                                     <span class="sr-only">Select</span>
                                                                 </label>
                                                             </TableCell>
@@ -585,7 +585,7 @@
                                                             <template v-else>
                                                                 <TableCell class="max-w-[70cqw]">
                                                                     <template v-if="fieldIndex === 0 && entityList.instanceUrl(item) && !selecting && !reordering">
-                                                                        <Link class="absolute inset-0" data-row-link :href="entityList.instanceUrl(item)"></Link>
+                                                                        <Link class="absolute inset-0" data-row-action :href="entityList.instanceUrl(item)"></Link>
                                                                     </template>
                                                                     <template v-if="field.html && typeof item[field.key] === 'string'">
                                                                         <Content class="break-words [&_a]:relative [&_a]:z-10"

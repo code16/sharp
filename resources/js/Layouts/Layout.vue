@@ -28,9 +28,8 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { config } from "@/utils/config";
-import { GlobalFiltersData, LogoData } from "@/types";
+import { GlobalFiltersData } from "@/types";
 import GlobalFilters from "@/filters/components/GlobalFilters.vue";
-import ColorModeDropdown from "@/components/ColorModeDropdown.vue";
 import SharpLogoMini from '../../svg/logo-mini.svg';
 import ColorModeDropdownItems from "@/components/ColorModeDropdownItems.vue";
 

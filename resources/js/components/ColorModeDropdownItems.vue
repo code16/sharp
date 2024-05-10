@@ -1,29 +1,23 @@
 <script setup lang="ts">
     import { useColorMode } from '@vueuse/core'
-    import { Moon, Sun } from 'lucide-vue-next';
-    import { Button } from '@/components/ui/button'
     import {
-        DropdownMenu,
-        DropdownMenuContent,
-        DropdownMenuLabel,
         DropdownMenuRadioGroup,
         DropdownMenuRadioItem,
-        DropdownMenuTrigger
     } from '@/components/ui/dropdown-menu'
     import { __ } from "@/utils/i18n";
 
-    const mode = useColorMode();
+    const { store } = useColorMode();
 </script>
 
 <template>
-    <DropdownMenuRadioGroup v-model="mode">
+    <DropdownMenuRadioGroup v-model="store">
         <DropdownMenuRadioItem value="light">
             {{ __('sharp::action_bar.color-mode-dropdown.light') }}
         </DropdownMenuRadioItem>
         <DropdownMenuRadioItem value="dark">
             {{ __('sharp::action_bar.color-mode-dropdown.dark') }}
         </DropdownMenuRadioItem>
-        <DropdownMenuRadioItem value="system">
+        <DropdownMenuRadioItem value="auto">
             {{ __('sharp::action_bar.color-mode-dropdown.system') }}
         </DropdownMenuRadioItem>
     </DropdownMenuRadioGroup>

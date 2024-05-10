@@ -13,6 +13,13 @@
 {{--            ], '/vendor/sharp')--}}
 {{--        </x-sharp::vite>--}}
 
+        <script>
+            const preference = localStorage.getItem('vueuse-color-scheme') || 'auto';
+            if(preference === 'auto' && window.matchMedia('(prefers-color-scheme: dark)') || preference === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        </script>
+
         <x-sharp::root-styles />
 
         <x-sharp::extensions.injected-assets />

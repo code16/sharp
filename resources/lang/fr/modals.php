@@ -10,6 +10,7 @@ return [
     'confirm.delete.title' => 'Confirmez la suppression',
 
     'command.info.title' => 'Information',
+    'command.submit_button' => 'Envoyer',
     'state.422.title' => "Impossible de modifier l'état",
     'cropper.title' => 'Transformer l’image',
 

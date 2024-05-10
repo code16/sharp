@@ -61,10 +61,7 @@
                         </Button>
                     </DialogClose>
                     <Button :disabled="commands.state.currentCommandFormLoading" @click="form.submit()">
-                        <template v-if="commands.state.currentCommandFormLoading">
-                            <Loader2 class="w-4 h-4 mr-2 animate-spin" />
-                        </template>
-                        {{ commands.state.currentCommandForm.config.buttonLabel ?? __('sharp::modals.ok_button') }}
+                        {{ commands.state.currentCommandForm.config.buttonLabel ?? __('sharp::modals.command.submit_button') }}
                     </Button>
                 </DialogFooter>
             </template>
