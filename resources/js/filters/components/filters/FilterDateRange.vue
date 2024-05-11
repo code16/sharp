@@ -14,6 +14,7 @@
     import { Label } from "@/components/ui/label";
     import FilterSelectValue from "@/filters/components/filters/FilterSelectValue.vue";
     import FilterDateRangeValue from "@/filters/components/filters/FilterDateRangeValue.vue";
+    import { cn } from "@/utils/cn";
 
     const props = defineProps<{
         value: DateRangeFilterData['value'],
@@ -135,7 +136,7 @@
                     </Button>
                 </template>
             </PopoverTrigger>
-            <PopoverContent class="w-auto p-0">
+            <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--radix-popover-trigger-width]' : '')">
                 <div class="flex">
                     <template v-if="filter.presets?.length">
                         <div class="flex flex-col shrink-0 p-3">
@@ -154,6 +155,7 @@
                     </template>
                     <div class="flex-1">
                         <RangeCalendar
+                            class="hidden md:block"
                             v-model="localValue"
                             :number-of-months="2"
                             :locale="window.navigator.language"
@@ -162,7 +164,7 @@
                             :key="edited.count"
                         />
                         <div class="grid gap-4 p-3" key="footer">
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid md:grid-cols-2 gap-4">
                                 <Input class="block" type="date"
                                     v-model="inputs.start"
                                     @update:model-value="onStartChange"
@@ -172,13 +174,13 @@
                                     @update:model-value="onEndChange"
                                 />
                             </div>
-                            <div class="flex justify-end gap-3 pt-0">
+                            <div class="flex flex-col md:flex-row justify-end gap-3 pt-0">
                                 <template v-if="localValue.end">
                                     <Button variant="outline" @click="onResetClick">
                                         {{ __('sharp::filters.select.reset') }}
                                     </Button>
                                 </template>
-                                <Button @click="onSubmit">
+                                <Button class="max-md:h-8" @click="onSubmit">
                                     {{ __('sharp::filters.daterange.confirm') }}
                                 </Button>
                             </div>

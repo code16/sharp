@@ -48,6 +48,14 @@
     import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
     import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
     import { UseElementBounding, UseWindowSize } from '@vueuse/components';
+    import {
+        Dialog,
+        DialogClose, DialogFooter,
+        DialogHeader,
+        DialogScrollContent,
+        DialogTitle,
+        DialogTrigger
+    } from "@/components/ui/dialog";
 
     const props = withDefaults(defineProps<{
         entityKey: string,
@@ -393,16 +401,21 @@
                                     <template v-if="entityList.visibleFilters?.length">
                                         <div class="relative -my-1 flex pointer-events-auto" v-show="!reordering && !selecting && !collapsed">
                                             <div class="flex items-center lg:hidden">
-                                                <Popover modal>
-                                                    <PopoverTrigger as-child>
+                                                <Dialog>
+                                                    <DialogTrigger as-child>
                                                         <Button class="h-8 gap-1" variant="outline" size="sm">
                                                             <Filter class="h-3.5 w-3.5" />
                                                             <span>
                                                                 {{ __('sharp::filters.popover_button') }}
                                                             </span>
                                                         </Button>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent class="min-w-min lg:hidden" align="center" @open-auto-focus.prevent>
+                                                    </DialogTrigger>
+                                                    <DialogScrollContent @open-auto-focus.prevent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>
+                                                                {{ __('sharp::filters.popover_button') }}
+                                                            </DialogTitle>
+                                                        </DialogHeader>
                                                         <div class="flex flex-col flex-wrap gap-4">
                                                             <template v-if="showSearchField && entityList.config.searchable">
                                                                 <EntityListSearch
@@ -421,13 +434,22 @@
                                                                 />
                                                             </template>
                                                         </div>
-                                                        <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
-                                                            <Button class="w-full mt-8 h-8" variant="secondary" @click="onResetAll">
-                                                                {{ __('sharp::filters.reset_all') }}
-                                                            </Button>
-                                                        </template>
-                                                    </PopoverContent>
-                                                </Popover>
+                                                        <DialogFooter class="flex-row gap-2 mt-2">
+                                                            <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
+                                                                <DialogClose as-child>
+                                                                    <Button class="flex-1" variant="secondary" @click="onResetAll">
+                                                                        {{ __('sharp::filters.reset_all') }}
+                                                                    </Button>
+                                                                </DialogClose>
+                                                            </template>
+                                                            <DialogClose as-child>
+                                                                <Button class="flex-1">
+                                                                    {{ __('sharp::action_bar.form.submit_button.update')}}
+                                                                </Button>
+                                                            </DialogClose>
+                                                        </DialogFooter>
+                                                    </DialogScrollContent>
+                                                </Dialog>
                                                 <template v-if="filters.isValuated(filters.rootFilters)">
                                                     <Badge class="ml-2">{{ Object.values(filters.filterValues?.valuated ?? {}).filter(Boolean).length }}</Badge>
                                                 </template>
