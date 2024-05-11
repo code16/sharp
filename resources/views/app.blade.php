@@ -15,7 +15,7 @@
 
         <script>
             const preference = localStorage.getItem('vueuse-color-scheme') || 'auto';
-            if(preference === 'auto' && window.matchMedia('(prefers-color-scheme: dark)') || preference === 'dark') {
+            if(preference === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches || preference === 'dark') {
                 document.documentElement.classList.add('dark');
             }
         </script>
