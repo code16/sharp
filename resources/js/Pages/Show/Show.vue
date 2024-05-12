@@ -39,7 +39,7 @@
     import { Badge } from "@/components/ui/badge";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { DropdownMenuPortal } from "radix-vue";
-    import CardContainer from "@/components/ui/CardContainer.vue";
+    import RootCard from "@/components/ui/RootCard.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -286,64 +286,62 @@
                                     </DropdownMenu>
                                 </div>
                             </template>
-                            <CardContainer>
-                                <Card class="rounded-none border-x-0 @5xl:border-x @5xl:rounded-lg">
-                                    <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable || show.sectionCommands(section)?.flat().length">
-                                        <CardHeader class="px-4 lg:px-6">
-                                            <div class="flex gap-4">
-                                                <template v-if="section.title || (!i && show.getTitle(locale))">
-                                                    <CardTitle v-html="section.title || (!i && show.getTitle(locale))">
-                                                    </CardTitle>
-                                                </template>
-                                                <template v-if="section.collapsable">
-                                                    <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
-                                                        <ChevronsUpDown class="w-4 h-4" />
-                                                    </Button>
-                                                </template>
-                                            </div>
-                                        </CardHeader>
-                                    </template>
-                                    <template v-else>
-                                        <CardHeader class="pb-0" />
-                                    </template>
-                                    <CardContent class="px-4 lg:px-6" v-show="!collapsed">
-                                        <div class="flex flex-wrap gap-y-4 -mx-4">
-                                            <template v-for="column in section.columns">
-                                                <div class="min-w-0 w-full sm:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
-                                                    <FieldGrid class="gap-x-4 gap-y-4">
-                                                        <template v-for="row in column.fields">
-                                                            <FieldGridRow>
-                                                                <template v-for="fieldLayout in row">
-                                                                    <FieldGridColumn
-                                                                        :layout="fieldLayout"
-                                                                        v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
-                                                                    >
-                                                                        <template v-if="show.fields[fieldLayout.key]">
-                                                                            <SharpShowField
-                                                                                :field="show.fields[fieldLayout.key]"
-                                                                                :field-layout="fieldLayout"
-                                                                                :value="show.data[fieldLayout.key]"
-                                                                                :locale="locale"
-                                                                                :collapsable="section.collapsable"
-                                                                                :entity-key="entityKey"
-                                                                                :instance-id="instanceId"
-                                                                                @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                                            />
-                                                                        </template>
-                                                                        <template v-else>
-                                                                            <UnknownField :name="fieldLayout.key" />
-                                                                        </template>
-                                                                    </FieldGridColumn>
-                                                                </template>
-                                                            </FieldGridRow>
-                                                        </template>
-                                                    </FieldGrid>
-                                                </div>
+                            <RootCard>
+                                <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable || show.sectionCommands(section)?.flat().length">
+                                    <CardHeader>
+                                        <div class="flex gap-4">
+                                            <template v-if="section.title || (!i && show.getTitle(locale))">
+                                                <CardTitle v-html="section.title || (!i && show.getTitle(locale))">
+                                                </CardTitle>
+                                            </template>
+                                            <template v-if="section.collapsable">
+                                                <Button variant="ghost" size="sm" class="w-9 p-0 -my-1.5" @click="onToggle">
+                                                    <ChevronsUpDown class="w-4 h-4" />
+                                                </Button>
                                             </template>
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            </CardContainer>
+                                    </CardHeader>
+                                </template>
+                                <template v-else>
+                                    <CardHeader class="pb-0" />
+                                </template>
+                                <CardContent v-show="!collapsed">
+                                    <div class="flex flex-wrap gap-y-4 -mx-4">
+                                        <template v-for="column in section.columns">
+                                            <div class="min-w-0 w-full sm:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                                <FieldGrid class="gap-x-4 gap-y-4">
+                                                    <template v-for="row in column.fields">
+                                                        <FieldGridRow>
+                                                            <template v-for="fieldLayout in row">
+                                                                <FieldGridColumn
+                                                                    :layout="fieldLayout"
+                                                                    v-show="show.fieldShouldBeVisible(show.fields[fieldLayout.key], show.data[fieldLayout.key], locale)"
+                                                                >
+                                                                    <template v-if="show.fields[fieldLayout.key]">
+                                                                        <SharpShowField
+                                                                            :field="show.fields[fieldLayout.key]"
+                                                                            :field-layout="fieldLayout"
+                                                                            :value="show.data[fieldLayout.key]"
+                                                                            :locale="locale"
+                                                                            :collapsable="section.collapsable"
+                                                                            :entity-key="entityKey"
+                                                                            :instance-id="instanceId"
+                                                                            @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                                        />
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <UnknownField :name="fieldLayout.key" />
+                                                                    </template>
+                                                                </FieldGridColumn>
+                                                            </template>
+                                                        </FieldGridRow>
+                                                    </template>
+                                                </FieldGrid>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </CardContent>
+                            </RootCard>
                         </template>
                     </Section>
                 </template>

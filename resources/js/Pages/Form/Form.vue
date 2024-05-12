@@ -11,6 +11,8 @@
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
     import { vSticky } from "@/directives/sticky";
+    import RootCard from "@/components/ui/RootCard.vue";
+    import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
     const props = defineProps<{
         form: FormData,
@@ -58,57 +60,64 @@
             </template>
         </template>
 
-        <div class="container mx-auto">
-            <SharpForm
-                :form="form"
-                :entity-key="entityKey"
-                :instance-id="instanceId"
-                @submit="submit"
-            >
-                <template #prepend>
-                    <template v-if="Object.values(errors).length > 0">
-                        <div class="alert alert-danger SharpForm__alert" role="alert">
-                            <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
-                            <div>{{ __('sharp::form.validation_error.description') }}</div>
-                        </div>
-                    </template>
-                </template>
-
-                <template #append>
-                    <div class="sticky bottom-0 px-4 py-3 bg-white border-t z-10"
-                        :class="{ 'shadow': bottomBarStuck }"
-                        v-sticky
-                        @stuck-change="bottomBarStuck = $event.detail"
-                        style="transition: box-shadow .25s ease-in-out"
-                    >
-                        <div class="flex gap-4">
-                            <div class="flex-1">
+        <RootCard>
+            <CardHeader>
+                <CardTitle>
+                    {{ breadcrumb.items.at(-1).documentTitleLabel }}
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <SharpForm
+                    :form="form"
+                    :entity-key="entityKey"
+                    :instance-id="instanceId"
+                    @submit="submit"
+                >
+                    <template #prepend>
+                        <template v-if="Object.values(errors).length > 0">
+                            <div class="alert alert-danger SharpForm__alert" role="alert">
+                                <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
+                                <div>{{ __('sharp::form.validation_error.description') }}</div>
                             </div>
-                            <Button as="a" :href="breadcrumb.items.at(-2)?.url" variant="outline">
-                                <template v-if="form.canEdit">
-                                    {{ __('sharp::action_bar.form.cancel_button') }}
-                                </template>
-                                <template v-else>
-                                    {{ __('sharp::action_bar.form.back_button') }}
-                                </template>
-                            </Button>
-                            <template v-if="form.canEdit">
-                                <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
-                                    <template v-if="form.isUploading">
-                                        {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
-                                    </template>
-                                    <template v-else-if="instanceId || form.config.isSingle">
-                                        {{ __('sharp::action_bar.form.submit_button.update') }}
+                        </template>
+                    </template>
+
+                    <template #append>
+                        <div class="sticky bottom-0 px-4 py-3 bg-white border-t z-10"
+                            :class="{ 'shadow': bottomBarStuck }"
+                            v-sticky
+                            @stuck-change="bottomBarStuck = $event.detail"
+                            style="transition: box-shadow .25s ease-in-out"
+                        >
+                            <div class="flex gap-4">
+                                <div class="flex-1">
+                                </div>
+                                <Button as="a" :href="breadcrumb.items.at(-2)?.url" variant="outline">
+                                    <template v-if="form.canEdit">
+                                        {{ __('sharp::action_bar.form.cancel_button') }}
                                     </template>
                                     <template v-else>
-                                        {{ __('sharp::action_bar.form.submit_button.create') }}
+                                        {{ __('sharp::action_bar.form.back_button') }}
                                     </template>
                                 </Button>
-                            </template>
+                                <template v-if="form.canEdit">
+                                    <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
+                                        <template v-if="form.isUploading">
+                                            {{ __('sharp::action_bar.form.submit_button.pending.upload') }}
+                                        </template>
+                                        <template v-else-if="instanceId || form.config.isSingle">
+                                            {{ __('sharp::action_bar.form.submit_button.update') }}
+                                        </template>
+                                        <template v-else>
+                                            {{ __('sharp::action_bar.form.submit_button.create') }}
+                                        </template>
+                                    </Button>
+                                </template>
+                            </div>
                         </div>
-                    </div>
-                </template>
-            </SharpForm>
-        </div>
+                    </template>
+                </SharpForm>
+            </CardContent>
+        </RootCard>
     </Layout>
 </template>

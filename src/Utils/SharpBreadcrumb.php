@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils;
 
 use Code16\Sharp\Http\Context\CurrentSharpRequest;
+use Code16\Sharp\Http\Context\Util\BreadcrumbItem;
 use Code16\Sharp\Utils\Entities\SharpEntityManager;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -60,7 +61,7 @@ class SharpBreadcrumb
         };
     }
 
-    private function getBreadcrumbLabelFor(object $item, bool $isLeaf): string
+    private function getBreadcrumbLabelFor(BreadcrumbItem $item, bool $isLeaf): string
     {
         switch ($item->type) {
             case 's-list':
@@ -98,7 +99,7 @@ class SharpBreadcrumb
      * Return first part of document title when needed :
      * {documentTitleLabel}, {entityLabel} | {site}.
      */
-    private function getDocumentTitleLabelFor(object $item, bool $isLeaf): ?string
+    private function getDocumentTitleLabelFor(BreadcrumbItem $item, bool $isLeaf): ?string
     {
         if (! $isLeaf) {
             return null;
@@ -122,9 +123,13 @@ class SharpBreadcrumb
     /**
      * Only for Shows and Forms.
      */
-    private function getEntityLabelForInstance(object $item, bool $isLeaf): string
+    private function getEntityLabelForInstance(BreadcrumbItem $item, bool $isLeaf): string
     {
         $cacheKey = "sharp.breadcrumb.{$item->key}.{$item->type}.{$item->instance}";
+        
+        if ($item->isForm() && ($cached = Cache::get("sharp.breadcrumb.{$item->key}.s-show.{$item->instance}"))) {
+            return $cached;
+        }
 
         if ($isLeaf && $this->currentInstanceLabel) {
             Cache::put($cacheKey, $this->currentInstanceLabel, now()->addMinutes(30));
