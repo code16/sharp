@@ -81,6 +81,7 @@
             :entity-list="entityList"
             :filters="filters"
             :commands="commands"
+            :title="breadcrumb.items[0].label"
             @reset="onReset"
             @filter-change="onFilterChange"
             @update:query="onQueryChange"

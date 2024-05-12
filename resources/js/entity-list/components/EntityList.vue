@@ -62,8 +62,8 @@
         entityList: EntityList | null,
         filters: FilterManager,
         commands: CommandManager,
+        title: string,
         inline?: boolean,
-        title?: string,
         showCreateButton?: boolean,
         showReorderButton?: boolean,
         showSearchField?: boolean,
@@ -413,7 +413,7 @@
                                                     <DialogScrollContent @open-auto-focus.prevent>
                                                         <DialogHeader>
                                                             <DialogTitle>
-                                                                {{ __('sharp::filters.popover_button') }}
+                                                                {{ __('sharp::filters.popover_button') }} : {{ title }}
                                                             </DialogTitle>
                                                         </DialogHeader>
                                                         <div class="flex flex-col flex-wrap gap-4">
@@ -435,13 +435,11 @@
                                                             </template>
                                                         </div>
                                                         <DialogFooter class="flex-row gap-2 mt-2">
-                                                            <template v-if="filters.isValuated(entityList.visibleFilters) || entityList.query?.search">
-                                                                <DialogClose as-child>
-                                                                    <Button class="flex-1" variant="secondary" @click="onResetAll">
-                                                                        {{ __('sharp::filters.reset_all') }}
-                                                                    </Button>
-                                                                </DialogClose>
-                                                            </template>
+                                                            <DialogClose as-child>
+                                                                <Button class="flex-1" variant="secondary" :disabled="!filters.isValuated(entityList.visibleFilters) && !entityList.query?.search" @click="onResetAll">
+                                                                    {{ __('sharp::filters.reset_all') }}
+                                                                </Button>
+                                                            </DialogClose>
                                                             <DialogClose as-child>
                                                                 <Button class="flex-1">
                                                                     {{ __('sharp::action_bar.form.submit_button.update')}}

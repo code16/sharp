@@ -38,7 +38,9 @@
             } else {
                 emit('update:expanded', true);
             }
-        } else {
+        } else if(!pressed.value) {
+            // in the case of the focus is lost even if user has pressed,
+            // we don't hide the button (safari lose focus on button click)
             savedSearchBeforeBlur = !props.entityList.query?.search ? search.value : '';
             search.value = props.entityList.query?.search;
             emit('update:expanded', false);
@@ -84,12 +86,15 @@
                     />
                     <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     <template v-if="props.entityList.query?.search">
-                        <Button type="button" class="absolute right-0 top-0 h-8" size="sm" variant="ghost" @click="$emit('submit', null)">
+                        <Button type="button" class="absolute right-0 top-0 h-full" size="sm" variant="ghost" @click="$emit('submit', null)">
                             <X class="h-4 w-4 text-muted-foreground" />
                         </Button>
                     </template>
                 </div>
-                <Button type="submit" :class="cn('h-8 hidden', expanded ? 'inline-flex' : '')" size="sm">
+                <Button type="submit"
+                    :class="cn('h-8 hidden', expanded ? 'inline-flex' : '')"
+                    size="sm"
+                >
                     {{ __('sharp::action_bar.list.search.button') }}
                 </Button>
             </div>
