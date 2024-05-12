@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { provide, ref } from "vue";
     import { BreadcrumbData, CommandData, ShowData } from "@/types";
-    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import Section from "@/show/components/Section.vue";
     import { Button } from '@/components/ui/button';
@@ -40,6 +39,7 @@
     import { Badge } from "@/components/ui/badge";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { DropdownMenuPortal } from "radix-vue";
+    import CardContainer from "@/components/ui/CardContainer.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -107,165 +107,189 @@
         </template>
 
         <WithCommands :commands="commands">
-            <div class="container">
-                <StickyTop class="group top-3.5 z-20 flex flex-wrap justify-end gap-3 mb-4 transition-[padding] lg:pl-[--sticky-safe-left-offset] lg:pr-[--sticky-safe-right-offset]"
-                    :class="{ 'lg:sticky': !entityListNeedsTopBar }"
-                >
-                    <template v-if="show.locales?.length">
-                        <Select v-model="locale">
-                            <SelectTrigger class="mr-auto w-auto h-8 pr-2">
-                                <Languages class="w-4 h-4 mr-2" />
-                                <SelectValue class="mr-1" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <template v-for="locale in show.locales" :key="locale">
-                                    <SelectItem :value="locale">
-                                        <span class="uppercase text-xs">{{ locale }}</span>
-                                    </SelectItem>
-                                </template>
-                            </SelectContent>
-                        </Select>
-                    </template>
-<!--                    <div class="flex-1">-->
-<!--                    </div>-->
-                    <template v-if="show.config.state">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger as-child>
-                                <Button class="h-8" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
-                                    <Badge variant="outline">
-                                        <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
-                                        {{ show.instanceStateValue?.label }}
-                                    </Badge>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                    <DropdownMenuCheckboxItem
-                                        :checked="stateValue.value === show.instanceState"
-                                        @update:checked="(checked) => checked && onStateChange(stateValue.value)"
-                                    >
-                                        <StateIcon class="mr-1.5" :state-value="stateValue" />
-                                        <span class="truncate">{{ stateValue.label }}</span>
-                                    </DropdownMenuCheckboxItem>
-                                </template>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </template>
-                    <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger as-child>
-                                <Button class="h-8" variant="outline" size="sm">
-                                    {{ __('sharp::entity_list.commands.instance.label') }}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent side="bottom" align="center">
-                                <template v-if="show.config.state && show.config.state.authorization">
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>
-                                                {{ __('sharp::modals.entity_state.edit.title') }}
-                                            </DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent>
-                                                    <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
-                                                        <DropdownMenuCheckboxItem
-                                                            :checked="stateValue.value === show.instanceState"
-                                                            @update:checked="(checked) => checked && onStateChange(stateValue.value)"
-                                                        >
-                                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
-                                                            <span class="truncate">{{ stateValue.label }}</span>
-                                                        </DropdownMenuCheckboxItem>
-                                                    </template>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                </template>
+            <StickyTop class="group container top-3.5 z-20 mb-4 pointer-events-none"
+                :class="[
+                    // '',
+                    { 'lg:sticky ': !entityListNeedsTopBar }
+                ]"
+            >
+                <div class="flex flex-wrap flex-row-reverse gap-3 pointer-events-auto transition-[margin] lg:ml-[--sticky-safe-left-offset] ">
+                    <div class="flex-1 order-1">
+                        <template v-if="show.locales?.length">
+                            <Select v-model="locale">
+                                <SelectTrigger class="w-auto h-8 pr-2">
+                                    <Languages class="w-4 h-4 mr-2" />
+                                    <SelectValue class="mr-1" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <template v-for="locale in show.locales" :key="locale">
+                                        <SelectItem :value="locale">
+                                            <span class="uppercase text-xs">{{ locale }}</span>
+                                        </SelectItem>
+                                    </template>
+                                </SelectContent>
+                            </Select>
+                        </template>
+                    </div>
 
-                                <CommandDropdownItems
-                                    :commands="show.allowedInstanceCommands"
-                                    @select="onCommand"
-                                />
-                                <template v-if="show.authorizations.delete">
-                                    <template v-if="show.allowedInstanceCommands?.flat().length">
+                    <div class="flex gap-3 lg:mr-[--sticky-safe-right-offset]">
+                        <template v-if="show.config.state">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button class="h-8 -mx-2" variant="ghost" size="sm" :disabled="!show.config.state.authorization">
+                                        <Badge variant="outline">
+                                            <StateIcon class="-ml-0.5 mr-1.5" :state-value="show.instanceStateValue" />
+                                            {{ show.instanceStateValue?.label }}
+                                        </Badge>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                        <DropdownMenuCheckboxItem
+                                            :checked="stateValue.value === show.instanceState"
+                                            @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                        >
+                                            <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                            <span class="truncate">{{ stateValue.label }}</span>
+                                        </DropdownMenuCheckboxItem>
+                                    </template>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </template>
+                        <template v-if="show.allowedInstanceCommands?.flat().length || show.authorizations.delete || show.config.state">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button class="h-8" variant="outline" size="sm">
+                                        {{ __('sharp::entity_list.commands.instance.label') }}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="center">
+                                    <template v-if="show.config.state && show.config.state.authorization">
+                                        <DropdownMenuGroup>
+                                            <DropdownMenuSub>
+                                                <DropdownMenuSubTrigger>
+                                                    {{ __('sharp::modals.entity_state.edit.title') }}
+                                                </DropdownMenuSubTrigger>
+                                                <DropdownMenuPortal>
+                                                    <DropdownMenuSubContent>
+                                                        <template v-for="stateValue in show.config.state.values" :key="stateValue.value">
+                                                            <DropdownMenuCheckboxItem
+                                                                :checked="stateValue.value === show.instanceState"
+                                                                @update:checked="(checked) => checked && onStateChange(stateValue.value)"
+                                                            >
+                                                                <StateIcon class="mr-1.5" :state-value="stateValue" />
+                                                                <span class="truncate">{{ stateValue.label }}</span>
+                                                            </DropdownMenuCheckboxItem>
+                                                        </template>
+                                                    </DropdownMenuSubContent>
+                                                </DropdownMenuPortal>
+                                            </DropdownMenuSub>
+                                        </DropdownMenuGroup>
                                         <DropdownMenuSeparator />
                                     </template>
-                                    <DropdownMenuItem class="text-destructive" @click="onDelete">
-                                        {{ __('sharp::action_bar.form.delete_button') }}
-                                    </DropdownMenuItem>
-                                </template>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </template>
-                    <template v-if="show.authorizations.update">
-                        <Button class="h-8" size="sm" :disabled="isReordering" as-child>
-                            <template v-if="isReordering">
-                                {{ __('sharp::action_bar.show.edit_button') }}
-                            </template>
-                            <template v-else>
-                                <Link :href="show.formUrl">
-                                    {{ __('sharp::action_bar.show.edit_button') }}
-                                </Link>
-                            </template>
-                        </Button>
-                    </template>
-                </StickyTop>
 
-                <template v-if="show.pageAlert">
+                                    <CommandDropdownItems
+                                        :commands="show.allowedInstanceCommands"
+                                        @select="onCommand"
+                                    />
+                                    <template v-if="show.authorizations.delete">
+                                        <template v-if="show.allowedInstanceCommands?.flat().length">
+                                            <DropdownMenuSeparator />
+                                        </template>
+                                        <DropdownMenuItem class="text-destructive" @click="onDelete">
+                                            {{ __('sharp::action_bar.form.delete_button') }}
+                                        </DropdownMenuItem>
+                                    </template>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </template>
+                        <template v-if="show.authorizations.update">
+                            <Button class="h-8" size="sm" :disabled="isReordering" as-child>
+                                <template v-if="isReordering">
+                                    {{ __('sharp::action_bar.show.edit_button') }}
+                                </template>
+                                <template v-else>
+                                    <Link :href="show.formUrl">
+                                        {{ __('sharp::action_bar.show.edit_button') }}
+                                    </Link>
+                                </template>
+                            </Button>
+                        </template>
+                    </div>
+                </div>
+
+<!--                    <div class="flex-1">-->
+<!--                    </div>-->
+
+            </StickyTop>
+
+            <template v-if="show.pageAlert">
+                <div class="container">
                     <PageAlert
                         class="mb-3"
                         :page-alert="show.pageAlert"
                     />
-                </template>
+                </div>
+            </template>
 
-                <div class="grid gap-4 md:gap-8">
-                    <template v-if="show.getTitle(locale) && show.layout.sections[0] && show.sectionHasField(show.layout.sections[0], 'entityList')">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>
-                                    {{ show.getTitle(locale) }}
-                                </CardTitle>
-                            </CardHeader>
-                        </Card>
-                    </template>
-                    <template v-for="(section, i) in show.layout.sections">
-                        <Section
-                            class="min-w-0"
-                            v-show="show.sectionShouldBeVisible(section, locale)"
-                            v-slot="{ collapsed, onToggle }"
-                        >
-                            <template v-if="show.sectionHasField(section, 'entityList')">
-                                <template v-for="column in section.columns">
-                                    <template v-for="row in column.fields">
-                                        <template v-for="fieldLayout in row">
-                                            <template v-if="show.fields[fieldLayout.key]">
-                                                <EntityList
-                                                    :field="show.fields[fieldLayout.key]"
-                                                    :collapsable="section.collapsable"
-                                                    :value="null"
-                                                    @reordering="onEntityListReordering(fieldLayout.key, $event)"
-                                                    @needs-topbar="entityListNeedsTopBar = $event"
-                                                />
-                                            </template>
-                                            <template v-else>
-                                                <UnknownField :name="fieldLayout.key" />
-                                            </template>
+            <div class="grid gap-6 md:gap-8">
+                <template v-if="show.getTitle(locale) && show.layout.sections[0] && (show.sectionHasField(show.layout.sections[0], 'entityList') || show.layout.sections[0].title)">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>
+                                {{ show.getTitle(locale) }}
+                            </CardTitle>
+                        </CardHeader>
+                    </Card>
+                </template>
+                <template v-for="(section, i) in show.layout.sections">
+                    <Section
+                        class="min-w-0"
+                        v-show="show.sectionShouldBeVisible(section, locale)"
+                        v-slot="{ collapsed, onToggle }"
+                    >
+                        <template v-if="show.sectionHasField(section, 'entityList')">
+                            <template v-for="column in section.columns">
+                                <template v-for="row in column.fields">
+                                    <template v-for="fieldLayout in row">
+                                        <template v-if="show.fields[fieldLayout.key]">
+                                            <EntityList
+                                                :field="show.fields[fieldLayout.key]"
+                                                :collapsable="section.collapsable"
+                                                :value="null"
+                                                @reordering="onEntityListReordering(fieldLayout.key, $event)"
+                                                @needs-topbar="entityListNeedsTopBar = $event"
+                                            />
+                                        </template>
+                                        <template v-else>
+                                            <UnknownField :name="fieldLayout.key" />
                                         </template>
                                     </template>
                                 </template>
                             </template>
-                            <template v-else>
-                                <template v-if="show.sectionCommands(section)?.flat().length && !collapsed">
-                                    <CommandsDropdown :commands="show.sectionCommands(section)" @select="onCommand">
-                                        <template v-slot:text>
-                                            {{ __('sharp::entity_list.commands.instance.label') }}
-                                        </template>
-                                    </CommandsDropdown>
-                                </template>
-                                <Card>
-                                    <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable">
-                                        <CardHeader>
+                        </template>
+                        <template v-else>
+                            <template v-if="show.sectionCommands(section)?.flat().length">
+                                <div class="container flex justify-end mb-4" :class="{ 'invisible': collapsed }">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger as-child>
+                                            <Button class="h-8" size="sm" variant="outline">
+                                                {{ __('sharp::entity_list.commands.instance.label') }}
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <CommandDropdownItems
+                                                :commands="show.sectionCommands(section)"
+                                                @select="onCommand"
+                                            />
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                            </template>
+                            <CardContainer>
+                                <Card class="rounded-none border-x-0 @5xl:border-x @5xl:rounded-lg">
+                                    <template v-if="section.title || (!i && show.getTitle(locale)) || section.collapsable || show.sectionCommands(section)?.flat().length">
+                                        <CardHeader class="px-4 lg:px-6">
                                             <div class="flex gap-4">
                                                 <template v-if="section.title || (!i && show.getTitle(locale))">
                                                     <CardTitle v-html="section.title || (!i && show.getTitle(locale))">
@@ -282,10 +306,10 @@
                                     <template v-else>
                                         <CardHeader class="pb-0" />
                                     </template>
-                                    <CardContent v-show="!collapsed">
-                                        <div class="flex -mx-4">
+                                    <CardContent class="px-4 lg:px-6" v-show="!collapsed">
+                                        <div class="flex flex-wrap gap-y-4 -mx-4">
                                             <template v-for="column in section.columns">
-                                                <div class="w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
+                                                <div class="min-w-0 w-full sm:w-[calc(var(--size)/12*100%)] px-4" :style="{ '--size': `${column.size}` }">
                                                     <FieldGrid class="gap-x-4 gap-y-4">
                                                         <template v-for="row in column.fields">
                                                             <FieldGridRow>
@@ -319,10 +343,10 @@
                                         </div>
                                     </CardContent>
                                 </Card>
-                            </template>
-                        </Section>
-                    </template>
-                </div>
+                            </CardContainer>
+                        </template>
+                    </Section>
+                </template>
             </div>
         </WithCommands>
     </Layout>

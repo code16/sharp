@@ -52,6 +52,12 @@
     <Layout>
         <Title :breadcrumb="breadcrumb" />
 
+        <template #breadcrumb>
+            <template v-if="config('sharp.display_breadcrumb')">
+                <PageBreadcrumb :breadcrumb="breadcrumb" />
+            </template>
+        </template>
+
         <div class="container mx-auto">
             <SharpForm
                 :form="form"
@@ -59,12 +65,6 @@
                 :instance-id="instanceId"
                 @submit="submit"
             >
-                <template #title>
-                    <template v-if="config('sharp.display_breadcrumb')">
-                        <PageBreadcrumb :breadcrumb="breadcrumb" />
-                    </template>
-                </template>
-
                 <template #prepend>
                     <template v-if="Object.values(errors).length > 0">
                         <div class="alert alert-danger SharpForm__alert" role="alert">

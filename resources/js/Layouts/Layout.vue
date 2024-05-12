@@ -204,7 +204,7 @@ const showDesktopLeftNav = ref(true);
                 <div class="min-w-0 flex-1 lg:flex-initial">
                     <slot name="breadcrumb" />
                 </div>
-                <div class="flex-1 self-stretch ml-3 hidden lg:block" data-topbar-sticky-safe-area>
+                <div class="flex-1 self-stretch hidden lg:block" data-topbar-sticky-safe-area>
 <!--                    <form>-->
 <!--                        <div class="relative">-->
 <!--                            <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />-->

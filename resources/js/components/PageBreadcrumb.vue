@@ -27,8 +27,8 @@
 </script>
 <template>
     <Breadcrumb v-if="breadcrumb.items?.length">
-        <BreadcrumbList class="flex-nowrap">
-            <BreadcrumbItem>
+        <BreadcrumbList class="flex-nowrap max-w-screen overflow-hidden">
+            <BreadcrumbItem class="min-w-0">
                 <template v-if="breadcrumb.items.length === 1">
                     <BreadcrumbPage>
                         {{ breadcrumb.items[0].label }}
@@ -36,7 +36,7 @@
                 </template>
                 <template v-else>
                     <BreadcrumbLink as-child>
-                        <Link :href="breadcrumb.items[0].url">
+                        <Link class="truncate" :href="breadcrumb.items[0].url">
                             {{ breadcrumb.items[0].label }}
                         </Link>
                     </BreadcrumbLink>
@@ -62,31 +62,30 @@
                     </DropdownMenu>
                 </BreadcrumbItem>
             </template>
-            <template v-for="item in breadcrumb.items.slice(1).slice(-2)">
+            <template v-for="item in breadcrumb.items.slice(1).slice(-2, -1)">
                 <BreadcrumbSeparator />
                 <BreadcrumbItem class="min-w-0">
-                    <template v-if="item.url === breadcrumb.items.at(-1).url">
-                        <BreadcrumbPage class="truncate">
+                    <BreadcrumbLink as-child>
+                        <Link class="truncate min-w-0" :href="item.url">
                             {{ item.label }}
-                        </BreadcrumbPage>
-                    </template>
-                    <template v-else>
-                        <BreadcrumbLink as-child>
-                            <Link :href="item.url">
-                                {{ item.label }}
-                            </Link>
-                        </BreadcrumbLink>
-                    </template>
+                        </Link>
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
             </template>
-            <template v-if="appendItem">
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                    <BreadcrumbPage>
-                        {{ appendItem.label }}
-                    </BreadcrumbPage>
-                </BreadcrumbItem>
-            </template>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem >
+                <BreadcrumbPage class="truncate w-max min-w-0 max-w-full">
+                    {{ breadcrumb.items.at(-1).label }}
+                </BreadcrumbPage>
+            </BreadcrumbItem>
+<!--            <template v-if="appendItem">-->
+<!--                <BreadcrumbSeparator />-->
+<!--                <BreadcrumbItem>-->
+<!--                    <BreadcrumbPage>-->
+<!--                        {{ appendItem.label }}-->
+<!--                    </BreadcrumbPage>-->
+<!--                </BreadcrumbItem>-->
+<!--            </template>-->
         </BreadcrumbList>
     </Breadcrumb>
 </template>

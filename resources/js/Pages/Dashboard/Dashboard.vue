@@ -7,7 +7,6 @@
     import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
     import SharpFilter from '@/filters/components/Filter.vue';
-    import CommandsDropdown from "@/commands/components/CommandsDropdown.vue";
     import WithCommands from "@/commands/components/WithCommands.vue";
     import { __ } from "@/utils/i18n";
     import { route } from "@/utils/url";
@@ -100,7 +99,7 @@
                     <template v-if="dashboard.config.commands?.dashboard?.length">
                         <div class="ml-auto">
                             <DropdownMenu>
-                                <DropdownMenuTrigger>
+                                <DropdownMenuTrigger as-child>
                                     <Button class="h-8" variant="outline" size="sm">
                                         {{ __('sharp::dashboard.commands.dashboard.label') }}
                                     </Button>
@@ -143,7 +142,7 @@
                                     <template v-if="dashboard.config.commands?.[section.key]?.flat().length">
                                         <div class="ml-auto">
                                             <DropdownMenu>
-                                                <DropdownMenuTrigger>
+                                                <DropdownMenuTrigger as-child>
                                                     <Button class="h-8" variant="outline" size="sm">
                                                         {{ __('sharp::dashboard.commands.dashboard.label') }}
                                                     </Button>
