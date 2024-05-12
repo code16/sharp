@@ -27,7 +27,7 @@
 </script>
 <template>
     <Breadcrumb v-if="breadcrumb.items?.length">
-        <BreadcrumbList>
+        <BreadcrumbList class="flex-nowrap">
             <BreadcrumbItem>
                 <template v-if="breadcrumb.items.length === 1">
                     <BreadcrumbPage>
@@ -64,9 +64,9 @@
             </template>
             <template v-for="item in breadcrumb.items.slice(1).slice(-2)">
                 <BreadcrumbSeparator />
-                <BreadcrumbItem>
+                <BreadcrumbItem class="min-w-0">
                     <template v-if="item.url === breadcrumb.items.at(-1).url">
-                        <BreadcrumbPage>
+                        <BreadcrumbPage class="truncate">
                             {{ item.label }}
                         </BreadcrumbPage>
                     </template>

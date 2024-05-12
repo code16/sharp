@@ -108,12 +108,12 @@
 
         <WithCommands :commands="commands">
             <div class="container">
-                <StickyTop class="group top-3.5 z-20 flex gap-3 mb-4 transition-[padding] pl-[--sticky-safe-left-offset] pr-[--sticky-safe-right-offset]"
-                    :class="{ 'sticky': !entityListNeedsTopBar }"
+                <StickyTop class="group top-3.5 z-20 flex flex-wrap justify-end gap-3 mb-4 transition-[padding] lg:pl-[--sticky-safe-left-offset] lg:pr-[--sticky-safe-right-offset]"
+                    :class="{ 'lg:sticky': !entityListNeedsTopBar }"
                 >
                     <template v-if="show.locales?.length">
                         <Select v-model="locale">
-                            <SelectTrigger class="w-auto h-8 pr-2">
+                            <SelectTrigger class="mr-auto w-auto h-8 pr-2">
                                 <Languages class="w-4 h-4 mr-2" />
                                 <SelectValue class="mr-1" />
                             </SelectTrigger>
@@ -126,8 +126,8 @@
                             </SelectContent>
                         </Select>
                     </template>
-                    <div class="flex-1">
-                    </div>
+<!--                    <div class="flex-1">-->
+<!--                    </div>-->
                     <template v-if="show.config.state">
                         <DropdownMenu>
                             <DropdownMenuTrigger as-child>

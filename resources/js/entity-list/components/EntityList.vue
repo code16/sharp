@@ -257,18 +257,17 @@
 
         <template v-if="entityList">
             <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
-                <StickyTop class="group container flex gap-3 mb-4 pointer-events-none"
+                <StickyTop
                     :class="cn(
-                        'z-30',
+                        'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 flex gap-3 pointer-events-none z-30',
                         inline ? 'px-0' : 'px-4 lg:px-6',
-                        'lg:sticky lg:top-3.5 lg:last:*:transition-transform lg:last:*:-translate-x-[--sticky-safe-right-offset]',
+                        'lg:sticky lg:mt-0 lg:border-0 lg:top-3.5 lg:bg-transparent lg:last:*:transition-transform lg:last:*:-translate-x-[--sticky-safe-right-offset]',
                         {
                             '-top-8 z-0 px-0': inline && !needsTopBar,
                             'relative z-[60]': reordering,
                             // 'opacity-0': inline && stuck && !needsTopBar,
                         })"
                     v-model:stuck="stuck"
-                    v-slot="{ largerThanTopbar }"
                 >
                     <div class="ml-auto self-start pointer-events-auto flex flex-wrap gap-2 lg:flex-nowrap">
                         <template v-if="showReorderButton && entityList.canReorder && !selecting">
