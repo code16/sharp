@@ -39,8 +39,7 @@
                         {{ commands.state.currentCommandForm.config.title  }}
                     </DialogTitle>
                     <template v-if="commands.state.currentCommandForm.config.description">
-                        <DialogDescription>
-                            {{ commands.state.currentCommandForm.config.description }}
+                        <DialogDescription as="div" v-html="commands.state.currentCommandForm.config.description">
                         </DialogDescription>
                     </template>
                 </DialogHeader>

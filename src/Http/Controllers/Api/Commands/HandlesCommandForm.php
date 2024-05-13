@@ -22,8 +22,8 @@ trait HandlesCommandForm
             'data' =>  $formData ? $commandHandler->applyFormatters($formData) : null,
             'pageAlert' => $commandHandler->pageAlert($formData),
             'config' => [
-                'title' => $commandHandler->getFormModalTitle($formData) ?: $commandHandler->label(),
-                'description' => $commandHandler->getFormModalDescription($formData) ?: $commandHandler->getDescription(),
+                'title' => $commandHandler->getFormModalTitle($formData) ?? $commandHandler->label(),
+                'description' => $commandHandler->getFormModalDescription($formData) ?? $commandHandler->getDescription(),
                 'buttonLabel' => $commandHandler->getFormModalButtonLabel(),
             ],
             ...$locales ? [

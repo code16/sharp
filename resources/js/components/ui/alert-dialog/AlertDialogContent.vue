@@ -25,25 +25,7 @@ const delegatedProps = computed(() => {
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
     const content = ref<HTMLElement>();
-    const contentRect = reactive(useElementBounding(content));
-    const { overlayPath, highlightElementRect } = useOverlayPath(props.highlightElement);
-    const safeTransformY = computed(() => {
-        if(overlayPath.value) {
-            const margin = 40;
-            const d1 = highlightElementRect.top - margin - (window.innerHeight / 2 + contentRect.height / 2);
-            const d2 = highlightElementRect.bottom + margin - (window.innerHeight / 2 - contentRect.height / 2);
-            if(d1 < 0 && d2 > 0 || d1 > 0 && d2 < 0) {
-                return Math.min(
-                    Math.max(
-                        (window.innerHeight / 2) * -1,
-                        (Math.abs(d1) < Math.abs(d2) ? d1 : d2)
-                    ),
-                    window.innerHeight / 2 + contentRect.height
-                );
-            }
-        }
-        return 0;
-    });
+    const { overlayPath, safeTransformY } = useOverlayPath(props.highlightElement, content);
 </script>
 
 <template>
@@ -64,7 +46,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
             'translate' : overlayPath ? `0 ${safeTransformY}px` : '',
         }"
     >
-        <div class="absolute inset-0 pointer-events-none" aria-hidden="true" ref="content"></div>
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" ref="content"></div>
       <slot />
     </AlertDialogContent>
   </AlertDialogPortal>
