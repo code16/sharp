@@ -10,7 +10,7 @@ export type FieldsMeta = { [key: string]: FieldMeta };
 export type FormFieldProps<Data extends FormFieldData = FormFieldData> = {
     field: Data,
     fieldLayout?: LayoutFieldData,
-    fieldErrorKey: string,
+    fieldErrorKey?: string,
     hasError?: boolean,
     value?: Data['value'],
     locale?: string | null,
