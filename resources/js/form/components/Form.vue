@@ -105,10 +105,10 @@
         <slot name="prepend" />
 
         <FormLayout :form="form" v-slot="{ tab }: { tab: FormLayoutTabData }">
-            <div class="grid gap-4 md:grid-cols-12">
+            <div class="grid gap-6 md:grid-cols-12">
                 <template v-for="column in tab.columns">
                     <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
-                        <FieldGrid class="gap-y-4 gap-x-4">
+                        <FieldGrid class="gap-6">
                             <template v-for="row in column.fields">
                                 <FieldGridRow>
                                     <template v-for="fieldLayout in row">
@@ -119,7 +119,7 @@
                                                         {{ fieldLayout.legend }}
                                                     </legend>
                                                     <div class="bg-white p-4">
-                                                        <FieldGrid class="gap-y-4 gap-x-4">
+                                                        <FieldGrid class="gap-6">
                                                             <template v-for="row in fieldLayout.fields">
                                                                 <FieldGridRow>
                                                                     <template v-for="fieldLayout in row">

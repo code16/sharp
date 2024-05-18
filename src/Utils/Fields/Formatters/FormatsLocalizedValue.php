@@ -3,6 +3,7 @@
 namespace Code16\Sharp\Utils\Fields\Formatters;
 
 use Closure;
+use Code16\Sharp\Form\Fields\SharpFormField;
 use Code16\Sharp\Utils\Fields\IsSharpFieldWithLocalization;
 
 trait FormatsLocalizedValue
@@ -17,14 +18,13 @@ trait FormatsLocalizedValue
     }
     
     /**
-     * @param  IsSharpFieldWithLocalization  $field
      * @param  ?Closure<string>  $transformContent
      */
-    protected function maybeLocalized(IsSharpFieldWithLocalization $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
+    protected function maybeLocalized(SharpFormField $field, array|string|null $value, ?Closure $transformContent = null): array|string|null
     {
         $transformContent ??= fn ($value) => $value;
         
-        if ($field->isLocalized()) {
+        if ($field instanceof IsSharpFieldWithLocalization && $field->isLocalized()) {
             return collect([
                 ...collect($this->dataLocalizations ?? [])->mapWithKeys(fn ($locale) => [$locale => null]),
                 ...is_array($value) ? $value : [app()->getLocale() => $value],

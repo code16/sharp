@@ -26,19 +26,17 @@
 </script>
 
 <template>
-    <div class="mt-1" :class="{
-        // 'borderrounded p-4': root
-    }">
-        <div class="flex gap-2" :class="field.inline ? 'flex-row' : 'flex-col'">
+    <div class="mt-1.5">
+        <div class="flex items-start gap-y-1.5 gap-x-6" :class="field.inline ? 'flex-row' : 'flex-col'">
             <template v-for="(option, index) in field.options" :key="option.id">
-                <div class="flex items-center space-x-2">
+                <div class="group/control flex items-center space-x-3">
                     <Checkbox
                         :id="`${fieldErrorKey}.${index}`"
                         :checked="value.some(v => isSelected(option, v))"
                         :disabled="field.readOnly"
                         @update:checked="onChange($event, option)"
                     />
-                    <Label class="font-normal" :for="`${fieldErrorKey}.${index}`">
+                    <Label class="font-normal py-1" :for="`${fieldErrorKey}.${index}`">
                         {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
                     </Label>
                 </div>

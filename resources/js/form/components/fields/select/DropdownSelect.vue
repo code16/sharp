@@ -47,7 +47,7 @@
     <DropdownMenu v-model:open="open" :modal="false">
         <DropdownMenuTrigger as-child>
             <Button
-                class="w-full text-left justify-start font-normal h-auto min-h-10 py-1.5 gap-1 hover:bg-background"
+                class="w-full text-left justify-start font-normal h-auto min-h-10 py-2 gap-1 hover:bg-background"
                 variant="outline"
                 size="sm"
                 :disabled="field.readOnly"
@@ -56,7 +56,7 @@
                     <template v-if="field.multiple">
                         <div class="flex flex-wrap gap-2">
                             <template v-for="option in field.options.filter((o) => (value as Array<string | number>)?.some(val => isSelected(o, val)))" :key="option.id">
-                                <Badge variant="secondary" class="block text-sm rounded-sm px-2 font-normal max-w-52 truncate transition-shadow">
+                                <Badge variant="secondary" class="block text-sm rounded-sm px-2 py-0.5 font-normal max-w-52 truncate transition-shadow">
                                     {{ field.localized && typeof option.label === 'object' ? option.label?.[locale] : option.label }}
                                 </Badge>
                             </template>
