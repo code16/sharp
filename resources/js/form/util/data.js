@@ -23,10 +23,3 @@ export function setDefaultValue(field, callback, { dependantAttributes } = {}) {
         callback();
     }
 }
-
-export function fieldEmptyValue(fieldType) {
-    if(fieldType === 'editor') {
-        return {};
-    }
-    return null;
-}

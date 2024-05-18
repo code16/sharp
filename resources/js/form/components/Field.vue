@@ -22,6 +22,7 @@
     import { useParentForm } from "../useParentForm";
 
     import { FormFieldProps } from "@/form/types";
+    import { Label } from "@/components/ui/label";
 
     const props = defineProps<FormFieldProps & {
         row: LayoutFieldData[],
@@ -37,11 +38,11 @@
         'check': Check,
         // 'date': DateInput,
         'editor': Editor,
-        'geolocation': Geolocation,
+        // 'geolocation': Geolocation,
         // 'html': Html,
         // 'list': List,
         // 'number': NumberInput,
-        // 'select': Select,
+        'select': Select,
         // 'tags': TagInput,
         'text': Text,
         'textarea': Textarea,
@@ -80,58 +81,53 @@
 </script>
 
 <template>
-    <div class="SharpFieldContainer SharpForm__form-item"
-        :class="[
-            `SharpForm__form-item--type-${field.type}`
-        ]"
+    <div class="grid gap-y-2"
         :style="field.extraStyle"
     >
-        <div v-sticky="field.type === 'list'">
-            <div class="flex">
-                <div class="flex-1">
-                    <template v-if="field.label">
-                        <label :for="id" class="SharpForm__label form-label mb-1">
-                            {{ field.label }}
-                        </label>
-                    </template>
-                    <template v-else-if="row.length > 1">
-                        <div class="form-label mb-1">&nbsp;</div>
-                    </template>
-                </div>
-                <template v-if="'localized' in field && field.localized">
-                    <div class="SharpFieldLocaleSelect mb-1">
-                        <nav class="flex">
-                            <template v-for="btnLocale in form.locales">
-                                <button
-                                    class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"
-                                    :class="[
-                                        btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :
-                                        form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :
-                                        'text-gray-500 hover:text-gray-700',
-                                        form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''
-                                    ]"
-                                    :aria-current="btnLocale === locale ? 'true' : null"
-                                    @click="$emit('locale-change', btnLocale)"
-                                >
-                                    {{ btnLocale }}
-                                    <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
-                                        <svg class="ml-1 h-1.5 w-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
-                                            <circle cx="3" cy="3" r="3" />
-                                        </svg>
-                                    </template>
-                                </button>
-                            </template>
-                        </nav>
-                    </div>
+        <div class="flex">
+            <div class="flex mr-auto">
+                <template v-if="field.label">
+                    <Label :for="id">
+                        {{ field.label }}
+                    </Label>
+                </template>
+                <template v-else-if="row.length > 1">
+                    <Label as="div">&nbsp;</Label>
                 </template>
             </div>
+            <template v-if="'localized' in field && field.localized">
+                <div class="-mt-2.5">
+                    <nav class="flex">
+                        <template v-for="btnLocale in form.locales">
+                            <button
+                                class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"
+                                :class="[
+                                    btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :
+                                    form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :
+                                    'text-gray-500 hover:text-gray-700',
+                                    form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''
+                                ]"
+                                :aria-current="btnLocale === locale ? 'true' : null"
+                                @click="$emit('locale-change', btnLocale)"
+                            >
+                                {{ btnLocale }}
+                                <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
+                                    <svg class="ml-1 h-1.5 w-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
+                                        <circle cx="3" cy="3" r="3" />
+                                    </svg>
+                                </template>
+                            </button>
+                        </template>
+                    </nav>
+                </div>
+            </template>
         </div>
 
         <div class="SharpForm__field-content">
             <template v-if="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]">
                 <component
                     :is="isCustomField(field.type) ? resolveCustomField(field.type) : components[field.type]"
-                    v-bind="$props"
+                    v-bind="(({ row, ...exposedProps }) => exposedProps)($props)"
                     :id="id"
                     :has-error="form.fieldHasError(field, fieldErrorKey, locale)"
                     @error="onError"

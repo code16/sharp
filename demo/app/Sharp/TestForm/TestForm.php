@@ -210,6 +210,7 @@ class TestForm extends SharpSingleForm
                 SharpFormSelectField::make('select_dropdown', $this->options(true))
                     ->setLocalized()
                     ->setLabel('Select dropdown')
+                    ->setMultiple()
                     ->setDisplayAsDropdown(),
             )
             ->addField(
@@ -386,6 +387,19 @@ class TestForm extends SharpSingleForm
             '1' => ['en' => 'Option one', 'fr' => 'Option un'],
             '2' => ['en' => 'Option two', 'fr' => 'Option deux'],
             '3' => ['en' => 'Option three', 'fr' => 'Option trois'],
+            '4' => ['en' => 'Option four', 'fr' => 'Option quatre'],
+            '5' => ['en' => 'Option five', 'fr' => 'Option cinq'],
+            '6' => ['en' => 'Option six', 'fr' => 'Option six'],
+            '7' => ['en' => 'Option seven', 'fr' => 'Option sept'],
+            '8' => ['en' => 'Option eight', 'fr' => 'Option huit'],
+            '9' => ['en' => 'Option nine', 'fr' => 'Option neuf'],
+            '10' => ['en' => 'Option ten', 'fr' => 'Option dix'],
+            '11' => ['en' => 'Option eleven', 'fr' => 'Option onze'],
+            '12' => ['en' => 'Option twelve', 'fr' => 'Option douze'],
+            '13' => ['en' => 'Option thirteen', 'fr' => 'Option treize'],
+            '14' => ['en' => 'Option fourteen', 'fr' => 'Option quatorze'],
+            '15' => ['en' => 'Option fifteen', 'fr' => 'Option quinze'],
+            '16' => ['en' => 'Option sixteen', 'fr' => 'Option seize'],
         ];
     }
 }

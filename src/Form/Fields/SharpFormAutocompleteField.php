@@ -63,25 +63,18 @@ class SharpFormAutocompleteField extends SharpFormField implements IsSharpFieldW
     public function setDynamicRemoteEndpoint(string $dynamicRemoteEndpoint, array $defaultValues = []): self
     {
         $this->remoteEndpoint = $dynamicRemoteEndpoint;
-
-        if ($defaultValues) {
-            $defaultEndpoint = $dynamicRemoteEndpoint;
-            collect($defaultValues)
-                ->each(function ($value, $name) use (&$defaultEndpoint) {
-                    $defaultEndpoint = str_replace('{{'.$name.'}}', $value, $defaultEndpoint);
-                });
-        }
-
+        
         $this->dynamicAttributes = [
-            array_merge(
-                [
-                    'name' => 'remoteEndpoint',
-                    'type' => 'template',
-                ],
-                ($defaultEndpoint ?? false)
-                    ? ['default' => $defaultEndpoint]
-                    : [],
-            ),
+            [
+                'name' => 'remoteEndpoint',
+                'type' => 'template',
+                'default' => $defaultValues
+                    ? collect($defaultValues)
+                        ->reduce(function ($endpoint, $value, $name) {
+                            return str_replace('{{'.$name.'}}', $value, $endpoint);
+                        }, $dynamicRemoteEndpoint)
+                    : null,
+            ],
         ];
 
         return $this;

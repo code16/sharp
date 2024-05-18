@@ -468,11 +468,14 @@ export type FormNumberFieldData = {
   extraStyle: string | null;
 };
 export type FormSelectFieldData = {
-  value: string | number | Array<string | number> | null;
+  value?: string | number | Array<string | number> | null;
   key: string;
   type: "select";
   options:
-    | Array<{ id: string | number; label: string }>
+    | Array<{
+        id: string | number;
+        label: string | { [locale: string]: string };
+      }>
     | FormDynamicOptionsData;
   multiple: boolean;
   showSelectAll: boolean;

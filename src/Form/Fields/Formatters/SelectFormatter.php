@@ -3,10 +3,14 @@
 namespace Code16\Sharp\Form\Fields\Formatters;
 
 use Code16\Sharp\Form\Fields\SharpFormField;
+use Code16\Sharp\Form\Fields\SharpFormSelectField;
 use Code16\Sharp\Utils\Transformers\ArrayConverter;
 
 class SelectFormatter extends SharpFieldFormatter
 {
+    /**
+     * @param SharpFormSelectField $field
+     */
     public function toFront(SharpFormField $field, $value)
     {
         if ($field->multiple()) {

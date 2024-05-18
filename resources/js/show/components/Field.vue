@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import type { Component } from "vue";
-    import EntityList from "./fields/entity-list/EntityList.vue";
     import Text from "./fields/text/Text.vue";
     import Picture from "./fields/Picture.vue";
     import File from "./fields/File.vue";

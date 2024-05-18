@@ -92,7 +92,7 @@
             </PopoverTrigger>
             <PopoverContent :class="cn('p-0 w-auto min-w-[200px]', !inline ? 'w-[--radix-popover-trigger-width]' : '')" align="start">
                 <Command
-                    :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term)) "
+                    :filter-function="(list: SelectFilterData['values'], term) => list.filter(i => i.label.toLowerCase()?.includes(term))"
                 >
                     <template v-if="filter.searchable">
                         <CommandInput :placeholder="__('sharp::form.multiselect.placeholder')" />

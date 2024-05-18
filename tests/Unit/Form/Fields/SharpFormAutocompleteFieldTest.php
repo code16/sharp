@@ -223,6 +223,7 @@ it('allows to define linked remote endpoint with dynamic attributes', function (
             [
                 'name' => 'remoteEndpoint',
                 'type' => 'template',
+                'default' => null,
             ],
         ]);
 });
