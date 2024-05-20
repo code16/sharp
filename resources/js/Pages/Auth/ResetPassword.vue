@@ -3,11 +3,10 @@
     import Title from "@/components/Title.vue";
     import { __ } from "@/utils/i18n";
     import { useForm } from "@inertiajs/vue3";
-    import TextInput from "@/form/components/fields/text/TextInput.vue";
     import { Button } from '@/components/ui/button';
     import { route } from "@/utils/url";
     import AuthCard from "@/Layouts/Auth/AuthCard.vue";
-    import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
+    import { FormItem, FormMessage } from "@/components/ui/form";
     import { Label } from "@/components/ui/label";
     import { Input } from "@/components/ui/input";
     import { session } from "@/utils/session";

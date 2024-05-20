@@ -3,19 +3,14 @@
     import { ref } from "vue";
     import { normalizeText } from "../../util/text";
     import { validateTextField } from "../../util/validation";
-    import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
-    import TextInput from "./text/TextInput.vue";
-    import FieldErrorIcon from "../FieldErrorIcon.vue";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { Input } from "@/components/ui/input";
 
-    const props = defineProps<{
-        field: FormTextFieldData,
-        value?: FormTextFieldData['value'],
-        locale?: string | null,
-        hasError: boolean,
-    }>();
+    const props = defineProps<FormFieldProps<FormTextFieldData>>();
+    const emit = defineEmits<FormFieldEmits<FormTextFieldData>>();
 
     const input = ref();
-    const emit = defineEmits(['input']);
 
     function onInput(e) {
         const value = normalizeText(e.target.value);
@@ -30,28 +25,21 @@
     }
 
     defineExpose({
-        focus: () => input.value.focus(),
+        focus: () => input.value.$el.focus(),
     });
 </script>
 
-<script lang="ts">
-    export default { inheritAttrs: false }
-</script>
-
 <template>
-    <div class="relative rounded-md shadow-sm">
-        <TextInput
-            :class="{ 'pr-10': hasError }"
-            :value="field.localized && typeof value === 'object' ? value?.[locale] : value"
+    <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
+        <Input
+            :id="id"
+            :model-value="field.localized && typeof value === 'object' ? value?.[locale] : (value as string)"
             :placeholder="field.placeholder"
             :disabled="field.readOnly"
             :has-error="hasError"
-            v-bind="$attrs"
-            @input="onInput"
+            :aria-describedby="ariaDescribedBy"
+            @update:model-value="onInput"
             ref="input"
         />
-        <template v-if="hasError">
-            <FieldErrorIcon />
-        </template>
-    </div>
+    </FormFieldLayout>
 </template>

@@ -22,14 +22,13 @@ type WithDynamicAttributesApplied<Data extends FormFieldData> =
 
 export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = Data['value']> = {
     field: WithDynamicAttributesApplied<Data>,
-    row: LayoutFieldData[],
     fieldLayout?: LayoutFieldData,
     fieldErrorKey?: string,
     hasError?: boolean,
     value?: Value,
     locale?: string | null,
     root?: boolean,
-    id?: string,
+    row?: LayoutFieldData[],
 }
 
 export type FormFieldEmitInputOptions = { error?: string, force?: boolean };

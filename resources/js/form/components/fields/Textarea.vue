@@ -2,14 +2,12 @@
     import { FormTextareaFieldData } from "@/types";
     import { normalizeText } from "../../util/text";
     import { validateTextField } from "../../util/validation";
+    import { Textarea } from "@/components/ui/textarea";
+    import { FormFieldEmits, FormFieldProps } from "@/form/types";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
 
-    const props = defineProps<{
-        field: FormTextareaFieldData,
-        value: FormTextareaFieldData['value'],
-        locale?: string | null,
-    }>();
-
-    const emit = defineEmits(['input']);
+    const props = defineProps<FormFieldProps<FormTextareaFieldData>>();
+    const emit = defineEmits<FormFieldEmits<FormTextareaFieldData>>();
 
     function onInput(e) {
         const value = normalizeText(e.target.value);
@@ -25,12 +23,15 @@
 </script>
 
 <template>
-    <textarea
-        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
-        :value="field.localized && typeof value === 'object' ? value[locale] : value"
-        :rows="field.rows"
-        :placeholder="field.placeholder"
-        :disabled="field.readOnly"
-        @input="onInput"
-    ></textarea>
+    <FormFieldLayout v-bind="props" v-slot="{ id, ariaDescribedBy }">
+          <Textarea
+              :id="id"
+              :model-value="field.localized && typeof value === 'object' ? value?.[locale] : (value as string)"
+              :rows="field.rows"
+              :placeholder="field.placeholder"
+              :disabled="field.readOnly"
+              :aria-describedby="ariaDescribedBy"
+              @update:model-value="onInput"
+          />
+    </FormFieldLayout>
 </template>

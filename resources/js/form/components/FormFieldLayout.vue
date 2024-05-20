@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="Data extends FormFieldData">
     import { computed } from "vue";
     import { FormFieldProps } from "@/form/types";
     import { useParentForm } from "@/form/useParentForm";
@@ -6,8 +6,9 @@
     import { __ } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
     import { cn } from "@/utils/cn";
+    import { FormFieldData } from "@/types";
 
-    const props = defineProps<FormFieldProps & {
+    const props = defineProps<FormFieldProps<Data> & {
         class?: string,
         fieldGroup?: boolean,
         forceLabelSpace?: boolean,
@@ -29,7 +30,7 @@
 </script>
 
 <template>
-    <div :class="cn('grid gap-y-2', props.class)"
+    <div :class="cn('grid gap-3', props.class)"
         :role="fieldGroup ? 'group' : null"
         :aria-labelledby="fieldGroup ? `${id}-label` : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
