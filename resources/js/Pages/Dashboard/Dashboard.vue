@@ -3,7 +3,6 @@
     import { useFilters } from "@/filters/useFilters";
     import { parseQuery, stringifyQuery } from "@/utils/querystring";
     import { router } from "@inertiajs/vue3";
-    import { SectionTitle } from '@/components/ui';
     import Widget from "@/dashboard/components/Widget.vue";
     import Layout from "@/Layouts/Layout.vue";
     import SharpFilter from '@/filters/components/Filter.vue';
@@ -86,6 +85,7 @@
                                     :filter="filter"
                                     :value="filters.currentValues[filter.key]"
                                     :valuated="filters.isValuated([filter])"
+                                    inline
                                     @input="onFilterChange(filter, $event)"
                                 />
                             </template>
@@ -127,6 +127,7 @@
                                                     :filter="filter"
                                                     :value="filters.currentValues[filter.key]"
                                                     :valuated="filters.isValuated([filter])"
+                                                    inline
                                                     @input="onFilterChange(filter, $event)"
                                                 />
                                             </template>

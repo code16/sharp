@@ -137,7 +137,7 @@
                 </template>
             </PopoverTrigger>
             <PopoverContent :class="cn('w-auto p-0', !inline ? 'w-[--radix-popover-trigger-width]' : '')">
-                <h4 class="font-medium leading-none mb-4">
+                <h4 v-if="!inline" class="font-medium leading-none mb-4">
                     {{ filter.label }}
                 </h4>
                 <div class="flex">
