@@ -1,16 +1,17 @@
 <script setup lang="ts" >
     import { TemplateRenderer } from '@/components';
     import { FormHtmlFieldData } from "@/types";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { FormFieldProps } from "@/form/types";
 
-    defineProps<{
-        field: FormHtmlFieldData,
-        value: FormHtmlFieldData['value'],
-    }>();
+    defineProps<FormFieldProps<FormHtmlFieldData>>();
 </script>
 
 <template>
-    <TemplateRenderer
-        :template="field.template"
-        :template-data="value"
-    />
+    <FormFieldLayout v-bind="$props">
+        <TemplateRenderer
+            :template="field.template"
+            :template-data="value"
+        />
+    </FormFieldLayout>
 </template>

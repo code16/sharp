@@ -107,7 +107,7 @@ abstract class Command
         return $this;
     }
 
-    final protected function configureFormModalButtonLabel(string $formModalButtonLabel): self
+    final protected function configureFormModalButtonLabel(string|Closure $formModalButtonLabel): self
     {
         $this->formModalButtonLabel = $formModalButtonLabel;
 

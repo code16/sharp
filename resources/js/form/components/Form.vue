@@ -36,6 +36,7 @@
 
         return postFn(form.data)
             .catch(error => {
+                console.log('handled', error);
                 if (error.response?.status === 422) {
                     props.form.errors = error.response.data.errors ?? {};
                 }

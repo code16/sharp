@@ -22,6 +22,7 @@ type WithDynamicAttributesApplied<Data extends FormFieldData> =
 
 export type FormFieldProps<Data extends FormFieldData = FormFieldData, Value = Data['value']> = {
     field: WithDynamicAttributesApplied<Data>,
+    row: LayoutFieldData[],
     fieldLayout?: LayoutFieldData,
     fieldErrorKey?: string,
     hasError?: boolean,

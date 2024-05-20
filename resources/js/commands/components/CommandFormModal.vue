@@ -21,9 +21,11 @@
 
     const form = ref<InstanceType<typeof SharpForm>>();
     const modalOpen = ref(false);
+    const currentFormUpdatedKey = ref(0);
 
     watchEffect(() => {
         modalOpen.value = !!props.commands.state.currentCommandForm;
+        currentFormUpdatedKey.value++;
     });
 </script>
 
@@ -32,7 +34,7 @@
         v-model:open="modalOpen"
         @update:open="!$event && $nextTick(() => commands.finish())"
     >
-        <DialogScrollContent class="sm:max-w-[558px]" @pointer-down-outside.prevent>
+        <DialogScrollContent class="sm:max-w-[558px] gap-6" @pointer-down-outside.prevent>
             <template v-if="commands.state.currentCommandForm">
                 <DialogHeader>
                     <DialogTitle>
@@ -50,6 +52,7 @@
                         :instance-id="commands.state.currentCommandEndpoints.instanceId"
                         :form="commands.state.currentCommandForm"
                         @loading="(loading) => commands.state.currentCommandFormLoading = loading"
+                        :key="`form-${currentFormUpdatedKey}`"
                         ref="form"
                     />
                 </div>
