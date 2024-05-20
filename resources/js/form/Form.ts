@@ -213,7 +213,7 @@ export class Form implements FormData, CommandFormData {
         return !value;
     }
 
-    tabHasError(tab: FormLayoutTabData): boolean {
+    tabErrorsCount(tab: FormLayoutTabData): number {
         const tabFields = tab.columns
             .map(col =>
                 col.fields.flat(2).map(fieldLayout =>
@@ -224,6 +224,6 @@ export class Form implements FormData, CommandFormData {
             .map(fieldLayout => this.fields[fieldLayout.key])
             .filter(Boolean);
 
-        return tabFields.some(field => this.fieldHasError(field, field.key, null, true));
+        return tabFields.filter(field => this.fieldHasError(field, field.key, null, true)).length;
     }
 }
