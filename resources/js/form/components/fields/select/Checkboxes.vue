@@ -27,7 +27,11 @@
 </script>
 
 <template>
-    <FormFieldLayout v-bind="props" field-group v-slot="{ id }">
+    <FormFieldLayout
+        v-bind="props"
+        field-group
+        v-slot="{ id }"
+    >
         <div>
             <div class="flex items-start gap-y-1.5 gap-x-6" :class="field.inline ? 'flex-row' : 'flex-col'">
                 <template v-for="(option, index) in field.options" :key="option.id">

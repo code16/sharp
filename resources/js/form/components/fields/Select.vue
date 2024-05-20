@@ -34,11 +34,6 @@
 </script>
 
 <template>
-<!--    <component-->
-<!--        :is="field.display === 'dropdown' ? DropdownSelect : field.multiple ? Checkboxes : Radios"-->
-<!--        v-bind="props"-->
-<!--        @input="onInput"-->
-<!--    />-->
     <template v-if="field.display === 'list'">
         <template v-if="field.multiple">
             <Checkboxes
@@ -48,7 +43,10 @@
             />
         </template>
         <template v-else>
-            <Radios v-bind="{ ...$props, ...$attrs }" @input="onInput" />
+            <Radios
+                v-bind="{ ...$props, ...$attrs }"
+                :value="value as string|number|null"
+                @input="onInput" />
         </template>
     </template>
     <template v-else>
