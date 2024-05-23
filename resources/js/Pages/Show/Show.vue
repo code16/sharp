@@ -40,6 +40,7 @@
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { DropdownMenuPortal } from "radix-vue";
     import RootCard from "@/components/ui/RootCard.vue";
+    import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
 
     const props = defineProps<{
         show: ShowData,
@@ -117,10 +118,7 @@
                     <div class="flex-1 order-1">
                         <template v-if="show.locales?.length">
                             <Select v-model="locale">
-                                <SelectTrigger class="w-auto h-8 pr-2">
-                                    <Languages class="w-4 h-4 mr-2" />
-                                    <SelectValue class="mr-1" />
-                                </SelectTrigger>
+                                <LocaleSelectTrigger />
                                 <SelectContent>
                                     <template v-for="locale in show.locales" :key="locale">
                                         <SelectItem :value="locale">

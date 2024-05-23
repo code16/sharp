@@ -1,8 +1,6 @@
 <script setup lang="ts">
-    import FormLayout from "./FormLayout.vue";
     import { FormData, FormFieldData, FormLayoutTabData, LayoutFieldData } from "@/types";
     import PageAlert from "@/components/PageAlert.vue";
-
     import { provide, ref } from "vue";
     import { Form } from "../Form";
     import { getDependantFieldsResetData } from "../util";
@@ -13,17 +11,28 @@
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
     import { Languages } from "lucide-vue-next";
     import { ApiResponse } from "@/api/types";
+    import { __ } from "@/utils/i18n";
+    import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+    import RootCard from "@/components/ui/RootCard.vue";
+    import LocaleSelectTrigger from "@/components/LocaleSelectTrigger.vue";
+    import { useFormTabs } from "@/form/components/useFormTabs";
+    import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    import { slugify } from "@/utils";
+    import { Badge } from "@/components/ui/badge";
 
     const props = defineProps<{
         form: Form
         entityKey: string,
         instanceId?: string | number,
+        inline?: boolean,
         postFn?: (data: FormData['data']) => Promise<ApiResponse<any>>,
+        showErrorAlert?: boolean,
     }>();
 
     provide('form', props.form);
 
     const loading = ref(false);
+    const { selectedTabSlug } = useFormTabs(props);
 
     function submit() {
         const { form, postFn } = props;
@@ -74,103 +83,152 @@
 </script>
 
 <template>
-    <div class="SharpForm">
-        <div class="flex">
-            <div class="flex-1">
-                <slot name="title" />
-            </div>
-            <template v-if="form.locales?.length">
-                <Select class="w-auto" :model-value="form.currentLocale" @update:model-value="onLocaleChange">
-                    <SelectTrigger>
-                        <Languages class="w-4 h-4" />
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <template v-for="locale in form.locales" :key="locale">
-                            <SelectItem :value="locale">
-                                <span class="text-uppercase">{{ locale }}</span>
-                            </SelectItem>
-                        </template>
-                    </SelectContent>
-                </Select>
-            </template>
-        </div>
-
-        <template v-if="form.pageAlert">
-            <PageAlert
-                class="mb-3"
-                :page-alert="form.pageAlert"
-            />
-        </template>
-
-        <slot name="prepend" />
-
-        <FormLayout :form="form" v-slot="{ tab }: { tab: FormLayoutTabData }">
-            <div class="grid gap-6 md:grid-cols-12">
-                <template v-for="column in tab.columns">
-                    <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
-                        <FieldGrid class="gap-6">
-                            <template v-for="row in column.fields">
-                                <FieldGridRow>
-                                    <template v-for="fieldLayout in row">
-                                        <template v-if="'legend' in fieldLayout">
-                                            <FieldGridColumn>
-                                                <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
-                                                    <legend>
-                                                        {{ fieldLayout.legend }}
-                                                    </legend>
-                                                    <div class="bg-white p-4">
-                                                        <FieldGrid class="gap-6">
-                                                            <template v-for="row in fieldLayout.fields">
-                                                                <FieldGridRow>
-                                                                    <template v-for="fieldLayout in row">
-                                                                        <FieldGridColumn :layout="fieldLayout">
-                                                                            <SharpFormField
-                                                                                :field="form.getField(fieldLayout.key)"
-                                                                                :field-layout="fieldLayout"
-                                                                                :field-error-key="fieldLayout.key"
-                                                                                :value="form.data[fieldLayout.key]"
-                                                                                :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
-                                                                                :row="row"
-                                                                                root
-                                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                                            />
-                                                                        </FieldGridColumn>
-                                                                    </template>
-                                                                </FieldGridRow>
-                                                            </template>
-                                                        </FieldGrid>
-                                                    </div>
-                                                </fieldset>
-                                            </FieldGridColumn>
-                                        </template>
-                                        <template v-else>
-                                            <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
-                                                <SharpFormField
-                                                    :field="form.getField(fieldLayout.key)"
-                                                    :field-layout="fieldLayout"
-                                                    :field-error-key="fieldLayout.key"
-                                                    :value="form.data[fieldLayout.key]"
-                                                    :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
-                                                    :row="row as LayoutFieldData[]"
-                                                    root
-                                                    @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
-                                                    @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
-                                                    @uploading="onFieldUploading(fieldLayout.key, $event)"
-                                                />
-                                            </FieldGridColumn>
-                                        </template>
-                                    </template>
-                                </FieldGridRow>
+    <Tabs v-model="selectedTabSlug">
+        <template v-if="form.locales?.length">
+            <div class="container mb-4">
+                <template v-if="form.locales?.length">
+                    <Select :model-value="form.currentLocale" @update:model-value="onLocaleChange">
+                        <LocaleSelectTrigger />
+                        <SelectContent>
+                            <template v-for="locale in form.locales" :key="locale">
+                                <SelectItem :value="locale">
+                                    <span class="uppercase text-xs">{{ locale }}</span>
+                                </SelectItem>
                             </template>
-                        </FieldGrid>
-                    </div>
+                        </SelectContent>
+                    </Select>
                 </template>
             </div>
-        </FormLayout>
+        </template>
+        <component :is="inline ? 'div' : RootCard">
+            <template v-if="!inline">
+                <CardHeader>
+                    <div class="flex items-start">
+                        <CardTitle class="flex-1">
+                            <slot name="title" />
+                        </CardTitle>
+                        <template v-if="form.layout.tabbed && form.layout.tabs.length > 1">
+                            <div>
+                                <div class="sm:hidden">
+                                    <Select v-model="selectedTabSlug">
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <template v-for="tab in form.layout.tabs">
+                                            <SelectItem :value="slugify(tab.title)">
+                                                {{ tab.title }}
+                                            </SelectItem>
+                                        </template>
+                                    </Select>
+                                </div>
+                                <div class="hidden sm:block">
+                                    <TabsList>
+                                        <template v-for="tab in form.layout.tabs">
+                                            <TabsTrigger :value="slugify(tab.title)">
+                                                {{ tab.title }}
+                                                <template v-if="form.tabErrorsCount(tab)">
+                                                    <Badge variant="destructive">
+                                                        {{ form.tabErrorsCount(tab) }}
+                                                    </Badge>
+                                                </template>
+                                            </TabsTrigger>
+                                        </template>
+                                    </TabsList>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="flex-1"></div>
+                    </div>
+                </CardHeader>
+            </template>
+            <CardContent :class="inline ? 'p-0' : ''">
+                <template v-if="form.pageAlert">
+                    <PageAlert
+                        class="mb-3"
+                        :page-alert="form.pageAlert"
+                    />
+                </template>
 
-        <slot name="append" />
-    </div>
+                <template v-if="showErrorAlert">
+                    <div class="alert alert-danger SharpForm__alert" role="alert">
+                        <div class="fw-bold">{{ __('sharp::form.validation_error.title') }}</div>
+                        <div>{{ __('sharp::form.validation_error.description') }}</div>
+                    </div>
+                </template>
+
+                <template v-for="tab in form.layout.tabs">
+                    <TabsContent class="mt-0" :value="slugify(tab.title)">
+                        <div class="grid gap-6 md:grid-cols-12">
+                            <template v-for="column in tab.columns">
+                                <div class="col-[span_var(--size)]" :style="{ '--size': `${column.size}` }">
+                                    <FieldGrid class="gap-6">
+                                        <template v-for="row in column.fields">
+                                            <FieldGridRow>
+                                                <template v-for="fieldLayout in row">
+                                                    <template v-if="'legend' in fieldLayout">
+                                                        <FieldGridColumn>
+                                                            <fieldset v-show="form.fieldsetShouldBeVisible(fieldLayout)">
+                                                                <legend>
+                                                                    {{ fieldLayout.legend }}
+                                                                </legend>
+                                                                <div class="bg-white p-4">
+                                                                    <FieldGrid class="gap-6">
+                                                                        <template v-for="row in fieldLayout.fields">
+                                                                            <FieldGridRow>
+                                                                                <template v-for="fieldLayout in row">
+                                                                                    <FieldGridColumn :layout="fieldLayout">
+                                                                                        <SharpFormField
+                                                                                            :field="form.getField(fieldLayout.key)"
+                                                                                            :field-layout="fieldLayout"
+                                                                                            :field-error-key="fieldLayout.key"
+                                                                                            :value="form.data[fieldLayout.key]"
+                                                                                            :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                                                            :row="row"
+                                                                                            root
+                                                                                            @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                                            @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                                            @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                                                        />
+                                                                                    </FieldGridColumn>
+                                                                                </template>
+                                                                            </FieldGridRow>
+                                                                        </template>
+                                                                    </FieldGrid>
+                                                                </div>
+                                                            </fieldset>
+                                                        </FieldGridColumn>
+                                                    </template>
+                                                    <template v-else>
+                                                        <FieldGridColumn :layout="fieldLayout" v-show="form.fieldShouldBeVisible(fieldLayout)">
+                                                            <SharpFormField
+                                                                :field="form.getField(fieldLayout.key)"
+                                                                :field-layout="fieldLayout"
+                                                                :field-error-key="fieldLayout.key"
+                                                                :value="form.data[fieldLayout.key]"
+                                                                :locale="form.getMeta(fieldLayout.key)?.locale ?? form.currentLocale"
+                                                                :row="row as LayoutFieldData[]"
+                                                                root
+                                                                @input="(value, options) => onFieldInput(fieldLayout.key, value, options)"
+                                                                @locale-change="onFieldLocaleChange(fieldLayout.key, $event)"
+                                                                @uploading="onFieldUploading(fieldLayout.key, $event)"
+                                                            />
+                                                        </FieldGridColumn>
+                                                    </template>
+                                                </template>
+                                            </FieldGridRow>
+                                        </template>
+                                    </FieldGrid>
+                                </div>
+                            </template>
+                        </div>
+                    </TabsContent>
+                </template>
+            </CardContent>
+            <template v-if="$slots.footer">
+                <CardFooter class="justify-end">
+                    <slot name="footer" />
+                </CardFooter>
+            </template>
+        </component>
+    </Tabs>
 </template>

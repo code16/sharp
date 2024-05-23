@@ -30,7 +30,7 @@
         'editor': Editor,
         // 'geolocation': Geolocation,
         'html': Html,
-        // 'list': List,
+        'list': List,
         // 'number': NumberInput,
         'select': Select,
         // 'tags': TagInput,

@@ -13,7 +13,7 @@ export type FieldMeta = {
 };
 export type FieldsMeta = { [key: string]: FieldMeta };
 
-type WithDynamicAttributesApplied<Data extends FormFieldData> =
+export type WithDynamicAttributesApplied<Data extends FormFieldData> =
     Data extends FormSelectFieldData
         ? Omit<FormSelectFieldData, 'options'> & { options: Exclude<FormSelectFieldData['options'], FormDynamicOptionsData> }
         : Data extends FormAutocompleteFieldData

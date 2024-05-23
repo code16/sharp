@@ -45,6 +45,7 @@
                 :instance-id="parentForm.instanceId"
                 :form="form"
                 :post-fn="post"
+                inline
                 style="transition-duration: 300ms"
                 ref="formComponent"
             />

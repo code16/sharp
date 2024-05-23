@@ -5,6 +5,7 @@ import { createApp, DefineComponent, h, nextTick } from 'vue';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { progressDelay } from "@/api/progress";
+
 import Form from "@/form/components/Form.vue";
 import FormField from "@/form/components/Field.vue";
 import ShowField from "@/show/components/Field.vue";

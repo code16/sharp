@@ -6,7 +6,7 @@ import {
     FilterData,
 } from "@/types";
 import { getAppendableParentUri, route } from "@/utils/url";
-import { Instance, InstanceId } from "./types";
+import { EntityListInstance, InstanceId } from "./types";
 
 export class EntityList implements EntityListData {
     authorizations: EntityListData['authorizations'];
@@ -83,7 +83,7 @@ export class EntityList implements EntityListData {
             && this.data.length > 0;
     }
 
-    withRefreshedItems(refreshedItems: Instance[]): EntityList {
+    withRefreshedItems(refreshedItems: EntityListInstance[]): EntityList {
         this.data = this.data.map(item => {
             return refreshedItems.find(refreshedItem => this.instanceId(refreshedItem) === this.instanceId(item))
                 ?? item;
@@ -102,11 +102,11 @@ export class EntityList implements EntityListData {
         );
     }
 
-    instanceId(instance: Instance): InstanceId {
+    instanceId(instance: EntityListInstance): InstanceId {
         return instance[this.config.instanceIdAttribute];
     }
 
-    instanceUrl(instance: Instance): string | null {
+    instanceUrl(instance: EntityListInstance): string | null {
         const entityKey = this.entityKey;
         const instanceId = this.instanceId(instance);
 
@@ -139,31 +139,31 @@ export class EntityList implements EntityListData {
         });
     }
 
-    instanceState(instance: Instance): string | number | null {
+    instanceState(instance: EntityListInstance): string | number | null {
         return this.config.state
             ? instance[this.config.state.attribute]
             : null;
     }
 
-    instanceStateValue(instance: Instance): EntityStateValueData | undefined {
+    instanceStateValue(instance: EntityListInstance): EntityStateValueData | undefined {
         return this.config.state?.values.find(item => item.value === this.instanceState(instance));
     }
 
-    instanceCanUpdateState(instance: Instance): boolean {
+    instanceCanUpdateState(instance: EntityListInstance): boolean {
         if(Array.isArray(this.config.state.authorization)) {
             return this.config.state.authorization.includes(this.instanceId(instance));
         }
         return !!this.config.state.authorization;
     }
 
-    instanceCanDelete(instance: Instance): boolean {
+    instanceCanDelete(instance: EntityListInstance): boolean {
         if(Array.isArray(this.authorizations.delete)) {
             return this.authorizations.delete?.includes(this.instanceId(instance));
         }
         return !!this.authorizations.delete;
     }
 
-    instanceCommands(instance: Instance): Array<Array<CommandData>> | undefined {
+    instanceCommands(instance: EntityListInstance): Array<Array<CommandData>> | undefined {
         return this.visibleCommands?.instance
             ?.map(group => group.filter(command => {
                 if(Array.isArray(command.authorization)) {
@@ -173,7 +173,7 @@ export class EntityList implements EntityListData {
             }));
     }
 
-    instanceHasActions(instance: Instance, showEntityState: boolean): boolean {
+    instanceHasActions(instance: EntityListInstance, showEntityState: boolean): boolean {
         return (
             this.instanceCommands(instance)?.flat().length > 0 ||
             this.config.state && showEntityState ||

@@ -4,7 +4,6 @@
     import { EntityList } from "../EntityList";
     import {
         CommandData,
-        EntityListQueryParamsData,
         EntityStateValueData,
         FilterData
     } from "@/types";
@@ -13,7 +12,7 @@
     import { Ref, watchEffect } from "vue";
     import { computed, ref, watch } from "vue";
     import { showAlert, showDeleteConfirm } from "@/utils/dialogs";
-    import { Instance, InstanceId } from "../types";
+    import { EntityListInstance, InstanceId } from "../types";
     import { getAppendableParentUri, route } from "@/utils/url";
     import { Button } from '@/components/ui/button';
     import { StateIcon } from '@/components/ui';
@@ -23,7 +22,7 @@
     import SharpFilter from "@/filters/components/Filter.vue";
     import PageAlert from "@/components/PageAlert.vue";
     import { useDraggable } from "vue-draggable-plus";
-    import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+    import { CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
     import { MoreHorizontal, PlusCircle, Filter, ChevronsUpDown, ArrowUp, ArrowDown, GripVertical } from "lucide-vue-next";
     import { Checkbox } from "@/components/ui/checkbox";
@@ -31,17 +30,16 @@
         DropdownMenu, DropdownMenuCheckboxItem,
         DropdownMenuContent,
         DropdownMenuGroup,
-        DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem,
+        DropdownMenuItem,
         DropdownMenuSeparator,
         DropdownMenuSub, DropdownMenuSubContent,
         DropdownMenuSubTrigger,
         DropdownMenuTrigger
     } from "@/components/ui/dropdown-menu";
-    import { DialogOverlay, DropdownMenuPortal } from "radix-vue";
+    import { DropdownMenuPortal } from "radix-vue";
     import CommandDropdownItems from "@/commands/components/CommandDropdownItems.vue";
     import { Badge } from "@/components/ui/badge";
     import { Link } from "@inertiajs/vue3";
-    import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
     import EntityListSearch from "@/entity-list/components/EntityListSearch.vue";
     import StickyTop from "@/components/StickyTop.vue";
     import { cn } from "@/utils/cn";
@@ -188,12 +186,12 @@
         }
     }
 
-    const reorderedItems: Ref<Instance[] | null> = ref(null);
+    const reorderedItems: Ref<EntityListInstance[] | null> = ref(null);
     const reordering = computed(() => !!reorderedItems.value);
     const sortableTableBody = ref<InstanceType<typeof TableBody>>();
-    const sortable = useDraggable<Instance>(
+    const sortable = useDraggable<EntityListInstance>(
         sortableTableBody as any,
-        computed<Instance[]>({
+        computed<EntityListInstance[]>({
             get: () => reorderedItems.value ?? [],
             set: (newItems) => reorderedItems.value = newItems
         }),
@@ -261,8 +259,7 @@
                 <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
                     <StickyTop
                         :class="cn(
-                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 flex gap-3 pointer-events-none z-30',
-                            inline ? 'px-0' : 'px-4 lg:px-6',
+                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none z-30',
                             'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3.5 lg:bg-transparent lg:last:*:transition-transform lg:last:*:-translate-x-[--sticky-safe-right-offset]',
                             {
                                 '-top-8 z-0 px-0': inline && !needsTopBar,
@@ -371,7 +368,7 @@
 
             <RootCard  :class="reordering ? 'relative z-[11]' : ''">
                 <CardHeader>
-                    <div class="flex sm:flex-wrap gap-y-6 gap-x-2 items-baseline">
+                    <div class="flex sm:flex-wrap gap-y-6 gap-x-2">
                         <div class="flex items-baseline">
                             <slot name="card-header" />
                             <template v-if="entityList">
@@ -627,7 +624,7 @@
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger as-child>
                                                                 <Button class="[@media(hover:hover)]:pointer-events-auto relative" variant="ghost" size="icon">
-                                                                    <MoreHorizontal class="h-4" />
+                                                                    <MoreHorizontal class="w-4 h-4" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent side="bottom" align="center">

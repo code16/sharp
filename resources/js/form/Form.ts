@@ -11,7 +11,7 @@ import {
 import { computeCondition } from "./util/conditional-display";
 import { reactive } from "vue";
 import { transformFields } from "./util";
-import { FieldMeta, FieldsMeta } from "./types";
+import { FieldMeta, FieldsMeta, WithDynamicAttributesApplied } from "./types";
 import get from 'lodash/get';
 import set from 'lodash/set';
 
@@ -146,7 +146,7 @@ export class Form implements FormData, CommandFormData {
         delete this.errors[key];
     }
 
-    getField(key: string, fields = this.fields, data = this.data, readOnly = false): FormFieldData {
+    getField(key: string, fields = this.fields, data = this.data, readOnly = false): WithDynamicAttributesApplied<FormFieldData> {
         const fieldsWithDynamicAttributesApplied = transformFields(fields, data);
 
         return {

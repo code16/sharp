@@ -6,6 +6,7 @@
     import { __ } from "@/utils/i18n";
     import { Label } from "@/components/ui/label";
     import { cn } from "@/utils/cn";
+    import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
     const props = defineProps<FormFieldProps & {
         class?: string,
@@ -30,7 +31,7 @@
 </script>
 
 <template>
-    <div :class="cn('grid gap-3', props.class)"
+    <div :class="cn('grid gap-2', props.class)"
         :role="fieldGroup ? 'group' : null"
         :aria-labelledby="fieldGroup ? `${id}-label` : null"
         :aria-describedby="fieldGroup ? ariaDescribedBy : null"
@@ -43,6 +44,7 @@
                     <Label
                         :id="`${id}-label`"
                         :as="fieldGroup ? 'div' : 'label'"
+                        class="leading-5"
                         :class="{ 'text-destructive': form.fieldHasError(field, fieldErrorKey) }"
                         :for="id"
                         @click="$emit('label-click')"
@@ -55,28 +57,36 @@
                 </template>
             </div>
             <template v-if="'localized' in field && field.localized">
-                <nav class="flex items-center h-3.5">
+                <ToggleGroup class="h-3.5" :model-value="locale" @update:model-value="$emit('locale-change', $event)" type="single">
                     <template v-for="btnLocale in form.locales">
-                        <button
-                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"
-                            :class="[
-                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :
-                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :
-                                'text-gray-500 hover:text-gray-700',
-                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''
-                            ]"
-                            :aria-current="btnLocale === locale ? 'true' : null"
-                            @click="$emit('locale-change', btnLocale)"
-                        >
+                        <ToggleGroupItem class="uppercase text-xs h-6" size="sm" :value="btnLocale">
                             {{ btnLocale }}
                             <template v-if="form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale)">
-                                <svg class="ml-1 h-1.5 w-1.5 fill-red-500" viewBox="0 0 6 6" aria-hidden="true">
+                                <svg class="ml-1 h-1.5 w-1.5 fill-destructive" viewBox="0 0 6 6" aria-hidden="true">
                                     <circle cx="3" cy="3" r="3" />
                                 </svg>
                             </template>
-                        </button>
+                        </ToggleGroupItem>
                     </template>
-                </nav>
+                </ToggleGroup>
+<!--                <nav class="flex items-center h-3.5">-->
+<!--                    <template v-for="btnLocale in form.locales">-->
+<!--                        <button-->
+<!--                            class="flex items-center rounded-md px-2 py-1 text-xs font-medium uppercase"-->
+<!--                            :class="[-->
+<!--                                btnLocale === locale ? 'bg-indigo-100 text-indigo-700' :-->
+<!--                                form.fieldLocalesContainingError(fieldErrorKey).includes(btnLocale) ? 'text-red-700' :-->
+<!--                                'text-gray-500 hover:text-gray-700',-->
+<!--                                form.fieldIsEmpty(field, value, btnLocale) ? 'italic' : ''-->
+<!--                            ]"-->
+<!--                            :aria-current="btnLocale === locale ? 'true' : null"-->
+<!--                            @click="$emit('locale-change', btnLocale)"-->
+<!--                        >-->
+<!--                            {{ btnLocale }}-->
+
+<!--                        </button>-->
+<!--                    </template>-->
+<!--                </nav>-->
             </template>
         </div>
 

@@ -1,30 +1,27 @@
 <script setup lang="ts">
     import { __ } from "@/utils/i18n";
     import { useParentForm } from "@/form/useParentForm";
-    import { FormFieldData, FormListFieldData, FormUploadFieldValueData, LayoutFieldData } from "@/types";
+    import { FormFieldData, FormListFieldData, FormUploadFieldValueData } from "@/types";
     import { getDependantFieldsResetData } from "@/form/util";
     import { computed, ref } from "vue";
     // import Draggable from 'vuedraggable';
     import { Button } from '@/components/ui/button';
     import ListBulkUpload from "./ListBulkUpload.vue";
     import { showAlert } from "@/utils/dialogs";
-    import { FieldsMeta } from "@/form/types";
-    import type { SortableOptions } from "sortablejs";
+    import { FieldsMeta, FormFieldEmits, FormFieldProps } from "@/form/types";
     import { Serializable } from "@/form/Serializable";
     import FieldGridRow from "@/components/ui/FieldGridRow.vue";
     import FieldGridColumn from "@/components/ui/FieldGridColumn.vue";
     import { Toggle } from "@/components/ui/toggle";
+    import FormFieldLayout from "@/form/components/FormFieldLayout.vue";
+    import { useDraggable } from "vue-draggable-plus";
+    import { EntityListInstance } from "@/entity-list/types";
+    import FieldGrid from "@/components/ui/FieldGrid.vue";
 
-    const props = defineProps<{
-        field: FormListFieldData,
-        fieldLayout: LayoutFieldData,
-        value: FormListFieldData['value'],
-        locale?: string | null,
-    }>();
+    const props = defineProps<FormFieldProps<FormListFieldData>>();
+    const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
 
-    const emit = defineEmits(['input']);
     const form = useParentForm();
-    const dragging = ref(false);
     const dragActive = ref(false);
     const canAddItem = computed(() => {
         const { field, value } = props;
@@ -44,6 +41,17 @@
         }
         return field.bulkUploadLimit;
     });
+    const sortableContainer = ref<HTMLElement>();
+    const sortable = useDraggable<EntityListInstance>(
+        sortableContainer as any,
+        computed<EntityListInstance[]>({
+            get: () => props.value ?? [],
+            set: (newItems) => emit('input', newItems)
+        }),
+        {
+            immediate: false,
+        }
+    );
 
     let itemKeyIndex = 0;
     const itemKey = Symbol('itemKey');
@@ -76,10 +84,6 @@
             props.field.key,
             (form.meta[props.field.key] as FieldsMeta[])?.toSpliced(itemIndex, 1)
         );
-    }
-
-    function onReorder(value: FormListFieldData['value']) {
-        emit('input', value);
     }
 
     function onBulkUploadInputChange(e: Event & { target: HTMLInputElement }) {
@@ -132,120 +136,105 @@
 </script>
 
 <template>
-    <div class="SharpList"
-        :class="{
-            'SharpList--dragging': dragging,
-        }"
-        @dragstart="dragging = true"
-        @dragend="dragging = false"
-    >
-        <div class="SharpList__sticky-wrapper text-end">
-            <template v-if="field.sortable && value?.length > 1">
-                <Toggle
-                    class="SharpList__sort-button"
-                    size="sm"
-                    :pressed="dragActive"
-                    :disabled="isUploading"
-                    style="pointer-events: auto"
-                    @click="dragActive = !dragActive"
-                >
-                    {{ __('sharp::form.list.sort_button.inactive') }}
-                    <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
-                        <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
-                    </svg>
-                </Toggle>
-            </template>
-        </div>
+    <FormFieldLayout v-bind="props" field-group>
+        <div>
+            <div class="SharpList__sticky-wrapper text-end">
+                <template v-if="field.sortable && value?.length > 1">
+                    <Toggle
+                        class="SharpList__sort-button"
+                        size="sm"
+                        :pressed="dragActive"
+                        :disabled="isUploading"
+                        style="pointer-events: auto"
+                        @click="dragActive = !dragActive"
+                    >
+                        {{ __('sharp::form.list.sort_button.inactive') }}
+                        <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
+                            <path d="M20 14V0h-4v14h-4l6 8 6-8zM4 8v14h4V8h4L6 0 0 8z"></path>
+                        </svg>
+                    </Toggle>
+                </template>
+            </div>
 
-        <Draggable
-            v-bind="{
-                handle: dragActive ? '[data-item]' : '[data-drag-handle]',
-                animation: 150,
-                // filter: '.SharpListUpload',
-            } as SortableOptions"
-            :modelValue="value"
-            :item-key="item => item[itemKey]"
-            @update:modelValue="onReorder"
-        >
-            <template #item="{ element: itemData, index }">
-                <div class="SharpList__item list-group-item"
-                    :class="{'SharpList__item--drag-active': dragActive}"
-                    data-item
-                >
-                    <template v-if="canAddItem && field.sortable && !dragActive">
-                        <div class="SharpList__new-item-zone">
-                            <Button size="sm" @click="onInsert(index)">
-                                {{ __('sharp::form.list.insert_button') }}
-                            </Button>
-                        </div>
-                    </template>
+            <div :ref="(el) => sortableContainer = el">
+                <template v-for="(item, index) in value">
+                    <div data-item>
+                        <template v-if="canAddItem && field.sortable && !dragActive">
+                            <div class="SharpList__new-item-zone">
+                                <Button size="sm" @click="onInsert(index)">
+                                    {{ __('sharp::form.list.insert_button') }}
+                                </Button>
+                            </div>
+                        </template>
 
-                    <template v-for="row in fieldLayout.item">
-                        <FieldGridRow>
-                            <template v-for="itemFieldLayout in row">
-                                <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, itemData)">
-                                    <SharpFormField
-                                        :field="form.getField(itemFieldLayout.key, field.itemFields, itemData, dragActive)"
-                                        :field-layout="itemFieldLayout"
-                                        :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
-                                        :value="itemData[itemFieldLayout.key]"
-                                        :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
-                                        :row="row"
-                                        @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
-                                        @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                        @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                    />
-                                </FieldGridColumn>
+                        <FieldGrid>
+                            <template v-for="row in fieldLayout.item">
+                                <FieldGridRow>
+                                    <template v-for="itemFieldLayout in row">
+                                        <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
+                                            <SharpFormField
+                                                :field="form.getField(itemFieldLayout.key, field.itemFields, item, dragActive)"
+                                                :field-layout="itemFieldLayout"
+                                                :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
+                                                :value="item[itemFieldLayout.key]"
+                                                :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                                :row="row"
+                                                @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
+                                                @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                                @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                            />
+                                        </FieldGridColumn>
+                                    </template>
+                                </FieldGridRow>
                             </template>
-                        </FieldGridRow>
-                    </template>
+                        </FieldGrid>
 
-                    <template v-if="field.removable && !field.readOnly && !dragActive">
-                        <Button
-                            class=""
-                            variant="ghost"
-                            size="icon"
-                            :aria-label="__('sharp::form.list.remove_button')"
-                            @click="onRemove(index)"
-                        >&times;</Button>
-                    </template>
+                        <template v-if="field.removable && !field.readOnly && !dragActive">
+                            <Button
+                                class=""
+                                variant="ghost"
+                                size="icon"
+                                :aria-label="__('sharp::form.list.remove_button')"
+                                @click="onRemove(index)"
+                            >&times;</Button>
+                        </template>
 
-                    <template v-if="field.sortable && value?.length > 1 && !isUploading">
-                        <div class="d-flex align-items-center px-1" data-drag-handle>
-                            <i class="fas fa-grip-vertical opacity-25"></i>
-                        </div>
-                    </template>
+                        <template v-if="field.sortable && value?.length > 1 && !isUploading">
+                            <div class="d-flex align-items-center px-1" data-drag-handle>
+                                <i class="fas fa-grip-vertical opacity-25"></i>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
+                <ListBulkUpload
+                    :field="field"
+                    :current-bulk-upload-limit="currentBulkUploadLimit"
+                    :disabled="dragActive"
+                    @change="onBulkUploadInputChange"
+                    key="upload"
+                />
+            </template>
+
+            <template v-if="canAddItem">
+                <div>
+                    <Button
+                        class="SharpList__add-button w-full"
+                        :disabled="field.readOnly || dragActive"
+                        variant="secondary"
+                        @click="onAdd"
+                    >
+                        ＋ {{ field.addText }}
+                    </Button>
                 </div>
             </template>
-
-            <template #footer>
-                <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
-                    <ListBulkUpload
-                        :field="field"
-                        :current-bulk-upload-limit="currentBulkUploadLimit"
-                        :disabled="dragActive"
-                        @change="onBulkUploadInputChange"
-                        key="upload"
-                    />
-                </template>
+            <template v-if="field.readOnly && !value?.length">
+                <em class="SharpList__empty-alert">
+                    {{ __('sharp::form.list.empty') }}
+                </em>
             </template>
-        </Draggable>
-        <template v-if="canAddItem">
-            <div class="mt-3">
-                <Button
-                    class="SharpList__add-button w-full"
-                    :disabled="field.readOnly || dragActive"
-                    variant="secondary"
-                    @click="onAdd"
-                >
-                    ＋ {{ field.addText }}
-                </Button>
-            </div>
-        </template>
-        <template v-if="field.readOnly && !value?.length">
-            <em class="SharpList__empty-alert">
-                {{ __('sharp::form.list.empty') }}
-            </em>
-        </template>
-    </div>
+        </div>
+    </FormFieldLayout>
 </template>
