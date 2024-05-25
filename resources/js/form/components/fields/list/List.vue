@@ -17,12 +17,21 @@
     import { useDraggable } from "vue-draggable-plus";
     import { EntityListInstance } from "@/entity-list/types";
     import FieldGrid from "@/components/ui/FieldGrid.vue";
+    import { route } from "@/utils/url";
+    import { MoreHorizontal } from "lucide-vue-next";
+    import {
+        DropdownMenu, DropdownMenuContent,
+        DropdownMenuItem,
+        DropdownMenuSeparator,
+        DropdownMenuTrigger
+    } from "@/components/ui/dropdown-menu";
+    import { Card, CardContent } from "@/components/ui/card";
 
     const props = defineProps<FormFieldProps<FormListFieldData>>();
     const emit = defineEmits<FormFieldEmits<FormListFieldData>>();
 
     const form = useParentForm();
-    const dragActive = ref(false);
+    const isSorting = ref(false);
     const canAddItem = computed(() => {
         const { field, value } = props;
         return field.addable &&
@@ -138,15 +147,14 @@
 <template>
     <FormFieldLayout v-bind="props" field-group>
         <div>
-            <div class="SharpList__sticky-wrapper text-end">
+            <div class="">
                 <template v-if="field.sortable && value?.length > 1">
                     <Toggle
                         class="SharpList__sort-button"
                         size="sm"
-                        :pressed="dragActive"
+                        :pressed="isSorting"
                         :disabled="isUploading"
-                        style="pointer-events: auto"
-                        @click="dragActive = !dragActive"
+                        @click="isSorting = !isSorting"
                     >
                         {{ __('sharp::form.list.sort_button.inactive') }}
                         <svg style="margin-left: .5em" width="1.125em" height="1.125em" viewBox="0 0 24 22" fill-rule="evenodd">
@@ -156,73 +164,89 @@
                 </template>
             </div>
 
-            <div :ref="(el) => sortableContainer = el">
-                <template v-for="(item, index) in value">
-                    <div data-item>
-                        <template v-if="canAddItem && field.sortable && !dragActive">
-                            <div class="SharpList__new-item-zone">
-                                <Button size="sm" @click="onInsert(index)">
-                                    {{ __('sharp::form.list.insert_button') }}
-                                </Button>
-                            </div>
-                        </template>
+            <Card>
+                <CardContent class="pt-6">
+                    <div class="divide-y" :ref="(el: HTMLElement) => sortableContainer = el">
+                        <template v-for="(item, index) in value">
+                            <div class="flex">
+                                <!--                        <template v-if="canAddItem && field.sortable && !dragActive">-->
+                                <!--                            <div class="SharpList__new-item-zone">-->
+                                <!--                                <Button size="sm" @click="onInsert(index)">-->
+                                <!--                                    {{ __('sharp::form.list.insert_button') }}-->
+                                <!--                                </Button>-->
+                                <!--                            </div>-->
+                                <!--                        </template>-->
 
-                        <FieldGrid>
-                            <template v-for="row in fieldLayout.item">
-                                <FieldGridRow>
-                                    <template v-for="itemFieldLayout in row">
-                                        <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
-                                            <SharpFormField
-                                                :field="form.getField(itemFieldLayout.key, field.itemFields, item, dragActive)"
-                                                :field-layout="itemFieldLayout"
-                                                :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
-                                                :value="item[itemFieldLayout.key]"
-                                                :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
-                                                :row="row"
-                                                @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
-                                                @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                                @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
-                                            />
-                                        </FieldGridColumn>
+                                <FieldGrid class="flex-1 min-w-0">
+                                    <template v-for="row in fieldLayout.item">
+                                        <FieldGridRow>
+                                            <template v-for="itemFieldLayout in row">
+                                                <FieldGridColumn :layout="itemFieldLayout" v-show="form.fieldShouldBeVisible(itemFieldLayout, field.itemFields, item)">
+                                                    <SharpFormField
+                                                        :field="form.getField(itemFieldLayout.key, field.itemFields, item, isSorting)"
+                                                        :field-layout="itemFieldLayout"
+                                                        :field-error-key="`${field.key}.${index}.${itemFieldLayout.key}`"
+                                                        :value="item[itemFieldLayout.key]"
+                                                        :locale="form.getMeta(`${field.key}.${index}.${itemFieldLayout.key}`)?.locale ?? locale"
+                                                        :row="row"
+                                                        @input="(value, options) => onFieldInput(index, itemFieldLayout.key, value, options)"
+                                                        @locale-change="onFieldLocaleChange(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                                        @uploading="onFieldUploading(`${field.key}.${index}.${itemFieldLayout.key}`, $event)"
+                                                    />
+                                                </FieldGridColumn>
+                                            </template>
+                                        </FieldGridRow>
                                     </template>
-                                </FieldGridRow>
-                            </template>
-                        </FieldGrid>
+                                </FieldGrid>
 
-                        <template v-if="field.removable && !field.readOnly && !dragActive">
-                            <Button
-                                class=""
-                                variant="ghost"
-                                size="icon"
-                                :aria-label="__('sharp::form.list.remove_button')"
-                                @click="onRemove(index)"
-                            >&times;</Button>
-                        </template>
+                                <DropdownMenu :modal="false">
+                                    <DropdownMenuTrigger as-child>
+                                        <Button class="shrink-0" variant="ghost" size="icon">
+                                            <MoreHorizontal class="w-4 h-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem class="text-destructive" @click="onRemove">
+                                            {{ __('sharp::form.upload.remove_button') }}
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <!--                        <template v-if="field.removable && !field.readOnly && !dragActive">-->
+                                <!--                            <Button-->
+                                <!--                                class=""-->
+                                <!--                                variant="ghost"-->
+                                <!--                                size="icon"-->
+                                <!--                                :aria-label="__('sharp::form.list.remove_button')"-->
+                                <!--                                @click="onRemove(index)"-->
+                                <!--                            >&times;</Button>-->
+                                <!--                        </template>-->
 
-                        <template v-if="field.sortable && value?.length > 1 && !isUploading">
-                            <div class="d-flex align-items-center px-1" data-drag-handle>
-                                <i class="fas fa-grip-vertical opacity-25"></i>
+                                <!--                        <template v-if="field.sortable && value?.length > 1 && !isUploading">-->
+                                <!--                            <div class="d-flex align-items-center px-1" data-drag-handle>-->
+                                <!--                                <i class="fas fa-grip-vertical opacity-25"></i>-->
+                                <!--                            </div>-->
+                                <!--                        </template>-->
                             </div>
                         </template>
                     </div>
-                </template>
-            </div>
+                </CardContent>
+            </Card>
 
-            <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">
-                <ListBulkUpload
-                    :field="field"
-                    :current-bulk-upload-limit="currentBulkUploadLimit"
-                    :disabled="dragActive"
-                    @change="onBulkUploadInputChange"
-                    key="upload"
-                />
-            </template>
+<!--            <template v-if="field.itemFields[field.bulkUploadField]?.type === 'upload' && canAddItem && currentBulkUploadLimit > 0">-->
+<!--                <ListBulkUpload-->
+<!--                    :field="field"-->
+<!--                    :current-bulk-upload-limit="currentBulkUploadLimit"-->
+<!--                    :disabled="isSorting"-->
+<!--                    @change="onBulkUploadInputChange"-->
+<!--                    key="upload"-->
+<!--                />-->
+<!--            </template>-->
 
             <template v-if="canAddItem">
                 <div>
                     <Button
-                        class="SharpList__add-button w-full"
-                        :disabled="field.readOnly || dragActive"
+                        class=" w-full"
+                        :disabled="field.readOnly || isSorting"
                         variant="secondary"
                         @click="onAdd"
                     >
@@ -230,11 +254,11 @@
                     </Button>
                 </div>
             </template>
-            <template v-if="field.readOnly && !value?.length">
-                <em class="SharpList__empty-alert">
-                    {{ __('sharp::form.list.empty') }}
-                </em>
-            </template>
+<!--            <template v-if="field.readOnly && !value?.length">-->
+<!--                <em class="SharpList__empty-alert">-->
+<!--                    {{ __('sharp::form.list.empty') }}-->
+<!--                </em>-->
+<!--            </template>-->
         </div>
     </FormFieldLayout>
 </template>
