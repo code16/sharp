@@ -105,7 +105,7 @@
             {{ filter.label }}
         </Label>
 
-        <Popover v-model:open="open" @update:open="$event && onOpen()" modal>
+        <Popover v-model:open="open" @update:open="$event && onOpen()" :modal="!inline">
             <PopoverTrigger as-child>
                 <template v-if="inline">
                     <Button variant="outline" size="sm" class="h-8 border-dashed transition-shadow shadow-sm data-[state=open]:shadow-md" :disabled="disabled">

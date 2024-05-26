@@ -108,13 +108,13 @@
         </template>
 
         <WithCommands :commands="commands">
-            <StickyTop class="group container top-3.5 z-20 mb-4 pointer-events-none"
+            <StickyTop
+                class="group container mb-4 pointer-events-none top-3.5 data-[stuck=true]:z-20"
                 :class="[
-                    // '',
-                    { 'lg:sticky ': !entityListNeedsTopBar }
+                    { 'lg:sticky': !entityListNeedsTopBar }
                 ]"
             >
-                <div class="flex flex-wrap flex-row-reverse gap-3 pointer-events-auto transition-[margin] lg:ml-[--sticky-safe-left-offset] ">
+                <div class="flex flex-wrap flex-row-reverse gap-3 pointer-events-auto lg:ml-[--sticky-safe-left-offset]">
                     <div class="flex-1 order-1">
                         <template v-if="show.locales?.length">
                             <Select v-model="locale">

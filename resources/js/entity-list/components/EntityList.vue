@@ -259,11 +259,11 @@
                 <template v-if="showSearchField && entityList.config.searchable || entityList.visibleFilters?.length">
                     <StickyTop
                         :class="cn(
-                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none z-30',
-                            'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3.5 lg:bg-transparent lg:last:*:transition-transform lg:last:*:-translate-x-[--sticky-safe-right-offset]',
+                            'group container sticky top-14 border-b -mb-px -mt-4 pt-4 bg-white pb-4 px-4 lg:px-6 flex gap-3 pointer-events-none data-[stuck=true]:z-30',
+                            'lg:sticky lg:border-0 lg:pt-0 lg:mt-0 lg:top-3.5 lg:bg-transparent lg:last:*:-translate-x-[--sticky-safe-right-offset]',
                             {
                                 '-top-8 z-0 px-0': inline && !needsTopBar,
-                                'relative z-[60]': reordering,
+                                'relative z-[15]': reordering,
                                 // 'opacity-0': inline && stuck && !needsTopBar,
                             })"
                         v-model:stuck="stuck"
