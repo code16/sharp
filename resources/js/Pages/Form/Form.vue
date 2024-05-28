@@ -2,7 +2,7 @@
     import { Form } from "@/form/Form";
     import Layout from "@/Layouts/Layout.vue";
     import { BreadcrumbData, FormData } from "@/types";
-    import { router } from "@inertiajs/vue3";
+    import { router, Link } from "@inertiajs/vue3";
     import { route } from "@/utils/url";
     import Title from "@/components/Title.vue";
     import { config } from "@/utils/config";
@@ -10,9 +10,6 @@
     import { ref, watchEffect } from "vue";
     import { __ } from "@/utils/i18n";
     import { Button } from '@/components/ui/button';
-    import { vSticky } from "@/directives/sticky";
-    import RootCard from "@/components/ui/RootCard.vue";
-    import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
     const props = defineProps<{
         form: FormData,
@@ -72,13 +69,15 @@
             </template>
             <template #footer>
                 <div class="flex gap-4">
-                    <Button as="a" :href="breadcrumb.items.at(-2)?.url" variant="outline">
-                        <template v-if="form.canEdit">
-                            {{ __('sharp::action_bar.form.cancel_button') }}
-                        </template>
-                        <template v-else>
-                            {{ __('sharp::action_bar.form.back_button') }}
-                        </template>
+                    <Button variant="outline" as-child>
+                        <Link :href="breadcrumb.items.at(-2)?.url">
+                            <template v-if="form.canEdit">
+                                {{ __('sharp::action_bar.form.cancel_button') }}
+                            </template>
+                            <template v-else>
+                                {{ __('sharp::action_bar.form.back_button') }}
+                            </template>
+                        </Link>
                     </Button>
                     <template v-if="form.canEdit">
                         <Button style="min-width: 6.5em" :disabled="form.isUploading || loading" @click="submit">
